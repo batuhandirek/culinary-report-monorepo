@@ -1,0 +1,10 @@
+{
+	"name": "swagger-build",
+	"version": "0.0.0",
+	"private": true,
+	"description": "CJS-scoped clone of apps/backend used to generate swagger.json and the API client. See bin/create-swagger.sh for the why.",
+	"scripts": {
+		"create:swagger": "bash ./bin/create-swagger.sh",
+		"create:client": "node ./bin/create-client.js"
+	}
+}

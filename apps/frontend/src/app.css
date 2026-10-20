@@ -1,0 +1,905 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+/* `dark:` is class-based, not `prefers-color-scheme`: the app is a single light
+   identity and nothing sets `.dark`, so without this a machine in dark mode would paint
+   shadcn's `dark:` utilities over tokens that have no dark counterpart. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-border, currentcolor);
+	}
+}
+
+:root {
+	/* ── "Pickle & Plum" palette ───────────────────────────────────────────────
+	   A ferment lab on an oat-paper counter. The ground is oat with grain and a faint
+	   dot grid (the cosy half); text is plum-black; the one loud colour is an acid
+	   pickle green, always with plum on it (the techy half). Beetroot and chili are the
+	   kitchen accents. Acid is a fill, never a colour for text or thin marks on paper
+	   (1.1:1 there): those use `primary-darker`. */
+	--sand: #f2ede3; /* the page ground: oat */
+	--paper: #fbf9f4; /* cards, sheets, bars */
+	--line: #ded7c9; /* hairlines, card borders */
+	--wash: #e8e1d3; /* image wells, quiet panels, empty tracks */
+	/* Brine: the pickle-tinted paper for notes, unread rows, selected states. */
+	--tint: #ebf1cc;
+	--ink: #1f1724; /* plum-black: text, headings, the strip, dark buttons */
+	/* 4.8:1 on paper, 4.3:1 on sand: the lightest a 12–13px label can go and still read. */
+	--faint: #766b79; /* placeholders, tertiary meta */
+	/* Accents. Acid lives on ink (13:1); beet is text on paper (7.5:1); chili is a rule
+	   or a glyph, never a sentence (3.9:1). */
+	--acid: #c6f135; /* pixel labels on ink, the primary fill */
+	--chili: #e2452b; /* the active tab's rule, required marks */
+	--beet: #8c2d5c; /* pixel labels and links on paper */
+	--strip-muted: #aba0ae; /* idle text on the strip */
+
+	/* Primary: acid pickle with ink on it (13:1). On paper it needs its ink frame (the
+	   stamp) to read as a shape at all, so thin marks and green text use the darker. */
+	--primary-lighter: #d6f86a;
+	--primary: var(--acid);
+	--primary-darker: #4d7612; /* 5.1:1 on paper: green text, bars, the focus ring */
+	--primary-foreground: var(--ink);
+
+	--secondary: var(--ink);
+	--secondary-foreground: var(--sand);
+
+	--background: var(--sand);
+	--foreground: var(--ink);
+	--reading-ink: #3a3040;
+	--base-100: var(--paper);
+	--base-200: var(--wash);
+	--base-300: var(--line);
+	--base-content: var(--ink);
+
+	--card: var(--paper);
+	--card-foreground: var(--ink);
+	--popover: var(--paper);
+	--popover-foreground: var(--ink);
+
+	--border: var(--line);
+	--input: #cbc2b3;
+	--ring: var(--primary-darker);
+	--muted: var(--wash);
+	--muted-foreground: #5e5466; /* 6.8:1 on paper */
+	/* Hover ground on a paper surface: the oat shows through. */
+	--accent: var(--sand);
+	--accent-foreground: var(--ink);
+
+	--neutral: var(--wash);
+	--neutral-content: #5e5466;
+
+	/* Success and destructive double as the positive / negative pair in reports
+	   (validated: 3:1 on paper, CVD ΔE 7.2 deutan, so they always ship with a label or
+	   a fixed position). */
+	--destructive: #c4382a;
+	--destructive-foreground: #ffffff;
+	--success: #0b8a5e;
+	--success-foreground: #ffffff;
+	--warning: #f2a900;
+
+	--sidebar: var(--sand);
+	--sidebar-foreground: var(--ink);
+	--sidebar-primary: var(--ink);
+	--sidebar-primary-foreground: var(--sand);
+	--sidebar-accent: var(--tint);
+	--sidebar-accent-foreground: var(--ink);
+	--sidebar-border: var(--line);
+	--sidebar-ring: var(--ring);
+
+	--radius: 0.625rem;
+	--ease-pop: cubic-bezier(0.22, 1, 0.36, 1);
+
+	/* The height of every field — input, select trigger, combobox trigger, stepper: 44px
+	   under the finger, 40px from `md` up. A token rather than `h-11 md:h-10`, so a call
+	   site overrides it with one `h-*` and no `md:` twin. */
+	--field-height: 2.75rem;
+	/* Where a sticky desktop rail stops: under the header (108px) with a 24px breath. */
+	--sticky-top: 8.25rem;
+
+	/* A 160px tile of monochrome fractal noise at 6%, the grain on the sand. An image,
+	   not a live SVG filter, so it rasterises once. */
+	--grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+	/* The lab's graph paper: a 1px plum dot every 20px, under the grain.
+	   Body and `checker` lay the grain over it. */
+	--dots: radial-gradient(
+		circle at 1px 1px,
+		color-mix(in srgb, var(--ink) 11%, transparent) 1px,
+		transparent 1.5px
+	);
+
+	/* Categorical, fixed order (plum, tomato, teal, mustard, indigo); validated as a set
+	   on paper: 3:1 each, CVD ΔE ≥ 11 between neighbours. */
+	--chart-1: #7b3a92;
+	--chart-2: #e05a2e;
+	--chart-3: #008c82;
+	--chart-4: #b07f00;
+	--chart-5: #4f68d9;
+
+	--spacing: 0.25rem;
+
+	/* A standard sans scale: Onest reads true to size, so nothing is compensated. */
+	--text-xs: 0.75rem;
+	--text-xs--line-height: 1.4;
+	--text-sm: 0.8125rem;
+	--text-sm--line-height: 1.45;
+	--text-base: 0.9375rem;
+	--text-base--line-height: 1.55;
+	--text-lg: 1.0625rem;
+	--text-lg--line-height: 1.5;
+	--text-xl: 1.1875rem;
+	--text-xl--line-height: 1.4;
+	--text-2xl: 1.375rem;
+	--text-2xl--line-height: 1.3;
+	--text-3xl: 1.625rem;
+	--text-3xl--line-height: 1.2;
+	--text-4xl: 2rem;
+	--text-4xl--line-height: 1.15;
+	--text-5xl: 2.5rem;
+	--text-5xl--line-height: 1.1;
+	--text-6xl: 3rem;
+	--text-6xl--line-height: 1.05;
+	--text-7xl: 3.5rem;
+	--text-7xl--line-height: 1;
+}
+
+@media (min-width: 48rem) {
+	:root {
+		--field-height: 2.5rem;
+	}
+}
+
+@theme inline {
+	/* Radius */
+	--radius-sm: calc(var(--radius) - 0.25rem);
+	--radius-md: var(--radius);
+	--radius-lg: calc(var(--radius) + 0.125rem);
+	--radius-xl: calc(var(--radius) + 0.375rem);
+
+	/* Container */
+	--container-center: true;
+	--container-padding: 2rem;
+	--container-screen-2xl: 1400px;
+
+	/* Color Mappings */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary-lighter: var(--primary-lighter);
+	--color-primary: var(--primary);
+	--color-primary-darker: var(--primary-darker);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	/* Base Colors */
+	--color-base-content: var(--base-content);
+	--color-reading-ink: var(--reading-ink);
+	--color-base-100: var(--base-100);
+	--color-base-200: var(--base-200);
+	--color-base-300: var(--base-300);
+
+	/* Neutral */
+	--color-neutral: var(--neutral);
+	--color-neutral-content: var(--neutral-content);
+
+	/* Semantic Colors */
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-error: var(--destructive);
+	--color-error-foreground: var(--destructive-foreground);
+
+	/* Animations */
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+	--animate-caret-blink: caret-blink 1.25s ease-out infinite;
+
+	/* Chart Colors */
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+
+	--color-ink: var(--ink);
+	--color-line: var(--line);
+	--color-paper: var(--paper);
+	--color-wash: var(--wash);
+	--color-tint: var(--tint);
+	--color-sand: var(--sand);
+	--color-faint: var(--faint);
+	--color-acid: var(--acid);
+	--color-chili: var(--chili);
+	--color-beet: var(--beet);
+	--color-strip-muted: var(--strip-muted);
+
+	/* ── Type: Onest + two pixel accents ───────────────────────────────────────
+	   Onest carries every sentence, title and price (full Turkish coverage and its own
+	   ₺). The pixel faces are the "künye" — short tags and counters, never prose:
+	   `font-pixel` (Press Start 2P, caps-only, via `eyebrow`/`sticker`) and `font-term`
+	   (VT323, a terminal face for one-line notes like "31 ilan" or "kargo dahil").
+	   Neither has ₺, so prices stay in Onest. All self-hosted: the native build never
+	   reaches a font CDN. */
+	--font-weight-book: 400;
+
+	--tracking-base: 0em;
+	--tracking-title: -0.012em;
+	--tracking-hero: -0.025em;
+	--tracking-display: -0.03em;
+
+	--font-onest: 'Onest', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--font-sans: var(--font-onest);
+	--font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+	--font-pixel: 'Press Start 2P', ui-monospace, monospace;
+	--font-term: 'VT323', ui-monospace, monospace;
+	/* Alias from the Martian Mono design, so older call sites resolve to Onest. */
+	--font-martian: var(--font-onest);
+
+	--text-xs: var(--text-xs);
+	--text-sm: var(--text-sm);
+	--text-base: var(--text-base);
+	--text-lg: var(--text-lg);
+	--text-xl: var(--text-xl);
+	--text-2xl: var(--text-2xl);
+	--text-3xl: var(--text-3xl);
+	--text-4xl: var(--text-4xl);
+	--text-5xl: var(--text-5xl);
+	--text-6xl: var(--text-6xl);
+	--text-7xl: var(--text-7xl);
+
+	/* Display steps for the few page-level headings (landing hero, empty states). */
+	--text-display-lg: clamp(2rem, 4.8vw, 3.5rem);
+	--text-display-lg--line-height: 1.05;
+	--text-display-lg--letter-spacing: var(--tracking-display);
+
+	--text-display: clamp(1.75rem, 4vw, 3rem);
+	--text-display--line-height: 1.08;
+	--text-display--letter-spacing: var(--tracking-display);
+	--text-display-sm: clamp(1.375rem, 2.6vw, 2rem);
+	--text-display-sm--line-height: 1.15;
+	--text-display-sm--letter-spacing: var(--tracking-title);
+}
+
+/* Soft, low elevation. Surfaces are told apart by hairlines and the sand, not by
+   depth; real shadows are for things that float (menus, dialogs, sticky bars).
+   `stamp` is the exception: the hard ink offset from the Y2K design, kept for the one
+   primary action per view (`Button` default, the tab bar's sell key) and nothing else. */
+@theme {
+	--shadow-xs: 0 1px 2px rgb(31 23 36 / 0.05);
+	--shadow-sm: 0 1px 3px rgb(31 23 36 / 0.07), 0 1px 2px rgb(31 23 36 / 0.04);
+	--shadow-md: 0 6px 20px rgb(31 23 36 / 0.09), 0 2px 6px rgb(31 23 36 / 0.05);
+	--shadow-lg: 0 12px 32px rgb(31 23 36 / 0.12), 0 4px 10px rgb(31 23 36 / 0.06);
+	--shadow-stamp: 3px 3px 0 var(--ink);
+	/* The quiet cousin: a hard offset in the hairline colour, so cards read as paper
+	   stuck on the sand. */
+	--shadow-sticker: 3px 3px 0 var(--line);
+	--shadow-stamp-sm: 1px 1px 0 var(--ink);
+}
+
+/* Every shadcn primitive tags its root with `data-slot`: one hairline for all of them.
+   In `@layer utilities` because the `.border` it overrides is a utility. */
+@layer utilities {
+	[data-slot='card'],
+	[data-slot='popover-content'],
+	[data-slot='dropdown-menu-content'],
+	[data-slot='dialog-content'],
+	[data-slot='sheet-content'],
+	[data-slot='drawer-content'],
+	[data-slot='command'] {
+		border-width: 1px;
+		border-color: var(--line);
+	}
+	[data-slot='input'],
+	[data-slot='textarea'],
+	[data-slot='select-trigger'] {
+		border-width: 1px;
+		border-color: var(--input);
+	}
+}
+
+@keyframes accordion-down {
+	from {
+		height: 0;
+	}
+	to {
+		height: var(--bits-accordion-content-height);
+	}
+}
+
+@keyframes accordion-up {
+	from {
+		height: var(--bits-accordion-content-height);
+	}
+	to {
+		height: 0;
+	}
+}
+
+@keyframes caret-blink {
+	0%,
+	70%,
+	100% {
+		opacity: 1;
+	}
+	20%,
+	50% {
+		opacity: 0;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+
+	section[aria-label^='Notifications'] {
+		pointer-events: none !important;
+	}
+
+	[data-sonner-toaster] {
+		z-index: 9999 !important;
+		pointer-events: none !important;
+	}
+
+	[data-sonner-toast] {
+		pointer-events: auto !important;
+	}
+
+	button:not([disabled]),
+	[role='button']:not([disabled]) {
+		cursor: pointer;
+	}
+
+	body {
+		@apply bg-background text-foreground;
+		/* The counter: 6% monochrome grain over a faint plum dot grid on the oat. */
+		background-image: var(--grain), var(--dots);
+		background-size:
+			160px 160px,
+			20px 20px;
+		font-family: var(--font-onest);
+		font-weight: 400;
+		letter-spacing: var(--tracking-base);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		font-feature-settings:
+			'rlig' 1,
+			'calt' 1;
+	}
+
+	b,
+	strong {
+		font-weight: 600;
+	}
+
+	ul {
+		white-space: normal;
+	}
+
+	.narrow {
+		width: 100%;
+		max-width: 1240px !important;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	@media (max-width: 1024px) {
+		.narrow {
+			padding-left: 16px;
+			padding-right: 16px;
+		}
+	}
+	/* Between the touch breakpoint and the container's own width plus two gutters, the
+	   window is narrower than the container: the gutter has to come from padding, or the
+	   content sits on the window's edge on every laptop under ~1290px. */
+	@media (min-width: 1025px) and (max-width: 1287px) {
+		.narrow {
+			padding-left: 24px;
+			padding-right: 24px;
+		}
+	}
+}
+
+/* ── Type roles ─────────────────────────────────────────────────────────────
+   Weight and tracking only; size comes from the scale at the call site. In
+   `@layer components`, so any utility (`font-bold`, `tracking-tight`) overrides. */
+@layer components {
+	.type-title {
+		font-family: var(--font-onest);
+		font-weight: 600;
+		letter-spacing: var(--tracking-title);
+		line-height: 1.25;
+		text-transform: none;
+	}
+
+	.type-hero {
+		font-family: var(--font-onest);
+		font-weight: 700;
+		letter-spacing: var(--tracking-hero);
+		line-height: 1.05;
+	}
+
+	.type-body {
+		font-family: var(--font-onest);
+		font-weight: 400;
+		letter-spacing: var(--tracking-base);
+		line-height: 1.55;
+	}
+
+	/* Prices, counts, timestamps: figures line up in columns. */
+	.type-meta {
+		font-family: var(--font-onest);
+		font-weight: 500;
+		letter-spacing: var(--tracking-base);
+		line-height: 1.4;
+		font-variant-numeric: tabular-nums;
+	}
+}
+
+/* ── Surfaces ──────────────────────────────────────────────────────────────────
+   The `pop*` names survive from the previous design so existing markup keeps
+   working; they now all mean "a hairline-bordered surface". `--pop-color` still
+   recolours the line. */
+@utility pop {
+	&& {
+		border: 1px solid var(--pop-color, var(--line));
+	}
+}
+
+@utility pop-sm {
+	&& {
+		border: 1px solid var(--pop-color, var(--line));
+	}
+}
+
+@utility pop-lg {
+	&& {
+		border: 1px solid var(--pop-color, var(--line));
+	}
+}
+
+@utility pop-soft {
+	--pop-color: var(--line);
+}
+
+/* A press is a small dip in opacity; nothing moves. */
+@utility pop-press {
+	transition:
+		opacity 120ms ease,
+		background-color 150ms ease;
+
+	&:active {
+		opacity: 0.85;
+	}
+}
+
+/* Hover on a pointer device raises the surface with a soft shadow. Behind
+   `(hover: hover)` so it never sticks after a tap in the WebView. */
+@utility pop-lift {
+	transition:
+		box-shadow 200ms ease,
+		border-color 200ms ease;
+
+	@media (hover: hover) {
+		&:hover {
+			box-shadow: var(--shadow-md);
+		}
+	}
+}
+
+/* The body's paper grain, for full-screen overlays that paint their own ground
+   (onboarding, the update gate, typeform flows). Pair with a background colour. */
+@utility checker {
+	background-image: var(--grain), var(--dots);
+	background-size:
+		160px 160px,
+		20px 20px;
+}
+
+/* The pill: filter chips, tab triggers and nav links share it. Selected is ink with
+   sand text, unselected warm white on a hairline. Keyed off `data-state` (bits-ui tabs),
+   `aria-current` (nav links) and `aria-pressed` (a toggle: the suggested amounts in the
+   offer dialogs). */
+@utility chip {
+	white-space: nowrap;
+	border-radius: 9999px;
+	background: var(--paper);
+	padding: 0.4375rem 0.875rem;
+	color: var(--ink);
+	font-size: var(--text-sm);
+	font-weight: 500;
+	letter-spacing: 0;
+
+	&[data-state='active'],
+	&[aria-current='page'],
+	&[aria-pressed='true'] {
+		background: var(--ink);
+		border-color: var(--ink);
+		color: var(--sand);
+	}
+}
+
+/* The pixel label — the "künye": `WALKMAN`, `MODEL`, `FİYAT`, `SATICININ NOTLARI`.
+   Press Start 2P, caps, fixed at 8px: it is a different face, not a role, so it does not
+   follow the type scale. Two to four words at most; anything longer is Onest. Colour
+   comes from the call site (`text-muted-foreground`, `text-beet`, `text-acid` on ink). */
+@utility eyebrow {
+	font-family: var(--font-pixel);
+	font-size: 0.5rem;
+	font-weight: 400;
+	line-height: 1.6;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+}
+
+/* A one-line supporting note under a heading or in a dialog: ink on the darker paper.
+   Width stays at the call site (`w-fit`, `max-w-sm`). */
+@utility ink-strip {
+	background: var(--tint);
+	color: var(--ink);
+	font-family: var(--font-onest);
+	font-weight: 500;
+	font-size: var(--text-sm);
+	line-height: 1.45;
+	letter-spacing: 0;
+	padding: 0.375rem 0.625rem;
+	border-radius: 0.375rem;
+}
+
+/* A section head ("Kategoriler … TÜMÜ ›"): an acid pixel block, the title, and a
+   dashed rule under the row. A trailing link (`eyebrow text-beet`) is pushed right. */
+@utility section-rule {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	padding-bottom: 0.625rem;
+	border-bottom: 1px dashed color-mix(in srgb, var(--ink) 28%, transparent);
+	color: var(--ink);
+
+	&::before {
+		content: '';
+		flex: none;
+		width: 0.625rem;
+		height: 0.625rem;
+		background: var(--primary);
+		border: 1.5px solid var(--ink);
+	}
+
+	& > a:last-child {
+		margin-left: auto;
+	}
+}
+
+/* A corner flag on a photo ("YENİ"): ink tag, pixel caps, slapped on at a slight tilt.
+   Needs a `relative` parent. */
+@utility sticker {
+	position: absolute;
+	top: 0.625rem;
+	left: 0.625rem;
+	transform: rotate(-4deg);
+	z-index: 1;
+	background: var(--ink);
+	padding: 0.4375rem 0.5625rem 0.3125rem;
+	color: var(--sand);
+	font-family: var(--font-pixel);
+	font-size: 0.4375rem;
+	line-height: 1;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+}
+
+/* A scroller that fades out at whichever edge still has content behind it. The
+   `data-overflow-*` hooks come from `scrollEdges` (#ui/lib/scroll-edges.ts); without
+   them nothing is masked. `--scroll-fade` is the depth of the fade. */
+@utility scroll-fade-x {
+	--scroll-fade: 2rem;
+
+	&[data-overflow-start]:not([data-overflow-end]) {
+		mask-image: linear-gradient(to right, transparent, #000 var(--scroll-fade));
+	}
+	&[data-overflow-end]:not([data-overflow-start]) {
+		mask-image: linear-gradient(to left, transparent, #000 var(--scroll-fade));
+	}
+	&[data-overflow-start][data-overflow-end] {
+		mask-image: linear-gradient(
+			to right,
+			transparent,
+			#000 var(--scroll-fade),
+			#000 calc(100% - var(--scroll-fade)),
+			transparent
+		);
+	}
+}
+
+@utility scroll-fade-y {
+	--scroll-fade: 1.5rem;
+
+	&[data-overflow-start]:not([data-overflow-end]) {
+		mask-image: linear-gradient(to bottom, transparent, #000 var(--scroll-fade));
+	}
+	&[data-overflow-end]:not([data-overflow-start]) {
+		mask-image: linear-gradient(to top, transparent, #000 var(--scroll-fade));
+	}
+	&[data-overflow-start][data-overflow-end] {
+		mask-image: linear-gradient(
+			to bottom,
+			transparent,
+			#000 var(--scroll-fade),
+			#000 calc(100% - var(--scroll-fade)),
+			transparent
+		);
+	}
+}
+
+@utility no-scrollbar {
+	@apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+}
+
+@utility pt-safe {
+	padding-top: env(safe-area-inset-top);
+}
+@utility pt-safe-* {
+	padding-top: calc(env(safe-area-inset-top) + --spacing(--value(integer)));
+}
+@utility top-safe {
+	top: env(safe-area-inset-top);
+}
+@utility top-safe-* {
+	top: calc(env(safe-area-inset-top) + --spacing(--value(integer)));
+}
+@utility pb-safe {
+	padding-bottom: env(safe-area-inset-bottom);
+}
+@utility pb-safe-* {
+	padding-bottom: calc(env(safe-area-inset-bottom) + --spacing(--value(integer)));
+}
+@utility bottom-safe {
+	bottom: env(safe-area-inset-bottom);
+}
+@utility bottom-safe-* {
+	bottom: calc(env(safe-area-inset-bottom) + --spacing(--value(integer)));
+}
+@utility pl-safe {
+	padding-left: env(safe-area-inset-left);
+}
+@utility pr-safe {
+	padding-right: env(safe-area-inset-right);
+}
+
+/* Custom Utility Classes */
+.abs {
+	@apply absolute;
+}
+.rel {
+	@apply relative;
+}
+.f {
+	display: flex !important;
+}
+.al-c {
+	@apply items-center;
+}
+.f1 {
+	@apply flex-1;
+}
+.cc {
+	@apply items-center justify-center;
+}
+.fw {
+	@apply w-full;
+}
+.fh {
+	@apply h-full;
+}
+.muted {
+	@apply text-muted-foreground;
+}
+
+/* JSON Viewer Styles */
+.json-container {
+	@apply !font-mono !text-xs !bg-base-100;
+}
+.json-key {
+	@apply !text-base-content;
+}
+.json-container .empty-icon {
+	@apply shrink-0;
+}
+
+/* ── Onest ────────────────────────────────────────────────────────────────────
+   Variable weight (100–900), split latin / latin-ext. Turkish needs both: `ı` is in
+   latin, `İ ğ ş` and the ₺ sign are in latin-ext, which is only fetched when a page
+   sets one of them. */
+@font-face {
+	font-family: 'Onest';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('/fonts/onest/onest-latin-wght-normal.woff2') format('woff2');
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+		U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: 'Onest';
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url('/fonts/onest/onest-latin-ext-wght-normal.woff2') format('woff2');
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+		U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ── Pixel accents ────────────────────────────────────────────────────────────
+   Press Start 2P (labels) and VT323 (one-line notes). Both carry latin-ext, so the
+   Turkish set renders from the face; neither has ₺ or the decorative glyphs (★ ♥ ›),
+   so prices stay in Onest and glyphs are Lucide icons. */
+@font-face {
+	font-family: 'Press Start 2P';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/press-start-2p/press-start-2p-v16-latin_latin-ext-regular.woff2')
+		format('woff2');
+}
+
+@font-face {
+	font-family: 'VT323';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/vt323/vt323-latin-400-normal.woff2') format('woff2');
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+		U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: 'VT323';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('/fonts/vt323/vt323-latin-ext-400-normal.woff2') format('woff2');
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+		U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ── Faces inside a trigger ────────────────────────────────────────────────
+   A popover / menu / sheet trigger is a bare <button> around a `Buttonish` or
+   `FieldTrigger` face. The focus ring belongs on the face, which has the shape — not on
+   the wrapper, which is a rectangle around a pill. Unlayered: the faces carry
+   `outline-none` as a utility. */
+button:has(> [data-slot='button'], > [data-slot='field-trigger']):focus-visible {
+	outline: none;
+}
+
+button:focus-visible > [data-slot='button'],
+button:focus-visible > [data-slot='field-trigger'] {
+	outline: 3px solid color-mix(in srgb, var(--ring) 50%, transparent);
+	outline-offset: 0;
+}
+
+button:focus-visible > [data-slot='field-trigger'] {
+	border-color: var(--ink);
+}
+
+/* ── Toasts (svelte-sonner) ────────────────────────────────────────────────
+   Unlayered on purpose: sonner ships unlayered rules, which beat anything in
+   `@layer utilities`; the extra `[data-sonner-toaster]` ancestor wins on specificity. */
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] {
+	align-items: flex-start;
+	gap: 10px;
+	padding: 14px 16px;
+	border: 1px solid var(--line);
+	border-radius: 12px;
+	background: var(--paper);
+	color: var(--ink);
+	box-shadow: var(--shadow-lg);
+}
+
+[data-sonner-toaster] [data-sonner-toast]:focus-visible {
+	box-shadow:
+		var(--shadow-lg),
+		0 0 0 3px color-mix(in srgb, var(--primary) 50%, transparent);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-title] {
+	font-family: var(--font-onest);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--ink);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-description] {
+	margin-top: 2px;
+	font-family: var(--font-onest);
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 1.45;
+	color: var(--muted-foreground);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-icon] {
+	height: 18px;
+	width: 18px;
+	margin-top: 1px;
+	color: var(--ink);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-icon] > * {
+	height: 18px;
+	width: 18px;
+}
+
+/* The card is the same paper for every kind; only the glyph says which it is. */
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'][data-type='success'] [data-icon] {
+	color: var(--success);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'][data-type='error'] [data-icon] {
+	color: var(--destructive);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'][data-type='warning'] [data-icon] {
+	color: hsl(30 85% 38%);
+}
+
+/* The undo: the ink pill of `Button variant="secondary"`, at a size a thumb can hit. */
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-button] {
+	align-self: center;
+	height: 34px;
+	padding: 0 14px;
+	border: 0;
+	border-radius: 9999px;
+	background: var(--ink);
+	color: var(--paper);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-cancel] {
+	background: var(--wash);
+	color: var(--ink);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true'] [data-close-button] {
+	border: 1px solid var(--line);
+	background: var(--paper);
+	color: var(--ink);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-styled='true']:hover [data-close-button]:hover {
+	background: var(--wash);
+	color: var(--ink);
+}

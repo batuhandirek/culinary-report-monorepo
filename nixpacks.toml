@@ -1,0 +1,64 @@
+[phases.setup]
+nixPkgs = [
+  "...",
+  "python3",
+  "gcc",
+  "gnumake",
+  "binutils",
+  "stdenv.cc",
+  "nodePackages.pnpm"
+]
+nixLibs = [
+	"...",
+	"stdenv.cc.cc.lib"
+]
+# What Puppeteer's own Chrome (report PDFs) needs from the system, and fonts for the glyphs the
+# app's web fonts lack. Deliberately no "...": the Node provider's Puppeteer defaults add apt
+# `chromium`, a snap shim on Ubuntu that does not run in a container. Names are for the
+# Ubuntu 24.04 base image (`libasound2t64`).
+aptPkgs = [
+	"ca-certificates",
+	"libnss3",
+	"libnspr4",
+	"libatk1.0-0",
+	"libatk-bridge2.0-0",
+	"libcups2",
+	"libdrm2",
+	"libgbm1",
+	"libxkbcommon0",
+	"libxcomposite1",
+	"libxdamage1",
+	"libxfixes3",
+	"libxrandr2",
+	"libxss1",
+	"libxshmfence1",
+	"libasound2t64",
+	"libpango-1.0-0",
+	"libpangocairo-1.0-0",
+	"libcairo2",
+	"libgtk-3-0",
+	"fontconfig",
+	"fonts-dejavu-core",
+	"fonts-noto-color-emoji",
+]
+
+# Build and runtime: `npm ci` downloads Puppeteer's pinned Chrome here, inside the app
+# directory, so it ships in the image and the server finds it at runtime
+[variables]
+PUPPETEER_CACHE_DIR = "/app/.cache/puppeteer"
+
+[phases.install]
+cmds = [
+	"npm ci",
+	"npx ts-patch install -s && npx typia patch",
+]
+
+[phases.build]
+env = { LIGHTNING_CSS_USE_WASM = "1", ROLLUP_USE_WASM = "1" }
+cmds = [
+	"npm run build",
+	"rm -rf /nix/var/nix/gc-socket /nix/var/nix/daemon-socket",
+]
+
+[start]
+cmd = "npm start"

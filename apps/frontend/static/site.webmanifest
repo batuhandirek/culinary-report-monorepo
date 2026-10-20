@@ -1,0 +1,14 @@
+{
+	"name": "Culinary Report",
+	"short_name": "Culinary Report",
+	"icons": [
+		{
+			"src": "/favicon/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml"
+		}
+	],
+	"theme_color": "#f2ede3",
+	"background_color": "#f2ede3",
+	"display": "standalone"
+}

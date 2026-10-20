@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+
+		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+		<link rel="icon" href="%sveltekit.assets%/favicon/favicon.svg" type="image/svg+xml">
+		<link rel="manifest" href="%sveltekit.assets%/site.webmanifest">
+
+		<!-- The pixel face of the tab bar's labels and every eyebrow: fetched with the page
+		     instead of after the stylesheet, so the labels don't show in a fallback face and
+		     jump when it lands. The same file `app.css` names; `%sveltekit.assets%` keeps the
+		     address relative. -->
+		<link rel="preload" as="font" type="font/woff2" crossorigin href="%sveltekit.assets%/fonts/press-start-2p/press-start-2p-v16-latin_latin-ext-regular.woff2">
+		<!-- Onest sets every sentence, title and price. Both halves: Turkish copy (ğ, ş, ı)
+		     and `₺` sit in latin-ext, so no page renders from latin alone. -->
+		<link rel="preload" as="font" type="font/woff2" crossorigin href="%sveltekit.assets%/fonts/onest/onest-latin-wght-normal.woff2">
+		<link rel="preload" as="font" type="font/woff2" crossorigin href="%sveltekit.assets%/fonts/onest/onest-latin-ext-wght-normal.woff2">
+
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="theme-color" content="#f2ede3">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+
+		<!-- A stored session is restored only after hydration; until then the server-rendered
+		     header would offer "Giriş yap / Üye ol" to someone who is logged in. Mark the
+		     document so the headers hold that slot back (`.visitor-only`); the root layout
+		     clears the mark once the session check has settled. -->
+		<script>
+			try {
+				if (localStorage.getItem('session')) {
+					document.documentElement.dataset.session = 'restoring';
+				}
+			} catch (e) {}
+		</script>
+
+		%sveltekit.head%
+	</head>
+	<body>
+		<div style="display: contents">
+			%sveltekit.body%
+		</div>
+	</body>
+</html>

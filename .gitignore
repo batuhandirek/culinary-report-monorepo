@@ -1,0 +1,27 @@
+node_modules
+.turbo
+.env
+.env.local
+.env.test
+env/**/.env*
+!env/**/.env.example
+data
+.indexes
+llmTests
+backups
+./claude
+# eval
+eval-report-*.json
+eval-fixtures/
+evals
+AuthKey*
+*.jks
+
+# Integration-test server log (written by bin/run-integration-tests.sh)
+apps/backend/integration-server.log
+
+# macOS Finder metadata — regenerated on disk, never useful in the repo
+.DS_Store
+*/.DS_Store
+
+

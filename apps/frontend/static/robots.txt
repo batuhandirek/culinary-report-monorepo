@@ -1,0 +1,11 @@
+# These are prefix matches, not path-segment matches. Anything listed here must stay out
+# of the sitemaps.
+User-agent: *
+Disallow: /auth
+Disallow: /admin
+Disallow: /api/*
+
+Sitemap: https://culinaryreport.com/sitemap.xml
+
+User-agent: AhrefsBot
+Disallow: /

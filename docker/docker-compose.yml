@@ -1,0 +1,80 @@
+name: culinary-report-dev
+
+services:
+  postgres:
+    container_name: culinary-report-dev-db
+    image: pgvector/pgvector:pg18-trixie
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?run with --env-file env/server/.env.local}
+      POSTGRES_DB: ${DB_NAME:-culinary_report}
+      PGDATA: /.data/postgres
+    ports:
+      - "${DB_PORT:-5441}:5432"
+    networks:
+      - postgres
+
+  jaeger:
+    container_name: culinary-report-dev-jaeger
+    image: jaegertracing/all-in-one:latest
+    ports:
+      # Jaeger UI - open this in your browser
+      - "16686:16686"
+      # OTLP HTTP receiver - your NestJS app sends traces here
+      - "4318:4318"
+      # OTLP gRPC receiver (optional)
+      - "4317:4317"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=info
+    networks:
+      - postgres
+
+  claude:
+    container_name: culinary-report-dev-claude
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.claude
+    working_dir: /workspace
+    environment:
+      NPM_CONFIG_CACHE: /home/node/.npm
+    volumes:
+      - ..:/workspace
+      - claude-root-config:/root/.claude
+      - claude-node-config:/home/node/.claude
+      - claude-npm-cache:/home/node/.npm
+      - claude-root-node-modules:/workspace/node_modules
+      - claude-frontend-node-modules:/workspace/apps/frontend/node_modules
+      - claude-backend-node-modules:/workspace/apps/backend/node_modules
+      - claude-swagger-build-node-modules:/workspace/apps/swagger-build/node_modules
+      - claude-emails-node-modules:/workspace/packages/emails/node_modules
+      - claude-exceptions-node-modules:/workspace/packages/exceptions/node_modules
+      - claude-sdk-node-modules:/workspace/packages/sdk/node_modules
+      - claude-blog-content-node-modules:/workspace/packages/blog-content/node_modules
+      - claude-client-node-modules:/workspace/packages/client/node_modules
+    command: sleep infinity
+    ports:
+      - "3000:3000"
+      - "5011:5011"
+      - "5012:5012"
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+  postgres:
+  claude-root-config:
+  claude-node-config:
+  claude-npm-cache:
+  claude-root-node-modules:
+  claude-frontend-node-modules:
+  claude-backend-node-modules:
+  claude-swagger-build-node-modules:
+  claude-emails-node-modules:
+  claude-exceptions-node-modules:
+  claude-sdk-node-modules:
+  claude-client-node-modules:
+  claude-blog-content-node-modules:

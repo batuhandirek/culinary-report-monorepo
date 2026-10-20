@@ -1,0 +1,27 @@
+---
+name: domain-notifications-and-email
+description: In-app notifications, transactional e-mail (packages/emails templates, renderEmail), SMS, notification topic switches, promotional consent, Telegram alerts. Use before touching `modules/notification`, `modules/notification-preferences`, `modules/email`, `modules/sms`, `modules/telegram`, `packages/emails`, any `*.worker.ts` that sends something.
+---
+
+# Notifications and e-mail
+
+## Map
+
+Backend: `modules/notification` (`Notification` rows: `type`, `title`, `description`, `path`, `readAt`; `GET /notifications`, read/unread), `modules/email` (`EmailService.queueEmail`, `util/render-email.ts`), `modules/sms` (`SmsService.queueSms`), `modules/telegram` (admin alerts), `modules/notification-preferences` (the topic switches; depends on nothing, so every sender module imports it). Side effects arrive as persisted events (`*.persisted-event.ts`) handled by workers with `@OnPersistentEvent`. Templates: `packages/emails/src` (react-email) with components `Layout`, `Facts`, `Note`, `Quote`, `Button`, `Code`. The venue portal's mails are English (`PortalLoginCodeEmail`) or the prospect's language (`PortalInviteEmail`, en/de), unlike the Turkish account mails.
+
+There is no push channel: the product is web only.
+
+## Rules
+
+- **Whether a message about a user's own activity may leave is `NotificationPreferenceService.isOn`**, asked by the sender services themselves, never by a worker. A worker only names the topic: `EmailService.queueEmail(mail, { preference: { userId, topic } })`, `SmsService.queueSms(to, text, { preference })`. Without a `preference` a mail or SMS always goes (verification codes, account and security notices). The in-app row is always written.
+- **A topic switch is a row in `user_notification_preferences` (user, topic, channel, enabled), and only a switch the user touched has one**: the rest are `NOTIFICATION_PREFERENCE_DEFAULT` (on). `NOTIFICATION_TOPIC_CHANNELS` lists, per topic, the channels something is really sent on (`reports`: email; `alerts`: email, sms); it is the API's shape (`notificationPreferences` on `GET/PATCH /auth/me`), so a new topic or channel is an entry there plus the sender naming it, with no migration. Don't list a channel nothing sends on: it would be a dead switch.
+- **A promotional send checks `acceptsPromotional(user, channel)`** (`auth/util/notification-consent.ts`): `acceptedMarketing` plus the channel's own consent (`accepted{Email,Sms,Call}Communications`). A bulk sender narrows its recipients with `UserService.filterPromotionalRecipients(userIds, channel)` before queueing; a new campaign channel or tool goes through the same call, never its own query on the consent columns.
+- **A mail is a template rendered with `renderEmail`**, never `render` directly: it points links at this environment's site and adds the plain-text body. Templates only compose the package's components; the look lives there in inline styles and tables, because that is all mail clients draw. `queueEmail` skips an account with no address (phone signups), so pass `user.email` as is; another user is named by `publicName`. Subjects are logged: no code or secret in one. The backend imports the package's build: after editing it, `npm run build --filter=emails` (dev's watcher does it; a test run does not).
+- **A mail to a business contact (no account) takes no `preference`**: the report mail (`ReportReadyEmail`, sent by outreach's `ReportDeliveryService`) and the critical-review alert (`ReviewAlertEmail`, `ReviewAlertService`) go to a venue that subscribed and say to reply "stop". `Layout` takes `lang` (`tr` default, `en`, `de`) for `<html lang>` and the footer's words; a venue mail is in the prospect's language.
+- **A notification carries its own fallbacks**: `title`, `description` and the `path` it opens. In case a type is added later that a client has no wording for, it still reads and opens the right page.
+- **A deadline reminder must not be a `…ReminderSentAt` column on the thing it is about**: keep a separate table of sent reminders keyed by (kind, subject, deadline), so a moved deadline is a new key with nothing to reset.
+- Changing a persisted-event payload means updating every handler for that name (grep the static `eventName`).
+
+## Tests
+
+`notification-preferences/tests/notification-preferences.pglite.spec.ts` (real senders, watched queue: defaults, a topic switched off, the promotional filter), `notification/tests/notifications.controller.pglite.spec.ts`, `email/tests/`.

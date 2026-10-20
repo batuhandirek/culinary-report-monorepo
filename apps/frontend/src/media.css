@@ -1,0 +1,96 @@
+@reference "tailwindcss";
+
+:root { --device-pl: 0.5rem; }
+@media (min-width: 768px) { :root { --device-pl: 1rem; } }
+@media (min-width: 1024px) { :root { --device-pl: 1.5rem; } }
+@media (min-width: 1280px) { :root { --device-pl: 2rem; } }
+@media (min-width: 1536px) { :root { --device-pl: 2.5rem; } }
+
+.px-device { @apply px-3; }
+.pt-device { @apply pt-3; }
+.pb-device { @apply pb-3; }
+.mt-device { @apply mt-3; }
+.mb-device { @apply mb-3; }
+.py-device { @apply py-3; }
+.gap-device { @apply gap-3; }
+.pl-device { @apply pl-3; }
+.scroll-pl-device { @apply scroll-pl-3; }
+.right-device { @apply right-3; }
+.top-device { @apply top-3; }
+.left-device { @apply left-3; }
+.bottom-device { @apply bottom-3; }
+@media (min-width: 640px) {
+    .right-device { @apply right-3; }
+    .top-device { @apply top-3; }
+    .left-device { @apply left-3; }
+    .bottom-device { @apply bottom-3; }
+    .px-device { @apply px-3; }
+    .pl-device { @apply pl-3; }
+    .pt-device { @apply pt-3; }
+    .pb-device { @apply pb-3; }
+    .mt-device { @apply mt-3; }
+    .mb-device { @apply mb-3; }
+    .py-device { @apply py-3; }
+    .gap-device { @apply gap-3; }
+    .scroll-pl-device { @apply scroll-pl-3; }
+}
+@media (min-width: 768px) {
+    .right-device { @apply right-4; }
+    .top-device { @apply top-4; }
+    .left-device { @apply left-4; }
+    .bottom-device { @apply bottom-4; }
+    .px-device { @apply px-4; }
+    .pl-device { @apply pl-4; }
+    .pt-device { @apply pt-4; }
+    .pb-device { @apply pb-4; }
+    .mt-device { @apply mt-4; }
+    .mb-device { @apply mb-4; }
+    .py-device { @apply py-4; }
+    .gap-device { @apply gap-4; }
+    .scroll-pl-device { @apply scroll-pl-4; }
+}
+@media (min-width: 1024px) {
+    .right-device { @apply right-6; }
+    .top-device { @apply top-6; }
+    .left-device { @apply left-6; }
+    .bottom-device { @apply bottom-6; }
+    .px-device { @apply px-6; }
+    .pl-device { @apply pl-6; }
+    .pt-device { @apply pt-6; }
+    .pb-device { @apply pb-6; }
+    .mt-device { @apply mt-6; }
+    .mb-device { @apply mb-6; }
+    .py-device { @apply py-6; }
+    .gap-device { @apply gap-6; }
+    .scroll-pl-device { @apply scroll-pl-6; }
+}
+@media (min-width: 1280px) {
+    .right-device { @apply right-8; }
+    .top-device { @apply top-8; }
+    .left-device { @apply left-8; }
+    .bottom-device { @apply bottom-8; }
+    .px-device { @apply px-8; }
+    .pl-device { @apply pl-8; }
+    .pt-device { @apply pt-8; }
+    .pb-device { @apply pb-8; }
+    .mt-device { @apply mt-8; }
+    .mb-device { @apply mb-8; }
+    .py-device { @apply py-8; }
+    .gap-device { @apply gap-8; }
+    .scroll-pl-device { @apply scroll-pl-8; }
+}
+@media (min-width: 1536px) {
+    .right-device { @apply right-10; }
+    .top-device { @apply top-10; }
+    .left-device { @apply left-10; }
+    .bottom-device { @apply bottom-10; }
+    .px-device { @apply px-10; }
+    .pl-device { @apply pl-10; }
+    .pt-device { @apply pt-10; }
+    .pb-device { @apply pb-10; }
+    .mt-device { @apply mt-10; }
+    .mb-device { @apply mb-10; }
+    .py-device { @apply py-10; }
+    .gap-device { @apply gap-10; }
+    .scroll-pl-device { @apply scroll-pl-10; }
+}

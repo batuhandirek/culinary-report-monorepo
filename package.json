@@ -1,0 +1,72 @@
+{
+  "name": "culinary-report",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "turbo": "turbo run",
+    "build": "turbo build --force",
+    "build:force": "turbo build --cache=local:r,remote:r",
+    "build:dry": "turbo run build --dry-run",
+    "build:graph": "turbo run build --graph",
+    "build:fe": "dotenv -- turbo run frontend#build",
+    "clean": "turbo run clean --parallel",
+    "create:client": "turbo run --env-mode=loose --force=true swagger-build#create:client && turbo run client#build",
+    "preview": "NODE_ENV=development node apps/backend/dist/main",
+    "start": "NODE_ENV=production node --max-old-space-size=6144 apps/backend/dist/main",
+    "start:dev": "turbo run dev --env-mode=loose",
+    "typia:setup": "npm run typia:setup --workspace=backend",
+    "PROD ************************************************************************": "",
+    "migration:fresh:prod": "NODE_ENV=production turbo run --env-mode loose backend#migration:fresh:prod",
+    "migration:up:prod": "NODE_ENV=production turbo run --env-mode loose backend#migration:up:prod",
+    "DEV ************************************************************************": "",
+    "rebuild:dev": "docker compose --env-file env/server/.env.local -f docker/docker-compose.yml down -v --remove-orphans && docker compose --env-file env/server/.env.local -f docker/docker-compose.yml up -d postgres && sleep 10 && turbo run backend#build && npm run migration:up:dev",
+    "migration:fresh:dev": "NODE_ENV=development turbo run --env-mode loose backend#migration:fresh:dev",
+    "migration:up:dev": "NODE_ENV=development turbo run --env-mode loose backend#migration:up:dev",
+    "migration:create:dev": "NODE_ENV=development turbo run --env-mode loose backend#migration:create:dev",
+    "TEST ************************************************************************": "",
+    "backend:test": "turbo run backend#test",
+    "backend:test:integration": "./bin/run-integration-tests.sh",
+    "backend:test:integration:local": "./bin/run-integration-tests.sh --local",
+    "migration:up:test": "NODE_ENV=test turbo run --env-mode loose backend#migration:up:test",
+    "LINT AND FORMAT ************************************************************************": "",
+    "lint:backend:fix": "eslint --config apps/backend/eslint.config.mjs 'apps/backend/src/**/*.ts' --fix --debug",
+    "lint:frontend": "eslint 'apps/frontend/**/*.{ts,tsx,js,jsx,svelte,svelte.ts}'",
+    "SCRIPTS ************************************************************************": "",
+    "db:up": "docker compose --env-file env/server/.env.local -f docker/docker-compose.yml up -d postgres"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.35.0",
+    "@types/hash-sum": "^1.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.2.0",
+    "hash-sum": "^2.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.9.2"
+  },
+  "dependencies": {
+    "dotenv-cli": "^10.0.0",
+    "ts-patch": "^3.3.0",
+    "turbo": "^2.5.6"
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "packageManager": "npm@11.6.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

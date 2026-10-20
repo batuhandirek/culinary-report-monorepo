@@ -1,0 +1,72 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    ".env"
+  ],
+  "tasks": {
+    "clean:build": {},
+    "clean": {},
+    "build": {
+      "cache": false,
+      "dependsOn": [],
+      "outputs": [
+        "dist/**",
+        ".svelte-kit/**",
+        ".build/**"
+      ]
+    },
+    "test": {},
+    "dev": {
+      "cache": false,
+      "dependsOn": [],
+      "persistent": true
+    },
+    "swagger-build#create:swagger": {
+      "dependsOn": []
+    },
+    "swagger-build#create:client": {
+      "dependsOn": [
+        "swagger-build#create:swagger"
+      ]
+    },
+    "backend#test": {},
+    "backend#migration:up:test": {},
+    "backend#migration:up:dev": {},
+    "backend#migration:fresh:dev": {},
+    "backend#migration:create:dev": {
+      "dependsOn": [
+        "backend#build"
+      ]
+    },
+    "backend#migration:up:prod": {},
+    "backend#migration:fresh:prod": {},
+    "exceptions#build": {},
+    "emails#build": {},
+    "client#build": {},
+    "sdk#build": {
+      "dependsOn": [
+        "client#build"
+      ]
+    },
+    "blog-content#build": {},
+    "backend#build": {
+      "dependsOn": [
+        "emails#build",
+        "sdk#build",
+        "exceptions#build",
+        "client#build"
+      ]
+    },
+    "frontend#build": {
+      "dependsOn": [
+        "sdk#build",
+        "exceptions#build",
+        "client#build",
+        "backend#build",
+        "blog-content#build"
+      ]
+    },
+    "frontend#optimize": {},
+    "frontend#dev": {}
+  }
+}

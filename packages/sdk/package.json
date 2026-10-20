@@ -1,0 +1,19 @@
+{
+  "name": "sdk",
+  "version": "0.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "dev": "tsc --w",
+    "clean": "rm -rf ./dist && rm -rf ./node_modules"
+  },
+  "dependencies": {
+    "client": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

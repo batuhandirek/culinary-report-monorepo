@@ -1,0 +1,27 @@
+{
+    "name": "emails",
+    "version": "0.0.0",
+    "main": "./dist/src/index.js",
+    "types": "./dist/src/index.d.ts",
+    "license": "MIT",
+    "scripts": {
+        "prebuild_old": "rimraf dist",
+        "build": "tsc --rootDir ./",
+        "dev": "tsc -w --rootDir ./",
+        "clean": "rm -rf ./dist && rm -rf ./node_modules",
+        "clean:build": "rm -rf ./dist",
+        "test": "echo NOTEST",
+        "email:dev": "email dev --dir src/emails",
+        "email:export": "email export --dir src/emails"
+    },
+    "dependencies": {
+        "react": "^19.1.1",
+        "react-dom": "^19.1.1"
+    },
+    "devDependencies": {
+        "@react-email/ui": "6.3.3",
+        "@types/react": "^19.1.13",
+        "react-email": "6.3.3",
+        "typescript": "^5.9.2"
+    }
+}

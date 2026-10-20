@@ -1,0 +1,27 @@
+{
+    "name": "client",
+    "version": "0.0.0",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./src/Api": {
+            "types": "./src/Api.ts",
+            "default": "./dist/Api.js"
+        }
+    },
+    "license": "MIT",
+    "scripts": {
+      "prebuild": "rimraf dist",
+      "build": "tsc",
+      "clean": "rm -rf ./dist && rm -rf ./node_modules"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "typescript": "^5.5.4"
+    }
+  }
+  

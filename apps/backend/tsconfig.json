@@ -1,0 +1,42 @@
+{
+    "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "target": "ES2024",
+        // Inert for .ts sources; lets ts-jest (shared ConfigSet) transform the
+        // `emails` package's .tsx — see the .tsx transform note in jest.config.ts.
+        "jsx": "react",
+        "declaration": true,
+        "removeComments": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "sourceMap": true,
+        "outDir": "dist",
+        "baseUrl": "./src",
+        "incremental": true,
+        "skipLibCheck": true,
+        "strictNullChecks": true,
+        "noImplicitAny": false,
+        "strictBindCallApply": false,
+        "forceConsistentCasingInFileNames": false,
+        "noFallthroughCasesInSwitch": false,
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+		"strictPropertyInitialization": false,
+		"useDefineForClassFields": false,
+		"types": ["jest"],
+        "plugins": [
+            { "transform": "typia/lib/transform" },
+            { "transform": "@nestia/core/lib/transform" },
+        ],
+        "paths": {
+            "src/": ["."],
+            "src/*": ["./*"]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+}

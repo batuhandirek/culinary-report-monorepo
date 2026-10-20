@@ -1,0 +1,32 @@
+{
+  "name": "blog-content",
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "dev": "tsc -p tsconfig.json --w"
+  },
+  "dependencies": {
+    "@tiptap/core": "^3.28.0",
+    "@tiptap/extension-image": "^3.28.0",
+    "@tiptap/extension-text-align": "^3.28.0",
+    "@tiptap/html": "^3.28.0",
+    "@tiptap/starter-kit": "^3.28.0",
+    "happy-dom": "^20.14.6"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2"
+  }
+}

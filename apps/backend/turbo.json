@@ -1,0 +1,35 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": [
+    "//"
+  ],
+  "tasks": {
+    "migration:up:test": { "cache": false },
+    "migration:create:dev": { "cache": false },
+    "migration:fresh:dev": { "cache": false },
+    "migration:up:dev": { "cache": false },
+    "migration:up:prod":  {"cache": false },
+    "migration:fresh:prod": { "cache": false },
+    "start": {
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "dev": {
+      "inputs": [
+        "./src"
+      ]
+    },
+    "create:swagger": {
+      "cache": false,
+      "outputs": ["./swagger.json"]
+    },
+    "create:client": {
+      "cache": false,
+      "inputs": ["./swagger.json"],
+      "dependsOn": [
+        "create:swagger"
+      ]
+    }
+  }
+}
