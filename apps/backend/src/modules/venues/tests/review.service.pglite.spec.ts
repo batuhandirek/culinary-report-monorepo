@@ -6,7 +6,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { ReviewAnalysisAgent } from '../agents/review-analysis.agent.js';
-import { Review } from '../entities/review.entity.js';
+import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { ReviewService } from '../services/review.service.js';
@@ -91,6 +91,34 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		await service.scrapeMonth('2026-09', [a.id], 5, new Date('2026-10-18T09:00:00Z'), '2026-08-01');
 		expect((runActor.mock.calls.at(-1)?.[1] as { reviewsStartDate: string }).reviewsStartDate).toBe('2026-08-01');
 		expect(await em.count(Review, { reviewId: 'r-aug' })).toBe(1);
+	});
+
+	it('sends the places in the order given, so a capped run covers the first ones', async () => {
+		const em = harness.orm.em;
+		const venues = ['pz', 'py', 'px'].map(placeId => em.create(Venue, { city: testCity(em), placeId, name: placeId }));
+		await em.flush();
+		runActor.mockResolvedValueOnce([]);
+		await service.scrapeMonth('2026-09', [venues[2].id, venues[0].id, venues[1].id], 5);
+		expect((runActor.mock.calls.at(-1)?.[1] as { placeIds: string[] }).placeIds).toEqual(['px', 'pz', 'py']);
+	});
+
+	it('tells the venues with a Google review from before the month: TripAdvisor and the month itself are no history', async () => {
+		const em = harness.orm.em;
+		const [old, recent, tourist, none] = ['h-old', 'h-recent', 'h-ta', 'h-none'].map(placeId =>
+			em.create(Venue, { city: testCity(em), placeId, name: placeId }),
+		);
+		em.create(Review, { venue: old, reviewId: 'h1', publishedAt: new Date('2026-08-31T21:00:00Z') });
+		em.create(Review, { venue: recent, reviewId: 'h2', publishedAt: new Date('2026-09-01T00:00:00Z') });
+		em.create(Review, {
+			venue: tourist,
+			reviewId: 'ta_h3',
+			platform: ReviewPlatformEnum.TRIPADVISOR,
+			publishedAt: new Date('2026-05-01T10:00:00Z'),
+		});
+		await em.flush();
+		const ids = [old, recent, tourist, none].map(v => v.id);
+		expect([...(await service.venuesWithHistory(ids, '2026-09'))]).toEqual([old.id]);
+		expect(await service.venuesWithHistory([], '2026-09')).toEqual(new Set());
 	});
 
 	it('updates the day’s snapshot when the step runs twice', async () => {

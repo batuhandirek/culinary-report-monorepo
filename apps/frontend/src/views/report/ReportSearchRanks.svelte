@@ -41,7 +41,7 @@
 							<span class="truncate">{place.name}</span>
 							<span class="text-muted-foreground tabular-nums">
 								{place.rating ? `${place.rating.toFixed(1)} ★` : ''}{place.reviewsCount
-									? ` · ${place.reviewsCount}`
+									? ` · ${place.reviewsCount.toLocaleString('en')}`
 									: ''}
 							</span>
 						</li>

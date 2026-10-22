@@ -47,6 +47,7 @@ export class AdminTopicInsightsController {
 			postsByMonth: d.postsByMonth,
 			shareByMonth: d.shareByMonth,
 			...(d.related && { related: d.related }),
+			menu: d.menu,
 			venues: d.venues.map(v => ({
 				id: v.venue.id,
 				name: v.venue.name,

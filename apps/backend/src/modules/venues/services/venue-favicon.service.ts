@@ -5,16 +5,18 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { createHash } from 'node:crypto';
 
+import { Image } from 'src/modules/image/entities/image.entity.js';
 import { ImageService, UnreadableImageError } from 'src/modules/image/services/image.service.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import {
-	FAVICON_BATCH,
 	FAVICON_CONCURRENCY,
 	FAVICON_IMAGE_FOLDER,
 	FAVICON_MAX_LINKS,
+	FAVICON_PAGE,
 	FAVICON_REFRESH_DAYS,
 	FAVICON_RETRY_DAYS,
+	FAVICON_RUN_SECONDS,
 	GENERIC_FAVICON_HOSTS,
 } from '../constants/favicon.constant.js';
 import { Venue } from '../entities/venue.entity.js';
@@ -29,9 +31,9 @@ import { hostOf } from '../util/web-mentions.js';
 
 import { FaviconFetchService, MAX_ICON_BYTES, MAX_PAGE_BYTES } from './favicon-fetch.service.js';
 
-/** What one venue's refresh did. */
+/** What a refresh did to one venue. */
 export type FaviconOutcome =
-	/** A new or changed icon was uploaded */
+	/** A new or changed icon was stored */
 	| 'updated'
 	/** The icon is the one already stored */
 	| 'unchanged'
@@ -43,15 +45,25 @@ export type FaviconOutcome =
 	| 'no_site';
 
 export interface FaviconRunResult {
+	/** Venues refreshed, the open venues sharing a due venue's website included */
 	venues: number;
+	/** Websites looked at: one fetch each, however many venues share it */
+	sites: number;
 	outcomes: Record<FaviconOutcome, number>;
+}
+
+/** The venues one fetch serves: every open venue on one website host, or one venue without a site. */
+interface SiteGroup {
+	site: URL | null;
+	venues: Venue[];
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
- * The one writer of `Venue.favicon` / `faviconHash` / `faviconCheckedAt`: each venue's
- * website icon, fetched from the site and kept on ImageKit through `ImageService`.
+ * The one writer of `Venue.favicon` / `faviconHash` / `faviconCheckedAt`: the icon of each
+ * venue's website, fetched once per website host and kept on ImageKit through `ImageService`
+ * (one file per host, one `Image` row per venue sharing it).
  */
 @Injectable()
 export class VenueFaviconService {
@@ -100,54 +112,109 @@ export class VenueFaviconService {
 	}
 
 	/**
-	 * One batch of due venues, side by side on one entity manager, flushed once at the end.
-	 * Throws, after flushing, when ImageKit or the database failed.
+	 * Due venues a page at a time, their websites side by side on one entity manager, each
+	 * page flushed, until none is due or `runMs` (wall clock) has passed; a website started
+	 * by then is finished. Throws, after flushing, when ImageKit or the database failed.
 	 */
-	async refreshDue(now = new Date(), limit = FAVICON_BATCH): Promise<FaviconRunResult> {
-		const venues = await this.due(now, limit);
-		const outcomes: Record<FaviconOutcome, number> = {
-			updated: 0,
-			unchanged: 0,
-			missing: 0,
-			generic: 0,
-			no_site: 0,
+	async refreshDue(
+		now = new Date(),
+		runMs = FAVICON_RUN_SECONDS * 1000,
+	): Promise<FaviconRunResult> {
+		const deadline = Date.now() + runMs;
+		const result: FaviconRunResult = {
+			venues: 0,
+			sites: 0,
+			outcomes: { updated: 0, unchanged: 0, missing: 0, generic: 0, no_site: 0 },
 		};
-		// A site's own failures are outcomes in `refresh`; what throws is ImageKit (keys, an
-		// outage) or the database, true for every venue after it too: the run stops, the venues
-		// it didn't finish stay due, and the job fails after keeping what it stored
+		// A site's own failures are outcomes in `refreshSite`; what throws is ImageKit (keys,
+		// an outage) or the database, true for every site after it too: the run stops, the
+		// venues it didn't finish stay due, and the job fails after keeping what it stored
 		let failure: Error | null = null;
-		await runPool(
-			venues,
-			FAVICON_CONCURRENCY,
-			async venue => {
-				if (failure) return;
-				outcomes[await this.refresh(venue, now)]++;
-			},
-			(venue, error) => {
-				failure ??= error;
-				this.logger.warn(`Favicon of venue ${venue.id} failed: ${error.message}`);
-			},
-		);
-		await this.em.flush();
-		if (venues.length)
-			this.logger.log(`Favicons: ${venues.length} venues, ${JSON.stringify(outcomes)}`);
+		while (!failure && Date.now() < deadline) {
+			const due = await this.due(now, FAVICON_PAGE);
+			if (!due.length) break;
+			await runPool(
+				await this.siteGroups(due),
+				FAVICON_CONCURRENCY,
+				async group => {
+					if (failure || Date.now() >= deadline) return;
+					const outcomes = await this.refreshSite(group, now);
+					result.sites++;
+					result.venues += outcomes.length;
+					for (const outcome of outcomes) result.outcomes[outcome]++;
+				},
+				(group, error) => {
+					failure ??= error;
+					this.logger.warn(
+						`Favicon of ${group.site?.hostname ?? `venue ${group.venues[0].id}`} failed: ${error.message}`,
+					);
+				},
+			);
+			await this.em.flush();
+		}
+		if (result.venues)
+			this.logger.log(
+				`Favicons: ${result.sites} sites, ${result.venues} venues, ${JSON.stringify(result.outcomes)}`,
+			);
 		if (failure) throw new Error(`Favicon run stopped: ${(failure as Error).message}`);
-		return { venues: venues.length, outcomes };
+		return result;
 	}
 
 	/**
-	 * Looks for the venue's icon and stores what changed, unflushed: the page's best icon
-	 * links, then `/favicon.ico`, then Google's copy; the first that is an image ImageKit can
-	 * read wins. A venue `favicon` must be populated.
+	 * The due venues by website host, each host with every other open venue on it, so a
+	 * chain's branches share one fetch and one icon whichever of them is due.
 	 */
-	async refresh(venue: Venue, now: Date): Promise<FaviconOutcome> {
-		const site = faviconSite(venue.website);
+	private async siteGroups(due: Venue[]): Promise<SiteGroup[]> {
+		const groups = new Map<string, SiteGroup>();
+		for (const venue of due) {
+			const site = faviconSite(venue.website);
+			const key = site ? hostOf(site.href)! : `venue:${venue.id}`;
+			const group = groups.get(key) ?? { site, venues: [] };
+			group.venues.push(venue);
+			groups.set(key, group);
+		}
+		const hosts = [...groups.entries()].filter(([, g]) => g.site).map(([host]) => host);
+		if (hosts.length) {
+			// The text match narrows the read; the host check below decides
+			const others = await this.em.find(
+				Venue,
+				{
+					closed: false,
+					id: { $nin: due.map(v => v.id) },
+					$or: hosts.map(host => ({ website: { $ilike: `%${host}%` } })),
+				},
+				{ populate: ['favicon'] },
+			);
+			for (const venue of others) {
+				const site = faviconSite(venue.website);
+				const group = site && groups.get(hostOf(site.href)!);
+				if (group?.site) group.venues.push(venue);
+			}
+		}
+		return [...groups.values()];
+	}
+
+	/**
+	 * Looks for the website's icon once and stores what changed on each of its venues,
+	 * unflushed: the page's best icon links, then `/favicon.ico`, then Google's copy; the first
+	 * that is an image ImageKit can read wins. It is uploaded once (or taken from a venue that
+	 * already holds it), and every venue gets its own `Image` row on that file. The venues'
+	 * `favicon` must be populated. One outcome per venue, in order.
+	 */
+	async refreshSite({ site, venues }: SiteGroup, now: Date): Promise<FaviconOutcome[]> {
+		const done = (outcomes: FaviconOutcome[]) => {
+			for (const venue of venues) venue.faviconCheckedAt = now;
+			return outcomes;
+		};
 		if (!site) {
-			if (venue.favicon) await this.imageService.removeImage(venue.favicon);
-			venue.favicon = null;
-			venue.faviconHash = null;
-			venue.faviconCheckedAt = now;
-			return 'no_site';
+			await this.imageService.removeImages(
+				venues.flatMap(v => (v.favicon ? [v.favicon] : [])),
+			);
+			for (const venue of venues) {
+				venue.favicon = null;
+				venue.faviconHash = null;
+			}
+			return done(venues.map(() => 'no_site'));
 		}
 
 		for (const url of await this.candidates(site)) {
@@ -156,53 +223,60 @@ export class VenueFaviconService {
 			if (!icon || !format) continue;
 
 			const hash = createHash('sha256').update(icon.body).digest('hex');
-			if (await this.isGeneric(hash, venue)) {
-				await this.dropGeneric(hash, venue);
-				venue.faviconCheckedAt = now;
-				return 'generic';
+			if (await this.isGeneric(hash, site, venues)) {
+				await this.dropGeneric(hash, venues);
+				return done(venues.map(() => 'generic'));
 			}
-			if (venue.favicon && venue.faviconHash === hash) {
-				venue.faviconCheckedAt = now;
-				return 'unchanged';
+			const held = (v: Venue) => !!v.favicon && v.faviconHash === hash;
+			let image: Image | null = venues.find(held)?.favicon ?? null;
+			if (!image) {
+				try {
+					image = await this.imageService.createImageFromBytes(
+						icon.body,
+						FAVICON_IMAGE_FOLDER,
+						`${hostOf(site.href)!.replace(/[^\w.-]/g, '')}.${format}`,
+					);
+				} catch (e) {
+					// ImageKit can't read every format a site serves (some ICO files): try the
+					// next. Anything else (keys, an outage) is no verdict on the site: its
+					// venues stay due
+					if (!(e instanceof UnreadableImageError)) throw e;
+					this.logger.debug(`Favicon ${url} not stored: ${e.message}`);
+					continue;
+				}
 			}
-			let image;
-			try {
-				image = await this.imageService.createImageFromBytes(
-					icon.body,
-					FAVICON_IMAGE_FOLDER,
-					`${venue.placeId.replace(/[^\w-]/g, '')}.${format}`,
-				);
-			} catch (e) {
-				// ImageKit can't read every format a site serves (some ICO files): try the next.
-				// Anything else (keys, an outage) is no verdict on the venue: it stays due
-				if (!(e instanceof UnreadableImageError)) throw e;
-				this.logger.debug(`Favicon ${url} not stored: ${e.message}`);
-				continue;
-			}
-			if (venue.favicon) await this.imageService.removeImage(venue.favicon);
-			venue.favicon = image;
-			venue.faviconHash = hash;
-			venue.faviconCheckedAt = now;
-			return 'updated';
+			let fresh: Image | null = venues.some(held) ? null : image;
+			const replaced: Image[] = [];
+			const outcomes = venues.map((venue): FaviconOutcome => {
+				if (held(venue)) return 'unchanged';
+				if (venue.favicon) replaced.push(venue.favicon);
+				// The uploaded row goes to the first venue, a row on the same file to the rest
+				venue.favicon = fresh ?? this.imageService.duplicate(image);
+				fresh = null;
+				venue.faviconHash = hash;
+				return 'updated';
+			});
+			await this.imageService.removeImages(replaced);
+			return done(outcomes);
 		}
 
-		venue.faviconCheckedAt = now;
-		return 'missing';
+		return done(venues.map(() => 'missing'));
 	}
 
 	/**
-	 * Whether venues on `GENERIC_FAVICON_HOSTS` − 1 other hosts found these bytes: a
-	 * WordPress, Wix or site-builder default. Read from stored hashes, so the batch in flight
-	 * isn't counted; the next venue to find it drops it from them.
+	 * Whether venues on `GENERIC_FAVICON_HOSTS` − 1 hosts other than this site's found these
+	 * bytes: a WordPress, Wix or site-builder default. Read from stored hashes, so the sites in
+	 * flight aren't counted; the next venue to find it drops it from them.
 	 */
-	private async isGeneric(hash: string, venue: Venue): Promise<boolean> {
+	private async isGeneric(hash: string, site: URL, venues: Venue[]): Promise<boolean> {
+		const ids = venues.map(v => v.id);
 		const rows: { website: string | null }[] = await this.em
 			.getConnection()
-			.execute('select distinct website from venues where favicon_hash = ? and id <> ?', [
-				hash,
-				venue.id,
-			]);
-		const own = venue.website ? hostOf(venue.website) : null;
+			.execute(
+				`select distinct website from venues where favicon_hash = ? and id not in (${ids.map(() => '?').join(', ')})`,
+				[hash, ...ids],
+			);
+		const own = hostOf(site.href);
 		const hosts = new Set(
 			rows.map(r => r.website && hostOf(r.website)).filter(h => h && h !== own),
 		);
@@ -210,20 +284,20 @@ export class VenueFaviconService {
 	}
 
 	/**
-	 * Removes a generic icon from every venue holding it, `venue` included (with whatever icon
-	 * it had), and keeps the hash on `venue` so it stays counted and waits the refresh period.
+	 * Removes a generic icon from every venue holding it, and the site's venues' icons
+	 * whatever they were; keeps the hash on the site's venues so they stay counted and wait
+	 * the refresh period.
 	 */
-	private async dropGeneric(hash: string, venue: Venue): Promise<void> {
+	private async dropGeneric(hash: string, venues: Venue[]): Promise<void> {
 		const holders = await this.em.find(
 			Venue,
 			{ faviconHash: hash, favicon: { $ne: null } },
 			{ populate: ['favicon'] },
 		);
-		for (const holder of new Set([...holders, venue])) {
-			if (holder.favicon) await this.imageService.removeImage(holder.favicon);
-			holder.favicon = null;
-		}
-		venue.faviconHash = hash;
+		const all = [...new Set([...holders, ...venues])];
+		await this.imageService.removeImages(all.flatMap(v => (v.favicon ? [v.favicon] : [])));
+		for (const holder of all) holder.favicon = null;
+		for (const venue of venues) venue.faviconHash = hash;
 	}
 
 	/** The URLs to try, best first, each once. */

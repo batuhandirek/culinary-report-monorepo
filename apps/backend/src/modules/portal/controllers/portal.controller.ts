@@ -132,7 +132,7 @@ export class PortalController {
 		@TypedParam('brandId') brandId: Uuid,
 		@TypedQuery() query: PortalSeriesInputDto,
 	): Promise<PortalSeriesOutputDto> {
-		return this.portalService.series(brandId, query.months ?? 12, query.cityId);
+		return this.portalService.series(brandId, query.months ?? 12, query.cityId, undefined, query.branchId);
 	}
 
 	/** The relations each stored report holds, month by month, and the weeks across them. */
@@ -142,7 +142,7 @@ export class PortalController {
 		@TypedParam('brandId') brandId: Uuid,
 		@TypedQuery() query: PortalPatternsInputDto,
 	): Promise<PortalPatternsOutputDto> {
-		return this.portalService.patterns(brandId, query.months ?? 6, query.cityId);
+		return this.portalService.patterns(brandId, query.months ?? 6, query.cityId, undefined, query.branchId);
 	}
 
 	@TypedRoute.Get('/brands/:brandId/settings')

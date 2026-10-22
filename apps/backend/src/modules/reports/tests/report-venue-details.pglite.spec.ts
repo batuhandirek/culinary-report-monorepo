@@ -54,7 +54,7 @@ describe('ReportData.venue Google Maps details (pglite)', () => {
 		await em.flush();
 
 		const report = await service.build(known.brand.id, known.city.id, '2026-09');
-		expect(report.data.venue.amenities).toEqual([
+		expect(report.data.branches[0].amenities).toEqual([
 			'Outdoor seating',
 			'Takeout',
 			'Accepts reservations',
@@ -62,11 +62,11 @@ describe('ReportData.venue Google Maps details (pglite)', () => {
 			'NFC mobile payments',
 			'Wheelchair accessible entrance',
 		]);
-		expect(report.data.venue.reviewsDistribution).toEqual(DETAIL_ITEM.reviewsDistribution);
+		expect(report.data.branches[0].reviewsDistribution).toEqual(DETAIL_ITEM.reviewsDistribution);
 
 		// Unknown stays absent, never an empty list or zeros
 		const bare = await service.build(unknown.brand.id, unknown.city.id, '2026-09');
-		expect(bare.data.venue.amenities).toBeUndefined();
-		expect(bare.data.venue.reviewsDistribution).toBeUndefined();
+		expect(bare.data.branches[0].amenities).toBeUndefined();
+		expect(bare.data.branches[0].reviewsDistribution).toBeUndefined();
 	});
 });

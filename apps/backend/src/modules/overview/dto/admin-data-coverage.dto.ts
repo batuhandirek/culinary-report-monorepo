@@ -28,7 +28,7 @@ export interface AdminDataMonthOutputDto {
 	inProgress: boolean;
 	/** Every step of the monthly run succeeded (or was skipped as done) */
 	complete: boolean;
-	posts: { tiktok: number; instagram: number; unanalysed: number };
+	posts: { tiktok: number; instagram: number; blog: number; unanalysed: number };
 	mentions: { matched: number; unmatched: number; otherCity: number };
 	reviews: { total: number; unanalysed: number; venues: number };
 	reports: { built: number; sent: number };

@@ -1,7 +1,7 @@
 import { QueryOrder, UniqueConstraintViolationException } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 
@@ -29,7 +29,7 @@ export type CityFields = Pick<
 	| 'cronEnabled'
 	| 'active'
 > &
-	Partial<Pick<City, 'lat' | 'lng'>>;
+	Partial<Pick<City, 'lat' | 'lng' | 'osmRelationId' | 'doNotListVenues' | 'doNotListCreators'>>;
 
 /** What one source brought in over the window `sourceYield` looks at. */
 export interface CitySourceYield {
@@ -127,16 +127,21 @@ export class CityService {
 		return city;
 	}
 
-	/** Adds a source (hashtags lose their `#` and are lowercased). Flushes; a duplicate is a 409. */
+	/**
+	 * Adds a source (hashtags lose their `#` and are lowercased; a blog is its URL, 400 when it is
+	 * not a public web address). Flushes; a duplicate is a 409.
+	 */
 	async addSource(
 		cityId: string,
 		input: { kind: CitySourceKindEnum; value: string; note?: string | null; enabled?: boolean },
 	): Promise<CitySource> {
+		const value = normalizeSourceValue(input.kind, input.value);
+		if (!value) throw new BadRequestException('Not a usable source');
 		const city = await this.getById(cityId);
 		const source = this.em.create(CitySource, {
 			city,
 			kind: input.kind,
-			value: normalizeSourceValue(input.kind, input.value),
+			value,
 			note: input.note?.trim() || null,
 			enabled: input.enabled ?? true,
 		});
@@ -191,6 +196,16 @@ export class CityService {
 		if (input.note !== undefined) source.note = input.note?.trim() || null;
 		await this.em.flush();
 		return source;
+	}
+
+	/**
+	 * What `SCRAPE_BLOGS` found reading a blog source: the feed it read (kept for the next run)
+	 * and what went wrong, null when nothing did. Does not flush.
+	 */
+	recordBlogCheck(source: CitySource, check: { feedUrl: string | null; error: string | null }, now = new Date()): void {
+		source.feedUrl = check.feedUrl;
+		source.error = check.error;
+		source.checkedAt = now;
 	}
 
 	/**

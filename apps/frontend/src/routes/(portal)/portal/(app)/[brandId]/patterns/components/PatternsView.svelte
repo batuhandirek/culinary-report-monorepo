@@ -21,6 +21,12 @@
 
 	let { patterns, brandId }: Props = $props();
 
+	// A chain's busyness and booked out are the picked branch's: their notes say which
+	const place = $derived.by(() => {
+		const branch =
+			patterns.branches.length > 1 ? patterns.branches.find((b) => b.id === patterns.branchId) : undefined;
+		return branch ? `${branch.street ?? branch.name} · ` : '';
+	});
 	const weeks = $derived(patterns.weeks);
 	const weekKeys = $derived(weeks.map((w) => w.week));
 	const rows = $derived(patterns.months);
@@ -152,7 +158,7 @@
 			{#if hasBusyness}
 				<MonthChart
 					title="Busyness"
-					note="Google popular times: the week's ten busiest hours, 0–100 of your own peak"
+					note={`${place}Google popular times: the week's ten busiest hours, 0–100 of your own peak`}
 					months={weekKeys}
 					values={weekly((w) => w.busyness)}
 					format={index}
@@ -169,7 +175,7 @@
 			{#if hasBooked}
 				<MonthChart
 					title="Booked out"
-					note="Share of Friday and Saturday evening slots already taken when we looked"
+					note={`${place}Share of Friday and Saturday evening slots already taken when we looked`}
 					months={weekKeys}
 					values={weekly((w) => w.booked)}
 					format={pct}

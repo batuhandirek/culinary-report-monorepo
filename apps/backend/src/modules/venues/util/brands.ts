@@ -1,6 +1,7 @@
 // Brands: which venue names are branches of one brand. Pure functions, shared by the venues and
 // social modules.
 
+import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { isDistinctive, nameVariants } from 'src/modules/social/util/account-match.js';
 import { profileOf } from 'src/modules/social/util/accounts.js';
 
@@ -77,15 +78,32 @@ export interface BrandSuggestionVenue {
 	closed?: boolean;
 }
 
+/** Why venues look like one brand (`suggestBrands`). */
+export type BrandSuggestionReason =
+	| 'same name'
+	| 'name prefix'
+	| 'same website'
+	| 'same Instagram'
+	| 'same TikTok';
+
 export interface BrandSuggestionGroup {
-	/** The brand key the branches share */
+	/**
+	 * The brand key the branches share; the profile itself ("instagram:kinza.berlin") when they
+	 * share one and their names share no words (`isProfileKey`)
+	 */
 	key: string;
 	/** The name to confirm it under: the shared head of the branch names */
 	name: string;
 	venueIds: string[];
-	/** "same name", "name + more words", "same website" */
-	reason: 'same name' | 'name prefix' | 'same website';
+	reason: BrandSuggestionReason;
 }
+
+/**
+ * Whether a suggestion's key is a shared Instagram or TikTok profile rather than a brand key:
+ * such a group is an admin's call, never merged by itself (one owner's two concepts may list
+ * one profile).
+ */
+export const isProfileKey = (key: string): boolean => /^(instagram|tiktok):/.test(key);
 
 const commonWordPrefix = (keys: string[]): string => {
 	const words = keys.map(k => k.split(' '));
@@ -100,8 +118,10 @@ const commonWordPrefix = (keys: string[]): string => {
 /**
  * A city's open food venues that look like one brand, biggest group first. Same brand key, or
  * a key and longer names that start with it (`BRAND_PREFIX_MIN_LENGTH`), or the same website
- * with the same first word. `skipKeys` (chains that exist, dismissed suggestions) are left out; so are
- * venues with no partner. A venue joins one group at most, and a key names one group.
+ * with the same first word, or the same Instagram or TikTok profile whatever the names (a
+ * profile is the business's own; a shared Lieferando or Linktree page says nothing). `skipKeys`
+ * (chains that exist, dismissed suggestions) are left out; so are venues with no partner. A
+ * venue joins one group at most, and a key names one group.
  */
 export const suggestBrands = (
 	venues: BrandSuggestionVenue[],
@@ -158,22 +178,48 @@ export const suggestBrands = (
 		});
 	}
 
-	// Branches with their own names on one website ("Burgermeister Zoo", "Burgermeister Mehringdamm")
-	const byHost = new Map<string, BrandSuggestionVenue[]>();
+	// A profile shared by names with no words in common is named after the venue it is named
+	// after ("kinza.berlin" → Kinza), else the shortest name
+	const profileName = (handle: string, members: BrandSuggestionVenue[]): string => {
+		const heads = members
+			.map(v => brandHead(v.name))
+			.sort((a, b) => a.length - b.length || a.localeCompare(b));
+		return heads.find(head => siteNamedAfter(handle, head, cityWords)) ?? heads[0];
+	};
+
+	// Branches with their own names on one website ("Burgermeister Zoo", "Burgermeister
+	// Mehringdamm"), or on one Instagram or TikTok profile ("instagram.com/kinza.berlin"),
+	// whatever their names: a shared website says little without a shared first word, a profile
+	// is the business's own
+	const bySite = new Map<
+		string,
+		{ reason: BrandSuggestionReason; handle: string | null; members: BrandSuggestionVenue[] }
+	>();
 	for (const v of open) {
 		if (assigned.has(v.id)) continue;
-		// An Instagram or TikTok profile is a website too: "instagram.com/kinza.berlin"
 		const profile = profileOf(v.website);
-		const site = faviconSite(v.website);
-		const host = profile ? `${profile.platform}:${profile.handle}` : site && hostOf(site.href);
+		const site = profile ? null : faviconSite(v.website);
+		const host = site && hostOf(site.href);
 		const first = keyOf.get(v.id)!.split(' ')[0];
-		if (!host || !first) continue;
-		const hostKey = `${host} ${first}`;
-		byHost.set(hostKey, [...(byHost.get(hostKey) ?? []), v]);
+		const siteKey =
+			profile ? `${profile.platform}:${profile.handle}`
+			: host && first ? `${host} ${first}`
+			: null;
+		if (!siteKey) continue;
+		const reason: BrandSuggestionReason =
+			!profile ? 'same website'
+			: profile.platform === SocialPlatformEnum.TIKTOK ? 'same TikTok'
+			: 'same Instagram';
+		const group = bySite.get(siteKey) ?? { reason, handle: profile?.handle ?? null, members: [] };
+		group.members.push(v);
+		bySite.set(siteKey, group);
 	}
-	for (const members of byHost.values()) {
+	for (const [siteKey, { reason, handle, members }] of bySite) {
 		if (members.length < 2) continue;
-		const key = commonWordPrefix(members.map(v => keyOf.get(v.id)!));
+		// Keyed by the words the names share; a profile shared by names with none is keyed by
+		// the profile itself, so a dismissal sticks and no brand's key is taken
+		const shared = commonWordPrefix(members.map(v => keyOf.get(v.id)!));
+		const key = shared || (handle ? siteKey : '');
 		if (!key || skipKeys.has(key)) continue;
 		for (const v of members) assigned.add(v.id);
 		// A key is one suggestion (dismissals and chains are keyed by it): "goldies" on its
@@ -183,9 +229,9 @@ export const suggestBrands = (
 		else
 			groups.push({
 				key,
-				name: nameFor(key, members),
+				name: shared ? nameFor(key, members) : profileName(handle!, members),
 				venueIds: members.map(v => v.id),
-				reason: 'same website',
+				reason,
 			});
 	}
 

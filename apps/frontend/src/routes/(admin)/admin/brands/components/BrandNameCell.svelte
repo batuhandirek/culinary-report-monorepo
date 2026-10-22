@@ -13,14 +13,14 @@
 	const where = $derived(
 		row.branches > 1
 			? `${row.branches} places${row.districts.length ? ` · ${row.districts.slice(0, 2).join(', ')}${row.districts.length > 2 ? '…' : ''}` : ''}`
-			: (row.venue?.district ?? '')
+			: (row.districts[0] ?? '')
 	);
-	const what = $derived(row.venue?.category ?? '');
+	const what = $derived(row.category ?? '');
 </script>
 
 <a href={`/admin/brands/${row.id}`} class="flex min-w-0 items-center gap-2.5 py-0.5">
 	<span class="flex size-6 shrink-0 items-center justify-center">
-		{#if row.venue?.favicon}<VenueFavicon favicon={row.venue.favicon} />{/if}
+		{#if row.favicon}<VenueFavicon favicon={row.favicon} />{/if}
 	</span>
 	<span class="flex min-w-0 flex-col leading-tight">
 		<span class="max-w-[22rem] truncate font-medium hover:underline" title={row.name}>{row.name}</span>

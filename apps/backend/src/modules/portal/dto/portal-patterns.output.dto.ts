@@ -1,3 +1,4 @@
+import type { PortalBranchChoiceOutputDto } from './portal-series.output.dto.js';
 import type {
 	BuzzToReviews,
 	ComplaintTimes,
@@ -38,10 +39,14 @@ export interface PortalPatternsWeekOutputDto {
 	partial?: boolean;
 }
 
-/** `GET /portal/venues/:venueId/patterns`: the relations month by month and the weeks across months. */
+/** `GET /portal/brands/:brandId/patterns`: the relations month by month and the weeks across months. */
 export interface PortalPatternsOutputDto {
 	/** Oldest first, ending with the last finished month or a newer report */
 	months: PortalPatternsMonthOutputDto[];
 	/** Every week touching those months, oldest first */
 	weeks: PortalPatternsWeekOutputDto[];
+	/** The open branches busyness and booked out can be of */
+	branches: PortalBranchChoiceOutputDto[];
+	/** The branch they are of; absent without one */
+	branchId?: string;
 }

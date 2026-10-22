@@ -3,7 +3,6 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
@@ -17,11 +16,12 @@ import {
 	searchQueries,
 } from '../util/search-ranks.js';
 
-const GOOGLE_PLACES_ACTOR = 'compass/crawler-google-places';
+import { VenueScrapeService } from './venue-scrape.service.js';
 
 /**
  * Where the report venues rank on the Google Maps searches a guest would type ("ramen Mitte"):
- * one Places run per month for every query (about three cents a search of twenty places).
+ * one Places run per month for every query (about eight cents a search of twenty places, ~$0.004
+ * a place). The places found are saved as venues (`VenueScrapeService.saveFound`).
  */
 @Injectable()
 export class VenueSearchRankService {
@@ -29,7 +29,7 @@ export class VenueSearchRankService {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly apifyService: ApifyService,
+		private readonly venueScrapeService: VenueScrapeService,
 		private readonly foodTopicService: FoodTopicService,
 		private readonly venueFoodTopicService: VenueFoodTopicService,
 	) {}
@@ -56,20 +56,13 @@ export class VenueSearchRankService {
 
 		// The city goes into the search itself, as a guest types it: no map grid, Google's own order
 		const searched = new Map(queries.map(q => [`${q} ${city.name}`, q]));
-		const items = await this.apifyService.runActor<SearchPlaceItem>(
-			GOOGLE_PLACES_ACTOR,
-			{
-				searchStringsArray: [...searched.keys()],
-				maxCrawledPlacesPerSearch: SEARCH_RANK_DEPTH,
-				language: 'en',
-				maxReviews: 0,
-				maxImages: 0,
-				maxQuestions: 0,
-			},
-			{
-				maxCostUsd: budgetUsd,
-				purpose: `google-places search ranks ${city.name} ${month}: ${queries.length} queries`,
-			},
+		// Every place found is saved too (`saveFound`): a search is a free look at the city's venues
+		const { items } = await this.venueScrapeService.searchPlaces<SearchPlaceItem>(
+			city,
+			[...searched.keys()],
+			SEARCH_RANK_DEPTH,
+			budgetUsd,
+			`google-places search ranks ${city.name} ${month}: ${queries.length} queries`,
 		);
 		const byQuery = new Map<string, SearchPlaceItem[]>();
 		for (const item of items) {

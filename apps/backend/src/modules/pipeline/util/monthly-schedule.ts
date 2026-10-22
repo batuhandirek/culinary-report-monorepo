@@ -37,3 +37,13 @@ export const INSTAGRAM_RECENT_CRON = '0 4 * * *';
  * leave no gap at a month's turn (the run's month is only a label).
  */
 export const INSTAGRAM_RECENT_DAYS = 2;
+
+// The weekly listening (TikTok searches and hashtags, Instagram reels): Sundays, 03:00 UTC,
+// before the daily Instagram scrape
+export const WEEKLY_LISTENING_CRON = '0 3 * * 0';
+
+/**
+ * How far back the weekly runs keep posts: the week since the last one plus a day of slack, so a
+ * late run leaves no gap (the run's month is only a label). TikTok's search asks for `WEEK`.
+ */
+export const WEEKLY_LISTENING_DAYS = 8;

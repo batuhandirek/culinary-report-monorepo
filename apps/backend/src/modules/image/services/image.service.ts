@@ -90,15 +90,26 @@ export class ImageService {
 	 * {@link deleteUnreferencedFiles}.
 	 */
 	async removeImage(image: Image): Promise<void> {
-		const shared = await this.imageRepository.count({
-			remoteId: image.remoteId,
-			id: { $ne: image.id },
-		});
-		this.imageRepository.getEntityManager().remove(image);
-		if (shared > 0) return;
-		await this.imagekit.files.delete(image.remoteId).catch((e: Error) => {
-			this.logger.warn(`ImageKit file ${image.remoteId} delete failed: ${e.message}`);
-		});
+		await this.removeImages([image]);
+	}
+
+	/**
+	 * Removes the rows (flushed by the caller) and each ImageKit file no row outside them
+	 * shares. Rows sharing one file go in one call: one at a time, each would see the others
+	 * still stored and leave the file behind.
+	 */
+	async removeImages(images: Image[]): Promise<void> {
+		if (!images.length) return;
+		const ids = images.map(image => image.id);
+		const em = this.imageRepository.getEntityManager();
+		for (const image of images) em.remove(image);
+		for (const remoteId of new Set(images.map(image => image.remoteId))) {
+			const shared = await this.imageRepository.count({ remoteId, id: { $nin: ids } });
+			if (shared > 0) continue;
+			await this.imagekit.files.delete(remoteId).catch((e: Error) => {
+				this.logger.warn(`ImageKit file ${remoteId} delete failed: ${e.message}`);
+			});
+		}
 	}
 
 	/**

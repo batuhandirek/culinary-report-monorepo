@@ -34,7 +34,11 @@ export interface LeadSignals {
 /** Everything `scoreBrand` needs about one venue, gathered by `BrandLeadScoreService`. */
 export interface LeadInputs {
 	name: string;
-	/** When a city-wide scrape first saw it open (an `opened` status change); absent for the rest */
+	/**
+	 * When it was last seen as new: a city-wide scrape first seeing it open (an `opened` status
+	 * change) or a post saying it had just opened (`Mention.isNewOpening`), whichever is later;
+	 * absent for the rest
+	 */
 	openedAt?: Date | null;
 	reviewsCount: number | null;
 	hasWebsite: boolean;
@@ -59,6 +63,11 @@ export interface LeadInputs {
 		unansweredCritical: number;
 		withChanges: number;
 	} | null;
+	/**
+	 * The lowest district rating percentile (0–100, `districtRatingStanding`) among its open
+	 * branches: read as the problem signal when `reviews` is null. Absent without one
+	 */
+	districtRatingPercentile?: number | null;
 	/** Classified press in the window (`WebMention`); null or absent when its press was never searched */
 	press?: { features: number; listicles: number; passing: number } | null;
 }

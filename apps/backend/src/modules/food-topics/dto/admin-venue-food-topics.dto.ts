@@ -4,9 +4,9 @@ export interface AdminVenueFoodTopicOutputDto {
 	key: string;
 	label: string;
 	kind: FoodTopicKindEnum;
-	/** What gives it: its Google categories, its posts, or an admin */
-	source: 'category' | 'mentions' | 'manual';
-	/** 1 for its main category or an admin's tag, 0.5 for another category, else its share of the posts */
+	/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
+	source: 'category' | 'mentions' | 'menu' | 'reviews' | 'manual';
+	/** 1 for its main category or an admin's tag, 0.5 for another category, else its share of the posts, menu items or review tags */
 	score: number;
 	/** The one kind of food it is known for */
 	primary: boolean;

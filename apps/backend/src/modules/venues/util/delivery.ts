@@ -35,7 +35,7 @@ export const median = (values: number[]): number | null => {
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
 /**
- * Menu items that are this dish: the dish's words (`dishKey` form) appear in the item's name as
+ * Menu items that are this dish: the dish's words (`plain` form) appear in the item's name as
  * a run of whole words, so "döner" finds "Döner im Brot" and not "Dönerteller".
  */
 export const itemsForDish = <T extends { name: string }>(items: T[], dish: string): T[] => {
@@ -59,7 +59,33 @@ export interface DishPrice {
 	othersWithDish: number;
 }
 
+/** The venue's own kind of food priced like a dish (`pricePosition`'s `topic`). */
+export interface TopicPrice {
+	key: string;
+	label: string;
+	/** The venue's median for items of the topic */
+	price: number;
+	/** The median of the other menus' medians for it; absent when none has it */
+	othersMedian?: number;
+	othersWithTopic: number;
+	/** `price / othersMedian - 1`; absent without others */
+	diff?: number;
+}
+
+/** Which menu items are of a topic, and the topic's name (built from the food topic index). */
+export interface MenuTopicMatcher {
+	key: string;
+	label: string;
+	matches: (item: { name: string; category?: string | null }) => boolean;
+}
+
 export interface PricePosition {
+	/**
+	 * The venue's primary kind of food against the same on the other menus ("your ramen against
+	 * their ramen"): the comparison to lead with, since the median main course mixes a burger with
+	 * a salad. Absent when no topic was given or the venue's menu has none of it.
+	 */
+	topic?: TopicPrice;
 	/** Median main course on the venue's menu */
 	median: number;
 	/** Median of the other menus' main-course medians */
@@ -71,14 +97,16 @@ export interface PricePosition {
 }
 
 /**
- * Where a venue's prices sit among other menus (its competitors, or nearby venues): median main
- * course against the others' medians, and each named dish against the same dish elsewhere.
- * Null when the venue's menu has no main course.
+ * Where a venue's prices sit among other menus (its competitors, or nearby venues): its primary
+ * kind of food (`topic`) against the same elsewhere first, then the median main course against
+ * the others' medians, and each named dish against the same dish elsewhere. Null when the venue's
+ * menu has no main course.
  */
 export const pricePosition = (
 	venue: MenuForPricing,
 	others: MenuForPricing[],
 	dishes: string[],
+	topic?: MenuTopicMatcher,
 ): PricePosition | null => {
 	const mains = venue.items.filter(isMainCourse);
 	const own = median(mains.map(i => i.price));
@@ -103,7 +131,26 @@ export const pricePosition = (
 			othersWithDish: elsewhere.length,
 		});
 	}
+	let topicPrice: TopicPrice | undefined;
+	const ownTopic = topic && median(venue.items.filter(topic.matches).map(i => i.price));
+	if (topic && ownTopic) {
+		const elsewhere = others
+			.map(o => median(o.items.filter(topic.matches).map(i => i.price)))
+			.filter((m): m is number => m !== null);
+		const elsewhereMedian = median(elsewhere);
+		topicPrice = {
+			key: topic.key,
+			label: topic.label,
+			price: round2(ownTopic),
+			...(elsewhereMedian !== null && {
+				othersMedian: round2(elsewhereMedian),
+				diff: Math.round((ownTopic / elsewhereMedian - 1) * 1000) / 1000,
+			}),
+			othersWithTopic: elsewhere.length,
+		};
+	}
 	return {
+		...(topicPrice && { topic: topicPrice }),
 		median: round2(own),
 		othersMedian: othersMedian === null ? null : round2(othersMedian),
 		othersWithMenu: otherMedians.length,

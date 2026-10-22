@@ -43,7 +43,8 @@ export interface AdminMatchAccountsInputDto {
 }
 
 export interface AdminAddBrandAccountInputDto {
-	platform: SocialPlatformEnum;
+	/** A brand's own accounts are profiles: never a blog */
+	platform: SocialPlatformEnum.INSTAGRAM | SocialPlatformEnum.TIKTOK;
 	/** A handle with or without the @, or the profile URL */
 	handle: string & tags.MinLength<1> & tags.MaxLength<200>;
 	/** One branch's own account; absent for the whole brand */

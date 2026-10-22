@@ -57,7 +57,8 @@ const reportSummary = (report: Report): AdminProspectReportOutputDto => ({
 	replyRate: report.data.reviews.replyRate,
 	ownAccounts: _.uniqBy(
 		report.data.ownPosts.flatMap(post =>
-			post.author ? [{ platform: post.platform, handle: post.author }] : [],
+			// A brand's own accounts are profiles, never a blog
+			post.author && post.platform !== 'blog' ? [{ platform: post.platform, handle: post.author }] : [],
 		),
 		account => `${account.platform}:${account.handle}`,
 	),
@@ -177,8 +178,12 @@ export class AdminOutreachController {
 		@TypedParam('id') id: string & tags.Format<'uuid'>,
 		@TypedBody() body: AdminUpdateProspectInputDto,
 	): Promise<AdminProspectOutputDto> {
-		const { nextFollowUpAt, ...patch } = body;
-		await this.outreachService.update(id, { ...patch, nextFollowUpAt: date(nextFollowUpAt) });
+		const { nextFollowUpAt, emailConsentAt, ...patch } = body;
+		await this.outreachService.update(id, {
+			...patch,
+			nextFollowUpAt: date(nextFollowUpAt),
+			emailConsentAt: date(emailConsentAt),
+		});
 		return this.getProspect(id);
 	}
 
@@ -197,17 +202,18 @@ export class AdminOutreachController {
 		return this.getProspect(id);
 	}
 
-	/** Logs an email, DM, call, visit, reply or note, and moves the prospect along. */
+	/** Logs an email, DM, call, visit (with its outcome, come-back time and consent), reply or note, and moves the prospect along. */
 	@TypedRoute.Post('/prospects/:id/touches')
 	async logOutreachTouch(
 		@TypedParam('id') id: string & tags.Format<'uuid'>,
 		@TypedBody() body: AdminLogOutreachTouchInputDto,
 	): Promise<AdminProspectOutputDto> {
-		const { at, followUpAt, ...touch } = body;
+		const { at, followUpAt, comeBackAt, ...touch } = body;
 		await this.outreachService.log(id, {
 			...touch,
 			at: date(at) ?? undefined,
 			followUpAt: date(followUpAt),
+			comeBackAt: date(comeBackAt) ?? undefined,
 		});
 		return this.getProspect(id);
 	}

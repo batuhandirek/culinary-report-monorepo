@@ -5,6 +5,7 @@ import {
 	brandKey,
 	busiestBranch,
 	isBrandName,
+	isProfileKey,
 	oneBrandSite,
 	ownSite,
 	registrableDomain,
@@ -136,8 +137,53 @@ describe('suggestBrands', () => {
 				venueIds: ['1', '2'],
 				reason: 'same website',
 			},
-			{ key: 'hisar', name: 'Hisar', venueIds: ['4', '5'], reason: 'same website' },
+			{ key: 'hisar', name: 'Hisar', venueIds: ['4', '5'], reason: 'same Instagram' },
 		]);
+	});
+
+	it('groups names sharing no words on one Instagram or TikTok profile, keyed by the profile', () => {
+		const groups = suggestBrands(
+			[
+				v('1', 'Kinza', { website: 'https://www.instagram.com/kinza.berlin/' }),
+				v('2', 'Taste of Japan', { website: 'https://instagram.com/kinza.berlin?igsh=abc' }),
+				v('3', 'Noodle Town', { website: 'https://www.tiktok.com/@thenoodletown' }),
+				v('4', 'Hanoi Kitchen', { website: 'https://tiktok.com/@thenoodletown/' }),
+				// A TikTok page without the @ is no profile; a Lieferando page is no one's own
+				v('5', 'Mangal Express', { website: 'https://www.lieferando.de/mangal' }),
+				v('6', 'Imren Grill', { website: 'https://www.lieferando.de/mangal' }),
+				v('7', 'Pho Haus', { website: 'https://www.tiktok.com/discover/pho' }),
+				v('8', 'Bun Cha', { website: 'https://www.tiktok.com/discover/pho' }),
+			],
+			berlin,
+			new Set(),
+		);
+		expect(groups).toEqual([
+			{
+				key: 'instagram:kinza.berlin',
+				name: 'Kinza',
+				venueIds: ['1', '2'],
+				reason: 'same Instagram',
+			},
+			{
+				key: 'tiktok:thenoodletown',
+				name: 'Noodle Town',
+				venueIds: ['3', '4'],
+				reason: 'same TikTok',
+			},
+		]);
+		expect(groups.map(g => isProfileKey(g.key))).toEqual([true, true]);
+		expect(isProfileKey('hisar')).toBe(false);
+		// A dismissal is keyed by the profile and sticks
+		expect(
+			suggestBrands(
+				[
+					v('1', 'Kinza', { website: 'https://www.instagram.com/kinza.berlin/' }),
+					v('2', 'Taste of Japan', { website: 'https://instagram.com/kinza.berlin' }),
+				],
+				berlin,
+				new Set(['instagram:kinza.berlin']),
+			),
+		).toEqual([]);
 	});
 
 	it('gives a key one group: a website group joins the name group with its key', () => {

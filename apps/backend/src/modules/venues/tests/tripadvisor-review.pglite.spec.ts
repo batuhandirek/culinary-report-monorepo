@@ -87,7 +87,7 @@ describe('TripAdvisor reviews (pglite)', () => {
 		reviews: (JSON.parse(input as string) as { reviews: { reviewId: string }[] }).reviews.map(r => ({
 			reviewId: r.reviewId,
 			sentiment: 'positive',
-			praise: [{ topic: 'vibe', detail: 'great vibe' }],
+			praise: [{ theme: 'atmosphere', detail: 'great vibe' }],
 			complaints: [],
 			dishes: [],
 			changes: [],

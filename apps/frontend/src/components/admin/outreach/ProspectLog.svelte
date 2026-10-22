@@ -2,6 +2,7 @@
 	import { Plus, Trash2 } from '@lucide/svelte';
 	import type {
 		AdminLogOutreachTouchInputDtoKindEnum,
+		AdminLogOutreachTouchInputDtoOutcomeEnum,
 		AdminOutreachTouchOutputDto,
 		AdminProspectOutputDto
 	} from 'client';
@@ -11,9 +12,12 @@
 	import { findOutreachTemplate } from '#constants/OUTREACH_TEMPLATES.js';
 	import { api } from '#lib/api.js';
 	import {
+		IN_PERSON_KINDS,
 		LOGGABLE_KINDS,
+		outcomeLabel,
 		type OutreachTouchKind,
 		TOUCH_KINDS,
+		TOUCH_OUTCOMES,
 		touchLabel
 	} from '#lib/outreach-status.js';
 	import Icon from '#ui/components/Icon.svelte';
@@ -22,6 +26,7 @@
 	import { Textarea } from '#ui/primitives-new/textarea/index.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
+	import Checkbox from '#ui/wrapped/Checkbox.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import IconButton from '#ui/wrapped/IconButton.svelte';
 	import Input from '#ui/wrapped/Input.svelte';
@@ -37,6 +42,7 @@
 	let { prospect, onChange }: Props = $props();
 
 	const KINDS = LOGGABLE_KINDS.map((kind) => ({ value: kind.value, label: kind.label }));
+	const OUTCOMES = TOUCH_OUTCOMES.map((o) => ({ value: o.value, label: o.label }));
 
 	// Date inputs speak `YYYY-MM-DD` in local time
 	const today = () => new Date().toLocaleDateString('en-CA');
@@ -47,6 +53,11 @@
 	let day = $state(today());
 	let text = $state('');
 	let checkBackOn = $state('');
+	// A visit or a call: who was reached, when to come back, their OK to e-mail
+	const inPerson = $derived(IN_PERSON_KINDS.includes(kind as OutreachTouchKind));
+	let outcome = $state<string>('');
+	let comeBackAt = $state('');
+	let emailConsent = $state(false);
 
 	const addAction = createAction(
 		() =>
@@ -55,7 +66,12 @@
 				// Today is now; an earlier day is backdated to its noon
 				at: day && day !== today() ? atLocal(day, 12) : undefined,
 				body: text.trim() || undefined,
-				followUpAt: kind === 'REPLY' && checkBackOn ? atLocal(checkBackOn, 9) : undefined
+				followUpAt: kind === 'REPLY' && checkBackOn ? atLocal(checkBackOn, 9) : undefined,
+				...(inPerson && {
+					outcome: (outcome || undefined) as AdminLogOutreachTouchInputDtoOutcomeEnum | undefined,
+					comeBackAt: comeBackAt ? new Date(comeBackAt).toISOString() : undefined,
+					emailConsent: emailConsent || undefined
+				})
 			}),
 		{
 			onSuccess: (updated) => {
@@ -63,6 +79,9 @@
 				text = '';
 				checkBackOn = '';
 				day = today();
+				outcome = '';
+				comeBackAt = '';
+				emailConsent = false;
 			},
 			successNotification: () => ({
 				title: 'Added to the log',
@@ -107,6 +126,24 @@
 					</label>
 				{/if}
 			</div>
+			{#if inPerson}
+				<div class="flex flex-wrap items-center gap-3">
+					<Select
+						items={OUTCOMES}
+						value={outcome}
+						onValueChange={(v) => (outcome = v)}
+						placeholder="Who did you reach?"
+						aria-label="Outcome"
+						width={200} />
+					<label class="text-muted-foreground flex items-center gap-2 text-xs whitespace-nowrap">
+						Come back on
+						<span class="w-52">
+							<Input type="datetime-local" bind:value={comeBackAt} aria-label="Come back on" />
+						</span>
+					</label>
+				</div>
+				<Checkbox bind:checked={emailConsent}>They said I may e-mail them</Checkbox>
+			{/if}
 			<Textarea
 				bind:value={text}
 				rows={2}
@@ -122,6 +159,9 @@
 						back.
 					{:else if kind === 'NOTE'}
 						Notes change nothing else.
+					{:else if inPerson}
+						Counts as a try. A come-back time becomes the follow-up; otherwise the usual gap
+						applies while they haven't answered. Their OK is kept on the prospect.
 					{:else}
 						Counts as a try; while they haven't answered, it sets the next follow-up.
 					{/if}
@@ -166,7 +206,16 @@
 										{findOutreachTemplate(touch.template)?.name ?? touch.template}
 									</Badge>
 								{/if}
+								{#if touch.outcome}
+									<Badge pill variant="quiet">{outcomeLabel(touch.outcome)}</Badge>
+								{/if}
+								{#if touch.emailConsent}
+									<Badge pill variant="success">OK to e-mail</Badge>
+								{/if}
 							</div>
+							{#if touch.comeBackAt}
+								<p class="text-muted-foreground m-0 text-xs">Come back {atShort(touch.comeBackAt)}</p>
+							{/if}
 							{#if touch.subject}
 								<p class="m-0 text-sm font-medium">{touch.subject}</p>
 							{/if}

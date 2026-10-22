@@ -3,12 +3,15 @@
 	export const BUDGETED_STEPS = [
 		{ key: 'SCRAPE_VENUES', label: 'Scrape venues', fallback: 20 },
 		{ key: 'SEARCH_BRANCHES', label: 'Search brand branches', fallback: 2 },
-		{ key: 'SCRAPE_TIKTOK', label: 'Scrape TikTok', fallback: 15 },
+		{ key: 'LOOKUP_OSM_PLACES', label: 'Look up OSM places', fallback: 10 },
+		{ key: 'SCRAPE_TIKTOK', label: 'Scrape TikTok', fallback: 7 },
+		{ key: 'SCRAPE_TIKTOK_RECENT', label: 'TikTok, weekly', fallback: 6 },
 		{ key: 'SCRAPE_INSTAGRAM', label: 'Scrape Instagram', fallback: 8 },
 		{ key: 'SCRAPE_INSTAGRAM_RECENT', label: 'Instagram, daily', fallback: 2 },
+		{ key: 'SCRAPE_INSTAGRAM_REELS', label: 'Instagram reels, weekly', fallback: 1 },
 		{ key: 'LOOKUP_VENUES', label: 'Look up venues', fallback: 6 },
 		{ key: 'SCRAPE_VENUE_SOCIAL', label: 'Scrape venue posts', fallback: 8 },
-		{ key: 'SCRAPE_REVIEWS', label: 'Scrape reviews', fallback: 5 },
+		{ key: 'SCRAPE_REVIEWS', label: 'Scrape reviews', fallback: 12 },
 		{ key: 'REFRESH_VENUE_DETAILS', label: 'Refresh venue details', fallback: 2 },
 		{ key: 'SCRAPE_OWN_ACCOUNTS', label: 'Scrape own accounts', fallback: 2 },
 		{ key: 'SCRAPE_COMMENTS', label: 'Scrape comments', fallback: 13 },
@@ -152,6 +155,16 @@
 				optional: true,
 				col: 3
 			},
+			osmRelationId: {
+				type: 'number' as const,
+				label: 'OpenStreetMap boundary',
+				placeholder: '62422',
+				min: 1,
+				value: city?.osmRelationId,
+				hint: 'The relation id of its boundary on openstreetmap.org (Berlin: 62422). Its food places there are the checklist the venue list is measured against.',
+				optional: true,
+				col: 6
+			},
 			nameStopwords: {
 				type: 'tags' as const,
 				label: 'Words dropped from venue names',
@@ -247,6 +260,7 @@
 			region: String(v.region ?? '').trim() || null,
 			lat: num(v.lat) ?? null,
 			lng: num(v.lng) ?? null,
+			osmRelationId: num(v.osmRelationId) ?? null,
 			nameStopwords: v.nameStopwords as string[],
 			chainDenyList: v.chainDenyList as string[],
 			districts: textToDistricts(String(v.districts ?? '')),

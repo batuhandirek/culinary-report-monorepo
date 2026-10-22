@@ -18,6 +18,9 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSearchRank } from '../entities/venue-search-rank.entity.js';
+import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
+import { VenueService } from '../services/venue.service.js';
+import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import { VenueSearchRankService } from '../services/venue-search-rank.service.js';
 import { SearchPlaceItem, searchQueries } from '../util/search-ranks.js';
 
@@ -29,11 +32,13 @@ const result = (
 	searchString: string,
 	rank: number,
 	placeId = `${searchString}-${rank}`,
+	title = `Place ${rank}`,
+	extra: Partial<SearchPlaceItem> = {},
 ): SearchPlaceItem => ({
 	searchString,
 	rank,
 	placeId,
-	title: `Place ${rank}`,
+	title,
 	categoryName: 'Ramen restaurant',
 	city: 'Berlin',
 	neighborhood: 'Mitte',
@@ -43,6 +48,7 @@ const result = (
 	permanentlyClosed: false,
 	temporarilyClosed: false,
 	url: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchString)}&query_place_id=${placeId}`,
+	...extra,
 });
 
 describe('searchQueries', () => {
@@ -128,6 +134,8 @@ describe('VenueSearchRankService (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				VenueSearchRankService,
+				VenueScrapeService,
+				VenueService,
 				FoodTopicService,
 				VenueFoodTopicService,
 				{ provide: ApifyService, useValue: { runActor } },
@@ -195,11 +203,18 @@ describe('VenueSearchRankService (pglite)', () => {
 			...Array.from({ length: 20 }, (_, i) => i + 1)
 				.reverse()
 				.map(rank =>
-					rank === 7 ? result(ramen, rank, 'me')
-					: rank === 2 ? result(ramen, rank, 'rival')
+					rank === 7 ? result(ramen, rank, 'me', 'Ramen Ichi')
+					: rank === 2 ? result(ramen, rank, 'rival', 'Ramen Ni')
 					: result(ramen, rank),
 				),
-			...Array.from({ length: 20 }, (_, i) => result(japanese, i + 1)),
+			...Array.from({ length: 20 }, (_, i) =>
+				i === 18 ?
+					// Places Google lists that aren't for us: a shop, and one across the border
+					result(japanese, i + 1, 'shop', 'Asia Markt', { categoryName: 'Grocery store' })
+				: i === 19 ?
+					result(japanese, i + 1, 'potsdam', 'Ramen Potsdam', { city: 'Potsdam' })
+				:	result(japanese, i + 1),
+			),
 			// "pizza Neukölln" and "italian Neukölln" came back empty (the budget ran out): no row
 		]);
 
@@ -242,7 +257,7 @@ describe('VenueSearchRankService (pglite)', () => {
 		]);
 		expect(ramenRow.top[1]).toEqual({
 			placeId: 'rival',
-			name: 'Place 2',
+			name: 'Ramen Ni',
 			rating: 4.2,
 			reviewsCount: 102,
 			venueId: rival.id,
@@ -250,8 +265,30 @@ describe('VenueSearchRankService (pglite)', () => {
 		expect(await em.count(VenueSearchRank, { venue: pizza.id })).toBe(0);
 	});
 
+	it('saves the places the searches found as venues of the city, never as openings', async () => {
+		const em = harness.orm.em.fork();
+		// 18 + 18 new food places in Berlin, plus the three known ones updated
+		const found = await em.find(Venue, { city: city.id, placeId: { $like: '% Berlin-%' } });
+		expect(found).toHaveLength(36);
+		expect(found.find(v => v.placeId === 'ramen Mitte Berlin-1')).toMatchObject({
+			name: 'Place 1',
+			district: 'Mitte',
+			reviewsCount: 101,
+		});
+		// Its top-ten entry links the venue now
+		const row = await em.findOneOrFail(VenueSearchRank, { venue: me.id, query: 'ramen Mitte' });
+		expect(row.top[0].venueId).toBe(found.find(v => v.placeId === 'ramen Mitte Berlin-1')!.id);
+		expect(await em.count(Venue, { placeId: { $in: ['shop', 'potsdam'] } })).toBe(0);
+		// The known rival got Google's figures, nothing else of it changed
+		expect(await em.findOneOrFail(Venue, { id: rival.id })).toMatchObject({
+			name: 'Ramen Ni',
+			reviewsCount: 102,
+		});
+		expect(await em.count(VenueStatusChange, {})).toBe(0);
+	});
+
 	it("replaces the month's rows on a rerun", async () => {
-		runActor.mockResolvedValueOnce([result('ramen Mitte Berlin', 1, 'me')]);
+		runActor.mockResolvedValueOnce([result('ramen Mitte Berlin', 1, 'me', 'Ramen Ichi')]);
 		await service.track(city, '2026-09', [me], 1);
 		harness.orm.em.clear();
 		const rows = await service.forVenue(me.id);

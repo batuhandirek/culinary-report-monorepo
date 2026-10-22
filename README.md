@@ -41,14 +41,19 @@ Data collected by the earlier scripts repo was imported once with `python3 bin/i
 
 - "Drei Berlin" news search is useless
 
-
-
-- Check "venue db2c582e-c949-4422-a93b-8f5f59a1d149" - Vegang and vegan.garden.berlin is not the same.
-	-	https://www.instagram.com/vegangberlin/
-- "http://localhost:5011/admin/posts/b62bd355-6a27-4328-8124-c110e03da1c7" 
-	-	why is this not matched to Heimweh?
-- Why did "/admin/posts/933d9b69-b086-422b-8b4b-a52befb7433b" not match anywhere?
-
 FUTURE:
 - "https://console.apify.com/actors/nrQeUJPbeJLVVsXPH/info/readme?build=latest"
 
+
+UI:
+- Put instagram/tiktok logos in the admin in Creators
+- Venue and Brand page details should 
+
+DATA:
+-	Scrape blog pages, and collect 'mentions' from there
+	-	https://www.berlinfoodstories.com/
+- Storing #hashtags or somehow having a place to show them, maybe even suggesting them in a report
+	- already in the post 
+- Captions also have @mentions
+	- taggedHandles in a post
+- Adding creators to be scraped for posts occasionally

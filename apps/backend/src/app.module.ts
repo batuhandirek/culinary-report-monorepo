@@ -12,6 +12,8 @@ import { BlogModule } from './modules/blog/blog.module.js';
 import { CitiesModule } from './modules/cities/cities.module.js';
 import { EmailModule } from './modules/email/email.module.js';
 import { EmbeddingsModule } from './modules/embeddings/embeddings.module.js';
+import { FoodTrendsModule } from './modules/food-trends/food-trends.module.js';
+import { HighlightsModule } from './modules/highlights/highlights.module.js';
 import { HealthCheckModule } from './modules/health-check/health-check.module.js';
 import { NotificationsModule } from './modules/notification/notifications.module.js';
 import { OtpModule } from './modules/otp/otp.module.js';
@@ -70,6 +72,8 @@ import sdk from './tracing.js';
 		OverviewModule,
 		FoodTopicsModule,
 		TrendsModule,
+		HighlightsModule,
+		FoodTrendsModule,
 		BlogModule,
 	],
 	controllers: [],

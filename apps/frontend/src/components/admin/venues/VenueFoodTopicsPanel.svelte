@@ -16,8 +16,9 @@
 	import Select from '#ui/wrapped/Select.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// The kinds of food the venue is tagged with: from its Google categories and what posts by
-	// others call its food, worked out on every read, with an admin's tags and exclusions on top.
+	// The kinds of food the venue is tagged with: from its Google categories, what posts by others
+	// call its food, its delivery menu and Google's review tags, worked out on every read, with an
+	// admin's tags and exclusions on top.
 	// Competitor suggestions compare these.
 	interface Props {
 		venue: AdminVenueOutputDto;
@@ -41,7 +42,15 @@
 	const addable = $derived(allTopics.filter((t) => !data?.tags.some((tag) => tag.key === t.value)));
 	let picked = $state<string | undefined>();
 
-	const SOURCE: Record<string, string> = { category: 'Google', mentions: 'posts', manual: 'admin' };
+	const SOURCE: Record<string, string> = {
+		category: 'Google',
+		mentions: 'posts',
+		menu: 'menu',
+		reviews: 'review tags',
+		manual: 'admin'
+	};
+	// Sources whose score is a share of the venue's posts, menu items or review tags
+	const SHARED = new Set(['mentions', 'menu', 'reviews']);
 	const changeAction = createAction(
 		(key: string, change: 'tag' | 'exclude' | 'clear') =>
 			api.admin.changeVenueFoodTopic(venue.id, key, {
@@ -71,7 +80,7 @@
 							: ''}">
 						<span class="font-medium">{tag.label}</span>
 						<span class="text-muted-foreground text-xs">
-							{SOURCE[tag.source]}{tag.source === 'mentions' ? ` ${Math.round(tag.score * 100)}%` : ''}
+							{SOURCE[tag.source]}{SHARED.has(tag.source) ? ` ${Math.round(tag.score * 100)}%` : ''}
 						</span>
 						<IconButton
 							icon={X}
@@ -83,11 +92,11 @@
 				{/each}
 			</ul>
 			<p class="text-muted-foreground m-0 mt-2 text-xs">
-				Framed: the kind of food it is known for. × on a Google or posts tag keeps it off for good.
+				Framed: the kind of food it is known for. × on a tag that isn't an admin's keeps it off for good.
 			</p>
 		{:else}
 			<p class="text-muted-foreground m-0 text-sm">
-				Neither its Google categories nor its posts say what it serves. Add a topic below.
+				Neither its Google categories, its posts, its menu nor its review tags say what it serves. Add a topic below.
 			</p>
 		{/if}
 

@@ -19,6 +19,8 @@ export class City extends MikroOrmEntityAbstractClass<
 	| 'districts'
 	| 'nameStopwords'
 	| 'chainDenyList'
+	| 'doNotListVenues'
+	| 'doNotListCreators'
 	| 'stepBudgetsUsd'
 	| 'topBrands'
 	| 'cronEnabled'
@@ -82,6 +84,14 @@ export class City extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'jsonb' })
 	chainDenyList: string[] = [];
 
+	// Venues (names, compared like the chain deny-list) and creators (handles) who asked to be
+	// left out of public pages: the monthly highlights never list them
+	@Property({ type: 'jsonb', default: '[]' })
+	doNotListVenues: string[] = [];
+
+	@Property({ type: 'jsonb', default: '[]' })
+	doNotListCreators: string[] = [];
+
 	// Apify cap per pipeline step, in USD; a step not listed uses `DEFAULT_STEP_BUDGET_USD`
 	@Property({ type: 'jsonb' })
 	stepBudgetsUsd: Partial<Record<PipelineStepEnum, number>> = {};
@@ -101,6 +111,15 @@ export class City extends MikroOrmEntityAbstractClass<
 	// one; the monthly cron queues the next one a quarter later
 	@Property({ type: 'datetime', nullable: true })
 	venuesScrapedAt?: Date | null;
+
+	// The city's boundary on OpenStreetMap (a relation id, e.g. Berlin's 62422): what
+	// `SYNC_OSM_PLACES` lists food places inside. Without one the city has no OSM checklist
+	@Property({ type: 'int', nullable: true })
+	osmRelationId?: number | null;
+
+	// The last `SYNC_OSM_PLACES`: places it didn't list since are gone from OSM
+	@Property({ type: 'datetime', nullable: true })
+	osmPlacesSyncedAt?: Date | null;
 
 	@OneToMany(() => CitySource, source => source.city)
 	sources = new Collection<CitySource>(this);

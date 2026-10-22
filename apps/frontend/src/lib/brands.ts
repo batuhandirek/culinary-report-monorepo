@@ -5,7 +5,9 @@ import type { AdminBrandBranchOutputDto } from 'client';
 export const SUGGESTION_REASONS: Record<string, string> = {
 	'same name': 'Same name',
 	'name prefix': 'Name plus a branch',
-	'same website': 'Same website'
+	'same website': 'Same website',
+	'same Instagram': 'Same Instagram',
+	'same TikTok': 'Same TikTok'
 };
 
 /** Branches grouped by city, cities with the most branches first. */

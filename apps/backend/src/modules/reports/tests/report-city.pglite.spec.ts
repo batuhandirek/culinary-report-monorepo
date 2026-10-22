@@ -126,7 +126,7 @@ describe('ReportCityService (pglite)', () => {
 	});
 
 	it('places the venue in its food and against the report venues', async () => {
-		const section = await service.section(me, '2026-09');
+		const section = await service.section([me], '2026-09');
 		expect(section).toMatchObject({ cityName: city.name, mentions: 200 });
 		expect(section?.risingCuisines.map(r => [r.key, r.share, r.prevShare, r.delta])).toEqual([
 			['ramen', 20, 10, 10],
@@ -146,7 +146,7 @@ describe('ReportCityService (pglite)', () => {
 	});
 
 	it('takes the report venues it is given', async () => {
-		const section = await service.section(me, '2026-09', [me.brand.id, rival.brand.id, pizza.brand.id]);
+		const section = await service.section([me], '2026-09', [me.brand.id, rival.brand.id, pizza.brand.id]);
 		expect(section?.baseline.venues).toBe(3);
 		// 16k pizza views and 30k rival views against its 5k
 		expect(section?.baseline.views).toMatchObject({ median: 16000, percentile: 0 });
@@ -215,7 +215,71 @@ describe('ReportCityService (pglite)', () => {
 		]);
 	});
 
+	it('counts the openings a matched post announced, once per venue', async () => {
+		const em = harness.orm.em;
+		let n = 0;
+		const flag = (venue: Venue, date: string) =>
+			em.create(Mention, {
+				post: em.create(SocialPost, {
+					city,
+					externalId: `opening-${n++}`,
+					platform: SocialPlatformEnum.TIKTOK,
+					url: `https://tiktok.com/opening-${n}`,
+					author: `opener${n}`,
+					views: 100,
+					postedAt: new Date(`${date}T12:00:00Z`),
+				}),
+				venue,
+				brand: (venue.brand ??= em.create(Brand, {
+					name: venue.name,
+					key: venue.name.toLowerCase(),
+				})),
+				venueName: venue.name,
+				visited: true,
+				isNewOpening: true,
+				sentiment: 'positive',
+				summary: 'Just opened.',
+				dishes: [],
+				praise: [],
+				complaints: [],
+			});
+		const place = (name: string, street: string, extra: Partial<Venue> = {}) =>
+			em.create(Venue, {
+				city,
+				placeId: name,
+				name,
+				street,
+				district: 'Mitte',
+				reviewsCount: 40,
+				...extra,
+			});
+		flag(place('Frisch', 'Torstraße 20'), '2026-08-20');
+		// Too well known to be new, closed, before the quarter, another district
+		flag(place('Gross', 'Torstraße 21', { reviewsCount: 300 }), '2026-09-02');
+		flag(place('Geschlossen', 'Linienstraße 2', { closed: true }), '2026-09-03');
+		flag(place('Frueh', 'Linienstraße 3'), '2026-06-28');
+		flag(place('Drüben', 'Torstraße 22', { district: 'Neukölln' }), '2026-09-04');
+		// A scrape saw it open too: listed once, as the scrape's
+		const scraped = await em.findOneOrFail(Venue, { placeId: 'Neu Zwei' });
+		flag(scraped, '2026-08-01');
+		await em.flush();
+
+		const changes = (await service.neighbourhood(me, '2026-09'))!.changes;
+		expect(changes).toMatchObject({
+			opened: 3,
+			openedFromPosts: 1,
+			closed: 1,
+			street: { name: 'Torstraße', opened: 2, openedFromPosts: 1, closed: 1 },
+		});
+		expect(changes.venues.map(v => [v.name, v.kind, v.date, v.sameStreet, v.source])).toEqual([
+			['Neu Eins', 'opened', '2026-10-02', true, undefined],
+			['Zu', 'permanently_closed', '2026-09-20', true, undefined],
+			['Frisch', 'opened', '2026-08-20', true, 'posts'],
+			['Neu Zwei', 'opened', '2026-08-15', false, undefined],
+		]);
+	});
+
 	it('leaves the section out when the city talked too little', async () => {
-		expect(await service.section(thin, '2026-09')).toBeUndefined();
+		expect(await service.section([thin], '2026-09')).toBeUndefined();
 	});
 });

@@ -9,12 +9,15 @@ export enum CitySourceKindEnum {
 	TIKTOK_HASHTAG = 'tiktok_hashtag',
 	TIKTOK_SEARCH = 'tiktok_search',
 	INSTAGRAM_HASHTAG = 'instagram_hashtag',
+	// A food blog or a magazine's food section: `value` is its URL (the site, a section or the
+	// feed itself), read through its RSS or Atom feed by the free `SCRAPE_BLOGS`
+	BLOG = 'blog',
 }
 
 /**
- * Where a city's monthly scrape looks: a hashtag (without `#`) or a search query. Posts keep
- * it in `SocialPost.source` (`#value` or `search:value`), so its yield can be counted.
- * `createdAt` is when it was added.
+ * Where a city's scrapes look: a hashtag (without `#`), a search query or a blog's URL. Posts
+ * keep it in `SocialPost.source` (`#value`, `search:value` or `blog:value`), so its yield can be
+ * counted. `createdAt` is when it was added.
  */
 @Entity({ tableName: 'city_sources' })
 @Unique({ properties: ['city', 'kind', 'value'] })
@@ -38,4 +41,16 @@ export class CitySource extends MikroOrmEntityAbstractClass<'enabled' | 'suggest
 	// it; enabling or turning it off clears the flag (the note keeps the agent's reason)
 	@Property({ type: 'boolean', default: false })
 	suggested: boolean = false;
+
+	// A blog's feed as `SCRAPE_BLOGS` found it (the page's `<link rel="alternate">`, else a usual
+	// path), kept so it is not looked for again; looked for again when it stops answering
+	@Property({ type: 'text', nullable: true })
+	feedUrl?: string | null;
+
+	// When `SCRAPE_BLOGS` last read the blog, and what went wrong then (null when nothing did)
+	@Property({ type: 'datetime', nullable: true })
+	checkedAt?: Date | null;
+
+	@Property({ type: 'text', nullable: true })
+	error?: string | null;
 }

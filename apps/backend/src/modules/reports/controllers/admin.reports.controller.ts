@@ -8,9 +8,11 @@ import type { Response } from 'express';
 import { tags } from 'typia';
 
 import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant.js';
+import { AuthenticatedUserId } from 'src/modules/auth/decorators/authenticated-user-id.decorator.js';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
+import { User } from 'src/modules/auth/entities/user.entity.js';
 
 import {
 	AdminBuildReportInputDto,
@@ -22,6 +24,8 @@ import {
 import { Report } from '../entities/report.entity.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportPdfService } from '../services/report-pdf.service.js';
+import { ReportShareService, shareUrl } from '../services/report-share.service.js';
+import { leaveBehindData } from '../util/leave-behind.js';
 
 const refs = (report: Pick<Report, 'brand' | 'city'>) => ({
 	brand: { id: report.brand.id, name: report.brand.name },
@@ -58,6 +62,7 @@ export class AdminReportsController {
 		private readonly em: EntityManager,
 		private readonly reportService: ReportService,
 		private readonly reportPdfService: ReportPdfService,
+		private readonly reportShareService: ReportShareService,
 	) {}
 
 	@TypedRoute.Get('/')
@@ -120,6 +125,36 @@ export class AdminReportsController {
 		res.setHeader(
 			'Content-Disposition',
 			`attachment; filename="report-${report.month}.pdf"; filename*=UTF-8''${encodeURIComponent(name)}.pdf`,
+		);
+		res.send(Buffer.from(pdf));
+	}
+
+	/**
+	 * The A5 leave-behind for a visit: the cover title, headline and three findings with a QR code to
+	 * the report's live share link (made if there is none), so a scan counts as an open, and the
+	 * printing admin's name and e-mail. Takes a few seconds: headless Chrome prints it.
+	 */
+	@Get('/:id/leave-behind.pdf')
+	async getReportLeaveBehindPdf(
+		@Param('id', ParseUUIDPipe) id: string,
+		@AuthenticatedUserId() adminId: string,
+		@Res() res: Response,
+	): Promise<void> {
+		const report = await this.em.findOneOrFail(Report, { id }, { populate: ['brand', 'city'] });
+		const admin = await this.em.findOneOrFail(User, { id: adminId });
+		const share = await this.reportShareService.ensureShare(report.id, adminId);
+		const pdf = await this.reportPdfService.renderLeaveBehind(
+			leaveBehindData(report, shareUrl(share.token), {
+				name: [admin.firstName, admin.lastName].filter(Boolean).join(' '),
+				...(admin.email && { email: admin.email }),
+				...(admin.mobileNumber && { phone: admin.mobileNumber }),
+			}),
+		);
+		const name = reportFileName(toOutput(report));
+		res.setHeader('Content-Type', 'application/pdf');
+		res.setHeader(
+			'Content-Disposition',
+			`attachment; filename="leave-behind-${report.month}.pdf"; filename*=UTF-8''${encodeURIComponent(`${name}-leave-behind`)}.pdf`,
 		);
 		res.send(Buffer.from(pdf));
 	}

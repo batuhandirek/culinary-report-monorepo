@@ -96,6 +96,13 @@ export interface PortalSeriesMonthOutputDto {
 	districtBooked?: number;
 }
 
+/** A branch the portal's place charts can show. */
+export interface PortalBranchChoiceOutputDto {
+	id: string;
+	name: string;
+	street?: string;
+}
+
 export interface PortalSeriesOutputDto {
 	/** Oldest first, one row per month, months without a report included */
 	months: PortalSeriesMonthOutputDto[];
@@ -103,4 +110,8 @@ export interface PortalSeriesOutputDto {
 	competitors: { venueId: string; name: string }[];
 	/** The city's weather, holidays and events per month, same months: the charts' bands */
 	calendar: CityMonthContextOutputDto[];
+	/** The open branches the place figures (rating, busyness, open tables) can be of */
+	branches: PortalBranchChoiceOutputDto[];
+	/** The branch they are of; absent without one */
+	branchId?: string;
 }

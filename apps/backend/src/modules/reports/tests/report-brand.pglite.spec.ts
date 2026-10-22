@@ -57,7 +57,7 @@ describe('ReportService.build for a brand (pglite)', () => {
 				{ name, reviewsCount, district: 'Friedrichshain-Kreuzberg', category: 'Hamburger restaurant', ...extra },
 				{ associations: { city, brand } },
 			);
-		// The most reviewed: the place-bound sections describe it
+		// The most reviewed: first in the report's branches
 		const main = branch('Burgermeister Schlesisches Tor', 17617);
 		const kotti = branch('Burgermeister Kottbusser Tor', 8310);
 		// Another city's branch is no part of this report
@@ -130,28 +130,36 @@ describe('ReportService.build for a brand (pglite)', () => {
 		expect(report.data.social.postCount).toBe(4);
 		expect(report.data.ownPosts).toHaveLength(1);
 		expect(report.data.reviews.count).toBe(3);
-		expect(report.data.brand).toMatchObject({
+		expect(report.data.brand).toEqual({
+			id: brand.id,
 			name: 'Burgermeister',
+			category: 'Hamburger restaurant',
 			brandOnlyPosts: 2,
-			branches: [
-				{ venueId: main.id, described: true, social: { postCount: 1 }, reviews: { count: 1 } },
-				{ venueId: kotti.id, described: false, social: { postCount: 1 }, reviews: { count: 2 } },
-			],
 		});
-		// A sibling is no neighbour
-		expect(report.data.neighbours.map(nb => nb.name)).toEqual(['Hisar']);
-		// The model gets the branches to compare
+		// One place entry per branch, each with its own month and place figures
+		expect(report.data.branches).toMatchObject([
+			{ venueId: main.id, social: { postCount: 1 }, reviews: { count: 1 }, ratingTrend: [] },
+			{ venueId: kotti.id, social: { postCount: 1 }, reviews: { count: 2 }, ratingTrend: [] },
+		]);
+		// Nothing stands in for the brand any more
+		expect(JSON.stringify(report.data)).not.toContain('described');
+		expect(report.data).not.toHaveProperty('venue');
+		// A sibling is no neighbour, in either branch's district
+		expect(report.data.branches.map(b => b.neighbours.map(nb => nb.name))).toEqual([['Hisar'], ['Hisar']]);
+		// The model gets every place on its own, and the brand
 		const input = JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string);
-		expect(input.brand).toMatchObject({ name: 'Burgermeister', postsNamingNoBranch: 2 });
-		expect(input.brand.branches).toHaveLength(2);
-		expect(report.data.venue.id).toBe(main.id);
+		expect(input.brand).toEqual({ name: 'Burgermeister', postsNamingNoBranch: 2 });
+		expect(input.places.map((p: { name: string }) => p.name)).toEqual([main.name, kotti.name]);
+		expect(input.places[1]).toMatchObject({ postsByOthersNamingIt: 1, neighbours: [{ name: 'Hisar' }] });
 
-		// Each city its own report: Hamburg's has its one branch and its post, no brand section
+		// Each city its own report: Hamburg's has its one branch and its post
 		const inHamburg = await service.build(brand.id, hamburg.id, '2026-09');
 		expect(inHamburg.id).not.toBe(report.id);
-		expect(inHamburg.data.venue.id).toBe(elsewhere.id);
+		expect(inHamburg.data.branches.map(b => b.venueId)).toEqual([elsewhere.id]);
 		expect(inHamburg.data.social.postCount).toBe(1);
-		expect(inHamburg.data.brand).toBeUndefined();
+		expect(inHamburg.data.brand.brandOnlyPosts).toBe(0);
+		// A single place: the prompt has no branch comparison
+		expect(JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string).brand).toBeUndefined();
 		expect(await em.count(Report, { brand })).toBe(2);
 		// A rebuild replaces the city's row
 		await service.build(brand.id, city.id, '2026-09');
@@ -168,9 +176,9 @@ describe('ReportService.build for a brand (pglite)', () => {
 		expect(across.data.social.postCount).toBe(5);
 		expect(across.data.reviews.count).toBe(3);
 		expect(across.data.city).toBeUndefined();
-		// The most reviewed branch overall is the described one
-		expect(across.data.venue.name).toBe('Burgermeister Schlesisches Tor');
-		expect(across.data.brand?.branches.map(b => [b.name, b.city])).toEqual([
+		// Every branch, the most reviewed first, named by city; no city calendar across cities
+		expect(across.data.context).toBeUndefined();
+		expect(across.data.branches.map(b => [b.name, b.city])).toEqual([
 			['Burgermeister Schlesisches Tor', 'Berlin'],
 			['Burgermeister Kottbusser Tor', 'Berlin'],
 			['Burgermeister', 'Hamburg'],

@@ -1,8 +1,9 @@
 // Pure: resolving raw cuisine strings (a mention's, a Google category) to food topics.
 
 import { cuisineWords, normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
+import { isMainCourse } from 'src/modules/venues/util/delivery.js';
 
-import type { FoodTopicKindEnum } from '../entities/food-topic.entity.js';
+import { FoodTopicKindEnum } from '../entities/food-topic.entity.js';
 
 /** What the index needs of a `FoodTopic`. */
 export interface IndexedFoodTopic {
@@ -95,6 +96,23 @@ export class FoodTopicIndex {
 	): string[] {
 		const own = this.resolve(cuisine);
 		return own.length ? own : this.resolve(category);
+	}
+
+	/**
+	 * A delivery menu item's topics: its name's, else its menu section's ("Tonkotsu" under
+	 * "Ramen"). A kind of place never comes from a menu ("Bistro Salat" is no bistro), and an item
+	 * that is not a main course (`isMainCourse`: drinks, desserts, sides, extras) only gives drinks
+	 * ("Matcha Latte" under "Getränke"), so an extra cheese in the pizza section is no pizza.
+	 */
+	resolveMenuItem(item: { name: string; category?: string | null }): string[] {
+		const main = isMainCourse(item);
+		const keep = (keys: string[]) =>
+			keys.filter(key => {
+				const kind = this.byKey.get(key)?.kind;
+				return main ? kind !== FoodTopicKindEnum.FORMAT : kind === FoodTopicKindEnum.DRINK;
+			});
+		const own = keep(this.resolve(item.name));
+		return own.length ? own : keep(this.resolve(item.category));
 	}
 
 	/** The keys and every ancestor of each, each once: a child counts for its parent too. */

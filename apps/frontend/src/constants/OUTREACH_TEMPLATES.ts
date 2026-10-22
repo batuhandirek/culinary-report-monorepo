@@ -26,12 +26,14 @@ export interface OutreachTemplate {
 	name: string;
 	/** When to use it, shown under the picker. */
 	when: string;
-	/** What sending it adds to the log. */
-	kind: 'EMAIL' | 'DM' | 'CALL';
+	/** What sending it adds to the log. A CALL or VISIT is a script: notes, outcome, come-back time and consent are logged with it. */
+	kind: 'EMAIL' | 'DM' | 'CALL' | 'VISIT';
 	/** An email that starts a thread, or one sent as a reply in the last one's thread. */
 	thread?: 'new' | 'reply';
 	/** Offers the report's PDF to attach. */
 	attachReport?: boolean;
+	/** Offers the A5 leave-behind to print and take along. */
+	leaveBehind?: boolean;
 	subject?: Record<OutreachLanguage, string>;
 	body: Record<OutreachLanguage, string>;
 }
@@ -189,6 +191,43 @@ Eine Sache ist mir aufgefallen: {hook}
 Darf ich Ihnen den Bericht per E-Mail schicken? An wen schicke ich ihn am besten?
 
 (Name und Adresse notieren, dann den Anruf eintragen.)`
+		}
+	},
+	{
+		key: 'visit',
+		name: 'Visit',
+		when: 'Go between 15:00 and 17:00, after lunch. Print the leave-behind first: its QR code opens their report, and a scan counts as an open. "May I e-mail you the report?" gets the OK that German law (UWG §7) asks for; log who you spoke to, when to come back, and whether they said yes.',
+		kind: 'VISIT',
+		leaveBehind: true,
+		body: {
+			en: `Hi, is the owner in? My name is {sender}, from Culinary Report here in {city}. I'll only take a minute.
+
+(Not in? Ask when they usually are, leave the page, and log the visit with that time.)
+
+We follow what TikTok creators and Google reviewers say about places in {city}. [[In {month}, {creators|one creator|# creators} posted about {venue}, with {views} views in total. ]]I've put it into a one-page report, and it's free.
+
+One thing that stood out: {hook}
+
+This page is yours to keep. The code on it opens the full report on your phone.
+
+May I e-mail you the report each month? Which address should I use?
+Or: do you have ten minutes next week? I'll walk you through it, here.
+
+(Write down the name and the address, then log the visit.)`,
+			de: `Guten Tag, ist der Inhaber da? Mein Name ist {sender}, von Culinary Report hier in {city}. Ich brauche nur eine Minute.
+
+(Nicht da? Fragen, wann er oder sie meistens da ist, die Seite dalassen und den Besuch mit der Uhrzeit eintragen.)
+
+Wir verfolgen, was TikTok-Creator und Google-Bewertungen über Läden in {city} sagen. [[Im {month} {creators|hat ein Creator|haben # Creator} über {venue} gepostet, mit zusammen {views} Aufrufen. ]]Daraus habe ich einen einseitigen Bericht gemacht, kostenlos.
+
+Eine Sache ist mir aufgefallen: {hook}
+
+Die Seite hier können Sie behalten. Der Code darauf öffnet den ganzen Bericht auf dem Handy.
+
+Darf ich Ihnen den Bericht jeden Monat per E-Mail schicken? An welche Adresse?
+Oder: Haben Sie nächste Woche zehn Minuten? Dann gehe ich ihn hier mit Ihnen durch.
+
+(Name und Adresse notieren, dann den Besuch eintragen.)`
 		}
 	}
 ];

@@ -34,8 +34,14 @@ const TIKTOK_COMMENTS_ACTOR = 'clockworks/tiktok-comments-scraper';
 // Free-plan prices per result, to size a run inside its cap (Apify enforces the cap regardless)
 const INSTAGRAM_RESULT_USD = 0.0027;
 const TIKTOK_COMMENT_USD = 0.00125;
-// The search actor's smallest `limit`
+// clockworks' hashtag items, measured: 2,000 for $7.40 on 2026-10-18
+const TIKTOK_HASHTAG_RESULT_USD = 0.0037;
+// The search actor's smallest `limit`, and the smallest cap it accepts
 const TIKTOK_SEARCH_MIN_LIMIT = 30;
+const TIKTOK_SEARCH_MIN_CAP_USD = 4;
+
+/** `novi/advanced-search-tiktok-api`'s `publishTime`: how far back a search looks. */
+export type TikTokSearchWindow = 'WEEK' | 'THREE_MONTH';
 
 /** `apify/instagram-scraper`'s `resultsType` on a tag URL: the feed's posts, or its top reels. */
 export type InstagramHashtagKind = 'posts' | 'reels';
@@ -100,34 +106,41 @@ export class SocialScrapeService {
 
 	/**
 	 * The city-wide TikTok scrape: the city's enabled hashtags and searches, searched in its
-	 * region. Videos older than `since` were paid for but stay out (hashtag feeds have no date
-	 * filter). Without hashtags the whole budget goes to the searches, and the other way round.
-	 * The search share must reach the search actor's $4 floor (40 % of the $15 default is $6).
+	 * region, the searches over `searchWindow` (three months without). Videos older than `since`
+	 * were paid for but stay out (hashtag feeds have no date filter). Without hashtags the whole
+	 * budget goes to the searches, and the other way round. With both, the searches get the larger
+	 * of 40 % and the search actor's $4 floor (they spend far less), the hashtags the rest, their
+	 * page size cut so the cap never stops the run before the last hashtag.
 	 */
 	async scrapeCityTikTok(opts: {
 		city: City;
 		since: string;
 		perSource: number;
 		budgetUsd: number;
+		searchWindow?: TikTokSearchWindow;
 	}): Promise<ScrapeResult> {
 		const { city } = opts;
 		const [hashtags, searches] = await Promise.all([
 			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_HASHTAG),
 			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_SEARCH),
 		]);
-		const hashtagBudget =
-			!searches.length ? opts.budgetUsd
-			: !hashtags.length ? 0
-			: opts.budgetUsd * 0.6;
-		const searchBudget = opts.budgetUsd - hashtagBudget;
+		const searchBudget =
+			!searches.length ? 0
+			: !hashtags.length ? opts.budgetUsd
+			: Math.min(opts.budgetUsd, Math.max(opts.budgetUsd * 0.4, TIKTOK_SEARCH_MIN_CAP_USD));
+		const hashtagBudget = opts.budgetUsd - searchBudget;
+		const perHashtag = Math.min(
+			opts.perSource,
+			Math.floor(hashtagBudget / (Math.max(hashtags.length, 1) * TIKTOK_HASHTAG_RESULT_USD)),
+		);
 
 		const hashtagItems =
-			hashtags.length ?
+			hashtags.length && perHashtag >= 1 ?
 				await this.apifyService.runActor(
 					TIKTOK_HASHTAG_ACTOR,
 					{
 						hashtags,
-						resultsPerPage: opts.perSource,
+						resultsPerPage: perHashtag,
 						downloadSubtitlesOptions: 'DOWNLOAD_SUBTITLES',
 						shouldDownloadVideos: false,
 						shouldDownloadCovers: false,
@@ -140,6 +153,7 @@ export class SocialScrapeService {
 		const search = await this.searchTikTok(city, searches, {
 			perQuery: opts.perSource,
 			budgetUsd: searchBudget,
+			window: opts.searchWindow,
 			label: `tiktok search ${city.name}: ${searches.length} queries`,
 		});
 		const rows = [...hashtagRows, ...search.rows.filter(r => r.postedAt.toISOString() >= opts.since)];
@@ -259,14 +273,14 @@ export class SocialScrapeService {
 	}
 
 	/**
-	 * TikTok's search for each query in the city's region over the last three months, by
-	 * relevance, in one run (the actor's `limit` is per keyword). Rows keep `search:<query>` from
-	 * the item. A failed run is logged and yields nothing.
+	 * TikTok's search for each query in the city's region over `window` (the last three months
+	 * without), by relevance, in one run (the actor's `limit` is per keyword). Rows keep
+	 * `search:<query>` from the item. A failed run is logged and yields nothing.
 	 */
 	private async searchTikTok(
 		city: City,
 		queries: string[],
-		opts: { perQuery: number; budgetUsd: number; label: string },
+		opts: { perQuery: number; budgetUsd: number; label: string; window?: TikTokSearchWindow },
 	): Promise<{ found: number; rows: PostFields[] }> {
 		if (!queries.length) return { found: 0, rows: [] };
 		let items: any[];
@@ -277,7 +291,7 @@ export class SocialScrapeService {
 					keywords: queries,
 					limit: Math.max(opts.perQuery, TIKTOK_SEARCH_MIN_LIMIT),
 					region: city.tiktokRegion,
-					publishTime: 'THREE_MONTH',
+					publishTime: opts.window ?? 'THREE_MONTH',
 					// Relevance
 					sortType: 0,
 					includeSearchTerms: true,

@@ -14,8 +14,8 @@ import { Creator } from '../entities/creator.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
 import { SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
-import { normalizeAccountHandle } from '../util/accounts.js';
-import { creatorKey } from '../util/creators.js';
+import { normalizeHandle } from '../util/accounts.js';
+import { CREATOR_KEY_SQL, creatorKeyOf } from '../util/creators.js';
 
 /** What our own scrapes saw an account post: a month's, and all of it. */
 export interface AccountPostStats {
@@ -153,7 +153,7 @@ export class SocialAccountService {
 		seen: AccountSeen = {},
 		now = new Date(),
 	): Promise<SocialAccount | null> {
-		const handle = normalizeAccountHandle(input);
+		const handle = normalizeHandle(platform, input);
 		if (!handle) return null;
 		let account = this.pending(platform, handle) ?? (await this.em.findOne(SocialAccount, { platform, handle }));
 		if (!account) {
@@ -177,11 +177,12 @@ export class SocialAccountService {
 
 	/** The creator of the one account on another platform with the same letters, if one. */
 	private async twinCreator(platform: SocialPlatformEnum, handle: string): Promise<Creator | null> {
-		const key = creatorKey(handle);
+		const key = creatorKeyOf(platform, handle);
 		if (!key) return null;
+		// One creator, even when it already has accounts on both other platforms
 		const rows: { creator_id: string }[] = await this.em.getConnection().execute(
-			`select creator_id from social_accounts
-			where platform <> ? and regexp_replace(handle, '[^a-z0-9]', '', 'g') = ?`,
+			`select distinct a.creator_id from social_accounts a
+			where a.platform <> ? and ${CREATOR_KEY_SQL('a')} = ?`,
 			[platform, key],
 		);
 		return rows.length === 1 ? this.em.getReference(Creator, rows[0].creator_id) : null;

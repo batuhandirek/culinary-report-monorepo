@@ -12,6 +12,8 @@
 	const value = $derived(page.url.searchParams.get('city') ?? cities[0]?.id);
 	const choose = (id: string) => {
 		const url = new URL(page.url.href);
+		// A branch is one city's
+		url.searchParams.delete('branch');
 		if (id === cities[0]?.id) url.searchParams.delete('city');
 		else url.searchParams.set('city', id);
 		goto(url, { replace: true });

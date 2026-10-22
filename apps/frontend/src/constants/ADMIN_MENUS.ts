@@ -87,7 +87,7 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/trends',
 		icon: TrendingUp,
 		group: 'Market',
-		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'unrecognised words'],
+		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'unrecognised words', 'highlights', 'public page', 'share cards', 'do-not-list'],
 		description:
 			'What the city eats and talks about: each kind of food with its venues, posts and Google searches, and how the month moved against the last.'
 	}),

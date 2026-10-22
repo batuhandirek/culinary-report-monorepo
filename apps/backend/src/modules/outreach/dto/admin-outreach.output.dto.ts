@@ -4,6 +4,7 @@ import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interfac
 
 import type {
 	OutreachTouchKindEnum,
+	OutreachTouchOutcomeEnum,
 	ProspectLanguage,
 	ProspectStageEnum,
 } from '../constants/outreach.constant.js';
@@ -44,6 +45,8 @@ export interface AdminProspectListItemOutputDto {
 	contactName?: string;
 	contactEmail?: string;
 	instagram?: string;
+	/** When they said we may e-mail them (UWG §7); absent until a visit or call logged it */
+	emailConsentAt?: Date;
 	hook?: string;
 	notes?: string;
 	nextFollowUpAt?: Date;
@@ -60,6 +63,12 @@ export interface AdminOutreachTouchOutputDto {
 	body?: string;
 	template?: string;
 	stage?: ProspectStageEnum;
+	/** A visit's or call's: who we got hold of */
+	outcome?: OutreachTouchOutcomeEnum;
+	/** A visit's or call's: when they said to come back */
+	comeBackAt?: Date;
+	/** A visit's or call's: they said we may e-mail them */
+	emailConsent: boolean;
 }
 
 /** The brand's newest report, cut down to what an outreach email quotes. */

@@ -18,6 +18,7 @@ import {
 	ACCOUNT_RECENT_POSTS,
 	type AccountFigures,
 	accountUrl,
+	type ProfilePlatform,
 	instagramProfileFigures,
 	normalizeAccountHandle,
 	tiktokProfileFigures,
@@ -32,7 +33,7 @@ const TIKTOK_PROFILE_ACTOR = 'clockworks/tiktok-profile-scraper';
 
 /** One own account in a month's report: its snapshot, and the change since the month before's. */
 export interface OwnAccountMonth {
-	platform: SocialPlatformEnum;
+	platform: ProfilePlatform;
 	handle: string;
 	url: string;
 	/** A branch's own account: the branch's name (and street) */
@@ -158,7 +159,8 @@ export class OwnAccountService {
 	): Promise<{ accounts: number; snapshots: number }> {
 		if (!brandIds.length) return { accounts: 0, snapshots: 0 };
 		const accounts = await this.em.find(SocialAccount, { brand: { $in: brandIds } });
-		const [instagram, tiktok] = _.partition(accounts, a => a.platform === SocialPlatformEnum.INSTAGRAM);
+		const instagram = accounts.filter(a => a.platform === SocialPlatformEnum.INSTAGRAM);
+		const tiktok = accounts.filter(a => a.platform === SocialPlatformEnum.TIKTOK);
 		// A TikTok profile is ten paid items, an Instagram one is one
 		const weight = instagram.length + tiktok.length * ACCOUNT_RECENT_POSTS;
 		const figures = new Map<SocialAccount, AccountFigures>();
@@ -240,7 +242,7 @@ export class OwnAccountService {
 		cityId: string | null,
 		months: string[],
 	): Promise<
-		{ month: string; platform: SocialPlatformEnum; handle: string; followers?: number | null; posts?: number | null; avgViews?: number | null }[]
+		{ month: string; platform: ProfilePlatform; handle: string; followers?: number | null; posts?: number | null; avgViews?: number | null }[]
 	> {
 		if (!months.length) return [];
 		const rows = await this.em.find(
@@ -250,7 +252,8 @@ export class OwnAccountService {
 		);
 		return rows.map(s => ({
 			month: s.month,
-			platform: s.account.platform,
+			// Snapshots exist for profiles only (`scrapeMonth`)
+			platform: s.account.platform as ProfilePlatform,
 			handle: s.account.handle,
 			followers: s.followers,
 			posts: s.posts,
@@ -277,7 +280,7 @@ export class OwnAccountService {
 				now != null && then != null ? now - then : undefined;
 			return _.omitBy(
 				{
-					platform: s.account.platform,
+					platform: s.account.platform as ProfilePlatform,
 					handle: s.account.handle,
 					url: accountUrl(s.account.platform, s.account.handle),
 					branch:

@@ -5,13 +5,14 @@ import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Image } from 'src/modules/image/entities/image.entity.js';
 import { ImageService } from 'src/modules/image/services/image.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
+import { isPublicWebUrl } from 'src/shared/util/public-fetch.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { Venue } from '../entities/venue.entity.js';
 import { FaviconFetchService, FetchedResource } from '../services/favicon-fetch.service.js';
 import { VenueService } from '../services/venue.service.js';
 import { VenueFaviconService } from '../services/venue-favicon.service.js';
-import { faviconFormat, faviconLinks, faviconSite, isPublicWebUrl } from '../util/favicon.js';
+import { faviconFormat, faviconLinks, faviconSite } from '../util/favicon.js';
 
 import { LIST_ITEM } from './fixtures/google-place-items.js';
 
@@ -172,6 +173,7 @@ describe('VenueFaviconService (pglite)', () => {
 
 		expect(await service.refreshDue(new Date('2026-10-01T00:00:00Z'))).toEqual({
 			venues: 1,
+			sites: 1,
 			outcomes: { updated: 1, unchanged: 0, missing: 0, generic: 0, no_site: 0 },
 		});
 		const first = await reload(id);
@@ -201,6 +203,70 @@ describe('VenueFaviconService (pglite)', () => {
 		expect(second.favicon?.id).not.toBe(first.favicon?.id);
 		expect(await harness.orm.em.fork().count(Image, { id: first.favicon!.id })).toBe(0);
 		expect(imagekit.files.delete).toHaveBeenCalledWith(first.favicon!.remoteId);
+	});
+
+	it('fetches a website once for every open venue on it, each with its own row on one file', async () => {
+		const at = new Date('2026-10-01T00:00:00Z');
+		// The group fetches whichever venue's spelling comes first
+		for (const page of [
+			'https://lap.coffee/',
+			'https://www.lap.coffee/',
+			'http://www.lap.coffee/',
+		])
+			sites[page] = HTML('<link rel="icon" href="https://lap.coffee/i.png">');
+		sites['https://lap.coffee/i.png'] = PNG(8);
+		// Spelled three ways, one of them checked last week and not due
+		const branches = [
+			await venue({ website: 'https://www.lap.coffee/' }),
+			await venue({ website: 'http://www.lap.coffee/' }),
+			await venue({ website: 'lap.coffee' }),
+			await venue({
+				website: 'https://lap.coffee/',
+				faviconCheckedAt: new Date('2026-09-25T00:00:00Z'),
+			}),
+		];
+		await venue({ website: 'https://lap.coffee/', closed: true });
+		await venue({ website: 'https://not-lap.coffee.example.de/' });
+
+		const result = await service.refreshDue(at);
+		expect(result.sites).toBe(2);
+		expect(result.venues).toBe(5);
+		expect(result.outcomes.updated).toBe(4);
+		expect(
+			fetcher.get.mock.calls.filter(([url]) => url === 'https://lap.coffee/i.png'),
+		).toHaveLength(1);
+		expect(imagekit.files.upload).toHaveBeenCalledTimes(1);
+		const stored = await Promise.all(branches.map(b => reload(b.id)));
+		expect(new Set(stored.map(v => v.favicon!.id)).size).toBe(4);
+		expect(new Set(stored.map(v => v.favicon!.remoteId)).size).toBe(1);
+		for (const v of stored) expect(v.faviconCheckedAt).toEqual(at);
+
+		// A new branch takes the icon already stored, without a fetch's upload
+		const late = await venue({ website: 'https://www.lap.coffee/' });
+		expect((await service.refreshDue(at)).outcomes).toMatchObject({ updated: 1, unchanged: 4 });
+		expect(imagekit.files.upload).toHaveBeenCalledTimes(1);
+		expect((await reload(late.id)).favicon!.remoteId).toBe(stored[0].favicon!.remoteId);
+
+		// A new icon replaces the shared file once all its rows go
+		sites['https://lap.coffee/i.png'] = PNG(9);
+		expect((await service.refreshDue(new Date('2026-11-02T00:00:00Z'))).outcomes.updated).toBe(
+			5,
+		);
+		expect(imagekit.files.upload).toHaveBeenCalledTimes(2);
+		expect(imagekit.files.delete).toHaveBeenCalledWith(stored[0].favicon!.remoteId);
+		expect(
+			await harness.orm.em.fork().count(Image, { remoteId: stored[0].favicon!.remoteId }),
+		).toBe(0);
+	});
+
+	it('takes nothing once its time is up, and leaves the rest due', async () => {
+		const { id } = await venue({ website: 'https://later.de' });
+		expect(await service.refreshDue(new Date('2026-10-01T00:00:00Z'), 0)).toMatchObject({
+			venues: 0,
+			sites: 0,
+		});
+		expect(fetcher.get).not.toHaveBeenCalled();
+		expect((await reload(id)).faviconCheckedAt).toBeNull();
 	});
 
 	it('falls back to /favicon.ico, then Google’s copy, past what ImageKit can’t read', async () => {
@@ -264,6 +330,7 @@ describe('VenueFaviconService (pglite)', () => {
 		expect((await service.refreshDue(new Date('2026-08-07T00:00:00Z'))).venues).toBe(0);
 		expect(await service.refreshDue(new Date('2026-08-10T00:00:00Z'))).toEqual({
 			venues: 1,
+			sites: 1,
 			outcomes: { updated: 0, unchanged: 0, missing: 1, generic: 0, no_site: 0 },
 		});
 		expect((await reload(without.id)).faviconCheckedAt).toEqual(

@@ -90,14 +90,19 @@ describe('the portal patterns (pglite)', () => {
 			reviews: {
 				list: [review('2026-09-01T09:00:00Z'), review('2026-09-02T09:00:00Z', 'tripadvisor')],
 			} as unknown as ReportData['reviews'],
-			demand: {
-				platform: 'thefork',
-				booked: 75,
-				evenings: [
-					{ date: '2026-09-04', booked: 50 },
-					{ date: '2026-09-05', booked: 100 },
-				],
-			},
+			branches: [
+				{
+					venueId: venue.id,
+					demand: {
+						platform: 'thefork',
+						booked: 75,
+						evenings: [
+							{ date: '2026-09-04', booked: 50 },
+							{ date: '2026-09-05', booked: 100 },
+						],
+					},
+				} as ReportData['branches'][number],
+			],
 			correlations: CORRELATIONS,
 		});
 		em.create(VenueBusyness, { venue, sampledAt: new Date('2026-09-03T17:00:00Z'), histogram: null, busynessIndex: 60 });

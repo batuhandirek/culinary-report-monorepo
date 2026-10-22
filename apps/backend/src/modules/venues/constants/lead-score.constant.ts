@@ -17,7 +17,13 @@ export const LEAD_SCORE_WEIGHTS: Record<LeadSignalKey, number> = {
 /** What each kind of press is worth to the press signal; the best one counts. */
 export const LEAD_PRESS_VALUES = { feature: 1, listicle: 0.75, passing: 0.25 } as const;
 
-/** Points added (out of 100) for a place that opened (a `VenueStatusChange`) within `LEAD_NEW_PLACE_MONTHS`, with few reviews. */
+/**
+ * Points added (out of 100) for a place that is new: an `opened` status change, or a matched
+ * mention whose post said it had just opened (`Mention.isNewOpening`), within
+ * `LEAD_NEW_PLACE_MONTHS`, and under `LEAD_NEW_PLACE_MAX_REVIEWS` Google reviews (a place with
+ * more is not new whatever a post says). The same window and cap define a post-flagged opening
+ * for `VenueStatusChangeService`.
+ */
 export const LEAD_NEW_PLACE_BONUS = 5;
 export const LEAD_NEW_PLACE_MONTHS = 6;
 export const LEAD_NEW_PLACE_MAX_REVIEWS = 300;

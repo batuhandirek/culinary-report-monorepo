@@ -164,8 +164,8 @@
 			name: 'Rating',
 			numeric: true,
 			value: (row) =>
-				row.venue?.rating
-					? `${row.venue.rating.toFixed(1)} ★`
+				row.rating
+					? `${row.rating.toFixed(1)} ★`
 					: { value: '—', class: 'text-faint' },
 			sort: { asc: SortBy.RatingAsc, desc: SortBy.RatingDesc }
 		},

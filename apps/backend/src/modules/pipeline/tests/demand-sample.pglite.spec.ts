@@ -92,7 +92,7 @@ describe('Demand sampling (pglite)', () => {
 		expect(berlin.timezone).toBe('Europe/Berlin');
 	});
 
-	it("samples the report brands' described branches, won prospects and their competitors on the $1 default", async () => {
+	it("samples the report brands' branches, won prospects and their competitors on the $1 default", async () => {
 		const em = harness.orm.em;
 		const city = cityFactory.build({ name: 'Sampled' });
 		const venue = (name: string) =>

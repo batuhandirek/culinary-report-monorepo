@@ -3,6 +3,8 @@
 
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 
+import { blogHandle } from './blog-feed.js';
+
 /** How many of the latest posts the averages cover. */
 export const ACCOUNT_RECENT_POSTS = 10;
 
@@ -15,6 +17,13 @@ export const normalizeAccountHandle = (input: string | null | undefined): string
 	const handle = (fromUrl ?? input).trim().replace(/^@/, '').replace(/\/+$/, '').toLowerCase();
 	return /^[\w.]{1,40}$/.test(handle) ? handle : null;
 };
+
+/** A platform whose accounts are profiles a brand can own and we can scrape: never a blog. */
+export type ProfilePlatform = SocialPlatformEnum.INSTAGRAM | SocialPlatformEnum.TIKTOK;
+
+/** A handle on its platform: a blog's is its host (`blogHandle`), the others' `normalizeAccountHandle`. */
+export const normalizeHandle = (platform: SocialPlatformEnum, input: string | null | undefined): string | null =>
+	platform === SocialPlatformEnum.BLOG ? (input ? blogHandle(input) : null) : normalizeAccountHandle(input);
 
 // Instagram and TikTok paths that are not a profile
 const NOT_PROFILES = new Set(['p', 'reel', 'reels', 'tv', 'explore', 'stories', 'accounts', 'tags', 'video', 'discover', 'share']);
@@ -36,9 +45,9 @@ export const profileOf = (
 };
 
 export const accountUrl = (platform: SocialPlatformEnum, handle: string): string =>
-	platform === SocialPlatformEnum.TIKTOK ?
-		`https://www.tiktok.com/@${handle}`
-	:	`https://www.instagram.com/${handle}/`;
+	platform === SocialPlatformEnum.TIKTOK ? `https://www.tiktok.com/@${handle}`
+	: platform === SocialPlatformEnum.BLOG ? `https://${handle}/`
+	: `https://www.instagram.com/${handle}/`;
 
 /** What one profile scrape gives a `SocialAccountSnapshot`. */
 export interface AccountFigures {

@@ -5,13 +5,13 @@ import type {
 	FeedbackPoint,
 	FeedbackSentiment,
 } from 'src/modules/venues/interfaces/feedback.interface.js';
+import { monthName } from 'src/modules/venues/util/month.js';
 import { isFoodVenue, plain } from 'src/modules/venues/util/venue-names.js';
 
 import type {
 	ReportCompetitor,
 	ReportCreator,
 	ReportData,
-	ReportNeighbour,
 	ReportPoint,
 	ReportPost,
 	ReportPreviousMonth,
@@ -22,7 +22,7 @@ import type {
 
 export interface SummaryMention {
 	postId: string;
-	platform: 'tiktok' | 'instagram';
+	platform: 'tiktok' | 'instagram' | 'blog';
 	url: string;
 	author?: string | null;
 	authorFans?: number | null;
@@ -63,6 +63,19 @@ export interface SummaryReview {
 /** Topic → how many sources (posts or reviews) raised it: a review listing three service complaints counts once. */
 const countSources = (sources: (FeedbackPoint[] | null | undefined)[]): Record<string, number> =>
 	_.countBy(sources.flatMap(points => _.uniq((points ?? []).map(p => p.topic))));
+
+/**
+ * Theme → how many sources raised it, once per source: "prices went up" and "dürüm now €9.50"
+ * in one review are one review raising `price_increase`. Undefined when any point has no theme
+ * (stored before themes and not backfilled yet), so a count is whole or absent, never short.
+ */
+export const countThemes = (
+	sources: (FeedbackPoint[] | null | undefined)[],
+): Record<string, number> | undefined => {
+	const points = sources.map(s => s ?? []);
+	if (points.some(ps => ps.some(p => !p.theme))) return undefined;
+	return _.countBy(points.flatMap(ps => _.uniq(ps.map(p => p.theme!))));
+};
 
 const DETAILS_PER_GROUP = 30;
 
@@ -116,14 +129,26 @@ export const summarizeCreators = (posts: ReportPost[]): ReportCreator[] =>
 		.sort((a, b) => b.views - a.views)
 		.slice(0, CREATORS_SHOWN);
 
-// "Döner" and "doner" are one dish
-export const dishKey = (name: string) => plain(name);
+/**
+ * An English plural folded to its singular's form: "fries" and "fry", "cookies" and "cookie" (both
+ * "cooky"), a trailing s off a word of 4+ letters unless it ends in ss, us or is ("burgers",
+ * never "hummus"). Not a lemmatizer: "sandwiches" stays "sandwiche".
+ */
+const singular = (word: string) => {
+	const w = word.replace(/ies$/, 'y').replace(/ie$/, 'y');
+	return w.length >= 4 && w.endsWith('s') && !/(ss|us|is)$/.test(w) ? w.slice(0, -1) : w;
+};
+
+// "Döner" and "doner" are one dish, and so are "burgers" and "burger"
+export const dishKey = (name: string) => plain(name).split(' ').map(singular).join(' ');
 
 const reviewGroup = (reviews: SummaryReview[]): ReportReviewGroup => ({
 	count: reviews.length,
 	written: reviews.filter(r => r.textTranslated || r.text).length,
 	praise: countSources(reviews.map(r => r.praise)),
 	complaints: countSources(reviews.map(r => r.complaints)),
+	praiseThemes: countThemes(reviews.map(r => r.praise)),
+	complaintThemes: countThemes(reviews.map(r => r.complaints)),
 	praiseDetails: reviews.flatMap(r => r.praise ?? []).slice(0, DETAILS_PER_GROUP),
 	complaintDetails: reviews.flatMap(r => r.complaints ?? []).slice(0, DETAILS_PER_GROUP),
 });
@@ -146,20 +171,44 @@ const toPost = (m: SummaryMention): ReportPost => ({
 	dishes: m.dishes,
 });
 
+/** Who a summary is of: a brand, one of its branches, or a competitor. */
+export interface SummaryVenue {
+	id: string;
+	name: string;
+	category?: string;
+	district?: string;
+	rating?: number;
+	reviewsCount?: number;
+}
+
+/** A month summed up from mentions and reviews: the report's brand-wide sections, and `venue`. */
+export type ReportSummary = { venue: SummaryVenue } & Pick<
+	ReportData,
+	| 'month'
+	| 'previous'
+	| 'social'
+	| 'posts'
+	| 'ownPosts'
+	| 'reviews'
+	| 'dishes'
+	| 'competitors'
+	| 'creators'
+	| 'creatorsNearby'
+>;
+
 /**
- * What a month's report shows, from the venue's mentions and reviews. The venue's own posts
- * are split off: they are not word of mouth.
+ * What a month's report shows, from the mentions and reviews of a brand (or one place). Its own
+ * accounts' posts are split off: they are not word of mouth.
  */
 export const summarizeReport = (input: {
-	venue: ReportData['venue'];
+	venue: SummaryVenue;
 	month: string;
 	mentions: SummaryMention[];
 	reviews: SummaryReview[];
-	neighbours: ReportNeighbour[];
 	competitors?: ReportCompetitor[];
 	creatorsNearby?: ReportData['creatorsNearby'];
 	previous?: ReportData['previous'];
-}): ReportData => {
+}): ReportSummary => {
 	const own = input.mentions.filter(m => m.own);
 	const others = input.mentions.filter(m => !m.own);
 	// A post that names the venue twice counts once, and so does its feedback
@@ -210,6 +259,8 @@ export const summarizeReport = (input: {
 			},
 			praise: countSources(postPraise),
 			complaints: countSources(postComplaints),
+			praiseThemes: countThemes(postPraise),
+			complaintThemes: countThemes(postComplaints),
 		},
 		posts: reportPosts,
 		ownPosts: _.orderBy(_.uniqBy(own, m => m.postId).map(toPost), p => p.views, 'desc'),
@@ -228,6 +279,8 @@ export const summarizeReport = (input: {
 			})),
 			praise: countSources(reviews.map(r => r.praise)),
 			complaints: countSources(reviews.map(r => r.complaints)),
+			praiseThemes: countThemes(reviews.map(r => r.praise)),
+			complaintThemes: countThemes(reviews.map(r => r.complaints)),
 			split: {
 				fiveStar: reviewGroup(fiveStar),
 				belowFive: reviewGroup(belowFive),
@@ -247,7 +300,6 @@ export const summarizeReport = (input: {
 			replyDrafts: [],
 		},
 		dishes,
-		neighbours: input.neighbours,
 		competitors: input.competitors ?? [],
 		creators: summarizeCreators(reportPosts),
 		creatorsNearby: input.creatorsNearby ?? [],
@@ -256,7 +308,7 @@ export const summarizeReport = (input: {
 
 /** A competitor's month, cut down to what a report compares. */
 export const summarizeCompetitor = (
-	data: ReportData,
+	data: ReportSummary,
 	reviewsTracked: boolean,
 ): ReportCompetitor => ({
 	venueId: data.venue.id,
@@ -279,7 +331,7 @@ export const summarizeCompetitor = (
 
 /** The previous month's KPIs, or undefined when the venue had neither posts nor reviews then. */
 export const summarizePrevious = (
-	data: ReportData,
+	data: ReportSummary,
 	actions?: ReportPoint[],
 ): ReportPreviousMonth | undefined => {
 	if (!data.social.postCount && !data.ownPosts.length && !data.reviews.count) return undefined;
@@ -322,11 +374,12 @@ const comparison = (
  * This month against the previous one, one phrase per KPI with the change already worked
  * out. Undefined without a previous month.
  */
-export const compareMonths = (data: ReportData) => {
+export const compareMonths = (data: Pick<ReportData, 'previous' | 'social' | 'reviews'>) => {
 	const prev = data.previous;
 	if (!prev) return undefined;
 	return {
-		month: prev.month,
+		// By name: the model quotes what it is given, an input key or a `YYYY-MM` too
+		month: monthName(prev.month),
 		socialMedia: {
 			postsByOthers: comparison(data.social.postCount, prev.social.postCount, 'count'),
 			views: comparison(data.social.views, prev.social.views, 'count'),
@@ -388,7 +441,7 @@ export const ratingTrend = (
 /** A non-promotional post about a district neighbour this month, as `neighbourPosts` reads it. */
 export interface NeighbourPost {
 	postId: string;
-	platform: 'tiktok' | 'instagram';
+	platform: 'tiktok' | 'instagram' | 'blog';
 	url: string;
 	author: string;
 	authorFans?: number | null;

@@ -11,7 +11,7 @@ import type {
 export interface PatternsReport {
 	id: string;
 	month: string;
-	data: Partial<Pick<ReportData, 'posts' | 'reviews' | 'demand' | 'correlations'>> & Pick<ReportData, 'month'>;
+	data: Partial<Pick<ReportData, 'posts' | 'reviews' | 'branches' | 'correlations'>> & Pick<ReportData, 'month'>;
 }
 
 /** What the patterns read from a busyness sample (`VenueBusyness`). */
@@ -24,8 +24,9 @@ const round1 = (n: number) => Math.round(n * 10) / 10;
 const mean = (values: number[]) => values.reduce((a, b) => a + b, 0) / values.length;
 
 /**
- * A venue's computed relations month by month and its weeks across months, from its stored
- * reports (nothing is recomputed) and its busyness samples. Weeks are by their Mondays in the
+ * A brand's computed relations month by month and its weeks across months, from its stored
+ * reports (nothing is recomputed) and one branch's busyness samples: booked out is that branch's
+ * (`branchId`, else the reports' first branch). Weeks are by their Mondays in the
  * city's time zone; a week spanning two months sums both reports' posts, views and reviews,
  * since each report counts only its own month's. A week with days in a month without a report
  * is `partial`; one with none has no counts at all.
@@ -35,6 +36,7 @@ export const buildPatterns = (
 	months: string[],
 	samples: PatternsBusynessSample[],
 	timeZone: string,
+	branchId?: string,
 ): PortalPatternsOutputDto => {
 	const byMonth = new Map(reports.map(report => [report.month, report]));
 
@@ -73,7 +75,10 @@ export const buildPatterns = (
 			const week = weekStart(new Date(review.publishedAt), timeZone);
 			reviews.set(week, (reviews.get(week) ?? 0) + 1);
 		}
-		for (const evening of report.data.demand?.evenings ?? []) {
+		// A report without the picked branch has no evenings for it: another branch's never stand in
+		const branch =
+			branchId ? report.data.branches?.find(b => b.venueId === branchId) : report.data.branches?.[0];
+		for (const evening of branch?.demand?.evenings ?? []) {
 			const week = weekStart(new Date(`${evening.date}T12:00:00Z`), timeZone);
 			booked.set(week, [...(booked.get(week) ?? []), evening.booked]);
 		}
@@ -104,5 +109,5 @@ export const buildPatterns = (
 		};
 	});
 
-	return { months: monthRows, weeks: weekRows };
+	return { months: monthRows, weeks: weekRows, branches: [] };
 };

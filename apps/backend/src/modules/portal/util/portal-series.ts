@@ -39,22 +39,28 @@ const emptyMonth = (month: string): PortalSeriesMonthOutputDto => ({
 });
 
 /**
- * A venue's monthly series from its stored reports: no recomputation, no LLM. A month with a
+ * A brand's monthly series from its stored reports: no recomputation, no LLM. A month with a
  * report reads it; a month without one but followed by a report reads that report's look back
- * (`previous`: the counts only); the all-time rating comes from every report's rating trend,
- * so months between reports still get one. Every field a stored report may lack is optional.
+ * (`previous`: the counts only); the all-time rating is the branch `branchId`'s (else the
+ * reports' first branch), from every report's rating trend for it, so months between reports
+ * still get one. Every field a stored report may lack is optional.
  */
 export const buildSeries = (
 	reports: SeriesReport[],
 	months: string[],
+	branchId?: string,
 ): PortalSeriesOutputDto => {
+	// A report without the picked branch (one built before it joined) has no figures for it:
+	// another branch's never stand in
+	const branchOf = (data: SeriesReport['data']) =>
+		branchId ? data.branches?.find(b => b.venueId === branchId) : data.branches?.[0];
 	const rows = new Map(months.map(month => [month, emptyMonth(month)]));
 	// Oldest build first, so a newer report's figures for a month win
 	const sorted = [...reports].sort((a, b) => a.month.localeCompare(b.month));
 
 	for (const report of sorted) {
 		const data = report.data;
-		for (const point of data.venue?.ratingTrend ?? []) {
+		for (const point of branchOf(data)?.ratingTrend ?? []) {
 			const row = rows.get(point.month);
 			if (!row) continue;
 			if (point.rating !== undefined) row.rating = point.rating;
@@ -84,7 +90,8 @@ export const buildSeries = (
 	for (const report of sorted) {
 		const row = rows.get(report.month);
 		if (!row) continue;
-		const { social, reviews, dishes, venue, competitors } = report.data;
+		const { social, reviews, dishes, competitors } = report.data;
+		const venue = branchOf(report.data);
 		row.reportId = report.id;
 		row.social = social
 			? {
@@ -139,8 +146,9 @@ export const buildSeries = (
 		competitors: [...names]
 			.map(([venueId, name]) => ({ venueId, name }))
 			.sort((a, b) => a.name.localeCompare(b.name)),
-		// The city's calendar is not in reports: `PortalService.series` adds it
+		// The city's calendar is not in reports: `PortalService.series` adds it, and the branches
 		calendar: [],
+		branches: [],
 	};
 };
 

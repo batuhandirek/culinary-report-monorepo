@@ -2,9 +2,13 @@
 export const FAVICON_REFRESH_DAYS = 30;
 // A venue with a website but no icon yet is tried again sooner: the site may have been down
 export const FAVICON_RETRY_DAYS = 7;
-// Venues per hourly run: every site costs up to a page and a few icon fetches of 10 s each
-export const FAVICON_BATCH = 40;
-export const FAVICON_CONCURRENCY = 4;
+// How long one hourly run keeps taking due websites. A website costs up to a page and five
+// icon fetches of 10 s each, so one started at the end still finishes inside the job's 30 min
+export const FAVICON_RUN_SECONDS = 20 * 60;
+// Due venues read at a time; their websites are fetched once each
+export const FAVICON_PAGE = 200;
+// Websites fetched side by side: each is a different host, so no site sees more than one
+export const FAVICON_CONCURRENCY = 8;
 // Icon URLs tried per venue after the page's own links are ranked; the conventional
 // `/favicon.ico` and Google's copy come after them
 export const FAVICON_MAX_LINKS = 3;

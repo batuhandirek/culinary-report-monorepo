@@ -91,6 +91,39 @@ describe('MonthlyPipelineCron (pglite)', () => {
 		expect(await em.count(PipelineRun, { step: PipelineStepEnum.SCRAPE_VENUES })).toBe(1);
 		expect(await em.count(PipelineRun, { step: PipelineStepEnum.SEARCH_BRANCHES })).toBe(1);
 	});
+
+	it('checks a city with an OSM boundary against OpenStreetMap every month, after a Places list', async () => {
+		const em = harness.orm.em;
+		await em.nativeDelete(PipelineRun, {});
+		const now = new Date();
+		const due = await cityFactory.create({ name: 'Mapped', cronEnabled: true, osmRelationId: 62422 });
+		const scraped = await cityFactory.create({
+			name: 'Mapped too',
+			cronEnabled: true,
+			osmRelationId: 62423,
+			venuesScrapedAt: new Date(now.getTime() - 30 * 24 * 3600 * 1000),
+		});
+		await harness.moduleRef.get(MonthlyPipelineCron).queueRuns(now);
+
+		em.clear();
+		const steps = async (cityId: string) =>
+			(await em.find(PipelineRun, { city: cityId }, { orderBy: { createdAt: 'asc' } })).map(r => r.step);
+		expect(await steps(due.id)).toEqual([
+			PipelineStepEnum.SCRAPE_VENUES,
+			PipelineStepEnum.SEARCH_BRANCHES,
+			PipelineStepEnum.SYNC_OSM_PLACES,
+			PipelineStepEnum.LOOKUP_OSM_PLACES,
+			PipelineStepEnum.MONTHLY,
+		]);
+		// Not a quarter since its Places list: OSM still runs
+		expect(await steps(scraped.id)).toEqual([
+			PipelineStepEnum.SYNC_OSM_PLACES,
+			PipelineStepEnum.LOOKUP_OSM_PLACES,
+			PipelineStepEnum.MONTHLY,
+		]);
+		// The cities above have no boundary
+		expect(await em.count(PipelineRun, { step: PipelineStepEnum.SYNC_OSM_PLACES })).toBe(2);
+	});
 });
 
 describe('cityVenueScrapeDue', () => {

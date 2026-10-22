@@ -26,12 +26,18 @@ export interface AdminCreateCityInputDto {
 	locationQuery: string & tags.MinLength<1> & tags.MaxLength<200>;
 	/** TikTok search region, ISO-2 */
 	tiktokRegion: string & tags.Pattern<'^[A-Z]{2}$'>;
+	/** The city's boundary on OpenStreetMap, a relation id (Berlin: 62422): the OSM place checklist */
+	osmRelationId?: (number & tags.Type<'uint32'> & tags.Minimum<1>) | null;
 	instagramEnabled?: boolean;
 	lat?: (number & tags.Minimum<-90> & tags.Maximum<90>) | null;
 	lng?: (number & tags.Minimum<-180> & tags.Maximum<180>) | null;
 	districts?: AdminCityDistrictInputDto[];
 	nameStopwords?: (string & tags.MaxLength<60>)[];
 	chainDenyList?: (string & tags.MaxLength<100>)[];
+	/** Venues who asked to be left out of public pages (names) */
+	doNotListVenues?: (string & tags.MaxLength<100>)[];
+	/** Creators who asked to be left out of public pages (handles, with or without @) */
+	doNotListCreators?: (string & tags.MaxLength<100>)[];
 	stepBudgetsUsd?: Partial<Record<PipelineStepEnum, number & tags.Minimum<0> & tags.Maximum<100>>>;
 	topBrands?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<200>;
 	cronEnabled?: boolean;
@@ -42,8 +48,8 @@ export interface AdminUpdateCityInputDto extends Partial<AdminCreateCityInputDto
 
 export interface AdminAddCitySourceInputDto {
 	kind: CitySourceKindEnum;
-	/** A hashtag (with or without #) or a search query */
-	value: string & tags.MinLength<1> & tags.MaxLength<120>;
+	/** A hashtag (with or without #), a search query, or a blog's URL (the site, a section or its feed) */
+	value: string & tags.MinLength<1> & tags.MaxLength<500>;
 	note?: string & tags.MaxLength<500>;
 	enabled?: boolean;
 }

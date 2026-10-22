@@ -1,6 +1,8 @@
 // A venue website's icon: which websites have one of their own, which links in a page are
 // icons, and what format a fetched file is. Pure functions.
 
+import { isPublicWebUrl } from 'src/shared/util/public-fetch.js';
+
 import { hostOf, hostOnDomain } from './web-mentions.js';
 
 /** An image ImageKit stores and a browser shows as an icon. */
@@ -51,16 +53,6 @@ export const faviconSite = (website: string | null | undefined): URL | null => {
 	const host = hostOf(url.href);
 	if (!host || PLATFORM_DOMAINS.some(domain => hostOnDomain(host, domain))) return null;
 	return url;
-};
-
-/** http(s), default ports, a dotted host name that is neither an IP literal nor a local name. */
-export const isPublicWebUrl = (url: URL): boolean => {
-	if (url.protocol !== 'https:' && url.protocol !== 'http:') return false;
-	if (url.port && url.port !== '80' && url.port !== '443') return false;
-	if (url.username || url.password) return false;
-	const host = url.hostname.toLowerCase();
-	if (!host.includes('.') || host.startsWith('[') || /^[\d.]+$/.test(host)) return false;
-	return !/(^|\.)(localhost|local|internal|lan|home|arpa)$/.test(host);
 };
 
 /** One icon a page declares. */

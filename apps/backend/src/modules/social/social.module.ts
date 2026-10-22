@@ -18,6 +18,8 @@ import { VenueMatchAgent } from './agents/venue-match.agent.js';
 import { AdminAccountsController } from './controllers/admin.accounts.controller.js';
 import { AdminBrandAccountsController } from './controllers/admin.brand-accounts.controller.js';
 import { AdminCreatorsController } from './controllers/admin.creators.controller.js';
+import { AdminFeedbackThemesController } from './controllers/admin.feedback-themes.controller.js';
+import { AdminOpeningFlagsController } from './controllers/admin.opening-flags.controller.js';
 import { AdminPostCommentsController } from './controllers/admin.post-comments.controller.js';
 import { AdminSocialController } from './controllers/admin.social.controller.js';
 import { Creator } from './entities/creator.entity.js';
@@ -27,6 +29,8 @@ import { SocialAccount } from './entities/social-account.entity.js';
 import { SocialAccountSnapshot } from './entities/social-account-snapshot.entity.js';
 import { SocialPost } from './entities/social-post.entity.js';
 import { AccountMatchingService } from './services/account-matching.service.js';
+import { BlogFetchService } from './services/blog-fetch.service.js';
+import { BlogScrapeService } from './services/blog-scrape.service.js';
 import { BrandPostsService } from './services/brand-posts.service.js';
 import { CreatorService } from './services/creator.service.js';
 import { MentionExtractionService } from './services/mention-extraction.service.js';
@@ -54,9 +58,13 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		AdminAccountsController,
 		AdminBrandAccountsController,
 		AdminCreatorsController,
+		AdminFeedbackThemesController,
+		AdminOpeningFlagsController,
 	],
 	providers: [
 		SocialPostService,
+		BlogFetchService,
+		BlogScrapeService,
 		SocialAccountService,
 		OwnAccountService,
 		AccountMatchingService,
@@ -73,6 +81,7 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 	],
 	exports: [
 		SocialScrapeService,
+		BlogScrapeService,
 		SocialAccountService,
 		OwnAccountService,
 		AccountMatchingService,

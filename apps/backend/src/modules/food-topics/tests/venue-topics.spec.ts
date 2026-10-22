@@ -54,6 +54,44 @@ describe('venueTopics', () => {
 		);
 	});
 
+	it('adds what its menu sells from three items and a quarter of those with a kind of food', () => {
+		const menuItems = [
+			{ name: 'Pho Bo', category: 'Suppen' },
+			{ name: 'Pho Ga', category: 'Suppen' },
+			{ name: 'Pho Chay', category: 'Suppen' },
+			{ name: 'Banh Mi Thit', category: 'Sandwiches' },
+			{ name: 'Sommerrollen', category: 'Vorspeisen' },
+			{ name: 'Matcha Latte', category: 'Getränke' },
+			{ name: 'Cola', category: 'Getränke' },
+		];
+		// Pho 3 of 5 items with a kind of food (banh mi and matcha are one each: too few)
+		expect(brief({ category: 'Asian restaurant', menuItems })).toEqual([
+			'*asian category 1',
+			'pho menu 0.6',
+		]);
+		// Without a category of food, the menu's makes it primary
+		expect(brief({ category: 'Restaurant', menuItems })).toEqual(['*pho menu 0.6']);
+	});
+
+	it("adds the food Google's review tags name, weighted by their counts, never staff or places", () => {
+		expect(
+			brief({
+				category: 'Cafe',
+				reviewTags: [
+					{ title: 'friendly staff', count: 104 },
+					{ title: 'atmosphere', count: 28 },
+					{ title: 'cookie', count: 38 },
+					{ title: 'cakes', count: 10 },
+					{ title: 'terrace', count: 10 },
+				],
+			}),
+		).toEqual(['*cookies reviews 0.79', 'cafe category 1']);
+		// A single mention is noise
+		expect(brief({ category: 'Bar', reviewTags: [{ title: 'cocktails', count: 1 }] })).toEqual([
+			'*bar category 1',
+		]);
+	});
+
 	it('makes a place type primary when it has no food tag', () => {
 		expect(brief({ category: 'Cocktail bar' })).toEqual([
 			'*cocktails category 1',

@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { RefreshCw } from '@lucide/svelte';
+	import { Printer, RefreshCw } from '@lucide/svelte';
 	import type { AdminBrandOutputDto, AdminReportListItemOutputDto } from 'client';
 
+	import { downloadLeaveBehindPdf } from '#components/admin/outreach/report-pdf.js';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
 	import type {
@@ -12,7 +13,8 @@
 	import { createAction } from '#ui/lib/action.svelte.js';
 
 	// The brand's monthly reports in the city (or across its cities). "Build report" above makes
-	// the month picked there; Rebuild after fixing a mention or a competitor.
+	// the month picked there; Rebuild after fixing a mention or a competitor. "Print leave-behind"
+	// is the A5 page to take on a visit: the cover, three findings and a QR code to the share link.
 	interface Props {
 		brand: AdminBrandOutputDto;
 		cityId?: string;
@@ -48,7 +50,23 @@
 			})
 		}
 	);
+	const leaveBehindAction = createAction(
+		(row: AdminReportListItemOutputDto) => downloadLeaveBehindPdf(row, brand.name),
+		{
+			successNotification: {
+				title: 'Leave-behind ready',
+				text: 'An A5 page in your downloads: print it and take it along'
+			}
+		}
+	);
 	const ACTIONS: PaginatedDataTableAction<AdminReportListItemOutputDto>[] = [
+		{
+			icon: Printer,
+			label: 'Print leave-behind',
+			onClick: (row) => {
+				leaveBehindAction.execute(row);
+			}
+		},
 		{
 			icon: RefreshCw,
 			label: 'Rebuild report',

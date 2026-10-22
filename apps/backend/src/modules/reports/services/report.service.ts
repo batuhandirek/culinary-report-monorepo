@@ -14,6 +14,12 @@ import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { VenueSnapshot } from 'src/modules/venues/entities/venue-snapshot.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
+import {
+	FEEDBACK_THEMES,
+	feedbackThemeLabel,
+	isFeedbackTheme,
+} from 'src/modules/venues/constants/feedback-themes.constant.js';
+import type { FeedbackPoint } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { offeredAmenities } from 'src/modules/venues/util/venue-details.js';
@@ -23,7 +29,7 @@ import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { Report } from '../entities/report.entity.js';
 import {
-	ReportBrand,
+	ReportBranch,
 	ReportCompetitor,
 	ReportData,
 	ReportNeighbour,
@@ -32,6 +38,7 @@ import {
 } from '../interfaces/report-data.interface.js';
 import { ReportBuiltEvent } from '../persisted-events/report-built.persisted-event.js';
 import { reachPromptInput } from '../util/reach.js';
+import { ratingBenchmarkSentence } from '../util/rating-benchmark.js';
 import { replyCandidates } from '../util/reply-drafts.js';
 import {
 	compareMonths,
@@ -58,13 +65,34 @@ const shares = (counts: Record<string, number>, total: number, unit: string) =>
 		]),
 	);
 
+/**
+ * Theme counts the same way, keyed "price / price increase"; the topics' catch-all themes are
+ * left out (the topic counts carry them). Undefined when the counts are (a point without a theme).
+ */
+const themeShares = (counts: Record<string, number> | undefined, total: number, unit: string) =>
+	counts &&
+	shares(
+		Object.fromEntries(
+			Object.entries(counts)
+				.filter(([theme]) => isFeedbackTheme(theme) && !FEEDBACK_THEMES[theme].label.endsWith(', other') && theme !== 'other')
+				.map(([theme, n]) => [feedbackThemeLabel(theme as keyof typeof FEEDBACK_THEMES), n]),
+		),
+		total,
+		unit,
+	);
+
+/** "price / price increase: prices went up", or the topic for a point without a theme. */
+const pointLine = (p: FeedbackPoint) => `${p.theme ? feedbackThemeLabel(p.theme) : p.topic}: ${p.detail}`;
+
 const reviewGroupInput = (group: ReportReviewGroup) => ({
 	reviews: group.count,
 	writtenReviews: group.written,
 	praisingTopic: shares(group.praise, group.written, 'written reviews'),
 	criticisingTopic: shares(group.complaints, group.written, 'written reviews'),
-	whatTheyPraised: group.praiseDetails.map(p => `${p.topic}: ${p.detail}`),
-	whatTheyCriticised: group.complaintDetails.map(p => `${p.topic}: ${p.detail}`),
+	praisingTheme: themeShares(group.praiseThemes, group.written, 'written reviews'),
+	criticisingTheme: themeShares(group.complaintThemes, group.written, 'written reviews'),
+	whatTheyPraised: group.praiseDetails.map(pointLine),
+	whatTheyCriticised: group.complaintDetails.map(pointLine),
 });
 
 @Injectable()
@@ -89,10 +117,11 @@ export class ReportService {
 	 * every city: `Brand.reportScope` `all`) for a month and returns it, flushed. Two LLM calls:
 	 * the highlights and the reply drafts, side by side. `peerBrandIds` are the month's report
 	 * brands the city section compares it with (the pipeline passes them; else the month's
-	 * reports). Posts and reviews cover every open branch covered; the place-bound sections
-	 * describe the one with the most Google reviews (`ReportData.venue`), in its own city; a
-	 * chain gets `ReportData.brand`. A report across cities has no city section: one city's
-	 * peers don't compare with a brand in several. 400 when there is no open branch.
+	 * reports). Posts, reviews and the other brand-wide sections cover every open branch covered;
+	 * each branch's place figures (busyness, open tables, prices, search ranks, neighbourhood,
+	 * rating trend, Google details) go in its own `ReportData.branches` entry. A report across
+	 * cities has no city section and no calendar: one city's peers don't compare with a brand in
+	 * several. 400 when there is no open branch.
 	 */
 	async build(
 		brandId: string,
@@ -105,19 +134,28 @@ export class ReportService {
 		if (!branches.length)
 			throw new BadRequestException(cityId ? 'The brand has no open branch in the city' : 'The brand has no open branch');
 		await this.em.populate(branches, ['city', 'brand', 'brand.branches']);
-		const [venue] = branches;
-		const { brand } = venue;
-		const city = cityId ? venue.city : null;
+		const [first] = branches;
+		const { brand } = first;
+		const city = cityId ? first.city : null;
 		const cityNames = _.uniq(branches.map(b => b.city.name));
-		const data = await this.collect(venue, month, branches, city);
-		if (city) data.city = await this.reportCityService.section(venue, month, peerBrandIds);
-		data.neighbourhood = await this.reportCityService.neighbourhood(venue, month);
-		data.searchRanks = await this.reportCityService.searchRanks(venue, month);
-		data.context = await this.cityDayService.month(venue.city.id, month);
-		// Busyness, open tables, delivery prices and the computed correlations, when tracked
-		Object.assign(data, await this.reportSignalsService.sections(venue, month, data));
+		const data = await this.collect(branches, month, city);
+		if (city) data.city = await this.reportCityService.section(branches, month, peerBrandIds);
+		if (cityNames.length === 1) data.context = await this.cityDayService.month(first.city.id, month);
+		// The relations over every branch's reviews, and the competitors' open tables and busyness
+		const correlations = await this.reportSignalsService.correlations(branches, month, first.city.timezone, data);
+		if (correlations) data.correlations = correlations;
+		const competitors = await this.reportSignalsService.competitorSignals(data.competitors, month);
+		if (competitors) data.competitors = competitors;
+		// Each branch's place figures, read one after another (they share the entity manager)
+		for (const [i, branch] of branches.entries()) await this.placeFigures(branch, data.branches[i], month, data);
+		// Each branch's all-time rating against its district's and its kind of food's venues
+		const benchmarks = await this.reportCityService.ratingBenchmarks(branches);
+		for (const [i, branch] of branches.entries()) {
+			const benchmark = benchmarks?.get(branch.id);
+			if (benchmark) data.branches[i].ratingBenchmark = benchmark;
+		}
 		// Own accounts, comments, press and the review platforms, when scraped
-		Object.assign(data, await this.reportReachService.sections(venue, month, data, city));
+		Object.assign(data, await this.reportReachService.sections(branches, month, data, city));
 		const [res, replyDrafts] = await Promise.all([
 			this.reportHighlightsAgent.generate(JSON.stringify(this.highlightsInput(data)), {
 				cityName: cityNames.join(', '),
@@ -192,8 +230,9 @@ export class ReportService {
 		return this.em.findOne(Report, { id }, { populate: ['brand', 'city'] });
 	}
 
-	private async collect(venue: Venue, month: string, branches: Venue[], city: City | null): Promise<ReportData> {
-		const brand = venue.brand;
+	private async collect(branches: Venue[], month: string, city: City | null): Promise<ReportData> {
+		const [first] = branches;
+		const brand = first.brand;
 		const cityIds = _.uniq(branches.map(b => b.city.id));
 		// Read one after another: they share the entity manager
 		const competitors: ReportCompetitor[] = [];
@@ -206,7 +245,6 @@ export class ReportService {
 					brandWide: !!competitor.link.rival,
 					name: competitor.name,
 				})),
-				neighbours: [],
 			});
 			const reviewsTracked =
 				(await this.em.count(Review, { venue: { $in: competitor.venues.map(v => v.id) } })) > 0;
@@ -214,7 +252,10 @@ export class ReportService {
 			competitors.push({
 				...summarizeCompetitor(data, reviewsTracked),
 				...(competitor.link.rival && { branches: competitor.venues.length }),
-				...(branch && { against: branch.street ? `${branch.name}, ${branch.street}` : branch.name }),
+				...(branch && {
+					branchId: branch.id,
+					against: branch.street ? `${branch.name}, ${branch.street}` : branch.name,
+				}),
 			});
 		}
 
@@ -222,60 +263,101 @@ export class ReportService {
 		const before = previousMonth(new Date(`${month}-01T00:00:00Z`));
 		const beforeReport = await this.em.findOne(Report, { brand, city: city ?? null, month: before });
 		const previous = summarizePrevious(
-			summarizeReport({
-				...(await this.monthInput(venue, before, { branches, brandWide: true })),
-				neighbours: [],
-			}),
+			summarizeReport(await this.monthInput(first, before, { branches, brandWide: true })),
 			beforeReport?.highlights.actions,
 		);
 
-		const input = await this.monthInput(venue, month, { branches, brandWide: true });
-		const snapshots = await this.em.find(VenueSnapshot, { venue }, { orderBy: { snapshotDate: QueryOrder.ASC } });
+		const input = await this.monthInput(first, month, { branches, brandWide: true });
 		const brandAuthors = new Set(input.mentions.filter(m => m.author).map(m => creatorKey(m.platform, m.author!)));
-		const data = summarizeReport({
+		const { venue: _subject, ...summary } = summarizeReport({
 			...input,
-			venue: { ...input.venue, ratingTrend: ratingTrend(snapshots, month) },
-			neighbours: venue.district ? await this.neighbours(venue, month) : [],
 			competitors,
-			creatorsNearby:
-				venue.district ? selectNearbyCreators(await this.neighbourPosts(venue, month), brandAuthors) : [],
+			creatorsNearby: selectNearbyCreators(await this.nearbyPosts(branches, month), brandAuthors),
 			previous,
 		});
-		if (branches.length > 1) data.brand = await this.brandSection(venue, month, branches, input, !city);
-		return data;
+		// Posts by others in the brand's figures that named no branch
+		const named = new Set(input.mentions.filter(m => !m.brandOnly).map(m => m.postId));
+		const categories = _.countBy(branches.map(b => b.category).filter(Boolean));
+		const category = _.maxBy(Object.keys(categories), c => categories[c]);
+		return {
+			brand: {
+				id: brand.id,
+				name: brand.name,
+				...(category && { category }),
+				brandOnlyPosts: summary.posts.filter(p => !named.has(p.postId)).length,
+			},
+			branches: await this.branchRows(branches, month, !city),
+			...summary,
+		};
 	}
 
 	/**
-	 * Each branch's own month: the posts that named it (not the ones naming only the brand) and
-	 * its reviews, cut down like a competitor.
+	 * Each branch's own month (the posts that named it, not the ones naming only the brand, and
+	 * its reviews, cut down like a competitor), where it is, its Google details, its rating trend
+	 * and its district's neighbours. The place sections come after (`placeFigures`).
 	 */
-	private async brandSection(
-		venue: Venue,
-		month: string,
-		branches: Venue[],
-		input: Awaited<ReturnType<ReportService['monthInput']>>,
-		acrossCities = false,
-	): Promise<ReportBrand> {
-		const brandName = venue.brand.name;
-		const rows: ReportBrand['branches'] = [];
+	private async branchRows(branches: Venue[], month: string, acrossCities: boolean): Promise<ReportBranch[]> {
+		const rows: ReportBranch[] = [];
 		for (const branch of branches) {
-			const own = await this.monthInput(branch, month, { branches: [branch] });
-			const summary = summarizeReport({ ...own, neighbours: [] });
+			const own = summarizeReport(await this.monthInput(branch, month, { branches: [branch] }));
+			const figures = _.pick(summarizeCompetitor(own, true), [
+				'venueId',
+				'name',
+				'category',
+				'district',
+				'rating',
+				'reviewsCount',
+				'social',
+				'reviews',
+			]);
+			const snapshots = await this.em.find(
+				VenueSnapshot,
+				{ venue: branch },
+				{ orderBy: { snapshotDate: QueryOrder.ASC } },
+			);
 			rows.push({
-				...summarizeCompetitor(summary, (await this.em.count(Review, { venue: branch })) > 0),
-				street: branch.street ?? undefined,
-				described: branch.id === venue.id,
+				...figures,
+				...(branch.street && { street: branch.street }),
 				...(acrossCities && { city: branch.city.name }),
+				...(branch.googleUrl && { googleUrl: branch.googleUrl }),
+				...(branch.details?.amenities && { amenities: offeredAmenities(branch.details) }),
+				...(branch.details?.reviewsDistribution && { reviewsDistribution: branch.details.reviewsDistribution }),
+				ratingTrend: ratingTrend(snapshots, month),
+				neighbours: branch.district ? await this.neighbours(branch, month) : [],
 			});
 		}
-		// Posts by others in the brand's figures that named no branch
-		const named = new Set(input.mentions.filter(m => !m.brandOnly).map(m => m.postId));
-		const posts = summarizeReport({ ...input, neighbours: [] }).posts;
-		return {
-			name: brandName,
-			brandOnlyPosts: posts.filter(p => !named.has(p.postId)).length,
-			branches: rows,
-		};
+		return rows;
+	}
+
+	/**
+	 * A branch's place sections, in place: its busyness, open tables and prices (against the
+	 * competitors picked for the whole brand or for it), its search ranks and neighbourhood.
+	 */
+	private async placeFigures(branch: Venue, row: ReportBranch, month: string, data: ReportData): Promise<void> {
+		Object.assign(
+			row,
+			await this.reportSignalsService.placeSections(branch, month, {
+				posts: data.posts,
+				reviews: row.reviews,
+				dishes: data.dishes,
+				competitors: data.competitors.filter(c => !c.branchId || c.branchId === branch.id),
+			}),
+		);
+		const neighbourhood = await this.reportCityService.neighbourhood(branch, month);
+		if (neighbourhood) row.neighbourhood = neighbourhood;
+		const searchRanks = await this.reportCityService.searchRanks(branch, month);
+		if (searchRanks) row.searchRanks = searchRanks;
+	}
+
+	/** Posts about district neighbours of every branch (each post and neighbour once). */
+	private async nearbyPosts(branches: Venue[], month: string): Promise<NeighbourPost[]> {
+		const posts: NeighbourPost[] = [];
+		for (const district of _.uniqBy(
+			branches.filter(b => b.district),
+			b => `${b.city.id}:${b.district}`,
+		))
+			posts.push(...(await this.neighbourPosts(district, month)));
+		return _.uniqBy(posts, p => `${p.postId}:${p.venueName}`);
 	}
 
 	/**
@@ -287,7 +369,6 @@ export class ReportService {
 		month: string,
 		data: ReportData,
 	): Promise<ReportReplyDraft[]> {
-		const [venue] = branches;
 		const { start, end } = monthRange(month);
 		const candidates = replyCandidates(
 			await this.em.find(Review, {
@@ -299,7 +380,11 @@ export class ReportService {
 		try {
 			const res = await this.reviewReplyAgent.generate(
 				JSON.stringify({
-					venue: _.pick(data.venue, ['name', 'category', 'district']),
+					venue: {
+						name: data.brand.name,
+						category: data.brand.category,
+						...(data.branches.length === 1 && { district: data.branches[0].district }),
+					},
 					praisedThisMonth: Object.keys(data.reviews.praise).filter(t => t !== 'other'),
 					topDishes: data.dishes.slice(0, 5).map(d => d.name),
 					reviews: candidates.map(r => ({
@@ -316,7 +401,7 @@ export class ReportService {
 				.filter(r => byId.get(r.reviewId))
 				.map(r => ({ reviewId: r.reviewId, draft: byId.get(r.reviewId)! }));
 		} catch (e) {
-			this.logger.warn(`Reply drafts for ${venue.name} failed: ${(e as Error).message}`);
+			this.logger.warn(`Reply drafts for ${data.brand.name} failed: ${(e as Error).message}`);
 			return [];
 		}
 	}
@@ -329,7 +414,7 @@ export class ReportService {
 		const { start, end } = monthRange(month);
 		const rows: {
 			post_id: string;
-			platform: 'tiktok' | 'instagram';
+			platform: 'tiktok' | 'instagram' | 'blog';
 			url: string;
 			author: string;
 			author_fans: number | null;
@@ -395,13 +480,8 @@ export class ReportService {
 				name: name ?? venue.name,
 				category: venue.category ?? undefined,
 				district: venue.district ?? undefined,
-				street: venue.street ?? undefined,
 				rating: venue.rating ?? undefined,
 				reviewsCount: venue.reviewsCount ?? undefined,
-				googleUrl: venue.googleUrl ?? undefined,
-				amenities: venue.details?.amenities ? offeredAmenities(venue.details) : undefined,
-				reviewsDistribution: venue.details?.reviewsDistribution,
-				ratingTrend: [],
 			},
 			month,
 			mentions: mentions.map(m => ({
@@ -431,7 +511,10 @@ export class ReportService {
 		};
 	}
 
-	/** Other food venues talked about this month in the same district, its brand's branches left out. */
+	/**
+	 * Other food venues talked about this month in the same district, its brand's branches left
+	 * out: posts by others, each once per venue (a post can name a venue twice), as in their own reports.
+	 */
 	private async neighbours(venue: Venue, month: string): Promise<ReportNeighbour[]> {
 		const rows: {
 			venue_id: string;
@@ -440,13 +523,18 @@ export class ReportService {
 			posts: number;
 			views: string;
 		}[] = await this.em.getConnection().execute(
-			`select v.id as venue_id, v.name, v.category, count(distinct p.id)::int as posts, sum(p.views) as views
-				from mentions m
-				join social_posts p on p.id = m.post_id
-				join venues v on v.id = m.venue_id
-				where v.city_id = ? and v.district = ? and v.brand_id <> ?
-					and to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') = ?
-				group by v.id order by sum(p.views) desc limit 40`,
+			`select v.id as venue_id, v.name, v.category, count(*)::int as posts, sum(vp.views) as views
+				from (
+					select distinct m.venue_id, p.id, p.views
+						from mentions m
+						join social_posts p on p.id = m.post_id
+						join venues v on v.id = m.venue_id
+						where v.city_id = ? and v.district = ? and v.brand_id <> ?
+							and to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') = ?
+							and not ${ownPostSql('p', 'v.brand_id')}
+				) vp
+				join venues v on v.id = vp.venue_id
+				group by v.id order by sum(vp.views) desc limit 40`,
 			[venue.city.id, venue.district, venue.brand.id, month],
 		);
 		return rows
@@ -462,17 +550,18 @@ export class ReportService {
 	}
 
 	private highlightsInput(data: ReportData) {
+		const chain = data.branches.length > 1;
 		return {
-			venue: _.pick(data.venue, ['name', 'category', 'district', 'rating']),
+			venue: {
+				name: data.brand.name,
+				category: data.brand.category,
+				...(!chain && _.pick(data.branches[0], ['district', 'rating'])),
+			},
 			month: data.month,
-			// All-time Google figures at the close of each month, oldest first
-			googleRatingTrend:
-				data.venue.ratingTrend.length >= 2 ?
-					data.venue.ratingTrend.map(p => _.pick(p, ['month', 'rating', 'reviewsCount']))
-				:	undefined,
 			previousMonth: compareMonths(data),
 			cityCalendar: data.context,
-			demandAndPrices: signalsPromptInput(data),
+			// The brand's relations over every branch; each place's own sentences are in places
+			demandAndPrices: signalsPromptInput({ correlations: data.correlations }),
 			reachAndPress: reachPromptInput(data),
 			socialMedia: {
 				postsByOthers: data.social.postCount,
@@ -487,6 +576,12 @@ export class ReportService {
 				postsPraisingTopic: shares(data.social.praise, data.social.postCount, 'posts'),
 				postsCriticisingTopic: shares(
 					data.social.complaints,
+					data.social.postCount,
+					'posts',
+				),
+				postsPraisingTheme: themeShares(data.social.praiseThemes, data.social.postCount, 'posts'),
+				postsCriticisingTheme: themeShares(
+					data.social.complaintThemes,
 					data.social.postCount,
 					'posts',
 				),
@@ -524,6 +619,16 @@ export class ReportService {
 					data.reviews.written,
 					'written reviews',
 				),
+				reviewsPraisingTheme: themeShares(
+					data.reviews.praiseThemes,
+					data.reviews.written,
+					'written reviews',
+				),
+				reviewsCriticisingTheme: themeShares(
+					data.reviews.complaintThemes,
+					data.reviews.written,
+					'written reviews',
+				),
 				fiveStarReviews: reviewGroupInput(data.reviews.split.fiveStar),
 				reviewsBelowFiveStars: reviewGroupInput(data.reviews.split.belowFive),
 				// One entry per review, so the model counts reviews rather than changes
@@ -538,25 +643,61 @@ export class ReportService {
 				followers: c.authorFans,
 				postedAbout: c.venues,
 			})),
-			neighbours: data.neighbours.map(n => _.pick(n, ['name', 'category', 'posts', 'views'])),
-			googleMapsSearchRanks: data.searchRanks?.map(r => ({
-				search: r.query,
-				yourPlace: r.rank ?? `not in the top ${r.results}`,
-				earlierMonths: r.history.map(h => ({
-					month: h.month,
-					place: h.rank ?? 'not in the results',
-				})),
-				topThree: r.top.slice(0, 3).map(t => (t.isVenue ? `${t.name} (you)` : t.name)),
-			})),
-			// Seen by our Google Maps scrapes, so "first seen", not an opening date
-			openingsAndClosuresNearbyThisQuarter: data.neighbourhood && {
-				district: data.neighbourhood.changes.district,
-				..._.pick(data.neighbourhood.changes, ['opened', 'closed', 'reopened']),
-				onYourStreet: data.neighbourhood.changes.street,
-				venues: data.neighbourhood.changes.venues
-					.slice(0, 6)
-					.map(v => _.pick(v, ['name', 'category', 'kind', 'sameStreet'])),
-			},
+			// Every place on its own: never sum or average these across places
+			places: data.branches.map(b => {
+				const competitors = data.competitors.filter(c => !c.branchId || c.branchId === b.venueId);
+				return {
+					name: b.name,
+					district: b.district,
+					street: b.street,
+					city: b.city,
+					googleRatingAllTime: b.rating,
+					// One pre-written sentence: its rating against its district's and its kind of food's venues
+					googleRatingAgainstOthers: b.ratingBenchmark && ratingBenchmarkSentence(b.ratingBenchmark),
+					// All-time Google figures at the close of each month, oldest first
+					googleRatingTrend:
+						b.ratingTrend.length >= 2 ?
+							b.ratingTrend.map(p => _.pick(p, ['month', 'rating', 'reviewsCount']))
+						:	undefined,
+					// A chain's branch: the posts that named it and its reviews
+					...(chain && {
+						postsByOthersNamingIt: b.social.postCount,
+						views: b.social.views,
+						googleReviews:
+							b.reviews.written >= 5 ?
+								{
+									count: b.reviews.count,
+									writtenReviews: b.reviews.written,
+									avgStars: b.reviews.avgStars,
+									replyRate: b.reviews.replyRate,
+									reviewsPraisingTopic: shares(b.reviews.praise, b.reviews.written, 'written reviews'),
+									reviewsCriticisingTopic: shares(b.reviews.complaints, b.reviews.written, 'written reviews'),
+								}
+							:	`${b.reviews.count} reviews: too few written to compare`,
+					}),
+					demandAndPrices: signalsPromptInput({ ...b, competitors }),
+					neighbours: b.neighbours.map(n => _.pick(n, ['name', 'category', 'posts', 'views'])),
+					googleMapsSearchRanks: b.searchRanks?.map(r => ({
+						search: r.query,
+						yourPlace: r.rank ?? `not in the top ${r.results}`,
+						earlierMonths: r.history.map(h => ({
+							month: h.month,
+							place: h.rank ?? 'not in the results',
+						})),
+						topThree: r.top.slice(0, 3).map(t => (t.isVenue ? `${t.name} (you)` : t.name)),
+					})),
+					// Seen by our Google Maps scrapes, so "first seen", not an opening date; an
+					// opening with `source: posts` is one a creator's post announced
+					openingsAndClosuresNearbyThisQuarter: b.neighbourhood && {
+						district: b.neighbourhood.changes.district,
+						..._.pick(b.neighbourhood.changes, ['opened', 'openedFromPosts', 'closed', 'reopened']),
+						onYourStreet: b.neighbourhood.changes.street,
+						venues: b.neighbourhood.changes.venues
+							.slice(0, 6)
+							.map(v => _.pick(v, ['name', 'category', 'kind', 'sameStreet', 'source'])),
+					},
+				};
+			}),
 			city: data.city && {
 				name: data.city.cityName,
 				risingCuisines: data.city.risingCuisines.map(r => ({
@@ -600,31 +741,8 @@ export class ReportService {
 					),
 				},
 			},
-			// A chain: posts and reviews above cover every branch in the city; each branch's own here
-			brand: data.brand && {
-				name: data.brand.name,
-				postsNamingNoBranch: data.brand.brandOnlyPosts,
-				branches: data.brand.branches.map(b => ({
-					name: b.name,
-					district: b.district,
-					street: b.street,
-					placeSectionsDescribeIt: b.described || undefined,
-					googleRatingAllTime: b.rating,
-					postsByOthersNamingIt: b.social.postCount,
-					views: b.social.views,
-					googleReviews:
-						b.reviews.written >= 5 ?
-							{
-								count: b.reviews.count,
-								writtenReviews: b.reviews.written,
-								avgStars: b.reviews.avgStars,
-								replyRate: b.reviews.replyRate,
-								reviewsPraisingTopic: shares(b.reviews.praise, b.reviews.written, 'written reviews'),
-								reviewsCriticisingTopic: shares(b.reviews.complaints, b.reviews.written, 'written reviews'),
-							}
-						:	`${b.reviews.count} reviews: too few written to compare`,
-				})),
-			},
+			// A chain: posts and reviews above cover every branch; each branch's own month is in places
+			brand: chain ? { name: data.brand.name, postsNamingNoBranch: data.brand.brandOnlyPosts } : undefined,
 			competitors: data.competitors.map(c => ({
 				name: c.name,
 				// A chain's places together; one picked for a branch compares with that branch only

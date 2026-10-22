@@ -29,18 +29,6 @@ export interface AdminListBrandsInputDto extends PaginationRequest {
 	sort?: AdminBrandSort;
 }
 
-/** The place a brand is shown as: its most reviewed open branch (in the city). */
-export interface AdminBrandRowVenueOutputDto {
-	id: string;
-	name: string;
-	category?: string;
-	district?: string;
-	street?: string;
-	rating?: number;
-	reviewsCount?: number;
-	favicon?: ImageOutputDto;
-}
-
 /** What social media and Google reviews said about a brand in one month. */
 export interface AdminBrandMonthFiguresOutputDto {
 	/** Posts by others naming it (its own accounts left out) */
@@ -66,7 +54,14 @@ export interface AdminBrandRowOutputDto {
 	branches: number;
 	/** The districts they are in */
 	districts: string[];
-	venue?: AdminBrandRowVenueOutputDto;
+	/** The Google category most of them share */
+	category?: string;
+	/** Their all-time Google stars over all their reviews (one branch's own rating); absent when none is rated */
+	rating?: number;
+	/** Their Google reviews, all time */
+	reviewsCount?: number;
+	/** A website icon one of them has */
+	favicon?: ImageOutputDto;
 	month: AdminBrandMonthFiguresOutputDto;
 	/** Posts and views the month before */
 	previous: { posts: number; views: number };

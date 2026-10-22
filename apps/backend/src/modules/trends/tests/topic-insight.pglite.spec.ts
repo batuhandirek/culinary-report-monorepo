@@ -5,11 +5,17 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
+import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
+import {
+	DeliveryPlatformEnum,
+	VenueDeliveryListing,
+} from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -22,7 +28,7 @@ import {
 import { TopicInsightService } from '../services/topic-insight.service.js';
 
 /* Supply (venues tagged), buzz (the month's posts) and demand (Google searches) per topic, and one
- * topic's page: children, posts by month, related searches, venues. */
+ * topic's page: children, posts by month, related searches, venues, menu prices. */
 describe('TopicInsightService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let controller: AdminTopicInsightsController;
@@ -34,6 +40,7 @@ describe('TopicInsightService (pglite)', () => {
 				TopicInsightService,
 				FoodTopicService,
 				VenueFoodTopicService,
+				MenuTopicService,
 				AdminTopicInsightsController,
 			],
 		});
@@ -108,6 +115,24 @@ describe('TopicInsightService (pglite)', () => {
 				month,
 				interest,
 			});
+		// September's menus: two Japanese places, and a döner place
+		const menu = (venue: Venue, items: [string, number][]) => {
+			const listing = em.create(VenueDeliveryListing, {
+				venue,
+				platform: DeliveryPlatformEnum.WOLT,
+				url: `https://wolt.com/en/deu/berlin/restaurant/${venue.placeId}`,
+				fetchedAt: new Date('2026-10-02T06:00:00Z'),
+			});
+			for (const [name, price] of items)
+				em.create(MenuItem, { listing, month: '2026-09', name, price, category: null });
+		};
+		menu(ramen, [
+			['Tonkotsu Ramen', 14],
+			['Shoyu Ramen', 12],
+			['Gyoza', 6],
+		]);
+		menu(sushi, [['Sushi Set', 18]]);
+		menu(doner, [['Döner im Brot', 7.5]]);
 		searched('2026-08', 50);
 		searched('2026-09', 60);
 		em.create(TrendRelatedQuery, {
@@ -179,12 +204,25 @@ describe('TopicInsightService (pglite)', () => {
 		]);
 		expect(d.venues[0]).toMatchObject({ district: 'Mitte', rating: 4.6, source: 'category' });
 		expect(d.trendsTopicId).toBe('/m/042ck');
+		// Ramen Ya's ramen at 13 and Sushi Bar's 18, each venue one value
+		expect(d.menu).toEqual({
+			menus: 3,
+			venues: 2,
+			items: 3,
+			median: 15.5,
+			p25: 14.25,
+			p75: 16.75,
+			districts: [],
+		});
 
 		const ramen = await controller.getTopicInsight('ramen', {
 			cityId: city.id,
 			month: '2026-09',
 		});
 		expect(ramen.parent).toEqual({ key: 'japanese', label: 'Japanese' });
+		// A month without menus says how many there are and nothing more
+		const august = await controller.getTopicInsight('ramen', { cityId: city.id, month: '2026-08' });
+		expect(august.menu).toEqual({ menus: 0 });
 		await expect(
 			controller.getTopicInsight('nope', { cityId: city.id, month: '2026-09' }),
 		).rejects.toThrow(NotFoundException);

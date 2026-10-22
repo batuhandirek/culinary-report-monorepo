@@ -9,8 +9,8 @@ import type { ReportData, ReportHighlights } from '../interfaces/report-data.int
 
 /**
  * A brand's monthly report on its branches in one city, or (`city` null, `Brand.reportScope`
- * `all`) in every city. Rebuilding it replaces the row. The place-bound sections describe one
- * branch, `data.venue` (`busiestBranch` at build). The unique key lets two null-city rows through
+ * `all`) in every city. Rebuilding it replaces the row. Each branch's place figures are its own
+ * entry in `data.branches`. The unique key lets two null-city rows through
  * (nulls are distinct): `ReportService.build` finds the existing one first.
  */
 @Entity({ tableName: 'reports' })

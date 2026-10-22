@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
@@ -162,8 +163,8 @@ describe('ReportService.build (pglite)', () => {
 		const report = await service.build(venue.brand.id, venue.city.id, '2026-09');
 		const data = report.data;
 
-		expect(data.venue.googleUrl).toBe('https://maps.google.com/?cid=1');
-		expect(data.venue.ratingTrend.map(p => [p.month, p.rating])).toEqual([
+		expect(data.branches[0].googleUrl).toBe('https://maps.google.com/?cid=1');
+		expect(data.branches[0].ratingTrend.map(p => [p.month, p.rating])).toEqual([
 			['2026-07', 4.3],
 			['2026-09', 4.4],
 		]);
@@ -178,7 +179,7 @@ describe('ReportService.build (pglite)', () => {
 		expect(data.creators.map(c => c.author)).toEqual(['loyal']);
 		expect(data.creatorsNearby.map(c => c.author)).toEqual(['newcomer']);
 		expect(data.creatorsNearby[0].venues).toEqual(['Zola']);
-		expect(data.neighbours.map(n => n.name)).toEqual(['Zola']);
+		expect(data.branches[0].neighbours.map(n => n.name)).toEqual(['Zola']);
 		expect(highlightsAgent.generate).toHaveBeenLastCalledWith(expect.any(String), { cityName: 'Berlin' });
 
 		expect(data.reviews.list).toHaveLength(14);
@@ -193,17 +194,59 @@ describe('ReportService.build (pglite)', () => {
 
 		// The model got the previous month and the creators
 		const input = JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string);
+		// By name, so the findings never quote a key or a YYYY-MM
 		expect(input.previousMonth).toMatchObject({
-			month: '2026-08',
+			month: 'August 2026',
 			actionsSuggestedLastMonth: HIGHLIGHTS.actions,
 		});
 		expect(input.nearbyCreatorsWhoDidNotPostAboutYou[0].author).toBe('newcomer');
-		expect(input.googleRatingTrend).toHaveLength(2);
+		// The trend is the place's own
+		expect(input.places[0].googleRatingTrend).toHaveLength(2);
 
 		// Stored as built
 		harness.orm.em.clear();
 		const stored = await harness.orm.em.findOneOrFail(Report, { id: report.id });
 		expect(stored.data.reviews.replyDrafts).toHaveLength(10);
+	});
+
+	it("counts a neighbour's posts by others, each once, as its own report does", async () => {
+		const em = harness.orm.em;
+		const city = testCity(em);
+		const venue = em.create(Venue, { city, placeId: 'p-nb-v', name: 'Kiez Kebab', category: 'Kebab shop', district: 'Neukölln' });
+		const neighbour = em.create(Venue, {
+			city,
+			placeId: 'p-nb-n',
+			name: 'Drei Bar',
+			category: 'Bar',
+			district: 'Neukölln',
+		});
+		const own = ownAccount(em, brandOf(neighbour), city, 'drei.bar');
+		post(neighbour, 'drei.bar', '2026-09-05T12:00:00Z', { account: own, views: 9000 });
+		post(neighbour, 'fan', '2026-09-06T12:00:00Z', { views: 300 });
+		// One post naming the neighbour twice
+		const twice = post(neighbour, 'regular', '2026-09-07T12:00:00Z', { views: 200 });
+		em.create(Mention, {
+			post: twice,
+			venueName: 'Drei',
+			venue: neighbour,
+			brand: brandOf(neighbour),
+			matchMethod: MentionMatchMethodEnum.EXACT,
+			visited: true,
+			sentiment: 'positive',
+			summary: 'Again.',
+			dishes: [],
+			praise: [],
+			complaints: [],
+		});
+		await em.flush();
+
+		const report = await service.build(brandOf(venue).id, city.id, '2026-09');
+		expect(report.data.branches[0].neighbours).toEqual([
+			expect.objectContaining({ name: 'Drei Bar', posts: 2, views: 500 }),
+		]);
+		// The same figures as the neighbour's own report
+		const its = await service.build(brandOf(neighbour).id, city.id, '2026-09');
+		expect(its.data.branches[0].social).toMatchObject({ postCount: 2, views: 500 });
 	});
 
 	it('leaves previous out for a first report and keeps the report when drafting fails', async () => {
@@ -216,7 +259,7 @@ describe('ReportService.build (pglite)', () => {
 		const report = await service.build(venue.brand.id, venue.city.id, '2026-09');
 		expect(report.data.previous).toBeUndefined();
 		expect(report.data.creatorsNearby).toEqual([]);
-		expect(report.data.venue.ratingTrend).toEqual([]);
+		expect(report.data.branches[0].ratingTrend).toEqual([]);
 		expect(report.data.reviews.replyDrafts).toEqual([]);
 	});
 });

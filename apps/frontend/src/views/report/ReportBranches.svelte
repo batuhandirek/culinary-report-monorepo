@@ -1,19 +1,23 @@
 <script lang="ts">
-	import type { ReportBrand } from 'client';
+	import type { ReportBranch } from 'client';
 
 	import { compact, monthLabel, TOPIC_LABELS } from '#lib/culinary.js';
 
 	// A chain's branches side by side: each one's own posts (those that named it) and its
 	// Google reviews, then what guests criticise and praise where a branch has enough reviews.
+	// Each branch's place figures have their own pages further on.
 	interface Props {
-		brand: ReportBrand;
+		branches: ReportBranch[];
+		brandName: string;
+		/** Posts that named the brand but no branch */
+		brandOnlyPosts: number;
 		month: string;
 	}
 
-	let { brand, month }: Props = $props();
+	let { branches, brandName, brandOnlyPosts, month }: Props = $props();
 
 	const MIN_WRITTEN = 5;
-	const rows = $derived(brand.branches);
+	const rows = $derived(branches);
 	const reviewRows = $derived(rows.filter((row) => row.reviews.written >= MIN_WRITTEN));
 	const best = (pick: (row: (typeof rows)[number]) => number | undefined) =>
 		Math.max(...rows.map((row) => pick(row) ?? -Infinity));
@@ -32,8 +36,8 @@
 			.slice(0, 4)
 			.map((c) => c.topic);
 	const brandOnlyNote = $derived(
-		brand.brandOnlyPosts
-			? `${brand.brandOnlyPosts} ${brand.brandOnlyPosts === 1 ? 'post' : 'posts'} named ${brand.name} without saying which branch: they count for the brand above, not for a branch.`
+		brandOnlyPosts
+			? `${brandOnlyPosts} ${brandOnlyPosts === 1 ? 'post' : 'posts'} named ${brandName} without saying which branch: they count for the brand above, not for a branch.`
 			: ''
 	);
 	const replyRate = (rate?: number) => (rate === undefined ? '—' : `${Math.round(rate * 100)} %`);
@@ -81,14 +85,11 @@
 						text: replyRate(row.reviews.replyRate)
 					}
 				]}
-				<tr class={['border-line border-t', row.described && 'bg-primary/35']}>
+				<tr class="border-line border-t">
 					<td class="px-3 py-2">
-						<span class={['block truncate', row.described && 'font-semibold']}
-							>{row.street ?? row.name}</span>
+						<span class="block truncate">{row.street ?? row.name}</span>
 						<span class="text-muted-foreground block truncate text-[10px]"
-							>{[row.city, row.district, row.described && 'place figures: this one']
-								.filter(Boolean)
-								.join(' · ')}</span>
+							>{[row.city, row.district].filter(Boolean).join(' · ')}</span>
 					</td>
 					{#each cells as cell, i (i)}
 						<td
@@ -132,8 +133,7 @@
 								>{TOPIC_LABELS[topic]}</span>
 						{/each}
 						{#each reviewRows as row (row.venueId)}
-							<span class={['truncate text-[13px]', row.described && 'font-semibold']}
-								>{row.street ?? row.name}</span>
+							<span class="truncate text-[13px]">{row.street ?? row.name}</span>
 							{#each columns as topic (topic)}
 								{@const share =
 									(row.reviews[matrix.kind][topic] ?? 0) / row.reviews.written}

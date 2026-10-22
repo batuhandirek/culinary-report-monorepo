@@ -7,7 +7,7 @@ import { OnCron } from 'src/modules/pgboss/decorators/on-cron.decorator.js';
 
 import { VenueFaviconService } from '../services/venue-favicon.service.js';
 
-// Hourly at :20, a small batch each time, so a new city's venues fill within a day or two
+// Hourly at :20, each run taking due websites for up to `FAVICON_RUN_SECONDS`
 export const VENUE_FAVICON_CRON = '20 * * * *';
 
 /** The website icons that are due (`VenueFaviconService.due`): plain fetches, no Apify. */

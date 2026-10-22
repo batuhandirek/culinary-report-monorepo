@@ -76,7 +76,7 @@
 	);
 
 	// The surest groups first: every name the same once accents and punctuation are gone, or one
-	// website; then a name plus a branch; then names that only look alike
+	// website or profile; then a name plus a branch; then names that only look alike
 	const plain = (name: string) =>
 		name
 			.normalize('NFD')
@@ -87,14 +87,14 @@
 	const kindOf = (s: AdminBrandSuggestionOutputDto) =>
 		new Set(s.venues.map((v) => plain(v.name))).size === 1
 			? 'identical'
-			: s.reason === 'same website'
+			: s.reason === 'same website' || s.reason === 'same Instagram' || s.reason === 'same TikTok'
 				? 'website'
 				: s.reason === 'name prefix'
 					? 'prefix'
 					: 'similar';
 	const KINDS = [
 		{ value: 'identical', label: 'Identical names' },
-		{ value: 'website', label: 'One website' },
+		{ value: 'website', label: 'One website or profile' },
 		{ value: 'prefix', label: 'Name plus a branch' },
 		{ value: 'similar', label: 'Similar names' }
 	];
@@ -126,10 +126,10 @@
 			<Select items={CITIES} bind:value={cityId} aria-label="City" placeholder="City" />
 		</div>
 		<p class="text-muted-foreground m-0 text-sm">
-			Venues of the city with the same name, the name plus a branch ("Burgermeister Zoo"), or
-			one website, that need a look: groups whose branches share a website named after the
-			brand are merged by themselves as venues come in. Tick the branches, say who decides
-			there, and confirm.
+			Venues of the city with the same name, the name plus a branch ("Burgermeister Zoo"), one
+			website, or one Instagram or TikTok profile whatever their names, that need a look:
+			groups whose branches share a website named after the brand are merged by themselves as
+			venues come in. Tick the branches, say who decides there, and confirm.
 		</p>
 	</div>
 

@@ -184,6 +184,26 @@ export const mentionTopic = (
 	return keys.find(k => FOOD_KINDS.has(index.get(k)!.kind)) ?? keys[0] ?? null;
 };
 
+const DISH_KINDS = new Set([FoodTopicKindEnum.DISH, FoodTopicKindEnum.DRINK]);
+
+/** The dish or drink topic a key is, if any: its row is labelled with the topic's label. */
+const dishTopic = (key: string, index: FoodTopicIndex) => {
+	const topic = index.get(key);
+	return topic && DISH_KINDS.has(topic.kind) ? topic : undefined;
+};
+
+/**
+ * The row a dish name counts in on the city's dish table: the dish or drink topic the name names
+ * as a whole, as written or singular ("döner", "doner kebab", "kebabs": kebab), else its
+ * `dishKey` ("vegetable kebab" stays apart). A venue's report keeps `dishKey` only.
+ */
+export const dishRow = (name: string, index: FoodTopicIndex): string => {
+	const key = dishKey(name);
+	if (!key) return '';
+	const topic = index.exact(name) ?? index.exact(key);
+	return topic && dishTopic(topic, index) ? topic : key;
+};
+
 const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) => {
 	const cuisines = new Tallies();
 	const dishes = new Tallies();
@@ -201,6 +221,12 @@ const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) =>
 	>();
 	const posts = new Map<string, number>();
 	let dishSources = 0;
+	// Each post or review counts a row once, however many of its names fall in it
+	const rowsOf = (named: FeedbackDish[] | null | undefined) =>
+		_.uniqBy(
+			(named ?? []).map(d => [dishRow(d.name, index), d] as const).filter(([row]) => row),
+			([row]) => row,
+		);
 
 	for (const m of mentions) {
 		const venue = { id: m.brandId, name: m.brandName };
@@ -210,8 +236,8 @@ const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) =>
 		if (cuisine) cuisines.add(cuisine, { views: m.views, venue });
 		if (m.district) districts.add(m.district, { views: m.views, venue });
 
-		const named = _.uniqBy(m.dishes ?? [], d => dishKey(d.name)).filter(d => dishKey(d.name));
-		for (const d of named) dishes.add(dishKey(d.name), { venue, label: d.name });
+		const named = rowsOf(m.dishes);
+		for (const [row, d] of named) dishes.add(row, { venue, label: d.name });
 		if (named.length) dishSources++;
 
 		if (m.creator) {
@@ -235,9 +261,9 @@ const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) =>
 	}
 
 	for (const r of reviews) {
-		const named = _.uniqBy(r.dishes ?? [], d => dishKey(d.name)).filter(d => dishKey(d.name));
-		for (const d of named)
-			dishes.add(dishKey(d.name), {
+		const named = rowsOf(r.dishes);
+		for (const [row, d] of named)
+			dishes.add(row, {
 				venue: { id: r.brandId, name: r.brandName },
 				label: d.name,
 			});
@@ -357,7 +383,7 @@ export const computeTrends = (
 		}),
 		dishes: shareTable(cur.dishes, prev.dishes, {
 			rows: TABLE_ROWS.dishes,
-			label: (key, t) => topLabel(t, key),
+			label: (key, t) => dishTopic(key, index)?.label ?? topLabel(t, key),
 			views: false,
 			samples: true,
 		}),

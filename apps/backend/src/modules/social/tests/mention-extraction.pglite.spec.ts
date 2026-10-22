@@ -12,7 +12,8 @@ import { Mention } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { MentionExtractionService } from '../services/mention-extraction.service.js';
 
-/* Extraction is told the food topics' labels, so a mention's cuisine uses the words reports group by. */
+/* Extraction is told the food topics' labels, so a mention's cuisine uses the words reports group by,
+   and stores whether the post said the place had just opened. */
 describe('MentionExtractionService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: MentionExtractionService;
@@ -25,6 +26,7 @@ describe('MentionExtractionService (pglite)', () => {
 				cuisine: 'Pho, Vietnamese',
 				city: 'Berlin',
 				visited: true,
+				isNewOpening: true,
 				sentiment: 'positive',
 				summary: 'Great broth.',
 				dishes: [],
@@ -76,8 +78,9 @@ describe('MentionExtractionService (pglite)', () => {
 			'Turkish',
 			'Vietnamese',
 		]);
-		expect(
-			(await harness.orm.em.findOneOrFail(Mention, { venueName: 'Pho House' })).cuisine,
-		).toBe('Pho, Vietnamese');
+		const mention = await harness.orm.em.findOneOrFail(Mention, { venueName: 'Pho House' });
+		expect(mention.cuisine).toBe('Pho, Vietnamese');
+		// The post said the place had just opened
+		expect(mention.isNewOpening).toBe(true);
 	});
 });

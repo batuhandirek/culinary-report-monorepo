@@ -34,6 +34,13 @@ import devtoolsJson from 'vite-plugin-devtools-json';
 		}),
 		devtoolsJson()
 	],
+	ssr: {
+		// Loaded by Node once per process, not by Vite's module runner. Its `svelte` export
+		// condition would inline it, and a full SSR reload (any edit to a loaded module) re-runs
+		// it: its resvg loader calls `initWasm()` again on the natively loaded, still initialised
+		// `@resvg/resvg-wasm`, which throws, and every `.png` card answers an empty reply.
+		external: ['@ethercorps/sveltekit-og']
+	},
 	server: {
 		watch: {
 			ignored: ['**/build/**']

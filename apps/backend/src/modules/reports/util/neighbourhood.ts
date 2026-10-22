@@ -5,20 +5,25 @@ import type { ReportNeighbourhoodChanges } from '../interfaces/report-data.inter
 
 const LISTED = 12;
 
-const counts = (rows: VenueStatusChangeRow[]) => ({
-	opened: rows.filter(r => r.kind === VenueStatusChangeKindEnum.OPENED).length,
-	closed: rows.filter(
-		r =>
-			r.kind === VenueStatusChangeKindEnum.TEMPORARILY_CLOSED ||
-			r.kind === VenueStatusChangeKindEnum.PERMANENTLY_CLOSED,
-	).length,
-	reopened: rows.filter(r => r.kind === VenueStatusChangeKindEnum.REOPENED).length,
-});
+const counts = (rows: VenueStatusChangeRow[]) => {
+	const fromPosts = rows.filter(r => r.source === 'posts').length;
+	return {
+		opened: rows.filter(r => r.kind === VenueStatusChangeKindEnum.OPENED).length,
+		closed: rows.filter(
+			r =>
+				r.kind === VenueStatusChangeKindEnum.TEMPORARILY_CLOSED ||
+				r.kind === VenueStatusChangeKindEnum.PERMANENTLY_CLOSED,
+		).length,
+		reopened: rows.filter(r => r.kind === VenueStatusChangeKindEnum.REOPENED).length,
+		...(fromPosts ? { openedFromPosts: fromPosts } : {}),
+	};
+};
 
 /**
  * The district's openings and closures for the report: counts for the district and for the
  * venue's street, and the venues, the street's first. `rows` are the other venues' changes in
- * the window, newest first.
+ * the window, newest first: the scrapes' and the openings a post flagged (source `posts`, an
+ * opening only), which `opened` counts and `openedFromPosts` names.
  */
 export const neighbourhoodChanges = (
 	venue: { district: string; street?: string | null },
@@ -48,6 +53,7 @@ export const neighbourhoodChanges = (
 			kind: r.kind,
 			date: r.at.toISOString().slice(0, 10),
 			sameStreet: onStreet(r),
+			...(r.source === 'posts' ? { source: 'posts' as const } : {}),
 		})),
 	};
 };

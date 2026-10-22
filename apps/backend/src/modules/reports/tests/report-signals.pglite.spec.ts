@@ -1,6 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
+import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -57,12 +61,22 @@ describe('ReportSignalsService (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [ReportSignalsService, VenueBusynessService, VenueReservationService, VenueDeliveryService],
+			providers: [
+				ReportSignalsService,
+				VenueBusynessService,
+				VenueReservationService,
+				VenueDeliveryService,
+				MenuTopicService,
+				FoodTopicService,
+				VenueFoodTopicService,
+			],
 		});
 		service = harness.moduleRef.get(ReportSignalsService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		const em = harness.orm.em;
+		// Only ramen (and Japanese): the döner venues keep no food topic
+		seedFoodTopics(em, ['ramen']);
 		const city = testCity(em);
 		venue = em.create(Venue, { city, placeId: 'sig-venue', name: 'Döner Pro', district: 'Kreuzberg' });
 		quiet = em.create(Venue, { city, placeId: 'sig-quiet', name: 'Quiet', district: 'Kreuzberg' });
@@ -139,7 +153,7 @@ describe('ReportSignalsService (pglite)', () => {
 	});
 
 	it('builds busyness by week next to the views, the open tables and the month before', async () => {
-		const res = await service.sections(venue, '2026-09', input());
+		const res = await service.placeSections(venue, '2026-09', input());
 		const b = res.busyness!;
 		expect(b.samples).toBe(2);
 		expect(b.livePercent).toBe(80);
@@ -164,7 +178,7 @@ describe('ReportSignalsService (pglite)', () => {
 	});
 
 	it('places the menu against the competitor’s and reads price complaints against theirs', async () => {
-		const { prices } = await service.sections(venue, '2026-09', input());
+		const { prices } = await service.placeSections(venue, '2026-09', input());
 		expect(prices!.listings).toEqual([
 			expect.objectContaining({ platform: 'wolt', rating: 4.6, deliveryFee: 1.99, currency: 'EUR' }),
 		]);
@@ -183,8 +197,62 @@ describe('ReportSignalsService (pglite)', () => {
 		);
 	});
 
+	it('leads the menu with its own kind of food against the same on the competitors’ menus', async () => {
+		const em = harness.orm.em;
+		const city = testCity(em);
+		const place = (placeId: string, category: string, items: Record<string, number>) => {
+			const v = em.create(Venue, { city, placeId, name: placeId, category, district: 'Mitte' });
+			const l = em.create(VenueDeliveryListing, {
+				venue: v,
+				platform: DeliveryPlatformEnum.WOLT,
+				url: `https://wolt.com/en/deu/berlin/restaurant/${placeId}`,
+				currency: 'EUR',
+				fetchedAt: new Date('2026-10-02'),
+			});
+			for (const [name, price] of Object.entries(items)) em.create(MenuItem, { listing: l, month: '2026-09', name, price });
+			return v;
+		};
+		const ichi = place('ramen-ichi', 'Ramen restaurant', { 'Tonkotsu Ramen': 15, 'Shoyu Ramen': 14, 'Chicken Katsu Curry': 12 });
+		const ni = place('ramen-ni', 'Ramen restaurant', { 'Miso Ramen': 13, 'Chicken Katsu Curry': 11 });
+		const san = place('ramen-san', 'Japanese restaurant', { 'Spicy Ramen': 12.8, 'Sushi Platter': 18 });
+		const pizzeria = place('pizzeria', 'Pizza restaurant', { Margherita: 9, Diavola: 11 });
+		await em.flush();
+		const against = (...venues: Venue[]): SignalsInput => ({
+			...input(),
+			dishes: [],
+			competitors: venues.map(v => ({
+				venueId: v.id,
+				name: v.name,
+				social: { postCount: 0, views: 0, engagements: 0, creators: 0 },
+				reviewsTracked: false,
+				reviews: { count: 0, written: 0, praise: {}, complaints: {} },
+			})),
+		});
+
+		const { prices } = await service.placeSections(ichi, '2026-09', against(ni, san));
+		// Its ramen €14.50 against the median of theirs (€13.00, €12.80)
+		expect(prices!.menu!.topic).toEqual({
+			key: 'ramen',
+			label: 'Ramen',
+			price: 14.5,
+			othersMedian: 12.9,
+			othersWithTopic: 2,
+			diff: 0.124,
+		});
+		expect(prices!.menu).toMatchObject({ median: 14, othersMedian: 13.7, othersAre: 'competitors' });
+		expect(prices!.sentence).toMatch(
+			/^Ramen on your Wolt menu costs €14\.50, against €12\.90 at your competitors \(12 % above, 2 menus\); your median main course on Wolt is €14\.00, /,
+		);
+
+		// No other menu has ramen: its price stays, without a comparison, and the sentence leaves it out
+		const alone = (await service.placeSections(ichi, '2026-09', against(pizzeria))).prices!;
+		expect(alone.menu!.topic).toEqual({ key: 'ramen', label: 'Ramen', price: 14.5, othersWithTopic: 0 });
+		expect(alone.sentence).toMatch(/^Your median main course on Wolt is €14\.00/);
+	});
+
 	it('computes the correlations over the stored reviews and hands the prompt sentences', async () => {
-		const res = await service.sections(venue, '2026-09', input());
+		const correlations = await service.correlations([venue], '2026-09', venue.city.timezone, input());
+		const res = { ...(await service.placeSections(venue, '2026-09', input())), correlations: correlations! };
 		expect(res.correlations!.buzzToReviews).toMatchObject({ peakWeek: '2026-09-07', followingReviews: 8, ratio: 2.7 });
 		expect(res.correlations!.paidVsOrganic).toMatchObject({ paid: { posts: 1 }, organic: { posts: 2 } });
 		// No complaints stored: that relation stays out
@@ -195,8 +263,9 @@ describe('ReportSignalsService (pglite)', () => {
 	});
 
 	it('leaves every section out for a venue without popular times, samples, listings or reviews', async () => {
-		const res = await service.sections(quiet, '2026-09', { ...input(), posts: [], competitors: [] });
-		expect(res).toEqual({ competitors: [] });
+		const res = await service.placeSections(quiet, '2026-09', { ...input(), posts: [], competitors: [] });
+		expect(res).toEqual({});
+		expect(await service.correlations([quiet], '2026-09', quiet.city.timezone, { posts: [] })).toBeNull();
 		expect(signalsPromptInput(res)).toBeUndefined();
 	});
 });

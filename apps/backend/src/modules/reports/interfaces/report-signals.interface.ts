@@ -3,7 +3,7 @@
 // `MenuItem`) and from the report's own posts and reviews. Every field is optional on
 // `ReportData`: absent means not tracked or below its floors, never zero.
 
-import type { DishPrice } from 'src/modules/venues/util/delivery.js';
+import type { DishPrice, TopicPrice } from 'src/modules/venues/util/delivery.js';
 
 import type { BuzzToReviews, ComplaintTimes, PaidVsOrganic } from '../util/correlations.js';
 
@@ -96,6 +96,12 @@ export interface ReportPrices {
 		currency: string;
 		/** The month the menu was read */
 		month: string;
+		/**
+		 * Its primary food topic's items against the same on the other menus ("your ramen €14.50,
+		 * theirs €12.90"), the line to lead with; `othersMedian` absent when no other menu has it.
+		 * Absent when its menu has none of it
+		 */
+		topic?: TopicPrice;
 		/** Median main course */
 		median: number;
 		/** Median of the other menus' medians (competitors, else venues of its district) */

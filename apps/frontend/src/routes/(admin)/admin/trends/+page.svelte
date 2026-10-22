@@ -3,18 +3,19 @@
 
 	import SearchInterestPanel from './components/SearchInterestPanel.svelte';
 	import TrendsPostsTab from './components/TrendsPostsTab.svelte';
+	import TrendsThemesTab from './components/TrendsThemesTab.svelte';
 	import TrendsTopicsTab from './components/TrendsTopicsTab.svelte';
 	import VenueOpeningsPanel from './components/VenueOpeningsPanel.svelte';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
+	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
 	import FoodTopicFormDialog from '#components/admin/topics/FoodTopicFormDialog.svelte';
 	import UnrecognisedWords from '#components/admin/topics/UnrecognisedWords.svelte';
 	import { findAdminMenu } from '#constants/ADMIN_MENUS.js';
-	import { api } from '#lib/api.js';
 	import { cityItems } from '#lib/admin-cities.js';
+	import { api } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
 	import { topicHref } from '#lib/topic-format.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
@@ -22,7 +23,7 @@
 	import Select from '#ui/wrapped/Select.svelte';
 
 	// What the city eats and talks about. Topics first: each kind of food with its venues (supply),
-	// the month's posts (buzz) and Google searches (demand); then the month in posts, searches,
+	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, searches,
 	// openings and closures, and the words no topic covers yet.
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
@@ -41,6 +42,7 @@
 	const TABS = [
 		{ value: 'topics', label: 'Topics' },
 		{ value: 'posts', label: 'In posts' },
+		{ value: 'themes', label: 'Praise and complaints' },
 		{ value: 'searches', label: 'Searches' },
 		{ value: 'openings', label: 'Openings and closures' },
 		{ value: 'words', label: 'Unrecognised words' }
@@ -73,6 +75,8 @@
 			<div class="w-44">
 				<Select items={MONTHS} value={month} aria-label="Month" size="sm" onValueChange={(v) => setParam('month', v === lastMonth() ? undefined : v)} />
 			</div>
+			<Button size="sm" variant="outline" href="/admin/trends/highlights">Public highlights</Button>
+			<Button size="sm" variant="outline" href="/admin/trends/food-trends">Food trends report</Button>
 			<Button size="sm" icon={Plus} onclick={() => newTopic()}>New topic</Button>
 		</div>
 	{/snippet}
@@ -86,6 +90,8 @@
 				<TrendsTopicsTab {cityId} {month} {version} />
 			{:else if tab === 'posts'}
 				<TrendsPostsTab {cityId} {month} />
+			{:else if tab === 'themes'}
+				<TrendsThemesTab {cityId} {month} />
 			{:else if tab === 'searches'}
 				<div class="pb-12"><SearchInterestPanel {cityId} {month} /></div>
 			{:else if tab === 'openings'}

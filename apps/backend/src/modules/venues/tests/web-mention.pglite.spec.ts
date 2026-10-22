@@ -9,6 +9,7 @@ import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { PressClassificationAgent } from '../agents/press-classification.agent.js';
+import { Brand } from '../entities/brand.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { WebMention, WebMentionKindEnum, WebMentionSourceEnum } from '../entities/web-mention.entity.js';
 import { BrandLeadScoreService } from '../services/brand-lead-score.service.js';
@@ -155,7 +156,8 @@ describe('WebMentionService (pglite)', () => {
 		expect(await service.classifyMonth(city, '2026-09')).toEqual({ classified: 3 });
 		expect(agent.generate).toHaveBeenCalledTimes(1);
 		expect(agent.generate.mock.calls[0][1]).toEqual({ venueName: 'Café Frieda', district: 'Neukölln', cityName: 'Berlin' });
-		const press = await service.forReport(frieda.id, '2026-09');
+		// The brand's press: found under any of its branches
+		const press = await service.forReport(frieda.brand.id, city.id, '2026-09');
 		expect(press.map(m => m.kind)).toEqual([WebMentionKindEnum.FEATURE, WebMentionKindEnum.LISTICLE]);
 		expect(press[0].summary).toBe('About Café Frieda: Neuer Brunch am Weserkiez');
 	});
@@ -175,5 +177,24 @@ describe('WebMentionService (pglite)', () => {
 		expect(o.leadSignals?.press?.value ?? null).toBeNull();
 		expect(o.leadSignals?.missing).toContain('press not searched');
 		expect(f.leadSignals?.missing).not.toContain('press not searched');
+	});
+
+	it('searches a chain once under its name, on its first branch, and stamps every branch', async () => {
+		const em = harness.orm.em;
+		const brand = em.create(Brand, { name: 'Brammibal’s', key: 'brammibals' });
+		const [first, second] = ['Brammibal’s Donuts Kreuzberg', 'Brammibal’s Donuts Neukölln'].map((name, i) =>
+			em.create(Venue, { city, placeId: `p-bramm-${i}`, name, brand, category: 'Donut shop' }),
+		);
+		await em.flush();
+		runActor.mockClear();
+		const now = new Date('2026-10-03T06:00:00Z');
+
+		await service.searchMonth(city, [first, second], '2026-09', 3, now);
+
+		const [news, web] = runActor.mock.calls;
+		expect(news[1].searchQueries).toEqual([pressQuery('Brammibal’s', city.name)]);
+		expect(web[1].queries).toBe(pressQuery('Brammibal’s', city.name));
+		em.clear();
+		for (const v of [first, second]) expect((await em.findOneOrFail(Venue, { id: v.id })).pressSearchedAt).toEqual(now);
 	});
 });

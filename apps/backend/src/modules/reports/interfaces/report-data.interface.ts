@@ -24,7 +24,7 @@ import type {
 /** One post about the venue, as the report lists it. */
 export interface ReportPost {
 	postId: string;
-	platform: 'tiktok' | 'instagram';
+	platform: 'tiktok' | 'instagram' | 'blog';
 	url: string;
 	author?: string;
 	authorFans?: number;
@@ -66,6 +66,12 @@ export interface ReportSocialStats {
 	/** topic → how many posts praised / criticised it */
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
+	/**
+	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 */
+	praiseThemes?: Record<string, number>;
+	complaintThemes?: Record<string, number>;
 }
 
 export interface ReportReviewGroup {
@@ -73,6 +79,12 @@ export interface ReportReviewGroup {
 	written: number;
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
+	/**
+	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 */
+	praiseThemes?: Record<string, number>;
+	complaintThemes?: Record<string, number>;
 	/** What they said, the first few points of the group */
 	praiseDetails: FeedbackPoint[];
 	complaintDetails: FeedbackPoint[];
@@ -89,6 +101,12 @@ export interface ReportReviewStats {
 	/** topic → how many reviews praised / criticised it */
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
+	/**
+	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 */
+	praiseThemes?: Record<string, number>;
+	complaintThemes?: Record<string, number>;
 	/** The same counts for 5-star reviews and the rest: what separates a 5 from a 4 */
 	split: { fiveStar: ReportReviewGroup; belowFive: ReportReviewGroup };
 	/** Changes a reviewer noticed, one entry per review */
@@ -131,7 +149,7 @@ export interface ReportReplyDraft {
 /** One creator's posts about the venue this month. */
 export interface ReportCreator {
 	author: string;
-	platform: 'tiktok' | 'instagram';
+	platform: 'tiktok' | 'instagram' | 'blog';
 	authorFans?: number;
 	posts: number;
 	views: number;
@@ -146,7 +164,7 @@ export interface ReportCreator {
 /** A creator who covered district neighbours this month but not the venue: someone to invite. */
 export interface ReportNearbyCreator {
 	author: string;
-	platform: 'tiktok' | 'instagram';
+	platform: 'tiktok' | 'instagram' | 'blog';
 	authorFans?: number;
 	/** Their non-promotional posts about neighbours this month */
 	posts: number;
@@ -169,6 +187,8 @@ export interface ReportNeighbour {
 export interface ReportCompetitor {
 	/** Its place: the competing venue, or a rival brand's most reviewed branch in the city (busyness, open tables and menus are that branch's) */
 	venueId: string;
+	/** Picked for one of the brand's branches: that branch's id (`against` names it); absent for the whole brand */
+	branchId?: string;
 	name: string;
 	category?: string;
 	district?: string;
@@ -198,26 +218,81 @@ export interface ReportCompetitor {
 	against?: string;
 }
 
-/** One branch of a chain, its own month beside the brand's (`ReportData.brand`). */
-export interface ReportBranch extends Omit<ReportCompetitor, 'demand' | 'busyness' | 'reviewsTracked'> {
+/**
+ * One open branch the report covers: where it is, its own month beside the brand's (the posts
+ * that named it and its reviews, cut like a competitor) and its place figures. A one-branch
+ * brand has one. Place figures are never summed or averaged across branches: Google scales
+ * busyness to each place's own peak, and a search rank or a neighbourhood belongs to one address.
+ */
+export interface ReportBranch extends Omit<ReportCompetitor, 'demand' | 'busyness' | 'reviewsTracked' | 'branches' | 'against' | 'branchId'> {
 	street?: string;
-	/** The branch `ReportData.venue` is: the place-bound sections describe it */
-	described: boolean;
 	/** Its city, in a report across cities (the brand's `reportScope` `all`) */
 	city?: string;
+	/** The branch's Google Maps page */
+	googleUrl?: string;
+	/** What Google Maps says it offers ("Outdoor seating", "Delivery", …); absent when unknown */
+	amenities?: string[];
+	/** All-time Google review count per star, as of the build; absent when unknown */
+	reviewsDistribution?: ReviewsDistribution;
+	/** The last six months' closing snapshots up to the report month, oldest first */
+	ratingTrend: ReportRatingPoint[];
+	/** Other food places talked about this month in its district, its brand's left out */
+	neighbours: ReportNeighbour[];
+	/** Its district this quarter; absent without a district */
+	neighbourhood?: ReportNeighbourhood;
+	/** Where it ranks on the Google Maps searches a guest would type; absent when not tracked this month */
+	searchRanks?: ReportSearchRank[];
+	/** Google popular times by week next to the brand's views ("Did the buzz fill the place?"); absent when not sampled */
+	busyness?: ReportBusyness;
+	/** Open Friday and Saturday tables on its booking platform; absent when not sampled */
+	demand?: ReportDemand;
+	/** Its delivery listings and its menu's price position; absent without a delivery listing */
+	prices?: ReportPrices;
+	/** Its all-time Google rating against its district's and its kind of food's venues; absent without a rating or 5 peers either way */
+	ratingBenchmark?: ReportRatingBenchmark;
 }
 
 /**
- * A chain's report: `social`, `posts`, `reviews` and `dishes` cover every branch in the city;
- * the place-bound sections (busyness, open tables, own accounts, search ranks, neighbourhood)
- * describe one branch, `ReportData.venue` (the most Google reviews).
+ * One comparison of a branch's all-time Google rating: the peers are the city's open food
+ * venues with a rating and 20+ reviews (`isRatingPeer`), the branch itself left out.
  */
+export interface ReportRatingBenchmarkEntry {
+	/** What it is compared with: the district's name, or the kind of food's label */
+	label: string;
+	/** The peers' median rating */
+	median: number;
+	/** Share of the peers its rating is ahead of, ties counted half, 0–100 */
+	percentile: number;
+	/** Peers compared, at least 5 */
+	venues: number;
+}
+
+/** Against the city's venues of a kind of food: `label` is the topic's. */
+export interface ReportRatingTopicBenchmark extends ReportRatingBenchmarkEntry {
+	/** The food topic compared: the primary one, or the nearest parent with 5+ peers */
+	key: string;
+	/** The city's name */
+	city: string;
+}
+
+/** "4.3 · above 70 % of Kreuzberg's 212 food venues · above 55 % of Berlin's 61 kebab places". */
+export interface ReportRatingBenchmark {
+	/** The all-time Google rating compared */
+	rating: number;
+	/** Against the food venues of its district */
+	district?: ReportRatingBenchmarkEntry;
+	/** Against the city's venues of its primary food topic, or of the nearest parent with 5+ */
+	topic?: ReportRatingTopicBenchmark;
+}
+
+/** The business the report is on. */
 export interface ReportBrand {
+	id: string;
 	name: string;
+	/** The Google category most of its branches share */
+	category?: string;
 	/** Posts by others that named the brand but no branch: in `social`, in no branch's */
 	brandOnlyPosts: number;
-	/** Every open branch in the city, the described one first; each counts only posts that named it */
-	branches: ReportBranch[];
 }
 
 /** A venue's all-time Google figures at the close of a month (its latest snapshot). */
@@ -243,65 +318,41 @@ export interface ReportPreviousMonth {
 	actions?: ReportPoint[];
 }
 
-/** Everything a monthly report shows, computed once when it is built. */
+/**
+ * Everything a monthly report shows, computed once when it is built. The brand's figures (posts,
+ * reviews, dishes, creators, competitors, own accounts, comments, press, correlations) cover
+ * every branch in `branches`; each place figure is in its branch's entry.
+ */
 export interface ReportData {
-	venue: {
-		id: string;
-		name: string;
-		category?: string;
-		district?: string;
-		street?: string;
-		/** All-time Google figures, as of the build */
-		rating?: number;
-		reviewsCount?: number;
-		/** The venue's Google Maps page */
-		googleUrl?: string;
-		/** What Google Maps says it offers ("Outdoor seating", "Delivery", …); absent when unknown */
-		amenities?: string[];
-		/** All-time Google review count per star, as of the build; absent when unknown */
-		reviewsDistribution?: ReviewsDistribution;
-		/** The last six months' closing snapshots up to the report month, oldest first */
-		ratingTrend: ReportRatingPoint[];
-	};
-	/** Absent for a first report: the venue has neither posts nor reviews the month before */
+	brand: ReportBrand;
+	/** Every open branch covered, the most Google reviews first */
+	branches: ReportBranch[];
+	/** Absent for a first report: the brand has neither posts nor reviews the month before */
 	previous?: ReportPreviousMonth;
 	month: string;
 	social: ReportSocialStats;
 	posts: ReportPost[];
-	/** Posts from the venue's own account: not word of mouth, kept out of `social` */
+	/** Posts from the brand's own accounts: not word of mouth, kept out of `social` */
 	ownPosts: ReportPost[];
 	reviews: ReportReviewStats;
 	dishes: ReportDishCount[];
-	neighbours: ReportNeighbour[];
-	/** The venues an admin picked as its competition */
+	/** The places and rival brands the brand competes with (brand-wide and per branch) */
 	competitors: ReportCompetitor[];
-	/** A chain's branches side by side; absent for a venue in no brand */
-	brand?: ReportBrand;
-	/** The top eight creators by views of their posts about the venue, one row per author */
+	/** The top eight creators by views of their posts about the brand, one row per author */
 	creators: ReportCreator[];
-	/** District creators who covered neighbours but not the venue, top eight by followers */
+	/** Creators who covered its branches' district neighbours but not the brand, top eight by followers */
 	creatorsNearby: ReportNearbyCreator[];
-	/** What the city talked about and the venue against the month's report venues; absent below 200 matched mentions in the city */
+	/** What the city talked about and the brand against the month's report brands; absent below 200 matched mentions in the city, and across cities */
 	city?: ReportCitySection;
-	/** The venue's district this quarter; absent without a district */
-	neighbourhood?: ReportNeighbourhood;
-	/** Where it ranks on the Google Maps searches a guest would type; absent when not tracked this month */
-	searchRanks?: ReportSearchRank[];
-	/** The month's weather, public holidays and events in the city (`CityDayService.month`); absent in older reports */
+	/** The month's weather, public holidays and events in the city (`CityDayService.month`); absent across cities */
 	context?: MonthContext;
-	/** Google popular times by week next to the views ("Did the buzz fill the place?"); absent when not sampled */
-	busyness?: ReportBusyness;
-	/** Open Friday and Saturday tables on the venue's booking platform; absent when not sampled */
-	demand?: ReportDemand;
-	/** Delivery listings and the menu's price position; absent without a delivery listing */
-	prices?: ReportPrices;
-	/** Buzz to reviews, complaints by time, paid against organic; absent below the floors */
+	/** Buzz to reviews, complaints by time, paid against organic, over every branch's Google reviews; absent below the floors */
 	correlations?: ReportCorrelations;
-	/** The venue's own TikTok and Instagram accounts at the month's close; absent when none is tracked */
+	/** The brand's own TikTok and Instagram accounts at the month's close (a branch's own named); absent when none is tracked */
 	ownAccounts?: ReportOwnAccount[];
-	/** What viewers said under its top TikTok posts; absent when no comment was scraped */
+	/** What viewers said under the brand's top TikTok posts; absent when no comment was scraped */
 	comments?: ReportComments;
-	/** The month's press and listicles; absent when none was found */
+	/** The month's press and listicles naming the brand; absent when none was found */
 	press?: ReportPress;
 }
 
@@ -389,10 +440,12 @@ export interface ReportNeighbourhoodChange {
 	category?: string;
 	street?: string;
 	kind: 'opened' | 'temporarily_closed' | 'permanently_closed' | 'reopened';
-	/** When a scrape first saw it, `YYYY-MM-DD` */
+	/** When a scrape first saw it, or the first post saying it had just opened, `YYYY-MM-DD` */
 	date: string;
 	/** On the venue's own street */
 	sameStreet: boolean;
+	/** `posts`: an opening only a matched post announced (`Mention.isNewOpening`); absent when a scrape saw it */
+	source?: 'posts';
 }
 
 /** Openings and closures around the venue over the three months ending with the report's. */
@@ -401,12 +454,14 @@ export interface ReportNeighbourhoodChanges {
 	from: string;
 	to: string;
 	district: string;
-	/** In the district, the venue left out; `closed` is temporary and permanent closures */
+	/** In the district, the venue left out; `closed` is temporary and permanent closures; `opened` counts post-flagged openings too */
 	opened: number;
 	closed: number;
 	reopened: number;
+	/** Of `opened`, the ones only a post announced; absent when none */
+	openedFromPosts?: number;
 	/** The same on the venue's street; absent when its street is unknown */
-	street?: { name: string; opened: number; closed: number; reopened: number };
+	street?: { name: string; opened: number; closed: number; reopened: number; openedFromPosts?: number };
 	/** Newest first, the street's first, twelve at most */
 	venues: ReportNeighbourhoodChange[];
 }

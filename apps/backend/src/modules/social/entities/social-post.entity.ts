@@ -12,14 +12,18 @@ import { SocialAccount } from './social-account.entity.js';
 export enum SocialPlatformEnum {
 	TIKTOK = 'tiktok',
 	INSTAGRAM = 'instagram',
+	// An article on a food blog the city lists as a source (`CitySourceKindEnum.BLOG`); the blog
+	// is its account, and it has no views, likes or comments
+	BLOG = 'blog',
 }
 
-/** A TikTok video or an Instagram post about food and drink in the city. */
+/** A TikTok video, an Instagram post or a blog article about food and drink in the city. */
 @Entity({ tableName: 'social_posts', repository: () => SocialPostRepository })
 export class SocialPost extends MikroOrmEntityAbstractClass<
 	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions'
 > {
-	// The platform's own id: a TikTok video id, or `ig_<postId>` for Instagram
+	// The platform's own id: a TikTok video id, `ig_<postId>` for Instagram, `blog_<hash of the URL>`
+	// for a blog article
 	@Property({ type: 'text', unique: true })
 	externalId: string;
 
@@ -72,10 +76,11 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'text', nullable: true })
 	locationName?: string | null;
 
-	// How it was found: `#hashtag`, `search:<query>` or `place:<venue>`
+	// How it was found: `#hashtag`, `search:<query>`, `place:<venue>` or `blog:<source URL>`
 	@Property({ type: 'text', nullable: true })
 	source?: string | null;
 
+	// The caption; a blog article's title and text
 	@Property({ type: 'text', nullable: true })
 	text?: string | null;
 

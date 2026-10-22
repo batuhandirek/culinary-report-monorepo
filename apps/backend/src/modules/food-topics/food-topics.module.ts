@@ -13,6 +13,7 @@ import { FoodTopic } from './entities/food-topic.entity.js';
 import { FoodTopicIgnoredWord } from './entities/food-topic-ignored-word.entity.js';
 import { VenueFoodTopic } from './entities/venue-food-topic.entity.js';
 import { FoodTopicService } from './services/food-topic.service.js';
+import { MenuTopicService } from './services/menu-topic.service.js';
 import { TrendsTopicLookupService } from './services/trends-topic-lookup.service.js';
 import { VenueFoodTopicService } from './services/venue-food-topic.service.js';
 
@@ -29,7 +30,7 @@ import { VenueFoodTopicService } from './services/venue-food-topic.service.js';
 		AuthModule,
 	],
 	controllers: [AdminFoodTopicsController, AdminVenueFoodTopicsController],
-	providers: [FoodTopicService, TrendsTopicLookupService, VenueFoodTopicService],
-	exports: [FoodTopicService, VenueFoodTopicService],
+	providers: [FoodTopicService, MenuTopicService, TrendsTopicLookupService, VenueFoodTopicService],
+	exports: [FoodTopicService, MenuTopicService, VenueFoodTopicService],
 })
 export class FoodTopicsModule {}

@@ -5,6 +5,7 @@ import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { FOOD_TOPIC_SEED } from '../constants/food-topic-seed.constant.js';
 import { FoodTopicKindEnum } from '../entities/food-topic.entity.js';
 import { FoodTopicIndex } from '../util/food-topics.js';
+import { MENU_DISTRICT_MIN_VENUES, menuItemsOf, menuTopicPrices } from '../util/menu-topics.js';
 import { parseTrendsAutocomplete, trendsAutocompleteUrl } from '../util/trends-autocomplete.js';
 
 import { seedIndex } from './factories/food-topic.factory.js';
@@ -49,6 +50,76 @@ describe('FoodTopicIndex.resolve', () => {
 		expect(index.resolveMention('Ramen', 'Japanese restaurant')).toEqual(['ramen']);
 		expect(index.resolveMention('.', 'Japanese restaurant')).toEqual(['japanese']);
 		expect(index.resolveMention(null, null)).toEqual([]);
+	});
+});
+
+describe('FoodTopicIndex.resolveMenuItem', () => {
+	it.each([
+		// The name first, then the menu section
+		[{ name: 'Tonkotsu Ramen', category: 'Bowls' }, ['ramen']],
+		[{ name: 'Shoyu', category: 'Ramen' }, ['ramen']],
+		[{ name: 'Margherita', category: 'Pizza' }, ['pizza']],
+		[{ name: 'Vegan Döner im Brot', category: null }, ['vegan', 'kebab']],
+		// A drink only from a drink; drinks, desserts, sides and extras give no food
+		[{ name: 'Matcha Latte', category: 'Getränke' }, ['matcha']],
+		[{ name: 'Coca-Cola 0,33l', category: 'Getränke' }, []],
+		[{ name: 'Extra Käse', category: 'Pizza' }, []],
+		[{ name: 'Cheesecake', category: 'Desserts' }, []],
+		[{ name: 'Pommes', category: 'Beilagen' }, []],
+		// A kind of place never comes from a menu
+		[{ name: 'Bistro Salat', category: 'Salate' }, []],
+		[{ name: 'Menü 3', category: null }, []],
+	])('%j → %j', (item, keys) => {
+		expect(index.resolveMenuItem(item)).toEqual(keys);
+	});
+});
+
+describe('menuTopicPrices', () => {
+	const row = (venueId: string, district: string | null, name: string, price: number, category: string | null = null) => ({
+		venueId,
+		district,
+		name,
+		category,
+		price,
+	});
+
+	it("prices a topic by each venue's own median, its parents too, and districts at 5+ venues", () => {
+		const rows = [
+			// Five ramen places in Mitte, one with a long menu that weighs as one
+			row('a', 'Mitte', 'Tonkotsu Ramen', 14),
+			row('a', 'Mitte', 'Shoyu Ramen', 12),
+			row('a', 'Mitte', 'Miso Ramen', 13),
+			row('a', 'Mitte', 'Spicy Ramen', 15),
+			row('b', 'Mitte', 'Ramen', 10),
+			row('c', 'Mitte', 'Shio', 11, 'Ramen'),
+			row('d', 'Mitte', 'Ramen Deluxe', 16),
+			row('e', 'Mitte', 'Ramen', 12),
+			row('f', 'Neukölln', 'Sushi Set', 18),
+			row('f', 'Neukölln', 'Cola', 3, 'Getränke'),
+			row('g', 'Neukölln', 'Pommes', 4, 'Beilagen'),
+		];
+		const prices = menuTopicPrices(rows, index);
+		expect(prices.menus).toBe(7);
+		// a 13.5, b 10, c 11, d 16, e 12
+		expect(prices.topics.get('ramen')).toEqual({
+			key: 'ramen',
+			venues: 5,
+			items: 8,
+			median: 12,
+			p25: 11,
+			p75: 13.5,
+			districts: [{ district: 'Mitte', venues: MENU_DISTRICT_MIN_VENUES, median: 12 }],
+		});
+		// Japanese counts its ramen and sushi; Neukölln has too few venues for a district figure
+		expect(prices.topics.get('japanese')).toMatchObject({ venues: 6, median: 12.75 });
+		expect(prices.topics.get('japanese')!.districts).toEqual([
+			{ district: 'Mitte', venues: 5, median: 12 },
+		]);
+		expect(prices.topics.has('cafe')).toBe(false);
+		// Only the topics asked for
+		expect([...menuTopicPrices(rows, index, ['sushi']).topics.keys()]).toEqual(['sushi']);
+		expect(menuItemsOf(index, 'japanese')({ name: 'Sushi Set' })).toBe(true);
+		expect(menuItemsOf(index, 'japanese')({ name: 'Cola', category: 'Getränke' })).toBe(false);
 	});
 });
 

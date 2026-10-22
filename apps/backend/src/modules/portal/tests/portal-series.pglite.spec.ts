@@ -1,5 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
+import { NotFoundException } from '@nestjs/common';
+
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
@@ -26,7 +28,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { PortalService } from '../services/portal.service.js';
-import { monthWindow } from '../util/portal-series.js';
+import { buildSeries, monthWindow } from '../util/portal-series.js';
 
 /* The Trends tab's series: one row per month read from the stored reports, nulls where a
  * month has none, the month before a report filled from its look back, and older reports
@@ -118,16 +120,18 @@ describe('the portal series (pglite)', () => {
 
 		// A full, current report
 		await addReport('2026-09', {
-			venue: {
-				id: venue.id,
-				name: venue.name,
-				rating: 4.6,
-				reviewsCount: 210,
-				ratingTrend: [
-					{ month: '2026-07', date: '2026-08-02', rating: 4.4, reviewsCount: 190 },
-					{ month: '2026-09', date: '2026-10-02', rating: 4.6, reviewsCount: 210 },
-				],
-			},
+			branches: [
+				{
+					venueId: venue.id,
+					name: venue.name,
+					rating: 4.6,
+					reviewsCount: 210,
+					ratingTrend: [
+						{ month: '2026-07', date: '2026-08-02', rating: 4.4, reviewsCount: 190 },
+						{ month: '2026-09', date: '2026-10-02', rating: 4.6, reviewsCount: 210 },
+					],
+				} as ReportData['branches'][number],
+			],
 			previous: {
 				month: '2026-08',
 				social: { postCount: 3, views: 900, engagements: 90, creators: 2, promotional: 0 },
@@ -143,7 +147,7 @@ describe('the portal series (pglite)', () => {
 		});
 		// An old report from before `previous`, `ratingTrend` and `competitors` existed
 		await addReport('2026-05', {
-			venue: { id: venue.id, name: venue.name, rating: 4.3 } as ReportData['venue'],
+			branches: [{ venueId: venue.id, name: venue.name, rating: 4.3 } as ReportData['branches'][number]],
 			social: social(2, 500),
 			reviews: reviews(3, 4.0),
 			dishes: [],
@@ -369,5 +373,58 @@ describe('the portal series (pglite)', () => {
 
 		brand.reportScope = BrandReportScopeEnum.CITY;
 		await em.flush();
+	});
+
+	it("reads a chain's place figures for the branch asked for, lists its branches, and refuses another brand's", async () => {
+		const em = harness.orm.em;
+		const city = testCity(em);
+		const brand = em.create(Brand, { name: 'Two Places', key: 'two places' });
+		const [big, small] = [
+			['Two Places Mitte', 900],
+			['Two Places Wedding', 100],
+		].map(([name, reviewsCount]) =>
+			em.create(Venue, { city, placeId: `series-${name}`, name: name as string, street: `${name} 1`, reviewsCount: reviewsCount as number, brand }),
+		);
+		const stranger = em.create(Venue, { city, placeId: 'series-stranger', name: 'Stranger' });
+		await em.flush();
+		const trend = (rating: number) => [{ month: '2026-09', date: '2026-10-02', rating }];
+		em.create(Report, {
+			brand,
+			city,
+			month: '2026-09',
+			data: {
+				month: '2026-09',
+				social: social(2, 100),
+				reviews: reviews(2, 4),
+				dishes: [],
+				branches: [
+					{ venueId: big.id, name: big.name, rating: 4.5, ratingTrend: trend(4.5) },
+					{ venueId: small.id, name: small.name, rating: 3.9, ratingTrend: trend(3.9) },
+				],
+			} as unknown as ReportData,
+			highlights: { title: 'T', headline: 'H', highlights: [], actions: [] } as ReportHighlights,
+		});
+		em.create(VenueBusyness, { venue: small, sampledAt: new Date('2026-09-10T17:00:00Z'), histogram: null, busynessIndex: 40 });
+		await em.flush();
+
+		const first = await service.series(brand.id, 3, city.id, now);
+		expect(first.branchId).toBe(big.id);
+		expect(first.branches.map(b => b.name)).toEqual(['Two Places Mitte', 'Two Places Wedding']);
+		expect(first.months.at(-1)).toMatchObject({ month: '2026-09', rating: 4.5 });
+		expect(first.months.at(-1)!.busyness).toBeUndefined();
+
+		const picked = await service.series(brand.id, 3, city.id, now, small.id);
+		expect(picked.branchId).toBe(small.id);
+		expect(picked.months.at(-1)).toMatchObject({ rating: 3.9, busyness: { index: 40, samples: 1 } });
+		// The brand's own counts stay the brand's
+		expect(picked.months.at(-1)!.social).toMatchObject({ posts: 2 });
+
+		await expect(service.series(brand.id, 3, city.id, now, stranger.id)).rejects.toBeInstanceOf(NotFoundException);
+
+		// A report built before a branch joined has no figures for it: the first branch's never stand in
+		const [report] = await em.find(Report, { brand });
+		const joinedLater = buildSeries([report] as never, ['2026-09'], stranger.id);
+		expect(joinedLater.months[0]).toMatchObject({ month: '2026-09', rating: null });
+		expect(joinedLater.months[0].social).toMatchObject({ posts: 2 });
 	});
 });

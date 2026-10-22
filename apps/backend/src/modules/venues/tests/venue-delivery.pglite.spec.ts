@@ -91,6 +91,37 @@ describe('delivery helpers', () => {
 		expect(pricePosition({ venueId: 'v', name: 'V', items: [] }, [], [])).toBeNull();
 	});
 
+	it('leads with the venue’s own kind of food against the same on the other menus', () => {
+		const items = (prices: Record<string, number>) => Object.entries(prices).map(([name, price]) => ({ name, price }));
+		const ramen = { key: 'ramen', label: 'Ramen', matches: (i: { name: string }) => /ramen/i.test(i.name) };
+		const position = pricePosition(
+			{ venueId: 'v', name: 'V', items: items({ 'Tonkotsu Ramen': 15, 'Shoyu Ramen': 14, Gyoza: 6 }) },
+			[
+				{ venueId: 'a', name: 'A', items: items({ 'Miso Ramen': 12, Edamame: 5 }) },
+				{ venueId: 'b', name: 'B', items: items({ 'Ramen': 13, 'Spicy Ramen': 13 }) },
+				{ venueId: 'c', name: 'C', items: items({ Burger: 11 }) },
+			],
+			[],
+			ramen,
+		);
+		expect(position?.topic).toEqual({
+			key: 'ramen',
+			label: 'Ramen',
+			price: 14.5,
+			othersMedian: 12.5,
+			othersWithTopic: 2,
+			diff: 0.16,
+		});
+		// The venue sells none of it: no topic line, the median main course stays
+		expect(pricePosition({ venueId: 'v', name: 'V', items: items({ Burger: 12 }) }, [], [], ramen)).toEqual({
+			median: 12,
+			othersMedian: null,
+			othersWithMenu: 0,
+			diff: null,
+			dishes: [],
+		});
+	});
+
 	it('matches a Lieferando row by name and postcode', () => {
 		const rows = [lieferando('Pinoli', '12357', 4.1), lieferando('Pinoli Restaurant', '12355', 4.6)];
 		expect(matchLieferando({ name: 'Pinoli Restaurant', postalCode: '12355' }, rows)?.restaurantId).toBe('lf-Pinoli Restaurant-12355');

@@ -1,5 +1,5 @@
-// Pure: a venue's food topics from its Google categories, what posts call its food, and an
-// admin's tags.
+// Pure: a venue's food topics from its Google categories, what posts call its food, its delivery
+// menu, Google's review tags, and an admin's tags.
 
 import { FoodTopicKindEnum } from '../entities/food-topic.entity.js';
 
@@ -10,12 +10,20 @@ import type { FoodTopicIndex } from './food-topics.js';
 export const MIN_TAG_MENTIONS = 2;
 export const MIN_TAG_SHARE = 0.25;
 
-export type VenueTopicSource = 'category' | 'mentions' | 'manual';
+// A kind of food its menu gives counts when this many of its items with a kind of food, and this
+// share of them, are of it: one pho on a burger menu is no pho place
+export const MIN_MENU_ITEMS = 3;
+export const MIN_MENU_SHARE = 0.25;
+
+export type VenueTopicSource = 'category' | 'mentions' | 'menu' | 'reviews' | 'manual';
 
 export interface VenueTopicTag {
 	key: string;
 	source: VenueTopicSource;
-	/** 1 for its main Google category or an admin's tag, 0.5 for another category, else the share of its posts */
+	/**
+	 * 1 for its main Google category or an admin's tag, 0.5 for another category, else the share
+	 * of its posts, menu items or review tags with a kind of food that are of it
+	 */
 	score: number;
 	/** The one kind of food it is known for */
 	primary: boolean;
@@ -28,6 +36,10 @@ export interface VenueTopicInput {
 	categories?: string[] | null;
 	/** Its posts by others, by the cuisine extraction gave, with how many */
 	mentionCuisines: { cuisine: string | null; n: number }[];
+	/** Its latest delivery menu (`resolveMenuItem`) */
+	menuItems?: { name: string; category?: string | null }[];
+	/** Google's "people often mention" (`VenueDetails.reviewsTags`), all-time counts */
+	reviewTags?: { title: string; count: number }[] | null;
 	/** An admin's tags and exclusions */
 	manual: { key: string; excluded: boolean }[];
 }
@@ -36,12 +48,36 @@ export interface VenueTopicInput {
 const FOOD_KINDS = new Set([FoodTopicKindEnum.CUISINE, FoodTopicKindEnum.DISH]);
 
 /**
+ * Topics given `min`+ times and on `share`+ of what has a kind of food, most first, with their share.
+ */
+const counted = (
+	entries: { keys: string[]; n: number }[],
+	min: number,
+	share: number,
+): [string, number][] => {
+	const counts = new Map<string, number>();
+	let withTopic = 0;
+	for (const { keys, n } of entries) {
+		if (!keys.length) continue;
+		withTopic += n;
+		for (const key of keys) counts.set(key, (counts.get(key) ?? 0) + n);
+	}
+	return [...counts]
+		.filter(([, n]) => n >= min && n / withTopic >= share)
+		.sort(([a, x], [b, y]) => y - x || a.localeCompare(b))
+		.map(([key, n]) => [key, Math.round((n / withTopic) * 100) / 100]);
+};
+
+/**
  * The venue's topics, its primary one first, then by score. Its main category's topics score 1,
  * its other categories' 0.5, a kind of food its posts give `MIN_TAG_MENTIONS`+ times and on
- * `MIN_TAG_SHARE`+ of its posts with one its share; an admin's tag scores 1 and an admin's
- * exclusion removes the topic whatever gives it. The primary is the first cuisine or dish of: an
- * admin's tags, the main category, the posts' (most first); else the first of any kind in that
- * order ("Cocktail bar": cocktails), else the best tag.
+ * `MIN_TAG_SHARE`+ of its posts with one its share, the same for Google's review tags (weighted
+ * by their counts), and a kind of food on `MIN_MENU_ITEMS`+ and `MIN_MENU_SHARE`+ of its menu's
+ * items with one its share; menus and review tags never give a kind of place (Google's category
+ * says that). An admin's tag scores 1 and an admin's exclusion removes the topic whatever gives
+ * it. The primary is the first cuisine or dish of: an admin's tags, the main category, the
+ * posts', the menu's, the review tags' (most first); else the first of any kind in that order
+ * ("Cocktail bar": cocktails), else the best tag.
  */
 export const venueTopics = (input: VenueTopicInput, index: FoodTopicIndex): VenueTopicTag[] => {
 	const tags = new Map<string, { source: VenueTopicSource; score: number }>();
@@ -55,18 +91,28 @@ export const venueTopics = (input: VenueTopicInput, index: FoodTopicIndex): Venu
 	for (const category of input.categories ?? [])
 		index.resolve(category).forEach(key => add(key, 'category', 0.5));
 
-	const counts = new Map<string, number>();
-	let withTopic = 0;
-	for (const { cuisine, n } of input.mentionCuisines) {
-		const keys = index.resolve(cuisine);
-		if (!keys.length) continue;
-		withTopic += n;
-		for (const key of keys) counts.set(key, (counts.get(key) ?? 0) + n);
-	}
-	const fromPosts = [...counts]
-		.filter(([, n]) => n >= MIN_TAG_MENTIONS && n / withTopic >= MIN_TAG_SHARE)
-		.sort(([a, x], [b, y]) => y - x || a.localeCompare(b));
-	for (const [key, n] of fromPosts) add(key, 'mentions', Math.round((n / withTopic) * 100) / 100);
+	const fromPosts = counted(
+		input.mentionCuisines.map(({ cuisine, n }) => ({ keys: index.resolve(cuisine), n })),
+		MIN_TAG_MENTIONS,
+		MIN_TAG_SHARE,
+	);
+	const notPlace = (key: string) => index.get(key)!.kind !== FoodTopicKindEnum.FORMAT;
+	const fromMenu = counted(
+		(input.menuItems ?? []).map(item => ({ keys: index.resolveMenuItem(item), n: 1 })),
+		MIN_MENU_ITEMS,
+		MIN_MENU_SHARE,
+	);
+	const fromReviews = counted(
+		(input.reviewTags ?? []).map(t => ({
+			keys: index.resolve(t.title).filter(notPlace),
+			n: t.count,
+		})),
+		MIN_TAG_MENTIONS,
+		MIN_TAG_SHARE,
+	);
+	for (const [key, share] of fromPosts) add(key, 'mentions', share);
+	for (const [key, share] of fromMenu) add(key, 'menu', share);
+	for (const [key, share] of fromReviews) add(key, 'reviews', share);
 
 	const manual = input.manual.filter(m => index.get(m.key));
 	for (const m of manual.filter(m => !m.excluded))
@@ -78,7 +124,7 @@ export const venueTopics = (input: VenueTopicInput, index: FoodTopicIndex): Venu
 	const candidates = [
 		...manual.filter(m => !m.excluded).map(m => m.key),
 		...main,
-		...fromPosts.map(([key]) => key),
+		...[...fromPosts, ...fromMenu, ...fromReviews].map(([key]) => key),
 	].filter(key => tags.has(key));
 	const primary = candidates.find(isFood) ?? candidates[0] ?? ranked[0]?.[0];
 

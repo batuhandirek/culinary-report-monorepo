@@ -12,6 +12,7 @@ import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
 import { ImagesModule } from '../image/images.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 
+import { FeedbackThemeAgent } from './agents/feedback-theme.agent.js';
 import { PressClassificationAgent } from './agents/press-classification.agent.js';
 import { ReviewAnalysisAgent } from './agents/review-analysis.agent.js';
 import { AdminBrandsController } from './controllers/admin.brands.controller.js';
@@ -32,8 +33,11 @@ import { BrandService } from './services/brand.service.js';
 import { BrandLeadScoreService } from './services/brand-lead-score.service.js';
 import { CompetitorService } from './services/competitor.service.js';
 import { FaviconFetchService } from './services/favicon-fetch.service.js';
+import { FeedbackThemeService } from './services/feedback-theme.service.js';
 import { GoogleReserveAvailabilityService } from './services/google-reserve-availability.service.js';
 import { OpenTableAvailabilityService } from './services/opentable-availability.service.js';
+import { OsmPlaceService } from './services/osm-place.service.js';
+import { OverpassService } from './services/overpass.service.js';
 import { ReviewService } from './services/review.service.js';
 import { TheForkAvailabilityService } from './services/thefork-availability.service.js';
 import { TripadvisorReviewService } from './services/tripadvisor-review.service.js';
@@ -88,6 +92,8 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueScrapeService,
 		VenueStatusChangeService,
 		VenueSearchRankService,
+		OverpassService,
+		OsmPlaceService,
 		CompetitorService,
 		BrandLeadScoreService,
 		VenueBusynessService,
@@ -101,6 +107,8 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueFaviconCron,
 		ReviewService,
 		ReviewAnalysisAgent,
+		FeedbackThemeService,
+		FeedbackThemeAgent,
 	],
 	exports: [
 		BrandService,
@@ -110,6 +118,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueScrapeService,
 		VenueStatusChangeService,
 		VenueSearchRankService,
+		OsmPlaceService,
 		CompetitorService,
 		BrandLeadScoreService,
 		VenueBusynessService,
@@ -117,6 +126,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueDeliveryService,
 		VenueFaviconService,
 		ReviewService,
+		FeedbackThemeService,
 		MikroOrmModule,
 	],
 })

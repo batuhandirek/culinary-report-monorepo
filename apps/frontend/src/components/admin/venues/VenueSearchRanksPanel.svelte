@@ -46,7 +46,7 @@
 	{:else if !ranks.length}
 		<EmptyState
 			title="Not tracked yet"
-			hint="The monthly run searches its kinds of food in its district once it is a report venue."
+			hint="The monthly run searches its kinds of food in its district once its brand gets a report."
 			ground="none"
 			size="sm" />
 	{:else}
@@ -68,8 +68,9 @@
 								<span class="block font-medium">{query}</span>
 								{#if top}
 									<span class="text-muted-foreground block text-xs">
-										Ahead: {top.name}{top.rating ? ` · ${top.rating.toFixed(1)} ★` : ''}{top.reviewsCount
-											? ` · ${top.reviewsCount} reviews`
+										<!-- First itself: the runner-up is behind, not ahead -->
+										{latestOf(query)?.rank === 1 ? 'Next' : 'Ahead'}: {top.name}{top.rating ? ` · ${top.rating.toFixed(1)} ★` : ''}{top.reviewsCount
+											? ` · ${top.reviewsCount.toLocaleString('en')} reviews`
 											: ''}
 									</span>
 								{/if}

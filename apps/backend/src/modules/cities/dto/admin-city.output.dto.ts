@@ -20,12 +20,15 @@ export interface AdminCityOutputDto extends AdminCityRefOutputDto {
 	language: string;
 	locationQuery: string;
 	tiktokRegion: string;
+	osmRelationId?: number;
 	instagramEnabled: boolean;
 	lat?: number;
 	lng?: number;
 	districts: CityDistrict[];
 	nameStopwords: string[];
 	chainDenyList: string[];
+	doNotListVenues: string[];
+	doNotListCreators: string[];
 	stepBudgetsUsd: Partial<Record<PipelineStepEnum, number>>;
 	topBrands: number;
 	cronEnabled: boolean;
@@ -59,6 +62,11 @@ export interface AdminCitySourceOutputDto {
 	/** Added by the suggestion agent and not reviewed yet */
 	suggested: boolean;
 	note?: string;
+	/** A blog's feed, once `SCRAPE_BLOGS` found it */
+	feedUrl?: string;
+	/** When `SCRAPE_BLOGS` last read the blog, and what went wrong then */
+	checkedAt?: Date;
+	error?: string;
 }
 
 /** A source with what it brought in over the last three months. */

@@ -111,26 +111,42 @@ export class PortalService {
 	}
 
 	/**
-	 * The reports a series or pattern reads and the branch their place-bound figures are: a
-	 * brand reported across its cities reads those reports; else the city's (`cityId`, else the
-	 * brand's first city). The branch is the one the newest report describes, else the most
-	 * reviewed open one.
+	 * The reports a series or pattern reads and the branch whose place figures (busyness, open
+	 * tables, rating) it shows: a brand reported across its cities reads those reports; else the
+	 * city's (`cityId`, else the brand's first city). The branch is `branchId`, one of those
+	 * reports' open branches (404 for another), else the most reviewed one; `branches` are all of
+	 * them, for the picker.
 	 */
-	private async place(brandId: string, cityId?: string): Promise<{ venue: Venue; reports: Report[] } | null> {
+	private async place(
+		brandId: string,
+		cityId?: string,
+		branchId?: string,
+	): Promise<{ venue: Venue; branches: Venue[]; reports: Report[] } | null> {
 		const brand = await this.em.findOne(Brand, { id: brandId });
 		if (!brand) return null;
 		const acrossCities = brand.reportScope === BrandReportScopeEnum.ALL;
 		const city = acrossCities ? null : (cityId ?? (await this.brandService.citiesOf(brandId))[0]?.id);
 		if (city === undefined) return null;
 		const reports = await this.reportService.forBrand(brandId, { cityId: city });
-		// Stored reports may predate `venue`
-		const described = reports[0]?.data.venue?.id;
 		const branches =
 			city ? await this.brandService.branchesIn(brandId, city) : await this.brandService.openBranches(brandId);
-		const venue = branches.find(v => v.id === described) ?? branches[0];
+		const venue = branchId ? branches.find(v => v.id === branchId) : branches[0];
+		if (branchId && !venue) throw new NotFoundException('Not an open branch of the brand here');
 		if (!venue) return null;
-		await this.em.populate(venue, ['city']);
-		return { venue, reports };
+		await this.em.populate(branches, ['city']);
+		return { venue, branches, reports };
+	}
+
+	/** The picker's list: every open branch the series could show, and the one it shows. */
+	private branchChoices(place: { venue: Venue; branches: Venue[] } | null) {
+		return {
+			branches: (place?.branches ?? []).map(v => ({
+				id: v.id,
+				name: v.name,
+				...(v.street && { street: v.street }),
+			})),
+			...(place && { branchId: place.venue.id }),
+		};
 	}
 
 	/** The brand's months, every city, newest first, without the report bodies. */
@@ -149,23 +165,29 @@ export class PortalService {
 	}
 
 	/**
-	 * The brand's last `count` months in a city, one row each, read from its stored reports. The
-	 * window ends with the last finished month, or with a newer report when there is one.
+	 * The brand's last `count` months in a city, one row each, read from its stored reports, with
+	 * one branch's place figures (`branchId`, else the most reviewed). The window ends with the
+	 * last finished month, or with a newer report when there is one.
 	 */
 	async series(
 		brandId: string,
 		count: number,
 		cityId?: string,
 		now = new Date(),
+		branchId?: string,
 	): Promise<PortalSeriesOutputDto> {
-		const place = await this.place(brandId, cityId);
+		const place = await this.place(brandId, cityId, branchId);
 		const reports = place?.reports ?? [];
 		const last = [previousMonth(now), ...reports.map(report => report.month)].sort().at(-1)!;
 		const months = monthWindow(last, count);
-		const series = buildSeries(
-			reports.filter(report => report.month >= months[0]) as SeriesReport[],
-			months,
-		);
+		const series = {
+			...buildSeries(
+				reports.filter(report => report.month >= months[0]) as SeriesReport[],
+				months,
+				place?.venue.id,
+			),
+			...this.branchChoices(place),
+		};
 		if (!place) return { ...addBusyness(series, []), calendar: [] };
 		const { venue } = place;
 		const busyness = await this.venueBusynessService.between(
@@ -198,12 +220,18 @@ export class PortalService {
 	}
 
 	/**
-	 * The relations the brand's stored reports in a city hold, month by month, and its branch's
-	 * weeks across those months (views, reviews, busyness, booked out). Same window as `series`;
-	 * nothing is recomputed.
+	 * The relations the brand's stored reports in a city hold, month by month, and the weeks
+	 * across those months: the brand's views and reviews, one branch's busyness and booked out
+	 * (`branchId`, else the most reviewed). Same window as `series`; nothing is recomputed.
 	 */
-	async patterns(brandId: string, count: number, cityId?: string, now = new Date()): Promise<PortalPatternsOutputDto> {
-		const place = await this.place(brandId, cityId);
+	async patterns(
+		brandId: string,
+		count: number,
+		cityId?: string,
+		now = new Date(),
+		branchId?: string,
+	): Promise<PortalPatternsOutputDto> {
+		const place = await this.place(brandId, cityId, branchId);
 		const reports = place?.reports ?? [];
 		const last = [previousMonth(now), ...reports.map(report => report.month)].sort().at(-1)!;
 		const months = monthWindow(last, count);
@@ -216,12 +244,16 @@ export class PortalService {
 					new Date(monthRange(months.at(-1)!).end.getTime() + 7 * 86_400_000),
 				)
 			:	[];
-		return buildPatterns(
-			reports.filter(report => months.includes(report.month)) as PatternsReport[],
-			months,
-			samples,
-			place?.venue.city.timezone ?? 'UTC',
-		);
+		return {
+			...buildPatterns(
+				reports.filter(report => months.includes(report.month)) as PatternsReport[],
+				months,
+				samples,
+				place?.venue.city.timezone ?? 'UTC',
+				place?.venue.id,
+			),
+			...this.branchChoices(place),
+		};
 	}
 
 	async settings(brandId: string): Promise<PortalSettingsOutputDto> {

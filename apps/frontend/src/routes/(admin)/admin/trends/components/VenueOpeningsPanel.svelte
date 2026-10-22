@@ -26,6 +26,13 @@
 		permanently_closed: 'closed',
 		reopened: 'reopened'
 	};
+	// What saw the change: a Google Maps scrape, or a post saying the place had just opened
+	const SOURCE_LABELS: Record<string, string> = {
+		city: 'city list',
+		lookup: 'name lookup',
+		details: 'detail page',
+		posts: 'posts'
+	};
 
 	let summary = $state<AdminVenueStatusChangesOutputDto | null>(null);
 	const loader = createLoader(
@@ -43,6 +50,7 @@
 	const total = $derived(
 		summary ? summary.totals.opened + closed(summary.totals) + summary.totals.reopened : 0
 	);
+	const fromPosts = $derived(summary?.changes.filter((c) => c.source === 'posts').length ?? 0);
 </script>
 
 {#snippet groupTable(rows: VenueStatusGroup[], label: string)}
@@ -76,16 +84,18 @@
 	{:else if total === 0}
 		<EmptyState
 			title="No openings or closures seen"
-			hint="They come from the quarterly city venue scrape (after the city's first one) and the monthly detail refresh."
+			hint="They come from the quarterly city venue scrape (after the city's first one), the monthly detail refresh, and posts saying a place has just opened."
 			ground="none"
 			size="sm" />
 	{:else}
 		<div class="flex flex-col gap-5">
 			<p class="text-muted-foreground m-0 text-sm">
 				{summary.totals.opened} opened, {closed(summary.totals)} closed ({summary.totals
-					.permanentlyClosed} for good), {summary.totals.reopened} reopened. Dates are when a scrape
-				first saw the change; an opening is a place a city scrape found for the first time with few
-				reviews.
+					.permanentlyClosed} for good), {summary.totals.reopened} reopened{fromPosts
+					? ` (${fromPosts} of the openings from posts)`
+					: ''}. Dates are when a scrape first saw the change, or the first post saying so; an
+				opening is a place a city scrape found for the first time with few reviews, or one a post
+				said had just opened, still under 300 reviews.
 			</p>
 			<div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
 				<div class="min-w-0">{@render groupTable(summary.byDistrict, 'District')}</div>
@@ -104,6 +114,8 @@
 						</a>
 						<span class="text-right text-xs">
 							<span class="block">{KIND_LABELS[change.kind] ?? change.kind}</span>
+							<span class="text-muted-foreground block"
+								>{SOURCE_LABELS[change.source] ?? change.source}</span>
 							<span class="text-muted-foreground block tabular-nums"
 								>{new Date(change.at).toLocaleDateString('en-GB', {
 									day: 'numeric',

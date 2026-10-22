@@ -10,7 +10,7 @@ SvelteKit 2 + Svelte 5 (runes), web only (adapter-node). The UI copy is Turkish 
 
 ## Structure
 
-Routes: the placeholder home `+page.svelte`, `auth/`, the `(admin)` group, the `(portal)` group (the venue owners' portal, `/portal`; English like the reports, `domain-venues-and-reports`), the `(blog)` group (the SSR'd public blog, English, `domain-blog`), `(server-only)` (sitemaps) and `[...catchall]` (a real 404). Site-wide chrome (cookie consent, `#ui/components/Setup.svelte`) lives in the **root** layout — don't re-add it per group.
+Routes: the placeholder home `+page.svelte`, `auth/`, the `(admin)` group, the `(portal)` group (the venue owners' portal, `/portal`; English like the reports, `domain-venues-and-reports`), the `(blog)` group (the SSR'd public blog, English, `domain-blog`), the `(highlights)` group (a city's public pages, SSR'd, English, `domain-venues-and-reports`: its month `/<city>/<month>` and its quarter of food trends `/<city>/trends/<YYYY>-q<N>`; the `[city=city]` / `[month=month]` / `[quarter=quarter]` matchers are in `src/params.ts`), `(server-only)` (sitemaps) and `[...catchall]` (a real 404). Site-wide chrome (cookie consent, `#ui/components/Setup.svelte`) lives in the **root** layout — don't re-add it per group.
 
 - `/src/ui` — self-contained design system: `primitives-new/` (direct shadcn imports via `npm run add:component`, keep upstream-compatible), `wrapped/`, `components/`, `lib/`, `types/`. Its living catalogue is `/admin/ui-kit`.
 - `/src/views` — page-level components that also embed elsewhere, and the admin table views.

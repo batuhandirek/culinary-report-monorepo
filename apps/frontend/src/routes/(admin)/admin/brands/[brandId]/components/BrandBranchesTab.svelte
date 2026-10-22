@@ -27,9 +27,6 @@
 	let { brand, onChange: set }: Props = $props();
 
 	const cities = $derived(branchesByCity(brand.branches));
-	// Each city's most reviewed open branch: the report's place figures describe it
-	const described = (b: AdminBrandBranchOutputDto) =>
-		cities.find((c) => c.cityId === b.city.id)?.branches.find((x) => !x.closed)?.id === b.id;
 	const chain = $derived(brand.branches.length > 1);
 
 	const addAction = createAction(
@@ -119,7 +116,7 @@
 			<AdminPanel title={`Branches in ${city.cityName}`} note={city.branches.length}>
 				<ul class="divide-line m-0 flex list-none flex-col divide-y p-0 text-sm">
 					{#each city.branches as branch (branch.id)}
-						<BrandBranchRow {branch} described={chain && described(branch)}>
+						<BrandBranchRow {branch}>
 							{#snippet trailing()}
 								{#if chain}
 									<IconButton
@@ -136,9 +133,9 @@
 				<p class="text-muted-foreground m-0 mt-3 text-xs">
 					{#if chain}
 						The brand's report here covers every branch: posts (those naming only the brand
-						too) and reviews. Its place figures (busyness, search ranks, the neighbourhood)
-						are the most reviewed branch's. A branch taken off becomes a brand of its own
-						and never joins again by itself.
+						too) and reviews, then each open branch's own place figures (busyness, open
+						tables, prices, search ranks, the neighbourhood). A branch taken off becomes a
+						brand of its own and never joins again by itself.
 					{:else}
 						One place. Branches on its own website join by themselves when they are scraped;
 						find more on Google Maps here, or merge the namesakes listed under Brands → Look

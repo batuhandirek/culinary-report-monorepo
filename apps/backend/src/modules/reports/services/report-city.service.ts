@@ -6,7 +6,11 @@ import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.se
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
+import _ from 'lodash';
+
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
+import type { VenueDetails } from 'src/modules/venues/interfaces/venue-details.interface.js';
+import { RATING_BENCHMARK_MIN_REVIEWS, RatingPeer, isRatingPeer } from 'src/modules/venues/util/rating-benchmark.js';
 import { VenueSearchRankService } from 'src/modules/venues/services/venue-search-rank.service.js';
 import { VenueStatusChangeService } from 'src/modules/venues/services/venue-status-change.service.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
@@ -15,16 +19,19 @@ import { quarterWindow } from 'src/modules/venues/util/venue-status.js';
 import type {
 	ReportCitySection,
 	ReportNeighbourhood,
+	ReportRatingBenchmark,
 	ReportSearchRank,
 } from '../interfaces/report-data.interface.js';
 import { BaselineReview, baselineVenues, citySection } from '../util/city-section.js';
+import { ratingBenchmark } from '../util/rating-benchmark.js';
 import { neighbourhoodChanges } from '../util/neighbourhood.js';
 import { reportSearchRanks } from '../util/search-ranks.js';
 
 /**
  * The report's city context: the city's rising cuisines and dishes (`TrendService`), the brand's
- * place in its kind of food and its month against the month's report brands; and its branch's
- * neighbourhood's openings and closures (`VenueStatusChangeService`).
+ * place in its kind of food and its month against the month's report brands; and, per branch,
+ * its neighbourhood's openings and closures (`VenueStatusChangeService`), search ranks and
+ * rating benchmark.
  */
 @Injectable()
 export class ReportCityService {
@@ -48,8 +55,9 @@ export class ReportCityService {
 	}
 
 	/**
-	 * Openings and closures in the venue's district over the quarter ending with `month`.
-	 * Undefined without a district, or before the city's first city-wide list (no openings yet).
+	 * Openings and closures in the venue's district over the quarter ending with `month`: the
+	 * scrapes' and the openings a matched post announced. Undefined without a district, or before
+	 * the city's first city-wide list (closures unknown yet).
 	 */
 	async neighbourhood(venue: Venue, month: string): Promise<ReportNeighbourhood | undefined> {
 		if (!venue.district || !venue.city.venuesScrapedAt) return undefined;
@@ -58,8 +66,7 @@ export class ReportCityService {
 			venue.city.id,
 			venue.district,
 			venue.id,
-			window.start,
-			window.end,
+			month,
 		);
 		return {
 			changes: neighbourhoodChanges(
@@ -71,26 +78,31 @@ export class ReportCityService {
 	}
 
 	/**
-	 * The brand's month in its city: `venue` is the branch the report describes (its food topic
-	 * places the brand in its kind of food). `peerBrandIds` are the month's report brands of the
-	 * city (the pipeline passes `topBrands`); without them, the brands that already have a report
-	 * of the month in the city, plus this one. Undefined when the city's month is too thin to show.
+	 * The brand's month in its city, `branches` its open branches there: its kind of food is the
+	 * primary food topic most of them share (the most reviewed one's on a tie). `peerBrandIds` are
+	 * the month's report brands of the city (the pipeline passes `topBrands`); without them, the
+	 * brands that already have a report of the month in the city, plus this one. Undefined when
+	 * the city's month is too thin to show.
 	 */
 	async section(
-		venue: Venue,
+		branches: Venue[],
 		month: string,
 		peerBrandIds?: string[],
 	): Promise<ReportCitySection | undefined> {
-		const cityId = venue.city.id;
-		const brandId = venue.brand.id;
+		const [first] = branches;
+		const cityId = first.city.id;
+		const brandId = first.brand.id;
 		const { trends, mentions } = await this.trendService.monthWithMentions(month, cityId);
 		const peers = [...new Set([brandId, ...(peerBrandIds ?? (await this.reportBrandIds(cityId, month)))])];
 		const index = await this.foodTopicService.index();
-		const tags = (await this.venueFoodTopicService.tags([venue], index)).get(venue.id) ?? [];
+		const tags = await this.venueFoodTopicService.tags(branches, index);
+		const primaries = branches.flatMap(b => (tags.get(b.id) ?? []).filter(t => t.primary).map(t => t.key));
+		const counts = _.countBy(primaries);
 		const section = citySection({
-			cityName: venue.city.name,
+			cityName: first.city.name,
 			brandId,
-			venueTopic: tags.find(t => t.primary)?.key,
+			// Most branches' first; `primaries` keeps the branches' order for a tie
+			venueTopic: _.maxBy(_.uniq(primaries), key => counts[key]),
 			index,
 			trends,
 			mentions,
@@ -101,6 +113,66 @@ export class ReportCityService {
 			if (searches.length) section.searches = searches;
 		}
 		return section;
+	}
+
+	/**
+	 * Each branch's all-time Google rating against its city's open food venues with 20+ reviews:
+	 * its district's and its primary food topic's (`ratingBenchmark`), by branch id; a branch
+	 * without a rating or enough peers either way is left out. One read of the city's venues and
+	 * their tags per city.
+	 */
+	async ratingBenchmarks(branches: Venue[]): Promise<Map<string, ReportRatingBenchmark>> {
+		const out = new Map<string, ReportRatingBenchmark>();
+		const rated = branches.filter(b => b.rating != null);
+		if (!rated.length) return out;
+		const index = await this.foodTopicService.index();
+		for (const inCity of Object.values(_.groupBy(rated, b => b.city.id))) {
+			const rows: {
+				id: string;
+				name: string;
+				category: string | null;
+				categories: string[] | null;
+				district: string | null;
+				rating: number | string;
+				reviews_count: number;
+				review_tags: VenueDetails['reviewsTags'] | null;
+			}[] = await this.em.getConnection().execute(
+				`select id, name, category, categories, district, rating, reviews_count, details->'reviewsTags' as review_tags
+				from venues
+				where city_id = ? and not closed and deleted_at is null and rating is not null and reviews_count >= ?`,
+				[inCity[0].city.id, RATING_BENCHMARK_MIN_REVIEWS],
+			);
+			const peers = rows
+				.map(r => ({ ...r, rating: Number(r.rating), reviewsCount: r.reviews_count }))
+				.filter(p => isRatingPeer(p));
+			const tags = await this.venueFoodTopicService.tags(
+				_.uniqBy(
+					[
+						...peers.map(p => ({
+							id: p.id,
+							name: p.name,
+							category: p.category,
+							categories: p.categories,
+							details: { reviewsTags: p.review_tags ?? undefined } as VenueDetails,
+						})),
+						...inCity,
+					],
+					v => v.id,
+				),
+				index,
+			);
+			for (const branch of inCity) {
+				const benchmark = ratingBenchmark({
+					branch: branch as RatingPeer,
+					cityName: branch.city.name,
+					peers,
+					tags,
+					index,
+				});
+				if (benchmark) out.set(branch.id, benchmark);
+			}
+		}
+		return out;
 	}
 
 	private async reportBrandIds(cityId: string, month: string): Promise<string[]> {

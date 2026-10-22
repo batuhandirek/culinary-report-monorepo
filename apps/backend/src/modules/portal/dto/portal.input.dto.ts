@@ -16,6 +16,8 @@ export interface PortalSeriesInputDto {
 	months?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<24>;
 	/** The city whose reports to read; the brand's first city when absent */
 	cityId?: string & tags.Format<'uuid'>;
+	/** The branch whose rating, busyness and open tables to show; the most reviewed when absent */
+	branchId?: string & tags.Format<'uuid'>;
 }
 
 export interface PortalPatternsInputDto {
@@ -23,6 +25,8 @@ export interface PortalPatternsInputDto {
 	months?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<24>;
 	/** The city whose reports to read; the brand's first city when absent */
 	cityId?: string & tags.Format<'uuid'>;
+	/** The branch whose busyness and open tables to show; the most reviewed when absent */
+	branchId?: string & tags.Format<'uuid'>;
 }
 
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;

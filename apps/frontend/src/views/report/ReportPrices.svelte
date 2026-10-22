@@ -5,14 +5,17 @@
 	import { monthLabel } from '#lib/culinary.js';
 
 	// "Your prices next to your competitors'": the delivery listings (a second reputation), the
-	// median main course against the other menus, the signature dishes against the same dish
+	// place's own kind of food against the same on the other menus, the median main course
+	// against the other menus, the signature dishes against the same dish
 	// elsewhere, and how often reviews criticise price here and at competitors.
 	interface Props {
 		prices: ReportPrices;
+		/** The section's key in the report's numbering (one per branch) */
+		key?: string;
 		sectionHead: Snippet<[string, string, string]>;
 	}
 
-	let { prices, sectionHead }: Props = $props();
+	let { prices, key = 'prices', sectionHead }: Props = $props();
 
 	const PLATFORMS: Record<string, string> = { wolt: 'Wolt', lieferando: 'Lieferando' };
 	const money = (n: number | undefined, currency = 'EUR') =>
@@ -33,7 +36,7 @@
 </script>
 
 <section class="break-inside-avoid">
-	{@render sectionHead('prices', 'Delivery apps', 'Your prices next to theirs')}
+	{@render sectionHead(key, 'Delivery apps', 'Your prices next to theirs')}
 
 	<div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
 		{#each prices.listings as listing (listing.platform)}
@@ -72,6 +75,17 @@
 
 	{#if menu}
 		<div class="bg-tint border-ink/15 mb-4 rounded-md border px-5 py-4">
+			<!-- Its own kind of food first, when another menu lists it too (absent in older reports) -->
+			{#if menu.topic?.othersMedian !== undefined && menu.topic.diff !== undefined}
+				<p class="m-0 mb-2 text-[15px] leading-snug">
+					Your {menu.topic.label} on {PLATFORMS[menu.platform] ?? menu.platform}:
+					<strong class="tabular-nums">{money(menu.topic.price, menu.currency)}</strong>,
+					{menu.othersAre === 'competitors' ? 'your competitors’' : 'menus in your district'}
+					<span class="tabular-nums">{money(menu.topic.othersMedian, menu.currency)}</span>
+					({diffText(menu.topic.diff)}, {menu.topic.othersWithTopic}
+					{menu.topic.othersWithTopic === 1 ? 'menu' : 'menus'}).
+				</p>
+			{/if}
 			<p class="m-0 text-[15px] leading-snug">
 				Your median main course on {PLATFORMS[menu.platform] ?? menu.platform} is
 				<strong class="tabular-nums">{money(menu.median, menu.currency)}</strong>{#if menu.othersMedian !== undefined && menu.diff !== undefined},

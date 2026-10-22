@@ -40,7 +40,7 @@ describe('Daily Instagram scrape (pglite)', () => {
 		await harness.stop();
 	});
 
-	it('queues one run a day per city with the cron and Instagram on, labelled with the month', async () => {
+	it('queues the scrape, then extraction and matching, per city with the cron and Instagram on, labelled with the month', async () => {
 		cityFactory.build({ name: 'Berlin', cronEnabled: true, instagramEnabled: true });
 		cityFactory.build({ name: 'No Instagram', cronEnabled: true, instagramEnabled: false });
 		cityFactory.build({ name: 'By hand', cronEnabled: false, instagramEnabled: true });
@@ -49,16 +49,14 @@ describe('Daily Instagram scrape (pglite)', () => {
 		await harness.moduleRef.get(InstagramRecentCron).queueAll(new Date('2026-11-01T04:00:00Z'));
 
 		harness.orm.em.clear();
-		const runs = await harness.orm.em.find(PipelineRun, {}, { populate: ['city'] });
+		// Oldest first: the order the queue works them in
+		const runs = await harness.orm.em.find(PipelineRun, {}, { populate: ['city'], orderBy: { createdAt: 'asc' } });
 		expect(runs.map(r => [r.city.name, r.step, r.month, r.status])).toEqual([
-			[
-				'Berlin',
-				PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT,
-				'2026-11',
-				PipelineRunStatusEnum.QUEUED,
-			],
+			['Berlin', PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 		]);
-		expect(sendJob).toHaveBeenCalledTimes(1);
+		expect(sendJob).toHaveBeenCalledTimes(3);
 	});
 
 	it('scrapes the posts feed only, two days back whatever the month, on the $2 default', async () => {

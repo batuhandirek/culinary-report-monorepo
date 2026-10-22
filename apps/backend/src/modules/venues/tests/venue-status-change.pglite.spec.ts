@@ -3,6 +3,8 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
@@ -206,5 +208,93 @@ describe('VenueStatusChange (pglite)', () => {
 		expect(await statusService.newVenueIds(city.id)).toEqual([newVenue.id]);
 		const other = await cityFactory.create({ name: 'Wien' });
 		expect(await statusService.newVenueIds(other.id)).toEqual([]);
+	});
+
+	it('counts a venue a post said had just opened, without writing a status change', async () => {
+		const em = harness.orm.em;
+		const postCity = await cityFactory.create({ name: 'Hamburg' });
+		const venue = (placeId: string, reviewsCount: number, closed = false) =>
+			em.create(Venue, {
+				city: postCity,
+				placeId,
+				name: `Place ${placeId}`,
+				district: 'Altona',
+				category: 'Cafe',
+				reviewsCount,
+				closed,
+			});
+		const fresh = venue('flag-fresh', 40);
+		const stale = venue('flag-stale', 40);
+		const big = venue('flag-big', 900);
+		const gone = venue('flag-gone', 40, true);
+		const unflagged = venue('flag-none', 40);
+		await em.flush();
+		const lastMonth = new Date(Date.now() - 30 * 24 * 3600 * 1000);
+		const sevenMonthsAgo = new Date();
+		sevenMonthsAgo.setUTCMonth(sevenMonthsAgo.getUTCMonth() - 7);
+		let n = 0;
+		const post = (v: Venue, postedAt: Date, isNewOpening: boolean) => {
+			const p = em.create(SocialPost, {
+				city: v.city,
+				externalId: `flag-${++n}`,
+				platform: SocialPlatformEnum.TIKTOK,
+				url: `https://tiktok.com/flag/${n}`,
+				author: 'eater',
+				views: 100,
+				postedAt,
+			});
+			em.create(Mention, {
+				post: p,
+				venueName: v.name,
+				venue: v,
+				visited: true,
+				isNewOpening,
+				sentiment: 'positive',
+				summary: 'Just opened.',
+				dishes: [],
+				praise: [],
+				complaints: [],
+			});
+		};
+		post(fresh, lastMonth, true);
+		// A later post saying so again: the first one dates the opening
+		post(fresh, new Date(), true);
+		post(stale, sevenMonthsAgo, true);
+		post(big, lastMonth, true);
+		post(gone, lastMonth, true);
+		post(unflagged, lastMonth, false);
+		// A venue a city scrape already saw open is listed once, as the scrape's
+		const scraped = await em.findOneOrFail(Venue, { placeId: 'new-1' });
+		post(scraped, lastMonth, true);
+		await em.flush();
+
+		expect(await statusService.newVenueIds(postCity.id)).toEqual([fresh.id]);
+		expect(await statusService.newVenueIds(city.id)).toEqual([scraped.id]);
+		expect(await statusService.newVenueIds()).toEqual(
+			expect.arrayContaining([fresh.id, scraped.id]),
+		);
+
+		const month = new Date().toISOString().slice(0, 7);
+		const summary = await statusService.quarter(postCity.id, month);
+		expect(summary.totals.opened).toBe(1);
+		expect(summary.changes).toEqual([
+			expect.objectContaining({
+				venueId: fresh.id,
+				kind: VenueStatusChangeKindEnum.OPENED,
+				source: 'posts',
+				district: 'Altona',
+				at: lastMonth,
+			}),
+		]);
+		expect(summary.byDistrict).toEqual([
+			{ key: 'Altona', opened: 1, temporarilyClosed: 0, permanentlyClosed: 0, reopened: 0 },
+		]);
+		const first = await statusService.quarter(city.id, month);
+		expect(first.totals.opened).toBe(1);
+		expect(first.changes.find(c => c.venueId === scraped.id)?.source).toBe(
+			VenueScrapeSourceEnum.CITY,
+		);
+		// No row is written from a post
+		expect(await em.count(VenueStatusChange, { venue: fresh })).toBe(0);
 	});
 });

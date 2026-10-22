@@ -8,23 +8,27 @@ import {
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 
-export const FEEDBACK_SENTIMENTS = ['positive', 'mixed', 'negative', 'neutral'] as const;
-export const FEEDBACK_TOPICS = [
-	'food',
-	'drinks',
-	'service',
-	'vibe',
-	'price',
-	'payment',
-	'wait',
-	'cleanliness',
-	'other',
-] as const;
+import { FEEDBACK_THEME_KEYS, feedbackThemeLegend } from '../constants/feedback-themes.constant.js';
 
+export const FEEDBACK_SENTIMENTS = ['positive', 'mixed', 'negative', 'neutral'] as const;
+
+/**
+ * One praise or complaint point: the theme it is about and the phrase. The topic is the theme's,
+ * derived in code (`withTopics`). Every agent answering this shape puts `FEEDBACK_THEMES_INSTRUCTION`
+ * in its instructions: the legend is long, and in the schema it would repeat for praise and
+ * complaints alike.
+ */
 export const feedbackPointSchema = z.object({
-	topic: z.enum(FEEDBACK_TOPICS),
+	theme: z.enum(FEEDBACK_THEME_KEYS).describe('The one theme the point is about, from the themes in the instructions'),
 	detail: z.string().describe('Short phrase in English, e.g. "staff forgot our order"'),
 });
+
+/** How the agents answering `feedbackPointSchema` pick a theme. */
+export const FEEDBACK_THEMES_INSTRUCTION =
+	'Every praise or complaint point carries the theme it is about: the one that fits best, a topic\'s "_other" theme only when ' +
+	'none fits. A theme says what the point is about, not whether it was good or bad (portion_size covers generous and small ' +
+	'portions). Prices that went up since an earlier visit are price_increase, not price_level; portions that got smaller are ' +
+	`portion_size. The themes, by topic: ${feedbackThemeLegend()}. `;
 
 export const feedbackDishSchema = z.object({
 	name: z.string(),
@@ -66,8 +70,9 @@ export class ReviewAnalysisAgent extends BaseMastraAgent<typeof reviewAnalysisSc
 	protected getInstructions(): string {
 		return (
 			'You analyse Google or TripAdvisor reviews of one restaurant, bar or café for a monthly report to its owner. ' +
-			'For every review, list the praise and complaints by topic, the dishes or drinks named, and any change the reviewer says happened ' +
+			'For every review, list the praise and complaints as points, the dishes or drinks named, and any change the reviewer says happened ' +
 			'compared to earlier visits or the past (ownership, staff, menu, prices, quality, opening hours, payment). ' +
+			FEEDBACK_THEMES_INSTRUCTION +
 			'Only use what the review says. Write details as short English phrases. Return one entry per review id.'
 		);
 	}

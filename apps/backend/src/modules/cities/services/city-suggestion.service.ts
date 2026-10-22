@@ -13,6 +13,8 @@ const SUGGESTION_COUNTS: Record<CitySourceKindEnum, number> = {
 	[CitySourceKindEnum.TIKTOK_HASHTAG]: 20,
 	[CitySourceKindEnum.TIKTOK_SEARCH]: 20,
 	[CitySourceKindEnum.INSTAGRAM_HASHTAG]: 10,
+	// Never suggested: a model's blog URLs are guesses; an admin adds blogs they have read
+	[CitySourceKindEnum.BLOG]: 0,
 };
 
 /** First guesses for a new city: scrape sources from an LLM, districts from its venue scrape. */

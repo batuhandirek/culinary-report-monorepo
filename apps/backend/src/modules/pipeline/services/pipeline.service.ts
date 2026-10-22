@@ -17,6 +17,7 @@ import { ProspectQueryService } from 'src/modules/outreach/services/prospect-que
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
 import { AccountMatchingService } from 'src/modules/social/services/account-matching.service.js';
+import { BlogScrapeService } from 'src/modules/social/services/blog-scrape.service.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
@@ -28,6 +29,7 @@ import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { BrandLeadScoreService } from 'src/modules/venues/services/brand-lead-score.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
+import { OsmPlaceService } from 'src/modules/venues/services/osm-place.service.js';
 import { ReviewService } from 'src/modules/venues/services/review.service.js';
 import { TripadvisorReviewService } from 'src/modules/venues/services/tripadvisor-review.service.js';
 import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness.service.js';
@@ -42,6 +44,8 @@ import {
 	MONTHLY_STEPS,
 	PipelineStepEnum,
 	RESERVATION_SAMPLE_MAX_VENUES,
+	REVIEW_BACKFILL_BUDGET_SHARE,
+	REVIEW_BACKFILL_MONTHS,
 	REVIEW_WATCH_DAYS,
 } from '../constants/pipeline.constant.js';
 import {
@@ -50,7 +54,7 @@ import {
 	PipelineRunStatusEnum,
 } from '../entities/pipeline-run.entity.js';
 import { RunPipelineJob } from '../jobs/run-pipeline.job.js';
-import { INSTAGRAM_RECENT_DAYS } from '../util/monthly-schedule.js';
+import { INSTAGRAM_RECENT_DAYS, WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
 import { isPaidStep, latestStepStates, SKIPPED_RESULT } from '../util/step-states.js';
 
 
@@ -59,12 +63,11 @@ const TRIPADVISOR_BUDGET_SHARE = 0.1;
 
 /**
  * A brand a month's run covers in a city: its open branches there, the most reviewed first.
- * `venue` is that first one, the branch its report's place-bound sections describe.
+ * Every branch's place figures are scraped and reported; no branch stands in for the brand.
  */
 export interface TopBrand {
 	brand: Brand;
 	branches: Venue[];
-	venue: Venue;
 }
 
 @Injectable()
@@ -97,6 +100,8 @@ export class PipelineService {
 		private readonly venueSearchRankService: VenueSearchRankService,
 		private readonly searchInterestService: SearchInterestService,
 		private readonly brandService: BrandService,
+		private readonly osmPlaceService: OsmPlaceService,
+		private readonly blogScrapeService: BlogScrapeService,
 	) {}
 
 	/**
@@ -143,8 +148,10 @@ export class PipelineService {
 	}
 
 	/**
-	 * Gives the month's report brands that have no competitors their five best suggestions. An
-	 * admin's explicit bulk action, not a step: competitors never change on their own.
+	 * Gives the month's report brands that have no competitors their five best suggestions: the
+	 * monthly run's `FILL_COMPETITORS` step and the Data page's bulk action. A brand with any
+	 * brand-wide competitor (an admin's or an owner's pick) is left as it is, so a comparison
+	 * never changes on its own.
 	 */
 	async fillCompetitors(cityId: string, month: string, top?: number) {
 		const city = await this.cityService.getById(cityId);
@@ -174,7 +181,7 @@ export class PipelineService {
 		// Ranked first, in rank order, then the subscribers outside the top
 		return ids
 			.filter(id => byBrand[id])
-			.map(id => ({ brand: byBrand[id][0].brand, branches: byBrand[id], venue: byBrand[id][0] }));
+			.map(id => ({ brand: byBrand[id][0].brand, branches: byBrand[id] }));
 	}
 
 	/**
@@ -343,8 +350,11 @@ export class PipelineService {
 		const top = params.top ?? city.topBrands;
 		const since = `${month}-01T00:00:00.000Z`;
 		const topBrands = () => this.topBrands(city, month, top);
-		// Each top brand's described branch: what the place-bound steps sample
-		const described = async () => (await topBrands()).map(t => t.venue);
+		// Every open branch of the report brands: each one's place figures are its own
+		const branches = async () => (await topBrands()).flatMap(t => t.branches);
+		// One venue a brand for the steps that search by the brand's name (press, social search):
+		// any branch carries the search, the results are the brand's
+		const byName = async () => (await topBrands()).map(t => t.branches[0]);
 
 		switch (step) {
 			case PipelineStepEnum.SCRAPE_VENUES:
@@ -356,12 +366,27 @@ export class PipelineService {
 				});
 			case PipelineStepEnum.SEARCH_BRANCHES:
 				return this.brandService.searchCity(city, budgetUsd);
+			case PipelineStepEnum.SYNC_OSM_PLACES:
+				return this.osmPlaceService.sync(city);
+			case PipelineStepEnum.LOOKUP_OSM_PLACES:
+				return this.osmPlaceService.lookup(city, budgetUsd);
 			case PipelineStepEnum.SCRAPE_TIKTOK:
+				// The month-end pass: the weekly runs found most of the month already
 				return this.socialScrapeService.scrapeCityTikTok({
 					city,
 					since,
-					perSource: 100,
+					perSource: 50,
 					budgetUsd,
+				});
+			case PipelineStepEnum.SCRAPE_TIKTOK_RECENT:
+				// The weekly cron: the week's searches and a short page of each hashtag, whatever
+				// the run's month
+				return this.socialScrapeService.scrapeCityTikTok({
+					city,
+					since: new Date(Date.now() - WEEKLY_LISTENING_DAYS * 24 * 3600 * 1000).toISOString(),
+					perSource: 30,
+					budgetUsd,
+					searchWindow: 'WEEK',
 				});
 			case PipelineStepEnum.SCRAPE_INSTAGRAM:
 				return this.socialScrapeService.scrapeCityInstagram({
@@ -379,6 +404,18 @@ export class PipelineService {
 					budgetUsd,
 					kinds: ['posts'],
 				});
+			case PipelineStepEnum.SCRAPE_INSTAGRAM_REELS:
+				// The weekly cron: each hashtag's top reels of the last week
+				return this.socialScrapeService.scrapeCityInstagram({
+					city,
+					since: new Date(Date.now() - WEEKLY_LISTENING_DAYS * 24 * 3600 * 1000).toISOString(),
+					perSource: 30,
+					budgetUsd,
+					kinds: ['reels'],
+				});
+			case PipelineStepEnum.SCRAPE_BLOGS:
+				// Every article not stored yet, whatever the run's month
+				return this.blogScrapeService.scrapeCity(city);
 			case PipelineStepEnum.EXTRACT_MENTIONS:
 				return this.mentionExtractionService.extract({ limit: 5000, cityId: city.id });
 			case PipelineStepEnum.MATCH_MENTIONS:
@@ -398,33 +435,63 @@ export class PipelineService {
 				// One search per brand, by its name
 				return this.socialScrapeService.scrapeVenueSocial({
 					city,
-					venues: await described(),
+					venues: await byName(),
 					since,
 					perVenue: 30,
 					budgetUsd,
 				});
+			case PipelineStepEnum.FILL_COMPETITORS:
+				return this.fillCompetitors(city.id, month, top);
 			case PipelineStepEnum.SCRAPE_REVIEWS: {
 				// Every branch (a chain's report compares them) and the competitors, inside the same
-				// budget. A tenth goes to the described branches' TripAdvisor side (pages found once,
-				// then the month). `params.since` starts the Google side earlier, to backfill the
-				// months before
+				// budget. A tenth goes to every branch's TripAdvisor side (pages found once,
+				// then the month). On Google, venues with no review stored from before the month
+				// (new to the set) start REVIEW_BACKFILL_MONTHS earlier, in a second run capped at
+				// REVIEW_BACKFILL_BUDGET_SHARE so the tracked venues' month always fits; the
+				// report brands' branches go first. `params.since` starts every venue there instead
 				const brands = await topBrands();
 				const branchIds = brands.flatMap(t => t.branches.map(v => v.id));
 				const competitorIds = await this.competitorService.competitorVenueIdsOf(
 					brands.map(t => t.brand.id),
 					city.id,
 				);
-				const venues = brands.map(t => t.venue);
+				const venues = brands.flatMap(t => t.branches);
 				const tripadvisorBudget = budgetUsd * TRIPADVISOR_BUDGET_SHARE;
+				const googleBudget = budgetUsd - tripadvisorBudget;
+				const googleIds = _.uniq([...branchIds, ...competitorIds]);
+				const now = new Date();
 				const pages = await this.tripadvisorReviewService.findPages(city, venues, tripadvisorBudget / 2);
-				return {
-					saved: await this.reviewService.scrapeMonth(
+				let google: { saved: number; backfilled: number; backfillSince?: string; backfillSaved?: number };
+				if (params.since) {
+					google = {
+						saved: await this.reviewService.scrapeMonth(month, googleIds, googleBudget, now, params.since),
+						backfilled: 0,
+					};
+				} else {
+					const tracked = await this.reviewService.venuesWithHistory(googleIds, month);
+					const fresh = googleIds.filter(id => !tracked.has(id));
+					const backfillBudget =
+						fresh.length === 0 ? 0
+						: tracked.size === 0 ? googleBudget
+						: googleBudget * REVIEW_BACKFILL_BUDGET_SHARE;
+					const start = new Date(`${month}-01T00:00:00Z`);
+					start.setUTCMonth(start.getUTCMonth() - REVIEW_BACKFILL_MONTHS);
+					const backfillSince = start.toISOString().slice(0, 10);
+					const saved = await this.reviewService.scrapeMonth(
 						month,
-						_.uniq([...branchIds, ...competitorIds]),
-						budgetUsd - tripadvisorBudget,
-						new Date(),
-						params.since,
-					),
+						googleIds.filter(id => tracked.has(id)),
+						googleBudget - backfillBudget,
+						now,
+					);
+					const backfillSaved = await this.reviewService.scrapeMonth(month, fresh, backfillBudget, now, backfillSince);
+					google = {
+						saved: saved + backfillSaved,
+						backfilled: fresh.length,
+						...(fresh.length > 0 && { backfillSince, backfillSaved }),
+					};
+				}
+				return {
+					...google,
 					branches: branchIds.length - brands.length,
 					competitors: competitorIds.length,
 					tripadvisor: {
@@ -484,11 +551,12 @@ export class PipelineService {
 				return this.postCommentService.analyse(city);
 			case PipelineStepEnum.SCRAPE_PRESS:
 				return {
-					...(await this.webMentionService.searchMonth(city, await described(), month, budgetUsd)),
+					// One search per brand (`searchMonth` groups the branches), every branch stamped
+					...(await this.webMentionService.searchMonth(city, await branches(), month, budgetUsd)),
 					...(await this.webMentionService.classifyMonth(city, month)),
 				};
 			case PipelineStepEnum.TRACK_SEARCH_RANKS:
-				return this.venueSearchRankService.track(city, month, await described(), budgetUsd);
+				return this.venueSearchRankService.track(city, month, await branches(), budgetUsd);
 			case PipelineStepEnum.SEARCH_INTEREST: {
 				// The city's top cuisines, and the names of the subscribers with a branch in the city
 				const won = await this.prospectQueryService.wonBrandIds();
@@ -530,7 +598,7 @@ export class PipelineService {
 			case PipelineStepEnum.SCORE_LEADS:
 				return this.brandLeadScoreService.scoreAll(month, city.id);
 			case PipelineStepEnum.SAMPLE_BUSYNESS: {
-				// The month's report brands' described branches (won prospects included) and their
+				// Every open branch of the month's report brands (won prospects included) and their
 				// competitors, sampled now
 				const brands = await topBrands();
 				const competitorIds = await this.competitorService.competitorVenueIdsOf(
@@ -539,7 +607,7 @@ export class PipelineService {
 				);
 				const competitors = await this.em.find(Venue, { id: { $in: competitorIds } });
 				return {
-					...(await this.venueBusynessService.sample([...brands.map(t => t.venue), ...competitors], budgetUsd)),
+					...(await this.venueBusynessService.sample([...brands.flatMap(t => t.branches), ...competitors], budgetUsd)),
 					competitors: competitors.length,
 				};
 			}
@@ -550,14 +618,20 @@ export class PipelineService {
 					maxVenues: RESERVATION_SAMPLE_MAX_VENUES,
 				});
 			case PipelineStepEnum.SCRAPE_DELIVERY: {
-				// The described branches and their competitors: the price block compares their menus
+				// Every report branch and the competitors: each branch's price block compares its menu
+				// with theirs
 				const brands = await topBrands();
 				const competitorIds = await this.competitorService.competitorVenueIdsOf(
 					brands.map(t => t.brand.id),
 					city.id,
 				);
 				const competitors = await this.em.find(Venue, { id: { $in: competitorIds } });
-				return this.venueDeliveryService.scrape([...brands.map(t => t.venue), ...competitors], city, month, budgetUsd);
+				return this.venueDeliveryService.scrape(
+					[...brands.flatMap(t => t.branches), ...competitors],
+					city,
+					month,
+					budgetUsd,
+				);
 			}
 			case PipelineStepEnum.MONTHLY:
 				throw new Error('MONTHLY is a sequence, not a step');

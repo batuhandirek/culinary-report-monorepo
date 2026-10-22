@@ -23,6 +23,7 @@ The CLAUDE.md files hold only cross-cutting conventions. Everything about a doma
 - Postgres runs in Docker (`docker/docker-compose.yml`, `npm run db:up`), with its password and port from `env/server/.env.local`.
 - Env files (gitignored, `.env.example` next to each): `env/server`, `env/web`.
 - **Questions for outside parties are `questions/<party>.md`** (`questions/README.md`): what a provider or vendor must answer, the answer once it comes, the follow-up task slugs. A task's own open questions are only the user's decisions.
+- **Plain-language docs for business and sales are `human-docs/`** (`human-docs/README.md`): derived from the skills, never the other way round; a change that makes a statement there wrong fixes it in the same change.
 - **Work queue is `tasks/`** (`todo/` → `in-progress/` → `done/`, one file per task naming the skills to load; `tasks/README.md`, `task-workflow` skill). Work found but not done now goes there as a task, never into a root-level markdown file.
 - Root commands: `npm run db:up`, `npm run start:dev`, `npm run build`, `npm run backend:test`, `npm run backend:test:integration`, `npm run create:client` (after any endpoint/DTO change), `npm run migration:create:dev` / `migration:up:dev`, `npm run typia:setup` (after fresh install).
 

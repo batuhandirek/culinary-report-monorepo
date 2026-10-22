@@ -26,7 +26,10 @@ const GRID_STEPS = _.uniq(MONTHLY_STEPS);
 
 // Steps on their own schedule: their latest run, whatever its month
 const RECURRING_STEPS = [
+	PipelineStepEnum.SCRAPE_TIKTOK_RECENT,
 	PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT,
+	PipelineStepEnum.SCRAPE_INSTAGRAM_REELS,
+	PipelineStepEnum.SCRAPE_BLOGS,
 	PipelineStepEnum.SAMPLE_BUSYNESS,
 	PipelineStepEnum.SAMPLE_RESERVATIONS,
 	PipelineStepEnum.WATCH_REVIEWS,
@@ -134,6 +137,7 @@ export class DataCoverageService {
 				posts: {
 					tiktok: _.sumBy(postRows.filter(p => p.platform === 'tiktok'), p => p.posts),
 					instagram: _.sumBy(postRows.filter(p => p.platform === 'instagram'), p => p.posts),
+					blog: _.sumBy(postRows.filter(p => p.platform === 'blog'), p => p.posts),
 					unanalysed: _.sumBy(postRows, p => p.unanalysed),
 				},
 				mentions: {

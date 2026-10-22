@@ -69,7 +69,7 @@ describe('PipelineService.topBrands (pglite)', () => {
 
 		expect(topBrandIds).toHaveBeenCalledWith(MONTH, 2, city.id);
 		expect(brands.map(t => t.brand.name)).toEqual(['Buzzing', 'Lost but ranked', 'Quiet subscriber']);
-		expect(brands[0]).toMatchObject({ venue: { id: buzzing.id }, branches: [{ id: buzzing.id }] });
+		expect(brands[0]).toMatchObject({ branches: [{ id: buzzing.id }] });
 	});
 
 	it('counts a won prospect that also ranks once', async () => {
@@ -101,8 +101,8 @@ describe('PipelineService.topBrands (pglite)', () => {
 		const brands = await service.topBrands(city, MONTH, 5);
 		expect(brands).toHaveLength(1);
 		expect(brands[0].brand.id).toBe(brand.id);
-		// The most reviewed open branch is the one its report describes
-		expect(brands[0].venue.id).toBe(mitte.id);
+		// Its open branches here, the most reviewed first
+		expect(brands[0].branches.map(v => v.id)).toEqual([mitte.id, expect.any(String)]);
 		expect(brands[0].branches.map(v => v.name)).toEqual(['Nhas Mitte', 'Nhas Neukölln']);
 		expect((await service.subscribedVenues(city)).map(v => v.name).sort()).toEqual(['Nhas Mitte', 'Nhas Neukölln']);
 	});

@@ -166,6 +166,6 @@ describe('CityService (pglite)', () => {
 		expect(areNeighbourDistricts(city, 'B', 'A')).toBe(true);
 		expect(areNeighbourDistricts(city, 'A', 'C')).toBe(false);
 		expect(stepBudgetUsd({ stepBudgetsUsd: { SCRAPE_TIKTOK: 3 } }, 'SCRAPE_TIKTOK' as never)).toBe(3);
-		expect(stepBudgetUsd({ stepBudgetsUsd: {} }, 'SCRAPE_TIKTOK' as never)).toBe(15);
+		expect(stepBudgetUsd({ stepBudgetsUsd: {} }, 'SCRAPE_TIKTOK' as never)).toBe(7);
 	});
 });

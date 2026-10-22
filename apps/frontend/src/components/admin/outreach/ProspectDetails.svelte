@@ -57,6 +57,13 @@
 					: undefined
 		},
 		{
+			label: 'E-mail OK',
+			value: prospect.emailConsentAt ? `since ${onDay(prospect.emailConsentAt)}` : undefined,
+			tone: prospect.emailConsentAt ? 'success' : undefined,
+			// Nothing on record: the composer warns before a cold e-mail
+			hint: prospect.emailConsentAt ? undefined : 'needed before a cold e-mail (UWG §7)'
+		},
+		{
 			label: 'Phone',
 			value: prospect.venue?.phone,
 			href: prospect.venue?.phone ? `tel:${prospect.venue.phone.replaceAll(' ', '')}` : undefined
@@ -174,7 +181,8 @@
 				{prospect.outreachCount}
 				{prospect.outreachCount === 1 ? 'try' : 'tries'} so far{prospect.lastTouchAt
 					? `, last ${onDay(prospect.lastTouchAt)}`
-					: ''}. Logging a message sets this for you: 4 days after the first, 7 after the second.
+					: ''}. Logging a message sets this for you: 4 days after the first, 7 after the second; a
+				visit's or call's come-back time instead.
 			</span>
 		</div>
 

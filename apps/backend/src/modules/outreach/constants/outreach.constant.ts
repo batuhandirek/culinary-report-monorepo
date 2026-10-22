@@ -24,12 +24,27 @@ export enum OutreachTouchKindEnum {
 	STAGE = 'STAGE',
 }
 
+/** What a visit or a call came to. The stage stays the salesperson's move. */
+export enum OutreachTouchOutcomeEnum {
+	SPOKE_TO_OWNER = 'spoke_to_owner',
+	SPOKE_TO_STAFF = 'spoke_to_staff',
+	// Shut when we came, or nobody picked up
+	CLOSED = 'closed',
+	NOBODY = 'nobody',
+}
+
 /** The kinds that are us reaching out. */
 export const OUTGOING_TOUCH_KINDS: OutreachTouchKindEnum[] = [
 	OutreachTouchKindEnum.EMAIL,
 	OutreachTouchKindEnum.DM,
 	OutreachTouchKindEnum.CALL,
 	OutreachTouchKindEnum.VISIT,
+];
+
+/** The kinds that happen in person or on the phone: the only ones with an outcome, a come-back time and consent. */
+export const IN_PERSON_TOUCH_KINDS: OutreachTouchKindEnum[] = [
+	OutreachTouchKindEnum.VISIT,
+	OutreachTouchKindEnum.CALL,
 ];
 
 /** The stages that end the conversation, so no follow-up is due. */

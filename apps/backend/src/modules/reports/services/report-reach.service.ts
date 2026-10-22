@@ -2,6 +2,8 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
 
+import _ from 'lodash';
+
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
@@ -28,29 +30,32 @@ export class ReportReachService {
 	) {}
 
 	/**
-	 * The sections this venue has data for (the absent ones left out). Also splits
-	 * `data.reviews` by platform and marks the appendix's TripAdvisor reviews, in place.
+	 * The brand's sections over `branches` (the absent ones left out): its own accounts, the
+	 * comments under its top posts, its press. Also splits `data.reviews` by platform and marks
+	 * the appendix's TripAdvisor reviews, in place.
 	 */
 	async sections(
-		venue: Venue,
+		branches: Venue[],
 		month: string,
 		data: Pick<ReportData, 'posts' | 'reviews'>,
 		// The report's city; null across all the brand's cities
-		city: Pick<City, 'id'> | null = venue.city,
+		city: Pick<City, 'id'> | null,
 	): Promise<Pick<ReportData, 'ownAccounts' | 'comments' | 'press'>> {
 		const cityId = city?.id ?? null;
+		const brandId = branches[0].brand.id;
 		const accounts = ownAccountsSection(
-			await this.ownAccountService.forReport(venue.brand.id, cityId, month),
+			await this.ownAccountService.forReport(brandId, cityId, month),
 			data.posts,
 		);
-		const comments = summarizeComments(
-			await this.postCommentService.forReport(venue.brand.id, cityId, month),
-		);
-		const press = pressSection(await this.webMentionService.forReport(venue.id, month));
+		const comments = summarizeComments(await this.postCommentService.forReport(brandId, cityId, month));
+		const press = pressSection(await this.webMentionService.forReport(brandId, cityId, month));
 
 		const { start, end } = monthRange(month);
-		const reviews = await this.em.find(Review, { venue, publishedAt: { $gte: start, $lt: end } });
-		const platforms = reviewPlatforms(reviews, venue);
+		const reviews = await this.em.find(Review, {
+			venue: { $in: branches.map(b => b.id) },
+			publishedAt: { $gte: start, $lt: end },
+		});
+		const platforms = reviewPlatforms(reviews, brandRatings(branches));
 		if (platforms) Object.assign(data.reviews, platforms);
 		const tripadvisorIds = new Set(
 			reviews.filter(r => r.platform === ReviewPlatformEnum.TRIPADVISOR).map(r => r.reviewId),
@@ -65,3 +70,27 @@ export class ReportReachService {
 		};
 	}
 }
+
+const weighted = (pairs: [number | null | undefined, number | null | undefined][]) => {
+	const known = pairs.filter((p): p is [number, number] => p[0] != null && p[1] != null && p[1] > 0);
+	const count = _.sumBy(known, p => p[1]);
+	return count ? { rating: Math.round((_.sumBy(known, p => p[0] * p[1]) / count) * 10) / 10, count } : null;
+};
+
+/**
+ * The brand's all-time ratings on Google and TripAdvisor: a one-branch brand's own, a chain's
+ * as all its branches' stars over all their reviews (what one rating over every review would be).
+ */
+export const brandRatings = (
+	branches: Pick<Venue, 'rating' | 'reviewsCount' | 'tripadvisorRating' | 'tripadvisorReviewsCount'>[],
+) => {
+	if (branches.length === 1) return branches[0];
+	const google = weighted(branches.map(b => [b.rating, b.reviewsCount]));
+	const tripadvisor = weighted(branches.map(b => [b.tripadvisorRating, b.tripadvisorReviewsCount]));
+	return {
+		rating: google?.rating,
+		reviewsCount: google?.count,
+		tripadvisorRating: tripadvisor?.rating,
+		tripadvisorReviewsCount: tripadvisor?.count,
+	};
+};

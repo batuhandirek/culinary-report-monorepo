@@ -7,8 +7,10 @@ import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import {
 	CLOSED_STAGES,
 	FOLLOW_UP_DAYS,
+	IN_PERSON_TOUCH_KINDS,
 	OUTGOING_TOUCH_KINDS,
 	OutreachTouchKindEnum,
+	type OutreachTouchOutcomeEnum,
 	type ProspectLanguage,
 	ProspectStageEnum,
 } from '../constants/outreach.constant.js';
@@ -30,6 +32,8 @@ export interface ProspectDetails {
 export interface ProspectPatch extends ProspectDetails {
 	stage?: ProspectStageEnum;
 	nextFollowUpAt?: Date | null;
+	/** When they said we may e-mail them; `null` takes it back. */
+	emailConsentAt?: Date | null;
 }
 
 export interface OutreachTouchInput {
@@ -41,6 +45,12 @@ export interface OutreachTouchInput {
 	template?: string;
 	/** The next follow-up: a date, `null` for none, absent for the usual gap. */
 	followUpAt?: Date | null;
+	/** VISIT or CALL only: who we got hold of. */
+	outcome?: OutreachTouchOutcomeEnum;
+	/** VISIT or CALL only: when to come back; it becomes the follow-up, over `followUpAt` and the usual gap. */
+	comeBackAt?: Date;
+	/** VISIT or CALL only: they said we may e-mail them; stamps the prospect's `emailConsentAt`. */
+	emailConsent?: boolean;
 }
 
 export interface OutreachSummary {
@@ -130,8 +140,9 @@ export class OutreachService {
 	/** Changes what we know about a prospect, its stage and its follow-up. Flushes. */
 	async update(id: string, patch: ProspectPatch): Promise<Prospect> {
 		const prospect = await this.em.findOneOrFail(Prospect, { id }, { populate: ['brand'] });
-		const { stage, nextFollowUpAt, ...details } = patch;
+		const { stage, nextFollowUpAt, emailConsentAt, ...details } = patch;
 		this.assignDetails(prospect, details);
+		if (emailConsentAt !== undefined) prospect.emailConsentAt = emailConsentAt;
 		if (stage && stage !== prospect.stage) {
 			prospect.stage = stage;
 			if (CLOSED_STAGES.includes(stage)) prospect.nextFollowUpAt = null;
@@ -157,6 +168,12 @@ export class OutreachService {
 			throw new BadRequestException(
 				`${prospect.brand.name} asked not to be contacted again`,
 			);
+		// Only a visit or a call has someone at the other end to record
+		const inPerson = IN_PERSON_TOUCH_KINDS.includes(input.kind);
+		if (!inPerson && (input.outcome || input.comeBackAt || input.emailConsent))
+			throw new BadRequestException(
+				'An outcome, a come-back time and consent belong to a visit or a call',
+			);
 
 		const at = input.at ?? new Date();
 		const touch = this.em.create(OutreachTouch, {
@@ -166,14 +183,20 @@ export class OutreachService {
 			subject: clean(input.subject),
 			body: clean(input.body),
 			template: clean(input.template),
+			outcome: input.outcome ?? null,
+			comeBackAt: input.comeBackAt ?? null,
+			emailConsent: !!input.emailConsent,
 		});
+		if (input.emailConsent) prospect.emailConsentAt = at;
 
 		if (outgoing) {
 			prospect.outreachCount += 1;
 			if (prospect.stage === ProspectStageEnum.TO_CONTACT)
 				prospect.stage = ProspectStageEnum.CONTACTED;
-			// The follow-up sequence runs only while we wait for a first answer
-			if (input.followUpAt !== undefined) this.setFollowUp(prospect, input.followUpAt);
+			// "Come back on Tuesday" is the follow-up, whatever the sequence says; otherwise the
+			// sequence runs only while we wait for a first answer
+			if (input.comeBackAt) this.setFollowUp(prospect, input.comeBackAt);
+			else if (input.followUpAt !== undefined) this.setFollowUp(prospect, input.followUpAt);
 			else if (prospect.stage === ProspectStageEnum.CONTACTED)
 				prospect.nextFollowUpAt = followUpAfter(at, prospect.outreachCount);
 		} else if (input.kind === OutreachTouchKindEnum.REPLY) {

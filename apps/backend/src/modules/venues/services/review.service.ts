@@ -14,6 +14,7 @@ import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import type { FeedbackTopic } from '../interfaces/feedback.interface.js';
 import { ReviewAlertEvent } from '../persisted-events/review-alert.persisted-event.js';
+import { withTopics } from '../util/feedback.js';
 import { monthRange } from '../util/month.js';
 
 import { VenueService } from './venue.service.js';
@@ -95,6 +96,9 @@ export class ReviewService {
 	 * Every item repeats its place's all-time rating and review count, so each venue with at
 	 * least one item gets today's `VenueSnapshot` for free: the report's rating trend. A venue
 	 * with no review since the month began returns no item and gets none.
+	 *
+	 * The places go to the actor in `venueIds`' order, so when the cap stops a run the first
+	 * ones are the ones covered.
 	 */
 	async scrapeMonth(
 		month: string,
@@ -132,6 +136,22 @@ export class ReviewService {
 		});
 	}
 
+	/**
+	 * Of these venues, the ones with a Google review stored from before `month`: a venue without
+	 * one has no history yet (never in a month scrape, or only in the weekly watch's last days),
+	 * and the monthly `SCRAPE_REVIEWS` starts it months earlier. TripAdvisor rows don't count.
+	 */
+	async venuesWithHistory(venueIds: string[], month: string): Promise<Set<string>> {
+		if (venueIds.length === 0) return new Set();
+		const rows = await this.em.getConnection().execute<{ venue_id: string }[]>(
+			`select distinct venue_id from reviews
+			where platform = '${ReviewPlatformEnum.GOOGLE}' and published_at < ?
+				and venue_id in (${venueIds.map(() => '?').join(', ')})`,
+			[monthRange(month).start, ...venueIds],
+		);
+		return new Set(rows.map(r => r.venue_id));
+	}
+
 	private async scrape(
 		venueIds: string[],
 		opts: {
@@ -142,7 +162,8 @@ export class ReviewService {
 			now: Date;
 		},
 	): Promise<number> {
-		const venues = await this.em.find(Venue, { id: { $in: venueIds } });
+		const order = new Map(venueIds.map((id, i) => [id, i]));
+		const venues = _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v => order.get(v.id));
 		if (venues.length === 0) return 0;
 		const byPlaceId = new Map(venues.map(v => [v.placeId, v]));
 
@@ -247,8 +268,8 @@ export class ReviewService {
 						const review = byId.get(result.reviewId);
 						if (!review) continue;
 						review.sentiment = result.sentiment;
-						review.praise = result.praise;
-						review.complaints = result.complaints;
+						review.praise = withTopics(result.praise);
+						review.complaints = withTopics(result.complaints);
 						review.dishes = result.dishes;
 						review.changes = result.changes;
 						review.analysedAt = new Date();

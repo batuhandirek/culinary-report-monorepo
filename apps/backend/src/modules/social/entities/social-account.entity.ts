@@ -31,7 +31,9 @@ export enum AccountBrandSourceEnum {
  */
 @Entity({ tableName: 'social_accounts' })
 @Unique({ properties: ['platform', 'handle'] })
-export class SocialAccount extends MikroOrmEntityAbstractClass<'rejectedBrandIds' | 'posts' | 'snapshots' | 'creator'> {
+export class SocialAccount extends MikroOrmEntityAbstractClass<
+	'rejectedBrandIds' | 'posts' | 'snapshots' | 'creator'
+> {
 	@Enum({ items: () => SocialPlatformEnum, nativeEnumName: 'social_platform' })
 	platform: SocialPlatformEnum;
 
@@ -66,7 +68,11 @@ export class SocialAccount extends MikroOrmEntityAbstractClass<'rejectedBrandIds
 	@ManyToOne({ entity: () => Venue, nullable: true, deleteRule: 'set null' })
 	branch?: Rel<Venue> | null;
 
-	@Enum({ items: () => AccountBrandSourceEnum, nativeEnumName: 'account_brand_source', nullable: true })
+	@Enum({
+		items: () => AccountBrandSourceEnum,
+		nativeEnumName: 'account_brand_source',
+		nullable: true,
+	})
 	brandSource?: AccountBrandSourceEnum | null;
 
 	// The matcher's likely brand, for an admin to confirm or reject; null once decided

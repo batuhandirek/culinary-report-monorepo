@@ -7,9 +7,16 @@ import _ from 'lodash';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 
-import { LEAD_NEW_PLACE_MONTHS } from '../constants/lead-score.constant.js';
-import { VenueStatusChangeKindEnum } from '../constants/venue-status.constant.js';
+import {
+	LEAD_NEW_PLACE_MAX_REVIEWS,
+	LEAD_NEW_PLACE_MONTHS,
+} from '../constants/lead-score.constant.js';
+import {
+	VenueScrapeSourceEnum,
+	VenueStatusChangeKindEnum,
+} from '../constants/venue-status.constant.js';
 import { Venue } from '../entities/venue.entity.js';
+import { monthRange } from '../util/month.js';
 import {
 	countStatusChanges,
 	groupStatusChanges,
@@ -28,14 +35,26 @@ export interface VenueStatusSummary {
 	byDistrict: VenueStatusGroup[];
 	/** By the venue's main food topic (`VenueFoodTopicService.tags`), else its Google category */
 	byCategory: VenueStatusGroup[];
-	/** Newest first */
+	/** Newest first; an opening a post flagged carries the source `posts` */
 	changes: VenueStatusChangeRow[];
 }
 
+interface ChangeRow {
+	venue_id: string;
+	name: string;
+	district: string | null;
+	category: string | null;
+	street: string | null;
+	at: Date;
+}
+
 /**
- * Reads the venues' openings and closures (`VenueStatusChange`, written only by
- * `VenueService.saveGooglePlace`): the trends panel, the report's neighbourhood line, the
- * "new venues" filter and the lead score's new-place bonus.
+ * Reads the venues' openings and closures: the `VenueStatusChange` rows a Google Maps scrape
+ * wrote (only `VenueService.saveGooglePlace` does) and, as openings with the source `posts`, the
+ * venues a matched mention said had just opened (`Mention.isNewOpening`): the post's day, the
+ * venue open and under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews, no row written. The trends panel,
+ * the report's neighbourhood line, the "new venues" filter and the lead score's new-place bonus
+ * read it.
  */
 @Injectable()
 export class VenueStatusChangeService {
@@ -45,10 +64,14 @@ export class VenueStatusChangeService {
 		private readonly venueFoodTopicService: VenueFoodTopicService,
 	) {}
 
-	/** The city's changes in the three months ending with `month`, by district and by food. */
+	/**
+	 * The city's changes in the three months ending with `month`, by district and by food. The
+	 * scrapes' window is shifted a week (`quarterWindow`); the posts' is the calendar months, since
+	 * a post is dated the day it was made. A venue a scrape saw open in the window is listed once.
+	 */
 	async quarter(cityId: string, month: string): Promise<VenueStatusSummary> {
-		const { from, start, end } = quarterWindow(month);
-		const changes = await this.rows('v.city_id = ?', [cityId], start, end);
+		const { from } = quarterWindow(month);
+		const changes = await this.window('v.city_id = ?', [cityId], month);
 		const index = await this.foodTopicService.index();
 		const venues =
 			changes.length ?
@@ -69,32 +92,70 @@ export class VenueStatusChangeService {
 		};
 	}
 
-	/** Changes of the other venues in a district of the city over the window, newest first. */
+	/**
+	 * The other venues' changes in a district of the city over the three months ending with
+	 * `month`, newest first (the report's neighbourhood line): the scrapes' rows and the openings a
+	 * post flagged, on the same windows and rules as `quarter`, a venue a scrape saw open listed once.
+	 */
 	async inDistrict(
 		cityId: string,
 		district: string,
 		exceptVenueId: string,
-		from: Date,
-		to: Date,
+		month: string,
 	): Promise<VenueStatusChangeRow[]> {
-		return this.rows(
+		return this.window(
 			'v.city_id = ? and v.district = ? and v.id <> ?',
 			[cityId, district, exceptVenueId],
-			from,
-			to,
+			month,
 		);
 	}
 
-	/** Venues of the city (or every city) that opened in the last `LEAD_NEW_PLACE_MONTHS` months. */
+	/**
+	 * Venues of the city (or every city) that are new: an `opened` change, or a post flagging them
+	 * as just opened (open, under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews), in the last
+	 * `LEAD_NEW_PLACE_MONTHS` months.
+	 */
 	async newVenueIds(cityId?: string, now = new Date()): Promise<string[]> {
 		const since = new Date(now);
 		since.setUTCMonth(since.getUTCMonth() - LEAD_NEW_PLACE_MONTHS);
-		const rows: { venue_id: string }[] = await this.em.getConnection().execute(
+		const opened: { venue_id: string }[] = await this.em.getConnection().execute(
 			`select distinct s.venue_id from venue_status_changes s join venues v on v.id = s.venue_id
 				where s.kind = ? and s.at >= ?${cityId ? ' and v.city_id = ?' : ''}`,
 			[VenueStatusChangeKindEnum.OPENED, since, ...(cityId ? [cityId] : [])],
 		);
-		return rows.map(r => r.venue_id);
+		const flagged = await this.postOpenings(
+			cityId ? 'v.city_id = ?' : 'true',
+			cityId ? [cityId] : [],
+			since,
+		);
+		return _.uniq([...opened.map(r => r.venue_id), ...flagged.map(r => r.venueId)]);
+	}
+
+	/**
+	 * Scrape rows over `quarterWindow(month)` and post-flagged openings over its calendar months,
+	 * newest first; a venue with an `opened` row in the window is not listed again from posts.
+	 */
+	private async window(
+		where: string,
+		params: unknown[],
+		month: string,
+	): Promise<VenueStatusChangeRow[]> {
+		const { from, start, end } = quarterWindow(month);
+		const scraped = await this.rows(where, params, start, end);
+		const flagged = await this.postOpenings(
+			where,
+			params,
+			monthRange(from).start,
+			monthRange(month).end,
+		);
+		const opened = new Set(
+			scraped.filter(c => c.kind === VenueStatusChangeKindEnum.OPENED).map(c => c.venueId),
+		);
+		return _.orderBy(
+			[...scraped, ...flagged.filter(c => !opened.has(c.venueId))],
+			[c => c.at.getTime(), c => c.name],
+			['desc', 'asc'],
+		);
 	}
 
 	private async rows(
@@ -103,29 +164,54 @@ export class VenueStatusChangeService {
 		from: Date,
 		to: Date,
 	): Promise<VenueStatusChangeRow[]> {
-		const rows: {
-			venue_id: string;
-			name: string;
-			district: string | null;
-			category: string | null;
-			street: string | null;
+		const rows: (ChangeRow & {
 			kind: VenueStatusChangeKindEnum;
-			at: Date;
-		}[] = await this.em.getConnection().execute(
-			`select s.venue_id, v.name, v.district, v.category, v.street, s.kind, s.at
+			source: VenueScrapeSourceEnum;
+		})[] = await this.em.getConnection().execute(
+			`select s.venue_id, v.name, v.district, v.category, v.street, s.kind, s.at, s.source
 				from venue_status_changes s join venues v on v.id = s.venue_id
 				where ${where} and s.at >= ? and s.at < ? and v.deleted_at is null
 				order by s.at desc, v.name`,
 			[...params, from, to],
 		);
+		return rows.map(r => ({ ...this.row(r), kind: r.kind, source: r.source }));
+	}
+
+	/**
+	 * Open venues under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews that a matched mention flagged as a
+	 * new opening in a post of the window (`to` open-ended when absent), dated the first such post,
+	 * newest first.
+	 */
+	private async postOpenings(
+		where: string,
+		params: unknown[],
+		from: Date,
+		to?: Date,
+	): Promise<VenueStatusChangeRow[]> {
+		const rows: ChangeRow[] = await this.em.getConnection().execute(
+			`select m.venue_id, v.name, v.district, v.category, v.street, min(p.posted_at) as at
+				from mentions m join social_posts p on p.id = m.post_id join venues v on v.id = m.venue_id
+				where m.is_new_opening and ${where} and p.posted_at >= ?${to ? ' and p.posted_at < ?' : ''}
+					and v.deleted_at is null and not v.closed and coalesce(v.reviews_count, 0) < ?
+				group by m.venue_id, v.name, v.district, v.category, v.street
+				order by min(p.posted_at) desc, v.name`,
+			[...params, from, ...(to ? [to] : []), LEAD_NEW_PLACE_MAX_REVIEWS],
+		);
 		return rows.map(r => ({
+			...this.row(r),
+			kind: VenueStatusChangeKindEnum.OPENED,
+			source: 'posts' as const,
+		}));
+	}
+
+	private row(r: ChangeRow): Omit<VenueStatusChangeRow, 'kind' | 'source'> {
+		return {
 			venueId: r.venue_id,
 			name: r.name,
 			district: r.district ?? undefined,
 			category: r.category ?? undefined,
 			street: r.street ?? undefined,
-			kind: r.kind,
 			at: new Date(r.at),
-		}));
+		};
 	}
 }

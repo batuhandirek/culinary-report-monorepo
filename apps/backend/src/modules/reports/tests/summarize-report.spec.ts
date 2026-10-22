@@ -2,6 +2,7 @@ import { describe, expect, it } from '@jest/globals';
 
 import {
 	compareMonths,
+	dishKey,
 	excerpt,
 	ratingTrend,
 	selectNearbyCreators,
@@ -42,7 +43,7 @@ const review = (overrides: Partial<SummaryReview>): SummaryReview => ({
 	...overrides,
 });
 
-const VENUE = { id: 'v1', name: 'Chén Chè', district: 'Mitte', ratingTrend: [] };
+const VENUE = { id: 'v1', name: 'Chén Chè', district: 'Mitte' };
 
 describe('summarizeReport', () => {
 	it("keeps the venue's own posts out of the word-of-mouth numbers", () => {
@@ -54,7 +55,6 @@ describe('summarizeReport', () => {
 				mention({ postId: 'own', author: 'chenche_berlin.0', views: 1000, own: true }),
 			],
 			reviews: [],
-			neighbours: [],
 		});
 		expect(data.social.postCount).toBe(1);
 		expect(data.social.views).toBe(4600);
@@ -67,7 +67,6 @@ describe('summarizeReport', () => {
 			month: '2026-09',
 			mentions: [mention({}), mention({ praise: [{ topic: 'vibe', detail: 'cosy' }] })],
 			reviews: [],
-			neighbours: [],
 		});
 		expect(data.social.postCount).toBe(1);
 		expect(data.social.praise).toEqual({ food: 1, vibe: 1 });
@@ -87,7 +86,6 @@ describe('summarizeReport', () => {
 				}),
 				review({ stars: 4, text: null }),
 			],
-			neighbours: [],
 		});
 		expect(data.reviews.count).toBe(3);
 		expect(data.reviews.avgStars).toBe(3.3);
@@ -120,7 +118,6 @@ describe('summarizeReport', () => {
 				review({ stars: 5, text: 'Great meat', praise: [{ topic: 'food', detail: 'juicy meat' }] }),
 				review({ stars: 5, text: null }),
 			],
-			neighbours: [],
 		});
 		expect(data.reviews.complaints).toEqual({ service: 2 });
 		expect(data.reviews.written).toBe(3);
@@ -138,7 +135,6 @@ describe('summarizeReport', () => {
 			month: '2026-09',
 			mentions: [mention({})],
 			reviews: [review({ stars: 2, dishes: [{ name: 'half chicken', sentiment: 'negative' }] })],
-			neighbours: [],
 		});
 		expect(data.dishes[0]).toEqual({
 			name: 'Half chicken',
@@ -148,9 +144,41 @@ describe('summarizeReport', () => {
 		});
 	});
 
+	it('folds English plurals per word, so "burgers" and "burger" are one dish', () => {
+		const data = summarizeReport({
+			venue: VENUE,
+			month: '2026-09',
+			mentions: [
+				mention({
+					dishes: [
+						{ name: 'Burgers', sentiment: 'positive' },
+						{ name: 'burger', sentiment: 'positive' },
+						{ name: 'Fries', sentiment: 'positive' },
+					],
+				}),
+			],
+			reviews: [
+				review({
+					dishes: [
+						{ name: 'burger', sentiment: 'negative' },
+						{ name: 'French fries', sentiment: 'positive' },
+					],
+				}),
+			],
+		});
+		expect(data.dishes.map(d => [d.name, d.count])).toEqual([
+			['Burgers', 2],
+			['Fries', 1],
+			['French fries', 1],
+		]);
+		expect(
+			['cookies', 'Cookie', 'fries', 'fry', 'kebabs', 'hummus', 'Glass', 'Ribs'].map(dishKey),
+		).toEqual(['cooky', 'cooky', 'fry', 'fry', 'kebab', 'hummus', 'glass', 'rib']);
+	});
+
 	it('cuts a competitor down to what a report compares, and passes competitors through', () => {
 		const competitorData = summarizeReport({
-			venue: { id: 'v2', name: 'Rüyam', rating: 4.8, ratingTrend: [] },
+			venue: { id: 'v2', name: 'Rüyam', rating: 4.8 },
 			month: '2026-09',
 			mentions: [mention({ views: 5000 })],
 			reviews: [
@@ -160,7 +188,6 @@ describe('summarizeReport', () => {
 					complaints: [{ topic: 'wait', detail: 'long queue' }],
 				}),
 			],
-			neighbours: [],
 		});
 		const competitor = summarizeCompetitor(competitorData, true);
 		expect(competitor).toMatchObject({
@@ -177,7 +204,6 @@ describe('summarizeReport', () => {
 			month: '2026-09',
 			mentions: [],
 			reviews: [],
-			neighbours: [],
 			competitors: [competitor],
 		});
 		expect(data.competitors.map(c => c.name)).toEqual(['Rüyam']);
@@ -208,7 +234,6 @@ describe('reviews.list', () => {
 				}),
 				review({ reviewId: 'mid', publishedAt: new Date('2026-09-10'), text: 'Nice' }),
 			],
-			neighbours: [],
 		});
 		expect(data.reviews.list.map(r => r.reviewId)).toEqual(['new', 'mid', 'old']);
 		const [newest, mid, old] = data.reviews.list;
@@ -245,7 +270,6 @@ describe('creators', () => {
 				mention({ postId: 'own', author: 'chenche_berlin', views: 5000, own: true }),
 			],
 			reviews: [],
-			neighbours: [],
 		});
 		expect(data.creators).toEqual([
 			expect.objectContaining({
@@ -295,7 +319,7 @@ describe('creators', () => {
 
 describe('previous month', () => {
 	const month = (mentions: SummaryMention[], reviews: SummaryReview[]) =>
-		summarizeReport({ venue: VENUE, month: '2026-08', mentions, reviews, neighbours: [] });
+		summarizeReport({ venue: VENUE, month: '2026-08', mentions, reviews });
 
 	it('is undefined when the month had neither posts nor reviews', () => {
 		expect(summarizePrevious(month([], []))).toBeUndefined();
@@ -329,10 +353,10 @@ describe('previous month', () => {
 				review({ stars: 4, ownerResponse: 'x' }),
 				review({ stars: 3 }),
 			],
-			neighbours: [],
 			previous,
 		});
 		const comparison = compareMonths(data)!;
+		expect(comparison.month).toBe('August 2026');
 		expect(comparison.socialMedia.views).toBe('from 1k to 2k (+1k, +100%)');
 		expect(comparison.socialMedia.postsByOthers).toBe('from 1 to 2 (+1, +100%)');
 		expect(comparison.googleReviews).toEqual({

@@ -11,3 +11,19 @@ export const downloadReportPdf = async (report: { id: string; month: string }, v
 	a.click();
 	URL.revokeObjectURL(url);
 };
+
+/** Downloads a report's A5 leave-behind (printed on the server like the report: a few seconds). */
+export const downloadLeaveBehindPdf = async (
+	report: { id: string; month: string },
+	venueName: string
+) => {
+	const blob = (await api.admin.getReportLeaveBehindPdf(report.id, {
+		format: 'blob'
+	})) as unknown as Blob;
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = `${venueName} – ${monthLabel(report.month)} leave-behind.pdf`;
+	a.click();
+	URL.revokeObjectURL(url);
+};

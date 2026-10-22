@@ -106,12 +106,18 @@ describe('Report competitor and district demand (pglite)', () => {
 		await em.flush();
 	});
 
+	// What the report puts together for a place: its sections beside the competitors' signals
+	const sections = async (v: Venue, data: ReturnType<typeof input>) => ({
+		...(await service.placeSections(v, '2026-09', data)),
+		competitors: await service.competitorSignals(data.competitors, '2026-09'),
+	});
+
 	afterAll(async () => {
 		await harness.stop();
 	});
 
 	it('puts competitors’ booked-out shares and busyness, and the district and city medians, next to the venue’s', async () => {
-		const res = await service.sections(home, '2026-09', input(rivals));
+		const res = await sections(home, input(rivals));
 
 		expect(res.demand).toEqual({
 			platform: 'google',
@@ -134,13 +140,13 @@ describe('Report competitor and district demand (pglite)', () => {
 	});
 
 	it('leaves the district (and city) out below five venues', async () => {
-		const res = await service.sections(small, '2026-09', input([]));
+		const res = await sections(small, input([]));
 		expect(res.demand).toEqual({ platform: 'google', booked: 50, evenings: [{ date: '2026-09-25', booked: 50 }] });
 		expect(res.competitors).toEqual([]);
 	});
 
 	it('hands the prompt the comparison only when the venue, competitors and district all have figures', async () => {
-		const res = await service.sections(home, '2026-09', input(rivals));
+		const res = await sections(home, input(rivals));
 		const prompt = signalsPromptInput(res)!;
 		expect(prompt.weekendTables).toBe(
 			"Friday and Saturday evenings booked out: yours 87.5 %; your competitors' Rival A 50 %, Rival B 12.5 %; " +

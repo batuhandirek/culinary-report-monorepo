@@ -3,13 +3,17 @@ import { Entity, Enum, ManyToOne, Property } from '@mikro-orm/decorators/legacy'
 
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
-import { OutreachTouchKindEnum, ProspectStageEnum } from '../constants/outreach.constant.js';
+import {
+	OutreachTouchKindEnum,
+	OutreachTouchOutcomeEnum,
+	ProspectStageEnum,
+} from '../constants/outreach.constant.js';
 
 import { Prospect } from './prospect.entity.js';
 
-/** One entry in a prospect's log: an email we sent, their reply, a call, a note. */
+/** One entry in a prospect's log: an email we sent, their reply, a call, a visit, a note. */
 @Entity({ tableName: 'outreach_touches' })
-export class OutreachTouch extends MikroOrmEntityAbstractClass {
+export class OutreachTouch extends MikroOrmEntityAbstractClass<'emailConsent'> {
 	@ManyToOne({ entity: () => Prospect, deleteRule: 'cascade', index: true })
 	prospect: Rel<Prospect>;
 
@@ -34,4 +38,16 @@ export class OutreachTouch extends MikroOrmEntityAbstractClass {
 	// STAGE: the stage the prospect moved to
 	@Enum({ items: () => ProspectStageEnum, nullable: true })
 	stage?: ProspectStageEnum | null;
+
+	// VISIT or CALL: who we got hold of, if anyone
+	@Enum({ items: () => OutreachTouchOutcomeEnum, nativeEnumName: 'outreach_touch_outcome', nullable: true })
+	outcome?: OutreachTouchOutcomeEnum | null;
+
+	// VISIT or CALL: when to come back ("the owner is in on Tuesdays after 15:00"); becomes the follow-up
+	@Property({ type: 'datetime', nullable: true })
+	comeBackAt?: Date | null;
+
+	// VISIT or CALL: they said we may e-mail them (UWG §7); stamps `Prospect.emailConsentAt`
+	@Property({ type: 'boolean', default: false })
+	emailConsent: boolean = false;
 }

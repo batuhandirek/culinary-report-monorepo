@@ -1,5 +1,6 @@
 import {
 	OPENING_MAX_REVIEWS,
+	VenueScrapeSourceEnum,
 	VenueStatusChangeKindEnum,
 } from '../constants/venue-status.constant.js';
 import type { VenueDetails } from '../interfaces/venue-details.interface.js';
@@ -37,6 +38,12 @@ export const isOpening = (
 	reviewsCount: number | null | undefined,
 ): boolean => openings && state === 'open' && (reviewsCount ?? 0) < OPENING_MAX_REVIEWS;
 
+/**
+ * What saw a change: a Google Maps scrape (`VenueStatusChange.source`), or `posts` for an
+ * opening a matched mention flagged (`Mention.isNewOpening`), which has no row of its own.
+ */
+export type VenueStatusChangeSource = VenueScrapeSourceEnum | 'posts';
+
 /** A status change with its venue, as the trends panel and the report read it. */
 export interface VenueStatusChangeRow {
 	venueId: string;
@@ -45,7 +52,9 @@ export interface VenueStatusChangeRow {
 	category?: string;
 	street?: string;
 	kind: VenueStatusChangeKindEnum;
+	/** The scrape's day, or the post's for `posts`; never an opening date */
 	at: Date;
+	source: VenueStatusChangeSource;
 }
 
 /** Changes counted per kind. */

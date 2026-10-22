@@ -14,10 +14,12 @@
 		/** The picked competitors: their booked-out shares go under the venue's */
 		competitors?: ReportCompetitor[];
 		month: string;
+		/** The section's key in the report's numbering (one per branch) */
+		key?: string;
 		sectionHead: Snippet<[string, string, string]>;
 	}
 
-	let { busyness, demand, competitors = [], month, sectionHead }: Props = $props();
+	let { busyness, demand, competitors = [], month, key = 'busyness', sectionHead }: Props = $props();
 
 	const DAY_NAMES: Record<string, string> = {
 		Mo: 'Monday',
@@ -137,7 +139,7 @@
 
 {#if busyness || demand}
 	<section class="break-inside-avoid">
-		{@render sectionHead('busyness', 'Popular times and tables', 'Did the buzz fill the place?')}
+		{@render sectionHead(key, 'Popular times and tables', 'Did the buzz fill the place?')}
 
 		<div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
 			{#if busyness}

@@ -48,8 +48,23 @@
 	const month = $derived(param('month') ?? lastMonth());
 	const cityId = $derived(param('cityId') ?? cities[0]?.cityId);
 	const city = $derived(cities.find((c) => c.cityId === cityId) ?? cities[0]);
-	// The place a chain is shown as in the city: its most reviewed open branch
-	const described = $derived(city?.branches.find((b) => !b.closed) ?? city?.branches[0]);
+	// A one-place brand's place; a chain is shown as the brand, never as one of its branches
+	const place = $derived(chain ? undefined : (city?.branches.find((b) => !b.closed) ?? city?.branches[0]));
+	const cityOpen = $derived(city?.branches.filter((b) => !b.closed) ?? []);
+	const icon = $derived(cityOpen.find((b) => b.favicon)?.favicon ?? place?.favicon);
+	const category = $derived.by(() => {
+		const counts = new Map<string, number>();
+		for (const b of cityOpen) if (b.category) counts.set(b.category, (counts.get(b.category) ?? 0) + 1);
+		return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0] ?? place?.category;
+	});
+	// Stars over all the open places' Google reviews in the city: one place's own rating
+	const rating = $derived.by(() => {
+		const rated = (place ? [place] : cityOpen).filter((b) => b.rating != null && b.reviewsCount);
+		const count = rated.reduce((sum, b) => sum + b.reviewsCount!, 0);
+		return count
+			? { stars: rated.reduce((sum, b) => sum + b.rating! * b.reviewsCount!, 0) / count, count }
+			: undefined;
+	});
 	const setParam = (name: string, value: string | undefined) => {
 		const url = new URL(page.url.href);
 		if (value) url.searchParams.set(name, value);
@@ -131,10 +146,8 @@
 <AdminPageHeader title={brand.name}>
 	{#snippet aboveTitle()}
 		<span class="text-muted-foreground flex items-center gap-1.5 text-xs">
-			{#if described?.favicon}<VenueFavicon favicon={described.favicon} />{/if}
-			{chain ? `Chain · ${open.length} open places` : 'Brand'}{described?.category
-				? ` · ${described.category}`
-				: ''}
+			{#if icon}<VenueFavicon favicon={icon} />{/if}
+			{chain ? `Chain · ${open.length} open places` : 'Brand'}{category ? ` · ${category}` : ''}
 		</span>
 	{/snippet}
 	{#snippet belowTitle()}
@@ -151,20 +164,20 @@
 				<Badge pill variant={leadScoreVariant(brand.leadScore)}
 					>Lead score {Math.round(brand.leadScore)}</Badge>
 			{/if}
-			{#if described?.rating}
+			{#if rating}
 				<span
-					>{described.rating.toFixed(1)} ★ · {described.reviewsCount ?? 0} reviews{chain
-						? ' (busiest place)'
+					>{rating.stars.toFixed(1)} ★ · {rating.count.toLocaleString('en')} reviews{chain
+						? ` over ${cityOpen.length} places`
 						: ''}</span>
 			{/if}
-			{#if !chain && described}
-				{#if described.street || described.district}
+			{#if place}
+				{#if place.street || place.district}
 					<span class="flex items-center gap-1">
 						<MapPin class="size-4 shrink-0" />
-						{[described.street, described.district].filter(Boolean).join(', ')}
+						{[place.street, place.district].filter(Boolean).join(', ')}
 					</span>
 				{/if}
-				<a href={`/admin/venues/${described.id}`} class="flex items-center gap-1 hover:underline">
+				<a href={`/admin/venues/${place.id}`} class="flex items-center gap-1 hover:underline">
 					<ExternalLink class="size-4" /> Place details
 				</a>
 			{:else if cities.length}
@@ -229,7 +242,7 @@
 				{summary}
 				failed={summaryLoader.failed}
 				onRetry={() => summaryLoader.reload()}
-				{described}
+				{place}
 				{sales}
 				{openTab}
 				onBuild={() => buildAction.execute()}
@@ -245,7 +258,7 @@
 				<BrandCompetitors brandId={brand.id} {cityId} />
 			{/if}
 		{:else if tab === 'signals'}
-			<BrandSignalsTab {brand} {described} />
+			<BrandSignalsTab {brand} {cityId} />
 		{:else if tab === 'reports'}
 			<BrandReportsTab {brand} {cityId} />
 		{:else if tab === 'sales'}

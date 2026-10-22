@@ -207,6 +207,34 @@ export enum AdminApifyRunOutputDtoStatusEnum {
 	FAILED = 'FAILED',
 }
 
+export interface AdminBackfillFeedbackThemesInputDto {
+	/**
+	 * Only the reviews of this city's venues and the mentions of its posts
+	 * @format uuid
+	 */
+	cityId?: string;
+	/**
+	 * At most this many reviews and this many mentions a run; 500 by default
+	 * @min 1
+	 * @max 5000
+	 */
+	limit?: number;
+}
+
+export interface AdminBackfillFeedbackThemesOutputDto {
+	/** Mentions whose points were filed this run */
+	mentions: number;
+	/** Points given a theme */
+	points: number;
+	/** Reviews and mentions still holding a point without a theme, in the same scope */
+	remaining: {
+		mentions: number;
+		reviews: number;
+	};
+	/** Reviews whose points were filed this run */
+	reviews: number;
+}
+
 export interface AdminBlogEntryAuthorOutputDto {
 	firstName: string;
 	id: string;
@@ -394,8 +422,12 @@ export enum AdminBrandRefOutputDtoReportScopeEnum {
 export interface AdminBrandRowOutputDto {
 	/** Open branches (in the city) */
 	branches: number;
+	/** The Google category most of them share */
+	category?: string;
 	/** The districts they are in */
 	districts: string[];
+	/** A website icon one of them has */
+	favicon?: ImageOutputDto;
 	id: string;
 	leadScore?: number;
 	/** What social media and Google reviews said about a brand in one month. */
@@ -413,6 +445,8 @@ export interface AdminBrandRowOutputDto {
 		nextFollowUpAt?: string;
 		stage: AdminBrandRowOutputDtoStageEnum;
 	};
+	/** Their all-time Google stars over all their reviews (one branch's own rating); absent when none is rated */
+	rating?: number;
 	/** The month's report (for the city, or across the brand's cities) */
 	report?: {
 		id: string;
@@ -421,8 +455,8 @@ export interface AdminBrandRowOutputDto {
 		/** @format date-time */
 		updatedAt: string;
 	};
-	/** The place a brand is shown as: its most reviewed open branch (in the city). */
-	venue?: AdminBrandRowVenueOutputDto;
+	/** Their Google reviews, all time */
+	reviewsCount?: number;
 }
 
 export enum AdminBrandRowOutputDtoStageEnum {
@@ -433,18 +467,6 @@ export enum AdminBrandRowOutputDtoStageEnum {
 	WON = 'WON',
 	LOST = 'LOST',
 	OPTED_OUT = 'OPTED_OUT',
-}
-
-/** The place a brand is shown as: its most reviewed open branch (in the city). */
-export interface AdminBrandRowVenueOutputDto {
-	category?: string;
-	district?: string;
-	favicon?: ImageOutputDto;
-	id: string;
-	name: string;
-	rating?: number;
-	reviewsCount?: number;
-	street?: string;
 }
 
 /** One month of a brand's figures, for the six-month strip. */
@@ -476,6 +498,8 @@ export enum AdminBrandSuggestionOutputDtoReasonEnum {
 	SameName = 'same name',
 	NamePrefix = 'name prefix',
 	SameWebsite = 'same website',
+	SameInstagram = 'same Instagram',
+	SameTikTok = 'same TikTok',
 }
 
 export interface AdminBrandSummaryOutputDto {
@@ -596,6 +620,13 @@ export interface AdminBrandVenuesInputDto {
 	venueIds: string[];
 }
 
+export interface AdminBuildCityHighlightInputDto {
+	/** @format uuid */
+	cityId: string;
+	/** @pattern ^[0-9]{4}-(0[1-9]|1[0-2])$ */
+	month: string;
+}
+
 export interface AdminBuildReportInputDto {
 	/** @format uuid */
 	brandId: string;
@@ -668,6 +699,41 @@ export enum AdminCityEventOutputDtoKindEnum {
 	Event = 'event',
 }
 
+export interface AdminCityHighlightMonthOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	month: string;
+	/** @format date-time */
+	publishedAt?: string;
+}
+
+/** A month as the admin page shows it: published or not. */
+export interface AdminCityHighlightOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	city: CityHighlightCityOutputDtoidstring;
+	/**
+	 * A city's month in public: what `CityHighlight.data` stores and the public page draws. Our own
+	 * counts only (posts, views, creators, shares): no Google rating, no review text, nothing from
+	 * OSM. Positive lists only. Optional fields are absent, never null (`serialize({ skipNull })`
+	 * drops a null inside the jsonb too).
+	 */
+	data: CityHighlightData;
+	id: string;
+	month: string;
+	/** @format date-time */
+	publishedAt?: string;
+	/** @format date-time */
+	updatedAt: string;
+}
+
+export interface AdminCityHighlightsOutputDto {
+	/** The asked month, when it was built */
+	highlight?: AdminCityHighlightOutputDto;
+	/** Every built month of the city, newest first */
+	months: AdminCityHighlightMonthOutputDto[];
+}
+
 export interface AdminCityListItemOutputDto {
 	active: boolean;
 	country: string;
@@ -695,6 +761,8 @@ export interface AdminCityOutputDto {
 	createdAt: string;
 	cronEnabled: boolean;
 	districts: CityDistrict[];
+	doNotListCreators: string[];
+	doNotListVenues: string[];
 	id: string;
 	instagramEnabled: boolean;
 	language: string;
@@ -703,6 +771,7 @@ export interface AdminCityOutputDto {
 	locationQuery: string;
 	name: string;
 	nameStopwords: string[];
+	osmRelationId?: number;
 	region?: string;
 	slug: string;
 	/** Make all properties in T optional */
@@ -847,6 +916,10 @@ export interface AdminCreateCityInputDto {
 	country: string;
 	cronEnabled?: boolean;
 	districts?: AdminCityDistrictInputDto[];
+	/** Creators who asked to be left out of public pages (handles, with or without */
+	doNotListCreators?: string[];
+	/** Venues who asked to be left out of public pages (names) */
+	doNotListVenues?: string[];
 	instagramEnabled?: boolean;
 	/**
 	 * ISO 639-1, e.g. de: the reports' and outreach's language
@@ -875,6 +948,11 @@ export interface AdminCreateCityInputDto {
 	 */
 	name: string;
 	nameStopwords?: string[];
+	/**
+	 * The city's boundary on OpenStreetMap, a relation id (Berlin: 62422): the OSM place checklist
+	 * @min 1
+	 */
+	osmRelationId?: number | null;
 	/**
 	 * ISO 3166-2 subdivision, e.g. DE-BE: regional holidays and the Google Trends region
 	 * @pattern ^[A-Z]{2}-[A-Z0-9]{1,3}$
@@ -1039,13 +1117,18 @@ export enum AdminDataCoverageOutputDtoStateEnum {
 export enum AdminDataCoverageOutputDtoStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
@@ -1112,20 +1195,25 @@ export enum AdminDataStepOutputDtoStateEnum {
 	Failed = 'failed',
 	Running = 'running',
 	Skipped = 'skipped',
-	Succeeded = 'succeeded',
 	Queued = 'queued',
+	Succeeded = 'succeeded',
 }
 
 export enum AdminDataStepOutputDtoStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
@@ -1261,6 +1349,51 @@ export interface AdminFoodTopicsOutputDto {
 	unmapped: AdminUnmappedCuisineOutputDto[];
 }
 
+export interface AdminFoodTrendsOutputDto {
+	/** What an anchored pull would compare and roughly cost */
+	pull: {
+		estimatedUsd: number;
+		groups: number;
+		topics: number;
+	};
+	/** Every stored quarter of the city, newest first */
+	quarters: AdminFoodTrendsQuarterOutputDto[];
+	/** The asked quarter, when anything is stored for it */
+	report?: AdminFoodTrendsReportOutputDto;
+}
+
+export interface AdminFoodTrendsQuarterInputDto {
+	/** @format uuid */
+	cityId: string;
+	/** @pattern ^[0-9]{4}-q[1-4]$ */
+	quarter: string;
+}
+
+export interface AdminFoodTrendsQuarterOutputDto {
+	/** @format date-time */
+	builtAt?: string;
+	/** @format date-time */
+	publishedAt?: string;
+	quarter: string;
+}
+
+/** A quarter as the admin page shows it: pulled, built, published or not. */
+export interface AdminFoodTrendsReportOutputDto {
+	/** @format date-time */
+	builtAt?: string;
+	city: FoodTrendsCityOutputDtoidstring;
+	/** Absent until built */
+	data?: FoodTrendsData;
+	id: string;
+	/** @format date-time */
+	publishedAt?: string;
+	quarter: string;
+	/** The anchored search pull's state; absent when none was asked for */
+	searchPull?: FoodTrendsSearchPull;
+	/** @format date-time */
+	updatedAt: string;
+}
+
 export interface AdminGetBrandSummaryInputDto {
 	/**
 	 * Figures in this city only; every city without
@@ -1272,6 +1405,13 @@ export interface AdminGetBrandSummaryInputDto {
 	 * @pattern ^[0-9]{4}-[0-9]{2}$
 	 */
 	month?: string;
+}
+
+export interface AdminGetCityHighlightsInputDto {
+	/** @format uuid */
+	cityId: string;
+	/** @pattern ^[0-9]{4}-(0[1-9]|1[0-2])$ */
+	month: string;
 }
 
 export interface AdminGetDataCoverageInputDto {
@@ -1290,9 +1430,28 @@ export interface AdminGetFoodTopicsInputDto {
 	cityId: string;
 }
 
+export interface AdminGetFoodTrendsInputDto {
+	/** @format uuid */
+	cityId: string;
+	/** @pattern ^[0-9]{4}-q[1-4]$ */
+	quarter: string;
+}
+
 export interface AdminGetSearchInterestInputDto {
 	/** @format uuid */
 	cityId: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	month: string;
+}
+
+export interface AdminGetThemeInsightsInputDto {
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * A food topic's key: only the brands whose food it is (most of their places' main food)
+	 * @maxLength 64
+	 */
+	food?: string;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month: string;
 }
@@ -1436,12 +1595,12 @@ export interface AdminListBlogEntriesInputDto {
 export enum AdminListBlogEntriesInputDtoSortEnum {
 	ViewCountASC = 'viewCount:ASC',
 	ViewCountDESC = 'viewCount:DESC',
+	PublishedAtASC = 'publishedAt:ASC',
+	PublishedAtDESC = 'publishedAt:DESC',
 	CreatedAtASC = 'createdAt:ASC',
 	CreatedAtDESC = 'createdAt:DESC',
 	TitleASC = 'title:ASC',
 	TitleDESC = 'title:DESC',
-	PublishedAtASC = 'publishedAt:ASC',
-	PublishedAtDESC = 'publishedAt:DESC',
 }
 
 export enum AdminListBlogEntriesInputDtoStatesEnum {
@@ -1982,11 +2141,20 @@ export interface AdminLogOutreachTouchInputDto {
 	/** @maxLength 20000 */
 	body?: string;
 	/**
+	 * VISIT or CALL only: when to come back; it becomes the follow-up, over `followUpAt`
+	 * @format date-time
+	 */
+	comeBackAt?: string;
+	/** VISIT or CALL only: they said we may e-mail them; sets the prospect's `emailConsentAt` */
+	emailConsent?: boolean;
+	/**
 	 * The next follow-up: a date, `null` for none, absent for the usual gap
 	 * @format date-time
 	 */
 	followUpAt?: string | null;
 	kind: AdminLogOutreachTouchInputDtoKindEnum;
+	/** VISIT or CALL only: who we got hold of */
+	outcome?: AdminLogOutreachTouchInputDtoOutcomeEnum;
 	/** @maxLength 500 */
 	subject?: string;
 	/**
@@ -2004,6 +2172,14 @@ export enum AdminLogOutreachTouchInputDtoKindEnum {
 	REPLY = 'REPLY',
 	NOTE = 'NOTE',
 	STAGE = 'STAGE',
+}
+
+/** VISIT or CALL only: who we got hold of */
+export enum AdminLogOutreachTouchInputDtoOutcomeEnum {
+	SpokeToOwner = 'spoke_to_owner',
+	SpokeToStaff = 'spoke_to_staff',
+	Closed = 'closed',
+	Nobody = 'nobody',
 }
 
 export interface AdminMatchAccountsInputDto {
@@ -2163,10 +2339,19 @@ export interface AdminOutreachTouchOutputDto {
 	/** @format date-time */
 	at: string;
 	body?: string;
+	/**
+	 * A visit's or call's: when they said to come back
+	 * @format date-time
+	 */
+	comeBackAt?: string;
 	/** @format date-time */
 	createdAt: string;
+	/** A visit's or call's: they said we may e-mail them */
+	emailConsent: boolean;
 	id: string;
 	kind: AdminOutreachTouchOutputDtoKindEnum;
+	/** A visit's or call's: who we got hold of */
+	outcome?: AdminOutreachTouchOutputDtoOutcomeEnum;
 	stage?: AdminOutreachTouchOutputDtoStageEnum;
 	subject?: string;
 	template?: string;
@@ -2180,6 +2365,14 @@ export enum AdminOutreachTouchOutputDtoKindEnum {
 	REPLY = 'REPLY',
 	NOTE = 'NOTE',
 	STAGE = 'STAGE',
+}
+
+/** A visit's or call's: who we got hold of */
+export enum AdminOutreachTouchOutputDtoOutcomeEnum {
+	SpokeToOwner = 'spoke_to_owner',
+	SpokeToStaff = 'spoke_to_staff',
+	Closed = 'closed',
+	Nobody = 'nobody',
 }
 
 export enum AdminOutreachTouchOutputDtoStageEnum {
@@ -2284,13 +2477,18 @@ export enum AdminPipelineRunOutputDtoNullableStatusEnum {
 export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
@@ -2319,13 +2517,18 @@ export enum AdminPipelineRunOutputDtoStatusEnum {
 export enum AdminPipelineRunOutputDtoStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
@@ -2444,6 +2647,11 @@ export interface AdminProspectListItemOutputDto {
 	contactName?: string;
 	/** @format date-time */
 	createdAt: string;
+	/**
+	 * When they said we may e-mail them (UWG §7); absent until a visit or call logged it
+	 * @format date-time
+	 */
+	emailConsentAt?: string;
 	hook?: string;
 	id: string;
 	instagram?: string;
@@ -2485,6 +2693,11 @@ export interface AdminProspectOutputDto {
 	contactName?: string;
 	/** @format date-time */
 	createdAt: string;
+	/**
+	 * When they said we may e-mail them (UWG §7); absent until a visit or call logged it
+	 * @format date-time
+	 */
+	emailConsentAt?: string;
 	hook?: string;
 	id: string;
 	instagram?: string;
@@ -2563,6 +2776,56 @@ export interface AdminProspectVenueOutputDto {
 	website?: string;
 }
 
+export interface AdminReflagOpeningsInputDto {
+	/**
+	 * Only posts extracted before this moment (before the flag existed)
+	 * @format date-time
+	 */
+	analysedBefore?: string;
+	/**
+	 * Only this city's posts
+	 * @format uuid
+	 */
+	cityId?: string;
+	/**
+	 * At most this many posts a call; 100 by default
+	 * @min 1
+	 * @max 500
+	 */
+	limit?: number;
+	/**
+	 * The month the posts were posted in, `YYYY-MM`
+	 * @pattern ^\d{4}-\d{2}$
+	 */
+	month: string;
+	/**
+	 * Skip this many posts of the scope, most viewed first: the previous call's `nextOffset`
+	 * @min 0
+	 */
+	offset?: number;
+}
+
+export interface AdminReflagOpeningsOutputDto {
+	/** Mentions that were flagged and the re-read cleared */
+	cleared: number;
+	/** Posts whose call failed (left as they were) */
+	failed: number;
+	/** Mentions set as a new opening this call */
+	flaggedMentions: number;
+	/** Posts holding at least one of them */
+	flaggedPosts: number;
+	/** The `offset` for the next call */
+	nextOffset: number;
+	/** Posts the agent read this call */
+	read: number;
+	/** Posts of the scope after `nextOffset` */
+	remaining: number;
+	/** Tokens the calls used */
+	tokens: number;
+	/** Stored mentions the agent's answer named no venue for (left as they were) */
+	unpaired: number;
+}
+
 export interface AdminReportListItemOutputDto {
 	/** The business it is on */
 	brand: {
@@ -2605,7 +2868,11 @@ export interface AdminReportOutputDto {
 	};
 	/** @format date-time */
 	createdAt: string;
-	/** Everything a monthly report shows, computed once when it is built. */
+	/**
+	 * Everything a monthly report shows, computed once when it is built. The brand's figures (posts,
+	 * reviews, dishes, creators, competitors, own accounts, comments, press, correlations) cover
+	 * every branch in `branches`; each place figure is in its branch's entry.
+	 */
 	data: ReportData;
 	highlights: ReportHighlights;
 	id: string;
@@ -2905,13 +3172,18 @@ export interface AdminStartPipelineRunInputDto {
 export enum AdminStartPipelineRunInputDtoStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
@@ -2972,6 +3244,166 @@ export interface AdminSuggestedProspectOutputDto {
 	website?: string;
 }
 
+export interface AdminThemeBrandOutputDto {
+	id: string;
+	name: string;
+	/** Its reviews and posts raising the theme */
+	sources: number;
+}
+
+export interface AdminThemeCoverageOutputDto {
+	postBrands: number;
+	/** Posts by others with any point about a matched venue */
+	posts: number;
+	/** The brands those reviews are of (reviews are scraped for report venues and their competitors) */
+	reviewBrands: number;
+	/** Written reviews of the month with any praise or complaint point */
+	reviews: number;
+	unfiledPosts: number;
+	/** Of those, the ones with a point not filed under a theme yet: counted under no theme */
+	unfiledReviews: number;
+}
+
+/** One kind of food in the month. */
+export interface AdminThemeFoodCoverageOutputDto {
+	brands: number;
+	key: string;
+	label: string;
+	/** Posts by others about its brands with any point */
+	posts: number;
+	/** Its brands' written reviews with any point */
+	reviews: number;
+}
+
+export interface AdminThemeFoodOutputDto {
+	key: string;
+	/** "Döner & kebab" */
+	label: string;
+	/** Of its brands' reviews and posts with any point this month, percent */
+	share: number;
+	/** Reviews and posts of its brands raising the theme */
+	sources: number;
+}
+
+/** One theme, praised or criticised, in the city and month. */
+export interface AdminThemeInsightRowOutputDto {
+	/** The three kinds of food it came up at most */
+	foods: AdminThemeFoodOutputDto[];
+	key: AdminThemeInsightRowOutputDtoKeyEnum;
+	/** "Price increase" */
+	label: string;
+	/** Of the month's posts by others with any point, percent */
+	postShare: number | null;
+	postShareChange: number | null;
+	/** Posts by others raising it */
+	posts: number;
+	/** Of the month's written reviews with any point, percent */
+	reviewShare: number | null;
+	/** Against the month before, in percentage points */
+	reviewShareChange: number | null;
+	/** Written reviews raising it */
+	reviews: number;
+	/** Up to five distinct details, newest first */
+	samples: string[];
+	/** The three it came up at most */
+	topBrands: AdminThemeBrandOutputDto[];
+	topic: AdminThemeInsightRowOutputDtoTopicEnum;
+	/** Brands it came up at */
+	venues: number;
+}
+
+export enum AdminThemeInsightRowOutputDtoKeyEnum {
+	Language = 'language',
+	Other = 'other',
+	Temperature = 'temperature',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
+	Taste = 'taste',
+	Freshness = 'freshness',
+	Cooking = 'cooking',
+	Seasoning = 'seasoning',
+	PortionSize = 'portion_size',
+	IngredientQuality = 'ingredient_quality',
+	MenuVariety = 'menu_variety',
+	Availability = 'availability',
+	QualityChange = 'quality_change',
+	Authenticity = 'authenticity',
+	Presentation = 'presentation',
+	FoodOther = 'food_other',
+	DrinkQuality = 'drink_quality',
+	DrinkSelection = 'drink_selection',
+	DrinksOther = 'drinks_other',
+	Friendliness = 'friendliness',
+	Attentiveness = 'attentiveness',
+	SpeedOfService = 'speed_of_service',
+	OrderAccuracy = 'order_accuracy',
+	Advice = 'advice',
+	ReservationHandling = 'reservation_handling',
+	ComplaintHandling = 'complaint_handling',
+	TakeawayHandling = 'takeaway_handling',
+	StaffChange = 'staff_change',
+	ServiceOther = 'service_other',
+	Atmosphere = 'atmosphere',
+	Noise = 'noise',
+	Space = 'space',
+	Interior = 'interior',
+	OutdoorSeating = 'outdoor_seating',
+	Crowding = 'crowding',
+	Location = 'location',
+	FamilyPets = 'family_pets',
+	VibeOther = 'vibe_other',
+	PriceLevel = 'price_level',
+	ValueForMoney = 'value_for_money',
+	PriceIncrease = 'price_increase',
+	ExtraCharges = 'extra_charges',
+	PriceOther = 'price_other',
+	CashOnly = 'cash_only',
+	CardPayment = 'card_payment',
+	Tipping = 'tipping',
+	Billing = 'billing',
+	PaymentOther = 'payment_other',
+	Queue = 'queue',
+	WaitForFood = 'wait_for_food',
+	WaitForTable = 'wait_for_table',
+	WaitOther = 'wait_other',
+	Toilets = 'toilets',
+	DiningArea = 'dining_area',
+	FoodHygiene = 'food_hygiene',
+	CleanlinessOther = 'cleanliness_other',
+	OpeningHours = 'opening_hours',
+	Accessibility = 'accessibility',
+	OwnershipChange = 'ownership_change',
+	Renovation = 'renovation',
+}
+
+export enum AdminThemeInsightRowOutputDtoTopicEnum {
+	Other = 'other',
+	Food = 'food',
+	Price = 'price',
+	Drinks = 'drinks',
+	Service = 'service',
+	Vibe = 'vibe',
+	Payment = 'payment',
+	Wait = 'wait',
+	Cleanliness = 'cleanliness',
+}
+
+export interface AdminThemeInsightsOutputDto {
+	complaints: AdminThemeInsightRowOutputDto[];
+	coverage: AdminThemeCoverageOutputDto;
+	/** The kind of food the counts are narrowed to, null for every brand */
+	food: {
+		key: string;
+		label: string;
+	} | null;
+	/** The month's kinds of food, the most reviews and posts first, whatever `food` is */
+	foods: AdminThemeFoodCoverageOutputDto[];
+	month: string;
+	praise: AdminThemeInsightRowOutputDto[];
+	/** The month the changes are against */
+	previous: string;
+}
+
 export interface AdminTodayOutputDto {
 	reportMonth: string;
 	todos: AdminTodoOutputDto[];
@@ -3003,6 +3435,11 @@ export interface AdminTopicInsightOutputDto {
 	aliases: string[];
 	children: AdminTopicInsightRowOutputDto[];
 	id: string;
+	/**
+	 * The month's delivery menus (scraped for report venues and their competitors only, so they
+	 * lean to those): `menus` venues have one; the rest is absent when none has the topic
+	 */
+	menu: AdminTopicMenuOutputDto;
 	months: string[];
 	parent?: {
 		key: string;
@@ -3056,6 +3493,24 @@ export interface AdminTopicInsightsOutputDto {
 	topics: AdminTopicInsightRowOutputDto[];
 }
 
+export interface AdminTopicMenuOutputDto {
+	p25?: number;
+	p75?: number;
+	/** Districts with 5+ such venues */
+	districts?: {
+		district: string;
+		median: number;
+		venues: number;
+	}[];
+	items?: number;
+	/** Median and quartiles of those venues' own median price for it */
+	median?: number;
+	/** Open venues of the city with a menu stored for the month */
+	menus: number;
+	/** Of those, the ones with the topic (or a child) on it */
+	venues?: number;
+}
+
 export interface AdminTopicVenueOutputDto {
 	category?: string;
 	district?: string;
@@ -3067,18 +3522,20 @@ export interface AdminTopicVenueOutputDto {
 	primary: boolean;
 	rating?: number;
 	reviewsCount?: number;
-	/** What gives the tag: its Google categories, its posts, or an admin */
+	/** What gives the tag: its Google categories, its posts, its menu, Google's review tags, or an admin */
 	source: AdminTopicVenueOutputDtoSourceEnum;
 	/** The tag that puts it under the topic: the topic's key or a child's */
 	viaKey: string;
 	viaLabel: string;
 }
 
-/** What gives the tag: its Google categories, its posts, or an admin */
+/** What gives the tag: its Google categories, its posts, its menu, Google's review tags, or an admin */
 export enum AdminTopicVenueOutputDtoSourceEnum {
 	Mentions = 'mentions',
 	Category = 'category',
 	Manual = 'manual',
+	Menu = 'menu',
+	Reviews = 'reviews',
 }
 
 export interface AdminTrendsLookupInputDto {
@@ -3197,6 +3654,10 @@ export interface AdminUpdateCityInputDto {
 	country?: string;
 	cronEnabled?: boolean;
 	districts?: AdminCityDistrictInputDto[];
+	/** Creators who asked to be left out of public pages (handles, with or without */
+	doNotListCreators?: string[];
+	/** Venues who asked to be left out of public pages (names) */
+	doNotListVenues?: string[];
 	instagramEnabled?: boolean;
 	/**
 	 * ISO 639-1, e.g. de: the reports' and outreach's language
@@ -3225,6 +3686,11 @@ export interface AdminUpdateCityInputDto {
 	 */
 	name?: string;
 	nameStopwords?: string[];
+	/**
+	 * The city's boundary on OpenStreetMap, a relation id (Berlin: 62422): the OSM place checklist
+	 * @min 1
+	 */
+	osmRelationId?: number | null;
 	/**
 	 * ISO 3166-2 subdivision, e.g. DE-BE: regional holidays and the Google Trends region
 	 * @pattern ^[A-Z]{2}-[A-Z0-9]{1,3}$
@@ -3321,6 +3787,11 @@ export interface AdminUpdateProspectInputDto {
 	contactEmail?: string | null;
 	/** @maxLength 200 */
 	contactName?: string | null;
+	/**
+	 * When they said we may e-mail them; `null` takes it back
+	 * @format date-time
+	 */
+	emailConsentAt?: string | null;
 	/** @maxLength 2000 */
 	hook?: string | null;
 	/**
@@ -3472,9 +3943,9 @@ export interface AdminVenueFoodTopicOutputDto {
 	label: string;
 	/** The one kind of food it is known for */
 	primary: boolean;
-	/** 1 for its main category or an admin's tag, 0.5 for another category, else its share of the posts */
+	/** 1 for its main category or an admin's tag, 0.5 for another category, else its share of the posts, menu items or review tags */
 	score: number;
-	/** What gives it: its Google categories, its posts, or an admin */
+	/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
 	source: AdminVenueFoodTopicOutputDtoSourceEnum;
 }
 
@@ -3487,11 +3958,13 @@ export enum AdminVenueFoodTopicOutputDtoKindEnum {
 	Meal = 'meal',
 }
 
-/** What gives it: its Google categories, its posts, or an admin */
+/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
 export enum AdminVenueFoodTopicOutputDtoSourceEnum {
 	Mentions = 'mentions',
 	Category = 'category',
 	Manual = 'manual',
+	Menu = 'menu',
+	Reviews = 'reviews',
 }
 
 export interface AdminVenueFoodTopicsOutputDto {
@@ -3614,7 +4087,7 @@ export interface AdminVenueStatusChangesOutputDto {
 	/** By the venue's main food topic (`VenueFoodTopicService.tags`), else its Google category */
 	byCategory: VenueStatusGroup[];
 	byDistrict: VenueStatusGroup[];
-	/** Newest first */
+	/** Newest first; an opening a post flagged carries the source `posts` */
 	changes: VenueStatusChangeRow[];
 	/** First and last month of the window, `YYYY-MM` */
 	from: string;
@@ -3622,6 +4095,8 @@ export interface AdminVenueStatusChangesOutputDto {
 	/** Changes counted per kind. */
 	totals: VenueStatusCounts;
 }
+
+export type BackfillFeedbackThemesData = AdminBackfillFeedbackThemesOutputDto;
 
 export interface BlogEntryAuthorOutputDto {
 	id: string;
@@ -3727,6 +4202,10 @@ export enum BrandMembershipOutputDtoRoleEnum {
 	STAFF = 'STAFF',
 }
 
+export type BuildCityHighlightData = AdminCityHighlightOutputDto;
+
+export type BuildFoodTrendsData = AdminFoodTrendsReportOutputDto;
+
 export type BuildReportData = AdminReportOutputDto;
 
 export interface BuzzToReviews {
@@ -3799,6 +4278,149 @@ export interface CityDistrict {
 	name: string;
 	neighbours: string[];
 	postalCodes: string[];
+}
+
+export interface CityHighlightBrand {
+	brandId: string;
+	category?: string;
+	creators: number;
+	/** Its most reviewed open branch's district and category, when known */
+	district?: string;
+	name: string;
+	posts: number;
+	rank: number;
+	views: number;
+}
+
+/** The city as the public page names it. */
+export interface CityHighlightCityOutputDto {
+	name: string;
+	slug: string;
+}
+
+export interface CityHighlightCityOutputDtoidstring {
+	id: string;
+	name: string;
+	slug: string;
+}
+
+export interface CityHighlightCreator {
+	/** How many of the city's places their posts named */
+	brands: number;
+	creatorId: string;
+	/** The handle their most viewed account goes by, without @ */
+	handle: string;
+	platform: CityHighlightCreatorPlatformEnum;
+	posts: number;
+	profileUrl: string;
+	views: number;
+}
+
+export enum CityHighlightCreatorPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+}
+
+/**
+ * A city's month in public: what `CityHighlight.data` stores and the public page draws. Our own
+ * counts only (posts, views, creators, shares): no Google rating, no review text, nothing from
+ * OSM. Positive lists only. Optional fields are absent, never null (`serialize({ skipNull })`
+ * drops a null inside the jsonb too).
+ */
+export interface CityHighlightData {
+	/** The ten brands most posted about by others, by posts then views */
+	brands: CityHighlightBrand[];
+	/** The creators whose posts about the city's places reached the most views */
+	creators: CityHighlightCreator[];
+	/** Dishes whose share of the posts and reviews naming a dish rose on the month before */
+	dishes: CityHighlightDish[];
+	/** The district most mentions named a branch in */
+	district?: CityHighlightDistrict;
+	/** The five fastest climbers in the top 50 by posts from others */
+	risers: CityHighlightRiser[];
+	/** The month's most viewed post by someone other than the brand */
+	topPost?: CityHighlightPost;
+	totals: CityHighlightTotals;
+}
+
+export interface CityHighlightDish {
+	count: number;
+	delta: number;
+	label: string;
+	/** Share of the posts and reviews naming a dish, in percent, and the change in points */
+	share: number;
+}
+
+export interface CityHighlightDistrict {
+	mentions: number;
+	name: string;
+	/** Its share of the month's mentions naming a branch, in percent */
+	share: number;
+}
+
+/** A published month of a city: what `/<city>/<month>` renders. */
+export interface CityHighlightOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	/** The city as the public page names it. */
+	city: CityHighlightCityOutputDto;
+	/**
+	 * A city's month in public: what `CityHighlight.data` stores and the public page draws. Our own
+	 * counts only (posts, views, creators, shares): no Google rating, no review text, nothing from
+	 * OSM. Positive lists only. Optional fields are absent, never null (`serialize({ skipNull })`
+	 * drops a null inside the jsonb too).
+	 */
+	data: CityHighlightData;
+	month: string;
+	/** @format date-time */
+	publishedAt: string;
+	/** @format date-time */
+	updatedAt: string;
+}
+
+export interface CityHighlightPost {
+	/** The places it names, as the brand list names them */
+	brands: {
+		brandId: string;
+		name: string;
+	}[];
+	/** The platform's official embed of it */
+	embedUrl: string;
+	/** The creator's handle, without @ */
+	handle: string;
+	platform: CityHighlightPostPlatformEnum;
+	postId: string;
+	postedAt: string;
+	/** The creator's profile */
+	profileUrl: string;
+	/** The original, as the platform shows it */
+	url: string;
+	views: number;
+}
+
+export enum CityHighlightPostPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+}
+
+export interface CityHighlightRiser {
+	brandId: string;
+	district?: string;
+	name: string;
+	posts: number;
+	prevPosts: number;
+	/** Absent when it was not in the previous month's top 50 */
+	prevRank?: number;
+	rank: number;
+}
+
+export interface CityHighlightTotals {
+	brands: number;
+	/** People, not accounts: one creator's TikTok and Instagram count once */
+	creators: number;
+	/** Posts by others naming a place of the city */
+	posts: number;
+	views: number;
 }
 
 /** A month's weather and calendar in the city (`MonthContext`). */
@@ -3987,19 +4609,88 @@ export enum FeedbackDishSentimentEnum {
 	Neutral = 'neutral',
 }
 
-/** One thing praised or criticised, e.g. `{ topic: 'service', detail: 'staff forgot our order' }`. */
+/**
+ * One thing praised or criticised, e.g. `{ topic: 'price', theme: 'price_increase', detail: 'prices went up' }`.
+ * The theme is what it is about (`FEEDBACK_THEMES`), the topic is the theme's. A point stored
+ * before themes existed has none until the backfill files it.
+ */
 export interface FeedbackPoint {
 	detail: string;
+	theme?: FeedbackPointThemeEnum;
 	topic: FeedbackPointTopicEnum;
+}
+
+export enum FeedbackPointThemeEnum {
+	Language = 'language',
+	Other = 'other',
+	Temperature = 'temperature',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
+	Taste = 'taste',
+	Freshness = 'freshness',
+	Cooking = 'cooking',
+	Seasoning = 'seasoning',
+	PortionSize = 'portion_size',
+	IngredientQuality = 'ingredient_quality',
+	MenuVariety = 'menu_variety',
+	Availability = 'availability',
+	QualityChange = 'quality_change',
+	Authenticity = 'authenticity',
+	Presentation = 'presentation',
+	FoodOther = 'food_other',
+	DrinkQuality = 'drink_quality',
+	DrinkSelection = 'drink_selection',
+	DrinksOther = 'drinks_other',
+	Friendliness = 'friendliness',
+	Attentiveness = 'attentiveness',
+	SpeedOfService = 'speed_of_service',
+	OrderAccuracy = 'order_accuracy',
+	Advice = 'advice',
+	ReservationHandling = 'reservation_handling',
+	ComplaintHandling = 'complaint_handling',
+	TakeawayHandling = 'takeaway_handling',
+	StaffChange = 'staff_change',
+	ServiceOther = 'service_other',
+	Atmosphere = 'atmosphere',
+	Noise = 'noise',
+	Space = 'space',
+	Interior = 'interior',
+	OutdoorSeating = 'outdoor_seating',
+	Crowding = 'crowding',
+	Location = 'location',
+	FamilyPets = 'family_pets',
+	VibeOther = 'vibe_other',
+	PriceLevel = 'price_level',
+	ValueForMoney = 'value_for_money',
+	PriceIncrease = 'price_increase',
+	ExtraCharges = 'extra_charges',
+	PriceOther = 'price_other',
+	CashOnly = 'cash_only',
+	CardPayment = 'card_payment',
+	Tipping = 'tipping',
+	Billing = 'billing',
+	PaymentOther = 'payment_other',
+	Queue = 'queue',
+	WaitForFood = 'wait_for_food',
+	WaitForTable = 'wait_for_table',
+	WaitOther = 'wait_other',
+	Toilets = 'toilets',
+	DiningArea = 'dining_area',
+	FoodHygiene = 'food_hygiene',
+	CleanlinessOther = 'cleanliness_other',
+	OpeningHours = 'opening_hours',
+	Accessibility = 'accessibility',
+	OwnershipChange = 'ownership_change',
+	Renovation = 'renovation',
 }
 
 export enum FeedbackPointTopicEnum {
 	Other = 'other',
 	Food = 'food',
+	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
-	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
@@ -4008,6 +4699,170 @@ export enum FeedbackPointTopicEnum {
 export type FillCityDaysData = AdminFillCityDaysOutputDto;
 
 export type FillCompetitorsData = AdminFillCompetitorsOutputDto;
+
+export interface FoodTrendsBreakout {
+	/** Rising past +5,000 % */
+	breakout?: boolean;
+	/** Growth against the twelve months before, percent; absent for a breakout */
+	growth?: number;
+	/** As Google lists it; may name a venue, Google's own words */
+	query: string;
+	/** The kind of food it was found under */
+	topic: string;
+}
+
+export interface FoodTrendsBreakouts {
+	/** The twelve months Google's rising queries cover, `YYYY-MM` */
+	from: string;
+	queries: FoodTrendsBreakout[];
+	to: string;
+}
+
+/** The city as the public page names it. */
+export interface FoodTrendsCityOutputDto {
+	name: string;
+	slug: string;
+}
+
+export interface FoodTrendsCityOutputDtoidstring {
+	id: string;
+	name: string;
+	slug: string;
+}
+
+/**
+ * A city's quarter of food trends in public: what `FoodTrendsReport.data` stores and the page
+ * `/<city>/trends/<YYYY>-q<N>` draws. Topics only: our own counts of posts, Google's public search
+ * figures, openings counted by kind of food; no venue figure, and no venue name except inside
+ * Google's own rising queries. Positive framing: rises only. Optional fields are absent, never
+ * null (`serialize({ skipNull })` drops a null inside the jsonb too).
+ */
+export interface FoodTrendsData {
+	/** Google's rising related queries; absent without a pull for the quarter's last month */
+	breakouts?: FoodTrendsBreakouts;
+	/** The quarter's three months, `YYYY-MM` */
+	months: string[];
+	/** Openings and closures by kind of food; absent when none was seen */
+	openings?: FoodTrendsOpenings;
+	/** Google searches on one scale across topics; absent until the anchored pull ran */
+	searches?: FoodTrendsSearches;
+	/** The kinds of food posts by others named most; absent below `MIN_QUARTER_MENTIONS` */
+	talked?: FoodTrendsTalked;
+}
+
+export interface FoodTrendsOpenings {
+	/** By the venue's kind of food (else its Google category), most openings first */
+	byTopic: {
+		closed: number;
+		label: string;
+		opened: number;
+	}[];
+	closed: number;
+	opened: number;
+}
+
+/** A published quarter of a city: what `/<city>/trends/<YYYY>-q<N>` renders. */
+export interface FoodTrendsReportOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	/** The city as the public page names it. */
+	city: FoodTrendsCityOutputDto;
+	/**
+	 * A city's quarter of food trends in public: what `FoodTrendsReport.data` stores and the page
+	 * `/<city>/trends/<YYYY>-q<N>` draws. Topics only: our own counts of posts, Google's public search
+	 * figures, openings counted by kind of food; no venue figure, and no venue name except inside
+	 * Google's own rising queries. Positive framing: rises only. Optional fields are absent, never
+	 * null (`serialize({ skipNull })` drops a null inside the jsonb too).
+	 */
+	data: FoodTrendsData;
+	/** @format date-time */
+	publishedAt: string;
+	quarter: string;
+	/** @format date-time */
+	updatedAt: string;
+}
+
+/** Where an anchored pull stands, for the admin page. */
+export interface FoodTrendsSearchPull {
+	finishedAt?: string;
+	/** What it fetched, or why it failed */
+	note?: string;
+	requestedAt: string;
+	state: FoodTrendsSearchPullStateEnum;
+}
+
+export enum FoodTrendsSearchPullStateEnum {
+	Failed = 'failed',
+	Done = 'done',
+	Running = 'running',
+	Queued = 'queued',
+}
+
+export interface FoodTrendsSearchTopic {
+	/** Present on the anchor's row */
+	anchor?: boolean;
+	/** `level / prevYearLevel - 1`: 0.4 = up 40 % */
+	change?: number;
+	key: string;
+	kind: FoodTrendsSearchTopicKindEnum;
+	label: string;
+	/** The quarter's mean search level, the anchor's two-year mean = 100 */
+	level: number;
+	/** The same quarter a year earlier, on the same scale */
+	prevYearLevel?: number;
+}
+
+export enum FoodTrendsSearchTopicKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+}
+
+export interface FoodTrendsSearches {
+	/** The topic every comparison carried (pizza): its two-year average is 100 */
+	anchor: {
+		key: string;
+		label: string;
+	};
+	/** First and last month of the pulled window */
+	from: string;
+	/** The Google Trends region */
+	geo: string;
+	/** The biggest rises on the same quarter a year earlier, positive only */
+	rising: FoodTrendsSearchTopic[];
+	to: string;
+	/** The quarter's most searched kinds of food, highest first */
+	top: FoodTrendsSearchTopic[];
+}
+
+export interface FoodTrendsTalked {
+	/** Mentions by others with a kind of food, in the quarter */
+	mentions: number;
+	topics: FoodTrendsTalkedTopic[];
+}
+
+export interface FoodTrendsTalkedTopic {
+	/** Points gained on the quarter before; absent when it fell or that quarter is too thin */
+	gain?: number;
+	key: string;
+	kind: FoodTrendsTalkedTopicKindEnum;
+	label: string;
+	mentions: number;
+	/** Share of the quarter's mentions with a kind of food naming it or a kind under it, percent */
+	share: number;
+}
+
+export enum FoodTrendsTalkedTopicKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+}
 
 export type ForgotPasswordData = VerificationTokenOutputDto;
 
@@ -4027,6 +4882,10 @@ export type GetBrandSummaryData = AdminBrandSummaryOutputDto;
 
 export type GetCityData = AdminCityOutputDto;
 
+export type GetCityHighlightData = CityHighlightOutputDto;
+
+export type GetCityHighlightsData = AdminCityHighlightsOutputDto;
+
 export type GetCityMonthContextData = CityMonthContextOutputDto;
 
 export type GetCreatorData = AdminCreatorOutputDto;
@@ -4040,6 +4899,10 @@ export type GetEntryData = BlogEntryOutputDto;
 export type GetEntryResult = AdminBlogEntryOutputDto;
 
 export type GetFoodTopicsData = AdminFoodTopicsOutputDto;
+
+export type GetFoodTrendsData = AdminFoodTrendsOutputDto;
+
+export type GetFoodTrendsReportData = FoodTrendsReportOutputDto;
 
 export type GetMeData = GetMeOutputDto;
 
@@ -4105,6 +4968,8 @@ export type GetProspectData = AdminProspectOutputDto;
 
 export type GetReportData = AdminReportOutputDto;
 
+export type GetReportLeaveBehindPdfData = any;
+
 export type GetReportPdfData = any;
 
 export type GetSearchInterestData = AdminSearchInterestOutputDto;
@@ -4116,6 +4981,8 @@ export type GetSharedReportData = SharedReportOutputDto;
 export type GetSharedReportPdfData = any;
 
 export type GetTagData = BlogTagOutputDto;
+
+export type GetThemeInsightsData = AdminThemeInsightsOutputDto;
 
 export type GetTopicInsightData = AdminTopicInsightOutputDto;
 
@@ -4338,12 +5205,12 @@ export type ListEntriesData = ListBlogEntriesOutputDto;
 export enum ListEntriesParams1SortEnum {
 	ViewCountASC = 'viewCount:ASC',
 	ViewCountDESC = 'viewCount:DESC',
+	PublishedAtASC = 'publishedAt:ASC',
+	PublishedAtDESC = 'publishedAt:DESC',
 	CreatedAtASC = 'createdAt:ASC',
 	CreatedAtDESC = 'createdAt:DESC',
 	TitleASC = 'title:ASC',
 	TitleDESC = 'title:DESC',
-	PublishedAtASC = 'publishedAt:ASC',
-	PublishedAtDESC = 'publishedAt:DESC',
 }
 
 export enum ListEntriesParams1StatesEnum {
@@ -4442,10 +5309,10 @@ export enum ListPortalReviewsParamsPlatformEnum {
 export enum ListPortalReviewsParamsTopicEnum {
 	Other = 'other',
 	Food = 'food',
+	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
-	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
@@ -4750,7 +5617,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@930'?: PartialOmitCredentialVerificationRequestuserOptionalProps930Enum;
+	'__@OptionalProps@948'?: PartialOmitCredentialVerificationRequestuserOptionalProps948Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -4776,7 +5643,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps930Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps948Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -4798,6 +5665,8 @@ export interface PartialRecordPipelineStepEnumnumber {
 	ANALYSE_REVIEWS?: number;
 	BUILD_REPORTS?: number;
 	EXTRACT_MENTIONS?: number;
+	FILL_COMPETITORS?: number;
+	LOOKUP_OSM_PLACES?: number;
 	LOOKUP_VENUES?: number;
 	MATCH_MENTIONS?: number;
 	MONTHLY?: number;
@@ -4809,14 +5678,17 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SCRAPE_DELIVERY?: number;
 	SCRAPE_INSTAGRAM?: number;
 	SCRAPE_INSTAGRAM_RECENT?: number;
+	SCRAPE_INSTAGRAM_REELS?: number;
 	SCRAPE_OWN_ACCOUNTS?: number;
 	SCRAPE_PRESS?: number;
 	SCRAPE_REVIEWS?: number;
 	SCRAPE_TIKTOK?: number;
+	SCRAPE_TIKTOK_RECENT?: number;
 	SCRAPE_VENUES?: number;
 	SCRAPE_VENUE_SOCIAL?: number;
 	SEARCH_BRANCHES?: number;
 	SEARCH_INTEREST?: number;
+	SYNC_OSM_PLACES?: number;
 	TRACK_SEARCH_RANKS?: number;
 	WATCH_REVIEWS?: number;
 }
@@ -4847,6 +5719,16 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	FILL_COMPETITORS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	LOOKUP_OSM_PLACES?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	LOOKUP_VENUES?: number;
 	/**
 	 * @min 0
@@ -4902,6 +5784,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	SCRAPE_INSTAGRAM_REELS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	SCRAPE_OWN_ACCOUNTS?: number;
 	/**
 	 * @min 0
@@ -4922,6 +5809,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	SCRAPE_TIKTOK_RECENT?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	SCRAPE_VENUES?: number;
 	/**
 	 * @min 0
@@ -4938,6 +5830,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	SEARCH_INTEREST?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	SYNC_OSM_PLACES?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -4970,7 +5867,7 @@ export interface PeopleAlsoSearchPlace {
 }
 
 /** From T, pick a set of properties whose keys are in the union K */
-export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars {
+export interface PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyRate {
 	avgStars?: number;
 	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
@@ -4984,7 +5881,7 @@ export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgSt
 }
 
 /** From T, pick a set of properties whose keys are in the union K */
-export interface PickReportReviewStatscountwrittenreplyRateavgStars {
+export interface PickReportReviewStatscountwrittenavgStarsreplyRate {
 	avgStars?: number;
 	count: number;
 	/** Share of the month's reviews the owner answered, 0–1 */
@@ -5031,6 +5928,13 @@ export interface PortalAddCompetitorInputDto {
 	brandId?: string;
 	/** @format uuid */
 	venueId?: string;
+}
+
+/** A branch the portal's place charts can show. */
+export interface PortalBranchChoiceOutputDto {
+	id: string;
+	name: string;
+	street?: string;
 }
 
 /** A brand as its portal shows it: its open branches, the most reviewed first, and their cities. */
@@ -5227,10 +6131,10 @@ export enum PortalListReviewsInputDtoPlatformEnum {
 export enum PortalListReviewsInputDtoTopicEnum {
 	Other = 'other',
 	Food = 'food',
+	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
-	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
@@ -5255,6 +6159,11 @@ export enum PortalMembershipOutputDtoRoleEnum {
 }
 
 export interface PortalPatternsInputDto {
+	/**
+	 * The branch whose busyness and open tables to show; the most reviewed when absent
+	 * @format uuid
+	 */
+	branchId?: string;
 	/**
 	 * The city whose reports to read; the brand's first city when absent
 	 * @format uuid
@@ -5281,8 +6190,12 @@ export interface PortalPatternsMonthOutputDto {
 	reportId: string | null;
 }
 
-/** `GET /portal/venues/:venueId/patterns`: the relations month by month and the weeks across months. */
+/** `GET /portal/brands/:brandId/patterns`: the relations month by month and the weeks across months. */
 export interface PortalPatternsOutputDto {
+	/** The branch they are of; absent without one */
+	branchId?: string;
+	/** The open branches busyness and booked out can be of */
+	branches: PortalBranchChoiceOutputDto[];
 	/** Oldest first, ending with the last finished month or a newer report */
 	months: PortalPatternsMonthOutputDto[];
 	/** Every week touching those months, oldest first */
@@ -5392,7 +6305,11 @@ export interface PortalReportOutputDto {
 	};
 	/** @format date-time */
 	createdAt: string;
-	/** Everything a monthly report shows, computed once when it is built. */
+	/**
+	 * Everything a monthly report shows, computed once when it is built. The brand's figures (posts,
+	 * reviews, dishes, creators, competitors, own accounts, comments, press, correlations) cover
+	 * every branch in `branches`; each place figure is in its branch's entry.
+	 */
 	data: ReportData;
 	highlights: ReportHighlights;
 	id: string;
@@ -5440,10 +6357,10 @@ export enum PortalReviewFiltersOutputDtoPlatformEnum {
 export enum PortalReviewFiltersOutputDtoTopicEnum {
 	Other = 'other',
 	Food = 'food',
+	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
-	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
@@ -5538,6 +6455,11 @@ export interface PortalSeriesCompetitorOutputDto {
 
 export interface PortalSeriesInputDto {
 	/**
+	 * The branch whose rating, busyness and open tables to show; the most reviewed when absent
+	 * @format uuid
+	 */
+	branchId?: string;
+	/**
 	 * The city whose reports to read; the brand's first city when absent
 	 * @format uuid
 	 */
@@ -5588,6 +6510,10 @@ export interface PortalSeriesMonthOutputDto {
 }
 
 export interface PortalSeriesOutputDto {
+	/** The branch they are of; absent without one */
+	branchId?: string;
+	/** The open branches the place figures (rating, busyness, open tables) can be of */
+	branches: PortalBranchChoiceOutputDto[];
 	/** The city's weather, holidays and events per month, same months: the charts' bands */
 	calendar: CityMonthContextOutputDto[];
 	/** Every competitor that appears in the window, by name: the charts' faint lines */
@@ -5735,6 +6661,12 @@ export interface PostGroupOutcome {
 
 export type PreviewEntryData = BlogEntryOutputDto;
 
+export type PublishCityHighlightData = AdminCityHighlightOutputDto;
+
+export type PublishFoodTrendsData = AdminFoodTrendsReportOutputDto;
+
+export type PullFoodTrendsSearchesData = AdminFoodTrendsReportOutputDto;
+
 export type ReadAllNotificationsData = OkResponse;
 
 export type ReadNotificationData = OkResponse;
@@ -5770,6 +6702,8 @@ export type Recordstringstringnumberbooleannull = Record<
 
 /** Construct a type with a set of properties K of type T */
 export type Recordstringunknown = Record<string, any>;
+
+export type ReflagOpeningsData = AdminReflagOpeningsOutputDto;
 
 export type RefreshTokenData = RefreshTokenOutputDto;
 
@@ -5823,24 +6757,45 @@ export interface ReportBookedMedian {
 	venues: number;
 }
 
-/** One branch of a chain, its own month beside the brand's (`ReportData.brand`). */
+/**
+ * One open branch the report covers: where it is, its own month beside the brand's (the posts
+ * that named it and its reviews, cut like a competitor) and its place figures. A one-branch
+ * brand has one. Place figures are never summed or averaged across branches: Google scales
+ * busyness to each place's own peak, and a search rank or a neighbourhood belongs to one address.
+ */
 export interface ReportBranch {
-	/** Picked for one of a chain's branches, not the whole brand: that branch's name and street */
-	against?: string;
-	/** A whole chain: its open branches in the city, counted together */
-	branches?: number;
+	/** What Google Maps says it offers ("Outdoor seating", "Delivery", …); absent when unknown */
+	amenities?: string[];
+	/** Google popular times by week next to the brand's views ("Did the buzz fill the place?"); absent when not sampled */
+	busyness?: ReportBusyness;
 	category?: string;
 	/** Its city, in a report across cities (the brand's `reportScope` `all`) */
 	city?: string;
-	/** The branch `ReportData.venue` is: the place-bound sections describe it */
-	described: boolean;
+	/** Open Friday and Saturday tables on its booking platform; absent when not sampled */
+	demand?: ReportDemand;
 	district?: string;
+	/** The branch's Google Maps page */
+	googleUrl?: string;
 	name: string;
+	/** Its district this quarter; absent without a district */
+	neighbourhood?: ReportNeighbourhood;
+	/** Other food places talked about this month in its district, its brand's left out */
+	neighbours: ReportNeighbour[];
+	/** Its delivery listings and its menu's price position; absent without a delivery listing */
+	prices?: ReportPrices;
 	/** All-time Google figures */
 	rating?: number;
+	/** Its all-time Google rating against its district's and its kind of food's venues; absent without a rating or 5 peers either way */
+	ratingBenchmark?: ReportRatingBenchmark;
+	/** The last six months' closing snapshots up to the report month, oldest first */
+	ratingTrend: ReportRatingPoint[];
 	/** From T, pick a set of properties whose keys are in the union K */
-	reviews: PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars;
+	reviews: PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyRate;
 	reviewsCount?: number;
+	/** All-time Google review count per star, as of the build; absent when unknown */
+	reviewsDistribution?: ReviewsDistribution;
+	/** Where it ranks on the Google Maps searches a guest would type; absent when not tracked this month */
+	searchRanks?: ReportSearchRank[];
 	/** From T, pick a set of properties whose keys are in the union K */
 	social: PickReportSocialStatsviewspostCountcreatorsengagements;
 	street?: string;
@@ -5848,16 +6803,13 @@ export interface ReportBranch {
 	venueId: string;
 }
 
-/**
- * A chain's report: `social`, `posts`, `reviews` and `dishes` cover every branch in the city;
- * the place-bound sections (busyness, open tables, own accounts, search ranks, neighbourhood)
- * describe one branch, `ReportData.venue` (the most Google reviews).
- */
+/** The business the report is on. */
 export interface ReportBrand {
-	/** Every open branch in the city, the described one first; each counts only posts that named it */
-	branches: ReportBranch[];
 	/** Posts by others that named the brand but no branch: in `social`, in no branch's */
 	brandOnlyPosts: number;
+	/** The Google category most of its branches share */
+	category?: string;
+	id: string;
 	name: string;
 }
 
@@ -5962,6 +6914,8 @@ export interface ReportComments {
 export interface ReportCompetitor {
 	/** Picked for one of a chain's branches, not the whole brand: that branch's name and street */
 	against?: string;
+	/** Picked for one of the brand's branches: that branch's id (`against` names it); absent for the whole brand */
+	branchId?: string;
 	/** A whole chain: its open branches in the city, counted together */
 	branches?: number;
 	/**
@@ -5986,7 +6940,7 @@ export interface ReportCompetitor {
 	/** All-time Google figures */
 	rating?: number;
 	/** From T, pick a set of properties whose keys are in the union K */
-	reviews: PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars;
+	reviews: PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyRate;
 	reviewsCount?: number;
 	/** Whether we scrape its Google reviews at all: without, `reviews` is empty, not zero */
 	reviewsTracked: boolean;
@@ -6037,66 +6991,43 @@ export interface ReportCuisinePlacement {
 	venues: number;
 }
 
-/** Everything a monthly report shows, computed once when it is built. */
+/**
+ * Everything a monthly report shows, computed once when it is built. The brand's figures (posts,
+ * reviews, dishes, creators, competitors, own accounts, comments, press, correlations) cover
+ * every branch in `branches`; each place figure is in its branch's entry.
+ */
 export interface ReportData {
-	/** A chain's branches side by side; absent for a venue in no brand */
-	brand?: ReportBrand;
-	/** Google popular times by week next to the views ("Did the buzz fill the place?"); absent when not sampled */
-	busyness?: ReportBusyness;
-	/** What the city talked about and the venue against the month's report venues; absent below 200 matched mentions in the city */
+	/** Every open branch covered, the most Google reviews first */
+	branches: ReportBranch[];
+	/** The business the report is on. */
+	brand: ReportBrand;
+	/** What the city talked about and the brand against the month's report brands; absent below 200 matched mentions in the city, and across cities */
 	city?: ReportCitySection;
-	/** What viewers said under its top TikTok posts; absent when no comment was scraped */
+	/** What viewers said under the brand's top TikTok posts; absent when no comment was scraped */
 	comments?: ReportComments;
-	/** The venues an admin picked as its competition */
+	/** The places and rival brands the brand competes with (brand-wide and per branch) */
 	competitors: ReportCompetitor[];
-	/** The month's weather, public holidays and events in the city (`CityDayService.month`); absent in older reports */
+	/** The month's weather, public holidays and events in the city (`CityDayService.month`); absent across cities */
 	context?: MonthContext;
-	/** Buzz to reviews, complaints by time, paid against organic; absent below the floors */
+	/** Buzz to reviews, complaints by time, paid against organic, over every branch's Google reviews; absent below the floors */
 	correlations?: ReportCorrelations;
-	/** The top eight creators by views of their posts about the venue, one row per author */
+	/** The top eight creators by views of their posts about the brand, one row per author */
 	creators: ReportCreator[];
-	/** District creators who covered neighbours but not the venue, top eight by followers */
+	/** Creators who covered its branches' district neighbours but not the brand, top eight by followers */
 	creatorsNearby: ReportNearbyCreator[];
-	/** Open Friday and Saturday tables on the venue's booking platform; absent when not sampled */
-	demand?: ReportDemand;
 	dishes: ReportDishCount[];
 	month: string;
-	/** The venue's district this quarter; absent without a district */
-	neighbourhood?: ReportNeighbourhood;
-	neighbours: ReportNeighbour[];
-	/** The venue's own TikTok and Instagram accounts at the month's close; absent when none is tracked */
+	/** The brand's own TikTok and Instagram accounts at the month's close (a branch's own named); absent when none is tracked */
 	ownAccounts?: ReportOwnAccount[];
-	/** Posts from the venue's own account: not word of mouth, kept out of `social` */
+	/** Posts from the brand's own accounts: not word of mouth, kept out of `social` */
 	ownPosts: ReportPost[];
 	posts: ReportPost[];
-	/** The month's press and listicles; absent when none was found */
+	/** The month's press and listicles naming the brand; absent when none was found */
 	press?: ReportPress;
-	/** Absent for a first report: the venue has neither posts nor reviews the month before */
+	/** Absent for a first report: the brand has neither posts nor reviews the month before */
 	previous?: ReportPreviousMonth;
-	/** Delivery listings and the menu's price position; absent without a delivery listing */
-	prices?: ReportPrices;
 	reviews: ReportReviewStats;
-	/** Where it ranks on the Google Maps searches a guest would type; absent when not tracked this month */
-	searchRanks?: ReportSearchRank[];
 	social: ReportSocialStats;
-	venue: {
-		/** What Google Maps says it offers ("Outdoor seating", "Delivery", …); absent when unknown */
-		amenities?: string[];
-		category?: string;
-		district?: string;
-		/** The venue's Google Maps page */
-		googleUrl?: string;
-		id: string;
-		name: string;
-		/** All-time Google figures, as of the build */
-		rating?: number;
-		/** The last six months' closing snapshots up to the report month, oldest first */
-		ratingTrend: ReportRatingPoint[];
-		reviewsCount?: number;
-		/** All-time Google review count per star, as of the build; absent when unknown */
-		reviewsDistribution?: ReviewsDistribution;
-		street?: string;
-	};
 }
 
 /** The venue's (or a competitor's) page on a delivery platform. */
@@ -6194,12 +7125,14 @@ export interface ReportNeighbourhood {
 /** A neighbour that opened, closed or reopened this quarter. */
 export interface ReportNeighbourhoodChange {
 	category?: string;
-	/** When a scrape first saw it, `YYYY-MM-DD` */
+	/** When a scrape first saw it, or the first post saying it had just opened, `YYYY-MM-DD` */
 	date: string;
 	kind: ReportNeighbourhoodChangeKindEnum;
 	name: string;
 	/** On the venue's own street */
 	sameStreet: boolean;
+	/** `posts`: an opening only a matched post announced (`Mention.isNewOpening`); absent when a scrape saw it */
+	source?: ReportNeighbourhoodChangeSourceEnum;
 	street?: string;
 	venueId: string;
 }
@@ -6211,20 +7144,28 @@ export enum ReportNeighbourhoodChangeKindEnum {
 	Reopened = 'reopened',
 }
 
+/** `posts`: an opening only a matched post announced (`Mention.isNewOpening`); absent when a scrape saw it */
+export enum ReportNeighbourhoodChangeSourceEnum {
+	Posts = 'posts',
+}
+
 /** Openings and closures around the venue over the three months ending with the report's. */
 export interface ReportNeighbourhoodChanges {
 	closed: number;
 	district: string;
 	/** First and last month of the window, `YYYY-MM` */
 	from: string;
-	/** In the district, the venue left out; `closed` is temporary and permanent closures */
+	/** In the district, the venue left out; `closed` is temporary and permanent closures; `opened` counts post-flagged openings too */
 	opened: number;
+	/** Of `opened`, the ones only a post announced; absent when none */
+	openedFromPosts?: number;
 	reopened: number;
 	/** The same on the venue's street; absent when its street is unknown */
 	street?: {
 		closed: number;
 		name: string;
 		opened: number;
+		openedFromPosts?: number;
 		reopened: number;
 	};
 	to: string;
@@ -6353,7 +7294,7 @@ export interface ReportPreviousMonth {
 	actions?: ReportPoint[];
 	month: string;
 	/** Absent when no review of that month is stored: reviews were not scraped for it */
-	reviews?: PickReportReviewStatscountwrittenreplyRateavgStars;
+	reviews?: PickReportReviewStatscountwrittenavgStarsreplyRate;
 	/** From T, pick a set of properties whose keys are in the union K */
 	social: PickReportSocialStatsviewspostCountcreatorsengagementspromotional;
 }
@@ -6380,6 +7321,12 @@ export interface ReportPrices {
 		othersMedian?: number;
 		othersWithMenu: number;
 		platform: string;
+		/**
+		 * Its primary food topic's items against the same on the other menus ("your ramen €14.50,
+		 * theirs €12.90"), the line to lead with; `othersMedian` absent when no other menu has it.
+		 * Absent when its menu has none of it
+		 */
+		topic?: TopicPrice;
 	};
 	/** Share of written reviews criticising price, 0–1, against tracked competitors' median */
 	priceComplaints?: {
@@ -6398,6 +7345,31 @@ export enum ReportPricesOthersAreEnum {
 	Competitors = 'competitors',
 }
 
+/** "4.3 · above 70 % of Kreuzberg's 212 food venues · above 55 % of Berlin's 61 kebab places". */
+export interface ReportRatingBenchmark {
+	/** Against the food venues of its district */
+	district?: ReportRatingBenchmarkEntry;
+	/** The all-time Google rating compared */
+	rating: number;
+	/** Against the city's venues of its primary food topic, or of the nearest parent with 5+ */
+	topic?: ReportRatingTopicBenchmark;
+}
+
+/**
+ * One comparison of a branch's all-time Google rating: the peers are the city's open food
+ * venues with a rating and 20+ reviews (`isRatingPeer`), the branch itself left out.
+ */
+export interface ReportRatingBenchmarkEntry {
+	/** What it is compared with: the district's name, or the kind of food's label */
+	label: string;
+	/** The peers' median rating */
+	median: number;
+	/** Share of the peers its rating is ahead of, ties counted half, 0–100 */
+	percentile: number;
+	/** Peers compared, at least 5 */
+	venues: number;
+}
+
 /** A venue's all-time Google figures at the close of a month (its latest snapshot). */
 export interface ReportRatingPoint {
 	/** The snapshot's day, `YYYY-MM-DD` */
@@ -6406,6 +7378,22 @@ export interface ReportRatingPoint {
 	month: string;
 	rating?: number;
 	reviewsCount?: number;
+}
+
+/** Against the city's venues of a kind of food: `label` is the topic's. */
+export interface ReportRatingTopicBenchmark {
+	/** The city's name */
+	city: string;
+	/** The food topic compared: the primary one, or the nearest parent with 5+ peers */
+	key: string;
+	/** What it is compared with: the district's name, or the kind of food's label */
+	label: string;
+	/** The peers' median rating */
+	median: number;
+	/** Share of the peers its rating is ahead of, ties counted half, 0–100 */
+	percentile: number;
+	/** Peers compared, at least 5 */
+	venues: number;
 }
 
 /** A reply the owner can post under a review, in the review's language. */
@@ -6417,12 +7405,19 @@ export interface ReportReplyDraft {
 export interface ReportReviewGroup {
 	complaintDetails: FeedbackPoint[];
 	/** Construct a type with a set of properties K of type T */
+	complaintThemes?: Recordstringnumber;
+	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
 	count: number;
 	/** Construct a type with a set of properties K of type T */
 	praise: Recordstringnumber;
 	/** What they said, the first few points of the group */
 	praiseDetails: FeedbackPoint[];
+	/**
+	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 */
+	praiseThemes?: Recordstringnumber;
 	written: number;
 }
 
@@ -6480,6 +7475,8 @@ export interface ReportReviewStats {
 		stars?: number;
 	}[];
 	/** Construct a type with a set of properties K of type T */
+	complaintThemes?: Recordstringnumber;
+	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
 	count: number;
 	/** The month's critical reviews (3 stars or fewer) worth reading */
@@ -6494,6 +7491,11 @@ export interface ReportReviewStats {
 	platformGaps?: ReportPlatformGap[];
 	/** topic → how many reviews praised / criticised it */
 	praise: Recordstringnumber;
+	/**
+	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 */
+	praiseThemes?: Recordstringnumber;
 	/** Ready-to-post replies to unanswered written reviews, critical first; filled at build */
 	replyDrafts: ReportReplyDraft[];
 	/** Share of the month's reviews the owner answered, 0–1 */
@@ -6540,6 +7542,8 @@ export interface ReportSentimentCounts {
 
 export interface ReportSocialStats {
 	/** Construct a type with a set of properties K of type T */
+	complaintThemes?: Recordstringnumber;
+	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
 	creators: number;
 	engagements: number;
@@ -6547,6 +7551,11 @@ export interface ReportSocialStats {
 	postCount: number;
 	/** topic → how many posts praised / criticised it */
 	praise: Recordstringnumber;
+	/**
+	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 */
+	praiseThemes?: Recordstringnumber;
 	promotional: number;
 	sentiment: ReportSentimentCounts;
 	tiktokCount: number;
@@ -6626,7 +7635,11 @@ export interface SharedReportOutputDto {
 	};
 	/** @format date-time */
 	createdAt: string;
-	/** Everything a monthly report shows, computed once when it is built. */
+	/**
+	 * Everything a monthly report shows, computed once when it is built. The brand's figures (posts,
+	 * reviews, dishes, creators, competitors, own accounts, comments, press, correlations) cover
+	 * every branch in `branches`; each place figure is in its branch's entry.
+	 */
 	data: ReportData;
 	highlights: ReportHighlights;
 	id: string;
@@ -6702,6 +7715,19 @@ export type SplitBrandData = AdminBrandOutputDto;
 export type StartPipelineRunData = AdminPipelineRunOutputDto;
 
 export type SuggestCitySourcesData = AdminSuggestCitySourcesOutputDto;
+
+/** The venue's own kind of food priced like a dish (`pricePosition`'s `topic`). */
+export interface TopicPrice {
+	/** `price / othersMedian - 1`; absent without others */
+	diff?: number;
+	key: string;
+	label: string;
+	/** The median of the other menus' medians for it; absent when none has it */
+	othersMedian?: number;
+	othersWithTopic: number;
+	/** The venue's median for items of the topic */
+	price: number;
+}
 
 /** A brand that entered the month's top 50 by posts from others, or climbed in it. */
 export interface TrendRisingBrandRow {
@@ -6845,6 +7871,10 @@ export enum UaParserIcpuArchitectureEnum {
 	Amd64 = 'amd64',
 }
 
+export type UnpublishCityHighlightData = AdminCityHighlightOutputDto;
+
+export type UnpublishFoodTrendsData = AdminFoodTrendsReportOutputDto;
+
 export type UnreadNotificationData = OkResponse;
 
 export interface UpdateBlogEntryInputDto {
@@ -6974,12 +8004,16 @@ export interface VenueSearchRankEntry {
 
 /** A status change with its venue, as the trends panel and the report read it. */
 export interface VenueStatusChangeRow {
-	/** @format date-time */
+	/**
+	 * The scrape's day, or the post's for `posts`; never an opening date
+	 * @format date-time
+	 */
 	at: string;
 	category?: string;
 	district?: string;
 	kind: VenueStatusChangeRowKindEnum;
 	name: string;
+	source: VenueStatusChangeRowSourceEnum;
 	street?: string;
 	venueId: string;
 }
@@ -6989,6 +8023,13 @@ export enum VenueStatusChangeRowKindEnum {
 	TemporarilyClosed = 'temporarily_closed',
 	PermanentlyClosed = 'permanently_closed',
 	Reopened = 'reopened',
+}
+
+export enum VenueStatusChangeRowSourceEnum {
+	Posts = 'posts',
+	City = 'city',
+	Lookup = 'lookup',
+	Details = 'details',
 }
 
 /** Changes counted per kind. */
@@ -9202,6 +10243,43 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description Files stored praise and complaint points that have no theme yet (extracted before themes existed) under one each, reading the phrases alone, so past months count by theme without re-extracting posts. Up to `limit` reviews and `limit` mentions a call, newest first; free (the LLM allowance). Call it again until `remaining` is zero.
+		 *
+		 * @name BackfillFeedbackThemes
+		 * @request POST:/admin/feedback-themes/backfill
+		 * @response `201` `BackfillFeedbackThemesData`
+		 */
+		backfillFeedbackThemes: (
+			data: AdminBackfillFeedbackThemesInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<BackfillFeedbackThemesData, any>({
+				path: `/admin/feedback-themes/backfill`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Reads a month's stored posts again for the "just opened" flag only (`MentionExtractionService.reflagOpenings`): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero.
+		 *
+		 * @name ReflagOpenings
+		 * @request POST:/admin/mentions/reflag-openings
+		 * @response `201` `ReflagOpeningsData`
+		 */
+		reflagOpenings: (data: AdminReflagOpeningsInputDto, params: RequestParams = {}) =>
+			this.request<ReflagOpeningsData, any>({
+				path: `/admin/mentions/reflag-openings`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * No description
 		 *
 		 * @name ListReports
@@ -9279,6 +10357,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		getReportPdf: (id: string, params: RequestParams = {}) =>
 			this.request<GetReportPdfData, any>({
 				path: `/admin/reports/${id}/pdf`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The A5 leave-behind for a visit: the cover title, headline and three findings with a QR code to the report's live share link (made if there is none), so a scan counts as an open, and the printing admin's name and e-mail. Takes a few seconds: headless Chrome prints it.
+		 *
+		 * @name GetReportLeaveBehindPdf
+		 * @request GET:/admin/reports/{id}/leave-behind.pdf
+		 * @response `200` `GetReportLeaveBehindPdfData`
+		 */
+		getReportLeaveBehindPdf: (id: string, params: RequestParams = {}) =>
+			this.request<GetReportLeaveBehindPdfData, any>({
+				path: `/admin/reports/${id}/leave-behind.pdf`,
 				method: 'GET',
 				format: 'json',
 				...params,
@@ -9426,6 +10519,35 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<GetTopicInsightData, any>({
 				path: `/admin/topic-insights/${key}`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description What the city's reviews and posts praise and criticise this month, per feedback theme, across every venue, by kind of food; `food` narrows it to the brands of one.
+		 *
+		 * @name GetThemeInsights
+		 * @request GET:/admin/theme-insights
+		 * @response `200` `GetThemeInsightsData`
+		 */
+		getThemeInsights: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * A food topic's key: only the brands whose food it is (most of their places' main food)
+				 * @maxLength 64
+				 */
+				food?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				month: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetThemeInsightsData, any>({
+				path: `/admin/theme-insights`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -9684,10 +10806,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Logs an email, DM, call, visit, reply or note, and moves the prospect along.
+		 * @description Logs an email, DM, call, visit (with its outcome, come-back time and consent), reply or note, and moves the prospect along.
 		 *
 		 * @name LogOutreachTouch
-		 * @summary Logs an email, DM, call, visit, reply or note, and moves the prospect along
+		 * @summary Logs an email, DM, call, visit (with its outcome, come-back time and consent), reply or note, and moves the prospect along
 		 * @request POST:/admin/outreach/prospects/{id}/touches
 		 * @response `201` `LogOutreachTouchData`
 		 */
@@ -9862,6 +10984,175 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				path: `/admin/data-coverage`,
 				method: 'GET',
 				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The month as built (absent when it never was) and every built month of the city.
+		 *
+		 * @name GetCityHighlights
+		 * @summary The month as built (absent when it never was) and every built month of the city
+		 * @request GET:/admin/highlights
+		 * @response `200` `GetCityHighlightsData`
+		 */
+		getCityHighlights: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/** @pattern ^[0-9]{4}-(0[1-9]|1[0-2])$ */
+				month: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetCityHighlightsData, any>({
+				path: `/admin/highlights`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Computes the month from what is stored now (corrections included) and keeps it for preview.
+		 *
+		 * @name BuildCityHighlight
+		 * @summary Computes the month from what is stored now (corrections included) and keeps it for preview
+		 * @request POST:/admin/highlights/build
+		 * @response `201` `BuildCityHighlightData`
+		 */
+		buildCityHighlight: (data: AdminBuildCityHighlightInputDto, params: RequestParams = {}) =>
+			this.request<BuildCityHighlightData, any>({
+				path: `/admin/highlights/build`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Puts the month on the site and in the sitemap; 400 before the month is over.
+		 *
+		 * @name PublishCityHighlight
+		 * @summary Puts the month on the site and in the sitemap; 400 before the month is over
+		 * @request POST:/admin/highlights/{id}/publish
+		 * @response `201` `PublishCityHighlightData`
+		 */
+		publishCityHighlight: (id: string, params: RequestParams = {}) =>
+			this.request<PublishCityHighlightData, any>({
+				path: `/admin/highlights/${id}/publish`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name UnpublishCityHighlight
+		 * @request POST:/admin/highlights/{id}/unpublish
+		 * @response `201` `UnpublishCityHighlightData`
+		 */
+		unpublishCityHighlight: (id: string, params: RequestParams = {}) =>
+			this.request<UnpublishCityHighlightData, any>({
+				path: `/admin/highlights/${id}/unpublish`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The quarter as stored (absent when nothing is), every stored quarter, and what a pull would cost.
+		 *
+		 * @name GetFoodTrends
+		 * @summary The quarter as stored (absent when nothing is), every stored quarter, and what a pull would cost
+		 * @request GET:/admin/food-trends
+		 * @response `200` `GetFoodTrendsData`
+		 */
+		getFoodTrends: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/** @pattern ^[0-9]{4}-q[1-4]$ */
+				quarter: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetFoodTrendsData, any>({
+				path: `/admin/food-trends`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Queues the anchored Google Trends pull of the quarter (paid, about a cent a topic); 409 while one runs.
+		 *
+		 * @name PullFoodTrendsSearches
+		 * @summary Queues the anchored Google Trends pull of the quarter (paid, about a cent a topic); 409 while one runs
+		 * @request POST:/admin/food-trends/pull-searches
+		 * @response `201` `PullFoodTrendsSearchesData`
+		 */
+		pullFoodTrendsSearches: (
+			data: AdminFoodTrendsQuarterInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<PullFoodTrendsSearchesData, any>({
+				path: `/admin/food-trends/pull-searches`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Computes the quarter from what is stored now and keeps it for preview. Free.
+		 *
+		 * @name BuildFoodTrends
+		 * @summary Computes the quarter from what is stored now and keeps it for preview. Free
+		 * @request POST:/admin/food-trends/build
+		 * @response `201` `BuildFoodTrendsData`
+		 */
+		buildFoodTrends: (data: AdminFoodTrendsQuarterInputDto, params: RequestParams = {}) =>
+			this.request<BuildFoodTrendsData, any>({
+				path: `/admin/food-trends/build`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Puts the quarter on the site and in the sitemap; 400 before it is built or over.
+		 *
+		 * @name PublishFoodTrends
+		 * @summary Puts the quarter on the site and in the sitemap; 400 before it is built or over
+		 * @request POST:/admin/food-trends/{id}/publish
+		 * @response `201` `PublishFoodTrendsData`
+		 */
+		publishFoodTrends: (id: string, params: RequestParams = {}) =>
+			this.request<PublishFoodTrendsData, any>({
+				path: `/admin/food-trends/${id}/publish`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name UnpublishFoodTrends
+		 * @request POST:/admin/food-trends/{id}/unpublish
+		 * @response `201` `UnpublishFoodTrendsData`
+		 */
+		unpublishFoodTrends: (id: string, params: RequestParams = {}) =>
+			this.request<UnpublishFoodTrendsData, any>({
+				path: `/admin/food-trends/${id}/unpublish`,
+				method: 'POST',
 				format: 'json',
 				...params,
 			}),
@@ -10302,6 +11593,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			brandId: string,
 			query?: {
 				/**
+				 * The branch whose rating, busyness and open tables to show; the most reviewed when absent
+				 * @format uuid
+				 */
+				branchId?: string;
+				/**
 				 * The city whose reports to read; the brand's first city when absent
 				 * @format uuid
 				 */
@@ -10334,6 +11630,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		getPortalPatterns: (
 			brandId: string,
 			query?: {
+				/**
+				 * The branch whose busyness and open tables to show; the most reviewed when absent
+				 * @format uuid
+				 */
+				branchId?: string;
 				/**
 				 * The city whose reports to read; the brand's first city when absent
 				 * @format uuid
@@ -10632,6 +11933,40 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<RemovePortalCompetitorData, any>({
 				path: `/portal/brands/${brandId}/competitors/${competitorId}`,
 				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+	};
+	highlights = {
+		/**
+		 * @description A published month of a city; 404 for an unknown city, an unbuilt or an unpublished month.
+		 *
+		 * @name GetCityHighlight
+		 * @summary A published month of a city; 404 for an unknown city, an unbuilt or an unpublished month
+		 * @request GET:/highlights/{citySlug}/{month}
+		 * @response `200` `GetCityHighlightData`
+		 */
+		getCityHighlight: (citySlug: string, month: string, params: RequestParams = {}) =>
+			this.request<GetCityHighlightData, any>({
+				path: `/highlights/${citySlug}/${month}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+	};
+	foodTrends = {
+		/**
+		 * @description A published quarter of a city; 404 for an unknown city, an unbuilt or an unpublished quarter.
+		 *
+		 * @name GetFoodTrendsReport
+		 * @summary A published quarter of a city; 404 for an unknown city, an unbuilt or an unpublished quarter
+		 * @request GET:/food-trends/{citySlug}/{quarter}
+		 * @response `200` `GetFoodTrendsReportData`
+		 */
+		getFoodTrendsReport: (citySlug: string, quarter: string, params: RequestParams = {}) =>
+			this.request<GetFoodTrendsReportData, any>({
+				path: `/food-trends/${citySlug}/${quarter}`,
+				method: 'GET',
 				format: 'json',
 				...params,
 			}),

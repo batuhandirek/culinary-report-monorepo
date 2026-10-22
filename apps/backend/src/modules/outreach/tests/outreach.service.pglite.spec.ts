@@ -6,7 +6,11 @@ import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { OutreachTouchKindEnum, ProspectStageEnum } from '../constants/outreach.constant.js';
+import {
+	OutreachTouchKindEnum,
+	OutreachTouchOutcomeEnum,
+	ProspectStageEnum,
+} from '../constants/outreach.constant.js';
 import { OutreachTouch } from '../entities/outreach-touch.entity.js';
 import { Prospect } from '../entities/prospect.entity.js';
 import { dueBefore, normalizeHandle, OutreachService } from '../services/outreach.service.js';
@@ -127,6 +131,85 @@ describe('OutreachService (pglite)', () => {
 
 		await service.log(prospect.id, { kind: OutreachTouchKindEnum.EMAIL, followUpAt: null });
 		expect(prospect.nextFollowUpAt).toBeNull();
+	});
+
+	it('lets "come back on Tuesday" from a visit win over the follow-up sequence', async () => {
+		const prospect = await newProspect();
+		const at = new Date('2026-10-01T11:00:00Z');
+		const comeBackAt = new Date('2026-10-06T15:00:00Z');
+
+		const visit = await service.log(prospect.id, {
+			kind: OutreachTouchKindEnum.VISIT,
+			at,
+			template: 'visit',
+			body: 'Owner is in on Tuesdays after 15:00',
+			outcome: OutreachTouchOutcomeEnum.SPOKE_TO_STAFF,
+			comeBackAt,
+			// A date given with the touch loses to the come-back time
+			followUpAt: new Date('2026-10-20T09:00:00Z'),
+		});
+		expect(prospect.stage).toBe(ProspectStageEnum.CONTACTED);
+		expect(prospect.outreachCount).toBe(1);
+		expect(prospect.nextFollowUpAt).toEqual(comeBackAt);
+		expect(prospect.emailConsentAt ?? null).toBeNull();
+		expect(visit).toMatchObject({
+			outcome: OutreachTouchOutcomeEnum.SPOKE_TO_STAFF,
+			comeBackAt,
+			emailConsent: false,
+		});
+
+		// A visit without a come-back time runs the sequence like any other try
+		const second = new Date('2026-10-06T15:30:00Z');
+		await service.log(prospect.id, {
+			kind: OutreachTouchKindEnum.VISIT,
+			at: second,
+			outcome: OutreachTouchOutcomeEnum.NOBODY,
+		});
+		expect(prospect.nextFollowUpAt).toEqual(new Date(second.getTime() + 7 * DAY_MS));
+	});
+
+	it('records their OK to e-mail from a visit or a call, which the admin can take back', async () => {
+		const prospect = await newProspect();
+		const at = new Date('2026-10-02T10:00:00Z');
+		await service.log(prospect.id, {
+			kind: OutreachTouchKindEnum.CALL,
+			at,
+			outcome: OutreachTouchOutcomeEnum.SPOKE_TO_OWNER,
+			emailConsent: true,
+		});
+		expect(prospect.emailConsentAt).toEqual(at);
+
+		// A later touch without consent does not take it back; only the admin does
+		await service.log(prospect.id, { kind: OutreachTouchKindEnum.VISIT });
+		expect(prospect.emailConsentAt).toEqual(at);
+		await service.update(prospect.id, { emailConsentAt: null });
+		expect(prospect.emailConsentAt).toBeNull();
+
+		// …and can give it by hand, for an OK that came in writing
+		const byHand = new Date('2026-10-03T10:00:00Z');
+		await service.update(prospect.id, { emailConsentAt: byHand });
+		expect(prospect.emailConsentAt).toEqual(byHand);
+	});
+
+	it('refuses an outcome, a come-back time or consent on anything but a visit or a call', async () => {
+		const prospect = await newProspect();
+		await expect(
+			service.log(prospect.id, {
+				kind: OutreachTouchKindEnum.NOTE,
+				outcome: OutreachTouchOutcomeEnum.CLOSED,
+			}),
+		).rejects.toThrow('belong to a visit or a call');
+		await expect(
+			service.log(prospect.id, { kind: OutreachTouchKindEnum.EMAIL, emailConsent: true }),
+		).rejects.toThrow('belong to a visit or a call');
+		await expect(
+			service.log(prospect.id, {
+				kind: OutreachTouchKindEnum.REPLY,
+				comeBackAt: new Date(Date.now() + DAY_MS),
+			}),
+		).rejects.toThrow('belong to a visit or a call');
+		expect(prospect.outreachCount).toBe(0);
+		expect(await touchesOf(prospect)).toHaveLength(0);
 	});
 
 	it('moves a prospect to replied on their answer and stops chasing them', async () => {

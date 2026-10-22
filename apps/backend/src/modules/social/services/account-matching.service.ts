@@ -11,6 +11,7 @@ import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
+import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { accountMatchIndex, type AccountMatchName, matchAccount } from '../util/account-match.js';
 import { profileOf } from '../util/accounts.js';
 
@@ -73,7 +74,8 @@ export class AccountMatchingService {
 			set.add(row.brand_id);
 		}
 
-		const accounts = await this.em.find(SocialAccount, { city: city.id });
+		// A blog is a publication, never a venue's own account
+		const accounts = await this.em.find(SocialAccount, { city: city.id, platform: { $ne: SocialPlatformEnum.BLOG } });
 		const result: AccountMatchResult = { accounts: accounts.length, linked: 0, unlinked: 0, suggested: 0, websites };
 		for (const account of accounts) {
 			// An admin's, a website's and outreach's links stay

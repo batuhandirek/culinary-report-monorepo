@@ -8,6 +8,7 @@ import {
 	feedbackDishSchema,
 	feedbackPointSchema,
 	FEEDBACK_SENTIMENTS,
+	FEEDBACK_THEMES_INSTRUCTION,
 } from 'src/modules/venues/agents/review-analysis.agent.js';
 
 const mentionExtractionSchema = z.object({
@@ -33,6 +34,11 @@ const mentionExtractionSchema = z.object({
 					.nullable()
 					.describe('City the venue is in, if stated or clearly implied, e.g. "Berlin", "London"'),
 				visited: z.boolean().describe('False if the creator says they have not been there themselves'),
+				isNewOpening: z
+					.boolean()
+					.describe(
+						'True only when the post itself says this venue is new or has recently opened ("just opened", "new in Neukölln", "soft opening", "opening week"). False for a new dish, menu or branch of an old place, a reopening or new concept of an existing place, a place telling how long it has been open ("six months already"), a #new hashtag alone, for "new to me", and for anything you know about the venue but the post does not say',
+					),
 				sentiment: z.enum(FEEDBACK_SENTIMENTS),
 				summary: z.string().describe('One sentence in English on what was said about this venue'),
 				dishes: z.array(feedbackDishSchema).describe('Specific dishes or drinks named'),
@@ -62,7 +68,7 @@ export class MentionExtractionAgent extends BaseMastraAgent<
 		outputSchema: mentionExtractionSchema,
 	};
 
-	// Hundreds of posts a month (~1,400 tokens each): mini, whose daily complimentary allowance
+	// Hundreds of posts a month (~3,000 tokens each with the theme legend and topic labels): mini, whose daily complimentary allowance
 	// is 10M tokens; 641 posts used 0.9M of the full model's 1M
 	protected getModel(): MastraModelConfig {
 		return 'openai/gpt-5.4-mini';
@@ -71,12 +77,15 @@ export class MentionExtractionAgent extends BaseMastraAgent<
 	protected getInstructions(context?: MentionExtractionContext): string {
 		const city = context?.cityName;
 		return (
-			`You extract restaurant, bar and café mentions from ${city ? `${city} ` : ''}social media posts for a report to venue owners. ` +
-			`You get the caption, hashtags, tagged location and, when available, the speech transcript. ` +
+			`You extract restaurant, bar and café mentions from ${city ? `${city} ` : ''}social media posts and food blog articles for a report to venue owners. ` +
+			`For a post you get the caption, hashtags, tagged location and, when available, the speech transcript; for a blog article its title and text. ` +
+			`A blog article or list may name many venues: include each one it says something about, with what it says about that one. ` +
 			`Transcripts are machine-generated and often misspell names; prefer spellings from the caption, hashtags or tagged location. ` +
 			`Hashtags of a city also attract posts about other cities, so record the venue's city when known. ` +
 			`A post tagged at a venue that describes a visit there counts as a mention of that venue, even if the caption does not repeat its name. ` +
 			`Only include venues that are specifically named or tagged. Do not invent dishes, praise or complaints that are not stated. ` +
+			FEEDBACK_THEMES_INSTRUCTION +
+			`Mark a venue as a new opening only when the post itself says it is new or has just opened; a new dish, a new menu or a creator's first visit is not an opening. ` +
 			(context?.foodTopics?.length ?
 				`For cuisine, use these words where one fits: ${context.foodTopics.join(', ')}. Use another short English word only when none fits. `
 			:	'') +

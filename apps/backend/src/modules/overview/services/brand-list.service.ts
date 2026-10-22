@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import type { ImageOutputDto } from 'src/modules/image/dto/image.output.dto.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -13,7 +14,6 @@ import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import type {
 	AdminBrandMonthFiguresOutputDto,
 	AdminBrandRowOutputDto,
-	AdminBrandRowVenueOutputDto,
 	AdminBrandSegment,
 	AdminListBrandsInputDto,
 	AdminListBrandsOutputDto,
@@ -31,8 +31,11 @@ interface BaseRow {
 	branches: number;
 	districts: string[] | null;
 	branch_names: string[];
-	described_id: string | null;
-	described_rating: number | null;
+	/** Its open branches' stars over their reviews (in the city): one branch's rating, a chain's over all */
+	rating: number | null;
+	reviews_count: number | null;
+	category: string | null;
+	icon_venue_id: string | null;
 	prospect_id: string | null;
 	stage: ProspectStageEnum | null;
 	next_follow_up_at: Date | null;
@@ -129,14 +132,14 @@ export class BrandListService {
 					return null;
 			}
 		};
-		const sortKey = field === 'rating' ? (row: (typeof rows)[number]) => row.base.described_rating : key;
+		const sortKey = field === 'rating' ? (row: (typeof rows)[number]) => row.base.rating : key;
 		const sorted = _.orderBy(
 			picked,
 			[r => sortKey(r) === null, sortKey, r => r.month.views, r => r.base.lead_score ?? -1, r => r.base.name],
 			['asc', order, 'desc', 'desc', 'asc'],
 		);
 		const page = sorted.slice((query.page - 1) * query.size, query.page * query.size);
-		const venues = await this.describedVenues(page.map(r => r.base.described_id));
+		const icons = await this.favicons(page.map(r => r.base.icon_venue_id));
 
 		return {
 			items: page.map(
@@ -146,8 +149,11 @@ export class BrandListService {
 					...(row.base.lead_score !== null && { leadScore: row.base.lead_score }),
 					branches: row.base.branches,
 					districts: row.base.districts ?? [],
-					...(row.base.described_id &&
-						venues.get(row.base.described_id) && { venue: venues.get(row.base.described_id) }),
+					...(row.base.category && { category: row.base.category }),
+					...(row.base.rating !== null && { rating: Math.round(Number(row.base.rating) * 10) / 10 }),
+					...(row.base.reviews_count !== null && { reviewsCount: Number(row.base.reviews_count) }),
+					...(row.base.icon_venue_id &&
+						icons.get(row.base.icon_venue_id) && { favicon: icons.get(row.base.icon_venue_id) }),
 					month: row.month,
 					previous: row.previous,
 					...(row.base.prospect_id &&
@@ -206,7 +212,8 @@ export class BrandListService {
 		const city = query.cityId ? 'and v.city_id = ?' : '';
 		const cityParams = query.cityId ? [query.cityId] : [];
 		const conditions: string[] = [];
-		const params: unknown[] = [...cityParams, ...cityParams];
+		// The open branches, the category and the icon each filter by the city
+		const params: unknown[] = [...cityParams, ...cityParams, ...cityParams];
 		if (query.q) {
 			conditions.push(
 				`(b.name ilike ? or exists (select 1 from venues v where v.brand_id = b.id and v.name ilike ?))`,
@@ -227,20 +234,28 @@ export class BrandListService {
 			`with open_branches as (
 				select v.brand_id, count(*)::int as branches,
 					array_remove(array_agg(distinct v.district), null) as districts,
-					array_agg(v.name) as branch_names
+					array_agg(v.name) as branch_names,
+					sum(v.rating * v.reviews_count) filter (where v.rating is not null and v.reviews_count > 0)
+						/ nullif(sum(v.reviews_count) filter (where v.rating is not null and v.reviews_count > 0), 0) as rating,
+					sum(v.reviews_count) as reviews_count
 				from venues v
 				where not v.closed ${city}
 				group by v.brand_id
 			)
 			select b.id, b.name, b.lead_score, ob.branches, ob.districts, ob.branch_names,
-				d.id as described_id, d.rating as described_rating,
+				ob.rating, ob.reviews_count, cat.category, icon.id as icon_venue_id,
 				p.id as prospect_id, p.stage, p.next_follow_up_at
 			from brands b
 			join open_branches ob on ob.brand_id = b.id
+			-- What most of its branches are, and an icon any of them has: the brand's, not one branch's figures
 			left join lateral (
-				select v.id, v.rating from venues v where v.brand_id = b.id and not v.closed ${city}
+				select v.category from venues v where v.brand_id = b.id and not v.closed ${city} and v.category is not null
+				group by v.category order by count(*) desc, v.category limit 1
+			) cat on true
+			left join lateral (
+				select v.id from venues v where v.brand_id = b.id and not v.closed ${city} and v.favicon_id is not null
 				order by v.reviews_count desc nulls last, v.id limit 1
-			) d on true
+			) icon on true
 			left join prospects p on p.brand_id = b.id
 			${conditions.length ? `where ${conditions.join(' and ')}` : ''}`,
 			params,
@@ -299,30 +314,17 @@ export class BrandListService {
 		return out;
 	}
 
-	private async describedVenues(ids: (string | null)[]): Promise<Map<string, AdminBrandRowVenueOutputDto>> {
+	/** The icons of these venues, by venue id. */
+	private async favicons(ids: (string | null)[]): Promise<Map<string, ImageOutputDto>> {
 		const wanted = ids.filter((id): id is string => !!id);
 		if (!wanted.length) return new Map();
 		const venues = await this.em.find(Venue, { id: { $in: wanted } }, { populate: ['favicon'] });
 		return new Map(
-			venues.map(v => {
-				const { id, name, category, district, street, rating, reviewsCount, favicon } = wrap(v).serialize({
-					skipNull: true,
-					forceObject: true,
-					populate: ['favicon'],
-				}) as unknown as AdminBrandRowVenueOutputDto;
-				return [
-					v.id,
-					{
-						id,
-						name,
-						...(category && { category }),
-						...(district && { district }),
-						...(street && { street }),
-						...(rating != null && { rating }),
-						...(reviewsCount != null && { reviewsCount }),
-						...(favicon && { favicon }),
-					},
-				];
+			venues.flatMap(v => {
+				const { favicon } = wrap(v).serialize({ skipNull: true, forceObject: true, populate: ['favicon'] }) as unknown as {
+					favicon?: ImageOutputDto;
+				};
+				return favicon ? [[v.id, favicon] as const] : [];
 			}),
 		);
 	}

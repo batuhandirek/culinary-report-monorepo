@@ -57,6 +57,11 @@
 		}));
 
 	const hasData = $derived(rows.some((row) => row.social || row.reviews || row.rating !== null));
+	// A chain's place charts (rating, foot traffic) are the picked branch's: their notes say which
+	const place = $derived.by(() => {
+		const branch = series.branches.length > 1 ? series.branches.find((b) => b.id === series.branchId) : undefined;
+		return branch ? (branch.street ?? branch.name) : '';
+	});
 
 	/** The topics raised most over the window, as a share of the month's written reviews. */
 	const topicRows = (kind: 'praise' | 'complaints'): TopicRow[] => {
@@ -248,7 +253,7 @@
 			onSelect={select} />
 		<MonthChart
 			title="Google rating"
-			note="All time, at the end of each month"
+			note={place ? `${place}: all time, at the end of each month` : 'All time, at the end of each month'}
 			{months}
 			values={pick((row) => row.rating)}
 			comparisons={against((c) => c.rating)}
@@ -263,7 +268,7 @@
 	</div>
 
 	{#if rows.some((row) => row.busyness || row.booked !== undefined)}
-		<h2 class="section-rule m-0">Foot traffic</h2>
+		<h2 class="section-rule m-0">Foot traffic{place ? ` · ${place}` : ''}</h2>
 		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 			{#if rows.some((row) => row.busyness)}
 				<MonthChart

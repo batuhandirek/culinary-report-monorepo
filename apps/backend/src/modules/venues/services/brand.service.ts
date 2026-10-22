@@ -20,6 +20,7 @@ import {
 	busiestBranch,
 	isBrandName,
 	isDistinctiveBrand,
+	isProfileKey,
 	oneBrandSite,
 	ownSite,
 	suggestBrands,
@@ -245,7 +246,8 @@ export class BrandService {
 
 		let merged = 0;
 		for (const { group, venues } of await this.suggestions(city.id)) {
-			if (!oneBrandSite(venues, group.name, words)) continue;
+			// Names sharing no words on one profile may be one owner's two concepts: an admin's call
+			if (isProfileKey(group.key) || !oneBrandSite(venues, group.name, words)) continue;
 			try {
 				const result = await this.combine(group.name, group.venueIds);
 				kept.push(result.keep.id);

@@ -33,7 +33,7 @@ export enum MentionMatchMethodEnum {
 
 /** One venue talked about in a post, as the LLM read it, and the brand (and branch) it was matched to. */
 @Entity({ tableName: 'mentions', repository: () => MentionRepository })
-export class Mention extends MikroOrmSimpleEntityAbstractClass {
+export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening'> {
 	@ManyToOne({ entity: () => SocialPost, deleteRule: 'cascade' })
 	post: Rel<SocialPost>;
 
@@ -53,6 +53,11 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass {
 	// False when the creator says they have not been there
 	@Property({ type: 'boolean' })
 	visited: boolean;
+
+	// The post itself says the place is new or has just opened: the earliest opening signal there
+	// is, read by `VenueStatusChangeService` and the lead score's new-place bonus
+	@Property({ type: 'boolean', default: false })
+	isNewOpening: boolean = false;
 
 	@Property({ type: 'text' })
 	sentiment: FeedbackSentiment;

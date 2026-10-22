@@ -50,8 +50,8 @@ export interface AdminTopicVenueOutputDto {
 	viaLabel: string;
 	/** The topic (or the child) is its main food */
 	primary: boolean;
-	/** What gives the tag: its Google categories, its posts, or an admin */
-	source: 'category' | 'mentions' | 'manual';
+	/** What gives the tag: its Google categories, its posts, its menu, Google's review tags, or an admin */
+	source: 'category' | 'mentions' | 'menu' | 'reviews' | 'manual';
 	/** The month's posts about it by others */
 	posts: number;
 }
@@ -69,5 +69,24 @@ export interface AdminTopicInsightOutputDto {
 	shareByMonth: (number | null)[];
 	/** Google's related searches over the twelve months; absent when the pull had none */
 	related?: AdminSearchRelatedQueriesOutputDto;
+	/**
+	 * The month's delivery menus (scraped for report venues and their competitors only, so they
+	 * lean to those): `menus` venues have one; the rest is absent when none has the topic
+	 */
+	menu: AdminTopicMenuOutputDto;
 	venues: AdminTopicVenueOutputDto[];
+}
+
+export interface AdminTopicMenuOutputDto {
+	/** Open venues of the city with a menu stored for the month */
+	menus: number;
+	/** Of those, the ones with the topic (or a child) on it */
+	venues?: number;
+	items?: number;
+	/** Median and quartiles of those venues' own median price for it */
+	median?: number;
+	p25?: number;
+	p75?: number;
+	/** Districts with 5+ such venues */
+	districts?: { district: string; venues: number; median: number }[];
 }

@@ -3,15 +3,34 @@ export enum PipelineStepEnum {
 	// Every confirmed brand's name on Google Maps in the city, for branches that opened since
 	// (the quarterly cron, after SCRAPE_VENUES); new ones are offered, never added
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	// OpenStreetMap's food places in the city, each linked to the venue it is (free; the
+	// monthly cron, before MONTHLY): the checklist the venue list is measured against
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	// The OSM places no venue is, searched on Google Maps by name and address, once each
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
+	// The month-end TikTok pass: the searches over three months and a short page of each hashtag,
+	// kept from the month's start; the weekly SCRAPE_TIKTOK_RECENT collects most of the month
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	// The city's TikTok searches over the last week and a short page of each hashtag (the weekly
+	// cron): hashtag feeds ignore dates, so only scraping through the month finds its videos
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	// The newest page of each Instagram hashtag (the daily cron): on Apify's Free plan a hashtag
 	// gives one page a run, about a day of posts on a busy tag
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	// Each Instagram hashtag's top reels of the last week (the weekly cron, with the TikTok one):
+	// the posts feed returns no reels, and reels carry the views
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	// The city's food blogs through their feeds: each new article a post (free; the weekly cron
+	// and the month end)
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	// Report brands with no competitors get their best suggestions (free; before the review
+	// scrape, so the competitors' reviews come in the same run); brands with any are left alone
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	// Google Maps detail pages (hours, amenities, popular times) of report venues and competitors
@@ -43,13 +62,14 @@ export enum PipelineStepEnum {
 	MONTHLY = 'MONTHLY',
 }
 
-// The monthly run, in order: city-wide posts, their mentions, filling in missing venues,
-// then the most talked-about brands' own posts, their reviews, their Google Maps details
-// (hours, amenities, popular times) and their reports, and last the
+// The monthly run, in order: city-wide posts and blog articles, their mentions, filling in missing venues,
+// then the most talked-about brands' own posts, competitors for those without, their reviews,
+// their Google Maps details (hours, amenities, popular times) and their reports, and last the
 // outreach lead scores over everything gathered
 export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_TIKTOK,
 	PipelineStepEnum.SCRAPE_INSTAGRAM,
+	PipelineStepEnum.SCRAPE_BLOGS,
 	PipelineStepEnum.EXTRACT_MENTIONS,
 	PipelineStepEnum.MATCH_MENTIONS,
 	PipelineStepEnum.LOOKUP_VENUES,
@@ -57,6 +77,9 @@ export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
 	PipelineStepEnum.EXTRACT_MENTIONS,
 	PipelineStepEnum.MATCH_MENTIONS,
+	// After the last match: the report brands are final here, and the review scrape takes
+	// their competitors
+	PipelineStepEnum.FILL_COMPETITORS,
 	PipelineStepEnum.SCRAPE_REVIEWS,
 	PipelineStepEnum.ANALYSE_REVIEWS,
 	PipelineStepEnum.REFRESH_VENUE_DETAILS,
@@ -78,21 +101,34 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.SCRAPE_VENUES]: 20,
 	// Forty places a brand at ~$0.004 a place: about $0.16 a brand
 	[PipelineStepEnum.SEARCH_BRANCHES]: 2,
-	[PipelineStepEnum.SCRAPE_TIKTOK]: 15,
+	// One result a place at ~$0.004, planned on 80 % of it: about 2,000 places
+	[PipelineStepEnum.LOOKUP_OSM_PLACES]: 10,
+	// TikTok, ~$15 a month in all. Each run's search share is the larger of 40 % and the search
+	// actor's $4 floor, and spends far less (~$0.60 for 24 queries); hashtags take the rest at
+	// ~$0.0037 an item, their page size cut to fit. Month end: $3 of hashtags (~40 a tag)
+	[PipelineStepEnum.SCRAPE_TIKTOK]: 7,
+	// Weekly: $2 of hashtags (~25 a tag) and the week's searches, ~$2.60 a week spent
+	[PipelineStepEnum.SCRAPE_TIKTOK_RECENT]: 6,
 	[PipelineStepEnum.SCRAPE_INSTAGRAM]: 8,
 	// One page (up to ~27 posts) of twenty hashtags at $0.0027 a post is about $1.50
 	[PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT]: 2,
+	// A few top reels a tag at $0.0027 (twenty tags: ~40 reels, ~$0.11)
+	[PipelineStepEnum.SCRAPE_INSTAGRAM_REELS]: 1,
 	[PipelineStepEnum.LOOKUP_VENUES]: 6,
 	// Half to the TikTok search, whose actor refuses a cap under $4
 	[PipelineStepEnum.SCRAPE_VENUE_SOCIAL]: 8,
-	[PipelineStepEnum.SCRAPE_REVIEWS]: 5,
+	// $0.0006 a Google review (Berlin 2026-09: ~6,300 for 127 venues, ~$3.80). A tenth to
+	// TripAdvisor, then of the $10.80 left the month takes 60 % ($6.48) and the backfill of
+	// venues new to the set 40 % ($4.32: ~7,200 reviews, ~22 venues at seven months of ~47)
+	[PipelineStepEnum.SCRAPE_REVIEWS]: 12,
 	[PipelineStepEnum.REFRESH_VENUE_DETAILS]: 2,
 	[PipelineStepEnum.SCRAPE_OWN_ACCOUNTS]: 2,
 	// A hundred comments under each of ~100 posts at $0.00125 a comment
 	[PipelineStepEnum.SCRAPE_COMMENTS]: 13,
 	[PipelineStepEnum.SCRAPE_PRESS]: 3,
-	// Three searches of twenty places per report venue: about $0.03 each
-	[PipelineStepEnum.TRACK_SEARCH_RANKS]: 3,
+	// Up to three searches of twenty places per report branch, ~$0.06 a search (Berlin 2026-09:
+	// 42 searches for 20 branches, $2.42); every branch of a chain counts, about a third more
+	[PipelineStepEnum.TRACK_SEARCH_RANKS]: 4,
 	// Two runs of signalbench/google-trends-scraper (~110 food topics, then the won venues) at
 	// ~$0.004 a term; the actor refuses a cap under $1, so each run gets at least that
 	[PipelineStepEnum.SEARCH_INTEREST]: 2,
@@ -114,3 +150,16 @@ export const RESERVATION_SAMPLE_MAX_VENUES = 600;
 
 /** How far back the weekly review watch scrapes: a week plus slack for a late run. */
 export const REVIEW_WATCH_DAYS = 10;
+
+/**
+ * How many months before the report month a venue's first `SCRAPE_REVIEWS` starts (a venue with
+ * no Google review stored from before the month): the report's previous month and the
+ * correlations' six-month window need them. Paid once per venue.
+ */
+export const REVIEW_BACKFILL_MONTHS = 6;
+
+/**
+ * The backfill's share of `SCRAPE_REVIEWS`' Google budget at most, so the month's own reviews
+ * of the venues already tracked always fit. All of it when no venue is tracked yet.
+ */
+export const REVIEW_BACKFILL_BUDGET_SHARE = 0.4;

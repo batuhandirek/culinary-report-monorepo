@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PortalBrandOutputDto, PortalPatternsOutputDto } from 'client';
 
+	import BranchPicker from '../components/BranchPicker.svelte';
 	import CityPicker from '../components/CityPicker.svelte';
 
 	import PatternsView from './components/PatternsView.svelte';
@@ -13,10 +14,17 @@
 	// Six months of relations and weeks in one city, from the brand's stored reports
 	const brandId = $derived(page.params.brandId!);
 	const cityId = $derived(page.url.searchParams.get('city') ?? undefined);
+	const branchId = $derived(page.url.searchParams.get('branch') ?? undefined);
 	let request = $state<Promise<[PortalPatternsOutputDto, PortalBrandOutputDto]>>(new Promise(() => {}));
 	const load = () =>
 		(request = Promise.all([
-			api.portal.getPortalPatterns(brandId, { months: 6, cityId }) as Promise<PortalPatternsOutputDto>,
+			(api.portal.getPortalPatterns(brandId, { months: 6, cityId, branchId }) as Promise<PortalPatternsOutputDto>).catch(
+				(error) => {
+					// A stale `?branch=` (closed, taken off the brand, mistyped) shows the default branch
+					if (!branchId) throw error;
+					return api.portal.getPortalPatterns(brandId, { months: 6, cityId }) as Promise<PortalPatternsOutputDto>;
+				}
+			),
 			api.portal.getPortalBrand(brandId) as Promise<PortalBrandOutputDto>
 		]));
 	$effect(() => {
@@ -33,7 +41,10 @@
 		{/each}
 	</div>
 {:then [patterns, brand]}
-	{#if brand.reportScope !== 'all'}<CityPicker cities={brand.cities} />{/if}
+	<div class="flex flex-wrap items-center gap-2">
+		{#if brand.reportScope !== 'all'}<CityPicker cities={brand.cities} />{/if}
+		<BranchPicker branches={patterns.branches} value={patterns.branchId} />
+	</div>
 	<PatternsView {patterns} {brandId} />
 {:catch}
 	<ErrorState ground="paper" onRetry={load} />

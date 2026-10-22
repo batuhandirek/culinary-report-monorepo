@@ -22,9 +22,11 @@
 	import { calendarLine } from '#lib/city-calendar.js';
 	import { compact, monthLabel, PLATFORM_LABELS, TOPIC_LABELS } from '#lib/culinary.js';
 
-	// A venue's monthly report, laid out as a document: on screen in a sheet, in print on A4
+	// A brand's monthly report, laid out as a document: on screen in a sheet, in print on A4
 	// pages (the `/print/report` page sets the page box). Grids switch at `sm`, which an A4
-	// page's 182mm column clears, so print gets the two-column layout.
+	// page's 182mm column clears, so print gets the two-column layout. The brand's figures come
+	// first; each branch's place figures (popular times, tables, prices, the neighbourhood,
+	// Google Maps searches) follow, one branch after another, all of them in print too.
 	interface Props {
 		report: Pick<AdminReportOutputDto, 'data' | 'highlights'>;
 	}
@@ -38,7 +40,33 @@
 	const highlights = $derived(report.highlights);
 
 	const issue = $derived(data.month.slice(5));
-	const facts = $derived([data.venue.category, data.venue.district].filter(Boolean).join(' · '));
+	const branches = $derived(data.branches);
+	const chain = $derived(branches.length > 1);
+	// A one-branch brand's place: its address and Google details go on the cover
+	const only = $derived(branches.length === 1 ? branches[0] : undefined);
+	const facts = $derived([data.brand.category, only?.district].filter(Boolean).join(' · '));
+	// The brand's all-time Google stars: one place's own, a chain's over all its places' reviews
+	const allTime = $derived.by(() => {
+		const rated = branches.filter((b) => b.rating !== undefined && b.reviewsCount);
+		const count = rated.reduce((sum, b) => sum + b.reviewsCount!, 0);
+		return count ? rated.reduce((sum, b) => sum + b.rating! * b.reviewsCount!, 0) / count : undefined;
+	});
+	const placeLabel = (b: (typeof branches)[number]) =>
+		chain ? (b.street ?? b.name) : data.brand.name;
+	// A place's all-time rating among its district's and its kind of food's venues (20+ reviews);
+	// absent in reports built before it
+	const benchmarkParts = (b: (typeof branches)[number]) => {
+		const r = b.ratingBenchmark;
+		if (!r) return [];
+		return [
+			r.district &&
+				`above ${r.district.percentile} % of ${r.district.label}'s ${r.district.venues} food venues`,
+			r.topic && `above ${r.topic.percentile} % of ${r.topic.city}'s ${r.topic.venues} ${r.topic.label} places`
+		].filter((p): p is string => !!p);
+	};
+	const districts = $derived(
+		[...new Set(branches.map((b) => b.district).filter(Boolean))].join(', ')
+	);
 
 	// Against the month before: absent for a first report, and review figures only when that
 	// month's reviews were collected
@@ -78,9 +106,9 @@
 
 	// Google Maps details on the cover; both absent when no scrape carried them (unknown)
 	const AMENITY_PILLS = 8;
-	const amenities = $derived(data.venue.amenities ?? []);
+	const amenities = $derived(only?.amenities ?? []);
 	const starShape = $derived.by(() => {
-		const dist = data.venue.reviewsDistribution;
+		const dist = only?.reviewsDistribution;
 		if (!dist) return [];
 		const rows = [
 			{ stars: 5, count: dist.fiveStar },
@@ -93,7 +121,7 @@
 		return total ? rows.map((r) => ({ ...r, share: r.count / total })) : [];
 	});
 
-	const trend = $derived(data.venue.ratingTrend ?? []);
+	const trend = $derived(only?.ratingTrend ?? []);
 	const trendNote = $derived.by(() => {
 		const rated = trend.filter((p) => p.rating !== undefined);
 		if (rated.length < 2) return '';
@@ -143,8 +171,8 @@
 			value: reviews.avgStars ? reviews.avgStars.toFixed(1) : '—',
 			label: 'Stars this month',
 			note:
-				(data.venue.rating
-					? `${data.venue.rating.toFixed(1)} all time on Google${trendNote}`
+				(allTime !== undefined
+					? `${allTime.toFixed(1)} all time on Google${chain ? ` over ${branches.length} places` : trendNote}`
 					: 'on Google') + was(previous?.reviews?.avgStars?.toFixed(1)),
 			delta: delta(reviews.avgStars, previous?.reviews?.avgStars, 'stars'),
 			spark: trend
@@ -208,38 +236,40 @@
 
 	const maxDish = $derived(Math.max(1, ...data.dishes.map((d) => d.count)));
 
-	// The venue itself ranked among its neighbours, by views
-	const ranking = $derived(
+	// Each place ranked among its district's neighbours, by views of the posts that named it
+	const rankingOf = (branch: (typeof branches)[number]) =>
 		[
-			...data.neighbours.map((n) => ({ ...n, self: false })),
+			...branch.neighbours.map((n) => ({ ...n, self: false })),
 			{
-				venueId: data.venue.id,
-				name: data.venue.name,
-				category: data.venue.category,
-				posts: social.postCount,
-				views: social.views,
+				venueId: branch.venueId,
+				name: placeLabel(branch),
+				category: branch.category,
+				posts: branch.social.postCount,
+				views: branch.social.views,
 				self: true
 			}
-		].sort((a, b) => b.views - a.views)
-	);
-	const maxViews = $derived(Math.max(1, ...ranking.map((r) => r.views)));
+		].sort((a, b) => b.views - a.views);
+	const changesOf = (branch: (typeof branches)[number]) => {
+		const c = branch.neighbourhood?.changes;
+		return c && c.opened + c.closed + c.reopened > 0 ? c : undefined;
+	};
 
 	// The venue next to the competitors its owner picked, on the same month's numbers
 	const competitors = $derived(data.competitors ?? []);
 	const compareRows = $derived([
 		{
-			venueId: data.venue.id,
-			// A chain compares as the whole brand in the city
-			name: data.brand?.name ?? data.venue.name,
+			venueId: data.brand.id,
+			// A chain compares as the whole brand; its places' tables and foot traffic are under each place
+			name: data.brand.name,
 			self: true,
-			rating: data.venue.rating,
+			rating: allTime,
 			social: social,
 			reviewsTracked: true,
 			reviews: reviews,
-			demand: data.demand && { booked: data.demand.booked, evenings: data.demand.evenings.length },
-			busyness: data.busyness && {
-				index: data.busyness.index,
-				previousIndex: data.busyness.previous?.index
+			demand: only?.demand && { booked: only.demand.booked, evenings: only.demand.evenings.length },
+			busyness: only?.busyness && {
+				index: only.busyness.index,
+				previousIndex: only.busyness.previous?.index
 			}
 		},
 		// A whole chain says how many places it counts; one picked for a branch says which
@@ -291,17 +321,15 @@
 		})
 	);
 
-	// Openings and closures nearby this quarter: the neighbourhood section shows them too
-	const openings = $derived(data.neighbourhood?.changes);
-	const showChanges = $derived(
-		!!openings && openings.opened + openings.closed + openings.reopened > 0
-	);
+	// The competitors a place is compared with: the whole brand's and the ones picked for it
+	const competitorsOf = (branch: (typeof branches)[number]) =>
+		competitors.filter((c) => !c.branchId || c.branchId === branch.venueId);
 
 	// Sections are numbered in the order they appear; empty ones drop out
 	const sections = $derived(
 		[
 			showSplit && 'stars',
-			data.brand && 'branches',
+			chain && 'branches',
 			competitors.length && 'compare',
 			'next',
 			'social',
@@ -309,11 +337,14 @@
 			reviews.count && 'reviews',
 			replyDrafts.length && 'replies',
 			data.dishes.length && 'menu',
-			(data.busyness || data.demand) && 'busyness',
+			// Each place's own figures, one place after another
+			...branches.flatMap((b) => [
+				(b.busyness || b.demand) && `busyness:${b.venueId}`,
+				b.prices && `prices:${b.venueId}`,
+				(b.neighbours.length || changesOf(b)) && `nearby:${b.venueId}`,
+				b.searchRanks?.length && `search:${b.venueId}`
+			]),
 			data.correlations && 'patterns',
-			data.prices && 'prices',
-			(data.neighbours.length || showChanges) && 'nearby',
-			data.searchRanks?.length && 'search',
 			data.city && 'city'
 		].filter(Boolean) as string[]
 	);
@@ -331,6 +362,17 @@
 			<h2 class="m-0 text-2xl leading-tight font-semibold tracking-tight">{title}</h2>
 		</div>
 	</header>
+{/snippet}
+
+{#snippet benchmarkLine(rating: number, parts: string[])}
+	<p class="m-0 mt-2 text-sm leading-snug">
+		<span class="font-semibold tabular-nums">{rating.toFixed(1)} ★</span>
+		{#each parts as part (part)}
+			<!-- An expression keeps the leading space, which Svelte trims from plain text in an {#each} -->
+			<span class="text-muted-foreground">{` · ${part}`}</span>
+		{/each}
+		<span class="text-muted-foreground text-[11px]"> (all-time Google rating, against venues with 20+ reviews)</span>
+	</p>
 {/snippet}
 
 {#snippet pill(text: string)}
@@ -358,14 +400,18 @@
 			{#if facts}<p class="eyebrow text-beet m-0 mb-2">{facts}</p>{/if}
 			<h1
 				class="m-0 text-4xl leading-[0.95] font-bold tracking-tight text-balance sm:text-5xl">
-				{data.brand?.name ?? data.venue.name}
+				{data.brand.name}
 			</h1>
-			{#if data.brand}
+			{#if chain}
 				<p class="text-muted-foreground m-0 mt-2">
-					{data.brand.branches.length} branches: posts and reviews cover all of them
+					{branches.length} places: posts and reviews cover all of them, and each place has its
+					own pages
 				</p>
-			{:else if data.venue.street}
-				<p class="text-muted-foreground m-0 mt-2">{data.venue.street}</p>
+			{:else if only?.street}
+				<p class="text-muted-foreground m-0 mt-2">{only.street}</p>
+			{/if}
+			{#if only?.ratingBenchmark}
+				{@render benchmarkLine(only.ratingBenchmark.rating, benchmarkParts(only))}
 			{/if}
 			{#if amenities.length}
 				<div class="mt-3 flex flex-wrap gap-1" aria-label="On Google Maps">
@@ -524,10 +570,14 @@
 	{/if}
 
 	<!-- A chain's branches side by side -->
-	{#if data.brand}
+	{#if chain}
 		<section>
 			{@render sectionHead('branches', 'Your branches', 'Branch by branch')}
-			<ReportBranches brand={data.brand} month={data.month} />
+			<ReportBranches
+				{branches}
+				brandName={data.brand.name}
+				brandOnlyPosts={data.brand.brandOnlyPosts}
+				month={data.month} />
 		</section>
 	{/if}
 
@@ -865,7 +915,7 @@
 				<div class={['break-inside-avoid', creators.length && 'mt-9']}>
 					<h3 class="m-0 text-base font-semibold">Worth inviting</h3>
 					<p class="text-reading-ink m-0 mt-1 mb-3 max-w-[62ch] text-[13px]">
-						They posted about places in {data.venue.district} this month, unpaid, but not
+						They posted about places in {districts} this month, unpaid, but not
 						about you.
 					</p>
 					<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -1058,75 +1108,118 @@
 		</section>
 	{/if}
 
-	<!-- Demand, what followed what, prices: each only when tracked -->
-	<ReportBusyness
-		busyness={data.busyness}
-		demand={data.demand}
-		{competitors}
-		month={data.month}
-		{sectionHead} />
+	<!-- Each place's own figures, each only when tracked: popular times and tables, prices, the
+	     neighbourhood, Google Maps searches -->
+	{#each branches as branch, i (branch.venueId)}
+		{@const changes = changesOf(branch)}
+		{@const ranking = rankingOf(branch)}
+		{@const maxViews = Math.max(1, ...ranking.map((r) => r.views))}
+		{#if chain}
+			<!-- Each place opens a page of its own in print ("each place has its own pages"), so its
+			     header never strands at the foot of the page before -->
+			<header
+				class="border-ink flex flex-col gap-1 border-t-2 pt-4 break-before-page break-inside-avoid break-after-avoid">
+				<p class="eyebrow text-beet m-0">Place {i + 1} of {branches.length}</p>
+				<h2 class="m-0 text-3xl leading-tight font-bold tracking-tight">{branch.street ?? branch.name}</h2>
+				<p class="text-muted-foreground m-0 flex flex-wrap items-center gap-x-2 text-sm">
+					<span
+						>{[branch.name, branch.district, branch.city].filter(Boolean).join(' · ')}{branch.rating
+							? ` · ${branch.rating.toFixed(1)} ★ all time, ${(branch.reviewsCount ?? 0).toLocaleString('en')} reviews`
+							: ''}</span>
+					<RatingSparkline points={branch.ratingTrend} />
+				</p>
+				{#if branch.ratingBenchmark}
+					{@render benchmarkLine(branch.ratingBenchmark.rating, benchmarkParts(branch))}
+				{/if}
+				{#if branch.amenities?.length}
+					<div class="mt-1 flex flex-wrap gap-1" aria-label="On Google Maps">
+						{#each branch.amenities.slice(0, AMENITY_PILLS) as amenity (amenity)}
+							{@render pill(amenity)}
+						{/each}
+					</div>
+				{/if}
+				{#if !(branch.busyness || branch.demand || branch.prices || branch.neighbours.length || changes || branch.searchRanks?.length)}
+					<p class="text-muted-foreground m-0 mt-1 text-xs">
+						No popular times, tables, delivery listing or searches tracked for this place this month.
+					</p>
+				{/if}
+			</header>
+		{/if}
+
+		<ReportBusyness
+			busyness={branch.busyness}
+			demand={branch.demand}
+			competitors={competitorsOf(branch)}
+			month={data.month}
+			key={`busyness:${branch.venueId}`}
+			{sectionHead} />
+		{#if branch.prices}
+			<ReportPrices prices={branch.prices} key={`prices:${branch.venueId}`} {sectionHead} />
+		{/if}
+
+		<!-- The neighbourhood -->
+		{#if branch.neighbours.length || changes}
+			<section class="break-inside-avoid">
+				{@render sectionHead(
+					`nearby:${branch.venueId}`,
+					branch.district ?? 'Nearby',
+					'Who got talked about nearby'
+				)}
+				{#if branch.neighbours.length}
+				<ol class="m-0 flex list-none flex-col p-0">
+					{#each ranking as row, i (row.venueId)}
+						<li
+							class={[
+								'grid grid-cols-[1.75rem_minmax(0,12rem)_minmax(0,1fr)] items-center gap-x-3 rounded-sm px-2 py-1.5',
+								row.self && 'bg-primary/35'
+							]}>
+							<span class="font-pixel text-muted-foreground text-[9px]">{i + 1}</span>
+							<span class="min-w-0">
+								<span class={['block truncate text-sm', row.self && 'font-semibold']}
+									>{row.name}</span>
+								<span class="text-muted-foreground block truncate text-[11px]">
+									{row.posts}
+									{row.posts === 1 ? 'post' : 'posts'}{row.category
+										? ` · ${row.category}`
+										: ''}
+								</span>
+							</span>
+							<div class="flex items-center gap-1.5">
+								<span
+									class={[
+										'h-3 rounded-r-[3px]',
+										row.self ? 'bg-ink' : 'bg-strip-muted'
+									]}
+									style:width={`${row.views ? Math.max(1, (row.views / maxViews) * 100) : 0}%`}
+								></span>
+								<span class="text-xs font-medium tabular-nums"
+									>{compact(row.views)}</span>
+							</div>
+						</li>
+					{/each}
+				</ol>
+				<p class="text-muted-foreground m-0 mt-2 text-xs">
+					Food and drink places in {branch.district} by views of posts about them this month{chain
+						? `; ${placeLabel(branch)} by the posts that named it`
+						: ''}.
+				</p>
+				{/if}
+				{#if changes}<ReportNeighbourhoodChanges {changes} />{/if}
+			</section>
+		{/if}
+
+		<!-- Google Maps searches -->
+		{#if branch.searchRanks?.length}
+			<section class="break-inside-avoid">
+				{@render sectionHead(`search:${branch.venueId}`, 'Google Maps', 'Where guests find you')}
+				<ReportSearchRanks ranks={branch.searchRanks} />
+			</section>
+		{/if}
+	{/each}
+
+	<!-- What followed what: the brand's posts against every place's reviews -->
 	{#if data.correlations}
 		<ReportPatterns correlations={data.correlations} {sectionHead} />
-	{/if}
-	{#if data.prices}
-		<ReportPrices prices={data.prices} {sectionHead} />
-	{/if}
-
-	<!-- The neighbourhood -->
-	{#if data.neighbours.length || showChanges}
-		<section class="break-inside-avoid">
-			{@render sectionHead(
-				'nearby',
-				data.venue.district ?? 'Nearby',
-				'Who got talked about nearby'
-			)}
-			{#if data.neighbours.length}
-			<ol class="m-0 flex list-none flex-col p-0">
-				{#each ranking as row, i (row.venueId)}
-					<li
-						class={[
-							'grid grid-cols-[1.75rem_minmax(0,12rem)_minmax(0,1fr)] items-center gap-x-3 rounded-sm px-2 py-1.5',
-							row.self && 'bg-primary/35'
-						]}>
-						<span class="font-pixel text-muted-foreground text-[9px]">{i + 1}</span>
-						<span class="min-w-0">
-							<span class={['block truncate text-sm', row.self && 'font-semibold']}
-								>{row.name}</span>
-							<span class="text-muted-foreground block truncate text-[11px]">
-								{row.posts}
-								{row.posts === 1 ? 'post' : 'posts'}{row.category
-									? ` · ${row.category}`
-									: ''}
-							</span>
-						</span>
-						<div class="flex items-center gap-1.5">
-							<span
-								class={[
-									'h-3 rounded-r-[3px]',
-									row.self ? 'bg-ink' : 'bg-strip-muted'
-								]}
-								style:width={`${row.views ? Math.max(1, (row.views / maxViews) * 100) : 0}%`}
-							></span>
-							<span class="text-xs font-medium tabular-nums"
-								>{compact(row.views)}</span>
-						</div>
-					</li>
-				{/each}
-			</ol>
-			<p class="text-muted-foreground m-0 mt-2 text-xs">
-				Food and drink places in {data.venue.district} by views of posts about them this month.
-			</p>
-			{/if}
-			{#if openings && showChanges}<ReportNeighbourhoodChanges changes={openings} />{/if}
-		</section>
-	{/if}
-
-	<!-- Google Maps searches -->
-	{#if data.searchRanks?.length}
-		<section class="break-inside-avoid">
-			{@render sectionHead('search', 'Google Maps', 'Where guests find you')}
-			<ReportSearchRanks ranks={data.searchRanks} />
-		</section>
 	{/if}
 
 	<!-- The city -->

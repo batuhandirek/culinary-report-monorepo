@@ -16,9 +16,9 @@ import { FoodTopicService } from './food-topic.service.js';
 export type VenueTopicChange = 'tag' | 'exclude' | 'clear';
 
 /**
- * Venues' food topics (`venueTopics`): worked out on read from the venues' Google categories and
- * their posts by others, with the admin's tags and exclusions (`VenueFoodTopic`, of which this is
- * the one writer) on top.
+ * Venues' food topics (`venueTopics`): worked out on read from the venues' Google categories,
+ * their posts by others, their latest delivery menu and Google's review tags, with the admin's
+ * tags and exclusions (`VenueFoodTopic`, of which this is the one writer) on top.
  */
 @Injectable()
 export class VenueFoodTopicService {
@@ -29,7 +29,8 @@ export class VenueFoodTopicService {
 
 	/** The tags of these venues, by venue id; a venue with none maps to `[]`. */
 	async tags(
-		venues: Pick<Venue, 'id' | 'name' | 'category' | 'categories'>[],
+		venues: (Pick<Venue, 'id' | 'name' | 'category' | 'categories'> &
+			Partial<Pick<Venue, 'details'>>)[],
 		index?: FoodTopicIndex,
 	) {
 		const out = new Map<string, VenueTopicTag[]>();
@@ -37,7 +38,7 @@ export class VenueFoodTopicService {
 		index ??= await this.foodTopicService.index();
 		const ids = venues.map(v => v.id);
 		const placeholders = ids.map(() => '?').join(', ');
-		const [rows, manual] = await Promise.all([
+		const [rows, menuRows, manual] = await Promise.all([
 			// A venue's own posts don't say what others call its food
 			this.em.getConnection().execute<{ venue_id: string; cuisine: string | null; n: number }[]>(
 				`select m.venue_id, m.cuisine, count(*)::int as n from mentions m
@@ -46,8 +47,22 @@ export class VenueFoodTopicService {
 						group by 1, 2`,
 				ids,
 			),
+			// Each listing's latest menu: what the venue sells now
+			this.em.getConnection().execute<{ venue_id: string; name: string; category: string | null }[]>(
+				`select l.venue_id, mi.name, mi.category from menu_items mi
+						join venue_delivery_listings l on l.id = mi.listing_id
+						where l.venue_id in (${placeholders})
+						and mi.month = (select max(x.month) from menu_items x where x.listing_id = mi.listing_id)`,
+				ids,
+			),
 			this.em.find(VenueFoodTopic, { venue: { $in: ids } }, { populate: ['topic'] }),
 		]);
+		const menus = new Map<string, { name: string; category: string | null }[]>();
+		for (const r of menuRows) {
+			const list = menus.get(r.venue_id) ?? [];
+			list.push({ name: r.name, category: r.category });
+			menus.set(r.venue_id, list);
+		}
 		const byVenue = new Map<string, { cuisine: string | null; n: number }[]>();
 		for (const r of rows) {
 			const list = byVenue.get(r.venue_id) ?? [];
@@ -62,6 +77,8 @@ export class VenueFoodTopicService {
 						category: venue.category,
 						categories: venue.categories,
 						mentionCuisines: byVenue.get(venue.id) ?? [],
+						menuItems: menus.get(venue.id) ?? [],
+						reviewTags: venue.details?.reviewsTags ?? [],
 						manual: manual
 							.filter(m => m.venue.id === venue.id)
 							.map(m => ({ key: m.topic.key, excluded: m.excluded })),

@@ -119,7 +119,7 @@
 	{:else if empty}
 		<EmptyState
 			title="Not sampled yet"
-			hint="Report venues and their competitors get popular times twice a week and delivery menus monthly; every venue with a booking page gets open tables on Thursdays."
+			hint="Every branch of a report brand, and its competitors, gets popular times twice a week and delivery menus monthly; every venue with a booking page gets open tables on Thursdays."
 			ground="none"
 			size="sm" />
 	{:else}

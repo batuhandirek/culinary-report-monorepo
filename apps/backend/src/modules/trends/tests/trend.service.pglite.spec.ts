@@ -95,8 +95,8 @@ describe('TrendService (pglite)', () => {
 		// September: three spellings of döner against one of Vietnamese
 		mention(pho, '2026-09-05', 'Viet', ['Pho']);
 		mention(doner, '2026-09-06', 'Kebap', ['Döner', 'döner']);
-		mention(kebap, '2026-09-07', 'Turkish/Kebab');
-		mention(kebap, '2026-09-08', 'doner kebab');
+		mention(kebap, '2026-09-07', 'Turkish/Kebab', ['doner kebab', 'Vegetable kebab']);
+		mention(kebap, '2026-09-08', 'doner kebab', ['Kebabs', 'Döner Kebab']);
 		// The venue's own account: not word of mouth, so no pizza in the tables
 		mention(doner, '2026-09-09', 'Pizza', ['Pizza'], 'donerx');
 		// Another city's talk stays in that city's trends
@@ -138,12 +138,14 @@ describe('TrendService (pglite)', () => {
 		expect(trends.totals).toMatchObject({ mentions: 4, posts: 4 });
 	});
 
-	it('counts each dish once per post or review, and every table adds up to 100', async () => {
+	it('groups the names of one food topic, counts each row once per post or review, and every table adds up to 100', async () => {
 		const trends = await service.month('2026-09', city.id);
-		expect(trends.dishes.map(r => [r.label, r.count, r.share])).toEqual([
-			['Döner', 2, 50],
-			['Ayran', 1, 25],
-			['Pho', 1, 25],
+		// "Döner", "doner kebab", "Kebabs": the kebab topic's row; "Vegetable kebab" is no alias of it
+		expect(trends.dishes.map(r => [r.key, r.label, r.count, r.share])).toEqual([
+			['kebab', 'Döner & kebab', 4, 57.1],
+			['ayran', 'Ayran', 1, 14.3],
+			['pho', 'Pho', 1, 14.3],
+			['vegetable kebab', 'Vegetable kebab', 1, 14.3],
 		]);
 		for (const table of [trends.cuisines, trends.dishes, trends.districts, trends.creators]) {
 			expect(_.sumBy(table, r => r.share)).toBeCloseTo(100, 0);

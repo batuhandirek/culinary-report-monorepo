@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AdminBrandBranchOutputDto, AdminBrandOutputDto, AdminVenueOutputDto } from 'client';
+	import type { AdminBrandOutputDto, AdminVenueOutputDto } from 'client';
 
 	import { untrack } from 'svelte';
 
@@ -15,19 +15,24 @@
 
 	// The data points beyond posts and reviews: open tables, foot traffic, delivery, where it
 	// ranks on Google Maps searches and its rating over time (its own accounts are on the
-	// Overview). Place-bound figures are one branch's: the busiest, unless another is picked.
+	// Overview). Each branch has its own: pick any of the city's open branches (the most
+	// reviewed first), as the report shows each one.
 	interface Props {
 		brand: AdminBrandOutputDto;
-		described?: AdminBrandBranchOutputDto;
+		cityId?: string;
 	}
 
-	let { brand, described }: Props = $props();
+	let { brand, cityId }: Props = $props();
 
-	const branches = $derived(brand.branches.filter((b) => !b.closed));
+	const branches = $derived(
+		brand.branches
+			.filter((b) => !b.closed && (!cityId || b.city.id === cityId))
+			.sort((a, b) => (b.reviewsCount ?? -1) - (a.reviewsCount ?? -1))
+	);
 	const chain = $derived(brand.branches.length > 1);
 	let branchId = $state<string | undefined>(undefined);
 	$effect(() => {
-		branchId ??= described?.id;
+		if (!branches.some((b) => b.id === branchId)) branchId = branches[0]?.id;
 	});
 	const BRANCHES = $derived(
 		branches.map((b) => ({ value: b.id, label: [b.name, b.street].filter(Boolean).join(' · ') }))
@@ -46,13 +51,10 @@
 <div class="flex min-w-0 flex-col gap-5">
 	{#if chain && BRANCHES.length > 1}
 		<div class="flex items-center gap-3 text-sm">
-			<span class="text-muted-foreground">Place figures of</span>
+			<span class="text-muted-foreground">Branch</span>
 			<div class="w-80">
 				<Select items={BRANCHES} bind:value={branchId} aria-label="Branch" size="sm" />
 			</div>
-			{#if branchId === described?.id}
-				<span class="text-muted-foreground text-xs">the busiest place: the report describes it</span>
-			{/if}
 		</div>
 	{/if}
 

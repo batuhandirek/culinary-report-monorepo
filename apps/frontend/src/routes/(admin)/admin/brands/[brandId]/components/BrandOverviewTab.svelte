@@ -34,7 +34,8 @@
 		brand: AdminBrandOutputDto;
 		month: string;
 		cityId?: string;
-		described?: AdminBrandBranchOutputDto;
+		/** A one-place brand's place */
+		place?: AdminBrandBranchOutputDto;
 		/** The month's figures, loaded by the page (its tabs count from them); null while loading */
 		summary: AdminBrandSummaryOutputDto | null;
 		failed: boolean;
@@ -45,7 +46,7 @@
 		building: boolean;
 	}
 
-	let { brand, month, cityId, described, summary, failed, onRetry, sales, openTab, onBuild, building }: Props =
+	let { brand, month, cityId, place, summary, failed, onRetry, sales, openTab, onBuild, building }: Props =
 		$props();
 
 	const chain = $derived(brand.branches.length > 1);
@@ -347,14 +348,14 @@
 						<button type="button" class="text-beet mt-2 cursor-pointer text-xs hover:underline" onclick={() => openTab('branches')}>
 							All branches and branch tools
 						</button>
-					{:else if described}
-						<a href={`/admin/venues/${described.id}`} class="flex flex-col gap-1 text-sm hover:underline">
-							<span class="font-medium">{described.name}</span>
+					{:else if place}
+						<a href={`/admin/venues/${place.id}`} class="flex flex-col gap-1 text-sm hover:underline">
+							<span class="font-medium">{place.name}</span>
 							<span class="text-muted-foreground text-xs">
-								{[described.category, described.street, described.district].filter(Boolean).join(' · ')}
+								{[place.category, place.street, place.district].filter(Boolean).join(' · ')}
 							</span>
-							{#if described.rating}
-								<span class="text-muted-foreground text-xs">{described.rating.toFixed(1)} ★ · {described.reviewsCount ?? 0} Google reviews</span>
+							{#if place.rating}
+								<span class="text-muted-foreground text-xs">{place.rating.toFixed(1)} ★ · {place.reviewsCount ?? 0} Google reviews</span>
 							{/if}
 						</a>
 						<p class="text-muted-foreground m-0 mt-2 text-xs">

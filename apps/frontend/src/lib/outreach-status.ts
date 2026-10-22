@@ -61,6 +61,32 @@ export const LOGGABLE_KINDS: { value: Exclude<OutreachTouchKind, 'STAGE'>; label
 	{ value: 'NOTE', label: 'Note' }
 ];
 
+export type OutreachTouchOutcome = 'spoke_to_owner' | 'spoke_to_staff' | 'closed' | 'nobody';
+
+/** What a visit or a call came to, the likeliest first. */
+export const TOUCH_OUTCOMES: { value: OutreachTouchOutcome; label: string }[] = [
+	{ value: 'spoke_to_owner', label: 'Spoke to the owner' },
+	{ value: 'spoke_to_staff', label: 'Spoke to staff' },
+	{ value: 'nobody', label: 'Nobody there' },
+	{ value: 'closed', label: 'Closed' }
+];
+
+export const outcomeLabel = (outcome: string) =>
+	TOUCH_OUTCOMES.find((o) => o.value === outcome)?.label ?? outcome;
+
+/** The kinds that happen in person or on the phone: the only ones logged with an outcome, a come-back time and consent. */
+export const IN_PERSON_KINDS: OutreachTouchKind[] = ['VISIT', 'CALL'];
+
+/**
+ * Whether a cold e-mail would go out without their OK: no consent on record (a visit or call
+ * logged with it, or set by hand) and no reply from them yet. German law (UWG §7) asks for
+ * consent before a promotional e-mail to a business; a reply from them makes it a conversation.
+ */
+export const needsEmailConsent = (prospect: {
+	emailConsentAt?: string | Date | null;
+	touches: { kind: string }[];
+}) => !prospect.emailConsentAt && !prospect.touches.some((t) => t.kind === 'REPLY');
+
 export const touchLabel = (touch: { kind: string; stage?: string }) =>
 	touch.kind === 'STAGE'
 		? `Moved to ${stageLabel(touch.stage ?? '')}`

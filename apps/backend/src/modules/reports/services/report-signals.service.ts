@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
 import { Review, ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import { ReservationPlatformEnum } from 'src/modules/venues/entities/venue-reservation-sample.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -15,12 +16,16 @@ import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness
 import { VenueDeliveryService } from 'src/modules/venues/services/venue-delivery.service.js';
 import { VenueReservationService } from 'src/modules/venues/services/venue-reservation.service.js';
 import { busiestHour, meanHistogram } from 'src/modules/venues/util/busyness.js';
-import { pricePosition } from 'src/modules/venues/util/delivery.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { bookedMedian, bookedPercent, eveningsBooked, meanBooked } from 'src/modules/venues/util/reservations.js';
 import { addDays, monthWeeks, weekStart } from 'src/modules/venues/util/week.js';
 
-import type { ReportCompetitor, ReportData } from '../interfaces/report-data.interface.js';
+import type {
+	ReportBranch,
+	ReportCompetitor,
+	ReportData,
+	ReportReviewStats,
+} from '../interfaces/report-data.interface.js';
 import type {
 	ReportBusyness,
 	ReportBusynessWeek,
@@ -43,9 +48,18 @@ const monthsBefore = (month: string, n: number): string => {
 	return m;
 };
 
+/** What a branch's price block reads: its own reviews, the brand's dishes, the competitors it is compared with. */
+export interface PlaceSignalsInput {
+	posts: ReportData['posts'];
+	reviews: Pick<ReportReviewStats, 'written' | 'complaints'>;
+	dishes: ReportData['dishes'];
+	competitors: ReportCompetitor[];
+}
+
 /**
  * The report's demand, price and correlation sections, read from what the pipeline stored:
- * busyness and reservation samples, delivery listings and menus, the venue's posts and reviews.
+ * busyness and reservation samples, delivery listings and menus, the brand's posts and reviews.
+ * Busyness, open tables and prices are each branch's own; the correlations are the brand's.
  * No LLM call, no scrape.
  */
 @Injectable()
@@ -55,26 +69,26 @@ export class ReportSignalsService {
 		private readonly venueBusynessService: VenueBusynessService,
 		private readonly venueReservationService: VenueReservationService,
 		private readonly venueDeliveryService: VenueDeliveryService,
+		private readonly menuTopicService: MenuTopicService,
 	) {}
 
-	/** Every section this venue has data for; the absent ones are left out. */
-	async sections(
-		venue: Venue,
+	/**
+	 * One branch's place sections (busyness by week beside the brand's posts, open tables, its
+	 * menu's prices), the absent ones left out. `data.competitors` are the ones it is compared
+	 * with: the brand-wide ones and its own.
+	 */
+	async placeSections(
+		branch: Venue,
 		month: string,
-		data: Pick<ReportData, 'posts' | 'reviews' | 'dishes' | 'competitors'>,
-	): Promise<Pick<ReportData, 'busyness' | 'demand' | 'prices' | 'correlations' | 'competitors'>> {
-		const timeZone = venue.city.timezone;
-		const demand = await this.demand(venue, month);
-		const competitors = await this.competitorSignals(data.competitors, month);
-		const busyness = await this.busyness(venue, month, timeZone, data.posts, demand);
-		const prices = await this.prices(venue, month, data);
-		const correlations = await this.correlations(venue, month, timeZone, data);
+		data: PlaceSignalsInput,
+	): Promise<Pick<ReportBranch, 'busyness' | 'demand' | 'prices'>> {
+		const demand = await this.demand(branch, month);
+		const busyness = await this.busyness(branch, month, branch.city.timezone, data.posts, demand);
+		const prices = await this.prices(branch, month, data);
 		return {
 			...(busyness && { busyness }),
 			...(demand && { demand }),
 			...(prices && { prices }),
-			...(correlations && { correlations }),
-			competitors,
 		};
 	}
 
@@ -199,7 +213,7 @@ export class ReportSignalsService {
 	async prices(
 		venue: Venue,
 		month: string,
-		data: Pick<ReportData, 'reviews' | 'dishes' | 'competitors'>,
+		data: Pick<PlaceSignalsInput, 'reviews' | 'dishes' | 'competitors'>,
 	): Promise<ReportPrices | null> {
 		const competitorIds = data.competitors.map(c => c.venueId);
 		const menus = await this.venueDeliveryService.menus([venue.id, ...competitorIds], month);
@@ -238,9 +252,11 @@ export class ReportSignalsService {
 					m => m.items.length,
 				);
 			}
-			const position = pricePosition(
-				{ venueId: venue.id, name: venue.name, items: ownMenu.items },
-				others.map(m => ({ venueId: m.venueId, name: '', items: m.items })),
+			// Its primary food topic first ("your ramen against their ramen"), then the median main course
+			const position = await this.menuTopicService.pricePosition(
+				venue,
+				_.uniq(others.map(m => m.venueId)),
+				month,
 				data.dishes.slice(0, PRICE_DISHES).map(d => d.name),
 			);
 			if (position)
@@ -254,6 +270,7 @@ export class ReportSignalsService {
 					othersAre,
 					...(position.diff !== null && { diff: position.diff }),
 					dishes: position.dishes,
+					...(position.topic && { topic: position.topic }),
 				};
 		}
 
@@ -277,12 +294,16 @@ export class ReportSignalsService {
 		return prices;
 	}
 
-	/** The three relations over the venue's posts and reviews; null when all are below the floors. */
+	/**
+	 * The three relations over the brand's posts and every branch's Google reviews; null when all
+	 * are below the floors. Complaint times carry Google's popular times only for a one-branch
+	 * brand: each branch's histogram is scaled to its own peak, so they don't combine.
+	 */
 	async correlations(
-		venue: Venue,
+		branches: Venue[],
 		month: string,
 		timeZone: string,
-		data: Pick<ReportData, 'posts' | 'reviews'>,
+		data: Pick<ReportData, 'posts'>,
 	): Promise<ReportCorrelations | null> {
 		const { start, end } = monthRange(month);
 		const baselineFrom = monthRange(monthsBefore(month, 6)).start;
@@ -291,7 +312,11 @@ export class ReportSignalsService {
 		const reviews = await this.em.find(
 			Review,
 			// Google's only: the correlations read Google's review pace
-			{ venue, platform: ReviewPlatformEnum.GOOGLE, publishedAt: { $gte: baselineFrom, $lt: weekAfter } },
+			{
+				venue: { $in: branches.map(b => b.id) },
+				platform: ReviewPlatformEnum.GOOGLE,
+				publishedAt: { $gte: baselineFrom, $lt: weekAfter },
+			},
 			{ fields: ['publishedAt', 'stars', 'text', 'complaints'] },
 		);
 		const asInput = (r: Review) => ({
@@ -305,8 +330,13 @@ export class ReportSignalsService {
 		const window = reviews.filter(r => r.publishedAt >= complaintsFrom && r.publishedAt < end).map(asInput);
 		const posts = data.posts.map(p => ({ postedAt: p.postedAt, views: p.views, promotional: p.promotional }));
 
-		const samples = await this.venueBusynessService.between(venue.id, start, end);
-		const histogram = meanHistogram(samples.map(s => s.histogram)) ?? venue.details?.popularTimesHistogram ?? null;
+		const [only] = branches.length === 1 ? branches : [];
+		const histogram =
+			only ?
+				(meanHistogram((await this.venueBusynessService.between(only.id, start, end)).map(s => s.histogram)) ??
+				only.details?.popularTimesHistogram ??
+				null)
+			:	null;
 
 		const buzz = buzzToReviews({ month, timeZone, posts, reviews: monthAndAfter, baseline });
 		const times = complaintTimes({ timeZone, reviews: window, histogram });
@@ -339,11 +369,23 @@ const money = (n: number, currency: string) =>
 export const priceSentence = (prices: ReportPrices): string | undefined => {
 	const parts: string[] = [];
 	const menu = prices.menu;
+	// The venue's own kind of food first, when another menu lists it too
+	const topic = menu?.topic;
+	if (menu && topic?.othersMedian !== undefined && topic.diff !== undefined) {
+		const where = menu.othersAre === 'competitors' ? 'at your competitors' : 'on menus in your district';
+		const pct = Math.round(Math.abs(topic.diff) * 100);
+		parts.push(
+			`${topic.label} on your ${PLATFORM_NAMES[menu.platform] ?? menu.platform} menu costs ${money(topic.price, menu.currency)}, ` +
+				`against ${money(topic.othersMedian, menu.currency)} ${where} (` +
+				(pct < 3 ? 'about the same' : `${pct} % ${topic.diff > 0 ? 'above' : 'below'}`) +
+				`, ${topic.othersWithTopic} ${topic.othersWithTopic === 1 ? 'menu' : 'menus'})`,
+		);
+	}
 	if (menu?.othersMedian !== undefined && menu.diff !== undefined) {
 		const who = menu.othersAre === 'competitors' ? 'your competitors' : 'menus in your district';
 		const pct = Math.round(Math.abs(menu.diff) * 100);
 		parts.push(
-			`Your median main course on ${PLATFORM_NAMES[menu.platform] ?? menu.platform} is ${money(menu.median, menu.currency)}, ` +
+			`${parts.length ? 'your' : 'Your'} median main course on ${PLATFORM_NAMES[menu.platform] ?? menu.platform} is ${money(menu.median, menu.currency)}, ` +
 				(pct < 3
 					? `about the same as ${who} (${money(menu.othersMedian, menu.currency)})`
 					: `${pct} % ${menu.diff > 0 ? 'above' : 'below'} ${who} (${money(menu.othersMedian, menu.currency)})`),
@@ -379,7 +421,7 @@ const signedPoints = (n: number) => (n > 0 ? `+${n}` : n < 0 ? `−${-n}` : '±0
  * three exist, since a comparison missing one side reads as a verdict it isn't.
  */
 export const weekendTablesSentence = (
-	data: Pick<ReportData, 'demand'> & Partial<Pick<ReportData, 'competitors'>>,
+	data: { demand?: ReportDemand; competitors?: ReportCompetitor[] },
 ): string | undefined => {
 	const d = data.demand;
 	const sampled = (data.competitors ?? []).filter(c => c.demand);
@@ -398,7 +440,7 @@ export const weekendTablesSentence = (
  * each venue to its own peak, so only changes compare, never levels.
  */
 export const competitorFootTrafficSentence = (
-	data: Pick<ReportData, 'busyness'> & Partial<Pick<ReportData, 'competitors'>>,
+	data: { busyness?: ReportBusyness; competitors?: ReportCompetitor[] },
 ): string | undefined => {
 	const changes = (data.competitors ?? [])
 		.filter(c => c.busyness?.previousIndex !== undefined)
@@ -412,9 +454,14 @@ export const competitorFootTrafficSentence = (
 	);
 };
 
-/** What the highlights prompt gets of these sections: sentences with their numbers, nothing to compute. */
+/**
+ * What the highlights prompt gets of these sections: sentences with their numbers, nothing to
+ * compute. Given a branch's place sections (with the competitors it is compared with), or the
+ * brand's correlations.
+ */
 export const signalsPromptInput = (
-	data: Pick<ReportData, 'busyness' | 'demand' | 'prices' | 'correlations'> & Partial<Pick<ReportData, 'competitors'>>,
+	data: Partial<Pick<ReportBranch, 'busyness' | 'demand' | 'prices'>> &
+		Partial<Pick<ReportData, 'correlations' | 'competitors'>>,
 ): Record<string, string> | undefined => {
 	const out: Record<string, string> = {};
 	const b = data.busyness;

@@ -9,8 +9,10 @@ import {
 	FoodTopicKindEnum,
 } from 'src/modules/food-topics/entities/food-topic.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import type { MenuTopicPrice } from 'src/modules/food-topics/util/menu-topics.js';
 import { VenueTopicTag } from 'src/modules/food-topics/util/venue-topics.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
@@ -87,6 +89,8 @@ export interface TopicInsightDetail {
 	/** Their share per month, percent */
 	shareByMonth: (number | null)[];
 	related?: { top: RelatedQuery[]; rising: RelatedQuery[] };
+	/** The month's delivery menus: how many venues have one, and the topic's price on them */
+	menu: { menus: number } & Partial<Omit<MenuTopicPrice, 'key'>>;
 	venues: TopicVenueRow[];
 }
 
@@ -106,8 +110,9 @@ interface CityData {
 
 /**
  * What the city's food topics are doing: venues tagged (supply), the month's posts (buzz) and
- * Google searches (demand), per topic and for one topic with its venues and children. Reads
- * stored rows only; the one reader behind `/admin/topic-insights`.
+ * Google searches (demand), per topic and for one topic with its venues, children and its price
+ * on the month's delivery menus (`MenuTopicService`). Reads stored rows only; the one reader
+ * behind `/admin/topic-insights`.
  */
 @Injectable()
 export class TopicInsightService {
@@ -115,6 +120,7 @@ export class TopicInsightService {
 		private readonly em: EntityManager,
 		private readonly foodTopicService: FoodTopicService,
 		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly menuTopicService: MenuTopicService,
 	) {}
 
 	/** Every topic with a signal in the city, most posted about this month first. */
@@ -147,6 +153,8 @@ export class TopicInsightService {
 			...(q.breakout && { breakout: true }),
 		});
 		const [rising, top] = _.partition(related, q => q.rising);
+		const menus = await this.menuTopicService.prices(cityId, month, [key]);
+		const price = menus.topics.get(key);
 
 		// Its venues: tagged with it or a descendant, the deepest tag naming why
 		const venues: TopicVenueRow[] = [];
@@ -177,6 +185,7 @@ export class TopicInsightService {
 			postsByMonth: data.months.map(m => data.counts.byTopic.get(key)?.get(m) ?? 0),
 			shareByMonth: topicShares(data.counts, key, data.months),
 			...(related.length && { related: { top: top.map(out), rising: rising.map(out) } }),
+			menu: { menus: menus.menus, ...(price && _.omit(price, 'key')) },
 			venues: _.orderBy(
 				venues,
 				[v => v.posts, v => v.primary, v => v.venue.reviewsCount ?? 0, v => v.venue.name],

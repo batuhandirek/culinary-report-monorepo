@@ -18,9 +18,11 @@ export class InstagramRecentCron {
 		private readonly cityService: CityService,
 	) {}
 
-	// Daily (`INSTAGRAM_RECENT_CRON`): one `SCRAPE_INSTAGRAM_RECENT` run per city the monthly cron
-	// covers that has Instagram on. On Apify's Free plan a hashtag gives one page a run, so only
-	// a daily run sees a busy tag's whole month
+	// Daily (`INSTAGRAM_RECENT_CRON`): per city the monthly cron covers that has Instagram on, a
+	// `SCRAPE_INSTAGRAM_RECENT` run, then the free `EXTRACT_MENTIONS` and `MATCH_MENTIONS` (the
+	// queue runs oldest first, so they follow it), so the month's mentions are read as it fills
+	// instead of all at once on the 2nd. On Apify's Free plan a hashtag gives one page a run, so
+	// only a daily run sees a busy tag's whole month
 	@OnCron('instagram-recent', INSTAGRAM_RECENT_CRON)
 	@EnsureRequestContext()
 	async handleCron() {
@@ -32,11 +34,12 @@ export class InstagramRecentCron {
 		const month = now.toISOString().slice(0, 7);
 		for (const city of await this.cityService.forMonthlyCron()) {
 			if (!city.instagramEnabled) continue;
-			await this.pipelineService.queue(
-				city.id,
+			for (const step of [
 				PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT,
-				month,
-			);
+				PipelineStepEnum.EXTRACT_MENTIONS,
+				PipelineStepEnum.MATCH_MENTIONS,
+			])
+				await this.pipelineService.queue(city.id, step, month);
 		}
 	}
 }

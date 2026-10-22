@@ -52,10 +52,11 @@ export class WebMentionService {
 	) {}
 
 	/**
-	 * Searches Google News and Google for each venue's name with the city, both limited to the
-	 * month, and stores the results that can be press (`isPressCandidate`), once per URL: a page
-	 * found again keeps its first venue. Stamps `pressSearchedAt` on every venue searched.
-	 * Flushes.
+	 * Searches Google News and Google for each brand's name with the city, once per brand however
+	 * many of its branches are given (the press writes about the brand), both limited to the
+	 * month, and stores the results that can be press (`isPressCandidate`), once per URL, on the
+	 * brand's first branch given: a page found again keeps its first venue. Stamps
+	 * `pressSearchedAt` on every venue given. Flushes.
 	 */
 	async searchMonth(
 		city: City,
@@ -67,8 +68,12 @@ export class WebMentionService {
 		if (!venues.length) return { found: 0, saved: 0 };
 		const { start, end } = monthRange(month);
 		const lastDay = new Date(end.getTime() - 1).toISOString().slice(0, 10);
-		// A branch is searched under its brand's name: the press writes about the brand
-		const byQuery = new Map(venues.map(v => [pressQuery(venueSearchName(v), city.name), v]));
+		// A branch is searched under its brand's name: one query a brand
+		const byQuery = new Map<string, Venue>();
+		for (const v of venues) {
+			const query = pressQuery(venueSearchName(v), city.name);
+			if (!byQuery.has(query)) byQuery.set(query, v);
+		}
 		const queries = [...byQuery.keys()];
 
 		const [news, pages] = await Promise.all([
@@ -86,7 +91,7 @@ export class WebMentionService {
 				},
 				{
 					maxCostUsd: budgetUsd * NEWS_BUDGET_SHARE,
-					purpose: `google news ${month}: ${venues.length} venues`,
+					purpose: `google news ${month}: ${queries.length} brands`,
 				},
 			),
 			this.apifyService.runActor<any>(
@@ -101,7 +106,7 @@ export class WebMentionService {
 				},
 				{
 					maxCostUsd: budgetUsd * (1 - NEWS_BUDGET_SHARE),
-					purpose: `google search press ${month}: ${venues.length} venues`,
+					purpose: `google search press ${month}: ${queries.length} brands`,
 				},
 			),
 		]);
@@ -113,7 +118,7 @@ export class WebMentionService {
 		const candidates = _.uniqBy(
 			results.filter(r => {
 				const venue = byQuery.get(r.query);
-				return venue && isPressCandidate(r, venue);
+				return venue && isPressCandidate(r, { name: venueSearchName(venue), website: venue.website });
 			}),
 			r => r.url,
 		);
@@ -150,7 +155,7 @@ export class WebMentionService {
 		const mentions = await this.em.find(
 			WebMention,
 			{ month, analysedAt: null, venue: { city } },
-			{ populate: ['venue'] },
+			{ populate: ['venue', 'venue.brand'] },
 		);
 		const batches = Object.values(_.groupBy(mentions, m => m.venue.id)).flatMap(group =>
 			_.chunk(group, CLASSIFY_BATCH_SIZE),
@@ -172,7 +177,8 @@ export class WebMentionService {
 								snippet: m.snippet?.slice(0, 500) ?? null,
 							})),
 						),
-						{ venueName: venue.name, district: venue.district ?? undefined, cityName: city.name },
+						// The search was the brand's name: a chain's page names the brand, not this branch
+						{ venueName: venueSearchName(venue), district: venue.district ?? undefined, cityName: city.name },
 					);
 					const byId = new Map(batch.map(m => [m.id, m]));
 					for (const result of res.object.results) {
@@ -195,11 +201,14 @@ export class WebMentionService {
 		return { classified };
 	}
 
-	/** The venue's classified press of the month, features first, then listicles and passing mentions. */
-	async forReport(venueId: string, month: string): Promise<WebMention[]> {
+	/**
+	 * A brand's classified press of the month (found under any of its branches, in the city or,
+	 * `cityId` null, anywhere), features first, then listicles and passing mentions.
+	 */
+	async forReport(brandId: string, cityId: string | null, month: string): Promise<WebMention[]> {
 		const mentions = await this.em.find(
 			WebMention,
-			{ venue: venueId, month, kind: { $in: KIND_ORDER } },
+			{ venue: { brand: brandId, ...(cityId && { city: cityId }) }, month, kind: { $in: KIND_ORDER } },
 			{ orderBy: { publishedAt: QueryOrder.DESC_NULLS_LAST, createdAt: QueryOrder.ASC } },
 		);
 		return _.sortBy(mentions, m => KIND_ORDER.indexOf(m.kind!));

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { AdminProspectOutputDto, AdminUpdateProspectInputDtoLanguageEnum } from 'client';
 
+	import { onDay } from '#components/admin/admin-format.js';
 	import { EMAIL_REGEX } from '#constants/REGEXES.js';
 	import { api } from '#lib/api.js';
 	import FormDialog from '#ui/components/FormDialog.svelte';
@@ -52,6 +53,14 @@
 				value: prospect.language as string,
 				col: 6
 			},
+			emailConsent: {
+				type: 'checkbox' as const,
+				label: 'OK to e-mail',
+				message: prospect.emailConsentAt
+					? `They agreed on ${onDay(prospect.emailConsentAt)}. Untick to take it back.`
+					: 'They said we may e-mail them (UWG §7). A visit or call logged with their OK ticks this for you.',
+				value: !!prospect.emailConsentAt
+			},
 			hook: {
 				type: 'textarea' as const,
 				label: 'Lead with',
@@ -82,13 +91,18 @@
 	cancelText="Cancel"
 	class="max-w-[640px]"
 	onSubmit={async (values) => {
+		const hadConsent = !!prospect.emailConsentAt;
 		const updated = await api.admin.updateProspect(prospect.id, {
 			contactName: blank(values.contactName),
 			contactEmail: blank(values.contactEmail),
 			instagram: blank(values.instagram),
 			language: values.language as AdminUpdateProspectInputDtoLanguageEnum,
 			hook: blank(values.hook),
-			notes: blank(values.notes)
+			notes: blank(values.notes),
+			// Only a change is sent, so the date they agreed on stays as it was
+			...(values.emailConsent !== hadConsent && {
+				emailConsentAt: values.emailConsent ? new Date().toISOString() : null
+			})
 		});
 		onChange(updated);
 		notificationManager.addNotification({ title: 'Saved', success: true });

@@ -28,6 +28,8 @@
 	const sentence = (items: string[]) =>
 		items.length > 1 ? `${items.slice(0, -1).join(', ')} and ${items.at(-1)}` : (items[0] ?? '');
 
+	// Openings a creator's post announced count with the scans' and are marked
+	const fromPosts = $derived(changes.openedFromPosts ?? 0);
 	const street = $derived(changes.street ? parts(changes.street) : []);
 	const district = $derived(parts(changes));
 	const line = $derived(
@@ -51,12 +53,14 @@
 					<span class="min-w-0 truncate"
 						>{v.name}{v.category ? ` · ${v.category}` : ''}{v.sameStreet && v.street
 							? ` · ${v.street}`
-							: ''}</span>
+							: ''}{#if v.source === 'posts'}<span class="text-muted-foreground"> · from a post</span>{/if}</span>
 				</li>
 			{/each}
 		</ul>
 		<p class="text-muted-foreground m-0 mt-2 text-xs">
-			{monthLabel(changes.from)} to {monthLabel(changes.to)}, as our Google Maps scans saw them.
+			{monthLabel(changes.from)} to {monthLabel(changes.to)}, as our Google Maps scans saw them{fromPosts
+				? `; ${fromPosts === 1 ? 'one opening' : `${fromPosts} openings`} from posts: a creator's post said the place had just opened`
+				: ''}.
 		</p>
 	</div>
 {/if}

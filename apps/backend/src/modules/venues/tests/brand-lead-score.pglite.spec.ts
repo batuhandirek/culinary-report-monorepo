@@ -186,4 +186,55 @@ describe('BrandLeadScoreService (pglite)', () => {
 		expect((await brandOf('p-hot')).id).toBe(first.id);
 		expect(await service.ranked({ limit: 10, minScore: first.leadScore! })).toHaveLength(1);
 	});
+
+	it('gives the new-place bonus to a venue a recent post said had just opened, under the review cap', async () => {
+		const em = harness.orm.em;
+		const city = testCity(em, { name: 'Leipzig' });
+		const venue = (placeId: string, reviewsCount: number) =>
+			em.create(Venue, { city, placeId, name: `New ${placeId}`, reviewsCount });
+		const fresh = venue('n-fresh', 40);
+		const old = venue('n-old', 40);
+		const big = venue('n-big', 300);
+		await em.flush();
+		let n = 0;
+		const flagged = (v: Venue, postedAt: string) => {
+			const p = em.create(SocialPost, {
+				city,
+				externalId: `n${++n}`,
+				platform: SocialPlatformEnum.TIKTOK,
+				url: `https://tiktok.com/n${n}`,
+				postedAt: new Date(postedAt),
+				author: 'foodie',
+				views: 1000,
+			});
+			em.create(Mention, {
+				post: p,
+				venueName: v.name,
+				venue: v,
+				visited: true,
+				isNewOpening: true,
+				sentiment: 'positive',
+				summary: 'Just opened.',
+				dishes: [],
+				praise: [],
+				complaints: [],
+			});
+		};
+		// Last month of the report month: new
+		flagged(fresh, '2026-08-15T00:00:00Z');
+		// Older than LEAD_NEW_PLACE_MONTHS before the report month's end: no longer new
+		flagged(old, '2026-02-15T00:00:00Z');
+		// LEAD_NEW_PLACE_MAX_REVIEWS reviews: not new, whatever the post says
+		flagged(big, '2026-08-15T00:00:00Z');
+		await em.flush();
+
+		await service.scoreAll('2026-09', city.id);
+		em.clear();
+		const bonus = async (placeId: string) =>
+			(await em.findOneOrFail(Venue, { placeId }, { populate: ['brand'] })).brand.leadSignals
+				?.newPlaceBonus;
+		expect(await bonus('n-fresh')).toBe(5);
+		expect(await bonus('n-old')).toBe(0);
+		expect(await bonus('n-big')).toBe(0);
+	});
 });

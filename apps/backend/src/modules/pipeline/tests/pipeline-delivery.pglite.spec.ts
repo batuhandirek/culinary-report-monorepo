@@ -40,7 +40,7 @@ describe('PipelineService SCRAPE_DELIVERY (pglite)', () => {
 		await harness.stop();
 	});
 
-	it("scrapes the report brands' described branches and their competitors for the month, on the $7 default", async () => {
+	it("scrapes the report brands' branches and their competitors for the month, on the $7 default", async () => {
 		const em = harness.orm.em;
 		const city = testCity(em);
 		const ranked = em.create(Venue, { city, placeId: 'ranked', name: 'Ranked' });

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Download, Network, RefreshCw, Store } from '@lucide/svelte';
+	import { Download, Network, RefreshCw } from '@lucide/svelte';
 	import type { AdminReportOutputDto } from 'client';
 
 	import ReportDeliveryPanel from './components/ReportDeliveryPanel.svelte';
@@ -53,14 +53,6 @@
 		<div class="flex shrink-0 items-center gap-2">
 			<Button size="sm" variant="outline" icon={Network} href={`/admin/brands/${report.brand.id}`}
 				>Brand</Button>
-			{#if report.data.brand}
-				<!-- A chain's place sections describe its busiest branch -->
-				<Button
-					size="sm"
-					variant="outline"
-					icon={Store}
-					href={`/admin/venues/${report.data.venue.id}`}>Described place</Button>
-			{/if}
 			<Button
 				size="sm"
 				variant="outline"

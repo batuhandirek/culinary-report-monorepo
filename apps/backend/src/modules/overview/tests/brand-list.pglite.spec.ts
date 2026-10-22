@@ -104,8 +104,14 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			{ associations: { city } },
 		);
 		chain = brandFactory.build({ name: 'Burgermeister' });
-		venueFactory.build({ name: 'Burgermeister Kotti', reviewsCount: 900, district: 'Kreuzberg' }, { associations: { city, brand: chain } });
-		venueFactory.build({ name: 'Burgermeister Zoo', reviewsCount: 400, district: 'Charlottenburg' }, { associations: { city, brand: chain } });
+		venueFactory.build(
+			{ name: 'Burgermeister Kotti', reviewsCount: 900, rating: 4.5, district: 'Kreuzberg', category: 'Hamburger restaurant' },
+			{ associations: { city, brand: chain } },
+		);
+		venueFactory.build(
+			{ name: 'Burgermeister Zoo', reviewsCount: 100, rating: 3.5, district: 'Charlottenburg', category: 'Hamburger restaurant' },
+			{ associations: { city, brand: chain } },
+		);
 		quiet = venueFactory.build({ name: 'Quiet Café' }, { associations: { city } });
 		await em.flush();
 
@@ -155,17 +161,20 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		expect(row.previous).toEqual({ posts: 1, views: 300 });
 		expect(row.prospect?.stage).toBe(ProspectStageEnum.TO_CONTACT);
 		expect(row.report?.id).toBeTruthy();
-		expect(row.venue).toMatchObject({ name: 'Döner Pro', district: 'Kreuzberg', rating: 4.8 });
+		expect(row).toMatchObject({ districts: ['Kreuzberg'], category: 'Restaurant', rating: 4.8, reviewsCount: 333 });
 	});
 
-	it('shows a chain as its busiest branch, with its branches and districts', async () => {
+	it('shows a chain as the brand: its branches, districts, shared category and stars over all their reviews', async () => {
 		const res = await list.list({ page: 1, size: 25, cityId: city.id, month: '2026-09', segment: 'chains' }, now);
 
 		expect(res.items).toHaveLength(1);
 		expect(res.items[0]).toMatchObject({
 			name: 'Burgermeister',
 			branches: 2,
-			venue: { name: 'Burgermeister Kotti' },
+			category: 'Hamburger restaurant',
+			// (4.5 × 900 + 3.5 × 100) / 1000
+			rating: 4.4,
+			reviewsCount: 1000,
 			month: { posts: 1 },
 			prospect: { stage: ProspectStageEnum.WON },
 		});

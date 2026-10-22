@@ -35,6 +35,11 @@ export class Prospect extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'text', nullable: true })
 	instagram?: string | null;
 
+	// When they said we may e-mail them (a visit or call logged with consent, or set by hand).
+	// German law (UWG §7) needs it before a cold e-mail; the composer warns without it.
+	@Property({ type: 'datetime', nullable: true })
+	emailConsentAt?: Date | null;
+
 	// The one finding from their report the first email leads with, in `language`
 	@Property({ type: 'text', nullable: true })
 	hook?: string | null;

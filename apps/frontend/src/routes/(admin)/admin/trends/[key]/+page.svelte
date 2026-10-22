@@ -24,7 +24,8 @@
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// One food topic in a city: its venues, how much posts talk about it and how Google searches
-	// for it move over twelve months, what people search alongside it, and the topics under it
+	// for it move over twelve months, what it costs on the month's delivery menus, what people
+	// search alongside it, and the topics under it
 	const key = $derived(decodeURIComponent(page.params.key ?? ''));
 
 	adminCitiesStore.load();
@@ -55,7 +56,14 @@
 
 	const VENUES_SHOWN = 25;
 	let allVenues = $state(false);
-	const SOURCE: Record<string, string> = { category: 'Google category', mentions: 'posts', manual: 'admin' };
+	const SOURCE: Record<string, string> = {
+		category: 'Google category',
+		mentions: 'posts',
+		menu: 'menu',
+		reviews: 'review tags',
+		manual: 'admin'
+	};
+	const euro = (v: number) => `€${v.toFixed(2)}`;
 	const rising = (q: AdminSearchRelatedQueryOutputDto) => (q.breakout ? 'Breakout' : `+${q.value.toLocaleString('en')} %`);
 	const trendsUrl = (id: string) => `https://trends.google.com/trends/explore?cat=71&q=${encodeURIComponent(id)}`;
 
@@ -130,7 +138,7 @@
 		<AdminPanel><SkeletonRows count={6} lines={1} trailing /></AdminPanel>
 	{:else}
 		<!-- The month in three numbers: supply, buzz, demand -->
-		<div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+		<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
 			<div class="bg-paper border-line rounded-md border p-4">
 				<p class="eyebrow text-muted-foreground m-0">Venues</p>
 				<p class="text-ink m-0 mt-1 text-2xl font-semibold tabular-nums">{data.row.venues}</p>
@@ -151,7 +159,38 @@
 				</p>
 				<p class="text-muted-foreground m-0 text-xs">against the month before</p>
 			</div>
+			<div class="bg-paper border-line rounded-md border p-4">
+				<p class="eyebrow text-muted-foreground m-0">On menus · {monthLabel(month)}</p>
+				{#if data.menu.venues && data.menu.median !== undefined}
+					<p class="text-ink m-0 mt-1 text-2xl font-semibold tabular-nums">{data.menu.venues}</p>
+					<p class="text-muted-foreground m-0 text-xs">
+						of {data.menu.menus} menus · median {euro(data.menu.median)}
+						{#if data.menu.venues > 1}({euro(data.menu.p25 ?? data.menu.median)}–{euro(data.menu.p75 ?? data.menu.median)}){/if}
+					</p>
+				{:else}
+					<p class="text-ink m-0 mt-1 text-2xl font-semibold tabular-nums">—</p>
+					<p class="text-muted-foreground m-0 text-xs">
+						{data.menu.menus ? `none of ${data.menu.menus} menus has it` : 'no menu stored for this month'}
+					</p>
+				{/if}
+				<p class="text-muted-foreground m-0 mt-1 text-xs">
+					Delivery menus are read for report venues and their competitors only, so these lean to them.
+				</p>
+			</div>
 		</div>
+
+		{#if data.menu.districts?.length}
+			<AdminPanel title="Menu prices by district" note="Districts with 5+ venues selling it">
+				<ul class="m-0 list-none p-0 text-sm">
+					{#each data.menu.districts as d (d.district)}
+						<li class="flex justify-between gap-3 border-t py-1">
+							<span>{d.district}</span>
+							<span class="text-muted-foreground tabular-nums">{d.venues} venues · median {euro(d.median)}</span>
+						</li>
+					{/each}
+				</ul>
+			</AdminPanel>
+		{/if}
 
 		<div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
 			<MonthChart

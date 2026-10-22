@@ -25,6 +25,7 @@ import type {
 	LeadSignals,
 } from '../interfaces/lead-score.interface.js';
 import { monthRange, previousMonth } from '../util/month.js';
+import { districtRatingStanding, RATING_BENCHMARK_MIN_REVIEWS } from '../util/rating-benchmark.js';
 import { normalizeVenueName } from '../util/venue-names.js';
 
 // Venues written in one update statement
@@ -105,12 +106,20 @@ export const scoreBrand = (
 	let problem: LeadSignal;
 	const negativeShare = inputs.posts ? inputs.negativePosts / inputs.posts : 0;
 	const r = inputs.reviews;
+	const districtPercentile = inputs.districtRatingPercentile;
 	if (!r) {
 		missing.push('reviews not scraped');
+		// Without reviews, a rating below the district's median is still a problem we can name
+		const parts =
+			districtPercentile != null ? [cap((50 - districtPercentile) / 50), cap(negativeShare / 0.3)] : undefined;
 		problem = {
-			value: null,
+			value: parts ? (Math.max(...parts) + parts.reduce((a, b) => a + b, 0) / parts.length) / 2 : null,
 			weight: w.problem,
-			inputs: { reviews: 0, negativePostShare: round(negativeShare) },
+			inputs: {
+				reviews: 0,
+				...(districtPercentile != null && { districtRatingPercentile: round(districtPercentile / 100) }),
+				negativePostShare: round(negativeShare),
+			},
 		};
 	} else {
 		if (r.analysed === 0) missing.push('reviews not analysed');
@@ -235,11 +244,25 @@ interface VenueRow {
 	brand_id: string;
 	brand_name: string;
 	opened_at: Date | null;
+	// The newest post whose matched mention said it had just opened (`Mention.isNewOpening`)
+	flagged_new_at: Date | null;
 	reviews_count: number | null;
+	district: string | null;
+	category: string | null;
+	rating: number | string | null;
 	website: string | null;
 	phone: string | null;
 	closed: boolean;
 	press_searched_at: Date | null;
+}
+
+interface PeerRow {
+	id: string;
+	city_id: string;
+	district: string;
+	category: string | null;
+	rating: number | string;
+	reviews_count: number;
 }
 
 interface PressRow {
@@ -294,10 +317,13 @@ export class BrandLeadScoreService {
 
 		// Every branch, in any city, of the brands with an open branch in this one
 		const venues: VenueRow[] = await conn.execute(
-			`select v.id, v.name, v.city_id, v.reviews_count, v.website, v.phone, v.closed, v.press_searched_at,
+			`select v.id, v.name, v.city_id, v.reviews_count, v.district, v.category, v.rating,
+				v.website, v.phone, v.closed, v.press_searched_at,
 				v.brand_id, b.name brand_name,
 				(select max(s.at) from venue_status_changes s
-					where s.venue_id = v.id and s.kind = 'opened') as opened_at
+					where s.venue_id = v.id and s.kind = 'opened') as opened_at,
+				(select max(p.posted_at) from mentions m join social_posts p on p.id = m.post_id
+					where m.venue_id = v.id and m.is_new_opening) as flagged_new_at
 			from venues v join brands b on b.id = v.brand_id
 			where v.deleted_at is null and v.brand_id in (
 				select brand_id from venues where city_id = ? and not closed and deleted_at is null
@@ -361,6 +387,27 @@ export class BrandLeadScoreService {
 		}
 		const pressByVenue = new Map(pressRows.map(r => [r.venue_id, r]));
 
+		// Each branch's rating against its district's food venues (the report's benchmark): the
+		// problem signal for a brand whose reviews were not scraped
+		const cityIds = _.uniq(venues.map(v => v.city_id));
+		const peerRows: PeerRow[] = await conn.execute(
+			`select id, city_id, district, category, rating, reviews_count from venues
+			where city_id in (${marks(cityIds)}) and not closed and deleted_at is null
+				and district is not null and rating is not null and reviews_count >= ?`,
+			[...cityIds, RATING_BENCHMARK_MIN_REVIEWS],
+		);
+		const peersByDistrict = _.groupBy(
+			peerRows.map(p => ({ ...p, rating: Number(p.rating), reviewsCount: p.reviews_count })),
+			p => `${p.city_id}:${p.district}`,
+		);
+		const districtPercentile = (v: VenueRow): number | undefined =>
+			v.district ?
+				districtRatingStanding(
+					{ ...v, rating: v.rating == null ? null : Number(v.rating) },
+					peersByDistrict[`${v.city_id}:${v.district}`] ?? [],
+				)?.percentile
+			:	undefined;
+
 		const reviewsByVenue = new Map(reviewRows.map(r => [r.venue_id, r]));
 		const postsByBrand = _.groupBy(postRows, r => r.brand_id);
 
@@ -378,7 +425,14 @@ export class BrandLeadScoreService {
 			const others = rows.filter(r => !r.own);
 			const sum = <T>(rs: T[], f: (r: T) => number) => rs.reduce((a, r) => a + f(r), 0);
 			const reviews = members.map(v => reviewsByVenue.get(v.id)).filter(r => !!r);
-			const opened = members.map(v => (v.opened_at ? new Date(v.opened_at) : null));
+			// A branch is new from a scrape's `opened` change or a post saying so, whichever is later;
+			// `scoreBrand` applies the window and the review cap
+			const opened = members.map(v => {
+				const dates = [v.opened_at, v.flagged_new_at]
+					.filter((d): d is Date => !!d)
+					.map(d => new Date(d));
+				return dates.length ? _.max(dates)! : null;
+			});
 			const counts = members.map(v => v.reviews_count).filter(n => n != null);
 			const searched = members.filter(
 				v => v.press_searched_at && new Date(v.press_searched_at) >= start,
@@ -417,6 +471,8 @@ export class BrandLeadScoreService {
 							withChanges: sum(reviews, r => r.with_changes),
 						}
 					:	null,
+				// The weakest branch against its district
+				districtRatingPercentile: _.min(members.map(districtPercentile).filter(p => p !== undefined)) ?? null,
 				// Unknown unless a branch was searched in the window
 				press:
 					searched.length ?

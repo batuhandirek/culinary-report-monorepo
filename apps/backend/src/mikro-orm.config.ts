@@ -15,6 +15,8 @@ import { Embedding } from 'src/modules/embeddings/entities/embedding.entity.js';
 import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
 import { FoodTopicIgnoredWord } from 'src/modules/food-topics/entities/food-topic-ignored-word.entity.js';
 import { VenueFoodTopic } from 'src/modules/food-topics/entities/venue-food-topic.entity.js';
+import { FoodTrendsReport } from 'src/modules/food-trends/entities/food-trends-report.entity.js';
+import { CityHighlight } from 'src/modules/highlights/entities/city-highlight.entity.js';
 import { FsmStateChange } from 'src/modules/fsm/entities/fsm-state-change.entity.js';
 import { Image } from 'src/modules/image/entities/image.entity.js';
 import { Notification } from 'src/modules/notification/entities/notification.entity.js';
@@ -41,6 +43,7 @@ import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { VenueBusyness } from 'src/modules/venues/entities/venue-busyness.entity.js';
 import { VenueDeliveryListing } from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
+import { OsmPlace } from 'src/modules/venues/entities/osm-place.entity.js';
 import { VenueLookup } from 'src/modules/venues/entities/venue-lookup.entity.js';
 import { VenueReservationSample } from 'src/modules/venues/entities/venue-reservation-sample.entity.js';
 import { VenueSearchRank } from 'src/modules/venues/entities/venue-search-rank.entity.js';
@@ -67,6 +70,8 @@ export default defineConfig({
 		CitySource,
 		CityDay,
 		CityEvent,
+		CityHighlight,
+		FoodTrendsReport,
 		TrendSearchInterest,
 		FoodTopic,
 		VenueFoodTopic,
@@ -78,6 +83,7 @@ export default defineConfig({
 		VenueSearchRank,
 		BrandCompetitor,
 		VenueLookup,
+		OsmPlace,
 		Brand,
 		BrandDismissal,
 		WebMention,

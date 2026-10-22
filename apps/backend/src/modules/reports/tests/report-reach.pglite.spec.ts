@@ -172,7 +172,7 @@ describe('Report reach sections (pglite)', () => {
 				],
 			} as unknown as ReportData['reviews'],
 		};
-		const sections = await service.sections(venue, '2026-09', data);
+		const sections = await service.sections([venue], '2026-09', data, venue.city);
 
 		expect(sections.ownAccounts).toEqual([
 			{

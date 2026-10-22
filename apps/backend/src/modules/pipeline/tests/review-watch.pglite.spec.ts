@@ -67,7 +67,7 @@ describe('the weekly review watch (pglite)', () => {
 			reviewId: r.reviewId,
 			sentiment: 'negative',
 			praise: [],
-			complaints: [{ topic: 'food', detail: 'dry meat' }],
+			complaints: [{ theme: 'cooking', detail: 'dry meat' }],
 			dishes: [],
 			changes: [],
 		})),

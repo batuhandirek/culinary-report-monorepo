@@ -5,6 +5,7 @@ import { PaginationRequest } from 'src/shared/interfaces/pagination-request.inte
 
 import type {
 	OutreachTouchKindEnum,
+	OutreachTouchOutcomeEnum,
 	ProspectLanguage,
 	ProspectStageEnum,
 } from '../constants/outreach.constant.js';
@@ -50,6 +51,8 @@ export interface AdminAddProspectInputDto extends AdminProspectDetailsInputDto {
 export interface AdminUpdateProspectInputDto extends AdminProspectDetailsInputDto {
 	stage?: ProspectStageEnum;
 	nextFollowUpAt?: DateTime | null;
+	/** When they said we may e-mail them; `null` takes it back */
+	emailConsentAt?: DateTime | null;
 }
 
 export interface AdminLogOutreachTouchInputDto {
@@ -62,6 +65,12 @@ export interface AdminLogOutreachTouchInputDto {
 	template?: Text<100>;
 	/** The next follow-up: a date, `null` for none, absent for the usual gap */
 	followUpAt?: DateTime | null;
+	/** VISIT or CALL only: who we got hold of */
+	outcome?: OutreachTouchOutcomeEnum;
+	/** VISIT or CALL only: when to come back; it becomes the follow-up, over `followUpAt` */
+	comeBackAt?: DateTime;
+	/** VISIT or CALL only: they said we may e-mail them; sets the prospect's `emailConsentAt` */
+	emailConsent?: boolean;
 }
 
 export interface AdminInviteToPortalInputDto {

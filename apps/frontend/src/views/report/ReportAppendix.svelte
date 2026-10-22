@@ -27,6 +27,14 @@
 	const day = (iso: string) =>
 		new Date(iso).toLocaleDateString('en', { month: 'short', day: 'numeric', timeZone: 'UTC' });
 	const topics = (list: string[]) => list.map((t) => TOPIC_LABELS[t] ?? t).join(', ');
+	// Each place's Google page: the reviews are listed there too
+	const googlePages = $derived(
+		data.branches.flatMap((b) =>
+			b.googleUrl
+				? [{ url: b.googleUrl, label: data.branches.length > 1 ? (b.street ?? b.name) : 'Your Google page' }]
+				: []
+		)
+	);
 </script>
 
 {#snippet flag(text: string)}
@@ -79,13 +87,13 @@
 				</li>
 				<li>
 					Reviews are every Google{hasTripadvisor ? ' and TripAdvisor' : ''} review published in
-					{monthLabel(data.month)}, as the platform showed them when we collected them.{#if data.venue.googleUrl}
+					{monthLabel(data.month)}, as the platform showed them when we collected them.{#each googlePages as page (page.url)}
 						<a
 							class="text-beet ml-1"
-							href={data.venue.googleUrl}
+							href={page.url}
 							target="_blank"
-							rel="noreferrer">Your Google page</a
-						>{/if}
+							rel="noreferrer">{page.label}</a
+						>{/each}
 				</li>
 			</ul>
 		</div>
