@@ -24,5 +24,5 @@ Frontend: `routes/(blog)` (index, `[articleId]` with `og.png`, `tag/[tagId]`; ow
 - **The blog is SSR'd** (`(blog)/+layout.ts`). Loads use `createLoadApi(fetch)`; a failing API is a 503, only a missing article or tag is a 404. Lists seed `SlideFetcher` with the first page (`seo-and-ssr`).
 - **Sitemap**: `BlogService.onModuleInit` registers the `blog` (published articles) and `blogtags` (tags with at least one published article) sections. A topic row on a page is built from the posts on screen (`collectBlogTags`), since `listTags` returns every tag ever created.
 - `.blog-content` in `blog.css` styles both the public article and the admin editor, so the editor stays WYSIWYG; the admin layout imports it.
-- Links in an article that point at `culinaryreport.com` become in-app links (`localizeBlogLinks`); everything else opens in a new tab.
+- Links in an article that point at `munchwerk.com` become in-app links (`localizeBlogLinks`); everything else opens in a new tab.
 - Copy is English. Search `q` is a case-insensitive substring match on title and body text.

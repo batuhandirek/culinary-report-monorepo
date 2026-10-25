@@ -14,6 +14,8 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportService } from '../services/report.service.js';
+import { ReportConfigService } from '../services/report-config.service.js';
+import { ReportTemplateService } from '../services/report-template.service.js';
 
 describe('ReportData.venue Google Maps details (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -23,6 +25,8 @@ describe('ReportData.venue Google Maps details (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,

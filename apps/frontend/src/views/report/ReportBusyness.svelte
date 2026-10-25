@@ -144,8 +144,8 @@
 		<div class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
 			{#if busyness}
 				<div class="bg-paper border-line rounded-md border px-4 py-3">
-					<p class="eyebrow text-muted-foreground m-0">Busyness index</p>
-					<p class="m-0 mt-1 text-2xl font-semibold tabular-nums">{busyness.index}</p>
+					<p class="stamp text-muted-foreground m-0">Busyness index</p>
+					<p class="font-display m-0 mt-1 text-[26px] font-extrabold tracking-[-0.02em] tabular-nums">{busyness.index}</p>
 					<p class="text-muted-foreground m-0 text-xs">
 						{#if previous}{previous.index} in {monthLabel(previous.month)} ·
 						{/if}{busyness.samples} samples
@@ -154,8 +154,8 @@
 			{/if}
 			{#if peak}
 				<div class="bg-paper border-line rounded-md border px-4 py-3">
-					<p class="eyebrow text-muted-foreground m-0">Busiest hour</p>
-					<p class="m-0 mt-1 text-2xl font-semibold">
+					<p class="stamp text-muted-foreground m-0">Busiest hour</p>
+					<p class="font-display m-0 mt-1 text-[26px] font-extrabold tracking-[-0.02em]">
 						{DAY_NAMES[peak.day] ?? peak.day}
 						<span class="tabular-nums">{String(peak.hour).padStart(2, '0')}:00</span>
 					</p>
@@ -171,8 +171,8 @@
 			{/if}
 			{#if demand}
 				<div class="bg-paper border-line rounded-md border px-4 py-3">
-					<p class="eyebrow text-muted-foreground m-0">Weekend tables</p>
-					<p class="m-0 mt-1 text-2xl font-semibold tabular-nums">{demand.booked} %</p>
+					<p class="stamp text-muted-foreground m-0">Weekend tables</p>
+					<p class="font-display m-0 mt-1 text-[26px] font-extrabold tracking-[-0.02em] tabular-nums">{demand.booked}%</p>
 					<p class="text-muted-foreground m-0 text-xs">
 						booked out over {demand.evenings.length} evenings{demand.previousBooked !== undefined
 							? ` · ${demand.previousBooked} % the month before`

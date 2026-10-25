@@ -84,9 +84,6 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Stored.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 				...extra,
 			});
 		const p1 = post(1, 300, '2026-10-05T12:00:00Z');

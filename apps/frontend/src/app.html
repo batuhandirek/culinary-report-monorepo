@@ -4,7 +4,9 @@
 		<meta charset="utf-8" />
 
 		<link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+		<link rel="icon" href="%sveltekit.assets%/favicon/favicon.ico" sizes="48x48">
 		<link rel="icon" href="%sveltekit.assets%/favicon/favicon.svg" type="image/svg+xml">
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/favicon/apple-touch-icon.png">
 		<link rel="manifest" href="%sveltekit.assets%/site.webmanifest">
 
 		<!-- The pixel face of the tab bar's labels and every eyebrow: fetched with the page
@@ -16,6 +18,10 @@
 		     and `₺` sit in latin-ext, so no page renders from latin alone. -->
 		<link rel="preload" as="font" type="font/woff2" crossorigin href="%sveltekit.assets%/fonts/onest/onest-latin-wght-normal.woff2">
 		<link rel="preload" as="font" type="font/woff2" crossorigin href="%sveltekit.assets%/fonts/onest/onest-latin-ext-wght-normal.woff2">
+
+		<!-- Bricolage Grotesque sets the wordmark and every public headline (latin carries
+		     English and German). -->
+		<link rel="preload" as="font" type="font/woff2" crossorigin href="%sveltekit.assets%/fonts/bricolage-grotesque/bricolage-grotesque-latin-opsz-normal.woff2">
 
 		<meta name="msapplication-TileColor" content="#ffffff">
 		<meta name="theme-color" content="#f2ede3">

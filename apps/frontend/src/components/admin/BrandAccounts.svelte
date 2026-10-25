@@ -114,7 +114,7 @@
 	const shown = (a: AdminAccountOutputDto) => !branchId || !a.branch || a.branch.id === branchId;
 	const linked = $derived((accounts ?? []).filter((a) => a.brand?.id === brandId && shown(a)));
 	const suggested = $derived((accounts ?? []).filter((a) => !a.brand && a.suggestedBrand?.id === brandId));
-	const rejected = $derived((accounts ?? []).filter((a) => a.rejectedBrandIds.includes(brandId) && a.brand?.id !== brandId));
+	const rejected = $derived((accounts ?? []).filter((a) => a.rejections.some((r) => r.brand.id === brandId) && a.brand?.id !== brandId));
 	const PLATFORMS = [
 		{ value: AdminAddBrandAccountInputDtoPlatformEnum.Instagram, label: 'Instagram' },
 		{ value: AdminAddBrandAccountInputDtoPlatformEnum.Tiktok, label: 'TikTok' }

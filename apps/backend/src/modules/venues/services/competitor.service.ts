@@ -258,7 +258,7 @@ export class CompetitorService {
 			})
 		).filter(c => isFoodVenue(c.category) && !taken.has(c.id));
 		const index = await this.foodTopicService.index();
-		const tags = await this.venueFoodTopicService.tags([venue, ...candidates], index);
+		const tags = await this.venueFoodTopicService.tags([venue, ...candidates]);
 		const own = tags.get(venue.id) ?? [];
 		const diets = (keys: { key: string }[]) =>
 			keys.map(t => t.key).filter(k => index.get(k)?.kind === FoodTopicKindEnum.DIET);

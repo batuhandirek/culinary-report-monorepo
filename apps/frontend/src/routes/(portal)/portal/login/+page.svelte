@@ -94,7 +94,7 @@
 
 <div class="mx-auto flex min-h-dvh w-full max-w-[440px] flex-col px-4 pt-safe pb-10">
 	<header class="flex h-16 shrink-0 items-center">
-		<Logo width={104} />
+		<Logo width={150} />
 	</header>
 
 	<main class="flex flex-1 flex-col justify-center pb-16">
@@ -128,9 +128,9 @@
 			<p class="text-muted-foreground m-0 mt-6 text-center text-sm">
 				No invite yet? Write to
 				<a
-					href="mailto:hello@culinaryreport.com"
+					href="mailto:hello@munchwerk.com"
 					class="text-ink decoration-line hover:decoration-ink font-medium underline underline-offset-4"
-					>hello@culinaryreport.com</a
+					>hello@munchwerk.com</a
 				>.
 			</p>
 		{/if}

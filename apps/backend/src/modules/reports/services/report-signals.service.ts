@@ -1,3 +1,4 @@
+import { topicsOf } from 'src/modules/feedback/util/feedback-rows.js';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
@@ -317,12 +318,12 @@ export class ReportSignalsService {
 				platform: ReviewPlatformEnum.GOOGLE,
 				publishedAt: { $gte: baselineFrom, $lt: weekAfter },
 			},
-			{ fields: ['publishedAt', 'stars', 'text', 'complaints'] },
+			{ populate: ['feedback'] },
 		);
 		const asInput = (r: Review) => ({
 			publishedAt: r.publishedAt.toISOString(),
 			stars: r.stars,
-			complaints: (r.complaints ?? []).map(c => c.topic),
+			complaints: topicsOf(r.feedback.getItems(), 'negative'),
 			written: !!r.text?.trim(),
 		});
 		const baseline = reviews.filter(r => r.publishedAt < start).map(asInput);

@@ -7,7 +7,7 @@ import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
@@ -94,9 +94,6 @@ describe('TopicInsightService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		// August: 1 Japanese of 4; September: 4 of 6
 		mention(ramen, 'Ramen', '2026-08-10');
@@ -148,6 +145,8 @@ describe('TopicInsightService (pglite)', () => {
 			breakout: false,
 		});
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

@@ -1,6 +1,10 @@
 <script lang="ts">
-	import { ExternalLink, FileText, MapPin, Send } from '@lucide/svelte';
-	import type { AdminBrandOutputDto, AdminBrandSummaryOutputDto } from 'client';
+	import { ChevronDown, ExternalLink, FileText, MapPin, Send } from '@lucide/svelte';
+	import type {
+		AdminBrandOutputDto,
+		AdminBrandSummaryOutputDto,
+		AdminReportConfigOutputDto
+	} from 'client';
 
 	import { untrack } from 'svelte';
 
@@ -27,8 +31,10 @@
 	import { stageLabel } from '#lib/outreach-status.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
+	import * as DropdownMenu from '#ui/primitives-new/dropdown-menu/index.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
+	import Buttonish from '#ui/wrapped/Buttonish.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
 	// The brand is the unit: its branches, what was said about it, its competitors, reports and
@@ -122,19 +128,36 @@
 		goto(url, { replace: true, reset: false });
 	};
 
-	// One LLM call over the month's data: a few seconds
+	// Its report configurations: "Build report" builds one of them (or every active one), the
+	// Reports tab lists and edits them
+	let configs = $state<AdminReportConfigOutputDto[] | null>(null);
+	$effect(() => {
+		const id = brand.id;
+		untrack(() => {
+			configs = null;
+			api.admin
+				.listBrandReportConfigs(id)
+				.then((list) => (configs = list))
+				.catch(() => (configs = []));
+		});
+	});
+	const activeConfigs = $derived(configs?.filter((c) => (c.status as string) === 'active') ?? []);
+
+	// LLM calls over the month's data: a few seconds. A configuration builds that one report,
+	// none builds every active configuration's (the default template's while none is active).
 	const buildAction = createAction(
-		() =>
+		(config?: AdminReportConfigOutputDto) =>
 			api.admin.buildReport({
 				brandId: brand.id,
 				cityId: brand.reportScope === 'all' ? undefined : cityId,
-				month
+				month,
+				...(config && { configId: config.id })
 			}),
 		{
 			onSuccess: (report) => goto(`/admin/reports/${report.id}`),
-			successNotification: () => ({
+			successNotification: (_, [config]) => ({
 				title: 'Report built',
-				text: `${brand.name}, ${monthLabel(month)}`
+				text: `${config ? `${config.name}, ` : ''}${brand.name}, ${monthLabel(month)}`
 			})
 		}
 	);
@@ -220,13 +243,45 @@
 					size="sm"
 					onValueChange={(v) => setParam('month', v === lastMonth() ? undefined : v)} />
 			</div>
-			<Button
-				size="sm"
-				icon={FileText}
-				loading={buildAction.executing}
-				onclick={() => buildAction.execute()}>
-				Build report
-			</Button>
+			{#if configs?.length}
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger disabled={buildAction.executing}>
+						<Buttonish
+							size="sm"
+							icon={FileText}
+							suffixIcon={ChevronDown}
+							loading={buildAction.executing}
+							disabled={buildAction.executing}>
+							Build report
+						</Buttonish>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content class="w-64" side="bottom" align="end">
+						<DropdownMenu.Label>Configuration</DropdownMenu.Label>
+						{#each configs as config (config.id)}
+							<DropdownMenu.Item onclick={() => buildAction.execute(config)}>
+								<span class="min-w-0 flex-1 truncate">{config.name}</span>
+								{#if (config.status as string) !== 'active'}
+									<Badge variant="quiet">Inactive</Badge>
+								{/if}
+							</DropdownMenu.Item>
+						{/each}
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item onclick={() => buildAction.execute()}>
+							{activeConfigs.length
+								? `Every active configuration (${activeConfigs.length})`
+								: 'Default template'}
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			{:else}
+				<Button
+					size="sm"
+					icon={FileText}
+					loading={buildAction.executing}
+					onclick={() => buildAction.execute()}>
+					Build report
+				</Button>
+			{/if}
 		</div>
 	{/snippet}
 </AdminPageHeader>
@@ -260,7 +315,13 @@
 		{:else if tab === 'signals'}
 			<BrandSignalsTab {brand} {cityId} />
 		{:else if tab === 'reports'}
-			<BrandReportsTab {brand} {cityId} />
+			<BrandReportsTab
+				{brand}
+				{cityId}
+				{month}
+				{configs}
+				onBuild={(config) => buildAction.execute(config)}
+				building={buildAction.executing} />
 		{:else if tab === 'sales'}
 			<BrandSalesTab {brand} {sales} />
 		{:else if tab === 'settings'}

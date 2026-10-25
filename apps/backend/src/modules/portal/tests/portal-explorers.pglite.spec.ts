@@ -3,6 +3,8 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
+import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
+import type { AnsweredPoint } from 'src/modules/feedback/util/feedback-rows.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
@@ -15,6 +17,8 @@ import type {
 	ReportHighlights,
 } from 'src/modules/reports/interfaces/report-data.interface.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { BrandPostsService } from 'src/modules/social/services/brand-posts.service.js';
@@ -53,13 +57,20 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			...extra,
 		} as Venue);
 
-	const newReview = (venue: Venue, extra: Partial<Review>) =>
-		em().create(Review, {
+	/** A review; `praise` / `complaints` become its feedback rows */
+	const newReview = (
+		venue: Venue,
+		{ praise = [], complaints = [], ...extra }: Partial<Review> & { praise?: AnsweredPoint[]; complaints?: AnsweredPoint[] },
+	) => {
+		const review = em().create(Review, {
 			reviewId: `review-${count++}`,
 			venue,
 			publishedAt: new Date('2026-09-10T12:00:00Z'),
 			...extra,
 		} as Review);
+		addFeedback(em(), review, { praise, complaints });
+		return review;
+	};
 
 	/** A post about the venue; `brandOnly`: it named the brand but no branch. */
 	const newPost = (venue: Venue, extra: Partial<SocialPost>, summary = 'Good döner', brandOnly = false) => {
@@ -71,7 +82,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			postedAt: new Date('2026-09-05T12:00:00Z'),
 			...extra,
 		} as SocialPost);
-		em().create(Mention, {
+		const mention = em().create(Mention, {
 			post,
 			brand: venue.brand,
 			venue: brandOnly ? null : venue,
@@ -79,10 +90,8 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary,
-			dishes: [{ name: 'döner', sentiment: 'positive' }],
-			praise: [],
-			complaints: [],
 		});
+		addFeedback(em(), mention, { dishes: [{ name: 'döner', sentiment: 'positive' }] });
 		return post;
 	};
 
@@ -92,6 +101,8 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				PortalController,
 				PortalService,
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				OutreachService,
 				ReviewService,
 				BrandPostsService,

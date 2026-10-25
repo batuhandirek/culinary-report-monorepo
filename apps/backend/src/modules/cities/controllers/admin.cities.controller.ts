@@ -9,6 +9,7 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
+import { ALL_FINDS_SINCE } from 'src/modules/social/util/post-sources.js';
 
 import {
 	AdminAddCitySourceInputDto,
@@ -19,6 +20,7 @@ import {
 } from '../dto/admin-city.input.dto.js';
 import {
 	AdminCityDistrictSuggestionsOutputDto,
+	AdminCityHashtagSuggestionsOutputDto,
 	AdminCityOutputDto,
 	AdminCitySourceOutputDto,
 	AdminListCitiesOutputDto,
@@ -106,7 +108,19 @@ export class AdminCitiesController {
 		const rows = await this.cityService.sourceYield(id);
 		return {
 			items: rows.map(({ source, ...numbers }) => ({ ...sourceDto(source), ...numbers })),
+			allFindsSince: ALL_FINDS_SINCE,
 		};
+	}
+
+	/**
+	 * Tags the city doesn't scrape that keep coming up on its matched posts (three months, 3+
+	 * brands, 5+ posts): candidates to add, from the data, free. Nothing is saved.
+	 */
+	@TypedRoute.Get('/:id/hashtag-suggestions')
+	async listCityHashtagSuggestions(
+		@TypedParam('id') id: string & tags.Format<'uuid'>,
+	): Promise<AdminCityHashtagSuggestionsOutputDto> {
+		return { items: await this.cityService.hashtagSuggestions(id) };
 	}
 
 	@TypedRoute.Post('/:id/sources')

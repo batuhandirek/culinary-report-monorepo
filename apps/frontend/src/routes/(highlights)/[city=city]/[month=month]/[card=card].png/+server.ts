@@ -6,6 +6,7 @@ import HighlightCardImage from './components/HighlightCardImage.svelte';
 
 import { createLoadApi, isNotFoundError } from '#lib/api.js';
 import { HIGHLIGHT_CARDS, type HighlightCard } from '#lib/highlights.js';
+import { ogFonts } from '#lib/og-fonts.js';
 import { satoriMarkup } from '#lib/og-image.js';
 
 // The month's share images from one renderer: `og.png` for links, `square.png` and
@@ -19,6 +20,7 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 		return new ImageResponse(satoriMarkup(HighlightCardImage, { highlight, card }), {
 			width,
 			height,
+			fonts: await ogFonts(),
 			debug: false,
 			tailwindConfig: {}
 		});

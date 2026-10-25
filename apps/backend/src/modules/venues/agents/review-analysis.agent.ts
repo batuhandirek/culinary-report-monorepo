@@ -13,15 +13,30 @@ import { FEEDBACK_THEME_KEYS, feedbackThemeLegend } from '../constants/feedback-
 export const FEEDBACK_SENTIMENTS = ['positive', 'mixed', 'negative', 'neutral'] as const;
 
 /**
- * One praise or complaint point: the theme it is about and the phrase. The topic is the theme's,
- * derived in code (`withTopics`). Every agent answering this shape puts `FEEDBACK_THEMES_INSTRUCTION`
- * in its instructions: the legend is long, and in the schema it would repeat for praise and
- * complaints alike.
+ * One praise or complaint point: the theme it is about, the phrase, the dish it is about and the
+ * number it states. The topic is the theme's, derived in code (`feedbackRows`). Every agent
+ * answering this shape puts `FEEDBACK_THEMES_INSTRUCTION` and `FEEDBACK_POINT_INSTRUCTION` in its
+ * instructions: the legend is long, and in the schema it would repeat for praise and complaints.
  */
 export const feedbackPointSchema = z.object({
 	theme: z.enum(FEEDBACK_THEME_KEYS).describe('The one theme the point is about, from the themes in the instructions'),
 	detail: z.string().describe('Short phrase in English, e.g. "staff forgot our order"'),
+	dish: z
+		.string()
+		.nullable()
+		.describe('The dish or drink the point is about, as written in the dishes list; null when it is about the place or the food as a whole'),
+	amount: z
+		.number()
+		.nullable()
+		.describe('For a wait or price point, the number the text states (minutes waited, the price); null when it states none'),
 });
+
+/** How the agents answering `feedbackPointSchema` fill `dish` and `amount`. */
+export const FEEDBACK_POINT_INSTRUCTION =
+	'A point about one dish or drink names it in dish, spelled as in the dishes list ("the burger got pricier": burger); a point ' +
+	'about the place or the food as a whole has none. Give amount only when the text states the number, never an estimate: for a ' +
+	'wait the minutes ("an hour" is 60, "half an hour" 30, "30 to 40 minutes" 40), for a price the price in the local currency ' +
+	'("dürüm now €9.50" is 9.5); "waited forever" or "pricey" has none. ';
 
 /** How the agents answering `feedbackPointSchema` pick a theme. */
 export const FEEDBACK_THEMES_INSTRUCTION =
@@ -73,6 +88,7 @@ export class ReviewAnalysisAgent extends BaseMastraAgent<typeof reviewAnalysisSc
 			'For every review, list the praise and complaints as points, the dishes or drinks named, and any change the reviewer says happened ' +
 			'compared to earlier visits or the past (ownership, staff, menu, prices, quality, opening hours, payment). ' +
 			FEEDBACK_THEMES_INSTRUCTION +
+			FEEDBACK_POINT_INSTRUCTION +
 			'Only use what the review says. Write details as short English phrases. Return one entry per review id.'
 		);
 	}

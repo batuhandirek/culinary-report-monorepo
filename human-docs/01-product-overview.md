@@ -2,7 +2,7 @@
 
 ## What it is
 
-Culinary Report sends the owner of a restaurant, bar or café a **monthly report on what the internet says about their business**, and gives them a **portal** to work with that data between reports. The data comes from TikTok and Instagram posts by other people, Google and TripAdvisor reviews, Google Maps (details, popular times, search results), press, delivery apps, booking pages, Google Trends and the city's weather and holidays. The report is written for the owner: three findings, two or three things to do next month, and the numbers behind them.
+Munchwerk sends the owner of a restaurant, bar or café a **monthly report on what the internet says about their business**, and gives them a **portal** to work with that data between reports. The data comes from TikTok and Instagram posts by other people, food blogs and city magazines, Google and TripAdvisor reviews, Google Maps (details, popular times, search results), press, delivery apps, booking pages, Google Trends and the city's weather and holidays. The report is written for the owner: three findings, two or three things to do next month, and the numbers behind them.
 
 Today it is built for **Berlin**. Any city is a row in the admin panel (name, hashtags, search queries, districts, budgets); nothing about Berlin is hard-coded.
 

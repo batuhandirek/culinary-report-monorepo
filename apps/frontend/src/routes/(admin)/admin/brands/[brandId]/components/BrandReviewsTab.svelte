@@ -2,8 +2,10 @@
 	import type { AdminBranchReviewOutputDto, AdminBrandOutputDto } from 'client';
 
 	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
+	import TalksAbout from '#components/admin/feedback/TalksAbout.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel, sentimentVariant } from '#lib/culinary.js';
+	import { changesOf } from '#lib/feedback.js';
 	import type { Column } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
 
@@ -52,10 +54,16 @@
 			variant: (row) => sentimentVariant(row.sentiment)
 		},
 		{
+			type: 'component',
+			name: 'Talks about',
+			component: TalksAbout as never,
+			props: (row) => ({ feedback: row.feedback, cityId, month: new Date(row.publishedAt).toISOString().slice(0, 7), compact: true })
+		},
+		{
 			type: 'value',
 			name: 'Changes noticed',
 			truncate: 40,
-			value: (row) => row.changes?.join(', ') ?? ''
+			value: (row) => changesOf(row.feedback).join(' · ')
 		},
 		{
 			type: 'value',

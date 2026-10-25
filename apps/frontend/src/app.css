@@ -17,12 +17,12 @@
 }
 
 :root {
-	/* ── "Pickle & Plum" palette ───────────────────────────────────────────────
-	   A ferment lab on an oat-paper counter. The ground is oat with grain and a faint
-	   dot grid (the cosy half); text is plum-black; the one loud colour is an acid
-	   pickle green, always with plum on it (the techy half). Beetroot and chili are the
-	   kitchen accents. Acid is a fill, never a colour for text or thin marks on paper
-	   (1.1:1 there): those use `primary-darker`. */
+	/* ── Munchwerk palette ─────────────────────────────────────────────────────
+	   The brand's tokens (`.claude/skills/brand/design-tokens.txt`), day theme. Oat ground,
+	   plum-black ink, and two brand colours used as fields: acid lime (daytime, fresh) and
+	   grape (evening, nightlife). Acid is a fill, never text or thin marks on paper (1.1:1
+	   there): those use `primary-darker`. Grape carries oat or acid text, never ink (2.6:1).
+	   Beet and chili are small accents and never sit next to grape. */
 	--sand: #f2ede3; /* the page ground: oat */
 	--paper: #fbf9f4; /* cards, sheets, bars */
 	--line: #ded7c9; /* hairlines, card borders */
@@ -36,7 +36,13 @@
 	   or a glyph, never a sentence (3.9:1). */
 	--acid: #c6f135; /* pixel labels on ink, the primary fill */
 	--chili: #e2452b; /* the active tab's rule, required marks */
-	--beet: #8c2d5c; /* pixel labels and links on paper */
+	--beet: #8c2d5c; /* pixel labels on paper, Dish of the Month */
+	/* Grape: the second brand colour. A field with oat (5.7:1) or acid (5.1:1) on it; as text
+	   on paper 6.3:1 (links, "New" labels). Deep grape is the night block (oat 10.9:1). */
+	--grape: #6a2bea;
+	--grape-deep: #3b1a80;
+	/* Lavender: purple as text on ink or deep grape only (9.4:1 on ink); never on paper. */
+	--lavender: #c9b3ff;
 	--strip-muted: #aba0ae; /* idle text on the strip */
 
 	/* Primary: acid pickle with ink on it (13:1). On paper it needs its ink frame (the
@@ -64,15 +70,16 @@
 
 	--border: var(--line);
 	--input: #cbc2b3;
-	--ring: var(--primary-darker);
+	/* The focus ring is grape by day (5.7:1 on sand, 6.3:1 on paper). */
+	--ring: var(--grape);
 	--muted: var(--wash);
-	--muted-foreground: #5e5466; /* 6.8:1 on paper */
+	--muted-foreground: #5e556a; /* ink-muted: 6.7:1 on paper, 6.0:1 on sand */
 	/* Hover ground on a paper surface: the oat shows through. */
 	--accent: var(--sand);
 	--accent-foreground: var(--ink);
 
 	--neutral: var(--wash);
-	--neutral-content: #5e5466;
+	--neutral-content: #5e556a;
 
 	/* Success and destructive double as the positive / negative pair in reports
 	   (validated: 3:1 on paper, CVD ΔE 7.2 deutan, so they always ship with a label or
@@ -112,10 +119,18 @@
 		color-mix(in srgb, var(--ink) 11%, transparent) 1px,
 		transparent 1.5px
 	);
+	/* The bite's shape: a mouthful whose edge is eight round tooth marks, scalloped like a drawn
+	   cloud, in a 200 box with the tooth tips on its edge and the gaps between teeth at 81% of the
+	   radius. `--bite-hole` is the same bite as a hole in the middle of a 300 box, the `bite`
+	   utility's corner layer. The logo's K, the share cards and the brand assets (`BRAND_BITE`,
+	   `bin/build-brand-assets.mjs`) draw the same shape. */
+	--bite-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M68.8 175.2A32 32 0 0 1 24.8 131.2A32 32 0 0 1 24.8 68.8A32 32 0 0 1 68.8 24.8A32 32 0 0 1 131.2 24.8A32 32 0 0 1 175.2 68.8A32 32 0 0 1 175.2 131.2A32 32 0 0 1 131.2 175.2A32 32 0 0 1 68.8 175.2Z'/%3E%3C/svg%3E");
+	--bite-hole: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cpath fill-rule='evenodd' d='M0 0H300V300H0ZM118.8 225.2A32 32 0 0 1 74.8 181.2A32 32 0 0 1 74.8 118.8A32 32 0 0 1 118.8 74.8A32 32 0 0 1 181.2 74.8A32 32 0 0 1 225.2 118.8A32 32 0 0 1 225.2 181.2A32 32 0 0 1 181.2 225.2A32 32 0 0 1 118.8 225.2Z'/%3E%3C/svg%3E");
 
-	/* Categorical, fixed order (plum, tomato, teal, mustard, indigo); validated as a set
-	   on paper: 3:1 each, CVD ΔE ≥ 11 between neighbours. */
-	--chart-1: #7b3a92;
+	/* Categorical, fixed order (grape, tomato, teal, mustard, indigo), for the admin's
+	   multi-series charts; 3:1 each on paper. Public story charts don't use these: ink bars,
+	   the one bar the story is about in acid with an ink outline (brand skill). */
+	--chart-1: #6a2bea;
 	--chart-2: #e05a2e;
 	--chart-3: #008c82;
 	--chart-4: #b07f00;
@@ -237,9 +252,14 @@
 	--color-acid: var(--acid);
 	--color-chili: var(--chili);
 	--color-beet: var(--beet);
+	--color-grape: var(--grape);
+	--color-grape-deep: var(--grape-deep);
+	--color-lavender: var(--lavender);
 	--color-strip-muted: var(--strip-muted);
 
-	/* ── Type: Onest + two pixel accents ───────────────────────────────────────
+	/* ── Type: Bricolage Grotesque + Onest + two pixel accents ──────────────────
+	   Bricolage Grotesque 800 is the display face: page headlines, place names in a
+	   ranking, big numbers (`font-display`, `type-hero`, `type-display`, `number-hero`).
 	   Onest carries every sentence, title and price (full Turkish coverage and its own
 	   ₺). The pixel faces are the "künye" — short tags and counters, never prose:
 	   `font-pixel` (Press Start 2P, caps-only, via `eyebrow`/`sticker`) and `font-term`
@@ -255,6 +275,7 @@
 
 	--font-onest: 'Onest', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 	--font-sans: var(--font-onest);
+	--font-display: 'Bricolage Grotesque', 'Arial Black', Impact, ui-sans-serif, sans-serif;
 	--font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
 	--font-pixel: 'Press Start 2P', ui-monospace, monospace;
 	--font-term: 'VT323', ui-monospace, monospace;
@@ -295,7 +316,13 @@
 	--shadow-sm: 0 1px 3px rgb(31 23 36 / 0.07), 0 1px 2px rgb(31 23 36 / 0.04);
 	--shadow-md: 0 6px 20px rgb(31 23 36 / 0.09), 0 2px 6px rgb(31 23 36 / 0.05);
 	--shadow-lg: 0 12px 32px rgb(31 23 36 / 0.12), 0 4px 10px rgb(31 23 36 / 0.06);
-	--shadow-stamp: 3px 3px 0 var(--ink);
+	--shadow-stamp: 4px 4px 0 var(--ink);
+	/* The brand's hard offsets, never blurred: stickers, cards and photo frames on public
+	   pages (`hard`), hero stickers (`hard-l`); grape or acid under an ink sticker. */
+	--shadow-hard: 8px 8px 0 var(--ink);
+	--shadow-hard-l: 16px 16px 0 var(--ink);
+	--shadow-hard-grape: 8px 8px 0 var(--grape);
+	--shadow-hard-acid: 8px 8px 0 var(--acid);
 	/* The quiet cousin: a hard offset in the hairline colour, so cards read as paper
 	   stuck on the sand. */
 	--shadow-sticker: 3px 3px 0 var(--line);
@@ -437,11 +464,32 @@
 		text-transform: none;
 	}
 
+	/* Display roles: Bricolage Grotesque 800, the optical size following the font size. */
 	.type-hero {
-		font-family: var(--font-onest);
-		font-weight: 700;
-		letter-spacing: var(--tracking-hero);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: var(--tracking-display);
+		line-height: 0.95;
+		font-optical-sizing: auto;
+	}
+
+	/* Section heads and card titles on public pages: the display face a step quieter. */
+	.type-display {
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.015em;
 		line-height: 1.05;
+		font-optical-sizing: auto;
+	}
+
+	/* Rank numerals as graphic elements ("01"). Size at the call site. */
+	.number-hero {
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.05em;
+		line-height: 0.85;
+		font-variant-numeric: tabular-nums;
+		font-optical-sizing: auto;
 	}
 
 	.type-body {
@@ -557,6 +605,61 @@
 	text-transform: uppercase;
 }
 
+/* The brand's stamp: the pixel face at a size that reads on public pages (11px, the
+   brand's minimum on web; `stamp-l` 14px on covers). One or two words per line, never
+   sentences ("HEAT CHECK · OCT 2026"). `eyebrow` stays the admin's dense 8px label. */
+@utility stamp {
+	font-family: var(--font-pixel);
+	font-size: 0.6875rem;
+	font-weight: 400;
+	line-height: 1.45;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+@utility stamp-l {
+	font-family: var(--font-pixel);
+	font-size: 0.875rem;
+	font-weight: 400;
+	line-height: 1.45;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+/* Tilts are for stickers and tags only: at most two per composition, never the same
+   angle twice. */
+@utility tilt-left {
+	rotate: -6deg;
+}
+@utility tilt-right {
+	rotate: 4deg;
+}
+@utility tilt-hard {
+	rotate: -12deg;
+}
+
+/* The bite: a mouthful taken from the top-right corner of a shape, one per composition; three
+   of its tooth marks show on the corner. `--bite` is its radius to the tooth tips (the brand's
+   16% of the shape's height: set it at the call site for tall shapes); the centre sits ~0.4
+   radius in from the corner. Three layers add up to the mask: a strip down the left, one along
+   the bottom and `--bite-hole` over the corner, so every layer is empty inside the bite. A bite
+   cut out of a full layer (`mask-composite`) leaves a hairline on a rounded corner, where both
+   layers are anti-aliased. Masks the shape's own shadow too, so a bitten sticker carries its
+   offset on a wrapper. */
+@utility bite {
+	--bite: 0.75rem;
+	mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0), var(--bite-hole);
+	mask-size:
+		calc(100% - var(--bite) * 1.625) 100%,
+		100% calc(100% - var(--bite) * 1.625),
+		calc(var(--bite) * 3) calc(var(--bite) * 3);
+	mask-position:
+		0 0,
+		0 100%,
+		right calc(var(--bite) * -1.125) top calc(var(--bite) * -1.125);
+	mask-repeat: no-repeat;
+}
+
 /* A one-line supporting note under a heading or in a dialog: ink on the darker paper.
    Width stays at the call site (`w-fit`, `max-w-sm`). */
 @utility ink-strip {
@@ -601,7 +704,7 @@
 	position: absolute;
 	top: 0.625rem;
 	left: 0.625rem;
-	transform: rotate(-4deg);
+	transform: rotate(-6deg);
 	z-index: 1;
 	background: var(--ink);
 	padding: 0.4375rem 0.5625rem 0.3125rem;
@@ -752,6 +855,33 @@
 	font-weight: 100 900;
 	font-display: swap;
 	src: url('/fonts/onest/onest-latin-ext-wght-normal.woff2') format('woff2');
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+		U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,
+		U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ── Bricolage Grotesque ──────────────────────────────────────────────────────
+   Variable weight (200–800) and optical size (12–96), split latin / latin-ext like Onest.
+   German (ä ö ü ß) is in latin. */
+@font-face {
+	font-family: 'Bricolage Grotesque';
+	font-style: normal;
+	font-weight: 200 800;
+	font-display: swap;
+	src: url('/fonts/bricolage-grotesque/bricolage-grotesque-latin-opsz-normal.woff2') format('woff2');
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308,
+		U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: 'Bricolage Grotesque';
+	font-style: normal;
+	font-weight: 200 800;
+	font-display: swap;
+	src: url('/fonts/bricolage-grotesque/bricolage-grotesque-latin-ext-opsz-normal.woff2')
+		format('woff2');
 	unicode-range:
 		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
 		U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0,

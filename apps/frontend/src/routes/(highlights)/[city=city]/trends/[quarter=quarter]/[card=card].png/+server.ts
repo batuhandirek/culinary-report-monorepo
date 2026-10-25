@@ -6,6 +6,7 @@ import FoodTrendsCardImage from './components/FoodTrendsCardImage.svelte';
 
 import { createLoadApi, isNotFoundError } from '#lib/api.js';
 import { HIGHLIGHT_CARDS, type HighlightCard } from '#lib/highlights.js';
+import { ogFonts } from '#lib/og-fonts.js';
 import { satoriMarkup } from '#lib/og-image.js';
 
 // The quarter's share images in the city month's three sizes, from one renderer: `og.png` for
@@ -19,6 +20,7 @@ export const GET: RequestHandler = async ({ params, fetch }) => {
 		return new ImageResponse(satoriMarkup(FoodTrendsCardImage, { report, card }), {
 			width,
 			height,
+			fonts: await ogFonts(),
 			debug: false,
 			tailwindConfig: {}
 		});

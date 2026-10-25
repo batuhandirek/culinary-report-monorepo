@@ -2,8 +2,6 @@ import _ from 'lodash';
 
 import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
 import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
-import { dishKey } from 'src/modules/reports/util/summarize-report.js';
-import type { FeedbackDish } from 'src/modules/venues/interfaces/feedback.interface.js';
 
 import type {
 	CityTrends,
@@ -11,6 +9,16 @@ import type {
 	TrendRisingBrandRow,
 	TrendShareRow,
 } from '../interfaces/city-trends.interface.js';
+
+/**
+ * A dish a post or review names, from its feedback rows: the stored `dishKey`, and the dish or drink
+ * topic the name names as a whole (`FeedbackPoint.foodTopic`'s key), when one does.
+ */
+export interface TrendDish {
+	name: string;
+	key: string;
+	topic?: string | null;
+}
 
 /**
  * A matched mention in a post by someone other than the brand. Counted per brand: a chain's
@@ -21,19 +29,20 @@ export interface TrendMention {
 	brandName: string;
 	district: string | null;
 	category: string | null;
-	cuisine: string | null;
-	dishes: FeedbackDish[];
+	/** Its stored food topics (`MentionFoodTopic`: its cuisine's, else its venue's category's), in order */
+	topics: string[];
+	dishes: TrendDish[];
 	postId: string;
 	/** The post's creator (`Creator.name`): one person's accounts count as one */
 	creator: string | null;
 	views: number;
 }
 
-/** A Google review that names dishes. */
+/** A review that names dishes. */
 export interface TrendReview {
 	brandId: string;
 	brandName: string;
-	dishes: FeedbackDish[];
+	dishes: TrendDish[];
 }
 
 export interface TrendMonthInput {
@@ -173,14 +182,11 @@ const FOOD_KINDS = new Set([FoodTopicKindEnum.CUISINE, FoodTopicKindEnum.DISH]);
 
 /**
  * The one topic a mention counts for in the trend tables (each sums to 100): the first cuisine or
- * dish its cuisine names ("Vegan Döner": döner), else its first topic of any kind, else the
- * venue's Google category's the same way; null for none.
+ * dish of its stored topics ("Vegan Döner": döner; a mention whose cuisine names none has its
+ * venue's Google category's), else its first topic of any kind; null for none.
  */
-export const mentionTopic = (
-	m: Pick<TrendMention, 'cuisine' | 'category'>,
-	index: FoodTopicIndex,
-): string | null => {
-	const keys = index.resolveMention(m.cuisine, m.category);
+export const mentionTopic = (m: Pick<TrendMention, 'topics'>, index: FoodTopicIndex): string | null => {
+	const keys = m.topics.filter(k => index.get(k));
 	return keys.find(k => FOOD_KINDS.has(index.get(k)!.kind)) ?? keys[0] ?? null;
 };
 
@@ -192,17 +198,6 @@ const dishTopic = (key: string, index: FoodTopicIndex) => {
 	return topic && DISH_KINDS.has(topic.kind) ? topic : undefined;
 };
 
-/**
- * The row a dish name counts in on the city's dish table: the dish or drink topic the name names
- * as a whole, as written or singular ("döner", "doner kebab", "kebabs": kebab), else its
- * `dishKey` ("vegetable kebab" stays apart). A venue's report keeps `dishKey` only.
- */
-export const dishRow = (name: string, index: FoodTopicIndex): string => {
-	const key = dishKey(name);
-	if (!key) return '';
-	const topic = index.exact(name) ?? index.exact(key);
-	return topic && dishTopic(topic, index) ? topic : key;
-};
 
 const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) => {
 	const cuisines = new Tallies();
@@ -221,10 +216,12 @@ const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) =>
 	>();
 	const posts = new Map<string, number>();
 	let dishSources = 0;
-	// Each post or review counts a row once, however many of its names fall in it
-	const rowsOf = (named: FeedbackDish[] | null | undefined) =>
+	// Each post or review counts a row once, however many of its names fall in it: the dish or
+	// drink topic the name names as a whole ("döner", "doner kebab", "kebabs": kebab), else its
+	// `dishKey` ("vegetable kebab" stays apart); both stored on the feedback row
+	const rowsOf = (named: TrendDish[]) =>
 		_.uniqBy(
-			(named ?? []).map(d => [dishRow(d.name, index), d] as const).filter(([row]) => row),
+			named.map(d => [d.topic ?? d.key, d] as const).filter(([row]) => row),
 			([row]) => row,
 		);
 

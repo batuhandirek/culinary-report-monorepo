@@ -22,7 +22,7 @@
 
 <figure class="m-0 flex min-w-0 flex-col gap-3">
 	<div
-		class="bg-wash border-line relative mx-auto flex w-full max-w-[340px] items-center justify-center overflow-hidden rounded-md border"
+		class="bg-wash border-ink shadow-hard relative mx-auto flex w-full max-w-[330px] items-center justify-center overflow-hidden border-[3px]"
 		style="aspect-ratio: 9 / 16;">
 		{#if playing}
 			<iframe
@@ -35,8 +35,8 @@
 				referrerpolicy="strict-origin-when-cross-origin"></iframe>
 		{:else}
 			<div class="flex flex-col items-center gap-3 px-6 text-center">
-				<span class="eyebrow text-beet">{platform}</span>
-				<span class="text-ink text-2xl font-semibold tabular-nums">{compact(post.views)} views</span>
+				<span class="stamp text-beet">{platform}</span>
+				<span class="type-display text-ink text-3xl tabular-nums">{compact(post.views)} views</span>
 				<Button icon={Play} onclick={() => (playing = true)}>Play here</Button>
 				<span class="text-muted-foreground text-xs leading-snug">
 					Loads {platform}'s player, which sets its own cookies.
@@ -44,10 +44,10 @@
 			</div>
 		{/if}
 	</div>
-	<figcaption class="text-muted-foreground text-center text-sm leading-relaxed">
-		<a href={post.profileUrl} rel="noopener nofollow" target="_blank" class="text-beet font-semibold hover:underline">
+	<figcaption class="text-muted-foreground mt-2 text-center text-sm leading-relaxed">
+		<a href={post.profileUrl} rel="noopener nofollow" target="_blank" class="text-grape font-bold hover:underline">
 			@{post.handle}</a> on {places} ·
-		<a href={post.url} rel="noopener nofollow" target="_blank" class="text-beet inline-flex items-center gap-1 hover:underline">
+		<a href={post.url} rel="noopener nofollow" target="_blank" class="text-grape inline-flex items-center gap-1 font-semibold hover:underline">
 			Watch on {platform}<ExternalLink class="size-3.5" aria-hidden="true" />
 		</a>
 	</figcaption>

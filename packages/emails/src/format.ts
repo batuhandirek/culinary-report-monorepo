@@ -1,4 +1,4 @@
-export const DEFAULT_APP_URL = 'https://culinaryreport.com';
+export const DEFAULT_APP_URL = 'https://munchwerk.com';
 
 const decimals = (amount: number) => (Number.isInteger(amount) ? 0 : 2);
 

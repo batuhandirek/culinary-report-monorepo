@@ -10,6 +10,7 @@ import {
 	htmlToText,
 	pagedFeedUrl,
 	parseFeed,
+	profileLinkText,
 } from '../util/blog-feed.js';
 
 // RSS 2.0 as WordPress writes it (Cee Cee's starts with blank lines; tip Berlin's held a 0x08)
@@ -149,5 +150,27 @@ describe('articles', () => {
 		expect(articleText('<html><body><nav>Menu</nav><main><h1>Title</h1><p>Text here</p></main></body></html>')).toBe(
 			'Title\nText here',
 		);
+	});
+
+	it('keeps where a link to a social profile points, after its text', () => {
+		const html = [
+			'<p>Erst zu <a href="https://www.instagram.com/kaffeebar.berlin/?hl=de">Kaffeebar</a>,',
+			'dann <a href="https://www.tiktok.com/@Pho_Sen/video/123">Pho Sen</a> und',
+			'<a href="https://twitter.com/curry36">@curry36</a>; <a href="https://instagram.com/p/Cx1/">ein Post</a>,',
+			'<a href="https://instagram.com/kroque">instagram.com/kroque</a>, <a href="https://kroque.de">Kroque</a>.</p>',
+		].join(' ');
+		expect(htmlToText(html)).toBe(
+			'Erst zu Kaffeebar (instagram.com/kaffeebar.berlin), dann Pho Sen (tiktok.com/@pho_sen) und @curry36 (x.com/curry36); ein Post, instagram.com/kroque, Kroque.',
+		);
+	});
+
+	it('reads only profiles from links', () => {
+		expect(profileLinkText('https://m.instagram.com/Cafe.Paula')).toBe('instagram.com/cafe.paula');
+		expect(profileLinkText('https://www.instagram.com/reel/abc/')).toBeNull();
+		expect(profileLinkText('https://www.tiktok.com/discover/berlin')).toBeNull();
+		expect(profileLinkText('https://x.com/intent/tweet?text=hi')).toBeNull();
+		expect(profileLinkText('https://x.com/burgermeister/status/1')).toBe('x.com/burgermeister');
+		expect(profileLinkText('/relative/path')).toBeNull();
+		expect(profileLinkText('https://facebook.com/kroque')).toBeNull();
 	});
 });

@@ -14,7 +14,6 @@ describe('countThemes', () => {
 				],
 				[{ topic: 'price', theme: 'price_increase', detail: 'prices are way more now than before' }],
 				[],
-				null,
 			]),
 		).toEqual({ price_increase: 2, price_level: 1 });
 	});

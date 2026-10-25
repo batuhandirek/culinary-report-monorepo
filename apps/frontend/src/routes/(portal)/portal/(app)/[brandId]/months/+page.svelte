@@ -16,7 +16,8 @@
 	// Every month with a report, newest first, each with its PDF.
 	const brandId = $derived(page.params.brandId!);
 	let request = $state<Promise<PortalReportsOutputDto>>(new Promise(() => {}));
-	const load = () => (request = api.portal.listPortalReports(brandId) as Promise<PortalReportsOutputDto>);
+	const load = () =>
+		(request = api.portal.listPortalReports(brandId) as Promise<PortalReportsOutputDto>);
 	$effect(() => {
 		load();
 	});
@@ -27,7 +28,11 @@
 			downloading = report.id;
 			try {
 				const brand = await api.portal.getPortalBrand(brandId);
-				await downloadPortalPdf(brandId, report, `${brand.name} ${report.city?.name ?? 'all cities'}`);
+				await downloadPortalPdf(
+					brandId,
+					report,
+					`${brand.name} ${report.city?.name ?? 'all cities'}`
+				);
 			} finally {
 				downloading = null;
 			}
@@ -40,6 +45,8 @@
 	<SkeletonRows count={4} lines={3} boxed />
 {:then { items }}
 	{@const cities = new Set(items.map((r) => r.city?.id ?? 'all')).size}
+	<!-- A month may hold a report per configuration ("Full report", "Reviews"): name them then -->
+	{@const several = new Set(items.map((r) => r.name)).size > 1}
 	{#if items.length}
 		<ul class="bg-paper border-line m-0 flex list-none flex-col rounded-md border p-0">
 			{#each items as report, index (report.id)}
@@ -48,13 +55,19 @@
 						'flex items-center gap-2 py-1 pr-2 pl-4',
 						index > 0 && 'border-line border-t'
 					]}>
-					<a href={`/portal/${brandId}/months/${report.id}`} class="flex min-w-0 flex-1 flex-col gap-0.5 py-3">
+					<a
+						href={`/portal/${brandId}/months/${report.id}`}
+						class="flex min-w-0 flex-1 flex-col gap-0.5 py-3">
 						<span class="eyebrow text-beet"
-							>{monthLabel(report.month)}{cities > 1 ? ` · ${report.city?.name ?? 'All cities'}` : ''}</span>
+							>{monthLabel(report.month)}{cities > 1
+								? ` · ${report.city?.name ?? 'All cities'}`
+								: ''}{several ? ` · ${report.name}` : ''}</span>
 						<span class="text-ink font-semibold">{report.title}</span>
-						<span class="text-muted-foreground line-clamp-2 text-sm">{report.headline}</span>
+						<span class="text-muted-foreground line-clamp-2 text-sm"
+							>{report.headline}</span>
 						<span class="font-term text-muted-foreground text-base">
-							{report.postCount} {report.postCount === 1 ? 'post' : 'posts'} · {report.reviewCount}
+							{report.postCount}
+							{report.postCount === 1 ? 'post' : 'posts'} · {report.reviewCount}
 							{report.reviewCount === 1 ? 'review' : 'reviews'}
 						</span>
 					</a>

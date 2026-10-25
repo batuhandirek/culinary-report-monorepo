@@ -336,7 +336,8 @@ export class SearchInterestService {
 		);
 		if (!stored.length) return [];
 		const index = await this.foodTopicService.index();
-		const own = new Set(index.resolve(ownCuisine));
+		// The venue's own kind of food is a topic key already
+		const own = new Set(ownCuisine && index.get(ownCuisine) ? [ownCuisine] : []);
 		const shares = await this.topicShares(cityId, months, index);
 		const rows = Object.values(_.groupBy(stored, 'term')).flatMap(group => {
 			const key = group[0].topic?.key ?? group[0].term;

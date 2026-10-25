@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import BlocksSection from './components/BlocksSection.svelte';
+	import BrandSection from './components/BrandSection.svelte';
 	import ButtonsSection from './components/ButtonsSection.svelte';
 	import ChoiceSection from './components/ChoiceSection.svelte';
 	import FeedbackSection from './components/FeedbackSection.svelte';
@@ -20,6 +21,7 @@
 	 * component gets a specimen in the section it belongs to.
 	 */
 	const SECTIONS = [
+		{ id: 'brand', name: 'Brand' },
 		{ id: 'foundations', name: 'Foundations' },
 		{ id: 'buttons', name: 'Buttons' },
 		{ id: 'fields', name: 'Fields' },
@@ -65,7 +67,7 @@
 </script>
 
 <svelte:head>
-	<title>UI kit | Culinary Report Admin</title>
+	<title>UI kit | Munchwerk Admin</title>
 </svelte:head>
 
 <div class="flex flex-col pb-24" bind:this={root}>
@@ -92,6 +94,7 @@
 	</nav>
 
 	<div class="flex flex-col gap-14">
+		<BrandSection />
 		<FoundationsSection />
 		<ButtonsSection />
 		<FieldsSection />

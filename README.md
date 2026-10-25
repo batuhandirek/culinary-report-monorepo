@@ -1,4 +1,4 @@
-# Culinary Report
+# Munchwerk
 
 Monthly social media reports for restaurants, bars and cafés. NestJS backend + SvelteKit frontend in one npm workspace (Turborepo). Conventions for people and agents: `CLAUDE.md`.
 

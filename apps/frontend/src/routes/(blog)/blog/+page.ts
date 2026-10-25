@@ -12,7 +12,7 @@ export async function load({ fetch }) {
 	// there are no `?page=` URLs to canonicalise or keep out of the index.
 	const entries = await api.blog.listEntries({ page: 1, size: PAGE_SIZE });
 
-	const blogUrl = 'https://culinaryreport.com/blog';
+	const blogUrl = 'https://munchwerk.com/blog';
 	const title = 'Blog';
 	const description =
 		'What guests post about restaurants, bars and cafés on TikTok, Instagram and Google, and what to do about it.';
@@ -23,10 +23,10 @@ export async function load({ fetch }) {
 		canonical: blogUrl,
 		openGraph: {
 			url: blogUrl,
-			title: 'Culinary Report blog',
+			title: 'Munchwerk blog',
 			description
 		},
-		twitter: { title: 'Culinary Report blog', description }
+		twitter: { title: 'Munchwerk blog', description }
 	};
 
 	return { entries, pageSize: PAGE_SIZE, pageMetaTags };

@@ -51,7 +51,7 @@
 				{#if userStore.isAdmin}
 					<Button variant="outline" href="/admin/brands?segment=prospects">Open the sales list</Button>
 				{:else}
-					<Button variant="outline" href="mailto:hello@culinaryreport.com">Write to us</Button>
+					<Button variant="outline" href="mailto:hello@munchwerk.com">Write to us</Button>
 				{/if}
 			</EmptyState>
 		{/if}

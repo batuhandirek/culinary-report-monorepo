@@ -1,6 +1,7 @@
 import type { Rel } from '@mikro-orm/core';
 import { Entity, Enum, ManyToOne, Property, Unique } from '@mikro-orm/decorators/legacy';
 
+import { Hashtag } from 'src/modules/social/entities/hashtag.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
 import { City } from './city.entity.js';
@@ -12,11 +13,16 @@ export enum CitySourceKindEnum {
 	// A food blog or a magazine's food section: `value` is its URL (the site, a section or the
 	// feed itself), read through its RSS or Atom feed by the free `SCRAPE_BLOGS`
 	BLOG = 'blog',
+	// One creator's profile, watched every week (`SCRAPE_ACCOUNTS_RECENT`) and at month end:
+	// `value` is the handle, lowercase, without the @
+	TIKTOK_ACCOUNT = 'tiktok_account',
+	INSTAGRAM_ACCOUNT = 'instagram_account',
 }
 
 /**
- * Where a city's scrapes look: a hashtag (without `#`), a search query or a blog's URL. Posts
- * keep it in `SocialPost.source` (`#value`, `search:value` or `blog:value`), so its yield can be
+ * Where a city's scrapes look: a hashtag (without `#`), a search query, a blog's URL or an
+ * account's handle. Every post
+ * it finds gets a `PostSource` row pointing at it, so its yield, and what only it found, can be
  * counted. `createdAt` is when it was added.
  */
 @Entity({ tableName: 'city_sources' })
@@ -30,6 +36,10 @@ export class CitySource extends MikroOrmEntityAbstractClass<'enabled' | 'suggest
 
 	@Property({ type: 'text' })
 	value: string;
+
+	// A hashtag source's tag (`Hashtag`), so "does the city scrape this tag" is a join
+	@ManyToOne({ entity: () => Hashtag, nullable: true, deleteRule: 'set null', index: true })
+	hashtag?: Rel<Hashtag> | null;
 
 	@Property({ type: 'boolean', default: true })
 	enabled: boolean = true;

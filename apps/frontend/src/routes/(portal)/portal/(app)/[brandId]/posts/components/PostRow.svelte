@@ -2,7 +2,7 @@
 	import { ExternalLink } from '@lucide/svelte';
 	import type { PortalPostOutputDto } from 'client';
 
-	import { compact, PLATFORM_LABELS } from '#lib/culinary.js';
+	import { authorLabel, compact, PLATFORM_LABELS } from '#lib/culinary.js';
 
 	// One post about the venue: who, where, how far it went, what it said.
 	let { post }: { post: PortalPostOutputDto } = $props();
@@ -27,7 +27,7 @@
 <article class="flex flex-col gap-2 px-4 py-4 sm:px-5">
 	<header class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
 		<span class="text-ink font-semibold break-all">
-			{post.author ? `@${post.author}` : 'Unknown creator'}
+			{post.author ? authorLabel(post.platform, post.author) : 'Unknown creator'}
 		</span>
 		{#if post.authorFans != null}
 			<span class="text-muted-foreground text-sm">{compact(post.authorFans)} followers</span>
@@ -41,7 +41,7 @@
 
 	<div class="flex flex-wrap items-center gap-x-4 gap-y-1">
 		<span class="font-term text-muted-foreground text-base">
-			{date} · {compact(post.views)} views · {compact(post.likes)} likes
+			{date}{post.platform === 'blog' ? '' : ` · ${compact(post.views)} views · ${compact(post.likes)} likes`}
 		</span>
 		<span class={['text-sm font-medium', sentiment.class]}>{sentiment.label}</span>
 		{#if !post.visited}<span class="text-muted-foreground text-sm">Not visited</span>{/if}

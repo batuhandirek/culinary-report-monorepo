@@ -108,7 +108,7 @@ export class ApifyService {
 				maxCostUsd,
 				status: ApifyRunStatusEnum.RUNNING,
 				inputHash,
-				pipelineRunId: context?.pipelineRunId ?? null,
+				pipelineRun: context?.pipelineRunId ?? null,
 				stepKey: context?.stepKey ?? null,
 			});
 		if (earlier) {
@@ -216,7 +216,7 @@ export class ApifyService {
 		const runs = await em.find(
 			ApifyRun,
 			{
-				pipelineRunId: context.pipelineRunId,
+				pipelineRun: context.pipelineRunId,
 				stepKey: context.stepKey,
 				actorId,
 				inputHash,
@@ -238,7 +238,7 @@ export class ApifyService {
 		const orphans = await em.find(ApifyRun, {
 			status: ApifyRunStatusEnum.RUNNING,
 			...(keepPipelineRunIds.length ?
-				{ $or: [{ pipelineRunId: null }, { pipelineRunId: { $nin: keepPipelineRunIds } }] }
+				{ $or: [{ pipelineRun: null }, { pipelineRun: { $nin: keepPipelineRunIds } }] }
 			:	{}),
 		});
 		for (const record of orphans) {

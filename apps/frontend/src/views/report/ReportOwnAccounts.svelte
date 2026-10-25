@@ -17,7 +17,7 @@
 </script>
 
 <div class="border-line mt-8 rounded-md border border-dashed p-5 break-inside-avoid">
-	<p class="eyebrow text-muted-foreground m-0">From your own account</p>
+	<p class="stamp text-muted-foreground m-0">From your own account</p>
 	{#if ownPosts.length}
 		<p class="m-0 mt-1 mb-3 text-base font-semibold">
 			{ownPosts.length}
@@ -48,13 +48,13 @@
 							? ` · ${account.branch}`
 							: ''}
 					</p>
-					<p class="text-ink m-0 mt-1 text-2xl leading-none font-semibold tabular-nums">
+					<p class="text-ink font-display m-0 mt-1 text-[26px] leading-none font-extrabold tracking-[-0.02em] tabular-nums">
 						{account.followers !== undefined ? compact(account.followers) : '—'}
-						<span class="text-muted-foreground text-sm font-normal">followers</span>
+						<span class="text-muted-foreground font-sans text-sm font-normal tracking-normal">followers</span>
 						{#if account.followersChange !== undefined}
 							<span
-								class="text-sm font-semibold {account.followersChange < 0
-									? 'text-beet'
+								class="font-sans text-sm font-semibold tracking-normal {account.followersChange < 0
+									? 'text-muted-foreground'
 									: 'text-primary-darker'}">{signed(account.followersChange)}</span>
 						{/if}
 					</p>

@@ -1,0 +1,123 @@
+/* Munchwerk — graphic language. Everything scales with font-size (em), colours come from tokens.css. */
+
+.mw { font-family: var(--font-text); color: var(--ink); background: var(--ground); -webkit-font-smoothing: antialiased; }
+.mw *, .mw *::before, .mw *::after { box-sizing: border-box; }
+.mw-display { font-family: var(--font-display); font-weight: 800; font-variation-settings: "opsz" 96; letter-spacing: -0.025em; line-height: 0.92; }
+.mw-text { font-family: var(--font-text); }
+.mw-stamp-type { font-family: var(--font-stamp); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.45; }
+
+/* --- Fields: flat colour blocks. Pair text with the on-* token. --- */
+.mw-field-green { background: var(--field-green); color: var(--on-field-green); }
+.mw-field-purple { background: var(--field-purple); color: var(--on-field-purple); }
+.mw-field-purple-deep { background: var(--field-purple-deep); color: var(--on-field-purple); }
+.mw-field-ink { background: var(--field-ink); color: var(--on-field-ink); }
+.mw-field-paper { background: var(--paper); color: var(--ink); }
+.mw-field-ground { background: var(--ground); color: var(--ink); }
+
+/* --- The bite: one circle cut from the top-right. --bite-r = radius (default 16% of height via --h). --- */
+.mw-bite { --bite-r: calc(var(--h, 100px) * 0.16); --bite-in: calc(var(--h, 100px) * 0.06);
+  -webkit-mask: radial-gradient(circle var(--bite-r) at calc(100% - var(--bite-in)) var(--bite-in), transparent 98.5%, #000 100%);
+  mask: radial-gradient(circle var(--bite-r) at calc(100% - var(--bite-in)) var(--bite-in), transparent 98.5%, #000 100%); }
+
+/* --- Stickers: display type, outline, hard shadow, tilt. Size with font-size. --- */
+.mw-sticker { display: inline-block; font-family: var(--font-display); font-weight: 800; font-variation-settings: "opsz" 96; letter-spacing: -0.01em; line-height: 1;
+  padding: 0.55em 0.85em 0.5em; border: 0.14em solid var(--rule); border-radius: 0.5em; background: var(--field-green); color: var(--on-field-green);
+  box-shadow: 0.3em 0.3em 0 var(--rule); white-space: nowrap; }
+.mw-sticker--pill { border-radius: 999px; padding-inline: 1.1em; }
+.mw-sticker--purple { background: var(--field-purple); color: var(--on-field-purple); }
+.mw-sticker--ink { background: var(--field-ink); color: var(--on-field-ink); box-shadow: 0.3em 0.3em 0 var(--brand-acid); }
+.mw-sticker--ink-grape { background: var(--field-ink); color: var(--on-field-ink); box-shadow: 0.3em 0.3em 0 var(--brand-grape); }
+.mw-sticker--oat { background: var(--brand-oat); color: var(--brand-ink); border-color: var(--brand-ink); box-shadow: 0.3em 0.3em 0 var(--brand-ink); }
+.mw-sticker--beet { background: var(--brand-beet); color: var(--brand-oat); }
+.mw-sticker--flat { box-shadow: none; }
+.mw-tilt-left { transform: rotate(var(--tilt-left)); }
+.mw-tilt-right { transform: rotate(var(--tilt-right)); }
+.mw-tilt-hard { transform: rotate(var(--tilt-hard)); }
+
+/* --- Stamps: pixel caps in a double rule. --- */
+.mw-stamp { display: inline-block; font-family: var(--font-stamp); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1;
+  padding: 0.7em 0.9em; border: 0.18em solid currentColor; outline: 0.12em solid currentColor; outline-offset: 0.2em; color: var(--ink); white-space: nowrap; }
+.mw-stamp--solid { background: var(--field-inverse); color: var(--on-field-inverse); border-color: var(--field-inverse); outline-color: var(--field-inverse); }
+.mw-stamp-line { font-family: var(--font-stamp); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.5; }
+
+/* --- Tags: a tilted rectangle with a punched hole, for districts, dates, "new". --- */
+.mw-tag { position: relative; display: inline-block; font-family: var(--font-display); font-weight: 800; line-height: 1; letter-spacing: 0;
+  padding: 0.5em 0.8em 0.45em 1.5em; background: var(--field-inverse); color: var(--on-field-inverse); border-radius: var(--radius-s); white-space: nowrap; }
+.mw-tag::before { content: ""; position: absolute; left: 0.55em; top: 50%; width: 0.45em; height: 0.45em; margin-top: -0.225em; border-radius: 50%; background: var(--ground); }
+.mw-tag--green { background: var(--field-green); color: var(--on-field-green); }
+.mw-tag--purple { background: var(--field-purple); color: var(--on-field-purple); }
+.mw-tag--oat { background: var(--brand-oat); color: var(--brand-ink); }
+.mw-tag--oat::before { background: var(--brand-ink); }
+
+/* --- Rules --- */
+.mw-rule { border: 0; border-top: var(--stroke-rule) solid var(--rule); margin: 0; }
+.mw-rule--bold { border-top-width: var(--stroke-rule-bold); }
+.mw-rule--hair { border-top: 1px solid var(--hairline); }
+
+/* --- Rank numerals as graphic elements --- */
+.mw-rank { font-family: var(--font-display); font-weight: 800; font-variation-settings: "opsz" 96; letter-spacing: -0.05em; line-height: 0.85; font-variant-numeric: tabular-nums lining-nums; }
+.mw-rank--outline { color: transparent; -webkit-text-stroke: 0.025em var(--rule); }
+
+/* --- Movement pills: "+12", "new", "held" --- */
+.mw-move { display: inline-flex; align-items: center; gap: 0.25em; font-family: var(--font-display); font-weight: 800; line-height: 1; letter-spacing: 0;
+  padding: 0.4em 0.65em 0.35em; border-radius: var(--radius-s); background: var(--chart-up); color: var(--brand-oat); white-space: nowrap; }
+[data-theme="night"] .mw-move { color: var(--brand-ink); }
+.mw-move--new { background: var(--chart-new); color: var(--brand-oat); }
+[data-theme="night"] .mw-move--new { color: var(--brand-ink); }
+.mw-move--flat, [data-theme="night"] .mw-move--flat { background: transparent; color: var(--chart-flat); border: 0.1em solid var(--chart-flat); }
+.mw-move--hot { background: var(--accent-chili); color: var(--brand-oat); }
+[data-theme="night"] .mw-move--hot { color: var(--brand-ink); }
+
+/* --- Creator credit: always with the @ --- */
+.mw-handle { display: inline-flex; align-items: center; gap: 0.45em; font-family: var(--font-text); font-weight: 700; line-height: 1; padding: 0.5em 0.9em 0.5em 0.5em;
+  border-radius: 999px; background: var(--paper); color: var(--ink); border: 0.1em solid var(--rule); white-space: nowrap; }
+.mw-handle__dot { width: 1.2em; height: 1.2em; border-radius: 50%; background: var(--field-purple); flex: none; }
+.mw-handle--on-dark { background: var(--brand-ink); color: var(--brand-oat); border-color: var(--brand-oat); }
+
+/* --- Photo / video-still frame: hard outline + hard shadow, never a soft shadow --- */
+.mw-frame { position: relative; border: var(--stroke-outline) solid var(--rule); box-shadow: var(--shadow-hard); background: var(--field-purple-deep); overflow: hidden; }
+.mw-frame > img, .mw-frame > video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mw-still { position: absolute; inset: 0; display: grid; place-items: center; color: var(--brand-oat);
+  background-image: repeating-linear-gradient(135deg, transparent 0 14px, #ffffff14 14px 16px); }
+
+/* --- Charts: poster bars --- */
+.mw-bars { display: grid; gap: 0.5em; font-family: var(--font-display); font-weight: 800; }
+.mw-bar { display: grid; grid-template-columns: 1.6em 1fr auto; align-items: center; gap: 0.6em; line-height: 1; }
+.mw-bar__rank { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
+.mw-bar__track { position: relative; height: 1.1em; }
+.mw-bar__fill { height: 100%; background: var(--chart-bar); }
+.mw-bar--hi .mw-bar__fill { background: var(--chart-highlight); outline: 0.12em solid var(--chart-outline); outline-offset: -0.12em; }
+.mw-bar__value { font-variant-numeric: tabular-nums; }
+.mw-baseline { border-left: var(--stroke-rule) solid var(--rule); }
+
+/* --- Series badge: tile + icon --- */
+.mw-badge { display: inline-grid; place-items: center; width: 2.4em; height: 2.4em; border-radius: var(--radius-m); background: var(--field-green); color: var(--on-field-green); flex: none; }
+.mw-badge svg { width: 66%; height: 66%; display: block; }
+.mw-badge--heat { background: var(--field-green); color: var(--on-field-green); }
+.mw-badge--rising { background: var(--accent-chili); color: var(--brand-oat); }
+.mw-badge--new { background: var(--field-purple); color: var(--on-field-purple); }
+.mw-badge--dish { background: var(--brand-beet); color: var(--brand-oat); }
+.mw-badge--creator { background: var(--field-ink); color: var(--brand-acid); }
+.mw-badge--trends { background: var(--field-purple-deep); color: var(--brand-acid); }
+[data-theme="night"] .mw-badge--creator { outline: 0.1em solid var(--brand-oat); }
+
+/* --- Logos: colour via currentColor; two-tone marks via tokens --- */
+.mw-logo { display: inline-block; line-height: 0; }
+.mw-logo svg { display: block; height: 100%; width: auto; }
+.mw-logo .mw-logo__ink { fill: currentColor; }
+.mw-logo-tile .mw-logo__tile { fill: var(--field-green); } .mw-logo-tile .mw-logo__letter { fill: var(--on-field-green); }
+.mw-logo-tile--ink .mw-logo__tile { fill: var(--field-ink); } .mw-logo-tile--ink .mw-logo__letter { fill: var(--brand-acid); }
+.mw-logo-tile--purple .mw-logo__tile { fill: var(--field-purple); } .mw-logo-tile--purple .mw-logo__letter { fill: var(--on-field-purple); }
+.mw-logo-tile--oat .mw-logo__tile { fill: var(--brand-oat); } .mw-logo-tile--oat .mw-logo__letter { fill: var(--brand-ink); }
+.mw-avatar .mw-logo__ground { fill: var(--brand-ink); } .mw-avatar .mw-logo__disc { fill: var(--brand-acid); } .mw-avatar .mw-logo__letter { fill: var(--brand-ink); }
+.mw-avatar .mw-logo__tagpill { fill: var(--brand-acid); } .mw-avatar .mw-logo__tagtext { fill: var(--brand-ink); }
+.mw-avatar--berlin .mw-logo__disc { fill: var(--brand-grape); } .mw-avatar--berlin .mw-logo__letter { fill: var(--brand-oat); }
+
+/* --- Focus --- */
+.mw :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* --- Buttons (web + email) --- */
+.mw-button { display: inline-block; font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; line-height: 1; padding: 0.9em 1.3em 0.85em;
+  background: var(--field-inverse); color: var(--on-field-inverse); border: 0.14em solid var(--rule); border-radius: var(--radius-s); box-shadow: var(--shadow-hard-s); text-decoration: none; }
+.mw-button--green { background: var(--field-green); color: var(--on-field-green); }
+.mw-button--purple { background: var(--field-purple); color: var(--on-field-purple); }

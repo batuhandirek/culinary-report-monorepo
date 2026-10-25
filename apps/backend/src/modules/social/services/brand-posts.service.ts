@@ -63,7 +63,7 @@ export class BrandPostsService {
 			? await this.em.find(
 					Mention,
 					{ post: { $in: posts.map(p => p.id) }, brand: brandId },
-					{ orderBy: { id: QueryOrder.ASC } },
+					{ orderBy: { id: QueryOrder.ASC }, populate: ['feedback', 'feedback.foodTopic'] },
 				)
 			: [];
 		const byPost = new Map<string, Mention>();

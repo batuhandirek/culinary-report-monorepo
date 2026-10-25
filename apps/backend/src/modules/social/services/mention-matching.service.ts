@@ -5,6 +5,8 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { MentionFoodTopicService } from 'src/modules/food-topics/services/mention-food-topic.service.js';
+import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
@@ -26,6 +28,8 @@ import { isFatalProviderError, runPool } from 'src/shared/util/pool.js';
 import { VenueMatchAgent } from '../agents/venue-match.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { ownPostSql } from '../util/accounts.js';
+
+import { HashtagService } from './hashtag.service.js';
 
 // Accepted without asking the LLM
 const AUTO_SCORE = 0.9;
@@ -173,7 +177,20 @@ export class MentionMatchingService {
 		private readonly em: EntityManager,
 		private readonly venueMatchAgent: VenueMatchAgent,
 		private readonly cityService: CityService,
+		private readonly mentionFoodTopicService: MentionFoodTopicService,
+		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly hashtagService: HashtagService,
 	) {}
+
+	/**
+	 * A match moves what a mention is about when its cuisine named nothing (its venue's category),
+	 * and what its venue's tags read: the mentions' topics now, their cities' venue tags by job.
+	 */
+	private async relinkFood(mentions: Mention[]): Promise<void> {
+		if (!mentions.length) return;
+		await this.mentionFoodTopicService.relink({ mentionIds: mentions.map(m => m.id) });
+		await this.venueFoodTopicService.queueCityRefresh(_.uniq(mentions.map(m => m.post.city.id)));
+	}
 
 	/**
 	 * Links mentions to venues of the post's city (of one city, or of every city without
@@ -264,6 +281,9 @@ export class MentionMatchingService {
 			(mention, e) => this.logger.warn(`Mention ${mention.id} failed: ${e.message}`),
 		);
 		await this.em.flush();
+		await this.relinkFood(mentions);
+		// A tag names a brand once a post carrying it is matched to it
+		if (mentions.length) await this.hashtagService.relink();
 		if (llm.down) throw llm.down;
 	}
 
@@ -425,17 +445,23 @@ export class MentionMatchingService {
 		mention.matchedAt = new Date();
 		mention.matchNote = input.note?.trim() || null;
 		await this.em.flush();
-		await this.em.populate(mention, ['venue', 'brand']);
+		await this.em.populate(mention, ['venue', 'brand', 'post']);
+		await this.relinkFood([mention]);
 		return mention;
 	}
 
-	/** Names the city's mentions gave that nothing matched yet, most viewed first: what to look up. */
-	async unmatchedNames(cityId: string, limit: number): Promise<string[]> {
+	/**
+	 * Every name the city's mentions gave that nothing matched yet, most posted first, then by
+	 * views, then likes (Instagram posts carry no views): what to look up. No limit here, since
+	 * `lookupNames` drops the names searched lately before it caps the run.
+	 */
+	async unmatchedNames(cityId: string): Promise<string[]> {
 		const rows: { venue_name: string }[] = await this.em.getConnection().execute(
 			`select m.venue_name from mentions m join social_posts p on p.id = m.post_id
 			where m.match_method = ? and p.city_id = ?
-			group by m.venue_name order by sum(p.views) desc limit ?`,
-			[MentionMatchMethodEnum.NONE, cityId, limit],
+			group by m.venue_name
+			order by count(distinct p.id) desc, sum(p.views) desc, sum(p.likes) desc, m.venue_name`,
+			[MentionMatchMethodEnum.NONE, cityId],
 		);
 		return rows.map(r => r.venue_name);
 	}

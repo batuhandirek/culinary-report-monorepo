@@ -71,13 +71,37 @@ export interface AdminCitySourceOutputDto {
 
 /** A source with what it brought in over the last three months. */
 export interface AdminCitySourceYieldOutputDto extends AdminCitySourceOutputDto {
+	/** Posts it found, whichever source found them too */
 	posts: number;
+	/** Of those, posts with a matched mention */
 	matchedPosts: number;
+	/** Matched posts no other enabled source, venue search or watched brand profile found: what turning it off loses */
+	uniqueMatchedPosts: number;
 	views: number;
 }
 
 export interface AdminListCitySourcesOutputDto {
 	items: AdminCitySourceYieldOutputDto[];
+	/**
+	 * The day every source that finds a post is recorded (YYYY-MM-DD): before it a post kept only
+	 * its first source, so unique counts over a window starting earlier are too high
+	 */
+	allFindsSince: string;
+}
+
+/** A tag the city doesn't scrape that keeps coming up on its matched posts. */
+export interface AdminCityHashtagSuggestionOutputDto {
+	hashtagId: number;
+	tag: string;
+	/** The source it would be */
+	kind: CitySourceKindEnum;
+	matchedPosts: number;
+	brands: number;
+	sampleBrands: string[];
+}
+
+export interface AdminCityHashtagSuggestionsOutputDto {
+	items: AdminCityHashtagSuggestionOutputDto[];
 }
 
 export interface AdminSuggestCitySourcesOutputDto {

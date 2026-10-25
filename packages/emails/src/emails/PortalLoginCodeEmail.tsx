@@ -19,10 +19,10 @@ export const PortalLoginCodeEmail = ({
 		appUrl={appUrl}
 		lang="en"
 		preview="Type it on the sign-in page to open your portal."
-		reason="You got this e-mail because someone asked to sign in to Culinary Report with this address."
+		reason="You got this e-mail because someone asked to sign in to Munchwerk with this address."
 	>
 		<Title>Your sign-in code</Title>
-		<P>Enter this code on the Culinary Report sign-in page.</P>
+		<P>Enter this code on the Munchwerk sign-in page.</P>
 		<Code>{code}</Code>
 		<Small>
 			Don't share it with anyone; we never ask for it. If you didn't ask for a code, you can

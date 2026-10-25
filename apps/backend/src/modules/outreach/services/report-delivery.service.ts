@@ -36,8 +36,9 @@ export class ReportDeliveryService {
 	) {}
 
 	/**
-	 * After a build: mails the report once, when the brand subscribed and it is the brand's
-	 * newest report of its city (or the newest across its cities, for one of those). A rebuild of a report already sent, or a backfill of an older
+	 * After a build: mails the report once, when the brand subscribed and it is of the brand's
+	 * newest month in its city (or across its cities, for one of those): each configuration's
+	 * report of that month goes in a mail of its own. A rebuild of a report already sent, or a backfill of an older
 	 * month, sends nothing. Returns whether a mail was queued.
 	 */
 	async deliverBuilt(reportId: string): Promise<boolean> {
@@ -47,7 +48,7 @@ export class ReportDeliveryService {
 			withData: false,
 			cityId: report.city?.id ?? null,
 		});
-		if (newest?.id !== report.id) return false;
+		if (newest?.month !== report.month) return false;
 		const prospect = await this.em.findOne(Prospect, { brand: report.brand });
 		if (prospect?.stage !== ProspectStageEnum.WON || !prospect.contactEmail) return false;
 		await this.send(report, prospect);
@@ -69,7 +70,8 @@ export class ReportDeliveryService {
 	}
 
 	private async send(report: Report, prospect: Prospect): Promise<void> {
-		const share = await this.reportShareService.ensureShare(report.id);
+		// A link of its own per mail, so the touch shows whether this mail's link was opened
+		const share = await this.reportShareService.create(report.id);
 		const props: ReportReadyEmailProps = {
 			language: prospect.language,
 			venueName: report.brand.name,
@@ -92,6 +94,8 @@ export class ReportDeliveryService {
 			subject,
 			body: props.shareUrl,
 			template: REPORT_READY_TEMPLATE,
+			reportId: report.id,
+			shareId: share.id,
 		});
 		report.sentAt = new Date();
 		await this.em.flush();

@@ -30,7 +30,7 @@
 </script>
 
 <BlogMasthead
-	title="The Culinary Report blog"
+	title="The Munchwerk blog"
 	description="What guests post about restaurants, bars and cafés on TikTok, Instagram and Google, and what to do about it.">
 	{#if topics.length}
 		<BlogTagNav tags={topics} />

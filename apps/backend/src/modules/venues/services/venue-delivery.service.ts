@@ -3,6 +3,10 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
+import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
+import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 
@@ -86,6 +90,9 @@ export class VenueDeliveryService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly apifyService: ApifyService,
+		private readonly foodTopicService: FoodTopicService,
+		private readonly menuTopicService: MenuTopicService,
+		private readonly venueFoodTopicService: VenueFoodTopicService,
 	) {}
 
 	/** Scrapes these venues' delivery listings for `month`, replacing that month's menus. Flushes. */
@@ -114,6 +121,8 @@ export class VenueDeliveryService {
 		const woltBudget = venues.length ? budgetUsd * WOLT_BUDGET_SHARE : 0;
 		const perRun = Math.max(WOLT_MIN_RUN_USD, woltLinks.size ? woltBudget / woltLinks.size : 0);
 		const onWolt = new Set<string>();
+		// Menu items are stored with their food topics
+		const index = woltLinks.size ? await this.foodTopicService.index() : undefined;
 		for (const [venue, url] of woltLinks) {
 			try {
 				const [item] = await this.apifyService.runActor<WoltItem>(
@@ -122,7 +131,7 @@ export class VenueDeliveryService {
 					{ maxCostUsd: perRun, purpose: `wolt menu: ${venue.name}` },
 				);
 				if (!item?.name) continue;
-				const items = await this.saveWolt(venue, url, item, month, now);
+				const items = await this.saveWolt(venue, url, item, month, now, index!);
 				result.wolt.saved++;
 				result.wolt.menuItems += items;
 				onWolt.add(venue.id);
@@ -168,6 +177,8 @@ export class VenueDeliveryService {
 			}
 			await this.em.flush();
 		}
+		// A new menu moves its venues' tags: their cities' by job
+		if (result.wolt.saved) await this.venueFoodTopicService.queueCityRefresh(venues.map(v => v.city.id));
 		return result;
 	}
 
@@ -183,7 +194,14 @@ export class VenueDeliveryService {
 		return listing;
 	}
 
-	private async saveWolt(venue: Venue, url: string, item: WoltItem, month: string, now: Date): Promise<number> {
+	private async saveWolt(
+		venue: Venue,
+		url: string,
+		item: WoltItem,
+		month: string,
+		now: Date,
+		index: FoodTopicIndex,
+	): Promise<number> {
 		const listing = await this.upsertListing(venue, DeliveryPlatformEnum.WOLT, {
 			url: item.url ?? url,
 			externalId: item.id ?? null,
@@ -199,14 +217,16 @@ export class VenueDeliveryService {
 		await this.em.flush();
 		await this.em.nativeDelete(MenuItem, { listing, month });
 		const items = (item.menuItems ?? []).filter(i => i.name && i.priceInCents > 0);
-		for (const menuItem of items)
+		const created = items.map(menuItem =>
 			this.em.create(MenuItem, {
 				listing,
 				month,
 				name: menuItem.name,
 				price: menuItem.priceInCents / 100,
 				category: menuItem.category ?? null,
-			});
+			}),
+		);
+		this.menuTopicService.linkItems(created, index);
 		return items.length;
 	}
 

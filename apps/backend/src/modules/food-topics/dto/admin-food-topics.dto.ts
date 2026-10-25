@@ -86,3 +86,7 @@ export interface AdminFoodTopicsOutputDto {
 	/** Cuisine keys of the city that resolve to no topic, most used first */
 	unmapped: AdminUnmappedCuisineOutputDto[];
 }
+
+export interface AdminRelinkFoodTopicsOutputDto {
+	queued: boolean;
+}

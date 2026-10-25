@@ -87,8 +87,11 @@ export class VenueService {
 		venue.lat = item.location?.lat ?? null;
 		venue.lng = item.location?.lng ?? null;
 		venue.priceLevel = item.price ?? null;
-		// A new website gets its icon on the next favicon run
-		if ((item.website ?? null) !== (venue.website ?? null)) venue.faviconCheckedAt = null;
+		// A new website gets its icon and its profile links read on the next favicon run
+		if ((item.website ?? null) !== (venue.website ?? null)) {
+			venue.faviconCheckedAt = null;
+			venue.siteProfilesAt = null;
+		}
 		venue.website = item.website ?? null;
 		venue.phone = item.phone ?? null;
 		venue.googleUrl = item.url ?? null;

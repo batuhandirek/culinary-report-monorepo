@@ -33,7 +33,7 @@ export const Facts = ({ rows }: { rows: Fact[] }) => (
 			<tbody>
 				{rows.map((row, index) => {
 					const borderTop =
-						row.total ? `2px solid ${color.ink}`
+						row.total ? `3px solid ${color.ink}`
 						: index > 0 ? `1px dashed ${color.dash}`
 						: undefined;
 					// Labels may repeat (two buyers of one name): a row is keyed by its place.

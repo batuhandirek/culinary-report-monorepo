@@ -15,10 +15,18 @@ export const TOPIC_LABELS: Record<string, string> = {
 	other: 'Other'
 };
 
-export const PLATFORM_LABELS: Record<string, string> = { tiktok: 'TikTok', instagram: 'Instagram' };
+export const PLATFORM_LABELS: Record<string, string> = { tiktok: 'TikTok', instagram: 'Instagram', blog: 'Blog' };
 
 export const compact = (n: number | null | undefined) =>
 	Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(n ?? 0);
+
+/** A post's author as shown: a handle with its @, a blog by its site ("berlinfoodstories.com"). */
+export const authorLabel = (platform: string, author: string | null | undefined) =>
+	!author ? 'unknown' : platform === 'blog' ? author : `@${author}`;
+
+/** A post's views as shown: a blog article has none, so "—", never 0. */
+export const viewsLabel = (platform: string, views: number | null | undefined) =>
+	platform === 'blog' ? '—' : compact(views);
 
 /** `2026-09` → "September 2026". */
 export const monthLabel = (month: string) =>

@@ -1,5 +1,6 @@
 // The reach and press sections of a report, from what the pipeline stored. Pure functions.
 
+import { type FeedbackRowLike, topicsOf } from 'src/modules/feedback/util/feedback-rows.js';
 import _ from 'lodash';
 
 import type { ReportData, ReportPost } from '../interfaces/report-data.interface.js';
@@ -138,12 +139,13 @@ export interface PlatformReviewInput {
 	text?: string | null;
 	textTranslated?: string | null;
 	ownerResponse?: string | null;
-	praise?: { topic: string }[] | null;
-	complaints?: { topic: string }[] | null;
+	/** What it says: its feedback rows */
+	feedback: FeedbackRowLike[];
 }
 
-const countSources = (sources: ({ topic: string }[] | null | undefined)[]) =>
-	_.countBy(sources.flatMap(points => _.uniq((points ?? []).map(p => p.topic))));
+/** Topic → written reviews raising it on that side, once each */
+const countSources = (reviews: PlatformReviewInput[], sentiment: 'positive' | 'negative') =>
+	_.countBy(reviews.flatMap(r => topicsOf(r.feedback, sentiment)));
 
 /**
  * Google and TripAdvisor side by side, and the topics their reviewers see differently (both
@@ -175,8 +177,8 @@ export const reviewPlatforms = (
 			...(rs.length && { replyRate: rs.filter(r => r.ownerResponse).length / rs.length }),
 			...(rating != null && { rating }),
 			...(reviewsCount != null && { reviewsCount }),
-			praise: countSources(written.map(r => r.praise)),
-			complaints: countSources(written.map(r => r.complaints)),
+			praise: countSources(written, 'positive'),
+			complaints: countSources(written, 'negative'),
 		};
 	};
 	const google = platform('google', reviews.filter(r => r.platform === 'google'));

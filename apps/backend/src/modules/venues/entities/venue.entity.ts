@@ -3,6 +3,7 @@ import { Entity, Formula, Index, ManyToOne, OneToMany, Property } from '@mikro-o
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { Image } from 'src/modules/image/entities/image.entity.js';
+import type { LinkedProfile } from 'src/modules/social/util/accounts.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 import { dedent } from 'src/shared/util/string.js';
 
@@ -76,6 +77,16 @@ export class Venue extends MikroOrmEntityAbstractClass<'mentionCount' | 'closed'
 	@Index()
 	@Property({ type: 'datetime', nullable: true })
 	faviconCheckedAt?: Date | null;
+
+	// The Instagram and TikTok profiles its website links (the home page, else its contact or
+	// Impressum page), read with the icon (`VenueFaviconService`); `AccountMatchingService` links
+	// them. Null until read; kept when a later read fails
+	@Property({ type: 'jsonb', nullable: true })
+	siteProfiles?: LinkedProfile[] | null;
+
+	// When the website was last read for profiles, found or not; null when the website changed since
+	@Property({ type: 'datetime', nullable: true })
+	siteProfilesAt?: Date | null;
 
 	// Its booking page (TheFork, OpenTable or Google's own), set by hand when the scrape missed
 	// it (`VenueReservationService.setBookingUrl`); sampled before Google's reservation link.

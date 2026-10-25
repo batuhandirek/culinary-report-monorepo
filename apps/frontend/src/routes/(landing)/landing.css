@@ -1,0 +1,888 @@
+/*
+ * The front page (`/`), from the Claude Design mockup in `munchwerk.com-version-2/`. Everything is
+ * scoped to `.lp`, the page's root, which carries `data-theme="day" | "night"`: day is oat ground
+ * and plum ink, night is ink ground, oat text, lavender for purple text and acid shadows (brand
+ * skill, `design-tokens.txt`). Brand fields (acid, grape, deep grape, ink, beet) keep their colour
+ * in both themes and carry only their own text.
+ */
+
+.lp {
+	--lp-acid: #c6f135;
+	--lp-grape: #6a2bea;
+	--lp-grape-deep: #3b1a80;
+	--lp-brand-ink: #1f1724;
+	--lp-oat: #f2ede3;
+	--lp-brand-paper: #fbf9f4;
+	--lp-green-deep: #4d7612;
+	--lp-lavender: #c9b3ff;
+	--lp-beet: #8c2d5c;
+	--lp-chili: #e2452b;
+	--lp-oat-15: #f2ede333;
+
+	--lp-ground: var(--lp-oat);
+	--lp-paper: var(--lp-brand-paper);
+	--lp-ink: var(--lp-brand-ink);
+	--lp-ink-muted: #5e556a;
+	--lp-rule: var(--lp-brand-ink);
+	--lp-field-inverse: var(--lp-brand-ink);
+	--lp-on-field-inverse: var(--lp-oat);
+	--lp-text-green: var(--lp-green-deep);
+	--lp-text-purple: var(--lp-grape);
+	--lp-chart-flat: var(--lp-ink-muted);
+	--lp-focus: var(--lp-grape);
+	--lp-shadow: var(--lp-brand-ink);
+
+	background: var(--lp-ground);
+	color: var(--lp-ink);
+	font-family: var(--font-onest);
+	-webkit-font-smoothing: antialiased;
+	transition:
+		background 0.4s,
+		color 0.4s;
+}
+
+.lp[data-theme='night'] {
+	--lp-ground: var(--lp-brand-ink);
+	--lp-paper: #2a2032;
+	--lp-ink: var(--lp-oat);
+	--lp-ink-muted: #b8aec4;
+	--lp-rule: var(--lp-oat);
+	--lp-field-inverse: var(--lp-oat);
+	--lp-on-field-inverse: var(--lp-brand-ink);
+	--lp-text-green: var(--lp-acid);
+	--lp-text-purple: var(--lp-lavender);
+	--lp-focus: var(--lp-acid);
+	--lp-shadow: var(--lp-acid);
+}
+
+.lp *,
+.lp *::before,
+.lp *::after {
+	box-sizing: border-box;
+}
+.lp :focus-visible {
+	outline: 3px solid var(--lp-focus);
+	outline-offset: 2px;
+}
+/* Zero specificity beyond `.lp`, so a field class on a link (a tile) keeps its own text colour */
+.lp :where(a) {
+	color: var(--lp-text-purple);
+}
+.lp :where(a):hover {
+	color: var(--lp-ink);
+}
+
+/* Layout and type */
+.lp-wrap {
+	max-width: 1360px;
+	margin: 0 auto;
+	padding: 0 16px;
+}
+@media (min-width: 720px) {
+	.lp-wrap {
+		padding: 0 32px;
+	}
+}
+.lp-section {
+	padding: 72px 0;
+}
+@media (min-width: 720px) {
+	.lp-section {
+		padding: 112px 0;
+	}
+}
+.lp-display {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-variation-settings: 'opsz' 96;
+	letter-spacing: -0.045em;
+	line-height: 0.85;
+	margin: 0;
+	text-wrap: balance;
+}
+.lp-giant {
+	font-size: clamp(64px, 15.4vw, 236px);
+	letter-spacing: -0.06em;
+	line-height: 0.78;
+}
+.lp-h2 {
+	font-size: clamp(44px, 8.6vw, 128px);
+	letter-spacing: -0.05em;
+	line-height: 0.82;
+}
+.lp-h3 {
+	font-size: clamp(32px, 4vw, 58px);
+	letter-spacing: -0.035em;
+	line-height: 0.9;
+}
+.lp-h4 {
+	font-size: clamp(26px, 3vw, 44px);
+	letter-spacing: -0.03em;
+	line-height: 0.92;
+}
+.lp-lede {
+	font-size: clamp(18px, 1.6vw, 24px);
+	line-height: 1.35;
+	font-weight: 500;
+	margin: 0;
+	text-wrap: pretty;
+}
+.lp-said {
+	font-size: clamp(17px, 1.4vw, 20px);
+	line-height: 1.4;
+	font-weight: 500;
+	margin: 0;
+	text-wrap: pretty;
+}
+.lp-muted {
+	color: var(--lp-ink-muted);
+}
+.lp-rule-top {
+	border-top: 8px solid var(--lp-rule);
+}
+
+/* Fields: flat brand blocks, each with its own text colour */
+.lp-ground {
+	background: var(--lp-ground);
+	color: var(--lp-ink);
+}
+.lp-paper {
+	background: var(--lp-paper);
+	color: var(--lp-ink);
+}
+.lp-field-green {
+	background: var(--lp-acid);
+	color: var(--lp-brand-ink);
+}
+.lp-field-purple {
+	background: var(--lp-grape);
+	color: var(--lp-oat);
+}
+.lp-field-purple-deep {
+	background: var(--lp-grape-deep);
+	color: var(--lp-oat);
+}
+.lp-field-ink {
+	background: var(--lp-brand-ink);
+	color: var(--lp-oat);
+}
+.lp-field-beet {
+	background: var(--lp-beet);
+	color: var(--lp-oat);
+}
+.lp-field-oat {
+	background: var(--lp-oat);
+	color: var(--lp-brand-ink);
+}
+
+/* Stamps: pixel caps in a double rule; a stamp line is the same face without the box */
+.lp-stamp {
+	display: inline-block;
+	font-family: var(--font-pixel);
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	line-height: 1;
+	padding: 0.7em 0.9em;
+	border: 0.18em solid currentColor;
+	outline: 0.12em solid currentColor;
+	outline-offset: 0.2em;
+	white-space: nowrap;
+}
+.lp-stamp--solid {
+	background: var(--lp-field-inverse);
+	color: var(--lp-on-field-inverse);
+	border-color: var(--lp-field-inverse);
+	outline-color: var(--lp-field-inverse);
+}
+.lp-stamp-line {
+	font-family: var(--font-pixel);
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	line-height: 1.5;
+}
+
+/* Tags: a rectangle with a punched hole, for districts */
+.lp-tag {
+	position: relative;
+	display: inline-block;
+	font-family: var(--font-display);
+	font-weight: 800;
+	line-height: 1;
+	padding: 0.5em 0.8em 0.45em 1.5em;
+	background: var(--lp-field-inverse);
+	color: var(--lp-on-field-inverse);
+	border-radius: 6px;
+	white-space: nowrap;
+}
+.lp-tag::before {
+	content: '';
+	position: absolute;
+	left: 0.55em;
+	top: 50%;
+	width: 0.45em;
+	height: 0.45em;
+	margin-top: -0.225em;
+	border-radius: 50%;
+	background: var(--lp-ground);
+}
+.lp-tag--green {
+	background: var(--lp-acid);
+	color: var(--lp-brand-ink);
+}
+
+/* Stickers: display type, outline, hard shadow; tilt at the call site */
+.lp-sticker {
+	display: inline-block;
+	font-family: var(--font-display);
+	font-weight: 800;
+	letter-spacing: -0.01em;
+	line-height: 1;
+	padding: 0.55em 0.85em 0.5em;
+	border: 0.14em solid var(--lp-rule);
+	border-radius: 0.5em;
+	background: var(--lp-acid);
+	color: var(--lp-brand-ink);
+	box-shadow: 0.3em 0.3em 0 var(--lp-rule);
+	white-space: nowrap;
+}
+.lp-sticker--ink {
+	background: var(--lp-brand-ink);
+	color: var(--lp-oat);
+	border-color: var(--lp-brand-ink);
+	box-shadow: 0.3em 0.3em 0 var(--lp-acid);
+}
+.lp-sticker--oat {
+	background: var(--lp-oat);
+	color: var(--lp-brand-ink);
+	border-color: var(--lp-brand-ink);
+	box-shadow: 0.3em 0.3em 0 var(--lp-brand-ink);
+}
+.lp-tilt-left {
+	transform: rotate(-6deg);
+}
+.lp-tilt-right {
+	transform: rotate(4deg);
+}
+
+/* Rank numerals are graphic elements */
+.lp-rank {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-variation-settings: 'opsz' 96;
+	letter-spacing: -0.05em;
+	line-height: 0.85;
+	font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Movement pills: "↑ 12", "New", "Held". Never a fall. */
+.lp-move {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25em;
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: 15px;
+	line-height: 1;
+	padding: 0.4em 0.65em 0.35em;
+	border-radius: 6px;
+	background: var(--lp-text-green);
+	color: var(--lp-oat);
+	white-space: nowrap;
+}
+.lp[data-theme='night'] .lp-move {
+	color: var(--lp-brand-ink);
+}
+.lp-move--new {
+	background: var(--lp-text-purple);
+}
+.lp-move--flat,
+.lp[data-theme='night'] .lp-move--flat {
+	background: transparent;
+	color: var(--lp-chart-flat);
+	border: 0.1em solid var(--lp-chart-flat);
+}
+/* On ink and grape fields the pills keep the field's own colours */
+.lp-on-ink .lp-move {
+	background: var(--lp-acid);
+	color: var(--lp-brand-ink);
+}
+.lp-on-ink .lp-move--new {
+	background: var(--lp-lavender);
+}
+.lp-on-ink .lp-move--flat {
+	background: transparent;
+	color: var(--lp-lavender);
+	border-color: var(--lp-lavender);
+}
+.lp-on-grape .lp-move {
+	background: var(--lp-oat);
+	color: var(--lp-brand-ink);
+}
+
+/* Series badges: a tile and a glyph */
+.lp-badge {
+	display: inline-grid;
+	place-items: center;
+	width: 2.4em;
+	height: 2.4em;
+	border-radius: 12px;
+	flex: none;
+}
+.lp-badge svg {
+	width: 66%;
+	height: 66%;
+	display: block;
+}
+
+/* Buttons: display type, hard offset */
+.lp .lp-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	font-family: var(--font-display);
+	font-weight: 800;
+	letter-spacing: -0.01em;
+	line-height: 1;
+	padding: 0.9em 1.3em 0.85em;
+	background: var(--lp-field-inverse);
+	color: var(--lp-on-field-inverse);
+	border: 0.14em solid var(--lp-rule);
+	border-radius: 6px;
+	box-shadow: 4px 4px 0 var(--lp-shadow);
+	text-decoration: none;
+	cursor: pointer;
+	transition:
+		transform 0.15s,
+		box-shadow 0.15s;
+}
+.lp .lp-button:hover {
+	transform: translate(-2px, -2px);
+	box-shadow: 6px 6px 0 var(--lp-shadow);
+}
+.lp .lp-button:active {
+	transform: translate(2px, 2px);
+	box-shadow: 1px 1px 0 var(--lp-shadow);
+}
+.lp .lp-button--green {
+	background: var(--lp-acid);
+	color: var(--lp-brand-ink);
+}
+.lp .lp-button--oat {
+	background: var(--lp-oat);
+	color: var(--lp-brand-ink);
+	border-color: var(--lp-brand-ink);
+	box-shadow: 4px 4px 0 var(--lp-brand-ink);
+}
+.lp .lp-button[disabled] {
+	opacity: 0.6;
+	cursor: progress;
+}
+
+/* Nav */
+.lp-nav a {
+	color: var(--lp-ink);
+	text-decoration: none;
+}
+.lp-nav a:hover {
+	text-decoration: underline;
+	text-decoration-thickness: 3px;
+	text-underline-offset: 4px;
+}
+
+/* The headline's rise */
+.lp-mask {
+	overflow: hidden;
+	display: block;
+}
+.lp-rise {
+	display: block;
+	transform: translateY(112%);
+	animation: lp-rise 0.9s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+}
+.lp-d1 {
+	animation-delay: 0.05s;
+}
+.lp-d2 {
+	animation-delay: 0.17s;
+}
+.lp-d3 {
+	animation-delay: 0.29s;
+}
+@keyframes lp-rise {
+	to {
+		transform: translateY(0);
+	}
+}
+.lp-fade {
+	opacity: 0;
+	animation: lp-fade 0.8s ease 0.7s forwards;
+}
+@keyframes lp-fade {
+	to {
+		opacity: 1;
+	}
+}
+
+/* The headline's bite: the one bite of the page */
+.lp-bitebtn {
+	all: unset;
+	cursor: pointer;
+	display: inline-block;
+	position: relative;
+	/* Room for the g's descender and the full stop's overhang, which the bite's mask would clip */
+	padding: 0 0.15em 0.3em 0;
+	margin: 0 -0.15em -0.3em 0;
+	transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.lp-bitebtn:hover {
+	transform: rotate(-2deg) scale(1.02);
+}
+.lp-bitebtn:focus-visible {
+	outline: 4px solid var(--lp-grape);
+	outline-offset: 8px;
+}
+/* The brand's bite (`--bite-shape`, app.css) out of the top of the g, whose middle sits 0.55em in
+   from the padded box's right edge; centred 0.07em down, its three lower tooth marks stop short
+   of the g's counter. No rounded corner here, so the bite is cut from one full layer. */
+.lp-bitebtn--bitten {
+	--bite: 0.22em;
+	mask-image: linear-gradient(#000 0 0), var(--bite-shape);
+	mask-size:
+		100% 100%,
+		calc(var(--bite) * 2) calc(var(--bite) * 2);
+	mask-position:
+		0 0,
+		right calc(0.55em - var(--bite)) top calc(0.07em - var(--bite));
+	mask-repeat: no-repeat;
+	mask-composite: exclude;
+	animation: lp-chomp 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+@keyframes lp-chomp {
+	0% {
+		transform: scale(1);
+	}
+	40% {
+		transform: scale(0.96) rotate(1.5deg);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+.lp-follow {
+	position: absolute;
+	left: 0;
+	top: 0;
+	pointer-events: none;
+	will-change: transform;
+	transition:
+		transform 0.12s linear,
+		opacity 0.2s;
+	font-size: 18px;
+	z-index: 3;
+}
+.lp-crumb {
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	background: var(--lp-brand-ink);
+	animation: lp-crumb 0.9s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+}
+@keyframes lp-crumb {
+	to {
+		transform: translate(var(--dx), var(--dy)) rotate(200deg);
+		opacity: 0;
+	}
+}
+
+/* The rotating stamp */
+.lp-spin {
+	animation: lp-spin 16s linear infinite;
+	transform-origin: 50% 50%;
+}
+@keyframes lp-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* The hero's ticket */
+.lp-ticket {
+	transition: transform 0.4s cubic-bezier(0.3, 1.4, 0.5, 1);
+	transform: rotate(-3deg);
+}
+.lp-ticket:hover {
+	transform: rotate(0) translateY(-6px);
+}
+
+/* Marquee */
+.lp-marquee {
+	display: flex;
+	overflow: hidden;
+	width: 100%;
+}
+.lp-marquee__track {
+	display: flex;
+	flex: none;
+	align-items: center;
+	gap: 0.25em;
+	padding-right: 0.25em;
+	animation: lp-scroll 42s linear infinite;
+	white-space: nowrap;
+}
+.lp-marquee:hover .lp-marquee__track {
+	animation-play-state: paused;
+}
+@keyframes lp-scroll {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-100%);
+	}
+}
+.lp-dish {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(72px, 14vw, 210px);
+	letter-spacing: -0.05em;
+	line-height: 1;
+	padding: 0 0.18em;
+	transition: color 0.2s;
+}
+.lp-dish--out {
+	color: transparent;
+	-webkit-text-stroke: 3px var(--lp-rule);
+}
+.lp-dish:hover {
+	color: var(--lp-grape);
+	-webkit-text-stroke: 0;
+}
+
+/* Live */
+.lp-live {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	flex: none;
+	background: var(--lp-chili);
+	animation: lp-blink 1.1s steps(1) infinite;
+}
+@keyframes lp-blink {
+	50% {
+		opacity: 0.15;
+	}
+}
+
+/* Heat Check rows */
+.lp-heat-row {
+	display: grid;
+	grid-template-columns: 80px minmax(0, 1fr);
+	gap: 12px 24px;
+	align-items: start;
+	padding: 28px 16px;
+	margin: 0 -16px;
+	border-bottom: 3px solid var(--lp-oat-15);
+	transition: background 0.2s;
+}
+@media (min-width: 720px) {
+	.lp-heat-row {
+		grid-template-columns: 150px minmax(0, 1fr) 120px;
+		gap: 12px 32px;
+		padding: 32px 16px;
+	}
+}
+.lp-heat-row__val {
+	grid-column: 2;
+	display: flex;
+	justify-content: flex-start;
+}
+@media (min-width: 720px) {
+	.lp-heat-row__val {
+		grid-column: auto;
+		justify-content: flex-end;
+	}
+}
+.lp-heat-row:hover {
+	background: #f2ede30f;
+}
+.lp-heat-row .lp-rank {
+	transition:
+		transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1),
+		color 0.2s;
+}
+.lp-heat-row:hover .lp-rank {
+	transform: scale(1.18) rotate(-5deg);
+	color: var(--lp-acid);
+}
+.lp-heat-row .lp-h4 {
+	transition: color 0.2s;
+}
+.lp-heat-row:hover .lp-h4 {
+	color: var(--lp-acid);
+}
+
+/* Tiles */
+.lp-bento {
+	display: grid;
+	grid-template-columns: repeat(12, minmax(0, 1fr));
+	gap: 20px;
+}
+.lp-bento > * {
+	grid-column: span 12;
+}
+@media (min-width: 860px) {
+	.lp-span8 {
+		grid-column: span 8 !important;
+	}
+	.lp-span7 {
+		grid-column: span 7 !important;
+	}
+	.lp-span6 {
+		grid-column: span 6 !important;
+	}
+	.lp-span5 {
+		grid-column: span 5 !important;
+	}
+	.lp-span4 {
+		grid-column: span 4 !important;
+	}
+}
+.lp-tile {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 40px;
+	padding: 28px;
+	transition:
+		transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1),
+		box-shadow 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+@media (min-width: 720px) {
+	.lp-tile {
+		padding: 32px;
+	}
+}
+.lp-tile--outline {
+	border: 3px solid var(--lp-rule);
+}
+.lp-tile--shadow {
+	box-shadow: 8px 8px 0 var(--lp-rule);
+}
+@media (hover: hover) {
+	.lp-tile:hover {
+		transform: translate(-8px, -8px);
+		box-shadow: 16px 16px 0 var(--lp-rule);
+	}
+}
+.lp-tile .lp-badge,
+.lp-tile .lp-tile__spin {
+	transition: transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.lp-tile:hover .lp-badge,
+.lp-tile:hover .lp-tile__spin {
+	transform: rotate(-14deg) scale(1.15);
+}
+a.lp-tile {
+	text-decoration: none;
+}
+
+/* The struck word */
+.lp-strike {
+	position: relative;
+	display: inline-block;
+	color: transparent;
+	-webkit-text-stroke: 0.025em var(--lp-rule);
+}
+.lp-strike::after {
+	content: '';
+	position: absolute;
+	left: -2%;
+	right: -2%;
+	top: 48%;
+	height: 0.09em;
+	background: var(--lp-chili);
+	transform: scaleX(0);
+	transform-origin: left;
+	animation: lp-strike 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) 1.2s forwards;
+}
+@keyframes lp-strike {
+	to {
+		transform: scaleX(1);
+	}
+}
+
+/* New in Town rows */
+.lp-open {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 12px 32px;
+	align-items: center;
+	padding: 28px 0;
+	border-top: 3px solid var(--lp-brand-ink);
+	transition: padding-left 0.3s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+.lp-open:hover {
+	padding-left: 16px;
+}
+.lp-open:last-child {
+	border-bottom: 3px solid var(--lp-brand-ink);
+}
+
+/* The example report card */
+.lp-report {
+	transform: rotate(4deg);
+	box-shadow: 16px 16px 0 var(--lp-acid);
+	transition:
+		transform 0.4s cubic-bezier(0.2, 0.9, 0.2, 1),
+		box-shadow 0.4s;
+}
+.lp-report:hover {
+	transform: rotate(0) scale(1.02);
+	box-shadow: 24px 24px 0 var(--lp-acid);
+}
+
+/* Day and night */
+.lp-switch {
+	all: unset;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 44px;
+	border: 3px solid var(--lp-rule);
+	padding: 4px 6px 4px 14px;
+	border-radius: 999px;
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: 15px;
+	color: var(--lp-ink);
+	background: var(--lp-paper);
+	transition: transform 0.2s;
+}
+.lp-switch:hover {
+	transform: rotate(-3deg) scale(1.04);
+}
+.lp-switch:focus-visible {
+	outline: 3px solid var(--lp-focus);
+	outline-offset: 3px;
+}
+.lp-switch__knob {
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: var(--lp-acid);
+	border: 3px solid var(--lp-rule);
+	display: grid;
+	place-items: center;
+	transition:
+		background 0.3s,
+		transform 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.lp-switch--night .lp-switch__knob {
+	background: var(--lp-grape);
+	transform: rotate(360deg);
+}
+
+/* The newsletter field */
+.lp-input {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(26px, 4vw, 64px);
+	letter-spacing: -0.04em;
+	padding: 18px 0;
+	border: 0;
+	border-bottom: 8px solid var(--lp-rule);
+	background: transparent;
+	color: var(--lp-ink);
+	border-radius: 0;
+	min-width: 0;
+	width: 100%;
+	flex: 1 1 420px;
+	outline: none;
+}
+.lp-input::placeholder {
+	color: var(--lp-ink-muted);
+	font-weight: 800;
+}
+.lp-input:focus {
+	border-bottom-color: var(--lp-grape);
+}
+
+/* Footer */
+.lp-foot a {
+	color: var(--lp-lavender);
+	text-decoration: none;
+}
+.lp-foot a:hover {
+	color: var(--lp-oat);
+}
+.lp-footmark {
+	width: 100%;
+	height: auto;
+	display: block;
+	color: var(--lp-acid);
+	transition: color 0.3s;
+}
+.lp-footmark:hover {
+	color: var(--lp-lavender);
+}
+
+/* Blog cards */
+.lp-post {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	color: var(--lp-ink);
+	text-decoration: none;
+}
+.lp-post__cover {
+	border: 3px solid var(--lp-rule);
+	box-shadow: 8px 8px 0 var(--lp-rule);
+	overflow: hidden;
+	transition:
+		transform 0.3s cubic-bezier(0.2, 0.9, 0.2, 1),
+		box-shadow 0.3s;
+}
+.lp-post:hover .lp-post__cover {
+	transform: translate(-4px, -4px);
+	box-shadow: 12px 12px 0 var(--lp-rule);
+}
+.lp-post:hover .lp-post__title {
+	text-decoration: underline;
+	text-decoration-thickness: 3px;
+	text-underline-offset: 5px;
+}
+
+.lp-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.lp-marquee__track,
+	.lp-spin,
+	.lp-live,
+	.lp-rise,
+	.lp-fade,
+	.lp-strike::after,
+	.lp-crumb,
+	.lp-bitebtn--bitten {
+		animation: none;
+	}
+	.lp-rise {
+		transform: none;
+	}
+	.lp-fade {
+		opacity: 1;
+	}
+	.lp-strike::after {
+		transform: scaleX(1);
+	}
+}

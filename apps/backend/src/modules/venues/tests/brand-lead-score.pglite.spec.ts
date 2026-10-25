@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
+import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -136,9 +137,6 @@ describe('BrandLeadScoreService (pglite)', () => {
 				visited: true,
 				sentiment: 'mixed',
 				summary: 'Hm.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		post(hot, 'chocspot.berlin', '2026-09-03T00:00:00Z');
@@ -148,15 +146,18 @@ describe('BrandLeadScoreService (pglite)', () => {
 		post(cold, 'foodie', '2026-06-01T00:00:00Z');
 		post(closed, 'foodie', '2026-09-01T00:00:00Z');
 		post(elsewhere, 'foodie', '2026-09-01T00:00:00Z');
-		em.create(Review, {
-			reviewId: 'r1',
-			venue: hot,
-			publishedAt: new Date('2026-09-10T00:00:00Z'),
-			stars: 2,
-			text: 'Sold out again.',
-			complaints: [{ topic: 'wait', detail: 'sold out' }],
-			analysedAt: new Date(),
-		});
+		addFeedback(
+			em,
+			em.create(Review, {
+				reviewId: 'r1',
+				venue: hot,
+				publishedAt: new Date('2026-09-10T00:00:00Z'),
+				stars: 2,
+				text: 'Sold out again.',
+				analysedAt: new Date(),
+			}),
+			{ complaints: [{ topic: 'wait', detail: 'sold out' }] },
+		);
 		await em.flush();
 
 		expect(await service.scoreAll('2026-09', city.id)).toMatchObject({ scored: 2 });
@@ -215,9 +216,6 @@ describe('BrandLeadScoreService (pglite)', () => {
 				isNewOpening: true,
 				sentiment: 'positive',
 				summary: 'Just opened.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		// Last month of the report month: new

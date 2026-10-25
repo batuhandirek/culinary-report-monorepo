@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 import { ExceptionCodes } from 'exceptions';
 
+import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import { CityDayService } from 'src/modules/cities/services/city-day.service.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
@@ -127,7 +128,8 @@ export class PortalService {
 		const acrossCities = brand.reportScope === BrandReportScopeEnum.ALL;
 		const city = acrossCities ? null : (cityId ?? (await this.brandService.citiesOf(brandId))[0]?.id);
 		if (city === undefined) return null;
-		const reports = await this.reportService.forBrand(brandId, { cityId: city });
+		// A month's reports (one per configuration) share one data: the series takes one each
+		const reports = _.uniqBy(await this.reportService.forBrand(brandId, { cityId: city }), r => r.month);
 		const branches =
 			city ? await this.brandService.branchesIn(brandId, city) : await this.brandService.openBranches(brandId);
 		const venue = branchId ? branches.find(v => v.id === branchId) : branches[0];
@@ -315,14 +317,16 @@ export class PortalService {
 			items: items.map(({ post, mention, own, paid }) => ({
 				...(wrap(post).serialize({ skipNull: true, forceObject: true }) as unknown as Omit<
 					PortalPostOutputDto,
-					'own' | 'paid' | 'sentiment' | 'summary' | 'visited' | 'dishes'
+					'own' | 'paid' | 'sentiment' | 'summary' | 'visited' | 'feedback'
 				>),
 				own,
 				paid,
 				sentiment: mention.sentiment,
 				summary: mention.summary,
 				visited: mention.visited,
-				dishes: mention.dishes,
+				feedback: mention.feedback
+					.getItems()
+					.map(row => wrap(row).serialize({ skipNull: true, populate: ['foodTopic'] }) as unknown as FeedbackPointOutputDto),
 			})),
 			totalItems: total,
 			page,
@@ -403,6 +407,7 @@ export class PortalService {
 		const { replyDraft: _stored, ...fields } = wrap(review).serialize({
 			skipNull: true,
 			forceObject: true,
+			populate: ['feedback', 'feedback.foodTopic'],
 		}) as unknown as PortalReviewOutputDto;
 		return {
 			...fields,

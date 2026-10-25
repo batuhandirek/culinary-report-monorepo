@@ -2,11 +2,16 @@
 
 import { cuisineWords, normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { isMainCourse } from 'src/modules/venues/util/delivery.js';
+import { dishKey } from 'src/modules/venues/util/dishes.js';
 
 import { FoodTopicKindEnum } from '../entities/food-topic.entity.js';
 
+const DISH_KINDS = new Set([FoodTopicKindEnum.DISH, FoodTopicKindEnum.DRINK]);
+
 /** What the index needs of a `FoodTopic`. */
 export interface IndexedFoodTopic {
+	/** The row's id, when built from stored topics: what a stored link points at */
+	id?: string;
 	key: string;
 	label: string;
 	kind: FoodTopicKindEnum;
@@ -57,6 +62,19 @@ export class FoodTopicIndex {
 			if (hit) return hit;
 		}
 		return undefined;
+	}
+
+	/**
+	 * The dish or drink topic a dish name names as a whole, as written or by its `dishKey`
+	 * ("döner", "doner kebab", "kebabs": kebab; "burger": burgers); none for a name it doesn't
+	 * name whole ("vegetable kebab") or for another kind of topic. A feedback row's `foodTopic`.
+	 */
+	dishTopic(name: string): string | undefined {
+		const key = dishKey(name);
+		if (!key) return undefined;
+		const topic = this.exact(name) ?? this.exact(key);
+		const kind = topic ? this.byKey.get(topic)?.kind : undefined;
+		return topic && kind && DISH_KINDS.has(kind) ? topic : undefined;
 	}
 
 	/**

@@ -148,7 +148,7 @@ export class AdminOutreachController {
 			Prospect,
 			{ id },
 			{
-				populate: ['brand.branches.city', 'touches'],
+				populate: ['brand.branches.city', 'touches', 'touches.report', 'touches.share'],
 				populateOrderBy: { touches: { at: QueryOrder.DESC, createdAt: QueryOrder.DESC } },
 			},
 		);
@@ -158,7 +158,13 @@ export class AdminOutreachController {
 		return {
 			...prospectItem(prospect),
 			touches: prospect.touches.getItems().map(
-				touch => wrap(touch).serialize({ skipNull: true, forceObject: true }) as unknown as AdminProspectOutputDto['touches'][number],
+				touch =>
+					wrap(touch).serialize({
+						skipNull: true,
+						forceObject: true,
+						populate: ['report', 'share'],
+						exclude: ['report.data', 'report.highlights', 'share.token', 'share.report', 'share.createdBy'],
+					}) as unknown as AdminProspectOutputDto['touches'][number],
 			),
 			...(place && { city: place.city.name }),
 			latestReport: report ? reportSummary(report) : undefined,

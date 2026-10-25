@@ -99,9 +99,6 @@ describe('Report reach sections (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Nice.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 		const comment = (n: number, intent: PostCommentIntentEnum, question?: string, likes = 0) =>
 			em.create(PostComment, {
@@ -246,8 +243,10 @@ describe('Report reach sections (pglite)', () => {
 			platform,
 			stars: 4,
 			text: 'text',
-			praise: praise.map(topic => ({ topic })),
-			complaints: complaints.map(topic => ({ topic })),
+			feedback: [
+				...praise.map(topic => ({ sentiment: 'positive', topic, detail: topic })),
+				...complaints.map(topic => ({ sentiment: 'negative', topic, detail: topic })),
+			],
 		});
 		const reviews = [
 			...Array.from({ length: 5 }, (_, i) => review('google', ['food'], i < 3 ? ['price'] : [])),

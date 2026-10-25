@@ -5,10 +5,24 @@ import { sharedFood, VenueTopicInput, venueTopics } from '../util/venue-topics.j
 import { seedIndex } from './factories/food-topic.factory.js';
 
 const index = seedIndex();
-const tags = (input: Partial<VenueTopicInput>) =>
-	venueTopics({ category: null, mentionCuisines: [], manual: [], ...input }, index);
-const brief = (input: Partial<VenueTopicInput>) =>
-	tags(input).map(t => `${t.primary ? '*' : ''}${t.key} ${t.source} ${t.score}`);
+
+/** The input as text, stored the way the writers store it: a cuisine resolved, a menu item `resolveMenuItem`'d */
+type TextInput = Omit<Partial<VenueTopicInput>, 'mentionTopics' | 'menuItems'> & {
+	mentionCuisines?: { cuisine: string | null; n: number }[];
+	menuItems?: { name: string; category?: string | null }[];
+};
+const tags = ({ mentionCuisines = [], menuItems, ...input }: TextInput) =>
+	venueTopics(
+		{
+			category: null,
+			manual: [],
+			...input,
+			mentionTopics: mentionCuisines.map(({ cuisine, n }) => ({ keys: index.resolve(cuisine), n })),
+			menuItems: menuItems?.map(item => ({ keys: index.resolveMenuItem(item) })),
+		},
+		index,
+	);
+const brief = (input: TextInput) => tags(input).map(t => `${t.primary ? '*' : ''}${t.key} ${t.source} ${t.score}`);
 
 describe('venueTopics', () => {
 	it('takes its main category, its other categories at half, and its primary food', () => {
@@ -102,7 +116,7 @@ describe('venueTopics', () => {
 });
 
 describe('sharedFood', () => {
-	const of = (category: string, mentionCuisines: VenueTopicInput['mentionCuisines'] = []) =>
+	const of = (category: string, mentionCuisines: TextInput['mentionCuisines'] = []) =>
 		tags({ category, mentionCuisines });
 
 	it('scores the same primary 3, a related food 2, an overlap 1, nothing 0', () => {

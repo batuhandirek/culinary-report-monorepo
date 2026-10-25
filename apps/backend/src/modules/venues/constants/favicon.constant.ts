@@ -17,3 +17,5 @@ export const FAVICON_IMAGE_FOLDER = 'venue-favicons';
 // The same icon on this many different website hosts is a platform's default (WordPress, Wix,
 // a site builder), not the venue's own
 export const GENERIC_FAVICON_HOSTS = 3;
+// Contact, Impressum or about pages read for profile links when the home page has none
+export const SITE_CONTACT_PAGES = 2;

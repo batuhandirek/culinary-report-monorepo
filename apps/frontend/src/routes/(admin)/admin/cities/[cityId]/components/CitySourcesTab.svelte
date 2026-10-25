@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { Check, Plus, Sparkles, X } from '@lucide/svelte';
-	import type { AdminCityOutputDto, AdminCitySourceYieldOutputDto } from 'client';
+	import type {
+		AdminCityHashtagSuggestionOutputDto,
+		AdminCityOutputDto,
+		AdminCitySourceYieldOutputDto
+	} from 'client';
 
 	import { AdminAddCitySourceInputDtoKindEnum as Kind } from 'client';
 
@@ -25,8 +29,24 @@
 	const KINDS = [
 		{ value: Kind.TiktokHashtag, label: 'TikTok hashtag' },
 		{ value: Kind.TiktokSearch, label: 'TikTok search' },
-		{ value: Kind.InstagramHashtag, label: 'Instagram hashtag' }
+		{ value: Kind.InstagramHashtag, label: 'Instagram hashtag' },
+		{ value: Kind.Blog, label: 'Blog' },
+		{ value: Kind.TiktokAccount, label: 'TikTok creator' },
+		{ value: Kind.InstagramAccount, label: 'Instagram creator' }
 	];
+	const isAccount = (kind: unknown) => `${kind}` === Kind.TiktokAccount || `${kind}` === Kind.InstagramAccount;
+	// How a source reads in a list: a hashtag with its #, a creator with its @, a search or a
+	// blog's URL as it is
+	const sourceLabel = (source: { kind: unknown; value: string }) =>
+		isAccount(source.kind) ? `@${source.value}`
+		: `${source.kind}` === Kind.TiktokSearch || `${source.kind}` === Kind.Blog ? source.value
+		: `#${source.value}`;
+	// A blog's last read: the trouble, else the feed it reads
+	const feedLabel = (source: AdminCitySourceYieldOutputDto) =>
+		`${source.kind}` !== Kind.Blog ? ''
+		: source.error ? `⚠ ${source.error}`
+		: source.feedUrl ? source.feedUrl
+		: 'Not read yet';
 	const kindLabel = (kind: string) => KINDS.find((k) => `${k.value}` === kind)?.label ?? kind;
 	const FILTERS: Filter[] = [
 		{
@@ -71,10 +91,11 @@
 			type: 'value',
 			name: 'Source',
 			truncate: 40,
-			value: (row) => (`${row.kind}` === Kind.TiktokSearch ? row.value : `#${row.value}`)
+			value: (row) => sourceLabel(row)
 		},
 		{ type: 'count', name: 'Posts', value: (row) => row.posts },
 		{ type: 'count', name: 'With a matched venue', tone: 'success', value: (row) => row.matchedPosts },
+		{ type: 'count', name: 'Only it found', value: (row) => row.uniqueMatchedPosts },
 		{
 			type: 'value',
 			name: 'Matched share',
@@ -82,18 +103,68 @@
 			value: (row) => (row.posts ? `${Math.round((100 * row.matchedPosts) / row.posts)} %` : '')
 		},
 		{ type: 'value', name: 'Views', numeric: true, value: (row) => (row.views ? compact(row.views) : '') },
+		{ type: 'value', name: 'Feed', truncate: 40, value: (row) => feedLabel(row) },
+		{ type: 'date', name: 'Last read', format: 'datetime', value: (row) => row.checkedAt },
 		{ type: 'value', name: 'Note', truncate: 40, value: (row) => row.note ?? '' },
 		{ type: 'date', name: 'Added', format: 'date', value: (row) => row.createdAt }
 	];
 
 	// Suggestions not reviewed yet: disabled until enabled here or in the table
 	let suggestions = $state<AdminCitySourceYieldOutputDto[]>([]);
+	// Before this day a post kept only its first source, so "Only it found" counts too much until
+	// three months have passed
+	let findsSince = $state<string | null>(null);
+	const findsComplete = $derived.by(() => {
+		if (!findsSince) return true;
+		const [year, month, day] = findsSince.split('-').map(Number);
+		return Date.UTC(year, month - 1 + 3, day) <= Date.now();
+	});
 	$effect(() => {
 		void refreshKey;
-		api.admin.listCitySources(city.id).then(({ items }) => {
+		api.admin.listCitySources(city.id).then(({ items, allFindsSince }) => {
 			suggestions = items.filter((s) => s.suggested);
+			findsSince = allFindsSince;
 		});
 	});
+
+	// Tags on matched posts the city doesn't scrape, from the data; the first ten until asked
+	let fromData = $state<AdminCityHashtagSuggestionOutputDto[]>([]);
+	let allTags = $state(false);
+	const shownTags = $derived(allTags ? fromData : fromData.slice(0, 10));
+	$effect(() => {
+		void refreshKey;
+		api.admin.listCityHashtagSuggestions(city.id).then(({ items }) => {
+			fromData = items;
+		});
+	});
+	const addTagAction = createAction(
+		(tag: AdminCityHashtagSuggestionOutputDto) =>
+			api.admin.addCitySource(city.id, {
+				kind: `${tag.kind}` as Kind,
+				value: tag.tag,
+				note: `From the data: on ${tag.matchedPosts} matched posts of ${tag.brands} brands`,
+				enabled: false
+			}),
+		{
+			onSuccess: () => refreshKey++,
+			successNotification: (source) => ({ title: 'Added switched off', text: `#${source.value}: turn it on in the table` })
+		}
+	);
+	const unignoreTag = async (tag: AdminCityHashtagSuggestionOutputDto) => {
+		await api.admin.updateHashtag(tag.hashtagId, { ignored: false });
+		refreshKey++;
+	};
+	const ignoreTagAction = createAction(
+		(tag: AdminCityHashtagSuggestionOutputDto) => api.admin.updateHashtag(tag.hashtagId, { ignored: true }),
+		{
+			onSuccess: () => refreshKey++,
+			successNotification: (_, [tag]) => ({
+				title: 'Ignored',
+				text: `#${tag.tag} is never suggested again`,
+				action: { label: 'Undo', onClick: () => unignoreTag(tag) }
+			})
+		}
+	);
 	const review = async (source: AdminCitySourceYieldOutputDto, enabled: boolean) => {
 		await api.admin.updateCitySource(city.id, source.id, { enabled });
 		refreshKey++;
@@ -155,11 +226,17 @@
 			</label>
 			<label class="flex w-64 flex-col gap-1 text-sm">
 				<span class="text-muted-foreground text-xs">
-					{kind === Kind.TiktokSearch ? 'Search query' : 'Hashtag'}
+					{kind === Kind.TiktokSearch ? 'Search query'
+					: kind === Kind.Blog ? 'Blog URL or feed'
+					: isAccount(kind) ? 'Handle or profile URL'
+					: 'Hashtag'}
 				</span>
 				<Input
 					bind:value
-					placeholder={kind === Kind.TiktokSearch ? 'munich restaurant' : 'munichfood'} />
+					placeholder={kind === Kind.TiktokSearch ? 'munich restaurant'
+					: kind === Kind.Blog ? 'https://www.berlinfoodstories.com'
+					: isAccount(kind) ? '@berlingoodfood'
+					: 'munichfood'} />
 			</label>
 			<label class="flex min-w-48 flex-1 flex-col gap-1 text-sm">
 				<span class="text-muted-foreground text-xs">Note</span>
@@ -169,7 +246,14 @@
 		</form>
 		<p class="text-muted-foreground m-0 mt-3 text-sm">
 			The monthly scrape reads the enabled ones. The numbers are the last three months: posts each source
-			found first, and how many of them named a venue we matched. Turn off what brings nothing.
+			found (a post two sources found counts for both), how many of them named a venue we matched, and how
+			many of those only it found, nothing else that keeps running: what turning it off would lose. Turn
+			off what brings nothing. A blog is read
+			through its RSS or Atom feed every Sunday and at month end, each new article a post: give the site, a
+			food section (its own feed is used) or the feed itself. A creator is a profile we scrape every Sunday
+			and at month end, whatever hashtags they use: their latest posts become posts. Report brands' own
+			accounts and their competitors' are watched without a source here; a creator's page says why
+			anyone is watched.
 		</p>
 	</AdminPanel>
 
@@ -194,6 +278,33 @@
 		</p>
 	</AdminPanel>
 
+	{#if fromData.length}
+		<AdminPanel title="Hashtags from the data" note={fromData.length}>
+			<p class="text-muted-foreground m-0 mb-3 text-sm">
+				Tags the city doesn't scrape that keep coming up on posts we matched, over the last three months:
+				on 5+ posts of 3+ brands. Free, no LLM. Add puts one in the table switched off; ignore the noise.
+			</p>
+			<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
+				{#each shownTags as tag (`${tag.hashtagId} ${tag.kind}`)}
+					<li class="flex items-center gap-3 border-b py-1.5 last:border-b-0">
+						<span class="text-muted-foreground w-36 shrink-0 text-xs">{kindLabel(`${tag.kind}`)}</span>
+						<span class="w-56 shrink-0 truncate font-medium">#{tag.tag}</span>
+						<span class="text-muted-foreground min-w-0 flex-1 truncate">
+							{tag.matchedPosts} posts · {tag.brands} brands: {tag.sampleBrands.join(', ')}{tag.brands > tag.sampleBrands.length ? '…' : ''}
+						</span>
+						<Button size="sm" variant="outline" icon={Plus} onclick={() => addTagAction.execute(tag)}>Add</Button>
+						<Button size="sm" variant="ghost" icon={X} onclick={() => ignoreTagAction.execute(tag)}>Ignore</Button>
+					</li>
+				{/each}
+			</ul>
+			{#if fromData.length > shownTags.length}
+				<Button class="mt-2" size="sm" variant="ghost" onclick={() => (allTags = true)}>
+					Show all {fromData.length}
+				</Button>
+			{/if}
+		</AdminPanel>
+	{/if}
+
 	{#if suggestions.length}
 		<AdminPanel title="Suggestions to review" note={suggestions.length}>
 			{#snippet action()}
@@ -206,7 +317,7 @@
 					<li class="flex items-center gap-3 border-b py-1.5 last:border-b-0">
 						<span class="text-muted-foreground w-36 shrink-0 text-xs">{kindLabel(`${source.kind}`)}</span>
 						<span class="w-56 shrink-0 font-medium">
-							{`${source.kind}` === Kind.TiktokSearch ? source.value : `#${source.value}`}
+							{sourceLabel(source)}
 						</span>
 						<span class="text-muted-foreground min-w-0 flex-1 truncate">
 							{source.note?.replace(/^Suggested: /, '') ?? ''}
@@ -217,6 +328,13 @@
 				{/each}
 			</ul>
 		</AdminPanel>
+	{/if}
+
+	{#if !findsComplete && findsSince}
+		<p class="ink-strip m-0 text-sm">
+			"Only it found" counts too much for posts from before {findsSince}: until then a post kept only the
+			first source that found it. It is right for the whole window three months after that day.
+		</p>
 	{/if}
 
 	<PaginatedDataTable

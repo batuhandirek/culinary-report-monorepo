@@ -62,9 +62,6 @@ describe('MentionMatchingService.topBrandIds (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Nice.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		for (let i = 0; i < 5; i++) post(a, 'venue_a_berlin', 10_000);

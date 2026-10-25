@@ -21,10 +21,10 @@
 	<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 		{#each platforms as p (p.platform)}
 			<div class="bg-paper border-line rounded-md border px-4 py-3">
-				<p class="eyebrow text-beet m-0">{NAMES[p.platform]}</p>
-				<p class="text-ink m-0 mt-1 text-2xl leading-none font-semibold tabular-nums">
+				<p class="stamp text-beet m-0">{NAMES[p.platform]}</p>
+				<p class="text-ink font-display m-0 mt-1 text-[26px] leading-none font-extrabold tracking-[-0.02em] tabular-nums">
 					{p.count}
-					<span class="text-muted-foreground text-sm font-normal"
+					<span class="text-muted-foreground font-sans text-sm font-normal tracking-normal"
 						>{p.count === 1 ? 'review' : 'reviews'} this month</span>
 				</p>
 				<p class="text-muted-foreground m-0 mt-1.5 text-xs">

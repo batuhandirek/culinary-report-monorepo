@@ -12,6 +12,8 @@ import type {
 	ReportHighlights,
 } from 'src/modules/reports/interfaces/report-data.interface.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { SocialAccountService } from 'src/modules/social/services/social-account.service.js';
 import { Brand, BrandReportScopeEnum } from 'src/modules/venues/entities/brand.entity.js';
@@ -101,6 +103,8 @@ describe('the portal series (pglite)', () => {
 				CityService,
 				PortalService,
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				OutreachService,
 				VenueBusynessService,
 				OwnAccountService,

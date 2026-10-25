@@ -4,7 +4,7 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -21,6 +21,8 @@ import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportCityService } from '../services/report-city.service.js';
 import { ReportService } from '../services/report.service.js';
+import { ReportConfigService } from '../services/report-config.service.js';
+import { ReportTemplateService } from '../services/report-template.service.js';
 import { ratingBenchmarkSentence } from '../util/rating-benchmark.js';
 
 describe('ReportCityService.ratingBenchmarks (pglite)', () => {
@@ -38,6 +40,8 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,
@@ -105,6 +109,8 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 		for (const rating of [4.0, 4.2, 4.3, 3.8]) venue('Pankow', 'Pizza restaurant', rating);
 		unrated = venue('Pankow', 'Pizza restaurant', null, 0);
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 		await em.populate([ramen, pizza, unrated], ['city']);
 	});
 

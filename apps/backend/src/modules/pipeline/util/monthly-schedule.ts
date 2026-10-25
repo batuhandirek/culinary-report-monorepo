@@ -47,3 +47,6 @@ export const WEEKLY_LISTENING_CRON = '0 3 * * 0';
  * late run leaves no gap (the run's month is only a label). TikTok's search asks for `WEEK`.
  */
 export const WEEKLY_LISTENING_DAYS = 8;
+
+// The rating snapshots: Tuesdays and Fridays, 04:30 UTC, after the daily Instagram run is queued
+export const RATING_SNAPSHOT_CRON = '30 4 * * 2,5';

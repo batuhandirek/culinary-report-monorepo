@@ -46,7 +46,7 @@ export const mastraProvider: Provider<Mastra> = {
 					new Observability({
 						configs: {
 							default: {
-								serviceName: 'Culinary Report',
+								serviceName: 'Munchwerk',
 								requestContextKeys: ['userId', 'sessionId'],
 								exporters,
 							},

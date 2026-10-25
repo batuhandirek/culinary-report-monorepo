@@ -7,6 +7,7 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
+import { FeedbackModule } from '../feedback/feedback.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
 import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
 import { LLMModule } from '../llm/llm.module.js';
@@ -18,17 +19,22 @@ import { VenueMatchAgent } from './agents/venue-match.agent.js';
 import { AdminAccountsController } from './controllers/admin.accounts.controller.js';
 import { AdminBrandAccountsController } from './controllers/admin.brand-accounts.controller.js';
 import { AdminCreatorsController } from './controllers/admin.creators.controller.js';
-import { AdminFeedbackThemesController } from './controllers/admin.feedback-themes.controller.js';
 import { AdminOpeningFlagsController } from './controllers/admin.opening-flags.controller.js';
 import { AdminPostCommentsController } from './controllers/admin.post-comments.controller.js';
+import { AdminHashtagsController } from './controllers/admin.hashtags.controller.js';
 import { AdminSocialController } from './controllers/admin.social.controller.js';
 import { Creator } from './entities/creator.entity.js';
+import { Hashtag } from './entities/hashtag.entity.js';
 import { Mention } from './entities/mention.entity.js';
 import { PostComment } from './entities/post-comment.entity.js';
+import { PostHashtag } from './entities/post-hashtag.entity.js';
+import { PostSource } from './entities/post-source.entity.js';
 import { SocialAccount } from './entities/social-account.entity.js';
 import { SocialAccountSnapshot } from './entities/social-account-snapshot.entity.js';
 import { SocialPost } from './entities/social-post.entity.js';
 import { AccountMatchingService } from './services/account-matching.service.js';
+import { AccountTwinService } from './services/account-twin.service.js';
+import { AccountScrapeService } from './services/account-scrape.service.js';
 import { BlogFetchService } from './services/blog-fetch.service.js';
 import { BlogScrapeService } from './services/blog-scrape.service.js';
 import { BrandPostsService } from './services/brand-posts.service.js';
@@ -38,15 +44,29 @@ import { MentionMatchingService } from './services/mention-matching.service.js';
 import { OwnAccountService } from './services/own-account.service.js';
 import { PostCommentService } from './services/post-comment.service.js';
 import { SocialAccountService } from './services/social-account.service.js';
+import { HashtagService } from './services/hashtag.service.js';
 import { SocialPostService } from './services/social-post.service.js';
 import { SocialScrapeService } from './services/social-scrape.service.js';
 import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 
 @Module({
 	imports: [
-		MikroOrmModule.forFeature([SocialPost, SocialAccount, SocialAccountSnapshot, Creator, Mention, PostComment, User, UserSession]),
+		MikroOrmModule.forFeature([
+			SocialPost,
+			SocialAccount,
+			SocialAccountSnapshot,
+			Creator,
+			Mention,
+			PostComment,
+			Hashtag,
+			PostHashtag,
+			PostSource,
+			User,
+			UserSession,
+		]),
 		ApifyModule,
 		AuthModule,
+		FeedbackModule,
 		CitiesModule,
 		FoodTopicsModule,
 		LLMModule,
@@ -54,20 +74,23 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 	],
 	controllers: [
 		AdminSocialController,
+		AdminHashtagsController,
 		AdminPostCommentsController,
 		AdminAccountsController,
 		AdminBrandAccountsController,
 		AdminCreatorsController,
-		AdminFeedbackThemesController,
 		AdminOpeningFlagsController,
 	],
 	providers: [
 		SocialPostService,
+		HashtagService,
 		BlogFetchService,
 		BlogScrapeService,
 		SocialAccountService,
 		OwnAccountService,
+		AccountScrapeService,
 		AccountMatchingService,
+		AccountTwinService,
 		CreatorService,
 		SocialScrapeService,
 		MentionExtractionService,
@@ -84,7 +107,9 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		BlogScrapeService,
 		SocialAccountService,
 		OwnAccountService,
+		AccountScrapeService,
 		AccountMatchingService,
+		AccountTwinService,
 		PostCommentService,
 		MentionExtractionService,
 		MentionMatchingService,

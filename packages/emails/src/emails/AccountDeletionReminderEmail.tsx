@@ -19,7 +19,7 @@ export const AccountDeletionReminderEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview="Fikrini değiştirdiysen bugün vazgeçebilirsin."
-		reason="Bu e-postayı, Culinary Report hesabını silmemizi istediğin için aldın."
+		reason="Bu e-postayı, Munchwerk hesabını silmemizi istediğin için aldın."
 	>
 		<Title>Hesabın yarın siliniyor</Title>
 		<P>

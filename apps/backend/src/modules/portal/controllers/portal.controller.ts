@@ -90,6 +90,7 @@ export class PortalController {
 				updatedAt: report.updatedAt,
 				postCount: report.postCount,
 				reviewCount: report.reviewCount,
+				name: report.name,
 				title: report.highlights.title,
 				headline: report.highlights.headline,
 				...(report.city && { city: { id: report.city.id, name: report.city.name } }),
@@ -159,7 +160,10 @@ export class PortalController {
 	): Promise<PortalSettingsOutputDto> {
 		return this.portalService.updateSettings(brandId, body);
 	}
-	/** The Google and TripAdvisor reviews of every branch, filtered, newest first; reply drafts under unanswered ones. */
+	/**
+	 * The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it
+	 * says (`feedback`); reply drafts under unanswered ones. The topic filter is any point of the topic.
+	 */
 	@TypedRoute.Get('/brands/:brandId/reviews')
 	@UseGuards(BrandAccessGuard)
 	async listPortalReviews(
@@ -189,7 +193,7 @@ export class PortalController {
 		return this.portalService.markReviewReplied(brandId, reviewId, body.replied);
 	}
 
-	/** Every post about the brand (any branch, or the brand alone), newest first. */
+	/** Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`feedback`). */
 	@TypedRoute.Get('/brands/:brandId/posts')
 	@UseGuards(BrandAccessGuard)
 	async listPortalPosts(

@@ -8,6 +8,7 @@ import _ from 'lodash';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
 import { Creator } from '../entities/creator.entity.js';
+import type { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialAccount } from '../entities/social-account.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
@@ -43,6 +44,22 @@ export interface CreatorDetail {
 	brands: { id: string; name: string; posts: number; views: number; lastPostedAt: Date; own: boolean }[];
 	posts: number;
 	views: number;
+	/** What found their posts, the most posts first: a city source, a venue search or their own profile */
+	foundBy: CreatorFind[];
+}
+
+/** One thing that found a creator's posts (`PostSource`), with how many of their posts. */
+export interface CreatorFind {
+	kind: PostSourceKindEnum;
+	value: string;
+	/** The city's source it is, when it is one (enabled or not) */
+	sourceId?: string;
+	sourceEnabled?: boolean;
+	city: { id: string; name: string };
+	/** A venue search's or place page's venue */
+	venue?: { id: string; name: string };
+	posts: number;
+	lastPostedAt: Date;
 }
 
 const marks = (n: unknown[]) => n.map(() => '?').join(', ');
@@ -182,6 +199,32 @@ export class CreatorService {
 					ids,
 				)
 			:	[];
+		const finds: {
+			kind: PostSourceKindEnum;
+			value: string;
+			source_id: string | null;
+			source_enabled: boolean | null;
+			city_id: string;
+			city_name: string;
+			venue_id: string | null;
+			venue_name: string | null;
+			posts: string;
+			last_posted_at: Date;
+		}[] = ids.length ?
+				await conn.execute(
+					`select ps.kind, ps.value, ps.source_id, cs.enabled as source_enabled, p.city_id, c.name as city_name,
+						ps.venue_id, v.name as venue_name, count(distinct ps.post_id) as posts, max(p.posted_at) as last_posted_at
+					from post_sources ps
+					join social_posts p on p.id = ps.post_id
+					join cities c on c.id = p.city_id
+					left join city_sources cs on cs.id = ps.source_id
+					left join venues v on v.id = ps.venue_id
+					where p.account_id in (${marks(ids)})
+					group by ps.kind, ps.value, ps.source_id, cs.enabled, p.city_id, c.name, ps.venue_id, v.name
+					order by posts desc, last_posted_at desc limit 15`,
+					ids,
+				)
+			:	[];
 		const ownBrands = new Set(accounts.map(a => a.brand?.id).filter(Boolean));
 		return {
 			creator,
@@ -200,6 +243,15 @@ export class CreatorService {
 			})),
 			posts: _.sumBy(perMonth, r => Number(r.posts)),
 			views: _.sumBy(perMonth, r => Number(r.views)),
+			foundBy: finds.map(f => ({
+				kind: f.kind,
+				value: f.value,
+				...(f.source_id && { sourceId: f.source_id, sourceEnabled: !!f.source_enabled }),
+				city: { id: f.city_id, name: f.city_name },
+				...(f.venue_id && { venue: { id: f.venue_id, name: f.venue_name ?? '' } }),
+				posts: Number(f.posts),
+				lastPostedAt: new Date(f.last_posted_at),
+			})),
 		};
 	}
 }

@@ -12,8 +12,11 @@ import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReportHighlightsAgent } from 'src/modules/reports/agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from 'src/modules/reports/agents/review-reply.agent.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
+import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
 import { ReportBuiltEvent } from 'src/modules/reports/persisted-events/report-built.persisted-event.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { ReportShareService } from 'src/modules/reports/services/report-share.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
@@ -88,6 +91,8 @@ describe('Report e-mail delivery (pglite)', () => {
 				BrandService,
 				CityService,
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				CompetitorService,
 				ReportShareService,
 				OutreachService,
@@ -164,6 +169,19 @@ describe('Report e-mail delivery (pglite)', () => {
 		expect(await touchesOf(prospect.id)).toHaveLength(2);
 	});
 
+	it("mails each of the newest month's configurations its own report", async () => {
+		const { venue, prospect } = await prospectOf(ProspectStageEnum.WON, { contactEmail: 'two@imbiss.de' });
+		const configs = harness.moduleRef.get(ReportConfigService);
+		await configs.create(venue.brand.id, { name: 'Full' });
+		await configs.create(venue.brand.id, { name: 'Reviews' });
+
+		const built = await reports.buildAll(venue.brand.id, venue.city.id, '2026-09');
+
+		expect(built).toHaveLength(2);
+		expect(mails()).toHaveLength(2);
+		expect(await touchesOf(prospect.id)).toHaveLength(2);
+	});
+
 	it('mails nobody for a prospect that has not subscribed', async () => {
 		const { venue, prospect } = await prospectOf(ProspectStageEnum.CONTACTED, {
 			contactEmail: 'maybe@imbiss.de',
@@ -220,6 +238,33 @@ describe('Report e-mail delivery (pglite)', () => {
 
 		await expect(delivery.sendNow(report.id)).rejects.toBeInstanceOf(BadRequestException);
 		expect(mails()).toHaveLength(0);
+	});
+
+	it('links each report mail to the report and a link of its own, whose opens are that mail’s', async () => {
+		const { venue, prospect } = await prospectOf(ProspectStageEnum.WON, { contactEmail: 'links@imbiss.de' });
+		const report = await reports.build(venue.brand.id, venue.city.id, '2026-09');
+		await delivery.sendNow(report.id);
+		// The admin's own link to the report (copied from the report page) is another one again
+		const copied = await harness.moduleRef.get(ReportShareService).create(report.id);
+
+		const touches = await harness.orm.em
+			.fork()
+			.find(
+				OutreachTouch,
+				{ prospect: prospect.id, kind: OutreachTouchKindEnum.EMAIL },
+				{ populate: ['report', 'share'], orderBy: { createdAt: 'asc' } },
+			);
+		expect(touches.map(t => t.report?.id)).toEqual([report.id, report.id]);
+		const [built, resent] = touches.map(t => t.share!);
+		expect(new Set([built.id, resent.id, copied.id]).size).toBe(3);
+		expect(touches[0].body).toContain(built.token);
+
+		const shares = harness.moduleRef.get(ReportShareService);
+		await shares.recordOpen(built.token);
+		await shares.recordOpen(built.token);
+		await shares.recordOpen(copied.token);
+		const opens = async (id: string) => (await harness.orm.em.fork().findOneOrFail(ReportShare, { id })).openCount;
+		expect([await opens(built.id), await opens(resent.id), await opens(copied.id)]).toEqual([2, 0, 1]);
 	});
 
 	it('renders the template in English and German', async () => {

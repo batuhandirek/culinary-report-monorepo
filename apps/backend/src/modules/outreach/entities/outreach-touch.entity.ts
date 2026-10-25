@@ -1,6 +1,8 @@
 import type { Rel } from '@mikro-orm/core';
 import { Entity, Enum, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
 
+import { Report } from 'src/modules/reports/entities/report.entity.js';
+import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
 import {
@@ -50,4 +52,12 @@ export class OutreachTouch extends MikroOrmEntityAbstractClass<'emailConsent'> {
 	// VISIT or CALL: they said we may e-mail them (UWG §7); stamps `Prospect.emailConsentAt`
 	@Property({ type: 'boolean', default: false })
 	emailConsent: boolean = false;
+
+	// The report it sent (the brand's own), and the link it used: a share of its own, so the
+	// share's opens are this touch's
+	@ManyToOne({ entity: () => Report, nullable: true, deleteRule: 'set null', index: true })
+	report?: Rel<Report> | null;
+
+	@ManyToOne({ entity: () => ReportShare, nullable: true, deleteRule: 'set null', index: true })
+	share?: Rel<ReportShare> | null;
 }

@@ -5,7 +5,6 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 
 import _ from 'lodash';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
@@ -14,22 +13,9 @@ import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-accoun
 import { SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
-import {
-	ACCOUNT_RECENT_POSTS,
-	type AccountFigures,
-	accountUrl,
-	type ProfilePlatform,
-	instagramProfileFigures,
-	normalizeAccountHandle,
-	tiktokProfileFigures,
-} from '../util/accounts.js';
+import { accountUrl, normalizeAccountHandle, type ProfilePlatform } from '../util/accounts.js';
 
 import { type AccountWithFigures, SocialAccountService } from './social-account.service.js';
-
-// One item per profile, ~$2.60 / 1k profiles
-const INSTAGRAM_PROFILE_ACTOR = 'apify/instagram-profile-scraper';
-// One item per video, ~$1–5 / 1k videos: ten per profile
-const TIKTOK_PROFILE_ACTOR = 'clockworks/tiktok-profile-scraper';
 
 /** One own account in a month's report: its snapshot, and the change since the month before's. */
 export interface OwnAccountMonth {
@@ -57,8 +43,8 @@ const inCity = (brandId: string, cityId: string | null) =>
 
 /**
  * A brand's own accounts (`SocialAccount.brand`): the brand page's panel, the Own accounts page,
- * outreach's handles, the monthly profile scrape into `SocialAccountSnapshot`s and what a report
- * and the portal read. A branch's own account counts only in the branch's city.
+ * outreach's handles, and what a report and the portal read from the month's
+ * `SocialAccountSnapshot`s (written by `AccountScrapeService`). A branch's own account counts only in the branch's city.
  */
 @Injectable()
 export class OwnAccountService {
@@ -66,7 +52,6 @@ export class OwnAccountService {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly apifyService: ApifyService,
 		private readonly socialAccountService: SocialAccountService,
 	) {}
 
@@ -92,9 +77,10 @@ export class OwnAccountService {
 			const branch = await this.brandCity(row.brandId).catch(() => null);
 			if (!branch) continue;
 			const account = await this.socialAccountService.ensure(SocialPlatformEnum.INSTAGRAM, row.instagram, branch.city);
-			if (!account || account.brand?.id === row.brandId || account.rejectedBrandIds.includes(row.brandId)) continue;
+			if (!account || account.brand?.id === row.brandId || (await this.socialAccountService.isRejected(account, row.brandId)))
+				continue;
 			if (account.brand && account.brandSource === AccountBrandSourceEnum.ADMIN) continue;
-			this.socialAccountService.setBrand(account, this.em.getReference(Brand, row.brandId), AccountBrandSourceEnum.PROSPECT);
+			await this.socialAccountService.setBrand(account, this.em.getReference(Brand, row.brandId), AccountBrandSourceEnum.PROSPECT);
 			created++;
 		}
 		await this.em.flush();
@@ -118,8 +104,9 @@ export class OwnAccountService {
 	private async idsOfBrand(brandId: string): Promise<string[]> {
 		const rows: { id: string }[] = await this.em.getConnection().execute(
 			`select id from social_accounts
-			where brand_id = ? or suggested_brand_id = ? or rejected_brand_ids @> ?::jsonb`,
-			[brandId, brandId, JSON.stringify([brandId])],
+			where brand_id = ? or suggested_brand_id = ?
+			or exists (select 1 from account_rejected_brands r where r.account_id = social_accounts.id and r.brand_id = ?)`,
+			[brandId, brandId, brandId],
 		);
 		return rows.map(r => r.id);
 	}
@@ -135,7 +122,7 @@ export class OwnAccountService {
 		const place = await this.brandCity(brandId, branchId);
 		const account = await this.socialAccountService.ensure(platform, input, place.city);
 		if (!account) throw new BadRequestException('Not a handle');
-		this.socialAccountService.setBrand(account, brand, AccountBrandSourceEnum.ADMIN, branchId ? place : null);
+		await this.socialAccountService.setBrand(account, brand, AccountBrandSourceEnum.ADMIN, branchId ? place : null);
 		await this.em.flush();
 		return account;
 	}
@@ -143,97 +130,6 @@ export class OwnAccountService {
 	/** Checks the account is the brand's (linked, suggested or rejected), so brand routes touch only theirs. */
 	async ensureOfBrand(brandId: string, accountId: string): Promise<void> {
 		if (!(await this.idsOfBrand(brandId)).includes(accountId)) throw new NotFoundException();
-	}
-
-	/**
-	 * Scrapes the brands' accounts into the month's snapshots: Instagram profiles in one run,
-	 * TikTok profiles' latest ten videos in another, the budget split by paid items. A profile
-	 * that returns nothing (private, renamed) gets no snapshot. The accounts take the profile's
-	 * display name and followers. Flushes.
-	 */
-	async scrapeMonth(
-		brandIds: string[],
-		month: string,
-		budgetUsd: number,
-		now = new Date(),
-	): Promise<{ accounts: number; snapshots: number }> {
-		if (!brandIds.length) return { accounts: 0, snapshots: 0 };
-		const accounts = await this.em.find(SocialAccount, { brand: { $in: brandIds } });
-		const instagram = accounts.filter(a => a.platform === SocialPlatformEnum.INSTAGRAM);
-		const tiktok = accounts.filter(a => a.platform === SocialPlatformEnum.TIKTOK);
-		// A TikTok profile is ten paid items, an Instagram one is one
-		const weight = instagram.length + tiktok.length * ACCOUNT_RECENT_POSTS;
-		const figures = new Map<SocialAccount, AccountFigures>();
-		const names = new Map<SocialAccount, string>();
-
-		if (instagram.length) {
-			const handles = _.uniq(instagram.map(a => a.handle));
-			const items = await this.apifyService.runActor<any>(
-				INSTAGRAM_PROFILE_ACTOR,
-				{ usernames: handles },
-				{
-					maxCostUsd: (budgetUsd * instagram.length) / weight,
-					purpose: `instagram profiles ${month}: ${handles.length} own accounts`,
-				},
-			);
-			for (const item of items) {
-				const result = instagramProfileFigures(item, now);
-				if (!result) continue;
-				const handle = `${item.username}`.toLowerCase();
-				for (const account of instagram.filter(a => a.handle === handle)) {
-					figures.set(account, result);
-					if (typeof item.fullName === 'string' && item.fullName.trim()) names.set(account, item.fullName);
-				}
-			}
-		}
-
-		if (tiktok.length) {
-			const handles = _.uniq(tiktok.map(a => a.handle));
-			const items = await this.apifyService.runActor<any>(
-				TIKTOK_PROFILE_ACTOR,
-				{
-					profiles: handles,
-					resultsPerPage: ACCOUNT_RECENT_POSTS,
-					profileSorting: 'latest',
-					excludePinnedPosts: true,
-					shouldDownloadVideos: false,
-					shouldDownloadCovers: false,
-					shouldDownloadSlideshowImages: false,
-					shouldDownloadAvatars: false,
-				},
-				{
-					maxCostUsd: (budgetUsd * tiktok.length * ACCOUNT_RECENT_POSTS) / weight,
-					purpose: `tiktok profiles ${month}: ${handles.length} own accounts`,
-				},
-			);
-			const byAuthor = _.groupBy(
-				items.filter(i => i?.authorMeta?.name),
-				i => `${i.authorMeta.name}`.toLowerCase(),
-			);
-			for (const account of tiktok) {
-				const result = tiktokProfileFigures(byAuthor[account.handle] ?? [], now);
-				if (!result) continue;
-				figures.set(account, result);
-				const nickName = byAuthor[account.handle]?.[0]?.authorMeta?.nickName;
-				if (typeof nickName === 'string' && nickName.trim()) names.set(account, nickName);
-			}
-		}
-
-		for (const [account, result] of figures) {
-			const snapshot =
-				(await this.em.findOne(SocialAccountSnapshot, { account, month })) ??
-				this.em.create(SocialAccountSnapshot, { account, month, scrapedAt: now });
-			Object.assign(snapshot, result, { scrapedAt: now });
-			if (result.followers !== null) {
-				account.followers = result.followers;
-				account.followersAt = now;
-			}
-			const name = names.get(account);
-			if (name) account.displayName = name.trim();
-		}
-		await this.em.flush();
-		this.logger.log(`Own accounts ${month}: ${figures.size} of ${accounts.length} scraped`);
-		return { accounts: accounts.length, snapshots: figures.size };
 	}
 
 	/** The brand's snapshots of these months in a city (brand-wide accounts and the city's branches' own): the portal's series. */

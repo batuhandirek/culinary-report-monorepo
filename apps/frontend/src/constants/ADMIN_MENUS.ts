@@ -1,7 +1,9 @@
 import {
 	FileText,
+	GalleryHorizontalEnd,
 	LayoutDashboard,
 	MapPin,
+	Megaphone,
 	MessageSquareText,
 	MonitorSmartphone,
 	Newspaper,
@@ -87,7 +89,7 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/trends',
 		icon: TrendingUp,
 		group: 'Market',
-		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'unrecognised words', 'highlights', 'public page', 'share cards', 'do-not-list'],
+		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'dish names', 'unrecognised words'],
 		description:
 			'What the city eats and talks about: each kind of food with its venues, posts and Google searches, and how the month moved against the last.'
 	}),
@@ -105,7 +107,7 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/reports',
 		icon: FileText,
 		group: 'Output',
-		keywords: ['monthly', 'report', 'pdf', 'share'],
+		keywords: ['monthly', 'report', 'pdf', 'share', 'report templates', 'report configurations', 'sections', 'layout'],
 		description: 'Monthly reports per brand and city: built, shared and sent.'
 	}),
 
@@ -125,6 +127,22 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		group: 'Content',
 		keywords: ['posts', 'articles', 'content', 'seo'],
 		description: 'Articles on the public blog, drafts included.'
+	}),
+	menu({
+		name: 'Instagram',
+		href: '/admin/instagram',
+		icon: GalleryHorizontalEnd,
+		group: 'Content',
+		keywords: ['posts', 'carousel', 'stories', 'design', 'templates', 'canvas', 'share images', 'png', 'caption', 'social media'],
+		description: 'Design a post from one of our layouts, fill it in, save it as images for Instagram.'
+	}),
+	menu({
+		name: 'Public reports',
+		href: '/admin/public-reports',
+		icon: Megaphone,
+		group: 'Content',
+		keywords: ['highlights', 'public highlights', 'public page', 'city month', 'top hits', 'food trends', 'quarter', 'share cards', 'share images', 'do-not-list', 'leave out', 'publish', 'pull searches', 'front page', 'landing', 'live edition', 'newsletter'],
+		description: 'The pages we publish about a city: its month and its quarter of food trends, built from stored data and published by hand, and the front page\'s live edition, rebuilt every five days.'
 	}),
 
 	menu({

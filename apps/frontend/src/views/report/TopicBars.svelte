@@ -1,16 +1,28 @@
 <script lang="ts">
 	import { TOPIC_LABELS } from '#lib/culinary.js';
+	import { FEEDBACK_THEME_LABELS, isCatchAllTheme, themeLabel } from '#lib/feedback.js';
 
 	// Complaints against praise per topic on one diverging axis: complaints run left in beet,
-	// praise right in olive, each count printed at the bar's end.
+	// praise right in olive, each count printed at the bar's end. With theme counts (reports built
+	// since themes), each topic's themes are listed under its bars, the same sides.
 	interface Props {
 		praise: Record<string, number>;
 		complaints: Record<string, number>;
+		praiseThemes?: Record<string, number>;
+		complaintThemes?: Record<string, number>;
 		/** What a count counts: "reviews" or "posts" */
 		unit: string;
 	}
 
-	let { praise, complaints, unit }: Props = $props();
+	let { praise, complaints, praiseThemes, complaintThemes, unit }: Props = $props();
+
+	// A topic's themes on one side, most raised first, catch-alls left out, three at most
+	const THEMES_SHOWN = 3;
+	const themesOf = (counts: Record<string, number> | undefined, topic: string) =>
+		Object.entries(counts ?? {})
+			.filter(([key, n]) => n && !isCatchAllTheme(key) && FEEDBACK_THEME_LABELS[key as keyof typeof FEEDBACK_THEME_LABELS]?.topic === topic)
+			.sort(([, a], [, b]) => b - a)
+			.slice(0, THEMES_SHOWN);
 
 	const topics = $derived(
 		Object.keys(TOPIC_LABELS)
@@ -59,10 +71,21 @@
 					{#if good}<span class="text-ink text-xs font-medium tabular-nums">{good}</span
 						>{/if}
 				</div>
+				{@const badThemes = themesOf(complaintThemes, topic)}
+				{@const goodThemes = themesOf(praiseThemes, topic)}
+				{#if badThemes.length || goodThemes.length}
+					<span></span>
+					<span class="text-muted-foreground -mt-1 pr-2 text-right text-xs leading-snug">
+						{badThemes.map(([key, n]) => `${themeLabel(key)} ${n}`).join(' · ')}
+					</span>
+					<span class="text-muted-foreground -mt-1 pl-2 text-xs leading-snug">
+						{goodThemes.map(([key, n]) => `${themeLabel(key)} ${n}`).join(' · ')}
+					</span>
+				{/if}
 			{/each}
 		</div>
 		<p class="text-muted-foreground m-0 mt-2 text-xs">
-			Number of {unit} that raised each topic.
+			Number of {unit} that raised each topic{praiseThemes || complaintThemes ? ', and under it the points they raised most' : ''}.
 		</p>
 	</div>
 {:else}

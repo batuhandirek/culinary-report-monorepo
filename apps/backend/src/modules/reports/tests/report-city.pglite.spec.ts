@@ -1,10 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
+import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
@@ -77,9 +78,6 @@ describe('ReportCityService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		// August: ramen is a tenth of the talk; September: a fifth, out of 200 mentions
@@ -118,6 +116,8 @@ describe('ReportCityService (pglite)', () => {
 		});
 		mention(thin, '2026-09-05', 'Austrian', 100);
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 		await em.populate([me, thin], ['city']);
 	});
 
@@ -239,9 +239,6 @@ describe('ReportCityService (pglite)', () => {
 				isNewOpening: true,
 				sentiment: 'positive',
 				summary: 'Just opened.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		const place = (name: string, street: string, extra: Partial<Venue> = {}) =>
 			em.create(Venue, {
@@ -276,6 +273,31 @@ describe('ReportCityService (pglite)', () => {
 			['Zu', 'permanently_closed', '2026-09-20', true, undefined],
 			['Frisch', 'opened', '2026-08-20', true, 'posts'],
 			['Neu Zwei', 'opened', '2026-08-15', false, undefined],
+		]);
+	});
+
+	// Each complaint theme of the venue's written reviews, against the median of the report venues
+	it('compares the venue\'s complaint themes with the report venues\'', async () => {
+		const em = harness.orm.em;
+		const written = (v: Venue, id: string, complaints: { theme: string; detail: string }[] = []) =>
+			addFeedback(
+				em,
+				em.create(Review, { venue: v, reviewId: id, stars: 3, text: 'Written', publishedAt: new Date('2026-09-12T00:00:00Z') }),
+				{ complaints },
+			);
+		const increase = [{ theme: 'price_increase', detail: 'prices went up' }];
+		const peers = [1, 2, 3, 4, 5].map(i =>
+			em.create(Venue, { city, placeId: `theme-peer-${i}`, name: `Peer ${i}`, category: 'Restaurant', district: 'Mitte' }),
+		);
+		await em.flush();
+		for (let i = 0; i < 5; i++) written(me, `theme-me-${i}`, i < 2 ? increase : []);
+		for (const [p, peer] of peers.entries())
+			for (let i = 0; i < 5; i++) written(peer, `theme-p${p}-${i}`, p === 0 && i === 0 ? increase : []);
+		await em.flush();
+
+		const section = await service.section([me], '2026-09', peers.map(p => p.brand.id));
+		expect(section?.themes).toEqual([
+			{ key: 'price_increase', label: 'Price increase', topic: 'price', reviews: 2, venueShare: 0.4, median: 0, venues: 5 },
 		]);
 	});
 

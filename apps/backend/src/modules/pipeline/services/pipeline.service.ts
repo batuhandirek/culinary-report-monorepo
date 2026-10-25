@@ -13,10 +13,14 @@ import {
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { stepBudgetUsd } from 'src/modules/cities/util/city.js';
+import { MentionFoodTopicService } from 'src/modules/food-topics/services/mention-food-topic.service.js';
+import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
 import { AccountMatchingService } from 'src/modules/social/services/account-matching.service.js';
+import { AccountScrapeService } from 'src/modules/social/services/account-scrape.service.js';
+import { AccountTwinService } from 'src/modules/social/services/account-twin.service.js';
 import { BlogScrapeService } from 'src/modules/social/services/blog-scrape.service.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
@@ -30,6 +34,7 @@ import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { BrandLeadScoreService } from 'src/modules/venues/services/brand-lead-score.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { OsmPlaceService } from 'src/modules/venues/services/osm-place.service.js';
+import { RatingSnapshotService } from 'src/modules/venues/services/rating-snapshot.service.js';
 import { ReviewService } from 'src/modules/venues/services/review.service.js';
 import { TripadvisorReviewService } from 'src/modules/venues/services/tripadvisor-review.service.js';
 import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness.service.js';
@@ -38,6 +43,7 @@ import { VenueReservationService } from 'src/modules/venues/services/venue-reser
 import { VenueScrapeService } from 'src/modules/venues/services/venue-scrape.service.js';
 import { VenueSearchRankService } from 'src/modules/venues/services/venue-search-rank.service.js';
 import { WebMentionService } from 'src/modules/venues/services/web-mention.service.js';
+import { previousMonth } from 'src/modules/venues/util/month.js';
 import { reservationUrlOf } from 'src/modules/venues/util/reservations.js';
 
 import {
@@ -57,6 +63,8 @@ import { RunPipelineJob } from '../jobs/run-pipeline.job.js';
 import { INSTAGRAM_RECENT_DAYS, WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
 import { isPaidStep, latestStepStates, SKIPPED_RESULT } from '../util/step-states.js';
 
+import { AccountWatchService } from './account-watch.service.js';
+
 
 // The share of SCRAPE_REVIEWS' budget for TripAdvisor: reviews cost $0.40 per 1k there
 const TRIPADVISOR_BUDGET_SHARE = 0.1;
@@ -68,6 +76,10 @@ const TRIPADVISOR_BUDGET_SHARE = 0.1;
 export interface TopBrand {
 	brand: Brand;
 	branches: Venue[];
+	/** Its place among the city's most talked-about brands of the month (1 = most); absent outside the top */
+	rank?: number;
+	/** A won prospect: a paying customer, covered whatever its rank */
+	won: boolean;
 }
 
 @Injectable()
@@ -95,13 +107,19 @@ export class PipelineService {
 		private readonly webMentionService: WebMentionService,
 		private readonly tripadvisorReviewService: TripadvisorReviewService,
 		private readonly venueBusynessService: VenueBusynessService,
+		private readonly ratingSnapshotService: RatingSnapshotService,
 		private readonly venueReservationService: VenueReservationService,
 		private readonly venueDeliveryService: VenueDeliveryService,
 		private readonly venueSearchRankService: VenueSearchRankService,
+		private readonly mentionFoodTopicService: MentionFoodTopicService,
+		private readonly venueFoodTopicService: VenueFoodTopicService,
 		private readonly searchInterestService: SearchInterestService,
 		private readonly brandService: BrandService,
 		private readonly osmPlaceService: OsmPlaceService,
 		private readonly blogScrapeService: BlogScrapeService,
+		private readonly accountScrapeService: AccountScrapeService,
+		private readonly accountTwinService: AccountTwinService,
+		private readonly accountWatchService: AccountWatchService,
 	) {}
 
 	/**
@@ -181,7 +199,12 @@ export class PipelineService {
 		// Ranked first, in rank order, then the subscribers outside the top
 		return ids
 			.filter(id => byBrand[id])
-			.map(id => ({ brand: byBrand[id][0].brand, branches: byBrand[id] }));
+			.map(id => ({
+				brand: byBrand[id][0].brand,
+				branches: byBrand[id],
+				...(ranked.includes(id) && { rank: ranked.indexOf(id) + 1 }),
+				won: won.includes(id),
+			}));
 	}
 
 	/**
@@ -340,6 +363,16 @@ export class PipelineService {
 		await this.em.flush();
 	}
 
+	/**
+	 * The city's stored food-topic links brought up to date in the step (the mentions' topics, then
+	 * the venue tags), so a step reading tags never reads what the queued refresh hasn't caught up
+	 * with. Pure matching, a few seconds a city.
+	 */
+	private async refreshFoodTopics(cityId: string): Promise<void> {
+		await this.mentionFoodTopicService.relink({ cityId });
+		await this.venueFoodTopicService.refreshCity(cityId);
+	}
+
 	private async runStep(
 		city: City,
 		step: PipelineStepEnum,
@@ -428,7 +461,7 @@ export class PipelineService {
 			case PipelineStepEnum.LOOKUP_VENUES:
 				return this.venueScrapeService.lookupNames(
 					city,
-					await this.mentionMatchingService.unmatchedNames(city.id, 500),
+					await this.mentionMatchingService.unmatchedNames(city.id),
 					budgetUsd,
 				);
 			case PipelineStepEnum.SCRAPE_VENUE_SOCIAL:
@@ -441,6 +474,7 @@ export class PipelineService {
 					budgetUsd,
 				});
 			case PipelineStepEnum.FILL_COMPETITORS:
+				await this.refreshFoodTopics(city.id);
 				return this.fillCompetitors(city.id, month, top);
 			case PipelineStepEnum.SCRAPE_REVIEWS: {
 				// Every branch (a chain's report compares them) and the competitors, inside the same
@@ -522,18 +556,48 @@ export class PipelineService {
 					competitors: competitors.length,
 				};
 			}
-			case PipelineStepEnum.SCRAPE_OWN_ACCOUNTS: {
-				// The report brands' accounts (matched by MATCH_MENTIONS) and outreach's handles, then
-				// one profile scrape each
-				const ids = (await topBrands()).map(t => t.brand.id);
+			case PipelineStepEnum.SCRAPE_ACCOUNTS: {
+				// Outreach's handles become the report brands' accounts (the rest matched by
+				// MATCH_MENTIONS), then every watched profile once: its posts since the month began
+				// and the month's snapshot
+				const brands = await topBrands();
 				const fromProspects = await this.ownAccountService.addProspectHandles(
-					await this.prospectQueryService.instagramHandles(ids),
+					await this.prospectQueryService.instagramHandles(brands.map(t => t.brand.id)),
 				);
+				const watched = await this.accountWatchService.watchList(city, brands, { month, top });
 				return {
 					fromProspects: fromProspects.created,
-					...(await this.ownAccountService.scrapeMonth(ids, month, budgetUsd)),
+					watched: this.accountWatchService.summary(watched),
+					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched), {
+						since,
+						budgetUsd,
+						snapshotMonth: month,
+						label: month,
+					})),
 				};
 			}
+			case PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT: {
+				// The weekly cron: the same profiles' posts of the last week, whatever the run's month.
+				// The report brands are the last finished month's, the ones the creator page shows
+				const reportMonth = previousMonth();
+				const watched = await this.accountWatchService.watchList(city, await this.topBrands(city, reportMonth, top), {
+					month: reportMonth,
+					top,
+				});
+				return {
+					watched: this.accountWatchService.summary(watched),
+					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched), {
+						since: new Date(Date.now() - WEEKLY_LISTENING_DAYS * 24 * 3600 * 1000).toISOString(),
+						budgetUsd,
+						label: 'last week',
+					})),
+				};
+			}
+			case PipelineStepEnum.FIND_OWN_ACCOUNTS:
+				// What the brands' sites and the posts' tags give is linked free by every
+				// MATCH_MENTIONS (`AccountMatchingService`); this pays for the brands still missing
+				// a platform
+				return this.accountTwinService.lookup(city, budgetUsd);
 			case PipelineStepEnum.SCRAPE_COMMENTS:
 				// The top five TikTok posts of each report brand, 100 top-level comments each at most:
 				// they come most liked first, and the report reads shares and repeated questions
@@ -556,6 +620,7 @@ export class PipelineService {
 					...(await this.webMentionService.classifyMonth(city, month)),
 				};
 			case PipelineStepEnum.TRACK_SEARCH_RANKS:
+				await this.refreshFoodTopics(city.id);
 				return this.venueSearchRankService.track(city, month, await branches(), budgetUsd);
 			case PipelineStepEnum.SEARCH_INTEREST: {
 				// The city's top cuisines, and the names of the subscribers with a branch in the city
@@ -564,6 +629,7 @@ export class PipelineService {
 				return this.searchInterestService.pull(city.id, month, { brands, budgetUsd });
 			}
 			case PipelineStepEnum.BUILD_REPORTS: {
+				await this.refreshFoodTopics(city.id);
 				let built = 0;
 				let acrossCities = 0;
 				let waiting = 0;
@@ -597,6 +663,9 @@ export class PipelineService {
 			}
 			case PipelineStepEnum.SCORE_LEADS:
 				return this.brandLeadScoreService.scoreAll(month, city.id);
+			case PipelineStepEnum.SNAPSHOT_RATINGS:
+				// The month is a label: the venues are today's (named in the last 30 days, or well reviewed)
+				return this.ratingSnapshotService.snapshot(city, budgetUsd);
 			case PipelineStepEnum.SAMPLE_BUSYNESS: {
 				// Every open branch of the month's report brands (won prospects included) and their
 				// competitors, sampled now

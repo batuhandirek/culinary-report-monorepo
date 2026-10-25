@@ -7,7 +7,8 @@
 
 	import { cityFilter } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
-	import { compact, monthLabel, PLATFORM_LABELS, recentMonths } from '#lib/culinary.js';
+	import { monthLabel, PLATFORM_LABELS, recentMonths, viewsLabel } from '#lib/culinary.js';
+	import { findLabel } from '#lib/post-sources.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import type { Column, Filter, Sort } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
@@ -21,6 +22,7 @@
 	adminCitiesStore.load();
 	const FILTERS: Filter[] = $derived([
 		{ key: 'q', name: 'Search', type: 'text', placeholder: 'Caption, creator or tagged place…' },
+		{ key: 'hashtag', name: 'Hashtag', type: 'text', placeholder: '#berlinfood' },
 		cityFilter(adminCitiesStore.list),
 		{
 			key: 'platform',
@@ -28,7 +30,8 @@
 			type: 'select',
 			options: [
 				{ name: 'TikTok', value: ListPostsParamsPlatformEnum.Tiktok },
-				{ name: 'Instagram', value: ListPostsParamsPlatformEnum.Instagram }
+				{ name: 'Instagram', value: ListPostsParamsPlatformEnum.Instagram },
+				{ name: 'Blog', value: ListPostsParamsPlatformEnum.Blog }
 			]
 		},
 		{
@@ -76,10 +79,10 @@
 			type: 'value',
 			name: 'Views',
 			numeric: true,
-			value: (row) => compact(row.views),
+			value: (row) => viewsLabel(row.platform, row.views),
 			sort: { asc: ListPostsParamsSortEnum.ViewsAsc, desc: ListPostsParamsSortEnum.ViewsDesc }
 		},
-		{ type: 'value', name: 'Found by', truncate: 24, value: (row) => row.source ?? '' }
+		{ type: 'value', name: 'Found by', truncate: 24, value: (row) => row.foundBy.map(findLabel).join(', ') }
 	];
 
 	const filters = { sort: ListPostsParamsSortEnum.PostedAtDesc, q: undefined };

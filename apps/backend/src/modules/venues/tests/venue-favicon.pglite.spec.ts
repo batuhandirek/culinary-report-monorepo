@@ -175,6 +175,7 @@ describe('VenueFaviconService (pglite)', () => {
 			venues: 1,
 			sites: 1,
 			outcomes: { updated: 1, unchanged: 0, missing: 0, generic: 0, no_site: 0 },
+			withProfiles: 0,
 		});
 		const first = await reload(id);
 		expect(first.favicon?.url).toMatch(/\.png$/);
@@ -203,6 +204,49 @@ describe('VenueFaviconService (pglite)', () => {
 		expect(second.favicon?.id).not.toBe(first.favicon?.id);
 		expect(await harness.orm.em.fork().count(Image, { id: first.favicon!.id })).toBe(0);
 		expect(imagekit.files.delete).toHaveBeenCalledWith(first.favicon!.remoteId);
+	});
+
+	it('reads the profiles a site links from the same page, else from its contact page', async () => {
+		const at = new Date('2026-10-01T00:00:00Z');
+		// The home page links its Instagram and TikTok; a template's placeholder and a post are no profile
+		const own = await venue({ website: 'https://eatmunchies.de/' });
+		sites['https://eatmunchies.de/'] = HTML(
+			'<link rel="icon" href="/i.png"></head><body><a href="https://instagram.com/munchiesde">IG</a>' +
+				'<a href="https://www.tiktok.com/@munchiesde/video/1">TT</a><a href="https://instagram.com/deinprofil">x</a>' +
+				'<a href="https://www.instagram.com/p/DeuVHoXE7NI/">post</a>',
+		);
+		sites['https://eatmunchies.de/i.png'] = PNG(30);
+		// Nothing on the home page: its Kontakt page is read
+		const contact = await venue({ website: 'https://pinoli.de/' });
+		sites['https://pinoli.de/'] = HTML('</head><body><a href="/kontakt">Kontakt</a><a href="https://other.de/impressum">x</a>');
+		sites['https://pinoli.de/kontakt'] = HTML('</head><body>Folgt uns: instagram.com/pinoli.berlin');
+		// Nothing anywhere: read, found none
+		const none = await venue({ website: 'https://quiet.de/' });
+		sites['https://quiet.de/'] = HTML('<title>Quiet</title>');
+
+		expect((await service.refreshDue(at)).withProfiles).toBe(2);
+		expect((await reload(own.id)).siteProfiles).toEqual([
+			{ platform: 'instagram', handle: 'munchiesde' },
+			{ platform: 'tiktok', handle: 'munchiesde' },
+		]);
+		expect((await reload(contact.id)).siteProfiles).toEqual([{ platform: 'instagram', handle: 'pinoli.berlin' }]);
+		expect(fetcher.get).not.toHaveBeenCalledWith('https://other.de/impressum', expect.anything());
+		const quiet = await reload(none.id);
+		expect(quiet.siteProfiles).toEqual([]);
+		expect(quiet.siteProfilesAt).toEqual(at);
+
+		// A venue whose icon was looked for before profiles were read is due for them
+		const old = await venue({ website: 'https://eatmunchies.de/', faviconCheckedAt: at });
+		expect(old.siteProfilesAt).toBeUndefined();
+		const later = new Date('2026-10-02T00:00:00Z');
+		expect((await service.refreshDue(later)).venues).toBe(2);
+		expect((await reload(old.id)).siteProfiles).toHaveLength(2);
+
+		// A site that is down keeps what was read before
+		delete sites['https://eatmunchies.de/'];
+		await harness.orm.em.fork().nativeUpdate(Venue, { id: own.id }, { faviconCheckedAt: null });
+		await service.refreshDue(new Date('2026-10-03T00:00:00Z'));
+		expect((await reload(own.id)).siteProfiles).toHaveLength(2);
 	});
 
 	it('fetches a website once for every open venue on it, each with its own row on one file', async () => {
@@ -332,6 +376,7 @@ describe('VenueFaviconService (pglite)', () => {
 			venues: 1,
 			sites: 1,
 			outcomes: { updated: 0, unchanged: 0, missing: 1, generic: 0, no_site: 0 },
+			withProfiles: 0,
 		});
 		expect((await reload(without.id)).faviconCheckedAt).toEqual(
 			new Date('2026-08-10T00:00:00Z'),

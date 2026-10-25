@@ -262,7 +262,7 @@ export class TopicInsightService {
 			counts: countTopicMentions(rows, index),
 			searches,
 			venues: food,
-			tags: await this.venueFoodTopicService.tags(food, index),
+			tags: await this.venueFoodTopicService.tags(food),
 		};
 	}
 }

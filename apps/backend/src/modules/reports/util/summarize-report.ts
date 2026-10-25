@@ -1,14 +1,20 @@
 import _ from 'lodash';
 
-import type {
-	FeedbackDish,
-	FeedbackPoint,
-	FeedbackSentiment,
-} from 'src/modules/venues/interfaces/feedback.interface.js';
+import {
+	changesOf,
+	complaintsOf,
+	dishesOf,
+	type FeedbackPointView,
+	type FeedbackRowLike,
+	praiseOf,
+} from 'src/modules/feedback/util/feedback-rows.js';
+import { FEEDBACK_THEMES, type FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
+import type { FeedbackSentiment } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { monthName } from 'src/modules/venues/util/month.js';
-import { isFoodVenue, plain } from 'src/modules/venues/util/venue-names.js';
+import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import type {
+	ReportChangeTheme,
 	ReportCompetitor,
 	ReportCreator,
 	ReportData,
@@ -24,6 +30,8 @@ export interface SummaryMention {
 	postId: string;
 	platform: 'tiktok' | 'instagram' | 'blog';
 	url: string;
+	/** A blog article's headline (`articleTitle`) */
+	title?: string;
 	author?: string | null;
 	authorFans?: number | null;
 	/** By one of the brand's own accounts (`SocialAccount.brand`): listed apart, never counted as word of mouth */
@@ -39,9 +47,8 @@ export interface SummaryMention {
 	visited: boolean;
 	sentiment: FeedbackSentiment;
 	summary: string;
-	praise: FeedbackPoint[];
-	complaints: FeedbackPoint[];
-	dishes: FeedbackDish[];
+	/** What it says: its feedback rows */
+	feedback: FeedbackRowLike[];
 	/** It named the brand but no branch (the mention has no venue) */
 	brandOnly?: boolean;
 }
@@ -54,27 +61,54 @@ export interface SummaryReview {
 	text?: string | null;
 	textTranslated?: string | null;
 	ownerResponse?: string | null;
-	praise?: FeedbackPoint[] | null;
-	complaints?: FeedbackPoint[] | null;
-	dishes?: FeedbackDish[] | null;
-	changes?: string[] | null;
+	/** What it says: its feedback rows (none before it is analysed), its noticed changes among them */
+	feedback: FeedbackRowLike[];
 }
 
+/**
+ * Noticed changes by what changed: per theme, the reviews noticing it (a review once) and how they
+ * put it ("burgers are getting smaller", "made smaller": portion size), the most noticed first;
+ * a catch-all theme ("Other", "Food, other") and the changes not filed yet last.
+ */
+export const groupChanges = (reviews: FeedbackPointView[][]): ReportChangeTheme[] => {
+	const groups = new Map<string, { theme?: FeedbackTheme; reviews: number; details: Map<string, string> }>();
+	for (const changes of reviews) {
+		const seen = new Set<string>();
+		for (const change of changes) {
+			const key = change.theme ?? '';
+			const group = groups.get(key) ?? { ...(change.theme && { theme: change.theme }), reviews: 0, details: new Map<string, string>() };
+			if (!seen.has(key)) {
+				seen.add(key);
+				group.reviews++;
+			}
+			if (!group.details.has(change.detail.toLowerCase())) group.details.set(change.detail.toLowerCase(), change.detail);
+			groups.set(key, group);
+		}
+	}
+	return _.orderBy(
+		[...groups.values()].map(g => ({
+			...(g.theme && { theme: g.theme }),
+			label: g.theme ? FEEDBACK_THEMES[g.theme].label : 'Other changes',
+			reviews: g.reviews,
+			details: [...g.details.values()],
+		})),
+		[g => (!g.theme ? 2 : g.theme === 'other' || g.theme.endsWith('_other') ? 1 : 0), g => g.reviews, g => g.label],
+		['asc', 'desc', 'asc'],
+	);
+};
+
 /** Topic → how many sources (posts or reviews) raised it: a review listing three service complaints counts once. */
-const countSources = (sources: (FeedbackPoint[] | null | undefined)[]): Record<string, number> =>
-	_.countBy(sources.flatMap(points => _.uniq((points ?? []).map(p => p.topic))));
+const countSources = (sources: FeedbackPointView[][]): Record<string, number> =>
+	_.countBy(sources.flatMap(points => _.uniq(points.map(p => p.topic))));
 
 /**
  * Theme → how many sources raised it, once per source: "prices went up" and "dürüm now €9.50"
  * in one review are one review raising `price_increase`. Undefined when any point has no theme
  * (stored before themes and not backfilled yet), so a count is whole or absent, never short.
  */
-export const countThemes = (
-	sources: (FeedbackPoint[] | null | undefined)[],
-): Record<string, number> | undefined => {
-	const points = sources.map(s => s ?? []);
-	if (points.some(ps => ps.some(p => !p.theme))) return undefined;
-	return _.countBy(points.flatMap(ps => _.uniq(ps.map(p => p.theme!))));
+export const countThemes = (sources: FeedbackPointView[][]): Record<string, number> | undefined => {
+	if (sources.some(ps => ps.some(p => !p.theme))) return undefined;
+	return _.countBy(sources.flatMap(ps => _.uniq(ps.map(p => p.theme!))));
 };
 
 const DETAILS_PER_GROUP = 30;
@@ -100,8 +134,8 @@ const toReviewItem = (r: SummaryReview): ReportReviewItem => {
 		excerpt: text ? excerpt(text) : undefined,
 		language: r.language ?? undefined,
 		replied: !!r.ownerResponse,
-		praise: _.uniq((r.praise ?? []).map(p => p.topic)),
-		complaints: _.uniq((r.complaints ?? []).map(p => p.topic)),
+		praise: _.uniq(praiseOf(r.feedback).map(p => p.topic)),
+		complaints: _.uniq(complaintsOf(r.feedback).map(p => p.topic)),
 	};
 };
 
@@ -129,34 +163,39 @@ export const summarizeCreators = (posts: ReportPost[]): ReportCreator[] =>
 		.sort((a, b) => b.views - a.views)
 		.slice(0, CREATORS_SHOWN);
 
-/**
- * An English plural folded to its singular's form: "fries" and "fry", "cookies" and "cookie" (both
- * "cooky"), a trailing s off a word of 4+ letters unless it ends in ss, us or is ("burgers",
- * never "hummus"). Not a lemmatizer: "sandwiches" stays "sandwiche".
- */
-const singular = (word: string) => {
-	const w = word.replace(/ies$/, 'y').replace(/ie$/, 'y');
-	return w.length >= 4 && w.endsWith('s') && !/(ss|us|is)$/.test(w) ? w.slice(0, -1) : w;
+
+const reviewGroup = (reviews: SummaryReview[]): ReportReviewGroup => {
+	const praise = reviews.map(r => praiseOf(r.feedback));
+	const complaints = reviews.map(r => complaintsOf(r.feedback));
+	return {
+		count: reviews.length,
+		written: reviews.filter(r => r.textTranslated || r.text).length,
+		praise: countSources(praise),
+		complaints: countSources(complaints),
+		praiseThemes: countThemes(praise),
+		complaintThemes: countThemes(complaints),
+		praiseDetails: praise.flat().slice(0, DETAILS_PER_GROUP),
+		complaintDetails: complaints.flat().slice(0, DETAILS_PER_GROUP),
+	};
 };
 
-// "Döner" and "doner" are one dish, and so are "burgers" and "burger"
-export const dishKey = (name: string) => plain(name).split(' ').map(singular).join(' ');
+const ARTICLE_TITLE_CHARS = 160;
 
-const reviewGroup = (reviews: SummaryReview[]): ReportReviewGroup => ({
-	count: reviews.length,
-	written: reviews.filter(r => r.textTranslated || r.text).length,
-	praise: countSources(reviews.map(r => r.praise)),
-	complaints: countSources(reviews.map(r => r.complaints)),
-	praiseThemes: countThemes(reviews.map(r => r.praise)),
-	complaintThemes: countThemes(reviews.map(r => r.complaints)),
-	praiseDetails: reviews.flatMap(r => r.praise ?? []).slice(0, DETAILS_PER_GROUP),
-	complaintDetails: reviews.flatMap(r => r.complaints ?? []).slice(0, DETAILS_PER_GROUP),
-});
-
+/**
+ * A blog article's headline: the first paragraph of its stored text, which the blog scrape
+ * writes as the title, then the article. Undefined for other platforms or an empty text.
+ */
+export const articleTitle = (platform: SummaryMention['platform'], text?: string | null) => {
+	if (platform !== 'blog' || !text) return undefined;
+	const first = text.split(/\n\s*\n/, 1)[0].replace(/\s+/g, ' ').trim();
+	if (!first) return undefined;
+	return first.length > ARTICLE_TITLE_CHARS ? `${first.slice(0, ARTICLE_TITLE_CHARS - 1).trimEnd()}…` : first;
+};
 const toPost = (m: SummaryMention): ReportPost => ({
 	postId: m.postId,
 	platform: m.platform,
 	url: m.url,
+	...(m.title && { title: m.title }),
 	author: m.author ?? undefined,
 	authorFans: m.authorFans ?? undefined,
 	postedAt: m.postedAt.toISOString(),
@@ -166,9 +205,9 @@ const toPost = (m: SummaryMention): ReportPost => ({
 	visited: m.visited,
 	sentiment: m.sentiment,
 	summary: m.summary,
-	praise: m.praise,
-	complaints: m.complaints,
-	dishes: m.dishes,
+	praise: praiseOf(m.feedback),
+	complaints: complaintsOf(m.feedback),
+	dishes: dishesOf(m.feedback).map(d => ({ name: d.name, sentiment: d.sentiment })),
 });
 
 /** Who a summary is of: a brand, one of its branches, or a competitor. */
@@ -214,15 +253,15 @@ export const summarizeReport = (input: {
 	// A post that names the venue twice counts once, and so does its feedback
 	const posts = _.uniqBy(others, m => m.postId);
 	const byPost = Object.values(_.groupBy(others, m => m.postId));
-	const postPraise = byPost.map(ms => ms.flatMap(m => m.praise));
-	const postComplaints = byPost.map(ms => ms.flatMap(m => m.complaints));
+	const postPraise = byPost.map(ms => ms.flatMap(m => praiseOf(m.feedback)));
+	const postComplaints = byPost.map(ms => ms.flatMap(m => complaintsOf(m.feedback)));
 
-	// Each post or review counts a dish once
+	// Each post or review counts a dish once: a source's rows give each dish once (`dishesOf`)
 	const dishSources = [
-		...byPost.map(ms => ms.flatMap(m => m.dishes)),
-		...input.reviews.map(r => r.dishes ?? []),
-	].map(dishes => _.uniqBy(dishes, d => dishKey(d.name)));
-	const dishes = Object.values(_.groupBy(dishSources.flat(), d => dishKey(d.name)))
+		...byPost.map(ms => dishesOf(ms.flatMap(m => m.feedback))),
+		...input.reviews.map(r => dishesOf(r.feedback)),
+	];
+	const dishes = Object.values(_.groupBy(dishSources.flat(), d => d.key))
 		.map(group => ({
 			name: group[0].name,
 			count: group.length,
@@ -277,17 +316,18 @@ export const summarizeReport = (input: {
 				stars,
 				count: reviews.filter(r => r.stars === stars).length,
 			})),
-			praise: countSources(reviews.map(r => r.praise)),
-			complaints: countSources(reviews.map(r => r.complaints)),
-			praiseThemes: countThemes(reviews.map(r => r.praise)),
-			complaintThemes: countThemes(reviews.map(r => r.complaints)),
+			praise: countSources(reviews.map(r => praiseOf(r.feedback))),
+			complaints: countSources(reviews.map(r => complaintsOf(r.feedback))),
+			praiseThemes: countThemes(reviews.map(r => praiseOf(r.feedback))),
+			complaintThemes: countThemes(reviews.map(r => complaintsOf(r.feedback))),
 			split: {
 				fiveStar: reviewGroup(fiveStar),
 				belowFive: reviewGroup(belowFive),
 			},
 			changes: reviews
-				.filter(r => r.changes?.length)
-				.map(r => ({ stars: r.stars ?? undefined, changes: r.changes! })),
+				.map(r => ({ stars: r.stars ?? undefined, changes: changesOf(r.feedback).map(c => c.detail) }))
+				.filter(r => r.changes.length),
+			changeThemes: groupChanges(reviews.map(r => changesOf(r.feedback))),
 			critical: reviews
 				.filter(r => (r.stars ?? 5) <= 3 && (r.textTranslated || r.text))
 				.slice(0, 6)

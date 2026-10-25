@@ -4,6 +4,7 @@
 
 	import { api } from '#lib/api.js';
 	import { TOPIC_LABELS } from '#lib/culinary.js';
+	import { topicsOf } from '#lib/feedback.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { notificationManager } from '#ui/lib/notification-manager.js';
 	import Button from '#ui/wrapped/Button.svelte';
@@ -40,11 +41,8 @@
 		})
 	);
 	const topics = $derived([
-		...[...new Set((review.praise ?? []).map((p) => p.topic))].map((t) => ({ topic: t, good: true })),
-		...[...new Set((review.complaints ?? []).map((p) => p.topic))].map((t) => ({
-			topic: t,
-			good: false
-		}))
+		...topicsOf(review.feedback, 'praise').map((t) => ({ topic: t, good: true })),
+		...topicsOf(review.feedback, 'complaints').map((t) => ({ topic: t, good: false }))
 	]);
 
 	const markAction = createAction(

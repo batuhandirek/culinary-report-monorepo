@@ -44,9 +44,10 @@
 		...(facets?.months ?? []).map((m) => ({ value: m.month, label: monthLabel(m.month) }))
 	]);
 	const PLATFORM_ITEMS = [
-		{ value: ALL, label: 'TikTok and Instagram' },
+		{ value: ALL, label: 'Every platform' },
 		{ value: 'tiktok', label: 'TikTok' },
-		{ value: 'instagram', label: 'Instagram' }
+		{ value: 'instagram', label: 'Instagram' },
+		{ value: 'blog', label: 'Blogs' }
 	];
 
 	const listPosts = (query: { page: number; size: number }) => api.portal.listPortalPosts(brandId, query);

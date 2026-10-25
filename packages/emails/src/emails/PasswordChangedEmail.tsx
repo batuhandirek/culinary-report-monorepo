@@ -19,11 +19,11 @@ export const PasswordChangedEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview="Bunu sen yaptıysan bir şey yapmana gerek yok."
-		reason="Bu e-postayı Culinary Report hesabının güvenliği için aldın."
+		reason="Bu e-postayı Munchwerk hesabının güvenliği için aldın."
 	>
 		<Title>Şifren değişti</Title>
 		<P>
-			Culinary Report hesabının şifresi <B>{formatDeadline(changedAt)}</B> saatinde değiştirildi.
+			Munchwerk hesabının şifresi <B>{formatDeadline(changedAt)}</B> saatinde değiştirildi.
 			Bunu sen yaptıysan bir şey yapmana gerek yok.
 		</P>
 		<Note>

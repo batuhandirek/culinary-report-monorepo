@@ -9,6 +9,7 @@
 	import ReportBusyness from './ReportBusyness.svelte';
 	import ReportCityTrends from './ReportCityTrends.svelte';
 	import ReportComments from './ReportComments.svelte';
+	import ReportMedia from './ReportMedia.svelte';
 	import ReportNeighbourhoodChanges from './ReportNeighbourhoodChanges.svelte';
 	import ReportOwnAccounts from './ReportOwnAccounts.svelte';
 	import ReportPatterns from './ReportPatterns.svelte';
@@ -20,15 +21,35 @@
 	import TopicBars from './TopicBars.svelte';
 
 	import { calendarLine } from '#lib/city-calendar.js';
-	import { compact, monthLabel, PLATFORM_LABELS, TOPIC_LABELS } from '#lib/culinary.js';
+	import {
+		authorLabel,
+		compact,
+		monthLabel,
+		PLATFORM_LABELS,
+		TOPIC_LABELS,
+		viewsLabel
+	} from '#lib/culinary.js';
+	import {
+		CoverKpi,
+		FULL_SECTIONS,
+		PlacePart,
+		platformsLabel,
+		postsSummary,
+		type Section,
+		SectionKind
+	} from '#lib/report-sections.js';
 
 	// A brand's monthly report, laid out as a document: on screen in a sheet, in print on A4
 	// pages (the `/print/report` page sets the page box). Grids switch at `sm`, which an A4
 	// page's 182mm column clears, so print gets the two-column layout. The brand's figures come
 	// first; each branch's place figures (popular times, tables, prices, the neighbourhood,
 	// Google Maps searches) follow, one branch after another, all of them in print too.
+	// Which sections it shows, in which order and with which settings, is the report's
+	// `sections` (its type's at the build); the cover comes first and the appendix last.
 	interface Props {
-		report: Pick<AdminReportOutputDto, 'data' | 'highlights'>;
+		report: Pick<AdminReportOutputDto, 'data' | 'highlights'> & {
+			sections?: AdminReportOutputDto['sections'];
+		};
 	}
 
 	let { report }: Props = $props();
@@ -38,6 +59,24 @@
 	const social = $derived(data.social);
 	const reviews = $derived(data.reviews);
 	const highlights = $derived(report.highlights);
+
+	const layout = $derived<Section[]>(report.sections?.length ? report.sections : FULL_SECTIONS);
+	const sectionOf = (kind: SectionKind) => layout.find((s) => s.kind === kind);
+	const cover = $derived(sectionOf(SectionKind.Cover));
+	// The posts section's platforms (none picked: every one) and how many posts get a card
+	const postsSection = $derived(sectionOf(SectionKind.Posts));
+	const shownPosts = $derived(
+		postsSection?.platforms?.length
+			? data.posts.filter((p) => (postsSection.platforms as string[]).includes(p.platform))
+			: data.posts
+	);
+	// Its counts: the month's own unless some platforms are left out
+	const postStats = $derived(postsSection?.platforms?.length ? postsSummary(shownPosts) : social);
+	const POSTS_SHOWN = $derived(postsSection?.limit ?? 6);
+	const placeParts = $derived(sectionOf(SectionKind.Places)?.parts ?? []);
+	// Media coverage: the month's blog articles, each in a block of its own
+	const articles = $derived(data.posts.filter((p) => p.platform === 'blog'));
+	const ARTICLES_SHOWN = $derived(sectionOf(SectionKind.Media)?.limit ?? 6);
 
 	const issue = $derived(data.month.slice(5));
 	const branches = $derived(data.branches);
@@ -49,7 +88,9 @@
 	const allTime = $derived.by(() => {
 		const rated = branches.filter((b) => b.rating !== undefined && b.reviewsCount);
 		const count = rated.reduce((sum, b) => sum + b.reviewsCount!, 0);
-		return count ? rated.reduce((sum, b) => sum + b.rating! * b.reviewsCount!, 0) / count : undefined;
+		return count
+			? rated.reduce((sum, b) => sum + b.rating! * b.reviewsCount!, 0) / count
+			: undefined;
 	});
 	const placeLabel = (b: (typeof branches)[number]) =>
 		chain ? (b.street ?? b.name) : data.brand.name;
@@ -61,7 +102,8 @@
 		return [
 			r.district &&
 				`above ${r.district.percentile} % of ${r.district.label}'s ${r.district.venues} food venues`,
-			r.topic && `above ${r.topic.percentile} % of ${r.topic.city}'s ${r.topic.venues} ${r.topic.label} places`
+			r.topic &&
+				`above ${r.topic.percentile} % of ${r.topic.city}'s ${r.topic.venues} ${r.topic.label} places`
 		].filter((p): p is string => !!p);
 	};
 	const districts = $derived(
@@ -133,8 +175,9 @@
 		return ` · ${first.rating!.toFixed(1)} in ${firstMonth}`;
 	});
 
-	const kpis = $derived([
+	const allKpis = $derived([
 		{
+			key: CoverKpi.Views,
 			value: compact(social.views),
 			label: 'Views',
 			note:
@@ -146,6 +189,7 @@
 			delta: delta(social.views, previous?.social.views, 'count')
 		},
 		{
+			key: CoverKpi.Creators,
 			value: `${social.creators}`,
 			label: social.creators === 1 ? 'Creator' : 'Creators',
 			note:
@@ -160,6 +204,7 @@
 			delta: delta(social.creators, previous?.social.creators, 'count')
 		},
 		{
+			key: CoverKpi.Interactions,
 			value: compact(social.engagements),
 			label: 'Interactions',
 			note:
@@ -168,6 +213,7 @@
 			delta: delta(social.engagements, previous?.social.engagements, 'count')
 		},
 		{
+			key: CoverKpi.Stars,
 			value: reviews.avgStars ? reviews.avgStars.toFixed(1) : '—',
 			label: 'Stars this month',
 			note:
@@ -178,6 +224,7 @@
 			spark: trend
 		},
 		{
+			key: CoverKpi.Reviews,
 			value: `${reviews.count}`,
 			label: reviews.count === 1 ? 'Google review' : 'Google reviews',
 			note:
@@ -186,6 +233,7 @@
 			delta: delta(reviews.count, previous?.reviews?.count, 'count')
 		},
 		{
+			key: CoverKpi.Answered,
 			value:
 				reviews.replyRate === undefined ? '—' : `${Math.round(reviews.replyRate * 100)}%`,
 			label: 'Answered',
@@ -193,6 +241,12 @@
 			delta: delta(reviews.replyRate, previous?.reviews?.replyRate, 'share')
 		}
 	]);
+	// The cover's tiles, in the type's order
+	const kpis = $derived(
+		(cover?.kpis ?? Object.values(CoverKpi)).flatMap((key) =>
+			allKpis.filter((k) => k.key === key)
+		)
+	);
 
 	// The comparison only says something with enough reviews on both sides
 	const split = $derived(reviews.split);
@@ -214,27 +268,22 @@
 	};
 
 	const sentimentParts = $derived([
-		{ label: 'Positive', n: social.sentiment.positive, cls: 'bg-primary-darker' },
+		{ label: 'Positive', n: postStats.sentiment.positive, cls: 'bg-primary-darker' },
 		{
 			label: 'Mixed or neutral',
-			n: social.sentiment.mixed + social.sentiment.neutral,
+			n: postStats.sentiment.mixed + postStats.sentiment.neutral,
 			cls: 'bg-strip-muted'
 		},
-		{ label: 'Negative', n: social.sentiment.negative, cls: 'bg-beet' }
+		{ label: 'Negative', n: postStats.sentiment.negative, cls: 'bg-beet' }
 	]);
 	const sentimentTotal = $derived(sentimentParts.reduce((sum, p) => sum + p.n, 0));
 	const maxStars = $derived(Math.max(1, ...reviews.stars.map((s) => s.count)));
 
-	const POSTS_SHOWN = 6;
-	const changes = $derived([
-		...new Map(
-			reviews.changes.flatMap((r) =>
-				r.changes.map((c) => [c.toLowerCase(), { change: c, stars: r.stars }] as const)
-			)
-		).values()
-	]);
+	// What guests noticed changed, by what changed ("Portion size: 3 reviews")
+	const changeThemes = $derived(reviews.changeThemes ?? []);
 
-	const maxDish = $derived(Math.max(1, ...data.dishes.map((d) => d.count)));
+	const dishes = $derived(data.dishes.slice(0, sectionOf(SectionKind.Dishes)?.limit ?? 12));
+	const maxDish = $derived(Math.max(1, ...dishes.map((d) => d.count)));
 
 	// Each place ranked among its district's neighbours, by views of the posts that named it
 	const rankingOf = (branch: (typeof branches)[number]) =>
@@ -266,7 +315,10 @@
 			social: social,
 			reviewsTracked: true,
 			reviews: reviews,
-			demand: only?.demand && { booked: only.demand.booked, evenings: only.demand.evenings.length },
+			demand: only?.demand && {
+				booked: only.demand.booked,
+				evenings: only.demand.evenings.length
+			},
 			busyness: only?.busyness && {
 				index: only.busyness.index,
 				previousIndex: only.busyness.previous?.index
@@ -275,7 +327,10 @@
 		// A whole chain says how many places it counts; one picked for a branch says which
 		...competitors.map((c) => ({
 			...c,
-			name: [c.branches ? `${c.name} (${c.branches} places)` : c.name, c.against && `vs ${c.against}`]
+			name: [
+				c.branches ? `${c.name} (${c.branches} places)` : c.name,
+				c.against && `vs ${c.against}`
+			]
 				.filter(Boolean)
 				.join(' · '),
 			self: false
@@ -313,7 +368,9 @@
 			.map((c) => c.topic);
 
 	const creators = $derived(data.creators ?? []);
-	const creatorsNearby = $derived(data.creatorsNearby ?? []);
+	const creatorsNearby = $derived(
+		sectionOf(SectionKind.Creators)?.nearby === false ? [] : (data.creatorsNearby ?? [])
+	);
 	const replyDrafts = $derived(
 		(reviews.replyDrafts ?? []).flatMap((d) => {
 			const review = (reviews.list ?? []).find((r) => r.reviewId === d.reviewId);
@@ -325,41 +382,106 @@
 	const competitorsOf = (branch: (typeof branches)[number]) =>
 		competitors.filter((c) => !c.branchId || c.branchId === branch.venueId);
 
+	// A place's block, when it has data
+	const placeKey = (part: PlacePart, b: (typeof branches)[number]) => {
+		switch (part) {
+			case PlacePart.Busyness:
+				return (b.busyness || b.demand) && `busyness:${b.venueId}`;
+			case PlacePart.Prices:
+				return b.prices && `prices:${b.venueId}`;
+			case PlacePart.Neighbourhood:
+				return (b.neighbours.length || changesOf(b)) && `nearby:${b.venueId}`;
+			case PlacePart.SearchRanks:
+				return b.searchRanks?.length && `search:${b.venueId}`;
+		}
+	};
+	// A section is drawn when it has something to show
+	const isVisible = (section: Section): boolean => {
+		switch (section.kind) {
+			case SectionKind.Stars:
+				return showSplit;
+			case SectionKind.Branches:
+				return chain;
+			case SectionKind.Competitors:
+				return competitors.length > 0;
+			case SectionKind.OwnAccounts:
+				return !!(data.ownPosts.length || data.ownAccounts?.length);
+			case SectionKind.Comments:
+				return !!data.comments;
+			case SectionKind.Press:
+				return !!data.press;
+			case SectionKind.Media:
+				return articles.length > 0;
+			case SectionKind.Creators:
+				return !!(creators.length || creatorsNearby.length);
+			case SectionKind.Reviews:
+				return reviews.count > 0;
+			case SectionKind.Replies:
+				return replyDrafts.length > 0;
+			case SectionKind.Dishes:
+				return dishes.length > 0;
+			case SectionKind.Places:
+				return placeParts.length > 0;
+			case SectionKind.Patterns:
+				return !!data.correlations;
+			case SectionKind.City:
+				return !!data.city;
+			default:
+				return true;
+		}
+	};
+	// What is drawn between the cover and the appendix, in the type's order
+	const body = $derived(
+		layout.filter(
+			(s) => s.kind !== SectionKind.Cover && s.kind !== SectionKind.Appendix && isVisible(s)
+		)
+	);
+	const showAppendix = $derived(!!sectionOf(SectionKind.Appendix));
+	// Own accounts, comments and press read as part of the posts section when they follow it
+	const SOCIAL_KINDS: string[] = [
+		SectionKind.Posts,
+		SectionKind.OwnAccounts,
+		SectionKind.Comments,
+		SectionKind.Press
+	];
+	const followsSocial = (i: number) => i > 0 && SOCIAL_KINDS.includes(body[i - 1].kind);
+
 	// Sections are numbered in the order they appear; empty ones drop out
+	const NUMBER_KEYS: Partial<Record<SectionKind, string>> = {
+		[SectionKind.Stars]: 'stars',
+		[SectionKind.Branches]: 'branches',
+		[SectionKind.Competitors]: 'compare',
+		[SectionKind.Actions]: 'next',
+		[SectionKind.Posts]: 'social',
+		[SectionKind.Media]: 'media',
+		[SectionKind.Creators]: 'creators',
+		[SectionKind.Reviews]: 'reviews',
+		[SectionKind.Replies]: 'replies',
+		[SectionKind.Dishes]: 'menu',
+		[SectionKind.Patterns]: 'patterns',
+		[SectionKind.City]: 'city'
+	};
 	const sections = $derived(
-		[
-			showSplit && 'stars',
-			chain && 'branches',
-			competitors.length && 'compare',
-			'next',
-			'social',
-			(creators.length || creatorsNearby.length) && 'creators',
-			reviews.count && 'reviews',
-			replyDrafts.length && 'replies',
-			data.dishes.length && 'menu',
-			// Each place's own figures, one place after another
-			...branches.flatMap((b) => [
-				(b.busyness || b.demand) && `busyness:${b.venueId}`,
-				b.prices && `prices:${b.venueId}`,
-				(b.neighbours.length || changesOf(b)) && `nearby:${b.venueId}`,
-				b.searchRanks?.length && `search:${b.venueId}`
-			]),
-			data.correlations && 'patterns',
-			data.city && 'city'
-		].filter(Boolean) as string[]
+		body.flatMap((section) =>
+			section.kind === SectionKind.Places
+				? branches.flatMap((b) =>
+						placeParts.map((part) => placeKey(part, b)).filter((k): k is string => !!k)
+					)
+				: (NUMBER_KEYS[section.kind] ?? [])
+		)
 	);
 	const num = (key: string) => String(sections.indexOf(key) + 2).padStart(2, '0');
 </script>
 
 {#snippet sectionHead(key: string, kicker: string, title: string)}
-	<header class="border-ink mb-6 flex items-end gap-3 border-b-2 pb-2.5 break-after-avoid">
+	<header class="border-ink mb-6 flex items-end gap-3 border-b-4 pb-3 break-after-avoid">
 		<span
-			class="bg-primary border-ink text-ink font-pixel shrink-0 border px-1.5 pt-1.5 pb-1 text-[10px] leading-none">
+			class="bg-acid border-ink text-ink number-hero grid h-11 min-w-11 shrink-0 place-items-center rounded-[6px] border-2 px-1.5 text-[24px]">
 			{num(key)}
 		</span>
 		<div class="min-w-0">
-			<p class="eyebrow text-beet m-0">{kicker}</p>
-			<h2 class="m-0 text-2xl leading-tight font-semibold tracking-tight">{title}</h2>
+			<p class="stamp text-beet m-0">{kicker}</p>
+			<h2 class="type-display m-0 mt-1 text-[26px]">{title}</h2>
 		</div>
 	</header>
 {/snippet}
@@ -371,7 +493,8 @@
 			<!-- An expression keeps the leading space, which Svelte trims from plain text in an {#each} -->
 			<span class="text-muted-foreground">{` · ${part}`}</span>
 		{/each}
-		<span class="text-muted-foreground text-[11px]"> (all-time Google rating, against venues with 20+ reviews)</span>
+		<span class="text-muted-foreground text-[11px]">
+			(all-time Google rating, against venues with 20+ reviews)</span>
 	</p>
 {/snippet}
 
@@ -382,34 +505,50 @@
 	</span>
 {/snippet}
 
-<article class="text-ink flex min-w-0 flex-col gap-12 text-sm leading-relaxed">
+{#snippet coverSection()}
 	<!-- Cover: who, when, the story, the numbers, the findings -->
 	<section class="flex flex-col gap-5 break-after-page">
-		<div class="flex items-start justify-between gap-4">
-			<span
-				class="bg-primary border-ink text-ink inline-block rounded-md border-2 px-2 py-1 text-[15px] leading-none font-semibold tracking-tight whitespace-nowrap">
-				Culinary Report
-			</span>
-			<div class="text-right">
-				<p class="eyebrow text-muted-foreground m-0">Monthly report · No. {issue}</p>
-				<p class="eyebrow text-ink m-0">{monthLabel(data.month)}</p>
+		<!-- The cover block: deep grape with oat, acid and lavender on it (10.9 / 9.8 / 6.9:1),
+		     the brand's one bite in its top-right corner, so nothing sits up there -->
+		<div
+			class="bite bg-grape-deep text-sand flex flex-col gap-6 rounded-[12px] px-6 pt-6 pb-7 break-inside-avoid sm:px-8 sm:pt-7 sm:pb-8"
+			style="--bite: 2.5rem;">
+			<div class="flex flex-wrap items-center gap-x-3 gap-y-2 pr-12">
+				<span
+					class="bg-acid text-ink font-display inline-block rounded-[6px] px-2 pt-[0.3em] pb-[0.32em] text-[18px] leading-none font-extrabold tracking-[-0.03em] whitespace-nowrap">
+					Munchwerk
+				</span>
+				<span class="stamp text-lavender">No. {issue}</span>
+			</div>
+
+			<div class="flex flex-col gap-3">
+				<p class="stamp-l text-acid m-0">Your Munchwerk report · {monthLabel(data.month)}</p>
+				{#if facts}<p class="stamp text-lavender m-0">{facts}</p>{/if}
+				<h1 class="type-hero text-sand m-0 text-[2.75rem] text-balance sm:text-[3.75rem]">
+					{data.brand.name}
+				</h1>
+				{#if chain}
+					<p class="text-sand/85 m-0">
+						{branches.length} places: posts and reviews cover all of them, and each place has
+						its own pages
+					</p>
+				{:else if only?.street}
+					<p class="text-sand/85 m-0">{only.street}</p>
+				{/if}
+			</div>
+
+			<div class="border-sand/25 border-t pt-5">
+				<p class="stamp text-lavender m-0 mb-3">The story of the month</p>
+				<p class="type-display text-acid m-0 text-[28px] text-balance sm:text-[34px]">
+					{highlights.title}
+				</p>
+				<p class="text-sand/85 m-0 mt-3 max-w-[56ch] text-sm leading-snug">
+					{highlights.headline}
+				</p>
 			</div>
 		</div>
 
-		<div class="border-ink border-t-2 pt-4">
-			{#if facts}<p class="eyebrow text-beet m-0 mb-2">{facts}</p>{/if}
-			<h1
-				class="m-0 text-4xl leading-[0.95] font-bold tracking-tight text-balance sm:text-5xl">
-				{data.brand.name}
-			</h1>
-			{#if chain}
-				<p class="text-muted-foreground m-0 mt-2">
-					{branches.length} places: posts and reviews cover all of them, and each place has its
-					own pages
-				</p>
-			{:else if only?.street}
-				<p class="text-muted-foreground m-0 mt-2">{only.street}</p>
-			{/if}
+		<div>
 			{#if only?.ratingBenchmark}
 				{@render benchmarkLine(only.ratingBenchmark.rating, benchmarkParts(only))}
 			{/if}
@@ -444,33 +583,20 @@
 		</div>
 
 		<div
-			class="bg-ink text-sand relative overflow-hidden rounded-md px-6 pt-5 pb-6 break-inside-avoid">
-			<span class="bg-acid absolute top-0 left-6 h-1.5 w-14"></span>
-			<p class="eyebrow text-acid m-0 mb-3">The story of the month</p>
-			<p
-				class="text-acid m-0 text-[28px] leading-[1.08] font-semibold tracking-tight text-balance sm:text-[32px]">
-				{highlights.title}
-			</p>
-			<p class="text-sand/80 m-0 mt-3 max-w-[56ch] text-sm leading-snug">
-				{highlights.headline}
-			</p>
-		</div>
-
-		<div
 			class="bg-line border-line grid grid-cols-2 gap-px overflow-hidden rounded-md border break-inside-avoid sm:grid-cols-3">
 			{#each kpis as kpi (kpi.label)}
 				<div class="bg-paper flex flex-col gap-0.5 px-4 py-3">
 					<div class="mb-1 flex items-end justify-between gap-2">
 						<span class="flex items-baseline gap-1.5">
 							<span
-								class="text-[26px] leading-none font-semibold tracking-tight tabular-nums"
+								class="font-display text-[28px] leading-none font-extrabold tracking-[-0.02em] tabular-nums"
 								>{kpi.value}</span>
 							{#if kpi.delta}
 								<span
 									class={[
 										'inline-flex items-center gap-px text-[11px] font-semibold whitespace-nowrap tabular-nums',
 										kpi.delta.dir === 'up' && 'text-primary-darker',
-										kpi.delta.dir === 'down' && 'text-beet',
+										kpi.delta.dir === 'down' && 'text-muted-foreground',
 										kpi.delta.dir === 'flat' && 'text-muted-foreground'
 									]}
 									aria-label={`${kpi.delta.text} against ${prevMonth}`}>
@@ -495,12 +621,12 @@
 		{/if}
 
 		<div>
-			<p class="eyebrow text-beet m-0 mb-2">What we found</p>
+			<p class="stamp text-beet m-0 mb-2">What we found</p>
 			<ol class="m-0 flex list-none flex-col p-0">
 				{#each highlights.highlights as point, i (i)}
 					<li
 						class="border-line grid grid-cols-[2.75rem_minmax(0,1fr)] gap-x-3 border-t py-3 break-inside-avoid">
-						<span class="font-pixel text-beet pt-1 text-xs"
+						<span class="number-hero text-ink text-[28px]"
 							>{String(i + 1).padStart(2, '0')}</span>
 						<div>
 							<p class="m-0 text-[15px] leading-snug font-semibold">{point.title}</p>
@@ -513,7 +639,9 @@
 			</ol>
 		</div>
 	</section>
+{/snippet}
 
+{#snippet starsSection()}
 	<!-- 5 stars against the rest -->
 	{#if showSplit}
 		<section>
@@ -568,7 +696,9 @@
 			</p>
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet branchesSection()}
 	<!-- A chain's branches side by side -->
 	{#if chain}
 		<section>
@@ -580,7 +710,9 @@
 				month={data.month} />
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet competitorsSection()}
 	<!-- The competition -->
 	{#if competitors.length}
 		<section>
@@ -596,11 +728,15 @@
 							<th class="px-2 py-2 text-right font-medium">Reviews</th>
 							<th class="px-2 py-2 text-right font-medium">Stars</th>
 							{#if showTables}
-								<th class="px-2 py-2 text-right font-medium" title="Friday and Saturday evenings booked out"
+								<th
+									class="px-2 py-2 text-right font-medium"
+									title="Friday and Saturday evenings booked out"
 									>Weekend tables</th>
 							{/if}
 							{#if showTraffic}
-								<th class="px-2 py-2 text-right font-medium" title="Busyness change on the month before, in points"
+								<th
+									class="px-2 py-2 text-right font-medium"
+									title="Busyness change on the month before, in points"
 									>Foot traffic</th>
 							{/if}
 							<th class="px-3 py-2 text-right font-medium">All time</th>
@@ -657,7 +793,13 @@
 												best: 0,
 												text: (() => {
 													const change = trafficChange(row);
-													return change === undefined ? '' : change > 0 ? `+${change}` : change < 0 ? `−${-change}` : '0';
+													return change === undefined
+														? ''
+														: change > 0
+															? `+${change}`
+															: change < 0
+																? `−${-change}`
+																: '0';
 												})()
 											}
 										]
@@ -752,7 +894,9 @@
 			{/if}
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet actionsSection()}
 	<!-- What to do -->
 	<section>
 		{@render sectionHead('next', 'For next month', 'What to do next')}
@@ -761,7 +905,7 @@
 				<div
 					class="bg-tint border-ink/15 flex gap-4 rounded-md border px-5 py-3.5 break-inside-avoid">
 					<span
-						class="bg-ink text-acid font-pixel grid size-8 shrink-0 place-items-center rounded-sm text-[10px]">
+						class="bg-ink text-acid number-hero grid size-9 shrink-0 place-items-center rounded-[6px] text-[20px]">
 						{i + 1}
 					</span>
 					<div>
@@ -774,10 +918,16 @@
 			{/each}
 		</div>
 	</section>
+{/snippet}
 
+{#snippet postsSection_()}
 	<!-- Social media -->
 	<section>
-		{@render sectionHead('social', 'TikTok and Instagram', 'What people posted')}
+		{@render sectionHead(
+			'social',
+			platformsLabel(postsSection?.platforms),
+			'What people posted'
+		)}
 		{#if sentimentTotal}
 			<div class="mb-7 break-inside-avoid">
 				<div class="flex h-4 gap-0.5 overflow-hidden rounded-[3px]">
@@ -797,9 +947,9 @@
 			</div>
 		{/if}
 
-		{#if data.posts.length}
+		{#if shownPosts.length}
 			<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-				{#each data.posts.slice(0, POSTS_SHOWN) as post, i (post.postId)}
+				{#each shownPosts.slice(0, POSTS_SHOWN) as post, i (post.postId)}
 					<a
 						href={post.url}
 						target="_blank"
@@ -810,7 +960,7 @@
 								<p class="m-0 truncate font-semibold">
 									<span class="font-pixel text-beet mr-1 text-[8px]"
 										>#{i + 1}</span
-									>@{post.author ?? 'unknown'}
+									>{authorLabel(post.platform, post.author)}
 								</p>
 								<p class="text-muted-foreground m-0 text-[11px]">
 									{PLATFORM_LABELS[post.platform]}{post.authorFans
@@ -821,7 +971,7 @@
 							<div class="shrink-0 text-right">
 								<p
 									class="m-0 text-xl leading-none font-semibold tracking-tight tabular-nums">
-									{compact(post.views)}
+									{viewsLabel(post.platform, post.views)}
 								</p>
 								<p class="text-muted-foreground m-0 text-[11px]">views</p>
 							</div>
@@ -841,31 +991,34 @@
 					</a>
 				{/each}
 			</div>
-			{#if data.posts.length > POSTS_SHOWN}
+			{#if shownPosts.length > POSTS_SHOWN}
 				<p class="text-muted-foreground m-0 mt-2 text-xs">
-					And {data.posts.length - POSTS_SHOWN} more, with
-					{compact(data.posts.slice(POSTS_SHOWN).reduce((sum, p) => sum + p.views, 0))} views
+					And {shownPosts.length - POSTS_SHOWN} more, with
+					{compact(shownPosts.slice(POSTS_SHOWN).reduce((sum, p) => sum + p.views, 0))} views
 					between them.
 				</p>
 			{/if}
 
 			<div class="mt-8 break-inside-avoid">
 				<h3 class="m-0 mb-3 text-base font-semibold">What came up in posts</h3>
-				<TopicBars praise={social.praise} complaints={social.complaints} unit="posts" />
+				<TopicBars
+					praise={postStats.praise}
+					complaints={postStats.complaints}
+					praiseThemes={postStats.praiseThemes}
+					complaintThemes={postStats.complaintThemes}
+					unit="posts" />
 			</div>
 		{:else}
 			<p class="bg-paper border-line text-muted-foreground m-0 rounded-md border p-5">
-				We found no posts about you by other people this month.
+				We found no {postsSection?.platforms?.length
+					? `${platformsLabel(postsSection.platforms)} `
+					: ''}posts about you by other people this month.
 			</p>
 		{/if}
-
-		{#if data.ownPosts.length || data.ownAccounts?.length}
-			<ReportOwnAccounts ownPosts={data.ownPosts} accounts={data.ownAccounts} />
-		{/if}
-		{#if data.comments}<ReportComments comments={data.comments} />{/if}
-		{#if data.press}<ReportPress press={data.press} />{/if}
 	</section>
+{/snippet}
 
+{#snippet creatorsSection()}
 	<!-- Creators -->
 	{#if creators.length || creatorsNearby.length}
 		<section>
@@ -883,7 +1036,7 @@
 									target="_blank"
 									rel="noreferrer"
 									class="text-ink block truncate text-sm font-semibold no-underline"
-									>@{creator.author}</a>
+									>{authorLabel(creator.platform, creator.author)}</a>
 								<span
 									class="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px]">
 									{PLATFORM_LABELS[creator.platform]}{creator.authorFans
@@ -900,7 +1053,7 @@
 							<span class="text-right">
 								<span
 									class="block text-base leading-none font-semibold tabular-nums"
-									>{compact(creator.views)}</span>
+									>{viewsLabel(creator.platform, creator.views)}</span>
 								<span class="text-muted-foreground text-[11px]">
 									views · {creator.posts}
 									{creator.posts === 1 ? 'post' : 'posts'}
@@ -915,8 +1068,7 @@
 				<div class={['break-inside-avoid', creators.length && 'mt-9']}>
 					<h3 class="m-0 text-base font-semibold">Worth inviting</h3>
 					<p class="text-reading-ink m-0 mt-1 mb-3 max-w-[62ch] text-[13px]">
-						They posted about places in {districts} this month, unpaid, but not
-						about you.
+						They posted about places in {districts} this month, unpaid, but not about you.
 					</p>
 					<div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
 						{#each creatorsNearby as creator (`${creator.platform}:${creator.author}`)}
@@ -927,7 +1079,7 @@
 								class="bg-paper border-line hover:border-ink/40 flex flex-col gap-1 rounded-md border px-4 py-3 no-underline break-inside-avoid">
 								<span class="flex items-baseline justify-between gap-2">
 									<span class="text-ink truncate text-sm font-semibold"
-										>@{creator.author}</span>
+										>{authorLabel(creator.platform, creator.author)}</span>
 									<span
 										class="text-muted-foreground shrink-0 text-[11px] tabular-nums">
 										{PLATFORM_LABELS[creator.platform]}{creator.authorFans
@@ -946,7 +1098,9 @@
 			{/if}
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet reviewsSection()}
 	<!-- Google reviews -->
 	{#if reviews.count}
 		<section>
@@ -959,15 +1113,20 @@
 				<ReportReviewPlatforms platforms={reviews.byPlatform} gaps={reviews.platformGaps} />
 			{/if}
 
-			{#if changes.length}
+			{#if changeThemes.length}
 				<div
 					class="bg-tint border-chili mb-7 rounded-r-md border-l-4 px-5 py-4 break-inside-avoid">
 					<p class="m-0 mb-2 text-base font-semibold">Changes guests noticed</p>
-					<ul class="m-0 flex list-none flex-col gap-1 p-0">
-						{#each changes as change (change.change)}
-							<li class="flex items-center gap-2">
-								{#if change.stars}<Stars value={change.stars} />{/if}
-								<span>{change.change}</span>
+					<ul class="m-0 flex list-none flex-col gap-2 p-0">
+						{#each changeThemes as group (group.theme ?? group.label)}
+							<li>
+								<span class="font-medium">{group.label}</span>
+								<span class="text-muted-foreground text-sm">
+									· {group.reviews}
+									{group.reviews === 1 ? 'review' : 'reviews'}</span>
+								<span class="text-muted-foreground block text-sm">
+									{group.details.map((d) => `“${d}”`).join(', ')}
+								</span>
 							</li>
 						{/each}
 					</ul>
@@ -980,6 +1139,8 @@
 					<TopicBars
 						praise={reviews.praise}
 						complaints={reviews.complaints}
+						praiseThemes={reviews.praiseThemes}
+						complaintThemes={reviews.complaintThemes}
 						unit="reviews" />
 					<p class="text-muted-foreground m-0 mt-1 text-xs">
 						Out of {reviews.written} written {reviews.written === 1
@@ -1026,7 +1187,9 @@
 			{/if}
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet repliesSection()}
 	<!-- Reply drafts -->
 	{#if replyDrafts.length}
 		<section>
@@ -1054,7 +1217,7 @@
 							</blockquote>
 						</div>
 						<div class="bg-tint rounded-sm px-3.5 py-2.5">
-							<p class="eyebrow text-beet m-0 mb-1">Your reply</p>
+							<p class="stamp text-beet m-0 mb-1">Your reply</p>
 							<p class="text-ink m-0 text-[13px] leading-snug whitespace-pre-line">
 								{item.draft}
 							</p>
@@ -1064,9 +1227,11 @@
 			</div>
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet dishesSection()}
 	<!-- Dishes -->
-	{#if data.dishes.length}
+	{#if dishes.length}
 		<section class="break-inside-avoid">
 			{@render sectionHead('menu', 'Posts and reviews', 'On the menu')}
 			<div class="text-muted-foreground mb-2 flex gap-5 text-xs">
@@ -1079,7 +1244,7 @@
 			</div>
 			<div
 				class="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] items-center gap-x-3 gap-y-1.5">
-				{#each data.dishes.slice(0, 12) as dish (dish.name)}
+				{#each dishes as dish (dish.name)}
 					<span class="truncate text-sm first-letter:uppercase">{dish.name}</span>
 					<div class="flex items-center gap-1.5">
 						<div
@@ -1107,7 +1272,9 @@
 			</p>
 		</section>
 	{/if}
+{/snippet}
 
+{#snippet placesSection()}
 	<!-- Each place's own figures, each only when tracked: popular times and tables, prices, the
 	     neighbourhood, Google Maps searches -->
 	{#each branches as branch, i (branch.venueId)}
@@ -1118,12 +1285,16 @@
 			<!-- Each place opens a page of its own in print ("each place has its own pages"), so its
 			     header never strands at the foot of the page before -->
 			<header
-				class="border-ink flex flex-col gap-1 border-t-2 pt-4 break-before-page break-inside-avoid break-after-avoid">
-				<p class="eyebrow text-beet m-0">Place {i + 1} of {branches.length}</p>
-				<h2 class="m-0 text-3xl leading-tight font-bold tracking-tight">{branch.street ?? branch.name}</h2>
+				class="border-ink flex flex-col gap-1 border-t-4 pt-4 break-before-page break-inside-avoid break-after-avoid">
+				<p class="stamp text-beet m-0">Place {i + 1} of {branches.length}</p>
+				<h2 class="type-display m-0 text-[32px]">
+					{branch.street ?? branch.name}
+				</h2>
 				<p class="text-muted-foreground m-0 flex flex-wrap items-center gap-x-2 text-sm">
 					<span
-						>{[branch.name, branch.district, branch.city].filter(Boolean).join(' · ')}{branch.rating
+						>{[branch.name, branch.district, branch.city]
+							.filter(Boolean)
+							.join(' · ')}{branch.rating
 							? ` · ${branch.rating.toFixed(1)} ★ all time, ${(branch.reviewsCount ?? 0).toLocaleString('en')} reviews`
 							: ''}</span>
 					<RatingSparkline points={branch.ratingTrend} />
@@ -1138,97 +1309,174 @@
 						{/each}
 					</div>
 				{/if}
-				{#if !(branch.busyness || branch.demand || branch.prices || branch.neighbours.length || changes || branch.searchRanks?.length)}
+				{#if !placeParts.some((part) => placeKey(part, branch))}
 					<p class="text-muted-foreground m-0 mt-1 text-xs">
-						No popular times, tables, delivery listing or searches tracked for this place this month.
+						No popular times, tables, delivery listing or searches tracked for this
+						place this month.
 					</p>
 				{/if}
 			</header>
 		{/if}
 
-		<ReportBusyness
-			busyness={branch.busyness}
-			demand={branch.demand}
-			competitors={competitorsOf(branch)}
-			month={data.month}
-			key={`busyness:${branch.venueId}`}
-			{sectionHead} />
-		{#if branch.prices}
-			<ReportPrices prices={branch.prices} key={`prices:${branch.venueId}`} {sectionHead} />
-		{/if}
-
-		<!-- The neighbourhood -->
-		{#if branch.neighbours.length || changes}
-			<section class="break-inside-avoid">
-				{@render sectionHead(
-					`nearby:${branch.venueId}`,
-					branch.district ?? 'Nearby',
-					'Who got talked about nearby'
-				)}
-				{#if branch.neighbours.length}
-				<ol class="m-0 flex list-none flex-col p-0">
-					{#each ranking as row, i (row.venueId)}
-						<li
-							class={[
-								'grid grid-cols-[1.75rem_minmax(0,12rem)_minmax(0,1fr)] items-center gap-x-3 rounded-sm px-2 py-1.5',
-								row.self && 'bg-primary/35'
-							]}>
-							<span class="font-pixel text-muted-foreground text-[9px]">{i + 1}</span>
-							<span class="min-w-0">
-								<span class={['block truncate text-sm', row.self && 'font-semibold']}
-									>{row.name}</span>
-								<span class="text-muted-foreground block truncate text-[11px]">
-									{row.posts}
-									{row.posts === 1 ? 'post' : 'posts'}{row.category
-										? ` · ${row.category}`
-										: ''}
-								</span>
-							</span>
-							<div class="flex items-center gap-1.5">
-								<span
-									class={[
-										'h-3 rounded-r-[3px]',
-										row.self ? 'bg-ink' : 'bg-strip-muted'
-									]}
-									style:width={`${row.views ? Math.max(1, (row.views / maxViews) * 100) : 0}%`}
-								></span>
-								<span class="text-xs font-medium tabular-nums"
-									>{compact(row.views)}</span>
-							</div>
-						</li>
-					{/each}
-				</ol>
-				<p class="text-muted-foreground m-0 mt-2 text-xs">
-					Food and drink places in {branch.district} by views of posts about them this month{chain
-						? `; ${placeLabel(branch)} by the posts that named it`
-						: ''}.
-				</p>
+		{#each placeParts as part (part)}
+			{#if part === PlacePart.Busyness}
+				<ReportBusyness
+					busyness={branch.busyness}
+					demand={branch.demand}
+					competitors={competitorsOf(branch)}
+					month={data.month}
+					key={`busyness:${branch.venueId}`}
+					{sectionHead} />
+			{:else if part === PlacePart.Prices}
+				{#if branch.prices}
+					<ReportPrices
+						prices={branch.prices}
+						key={`prices:${branch.venueId}`}
+						{sectionHead} />
 				{/if}
-				{#if changes}<ReportNeighbourhoodChanges {changes} />{/if}
-			</section>
-		{/if}
-
-		<!-- Google Maps searches -->
-		{#if branch.searchRanks?.length}
-			<section class="break-inside-avoid">
-				{@render sectionHead(`search:${branch.venueId}`, 'Google Maps', 'Where guests find you')}
-				<ReportSearchRanks ranks={branch.searchRanks} />
-			</section>
-		{/if}
+			{:else if part === PlacePart.Neighbourhood}
+				<!-- The neighbourhood -->
+				{#if branch.neighbours.length || changes}
+					<section class="break-inside-avoid">
+						{@render sectionHead(
+							`nearby:${branch.venueId}`,
+							branch.district ?? 'Nearby',
+							'Who got talked about nearby'
+						)}
+						{#if branch.neighbours.length}
+							<ol class="m-0 flex list-none flex-col p-0">
+								{#each ranking as row, i (row.venueId)}
+									<li
+										class={[
+											'grid grid-cols-[1.75rem_minmax(0,12rem)_minmax(0,1fr)] items-center gap-x-3 rounded-sm px-2 py-1.5',
+											row.self && 'bg-primary/35'
+										]}>
+										<span class="font-pixel text-muted-foreground text-[9px]"
+											>{i + 1}</span>
+										<span class="min-w-0">
+											<span
+												class={[
+													'block truncate text-sm',
+													row.self && 'font-semibold'
+												]}>{row.name}</span>
+											<span
+												class="text-muted-foreground block truncate text-[11px]">
+												{row.posts}
+												{row.posts === 1 ? 'post' : 'posts'}{row.category
+													? ` · ${row.category}`
+													: ''}
+											</span>
+										</span>
+										<div class="flex items-center gap-1.5">
+											<span
+												class={[
+													'h-3 rounded-r-[3px]',
+													row.self ? 'bg-acid border-ink border-2' : 'bg-strip-muted'
+												]}
+												style:width={`${row.views ? Math.max(1, (row.views / maxViews) * 100) : 0}%`}
+											></span>
+											<span class="text-xs font-medium tabular-nums"
+												>{compact(row.views)}</span>
+										</div>
+									</li>
+								{/each}
+							</ol>
+							<p class="text-muted-foreground m-0 mt-2 text-xs">
+								Food and drink places in {branch.district} by views of posts about them
+								this month{chain
+									? `; ${placeLabel(branch)} by the posts that named it`
+									: ''}.
+							</p>
+						{/if}
+						{#if changes}<ReportNeighbourhoodChanges {changes} />{/if}
+					</section>
+				{/if}
+			{:else if part === PlacePart.SearchRanks}
+				<!-- Google Maps searches -->
+				{#if branch.searchRanks?.length}
+					<section class="break-inside-avoid">
+						{@render sectionHead(
+							`search:${branch.venueId}`,
+							'Google Maps',
+							'Where guests find you'
+						)}
+						<ReportSearchRanks ranks={branch.searchRanks} />
+					</section>
+				{/if}
+			{/if}
+		{/each}
 	{/each}
+{/snippet}
 
+{#snippet patternsSection()}
 	<!-- What followed what: the brand's posts against every place's reviews -->
 	{#if data.correlations}
 		<ReportPatterns correlations={data.correlations} {sectionHead} />
 	{/if}
+{/snippet}
 
+{#snippet citySection()}
 	<!-- The city -->
 	{#if data.city}
 		<section class="break-inside-avoid">
-			{@render sectionHead('city', data.city.cityName, `What ${data.city.cityName} is talking about`)}
+			{@render sectionHead(
+				'city',
+				data.city.cityName,
+				`What ${data.city.cityName} is talking about`
+			)}
 			<ReportCityTrends city={data.city} />
 		</section>
 	{/if}
+{/snippet}
+
+<article class="text-ink flex min-w-0 flex-col gap-12 text-sm leading-relaxed">
+	{@render coverSection()}
+
+	{#each body as section, i (section.kind)}
+		{#if section.kind === SectionKind.Stars}
+			{@render starsSection()}
+		{:else if section.kind === SectionKind.Branches}
+			{@render branchesSection()}
+		{:else if section.kind === SectionKind.Competitors}
+			{@render competitorsSection()}
+		{:else if section.kind === SectionKind.Actions}
+			{@render actionsSection()}
+		{:else if section.kind === SectionKind.Posts}
+			{@render postsSection_()}
+		{:else if section.kind === SectionKind.OwnAccounts}
+			<!-- Right under the posts it reads as part of them, as it always did -->
+			<div class={[followsSocial(i) && '-mt-12']}>
+				<ReportOwnAccounts ownPosts={data.ownPosts} accounts={data.ownAccounts} />
+			</div>
+		{:else if section.kind === SectionKind.Comments && data.comments}
+			<div class={[followsSocial(i) && '-mt-12']}>
+				<ReportComments comments={data.comments} />
+			</div>
+		{:else if section.kind === SectionKind.Press && data.press}
+			<div class={[followsSocial(i) && '-mt-12']}>
+				<ReportPress press={data.press} />
+			</div>
+		{:else if section.kind === SectionKind.Media}
+			<section>
+				{@render sectionHead('media', 'Media coverage', 'What the blogs wrote about you')}
+				<ReportMedia {articles} limit={ARTICLES_SHOWN} />
+			</section>
+		{:else if section.kind === SectionKind.Creators}
+			{@render creatorsSection()}
+		{:else if section.kind === SectionKind.Reviews}
+			{@render reviewsSection()}
+		{:else if section.kind === SectionKind.Replies}
+			{@render repliesSection()}
+		{:else if section.kind === SectionKind.Dishes}
+			{@render dishesSection()}
+		{:else if section.kind === SectionKind.Places}
+			{@render placesSection()}
+		{:else if section.kind === SectionKind.Patterns}
+			{@render patternsSection()}
+		{:else if section.kind === SectionKind.City}
+			{@render citySection()}
+		{/if}
+	{/each}
 
 	<footer
 		class="border-line text-muted-foreground border-t pt-4 text-[11px] leading-relaxed break-inside-avoid">
@@ -1242,5 +1490,5 @@
 		</p>
 	</footer>
 
-	<ReportAppendix {data} />
+	{#if showAppendix}<ReportAppendix {data} />{/if}
 </article>

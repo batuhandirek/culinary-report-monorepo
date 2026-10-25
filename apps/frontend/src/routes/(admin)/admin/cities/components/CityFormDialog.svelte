@@ -13,12 +13,15 @@
 		{ key: 'SCRAPE_VENUE_SOCIAL', label: 'Scrape venue posts', fallback: 8 },
 		{ key: 'SCRAPE_REVIEWS', label: 'Scrape reviews', fallback: 12 },
 		{ key: 'REFRESH_VENUE_DETAILS', label: 'Refresh venue details', fallback: 2 },
-		{ key: 'SCRAPE_OWN_ACCOUNTS', label: 'Scrape own accounts', fallback: 2 },
+		{ key: 'SCRAPE_ACCOUNTS', label: 'Watched accounts, monthly', fallback: 4 },
+		{ key: 'SCRAPE_ACCOUNTS_RECENT', label: 'Watched accounts, weekly', fallback: 2 },
+		{ key: 'FIND_OWN_ACCOUNTS', label: 'Own accounts on the other platform, weekly', fallback: 1 },
 		{ key: 'SCRAPE_COMMENTS', label: 'Scrape comments', fallback: 13 },
 		{ key: 'SCRAPE_PRESS', label: 'Scrape press', fallback: 3 },
 		{ key: 'SCRAPE_DELIVERY', label: 'Scrape delivery', fallback: 3 },
 		{ key: 'SAMPLE_BUSYNESS', label: 'Sample busyness', fallback: 1 },
 		{ key: 'SAMPLE_RESERVATIONS', label: 'Sample open tables', fallback: 1 },
+		{ key: 'SNAPSHOT_RATINGS', label: 'Snapshot ratings, twice a week', fallback: 3 },
 		{ key: 'TRACK_SEARCH_RANKS', label: 'Track search ranks', fallback: 3 },
 		{ key: 'SEARCH_INTEREST', label: 'Google Trends', fallback: 2 }
 	] as const;

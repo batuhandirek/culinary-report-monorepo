@@ -58,7 +58,7 @@ const COPY = {
 		portalLink: 'open your portal',
 		stop: 'No longer want these alerts? Reply “stop” and we won’t send them again.',
 		reason: (venue: string) =>
-			`You got this e-mail because ${venue} receives the Culinary Report review alerts.`,
+			`You got this e-mail because ${venue} receives the Munchwerk review alerts.`,
 	},
 	de: {
 		subject: (venue: string, stars: number) =>
@@ -80,7 +80,7 @@ const COPY = {
 		portalLink: 'Portal öffnen',
 		stop: 'Sie möchten keine Hinweise mehr? Antworten Sie mit „Stopp“, dann schicken wir keine mehr.',
 		reason: (venue: string) =>
-			`Sie erhalten diese E-Mail, weil ${venue} die Bewertungs-Hinweise von Culinary Report bekommt.`,
+			`Sie erhalten diese E-Mail, weil ${venue} die Bewertungs-Hinweise von Munchwerk bekommt.`,
 	},
 } satisfies Record<ReviewAlertLanguage, unknown>;
 
@@ -147,7 +147,7 @@ ReviewAlertEmail.PreviewProps = {
 	draft:
 		'Danke für Ihre ehrliche Rückmeldung. 25 Minuten sind zu lang, und trockenes Fleisch soll bei uns nicht passieren. Wir schauen uns das in der Küche an und würden uns freuen, Sie bald wieder zu sehen.',
 	googleUrl: 'https://maps.google.com/?cid=1',
-	portalUrl: 'https://culinaryreport.com/portal/venue-id/reviews',
+	portalUrl: 'https://munchwerk.com/portal/venue-id/reviews',
 } satisfies ReviewAlertEmailProps;
 
 export default ReviewAlertEmail;

@@ -8,6 +8,8 @@ import { PgBossModule } from 'src/modules/pgboss/pgboss.module.js';
 
 import { mainConfig } from './config/main.config.js';
 import { AuthModule } from './modules/auth/auth.module.js';
+import { BacklogModule } from './modules/backlog/backlog.module.js';
+import { FeedbackModule } from './modules/feedback/feedback.module.js';
 import { BlogModule } from './modules/blog/blog.module.js';
 import { CitiesModule } from './modules/cities/cities.module.js';
 import { EmailModule } from './modules/email/email.module.js';
@@ -15,6 +17,8 @@ import { EmbeddingsModule } from './modules/embeddings/embeddings.module.js';
 import { FoodTrendsModule } from './modules/food-trends/food-trends.module.js';
 import { HighlightsModule } from './modules/highlights/highlights.module.js';
 import { HealthCheckModule } from './modules/health-check/health-check.module.js';
+import { LandingModule } from './modules/landing/landing.module.js';
+import { NewsletterModule } from './modules/newsletter/newsletter.module.js';
 import { NotificationsModule } from './modules/notification/notifications.module.js';
 import { OtpModule } from './modules/otp/otp.module.js';
 import { OutreachModule } from './modules/outreach/outreach.module.js';
@@ -61,12 +65,14 @@ import sdk from './tracing.js';
 		NotificationsModule,
 		SitemapModule,
 
-		// Culinary Report
+		// Munchwerk
 		CitiesModule,
 		VenuesModule,
 		SocialModule,
 		ReportsModule,
 		PipelineModule,
+		BacklogModule,
+		FeedbackModule,
 		OutreachModule,
 		PortalModule,
 		OverviewModule,
@@ -74,6 +80,8 @@ import sdk from './tracing.js';
 		TrendsModule,
 		HighlightsModule,
 		FoodTrendsModule,
+		LandingModule,
+		NewsletterModule,
 		BlogModule,
 	],
 	controllers: [],

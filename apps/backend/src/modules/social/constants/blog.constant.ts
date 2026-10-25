@@ -24,8 +24,9 @@ export const BLOG_MAX_FEED_BYTES = 5 * 1024 * 1024;
 export const BLOG_MAX_PAGE_BYTES = 3 * 1024 * 1024;
 
 /**
- * The User-Agent of feed requests: a common feed reader's. Some magazines answer a browser's
- * with a script challenge and let only known feed readers through (tip Berlin, 2026-10-22: 403
- * for any other name, 200 for FreshRSS, Feedbin or SimplePie). Pages go with a browser's.
+ * The User-Agent a feed request falls back to: a common feed reader's. Sites disagree on who may
+ * read a feed (2026-10-22): tip Berlin answers a browser with a script challenge and lets only
+ * known readers through (FreshRSS, Feedbin, SimplePie), while Qiez and Berlin Food Stories refuse
+ * FreshRSS and serve a browser. So a feed is asked for as a browser first, then as this.
  */
 export const BLOG_FEED_USER_AGENT = 'Mozilla/5.0 (compatible; FreshRSS/1.24.3; +https://freshrss.org)';

@@ -26,9 +26,40 @@ import {
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPost } from '../entities/social-post.entity.js';
 import { MentionMatchingService } from '../services/mention-matching.service.js';
+import { normalizeHashtag } from '../util/hashtags.js';
 
-const MENTION_POPULATE = ['mentions', 'mentions.venue', 'mentions.brand', 'account', 'account.creator', 'account.brand'] as const;
-const EXCLUDE = ['account.creator.accounts', 'account.brand.branches', 'mentions.brand.branches'] as const;
+const MENTION_POPULATE = [
+	'mentions',
+	'mentions.venue',
+	'mentions.brand',
+	'mentions.feedback',
+	'mentions.feedback.foodTopic',
+	'account',
+	'account.creator',
+	'account.brand',
+	'foundBy',
+	'foundBy.source',
+	'foundBy.venue',
+] as const;
+// A post's page also lists its hashtags with what they name
+const POST_POPULATE = [
+	...MENTION_POPULATE,
+	'mentions.foodTopics',
+	'mentions.foodTopics.topic',
+	'city',
+	'hashtagLinks',
+	'hashtagLinks.hashtag',
+	'hashtagLinks.hashtag.foodTopic',
+	'hashtagLinks.hashtag.brand',
+] as const;
+const EXCLUDE = [
+	'account.creator.accounts',
+	'account.brand.branches',
+	'mentions.brand.branches',
+	'hashtagLinks.hashtag.brand.branches',
+	'mentions.foodTopics.mention',
+	'mentions.foodTopics.topic.parent',
+] as const;
 
 @Controller('/admin')
 @UseGuards(AuthenticationGuard, RolesGuard)
@@ -56,6 +87,8 @@ export class AdminSocialController {
 				{ locationName: { $ilike: `%${query.q}%` } },
 			];
 		}
+		if (query.hashtag && normalizeHashtag(query.hashtag))
+			filters.hashtagLinks = { hashtag: { tag: normalizeHashtag(query.hashtag) } };
 		if (query.accountId) filters.account = query.accountId;
 		else if (query.creatorId) filters.account = { creator: query.creatorId };
 		if (query.venueId) filters.mentions = { venue: query.venueId };
@@ -88,11 +121,11 @@ export class AdminSocialController {
 
 	@TypedRoute.Get('/posts/:id')
 	async getPost(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminSocialPostOutputDto> {
-		const post = await this.em.findOneOrFail(SocialPost, { id }, { populate: [...MENTION_POPULATE, 'city'] });
+		const post = await this.em.findOneOrFail(SocialPost, { id }, { populate: [...POST_POPULATE] });
 		return wrap(post).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: [...MENTION_POPULATE, 'city'],
+			populate: [...POST_POPULATE],
 			exclude: [...EXCLUDE],
 		}) as unknown as AdminSocialPostOutputDto;
 	}
@@ -107,7 +140,7 @@ export class AdminSocialController {
 			const { start, end } = monthRange(query.month);
 			filters.post = { postedAt: { $gte: start, $lt: end } };
 		}
-		const populate = ['post', 'venue', 'brand'] as const;
+		const populate = ['post', 'venue', 'brand', 'feedback', 'feedback.foodTopic'] as const;
 		const [items, totalItems] = await this.em.findAndCount(Mention, filters, {
 			populate: [...populate],
 			orderBy: { post: { postedAt: QueryOrder.DESC } },
@@ -136,10 +169,11 @@ export class AdminSocialController {
 		@TypedBody() body: AdminUpdateMentionInputDto,
 	): Promise<AdminMentionOutputDto> {
 		const mention = await this.mentionMatchingService.correct(id, body);
+		await this.em.populate(mention, ['feedback', 'feedback.foodTopic']);
 		return wrap(mention).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: ['venue', 'brand'],
+			populate: ['venue', 'brand', 'feedback', 'feedback.foodTopic'],
 		}) as unknown as AdminMentionOutputDto;
 	}
 }

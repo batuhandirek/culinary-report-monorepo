@@ -10,11 +10,14 @@ export const ACCOUNT_RECENT_POSTS = 10;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** `@Chen_Che.Berlin ` or a profile URL → `chen_che.berlin`; null for nothing usable. */
+/**
+ * `@Chen_Che.Berlin ` or a profile URL → `chen_che.berlin`; null for nothing usable. Neither
+ * platform lets a handle end in a dot, so one there is a caption's full stop ("@sotamesa.").
+ */
 export const normalizeAccountHandle = (input: string | null | undefined): string | null => {
 	if (!input) return null;
 	const fromUrl = input.trim().match(/(?:instagram\.com|tiktok\.com)\/@?([\w.]+)/i)?.[1];
-	const handle = (fromUrl ?? input).trim().replace(/^@/, '').replace(/\/+$/, '').toLowerCase();
+	const handle = (fromUrl ?? input).trim().replace(/^@/, '').replace(/\/+$/, '').replace(/\.+$/, '').toLowerCase();
 	return /^[\w.]{1,40}$/.test(handle) ? handle : null;
 };
 
@@ -25,8 +28,61 @@ export type ProfilePlatform = SocialPlatformEnum.INSTAGRAM | SocialPlatformEnum.
 export const normalizeHandle = (platform: SocialPlatformEnum, input: string | null | undefined): string | null =>
 	platform === SocialPlatformEnum.BLOG ? (input ? blogHandle(input) : null) : normalizeAccountHandle(input);
 
-// Instagram and TikTok paths that are not a profile
-const NOT_PROFILES = new Set(['p', 'reel', 'reels', 'tv', 'explore', 'stories', 'accounts', 'tags', 'video', 'discover', 'share']);
+// Instagram and TikTok paths that are not a profile: posts, embeds, the CDN's `/o1/v/…`, the
+// apps' own pages
+const NOT_PROFILES = new Set([
+	'p',
+	'reel',
+	'reels',
+	'tv',
+	'explore',
+	'stories',
+	'accounts',
+	'tags',
+	'video',
+	'discover',
+	'share',
+	'embed',
+	'embed.js',
+	'o1',
+	'v',
+	'direct',
+	'developer',
+	'about',
+	'legal',
+	'privacy',
+	'web',
+	'static',
+	'oauth',
+	'login',
+	'music',
+	'tag',
+	'foryou',
+	'channel',
+	'business',
+	'creators',
+]);
+
+// What a site template leaves in place of the venue's handle ("instagram.com/deinprofil")
+const PLACEHOLDER_HANDLES = new Set([
+	'deinprofil',
+	'deinname',
+	'dein.profil',
+	'profil',
+	'profile',
+	'yourprofile',
+	'your.profile',
+	'yourusername',
+	'yourname',
+	'yourpage',
+	'username',
+	'user',
+	'example',
+	'instagram',
+	'tiktok',
+	'meta',
+	'facebook',
+]);
 
 /**
  * The profile a link points at ("https://www.instagram.com/cafepaula/?hl=de" → Instagram
@@ -41,7 +97,34 @@ export const profileOf = (
 	// A TikTok profile is `/@handle`; without the @ it is some other page
 	if (platform === SocialPlatformEnum.TIKTOK && !match[2]) return null;
 	const handle = normalizeAccountHandle(match[3]);
-	return handle && !NOT_PROFILES.has(handle) ? { platform, handle } : null;
+	return handle && !NOT_PROFILES.has(handle) && !PLACEHOLDER_HANDLES.has(handle) ? { platform, handle } : null;
+};
+
+/** A profile a website links: Instagram or TikTok, never a blog. */
+export interface LinkedProfile {
+	platform: ProfilePlatform;
+	handle: string;
+}
+
+/**
+ * Every Instagram and TikTok profile a page's HTML points at, in page order, each once: links,
+ * and addresses written out in its text or scripts ("instagram.com/cafepaula"). Posts, embeds
+ * and template placeholders are no profile (`profileOf`).
+ */
+export const profileLinks = (html: string): LinkedProfile[] => {
+	const out = new Map<string, LinkedProfile>();
+	// Escaped slashes in inline JSON ("instagram.com\/cafepaula") read like plain ones, and the
+	// app's deep link "instagram.com/_u/cafepaula" like the profile
+	const text = html.replace(/\\\//g, '/').replace(/instagram\.com\/_u\//gi, 'instagram.com/');
+	// Not inside another host's name ("notinstagram.com")
+	const links = /(?<![\w-])(?:https?:\/\/)?(?:www\.|m\.)?(?:instagram\.com|tiktok\.com)\/@?[\w.]+/gi;
+	for (const [url] of text.matchAll(links)) {
+		const profile = profileOf(url.replace(/\.+$/, ''));
+		if (!profile || profile.platform === SocialPlatformEnum.BLOG) continue;
+		const key = `${profile.platform}:${profile.handle}`;
+		if (!out.has(key)) out.set(key, { platform: profile.platform as ProfilePlatform, handle: profile.handle });
+	}
+	return [...out.values()];
 };
 
 export const accountUrl = (platform: SocialPlatformEnum, handle: string): string =>

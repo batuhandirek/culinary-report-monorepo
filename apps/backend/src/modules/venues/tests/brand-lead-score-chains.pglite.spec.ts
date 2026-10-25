@@ -94,9 +94,6 @@ describe('BrandLeadScoreService with brands (pglite)', () => {
 					visited: true,
 					sentiment: 'positive',
 					summary: 'Good.',
-					dishes: [],
-					praise: [],
-					complaints: [],
 				});
 		};
 		// One post names both branches, one only the brand
@@ -120,9 +117,6 @@ describe('BrandLeadScoreService with brands (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Good.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 		for (const [i, venue] of [mitte, neukolln].entries())
 			em.create(Review, {

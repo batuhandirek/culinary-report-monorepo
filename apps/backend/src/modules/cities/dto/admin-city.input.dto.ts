@@ -48,7 +48,7 @@ export interface AdminUpdateCityInputDto extends Partial<AdminCreateCityInputDto
 
 export interface AdminAddCitySourceInputDto {
 	kind: CitySourceKindEnum;
-	/** A hashtag (with or without #), a search query, or a blog's URL (the site, a section or its feed) */
+	/** A hashtag (with or without #), a search query, a blog's URL (the site, a section or its feed), or an account's handle (with or without @, or its profile URL) */
 	value: string & tags.MinLength<1> & tags.MaxLength<500>;
 	note?: string & tags.MaxLength<500>;
 	enabled?: boolean;

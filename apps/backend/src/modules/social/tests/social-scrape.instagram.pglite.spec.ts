@@ -4,12 +4,15 @@ import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
+import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { cityFactory, testCitySource } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { PostSource, PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
+import { HashtagService } from '../services/hashtag.service.js';
 import { SocialPostService } from '../services/social-post.service.js';
 import { SocialScrapeService } from '../services/social-scrape.service.js';
 
@@ -202,12 +205,25 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 		},
 	);
 
+	// What found a post (with the city source it is) and its caption's tags, as stored
+	const linksOf = async (postId: string) => {
+		const stored = await harness.orm.em
+			.fork()
+			.findOneOrFail(SocialPost, { id: postId }, { populate: ['foundBy', 'foundBy.source', 'hashtagLinks.hashtag'] });
+		return {
+			finds: stored.foundBy.getItems().map(f => `${f.kind} ${f.value}${f.source ? ` (${f.source.value})` : ''}`),
+			tags: stored.hashtagLinks.getItems().map(link => link.hashtag.tag),
+		};
+	};
+
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				SocialScrapeService,
 				SocialPostService,
 				CityService,
+				HashtagService,
+				FoodTopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});
@@ -239,14 +255,19 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 	it('scrapes posts and reels of every hashtag in two runs and saves the month’s posts with their hashtag', async () => {
 		const em = harness.orm.em;
 		// The same post, already saved by the per-venue location actor
-		em.create(SocialPost, {
+		const known = em.create(SocialPost, {
 			city: berlin.id,
 			externalId: 'ig_3990457345116769680',
 			platform: SocialPlatformEnum.INSTAGRAM,
 			url: post.url,
 			postedAt: new Date(post.timestamp),
 			likes: 700,
-			source: 'place:Café YOHAKU',
+		});
+		em.create(PostSource, {
+			post: known,
+			kind: PostSourceKindEnum.VENUE_PLACE,
+			value: 'Café YOHAKU',
+			foundAt: new Date('2026-09-15T00:00:00Z'),
 		});
 		await em.flush();
 
@@ -302,21 +323,28 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 			'ig_3992000000000000002',
 		]);
 		const [first, second, third] = posts;
-		// Counts refreshed, the first-seen source kept
-		expect(first).toMatchObject({ likes: 812, comments: 37, source: 'place:Café YOHAKU' });
+		// Counts refreshed; the place page that found it first and both tags that found it again
+		expect(first).toMatchObject({ likes: 812, comments: 37 });
+		expect(await linksOf(first.id)).toEqual({
+			finds: [
+				'venue_place Café YOHAKU',
+				'instagram_hashtag berlinbrunch (berlinbrunch)',
+				'instagram_hashtag brunchberlin (brunchberlin)',
+			],
+			tags: [],
+		});
+		expect(await linksOf(second.id)).toEqual({ finds: ['instagram_hashtag berlinbrunch (berlinbrunch)'], tags: ['ad'] });
+		expect(await linksOf(third.id)).toEqual({ finds: ['instagram_hashtag brunchberlin (brunchberlin)'], tags: [] });
 		expect(second).toMatchObject({
-			source: '#berlinbrunch',
 			author: 'brunchgirl.berlin',
 			authorFans: null,
 			likes: 0,
 			views: 0,
 			isAd: true,
 			locationName: null,
-			hashtags: ['ad'],
 			taggedHandles: ['zimtschnecke.berlin'],
 		});
 		expect(third).toMatchObject({
-			source: '#brunchberlin',
 			views: 116556,
 			likes: 2400,
 			taggedHandles: ['zeitundraum.berlin'],
@@ -370,7 +398,7 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 			views: 0,
 			isAd: false,
 			locationName: 'Café YOHAKU',
-			source: '#berlinbrunch',
+			finds: [{ kind: PostSourceKindEnum.INSTAGRAM_HASHTAG, value: 'berlinbrunch' }],
 			hashtags: ['berlinbrunch', 'berlinfoodie'],
 			taggedHandles: ['cafe.yohaku'],
 		});
@@ -438,10 +466,9 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 		]);
 
 		em.clear();
-		expect(await em.findOneOrFail(SocialPost, { externalId: tiktokVideo.id })).toMatchObject({
-			source: '#wienfood',
-			city: { id: wien.id },
-		});
+		const hashtagVideo = await em.findOneOrFail(SocialPost, { externalId: tiktokVideo.id });
+		expect(hashtagVideo).toMatchObject({ city: { id: wien.id } });
+		expect((await linksOf(hashtagVideo.id)).finds).toEqual(['tiktok_hashtag wienfood (wienfood)']);
 		// The original-language subtitles, not the machine translation
 		expect(fetchSpy).toHaveBeenCalledTimes(1);
 		expect(String(fetchSpy.mock.calls[0][0])).toBe('https://cla.example/orig.vtt');
@@ -460,12 +487,15 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 			saves: 300,
 			isAd: false,
 			locationName: 'Figlmüller Wollzeile',
-			source: 'search:wien restaurant',
-			hashtags: ['wienfood', 'schnitzel'],
 			taggedHandles: ['figlmueller.wien'],
 			subtitles: 'Bestes Schnitzel bei Figlmüller',
 			subtitlesLanguage: 'deu-DE',
 			city: { id: wien.id },
+		});
+		const searched = await em.findOneOrFail(SocialPost, { externalId: searchVideo.aweme_id });
+		expect(await linksOf(searched.id)).toEqual({
+			finds: ['tiktok_search wien restaurant (wien restaurant)'],
+			tags: ['wienfood', 'schnitzel'],
 		});
 		// Found by the search, but from before the month
 		expect(await em.count(SocialPost, { externalId: julySearchVideo.aweme_id })).toBe(0);

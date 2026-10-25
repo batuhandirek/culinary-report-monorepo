@@ -14,7 +14,7 @@ import { AdminVenueFoodTopicsController } from '../controllers/admin.venue-food-
 import { FoodTopicService } from '../services/food-topic.service.js';
 import { VenueFoodTopicService } from '../services/venue-food-topic.service.js';
 
-import { seedFoodTopics } from './factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from './factories/food-topic.factory.js';
 
 /* A venue's food topics from its categories and posts by others, and an admin's tags on top. */
 describe('VenueFoodTopicService (pglite)', () => {
@@ -58,9 +58,6 @@ describe('VenueFoodTopicService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		mention('Pho, Vietnamese', 'eater1');
 		mention('Pho', 'eater2');
@@ -68,6 +65,8 @@ describe('VenueFoodTopicService (pglite)', () => {
 		mention('Thai', 'phosang');
 		mention('Thai', 'phosang');
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

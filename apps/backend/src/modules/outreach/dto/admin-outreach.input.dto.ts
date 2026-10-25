@@ -71,6 +71,10 @@ export interface AdminLogOutreachTouchInputDto {
 	comeBackAt?: DateTime;
 	/** VISIT or CALL only: they said we may e-mail them; sets the prospect's `emailConsentAt` */
 	emailConsent?: boolean;
+	/** The report it sent: the brand's own */
+	reportId?: string & tags.Format<'uuid'>;
+	/** The link it sent (`POST /admin/reports/:id/shares`): one of that report's */
+	shareId?: string & tags.Format<'uuid'>;
 }
 
 export interface AdminInviteToPortalInputDto {

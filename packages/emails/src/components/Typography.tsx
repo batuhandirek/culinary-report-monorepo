@@ -1,22 +1,23 @@
 import { Link } from 'react-email';
 import * as React from 'react';
 
-import { color, font } from '../theme';
+import { cls, color, font } from '../theme';
 
 interface Props {
 	children: React.ReactNode;
 }
 
-/** The one heading of a mail: what happened, as a sentence. */
+/** The one heading of a mail: what happened, as a sentence, in the display face. */
 export const Title = ({ children }: Props) => (
 	<h1
+		className={cls.display}
 		style={{
 			margin: '0 0 12px',
-			fontFamily: font.sans,
-			fontSize: 26,
+			fontFamily: font.display,
+			fontSize: 28,
 			lineHeight: '32px',
-			fontWeight: 700,
-			letterSpacing: '-0.01em',
+			fontWeight: 800,
+			letterSpacing: '-0.02em',
 			color: color.ink,
 		}}
 	>
@@ -57,7 +58,7 @@ export const Small = ({ children }: Props) => (
 export const B = ({ children }: Props) => <strong style={{ fontWeight: 600 }}>{children}</strong>;
 
 export const TextLink = ({ href, children }: Props & { href: string }) => (
-	<Link href={href} style={{ color: color.ink, textDecoration: 'underline' }}>
+	<Link href={href} style={{ color: color.grape, textDecoration: 'underline' }}>
 		{children}
 	</Link>
 );

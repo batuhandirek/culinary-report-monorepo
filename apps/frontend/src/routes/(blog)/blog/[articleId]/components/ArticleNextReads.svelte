@@ -3,7 +3,6 @@
 
 	import BlogPostCard from './BlogPostCard.svelte';
 
-	import Section from '#ui/wrapped/Section.svelte';
 
 	// What to read after this one: posts on the same topic first, topped up with the newest
 	// (`pickNextBlogEntries` in the load). The same three on a phone and on a desktop — the
@@ -12,16 +11,15 @@
 </script>
 
 {#if entries.length > 0}
-	<Section
-		title="Read next"
-		href="/blog"
-		linkText="All articles"
-		headingId="blog-next-reads"
-		class="narrow gap-5 pb-12">
+	<section aria-labelledby="blog-next-reads" class="narrow flex flex-col gap-5 pb-12">
+		<div class="border-ink flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-b-4 pb-2">
+			<h2 id="blog-next-reads" class="type-display text-ink m-0 text-2xl md:text-3xl">Read next</h2>
+			<a href="/blog" class="stamp text-grape hover:text-ink inline-flex min-h-11 items-center">All articles</a>
+		</div>
 		<div class="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
 			{#each entries as post (post.id)}
 				<BlogPostCard entry={post} />
 			{/each}
 		</div>
-	</Section>
+	</section>
 {/if}

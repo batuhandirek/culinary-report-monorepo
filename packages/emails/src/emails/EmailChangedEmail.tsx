@@ -19,16 +19,16 @@ export const EmailChangedEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview="Bunu sen yaptıysan bir şey yapmana gerek yok."
-		reason="Bu e-postayı Culinary Report hesabının güvenliği için aldın."
+		reason="Bu e-postayı Munchwerk hesabının güvenliği için aldın."
 	>
 		<Title>E-posta adresin değişti</Title>
 		<P>
-			Culinary Report hesabının e-posta adresi <B>{newEmail}</B> olarak değiştirildi. Bundan sonra
+			Munchwerk hesabının e-posta adresi <B>{newEmail}</B> olarak değiştirildi. Bundan sonra
 			bu adrese e-posta göndermeyeceğiz.
 		</P>
 		<P>Bunu sen yaptıysan bir şey yapmana gerek yok.</P>
 		<Note>
-			<B>Sen yapmadıysan</B> hesabına başkası girmiş olabilir: hemen support@culinaryreport.com
+			<B>Sen yapmadıysan</B> hesabına başkası girmiş olabilir: hemen support@munchwerk.com
 			adresine yaz.
 		</Note>
 	</Layout>

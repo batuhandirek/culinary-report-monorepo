@@ -27,8 +27,8 @@ export async function load({ params, fetch }) {
 
 	const label = blogTagLabel(tag.name);
 	const title = `${label}: articles`;
-	const description = `Articles on ${tag.name} for restaurants, bars and cafés, from the Culinary Report blog.`;
-	const canonical = `https://culinaryreport.com/blog/tag/${tag.slug}`;
+	const description = `Articles on ${tag.name} for restaurants, bars and cafés, from the Munchwerk blog.`;
+	const canonical = `https://munchwerk.com/blog/tag/${tag.slug}`;
 	const pageMetaTags: MetaTagsProps = {
 		title,
 		description,

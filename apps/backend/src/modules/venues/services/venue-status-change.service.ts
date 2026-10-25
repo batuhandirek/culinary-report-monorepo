@@ -77,7 +77,7 @@ export class VenueStatusChangeService {
 			changes.length ?
 				await this.em.find(Venue, { id: { $in: _.uniq(changes.map(c => c.venueId)) } })
 			:	[];
-		const tags = await this.venueFoodTopicService.tags(venues, index);
+		const tags = await this.venueFoodTopicService.tags(venues);
 		const food = (venueId: string) => {
 			const primary = tags.get(venueId)?.find(t => t.primary);
 			return primary ? index.get(primary.key)?.label : undefined;

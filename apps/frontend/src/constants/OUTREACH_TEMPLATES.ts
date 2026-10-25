@@ -30,7 +30,7 @@ export interface OutreachTemplate {
 	kind: 'EMAIL' | 'DM' | 'CALL' | 'VISIT';
 	/** An email that starts a thread, or one sent as a reply in the last one's thread. */
 	thread?: 'new' | 'reply';
-	/** Offers the report's PDF to attach. */
+	/** Offers the report: its PDF to attach, or a link of its own (the log shows its opens). */
 	attachReport?: boolean;
 	/** Offers the A5 leave-behind to print and take along. */
 	leaveBehind?: boolean;
@@ -39,7 +39,7 @@ export interface OutreachTemplate {
 }
 
 const SIGNATURE = `{sender}
-Culinary Report · culinaryreport.com`;
+Munchwerk · munchwerk.com`;
 
 export const OUTREACH_TEMPLATES: OutreachTemplate[] = [
 	{
@@ -80,7 +80,7 @@ P.S. Kein Interesse? Sagt einfach kurz Bescheid, dann schreibe ich nicht mehr.`
 	{
 		key: 'report',
 		name: 'Send the report',
-		when: 'After they say yes, or after a call. Download the PDF below and attach it.',
+		when: 'After they say yes, or after a call. Download the PDF below and attach it, or add a link of its own: the log then shows whether they opened it.',
 		kind: 'EMAIL',
 		thread: 'new',
 		attachReport: true,
@@ -159,10 +159,10 @@ Alles Gute
 		when: 'When there is no email address, or as a second channel. Keep it short and offer the PDF by email.',
 		kind: 'DM',
 		body: {
-			en: `Hi! I'm {sender} from Culinary Report: we track what creators and Google reviewers say about restaurants in {city}. [[In {month}, {creators|one creator|# creators} posted about {venue} ({views} views). ]]I made you a free one-page report, and one thing stood out: {hook}
+			en: `Hi! I'm {sender} from Munchwerk: we track what creators and Google reviewers say about restaurants in {city}. [[In {month}, {creators|one creator|# creators} posted about {venue} ({views} views). ]]I made you a free one-page report, and one thing stood out: {hook}
 
 Want it? Send me an email address and I'll send you the PDF.`,
-			de: `Hallo! Ich bin {sender} von Culinary Report: Wir werten aus, was Creator und Google-Bewertungen über Restaurants in {city} sagen. [[Im {month} {creators|hat ein Creator|haben # Creator} über {venue} gepostet ({views} Aufrufe). ]]Ich habe euch dazu einen kostenlosen einseitigen Bericht gemacht, und eine Sache ist mir aufgefallen: {hook}
+			de: `Hallo! Ich bin {sender} von Munchwerk: Wir werten aus, was Creator und Google-Bewertungen über Restaurants in {city} sagen. [[Im {month} {creators|hat ein Creator|haben # Creator} über {venue} gepostet ({views} Aufrufe). ]]Ich habe euch dazu einen kostenlosen einseitigen Bericht gemacht, und eine Sache ist mir aufgefallen: {hook}
 
 Interesse? Schickt mir eine E-Mail-Adresse, dann bekommt ihr das PDF.`
 		}
@@ -173,7 +173,7 @@ Interesse? Schickt mir eine E-Mail-Adresse, dann bekommt ihr das PDF.`
 		when: 'Call between 15:00 and 17:00, between lunch and dinner. Asking "Can I email it?" also gets you their OK to email, which German law (UWG §7) asks for before a promotional email.',
 		kind: 'CALL',
 		body: {
-			en: `Hi, is this {venue}? My name is {sender}, from Culinary Report here in {city}. Do you have a minute? (Busy? Ask when is better, and log the call with that time.)
+			en: `Hi, is this {venue}? My name is {sender}, from Munchwerk here in {city}. Do you have a minute? (Busy? Ask when is better, and log the call with that time.)
 
 We track what TikTok creators and Google reviewers say about restaurants in {city}. [[In {month}, {creators|one creator|# creators} posted about you, with {views} views in total. ]]I've made a free one-page report on it.
 
@@ -182,7 +182,7 @@ One thing that stood out: {hook}
 Can I email it to you? Who should I send it to?
 
 (Write down the name and the address, then log the call.)`,
-			de: `Hallo, spreche ich mit {venue}? Mein Name ist {sender}, von Culinary Report hier in {city}. Haben Sie eine Minute? (Keine Zeit? Fragen, wann es besser passt, und den Anruf mit der Uhrzeit eintragen.)
+			de: `Hallo, spreche ich mit {venue}? Mein Name ist {sender}, von Munchwerk hier in {city}. Haben Sie eine Minute? (Keine Zeit? Fragen, wann es besser passt, und den Anruf mit der Uhrzeit eintragen.)
 
 Wir werten aus, was TikTok-Creator und Google-Bewertungen über Restaurants in {city} sagen. [[Im {month} {creators|hat ein Creator|haben # Creator} über Sie gepostet, mit zusammen {views} Aufrufen. ]]Dazu habe ich einen kostenlosen einseitigen Bericht erstellt.
 
@@ -200,7 +200,7 @@ Darf ich Ihnen den Bericht per E-Mail schicken? An wen schicke ich ihn am besten
 		kind: 'VISIT',
 		leaveBehind: true,
 		body: {
-			en: `Hi, is the owner in? My name is {sender}, from Culinary Report here in {city}. I'll only take a minute.
+			en: `Hi, is the owner in? My name is {sender}, from Munchwerk here in {city}. I'll only take a minute.
 
 (Not in? Ask when they usually are, leave the page, and log the visit with that time.)
 
@@ -214,7 +214,7 @@ May I e-mail you the report each month? Which address should I use?
 Or: do you have ten minutes next week? I'll walk you through it, here.
 
 (Write down the name and the address, then log the visit.)`,
-			de: `Guten Tag, ist der Inhaber da? Mein Name ist {sender}, von Culinary Report hier in {city}. Ich brauche nur eine Minute.
+			de: `Guten Tag, ist der Inhaber da? Mein Name ist {sender}, von Munchwerk hier in {city}. Ich brauche nur eine Minute.
 
 (Nicht da? Fragen, wann er oder sie meistens da ist, die Seite dalassen und den Besuch mit der Uhrzeit eintragen.)
 

@@ -7,12 +7,11 @@ import type { FoodTopicIndex } from './food-topics.js';
 /** A district's menu price for a topic is shown from this many venues selling it. */
 export const MENU_DISTRICT_MIN_VENUES = 5;
 
-/** One menu item as `menuTopicPrices` reads it. */
+/** One menu item as `menuTopicPrices` reads it, with its stored topics (`MenuItemFoodTopic`). */
 export interface MenuPriceRow {
 	venueId: string;
 	district: string | null;
-	name: string;
-	category: string | null;
+	topics: string[];
 	price: number;
 }
 
@@ -48,8 +47,9 @@ const quantile = (sorted: number[], q: number): number => {
 };
 
 /**
- * Per topic, the venues whose menu has it and its price: each item's topics are
- * `resolveMenuItem`'s with their parents (a ramen is Japanese too); each venue's median price
+ * Per topic, the venues whose menu has it and its price: each item's topics are its stored ones
+ * (`resolveMenuItem` at the scrape, re-linked when topics change) with their parents (a ramen is
+ * Japanese too); each venue's median price
  * for the topic is one value, and the city and its districts read the median of those. Only
  * `topicKeys` when given.
  */
@@ -65,7 +65,7 @@ export const menuTopicPrices = (
 	for (const row of rows) {
 		districtOf.set(row.venueId, row.district);
 		if (!(row.price > 0)) continue;
-		for (const key of index.withParents(index.resolveMenuItem(row))) {
+		for (const key of index.withParents(row.topics)) {
 			if (wanted && !wanted.has(key)) continue;
 			const venues = byTopic.get(key) ?? new Map<string, number[]>();
 			venues.set(row.venueId, [...(venues.get(row.venueId) ?? []), row.price]);
@@ -104,8 +104,8 @@ export const menuTopicPrices = (
 	return { menus: districtOf.size, topics };
 };
 
-/** Which menu items are of `key` or a child of it (`pricePosition`'s topic). */
+/** Which menu items are of `key` or a child of it (`pricePosition`'s topic), by their stored topics. */
 export const menuItemsOf =
 	(index: FoodTopicIndex, key: string) =>
-	(item: { name: string; category?: string | null }): boolean =>
-		index.withParents(index.resolveMenuItem(item)).includes(key);
+	(item: { topics?: string[] }): boolean =>
+		index.withParents(item.topics ?? []).includes(key);

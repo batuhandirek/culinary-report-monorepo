@@ -20,7 +20,7 @@ interface Props {
 }
 
 /**
- * Every mail is one paper sheet on the sand ground, wordmark above it and the small print
+ * Every mail is one paper sheet on the oat ground, wordmark above it and the small print
  * below. Layout is tables and inline styles throughout: that is what mail clients draw.
  */
 export const Layout = ({
@@ -59,12 +59,11 @@ export const Layout = ({
 					border={0}
 					style={{
 						backgroundColor: color.paper,
-						// A hairline all round, heavier on two sides: the app's hard offset
-						// (`shadow-sticker`) without `box-shadow`, which Gmail drops.
+						// An ink frame, heavier on two sides: the brand's hard offset without
+						// `box-shadow`, which Gmail drops. Square, like the brand's cards.
 						borderStyle: 'solid',
-						borderColor: color.line,
-						borderWidth: '1px 4px 4px 1px',
-						borderRadius: 12,
+						borderColor: color.ink,
+						borderWidth: '2px 6px 6px 2px',
 						borderCollapse: 'separate',
 					}}
 				>

@@ -29,7 +29,8 @@ const mention = (
 	brandName: brandId,
 	district: 'Mitte',
 	category: null,
-	cuisine,
+	// Stored as the writer stores them: the cuisine's topics
+	topics: seedIndex().resolve(cuisine),
 	dishes: [],
 	postId,
 	creator: `creator-${postId}`,

@@ -53,7 +53,7 @@
 		onSuccess: () => refresh++,
 		successNotification: (result) => ({
 			title: 'Accounts matched',
-			text: `${result.linked} linked, ${result.websites} from websites, ${result.suggested} to review`
+			text: `${result.linked} linked by name, ${result.websites + result.fromSites} from websites, ${result.fromTags} new from creators' tags, ${result.suggested + result.siteSuggested} to review`
 		})
 	});
 

@@ -6,6 +6,7 @@ import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
+import { AccountRejectedBrand } from './account-rejected-brand.entity.js';
 import { Creator } from './creator.entity.js';
 import { SocialAccountSnapshot } from './social-account-snapshot.entity.js';
 import { SocialPlatformEnum, SocialPost } from './social-post.entity.js';
@@ -16,6 +17,11 @@ export enum AccountBrandSourceEnum {
 	HANDLE = 'handle',
 	// A branch's Google website is this profile
 	WEBSITE = 'website',
+	// The brand's own website links this profile, named after the brand (`Venue.siteProfiles`)
+	SITE = 'site',
+	// The same handle as the brand's account on the other platform, and the profile proves it:
+	// its link is on the brand's site, its bio names a branch's street or it links that account
+	PROFILE = 'profile',
 	// Outreach's handle for the brand (`Prospect.instagram`)
 	PROSPECT = 'prospect',
 	// An admin linked it, or confirmed the matcher's suggestion
@@ -26,13 +32,13 @@ export enum AccountBrandSourceEnum {
  * One handle on one platform: the author of posts, keyed by platform and handle (lowercase, no
  * @). It belongs to a `Creator`, and may be a brand's own account (`brand`, a branch's own when
  * `branch` is set), which is what "posts by others" leaves out everywhere. The link is stored once
- * by `AccountMatchingService` (or an admin) and read by every count; `rejectedBrandIds` holds the
+ * by `AccountMatchingService` (or an admin) and read by every count; `rejections` holds the
  * brands an admin said it is not, final for the matcher.
  */
 @Entity({ tableName: 'social_accounts' })
 @Unique({ properties: ['platform', 'handle'] })
 export class SocialAccount extends MikroOrmEntityAbstractClass<
-	'rejectedBrandIds' | 'posts' | 'snapshots' | 'creator'
+	'rejections' | 'posts' | 'snapshots' | 'creator'
 > {
 	@Enum({ items: () => SocialPlatformEnum, nativeEnumName: 'social_platform' })
 	platform: SocialPlatformEnum;
@@ -83,9 +89,14 @@ export class SocialAccount extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'float', nullable: true })
 	suggestedScore?: number | null;
 
-	// Brands an admin said it is not: never linked to or suggested again
-	@Property({ type: 'jsonb', default: '[]' })
-	rejectedBrandIds: string[] = [];
+	// When this brand account's handle was looked up on the other platform (`AccountTwinService`),
+	// found or not: each is looked up once
+	@Property({ type: 'datetime', nullable: true })
+	twinCheckedAt?: Date | null;
+
+	// Brands an admin said it is not (`AccountRejectedBrand`): never linked to or suggested again
+	@OneToMany(() => AccountRejectedBrand, rejection => rejection.account)
+	rejections = new Collection<AccountRejectedBrand>(this);
 
 	@OneToMany(() => SocialPost, post => post.account)
 	posts = new Collection<SocialPost>(this);

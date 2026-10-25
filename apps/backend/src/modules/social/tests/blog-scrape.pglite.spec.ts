@@ -36,7 +36,7 @@ const WEB: Record<string, string> = {
 	[A]: `<html><head><link rel="alternate" type="application/rss+xml" href="/feed/"></head><body>Home</body></html>`,
 	[`${A}/feed/`]: rss('Blog A', [
 		item(`${A}/kroque/`, '2026-10-10T10:00:00Z', `<p>${ARTICLE}</p>`, 'Kroque'),
-		item(`${A}/brunch-list/?utm_source=rss`, '2026-09-01T10:00:00Z', '<p>Five brunch spots…</p>', 'Five brunch spots'),
+		item(`${A}/brunch-list/?utm_source=rss`, '2026-09-02T10:00:00Z', '<p>Five brunch spots…</p>', 'Five brunch spots'),
 		item(`${A}/old/`, '2026-03-01T10:00:00Z', `<p>${ARTICLE}</p>`),
 	]),
 	[`${A}/brunch-list/?utm_source=rss`]: `<html><body><nav>Menu</nav><article><h1>Five brunch spots</h1><p>${ARTICLE}</p></article></body></html>`,
@@ -108,14 +108,20 @@ describe('BlogScrapeService', () => {
 		expect(get.mock.calls.some(([url]) => url.includes('off.example.com'))).toBe(false);
 
 		const em = harness.orm.em.fork();
-		const posts = await em.find(SocialPost, { platform: SocialPlatformEnum.BLOG }, { orderBy: { postedAt: 'desc' }, populate: ['account'] });
-		expect(posts.map(p => [p.url, p.author, p.source])).toEqual([
-			[`${A}/kroque/`, 'blog-a.example.de', `blog:${A}`],
-			['https://blog-b.example.com/food/one/', 'blog-b.example.com', `blog:${B}`],
-			[`${A}/brunch-list/`, 'blog-a.example.de', `blog:${A}`],
-			['https://blog-b.example.com/food/two/', 'blog-b.example.com', `blog:${B}`],
-			['https://blog-b.example.com/food/three/', 'blog-b.example.com', `blog:${B}`],
-			['https://blog-b.example.com/food/four/', 'blog-b.example.com', `blog:${B}`],
+		const posts = await em.find(
+			SocialPost,
+			{ platform: SocialPlatformEnum.BLOG },
+			{ orderBy: { postedAt: 'desc' }, populate: ['account', 'foundBy', 'foundBy.source'] },
+		);
+		// Found by the blog, which is the city's source
+		const foundBy = (p: SocialPost) => p.foundBy.getItems().map(f => `${f.kind} ${f.value} ${f.source?.value === f.value}`);
+		expect(posts.map(p => [p.url, p.author, foundBy(p)])).toEqual([
+			[`${A}/kroque/`, 'blog-a.example.de', [`blog ${A} true`]],
+			['https://blog-b.example.com/food/one/', 'blog-b.example.com', [`blog ${B} true`]],
+			[`${A}/brunch-list/`, 'blog-a.example.de', [`blog ${A} true`]],
+			['https://blog-b.example.com/food/two/', 'blog-b.example.com', [`blog ${B} true`]],
+			['https://blog-b.example.com/food/three/', 'blog-b.example.com', [`blog ${B} true`]],
+			['https://blog-b.example.com/food/four/', 'blog-b.example.com', [`blog ${B} true`]],
 		]);
 		// Title, then the text: the feed's when whole, the page's article when the feed had an excerpt
 		expect(posts[0].text).toBe(`Kroque\n\n${ARTICLE.trim()}`);
@@ -126,7 +132,7 @@ describe('BlogScrapeService', () => {
 		const accounts = await em.find(SocialAccount, { handle: { $in: ['blog-a.example.de', 'blog_a.example'] } }, { orderBy: { platform: 'asc' } });
 		expect(accounts.map(a => [a.platform, a.handle, a.displayName])).toEqual([
 			[SocialPlatformEnum.INSTAGRAM, 'blog_a.example', null],
-			[SocialPlatformEnum.BLOG, 'blog-a.example.de', 'Blog A'],
+			[SocialPlatformEnum.BLOG, 'blog-a.example.de', null],
 		]);
 		expect(accounts[0].creator.id).toBe(accounts[1].creator.id);
 

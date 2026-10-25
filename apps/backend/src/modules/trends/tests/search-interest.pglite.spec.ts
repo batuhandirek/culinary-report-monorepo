@@ -5,7 +5,7 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
@@ -144,9 +144,6 @@ describe('SearchInterestService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		// August: 1 Vietnamese, 3 döner; September: 2 and 2. The venue's own post never counts.
@@ -160,6 +157,8 @@ describe('SearchInterestService (pglite)', () => {
 		mention(doner, '2026-09-13', 'Döner');
 		mention(doner, '2026-09-14', 'Döner');
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

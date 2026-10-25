@@ -1,4 +1,4 @@
-# Culinary Report: the human docs
+# Munchwerk: the human docs
 
 Plain-language documentation of the product for people who plan, sell or price it, not for people who change the code. Everything here is derived from the code and the Berlin development database as of **21 October 2026**. Nothing is released yet: there is no production system, no paying customer and no sent report. Numbers quoted from "the dev database" describe what the pipeline has gathered for Berlin so far, and they will move.
 

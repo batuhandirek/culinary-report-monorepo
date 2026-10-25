@@ -17,7 +17,7 @@ export const ForgotPasswordEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview="Şifreni yenilemek için kodun hazır."
-		reason="Bu e-postayı, Culinary Report hesabın için şifre sıfırlama istendiği için aldın."
+		reason="Bu e-postayı, Munchwerk hesabın için şifre sıfırlama istendiği için aldın."
 	>
 		<Title>Şifreni sıfırla</Title>
 		<P>Yeni bir şifre belirlemek için aşağıdaki kodu gir.</P>

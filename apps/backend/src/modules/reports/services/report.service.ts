@@ -19,7 +19,6 @@ import {
 	feedbackThemeLabel,
 	isFeedbackTheme,
 } from 'src/modules/venues/constants/feedback-themes.constant.js';
-import type { FeedbackPoint } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { offeredAmenities } from 'src/modules/venues/util/venue-details.js';
@@ -32,6 +31,7 @@ import {
 	ReportBranch,
 	ReportCompetitor,
 	ReportData,
+	ReportFeedbackPoint,
 	ReportNeighbour,
 	ReportReplyDraft,
 	ReportReviewGroup,
@@ -40,7 +40,9 @@ import { ReportBuiltEvent } from '../persisted-events/report-built.persisted-eve
 import { reachPromptInput } from '../util/reach.js';
 import { ratingBenchmarkSentence } from '../util/rating-benchmark.js';
 import { replyCandidates } from '../util/reply-drafts.js';
+import { type PromptScope, sectionsOutput, toSections, trimForSections } from '../util/report-sections.js';
 import {
+	articleTitle,
 	compareMonths,
 	NeighbourPost,
 	ratingTrend,
@@ -48,11 +50,13 @@ import {
 	summarizeCompetitor,
 	summarizePrevious,
 	summarizeReport,
+	type SummaryReview,
 } from '../util/summarize-report.js';
 
 import { ReportCityService } from './report-city.service.js';
 import { ReportReachService } from './report-reach.service.js';
 import { ReportSignalsService, signalsPromptInput } from './report-signals.service.js';
+import { ReportConfigService } from './report-config.service.js';
 
 const creatorKey = (platform: string, author: string) => `${platform}:${author.toLowerCase()}`;
 
@@ -82,7 +86,7 @@ const themeShares = (counts: Record<string, number> | undefined, total: number, 
 	);
 
 /** "price / price increase: prices went up", or the topic for a point without a theme. */
-const pointLine = (p: FeedbackPoint) => `${p.theme ? feedbackThemeLabel(p.theme) : p.topic}: ${p.detail}`;
+const pointLine = (p: ReportFeedbackPoint) => `${p.theme ? feedbackThemeLabel(p.theme) : p.topic}: ${p.detail}`;
 
 const reviewGroupInput = (group: ReportReviewGroup) => ({
 	reviews: group.count,
@@ -110,12 +114,17 @@ export class ReportService {
 		private readonly reportSignalsService: ReportSignalsService,
 		private readonly reportReachService: ReportReachService,
 		private readonly brandService: BrandService,
+		private readonly reportConfigService: ReportConfigService,
 	) {}
 
 	/**
-	 * Builds (or rebuilds) a brand's report on its branches in a city (or, `cityId` null, in
-	 * every city: `Brand.reportScope` `all`) for a month and returns it, flushed. Two LLM calls:
-	 * the highlights and the reply drafts, side by side. `peerBrandIds` are the month's report
+	 * Builds (or rebuilds) a brand's reports on its branches in a city (or, `cityId` null, in
+	 * every city: `Brand.reportScope` `all`) for a month, flushed: one per active configuration of
+	 * the brand, or the default template's when it has none (`ReportConfigService.targets`), and
+	 * only `configId`'s when given. The data and the reply drafts are computed once and stored
+	 * whole on each; each report keeps a copy of its sections and gets its own highlights, written
+	 * from only the data those sections show (`trimForSections`). LLM calls side by side: one
+	 * highlights call per report and one reply-drafts call. `peerBrandIds` are the month's report
 	 * brands the city section compares it with (the pipeline passes them; else the month's
 	 * reports). Posts, reviews and the other brand-wide sections cover every open branch covered;
 	 * each branch's place figures (busyness, open tables, prices, search ranks, neighbourhood,
@@ -123,19 +132,75 @@ export class ReportService {
 	 * cities has no city section and no calendar: one city's peers don't compare with a brand in
 	 * several. 400 when there is no open branch.
 	 */
-	async build(
+	async buildAll(
+		brandId: string,
+		cityId: string | null,
+		month: string,
+		{ peerBrandIds, configId }: { peerBrandIds?: string[]; configId?: string } = {},
+	): Promise<Report[]> {
+		const targets = await this.reportConfigService.targets(brandId, configId);
+		const { data, branches, city, cityNames } = await this.compute(brandId, cityId, month, { peerBrandIds });
+		const [first] = branches;
+		const { brand } = first;
+		const [replyDrafts, ...highlights] = await Promise.all([
+			this.draftReplies(branches, month, data),
+			...targets.map(target => {
+				const trimmed = trimForSections(data, target.sections);
+				return this.reportHighlightsAgent.generate(JSON.stringify(this.highlightsInput(trimmed.data, trimmed.scope)), {
+					cityName: cityNames.join(', '),
+				});
+			}),
+		]);
+		data.reviews.replyDrafts = replyDrafts;
+
+		const reports: Report[] = [];
+		for (const [i, target] of targets.entries()) {
+			const report =
+				(await this.em.findOne(Report, { brand, city: city ?? null, month, config: target.config ?? null })) ??
+				this.em.create(Report, { brand, city, month, data, highlights: highlights[i].object });
+			report.data = data;
+			report.config = target.config;
+			report.template = target.template;
+			report.name = target.name;
+			// A copy: the configuration's own objects stay its own
+			report.sections = toSections(sectionsOutput(target.sections));
+			report.highlights = highlights[i].object;
+			report.postCount = data.social.postCount;
+			report.reviewCount = data.reviews.count;
+			reports.push(report);
+		}
+		await this.em.flush();
+		this.logger.log(
+			`Built ${month} ${targets.map(t => `"${t.name}"`).join(', ')} of ${brand.name} in ${city?.name ?? `all its cities (${cityNames.join(', ')})`}`,
+		);
+		// The outreach side mails each to a brand that subscribed
+		for (const report of reports)
+			await this.pgBossService.publish(ReportBuiltEvent.eventName, new ReportBuiltEvent({ reportId: report.id }));
+		return reports;
+	}
+
+	/** `buildAll`, returning the first report it built (the brand's oldest active configuration's, or the default). */
+	async build(...args: Parameters<ReportService['buildAll']>): Promise<Report> {
+		return (await this.buildAll(...args))[0];
+	}
+
+	/**
+	 * A report's data as a build would compute it now, without the two LLM calls (no highlights,
+	 * no reply drafts) and without saving: what a rebuild would show, and how a change to the
+	 * readers is checked against the stored data. 400 when there is no open branch.
+	 */
+	async compute(
 		brandId: string,
 		cityId: string | null,
 		month: string,
 		{ peerBrandIds }: { peerBrandIds?: string[] } = {},
-	): Promise<Report> {
+	): Promise<{ data: ReportData; branches: Venue[]; city: City | null; cityNames: string[] }> {
 		const branches =
 			cityId ? await this.brandService.branchesIn(brandId, cityId) : await this.brandService.openBranches(brandId);
 		if (!branches.length)
 			throw new BadRequestException(cityId ? 'The brand has no open branch in the city' : 'The brand has no open branch');
 		await this.em.populate(branches, ['city', 'brand', 'brand.branches']);
 		const [first] = branches;
-		const { brand } = first;
 		const city = cityId ? first.city : null;
 		const cityNames = _.uniq(branches.map(b => b.city.name));
 		const data = await this.collect(branches, month, city);
@@ -156,29 +221,7 @@ export class ReportService {
 		}
 		// Own accounts, comments, press and the review platforms, when scraped
 		Object.assign(data, await this.reportReachService.sections(branches, month, data, city));
-		const [res, replyDrafts] = await Promise.all([
-			this.reportHighlightsAgent.generate(JSON.stringify(this.highlightsInput(data)), {
-				cityName: cityNames.join(', '),
-			}),
-			this.draftReplies(branches, month, data),
-		]);
-		data.reviews.replyDrafts = replyDrafts;
-
-		const report =
-			(await this.em.findOne(Report, { brand, city: city ?? null, month })) ??
-			this.em.create(Report, { brand, city, month, data, highlights: res.object });
-		report.data = data;
-		report.highlights = res.object;
-		report.postCount = data.social.postCount;
-		report.reviewCount = data.reviews.count;
-		await this.em.flush();
-		this.logger.log(`Built ${month} report of ${brand.name} in ${city?.name ?? `all its cities (${cityNames.join(', ')})`}`);
-		// The outreach side mails it to a brand that subscribed
-		await this.pgBossService.publish(
-			ReportBuiltEvent.eventName,
-			new ReportBuiltEvent({ reportId: report.id }),
-		);
-		return report;
+		return { data, branches, city, cityNames };
 	}
 
 	/** A brand's newest report (of any city), or null when it has none. */
@@ -467,12 +510,14 @@ export class ReportService {
 						post: { city: { $in: _.uniq(branches.map(b => b.city.id)) }, postedAt: { $gte: start, $lt: end } },
 					}
 			:	{ venue: { $in: ids }, post: { postedAt: { $gte: start, $lt: end } } },
-			{ populate: ['post', 'post.account'] },
+			{ populate: ['post', 'post.account', 'feedback'] },
 		);
-		const reviews = await this.em.find(Review, {
-			venue: { $in: ids },
-			publishedAt: { $gte: start, $lt: end },
-		});
+		// Newest first, so the details a review group quotes first are always the same ones
+		const reviews = await this.em.find(
+			Review,
+			{ venue: { $in: ids }, publishedAt: { $gte: start, $lt: end } },
+			{ populate: ['feedback'], orderBy: { publishedAt: 'desc', id: 'asc' } },
+		);
 
 		return {
 			venue: {
@@ -488,6 +533,7 @@ export class ReportService {
 				postId: m.post.id,
 				platform: m.post.platform,
 				url: m.post.url,
+				title: articleTitle(m.post.platform, m.post.text),
 				author: m.post.author,
 				authorFans: m.post.authorFans,
 				own: m.post.account?.brand?.id === venue.brand.id,
@@ -502,12 +548,21 @@ export class ReportService {
 				visited: m.visited,
 				sentiment: m.sentiment,
 				summary: m.summary,
-				praise: m.praise,
-				complaints: m.complaints,
-				dishes: m.dishes,
+				feedback: m.feedback.getItems(),
 				brandOnly: !m.venue,
 			})),
-			reviews,
+			reviews: reviews.map(
+				(r): SummaryReview => ({
+					reviewId: r.reviewId,
+					publishedAt: r.publishedAt,
+					language: r.language,
+					stars: r.stars,
+					text: r.text,
+					textTranslated: r.textTranslated,
+					ownerResponse: r.ownerResponse,
+					feedback: r.feedback.getItems(),
+				}),
+			),
 		};
 	}
 
@@ -549,8 +604,9 @@ export class ReportService {
 			}));
 	}
 
-	private highlightsInput(data: ReportData) {
+	private highlightsInput(data: ReportData, scope: PromptScope) {
 		const chain = data.branches.length > 1;
+		const previous = compareMonths(data);
 		return {
 			venue: {
 				name: data.brand.name,
@@ -558,12 +614,16 @@ export class ReportService {
 				...(!chain && _.pick(data.branches[0], ['district', 'rating'])),
 			},
 			month: data.month,
-			previousMonth: compareMonths(data),
+			previousMonth: previous && {
+				...previous,
+				socialMedia: scope.social ? previous.socialMedia : undefined,
+				googleReviews: scope.reviews ? previous.googleReviews : undefined,
+			},
 			cityCalendar: data.context,
 			// The brand's relations over every branch; each place's own sentences are in places
 			demandAndPrices: signalsPromptInput({ correlations: data.correlations }),
 			reachAndPress: reachPromptInput(data),
-			socialMedia: {
+			socialMedia: scope.social ? {
 				postsByOthers: data.social.postCount,
 				ofWhichPromotional: data.social.promotional,
 				..._.pick(data.social, [
@@ -600,13 +660,13 @@ export class ReportService {
 					]),
 				),
 				topDishes: data.dishes.slice(0, 8),
-			},
-			ownPosts: {
+			} : undefined,
+			ownPosts: data.ownPosts.length ? {
 				note: 'Posted by the venue itself, not word of mouth',
 				count: data.ownPosts.length,
 				views: _.sumBy(data.ownPosts, p => p.views),
-			},
-			googleReviews: {
+			} : undefined,
+			googleReviews: scope.reviews ? {
 				..._.pick(data.reviews, ['count', 'avgStars', 'replyRate', 'stars', 'critical']),
 				writtenReviews: data.reviews.written,
 				reviewsPraisingTopic: shares(
@@ -629,11 +689,11 @@ export class ReportService {
 					data.reviews.written,
 					'written reviews',
 				),
-				fiveStarReviews: reviewGroupInput(data.reviews.split.fiveStar),
-				reviewsBelowFiveStars: reviewGroupInput(data.reviews.split.belowFive),
+				fiveStarReviews: scope.stars ? reviewGroupInput(data.reviews.split.fiveStar) : undefined,
+				reviewsBelowFiveStars: scope.stars ? reviewGroupInput(data.reviews.split.belowFive) : undefined,
 				// One entry per review, so the model counts reviews rather than changes
 				reviewsNoticingChanges: data.reviews.changes,
-			},
+			} : undefined,
 			topCreators: data.creators.map(c =>
 				_.pick(c, ['author', 'platform', 'authorFans', 'posts', 'views', 'promotional']),
 			),
@@ -660,7 +720,7 @@ export class ReportService {
 							b.ratingTrend.map(p => _.pick(p, ['month', 'rating', 'reviewsCount']))
 						:	undefined,
 					// A chain's branch: the posts that named it and its reviews
-					...(chain && {
+					...(chain && scope.branches && {
 						postsByOthersNamingIt: b.social.postCount,
 						views: b.social.views,
 						googleReviews:
@@ -729,6 +789,12 @@ export class ReportService {
 							`${r.prevShare}% → ${r.share}%`
 						:	undefined,
 				})),
+				// Pre-written: the model quotes the shares, never computes them
+				complaintThemesAgainstReportVenues: data.city.themes?.map(
+					t =>
+						`${t.label.toLowerCase()} was criticised in ${Math.round(t.venueShare * 100)}% of your written reviews; ` +
+						`${Math.round(t.median * 100)}% at the month's report venues (median of ${t.venues})`,
+				),
 				youAgainstThisMonthsReportVenues: {
 					venuesCompared: data.city.baseline.venues,
 					..._.mapValues(
@@ -742,7 +808,7 @@ export class ReportService {
 				},
 			},
 			// A chain: posts and reviews above cover every branch; each branch's own month is in places
-			brand: chain ? { name: data.brand.name, postsNamingNoBranch: data.brand.brandOnlyPosts } : undefined,
+			brand: chain && scope.branches ? { name: data.brand.name, postsNamingNoBranch: data.brand.brandOnlyPosts } : undefined,
 			competitors: data.competitors.map(c => ({
 				name: c.name,
 				// A chain's places together; one picked for a branch compares with that branch only

@@ -19,6 +19,8 @@ import type {
 	ReportHighlights,
 } from 'src/modules/reports/interfaces/report-data.interface.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -61,6 +63,8 @@ describe('the portal API (pglite)', () => {
 				PortalController,
 				PortalService,
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				OutreachService,
 				BrandMemberService,
 				UserService,

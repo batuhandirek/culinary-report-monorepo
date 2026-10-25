@@ -34,10 +34,10 @@
 		</div>
 		<div class="flex min-w-0 flex-col items-start gap-3 md:gap-4">
 			{#if topic}
-				<span class="eyebrow text-beet">{blogTagLabel(topic)}</span>
+				<span class="stamp text-beet">{blogTagLabel(topic)}</span>
 			{/if}
 			<h2
-				class="type-title text-ink m-0 text-2xl leading-tight text-balance group-hover:underline md:text-4xl">
+				class="type-display text-ink m-0 text-3xl text-balance group-hover:underline md:text-5xl">
 				{entry.title}
 			</h2>
 			{#if entry.excerpt}

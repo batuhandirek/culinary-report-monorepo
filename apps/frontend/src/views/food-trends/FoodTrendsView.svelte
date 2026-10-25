@@ -35,88 +35,92 @@
 	const maxShare = $derived(Math.max(1, ...(data.talked?.topics ?? []).map((t) => t.share)));
 	const width = (value: number, max: number) => `width: ${Math.max(2, (value / max) * 100)}%`;
 	const level = (n: number) => (n >= 10 ? Math.round(n).toString() : n.toFixed(1));
+	const rankLabel = (i: number) => String(i + 1).padStart(2, '0');
+	// Story bars: ink, the one the story is about acid with an ink outline (brand skill).
+	const bar = (lead: boolean) => (lead ? 'bg-acid border-ink border-2' : 'bg-ink');
 </script>
 
-{#snippet head(title: string, note?: string)}
-	<div class="section-rule">
-		<h2 class="type-title text-ink m-0 text-xl md:text-2xl">{title}</h2>
-		{#if note}<span class="eyebrow text-beet">{note}</span>{/if}
+{#snippet head(title: string, note?: string, id?: string)}
+	<div class="border-ink flex flex-wrap items-end justify-between gap-x-4 gap-y-1 border-b-4 pb-2">
+		<h2 {id} class="type-display text-ink m-0 text-2xl md:text-3xl">{title}</h2>
+		{#if note}<span class="stamp text-muted-foreground">{note}</span>{/if}
 	</div>
 {/snippet}
 
-<article class="mx-auto flex w-full max-w-[60rem] min-w-0 flex-col gap-12 px-4 pt-10 pb-12 md:pt-14">
-	<header class="flex max-w-[44rem] flex-col gap-4">
-		<span class="eyebrow text-beet">{city.name} · {label}</span>
-		<h1 class="text-ink m-0 text-3xl leading-tight font-semibold text-balance md:text-5xl">
+<article class="mx-auto flex w-full max-w-[60rem] min-w-0 flex-col gap-14 px-4 pt-10 pb-12 md:pt-16">
+	<header class="flex max-w-[46rem] flex-col items-start gap-5">
+		<span class="bg-acid border-ink text-ink stamp-l tilt-left shadow-stamp inline-block rounded-[12px] border-[3px] px-3 pt-2.5 pb-2">
+			Munchwerk Trends
+		</span>
+		<span class="stamp text-beet">{city.name} · {label}</span>
+		<h1 class="type-hero text-ink m-0 text-[2.5rem] text-balance md:text-7xl">
 			{foodTrendsTitle(city.name, quarter)}
 		</h1>
-		<p class="text-muted-foreground m-0 text-base leading-relaxed md:text-lg">
+		<p class="text-muted-foreground m-0 text-base leading-relaxed md:text-xl md:leading-relaxed">
 			{foodTrendsSummary(city.name, quarter, data)}
 		</p>
 	</header>
 
 	{#if searches}
-		<div class="grid grid-cols-1 items-start gap-12 lg:grid-cols-2 lg:gap-10">
-			<section class="flex min-w-0 flex-col gap-4" aria-labelledby="ft-searched">
-				<div class="section-rule">
-					<h2 id="ft-searched" class="type-title text-ink m-0 text-xl md:text-2xl">Most searched</h2>
-					<span class="eyebrow text-beet">{searches.anchor.label} = 100</span>
-				</div>
+		<div class="grid grid-cols-1 items-start gap-14 lg:grid-cols-2 lg:gap-10">
+			<section class="flex min-w-0 flex-col gap-5" aria-labelledby="ft-searched">
+				{@render head('Most searched', `${searches.anchor.label} = 100`, 'ft-searched')}
 				<p class="text-muted-foreground m-0 text-sm leading-relaxed">
 					Google searches in {city.name}, {quarterSpan(data.months)}, on one scale: 100 is how
 					much {searches.anchor.label.toLowerCase()} was searched in an average week of the last
 					two years, so 50 is half that.
 				</p>
-				<ol class="bg-paper border-line divide-line m-0 flex list-none flex-col divide-y rounded-md border p-0">
-					{#each searches.top as topic, i (topic.key)}
-						<li class="grid grid-cols-[2rem_minmax(0,1fr)_3.5rem] items-center gap-3 px-4 py-3">
-							<span class="font-term text-ink text-2xl leading-none tabular-nums">{i + 1}</span>
-							<div class="flex min-w-0 flex-col gap-1.5">
-								<span class="text-ink truncate font-semibold">
-									{topic.label}
-									{#if topic.anchor}<span class="text-muted-foreground text-xs font-normal">the yardstick</span>{/if}
-								</span>
-								<span class="bg-wash block h-1.5 w-full rounded-full" aria-hidden="true">
-									<span class="bg-primary-darker block h-1.5 rounded-full" style={width(topic.level, maxLevel)}></span>
-								</span>
-							</div>
-							<span class="text-ink text-right font-semibold tabular-nums">{level(topic.level)}</span>
-						</li>
-					{/each}
-				</ol>
+				<!-- The hard shadow sits on the wrapper as a drop-shadow, so it follows the bite. -->
+				<div class="[filter:drop-shadow(8px_8px_0_var(--ink))]">
+					<ol class="bg-paper border-ink divide-ink/15 bite m-0 flex list-none flex-col divide-y border-[3px] p-0 [--bite:1.25rem]">
+						{#each searches.top as topic, i (topic.key)}
+							<li class="grid grid-cols-[2.75rem_minmax(0,1fr)_3.5rem] items-center gap-3 px-4 py-3">
+								<span class="number-hero text-ink text-3xl">{rankLabel(i)}</span>
+								<div class="flex min-w-0 flex-col gap-1.5">
+									<span class="type-display text-ink truncate text-lg">
+										{topic.label}
+										{#if topic.anchor}<span class="text-muted-foreground font-sans text-xs font-normal">the yardstick</span>{/if}
+									</span>
+									<span class="block h-3 w-full" aria-hidden="true">
+										<span class={['block h-3', bar(i === 0)]} style={width(topic.level, maxLevel)}></span>
+									</span>
+								</div>
+								<span class="font-display text-ink text-right text-lg font-extrabold tabular-nums">{level(topic.level)}</span>
+							</li>
+						{/each}
+					</ol>
+				</div>
 			</section>
 
 			{#if searches.rising.length}
-				<section class="flex min-w-0 flex-col gap-4" aria-labelledby="ft-rising">
-					<div class="section-rule">
-						<h2 id="ft-rising" class="type-title text-ink m-0 text-xl md:text-2xl">Searched more than a year ago</h2>
-					</div>
+				<section class="flex min-w-0 flex-col gap-5" aria-labelledby="ft-rising">
+					{@render head('Searched more than a year ago', undefined, 'ft-rising')}
 					<p class="text-muted-foreground m-0 text-sm leading-relaxed">
 						The same three months a year apart, so a season (ice cream every summer) never reads as
 						a trend.
 					</p>
 					<div class="text-muted-foreground flex flex-wrap items-center gap-x-5 gap-y-1 text-xs" aria-hidden="true">
-						<span class="inline-flex items-center gap-1.5"><span class="bg-strip-muted inline-block h-2 w-4 rounded-sm"></span>{lastYear}</span>
-						<span class="inline-flex items-center gap-1.5"><span class="bg-primary-darker inline-block h-2 w-4 rounded-sm"></span>{label}</span>
+						<span class="inline-flex items-center gap-1.5"><span class="bg-muted-foreground inline-block h-2.5 w-4"></span>{lastYear}</span>
+						<span class="inline-flex items-center gap-1.5"><span class="bg-acid border-ink inline-block h-2.5 w-4 border-2"></span>{label}</span>
 					</div>
-					<ul class="bg-paper border-line divide-line m-0 flex list-none flex-col divide-y rounded-md border p-0">
+					<ul class="bg-paper border-ink divide-ink/15 m-0 flex list-none flex-col divide-y border-2 p-0">
 						{#each searches.rising as topic (topic.key)}
 							<li class="flex flex-col gap-2 px-4 py-3">
 								<div class="flex items-baseline justify-between gap-3">
-									<span class="text-ink min-w-0 truncate font-semibold">{topic.label}</span>
+									<span class="type-display text-ink min-w-0 truncate text-lg">{topic.label}</span>
 									{#if topic.change !== undefined}
-										<span class="text-primary-darker shrink-0 font-semibold tabular-nums">{percentUp(topic.change)}</span>
+										<span class="text-primary-darker font-display shrink-0 text-lg font-extrabold tabular-nums">{percentUp(topic.change)}</span>
 									{/if}
 								</div>
-								<dl class="m-0 grid grid-cols-[4.5rem_minmax(0,1fr)_2.5rem] items-center gap-x-2 gap-y-1 text-xs">
+								<dl class="m-0 grid grid-cols-[4.5rem_minmax(0,1fr)_2.5rem] items-center gap-x-2 gap-y-1.5 text-xs">
 									{#if topic.prevYearLevel !== undefined}
 										<dt class="text-muted-foreground">{lastYear}</dt>
-										<dd class="m-0"><span class="bg-strip-muted block h-2 rounded-sm" style={width(topic.prevYearLevel, maxRising)}></span></dd>
+										<dd class="m-0"><span class="bg-muted-foreground block h-2.5" style={width(topic.prevYearLevel, maxRising)}></span></dd>
 										<dd class="text-muted-foreground m-0 text-right tabular-nums">{level(topic.prevYearLevel)}</dd>
 									{/if}
 									<dt class="text-muted-foreground">{label}</dt>
-									<dd class="m-0"><span class="bg-primary-darker block h-2 rounded-sm" style={width(topic.level, maxRising)}></span></dd>
-									<dd class="text-ink m-0 text-right font-semibold tabular-nums">{level(topic.level)}</dd>
+									<dd class="m-0"><span class="bg-acid border-ink block h-3 border-2" style={width(topic.level, maxRising)}></span></dd>
+									<dd class="text-ink m-0 text-right font-bold tabular-nums">{level(topic.level)}</dd>
 								</dl>
 							</li>
 						{/each}
@@ -127,23 +131,23 @@
 	{/if}
 
 	{#if data.breakouts}
-		<section class="flex min-w-0 flex-col gap-4" aria-label="Breakout searches">
+		<section class="flex min-w-0 flex-col gap-5" aria-label="Breakout searches">
 			{@render head('Breakout searches', 'Google’s rising queries')}
 			<p class="text-muted-foreground m-0 text-sm leading-relaxed">
 				What people in {city.name} searched alongside each kind of food, {monthLabel(data.breakouts.from)}
 				to {monthLabel(data.breakouts.to)}, rising fastest against the twelve months before. Google’s
-				own words; a breakout grew more than 5,000 %.
+				own words; a breakout grew more than 5,000%.
 			</p>
 			<ul class="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
 				{#each data.breakouts.queries as q (q.query)}
-					<li class="bg-paper border-line flex min-w-0 flex-col gap-1 rounded-md border px-4 py-3">
-						<span class="text-ink font-semibold break-words">“{q.query}”</span>
+					<li class="bg-paper border-ink flex min-w-0 flex-col gap-1 border-2 px-4 py-3">
+						<span class="type-display text-ink text-lg break-words">“{q.query}”</span>
 						<span class="text-muted-foreground flex items-baseline justify-between gap-3 text-sm">
 							<span class="truncate">{q.topic}</span>
 							{#if q.breakout}
-								<span class="eyebrow text-beet shrink-0">Breakout</span>
+								<span class="stamp text-grape shrink-0">Breakout</span>
 							{:else if q.growth !== undefined}
-								<span class="text-primary-darker shrink-0 font-semibold tabular-nums">+{q.growth.toLocaleString('en')} %</span>
+								<span class="text-primary-darker shrink-0 font-bold tabular-nums">+{q.growth.toLocaleString('en')}%</span>
 							{/if}
 						</span>
 					</li>
@@ -155,27 +159,27 @@
 	{#if data.talked || data.openings}
 		<div
 			class={[
-				'grid grid-cols-1 items-start gap-12 lg:gap-10',
+				'grid grid-cols-1 items-start gap-14 lg:gap-10',
 				data.talked && data.openings && 'lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]'
 			]}>
 			{#if data.talked}
-				<section class="flex min-w-0 flex-col gap-4" aria-label="Most talked about">
+				<section class="flex min-w-0 flex-col gap-5" aria-label="Most talked about">
 					{@render head('Most talked about', 'TikTok and Instagram')}
 					<p class="text-muted-foreground m-0 text-sm leading-relaxed">
 						Share of the {data.talked.mentions.toLocaleString('en')} posts by others that named a
 						place and its kind of food. A kind counts the ones under it (ramen counts for
 						Japanese), so the shares add up to more than 100.
 					</p>
-					<ol class="bg-paper border-line divide-line m-0 flex list-none flex-col divide-y rounded-md border p-0">
-						{#each data.talked.topics as topic (topic.key)}
+					<ol class="bg-paper border-ink divide-ink/15 m-0 flex list-none flex-col divide-y border-2 p-0">
+						{#each data.talked.topics as topic, i (topic.key)}
 							<li class="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 px-4 py-3">
-								<span class="text-ink truncate font-semibold">{topic.label}</span>
-								<span class="text-ink text-right font-semibold tabular-nums">
-									{topic.share.toFixed(0)} %
+								<span class="type-display text-ink truncate text-lg">{topic.label}</span>
+								<span class="text-ink text-right font-bold tabular-nums">
+									{topic.share.toFixed(0)}%
 									{#if topic.gain}<span class="text-primary-darker ml-1 text-xs tabular-nums">+{topic.gain.toFixed(1)} pt</span>{/if}
 								</span>
-								<span class="bg-wash col-span-2 block h-1.5 w-full rounded-full" aria-hidden="true">
-									<span class="bg-primary-darker block h-1.5 rounded-full" style={width(topic.share, maxShare)}></span>
+								<span class="col-span-2 block h-3 w-full" aria-hidden="true">
+									<span class={['block h-3', bar(i === 0)]} style={width(topic.share, maxShare)}></span>
 								</span>
 							</li>
 						{/each}
@@ -184,18 +188,19 @@
 			{/if}
 
 			{#if data.openings}
-				<section class="flex min-w-0 flex-col gap-4" aria-label="New places">
-					{@render head('New places')}
-					<div class="bg-paper border-line flex flex-col gap-4 rounded-md border p-5">
+				<section class="flex min-w-0 flex-col gap-5" aria-label="New places">
+					{@render head('New in town')}
+					<!-- New in Town is a grape series: oat text, acid numbers. -->
+					<div class="bg-grape text-sand flex flex-col gap-4 p-5">
 						<div class="flex items-baseline gap-3">
-							<span class="font-term text-ink text-5xl leading-none tabular-nums">{data.openings.opened}</span>
-							<span class="text-muted-foreground text-sm">opened, {data.openings.closed} closed</span>
+							<span class="number-hero text-acid text-6xl">{data.openings.opened}</span>
+							<span class="text-sm">opened, {data.openings.closed} closed</span>
 						</div>
 						{#if data.openings.byTopic.length}
 							<table class="w-full text-sm">
 								<caption class="sr-only">Openings and closures by kind of food</caption>
 								<thead>
-									<tr class="text-muted-foreground text-xs">
+									<tr class="text-xs">
 										<th scope="col" class="pb-1 text-left font-normal">Kind of food</th>
 										<th scope="col" class="pb-1 text-right font-normal">Opened</th>
 										<th scope="col" class="pb-1 text-right font-normal">Closed</th>
@@ -203,10 +208,10 @@
 								</thead>
 								<tbody>
 									{#each data.openings.byTopic as row (row.label)}
-										<tr class="border-line border-t">
-											<th scope="row" class="text-ink py-1.5 text-left font-semibold">{row.label}</th>
-											<td class="text-ink py-1.5 text-right tabular-nums">{row.opened}</td>
-											<td class="text-muted-foreground py-1.5 text-right tabular-nums">{row.closed}</td>
+										<tr class="border-sand/30 border-t">
+											<th scope="row" class="py-1.5 text-left font-bold">{row.label}</th>
+											<td class="py-1.5 text-right tabular-nums">{row.opened}</td>
+											<td class="py-1.5 text-right tabular-nums">{row.closed}</td>
 										</tr>
 									{/each}
 								</tbody>

@@ -72,7 +72,7 @@
 		<Notice
 			tone="neutral"
 			title="Nothing to set here yet"
-			text="Write to hello@culinaryreport.com to change where your report goes." />
+			text="Write to hello@munchwerk.com to change where your report goes." />
 	{/if}
 </div>
 

@@ -43,7 +43,7 @@
 
 {#if line}
 	<div class="border-line mt-5 border-t pt-4 break-inside-avoid">
-		<p class="eyebrow text-beet m-0 mb-2">New and closed nearby</p>
+		<p class="stamp text-beet m-0 mb-2">New and closed nearby</p>
 		<p class="text-reading-ink m-0 max-w-[62ch] text-sm">{line}</p>
 		<ul class="m-0 mt-2 flex list-none flex-col gap-0.5 p-0 text-xs">
 			{#each changes.venues.slice(0, SHOWN) as v (`${v.venueId}-${v.kind}`)}

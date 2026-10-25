@@ -9,7 +9,7 @@
 		description,
 		children
 	}: {
-		/** Pixel label above the title ("Topic"); two to four words. */
+		/** Stamp above the title ("Topic"); one or two words. */
 		eyebrow?: string;
 		title: string;
 		description?: string;
@@ -20,14 +20,14 @@
 
 <section class="narrow pt-8 pb-6 md:pt-12 md:pb-8">
 	{#if eyebrow}
-		<div class="eyebrow text-beet mb-2">{eyebrow}</div>
+		<div class="stamp text-beet mb-3">{eyebrow}</div>
 	{/if}
 	<h1
-		class="type-title text-ink m-0 max-w-[24ch] text-3xl leading-tight text-balance md:text-[2.5rem]">
+		class="type-hero text-ink m-0 max-w-[20ch] text-[2.5rem] text-balance md:text-6xl">
 		{title}
 	</h1>
 	{#if description}
-		<p class="text-muted-foreground mt-3 mb-0 max-w-[60ch] text-[0.9375rem] leading-relaxed">
+		<p class="text-muted-foreground mt-4 mb-0 max-w-[60ch] text-base leading-relaxed md:text-lg">
 			{description}
 		</p>
 	{/if}

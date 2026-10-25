@@ -5,7 +5,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySource, CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { sourcePost } from 'src/modules/cities/util/city-source.js';
+import { sourcePlatform } from 'src/modules/cities/util/city-source.js';
 
 import {
 	BLOG_BACKFILL_MONTHS,
@@ -14,6 +14,7 @@ import {
 	BLOG_MAX_TEXT_CHARS,
 	BLOG_MIN_FEED_WORDS,
 } from '../constants/blog.constant.js';
+import { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialPost } from '../entities/social-post.entity.js';
 import {
 	articleText,
@@ -93,6 +94,7 @@ export class BlogScrapeService {
 			if (entry.error) this.logger.warn(`Blog ${source.value}: ${entry.error}`);
 			details.push(entry);
 		}
+		if (details.length) await this.socialPostService.finishSave(city.id);
 		return {
 			blogs: details.length,
 			saved: details.reduce((sum, d) => sum + d.saved, 0),
@@ -145,7 +147,7 @@ export class BlogScrapeService {
 		}
 
 		const handle = blogHandle(source.value);
-		const { platform, source: postSource } = sourcePost(CitySourceKindEnum.BLOG, source.value);
+		const platform = sourcePlatform(CitySourceKindEnum.BLOG);
 		let fetches = 0;
 		for (const item of toSave) {
 			let text = htmlToText(item.html);
@@ -169,9 +171,9 @@ export class BlogScrapeService {
 					platform,
 					url: canonicalArticleUrl(item.url),
 					postedAt: item.publishedAt!,
+					// Named by its site: a feed's title names a section ("Essen + Trinken Archives - Qiez")
 					author: handle,
-					authorName: found.feed.title,
-					source: postSource,
+					finds: [{ kind: PostSourceKindEnum.BLOG, value: source.value }],
 					text: [item.title, text].filter(Boolean).join('\n\n').slice(0, BLOG_MAX_TEXT_CHARS),
 				},
 				city,

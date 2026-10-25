@@ -6,6 +6,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import _ from 'lodash';
 
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FeedbackService } from 'src/modules/feedback/services/feedback.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { runPool } from 'src/shared/util/pool.js';
 
@@ -14,7 +15,6 @@ import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import type { FeedbackTopic } from '../interfaces/feedback.interface.js';
 import { ReviewAlertEvent } from '../persisted-events/review-alert.persisted-event.js';
-import { withTopics } from '../util/feedback.js';
 import { monthRange } from '../util/month.js';
 
 import { VenueService } from './venue.service.js';
@@ -85,6 +85,7 @@ export class ReviewService {
 		private readonly reviewAnalysisAgent: ReviewAnalysisAgent,
 		private readonly venueService: VenueService,
 		private readonly pgBossService: PgBossService,
+		private readonly feedbackService: FeedbackService,
 	) {}
 
 	/**
@@ -137,6 +138,47 @@ export class ReviewService {
 	}
 
 	/**
+	 * Today's rating snapshot of these venues at the price of one review each: the newest review
+	 * of every place repeats its all-time rating and review count. The reviews themselves are
+	 * not kept, since the month scrape keeps the report venues' and the rest would only add
+	 * analysis. A place without any review returns nothing. The places go to the actor in the
+	 * order given, so a cap that stops the run cuts the last ones. Flushes.
+	 */
+	async snapshotRatings(
+		venueIds: string[],
+		budgetUsd: number,
+		now = new Date(),
+	): Promise<{ requested: number; snapshots: number }> {
+		const order = new Map(venueIds.map((id, i) => [id, i]));
+		const venues = _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v =>
+			order.get(v.id),
+		);
+		if (venues.length === 0) return { requested: 0, snapshots: 0 };
+		const byPlaceId = new Map(venues.map(v => [v.placeId, v]));
+		const items = await this.apifyService.runActor<GoogleReviewItem>(
+			GOOGLE_REVIEWS_ACTOR,
+			{
+				placeIds: venues.map(v => v.placeId),
+				maxReviews: 1,
+				reviewsSort: 'newest',
+				language: 'en',
+				personalData: false,
+			},
+			{ maxCostUsd: budgetUsd, purpose: `google-ratings: ${venues.length} venues` },
+		);
+		const rated = new Set<string>();
+		for (const item of items) {
+			const venue = item.placeId ? byPlaceId.get(item.placeId) : undefined;
+			if (!venue || rated.has(venue.id)) continue;
+			if (item.totalScore == null && item.reviewsCount == null) continue;
+			await this.venueService.recordRating(venue, item, now);
+			rated.add(venue.id);
+		}
+		await this.em.flush();
+		return { requested: venues.length, snapshots: rated.size };
+	}
+
+	/**
 	 * Of these venues, the ones with a Google review stored from before `month`: a venue without
 	 * one has no history yet (never in a month scrape, or only in the weekly watch's last days),
 	 * and the monthly `SCRAPE_REVIEWS` starts it months earlier. TripAdvisor rows don't count.
@@ -163,7 +205,9 @@ export class ReviewService {
 		},
 	): Promise<number> {
 		const order = new Map(venueIds.map((id, i) => [id, i]));
-		const venues = _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v => order.get(v.id));
+		const venues = _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v =>
+			order.get(v.id),
+		);
 		if (venues.length === 0) return 0;
 		const byPlaceId = new Map(venues.map(v => [v.placeId, v]));
 
@@ -194,7 +238,12 @@ export class ReviewService {
 		let saved = 0;
 		for (const item of items) {
 			const venue = item.placeId ? byPlaceId.get(item.placeId) : undefined;
-			if (!venue || !item.reviewId || !item.publishedAtDate || !opts.keep(item.publishedAtDate))
+			if (
+				!venue ||
+				!item.reviewId ||
+				!item.publishedAtDate ||
+				!opts.keep(item.publishedAtDate)
+			)
 				continue;
 			const review =
 				(await this.em.findOne(Review, { reviewId: item.reviewId })) ??
@@ -240,11 +289,13 @@ export class ReviewService {
 				analysedAt: null,
 				$or: [{ text: { $ne: null } }, { textTranslated: { $ne: null } }],
 			} as FilterQuery<Review>,
-			{ populate: ['venue'] },
+			// Its feedback too: re-analysing a review replaces its rows
+			{ populate: ['venue', 'feedback'] },
 		);
 		const batches = Object.values(_.groupBy(reviews, r => r.venue.id)).flatMap(group =>
 			_.chunk(group, ANALYSIS_BATCH_SIZE),
 		);
+		const topics = reviews.length ? await this.feedbackService.dishTopics() : undefined;
 
 		let analysed = 0;
 		// A provider failure (no credits) stops the pool: keep what was finished before it
@@ -268,10 +319,12 @@ export class ReviewService {
 						const review = byId.get(result.reviewId);
 						if (!review) continue;
 						review.sentiment = result.sentiment;
-						review.praise = withTopics(result.praise);
-						review.complaints = withTopics(result.complaints);
-						review.dishes = result.dishes;
-						review.changes = result.changes;
+						// What it says, as rows, flushed with the review
+						// Its noticed changes are rows too (`change`)
+						this.feedbackService.replaceFor(review, result, {
+							asked: true,
+							topics: topics!,
+						});
 						review.analysedAt = new Date();
 						analysed++;
 					}
@@ -340,15 +393,17 @@ export class ReviewService {
 			params.push(filters.stars);
 		}
 		if (filters.topic) {
-			where.push('(r.praise @> ?::jsonb or r.complaints @> ?::jsonb)');
-			const json = JSON.stringify([{ topic: filters.topic }]);
-			params.push(json, json);
+			// Praised or criticised: any point of the topic
+			where.push(
+				'exists (select 1 from feedback_points f where f.review_id = r.id and f.topic = ? and f.detail is not null and not f.change)',
+			);
+			params.push(filters.topic);
 		}
 		if (filters.answered != null) {
 			where.push(
-				filters.answered
-					? '(r.owner_response is not null or r.marked_replied_at is not null)'
-					: '(r.owner_response is null and r.marked_replied_at is null)',
+				filters.answered ?
+					'(r.owner_response is not null or r.marked_replied_at is not null)'
+				:	'(r.owner_response is null and r.marked_replied_at is null)',
 			);
 		}
 		if (filters.language) {
@@ -372,10 +427,17 @@ export class ReviewService {
 			// Past the last page the window has no row to carry the total
 			const [{ n }]: { n: number }[] = await this.em
 				.getConnection()
-				.execute(`select count(*)::int as n from reviews r where ${where.join(' and ')}`, params);
+				.execute(
+					`select count(*)::int as n from reviews r where ${where.join(' and ')}`,
+					params,
+				);
 			return { items: [], total: n };
 		}
-		const reviews = await this.em.find(Review, { id: { $in: rows.map(r => r.id) } });
+		const reviews = await this.em.find(
+			Review,
+			{ id: { $in: rows.map(r => r.id) } },
+			{ populate: ['feedback', 'feedback.foodTopic'] },
+		);
 		const byId = new Map(reviews.map(r => [r.id, r]));
 		return { items: rows.map(r => byId.get(r.id)!), total: rows[0].total };
 	}
@@ -397,11 +459,10 @@ export class ReviewService {
 				ids,
 			),
 			conn.execute(
-				`select topic, count(*)::int as count from (
-					select distinct r.id, p->>'topic' as topic from reviews r,
-						jsonb_array_elements(coalesce(r.praise, '[]'::jsonb) || coalesce(r.complaints, '[]'::jsonb)) p
-					where r.${venueIn}
-				) t where topic is not null group by 1 order by 2 desc, 1`,
+				`select f.topic, count(distinct r.id)::int as count from reviews r
+					join feedback_points f on f.review_id = r.id and f.detail is not null and not f.change
+				where r.${venueIn} and f.topic is not null
+				group by 1 order by 2 desc, 1`,
 				ids,
 			),
 			conn.execute(
@@ -427,7 +488,11 @@ export class ReviewService {
 	 * `ownerResponse` confirms it; the mark is kept either way. Flushes.
 	 */
 	async markReplied(venueIds: string | string[], id: string, replied: boolean): Promise<Review> {
-		const review = await this.em.findOne(Review, { id, venue: { $in: [venueIds].flat() } });
+		const review = await this.em.findOne(
+			Review,
+			{ id, venue: { $in: [venueIds].flat() } },
+			{ populate: ['feedback', 'feedback.foodTopic'] },
+		);
 		if (!review) throw new NotFoundException();
 		review.markedRepliedAt = replied ? (review.markedRepliedAt ?? new Date()) : null;
 		await this.em.flush();

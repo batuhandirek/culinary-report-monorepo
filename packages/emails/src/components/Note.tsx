@@ -17,7 +17,7 @@ export const Note = ({ children }: Props) => (
 					<td
 						style={{
 							backgroundColor: color.tint,
-							borderRadius: 8,
+							borderRadius: 6,
 							padding: '11px 14px',
 							fontFamily: font.sans,
 							fontSize: 14,

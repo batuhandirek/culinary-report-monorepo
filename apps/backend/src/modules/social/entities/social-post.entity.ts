@@ -7,6 +7,8 @@ import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-e
 import { SocialPostRepository } from '../repositories/social-post.repository.js';
 
 import { Mention } from './mention.entity.js';
+import { PostHashtag } from './post-hashtag.entity.js';
+import { PostSource } from './post-source.entity.js';
 import { SocialAccount } from './social-account.entity.js';
 
 export enum SocialPlatformEnum {
@@ -20,7 +22,7 @@ export enum SocialPlatformEnum {
 /** A TikTok video, an Instagram post or a blog article about food and drink in the city. */
 @Entity({ tableName: 'social_posts', repository: () => SocialPostRepository })
 export class SocialPost extends MikroOrmEntityAbstractClass<
-	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions'
+	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions' | 'hashtagLinks' | 'foundBy'
 > {
 	// The platform's own id: a TikTok video id, `ig_<postId>` for Instagram, `blog_<hash of the URL>`
 	// for a blog article
@@ -76,16 +78,9 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'text', nullable: true })
 	locationName?: string | null;
 
-	// How it was found: `#hashtag`, `search:<query>`, `place:<venue>` or `blog:<source URL>`
-	@Property({ type: 'text', nullable: true })
-	source?: string | null;
-
 	// The caption; a blog article's title and text
 	@Property({ type: 'text', nullable: true })
 	text?: string | null;
-
-	@Property({ type: 'jsonb', nullable: true })
-	hashtags?: string[] | null;
 
 	@Property({ type: 'jsonb', nullable: true })
 	taggedHandles?: string[] | null;
@@ -117,4 +112,12 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 
 	@OneToMany(() => Mention, mention => mention.post)
 	mentions = new Collection<Mention>(this);
+
+	// The hashtags in its caption, in the caption's order
+	@OneToMany(() => PostHashtag, link => link.post, { orderBy: { rank: 'asc' } })
+	hashtagLinks = new Collection<PostHashtag>(this);
+
+	// Every source that found it (`PostSource`), first find first
+	@OneToMany(() => PostSource, find => find.post, { orderBy: { foundAt: 'asc', id: 'asc' } })
+	foundBy = new Collection<PostSource>(this);
 }

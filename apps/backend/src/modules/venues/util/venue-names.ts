@@ -104,7 +104,7 @@ export const isInCity = (mentionCity: string | null | undefined, names: readonly
 
 // Google categories of places that serve food or drinks
 const FOOD_CATEGORY =
-	/restaurant|\bbar\b|cafe|café|coffee|roaster|bakery|patisserie|confectioner|snack|food|bistro|\bpub\b|imbiss|brunch|breakfast|tea ?house|ice cream|dessert|pizza|kebab|doner|falafel|burger|diner|deli|steak|sushi|ramen|noodle|dumpling|grill|bbq|barbecue|chicken|bagel|donut|juice|bubble tea|brewery|beer|biergarten|wine|cocktail|market|caterer|canteen/i;
+	/restaurant|\bbar\b|cafe|café|coffee|roaster|bakery|patisserie|confectioner|snack|food|bistro|\bpub\b|imbiss|brunch|breakfast|tea ?house|ice cream|dessert|pizza|kebab|doner|falafel|burger|diner|deli|steak|sushi|ramen|noodle|dumpling|grill|bbq|barbecue|chicken|bagel|donut|juice|bubble tea|brewery|beer|biergarten|wine|cocktail|market|caterer|canteen|gastropub|brewpub|brasserie|sandwich|pastry|cookie|cake|cr[eê]perie|a[cç]a[ií]|salad|pasta|pie shop|churreria|fruit parlou?r|frozen yogh?urt|takeaway|meyhane|dinner theater/i;
 
 export const isFoodVenue = (category: string | null | undefined): boolean =>
 	!category || FOOD_CATEGORY.test(category);

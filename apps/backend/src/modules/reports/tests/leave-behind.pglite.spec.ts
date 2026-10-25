@@ -53,7 +53,7 @@ describe('The leave-behind (pglite)', () => {
 	});
 
 	it('draws the share link as a QR code with no network', () => {
-		const svg = leaveBehindQr('https://culinaryreport.com/r/abcdefghijklmnopqrstuv');
+		const svg = leaveBehindQr('https://munchwerk.com/r/abcdefghijklmnopqrstuv');
 		expect(svg.startsWith('<svg')).toBe(true);
 		expect(svg).toContain('<path');
 	});
@@ -86,7 +86,7 @@ describe('The leave-behind (pglite)', () => {
 		await em.flush();
 		const admin = await userFactory
 			.admin()
-			.create({ firstName: 'Batu', lastName: 'D', email: 'batu@culinaryreport.com' });
+			.create({ firstName: 'Batu', lastName: 'D', email: 'batu@munchwerk.com' });
 
 		const { res, headers, body } = fakeResponse();
 		await controller.getReportLeaveBehindPdf(report.id, admin.id, res);

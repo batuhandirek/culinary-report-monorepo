@@ -25,13 +25,13 @@
 
 <div class="flex min-h-dvh flex-col">
 	<header class="mx-auto flex h-16 w-full max-w-[56rem] items-center justify-between gap-3 px-4">
-		<Logo width={104} />
+		<Logo width={150} />
 		<Button icon={Download} href={pdfHref} download>Download PDF</Button>
 	</header>
 
 	<main class="flex-1 px-4 pb-12">
 		<div
-			class="bg-paper border-line shadow-sticker mx-auto max-w-[56rem] rounded-md border px-5 py-8 sm:px-12 sm:py-12">
+			class="bg-paper border-ink shadow-hard mx-auto max-w-[56rem] rounded-[12px] border-[3px] px-5 py-8 sm:px-12 sm:py-12">
 			<ReportView {report} />
 		</div>
 		<p class="text-muted-foreground mx-auto mt-6 max-w-[56rem] text-center text-xs">

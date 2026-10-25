@@ -6,6 +6,8 @@ import { compact } from './culinary.js';
 export const ACCOUNT_SOURCE_LABELS: Record<string, string> = {
 	handle: 'its handle is the name',
 	website: 'its Google website',
+	site: 'linked from its website',
+	profile: 'its profile names the brand',
 	prospect: 'from outreach',
 	admin: 'set by an admin'
 };

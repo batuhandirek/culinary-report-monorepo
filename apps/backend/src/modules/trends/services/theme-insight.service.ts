@@ -1,10 +1,16 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import {
+	FEEDBACK_THEMES,
+	type FeedbackTheme,
+	isFeedbackTheme,
+} from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
+import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
 import {
@@ -18,6 +24,20 @@ import {
 	themeFoods,
 	ThemePointRow,
 } from '../util/theme-counts.js';
+import {
+	monthsUpTo,
+	THEME_BASE_SOURCES_SQL,
+	THEME_BASE_SQL,
+	THEME_MONTHS,
+	THEME_POST_DETAIL_SQL,
+	THEME_REVIEW_DETAIL_SQL,
+	type ThemeBaseMonth,
+	type ThemeBaseSource,
+	type ThemeDetail,
+	themeDetail,
+	type ThemeDetailFilters,
+	type ThemeDetailRow,
+} from '../util/theme-detail.js';
 
 export interface ThemeInsights extends ThemeCounts {
 	month: string;
@@ -27,6 +47,17 @@ export interface ThemeInsights extends ThemeCounts {
 	food: ThemeFood | null;
 	/** The month's kinds of food, whatever `food` is: what they can be narrowed to */
 	foods: ThemeFoodCoverage[];
+}
+
+export interface ThemeInsight extends ThemeDetail {
+	key: FeedbackTheme;
+	topic: FeedbackTopic;
+	label: string;
+	/** What the theme covers, as the agents are told */
+	hint: string;
+	month: string;
+	previous: string;
+	side: ThemeDetailFilters['side'];
 }
 
 /**
@@ -51,7 +82,10 @@ export class ThemeInsightService {
 		const reviews = await connection.execute<ThemePointRow[]>(THEME_REVIEW_POINTS_SQL, params);
 		const posts = await connection.execute<ThemePointRow[]>(THEME_POST_POINTS_SQL, params);
 		const rows = [...reviews, ...posts];
-		const foods = await this.brandFoods(cityId, rows);
+		const foods = await this.brandFoods(
+			cityId,
+			rows.map(r => r.brand_id),
+		);
 		const narrowed = food ? rows.filter(r => foods.get(r.brand_id)?.key === food) : rows;
 		const covered = themeFoods(rows, month, foods);
 		const picked = covered.find(f => f.key === food);
@@ -64,13 +98,70 @@ export class ThemeInsightService {
 		};
 	}
 
-	/** The food of each brand in the rows, from its places in the city. */
-	private async brandFoods(cityId: string, rows: ThemePointRow[]): Promise<Map<string, ThemeFood>> {
-		const brandIds = [...new Set(rows.map(r => r.brand_id))];
+	/**
+	 * One theme in a city's month: its complaints, praise and noticed changes, the picked side over
+	 * six months, where it came up, the numbers its points state and the month's sentences filed
+	 * under it, narrowed by `filters`. Reads stored rows only. 404 for a key the vocabulary lacks.
+	 */
+	async theme(
+		cityId: string,
+		month: string,
+		theme: string,
+		filters: ThemeDetailFilters,
+	): Promise<ThemeInsight> {
+		if (!isFeedbackTheme(theme)) throw new NotFoundException(`No feedback theme ${theme}`);
+		const start = monthRange(monthsUpTo(month, THEME_MONTHS)[0]).start;
+		const { start: monthStart, end } = monthRange(month);
+		const connection = this.em.getConnection();
+		const window = [cityId, start, end];
+		const reviews = await connection.execute<ThemeDetailRow[]>(THEME_REVIEW_DETAIL_SQL, [
+			theme,
+			...window,
+		]);
+		const posts = await connection.execute<ThemeDetailRow[]>(THEME_POST_DETAIL_SQL, [
+			theme,
+			...window,
+		]);
+		const bases = await connection.execute<ThemeBaseMonth[]>(THEME_BASE_SQL, [
+			...window,
+			...window,
+		]);
+		const ofMonth = [cityId, monthStart, end];
+		const baseSources = await connection.execute<ThemeBaseSource[]>(THEME_BASE_SOURCES_SQL, [
+			...ofMonth,
+			...ofMonth,
+		]);
+		const foods = await this.brandFoods(
+			cityId,
+			baseSources.map(s => s.brand_id),
+		);
+		const definition = FEEDBACK_THEMES[theme];
+		return {
+			key: theme,
+			topic: definition.topic,
+			label: definition.label,
+			hint: definition.hint,
+			month,
+			previous: previousMonth(monthStart),
+			side: filters.side,
+			...themeDetail({
+				rows: [...reviews, ...posts],
+				bases,
+				baseSources,
+				month,
+				foods,
+				filters,
+			}),
+		};
+	}
+
+	/** The food of each brand, from its places in the city. */
+	private async brandFoods(cityId: string, ids: string[]): Promise<Map<string, ThemeFood>> {
+		const brandIds = [...new Set(ids)];
 		if (!brandIds.length) return new Map();
 		const index = await this.foodTopicService.index();
 		const venues = await this.em.find(Venue, { brand: { $in: brandIds }, city: cityId });
-		const tags = await this.venueFoodTopicService.tags(venues, index);
+		const tags = await this.venueFoodTopicService.tags(venues);
 		return brandFoods(
 			venues.map(v => {
 				const key = tags.get(v.id)?.find(t => t.primary)?.key;

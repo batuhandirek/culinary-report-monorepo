@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import type { ReportData, ReportHighlights } from 'src/modules/reports/interfaces/report-data.interface.js';
+import { Report } from 'src/modules/reports/entities/report.entity.js';
+import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -31,6 +34,33 @@ describe('OutreachService (pglite)', () => {
 
 	const touchesOf = (prospect: Prospect) =>
 		harness.orm.em.find(OutreachTouch, { prospect }, { orderBy: { createdAt: 'asc' } });
+
+	it("links a touch to the brand's report and its link, and refuses another brand's", async () => {
+		const em = harness.orm.em;
+		const mine = await newProspect('Report Döner');
+		const theirs = await newProspect('Other Döner');
+		const report = (brand: Brand) =>
+			em.create(Report, { brand, month: '2026-09', data: {} as ReportData, highlights: {} as ReportHighlights });
+		const ours = report(mine.brand);
+		const other = report(theirs.brand);
+		const link = (of: Report) => em.create(ReportShare, { report: of, token: `token-${of.brand.name}` });
+		const ourLink = link(ours);
+		const otherLink = link(other);
+		await em.flush();
+		const email = { kind: OutreachTouchKindEnum.EMAIL, body: 'Your September: https://…/r/token' };
+
+		await service.log(mine.id, { ...email, shareId: ourLink.id });
+		const [touch] = await touchesOf(mine);
+		// The link names its report
+		expect([touch.report?.id, touch.share?.id]).toEqual([ours.id, ourLink.id]);
+
+		await expect(service.log(mine.id, { ...email, reportId: other.id })).rejects.toThrow("not Report Döner's");
+		await expect(service.log(mine.id, { ...email, reportId: ours.id, shareId: otherLink.id })).rejects.toThrow(
+			'another report',
+		);
+		await expect(service.log(mine.id, { ...email, shareId: otherLink.id })).rejects.toThrow("not Report Döner's");
+		expect(await touchesOf(mine)).toHaveLength(1);
+	});
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({ providers: [OutreachService] });

@@ -4,6 +4,7 @@ export * from './AccountDeletionScheduledEmail';
 export * from './EmailChangedEmail';
 export * from './EmailVerificationEmail';
 export * from './ForgotPasswordEmail';
+export * from './NewsletterConfirmEmail';
 export * from './PasswordChangedEmail';
 export * from './PortalInviteEmail';
 export * from './PortalLoginCodeEmail';

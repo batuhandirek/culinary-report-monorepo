@@ -20,10 +20,11 @@
 	const ACCENTS = [
 		{ name: 'primary', use: 'the one primary action, the wordmark', class: 'bg-primary' },
 		{ name: 'primary-lighter', use: 'primary hover', class: 'bg-primary-lighter' },
-		{ name: 'primary-darker', use: 'green text, thin marks, the ring', class: 'bg-primary-darker' },
+		{ name: 'primary-darker', use: 'green text, thin marks', class: 'bg-primary-darker' },
+		{ name: 'grape', use: 'links on paper, the focus ring', class: 'bg-grape' },
 		{ name: 'acid', use: 'pixel labels on ink, the primary fill', class: 'bg-acid' },
 		{ name: 'chili', use: 'the active tab rule', class: 'bg-chili' },
-		{ name: 'beet', use: 'pixel labels and links on paper', class: 'bg-beet' }
+		{ name: 'beet', use: 'pixel labels on paper', class: 'bg-beet' }
 	];
 	const SEMANTIC = [
 		{ name: 'success', use: 'done, verified', class: 'bg-success' },
@@ -74,7 +75,7 @@
 <KitSection
 	id="foundations"
 	title="Foundations"
-	description="“Pickle & Plum”: a ferment lab on oat paper. Plum ink, one acid-green accent, grain over a faint dot grid. Surfaces are told apart by hairlines and the ground under them, not by depth. Tokens live in `app.css`.">
+	description="The app's working layer under the brand: oat ground with grain over a faint dot grid, plum ink, hairline cards. Dense screens (admin, portal) are built from these; public pages add the Brand layer above. Tokens live in `app.css`.">
 	<KitSpecimen label="Grounds and lines" ground="paper">
 		{@render swatches(GROUNDS)}
 	</KitSpecimen>
@@ -93,7 +94,7 @@
 
 	<KitSpecimen
 		label="Type scale"
-		note="Onest for every sentence, title and price"
+		note="Onest for every sentence and price; display headlines are Bricolage (Brand)"
 		ground="paper"
 		stack
 		class="items-start gap-1.5">

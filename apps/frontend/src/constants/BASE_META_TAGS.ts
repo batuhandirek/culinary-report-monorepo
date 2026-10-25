@@ -21,25 +21,27 @@ const DESCRIPTION =
 export const BASE_META_TAGS: MetaTagsProps = {
 	// The page's own words first: a result's title is cut off from the end, and nobody is
 	// searching for the brand yet. The homepage opts back into brand-first.
-	titleTemplate: '%s | Culinary Report',
+	titleTemplate: '%s | Munchwerk',
 	title: TITLE,
 	description: DESCRIPTION,
-	canonical: 'https://culinaryreport.com',
+	canonical: 'https://munchwerk.com',
 	openGraph: {
 		type: 'website',
-		url: 'https://culinaryreport.com',
+		url: 'https://munchwerk.com',
 		title: TITLE,
 		description: DESCRIPTION,
-		siteName: 'Culinary Report',
+		siteName: 'Munchwerk',
 		images: [
 			{
 				url: OG_IMAGE_LINK,
-				alt: 'Culinary Report'
+				width: 1200,
+				height: 630,
+				alt: "Munchwerk: what the city's munching"
 			}
 		]
 	},
 	twitter: {
-		cardType: 'summary',
+		cardType: 'summary_large_image',
 		title: TITLE,
 		description: DESCRIPTION
 	}

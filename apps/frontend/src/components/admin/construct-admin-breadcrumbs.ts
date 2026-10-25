@@ -2,6 +2,7 @@ import type { Component } from 'svelte';
 
 import { page } from '$app/state';
 import { ADMIN_MENUS, findAdminMenu } from '#constants/ADMIN_MENUS.js';
+import { themeLabel } from '#lib/feedback.js';
 
 export interface AdminBreadcrumb {
 	// Empty for the page you are on: it is not a link.
@@ -28,6 +29,7 @@ const DETAIL_NAMES: Record<string, (segment: string) => string | undefined> = {
 	'/admin/reports': () =>
 		page.data.report ? `${page.data.report.brand.name} · ${page.data.report.month}` : undefined,
 	'/admin/blog': (segment) => (segment === 'new' ? 'New article' : page.data.entry?.title),
+	'/admin/instagram': () => page.data.designName,
 	// A topic's page loads its own data per city: its key reads well enough
 	'/admin/trends': (segment) => sentence(decodeURIComponent(segment)),
 	'/admin/ui-kit': (segment) => sentence(segment)
@@ -52,6 +54,37 @@ export function constructAdminBreadcrumbs(): AdminBreadcrumb[] {
 			.find((path) => pathname === path || pathname.startsWith(`${path}/`)) ?? section.href;
 	const segment = pathname.slice(base.length).split('/').filter(Boolean)[0];
 	if (!segment) return crumbs;
+	// A theme sits under the Trends tab that lists the themes, for the same city and month
+	if (base === '/admin/trends' && segment === 'themes') {
+		const params = new URLSearchParams({ tab: 'themes' });
+		for (const name of ['cityId', 'month']) {
+			const value = page.url.searchParams.get(name);
+			if (value) params.set(name, value);
+		}
+		const theme = pathname.split('/').filter(Boolean)[3];
+		crumbs.push({ href: `/admin/trends?${params}`, name: 'Praise and complaints' });
+		crumbs.push({ href: '', name: theme ? themeLabel(decodeURIComponent(theme)) : 'Theme' });
+		return crumbs;
+	}
+	// Report templates sit beside the reports: Reports › Report templates › a template
+	if (base === '/admin/reports' && segment === 'templates') {
+		const template = page.data.reportTemplate as { name: string } | undefined;
+		if (!template) {
+			crumbs.push({ href: '', name: 'Report templates' });
+			return crumbs;
+		}
+		crumbs.push({ href: '/admin/reports/templates', name: 'Report templates' });
+		crumbs.push({ href: '', name: template.name });
+		return crumbs;
+	}
+	// A brand's report configuration sits under the brand's Reports tab
+	const config = page.data.reportConfig as { name: string } | undefined;
+	const brand = page.data.brand as { id: string; name: string } | undefined;
+	if (base === '/admin/brands' && config && brand) {
+		crumbs.push({ href: `/admin/brands/${brand.id}?tab=reports`, name: brand.name });
+		crumbs.push({ href: '', name: config.name });
+		return crumbs;
+	}
 	// A branch sits under its brand
 	const venue = page.data.venue as { brand?: { id: string; name: string } } | undefined;
 	if (base === '/admin/venues' && venue?.brand) {

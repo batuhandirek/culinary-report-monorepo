@@ -4,6 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
@@ -26,6 +27,8 @@ const LOOKUP_RESULTS_PER_NAME = 3;
 // A name still unmatched this long after its last lookup is searched again: creators post about
 // a place in its first weeks, often before Google lists it
 export const LOOKUP_RETRY_MONTHS = 3;
+/** Names one lookup run searches at most, counted after the ones searched lately are dropped. */
+export const LOOKUP_MAX_NAMES = 500;
 
 /** Whether a lookup is old enough to pay for again. */
 export const lookupStale = (lookedUpAt: Date, now = new Date()): boolean => {
@@ -47,6 +50,7 @@ export class VenueScrapeService {
 		private readonly apifyService: ApifyService,
 		private readonly venueService: VenueService,
 		private readonly pgBossService: PgBossService,
+		private readonly venueFoodTopicService: VenueFoodTopicService,
 	) {}
 
 	/** The venue master list: every place Google Maps finds for these terms in the city. */
@@ -85,13 +89,16 @@ export class VenueScrapeService {
 	 * Searches Google Maps in the city for venue names that mentions named but nothing matched.
 	 * A name searched there within `LOOKUP_RETRY_MONTHS` is skipped, so it is not paid for
 	 * twice; one still unmatched after that is searched again (its row is updated, never
-	 * doubled), since a place named before Google listed it is there by then.
+	 * doubled), since a place named before Google listed it is there by then. `names` come most
+	 * important first and the cap applies to what is left to search, so the names searched lately
+	 * never take the run's room.
 	 */
 	async lookupNames(
 		city: City,
 		names: string[],
 		budgetUsd: number,
 		now = new Date(),
+		maxNames = LOOKUP_MAX_NAMES,
 	): Promise<{ lookedUp: number; retried: number; saved: number }> {
 		const words = cityStopwords(city.nameStopwords);
 		const lookups = new Map(
@@ -99,6 +106,7 @@ export class VenueScrapeService {
 		);
 		const queries = new Map<string, string>();
 		for (const name of names) {
+			if (queries.size >= maxNames) break;
 			const key = normalizeVenueName(name, words);
 			if (!key || queries.has(key)) continue;
 			const earlier = lookups.get(key);
@@ -139,8 +147,8 @@ export class VenueScrapeService {
 				this.em.create(VenueLookup, { city, query: key, results: found.get(key) ?? 0, lookedUpAt: now });
 			}
 		}
-		const saved = await this.saveAll(items, city, { source: VenueScrapeSourceEnum.LOOKUP });
-		await this.venueService.fillDistricts(city);
+		// Known places are updated; a new one joins only when it serves food in the city
+		const saved = await this.saveFound(items, city);
 		return { lookedUp: queries.size, retried, saved };
 	}
 
@@ -353,5 +361,7 @@ export class VenueScrapeService {
 					singletonKey: cityId,
 				},
 			);
+		// A saved place may have new categories or review tags: its city's food-topic links by job
+		await this.venueFoodTopicService.queueCityRefresh(cityIds);
 	}
 }

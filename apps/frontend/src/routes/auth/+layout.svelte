@@ -40,7 +40,7 @@
      as the one calm thing to do. `checker` carries the body's grain onto this ground. -->
 <div class="bg-background checker fixed inset-0 z-[1] flex">
 	<aside class="bg-tint relative hidden w-[42%] max-w-[640px] flex-col justify-between p-12 lg:flex">
-		<Logo width={120} />
+		<Logo width={170} />
 
 		<div class="flex max-w-[440px] flex-col gap-7">
 			<div class="flex flex-col gap-4">
@@ -79,7 +79,7 @@
 		     in the same corner. -->
 		<header class="pt-safe flex shrink-0 items-center justify-between px-4 lg:px-6">
 			<div class="flex h-16 items-center lg:invisible">
-				<Logo width={104} />
+				<Logo width={150} />
 			</div>
 			<IconButton label="Kapat" icon={X} variant="ghost" circle lg onclick={leave} />
 		</header>

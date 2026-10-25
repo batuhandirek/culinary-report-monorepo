@@ -4,7 +4,7 @@ import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { VenueFoodTopic } from 'src/modules/food-topics/entities/venue-food-topic.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -77,15 +77,14 @@ describe('CompetitorService suggestions (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		mention(venues.doner, 'Döner');
 		mention(venues.imbiss, 'Turkish/Kebab');
 		mention(venues.imbiss, 'Kebap');
 		for (let i = 0; i < 20; i++) mention(venues.pizza, 'Pizza');
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {
@@ -108,10 +107,12 @@ describe('CompetitorService suggestions (pglite)', () => {
 		em.create(VenueFoodTopic, { venue: venues.doner, topic: topic('vegan') });
 		em.create(VenueFoodTopic, { venue: venues.ruyam, topic: topic('vegan') });
 		await em.flush();
+		await linkFoodTopics(em);
 		const suggestions = await service.suggest(venues.doner.brand.id);
 		expect(suggestions.map(s => s.venue.placeId)).toEqual(['ruyam', 'mustafa']);
 		expect(suggestions[0].reasons).toEqual(['same food (Döner & kebab)', 'both vegan', 'same district']);
 		await em.nativeDelete(VenueFoodTopic, {});
+		await linkFoodTopics(em);
 	});
 
 	it('leaves out current competitors', async () => {

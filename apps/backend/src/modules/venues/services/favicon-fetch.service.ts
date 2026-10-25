@@ -4,8 +4,9 @@ import { fetchPublic, type FetchedResource } from 'src/shared/util/public-fetch.
 
 export type { FetchedResource };
 
-// The page's head is near its start; a bigger icon than this is not an icon
-export const MAX_PAGE_BYTES = 512 * 1024;
+// A page is cut here: the icon links are in its head, but the profile links are often in the
+// footer, past a page builder's inline scripts. A bigger icon than `MAX_ICON_BYTES` is not an icon
+export const MAX_PAGE_BYTES = 2 * 1024 * 1024;
 export const MAX_ICON_BYTES = 1024 * 1024;
 
 /**

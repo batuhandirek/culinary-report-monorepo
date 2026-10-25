@@ -113,7 +113,7 @@
 		note="#ui/wrapped/Radio.svelte — one compact line inside a RadioGroup.Root, for a short self-explanatory set"
 		class="flex-col items-stretch">
 		<RadioGroup.Root bind:value={reason} class="gap-0">
-			<Radio value="sold">Culinary Report'ta sattım</Radio>
+			<Radio value="sold">Munchwerk'te sattım</Radio>
 			<Radio value="elsewhere">Başka bir yerde sattım</Radio>
 			<Radio value="changed-mind">Satmaktan vazgeçtim</Radio>
 		</RadioGroup.Root>

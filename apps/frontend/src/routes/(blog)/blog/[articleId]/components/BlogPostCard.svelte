@@ -24,9 +24,9 @@
 		class="rounded-md" />
 	<div class="flex flex-1 flex-col gap-1.5">
 		{#if topic}
-			<span class="eyebrow text-beet truncate">{blogTagLabel(topic)}</span>
+			<span class="stamp text-beet truncate">{blogTagLabel(topic)}</span>
 		{/if}
-		<h3 class="type-title text-ink m-0 line-clamp-3 text-base group-hover:underline">
+		<h3 class="type-display text-ink m-0 line-clamp-3 text-lg group-hover:underline">
 			{entry.title}
 		</h3>
 		<BlogEntryMeta {entry} author={false} />

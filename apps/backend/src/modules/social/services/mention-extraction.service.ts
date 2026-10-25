@@ -2,9 +2,10 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
+import { FeedbackService } from 'src/modules/feedback/services/feedback.service.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FeedbackThemeService, unthemedSql } from 'src/modules/venues/services/feedback-theme.service.js';
-import { withTopics } from 'src/modules/venues/util/feedback.js';
+import { MentionFoodTopicService } from 'src/modules/food-topics/services/mention-food-topic.service.js';
+import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 import { normalizeVenueName, plain } from 'src/modules/venues/util/venue-names.js';
 import { runPool } from 'src/shared/util/pool.js';
@@ -15,7 +16,6 @@ import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.j
 
 // A caption shorter than this (without hashtags) rarely names a venue
 const MIN_CAPTION_CHARS = 60;
-
 @Injectable()
 export class MentionExtractionService {
 	private readonly logger = new Logger(MentionExtractionService.name);
@@ -24,7 +24,9 @@ export class MentionExtractionService {
 		private readonly em: EntityManager,
 		private readonly mentionExtractionAgent: MentionExtractionAgent,
 		private readonly foodTopicService: FoodTopicService,
-		private readonly feedbackThemeService: FeedbackThemeService,
+		private readonly feedbackService: FeedbackService,
+		private readonly mentionFoodTopicService: MentionFoodTopicService,
+		private readonly venueFoodTopicService: VenueFoodTopicService,
 	) {}
 
 	/**
@@ -44,17 +46,28 @@ export class MentionExtractionService {
 				...(opts.cityId && { city: opts.cityId }),
 				...(range ? { postedAt: { $gte: range.start, $lt: range.end } } : {}),
 			},
-			{ orderBy: { views: 'desc' }, limit: opts.limit * 2, populate: ['city'] },
+			{
+				orderBy: { views: 'desc' },
+				limit: opts.limit * 2,
+				populate: ['city', 'hashtagLinks.hashtag'],
+			},
 		);
 		const posts = candidates
-			.filter(p => p.subtitles || (p.text ?? '').replaceAll('#', '').trim().length >= MIN_CAPTION_CHARS)
+			.filter(
+				p =>
+					p.subtitles ||
+					(p.text ?? '').replaceAll('#', '').trim().length >= MIN_CAPTION_CHARS,
+			)
 			.slice(0, opts.limit);
 		// Too short to name anything: marked analysed so they are not picked up again
 		for (const post of candidates.filter(p => !posts.includes(p))) post.analysedAt = new Date();
 
-		const foodTopics = posts.length ? (await this.foodTopicService.all()).map(t => t.label) : [];
+		const foodTopics =
+			posts.length ? (await this.foodTopicService.all()).map(t => t.label) : [];
+		const topics = posts.length ? await this.feedbackService.dishTopics() : undefined;
 		let mentions = 0;
 		let analysed = 0;
+		const created: Mention[] = [];
 		// A provider failure (no credits) stops the pool: keep what was finished before it
 		try {
 			await runPool(
@@ -65,14 +78,15 @@ export class MentionExtractionService {
 						cityName: post.city.name,
 						foodTopics,
 					});
-					for (const m of res.object.mentions) {
-						// The agent answers a theme per point; the topic is the theme's
-						this.em.create(Mention, {
-							post,
-							...m,
-							praise: withTopics(m.praise),
-							complaints: withTopics(m.complaints),
-						});
+					for (const { praise, complaints, dishes, ...m } of res.object.mentions) {
+						const mention = this.em.create(Mention, { post, ...m });
+						created.push(mention);
+						// What it says, as rows, flushed with the mention
+						this.feedbackService.replaceFor(
+							mention,
+							{ praise, complaints, dishes },
+							{ asked: true, topics: topics! },
+						);
 						mentions++;
 					}
 					post.isPromotional = res.object.isPromotional;
@@ -88,48 +102,12 @@ export class MentionExtractionService {
 		}
 		// One flush at the end: the posts run side by side on this entity manager
 		await this.em.flush();
-		return { analysed, mentions };
-	}
-
-	/** Mentions (of one city's posts, or all), newest post first, holding a point without a theme. */
-	private async unthemedIds(cityId: string | undefined, limit?: number): Promise<number[]> {
-		const rows: { id: number }[] = await this.em.getConnection().execute(
-			`select m.id from mentions m join social_posts p on p.id = m.post_id
-			where ${unthemedSql('m')} ${cityId ? 'and p.city_id = ?' : ''}
-			order by p.posted_at desc, m.id
-			${limit ? 'limit ?' : ''}`,
-			[...(cityId ? [cityId] : []), ...(limit ? [limit] : [])],
-		);
-		return rows.map(r => r.id);
-	}
-
-	async countUnthemed(cityId?: string): Promise<number> {
-		const [row]: { n: number }[] = await this.em.getConnection().execute(
-			`select count(*)::int as n from mentions m join social_posts p on p.id = m.post_id
-			where ${unthemedSql('m')} ${cityId ? 'and p.city_id = ?' : ''}`,
-			cityId ? [cityId] : [],
-		);
-		return row.n;
-	}
-
-	/**
-	 * Files the points of up to `limit` mentions extracted before themes existed (newest post
-	 * first) under a theme each, through `FeedbackThemeService.fileThemes`: no post is extracted
-	 * again, so matches and corrections stay.
-	 */
-	async backfillThemes(opts: { cityId?: string; limit: number }): Promise<{ mentions: number; points: number }> {
-		const ids = await this.unthemedIds(opts.cityId, opts.limit);
-		if (!ids.length) return { mentions: 0, points: 0 };
-		const mentions = await this.em.find(Mention, { id: { $in: ids } });
-		let filed: { holders: number; points: number };
-		try {
-			filed = await this.feedbackThemeService.fileThemes(mentions);
-		} catch (e) {
-			await this.em.flush();
-			throw e;
+		// What the new mentions are about, and their cities' venue tags by job
+		if (created.length) {
+			await this.mentionFoodTopicService.relink({ mentionIds: created.map(m => m.id) });
+			await this.venueFoodTopicService.queueCityRefresh(posts.map(p => p.city.id));
 		}
-		await this.em.flush();
-		return { mentions: filed.holders, points: filed.points };
+		return { analysed, mentions };
 	}
 
 	/**
@@ -192,7 +170,11 @@ export class MentionExtractionService {
 			tokens: 0,
 		};
 		if (!ids.length) return result;
-		const posts = await this.em.find(SocialPost, { id: { $in: ids } }, { populate: ['city', 'mentions'] });
+		const posts = await this.em.find(
+			SocialPost,
+			{ id: { $in: ids } },
+			{ populate: ['city', 'mentions', 'hashtagLinks.hashtag'] },
+		);
 		const foodTopics = (await this.foodTopicService.all()).map(t => t.label);
 		const key = (name: string) => normalizeVenueName(name) || plain(name);
 		try {
@@ -213,7 +195,8 @@ export class MentionExtractionService {
 						else pairs.push([left.splice(i, 1)[0], answer.isNewOpening]);
 					}
 					// One stored and one answered left: the same venue, spelled another way
-					if (left.length === 1 && unanswered.length === 1) pairs.push([left.pop()!, unanswered[0]]);
+					if (left.length === 1 && unanswered.length === 1)
+						pairs.push([left.pop()!, unanswered[0]]);
 					let flagged = false;
 					for (const [mention, isNewOpening] of pairs) {
 						if (mention.matchMethod === MentionMatchMethodEnum.IGNORED) continue;
@@ -225,7 +208,9 @@ export class MentionExtractionService {
 						}
 					}
 					if (flagged) result.flaggedPosts++;
-					result.unpaired += left.filter(m => m.matchMethod !== MentionMatchMethodEnum.IGNORED).length;
+					result.unpaired += left.filter(
+						m => m.matchMethod !== MentionMatchMethodEnum.IGNORED,
+					).length;
 					result.tokens += res.usage?.totalTokens ?? 0;
 					result.read++;
 				},
@@ -245,14 +230,19 @@ export class MentionExtractionService {
 
 	private prompt(post: SocialPost): string {
 		if (post.platform === SocialPlatformEnum.BLOG)
-			return [`Platform: blog article on ${post.author ?? 'a food blog'}`, `Article:\n${post.text ?? ''}`].join('\n\n');
+			return [
+				`Platform: blog article on ${post.author ?? 'a food blog'}`,
+				`Article:\n${post.text ?? ''}`,
+			].join('\n\n');
 		return [
 			`Platform: ${post.platform}`,
 			`Tagged location: ${post.locationName ?? 'none'}`,
-			`Hashtags: ${(post.hashtags ?? []).join(', ') || 'none'}`,
+			`Hashtags: ${post.hashtagLinks.map(link => link.hashtag.tag).join(', ') || 'none'}`,
 			`Mentioned accounts: ${(post.taggedHandles ?? []).join(', ') || 'none'}`,
 			`Caption:\n${post.text ?? ''}`,
-			post.subtitles ? `Transcript (${post.subtitlesLanguage}):\n${post.subtitles}` : 'Transcript: not available',
+			post.subtitles ?
+				`Transcript (${post.subtitlesLanguage}):\n${post.subtitles}`
+			:	'Transcript: not available',
 		].join('\n\n');
 	}
 }

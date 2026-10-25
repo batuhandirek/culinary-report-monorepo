@@ -8,6 +8,7 @@ import {
 	BLOG_MAX_PAGE_BYTES,
 	BLOG_REQUEST_PAUSE_MS,
 } from '../constants/blog.constant.js';
+import { isFeed } from '../util/blog-feed.js';
 
 /** A fetched feed or page as text. */
 export interface FetchedText {
@@ -24,22 +25,30 @@ const ACCEPT = {
 /**
  * Plain GETs of blogs for `BlogScrapeService`, which is its only caller; tests mock it. Each
  * request waits `BLOG_REQUEST_PAUSE_MS` first; the rules (public hosts, size caps, timeout) are
- * `fetchPublic`'s. A failure of any kind is null: a blog that does not answer is the run's note,
- * never its failure.
+ * `fetchPublic`'s. A feed is asked for as a browser, then, when that brings no feed, as a feed
+ * reader (`BLOG_FEED_USER_AGENT`). A failure of any kind is null: a blog that does not answer is
+ * the run's note, never its failure.
  */
 @Injectable()
 export class BlogFetchService {
 	private readonly logger = new Logger(BlogFetchService.name);
 
 	async get(url: string, kind: 'feed' | 'page'): Promise<FetchedText | null> {
+		const res = await this.fetch(url, kind);
+		if (kind === 'page' || (res && isFeed(res.body))) return res;
+		// A challenge, a 403 or a page: a feed reader may be let through to the feed
+		const asReader = await this.fetch(url, kind, BLOG_FEED_USER_AGENT);
+		return asReader && isFeed(asReader.body) ? asReader : res;
+	}
+
+	private async fetch(url: string, kind: 'feed' | 'page', userAgent?: string): Promise<FetchedText | null> {
 		await new Promise(resolve => setTimeout(resolve, BLOG_REQUEST_PAUSE_MS));
 		try {
 			const res = await fetchPublic(url, {
 				maxBytes: kind === 'feed' ? BLOG_MAX_FEED_BYTES : BLOG_MAX_PAGE_BYTES,
 				truncate: kind === 'page',
 				accept: ACCEPT[kind],
-				// Pages go as a browser; feeds as a feed reader
-				...(kind === 'feed' && { userAgent: BLOG_FEED_USER_AGENT }),
+				...(userAgent && { userAgent }),
 			});
 			return res && { url: res.url, body: decode(res.body, res.contentType) };
 		} catch (e) {

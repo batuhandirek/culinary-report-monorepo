@@ -4,7 +4,7 @@
 
 	import Stars from './Stars.svelte';
 
-	import { compact, monthLabel, PLATFORM_LABELS, TOPIC_LABELS } from '#lib/culinary.js';
+	import { authorLabel, compact, monthLabel, PLATFORM_LABELS, TOPIC_LABELS, viewsLabel } from '#lib/culinary.js';
 	import { Button } from '#ui/primitives-new/button/index.js';
 
 	// Every post and review the report counts, so a claim can be checked against its sources.
@@ -47,12 +47,12 @@
 <section class="break-before-page">
 	<header class="border-ink flex items-end gap-3 border-b-2 pb-2.5 break-after-avoid">
 		<span
-			class="bg-primary border-ink text-ink font-pixel shrink-0 border px-1.5 pt-1.5 pb-1 text-[10px] leading-none">
+			class="bg-acid border-ink text-ink number-hero grid h-11 min-w-11 shrink-0 place-items-center rounded-[6px] border-2 px-1.5 text-[24px]">
 			A
 		</span>
 		<div class="min-w-0 flex-1">
-			<p class="eyebrow text-beet m-0">Appendix</p>
-			<h2 class="m-0 text-2xl leading-tight font-semibold tracking-tight">Sources</h2>
+			<p class="stamp text-beet m-0">Appendix</p>
+			<h2 class="type-display m-0 mt-1 text-[26px]">Sources</h2>
 		</div>
 		<p class="text-muted-foreground m-0 hidden text-xs sm:block print:hidden">
 			{posts.length}
@@ -118,7 +118,7 @@
 								>{day(post.postedAt)}</td>
 							<td class="py-1.5 pr-2">
 								<span class="block max-w-32 truncate font-medium"
-									>@{post.author ?? 'unknown'}</span>
+									>{authorLabel(post.platform, post.author)}</span>
 								<span class="text-muted-foreground block text-[10.5px]">
 									{PLATFORM_LABELS[post.platform]}{post.authorFans
 										? ` · ${compact(post.authorFans)}`
@@ -126,7 +126,7 @@
 								</span>
 							</td>
 							<td class="py-1.5 pr-3 text-right tabular-nums"
-								>{compact(post.views)}</td>
+								>{viewsLabel(post.platform, post.views)}</td>
 							<td class="py-1.5">
 								<span class="text-reading-ink">{post.summary}</span>
 								<span class="mt-1 flex flex-wrap items-center gap-1">

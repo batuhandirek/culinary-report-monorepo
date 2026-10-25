@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { AdminReviewOutputDto, AdminVenueOutputDto } from 'client';
 
+	import TalksAbout from '#components/admin/feedback/TalksAbout.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel, recentMonths, sentimentVariant } from '#lib/culinary.js';
+	import { changesOf } from '#lib/feedback.js';
 	import type { Column, Filter } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
 
@@ -36,10 +38,21 @@
 			variant: (row) => sentimentVariant(row.sentiment)
 		},
 		{
+			type: 'component',
+			name: 'Talks about',
+			component: TalksAbout as never,
+			props: (row) => ({
+				feedback: row.feedback,
+				cityId: venue.city.id,
+				month: new Date(row.publishedAt).toISOString().slice(0, 7),
+				compact: true
+			})
+		},
+		{
 			type: 'value',
 			name: 'Changes noticed',
 			truncate: 40,
-			value: (row) => row.changes?.join(', ') ?? ''
+			value: (row) => changesOf(row.feedback).join(' · ')
 		},
 		{ type: 'value', name: 'Owner replied', value: (row) => (row.ownerResponse ? 'Yes' : '') }
 	];

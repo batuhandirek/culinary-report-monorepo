@@ -7,7 +7,7 @@ import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { linkFoodTopics, seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -189,6 +189,7 @@ describe('VenueStatusChange (pglite)', () => {
 
 	it("sums the city's quarter by district and food, and lists new venues", async () => {
 		const month = new Date().toISOString().slice(0, 7);
+		await linkFoodTopics(harness.orm.em);
 		const summary = await statusService.quarter(city.id, month);
 		expect(summary.totals).toEqual({
 			opened: 1,
@@ -251,9 +252,6 @@ describe('VenueStatusChange (pglite)', () => {
 				isNewOpening,
 				sentiment: 'positive',
 				summary: 'Just opened.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		post(fresh, lastMonth, true);
@@ -275,6 +273,7 @@ describe('VenueStatusChange (pglite)', () => {
 		);
 
 		const month = new Date().toISOString().slice(0, 7);
+		await linkFoodTopics(harness.orm.em);
 		const summary = await statusService.quarter(postCity.id, month);
 		expect(summary.totals.opened).toBe(1);
 		expect(summary.changes).toEqual([

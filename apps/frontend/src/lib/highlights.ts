@@ -4,7 +4,7 @@ import type { CityHighlightData, CityHighlightRiser } from 'client';
 
 import { compact, monthLabel } from '#lib/culinary.js';
 
-const SITE = 'https://culinaryreport.com';
+const SITE = 'https://munchwerk.com';
 
 export const highlightPath = (citySlug: string, month: string) => `/${citySlug}/${month}`;
 export const highlightUrl = (citySlug: string, month: string) =>
@@ -36,7 +36,7 @@ export const climbLabel = (row: Pick<CityHighlightRiser, 'rank' | 'prevRank'>) =
 		? `new at #${row.rank}`
 		: `#${row.prevRank} → #${row.rank}`;
 
-export const PLATFORM_NAMES: Record<string, string> = { tiktok: 'TikTok', instagram: 'Instagram' };
+export const PLATFORM_NAMES: Record<string, string> = { tiktok: 'TikTok', instagram: 'Instagram', blog: 'Blog' };
 
 /**
  * The page as a list of places, an article of the month and its breadcrumb. Names come from
@@ -61,7 +61,7 @@ export const highlightJsonLd = (
 			datePublished: publishedAt,
 			inLanguage: 'en',
 			about: { '@type': 'City', name: city.name },
-			publisher: { '@type': 'Organization', name: 'Culinary Report', url: SITE }
+			publisher: { '@type': 'Organization', name: 'Munchwerk', url: SITE }
 		},
 		{
 			'@type': 'ItemList',
@@ -83,7 +83,7 @@ export const highlightJsonLd = (
 		{
 			'@type': 'BreadcrumbList',
 			itemListElement: [
-				{ '@type': 'ListItem', position: 1, name: 'Culinary Report', item: SITE },
+				{ '@type': 'ListItem', position: 1, name: 'Munchwerk', item: SITE },
 				{ '@type': 'ListItem', position: 2, name: title, item: url }
 			]
 		}

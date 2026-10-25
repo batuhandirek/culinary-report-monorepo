@@ -55,17 +55,18 @@
 	schema={[
 		{
 			'@type': 'Organization',
-			name: 'Culinary Report',
-			url: 'https://culinaryreport.com',
+			name: 'Munchwerk',
+			url: 'https://munchwerk.com',
+			logo: 'https://munchwerk.com/favicon/icon-512.png',
 			description:
-				'Monthly reports on what social media says about your restaurant, bar or café.'
+				'What the city posts about food, counted: the places, creators and dishes everyone is talking about, and monthly reports for restaurants, bars and cafés.'
 		},
 		{
 			'@type': 'WebSite',
-			name: 'Culinary Report',
-			url: 'https://culinaryreport.com',
+			name: 'Munchwerk',
+			url: 'https://munchwerk.com',
 			description:
-				'Monthly reports on what social media says about your restaurant, bar or café.'
+				'What the city posts about food, counted: the places, creators and dishes everyone is talking about, and monthly reports for restaurants, bars and cafés.'
 		}
 	]} />
 

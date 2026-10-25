@@ -10,10 +10,12 @@ import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 
+import { AccountRejectedBrand } from '../entities/account-rejected-brand.entity.js';
 import { Creator } from '../entities/creator.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
 import { SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
+import { ACCOUNT_POPULATE } from '../util/account-output.js';
 import { normalizeHandle } from '../util/accounts.js';
 import { CREATOR_KEY_SQL, creatorKeyOf } from '../util/creators.js';
 
@@ -84,7 +86,7 @@ export class SocialAccountService {
 		const accounts = await this.em.find(
 			SocialAccount,
 			query.status === 'linked' ? linked : query.status === 'suggested' ? suggested : where,
-			{ populate: ['creator', 'brand', 'branch', 'suggestedBrand'] },
+			{ populate: [...ACCOUNT_POPULATE] },
 		);
 		const rows = await this.withFigures(accounts, query.month);
 		const [field, order] = (query.sort ?? (query.status === 'suggested' ? 'score:desc' : 'followers:desc')).split(':');
@@ -188,20 +190,56 @@ export class SocialAccountService {
 		return rows.length === 1 ? this.em.getReference(Creator, rows[0].creator_id) : null;
 	}
 
+	/** The brands each of these accounts was said not to be (`AccountRejectedBrand`), by account id. */
+	async rejectedBrands(accountIds: string[]): Promise<Map<string, Set<string>>> {
+		const out = new Map<string, Set<string>>();
+		for (const ids of _.chunk(_.uniq(accountIds.filter(Boolean)), 1000)) {
+			const rows: { account_id: string; brand_id: string }[] = await this.em
+				.getConnection()
+				.execute(
+					`select account_id, brand_id from account_rejected_brands where account_id in (${ids.map(() => '?').join(', ')})`,
+					ids,
+				);
+			for (const r of rows) {
+				const set = out.get(r.account_id) ?? new Set<string>();
+				set.add(r.brand_id);
+				out.set(r.account_id, set);
+			}
+		}
+		return out;
+	}
+
+	/** Whether an admin said the account is not this brand's. */
+	async isRejected(account: SocialAccount, brandId: string): Promise<boolean> {
+		return !!account.id && !!(await this.em.count(AccountRejectedBrand, { account: account.id, brand: brandId }));
+	}
+
+	/** Records that the account is not the brand's, once. Does not flush. */
+	private async reject(account: SocialAccount, brand: Brand): Promise<void> {
+		if (!(await this.isRejected(account, brand.id))) this.em.create(AccountRejectedBrand, { account, brand });
+	}
+
+	/** Takes back that the account is not the brand's. Does not flush. */
+	private async unreject(account: SocialAccount, brandId: string): Promise<void> {
+		if (!account.id) return;
+		const row = await this.em.findOne(AccountRejectedBrand, { account: account.id, brand: brandId });
+		if (row) this.em.remove(row);
+	}
+
 	/**
 	 * Links an account to a brand as its own (a branch's own when `branchId`), or (`brand` null)
-	 * unlinks it. Clears the open suggestion. An admin's unlink records the brand as rejected,
-	 * so the matcher never links it back. Does not flush.
+	 * unlinks it. Clears the open suggestion. An admin's unlink records the brand as rejected
+	 * (`AccountRejectedBrand`), so the matcher never links it back; a link takes back a rejection
+	 * of that brand. Does not flush.
 	 */
-	setBrand(
+	async setBrand(
 		account: SocialAccount,
 		brand: Brand | null,
 		source: AccountBrandSourceEnum,
 		branch?: Venue | null,
-	): void {
-		if (!brand && account.brand && source === AccountBrandSourceEnum.ADMIN)
-			account.rejectedBrandIds = [...new Set([...account.rejectedBrandIds, account.brand.id])];
-		if (brand) account.rejectedBrandIds = account.rejectedBrandIds.filter(id => id !== brand.id);
+	): Promise<void> {
+		if (!brand && account.brand && source === AccountBrandSourceEnum.ADMIN) await this.reject(account, account.brand);
+		if (brand) await this.unreject(account, brand.id);
 		account.brand = brand;
 		account.branch = brand ? (branch ?? null) : null;
 		account.brandSource = brand ? source : source === AccountBrandSourceEnum.ADMIN ? AccountBrandSourceEnum.ADMIN : null;
@@ -228,17 +266,17 @@ export class SocialAccountService {
 			case 'link': {
 				const brand = await this.em.findOne(Brand, { id: decision.brandId });
 				if (!brand) throw new BadRequestException('Unknown brand');
-				this.setBrand(account, brand, AccountBrandSourceEnum.ADMIN, await this.branchOf(brand.id, decision.branchId));
+				await this.setBrand(account, brand, AccountBrandSourceEnum.ADMIN, await this.branchOf(brand.id, decision.branchId));
 				break;
 			}
 			case 'confirm':
 				if (!account.suggestedBrand) throw new BadRequestException('Nothing suggested');
-				this.setBrand(account, account.suggestedBrand, AccountBrandSourceEnum.ADMIN);
+				await this.setBrand(account, account.suggestedBrand, AccountBrandSourceEnum.ADMIN);
 				break;
 			case 'reject':
-				if (account.brand) this.setBrand(account, null, AccountBrandSourceEnum.ADMIN);
+				if (account.brand) await this.setBrand(account, null, AccountBrandSourceEnum.ADMIN);
 				else if (account.suggestedBrand) {
-					account.rejectedBrandIds = [...new Set([...account.rejectedBrandIds, account.suggestedBrand.id])];
+					await this.reject(account, account.suggestedBrand);
 					account.suggestedBrand = null;
 					account.suggestedScore = null;
 				}

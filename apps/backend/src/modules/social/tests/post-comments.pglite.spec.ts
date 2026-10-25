@@ -145,9 +145,6 @@ describe('Post comments (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Nice.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		};
 		post(TOP, 'foodie.berlin', 300_000);

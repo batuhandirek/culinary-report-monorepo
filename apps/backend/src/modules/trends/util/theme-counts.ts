@@ -27,6 +27,12 @@ export interface ThemePointRow {
 	detail: string | null;
 	/** A post by one of the brand's own accounts (`ownPostSql`); false for reviews */
 	own: boolean;
+	/** The dish the point is about (`FeedbackPoint.dish`), as spelled, and its key */
+	dish?: string | null;
+	dish_key?: string | null;
+	/** The dish's food topic, when it has one: dishes of one topic are one row */
+	food_topic_key?: string | null;
+	food_topic_label?: string | null;
 }
 
 /** A kind of food (a food topic): a brand's is the main one of most of its places (`brandFoods`). */
@@ -48,6 +54,20 @@ export interface ThemeFoodCoverage extends ThemeFood {
 	reviews: number;
 	posts: number;
 	brands: number;
+}
+
+/** One dish a theme's sources were about: a food topic ("Döner & kebab") or, without one, the dish itself. */
+export interface ThemeDishRow {
+	/** `topic:<food topic key>` or `dish:<dish key>` */
+	key: string;
+	/** The topic's label, else the dish as most often spelled */
+	label: string;
+	/** The food topic, for a link to its page */
+	foodTopic?: string;
+	/** Reviews and posts raising the theme about it, each once */
+	sources: number;
+	/** Of the reviews and posts with a point of this side about it, percent */
+	share: number;
 }
 
 export interface ThemeBrand {
@@ -79,6 +99,8 @@ export interface ThemeRow {
 	topBrands: ThemeBrand[];
 	/** The three kinds of food it came up at most, by the brands' food */
 	foods: ThemeFoodRow[];
+	/** The five dishes its points were about most (`FeedbackPoint.dish`) */
+	dishes: ThemeDishRow[];
 	/** Up to five distinct details, in row order (newest first) */
 	samples: string[];
 }
@@ -106,6 +128,17 @@ export interface ThemeCounts {
 const SAMPLES = 5;
 const TOP_BRANDS = 3;
 const TOP_FOODS = 3;
+const TOP_DISHES = 5;
+
+/** A point's dish as one row: its food topic when it has one ("döner" and "doner kebab" are kebab), else its key. */
+export const themeDishOf = (
+	r: Pick<ThemePointRow, 'dish' | 'dish_key' | 'food_topic_key' | 'food_topic_label'>,
+): { key: string; topic?: string; topicLabel?: string; spelling: string } | null => {
+	if (!r.dish) return null;
+	if (r.food_topic_key) return { key: `topic:${r.food_topic_key}`, topic: r.food_topic_key, topicLabel: r.food_topic_label ?? r.food_topic_key, spelling: r.dish };
+	const key = r.dish_key || r.dish.trim().toLowerCase();
+	return key ? { key: `dish:${key}`, spelling: r.dish } : null;
+};
 
 const percent = (n: number, of: number): number | null => (of ? Math.round((n / of) * 1000) / 10 : null);
 const pointsChange = (now: number | null, before: number | null): number | null =>
@@ -118,6 +151,8 @@ interface Tally {
 	brands: Map<string, Set<string>>;
 	/** Per kind of food, its sources */
 	foods: Map<string, Set<string>>;
+	/** Per dish row (`themeDishOf`), its sources */
+	dishes: Map<string, Set<string>>;
 	samples: string[];
 	seen: Set<string>;
 }
@@ -144,6 +179,10 @@ export const countThemes = (
 	const names = new Map<string, string>();
 	/** Per kind of food, the month's sources with any point */
 	const foodBase = new Map<string, Set<string>>();
+	/** Per side and dish row, the month's sources with a point of that side about it */
+	const dishBase = new Map<string, Set<string>>();
+	/** Per dish row, its topic and how it is spelled */
+	const dishNames = new Map<string, { topic?: string; topicLabel?: string; spellings: Map<string, number> }>();
 
 	for (const r of rows) {
 		if (r.own || !base[r.month]) continue;
@@ -161,6 +200,14 @@ export const countThemes = (
 		const food = foods.get(r.brand_id);
 		const source = `${r.kind}:${r.source_id}`;
 		if (food) foodBase.set(food.key, (foodBase.get(food.key) ?? new Set<string>()).add(source));
+		const dish = themeDishOf(r);
+		if (dish) {
+			const side = `${r.polarity}:${dish.key}`;
+			dishBase.set(side, (dishBase.get(side) ?? new Set<string>()).add(source));
+			const names = dishNames.get(dish.key) ?? { topic: dish.topic, topicLabel: dish.topicLabel, spellings: new Map<string, number>() };
+			names.spellings.set(dish.spelling, (names.spellings.get(dish.spelling) ?? 0) + 1);
+			dishNames.set(dish.key, names);
+		}
 		if (!known) {
 			unfiled[r.kind].add(r.source_id);
 			continue;
@@ -172,12 +219,14 @@ export const countThemes = (
 			posts: new Set(),
 			brands: new Map(),
 			foods: new Map(),
+			dishes: new Map(),
 			samples: [],
 			seen: new Set(),
 		};
 		(r.kind === 'review' ? t.reviews : t.posts).add(r.source_id);
 		t.brands.set(r.brand_id, (t.brands.get(r.brand_id) ?? new Set<string>()).add(source));
 		if (food) t.foods.set(food.key, (t.foods.get(food.key) ?? new Set<string>()).add(source));
+		if (dish) t.dishes.set(dish.key, (t.dishes.get(dish.key) ?? new Set<string>()).add(source));
 		const detail = r.detail?.trim();
 		if (detail && t.samples.length < SAMPLES && !t.seen.has(detail.toLowerCase())) {
 			t.seen.add(detail.toLowerCase());
@@ -187,6 +236,12 @@ export const countThemes = (
 	}
 
 	const foodLabels = new Map([...foods.values()].map(f => [f.key, f.label]));
+	const dishLabel = (key: string) => {
+		const names = dishNames.get(key);
+		if (!names) return key;
+		if (names.topicLabel) return names.topicLabel;
+		return [...names.spellings.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0][0];
+	};
 	const now = base[month];
 	const then = base[previous];
 	const rowsOf = (polarity: ThemePolarity): ThemeRow[] =>
@@ -221,6 +276,16 @@ export const countThemes = (
 						}))
 						.sort((a, b) => b.sources - a.sources || a.label.localeCompare(b.label))
 						.slice(0, TOP_FOODS),
+					dishes: [...t.dishes.entries()]
+						.map(([key, sources]) => ({
+							key,
+							label: dishLabel(key),
+							...(dishNames.get(key)?.topic && { foodTopic: dishNames.get(key)!.topic }),
+							sources: sources.size,
+							share: percent(sources.size, dishBase.get(`${polarity}:${key}`)?.size ?? 0) ?? 0,
+						}))
+						.sort((a, b) => b.sources - a.sources || a.label.localeCompare(b.label))
+						.slice(0, TOP_DISHES),
 					samples: t.samples,
 				};
 			})
@@ -292,34 +357,31 @@ export const brandFoods = (places: BrandPlaceFood[]): Map<string, ThemeFood> => 
 	return out;
 };
 
-/** The points of a jsonb list column, both lists of the row unnested with their polarity. */
-const pointsOf = (alias: string) => `cross join lateral (
-		select 'praise' as polarity, x as point
-		from jsonb_array_elements(case when jsonb_typeof(${alias}.praise) = 'array' then ${alias}.praise else '[]'::jsonb end) x
-		union all
-		select 'complaint', x
-		from jsonb_array_elements(case when jsonb_typeof(${alias}.complaints) = 'array' then ${alias}.complaints else '[]'::jsonb end) x
-	) e`;
+/** A source's points (`f`, joined on `on`): praise and complaints, dish-only and change rows left out; their dish's food topic (`ft`). */
+const pointsOf = (on: string) =>
+	`join feedback_points f on ${on} and f.detail is not null and not f.change left join food_topics ft on ft.id = f.food_topic_id`;
+const DISH_FIELDS = `f.dish, f.dish_key, ft.key as food_topic_key, ft.label as food_topic_label`;
+const POLARITY = `case when f.sentiment = 'positive' then 'praise' else 'complaint' end as polarity`;
 
 /** `ThemePointRow`s of a city's written, analysed reviews in [start, end), newest first. */
 export const THEME_REVIEW_POINTS_SQL = `select to_char(r.published_at at time zone 'UTC', 'YYYY-MM') as month, 'review' as kind,
-		r.id::text as source_id, v.brand_id, b.name as brand_name, e.polarity,
-		e.point->>'theme' as theme, e.point->>'detail' as detail, false as own
+		r.id::text as source_id, v.brand_id, b.name as brand_name, ${POLARITY},
+		f.theme, f.detail, false as own, ${DISH_FIELDS}
 	from reviews r
 	join venues v on v.id = r.venue_id
 	join brands b on b.id = v.brand_id
-	${pointsOf('r')}
+	${pointsOf('f.review_id = r.id')}
 	where v.city_id = ? and r.published_at >= ? and r.published_at < ?
 		and r.analysed_at is not null and coalesce(r.text_translated, r.text, '') <> ''
-	order by r.published_at desc, r.id`;
+	order by r.published_at desc, r.id, f.id`;
 
 /** `ThemePointRow`s of a city's mentions matched to a brand in [start, end), newest post first. */
 export const THEME_POST_POINTS_SQL = `select to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') as month, 'post' as kind,
-		p.id::text as source_id, m.brand_id, b.name as brand_name, e.polarity,
-		e.point->>'theme' as theme, e.point->>'detail' as detail, ${ownPostSql('p', 'm.brand_id')} as own
+		p.id::text as source_id, m.brand_id, b.name as brand_name, ${POLARITY},
+		f.theme, f.detail, ${ownPostSql('p', 'm.brand_id')} as own, ${DISH_FIELDS}
 	from mentions m
 	join social_posts p on p.id = m.post_id
 	join brands b on b.id = m.brand_id
-	${pointsOf('m')}
+	${pointsOf('f.mention_id = m.id')}
 	where p.city_id = ? and p.posted_at >= ? and p.posted_at < ?
-	order by p.posted_at desc, p.id`;
+	order by p.posted_at desc, p.id, m.id, f.id`;

@@ -14,8 +14,8 @@ export const Code = ({ children }: { children: string }) => (
 						className={cls.mono}
 						style={{
 							backgroundColor: color.sand,
-							border: `1px dashed ${color.dash}`,
-							borderRadius: 10,
+							border: `2px solid ${color.ink}`,
+							borderRadius: 6,
 							// Letter-spacing trails the last digit: less padding on that side evens it.
 							padding: '14px 14px 14px 24px',
 							fontFamily: font.mono,

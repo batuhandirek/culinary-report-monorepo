@@ -113,21 +113,21 @@
 					<nav aria-label="Breadcrumb" class="flex min-w-0 items-center gap-1.5">
 						<a
 							href="/blog"
-							class="eyebrow text-beet hover:text-ink inline-flex min-h-11 items-center">
+							class="stamp text-beet hover:text-ink inline-flex min-h-11 items-center">
 							Blog
 						</a>
 						{#if leadTag}
 							<Icon icon={ChevronRight} size={12} class="text-beet shrink-0" />
 							<a
 								href={`/blog/tag/${leadTag.slug}`}
-								class="eyebrow text-beet hover:text-ink inline-flex min-h-11 min-w-0 items-center">
+								class="stamp text-beet hover:text-ink inline-flex min-h-11 min-w-0 items-center">
 								<span class="truncate">{blogTagLabel(leadTag.name)}</span>
 							</a>
 						{/if}
 					</nav>
 
 					<h1
-						class="type-title text-ink m-0 text-3xl leading-tight text-balance sm:text-[2.625rem]">
+						class="type-hero text-ink m-0 text-4xl text-balance sm:text-[3.25rem]">
 						{entry.title}
 					</h1>
 
@@ -235,7 +235,7 @@
 					<nav
 						aria-label="Contents"
 						class="no-scrollbar sticky top-24 mt-8 max-h-[calc(100dvh-8rem)] overflow-y-auto pb-4">
-						<div class="eyebrow text-muted-foreground mb-3">Contents</div>
+						<div class="stamp text-muted-foreground mb-3">Contents</div>
 						<ol class="border-line m-0 list-none border-l p-0">
 							{#each toc as item (item.id)}
 								<li>

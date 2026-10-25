@@ -7,10 +7,11 @@
 		AdminProspectOutputDto
 	} from 'client';
 
-	import { atExact, atShort } from '#components/admin/admin-format.js';
+	import { ago, atExact, atShort } from '#components/admin/admin-format.js';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { findOutreachTemplate } from '#constants/OUTREACH_TEMPLATES.js';
 	import { api } from '#lib/api.js';
+	import { monthLabel } from '#lib/culinary.js';
 	import {
 		IN_PERSON_KINDS,
 		LOGGABLE_KINDS,
@@ -215,6 +216,28 @@
 							</div>
 							{#if touch.comeBackAt}
 								<p class="text-muted-foreground m-0 text-xs">Come back {atShort(touch.comeBackAt)}</p>
+							{/if}
+							{#if touch.report}
+								<!-- The report it sent, and whether its own link was opened -->
+								<p class="m-0 text-xs">
+									<a class="text-beet underline-offset-2 hover:underline" href={`/admin/reports/${touch.report.id}`}>
+										{monthLabel(touch.report.month)} report
+									</a>
+									{#if touch.share}
+										<span class="text-muted-foreground"> · </span>
+										{#if touch.share.openCount}
+											<span class="text-primary-darker font-medium">opened {touch.share.openCount}×</span>
+											<span class="text-muted-foreground" title={atExact(touch.share.lastOpenedAt)}>
+												, last {ago(touch.share.lastOpenedAt)}
+											</span>
+										{:else}
+											<span class="text-muted-foreground">not opened</span>
+										{/if}
+										{#if touch.share.revokedAt}
+											<span class="text-muted-foreground"> · link turned off</span>
+										{/if}
+									{/if}
+								</p>
 							{/if}
 							{#if touch.subject}
 								<p class="m-0 text-sm font-medium">{touch.subject}</p>

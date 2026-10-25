@@ -6,24 +6,68 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 
+import { PostHashtag } from '../entities/post-hashtag.entity.js';
+import { PostSource, PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
+import { captionHashtags, ensureHashtags, normalizeHashtag } from '../util/hashtags.js';
 import { hashtagOfTagUrl } from '../util/instagram-tags.js';
+import { linkPostSources, type PostFind } from '../util/post-sources.js';
 
+import { HashtagService } from './hashtag.service.js';
 import { SocialAccountService } from './social-account.service.js';
 
 type SubtitleLink = { language: string; downloadLink: string; source?: string };
 
 export type PostFields = Omit<
 	Partial<SocialPost>,
-	'id' | 'mentions' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'city' | 'account'
+	| 'id'
+	| 'mentions'
+	| 'hashtagLinks'
+	| 'foundBy'
+	| 'createdAt'
+	| 'updatedAt'
+	| 'deletedAt'
+	| 'city'
+	| 'account'
 > &
 	Pick<SocialPost, 'externalId' | 'platform' | 'url' | 'postedAt'> & {
 		/** The name the author's profile shows, when the item carries it: the account's `displayName` */
 		authorName?: string | null;
+		/** The caption's hashtags, in its order (`PostHashtag`) */
+		hashtags?: string[];
+		/** What found it in this scrape (`PostSource`); rows of one post merged keep them all */
+		finds?: PostFind[];
 	};
 
+/** What found a `clockworks/tiktok-scraper` item: the hashtag or the query it came from. */
+export const clockworksFinds = (row: any): PostFind[] => {
+	const hashtag = row?.searchHashtag;
+	const tag = normalizeHashtag(typeof hashtag === 'object' ? hashtag?.name : hashtag);
+	return (
+		tag ? [{ kind: PostSourceKindEnum.TIKTOK_HASHTAG, value: tag }]
+		: row?.searchQuery ? [{ kind: PostSourceKindEnum.TIKTOK_SEARCH, value: `${row.searchQuery}` }]
+		: []
+	);
+};
+
+/** What found a `novi/advanced-search-tiktok-api` item: the query (`__search_terms.keyword`). */
+export const tikTokSearchFinds = (row: any): PostFind[] => {
+	const keyword = row?.__search_terms?.keyword;
+	return keyword ? [{ kind: PostSourceKindEnum.TIKTOK_SEARCH, value: `${keyword}` }] : [];
+};
+
+/** Rows of one post (two queries or tags found it) as one, keeping every find. */
+export const mergeFinds = (rows: PostFields[]): PostFields[] =>
+	Object.values(_.groupBy(rows, r => r.externalId)).map(([first, ...rest]) => ({
+		...first,
+		finds: _.uniqBy(
+			[first, ...rest].flatMap(r => r.finds ?? []),
+			f => `${f.kind} ${f.value}`,
+		),
+	}));
+
 /**
- * Stores posts from the scrapers' four item shapes. Subtitle links expire within days, so
+ * Stores posts from the scrapers' item shapes (hashtags, searches, places, profiles). Subtitle links expire within days, so
  * subtitles are downloaded while saving, right after a scrape.
  */
 @Injectable()
@@ -33,16 +77,28 @@ export class SocialPostService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly socialAccountService: SocialAccountService,
+		private readonly hashtagService: HashtagService,
 	) {}
 
 	/**
+	 * After a scrape's posts are flushed: their finds point at the city's sources they are, and
+	 * new tags get their food topic and brand.
+	 */
+	async finishSave(cityId: string): Promise<void> {
+		await linkPostSources(this.em, cityId);
+		await this.hashtagService.relink();
+	}
+
+	/**
 	 * Creates the post in the city whose scrape found it, or refreshes its counts (a known post
-	 * keeps its first city), and links it to its author's account (`SocialAccountService.ensure`,
-	 * which takes the item's display name and follower count). Returns false for an item it
-	 * cannot use. Does not flush.
+	 * keeps its first city and caption), and links it to its author's account
+	 * (`SocialAccountService.ensure`, which takes the item's display name and follower count).
+	 * Every find is recorded (`PostSource`), new post or known; a new post's hashtags are stored
+	 * as rows (`PostHashtag`). Returns false for an item it cannot use. Does not flush; the finds
+	 * reach their city source with `linkPostSources` after the flush.
 	 */
 	async upsert(fields: PostFields, city: City): Promise<boolean> {
-		const { authorName, ...postFields } = fields;
+		const { authorName, hashtags, finds, ...postFields } = fields;
 		const account = await this.socialAccountService.ensure(fields.platform, fields.author, city, {
 			displayName: authorName,
 			followers: fields.authorFans,
@@ -54,17 +110,41 @@ export class SocialPostService {
 			existing.subtitles ??= fields.subtitles ?? null;
 			existing.subtitlesLanguage ??= fields.subtitlesLanguage ?? null;
 			existing.account ??= account;
+			await this.addFinds(existing, finds ?? []);
 			return true;
 		}
-		this.em.create(SocialPost, { ...postFields, author: account?.handle ?? fields.author ?? null, account, city });
+		const post = this.em.create(SocialPost, {
+			...postFields,
+			author: account?.handle ?? fields.author ?? null,
+			account,
+			city,
+		});
+		const tagIds = await ensureHashtags(this.em, hashtags ?? []);
+		_.uniq((hashtags ?? []).map(normalizeHashtag).filter(Boolean)).forEach((tag, rank) =>
+			this.em.create(PostHashtag, { post, hashtag: tagIds.get(tag)!, rank }),
+		);
+		const now = new Date();
+		for (const find of _.uniqBy(finds ?? [], f => `${f.kind} ${f.value}`))
+			this.em.create(PostSource, { post, kind: find.kind, value: find.value, venue: find.venueId ?? null, foundAt: now });
 		return true;
+	}
+
+	/** A known post's finds this time: a row for each source not on it yet. */
+	private async addFinds(post: SocialPost, finds: PostFind[]): Promise<void> {
+		if (!finds.length) return;
+		const known = new Set(
+			(await this.em.find(PostSource, { post })).map(f => `${f.kind} ${f.value}`),
+		);
+		const now = new Date();
+		for (const find of _.uniqBy(finds, f => `${f.kind} ${f.value}`))
+			if (!known.has(`${find.kind} ${find.value}`))
+				this.em.create(PostSource, { post, kind: find.kind, value: find.value, venue: find.venueId ?? null, foundAt: now });
 	}
 
 	/** One item of `clockworks/tiktok-scraper` (hashtags) or `clockworks/tiktok-hashtag-scraper`. */
 	async fromClockworks(row: any): Promise<PostFields | null> {
 		if (!row?.id || !row.webVideoUrl || !row.createTimeISO || row.error) return null;
 		const subs = row.videoMeta?.subtitleLinks?.length ? await this.downloadSubtitles(row.videoMeta.subtitleLinks) : null;
-		const hashtag = row.searchHashtag;
 		return {
 			externalId: `${row.id}`,
 			platform: SocialPlatformEnum.TIKTOK,
@@ -80,10 +160,7 @@ export class SocialPostService {
 			saves: row.collectCount ?? 0,
 			isAd: !!(row.isAd || row.isSponsored),
 			locationName: row.locationMeta?.locationName ?? null,
-			source:
-				hashtag ? `#${typeof hashtag === 'object' ? hashtag.name : hashtag}`
-				: row.searchQuery ? `search:${row.searchQuery}`
-				: null,
+			finds: clockworksFinds(row),
 			text: row.text ?? null,
 			hashtags: _.uniq((row.hashtags ?? []).map((h: any) => h?.name).filter(Boolean)),
 			taggedHandles: row.mentions ?? [],
@@ -112,7 +189,6 @@ export class SocialPostService {
 		const text: string = row.desc ?? '';
 		const tags: string[] = (row.text_extra ?? []).map((t: any) => t?.hashtag_name).filter(Boolean);
 		const place = (row.anchors ?? []).find((a: any) => a?.component_key === 'anchor_poi');
-		const keyword = row.__search_terms?.keyword;
 		return {
 			externalId: `${row.aweme_id}`,
 			platform: SocialPlatformEnum.TIKTOK,
@@ -129,17 +205,17 @@ export class SocialPostService {
 			// Branded content carries TikTok's "ad" label
 			isAd: !!(row.is_ads || row.commerce_info?.branded_content_type),
 			locationName: row.poi_info?.poi_name ?? place?.keyword ?? null,
-			source: keyword ? `search:${keyword}` : null,
+			finds: tikTokSearchFinds(row),
 			text,
-			hashtags: _.uniq(tags.length ? tags : (text.match(/#[\p{L}\p{N}_]+/gu) ?? []).map(h => h.slice(1))),
+			hashtags: _.uniq(tags.length ? tags : captionHashtags(text)),
 			taggedHandles: _.uniq((text.match(/@[\w.]+/g) ?? []).map(h => h.slice(1))),
 			subtitles: subs?.subtitles ?? null,
 			subtitlesLanguage: subs?.language ?? null,
 		};
 	}
 
-	/** One item of `scraping_solutions/instagram-location-posts-local-creator-finder`. */
-	fromInstagramLocation(row: any, venueName: string): PostFields | null {
+	/** One item of `scraping_solutions/instagram-location-posts-local-creator-finder`, run for a venue's place. */
+	fromInstagramLocation(row: any, venue: { id: string; name: string }): PostFields | null {
 		if (!row?.postId || !row.postUrl || !row.publishedAt) return null;
 		const caption: string = row.caption ?? '';
 		return {
@@ -156,9 +232,9 @@ export class SocialPostService {
 			shares: row.shareCount ?? 0,
 			comments: row.commentCount ?? 0,
 			locationName: row.locationName ?? null,
-			source: `place:${venueName}`,
+			finds: [{ kind: PostSourceKindEnum.VENUE_PLACE, value: venue.name, venueId: venue.id }],
 			text: caption,
-			hashtags: (caption.match(/#[\p{L}\p{N}_]+/gu) ?? []).map(h => h.slice(1)),
+			hashtags: captionHashtags(caption),
 			taggedHandles: (caption.match(/@[\w.]+/g) ?? []).map(h => h.slice(1)),
 		};
 	}
@@ -190,14 +266,50 @@ export class SocialPostService {
 			comments: count(row.commentsCount),
 			isAd: !!(row.paidPartnership || row.isSponsored),
 			locationName: typeof row.locationName === 'string' && row.locationName.trim() ? row.locationName.trim() : null,
-			source: `#${hashtag}`,
+			finds: [{ kind: PostSourceKindEnum.INSTAGRAM_HASHTAG, value: normalizeHashtag(hashtag) }],
 			text: caption,
-			hashtags: _.uniq((caption.match(/#[\p{L}\p{N}_]+/gu) ?? []).map(h => h.slice(1))),
+			hashtags: captionHashtags(caption),
 			// Caption @-mentions, co-authors and people tagged in the photo
 			taggedHandles: _.uniq([
 				...(caption.match(/@[\w.]+/g) ?? []).map(h => h.slice(1)),
 				...usernames(row.coauthorProducers),
 				...usernames(row.taggedUsers),
+			]),
+		};
+	}
+
+	/**
+	 * One of the `latestPosts` of an `apify/instagram-profile-scraper` item (`profile`, the
+	 * account's): the same media fields as the hashtag actor's items (`id` is the media pk), views
+	 * on videos only, hidden like counts as -1. The profile carries the author's followers.
+	 */
+	fromInstagramProfilePost(post: any, profile: any): PostFields | null {
+		if (!post?.id || !post.url || !post.timestamp) return null;
+		const caption: string = post.caption ?? '';
+		const count = (n: unknown) => (typeof n === 'number' && n > 0 ? n : 0);
+		const usernames = (list: unknown) =>
+			Array.isArray(list) ? list.map((u: any) => u?.username).filter(Boolean) : [];
+		const author = post.ownerUsername ?? profile?.username ?? null;
+		return {
+			externalId: `ig_${`${post.id}`.split('_')[0]}`,
+			platform: SocialPlatformEnum.INSTAGRAM,
+			url: post.url,
+			postedAt: new Date(post.timestamp),
+			author,
+			authorName: profile?.fullName ?? null,
+			authorFans: typeof profile?.followersCount === 'number' ? profile.followersCount : null,
+			views: count(post.videoPlayCount ?? post.videoViewCount),
+			likes: count(post.likesCount),
+			shares: 0,
+			comments: count(post.commentsCount),
+			isAd: !!(post.paidPartnership || post.isSponsored),
+			locationName: typeof post.locationName === 'string' && post.locationName.trim() ? post.locationName.trim() : null,
+			text: caption,
+			hashtags: captionHashtags(caption),
+			taggedHandles: _.uniq([
+				...(caption.match(/@[\w.]+/g) ?? []).map(h => h.slice(1)),
+				...usernames(post.coauthorProducers),
+				...usernames(post.taggedUsers),
 			]),
 		};
 	}

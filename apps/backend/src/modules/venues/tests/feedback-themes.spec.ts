@@ -10,7 +10,6 @@ import {
 	isFeedbackTheme,
 	themesOfTopic,
 } from '../constants/feedback-themes.constant.js';
-import { withTopics } from '../util/feedback.js';
 
 /* The vocabulary every praise and complaint point is filed under. */
 describe('feedback themes', () => {
@@ -31,17 +30,5 @@ describe('feedback themes', () => {
 		const legend = feedbackThemeLegend();
 		for (const key of FEEDBACK_THEME_KEYS) expect(legend).toContain(`${key} (`);
 		expect(feedbackThemeLabel('price_increase')).toBe('price / price increase');
-	});
-
-	it('derives the topic from the theme the agent answered', () => {
-		expect(
-			withTopics([
-				{ theme: 'price_increase', detail: 'prices went up' },
-				{ theme: 'cash_only', detail: 'cards no longer accepted' },
-			]),
-		).toEqual([
-			{ topic: 'price', theme: 'price_increase', detail: 'prices went up' },
-			{ topic: 'payment', theme: 'cash_only', detail: 'cards no longer accepted' },
-		]);
 	});
 });

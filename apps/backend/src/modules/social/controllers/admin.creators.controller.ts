@@ -75,6 +75,7 @@ export class AdminCreatorsController {
 			brands: detail.brands,
 			posts: detail.posts,
 			views: detail.views,
+			foundBy: detail.foundBy,
 		};
 	}
 

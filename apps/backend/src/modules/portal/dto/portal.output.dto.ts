@@ -1,3 +1,4 @@
+import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { BrandMemberRoleEnum } from 'src/modules/auth/constants/brand-member-role.enum.constant.js';
 import type { ProspectLanguage } from 'src/modules/outreach/constants/outreach.constant.js';
 import type { SharedReportOutputDto } from 'src/modules/reports/dto/report-share.output.dto.js';
@@ -6,8 +7,6 @@ import type { ReviewPlatformEnum } from 'src/modules/venues/entities/review.enti
 import type { BrandReportScopeEnum } from 'src/modules/venues/entities/brand.entity.js';
 import type { CompetitorPickedByEnum } from 'src/modules/venues/entities/brand-competitor.entity.js';
 import type {
-	FeedbackDish,
-	FeedbackPoint,
 	FeedbackSentiment,
 	FeedbackTopic,
 } from 'src/modules/venues/interfaces/feedback.interface.js';
@@ -63,6 +62,8 @@ export interface PortalReportListItemOutputDto {
 	updatedAt: Date;
 	postCount: number;
 	reviewCount: number;
+	/** Which of the brand's reports it is ("Full report", "Reviews"): a month may have several */
+	name: string;
 	title: string;
 	headline: string;
 	/** The city whose branches it covers; absent for a report across all its cities */
@@ -102,8 +103,8 @@ export interface PortalReviewOutputDto {
 	/** When the owner marked it answered here */
 	markedRepliedAt?: Date;
 	sentiment?: FeedbackSentiment;
-	praise?: FeedbackPoint[];
-	complaints?: FeedbackPoint[];
+	/** What it says, as feedback rows (none before it is analysed) */
+	feedback: FeedbackPointOutputDto[];
 	/** Answered on Google, or marked answered here */
 	answered: boolean;
 	/** A reply ready to post, in the review's language: unanswered written reviews only, when drafted */
@@ -148,7 +149,8 @@ export interface PortalPostOutputDto {
 	summary: string;
 	/** False when the creator says they have not been there */
 	visited: boolean;
-	dishes: FeedbackDish[];
+	/** What it says about the brand, as feedback rows */
+	feedback: FeedbackPointOutputDto[];
 }
 
 export interface PortalPostsOutputDto extends PaginatedResult<PortalPostOutputDto> {}

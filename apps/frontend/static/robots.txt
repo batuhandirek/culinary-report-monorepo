@@ -5,7 +5,7 @@ Disallow: /auth
 Disallow: /admin
 Disallow: /api/*
 
-Sitemap: https://culinaryreport.com/sitemap.xml
+Sitemap: https://munchwerk.com/sitemap.xml
 
 User-agent: AhrefsBot
 Disallow: /

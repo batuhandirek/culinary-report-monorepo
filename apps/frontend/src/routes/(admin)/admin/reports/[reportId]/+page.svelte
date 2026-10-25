@@ -19,7 +19,13 @@
 
 	const rebuildAction = createAction(
 		() =>
-			api.admin.buildReport({ brandId: report.brand.id, cityId: report.city?.id, month: report.month }),
+			api.admin.buildReport({
+				brandId: report.brand.id,
+				cityId: report.city?.id,
+				month: report.month,
+				// Its configuration's alone; a default report rebuilds as the brand's reports now are
+				...(report.config && { configId: report.config.id })
+			}),
 		{
 			onSuccess: (rebuilt) => goto(`/admin/reports/${rebuilt.id}`, { invalidateAll: true }),
 			successNotification: { title: 'Report rebuilt', text: 'With the data as it is now' }
@@ -46,13 +52,32 @@
 <AdminPageHeader title={report.brand.name}>
 	{#snippet aboveTitle()}
 		<span class="text-muted-foreground text-xs">
-			Report · {report.city?.name ?? 'All cities'} · {monthLabel(report.month)} · built {at(report.updatedAt)}
+			Report · {report.city?.name ?? 'All cities'} · {monthLabel(report.month)} · built {at(
+				report.updatedAt
+			)}
+			·
+			{#if report.config}
+				<a
+					href={`/admin/brands/${report.brand.id}/report-configs/${report.config.id}`}
+					class="text-beet">{report.name}</a>
+			{:else}
+				{report.name}
+			{/if}
+			{#if report.template}
+				(template <a
+					href={`/admin/reports/templates/${report.template.id}`}
+					class="text-beet">{report.template.name}</a
+				>)
+			{/if}
 		</span>
 	{/snippet}
 	{#snippet rightTitle()}
 		<div class="flex shrink-0 items-center gap-2">
-			<Button size="sm" variant="outline" icon={Network} href={`/admin/brands/${report.brand.id}`}
-				>Brand</Button>
+			<Button
+				size="sm"
+				variant="outline"
+				icon={Network}
+				href={`/admin/brands/${report.brand.id}`}>Brand</Button>
 			<Button
 				size="sm"
 				variant="outline"

@@ -13,12 +13,13 @@ import { venueSearchName } from 'src/modules/venues/util/brands.js';
 import { isSameVenue, plain } from 'src/modules/venues/util/venue-names.js';
 import { runPool } from 'src/shared/util/pool.js';
 
+import { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import type { SocialPost } from '../entities/social-post.entity.js';
 import { instagramTagUrl } from '../util/instagram-tags.js';
 import { fromClockworksComment } from '../util/post-comments.js';
 
 import { PostCommentService } from './post-comment.service.js';
-import { PostFields, SocialPostService } from './social-post.service.js';
+import { clockworksFinds, mergeFinds, PostFields, SocialPostService, tikTokSearchFinds } from './social-post.service.js';
 
 // clockworks' search fails on device registration; it is still the hashtag actor
 const TIKTOK_HASHTAG_ACTOR = 'clockworks/tiktok-scraper';
@@ -229,22 +230,28 @@ export class SocialScrapeService {
 		budgetUsd: number;
 	}): Promise<ScrapeResult> {
 		const { city } = opts;
-		const searchName = (name: string) => {
-			const head = name.split(/\s[|\-–·•]\s|[|]/)[0].trim();
-			return plain(head).includes(plain(city.name)) ? head : `${head} ${city.name}`;
-		};
 		// The search actor refuses a cap under $4, hence the step's $8 default
 		const half = opts.budgetUsd / 2;
 
+		const byInput = new Map(opts.venues.map(v => [venueSearchQuery(v, city.name), v]));
 		const search = await this.searchTikTok(
 			city,
 			// A branch is searched under its brand's name
-			opts.venues.map(v => searchName(venueSearchName(v))),
+			[...byInput.keys()],
 			{ perQuery: opts.perVenue, budgetUsd: half, label: `tiktok venue search ${city.name}: ${opts.venues.length} venues` },
 		);
-		const tiktok = search.rows.filter(r => r.postedAt.toISOString() >= opts.since);
+		// Found by a search for one venue, not by a city source
+		const tiktok = search.rows
+			.filter(r => r.postedAt.toISOString() >= opts.since)
+			.map(r => ({
+				...r,
+				finds: (r.finds ?? []).map(f => ({
+					kind: PostSourceKindEnum.VENUE_SEARCH,
+					value: f.value,
+					venueId: byInput.get(f.value)?.id,
+				})),
+			}));
 
-		const byInput = new Map(opts.venues.map(v => [searchName(venueSearchName(v)), v]));
 		const instagramItems = await this.apifyService.runActor<any>(
 			INSTAGRAM_LOCATION_ACTOR,
 			{
@@ -263,7 +270,7 @@ export class SocialScrapeService {
 				const venue = byInput.get(row.input);
 				return venue && row.locationName && isSameVenue(row.locationName, venue.name);
 			})
-			.map(row => this.socialPostService.fromInstagramLocation(row, byInput.get(row.input)!.name))
+			.map(row => this.socialPostService.fromInstagramLocation(row, byInput.get(row.input)!))
 			.filter((row): row is PostFields => !!row && row.postedAt.toISOString() >= opts.since);
 
 		return {
@@ -303,10 +310,10 @@ export class SocialScrapeService {
 			return { found: 0, rows: [] };
 		}
 		const rows: PostFields[] = [];
-		// A video two queries found is downloaded once; the first query keeps it
-		for (const item of _.uniqBy(items, i => `${i?.aweme_id}`)) {
-			const row = await this.socialPostService.fromTikTokSearch(item);
-			if (row) rows.push(row);
+		// A video two queries found is downloaded once, with both finds
+		for (const group of Object.values(_.groupBy(items, i => `${i?.aweme_id}`))) {
+			const row = await this.socialPostService.fromTikTokSearch(group[0]);
+			if (row) rows.push({ ...row, finds: _.uniqBy(group.flatMap(tikTokSearchFinds), f => f.value) });
 		}
 		return { found: items.length, rows };
 	}
@@ -317,25 +324,43 @@ export class SocialScrapeService {
 		since: string,
 	): Promise<PostFields[]> {
 		const rows: PostFields[] = [];
-		for (const item of _.uniqBy(items, i => `${i?.id}`)) {
+		// A video two hashtags found is mapped (its subtitles downloaded) once, with both finds
+		for (const group of Object.values(_.groupBy(items, i => `${i?.id}`))) {
+			const item = group[0];
 			if (item?.createTimeISO && item.createTimeISO < since) continue;
 			const row = await map(item);
-			if (row) rows.push(row);
+			if (row) rows.push({ ...row, finds: _.uniqBy(group.flatMap(clockworksFinds), f => `${f.kind} ${f.value}`) });
 		}
 		return rows;
 	}
 
 	private async saveAll(rows: PostFields[], city: City): Promise<number> {
 		let saved = 0;
-		for (const row of _.uniqBy(rows, r => r.externalId)) {
+		// A post two of the run's sources found is saved once, with both finds
+		for (const row of mergeFinds(rows)) {
 			if (await this.socialPostService.upsert(row, city)) saved++;
 			if (saved % 200 === 0) await this.em.flush();
 		}
 		await this.em.flush();
+		await this.socialPostService.finishSave(city.id);
 		this.logger.log(`Saved ${saved} posts`);
 		return saved;
 	}
 }
+
+/**
+ * What a venue is searched for, on TikTok and Instagram places: its brand's name (`venueSearchName`)
+ * up to a "|" or " - " tail, with the city's name unless it has it. A `venue_search` find's value.
+ */
+export const venueSearchQuery = (
+	venue: { name: string; brand?: { name?: string } | null },
+	cityName: string,
+): string => {
+	const head = venueSearchName(venue)
+		.split(/\s[|\-–·•]\s|[|]/)[0]
+		.trim();
+	return plain(head).includes(plain(cityName)) ? head : `${head} ${cityName}`;
+};
 
 /** Whether a TikTok URL is the video with this id (an item without a URL is taken as the post's). */
 const isSameVideo = (url: unknown, videoId: string): boolean =>

@@ -45,11 +45,11 @@
 				target="_blank"
 				rel="noreferrer"
 				class="bg-paper border-line hover:border-ink/40 rounded-md border px-4 py-3 no-underline">
-				<p class="eyebrow text-beet m-0">{PLATFORMS[listing.platform] ?? listing.platform}</p>
-				<p class="text-ink m-0 mt-1 text-2xl font-semibold tabular-nums">
+				<p class="stamp text-beet m-0">{PLATFORMS[listing.platform] ?? listing.platform}</p>
+				<p class="text-ink font-display m-0 mt-1 text-[26px] font-extrabold tracking-[-0.02em] tabular-nums">
 					{listing.rating !== undefined ? `${listing.rating.toFixed(1)}★` : '—'}
 					{#if listing.reviewsCount !== undefined}
-						<span class="text-muted-foreground text-sm font-normal"
+						<span class="text-muted-foreground font-sans text-sm font-normal tracking-normal"
 							>{listing.reviewsCount.toLocaleString('en')} ratings</span>
 					{/if}
 				</p>

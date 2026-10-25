@@ -15,12 +15,14 @@ import { BrandLeadScoreService } from 'src/modules/venues/services/brand-lead-sc
 import { previousMonth } from 'src/modules/venues/util/month.js';
 
 import { AccountMatchingService } from '../services/account-matching.service.js';
+import { HashtagService } from '../services/hashtag.service.js';
 import { MentionMatchingService } from '../services/mention-matching.service.js';
 
 /**
  * Brands changed: their mentions are matched again (a chain's branch only when the post says
  * which), the cities' accounts too (a merge settles handles two brands shared), then the
- * cities' lead scores are worked out again for the last finished month. Accounts and scores
+ * cities' lead scores are worked out again for the last finished month, and hashtags' brands
+ * checked again (a merge or rename moves which brand a tag names). Accounts, scores and tags
  * need no LLM, so they run even when the rematch fails (an LLM account out of credits leaves
  * its close calls for the retry); the job then fails with the rematch's error.
  */
@@ -32,6 +34,7 @@ export class BrandChangedWorker {
 		private readonly accountMatchingService: AccountMatchingService,
 		private readonly cityService: CityService,
 		private readonly brandLeadScoreService: BrandLeadScoreService,
+		private readonly hashtagService: HashtagService,
 	) {}
 
 	// Matching may call the LLM for a few mentions; a retry redoes the same work, never paid scrapes
@@ -49,6 +52,7 @@ export class BrandChangedWorker {
 			await this.accountMatchingService.match(await this.cityService.getById(cityId));
 			await this.brandLeadScoreService.scoreAll(month, cityId);
 		}
+		await this.hashtagService.relink();
 		if (rematchError) throw rematchError;
 	}
 }

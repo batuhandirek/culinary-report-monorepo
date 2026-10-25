@@ -137,9 +137,6 @@ describe('MentionMatchingService with brands (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Good.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 			...extra,
 		});
 

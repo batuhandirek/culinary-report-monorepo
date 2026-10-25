@@ -8,6 +8,8 @@ import { ProspectQueryService } from 'src/modules/outreach/services/prospect-que
 import { ReportHighlightsAgent } from 'src/modules/reports/agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from 'src/modules/reports/agents/review-reply.agent.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { ReportSignalsService } from 'src/modules/reports/services/report-signals.service.js';
 import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -71,6 +73,8 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 				ReviewService,
 				VenueService,
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				ReportSignalsService,
 				VenueBusynessService,
 				VenueReservationService,
@@ -176,9 +180,6 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Nice.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		}
 		await em.flush();

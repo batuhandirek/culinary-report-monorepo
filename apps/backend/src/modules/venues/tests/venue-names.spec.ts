@@ -40,6 +40,11 @@ describe('venue names', () => {
 		expect(isFoodVenue('Vietnamese restaurant')).toBe(true);
 		expect(isFoodVenue('Cocktail bar')).toBe(true);
 		expect(isFoodVenue('Typing service')).toBe(false);
+		// Food Google names without a food word we had: "pub" inside a word, shops you eat at
+		for (const category of ['Gastropub', 'Brasserie', 'Sandwich shop', 'Açaí shop', 'Creperie', 'Indian takeaway', 'Meyhane'])
+			expect(isFoodVenue(category)).toBe(true);
+		for (const category of ['Hotel', 'Event venue', 'Grocery store', 'Night club', 'Public bathroom', 'Hair salon'])
+			expect(isFoodVenue(category)).toBe(false);
 		expect(isFoodVenue(null)).toBe(true);
 	});
 

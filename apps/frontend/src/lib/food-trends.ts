@@ -5,7 +5,7 @@ import type { FoodTrendsData } from 'client';
 
 import { monthLabel } from '#lib/culinary.js';
 
-const SITE = 'https://culinaryreport.com';
+const SITE = 'https://munchwerk.com';
 
 export const foodTrendsPath = (citySlug: string, quarter: string) => `/${citySlug}/trends/${quarter}`;
 export const foodTrendsUrl = (citySlug: string, quarter: string) =>
@@ -46,8 +46,8 @@ export const recentQuarters = (count = 6, now = new Date()): string[] => {
 export const foodTrendsTitle = (cityName: string, quarter: string) =>
 	`${cityName} food trends, ${quarterLabel(quarter)}`;
 
-/** "+60 %", rounded to whole percent. */
-export const percentUp = (change: number) => `+${Math.round(change * 100)} %`;
+/** "+60%", rounded to whole percent. */
+export const percentUp = (change: number) => `+${Math.round(change * 100)}%`;
 
 /** One sentence of what the quarter shows, from whichever sections it has. */
 export const foodTrendsSummary = (cityName: string, quarter: string, data: FoodTrendsData) => {
@@ -60,7 +60,7 @@ export const foodTrendsSummary = (cityName: string, quarter: string, data: FoodT
 	}
 	const talked = data.talked?.topics[0];
 	if (talked) {
-		parts.push(`${talked.label} came up in ${Math.round(talked.share)} % of the TikTok and Instagram posts naming a kind of food`);
+		parts.push(`${talked.label} came up in ${Math.round(talked.share)}% of the TikTok and Instagram posts naming a kind of food`);
 	}
 	if (data.openings?.opened) {
 		parts.push(`${data.openings.opened} new ${data.openings.opened === 1 ? 'place' : 'places'} opened`);
@@ -93,7 +93,7 @@ export const foodTrendsJsonLd = (
 			datePublished: publishedAt,
 			inLanguage: 'en',
 			about: { '@type': 'City', name: city.name },
-			publisher: { '@type': 'Organization', name: 'Culinary Report', url: SITE }
+			publisher: { '@type': 'Organization', name: 'Munchwerk', url: SITE }
 		},
 		...(list.length
 			? [
@@ -109,7 +109,7 @@ export const foodTrendsJsonLd = (
 		{
 			'@type': 'BreadcrumbList',
 			itemListElement: [
-				{ '@type': 'ListItem', position: 1, name: 'Culinary Report', item: SITE },
+				{ '@type': 'ListItem', position: 1, name: 'Munchwerk', item: SITE },
 				{ '@type': 'ListItem', position: 2, name: title, item: url }
 			]
 		}

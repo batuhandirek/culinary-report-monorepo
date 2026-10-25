@@ -24,11 +24,13 @@
 
 **Competitor** — a place or a whole rival brand on a brand's list (five at most per subject), picked by an admin, by the owner in the portal, or filled from suggestions. A competitor's reviews are scraped with the brand's, so the comparison can use percentages.
 
-**Own account** — a brand's own TikTok or Instagram handle: linked by an admin, found as the branch's website, given by outreach, or matched by name from the handle (confirmed or rejected on the Social page). Its posts never count as word of mouth.
+**Own account** — a brand's own TikTok or Instagram handle: linked by an admin, found as the branch's Google website, linked from the brand's own website, given by outreach, matched by name from the handle (creators tagging it under posts about the brand count as evidence), or the brand's handle on its other platform when that profile names the brand's website or a branch's street (anything less sure is confirmed or rejected on the Social page). Its posts never count as word of mouth.
+
+**Watched profile** — a TikTok or Instagram profile we scrape every Sunday and at month end, its latest posts stored like any post: a creator a city follows (a creator source), or the own account of a report brand (customer or most talked about) or of a report brand's competitor.
 
 **Creator** — the person behind one or more accounts (one person's TikTok and Instagram count once).
 
-**Food topic** — one kind of food in our vocabulary (cuisine, dish, drink, diet, format, meal), with aliases and a Google Trends id. Mentions' cuisines, venues' Google categories, delivery menu items and Google's review tags resolve to topics on read; nothing stores the resolution, so a new alias retags everything at once.
+**Food topic** — one kind of food in our vocabulary (cuisine, dish, drink, diet, format, meal), with aliases and a Google Trends id. Mentions' cuisines, venues' Google categories, delivery menu items and Google's review tags are linked to topics when they are stored, and every venue keeps its topics as tags, so "all burger places in Berlin" is a lookup. A new alias or topic re-links everything in the background within minutes, without the LLM.
 
 **Feedback theme** — what one praise or complaint point is about, from a fixed list of about 60 under the nine feedback topics (food, drinks, service, atmosphere, price, payment, wait, cleanliness, other): "price increase", "portion size", "cash only", "friendliness". It lets "prices went up" and "the dürüm is now €9.50" count as the same thing, in one venue's report and across a city. A theme never says good or bad; whether the point was praise or a complaint does.
 
@@ -44,7 +46,7 @@
 
 **Hook** — the one-sentence pitch line the app writes from the brand's report for the templates.
 
-**Share link** — a private URL to one report that needs no login; opens are counted; revocable.
+**Share link** — a private URL to one report that needs no login; opens are counted; revocable. Every report e-mail and every link put into a sales message gets one of its own, so the brand's Sales tab shows whether that message's link was opened.
 
 **Step / run** — one unit of pipeline work for a city and month (e.g. "Scrape reviews, Berlin, 2026-09"), with a budget, a status and its figures. The monthly run is 21 steps in order.
 
@@ -52,7 +54,7 @@
 
 **Free-plan limit** — a note on an Apify run that an actor cut short for Free users (10 items, one page).
 
-**Rating snapshot** — a venue's all-time Google rating and review count on a given day, written by every scrape that sees it; the report's sparkline.
+**Rating snapshot** — a venue's all-time Google rating and review count on a given day, written by every scrape that sees it, and twice a week for every venue posted about in the last 30 days or with 500+ reviews; the report's sparkline.
 
 **Status change** — opened / temporarily closed / permanently closed / reopened, recorded when a scrape sees the change; "opened" only from a city-wide list after the first one. A post saying a place has just opened also counts it as opened (source "posts") without recording a status change.
 

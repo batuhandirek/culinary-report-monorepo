@@ -15,8 +15,8 @@
 	import PopConfirm from '#ui/wrapped/PopConfirm.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
-	// What an admin decides about a brand: how its reports are cut, and
-	// undoing a chain. Its own social accounts are on the Signals tab.
+	// What an admin decides about a brand: how its reports are cut, and undoing a chain. Its
+	// report configurations are on the Reports tab, its own social accounts on the Signals tab.
 	interface Props {
 		brand: AdminBrandOutputDto;
 		onChange: (brand: AdminBrandOutputDto) => void;
@@ -39,7 +39,8 @@
 		{
 			onSuccess: set,
 			successNotification: (b) => ({
-				title: b.reportScope === 'all' ? 'One report across all cities' : 'A report per city',
+				title:
+					b.reportScope === 'all' ? 'One report across all cities' : 'A report per city',
 				text: 'From the next monthly run on.'
 			})
 		}
@@ -65,7 +66,8 @@
 							items={SCOPES}
 							bind:value={reportScope}
 							aria-label="Reports"
-							onValueChange={(v) => v && v !== brand.reportScope && scopeAction.execute(v)} />
+							onValueChange={(v) =>
+								v && v !== brand.reportScope && scopeAction.execute(v)} />
 					</div>
 					<p class="text-muted-foreground m-0 text-xs">
 						It has places in {cities.map((c) => c.cityName).join(' and ')}: a report per
@@ -82,13 +84,15 @@
 						The most reviewed place keeps the brand with its reports, sales record and
 						portal. Every other place becomes a brand of its own.
 					</p>
-					<Button size="sm" variant="outline" icon={Split} onclick={() => (splitting = true)}
-						>Split {brand.name}</Button>
+					<Button
+						size="sm"
+						variant="outline"
+						icon={Split}
+						onclick={() => (splitting = true)}>Split {brand.name}</Button>
 				</div>
 			</AdminPanel>
 		{/if}
 	</div>
-
 </div>
 
 <AdminRawJson value={brand} />

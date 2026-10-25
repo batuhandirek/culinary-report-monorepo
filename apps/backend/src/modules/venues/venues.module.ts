@@ -8,11 +8,11 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
+import { FeedbackModule } from '../feedback/feedback.module.js';
 import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
 import { ImagesModule } from '../image/images.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 
-import { FeedbackThemeAgent } from './agents/feedback-theme.agent.js';
 import { PressClassificationAgent } from './agents/press-classification.agent.js';
 import { ReviewAnalysisAgent } from './agents/review-analysis.agent.js';
 import { AdminBrandsController } from './controllers/admin.brands.controller.js';
@@ -33,11 +33,11 @@ import { BrandService } from './services/brand.service.js';
 import { BrandLeadScoreService } from './services/brand-lead-score.service.js';
 import { CompetitorService } from './services/competitor.service.js';
 import { FaviconFetchService } from './services/favicon-fetch.service.js';
-import { FeedbackThemeService } from './services/feedback-theme.service.js';
 import { GoogleReserveAvailabilityService } from './services/google-reserve-availability.service.js';
 import { OpenTableAvailabilityService } from './services/opentable-availability.service.js';
 import { OsmPlaceService } from './services/osm-place.service.js';
 import { OverpassService } from './services/overpass.service.js';
+import { RatingSnapshotService } from './services/rating-snapshot.service.js';
 import { ReviewService } from './services/review.service.js';
 import { TheForkAvailabilityService } from './services/thefork-availability.service.js';
 import { TripadvisorReviewService } from './services/tripadvisor-review.service.js';
@@ -69,6 +69,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		]),
 		ApifyModule,
 		AuthModule,
+		FeedbackModule,
 		CitiesModule,
 		FoodTopicsModule,
 		ImagesModule,
@@ -106,9 +107,8 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueFaviconService,
 		VenueFaviconCron,
 		ReviewService,
+		RatingSnapshotService,
 		ReviewAnalysisAgent,
-		FeedbackThemeService,
-		FeedbackThemeAgent,
 	],
 	exports: [
 		BrandService,
@@ -126,7 +126,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueDeliveryService,
 		VenueFaviconService,
 		ReviewService,
-		FeedbackThemeService,
+		RatingSnapshotService,
 		MikroOrmModule,
 	],
 })

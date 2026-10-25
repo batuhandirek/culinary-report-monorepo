@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-	<!-- Placeholder mark until the product has a logo: plum tile, acid letters -->
-	<rect width="64" height="64" rx="14" fill="#1f1724"/>
-	<text x="32" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="28" font-weight="700" fill="#c6f135">CR</text>
+	<!-- The wordmark's own M, acid on an ink tile (brand skill; sources in static/brand). -->
+	<rect width="64" height="64" rx="12" fill="#1f1724"/>
+	<g transform="translate(9.00 10.67) scale(0.61995)"><path fill="#c6f135" d="M0 67.4V1.4H24.3L37.8 48.3H38L51.2 1.4H74.2V67.4H59.2V17.7H59L44.1 67.4H29.9L15.2 17.7H15V67.4Z"/></g>
 </svg>

@@ -51,11 +51,22 @@ export class ReportReachService {
 		const press = pressSection(await this.webMentionService.forReport(brandId, cityId, month));
 
 		const { start, end } = monthRange(month);
-		const reviews = await this.em.find(Review, {
-			venue: { $in: branches.map(b => b.id) },
-			publishedAt: { $gte: start, $lt: end },
-		});
-		const platforms = reviewPlatforms(reviews, brandRatings(branches));
+		const reviews = await this.em.find(
+			Review,
+			{ venue: { $in: branches.map(b => b.id) }, publishedAt: { $gte: start, $lt: end } },
+			{ populate: ['feedback'] },
+		);
+		const platforms = reviewPlatforms(
+			reviews.map(r => ({
+				platform: r.platform,
+				stars: r.stars,
+				text: r.text,
+				textTranslated: r.textTranslated,
+				ownerResponse: r.ownerResponse,
+				feedback: r.feedback.getItems(),
+			})),
+			brandRatings(branches),
+		);
 		if (platforms) Object.assign(data.reviews, platforms);
 		const tripadvisorIds = new Set(
 			reviews.filter(r => r.platform === ReviewPlatformEnum.TRIPADVISOR).map(r => r.reviewId),

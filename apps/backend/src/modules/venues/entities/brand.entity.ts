@@ -21,7 +21,7 @@ export enum BrandReportScopeEnum {
  * venue gets one of its own, and an admin merges brands into a chain (`BrandService`).
  */
 @Entity({ tableName: 'brands' })
-export class Brand extends MikroOrmEntityAbstractClass<'branchesSearchedAt' | 'excludedVenueIds' | 'reportScope'> {
+export class Brand extends MikroOrmEntityAbstractClass<'branchesSearchedAt' | 'reportScope'> {
 	@Property({ type: 'text' })
 	name: string;
 
@@ -45,10 +45,6 @@ export class Brand extends MikroOrmEntityAbstractClass<'branchesSearchedAt' | 'e
 	// When its name was last searched on Google Maps, per city id (ISO dates)
 	@Property({ type: 'jsonb', default: '{}' })
 	branchesSearchedAt: Record<string, string> = {};
-
-	// Places with a matching name an admin said are not its branches: never offered again
-	@Property({ type: 'jsonb', default: '[]' })
-	excludedVenueIds: string[] = [];
 
 	@OneToMany(() => Venue, venue => venue.brand)
 	branches = new Collection<Venue>(this);

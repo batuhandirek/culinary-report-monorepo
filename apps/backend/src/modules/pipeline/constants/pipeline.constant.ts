@@ -35,8 +35,15 @@ export enum PipelineStepEnum {
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	// Google Maps detail pages (hours, amenities, popular times) of report venues and competitors
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	// The report venues' own TikTok and Instagram accounts: followers, posts, reach per post
-	SCRAPE_OWN_ACCOUNTS = 'SCRAPE_OWN_ACCOUNTS',
+	// Every watched TikTok and Instagram account (`AccountWatchService`: the creators the city
+	// follows, the report brands' and their rivals' own accounts): their posts since the month
+	// began and the month's profile snapshot (followers, reach per post)
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	// The same accounts' posts of the last week (the weekly cron), no snapshot
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	// Brands' own accounts on the platform they have none on: their other account's handle looked
+	// up there, linked when the profile proves it (the weekly cron, after matching)
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	// Comments under each report venue's top TikTok posts of the month, then their intents
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -56,6 +63,9 @@ export enum PipelineStepEnum {
 	// Open evening tables of every venue with a booking page (Google's own, TheFork, OpenTable),
 	// won prospects and report venues first (the Thursday demand cron)
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	// Google rating and review count of every venue posts named in the last 30 days and every
+	// one with 500+ reviews (`RatingSnapshotService`, the twice-weekly rating cron)
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	// Wolt / Lieferando ratings, fees and menus of the report venues and competitors
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	// Every step above but the venue list, in order, for one month
@@ -63,9 +73,11 @@ export enum PipelineStepEnum {
 }
 
 // The monthly run, in order: city-wide posts and blog articles, their mentions, filling in missing venues,
-// then the most talked-about brands' own posts, competitors for those without, their reviews,
-// their Google Maps details (hours, amenities, popular times) and their reports, and last the
-// outreach lead scores over everything gathered
+// then the most talked-about brands' posts (searched by name, and the watched accounts' own
+// profiles), competitors for those without, their reviews, their Google Maps details (hours,
+// amenities, popular times) and their reports, and last the outreach lead scores over everything
+// gathered. A stored run's result is keyed by position ("<n>. <STEP>"), so reordering needs a
+// migration re-keying stored results (`Migration20261025050000_watched_accounts`)
 export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_TIKTOK,
 	PipelineStepEnum.SCRAPE_INSTAGRAM,
@@ -75,6 +87,8 @@ export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.LOOKUP_VENUES,
 	PipelineStepEnum.MATCH_MENTIONS,
 	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
+	// Before extraction: the profiles' posts are read and matched with the rest
+	PipelineStepEnum.SCRAPE_ACCOUNTS,
 	PipelineStepEnum.EXTRACT_MENTIONS,
 	PipelineStepEnum.MATCH_MENTIONS,
 	// After the last match: the report brands are final here, and the review scrape takes
@@ -85,7 +99,6 @@ export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.REFRESH_VENUE_DETAILS,
 	// After the details: Google's "Order online" links say where each venue delivers
 	PipelineStepEnum.SCRAPE_DELIVERY,
-	PipelineStepEnum.SCRAPE_OWN_ACCOUNTS,
 	PipelineStepEnum.SCRAPE_COMMENTS,
 	PipelineStepEnum.ANALYSE_COMMENTS,
 	PipelineStepEnum.SCRAPE_PRESS,
@@ -122,7 +135,14 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// venues new to the set 40 % ($4.32: ~7,200 reviews, ~22 venues at seven months of ~47)
 	[PipelineStepEnum.SCRAPE_REVIEWS]: 12,
 	[PipelineStepEnum.REFRESH_VENUE_DETAILS]: 2,
-	[PipelineStepEnum.SCRAPE_OWN_ACCOUNTS]: 2,
+	// Instagram profiles at ~$0.0026 each (twelve latest posts included), TikTok's latest ten
+	// videos at ~$0.003 each: ~100 accounts, mostly TikTok's videos, about $2
+	[PipelineStepEnum.SCRAPE_ACCOUNTS]: 4,
+	// The week's videos only (TikTok's date filter), so a quiet account costs a profile at most
+	[PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT]: 2,
+	// An Instagram profile at ~$0.003, a TikTok one (its latest video) at ~$0.004: ~300 lookups.
+	// Each account is looked up once, so the weekly run spends only on brands new to an account
+	[PipelineStepEnum.FIND_OWN_ACCOUNTS]: 1,
 	// A hundred comments under each of ~100 posts at $0.00125 a comment
 	[PipelineStepEnum.SCRAPE_COMMENTS]: 13,
 	[PipelineStepEnum.SCRAPE_PRESS]: 3,
@@ -135,6 +155,9 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.WATCH_REVIEWS]: 1,
 	[PipelineStepEnum.SAMPLE_BUSYNESS]: 1,
 	[PipelineStepEnum.SAMPLE_RESERVATIONS]: 1,
+	// One review a venue at $0.0006, planned on 80 %: up to 4,000 venues (Berlin 2026-10: ~3,300,
+	// about $2 a run, $16 a month)
+	[PipelineStepEnum.SNAPSHOT_RATINGS]: 3,
 	// Wolt menus on 30 %, then Lieferando's city listing, whose actor refuses a cap under $5
 	[PipelineStepEnum.SCRAPE_DELIVERY]: 7,
 };

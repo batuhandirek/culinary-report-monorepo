@@ -1,0 +1,1008 @@
+MUNCHWERK — DESIGN TOKENS (handoff for implementation)
+============================================================
+
+Fonts (self-host the three woff2 files from the design system's fonts/ folder, or load from Google Fonts):
+  Bricolage Grotesque  variable, wght 200–800, opsz 12–96, wdth 75–100  → display headlines, numerals
+  Onest                variable, wght 100–900                            → body text
+  Press Start 2P       400                                              → pixel 'stamp' labels, caps only, min 11px
+
+Google Fonts link (alternative to self-hosting):
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Onest:wght@100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+------------------------------------------------------------
+CSS — drop into a global stylesheet. Theme switch: <html data-theme="day"> (default) or data-theme="night".
+------------------------------------------------------------
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/fonts/BricolageGrotesque-Variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Onest";
+  src: url("/fonts/Onest-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("/fonts/PressStart2P-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root, [data-theme="day"] {
+  /* colour */
+  --brand-acid: #c6f135;
+  --brand-grape: #6a2bea;
+  --brand-grape-deep: #3b1a80;
+  --brand-ink: #1f1724;
+  --brand-oat: #f2ede3;
+  --brand-paper: #fbf9f4;
+  --brand-green-deep: #4d7612;
+  --brand-lavender: #c9b3ff;
+  --brand-beet: #8c2d5c;
+  --brand-chili: #e2452b;
+  --ground: var(--brand-oat);
+  --paper: var(--brand-paper);
+  --ink: var(--brand-ink);
+  --ink-muted: #5e556a;
+  --rule: var(--brand-ink);
+  --hairline: #1f172426;
+  --field-green: var(--brand-acid);
+  --on-field-green: var(--brand-ink);
+  --field-purple: var(--brand-grape);
+  --on-field-purple: var(--brand-oat);
+  --field-ink: var(--brand-ink);
+  --on-field-ink: var(--brand-oat);
+  --field-purple-deep: var(--brand-grape-deep);
+  --text-green: var(--brand-green-deep);
+  --text-purple: var(--brand-grape);
+  --accent-beet: var(--brand-beet);
+  --accent-chili: var(--brand-chili);
+  --chart-bar: var(--brand-ink);
+  --chart-highlight: var(--brand-acid);
+  --chart-outline: var(--brand-ink);
+  --chart-up: var(--text-green);
+  --chart-new: var(--text-purple);
+  --chart-flat: var(--ink-muted);
+  --focus: var(--brand-grape);
+  /* shadow */
+  --shadow-hard-s: 4px 4px 0 #1f1724;
+  --shadow-hard: 8px 8px 0 #1f1724;
+  --shadow-hard-l: 16px 16px 0 #1f1724;
+  --shadow-hard-grape: 8px 8px 0 #6a2bea;
+  --shadow-hard-acid: 8px 8px 0 #c6f135;
+}
+
+[data-theme="night"] {
+  --ground: var(--brand-ink);
+  --paper: #2a2032;
+  --ink: var(--brand-oat);
+  --ink-muted: #b8aec4;
+  --rule: var(--brand-oat);
+  --hairline: #f2ede326;
+  --text-green: var(--brand-acid);
+  --text-purple: var(--brand-lavender);
+  --accent-beet: #d6679c;
+  --accent-chili: #ff7a5c;
+  --chart-bar: var(--brand-lavender);
+  --chart-outline: var(--brand-ink);
+  --focus: var(--brand-acid);
+  --shadow-hard-s: 4px 4px 0 #c6f135;
+  --shadow-hard: 8px 8px 0 #c6f135;
+  --shadow-hard-l: 16px 16px 0 #c6f135;
+}
+
+:root {
+  /* spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --canvas-gutter: 72px;
+  --story-safe: 250px;
+  /* radius */
+  --radius-hard: 0px;
+  --radius-s: 6px;
+  --radius-m: 12px;
+  --radius-l: 24px;
+  --radius-pill: 999px;
+  /* stroke */
+  --stroke-outline: 3px;
+  --stroke-rule: 4px;
+  --stroke-rule-bold: 8px;
+  /* tilt */
+  --tilt-left: -6deg;
+  --tilt-right: 4deg;
+  --tilt-hard: -12deg;
+  /* bite */
+  --bite-ratio: 16%;
+  --bite-inset: 6%;
+  /* font families */
+  --font-display: "Bricolage Grotesque", "Arial Black", Impact, sans-serif;
+  --font-text: Onest, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-stamp: "Press Start 2P", "Courier New", monospace;
+}
+
+/* type styles */
+.number-hero {
+  font-family: var(--font-display);
+  font-size: 160px;
+  line-height: 0.85;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  font-variation-settings: "opsz" 96;
+}
+.display-xxl {
+  font-family: var(--font-display);
+  font-size: 88px;
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 96;
+}
+.display-xl {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 0.92;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  font-variation-settings: "opsz" 96;
+}
+.display-l {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 0.95;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-variation-settings: "opsz" 96;
+}
+.display-m {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.0;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 96;
+}
+.display-s {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-variation-settings: "opsz" 96;
+}
+.display-xs {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: 0;
+  font-variation-settings: "opsz" 96;
+}
+.body-l {
+  font-family: var(--font-text);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+}
+.body {
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 25px;
+  font-weight: 400;
+}
+.body-s {
+  font-family: var(--font-text);
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+}
+.label {
+  font-family: var(--font-text);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+}
+.caption {
+  font-family: var(--font-text);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 500;
+}
+.stamp {
+  font-family: var(--font-stamp);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.stamp-l {
+  font-family: var(--font-stamp);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+------------------------------------------------------------
+USAGE NOTES (per token)
+------------------------------------------------------------
+
+[color]
+  --brand-acid  =  #c6f135
+      Hero colour, lime. Daytime, fresh, outdoors. Big fields, stickers, highlights, the wordmark on ink. Never as small text on oat or paper (1.1:1).
+  --brand-grape  =  #6a2bea
+      Second brand colour, electric grape. Evening, nightlife, neon. Big fields, stories, New in Town. Text on it: brand-oat (5.7:1) or brand-acid (5.1:1), never brand-ink (2.6:1).
+  --brand-grape-deep  =  #3b1a80
+      Deep grape for layered night layouts and the venue report. Text on it: brand-oat (10.9:1), brand-acid (9.8:1), brand-lavender (6.9:1). Sits next to brand-ink only with a rule between them.
+  --brand-ink  =  #1f1724
+      Plum-black ink. All text by day, dark grounds, outlines, hard shadows. Keeps green and purple feeling like lime and plum, not chemicals.
+  --brand-oat  =  #f2ede3
+      Warm oat. The daytime ground and the text colour on ink and grape. Frames food photography; never a cold white.
+  --brand-paper  =  #fbf9f4
+      Paper. Cards and report pages on oat, email body.
+  --brand-green-deep  =  #4d7612
+      Herb green, readable as text: 4.6:1 on oat, 5.1:1 on paper. Rank-up numbers and green labels by day. On brand-acid only at 24px+ (4.1:1).
+  --brand-lavender  =  #c9b3ff
+      Lavender. Purple as text and lines by night: 9.4:1 on ink. Never on oat or paper.
+  --brand-beet  =  #8c2d5c
+      Beet / plum accent. Dish of the Month, wine moments. Text-safe on oat (6.8:1), paper (7.6:1) and acid (6.1:1). Never beside brand-grape.
+  --brand-chili  =  #e2452b
+      Chili, the smallest accent. Rising arrows and 'hot' stamps. On oat only 3.5:1: use at 24px+ or as a mark, never for body text. Never on brand-acid for text (3.1:1), never beside brand-grape.
+  --ground  =  day: {brand-oat} / night: {brand-ink}
+      Page and canvas background. Oat by day, ink by night.
+  --paper  =  day: {brand-paper} / night: #2a2032
+      Cards, report pages, email body on ground.
+  --ink  =  day: {brand-ink} / night: {brand-oat}
+      Primary text on ground and paper (14.9:1 / 16.6:1 day; 14.9:1 / 13.3:1 night).
+  --ink-muted  =  day: #5e556a / night: #b8aec4
+      Secondary text: method lines, captions, districts. 6.0:1 on ground and 6.7:1 on paper by day; 8.2:1 and 7.3:1 by night.
+  --rule  =  day: {brand-ink} / night: {brand-oat}
+      Bold rules, sticker outlines, chart baselines. Always full-strength ink, never grey.
+  --hairline  =  day: #1f172426 / night: #f2ede326
+      Chart gridlines and table dividers only. Carries no meaning.
+  --field-green  =  {brand-acid}
+      Acid field: Heat Check covers, highlight stickers, the hero bar. Both themes. Text on it: on-field-green only.
+  --on-field-green  =  {brand-ink}
+      Text and marks on field-green (13.3:1). Always ink, both themes.
+  --field-purple  =  {brand-grape}
+      Grape field: stories, New in Town, evening content. Both themes. Text on it: on-field-purple or brand-acid.
+  --on-field-purple  =  {brand-oat}
+      Text and marks on field-purple (5.7:1) and field-purple-deep (10.9:1). Always oat.
+  --field-ink  =  {brand-ink}
+      Ink block inside a day layout (stat blocks, the follow slide). Both themes; by night give it a rule so it separates from ground.
+  --on-field-ink  =  {brand-oat}
+      Text on field-ink (14.9:1). Numbers on field-ink may use brand-acid (13.3:1).
+  --field-purple-deep  =  {brand-grape-deep}
+      Deep grape block for the venue report cover and night stories. Text: on-field-purple, brand-acid, brand-lavender.
+  --text-green  =  day: {brand-green-deep} / night: {brand-acid}
+      Green as text and lines on ground and paper: rank-up numbers, '+12 places', method ticks.
+  --text-purple  =  day: {brand-grape} / night: {brand-lavender}
+      Purple as text and lines on ground and paper: 'New' labels, evening tags, links in email.
+  --accent-beet  =  day: {brand-beet} / night: #d6679c
+      Beet as text and marks on ground and paper (6.8:1 day, 5.2:1 night). Dish of the Month.
+  --accent-chili  =  day: {brand-chili} / night: #ff7a5c
+      Chili as a mark or 24px+ text on ground and paper (3.5:1 day, 6.8:1 night). Rising arrows.
+  --chart-bar  =  day: {brand-ink} / night: {brand-lavender}
+      Default bar, column and dot fill. Solid, no gradient.
+  --chart-highlight  =  {brand-acid}
+      The one bar or point the story is about. By day give it a 3px chart-outline so it holds 3:1 against ground.
+  --chart-outline  =  day: {brand-ink} / night: {brand-ink}
+      Outline on chart-highlight and on photo frames, both themes.
+  --chart-up  =  {text-green}
+      Rank movement up, growth, new highs.
+  --chart-new  =  {text-purple}
+      New entries and openings in charts.
+  --chart-flat  =  {ink-muted}
+      No movement, held rank, context series. Public charts never colour a decline red; venue reports use chart-flat for fewer posts.
+  --focus  =  day: {brand-grape} / night: {brand-acid}
+      Focus ring, 3px solid, 2px offset: 5.7:1 on ground and 6.3:1 on paper by day; 13.3:1 / 11.9:1 by night.
+
+[shadow]
+  note: Shadows are hard offsets, never blurred. Ink by day, acid by night, grape or acid when the sticker itself is ink.
+  --shadow-hard-s  =  day: 4px 4px 0 #1f1724 / night: 4px 4px 0 #c6f135
+      Small stickers, pills, email buttons.
+  --shadow-hard  =  day: 8px 8px 0 #1f1724 / night: 8px 8px 0 #c6f135
+      Stickers, cards, photo frames on web (16px on a 1080 canvas).
+  --shadow-hard-l  =  day: 16px 16px 0 #1f1724 / night: 16px 16px 0 #c6f135
+      Hero stickers and the video still frame on canvases.
+  --shadow-hard-grape  =  8px 8px 0 #6a2bea
+      Offset shadow in grape, for ink or oat stickers in evening layouts.
+  --shadow-hard-acid  =  8px 8px 0 #c6f135
+      Offset shadow in acid, for ink stickers by day.
+
+[spacing]
+  --space-1  =  4px
+      Hairline gaps, stamp padding.
+  --space-2  =  8px
+      Sticker padding, icon gaps.
+  --space-3  =  12px
+      Inline gaps, pill padding.
+  --space-4  =  16px
+      Component padding, list row gaps.
+  --space-5  =  24px
+      Card padding on web and email.
+  --space-6  =  32px
+      Section gaps on web.
+  --space-7  =  48px
+      Block gaps on canvases.
+  --space-8  =  64px
+      Large block gaps, report margins.
+  --space-9  =  96px
+      Hero padding on web.
+  --canvas-gutter  =  72px
+      Side margin on every 1080px Instagram canvas. Nothing but a bleeding field crosses it.
+  --story-safe  =  250px
+      Top and bottom safe zones on a 1080×1920 story: no text or logo inside them.
+
+[radius]
+  --radius-hard  =  0px
+      Default. Fields, bars, photo frames, rules are square.
+  --radius-s  =  6px
+      Tags and movement pills.
+  --radius-m  =  12px
+      Stickers, the monogram tile, cards on paper.
+  --radius-l  =  24px
+      Large stickers on canvases (scale with the sticker).
+  --radius-pill  =  999px
+      Pill stickers and handle chips.
+
+[stroke]
+  note: Rule and outline weights. Bold rules are part of the look; use them instead of shadows or grey dividers.
+  --stroke-outline  =  3px
+      Sticker and photo-frame outline on web (6px on a 1080 canvas).
+  --stroke-rule  =  4px
+      Section rules, chart baselines.
+  --stroke-rule-bold  =  8px
+      Hero rules under headlines, the top bar on covers.
+
+[tilt]
+  note: Stickers and tags tilt; nothing else does. At most two tilted elements per composition, never the same angle twice.
+  --tilt-left  =  -6deg
+      Default sticker tilt.
+  --tilt-right  =  4deg
+      Second sticker or tag in the same composition.
+  --tilt-hard  =  -12deg
+      One hero sticker on a cover.
+
+[bite]
+  note: The bite: a mouthful cut from the top-right of a shape, its edge eight round tooth marks scalloped like a drawn cloud (three show on a corner). Radius, to the tooth tips, = 16% of the shape's height, centre 6% in from the corner. One bite per composition.
+  --bite-ratio  =  16%
+      Bite radius as a share of the bitten shape's height.
+  --bite-inset  =  6%
+      How far the bite centre sits in from the top-right corner, as a share of height.
+
+[type]
+  Display (display)
+    .number-hero: 160px / 0.85 / 800  — Rank numerals as graphic elements. 320px on a 1080 canvas.
+    .display-xxl: 88px / 0.9 / 800  — Web hero and report cover headlines. 128px on a 1080 canvas.
+    .display-xl: 64px / 0.92 / 800  — Page headers, carousel covers.
+    .display-l: 48px / 0.95 / 800  — Place names on item slides (72px on a 1080 canvas), section headlines.
+    .display-m: 32px / 1.0 / 800  — Card titles, big stats, email headlines.
+    .display-s: 22px / 1.05 / 800  — Sticker text, list rows, chart labels.
+    .display-xs: 16px / 1.1 / 800  — Small stickers and movement pills.
+  Text (text)
+    .body-l: 20px / 28px / 500  — Lead paragraphs, report intros.
+    .body: 17px / 25px / 400  — Body copy on web, email and reports. Never below 15px on web, never below 32px on a 1080 canvas.
+    .body-s: 15px / 22px / 400  — Secondary copy, table cells, footnotes.
+    .label: 14px / 18px / 700  — Creator handles, button text, UI labels. Handles are always written with the @.
+    .caption: 13px / 18px / 500  — Captions, method lines in ink-muted.
+  Stamp (stamp)
+    .stamp: 11px / 16px / 400  — Pixel labels in caps: series stamps, dates, 'counted by Munchwerk'. Minimum 11px on web, 24px on a 1080 canvas. One or two words per line, never sentences.
+    .stamp-l: 14px / 20px / 400  — Larger stamps on covers and the venue report.
+
+------------------------------------------------------------
+ALLOWED TEXT/GROUND PAIRINGS (WCAG ratio, Day theme)
+------------------------------------------------------------
+  ink on ground (oat)                               14.9:1   ok
+  ink on paper                                      16.6:1   ok
+  ink on field-green (acid)                         13.3:1   ok
+  oat on field-ink                                  14.9:1   ok
+  oat on field-purple (grape)                        5.7:1   ok
+  oat on field-purple-deep                          10.9:1   ok
+  acid on field-ink                                 13.3:1   ok
+  acid on field-purple                               5.1:1   ok
+  acid on field-purple-deep                          9.8:1   ok
+  text-green (green-deep) on ground                  4.6:1   ok, body size
+  text-green on paper                                5.1:1   ok
+  text-purple (grape) on ground                      5.7:1   ok
+  text-purple on paper                               6.3:1   ok
+  accent-beet on ground                              6.8:1   ok
+  accent-beet on field-green                         6.1:1   ok
+  accent-chili on ground                             3.5:1   24px+ text or marks only
+  green-deep on field-green                          4.1:1   24px+ text only
+  ink on field-purple                                2.6:1   OFF-LIMITS
+  acid on ground/paper                               1.1:1   OFF-LIMITS as text
+  chili on field-green                               3.1:1   OFF-LIMITS as text
+  grape beside beet / grape beside chili         1.2 / 1.6:1   OFF-LIMITS adjacent
+  lavender on ground/paper (day)                      <2:1   OFF-LIMITS: lavender is a Night-only text colour
+
+------------------------------------------------------------
+RAW tokens.json (same data, for tooling)
+------------------------------------------------------------
+{
+  "name": "Munchwerk",
+  "version": 1,
+  "color": {
+    "themes": [
+      {
+        "id": "day",
+        "name": "Day"
+      },
+      {
+        "id": "night",
+        "name": "Night"
+      }
+    ],
+    "tokens": [
+      {
+        "name": "brand-acid",
+        "value": "#c6f135",
+        "usage": "Hero colour, lime. Daytime, fresh, outdoors. Big fields, stickers, highlights, the wordmark on ink. Never as small text on oat or paper (1.1:1)."
+      },
+      {
+        "name": "brand-grape",
+        "value": "#6a2bea",
+        "usage": "Second brand colour, electric grape. Evening, nightlife, neon. Big fields, stories, New in Town. Text on it: brand-oat (5.7:1) or brand-acid (5.1:1), never brand-ink (2.6:1)."
+      },
+      {
+        "name": "brand-grape-deep",
+        "value": "#3b1a80",
+        "usage": "Deep grape for layered night layouts and the venue report. Text on it: brand-oat (10.9:1), brand-acid (9.8:1), brand-lavender (6.9:1). Sits next to brand-ink only with a rule between them."
+      },
+      {
+        "name": "brand-ink",
+        "value": "#1f1724",
+        "usage": "Plum-black ink. All text by day, dark grounds, outlines, hard shadows. Keeps green and purple feeling like lime and plum, not chemicals."
+      },
+      {
+        "name": "brand-oat",
+        "value": "#f2ede3",
+        "usage": "Warm oat. The daytime ground and the text colour on ink and grape. Frames food photography; never a cold white."
+      },
+      {
+        "name": "brand-paper",
+        "value": "#fbf9f4",
+        "usage": "Paper. Cards and report pages on oat, email body."
+      },
+      {
+        "name": "brand-green-deep",
+        "value": "#4d7612",
+        "usage": "Herb green, readable as text: 4.6:1 on oat, 5.1:1 on paper. Rank-up numbers and green labels by day. On brand-acid only at 24px+ (4.1:1)."
+      },
+      {
+        "name": "brand-lavender",
+        "value": "#c9b3ff",
+        "usage": "Lavender. Purple as text and lines by night: 9.4:1 on ink. Never on oat or paper."
+      },
+      {
+        "name": "brand-beet",
+        "value": "#8c2d5c",
+        "usage": "Beet / plum accent. Dish of the Month, wine moments. Text-safe on oat (6.8:1), paper (7.6:1) and acid (6.1:1). Never beside brand-grape."
+      },
+      {
+        "name": "brand-chili",
+        "value": "#e2452b",
+        "usage": "Chili, the smallest accent. Rising arrows and 'hot' stamps. On oat only 3.5:1: use at 24px+ or as a mark, never for body text. Never on brand-acid for text (3.1:1), never beside brand-grape."
+      },
+      {
+        "name": "ground",
+        "value": {
+          "day": "{brand-oat}",
+          "night": "{brand-ink}"
+        },
+        "usage": "Page and canvas background. Oat by day, ink by night."
+      },
+      {
+        "name": "paper",
+        "value": {
+          "day": "{brand-paper}",
+          "night": "#2a2032"
+        },
+        "usage": "Cards, report pages, email body on ground."
+      },
+      {
+        "name": "ink",
+        "value": {
+          "day": "{brand-ink}",
+          "night": "{brand-oat}"
+        },
+        "usage": "Primary text on ground and paper (14.9:1 / 16.6:1 day; 14.9:1 / 13.3:1 night)."
+      },
+      {
+        "name": "ink-muted",
+        "value": {
+          "day": "#5e556a",
+          "night": "#b8aec4"
+        },
+        "usage": "Secondary text: method lines, captions, districts. 6.0:1 on ground and 6.7:1 on paper by day; 8.2:1 and 7.3:1 by night."
+      },
+      {
+        "name": "rule",
+        "value": {
+          "day": "{brand-ink}",
+          "night": "{brand-oat}"
+        },
+        "usage": "Bold rules, sticker outlines, chart baselines. Always full-strength ink, never grey."
+      },
+      {
+        "name": "hairline",
+        "value": {
+          "day": "#1f172426",
+          "night": "#f2ede326"
+        },
+        "usage": "Chart gridlines and table dividers only. Carries no meaning."
+      },
+      {
+        "name": "field-green",
+        "value": "{brand-acid}",
+        "usage": "Acid field: Heat Check covers, highlight stickers, the hero bar. Both themes. Text on it: on-field-green only."
+      },
+      {
+        "name": "on-field-green",
+        "value": "{brand-ink}",
+        "usage": "Text and marks on field-green (13.3:1). Always ink, both themes."
+      },
+      {
+        "name": "field-purple",
+        "value": "{brand-grape}",
+        "usage": "Grape field: stories, New in Town, evening content. Both themes. Text on it: on-field-purple or brand-acid."
+      },
+      {
+        "name": "on-field-purple",
+        "value": "{brand-oat}",
+        "usage": "Text and marks on field-purple (5.7:1) and field-purple-deep (10.9:1). Always oat."
+      },
+      {
+        "name": "field-ink",
+        "value": "{brand-ink}",
+        "usage": "Ink block inside a day layout (stat blocks, the follow slide). Both themes; by night give it a rule so it separates from ground."
+      },
+      {
+        "name": "on-field-ink",
+        "value": "{brand-oat}",
+        "usage": "Text on field-ink (14.9:1). Numbers on field-ink may use brand-acid (13.3:1)."
+      },
+      {
+        "name": "field-purple-deep",
+        "value": "{brand-grape-deep}",
+        "usage": "Deep grape block for the venue report cover and night stories. Text: on-field-purple, brand-acid, brand-lavender."
+      },
+      {
+        "name": "text-green",
+        "value": {
+          "day": "{brand-green-deep}",
+          "night": "{brand-acid}"
+        },
+        "usage": "Green as text and lines on ground and paper: rank-up numbers, '+12 places', method ticks."
+      },
+      {
+        "name": "text-purple",
+        "value": {
+          "day": "{brand-grape}",
+          "night": "{brand-lavender}"
+        },
+        "usage": "Purple as text and lines on ground and paper: 'New' labels, evening tags, links in email."
+      },
+      {
+        "name": "accent-beet",
+        "value": {
+          "day": "{brand-beet}",
+          "night": "#d6679c"
+        },
+        "usage": "Beet as text and marks on ground and paper (6.8:1 day, 5.2:1 night). Dish of the Month."
+      },
+      {
+        "name": "accent-chili",
+        "value": {
+          "day": "{brand-chili}",
+          "night": "#ff7a5c"
+        },
+        "usage": "Chili as a mark or 24px+ text on ground and paper (3.5:1 day, 6.8:1 night). Rising arrows."
+      },
+      {
+        "name": "chart-bar",
+        "value": {
+          "day": "{brand-ink}",
+          "night": "{brand-lavender}"
+        },
+        "usage": "Default bar, column and dot fill. Solid, no gradient."
+      },
+      {
+        "name": "chart-highlight",
+        "value": "{brand-acid}",
+        "usage": "The one bar or point the story is about. By day give it a 3px chart-outline so it holds 3:1 against ground."
+      },
+      {
+        "name": "chart-outline",
+        "value": {
+          "day": "{brand-ink}",
+          "night": "{brand-ink}"
+        },
+        "usage": "Outline on chart-highlight and on photo frames, both themes."
+      },
+      {
+        "name": "chart-up",
+        "value": "{text-green}",
+        "usage": "Rank movement up, growth, new highs."
+      },
+      {
+        "name": "chart-new",
+        "value": "{text-purple}",
+        "usage": "New entries and openings in charts."
+      },
+      {
+        "name": "chart-flat",
+        "value": "{ink-muted}",
+        "usage": "No movement, held rank, context series. Public charts never colour a decline red; venue reports use chart-flat for fewer posts."
+      },
+      {
+        "name": "focus",
+        "value": {
+          "day": "{brand-grape}",
+          "night": "{brand-acid}"
+        },
+        "usage": "Focus ring, 3px solid, 2px offset: 5.7:1 on ground and 6.3:1 on paper by day; 13.3:1 / 11.9:1 by night."
+      }
+    ]
+  },
+  "type": {
+    "fonts": [
+      {
+        "family": "Bricolage Grotesque",
+        "file": "fonts/BricolageGrotesque-Variable.woff2",
+        "weight": "200 800"
+      },
+      {
+        "family": "Onest",
+        "file": "fonts/Onest-Variable.woff2",
+        "weight": "100 900"
+      },
+      {
+        "family": "Press Start 2P",
+        "file": "fonts/PressStart2P-Regular.woff2",
+        "weight": "400"
+      }
+    ],
+    "families": {
+      "display": "\"Bricolage Grotesque\", \"Arial Black\", Impact, sans-serif",
+      "text": "Onest, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+      "stamp": "\"Press Start 2P\", \"Courier New\", monospace"
+    },
+    "groups": [
+      {
+        "name": "Display",
+        "family": "display",
+        "styles": [
+          {
+            "name": "number-hero",
+            "fontSize": "160px",
+            "lineHeight": 0.85,
+            "fontWeight": 800,
+            "letterSpacing": "-0.05em",
+            "sample": "01",
+            "usage": "Rank numerals as graphic elements. 320px on a 1080 canvas."
+          },
+          {
+            "name": "display-xxl",
+            "fontSize": "88px",
+            "lineHeight": 0.9,
+            "fontWeight": 800,
+            "letterSpacing": "-0.03em",
+            "sample": "Heat Check",
+            "usage": "Web hero and report cover headlines. 128px on a 1080 canvas."
+          },
+          {
+            "name": "display-xl",
+            "fontSize": "64px",
+            "lineHeight": 0.92,
+            "fontWeight": 800,
+            "letterSpacing": "-0.025em",
+            "sample": "Your brunch got noticed",
+            "usage": "Page headers, carousel covers."
+          },
+          {
+            "name": "display-l",
+            "fontSize": "48px",
+            "lineHeight": 0.95,
+            "fontWeight": 800,
+            "letterSpacing": "-0.02em",
+            "sample": "Luna Ramen",
+            "usage": "Place names on item slides (72px on a 1080 canvas), section headlines."
+          },
+          {
+            "name": "display-m",
+            "fontSize": "32px",
+            "lineHeight": 1.0,
+            "fontWeight": 800,
+            "letterSpacing": "-0.015em",
+            "sample": "Posted 412 times",
+            "usage": "Card titles, big stats, email headlines."
+          },
+          {
+            "name": "display-s",
+            "fontSize": "22px",
+            "lineHeight": 1.05,
+            "fontWeight": 800,
+            "letterSpacing": "-0.01em",
+            "sample": "Kreuzberg · Oranienstraße",
+            "usage": "Sticker text, list rows, chart labels."
+          },
+          {
+            "name": "display-xs",
+            "fontSize": "16px",
+            "lineHeight": 1.1,
+            "fontWeight": 800,
+            "letterSpacing": "0",
+            "sample": "+12 places",
+            "usage": "Small stickers and movement pills."
+          }
+        ]
+      },
+      {
+        "name": "Text",
+        "family": "text",
+        "styles": [
+          {
+            "name": "body-l",
+            "fontSize": "20px",
+            "lineHeight": "28px",
+            "fontWeight": 500,
+            "sample": "Counted from 3,400 posts by 900 creators, 1–31 October.",
+            "usage": "Lead paragraphs, report intros."
+          },
+          {
+            "name": "body",
+            "fontSize": "17px",
+            "lineHeight": "25px",
+            "fontWeight": 400,
+            "sample": "Diners follow it for the lists. Creators share it because they get credited.",
+            "usage": "Body copy on web, email and reports. Never below 15px on web, never below 32px on a 1080 canvas."
+          },
+          {
+            "name": "body-s",
+            "fontSize": "15px",
+            "lineHeight": "22px",
+            "fontWeight": 400,
+            "sample": "Posts, views and creators are our own counts.",
+            "usage": "Secondary copy, table cells, footnotes."
+          },
+          {
+            "name": "label",
+            "fontSize": "14px",
+            "lineHeight": "18px",
+            "fontWeight": 700,
+            "sample": "@essenmitlena",
+            "usage": "Creator handles, button text, UI labels. Handles are always written with the @."
+          },
+          {
+            "name": "caption",
+            "fontSize": "13px",
+            "lineHeight": "18px",
+            "fontWeight": 500,
+            "sample": "Source: public posts, October 2026",
+            "usage": "Captions, method lines in ink-muted."
+          }
+        ]
+      },
+      {
+        "name": "Stamp",
+        "family": "stamp",
+        "styles": [
+          {
+            "name": "stamp",
+            "fontSize": "11px",
+            "lineHeight": "16px",
+            "fontWeight": 400,
+            "letterSpacing": "0.06em",
+            "sample": "HEAT CHECK · OCT 2026",
+            "usage": "Pixel labels in caps: series stamps, dates, 'counted by Munchwerk'. Minimum 11px on web, 24px on a 1080 canvas. One or two words per line, never sentences."
+          },
+          {
+            "name": "stamp-l",
+            "fontSize": "14px",
+            "lineHeight": "20px",
+            "fontWeight": 400,
+            "letterSpacing": "0.06em",
+            "sample": "BERLIN · EST. 2026",
+            "usage": "Larger stamps on covers and the venue report."
+          }
+        ]
+      }
+    ]
+  },
+  "spacing": {
+    "tokens": [
+      {
+        "name": "space-1",
+        "value": "4px",
+        "usage": "Hairline gaps, stamp padding."
+      },
+      {
+        "name": "space-2",
+        "value": "8px",
+        "usage": "Sticker padding, icon gaps."
+      },
+      {
+        "name": "space-3",
+        "value": "12px",
+        "usage": "Inline gaps, pill padding."
+      },
+      {
+        "name": "space-4",
+        "value": "16px",
+        "usage": "Component padding, list row gaps."
+      },
+      {
+        "name": "space-5",
+        "value": "24px",
+        "usage": "Card padding on web and email."
+      },
+      {
+        "name": "space-6",
+        "value": "32px",
+        "usage": "Section gaps on web."
+      },
+      {
+        "name": "space-7",
+        "value": "48px",
+        "usage": "Block gaps on canvases."
+      },
+      {
+        "name": "space-8",
+        "value": "64px",
+        "usage": "Large block gaps, report margins."
+      },
+      {
+        "name": "space-9",
+        "value": "96px",
+        "usage": "Hero padding on web."
+      },
+      {
+        "name": "canvas-gutter",
+        "value": "72px",
+        "usage": "Side margin on every 1080px Instagram canvas. Nothing but a bleeding field crosses it."
+      },
+      {
+        "name": "story-safe",
+        "value": "250px",
+        "usage": "Top and bottom safe zones on a 1080×1920 story: no text or logo inside them."
+      }
+    ]
+  },
+  "radius": {
+    "tokens": [
+      {
+        "name": "radius-hard",
+        "value": "0px",
+        "usage": "Default. Fields, bars, photo frames, rules are square."
+      },
+      {
+        "name": "radius-s",
+        "value": "6px",
+        "usage": "Tags and movement pills."
+      },
+      {
+        "name": "radius-m",
+        "value": "12px",
+        "usage": "Stickers, the monogram tile, cards on paper."
+      },
+      {
+        "name": "radius-l",
+        "value": "24px",
+        "usage": "Large stickers on canvases (scale with the sticker)."
+      },
+      {
+        "name": "radius-pill",
+        "value": "999px",
+        "usage": "Pill stickers and handle chips."
+      }
+    ]
+  },
+  "shadow": {
+    "note": "Shadows are hard offsets, never blurred. Ink by day, acid by night, grape or acid when the sticker itself is ink.",
+    "tokens": [
+      {
+        "name": "shadow-hard-s",
+        "value": {
+          "day": "4px 4px 0 #1f1724",
+          "night": "4px 4px 0 #c6f135"
+        },
+        "usage": "Small stickers, pills, email buttons."
+      },
+      {
+        "name": "shadow-hard",
+        "value": {
+          "day": "8px 8px 0 #1f1724",
+          "night": "8px 8px 0 #c6f135"
+        },
+        "usage": "Stickers, cards, photo frames on web (16px on a 1080 canvas)."
+      },
+      {
+        "name": "shadow-hard-l",
+        "value": {
+          "day": "16px 16px 0 #1f1724",
+          "night": "16px 16px 0 #c6f135"
+        },
+        "usage": "Hero stickers and the video still frame on canvases."
+      },
+      {
+        "name": "shadow-hard-grape",
+        "value": "8px 8px 0 #6a2bea",
+        "usage": "Offset shadow in grape, for ink or oat stickers in evening layouts."
+      },
+      {
+        "name": "shadow-hard-acid",
+        "value": "8px 8px 0 #c6f135",
+        "usage": "Offset shadow in acid, for ink stickers by day."
+      }
+    ]
+  },
+  "stroke": {
+    "note": "Rule and outline weights. Bold rules are part of the look; use them instead of shadows or grey dividers.",
+    "tokens": [
+      {
+        "name": "stroke-outline",
+        "value": "3px",
+        "usage": "Sticker and photo-frame outline on web (6px on a 1080 canvas)."
+      },
+      {
+        "name": "stroke-rule",
+        "value": "4px",
+        "usage": "Section rules, chart baselines."
+      },
+      {
+        "name": "stroke-rule-bold",
+        "value": "8px",
+        "usage": "Hero rules under headlines, the top bar on covers."
+      }
+    ]
+  },
+  "tilt": {
+    "note": "Stickers and tags tilt; nothing else does. At most two tilted elements per composition, never the same angle twice.",
+    "tokens": [
+      {
+        "name": "tilt-left",
+        "value": "-6deg",
+        "usage": "Default sticker tilt."
+      },
+      {
+        "name": "tilt-right",
+        "value": "4deg",
+        "usage": "Second sticker or tag in the same composition."
+      },
+      {
+        "name": "tilt-hard",
+        "value": "-12deg",
+        "usage": "One hero sticker on a cover."
+      }
+    ]
+  },
+  "bite": {
+    "note": "The bite: a mouthful cut from the top-right of a shape, its edge eight round tooth marks scalloped like a drawn cloud (three show on a corner). Radius, to the tooth tips, = 16% of the shape's height, centre 6% in from the corner. One bite per composition.",
+    "tokens": [
+      {
+        "name": "bite-ratio",
+        "value": "16%",
+        "usage": "Bite radius as a share of the bitten shape's height."
+      },
+      {
+        "name": "bite-inset",
+        "value": "6%",
+        "usage": "How far the bite centre sits in from the top-right corner, as a share of height."
+      }
+    ]
+  }
+}

@@ -6,6 +6,7 @@ import { z } from 'zod/v4';
 import { BaseMastraAgent, BaseMastraAgentConfig } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 import {
 	feedbackDishSchema,
+	FEEDBACK_POINT_INSTRUCTION,
 	feedbackPointSchema,
 	FEEDBACK_SENTIMENTS,
 	FEEDBACK_THEMES_INSTRUCTION,
@@ -78,13 +79,14 @@ export class MentionExtractionAgent extends BaseMastraAgent<
 		const city = context?.cityName;
 		return (
 			`You extract restaurant, bar and café mentions from ${city ? `${city} ` : ''}social media posts and food blog articles for a report to venue owners. ` +
-			`For a post you get the caption, hashtags, tagged location and, when available, the speech transcript; for a blog article its title and text. ` +
+			`For a post you get the caption, hashtags, tagged location and, when available, the speech transcript; for a blog article its title and text, where a link to a social profile follows the linked words in parentheses ("Kaffeebar (instagram.com/kaffeebar)"): an account linked from a venue's name is that venue's and confirms its spelling. ` +
 			`A blog article or list may name many venues: include each one it says something about, with what it says about that one. ` +
 			`Transcripts are machine-generated and often misspell names; prefer spellings from the caption, hashtags or tagged location. ` +
 			`Hashtags of a city also attract posts about other cities, so record the venue's city when known. ` +
 			`A post tagged at a venue that describes a visit there counts as a mention of that venue, even if the caption does not repeat its name. ` +
 			`Only include venues that are specifically named or tagged. Do not invent dishes, praise or complaints that are not stated. ` +
 			FEEDBACK_THEMES_INSTRUCTION +
+			FEEDBACK_POINT_INSTRUCTION +
 			`Mark a venue as a new opening only when the post itself says it is new or has just opened; a new dish, a new menu or a creator's first visit is not an opening. ` +
 			(context?.foodTopics?.length ?
 				`For cuisine, use these words where one fits: ${context.foodTopics.join(', ')}. Use another short English word only when none fits. `

@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 
 import { Image } from 'src/modules/image/entities/image.entity.js';
 import { ImageService, UnreadableImageError } from 'src/modules/image/services/image.service.js';
+import { type LinkedProfile, profileLinks } from 'src/modules/social/util/accounts.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import {
@@ -18,6 +19,7 @@ import {
 	FAVICON_RETRY_DAYS,
 	FAVICON_RUN_SECONDS,
 	GENERIC_FAVICON_HOSTS,
+	SITE_CONTACT_PAGES,
 } from '../constants/favicon.constant.js';
 import { Venue } from '../entities/venue.entity.js';
 import {
@@ -27,7 +29,10 @@ import {
 	faviconSite,
 	googleFaviconUrl,
 } from '../util/favicon.js';
+import { contactPageUrls } from '../util/site-pages.js';
 import { hostOf } from '../util/web-mentions.js';
+
+import type { FetchedResource } from './favicon-fetch.service.js';
 
 import { FaviconFetchService, MAX_ICON_BYTES, MAX_PAGE_BYTES } from './favicon-fetch.service.js';
 
@@ -50,6 +55,8 @@ export interface FaviconRunResult {
 	/** Websites looked at: one fetch each, however many venues share it */
 	sites: number;
 	outcomes: Record<FaviconOutcome, number>;
+	/** Websites whose pages link an Instagram or TikTok profile */
+	withProfiles: number;
 }
 
 /** The venues one fetch serves: every open venue on one website host, or one venue without a site. */
@@ -63,7 +70,10 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 /**
  * The one writer of `Venue.favicon` / `faviconHash` / `faviconCheckedAt`: the icon of each
  * venue's website, fetched once per website host and kept on ImageKit through `ImageService`
- * (one file per host, one `Image` row per venue sharing it).
+ * (one file per host, one `Image` row per venue sharing it). The same home page fetch gives
+ * `Venue.siteProfiles` / `siteProfilesAt`, the Instagram and TikTok profiles the site links
+ * (its contact or Impressum page when the home page has none), which `AccountMatchingService`
+ * links to the brand.
  */
 @Injectable()
 export class VenueFaviconService {
@@ -78,7 +88,7 @@ export class VenueFaviconService {
 	/**
 	 * Open venues whose icon is due: never looked for (or the website changed since), found
 	 * (a generic one too) more than `FAVICON_REFRESH_DAYS` ago, or nothing found more than
-	 * `FAVICON_RETRY_DAYS` ago;
+	 * `FAVICON_RETRY_DAYS` ago, or whose website was never read for profiles;
 	 * with a website, or with an icon left from a website that is gone. Never-looked-for first.
 	 */
 	async due(now: Date, limit: number): Promise<Venue[]> {
@@ -93,6 +103,7 @@ export class VenueFaviconService {
 					{
 						$or: [
 							{ faviconCheckedAt: null },
+							{ website: { $ne: null }, siteProfilesAt: null },
 							{ faviconCheckedAt: { $lt: refreshBefore } },
 							{
 								favicon: null,
@@ -125,6 +136,7 @@ export class VenueFaviconService {
 			venues: 0,
 			sites: 0,
 			outcomes: { updated: 0, unchanged: 0, missing: 0, generic: 0, no_site: 0 },
+			withProfiles: 0,
 		};
 		// A site's own failures are outcomes in `refreshSite`; what throws is ImageKit (keys,
 		// an outage) or the database, true for every site after it too: the run stops, the
@@ -140,6 +152,7 @@ export class VenueFaviconService {
 					if (failure || Date.now() >= deadline) return;
 					const outcomes = await this.refreshSite(group, now);
 					result.sites++;
+					if (group.venues[0]?.siteProfiles?.length) result.withProfiles++;
 					result.venues += outcomes.length;
 					for (const outcome of outcomes) result.outcomes[outcome]++;
 				},
@@ -154,7 +167,7 @@ export class VenueFaviconService {
 		}
 		if (result.venues)
 			this.logger.log(
-				`Favicons: ${result.sites} sites, ${result.venues} venues, ${JSON.stringify(result.outcomes)}`,
+				`Favicons: ${result.sites} sites, ${result.venues} venues, ${JSON.stringify(result.outcomes)}, ${result.withProfiles} sites link a profile`,
 			);
 		if (failure) throw new Error(`Favicon run stopped: ${(failure as Error).message}`);
 		return result;
@@ -199,14 +212,20 @@ export class VenueFaviconService {
 	 * unflushed: the page's best icon links, then `/favicon.ico`, then Google's copy; the first
 	 * that is an image ImageKit can read wins. It is uploaded once (or taken from a venue that
 	 * already holds it), and every venue gets its own `Image` row on that file. The venues'
-	 * `favicon` must be populated. One outcome per venue, in order.
+	 * `favicon` must be populated. One outcome per venue, in order. The home page read for icon
+	 * links also gives the venues' `siteProfiles`; a page that could not be read keeps them.
 	 */
 	async refreshSite({ site, venues }: SiteGroup, now: Date): Promise<FaviconOutcome[]> {
 		const done = (outcomes: FaviconOutcome[]) => {
-			for (const venue of venues) venue.faviconCheckedAt = now;
+			for (const venue of venues) {
+				venue.faviconCheckedAt = now;
+				venue.siteProfilesAt = now;
+			}
 			return outcomes;
 		};
 		if (!site) {
+			// No site of its own: a profile as website is linked from `website` itself
+			for (const venue of venues) venue.siteProfiles = [];
 			await this.imageService.removeImages(
 				venues.flatMap(v => (v.favicon ? [v.favicon] : [])),
 			);
@@ -217,7 +236,13 @@ export class VenueFaviconService {
 			return done(venues.map(() => 'no_site'));
 		}
 
-		for (const url of await this.candidates(site)) {
+		const page = await this.fetch(site.href, MAX_PAGE_BYTES, true);
+		if (page) {
+			const profiles = await this.profilesOf(page);
+			for (const venue of venues) venue.siteProfiles = profiles;
+		}
+
+		for (const url of this.candidates(site, page)) {
 			const icon = await this.fetch(url, MAX_ICON_BYTES);
 			const format = icon && faviconFormat(icon.body);
 			if (!icon || !format) continue;
@@ -300,9 +325,24 @@ export class VenueFaviconService {
 		for (const venue of venues) venue.faviconHash = hash;
 	}
 
+	/**
+	 * The profiles the home page links, else those its contact, Impressum or about pages link
+	 * (`SITE_CONTACT_PAGES` at most, read until one links any).
+	 */
+	private async profilesOf(page: FetchedResource): Promise<LinkedProfile[]> {
+		const html = page.body.toString('utf8');
+		const own = profileLinks(html);
+		if (own.length) return own;
+		for (const url of contactPageUrls(html, page.url, SITE_CONTACT_PAGES)) {
+			const contact = await this.fetch(url, MAX_PAGE_BYTES, true);
+			const found = contact ? profileLinks(contact.body.toString('utf8')) : [];
+			if (found.length) return found;
+		}
+		return [];
+	}
+
 	/** The URLs to try, best first, each once. */
-	private async candidates(site: URL): Promise<string[]> {
-		const page = await this.fetch(site.href, MAX_PAGE_BYTES, true);
+	private candidates(site: URL, page: FetchedResource | null): string[] {
 		const origin = page ? new URL(page.url) : site;
 		const links =
 			page ?

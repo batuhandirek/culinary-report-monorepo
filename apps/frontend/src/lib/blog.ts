@@ -3,9 +3,9 @@
 // through `#ui/lib/date.ts` like everywhere else.
 import type { BlogEntryOutputDto, BlogEntrySummaryOutputDto, BlogTagOutputDto } from 'client';
 
-import { OG_IMAGE_LINK } from '#constants/OG_IMAGE.js';
+import { BRAND_ICON_LINK } from '#constants/OG_IMAGE.js';
 
-const SITE = 'https://culinaryreport.com';
+const SITE = 'https://munchwerk.com';
 
 /** When an entry counts as written: its publication, or its creation while still a draft. */
 export const blogEntryDate = (entry: { publishedAt?: string | null; createdAt: string }) =>
@@ -75,9 +75,9 @@ export const blogPostingJsonLd = (entry: BlogEntryOutputDto): Record<string, unk
 				: {}),
 			publisher: {
 				'@type': 'Organization',
-				name: 'Culinary Report',
+				name: 'Munchwerk',
 				url: SITE,
-				logo: { '@type': 'ImageObject', url: OG_IMAGE_LINK }
+				logo: { '@type': 'ImageObject', url: BRAND_ICON_LINK }
 			},
 			...(entry.tags?.length
 				? { keywords: entry.tags.map((tag) => tag.name).join(', ') }
@@ -142,7 +142,7 @@ export const slugifyHeading = (text: string): string =>
 		.replace(/[^a-z0-9]+/g, '-')
 		.replace(/^-+|-+$/g, '');
 
-const OWN_HOST = /^https?:\/\/(?:www\.)?culinaryreport\.com(?=[/?#]|$)/i;
+const OWN_HOST = /^https?:\/\/(?:www\.)?munchwerk\.com(?=[/?#]|$)/i;
 
 /**
  * Links in an article that point at our own site become in-app links.

@@ -10,7 +10,7 @@ let sdk: NodeSDK | undefined;
 
 if (mainConfig.OTEL_IS_ENABLED && !sdk) {
 	sdk = new NodeSDK({
-		serviceName: 'Culinary Report',
+		serviceName: 'Munchwerk',
 		traceExporter: new OTLPTraceExporter({
 			url: mainConfig.OTEL_EXPORTER_OTLP_TRACES_ENDPOINT,
 		}),

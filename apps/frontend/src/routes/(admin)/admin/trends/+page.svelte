@@ -2,6 +2,7 @@
 	import { Plus } from '@lucide/svelte';
 
 	import SearchInterestPanel from './components/SearchInterestPanel.svelte';
+	import TrendsDishNamesTab from './components/TrendsDishNamesTab.svelte';
 	import TrendsPostsTab from './components/TrendsPostsTab.svelte';
 	import TrendsThemesTab from './components/TrendsThemesTab.svelte';
 	import TrendsTopicsTab from './components/TrendsTopicsTab.svelte';
@@ -24,7 +25,8 @@
 
 	// What the city eats and talks about. Topics first: each kind of food with its venues (supply),
 	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, searches,
-	// openings and closures, and the words no topic covers yet.
+	// openings and closures, the dish names reviews and posts use (each counting for a topic), and the
+	// words no topic covers yet.
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
 	const cityId = $derived(
@@ -45,17 +47,20 @@
 		{ value: 'themes', label: 'Praise and complaints' },
 		{ value: 'searches', label: 'Searches' },
 		{ value: 'openings', label: 'Openings and closures' },
+		{ value: 'dishes', label: 'Dish names' },
 		{ value: 'words', label: 'Unrecognised words' }
 	];
 	let tab = $state('topics');
 
 	let dialogOpen = $state(false);
 	let newLabel = $state('');
+	let newKind = $state<'cuisine' | 'dish' | 'drink'>('cuisine');
 	let version = $state(0);
 	// Every topic, as the new one's possible parents
 	let topics = $state<{ key: string; label: string }[]>([]);
-	const newTopic = async (label = '') => {
+	const newTopic = async (label = '', kind: 'cuisine' | 'dish' | 'drink' = 'cuisine') => {
 		newLabel = label;
+		newKind = kind;
 		dialogOpen = true;
 		if (!topics.length && cityId) {
 			const res = await api.admin.getFoodTopics({ cityId });
@@ -75,8 +80,6 @@
 			<div class="w-44">
 				<Select items={MONTHS} value={month} aria-label="Month" size="sm" onValueChange={(v) => setParam('month', v === lastMonth() ? undefined : v)} />
 			</div>
-			<Button size="sm" variant="outline" href="/admin/trends/highlights">Public highlights</Button>
-			<Button size="sm" variant="outline" href="/admin/trends/food-trends">Food trends report</Button>
 			<Button size="sm" icon={Plus} onclick={() => newTopic()}>New topic</Button>
 		</div>
 	{/snippet}
@@ -96,6 +99,8 @@
 				<div class="pb-12"><SearchInterestPanel {cityId} {month} /></div>
 			{:else if tab === 'openings'}
 				<div class="pb-12"><VenueOpeningsPanel {cityId} {month} /></div>
+			{:else if tab === 'dishes'}
+				<TrendsDishNamesTab {cityId} {version} onNewTopic={newTopic} />
 			{:else}
 				<div class="pb-12"><UnrecognisedWords {cityId} {version} onNewTopic={newTopic} /></div>
 			{/if}
@@ -106,6 +111,7 @@
 <FoodTopicFormDialog
 	bind:active={dialogOpen}
 	label={newLabel}
+	kind={newKind}
 	{topics}
 	onSaved={(saved) => {
 		version++;

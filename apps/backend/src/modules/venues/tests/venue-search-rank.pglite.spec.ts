@@ -7,6 +7,7 @@ import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.se
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
 import {
 	seedFoodTopics,
+	linkFoodTopics,
 	seedIndex,
 } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { venueTopics } from 'src/modules/food-topics/util/venue-topics.js';
@@ -58,7 +59,7 @@ describe('searchQueries', () => {
 			{
 				category,
 				categories,
-				mentionCuisines: cuisines.map(cuisine => ({ cuisine, n: 2 })),
+				mentionTopics: cuisines.map(cuisine => ({ keys: index.resolve(cuisine), n: 2 })),
 				manual: [],
 			},
 			index,
@@ -184,11 +185,9 @@ describe('VenueSearchRankService (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Good.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 		await em.flush();
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

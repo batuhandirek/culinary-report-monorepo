@@ -21,9 +21,14 @@ export class WeeklyListeningCron {
 
 	// Sundays (`WEEKLY_LISTENING_CRON`): per city the monthly cron covers, a
 	// `SCRAPE_TIKTOK_RECENT` run where it has TikTok sources, a `SCRAPE_INSTAGRAM_REELS` run
-	// where Instagram is on and a `SCRAPE_BLOGS` run where it has blogs, then the free
-	// `EXTRACT_MENTIONS` and `MATCH_MENTIONS` (the queue runs oldest first, so they follow). TikTok hashtag feeds ignore dates and its search is by
-	// relevance, so only listening through the month finds the month's videos
+	// where Instagram is on, a `SCRAPE_BLOGS` run where it has blogs and a
+	// `SCRAPE_ACCOUNTS_RECENT` run (the watched profiles' week: `AccountWatchService`), then the free
+	// `EXTRACT_MENTIONS` and `MATCH_MENTIONS`, then `LOOKUP_VENUES` and `MATCH_MENTIONS` again
+	// (the queue runs oldest first, so they follow), and last `FIND_OWN_ACCOUNTS` (the brands'
+	// accounts on the platform they lack, after matching linked what the week gave). TikTok hashtag feeds ignore dates and its
+	// search is by relevance, so only listening through the month finds the month's videos. The
+	// lookup puts a place posts named on the map within a week instead of on the 2nd; it pays only
+	// for names not searched lately, so a week costs cents
 	@OnCron('weekly-listening', WEEKLY_LISTENING_CRON)
 	@EnsureRequestContext()
 	async handleCron() {
@@ -43,9 +48,17 @@ export class WeeklyListeningCron {
 				...(hashtags.length || searches.length ? [PipelineStepEnum.SCRAPE_TIKTOK_RECENT] : []),
 				...(city.instagramEnabled ? [PipelineStepEnum.SCRAPE_INSTAGRAM_REELS] : []),
 				...(blogs.length ? [PipelineStepEnum.SCRAPE_BLOGS] : []),
+				// Every city has watched profiles (its report brands' own accounts at least)
+				PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT,
 			];
-			if (!steps.length) continue;
-			for (const step of [...steps, PipelineStepEnum.EXTRACT_MENTIONS, PipelineStepEnum.MATCH_MENTIONS])
+			for (const step of [
+				...steps,
+				PipelineStepEnum.EXTRACT_MENTIONS,
+				PipelineStepEnum.MATCH_MENTIONS,
+				PipelineStepEnum.LOOKUP_VENUES,
+				PipelineStepEnum.MATCH_MENTIONS,
+				PipelineStepEnum.FIND_OWN_ACCOUNTS,
+			])
 				await this.pipelineService.queue(city.id, step, month);
 		}
 	}

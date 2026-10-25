@@ -12,14 +12,14 @@ This is the audit the user asked for: where coverage is thin, where the order of
 | Instagram posts | Sept 25, Oct 626 (daily run started in October) | Same | OK from October on; reels weekly and monthly |
 | Mentions | Oct: 1,111 matched, 394 unmatched, 191 other city | Matched mentions drive everything | 166 of 1,939 October posts were not extracted on the audit day; the daily run now extracts and matches after each scrape (fixed 2026-10-21) |
 | Reviews | Aug 5,997, Sept 5,863, Oct 4,299 across ~120 venues (report brands + competitors). Sept: 3,506 written, 670 answered | Review analysis for the report brand, its competitors, and the months before | A venue new to the set gets six months back in its first scrape (fixed 2026-10-22, B.1); only ~120 of 1,076 ever-mentioned venues have any review |
-| Rating snapshots | One per venue from the city list; monthly ones only for scraped venues | Six months for the sparkline | Starts at the first scrape; cannot be backfilled |
+| Rating snapshots | Twice a week for venues posted about in the last 30 days and every venue with 500+ reviews (from 2026-10-27); otherwise one per venue from the city list | Six months for the sparkline | Starts at the first scrape; cannot be backfilled |
 | Competitors | 118 rows across 24 brands; 17 of 21 September reports have some | Every report brand | Fixed 2026-10-21: the monthly run fills brands with none before the review scrape |
 | Search ranks | 48 rows, 20 venues, one month | Monthly | OK (history builds up) |
 | Google Trends | 1,164 rows, 97 terms | Monthly | OK |
 | Open tables | 46 samples, 21 venues; 569 venues have a booking link | Thursday samples over a month | Early (the cron has run once or twice) |
 | Busyness | 0 samples with data | Twice weekly | **Dead**: `popular-times-and-order-online-source` |
 | Delivery | 12 Lieferando listings, 0 menus | Wolt menus for prices | **Dead for menus**: same research task |
-| Own accounts | 535 accounts linked to brands; 14 of 21 report brands have one; 4 snapshots | One snapshot per account per month | The step ran before the matcher rework; next run fixes it |
+| Own accounts | 1,579 accounts linked to brands (2026-10-25: 664 by handle, 607 from the brands' own websites, 268 as a branch's Google website, 40 verified on the other platform), 213 suggestions to review; 825 of 4,955 Berlin brands with a website have an Instagram, 22 of the 34 at a lead score of 60+ | One snapshot per account per month | The website read covered 1,876 of ~5,100 venues on the first day; the hourly job reads the rest. The other-platform lookup covers ~260 brands a week ($1) of 1,180 waiting |
 | Comments | 1,446 scraped, 123 classified | Classified | Analysis failed in September (LLM credits); "Finish the month" reruns it free |
 | Press | 33 pages found, 0 classified | Classified | Same |
 | TripAdvisor | 6 venues with a page | The visitor side | Expected: most Berlin Imbisse have none |

@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOrder } from '@mikro-orm/core';
+import { FilterQuery, QueryOrder, wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Controller, Get, Param, ParseUUIDPipe, Res, UseGuards } from '@nestjs/common';
@@ -22,10 +22,12 @@ import {
 	AdminReportOutputDto,
 } from '../dto/admin-report.output.dto.js';
 import { Report } from '../entities/report.entity.js';
+import type { ReportData } from '../interfaces/report-data.interface.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportPdfService } from '../services/report-pdf.service.js';
 import { ReportShareService, shareUrl } from '../services/report-share.service.js';
 import { leaveBehindData } from '../util/leave-behind.js';
+import { sectionsOutput } from '../util/report-sections.js';
 
 const refs = (report: Pick<Report, 'brand' | 'city'>) => ({
 	brand: { id: report.brand.id, name: report.brand.name },
@@ -40,6 +42,13 @@ export const reportFileName = (report: AdminReportOutputDto) =>
 		.replace(/[^\p{L}\p{N}]+/gu, '-')
 		.replace(/^-|-$/g, '');
 
+/** A report's configuration and template, when loaded. */
+const links = (report: Pick<Report, 'config' | 'template'>) => ({
+	...(report.config && wrap(report.config).isInitialized() && { config: { id: report.config.id, name: report.config.name } }),
+	...(report.template &&
+		wrap(report.template).isInitialized() && { template: { id: report.template.id, name: report.template.name } }),
+});
+
 /** A report as the API returns it, to admins and through a private link alike. */
 export const toOutput = (report: Report): AdminReportOutputDto => ({
 	id: report.id,
@@ -51,6 +60,10 @@ export const toOutput = (report: Report): AdminReportOutputDto => ({
 	...refs(report),
 	data: report.data,
 	highlights: report.highlights,
+	name: report.name,
+	sections: sectionsOutput(report.sections),
+	// Named where they were loaded (the admin's routes)
+	...links(report),
 	sentAt: report.sentAt ?? undefined,
 });
 
@@ -73,12 +86,14 @@ export class AdminReportsController {
 		if (query.month) filters.month = query.month;
 		if (query.brandId) filters.brand = query.brandId;
 		if (query.cityId) filters.city = query.cityId;
+		if (query.templateId) filters.template = query.templateId;
+		if (query.configId) filters.config = query.configId;
 		const [field, order] = (query.sort ?? 'updatedAt:desc').split(':') as [
 			keyof Report,
 			'asc' | 'desc',
 		];
 		const [items, totalItems] = await this.em.findAndCount(Report, filters, {
-			populate: ['brand', 'city'],
+			populate: ['brand', 'city', 'config', 'template'],
 			// The report body is big; the list needs the headline only
 			exclude: ['data'],
 			orderBy: { [field]: order === 'asc' ? QueryOrder.ASC : QueryOrder.DESC },
@@ -95,6 +110,8 @@ export class AdminReportsController {
 				reviewCount: report.reviewCount,
 				...refs(report),
 				headline: report.highlights.headline,
+				name: report.name,
+				...links(report),
 				...(report.sentAt && { sentAt: report.sentAt }),
 			})),
 			totalItems,
@@ -107,7 +124,7 @@ export class AdminReportsController {
 	async getReport(
 		@TypedParam('id') id: string & tags.Format<'uuid'>,
 	): Promise<AdminReportOutputDto> {
-		return toOutput(await this.em.findOneOrFail(Report, { id }, { populate: ['brand', 'city'] }));
+		return toOutput(await this.em.findOneOrFail(Report, { id }, { populate: ['brand', 'city', 'config', 'template'] }));
 	}
 
 	/** The report as an A4 PDF, for downloading. Takes a few seconds: headless Chrome prints it. */
@@ -159,11 +176,27 @@ export class AdminReportsController {
 		res.send(Buffer.from(pdf));
 	}
 
-	/** Builds (or rebuilds) a brand's report on its branches in a city, or (no `cityId`) in all its cities, for a month. Takes a few seconds: two LLM calls. */
+	/**
+	 * A brand's report data as a rebuild would compute it now, without the LLM calls (no
+	 * highlights, no reply drafts) and without saving anything: to check what a change to the
+	 * data would move before rebuilding.
+	 */
+	@TypedRoute.Post('/preview')
+	async previewReportData(@TypedBody() body: AdminBuildReportInputDto): Promise<ReportData> {
+		return (await this.reportService.compute(body.brandId, body.cityId ?? null, body.month)).data;
+	}
+
+	/**
+	 * Builds (or rebuilds) a brand's reports on its branches in a city, or (no `cityId`) in all
+	 * its cities, for a month: one per active configuration (or the default), or only
+	 * `configId`'s. Returns the first. Takes a few seconds: LLM calls.
+	 */
 	@TypedRoute.Post('/')
 	async buildReport(@TypedBody() body: AdminBuildReportInputDto): Promise<AdminReportOutputDto> {
-		const report = await this.reportService.build(body.brandId, body.cityId ?? null, body.month);
-		await this.em.populate(report, ['brand', 'city']);
+		const report = await this.reportService.build(body.brandId, body.cityId ?? null, body.month, {
+			...(body.configId && { configId: body.configId }),
+		});
+		await this.em.populate(report, ['brand', 'city', 'config', 'template']);
 		return toOutput(report);
 	}
 }

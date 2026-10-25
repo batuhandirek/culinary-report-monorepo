@@ -1,16 +1,20 @@
 ---
 name: design-system
-description: The design system "Pickle & Plum" — tokens, button variants, character utilities, type, page blocks under `#ui/wrapped`, dialogs/drawers, forms and controls, copy voice. Use when building or restyling any user-facing UI in `apps/frontend` (anything under `src/ui`, `src/components`, `src/dialogs`, route components), or when a change should be checked in `/admin/ui-kit`.
+description: The design system — the Munchwerk brand layer in code (tokens, display type, stamps, hard shadows, the bite) over the app's working layer (button variants, character utilities, page blocks under `#ui/wrapped`, dialogs/drawers, forms and controls). Use when building or restyling any user-facing UI in `apps/frontend` (anything under `src/ui`, `src/components`, `src/dialogs`, route components), or when a change should be checked in `/admin/ui-kit`.
 ---
 
-# Design system: "Pickle & Plum"
+# Design system
 
-Ferment lab on oat paper: plum ink, one acid-green accent, pixel labels. The living catalogue is `/admin/ui-kit`: check a shared change there first, give a new shared control or block a specimen. Touch targets: memory `feedback_tap_target_size` (~44px, no tiny badges or icon buttons).
+Two layers in one `app.css`. The **brand layer** is Munchwerk's (`brand` skill, `design-tokens.txt`): acid and grape fields, Bricolage Grotesque headlines, stamps, tilted stickers, hard ink offsets, the bite; public pages (city month, trends, blog, home), the report and share cards are built from it. The **working layer** is the dense UI under it (admin, portal, forms): oat ground, plum ink, hairline cards, Onest. The living catalogue is `/admin/ui-kit`: check a shared change there first, give a new shared control or block a specimen. Touch targets: memory `feedback_tap_target_size` (~44px, no tiny badges or icon buttons).
 
 ## Look
 
-Oat ground (`sand`) with grain over a faint plum dot grid, warm-white cards on warm hairlines, photos in a darker well. Acid pickle green only for the one primary action, the wordmark and fills on ink; pixel labels, tilted stickers and hard offsets carry the character. Tokens in `app.css`: `sand` (page), `paper` (cards/bars), `line`, `wash` (image wells, empty tracks), `tint` (pickle-brine paper: notes, unread, selected), `ink` (plum-black), `faint`, `primary` (= `acid`, ink text on it), `primary-darker` (olive), accents `acid` (on ink), `chili` (active-tab rule, required marks), `beet` (pixel labels and links on paper).
+Oat ground (`sand`) with grain over a faint plum dot grid, warm-white cards on warm hairlines, photos in a darker well. Tokens in `app.css`: `sand` (page), `paper` (cards/bars), `line`, `wash` (image wells, empty tracks), `tint` (brine paper: notes, unread, selected), `ink` (plum-black), `muted-foreground` (ink-muted), `faint`, `primary` (= `acid`, ink text on it), `primary-darker` (herb green text), `grape` (second brand colour: fields, links on paper, the focus ring), `grape-deep` (night block, the report cover), `lavender` (purple text on ink only), accents `chili` (active-tab rule, rising marks) and `beet` (pixel labels on paper, Dish of the Month).
 
+- **Brand fields carry only their own text**: ink on acid; oat or acid on grape and deep grape, never ink (2.6:1); lavender only on ink or deep grape. Beet and chili never sit next to grape. The full pairing table is in `design-tokens.txt`.
+- **Public pages and the report use the brand layer**: `type-hero` / `type-display` headlines, `number-hero` rank numerals, `stamp` labels (11px; the 8px `eyebrow` is the dense admin label), section heads on a 4px ink rule, panels with a 3px ink outline and `shadow-hard`, ink bars with the story's bar in acid and an ink outline, a grape pitch band. At most two tilts and one `bite` per composition. A decline is never red in public.
+
+- **The front page has its own stylesheet** (`routes/(landing)/landing.css`, imported by its page): everything under `.lp`, whose `data-theme` is `day` or `night` (the nav's switch, remembered per browser), with its own `--lp-*` tokens, since it alone has a night theme and the app's `ink` / `paper` must not flip elsewhere. Its brand pieces (`lp-stamp`, `lp-tag`, `lp-sticker`, `lp-move`, `lp-badge`, `lp-button`, `lp-tile`) follow the mockup in `munchwerk.com-version-2/`; a field class on a link keeps its colour because the page's link colour sits in `:where(a)`.
 - **Surfaces on sand need a ground**: a hairline panel is `bg-paper border-line rounded-md border`; without `bg-paper` it reads as see-through. Radius `rounded-md` (10px) for cards and panels.
 - **Acid is a fill, never ink on paper** (1.1:1 there): on paper it carries an ink frame (the stamp, the section-rule block) or ink text inside it. Green text, bars and other thin marks on paper are `primary-darker`; the focus ring is too. Chili is a rule or glyph, never a sentence (3.9:1).
 - **Prices** (none yet): Onest bold `text-ink`; pixel faces have no ₺.
@@ -19,13 +23,14 @@ Oat ground (`sand`) with grain over a faint plum dot grid, warm-white cards on w
 
 ## Type
 
-Onest (variable, `static/fonts/onest`, latin + latin-ext; `₺` lives in latin-ext) for every sentence, title and price. `app.html` preloads both Onest files and the pixel face; a face added to `app.css` that renders above the fold gets a preload there too. Press Start 2P (`font-pixel`, via `eyebrow` / `sticker`) and VT323 (`font-term`) are accents for short labels only, never prose, never prices. `--font-martian` aliases Onest. Standard Tailwind sizes; headings `font-semibold` / `font-bold`, never `font-black` / `extrabold`. Decorative glyphs are Lucide icons or inline SVG (tofu on Android otherwise).
+Bricolage Grotesque (variable weight and optical size, `static/fonts/bricolage-grotesque`, latin + latin-ext; `font-display`) at 800 for display only: the wordmark, `type-hero`, `type-display`, `number-hero`. Onest (variable, `static/fonts/onest`, latin + latin-ext) for every sentence, admin title and price. `app.html` preloads Bricolage's latin file, both Onest files and the pixel face; a face added to `app.css` that renders above the fold gets a preload there too. Press Start 2P (`font-pixel`, via `stamp` / `eyebrow` / `sticker`) and VT323 (`font-term`) are accents for short labels only, never prose, never prices. `--font-martian` aliases Onest. Standard Tailwind sizes; Onest headings `font-semibold` / `font-bold`, never `font-black` / `extrabold` (Bricolage display is the one 800). Decorative glyphs are Lucide icons or inline SVG (tofu on Android otherwise).
 
 ## Buttons and character utilities
 
 - **Button variants**: `default` = the acid *stamp* (2px ink frame + `shadow-stamp`, sinks on press), the one primary action per view and the only ink-framed thing besides the tab bar's sell key and the hero's stamped word; `secondary` ink pill; `outline` ink-bordered pill (icon sizes become round warm-white hairline keys); `ghost` / `link`. Shape lives on the variant, not the size. Sizes are touch-sized; don't shrink below `default`.
+- Brand utilities: `stamp` (11px pixel caps, 0.06em) / `stamp-l` (14px) for public labels of one or two words; `tilt-left` (−6°) / `tilt-right` (4°) / `tilt-hard` (−12°) for stickers only; `bite` (a mouthful with tooth marks out of the top-right corner, `--bite-shape`; radius `--bite` to the tooth tips, default 0.75rem; it masks the element's own shadow, so put `shadow-hard` on a wrapper). A bite anywhere else cuts `--bite-shape` from a full mask layer (the landing's word), never on a rounded box: there the cut leaves a hairline along the corner, which is why `bite` adds up three layers instead; shadows `shadow-stamp` (4px ink), `shadow-hard` (8px), `shadow-hard-l` (16px), `shadow-hard-grape`, `shadow-hard-acid`.
 - `eyebrow` = 8px Press Start 2P caps label (2–4 words; colour at the call site: `text-muted-foreground`, `text-beet` for spec labels and links). `section-rule` = a section head (acid pixel block, `type-title` h2, trailing `eyebrow text-beet` link, dashed rule), written as `#ui/wrapped/Section.svelte`. `ink-strip` = one-line note on `tint`. `sticker` = tilted ink corner tag. `shadow-sticker` = hard hairline-coloured offset on cards. `font-term` = VT323 for one-line notes/counters. `chip` = pill (ink when active or `aria-pressed`). `checker` = the body's grain and dot grid for full-screen overlays. `pop*` = 1px hairline, `pop-press` / `pop-lift` = opacity dip / hover shadow.
-- The wordmark is ink on acid; on acid or any light accent ground use `<Logo ink />` (sand on ink); never a box behind the logo.
+- The wordmark (`components/Logo.svelte`) is "Munchwerk" in Bricolage 800, ink on an acid block; on acid or any light accent ground use `<Logo ink />` (acid on ink); never another box behind it.
 
 ## Page blocks (`#ui/wrapped`)
 
@@ -53,4 +58,4 @@ Onest (variable, `static/fonts/onest`, latin + latin-ext; `₺` lives in latin-e
 
 ## Copy
 
-Informal second person ("sen"), sentence case, no "Lütfen". Legal texts stay formal and come from the backend as-is.
+Voice, word choice and title patterns are the `brand` skill's. Sentence case everywhere. Legal texts stay formal and come from the backend as-is.

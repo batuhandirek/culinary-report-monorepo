@@ -105,4 +105,35 @@ describe('VenueScrapeService.lookupNames (pglite)', () => {
 		expect(await harness.orm.em.count(Venue, { placeId: 'lupita' })).toBe(1);
 		expect(await harness.orm.em.count(VenueStatusChange, {})).toBe(0);
 	});
+
+	it('caps the run after dropping the names searched lately, so a new name further down is reached', async () => {
+		runActor.mockResolvedValueOnce([]);
+		const december = new Date('2026-12-02T06:00:00Z');
+
+		// Tacos Lupita and Bao Bar were searched in November: they take none of the two places
+		const res = await service.lookupNames(
+			city,
+			['Tacos Lupita', 'Bao Bar', 'Heller Kaffees', 'Kaffee Perry', 'Third Name'],
+			6,
+			december,
+			2,
+		);
+
+		expect(res).toEqual({ lookedUp: 2, retried: 0, saved: 0 });
+		expect(searched(2)).toEqual(['Heller Kaffees', 'Kaffee Perry']);
+	});
+
+	it('keeps only the places that serve food in the city: never a cleaner or a namesake elsewhere', async () => {
+		runActor.mockResolvedValueOnce([
+			place('Facil', 'facil', 'Restaurant Facil'),
+			{ ...place('Facil', 'facil-clean', 'Facil Clean'), categoryName: 'Cleaners' },
+			{ ...place('Facil', 'facil-potsdam', 'Facil Potsdam'), city: 'Potsdam' },
+		]);
+
+		const res = await service.lookupNames(city, ['Facil'], 6, new Date('2026-12-01T06:00:00Z'));
+
+		expect(res.saved).toBe(1);
+		expect(await harness.orm.em.count(Venue, { placeId: { $in: ['facil', 'facil-clean', 'facil-potsdam'] } })).toBe(1);
+		expect(await harness.orm.em.count(Venue, { placeId: 'facil' })).toBe(1);
+	});
 });

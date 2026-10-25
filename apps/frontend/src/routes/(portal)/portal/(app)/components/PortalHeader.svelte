@@ -13,7 +13,7 @@
 
 <header class="pt-safe mx-auto flex w-full max-w-[56rem] items-center gap-3 px-4">
 	<div class="flex h-16 shrink-0 items-center">
-		<Logo width={96} />
+		<Logo width={140} />
 	</div>
 	<div class="flex min-w-0 flex-1 items-center justify-end gap-1">
 		{@render children?.()}

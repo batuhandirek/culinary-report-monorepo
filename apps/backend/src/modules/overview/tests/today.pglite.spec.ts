@@ -77,9 +77,6 @@ describe('TodayService (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Good.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 			matchMethod: MentionMatchMethodEnum.NONE,
 		});
 		await em.flush();

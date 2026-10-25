@@ -16,7 +16,7 @@ import { FoodTopicService } from '../services/food-topic.service.js';
 import { MenuTopicService } from '../services/menu-topic.service.js';
 import { VenueFoodTopicService } from '../services/venue-food-topic.service.js';
 
-import { seedFoodTopics } from './factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from './factories/food-topic.factory.js';
 
 /* Delivery menus read by food topic: who sells it at what price, a venue's tags from its menu and
  * Google's review tags, and its price position by its own kind of food. */
@@ -92,6 +92,8 @@ describe('MenuTopicService (pglite)', () => {
 			},
 		});
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

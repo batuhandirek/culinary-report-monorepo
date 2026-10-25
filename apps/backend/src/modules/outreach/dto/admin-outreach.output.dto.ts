@@ -69,6 +69,10 @@ export interface AdminOutreachTouchOutputDto {
 	comeBackAt?: Date;
 	/** A visit's or call's: they said we may e-mail them */
 	emailConsent: boolean;
+	/** The report it sent */
+	report?: { id: string; month: string };
+	/** The link it sent, with its opens */
+	share?: { id: string; openCount: number; lastOpenedAt?: Date; revokedAt?: Date };
 }
 
 /** The brand's newest report, cut down to what an outreach email quotes. */

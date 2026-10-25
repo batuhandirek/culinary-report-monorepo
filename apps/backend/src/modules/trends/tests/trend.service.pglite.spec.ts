@@ -3,8 +3,9 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -53,6 +54,8 @@ describe('TrendService (pglite)', () => {
 
 		// The venues' brands come with the flush; each author has an account (and a creator)
 		await em.flush();
+		// Dish rows get their food topic as the writer resolves it
+		const index = await harness.moduleRef.get(FoodTopicService).index();
 		const accounts = new Map<string, SocialAccount>([['donerx', ownAccount(em, doner.brand, city, 'donerx')]]);
 		let n = 0;
 		const mention = (
@@ -76,18 +79,20 @@ describe('TrendService (pglite)', () => {
 				views: 100,
 				postedAt: new Date(`${date}T12:00:00Z`),
 			});
-			em.create(Mention, {
-				post,
-				venue,
-				venueName: venue.name,
-				cuisine,
-				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
-				dishes: dishes.map(name => ({ name, sentiment: 'positive' as const })),
-				praise: [],
-				complaints: [],
-			});
+			addFeedback(
+				em,
+				em.create(Mention, {
+					post,
+					venue,
+					venueName: venue.name,
+					cuisine,
+					visited: true,
+					sentiment: 'positive',
+					summary: 'Good.',
+				}),
+				{ dishes: dishes.map(name => ({ name, sentiment: 'positive' as const })) },
+				{ index },
+			);
 		};
 		// August: half Vietnamese, half döner
 		mention(pho, '2026-08-05', 'Vietnamese');
@@ -107,17 +112,25 @@ describe('TrendService (pglite)', () => {
 			category: 'Austrian restaurant',
 		});
 		mention(wien, '2026-09-05', 'Austrian', ['Schnitzel']);
-		em.create(Review, {
-			venue: doner,
-			reviewId: 'r1',
-			stars: 5,
-			publishedAt: new Date('2026-09-10T00:00:00Z'),
-			dishes: [
-				{ name: 'Döner', sentiment: 'positive' },
-				{ name: 'Ayran', sentiment: 'positive' },
-			],
-		});
+		addFeedback(
+			em,
+			em.create(Review, {
+				venue: doner,
+				reviewId: 'r1',
+				stars: 5,
+				publishedAt: new Date('2026-09-10T00:00:00Z'),
+			}),
+			{
+				dishes: [
+					{ name: 'Döner', sentiment: 'positive' },
+					{ name: 'Ayran', sentiment: 'positive' },
+				],
+			},
+			{ index },
+		);
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

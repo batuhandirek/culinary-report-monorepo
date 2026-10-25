@@ -28,9 +28,6 @@ describe('MentionMatchingService (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Nice.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 
 	beforeAll(async () => {

@@ -51,7 +51,7 @@ export interface AdminAccountOutputDto {
 	/** How close the handle is to it, 0–1 */
 	suggestedScore?: number;
 	/** Brands an admin said it is not */
-	rejectedBrandIds: string[];
+	rejections: { brand: { id: string; name: string } }[];
 	/** The latest profile scrape; absent when it was never scraped */
 	latest?: AdminAccountSnapshotOutputDto;
 	/** Followers since the scrape before the latest; absent without two */

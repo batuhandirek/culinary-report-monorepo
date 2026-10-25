@@ -5,11 +5,10 @@
 		AdminUpdateFoodTopicInputDto
 	} from 'client';
 
-	import { KIND_ITEMS } from '#lib/food-topic-kinds.js';
-
 	import ParentSelect from './ParentSelect.svelte';
 
 	import { api } from '#lib/api.js';
+	import { KIND_ITEMS } from '#lib/food-topic-kinds.js';
 	import FormDialog from '#ui/components/FormDialog.svelte';
 	import { notificationManager } from '#ui/lib/notification-manager.js';
 
@@ -20,13 +19,15 @@
 		};
 		/** A new topic's label, e.g. an unmapped key */
 		label?: string;
+		/** A new topic's type, cuisine unless given */
+		kind?: string;
 		/** Every topic, for the parent picker */
 		topics: { key: string; label: string }[];
 		active?: boolean;
 		onSaved: (topic: AdminFoodTopicBaseOutputDto) => void;
 	}
 
-	let { topic, label = '', topics, active = $bindable(false), onSaved }: Props = $props();
+	let { topic, label = '', kind = 'cuisine', topics, active = $bindable(false), onSaved }: Props = $props();
 
 	const NO_PARENT = '-';
 	const parentItems = $derived([
@@ -55,7 +56,7 @@
 				type: 'select' as const,
 				label: 'Type',
 				items: KIND_ITEMS,
-				value: topic?.kind ?? 'cuisine',
+				value: topic?.kind ?? kind,
 				col: 6
 			},
 			parentKey: {

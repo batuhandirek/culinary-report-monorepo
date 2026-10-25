@@ -20,6 +20,8 @@ import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { Report } from '../entities/report.entity.js';
 import { ReportService } from '../services/report.service.js';
+import { ReportConfigService } from '../services/report-config.service.js';
+import { ReportTemplateService } from '../services/report-template.service.js';
 
 const HIGHLIGHTS = { title: 'A month', headline: 'Fine.', highlights: [], actions: [] };
 
@@ -33,6 +35,8 @@ describe('ReportService.build for a brand (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,
@@ -96,9 +100,6 @@ describe('ReportService.build for a brand (pglite)', () => {
 					visited: true,
 					sentiment: 'positive',
 					summary: 'Good.',
-					dishes: [],
-					praise: [],
-					complaints: [],
 				});
 		};
 		post([{ venue: main, brandOnly: true }], 'a');

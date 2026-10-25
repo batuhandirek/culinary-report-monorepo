@@ -1,15 +1,15 @@
 import { tags } from 'typia';
 
+import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
 import type {
-	FeedbackDish,
-	FeedbackPoint,
 	FeedbackSentiment,
 } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
 import { MentionMatchMethodEnum } from '../entities/mention.entity.js';
+import { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
@@ -29,9 +29,10 @@ export interface AdminMentionOutputDto {
 	visited: boolean;
 	sentiment: FeedbackSentiment;
 	summary: string;
-	dishes: FeedbackDish[];
-	praise: FeedbackPoint[];
-	complaints: FeedbackPoint[];
+	/** What it says, as feedback rows */
+	feedback: FeedbackPointOutputDto[];
+	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
+	foodTopics?: { source: 'cuisine' | 'category'; topic: { key: string; label: string } }[];
 	/** The brand it was matched to */
 	brand?: { id: string; name: string };
 	/** The branch, when the post says which; a chain's mention may have the brand only */
@@ -39,6 +40,30 @@ export interface AdminMentionOutputDto {
 	matchMethod?: MentionMatchMethodEnum;
 	matchScore?: number;
 	matchNote?: string;
+}
+
+/** One find of a post (`PostSource`). */
+export interface AdminPostFindOutputDto {
+	kind: PostSourceKindEnum;
+	/** The tag, query, blog URL or venue name the scrape looked for */
+	value: string;
+	foundAt: Date;
+	/** The city source it is, when it is one */
+	source?: { id: string; enabled: boolean };
+	/** The venue a venue search or place page was for */
+	venue?: AdminVenueRefOutputDto;
+}
+
+export interface AdminHashtagOutputDto {
+	id: number;
+	tag: string;
+	ignored: boolean;
+	foodTopic?: { key: string; label: string };
+	brand?: { id: string; name: string };
+}
+
+export interface AdminPostHashtagOutputDto {
+	hashtag: AdminHashtagOutputDto;
 }
 
 /** Who posted it: the account, its creator, and the brand when it is a brand's own. */
@@ -66,7 +91,8 @@ export interface AdminSocialPostListItemOutputDto {
 	isAd: boolean;
 	isPromotional?: boolean;
 	locationName?: string;
-	source?: string;
+	/** Every source that found it, the first find first */
+	foundBy: AdminPostFindOutputDto[];
 	text?: string;
 	analysedAt?: Date;
 	mentions: AdminMentionOutputDto[];
@@ -76,7 +102,8 @@ export interface AdminSocialPostOutputDto extends AdminSocialPostListItemOutputD
 	createdAt: Date;
 	/** The city whose scrape found it */
 	city: AdminCityRefOutputDto;
-	hashtags?: string[];
+	/** The caption's hashtags, in its order, with the food topic or brand each names */
+	hashtagLinks: AdminPostHashtagOutputDto[];
 	taggedHandles?: string[];
 	subtitles?: string;
 	subtitlesLanguage?: string;
@@ -103,12 +130,14 @@ export interface AdminListPostsInputDto extends PaginationRequest {
 	matchedOnly?: boolean;
 	/** Only posts with a mention nothing matched (`none`): to link by hand. */
 	unmatchedOnly?: boolean;
+	/** Only posts whose caption carries this hashtag (with or without #, any case) */
+	hashtag?: string & tags.MaxLength<200>;
 }
 
 export interface AdminListPostsOutputDto extends PaginatedResult<AdminSocialPostListItemOutputDto> {}
 
 export interface AdminMentionWithPostOutputDto extends AdminMentionOutputDto {
-	post: Omit<AdminSocialPostListItemOutputDto, 'mentions' | 'account'>;
+	post: Omit<AdminSocialPostListItemOutputDto, 'mentions' | 'account' | 'foundBy'>;
 }
 
 export interface AdminListMentionsInputDto extends PaginationRequest {

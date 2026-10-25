@@ -120,6 +120,8 @@ export class ReportHighlightsAgent extends BaseMastraAgent<
 			'inviting one of them by handle, naming the neighbours they covered. ' +
 			'When city is given, a finding may place the month in the city: what is rising there and where the venue stands ' +
 			'against the median of the month\'s report venues (e.g. "views were below the median, so it was not a quiet month everywhere"). ' +
+			'city.complaintThemesAgainstReportVenues are pre-written sentences: one may back a finding about a complaint far above the ' +
+			'city\'s, quoted as given. ' +
 			'googleMapsSearchRanks are where the venue appears when a guest searches Google Maps; an action may aim to climb one, ' +
 			'naming who ranks above it. openingsAndClosuresNearbyThisQuarter are places our scrapes saw open or close in the district.'
 		);

@@ -188,7 +188,41 @@ export const blogHandle = (url: string): string | null => {
 	}
 };
 
-/** Text of nodes, blocks on lines of their own, junk left out. */
+// Instagram and X paths that are no profile (a TikTok profile is always `/@handle`)
+const NOT_PROFILE_PATHS = new Set([
+	'p', 'reel', 'reels', 'tv', 'explore', 'stories', 'accounts', 'tags', 'direct', 'about', 'legal',
+	'home', 'i', 'intent', 'share', 'search', 'hashtag', 'settings', 'messages', 'notifications', 'compose', 'login', 'signup',
+]);
+
+/**
+ * The social profile a link points at, written short as the article text keeps it
+ * (`instagram.com/kaffeebar`, `tiktok.com/@kaffeebar`, `x.com/kaffeebar`), or null for any other
+ * link. A TikTok video link names its account, so it gives the profile too.
+ */
+export const profileLinkText = (href: string | null | undefined): string | null => {
+	let url: URL;
+	try {
+		url = new URL(href?.trim() ?? '');
+	} catch {
+		return null;
+	}
+	const host = url.hostname.toLowerCase().replace(/^(www|m|mobile)\./, '');
+	const [first] = url.pathname.split('/').filter(Boolean);
+	if (!first) return null;
+	if (host === 'tiktok.com') {
+		const handle = first.match(/^@([\w.]{1,40})$/)?.[1];
+		return handle ? `tiktok.com/@${handle.toLowerCase()}` : null;
+	}
+	const site = host === 'instagram.com' ? 'instagram.com' : host === 'x.com' || host === 'twitter.com' ? 'x.com' : null;
+	if (!site || !/^[\w.]{1,40}$/.test(first) || NOT_PROFILE_PATHS.has(first.toLowerCase())) return null;
+	return `${site}/${first.toLowerCase()}`;
+};
+
+/**
+ * Text of nodes, blocks on lines of their own, junk left out. A link to a social profile keeps
+ * where it points after its text ("Kaffeebar (instagram.com/kaffeebar)"): the article names the
+ * venue's account there, and extraction reads it like a post's mentioned accounts.
+ */
 const nodesText = (nodes: AnyNode[]): string => {
 	const out: string[] = [];
 	const walk = (node: AnyNode) => {
@@ -201,7 +235,10 @@ const nodesText = (nodes: AnyNode[]): string => {
 		if (JUNK_TAGS.has(tag)) return;
 		const block = BLOCK_TAGS.has(tag);
 		if (block) out.push('\n');
+		const start = out.length;
 		for (const child of node.children) walk(child);
+		const profile = tag === 'a' ? profileLinkText(getAttributeValue(node, 'href')) : null;
+		if (profile && !out.slice(start).join('').toLowerCase().includes(profile)) out.push(` (${profile})`);
 		if (block) out.push('\n');
 	};
 	for (const node of nodes) walk(node);

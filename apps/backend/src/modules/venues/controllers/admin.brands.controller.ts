@@ -265,7 +265,7 @@ export class AdminBrandsController {
 			...(wrap(brand).serialize({
 				skipNull: true,
 				forceObject: true,
-				exclude: ['branches', 'branchesSearchedAt', 'excludedVenueIds', 'leadSignals'],
+				exclude: ['branches', 'branchesSearchedAt', 'leadSignals'],
 			}) as unknown as Omit<AdminBrandListItemOutputDto, 'branches' | 'brandOnlyMentions'>),
 			branches: brand.branches.getItems().map(v => branches.get(v.id)!),
 			brandOnlyMentions: brandOnly.get(brand.id) ?? 0,

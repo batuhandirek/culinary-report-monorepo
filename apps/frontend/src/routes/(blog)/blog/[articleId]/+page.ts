@@ -36,7 +36,7 @@ export async function load({ params, fetch }) {
 	]);
 	const next = pickNextBlogEntries(sameTopic, latest, { exclude: entry.id });
 
-	const canonical = `https://culinaryreport.com/blog/${entry.slug}`;
+	const canonical = `https://munchwerk.com/blog/${entry.slug}`;
 	const ogImage = `${canonical}/og.png`;
 	// Editors leave stray spaces at the end of a headline; in a `<title>` they show.
 	const title = entry.title.trim();

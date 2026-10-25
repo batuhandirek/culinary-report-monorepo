@@ -47,7 +47,8 @@ export const itemsForDish = <T extends { name: string }>(items: T[], dish: strin
 export interface MenuForPricing {
 	venueId: string;
 	name: string;
-	items: { name: string; price: number; category?: string | null }[];
+	/** `topics`: the item's stored food topics (`MenuItemFoodTopic`), when the topic comparison needs them */
+	items: { name: string; price: number; category?: string | null; topics?: string[] }[];
 }
 
 export interface DishPrice {
@@ -76,7 +77,7 @@ export interface TopicPrice {
 export interface MenuTopicMatcher {
 	key: string;
 	label: string;
-	matches: (item: { name: string; category?: string | null }) => boolean;
+	matches: (item: { name: string; category?: string | null; topics?: string[] }) => boolean;
 }
 
 export interface PricePosition {

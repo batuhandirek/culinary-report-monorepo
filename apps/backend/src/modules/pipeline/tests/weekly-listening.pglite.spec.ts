@@ -67,7 +67,7 @@ describe('Weekly listening (pglite)', () => {
 		return em.findOneOrFail(PipelineRun, { id: run.id });
 	};
 
-	it('queues the TikTok and reels runs, then extraction and matching, per cron city with sources', async () => {
+	it('queues the TikTok, reels, blog and watched-profile runs, then extraction, matching, the name lookup, matching again and the own-account lookup, per cron city with sources', async () => {
 		const em = harness.orm.em;
 		const berlin = cityFactory.build({ name: 'Berlin', cronEnabled: true, instagramEnabled: true });
 		// Twenty hashtags and two searches: the budget split below
@@ -76,9 +76,10 @@ describe('Weekly listening (pglite)', () => {
 		testCitySource(em, berlin, CitySourceKindEnum.TIKTOK_SEARCH, 'berlin ramen');
 		testCitySource(em, berlin, CitySourceKindEnum.TIKTOK_SEARCH, 'kreuzberg food');
 		testCitySource(em, berlin, CitySourceKindEnum.INSTAGRAM_HASHTAG, 'berlinbrunch');
+		testCitySource(em, berlin, CitySourceKindEnum.BLOG, 'https://www.berlinfoodstories.com');
 		const wien = cityFactory.build({ name: 'Wien', cronEnabled: true, instagramEnabled: false });
 		testCitySource(em, wien, CitySourceKindEnum.TIKTOK_SEARCH, 'wien schnitzel');
-		// TikTok sources all off and no Instagram: nothing to listen to
+		// TikTok sources all off and no Instagram: only the watched profiles to listen to
 		const quiet = cityFactory.build({ name: 'Quiet', cronEnabled: true, instagramEnabled: false });
 		testCitySource(em, quiet, CitySourceKindEnum.TIKTOK_HASHTAG, 'quietfood', false);
 		const byHand = cityFactory.build({ name: 'By hand', cronEnabled: false, instagramEnabled: true });
@@ -93,13 +94,29 @@ describe('Weekly listening (pglite)', () => {
 		expect(runs.map(r => [r.city.name, r.step, r.month, r.status])).toEqual([
 			['Berlin', PipelineStepEnum.SCRAPE_TIKTOK_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_INSTAGRAM_REELS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.SCRAPE_BLOGS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_TIKTOK_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Wien', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Wien', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Wien', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Wien', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			// No sources on, but every city has profiles to watch (its report brands' own accounts)
+			['Quiet', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 		]);
-		expect(sendJob).toHaveBeenCalledTimes(7);
+		expect(sendJob).toHaveBeenCalledTimes(22);
 		await em.nativeDelete(PipelineRun, {});
 	});
 

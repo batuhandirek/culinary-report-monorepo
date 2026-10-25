@@ -58,12 +58,16 @@
 			{/if}
 			{#if won && prospect?.contactEmail}
 				<span class="text-muted-foreground">
-					Goes to {prospect.contactEmail}, in {prospect.language === 'de' ? 'German' : 'English'}.
+					Goes to {prospect.contactEmail}, in {prospect.language === 'de'
+						? 'German'
+						: 'English'}.
 				</span>
 			{:else if won}
 				<span class="text-muted-foreground">
 					{report.brand.name} subscribed but has no e-mail address:
-					<a class="underline" href={`/admin/brands/${report.brand.id}?tab=sales`}>add one</a>.
+					<a class="underline" href={`/admin/brands/${report.brand.id}?tab=sales`}
+						>add one</a
+					>.
 				</span>
 			{/if}
 		</p>

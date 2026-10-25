@@ -75,11 +75,11 @@ describe('FoodTopicIndex.resolveMenuItem', () => {
 });
 
 describe('menuTopicPrices', () => {
+	// Each item stored with its topics, as the delivery scrape writes them
 	const row = (venueId: string, district: string | null, name: string, price: number, category: string | null = null) => ({
 		venueId,
 		district,
-		name,
-		category,
+		topics: index.resolveMenuItem({ name, category }),
 		price,
 	});
 
@@ -118,8 +118,10 @@ describe('menuTopicPrices', () => {
 		expect(prices.topics.has('cafe')).toBe(false);
 		// Only the topics asked for
 		expect([...menuTopicPrices(rows, index, ['sushi']).topics.keys()]).toEqual(['sushi']);
-		expect(menuItemsOf(index, 'japanese')({ name: 'Sushi Set' })).toBe(true);
-		expect(menuItemsOf(index, 'japanese')({ name: 'Cola', category: 'Getränke' })).toBe(false);
+		expect(menuItemsOf(index, 'japanese')({ topics: index.resolveMenuItem({ name: 'Sushi Set' }) })).toBe(true);
+		expect(menuItemsOf(index, 'japanese')({ topics: index.resolveMenuItem({ name: 'Cola', category: 'Getränke' }) })).toBe(
+			false,
+		);
 	});
 });
 

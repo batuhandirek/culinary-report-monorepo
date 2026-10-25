@@ -1,4 +1,4 @@
-export const ORIGIN = 'https://culinaryreport.com';
+export const ORIGIN = 'https://munchwerk.com';
 export const SITEMAP_PAGE_SIZE = 10_000;
 
 function escapeXml(str: string): string {

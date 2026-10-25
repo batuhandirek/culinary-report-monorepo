@@ -1,5 +1,7 @@
-import { Entity, Enum, Index, Property } from '@mikro-orm/decorators/legacy';
+import type { Rel } from '@mikro-orm/core';
+import { Entity, Enum, Index, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
 
+import { PipelineRun } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
 import { ApifyRunRepository } from '../repositories/apify-run.repository.js';
@@ -49,9 +51,8 @@ export class ApifyRun extends MikroOrmEntityAbstractClass {
 	inputHash?: string | null;
 
 	// The pipeline run and step that started it (`apifyRunContext`); none outside a pipeline run
-	@Index()
-	@Property({ type: 'uuid', nullable: true })
-	pipelineRunId?: string | null;
+	@ManyToOne({ entity: () => PipelineRun, nullable: true, deleteRule: 'set null', index: true })
+	pipelineRun?: Rel<PipelineRun> | null;
 
 	@Property({ type: 'text', nullable: true })
 	stepKey?: string | null;

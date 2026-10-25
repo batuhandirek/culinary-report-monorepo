@@ -45,7 +45,12 @@ export interface AdminAccountOutputDto {
 	latest?: AdminAccountSnapshotOutputDto;
 	platform: AdminAccountOutputDtoPlatformEnum;
 	/** Brands an admin said it is not */
-	rejectedBrandIds: string[];
+	rejections: {
+		brand: {
+			id: string;
+			name: string;
+		};
+	}[];
 	/** What our own scrapes saw an account post. */
 	stats: AdminAccountStatsOutputDto;
 	/** The matcher's likely brand, waiting for an admin */
@@ -58,6 +63,8 @@ export interface AdminAccountOutputDto {
 export enum AdminAccountOutputDtoBrandSourceEnum {
 	Handle = 'handle',
 	Website = 'website',
+	Site = 'site',
+	Profile = 'profile',
 	Prospect = 'prospect',
 	Admin = 'admin',
 }
@@ -65,6 +72,7 @@ export enum AdminAccountOutputDtoBrandSourceEnum {
 export enum AdminAccountOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 /** One month's profile scrape of an account. */
@@ -102,9 +110,11 @@ export interface AdminAddBrandAccountInputDto {
 	 * @maxLength 200
 	 */
 	handle: string;
+	/** A brand's own accounts are profiles: never a blog */
 	platform: AdminAddBrandAccountInputDtoPlatformEnum;
 }
 
+/** A brand's own accounts are profiles: never a blog */
 export enum AdminAddBrandAccountInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
@@ -134,9 +144,9 @@ export interface AdminAddCitySourceInputDto {
 	/** @maxLength 500 */
 	note?: string;
 	/**
-	 * A hashtag (with or without #) or a search query
+	 * A hashtag (with or without #), a search query, a blog's URL (the site, a section or its feed), or an account's handle (with or without
 	 * @minLength 1
-	 * @maxLength 120
+	 * @maxLength 500
 	 */
 	value: string;
 }
@@ -145,6 +155,9 @@ export enum AdminAddCitySourceInputDtoKindEnum {
 	TiktokHashtag = 'tiktok_hashtag',
 	TiktokSearch = 'tiktok_search',
 	InstagramHashtag = 'instagram_hashtag',
+	Blog = 'blog',
+	TiktokAccount = 'tiktok_account',
+	InstagramAccount = 'instagram_account',
 }
 
 /**
@@ -207,32 +220,26 @@ export enum AdminApifyRunOutputDtoStatusEnum {
 	FAILED = 'FAILED',
 }
 
-export interface AdminBackfillFeedbackThemesInputDto {
-	/**
-	 * Only the reviews of this city's venues and the mentions of its posts
-	 * @format uuid
-	 */
-	cityId?: string;
-	/**
-	 * At most this many reviews and this many mentions a run; 500 by default
-	 * @min 1
-	 * @max 5000
-	 */
-	limit?: number;
+/** One backlog's day (`BacklogRun`) */
+export interface AdminBacklogRunOutputDto {
+	batches: number;
+	/** YYYY-MM-DD, UTC */
+	day: string;
+	done: number;
+	error?: string;
+	/** @format date-time */
+	finishedAt?: string;
+	remaining?: number;
+	stopReason?: AdminBacklogRunOutputDtoStopReasonEnum;
+	tokens?: number;
 }
 
-export interface AdminBackfillFeedbackThemesOutputDto {
-	/** Mentions whose points were filed this run */
-	mentions: number;
-	/** Points given a theme */
-	points: number;
-	/** Reviews and mentions still holding a point without a theme, in the same scope */
-	remaining: {
-		mentions: number;
-		reviews: number;
-	};
-	/** Reviews whose points were filed this run */
-	reviews: number;
+export enum AdminBacklogRunOutputDtoStopReasonEnum {
+	Error = 'error',
+	Empty = 'empty',
+	Budget = 'budget',
+	Allowance = 'allowance',
+	Shutdown = 'shutdown',
 }
 
 export interface AdminBlogEntryAuthorOutputDto {
@@ -301,9 +308,8 @@ export interface AdminBranchReviewOutputDto {
 		name: string;
 		street?: string;
 	};
-	changes?: string[];
-	complaints?: FeedbackPoint[];
-	dishes?: FeedbackDish[];
+	/** What it says, as feedback rows (none before it is analysed) */
+	feedback: FeedbackPointOutputDto[];
 	id: string;
 	language?: string;
 	likes: number;
@@ -313,7 +319,6 @@ export interface AdminBranchReviewOutputDto {
 	/** @format date-time */
 	ownerResponseAt?: string;
 	platform: AdminBranchReviewOutputDtoPlatformEnum;
-	praise?: FeedbackPoint[];
 	/** @format date-time */
 	publishedAt: string;
 	replyDraft?: string;
@@ -330,8 +335,8 @@ export enum AdminBranchReviewOutputDtoPlatformEnum {
 }
 
 export enum AdminBranchReviewOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -573,11 +578,11 @@ export enum AdminBrandTodoOutputDtoTabEnum {
 	Reports = 'reports',
 	Branches = 'branches',
 	Reviews = 'reviews',
+	Settings = 'settings',
 	Competitors = 'competitors',
 	Overview = 'overview',
 	Signals = 'signals',
 	Sales = 'sales',
-	Settings = 'settings',
 }
 
 export enum AdminBrandTodoOutputDtoToneEnum {
@@ -608,6 +613,7 @@ export interface AdminBrandTopPostOutputDto {
 export enum AdminBrandTopPostOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface AdminBrandVenueInputDto {
@@ -627,6 +633,11 @@ export interface AdminBuildCityHighlightInputDto {
 	month: string;
 }
 
+export interface AdminBuildLandingEditionInputDto {
+	/** @format uuid */
+	cityId: string;
+}
+
 export interface AdminBuildReportInputDto {
 	/** @format uuid */
 	brandId: string;
@@ -635,6 +646,11 @@ export interface AdminBuildReportInputDto {
 	 * @format uuid
 	 */
 	cityId?: string;
+	/**
+	 * Only this configuration's report (a rebuild); absent builds every active configuration's
+	 * @format uuid
+	 */
+	configId?: string;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month: string;
 }
@@ -697,6 +713,31 @@ export interface AdminCityEventOutputDto {
 export enum AdminCityEventOutputDtoKindEnum {
 	SchoolHoliday = 'school_holiday',
 	Event = 'event',
+}
+
+/** A tag the city doesn't scrape that keeps coming up on its matched posts. */
+export interface AdminCityHashtagSuggestionOutputDto {
+	brands: number;
+	hashtagId: number;
+	/** The source it would be */
+	kind: AdminCityHashtagSuggestionOutputDtoKindEnum;
+	matchedPosts: number;
+	sampleBrands: string[];
+	tag: string;
+}
+
+/** The source it would be */
+export enum AdminCityHashtagSuggestionOutputDtoKindEnum {
+	TiktokHashtag = 'tiktok_hashtag',
+	TiktokSearch = 'tiktok_search',
+	InstagramHashtag = 'instagram_hashtag',
+	Blog = 'blog',
+	TiktokAccount = 'tiktok_account',
+	InstagramAccount = 'instagram_account',
+}
+
+export interface AdminCityHashtagSuggestionsOutputDto {
+	items: AdminCityHashtagSuggestionOutputDto[];
 }
 
 export interface AdminCityHighlightMonthOutputDto {
@@ -791,9 +832,17 @@ export interface AdminCityRefOutputDto {
 }
 
 export interface AdminCitySourceOutputDto {
+	/**
+	 * When `SCRAPE_BLOGS` last read the blog, and what went wrong then
+	 * @format date-time
+	 */
+	checkedAt?: string;
 	/** @format date-time */
 	createdAt: string;
 	enabled: boolean;
+	error?: string;
+	/** A blog's feed, once `SCRAPE_BLOGS` found it */
+	feedUrl?: string;
 	id: string;
 	kind: AdminCitySourceOutputDtoKindEnum;
 	note?: string;
@@ -806,20 +855,35 @@ export enum AdminCitySourceOutputDtoKindEnum {
 	TiktokHashtag = 'tiktok_hashtag',
 	TiktokSearch = 'tiktok_search',
 	InstagramHashtag = 'instagram_hashtag',
+	Blog = 'blog',
+	TiktokAccount = 'tiktok_account',
+	InstagramAccount = 'instagram_account',
 }
 
 /** A source with what it brought in over the last three months. */
 export interface AdminCitySourceYieldOutputDto {
+	/**
+	 * When `SCRAPE_BLOGS` last read the blog, and what went wrong then
+	 * @format date-time
+	 */
+	checkedAt?: string;
 	/** @format date-time */
 	createdAt: string;
 	enabled: boolean;
+	error?: string;
+	/** A blog's feed, once `SCRAPE_BLOGS` found it */
+	feedUrl?: string;
 	id: string;
 	kind: AdminCitySourceYieldOutputDtoKindEnum;
+	/** Of those, posts with a matched mention */
 	matchedPosts: number;
 	note?: string;
+	/** Posts it found, whichever source found them too */
 	posts: number;
 	/** Added by the suggestion agent and not reviewed yet */
 	suggested: boolean;
+	/** Matched posts no other enabled source, venue search or watched brand profile found: what turning it off loses */
+	uniqueMatchedPosts: number;
 	value: string;
 	views: number;
 }
@@ -828,6 +892,9 @@ export enum AdminCitySourceYieldOutputDtoKindEnum {
 	TiktokHashtag = 'tiktok_hashtag',
 	TiktokSearch = 'tiktok_search',
 	InstagramHashtag = 'instagram_hashtag',
+	Blog = 'blog',
+	TiktokAccount = 'tiktok_account',
+	InstagramAccount = 'instagram_account',
 }
 
 /** A whole brand on the competition list. */
@@ -1013,6 +1080,35 @@ export enum AdminCreateFoodTopicInputDtoKindEnum {
 	Meal = 'meal',
 }
 
+export interface AdminCreateReportConfigInputDto {
+	/**
+	 * Absent: the template's name (numbered when the brand has it already)
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	name?: string;
+	/**
+	 * The template to copy; absent for a custom configuration starting from the full layout
+	 * @format uuid
+	 */
+	templateId?: string;
+}
+
+export interface AdminCreateReportTemplateInputDto {
+	/** @maxLength 400 */
+	description?: string;
+	/**
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	name: string;
+	/**
+	 * The cover first, each kind once; absent starts from the full layout
+	 * @minItems 1
+	 */
+	sections?: ReportSectionDto[];
+}
+
 /** One of a creator's accounts in a list row. */
 export interface AdminCreatorAccountRefOutputDto {
 	/** A brand's own account */
@@ -1029,6 +1125,7 @@ export interface AdminCreatorAccountRefOutputDto {
 export enum AdminCreatorAccountRefOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface AdminCreatorDetailInputDto {
@@ -1037,6 +1134,38 @@ export interface AdminCreatorDetailInputDto {
 	 * @pattern ^[0-9]{4}-[0-9]{2}$
 	 */
 	month?: string;
+}
+
+/** One thing that found a creator's posts: a city's source, a venue search or place page, or their own profile. */
+export interface AdminCreatorFindOutputDto {
+	city: {
+		id: string;
+		name: string;
+	};
+	kind: AdminCreatorFindOutputDtoKindEnum;
+	/** @format date-time */
+	lastPostedAt: string;
+	posts: number;
+	sourceEnabled?: boolean;
+	/** The city's source it is (absent for a venue search, or a watched brand's profile) */
+	sourceId?: string;
+	/** A tag without #, a query, a blog's URL, the venue's search name or the profile's handle */
+	value: string;
+	venue?: {
+		id: string;
+		name: string;
+	};
+}
+
+export enum AdminCreatorFindOutputDtoKindEnum {
+	TiktokHashtag = 'tiktok_hashtag',
+	TiktokSearch = 'tiktok_search',
+	InstagramHashtag = 'instagram_hashtag',
+	Blog = 'blog',
+	VenueSearch = 'venue_search',
+	VenuePlace = 'venue_place',
+	TiktokAccount = 'tiktok_account',
+	InstagramAccount = 'instagram_account',
 }
 
 /** A creator's posts in the month asked for, over all their accounts. */
@@ -1065,6 +1194,8 @@ export interface AdminCreatorOutputDto {
 	}[];
 	/** @format date-time */
 	createdAt: string;
+	/** What found their posts, the most posts first (15 at most) */
+	foundBy: AdminCreatorFindOutputDto[];
 	id: string;
 	/** Posts and views per month, six months up to the one asked for, oldest first */
 	months: {
@@ -1090,6 +1221,31 @@ export interface AdminCreatorRowOutputDto {
 	own: boolean;
 }
 
+export interface AdminCreatorWatchInputDto {
+	/**
+	 * The report month whose brands decide (customers, top brands, rivals); the last finished month without
+	 * @pattern ^[0-9]{4}-[0-9]{2}$
+	 */
+	month?: string;
+}
+
+export interface AdminCreatorWatchOutputDto {
+	/** Each of the creator's profiles (blogs are read through their feeds, never watched) */
+	accounts: {
+		accountId: string;
+		handle: string;
+		platform: AdminCreatorWatchOutputDtoPlatformEnum;
+		reasons: AdminWatchReasonOutputDto[];
+	}[];
+	month: string;
+}
+
+export enum AdminCreatorWatchOutputDtoPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
 export interface AdminDataCoverageOutputDto {
 	cityId: string;
 	/** Newest first */
@@ -1110,8 +1266,8 @@ export interface AdminDataCoverageOutputDto {
 }
 
 export enum AdminDataCoverageOutputDtoStateEnum {
-	Running = 'running',
 	Queued = 'queued',
+	Running = 'running',
 }
 
 export enum AdminDataCoverageOutputDtoStepEnum {
@@ -1124,6 +1280,7 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
@@ -1132,7 +1289,9 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_OWN_ACCOUNTS = 'SCRAPE_OWN_ACCOUNTS',
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -1143,6 +1302,7 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	MONTHLY = 'MONTHLY',
 }
@@ -1161,6 +1321,7 @@ export interface AdminDataMonthOutputDto {
 	};
 	month: string;
 	posts: {
+		blog: number;
 		instagram: number;
 		tiktok: number;
 		unanalysed: number;
@@ -1193,9 +1354,9 @@ export interface AdminDataStepOutputDto {
 
 export enum AdminDataStepOutputDtoStateEnum {
 	Failed = 'failed',
+	Queued = 'queued',
 	Running = 'running',
 	Skipped = 'skipped',
-	Queued = 'queued',
 	Succeeded = 'succeeded',
 }
 
@@ -1209,6 +1370,7 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
@@ -1217,7 +1379,9 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_OWN_ACCOUNTS = 'SCRAPE_OWN_ACCOUNTS',
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -1228,8 +1392,52 @@ export enum AdminDataStepOutputDtoStepEnum {
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	MONTHLY = 'MONTHLY',
+}
+
+export interface AdminDishNameOutputDto {
+	/** Who decided: `match` (the name is the topic or one of its other names), `ai`, `admin`; absent while undecided */
+	decidedBy?: AdminDishNameOutputDtoDecidedByEnum;
+	foodTopic?: {
+		key: string;
+		label: string;
+	};
+	id: number;
+	key: string;
+	name: string;
+	/** The city's feedback rows naming it */
+	notes: number;
+	/** The agent's label for a topic that would fit, when none does */
+	suggestion?: string;
+}
+
+/** Who decided: `match` (the name is the topic or one of its other names), `ai`, `admin`; absent while undecided */
+export enum AdminDishNameOutputDtoDecidedByEnum {
+	Match = 'match',
+	Admin = 'admin',
+	Ai = 'ai',
+}
+
+export interface AdminDishNameSuggestionOutputDto {
+	examples: string[];
+	label: string;
+	names: number;
+	notes: number;
+}
+
+export interface AdminDishNamesOutputDto {
+	names: AdminDishNameOutputDto[];
+	suggestions: AdminDishNameSuggestionOutputDto[];
+	summary: {
+		linkedNames: number;
+		linkedNotes: number;
+		names: number;
+		notes: number;
+		pendingNames: number;
+	};
+	total: number;
 }
 
 export interface AdminDismissBrandInputDto {
@@ -1255,6 +1463,32 @@ export enum AdminExportUsersCsvInputDtoRolesEnum {
 	Promoter = 'promoter',
 	User = 'user',
 	VenueOwner = 'venue_owner',
+}
+
+export interface AdminFileFeedbackThemesInputDto {
+	/**
+	 * Only this city's points
+	 * @format uuid
+	 */
+	cityId?: string;
+	/**
+	 * Points filed this call (newest month first), default 600
+	 * @min 1
+	 * @max 5000
+	 */
+	limit?: number;
+}
+
+export interface AdminFileFeedbackThemesOutputDto {
+	/** Points filed this call */
+	points: number;
+	/** What `realign` changed first: topics moved to their theme's, points sent back to filing */
+	realigned: {
+		topicsMoved: number;
+		unfiled: number;
+	};
+	/** Points still without a theme (of the city, when given) */
+	remaining: number;
 }
 
 export interface AdminFillCityDaysInputDto {
@@ -1425,6 +1659,43 @@ export interface AdminGetDataCoverageInputDto {
 	months?: number;
 }
 
+export interface AdminGetDishNamesInputDto {
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * @min 1
+	 * @max 200
+	 */
+	limit?: number;
+	/** @min 0 */
+	offset?: number;
+	/**
+	 * Part of the name
+	 * @maxLength 100
+	 */
+	q?: string;
+	/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
+	status?: AdminGetDishNamesInputDtoStatusEnum;
+	/**
+	 * Only the names the agent suggested this topic for
+	 * @maxLength 100
+	 */
+	suggestion?: string;
+	/**
+	 * Only the names of this topic
+	 * @maxLength 64
+	 */
+	topicKey?: string;
+}
+
+/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
+export enum AdminGetDishNamesInputDtoStatusEnum {
+	All = 'all',
+	Pending = 'pending',
+	Unlinked = 'unlinked',
+	Linked = 'linked',
+}
+
 export interface AdminGetFoodTopicsInputDto {
 	/** @format uuid */
 	cityId: string;
@@ -1442,6 +1713,53 @@ export interface AdminGetSearchInterestInputDto {
 	cityId: string;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month: string;
+}
+
+export interface AdminGetThemeInsightInputDto {
+	/**
+	 * Only this brand's sentences
+	 * @format uuid
+	 */
+	brandId?: string;
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * Only the sentences about one dish: a `dishes` row's key (`topic:<key>` or `dish:<key>`)
+	 * @maxLength 200
+	 */
+	dish?: string;
+	/**
+	 * Only the brands of one kind of food: a food topic's key
+	 * @maxLength 64
+	 */
+	food?: string;
+	/** Only reviews, or only posts */
+	kind?: AdminGetThemeInsightInputDtoKindEnum;
+	/**
+	 * 50 when absent
+	 * @min 1
+	 * @max 200
+	 */
+	limit?: number;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	month: string;
+	/** @min 0 */
+	offset?: number;
+	/** Complaints when absent */
+	side?: AdminGetThemeInsightInputDtoSideEnum;
+}
+
+/** Only reviews, or only posts */
+export enum AdminGetThemeInsightInputDtoKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+/** Complaints when absent */
+export enum AdminGetThemeInsightInputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Changes = 'changes',
 }
 
 export interface AdminGetThemeInsightsInputDto {
@@ -1480,6 +1798,20 @@ export interface AdminGetVenueStatusChangesInputDto {
 	month: string;
 }
 
+export interface AdminHashtagOutputDto {
+	brand?: {
+		id: string;
+		name: string;
+	};
+	foodTopic?: {
+		key: string;
+		label: string;
+	};
+	id: number;
+	ignored: boolean;
+	tag: string;
+}
+
 export interface AdminIgnoreWordInputDto {
 	ignored: boolean;
 	/**
@@ -1504,6 +1836,61 @@ export interface AdminInviteToPortalInputDto {
 export enum AdminInviteToPortalInputDtoRoleEnum {
 	OWNER = 'OWNER',
 	STAFF = 'STAFF',
+}
+
+/** One edition, published or not, with everything it shows. */
+export interface AdminLandingEditionOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	city: LandingCityOutputDtoidstring;
+	/**
+	 * What the model wrote for an edition, each line checked against its numbers; a line that
+	 * failed or was missing is the plain fallback. The page joins it to `data` by key.
+	 */
+	copy: LandingCopy;
+	/** Why every line fell back, when the model's call failed */
+	copyError?: string;
+	/**
+	 * The front page's live edition of a city: the last 30 days of what the city posted about
+	 * eating out, against the 30 days before. Our own counts of public posts by others only (a
+	 * brand's own account and paid or promotional posts left out): no Google rating, no review
+	 * text, nothing from OSM. Positive lists only. Optional fields are absent, never null
+	 * (`serialize({ skipNull })` drops a null inside the jsonb too).
+	 */
+	data: LandingEditionData;
+	id: string;
+	/** @format date-time */
+	publishedAt?: string;
+	/** @format date-time */
+	windowEnd: string;
+	/** @format date-time */
+	windowStart: string;
+}
+
+/** An edition as the admin lists it. */
+export interface AdminLandingEditionSummaryOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	/** Why every line fell back, when the model's call failed */
+	copyError?: string;
+	id: string;
+	/** @format date-time */
+	publishedAt?: string;
+	/** @format date-time */
+	windowEnd: string;
+	/** @format date-time */
+	windowStart: string;
+}
+
+export interface AdminLandingEditionsInputDto {
+	/** @format uuid */
+	cityId: string;
+}
+
+export interface AdminLandingEditionsOutputDto {
+	editions: AdminLandingEditionSummaryOutputDto[];
+	/** The edition `/` shows now, if any */
+	liveId?: string;
 }
 
 export interface AdminListAccountsInputDto {
@@ -1531,15 +1918,16 @@ export interface AdminListAccountsInputDto {
 export enum AdminListAccountsInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum AdminListAccountsInputDtoSortEnum {
-	HandleAsc = 'handle:asc',
-	HandleDesc = 'handle:desc',
-	FollowersAsc = 'followers:asc',
-	FollowersDesc = 'followers:desc',
 	ScoreAsc = 'score:asc',
 	ScoreDesc = 'score:desc',
+	FollowersAsc = 'followers:asc',
+	FollowersDesc = 'followers:desc',
+	HandleAsc = 'handle:asc',
+	HandleDesc = 'handle:desc',
 	MonthPostsAsc = 'monthPosts:asc',
 	MonthPostsDesc = 'monthPosts:desc',
 	MonthViewsAsc = 'monthViews:asc',
@@ -1664,12 +2052,12 @@ export enum AdminListBrandsInputDtoSortEnum {
 	ViewsDesc = 'views:desc',
 	PostsAsc = 'posts:asc',
 	PostsDesc = 'posts:desc',
+	ChangeAsc = 'change:asc',
+	ChangeDesc = 'change:desc',
 	BranchesAsc = 'branches:asc',
 	BranchesDesc = 'branches:desc',
 	ReviewsAsc = 'reviews:asc',
 	ReviewsDesc = 'reviews:desc',
-	ChangeAsc = 'change:asc',
-	ChangeDesc = 'change:desc',
 	FollowUpAsc = 'followUp:asc',
 	FollowUpDesc = 'followUp:desc',
 }
@@ -1707,6 +2095,11 @@ export interface AdminListCityEventsOutputDto {
 }
 
 export interface AdminListCitySourcesOutputDto {
+	/**
+	 * The day every source that finds a post is recorded (YYYY-MM-DD): before it a post kept only
+	 * its first source, so unique counts over a window starting earlier are too high
+	 */
+	allFindsSince: string;
 	items: AdminCitySourceYieldOutputDto[];
 }
 
@@ -1749,6 +2142,7 @@ export interface AdminListCreatorsInputDto {
 export enum AdminListCreatorsInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum AdminListCreatorsInputDtoSortEnum {
@@ -1839,6 +2233,11 @@ export interface AdminListPostsInputDto {
 	 * @format uuid
 	 */
 	creatorId?: string;
+	/**
+	 * Only posts whose caption carries this hashtag (with or without #, any case)
+	 * @maxLength 200
+	 */
+	hashtag?: string;
 	/** Only posts with at least one mention matched to a brand. */
 	matchedOnly?: boolean;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -1862,6 +2261,7 @@ export interface AdminListPostsInputDto {
 export enum AdminListPostsInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum AdminListPostsInputDtoSortEnum {
@@ -1936,6 +2336,11 @@ export interface AdminListReportsInputDto {
 	 * @format uuid
 	 */
 	cityId?: string;
+	/**
+	 * Reports of this configuration
+	 * @format uuid
+	 */
+	configId?: string;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month?: string;
 	/** @min 1 */
@@ -1943,6 +2348,11 @@ export interface AdminListReportsInputDto {
 	/** @min 1 */
 	size: number;
 	sort?: AdminListReportsInputDtoSortEnum;
+	/**
+	 * Reports made from this template
+	 * @format uuid
+	 */
+	templateId?: string;
 }
 
 export enum AdminListReportsInputDtoSortEnum {
@@ -2132,6 +2542,31 @@ export interface AdminListVenuesOutputDto {
 	totalItems: number;
 }
 
+export interface AdminLlmBacklogOutputDto {
+	doneLast7Days: number;
+	tokensLast7Days: number;
+	key: string;
+	label: string;
+	/**
+	 * When a run last settled anything
+	 * @format date-time
+	 */
+	lastMovedAt?: string;
+	/** The newest day's run */
+	lastRun?: AdminBacklogRunOutputDto;
+	priority: number;
+	/** Absent when counting failed */
+	remaining?: number;
+}
+
+export interface AdminLlmBacklogsOutputDto {
+	/** `LLM_BACKLOG_DAILY_TOKENS`: what a day's runs may spend over every backlog */
+	dailyTokens: number;
+	items: AdminLlmBacklogOutputDto[];
+	/** Reported by today's batches (UTC day) */
+	spentToday: number;
+}
+
 export interface AdminLogOutreachTouchInputDto {
 	/**
 	 * When it happened; defaults to now
@@ -2155,6 +2590,16 @@ export interface AdminLogOutreachTouchInputDto {
 	kind: AdminLogOutreachTouchInputDtoKindEnum;
 	/** VISIT or CALL only: who we got hold of */
 	outcome?: AdminLogOutreachTouchInputDtoOutcomeEnum;
+	/**
+	 * The report it sent: the brand's own
+	 * @format uuid
+	 */
+	reportId?: string;
+	/**
+	 * The link it sent (`POST /admin/reports/:id/shares`): one of that report's
+	 * @format uuid
+	 */
+	shareId?: string;
 	/** @maxLength 500 */
 	subject?: string;
 	/**
@@ -2190,8 +2635,14 @@ export interface AdminMatchAccountsInputDto {
 export interface AdminMatchAccountsOutputDto {
 	/** Accounts of the city looked at */
 	accounts: number;
+	/** Linked because the brand's own website links the profile */
+	fromSites: number;
+	/** Accounts created for handles posts about a brand tagged, named like that brand */
+	fromTags: number;
 	/** Newly linked to a brand by their handle */
 	linked: number;
+	/** Suggested because the brand's own website links the profile */
+	siteSuggested: number;
 	/** Open suggestions after the run */
 	suggested: number;
 	/** The matcher's earlier links that no longer hold */
@@ -2207,15 +2658,22 @@ export interface AdminMentionOutputDto {
 		name: string;
 	};
 	city?: string;
-	complaints: FeedbackPoint[];
 	cuisine?: string;
-	dishes: FeedbackDish[];
+	/** What it says, as feedback rows */
+	feedback: FeedbackPointOutputDto[];
+	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
+	foodTopics?: {
+		source: AdminMentionOutputDtoSourceEnum;
+		topic: {
+			key: string;
+			label: string;
+		};
+	}[];
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionOutputDtoMatchMethodEnum;
 	matchNote?: string;
 	matchScore?: number;
-	praise: FeedbackPoint[];
 	sentiment: AdminMentionOutputDtoSentimentEnum;
 	summary: string;
 	/** The branch, when the post says which; a chain's mention may have the brand only */
@@ -2235,10 +2693,15 @@ export enum AdminMentionOutputDtoMatchMethodEnum {
 }
 
 export enum AdminMentionOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
+}
+
+export enum AdminMentionOutputDtoSourceEnum {
+	Category = 'category',
+	Cuisine = 'cuisine',
 }
 
 export interface AdminMentionWithPostOutputDto {
@@ -2248,17 +2711,24 @@ export interface AdminMentionWithPostOutputDto {
 		name: string;
 	};
 	city?: string;
-	complaints: FeedbackPoint[];
 	cuisine?: string;
-	dishes: FeedbackDish[];
+	/** What it says, as feedback rows */
+	feedback: FeedbackPointOutputDto[];
+	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
+	foodTopics?: {
+		source: AdminMentionWithPostOutputDtoSourceEnum;
+		topic: {
+			key: string;
+			label: string;
+		};
+	}[];
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionWithPostOutputDtoMatchMethodEnum;
 	matchNote?: string;
 	matchScore?: number;
 	/** Construct a type with the properties of T except for those in type K. */
-	post: OmitAdminSocialPostListItemOutputDtomentionsaccount;
-	praise: FeedbackPoint[];
+	post: OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount;
 	sentiment: AdminMentionWithPostOutputDtoSentimentEnum;
 	summary: string;
 	/** The branch, when the post says which; a chain's mention may have the brand only */
@@ -2278,10 +2748,15 @@ export enum AdminMentionWithPostOutputDtoMatchMethodEnum {
 }
 
 export enum AdminMentionWithPostOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
+}
+
+export enum AdminMentionWithPostOutputDtoSourceEnum {
+	Category = 'category',
+	Cuisine = 'cuisine',
 }
 
 /** Accounts that are this creator's too: they move under it, and creators left empty go. */
@@ -2291,6 +2766,17 @@ export interface AdminMergeCreatorAccountsInputDto {
 	 * @minItems 1
 	 */
 	accountIds: string[];
+}
+
+export interface AdminNewsletterCountsInputDto {
+	/** @format uuid */
+	cityId: string;
+}
+
+export interface AdminNewsletterCountsOutputDto {
+	confirmed: number;
+	pending: number;
+	unsubscribed: number;
 }
 
 export interface AdminOutreachSummaryOutputDto {
@@ -2352,6 +2838,20 @@ export interface AdminOutreachTouchOutputDto {
 	kind: AdminOutreachTouchOutputDtoKindEnum;
 	/** A visit's or call's: who we got hold of */
 	outcome?: AdminOutreachTouchOutputDtoOutcomeEnum;
+	/** The report it sent */
+	report?: {
+		id: string;
+		month: string;
+	};
+	/** The link it sent, with its opens */
+	share?: {
+		id: string;
+		/** @format date-time */
+		lastOpenedAt?: string;
+		openCount: number;
+		/** @format date-time */
+		revokedAt?: string;
+	};
 	stage?: AdminOutreachTouchOutputDtoStageEnum;
 	subject?: string;
 	template?: string;
@@ -2484,6 +2984,7 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
@@ -2492,7 +2993,9 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_OWN_ACCOUNTS = 'SCRAPE_OWN_ACCOUNTS',
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -2503,6 +3006,7 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	MONTHLY = 'MONTHLY',
 }
@@ -2524,6 +3028,7 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
@@ -2532,7 +3037,9 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_OWN_ACCOUNTS = 'SCRAPE_OWN_ACCOUNTS',
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -2543,6 +3050,7 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	MONTHLY = 'MONTHLY',
 }
@@ -2628,6 +3136,37 @@ export interface AdminPostCommentsOutputDto {
 	disagreement?: string;
 	/** Absent when its comments were never scraped */
 	scrapedAt?: string;
+}
+
+/** One find of a post (`PostSource`). */
+export interface AdminPostFindOutputDto {
+	/** @format date-time */
+	foundAt: string;
+	kind: AdminPostFindOutputDtoKindEnum;
+	/** The city source it is, when it is one */
+	source?: {
+		enabled: boolean;
+		id: string;
+	};
+	/** The tag, query, blog URL or venue name the scrape looked for */
+	value: string;
+	/** The venue a venue search or place page was for */
+	venue?: AdminVenueRefOutputDto;
+}
+
+export enum AdminPostFindOutputDtoKindEnum {
+	TiktokHashtag = 'tiktok_hashtag',
+	TiktokSearch = 'tiktok_search',
+	InstagramHashtag = 'instagram_hashtag',
+	Blog = 'blog',
+	VenueSearch = 'venue_search',
+	VenuePlace = 'venue_place',
+	TiktokAccount = 'tiktok_account',
+	InstagramAccount = 'instagram_account',
+}
+
+export interface AdminPostHashtagOutputDto {
+	hashtag: AdminHashtagOutputDto;
 }
 
 /** The business a prospect is. */
@@ -2758,8 +3297,8 @@ export interface AdminProspectReportOutputDto {
 }
 
 export enum AdminProspectReportOutputDtoPlatformEnum {
-	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Tiktok = 'tiktok',
 }
 
 /** A brand's branch as outreach shows it: the address, website and phone to reach it by. */
@@ -2774,6 +3313,15 @@ export interface AdminProspectVenueOutputDto {
 	reviewsCount?: number;
 	street?: string;
 	website?: string;
+}
+
+export interface AdminRecheckDishLinksOutputDto {
+	/** Dish-only rows the links had dropped, back */
+	dishOnlyRows: number;
+	/** Points sent back to the `feedback-dish-links` backlog */
+	points: number;
+	/** Points the backlog now has to look at */
+	remaining: number;
 }
 
 export interface AdminReflagOpeningsInputDto {
@@ -2826,6 +3374,34 @@ export interface AdminReflagOpeningsOutputDto {
 	unpaired: number;
 }
 
+export interface AdminRelinkFoodTopicsOutputDto {
+	queued: boolean;
+}
+
+export interface AdminReportConfigOutputDto {
+	brandId: string;
+	/** @format date-time */
+	createdAt: string;
+	id: string;
+	name: string;
+	sections: ReportSectionDto[];
+	/** Inactive: not built until switched back on */
+	status: AdminReportConfigOutputDtoStatusEnum;
+	/** The template it was copied from; absent for a custom one or once that template is deleted */
+	template?: {
+		id: string;
+		name: string;
+	};
+	/** @format date-time */
+	updatedAt: string;
+}
+
+/** Inactive: not built until switched back on */
+export enum AdminReportConfigOutputDtoStatusEnum {
+	Active = 'active',
+	Inactive = 'inactive',
+}
+
 export interface AdminReportListItemOutputDto {
 	/** The business it is on */
 	brand: {
@@ -2838,11 +3414,18 @@ export interface AdminReportListItemOutputDto {
 		name: string;
 		slug: string;
 	};
+	/** The brand's configuration it was built for; absent for a default report or once deleted */
+	config?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	createdAt: string;
 	headline: string;
 	id: string;
 	month: string;
+	/** Its configuration's (or the default template's) name at the build */
+	name: string;
 	postCount: number;
 	reviewCount: number;
 	/**
@@ -2850,10 +3433,16 @@ export interface AdminReportListItemOutputDto {
 	 * @format date-time
 	 */
 	sentAt?: string;
+	/** The template behind it; absent for a custom configuration or once the template is deleted */
+	template?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	updatedAt: string;
 }
 
+/** Its configuration and template are named on the admin's routes only (not on the portal or a shared link). */
 export interface AdminReportOutputDto {
 	/** The business it is on */
 	brand: {
@@ -2866,6 +3455,11 @@ export interface AdminReportOutputDto {
 		name: string;
 		slug: string;
 	};
+	/** The brand's configuration it was built for; absent for a default report or once deleted */
+	config?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	createdAt: string;
 	/**
@@ -2877,13 +3471,22 @@ export interface AdminReportOutputDto {
 	highlights: ReportHighlights;
 	id: string;
 	month: string;
+	/** Its configuration's (or the default template's) name at the build */
+	name: string;
 	postCount: number;
 	reviewCount: number;
+	/** What it shows, in order: its type's sections as they were at the build */
+	sections: ReportSectionDto[];
 	/**
 	 * When it was last e-mailed to the brand
 	 * @format date-time
 	 */
 	sentAt?: string;
+	/** The template behind it; absent for a custom configuration or once the template is deleted */
+	template?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	updatedAt: string;
 }
@@ -2912,19 +3515,32 @@ export interface AdminReportShareOutputDto {
 	url: string;
 }
 
+export interface AdminReportTemplateOutputDto {
+	/** Brands with a configuration copied from it */
+	brands: number;
+	/** @format date-time */
+	createdAt: string;
+	description?: string;
+	id: string;
+	/** What brands without an active configuration get */
+	isDefault: boolean;
+	name: string;
+	sections: ReportSectionDto[];
+	/** @format date-time */
+	updatedAt: string;
+}
+
 export interface AdminReviewOutputDto {
 	/** @format date-time */
 	analysedAt?: string;
-	changes?: string[];
-	complaints?: FeedbackPoint[];
-	dishes?: FeedbackDish[];
+	/** What it says, as feedback rows (none before it is analysed) */
+	feedback: FeedbackPointOutputDto[];
 	id: string;
 	language?: string;
 	likes: number;
 	ownerResponse?: string;
 	/** @format date-time */
 	ownerResponseAt?: string;
-	praise?: FeedbackPoint[];
 	/** @format date-time */
 	publishedAt: string;
 	reviewId: string;
@@ -2935,10 +3551,14 @@ export interface AdminReviewOutputDto {
 }
 
 export enum AdminReviewOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
+}
+
+export interface AdminRunLlmBacklogsOutputDto {
+	queued: boolean;
 }
 
 export interface AdminSearchBrandInputDto {
@@ -3075,6 +3695,8 @@ export interface AdminSocialPostListItemOutputDto {
 	authorFans?: number;
 	comments: number;
 	externalId: string;
+	/** Every source that found it, the first find first */
+	foundBy: AdminPostFindOutputDto[];
 	id: string;
 	isAd: boolean;
 	isPromotional?: boolean;
@@ -3086,7 +3708,6 @@ export interface AdminSocialPostListItemOutputDto {
 	postedAt: string;
 	saves: number;
 	shares: number;
-	source?: string;
 	text?: string;
 	url: string;
 	views: number;
@@ -3095,6 +3716,7 @@ export interface AdminSocialPostListItemOutputDto {
 export enum AdminSocialPostListItemOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface AdminSocialPostOutputDto {
@@ -3111,7 +3733,10 @@ export interface AdminSocialPostOutputDto {
 	/** @format date-time */
 	createdAt: string;
 	externalId: string;
-	hashtags?: string[];
+	/** Every source that found it, the first find first */
+	foundBy: AdminPostFindOutputDto[];
+	/** The caption's hashtags, in its order, with the food topic or brand each names */
+	hashtagLinks: AdminPostHashtagOutputDto[];
 	id: string;
 	isAd: boolean;
 	isPromotional?: boolean;
@@ -3123,7 +3748,6 @@ export interface AdminSocialPostOutputDto {
 	postedAt: string;
 	saves: number;
 	shares: number;
-	source?: string;
 	subtitles?: string;
 	subtitlesLanguage?: string;
 	taggedHandles?: string[];
@@ -3135,6 +3759,7 @@ export interface AdminSocialPostOutputDto {
 export enum AdminSocialPostOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 /** The creator an account was split into. */
@@ -3179,6 +3804,7 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
@@ -3187,7 +3813,9 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_OWN_ACCOUNTS = 'SCRAPE_OWN_ACCOUNTS',
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -3198,6 +3826,7 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	MONTHLY = 'MONTHLY',
 }
@@ -3244,6 +3873,22 @@ export interface AdminSuggestedProspectOutputDto {
 	website?: string;
 }
 
+export interface AdminThemeAmountOutputDto {
+	max: number;
+	median: number;
+	min: number;
+	/** Reviews and posts stating one; a source stating two keeps its largest */
+	sources: number;
+	/** Minutes for a wait, euro for a price */
+	unit: AdminThemeAmountOutputDtoUnitEnum;
+}
+
+/** Minutes for a wait, euro for a price */
+export enum AdminThemeAmountOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
 export interface AdminThemeBrandOutputDto {
 	id: string;
 	name: string;
@@ -3262,6 +3907,35 @@ export interface AdminThemeCoverageOutputDto {
 	unfiledPosts: number;
 	/** Of those, the ones with a point not filed under a theme yet: counted under no theme */
 	unfiledReviews: number;
+}
+
+export interface AdminThemeCurrentOutputDto {
+	/** Brands it came up at */
+	brands: number;
+	/** YYYY-MM */
+	month: string;
+	/** Of the month's posts by others with any point, percent */
+	postShare: number | null;
+	postShareChange: number | null;
+	posts: number;
+	/** Of the month's written reviews with any point (any row, changes included, for `changes`), percent */
+	reviewShare: number | null;
+	/** Against the month before, in percentage points */
+	reviewShareChange: number | null;
+	reviews: number;
+}
+
+/** One theme, praised or criticised, in the city and month. */
+export interface AdminThemeDishOutputDto {
+	/** The food topic's key, for its page */
+	foodTopic?: string;
+	/** `topic:<key>` or `dish:<key>` */
+	key: string;
+	label: string;
+	/** Of the reviews and posts with a point of this side about it, percent */
+	share: number;
+	/** Reviews and posts raising the theme about it */
+	sources: number;
 }
 
 /** One kind of food in the month. */
@@ -3285,41 +3959,45 @@ export interface AdminThemeFoodOutputDto {
 	sources: number;
 }
 
-/** One theme, praised or criticised, in the city and month. */
-export interface AdminThemeInsightRowOutputDto {
-	/** The three kinds of food it came up at most */
+export interface AdminThemeInsightOutputDto {
+	/** The numbers its points state, per unit */
+	amounts: AdminThemeAmountOutputDto[];
+	/** The ten brands it came up at most */
+	brands: AdminThemeBrandOutputDto[];
+	/** The side this month: the whole month's, whatever the filters */
+	current: AdminThemeCurrentOutputDto;
+	/** The ten dishes its points were about most: a food topic's dishes as one */
+	dishes: AdminThemePageDishOutputDto[];
+	/** The five kinds of food it came up at most, each a share of its brands' sources with any point */
 	foods: AdminThemeFoodOutputDto[];
-	key: AdminThemeInsightRowOutputDtoKeyEnum;
+	/** What the theme covers, as the agents are told */
+	hint: string;
+	key: AdminThemeInsightOutputDtoKeyEnum;
 	/** "Price increase" */
 	label: string;
-	/** Of the month's posts by others with any point, percent */
-	postShare: number | null;
-	postShareChange: number | null;
-	/** Posts by others raising it */
-	posts: number;
-	/** Of the month's written reviews with any point, percent */
-	reviewShare: number | null;
-	/** Against the month before, in percentage points */
-	reviewShareChange: number | null;
-	/** Written reviews raising it */
-	reviews: number;
-	/** Up to five distinct details, newest first */
-	samples: string[];
-	/** The three it came up at most */
-	topBrands: AdminThemeBrandOutputDto[];
-	topic: AdminThemeInsightRowOutputDtoTopicEnum;
-	/** Brands it came up at */
-	venues: number;
+	month: string;
+	/** The side over the six months up to the month, oldest first */
+	months: AdminThemeMonthOutputDto[];
+	/** The month's sentences of the side, filtered, newest first, one page */
+	points: AdminThemePointOutputDto[];
+	/** The month the changes are against */
+	previous: string;
+	side: AdminThemeInsightOutputDtoSideEnum;
+	/** Each side's reviews and posts this month */
+	sides: AdminThemeSideCountOutputDto[];
+	topic: AdminThemeInsightOutputDtoTopicEnum;
+	/** Sentences matching the filters */
+	total: number;
+	/** The reviews and posts they come from */
+	totalSources: number;
 }
 
-export enum AdminThemeInsightRowOutputDtoKeyEnum {
+export enum AdminThemeInsightOutputDtoKeyEnum {
 	Language = 'language',
-	Other = 'other',
-	Temperature = 'temperature',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
 	Taste = 'taste',
+	Other = 'other',
 	Freshness = 'freshness',
+	Temperature = 'temperature',
 	Cooking = 'cooking',
 	Seasoning = 'seasoning',
 	PortionSize = 'portion_size',
@@ -3374,18 +4052,130 @@ export enum AdminThemeInsightRowOutputDtoKeyEnum {
 	Accessibility = 'accessibility',
 	OwnershipChange = 'ownership_change',
 	Renovation = 'renovation',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
 }
 
-export enum AdminThemeInsightRowOutputDtoTopicEnum {
-	Other = 'other',
+export enum AdminThemeInsightOutputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Changes = 'changes',
+}
+
+export enum AdminThemeInsightOutputDtoTopicEnum {
 	Food = 'food',
-	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
+	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
+	Other = 'other',
+}
+
+export interface AdminThemeInsightRowOutputDto {
+	/** The five dishes its points were about most: a food topic's dishes as one */
+	dishes: AdminThemeDishOutputDto[];
+	/** The three kinds of food it came up at most */
+	foods: AdminThemeFoodOutputDto[];
+	key: AdminThemeInsightRowOutputDtoKeyEnum;
+	/** "Price increase" */
+	label: string;
+	/** Of the month's posts by others with any point, percent */
+	postShare: number | null;
+	postShareChange: number | null;
+	/** Posts by others raising it */
+	posts: number;
+	/** Of the month's written reviews with any point, percent */
+	reviewShare: number | null;
+	/** Against the month before, in percentage points */
+	reviewShareChange: number | null;
+	/** Written reviews raising it */
+	reviews: number;
+	/** Up to five distinct details, newest first */
+	samples: string[];
+	/** The three it came up at most */
+	topBrands: AdminThemeBrandOutputDto[];
+	topic: AdminThemeInsightRowOutputDtoTopicEnum;
+	/** Brands it came up at */
+	venues: number;
+}
+
+export enum AdminThemeInsightRowOutputDtoKeyEnum {
+	Language = 'language',
+	Taste = 'taste',
+	Other = 'other',
+	Freshness = 'freshness',
+	Temperature = 'temperature',
+	Cooking = 'cooking',
+	Seasoning = 'seasoning',
+	PortionSize = 'portion_size',
+	IngredientQuality = 'ingredient_quality',
+	MenuVariety = 'menu_variety',
+	Availability = 'availability',
+	QualityChange = 'quality_change',
+	Authenticity = 'authenticity',
+	Presentation = 'presentation',
+	FoodOther = 'food_other',
+	DrinkQuality = 'drink_quality',
+	DrinkSelection = 'drink_selection',
+	DrinksOther = 'drinks_other',
+	Friendliness = 'friendliness',
+	Attentiveness = 'attentiveness',
+	SpeedOfService = 'speed_of_service',
+	OrderAccuracy = 'order_accuracy',
+	Advice = 'advice',
+	ReservationHandling = 'reservation_handling',
+	ComplaintHandling = 'complaint_handling',
+	TakeawayHandling = 'takeaway_handling',
+	StaffChange = 'staff_change',
+	ServiceOther = 'service_other',
+	Atmosphere = 'atmosphere',
+	Noise = 'noise',
+	Space = 'space',
+	Interior = 'interior',
+	OutdoorSeating = 'outdoor_seating',
+	Crowding = 'crowding',
+	Location = 'location',
+	FamilyPets = 'family_pets',
+	VibeOther = 'vibe_other',
+	PriceLevel = 'price_level',
+	ValueForMoney = 'value_for_money',
+	PriceIncrease = 'price_increase',
+	ExtraCharges = 'extra_charges',
+	PriceOther = 'price_other',
+	CashOnly = 'cash_only',
+	CardPayment = 'card_payment',
+	Tipping = 'tipping',
+	Billing = 'billing',
+	PaymentOther = 'payment_other',
+	Queue = 'queue',
+	WaitForFood = 'wait_for_food',
+	WaitForTable = 'wait_for_table',
+	WaitOther = 'wait_other',
+	Toilets = 'toilets',
+	DiningArea = 'dining_area',
+	FoodHygiene = 'food_hygiene',
+	CleanlinessOther = 'cleanliness_other',
+	OpeningHours = 'opening_hours',
+	Accessibility = 'accessibility',
+	OwnershipChange = 'ownership_change',
+	Renovation = 'renovation',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
+}
+
+export enum AdminThemeInsightRowOutputDtoTopicEnum {
+	Food = 'food',
+	Drinks = 'drinks',
+	Service = 'service',
+	Vibe = 'vibe',
+	Price = 'price',
+	Payment = 'payment',
+	Wait = 'wait',
+	Cleanliness = 'cleanliness',
+	Other = 'other',
 }
 
 export interface AdminThemeInsightsOutputDto {
@@ -3402,6 +4192,114 @@ export interface AdminThemeInsightsOutputDto {
 	praise: AdminThemeInsightRowOutputDto[];
 	/** The month the changes are against */
 	previous: string;
+}
+
+export interface AdminThemeMonthOutputDto {
+	/** YYYY-MM */
+	month: string;
+	/** Of the month's posts by others with any point, percent */
+	postShare: number | null;
+	posts: number;
+	/** Of the month's written reviews with any point (any row, changes included, for `changes`), percent */
+	reviewShare: number | null;
+	reviews: number;
+}
+
+export interface AdminThemePageDishOutputDto {
+	/** The food topic's key, for its page */
+	foodTopic?: string;
+	/** `topic:<key>` or `dish:<key>`: what `dish=` takes */
+	key: string;
+	label: string;
+	/** Reviews and posts of the side about it */
+	sources: number;
+}
+
+/** One sentence filed under the theme, with the review or post it came from. */
+export interface AdminThemePointOutputDto {
+	/** The number it states */
+	amount?: number;
+	/**
+	 * When the review was published or the post posted
+	 * @format date-time
+	 */
+	at: string;
+	/** A post's author handle */
+	author?: string;
+	brand: {
+		id: string;
+		name: string;
+	};
+	/** The phrase, in English */
+	detail: string;
+	/** The dish or drink it is about, as the source names it */
+	dish?: string;
+	foodTopic?: {
+		key: string;
+		label: string;
+	};
+	/** The feedback row's id */
+	id: string;
+	kind: AdminThemePointOutputDtoKindEnum;
+	postPlatform?: AdminThemePointOutputDtoPostPlatformEnum;
+	reviewPlatform?: AdminThemePointOutputDtoReviewPlatformEnum;
+	sentiment: AdminThemePointOutputDtoSentimentEnum;
+	/** The review's or the post's id (a post's page is `/admin/posts/<id>`) */
+	sourceId: string;
+	/** A review's stars */
+	stars?: number;
+	/** What the post says about the brand */
+	summary?: string;
+	/** A review's text (translated when it was), cut at 400 characters */
+	text?: string;
+	unit?: AdminThemePointOutputDtoUnitEnum;
+	/** The branch: a review's place, a post's when it named one */
+	venue?: {
+		id: string;
+		name: string;
+	};
+}
+
+export enum AdminThemePointOutputDtoKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+export enum AdminThemePointOutputDtoPostPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
+export enum AdminThemePointOutputDtoReviewPlatformEnum {
+	Google = 'google',
+	Tripadvisor = 'tripadvisor',
+}
+
+export enum AdminThemePointOutputDtoSentimentEnum {
+	Mixed = 'mixed',
+	Positive = 'positive',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
+export enum AdminThemePointOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
+export interface AdminThemeSideCountOutputDto {
+	/** Posts by others likewise */
+	posts: number;
+	/** Written reviews of the month with a point of this side filed under the theme */
+	reviews: number;
+	side: AdminThemeSideCountOutputDtoSideEnum;
+}
+
+export enum AdminThemeSideCountOutputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Changes = 'changes',
 }
 
 export interface AdminTodayOutputDto {
@@ -3533,9 +4431,9 @@ export interface AdminTopicVenueOutputDto {
 export enum AdminTopicVenueOutputDtoSourceEnum {
 	Mentions = 'mentions',
 	Category = 'category',
-	Manual = 'manual',
 	Menu = 'menu',
 	Reviews = 'reviews',
+	Manual = 'manual',
 }
 
 export interface AdminTrendsLookupInputDto {
@@ -3599,6 +4497,7 @@ export interface AdminUnmatchedPostOutputDto {
 export enum AdminUnmatchedPostOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface AdminUpdateBrandAccountInputDto {
@@ -3735,6 +4634,13 @@ export interface AdminUpdateCreatorInputDto {
 	name: string;
 }
 
+/** A topic key, null for "no topic", or `auto: true` to hand the name back to the name match and the agent */
+export interface AdminUpdateDishNameInputDto {
+	auto?: boolean;
+	/** @maxLength 64 */
+	topicKey?: string | null;
+}
+
 /** Only the fields given change; null clears a parent, a Trends id or a query. The key never changes. */
 export interface AdminUpdateFoodTopicInputDto {
 	/** @maxItems 100 */
@@ -3759,6 +4665,11 @@ export enum AdminUpdateFoodTopicInputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+}
+
+export interface AdminUpdateHashtagInputDto {
+	/** Noise (#fyp, #viral): never suggested as a source */
+	ignored: boolean;
 }
 
 /** An admin's correction of a mention's brand and venue. */
@@ -3822,6 +4733,40 @@ export enum AdminUpdateProspectInputDtoStageEnum {
 	OPTED_OUT = 'OPTED_OUT',
 }
 
+export interface AdminUpdateReportConfigInputDto {
+	/**
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	name?: string;
+	/**
+	 * The cover first, each kind once
+	 * @minItems 1
+	 */
+	sections?: ReportSectionDto[];
+	status?: AdminUpdateReportConfigInputDtoStatusEnum;
+}
+
+export enum AdminUpdateReportConfigInputDtoStatusEnum {
+	Active = 'active',
+	Inactive = 'inactive',
+}
+
+export interface AdminUpdateReportTemplateInputDto {
+	/** @maxLength 400 */
+	description?: string | null;
+	/**
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	name?: string;
+	/**
+	 * The cover first, each kind once
+	 * @minItems 1
+	 */
+	sections?: ReportSectionDto[];
+}
+
 export interface AdminUpdateUserRolesInputDto {
 	/** Anything outside `ASSIGNABLE_USER_ROLES` is rejected — `system` above all. */
 	roles: AdminUpdateUserRolesInputDtoRolesEnum[];
@@ -3840,6 +4785,24 @@ export interface AdminUpdateVenueInputDto {
 	 * @maxLength 500
 	 */
 	bookingUrl?: string | null;
+}
+
+export interface AdminUpdatedDishNameOutputDto {
+	decidedBy?: AdminUpdatedDishNameOutputDtoDecidedByEnum;
+	foodTopic?: {
+		key: string;
+		label: string;
+	};
+	id: number;
+	key: string;
+	name: string;
+	suggestion?: string;
+}
+
+export enum AdminUpdatedDishNameOutputDtoDecidedByEnum {
+	Match = 'match',
+	Admin = 'admin',
+	Ai = 'ai',
 }
 
 export interface AdminUserOutputDto {
@@ -3962,9 +4925,9 @@ export enum AdminVenueFoodTopicOutputDtoKindEnum {
 export enum AdminVenueFoodTopicOutputDtoSourceEnum {
 	Mentions = 'mentions',
 	Category = 'category',
-	Manual = 'manual',
 	Menu = 'menu',
 	Reviews = 'reviews',
+	Manual = 'manual',
 }
 
 export interface AdminVenueFoodTopicsOutputDto {
@@ -4096,7 +5059,130 @@ export interface AdminVenueStatusChangesOutputDto {
 	totals: VenueStatusCounts;
 }
 
-export type BackfillFeedbackThemesData = AdminBackfillFeedbackThemesOutputDto;
+export interface AdminWaitComplaintsInputDto {
+	/** @format uuid */
+	cityId: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	month: string;
+}
+
+export interface AdminWaitComplaintsOutputDto {
+	brands: number;
+	byTheme: {
+		brands: number;
+		sources: number;
+		theme: AdminWaitComplaintsOutputDtoThemeEnum;
+		venues: number;
+	}[];
+	month: string;
+	posts: number;
+	reviews: number;
+	sources: number;
+	stated: {
+		complaints: number;
+		max?: number;
+		median?: number;
+		of: number;
+		upperQuartile?: number;
+	};
+	venues: number;
+}
+
+export enum AdminWaitComplaintsOutputDtoThemeEnum {
+	Language = 'language',
+	Taste = 'taste',
+	Other = 'other',
+	Freshness = 'freshness',
+	Temperature = 'temperature',
+	Cooking = 'cooking',
+	Seasoning = 'seasoning',
+	PortionSize = 'portion_size',
+	IngredientQuality = 'ingredient_quality',
+	MenuVariety = 'menu_variety',
+	Availability = 'availability',
+	QualityChange = 'quality_change',
+	Authenticity = 'authenticity',
+	Presentation = 'presentation',
+	FoodOther = 'food_other',
+	DrinkQuality = 'drink_quality',
+	DrinkSelection = 'drink_selection',
+	DrinksOther = 'drinks_other',
+	Friendliness = 'friendliness',
+	Attentiveness = 'attentiveness',
+	SpeedOfService = 'speed_of_service',
+	OrderAccuracy = 'order_accuracy',
+	Advice = 'advice',
+	ReservationHandling = 'reservation_handling',
+	ComplaintHandling = 'complaint_handling',
+	TakeawayHandling = 'takeaway_handling',
+	StaffChange = 'staff_change',
+	ServiceOther = 'service_other',
+	Atmosphere = 'atmosphere',
+	Noise = 'noise',
+	Space = 'space',
+	Interior = 'interior',
+	OutdoorSeating = 'outdoor_seating',
+	Crowding = 'crowding',
+	Location = 'location',
+	FamilyPets = 'family_pets',
+	VibeOther = 'vibe_other',
+	PriceLevel = 'price_level',
+	ValueForMoney = 'value_for_money',
+	PriceIncrease = 'price_increase',
+	ExtraCharges = 'extra_charges',
+	PriceOther = 'price_other',
+	CashOnly = 'cash_only',
+	CardPayment = 'card_payment',
+	Tipping = 'tipping',
+	Billing = 'billing',
+	PaymentOther = 'payment_other',
+	Queue = 'queue',
+	WaitForFood = 'wait_for_food',
+	WaitForTable = 'wait_for_table',
+	WaitOther = 'wait_other',
+	Toilets = 'toilets',
+	DiningArea = 'dining_area',
+	FoodHygiene = 'food_hygiene',
+	CleanlinessOther = 'cleanliness_other',
+	OpeningHours = 'opening_hours',
+	Accessibility = 'accessibility',
+	OwnershipChange = 'ownership_change',
+	Renovation = 'renovation',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
+}
+
+/** One reason a profile is scraped, or would be. */
+export interface AdminWatchReasonOutputDto {
+	/** Whether it gets the profile scraped now (a source switched off, or Instagram off in the city, does not) */
+	active: boolean;
+	/** The brand whose own account it is */
+	brand?: AdminWatchRefOutputDto;
+	city: AdminWatchRefOutputDto;
+	enabled?: boolean;
+	instagramOff?: boolean;
+	kind: AdminWatchReasonOutputDtoKindEnum;
+	month?: string;
+	/** A top brand's place in the month's list, and its length */
+	rank?: number;
+	/** The report brands a rival competes with */
+	rivalOf?: AdminWatchRefOutputDto[];
+	/** A city source's id, and whether it is on */
+	sourceId?: string;
+	top?: number;
+}
+
+export enum AdminWatchReasonOutputDtoKindEnum {
+	CitySource = 'city_source',
+	Customer = 'customer',
+	TopBrand = 'top_brand',
+	Rival = 'rival',
+}
+
+export interface AdminWatchRefOutputDto {
+	id: string;
+	name: string;
+}
 
 export interface BlogEntryAuthorOutputDto {
 	id: string;
@@ -4205,6 +5291,8 @@ export enum BrandMembershipOutputDtoRoleEnum {
 export type BuildCityHighlightData = AdminCityHighlightOutputDto;
 
 export type BuildFoodTrendsData = AdminFoodTrendsReportOutputDto;
+
+export type BuildLandingEditionData = any;
 
 export type BuildReportData = AdminReportOutputDto;
 
@@ -4319,6 +5407,7 @@ export interface CityHighlightCreator {
 export enum CityHighlightCreatorPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 /**
@@ -4401,6 +5490,7 @@ export interface CityHighlightPost {
 export enum CityHighlightPostPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface CityHighlightRiser {
@@ -4492,6 +5582,8 @@ export interface ComplaintTimes {
 
 export type ConfirmBrandData = AdminBrandOutputDto;
 
+export type ConfirmNewsletterData = NewsletterSubscriptionOutputDto;
+
 export interface ContextEvent {
 	endDate: string;
 	kind: ContextEventKindEnum;
@@ -4517,6 +5609,8 @@ export interface CreateBlogEntryInputDto {
 	title: string;
 }
 
+export type CreateBrandReportConfigData = AdminReportConfigOutputDto;
+
 export type CreateCityData = AdminCityOutputDto;
 
 export type CreateEntryData = AdminBlogEntryOutputDto;
@@ -4524,6 +5618,8 @@ export type CreateEntryData = AdminBlogEntryOutputDto;
 export type CreateFoodTopicData = AdminFoodTopicBaseOutputDto;
 
 export type CreateReportShareData = AdminReportShareOutputDto;
+
+export type CreateReportTemplateData = AdminReportTemplateOutputDto;
 
 export type CreateTagData = BlogTagOutputDto;
 
@@ -4567,6 +5663,10 @@ export type DecideAccountPayload =
 
 export type DeleteMeData = GetMeOutputDto;
 
+export type DeleteReportConfigData = any;
+
+export type DeleteReportTemplateData = any;
+
 export type DeleteTagData = OkResponse;
 
 export type DeleteUserData = OkResponseO1;
@@ -4596,38 +5696,46 @@ export enum ExportUsersCsvParamsRolesEnum {
 	VenueOwner = 'venue_owner',
 }
 
-/** A dish or drink named, with how it came across. */
-export interface FeedbackDish {
-	name: string;
-	sentiment: FeedbackDishSentimentEnum;
+/**
+ * One thing a review or a mention says (a `FeedbackPoint` row). A point has a `detail`, praise
+ * `positive` and a complaint `negative`; a dish-only row has a `dish`, the dish's sentiment and no
+ * topic or detail; a noticed change (`change`) is `neutral`, its phrase the detail. Pages group
+ * them by sentiment themselves.
+ */
+export interface FeedbackPointOutputDto {
+	/** The number it states: minutes for a wait, the price for a price */
+	amount?: number;
+	/** A change the reviewer noticed since before ("new owner"), not a praise or complaint */
+	change: boolean;
+	detail?: string;
+	/** The dish or drink it is about */
+	dish?: string;
+	/** The food topic the dish is (`FeedbackPoint.foodTopic`): its page is `/admin/trends/<key>` */
+	foodTopic?: {
+		key: string;
+		label: string;
+	};
+	sentiment: FeedbackPointOutputDtoSentimentEnum;
+	/** Absent until the point is filed, and on a dish-only row */
+	theme?: FeedbackPointOutputDtoThemeEnum;
+	topic?: FeedbackPointOutputDtoTopicEnum;
+	unit?: FeedbackPointOutputDtoUnitEnum;
 }
 
-export enum FeedbackDishSentimentEnum {
-	Positive = 'positive',
+export enum FeedbackPointOutputDtoSentimentEnum {
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
 
-/**
- * One thing praised or criticised, e.g. `{ topic: 'price', theme: 'price_increase', detail: 'prices went up' }`.
- * The theme is what it is about (`FEEDBACK_THEMES`), the topic is the theme's. A point stored
- * before themes existed has none until the backfill files it.
- */
-export interface FeedbackPoint {
-	detail: string;
-	theme?: FeedbackPointThemeEnum;
-	topic: FeedbackPointTopicEnum;
-}
-
-export enum FeedbackPointThemeEnum {
+/** Absent until the point is filed, and on a dish-only row */
+export enum FeedbackPointOutputDtoThemeEnum {
 	Language = 'language',
-	Other = 'other',
-	Temperature = 'temperature',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
 	Taste = 'taste',
+	Other = 'other',
 	Freshness = 'freshness',
+	Temperature = 'temperature',
 	Cooking = 'cooking',
 	Seasoning = 'seasoning',
 	PortionSize = 'portion_size',
@@ -4682,19 +5790,28 @@ export enum FeedbackPointThemeEnum {
 	Accessibility = 'accessibility',
 	OwnershipChange = 'ownership_change',
 	Renovation = 'renovation',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
 }
 
-export enum FeedbackPointTopicEnum {
-	Other = 'other',
+export enum FeedbackPointOutputDtoTopicEnum {
 	Food = 'food',
-	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
+	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
+	Other = 'other',
 }
+
+export enum FeedbackPointOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
+export type FileFeedbackThemesData = AdminFileFeedbackThemesOutputDto;
 
 export type FillCityDaysData = AdminFillCityDaysOutputDto;
 
@@ -4792,10 +5909,10 @@ export interface FoodTrendsSearchPull {
 }
 
 export enum FoodTrendsSearchPullStateEnum {
-	Failed = 'failed',
 	Done = 'done',
-	Running = 'running',
+	Failed = 'failed',
 	Queued = 'queued',
+	Running = 'running',
 }
 
 export interface FoodTrendsSearchTopic {
@@ -4890,7 +6007,19 @@ export type GetCityMonthContextData = CityMonthContextOutputDto;
 
 export type GetCreatorData = AdminCreatorOutputDto;
 
+export type GetCreatorWatchData = AdminCreatorWatchOutputDto;
+
 export type GetDataCoverageData = AdminDataCoverageOutputDto;
+
+export type GetDishNamesData = AdminDishNamesOutputDto;
+
+/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
+export enum GetDishNamesParamsStatusEnum {
+	All = 'all',
+	Pending = 'pending',
+	Unlinked = 'unlinked',
+	Linked = 'linked',
+}
 
 export type GetEntriesData = SitemapEntriesOutputDto;
 
@@ -4903,6 +6032,12 @@ export type GetFoodTopicsData = AdminFoodTopicsOutputDto;
 export type GetFoodTrendsData = AdminFoodTrendsOutputDto;
 
 export type GetFoodTrendsReportData = FoodTrendsReportOutputDto;
+
+export type GetLandingEditionData = LandingEditionOutputDto;
+
+export type GetLandingEditionResult = AdminLandingEditionOutputDto;
+
+export type GetLandingEditionsData = AdminLandingEditionsOutputDto;
 
 export type GetMeData = GetMeOutputDto;
 
@@ -4944,6 +6079,8 @@ export enum GetMeOutputDtoRolesEnum {
 	VenueOwner = 'venue_owner',
 }
 
+export type GetNewsletterCountsData = AdminNewsletterCountsOutputDto;
+
 export type GetOutreachSummaryData = AdminOutreachSummaryOutputDto;
 
 export type GetPortalBrandData = PortalBrandOutputDto;
@@ -4966,11 +6103,15 @@ export type GetPostData = AdminSocialPostOutputDto;
 
 export type GetProspectData = AdminProspectOutputDto;
 
+export type GetReportConfigData = AdminReportConfigOutputDto;
+
 export type GetReportData = AdminReportOutputDto;
 
 export type GetReportLeaveBehindPdfData = any;
 
 export type GetReportPdfData = any;
+
+export type GetReportTemplateData = AdminReportTemplateOutputDto;
 
 export type GetSearchInterestData = AdminSearchInterestOutputDto;
 
@@ -4981,6 +6122,21 @@ export type GetSharedReportData = SharedReportOutputDto;
 export type GetSharedReportPdfData = any;
 
 export type GetTagData = BlogTagOutputDto;
+
+export type GetThemeInsightData = AdminThemeInsightOutputDto;
+
+/** Only reviews, or only posts */
+export enum GetThemeInsightParamsKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+/** Complaints when absent */
+export enum GetThemeInsightParamsSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Changes = 'changes',
+}
 
 export type GetThemeInsightsData = AdminThemeInsightsOutputDto;
 
@@ -5000,6 +6156,8 @@ export type GetVenueFoodTopicsData = AdminVenueFoodTopicsOutputDto;
 
 export type GetVenueStatusChangesData = AdminVenueStatusChangesOutputDto;
 
+export type GetWaitComplaintsData = AdminWaitComplaintsOutputDto;
+
 export interface HealthCheckResponseDto {
 	ok: boolean;
 	/** @format date-time */
@@ -5016,6 +6174,243 @@ export interface ImageOutputDto {
 }
 
 export type InviteToPortalData = AdminProspectOutputDto;
+
+/** The city as the front page names it. */
+export interface LandingCityOutputDto {
+	name: string;
+	slug: string;
+}
+
+export interface LandingCityOutputDtoidstring {
+	id: string;
+	name: string;
+	slug: string;
+}
+
+/**
+ * What the model wrote for an edition, each line checked against its numbers; a line that
+ * failed or was missing is the plain fallback. The page joins it to `data` by key.
+ */
+export interface LandingCopy {
+	dishes: LandingDishCopy[];
+	fallbacks: number;
+	/** The hero's paragraph */
+	lede: string;
+	openings: LandingOpeningCopy[];
+	places: LandingPlaceCopy[];
+	/** The "right now" strip, in order */
+	ticker: LandingStoryCopy[];
+	/** Three trend tiles, in order */
+	trends: LandingStoryCopy[];
+	/** Lines the model wrote and that passed the checks, and lines that fell back */
+	written: number;
+}
+
+export interface LandingDish {
+	delta: number;
+	/** The food topic's key, else the dish key */
+	key: string;
+	label: string;
+	/** Places whose posts named it */
+	places: number;
+	posts: number;
+	role: LandingDishRoleEnum;
+	/** Share of the posts naming a dish, percent with one decimal, and the change in points */
+	share: number;
+	/** The places whose posts named it most */
+	topPlaces: LandingDishPlace[];
+}
+
+export interface LandingDishCopy {
+	key: string;
+	/** One or two words on the tile's sticker */
+	sticker: string;
+	text: string;
+}
+
+export interface LandingDishPlace {
+	brandId: string;
+	district?: string;
+	name: string;
+	posts: number;
+}
+
+export enum LandingDishRoleEnum {
+	Drink = 'drink',
+	Rising = 'rising',
+	DishOfTheMonth = 'dish_of_the_month',
+	MostNamed = 'most_named',
+}
+
+/**
+ * The front page's live edition of a city: the last 30 days of what the city posted about
+ * eating out, against the 30 days before. Our own counts of public posts by others only (a
+ * brand's own account and paid or promotional posts left out): no Google rating, no review
+ * text, nothing from OSM. Positive lists only. Optional fields are absent, never null
+ * (`serialize({ skipNull })` drops a null inside the jsonb too).
+ */
+export interface LandingEditionData {
+	/** Up to four dishes with a role each (Dish of the Month, still rising, most named, drink) */
+	dishes: LandingDish[];
+	/** The window's most named dishes, for the marquee */
+	marquee: string[];
+	/** Places posts called new in the last 14 days, most talked about first (three at most) */
+	openings: LandingOpening[];
+	/** How many places posts called new in the last 14 days */
+	openingsCount: number;
+	/** The ten places the most people posted about, then by posts, then views */
+	places: LandingPlace[];
+	/** Facts the model may tell: trend tiles pick three, the ticker the rest */
+	stories: LandingStory[];
+	totals: LandingTotals;
+}
+
+/** The newest published edition of a city's front page: what `/` renders. */
+export interface LandingEditionOutputDto {
+	/** @format date-time */
+	builtAt: string;
+	/** The city as the front page names it. */
+	city: LandingCityOutputDto;
+	/**
+	 * What the model wrote for an edition, each line checked against its numbers; a line that
+	 * failed or was missing is the plain fallback. The page joins it to `data` by key.
+	 */
+	copy: LandingCopy;
+	/**
+	 * The front page's live edition of a city: the last 30 days of what the city posted about
+	 * eating out, against the 30 days before. Our own counts of public posts by others only (a
+	 * brand's own account and paid or promotional posts left out): no Google rating, no review
+	 * text, nothing from OSM. Positive lists only. Optional fields are absent, never null
+	 * (`serialize({ skipNull })` drops a null inside the jsonb too).
+	 */
+	data: LandingEditionData;
+	/** @format date-time */
+	publishedAt: string;
+	/** @format date-time */
+	windowEnd: string;
+	/**
+	 * The counted window [windowStart, windowEnd)
+	 * @format date-time
+	 */
+	windowStart: string;
+}
+
+export interface LandingNamedDish {
+	label: string;
+	posts: number;
+}
+
+export interface LandingOpening {
+	brandId: string;
+	creators: number;
+	dish?: LandingNamedDish;
+	district?: string;
+	/** The day of the first post calling it new (`YYYY-MM-DD`), else of the scrape that saw it open */
+	firstSeen: string;
+	name: string;
+	posts: number;
+	street?: string;
+	views: number;
+}
+
+export interface LandingOpeningCopy {
+	brandId: string;
+	text: string;
+}
+
+export interface LandingPlace {
+	/** The brand's open places in the city */
+	branches: number;
+	brandId: string;
+	/** Places climbed, for `up` */
+	climb?: number;
+	creators: number;
+	/** The dish its posts named most, with 2+ posts */
+	dish?: LandingNamedDish;
+	/** The branch the window's posts named most (else its most reviewed open one) */
+	district?: string;
+	/** A post in the last 14 days called it new */
+	isNew?: boolean;
+	move: LandingPlaceMoveEnum;
+	name: string;
+	posts: number;
+	/** Its rank in the 30 days before, when it was in the top 50 */
+	prevRank?: number;
+	rank: number;
+	/** Its street without the house number, as Google writes it */
+	street?: string;
+	views: number;
+}
+
+export interface LandingPlaceCopy {
+	brandId: string;
+	/** What the city said, two sentences at most */
+	said: string;
+	/** A few words under the name on the hero's ticket */
+	tagline: string;
+}
+
+export enum LandingPlaceMoveEnum {
+	New = 'new',
+	None = 'none',
+	Up = 'up',
+	Held = 'held',
+}
+
+/**
+ * One fact with its numbers. `fact` is the plain sentence the page falls back to when the
+ * model's line is missing or states a number the fact doesn't hold.
+ */
+export interface LandingStory {
+	/** The district it is about, for the ticker's tag */
+	district?: string;
+	fact: string;
+	/** Credit, for a story about a post */
+	handle?: string;
+	/** Stable within an edition: `district`, `place:<brandId>`, … */
+	id: string;
+	kind: LandingStoryKindEnum;
+	platform?: LandingStoryPlatformEnum;
+	/** A short fallback title, for a trend tile */
+	title: string;
+	/** Trend tiles pick among these; the ticker takes the others */
+	trend: boolean;
+	url?: string;
+}
+
+export interface LandingStoryCopy {
+	storyId: string;
+	text: string;
+	title: string;
+}
+
+export enum LandingStoryKindEnum {
+	District = 'district',
+	Street = 'street',
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Praise = 'praise',
+	Openings = 'openings',
+	Place = 'place',
+	Crowd = 'crowd',
+	TopPost = 'top_post',
+	Climber = 'climber',
+}
+
+export enum LandingStoryPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
+export interface LandingTotals {
+	/** People, not accounts */
+	creators: number;
+	places: number;
+	/** Posts by others naming a place of the city */
+	posts: number;
+	views: number;
+}
 
 /**
  * One signal: its 0–1 value (`null` = unknown, counted at half), its weight and the raw inputs.
@@ -5071,15 +6466,16 @@ export type ListAccountsData = AdminListAccountsOutputDto;
 export enum ListAccountsParamsPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum ListAccountsParamsSortEnum {
-	HandleAsc = 'handle:asc',
-	HandleDesc = 'handle:desc',
-	FollowersAsc = 'followers:asc',
-	FollowersDesc = 'followers:desc',
 	ScoreAsc = 'score:asc',
 	ScoreDesc = 'score:desc',
+	FollowersAsc = 'followers:asc',
+	FollowersDesc = 'followers:desc',
+	HandleAsc = 'handle:asc',
+	HandleDesc = 'handle:desc',
 	MonthPostsAsc = 'monthPosts:asc',
 	MonthPostsDesc = 'monthPosts:desc',
 	MonthViewsAsc = 'monthViews:asc',
@@ -5127,6 +6523,8 @@ export type ListBrandCompetitorSuggestionsData = AdminCompetitorSuggestionOutput
 
 export type ListBrandCompetitorsData = AdminCompetitorOutputDto[];
 
+export type ListBrandReportConfigsData = AdminReportConfigOutputDto[];
+
 export type ListBrandSuggestionsData = AdminBrandSuggestionOutputDto[];
 
 export type ListBrandsData = AdminListBrandsOutputDto;
@@ -5150,12 +6548,12 @@ export enum ListBrandsParamsSortEnum {
 	ViewsDesc = 'views:desc',
 	PostsAsc = 'posts:asc',
 	PostsDesc = 'posts:desc',
+	ChangeAsc = 'change:asc',
+	ChangeDesc = 'change:desc',
 	BranchesAsc = 'branches:asc',
 	BranchesDesc = 'branches:desc',
 	ReviewsAsc = 'reviews:asc',
 	ReviewsDesc = 'reviews:desc',
-	ChangeAsc = 'change:asc',
-	ChangeDesc = 'change:desc',
 	FollowUpAsc = 'followUp:asc',
 	FollowUpDesc = 'followUp:desc',
 }
@@ -5178,6 +6576,8 @@ export type ListCityDistrictSuggestionsData = AdminCityDistrictSuggestionsOutput
 
 export type ListCityEventsData = AdminListCityEventsOutputDto;
 
+export type ListCityHashtagSuggestionsData = AdminCityHashtagSuggestionsOutputDto;
+
 export type ListCitySourcesData = AdminListCitySourcesOutputDto;
 
 export type ListCreatorsData = AdminListCreatorsOutputDto;
@@ -5185,6 +6585,7 @@ export type ListCreatorsData = AdminListCreatorsOutputDto;
 export enum ListCreatorsParamsPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum ListCreatorsParamsSortEnum {
@@ -5227,6 +6628,8 @@ export enum ListEntriesParamsSortEnum {
 }
 
 export type ListEntriesResult = AdminListBlogEntriesOutputDto;
+
+export type ListLlmBacklogsData = AdminLlmBacklogsOutputDto;
 
 export type ListMentionsData = AdminListMentionsOutputDto;
 
@@ -5286,6 +6689,7 @@ export type ListPortalCreatorsData = PortalCreatorsOutputDto;
 export enum ListPortalCreatorsParamsPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export type ListPortalPostsData = PortalPostsOutputDto;
@@ -5293,6 +6697,7 @@ export type ListPortalPostsData = PortalPostsOutputDto;
 export enum ListPortalPostsParamsPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export type ListPortalReportsData = PortalReportsOutputDto;
@@ -5307,15 +6712,15 @@ export enum ListPortalReviewsParamsPlatformEnum {
 
 /** A topic the review praised or criticised */
 export enum ListPortalReviewsParamsTopicEnum {
-	Other = 'other',
 	Food = 'food',
-	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
+	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
+	Other = 'other',
 }
 
 export type ListPostCommentsData = AdminPostCommentsOutputDto;
@@ -5325,6 +6730,7 @@ export type ListPostsData = AdminListPostsOutputDto;
 export enum ListPostsParamsPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum ListPostsParamsSortEnum {
@@ -5360,6 +6766,8 @@ export enum ListProspectsParamsStageEnum {
 }
 
 export type ListReportSharesData = AdminReportShareOutputDto[];
+
+export type ListReportTemplatesData = AdminReportTemplateOutputDto[];
 
 export type ListReportsData = AdminListReportsOutputDto;
 
@@ -5536,6 +6944,37 @@ export interface MonthContext {
 	weekends: number;
 }
 
+export interface NewsletterSubscribeInputDto {
+	/** @maxLength 60 */
+	citySlug: string;
+	/**
+	 * @format email
+	 * @maxLength 254
+	 */
+	email: string;
+}
+
+/** What the confirm and unsubscribe pages show: the address and the city edition. */
+export interface NewsletterSubscriptionOutputDto {
+	city: {
+		name: string;
+		slug: string;
+	};
+	/** @format date-time */
+	confirmedAt?: string;
+	email: string;
+	/** @format date-time */
+	unsubscribedAt?: string;
+}
+
+export interface NewsletterTokenInputDto {
+	/**
+	 * @minLength 10
+	 * @maxLength 64
+	 */
+	token: string;
+}
+
 /** Every switch with its state: what `GET /auth/me` returns. */
 export interface NotificationPreferences {
 	alerts: {
@@ -5567,7 +7006,7 @@ export interface OkResponseO1 {
 }
 
 /** Construct a type with the properties of T except for those in type K. */
-export interface OmitAdminSocialPostListItemOutputDtomentionsaccount {
+export interface OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount {
 	/** @format date-time */
 	analysedAt?: string;
 	author?: string;
@@ -5579,20 +7018,20 @@ export interface OmitAdminSocialPostListItemOutputDtomentionsaccount {
 	isPromotional?: boolean;
 	likes: number;
 	locationName?: string;
-	platform: OmitAdminSocialPostListItemOutputDtomentionsaccountPlatformEnum;
+	platform: OmitAdminSocialPostListItemOutputDtomentionsfoundByaccountPlatformEnum;
 	/** @format date-time */
 	postedAt: string;
 	saves: number;
 	shares: number;
-	source?: string;
 	text?: string;
 	url: string;
 	views: number;
 }
 
-export enum OmitAdminSocialPostListItemOutputDtomentionsaccountPlatformEnum {
+export enum OmitAdminSocialPostListItemOutputDtomentionsfoundByaccountPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 /** One day's opening hours as Google words them: `{ day: 'Monday', hours: '5 to 11 PM' }`. */
@@ -5617,7 +7056,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@948'?: PartialOmitCredentialVerificationRequestuserOptionalProps948Enum;
+	'__@OptionalProps@1112'?: PartialOmitCredentialVerificationRequestuserOptionalProps1112Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -5643,7 +7082,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps948Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1112Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -5666,6 +7105,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	BUILD_REPORTS?: number;
 	EXTRACT_MENTIONS?: number;
 	FILL_COMPETITORS?: number;
+	FIND_OWN_ACCOUNTS?: number;
 	LOOKUP_OSM_PLACES?: number;
 	LOOKUP_VENUES?: number;
 	MATCH_MENTIONS?: number;
@@ -5674,12 +7114,14 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SAMPLE_BUSYNESS?: number;
 	SAMPLE_RESERVATIONS?: number;
 	SCORE_LEADS?: number;
+	SCRAPE_ACCOUNTS?: number;
+	SCRAPE_ACCOUNTS_RECENT?: number;
+	SCRAPE_BLOGS?: number;
 	SCRAPE_COMMENTS?: number;
 	SCRAPE_DELIVERY?: number;
 	SCRAPE_INSTAGRAM?: number;
 	SCRAPE_INSTAGRAM_RECENT?: number;
 	SCRAPE_INSTAGRAM_REELS?: number;
-	SCRAPE_OWN_ACCOUNTS?: number;
 	SCRAPE_PRESS?: number;
 	SCRAPE_REVIEWS?: number;
 	SCRAPE_TIKTOK?: number;
@@ -5688,6 +7130,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SCRAPE_VENUE_SOCIAL?: number;
 	SEARCH_BRANCHES?: number;
 	SEARCH_INTEREST?: number;
+	SNAPSHOT_RATINGS?: number;
 	SYNC_OSM_PLACES?: number;
 	TRACK_SEARCH_RANKS?: number;
 	WATCH_REVIEWS?: number;
@@ -5724,6 +7167,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	FIND_OWN_ACCOUNTS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	LOOKUP_OSM_PLACES?: number;
 	/**
 	 * @min 0
@@ -5764,6 +7212,21 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	SCRAPE_ACCOUNTS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	SCRAPE_ACCOUNTS_RECENT?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	SCRAPE_BLOGS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	SCRAPE_COMMENTS?: number;
 	/**
 	 * @min 0
@@ -5785,11 +7248,6 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	SCRAPE_INSTAGRAM_REELS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	SCRAPE_OWN_ACCOUNTS?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -5830,6 +7288,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	SEARCH_INTEREST?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	SNAPSHOT_RATINGS?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -5867,7 +7330,7 @@ export interface PeopleAlsoSearchPlace {
 }
 
 /** From T, pick a set of properties whose keys are in the union K */
-export interface PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyRate {
+export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars {
 	avgStars?: number;
 	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
@@ -5881,7 +7344,7 @@ export interface PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyR
 }
 
 /** From T, pick a set of properties whose keys are in the union K */
-export interface PickReportReviewStatscountwrittenavgStarsreplyRate {
+export interface PickReportReviewStatscountwrittenreplyRateavgStars {
 	avgStars?: number;
 	count: number;
 	/** Share of the month's reviews the owner answered, 0–1 */
@@ -6055,6 +7518,7 @@ export interface PortalCreatorOutputDto {
 export enum PortalCreatorOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface PortalCreatorsOutputDto {
@@ -6071,6 +7535,7 @@ export interface PortalListCreatorsInputDto {
 export enum PortalListCreatorsInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface PortalListPostsInputDto {
@@ -6089,6 +7554,7 @@ export interface PortalListPostsInputDto {
 export enum PortalListPostsInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface PortalListReviewsInputDto {
@@ -6129,15 +7595,15 @@ export enum PortalListReviewsInputDtoPlatformEnum {
 
 /** A topic the review praised or criticised */
 export enum PortalListReviewsInputDtoTopicEnum {
-	Other = 'other',
 	Food = 'food',
-	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
+	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
+	Other = 'other',
 }
 
 export interface PortalMarkReviewRepliedInputDto {
@@ -6236,7 +7702,8 @@ export interface PortalPostOutputDto {
 	author?: string;
 	authorFans?: number;
 	comments: number;
-	dishes: FeedbackDish[];
+	/** What it says about the brand, as feedback rows */
+	feedback: FeedbackPointOutputDto[];
 	id: string;
 	likes: number;
 	/** Posted by the brand's own account */
@@ -6260,11 +7727,12 @@ export interface PortalPostOutputDto {
 export enum PortalPostOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export enum PortalPostOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -6283,6 +7751,8 @@ export interface PortalReportListItemOutputDto {
 	headline: string;
 	id: string;
 	month: string;
+	/** Which of the brand's reports it is ("Full report", "Reviews"): a month may have several */
+	name: string;
 	postCount: number;
 	reviewCount: number;
 	title: string;
@@ -6303,6 +7773,11 @@ export interface PortalReportOutputDto {
 		name: string;
 		slug: string;
 	};
+	/** The brand's configuration it was built for; absent for a default report or once deleted */
+	config?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	createdAt: string;
 	/**
@@ -6314,8 +7789,17 @@ export interface PortalReportOutputDto {
 	highlights: ReportHighlights;
 	id: string;
 	month: string;
+	/** Its configuration's (or the default template's) name at the build */
+	name: string;
 	postCount: number;
 	reviewCount: number;
+	/** What it shows, in order: its type's sections as they were at the build */
+	sections: ReportSectionDto[];
+	/** The template behind it; absent for a custom configuration or once the template is deleted */
+	template?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	updatedAt: string;
 }
@@ -6355,15 +7839,15 @@ export enum PortalReviewFiltersOutputDtoPlatformEnum {
 }
 
 export enum PortalReviewFiltersOutputDtoTopicEnum {
-	Other = 'other',
 	Food = 'food',
-	Price = 'price',
 	Drinks = 'drinks',
 	Service = 'service',
 	Vibe = 'vibe',
+	Price = 'price',
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
+	Other = 'other',
 }
 
 /** A Google or TripAdvisor review as the portal lists it. The entity stores no reviewer names. */
@@ -6372,7 +7856,8 @@ export interface PortalReviewOutputDto {
 	answered: boolean;
 	/** The branch it is about, for a chain's portal (which shows every branch's reviews) */
 	branch?: string;
-	complaints?: FeedbackPoint[];
+	/** What it says, as feedback rows (none before it is analysed) */
+	feedback: FeedbackPointOutputDto[];
 	id: string;
 	language?: string;
 	/**
@@ -6384,7 +7869,6 @@ export interface PortalReviewOutputDto {
 	/** @format date-time */
 	ownerResponseAt?: string;
 	platform: PortalReviewOutputDtoPlatformEnum;
-	praise?: FeedbackPoint[];
 	/** @format date-time */
 	publishedAt: string;
 	/** A reply ready to post, in the review's language: unanswered written reviews only, when drafted */
@@ -6402,8 +7886,8 @@ export enum PortalReviewOutputDtoPlatformEnum {
 }
 
 export enum PortalReviewOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -6537,8 +8021,8 @@ export interface PortalSeriesOwnAccountOutputDto {
 }
 
 export enum PortalSeriesOwnAccountOutputDtoPlatformEnum {
-	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Tiktok = 'tiktok',
 }
 
 /** The month's Google reviews. */
@@ -6661,15 +8145,21 @@ export interface PostGroupOutcome {
 
 export type PreviewEntryData = BlogEntryOutputDto;
 
+export type PreviewReportDataData = ReportData;
+
 export type PublishCityHighlightData = AdminCityHighlightOutputDto;
 
 export type PublishFoodTrendsData = AdminFoodTrendsReportOutputDto;
+
+export type PublishLandingEditionData = AdminLandingEditionOutputDto;
 
 export type PullFoodTrendsSearchesData = AdminFoodTrendsReportOutputDto;
 
 export type ReadAllNotificationsData = OkResponse;
 
 export type ReadNotificationData = OkResponse;
+
+export type RecheckDishLinksData = AdminRecheckDishLinksOutputDto;
 
 /** Construct a type with a set of properties K of type T */
 export interface RecordAdminBrandSegmentnumber {
@@ -6722,6 +8212,8 @@ export interface RefreshTokenOutputDto {
 }
 
 export type RegisterViewData = OkResponse;
+
+export type RelinkFoodTopicsData = AdminRelinkFoodTopicsOutputDto;
 
 export type RemoveBrandAccountData = AdminAccountOutputDto[];
 
@@ -6790,7 +8282,7 @@ export interface ReportBranch {
 	/** The last six months' closing snapshots up to the report month, oldest first */
 	ratingTrend: ReportRatingPoint[];
 	/** From T, pick a set of properties whose keys are in the union K */
-	reviews: PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyRate;
+	reviews: PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars;
 	reviewsCount?: number;
 	/** All-time Google review count per star, as of the build; absent when unknown */
 	reviewsDistribution?: ReviewsDistribution;
@@ -6847,6 +8339,82 @@ export interface ReportBusynessWeek {
 	week: string;
 }
 
+/** The changes guests noticed about one thing (a feedback theme), across the month's reviews. */
+export interface ReportChangeTheme {
+	/** How they put it, each spelling once */
+	details: string[];
+	label: string;
+	/** Reviews noticing it, each once */
+	reviews: number;
+	/** Absent while the changes are not filed yet */
+	theme?: ReportChangeThemeThemeEnum;
+}
+
+/** Absent while the changes are not filed yet */
+export enum ReportChangeThemeThemeEnum {
+	Language = 'language',
+	Taste = 'taste',
+	Other = 'other',
+	Freshness = 'freshness',
+	Temperature = 'temperature',
+	Cooking = 'cooking',
+	Seasoning = 'seasoning',
+	PortionSize = 'portion_size',
+	IngredientQuality = 'ingredient_quality',
+	MenuVariety = 'menu_variety',
+	Availability = 'availability',
+	QualityChange = 'quality_change',
+	Authenticity = 'authenticity',
+	Presentation = 'presentation',
+	FoodOther = 'food_other',
+	DrinkQuality = 'drink_quality',
+	DrinkSelection = 'drink_selection',
+	DrinksOther = 'drinks_other',
+	Friendliness = 'friendliness',
+	Attentiveness = 'attentiveness',
+	SpeedOfService = 'speed_of_service',
+	OrderAccuracy = 'order_accuracy',
+	Advice = 'advice',
+	ReservationHandling = 'reservation_handling',
+	ComplaintHandling = 'complaint_handling',
+	TakeawayHandling = 'takeaway_handling',
+	StaffChange = 'staff_change',
+	ServiceOther = 'service_other',
+	Atmosphere = 'atmosphere',
+	Noise = 'noise',
+	Space = 'space',
+	Interior = 'interior',
+	OutdoorSeating = 'outdoor_seating',
+	Crowding = 'crowding',
+	Location = 'location',
+	FamilyPets = 'family_pets',
+	VibeOther = 'vibe_other',
+	PriceLevel = 'price_level',
+	ValueForMoney = 'value_for_money',
+	PriceIncrease = 'price_increase',
+	ExtraCharges = 'extra_charges',
+	PriceOther = 'price_other',
+	CashOnly = 'cash_only',
+	CardPayment = 'card_payment',
+	Tipping = 'tipping',
+	Billing = 'billing',
+	PaymentOther = 'payment_other',
+	Queue = 'queue',
+	WaitForFood = 'wait_for_food',
+	WaitForTable = 'wait_for_table',
+	WaitOther = 'wait_other',
+	Toilets = 'toilets',
+	DiningArea = 'dining_area',
+	FoodHygiene = 'food_hygiene',
+	CleanlinessOther = 'cleanliness_other',
+	OpeningHours = 'opening_hours',
+	Accessibility = 'accessibility',
+	OwnershipChange = 'ownership_change',
+	Renovation = 'renovation',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
+}
+
 /** "What the city is talking about": its rising cuisines and dishes and the venue's standing. */
 export interface ReportCitySection {
 	baseline: {
@@ -6871,6 +8439,27 @@ export interface ReportCitySection {
 	risingDishes: ReportTrendRow[];
 	/** Google search interest against mention share per cuisine (`SEARCH_INTEREST`); absent when not pulled */
 	searches?: SearchDelta[];
+	/**
+	 * The complaint themes of the brand's written reviews against the month's report venues
+	 * (`cityThemes`), the biggest gap first; absent below 5 written reviews or 5 peers, while a
+	 * point is unfiled, and in reports built before it
+	 */
+	themes?: ReportCityTheme[];
+}
+
+/** A complaint theme of the brand's month against the month's report venues of its city */
+export interface ReportCityTheme {
+	key: string;
+	label: string;
+	/** 0–1: the median share at the other report venues with 5+ written reviews */
+	median: number;
+	/** The brand's written reviews raising it */
+	reviews: number;
+	topic: string;
+	/** 0–1 of the brand's written reviews */
+	venueShare: number;
+	/** How many report venues the median is over */
+	venues: number;
 }
 
 /** One post's comments by what they say. */
@@ -6940,7 +8529,7 @@ export interface ReportCompetitor {
 	/** All-time Google figures */
 	rating?: number;
 	/** From T, pick a set of properties whose keys are in the union K */
-	reviews: PickReportReviewStatscountpraisecomplaintswrittenavgStarsreplyRate;
+	reviews: PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars;
 	reviewsCount?: number;
 	/** Whether we scrape its Google reviews at all: without, `reviews` is empty, not zero */
 	reviewsTracked: boolean;
@@ -6973,8 +8562,9 @@ export interface ReportCreator {
 }
 
 export enum ReportCreatorPlatformEnum {
-	Tiktok = 'tiktok',
+	Blog = 'blog',
 	Instagram = 'instagram',
+	Tiktok = 'tiktok',
 }
 
 /** The venue's kind of food and where it stands among the month's venues of that kind. */
@@ -7082,6 +8672,92 @@ export interface ReportDishCount {
 	positive: number;
 }
 
+/**
+ * A praise or complaint point as a report keeps it: the report's own copy, built from the feedback
+ * rows at build time, so a stored report never moves with them.
+ */
+export interface ReportFeedbackPoint {
+	detail: string;
+	theme?: ReportFeedbackPointThemeEnum;
+	topic: ReportFeedbackPointTopicEnum;
+}
+
+export enum ReportFeedbackPointThemeEnum {
+	Language = 'language',
+	Taste = 'taste',
+	Other = 'other',
+	Freshness = 'freshness',
+	Temperature = 'temperature',
+	Cooking = 'cooking',
+	Seasoning = 'seasoning',
+	PortionSize = 'portion_size',
+	IngredientQuality = 'ingredient_quality',
+	MenuVariety = 'menu_variety',
+	Availability = 'availability',
+	QualityChange = 'quality_change',
+	Authenticity = 'authenticity',
+	Presentation = 'presentation',
+	FoodOther = 'food_other',
+	DrinkQuality = 'drink_quality',
+	DrinkSelection = 'drink_selection',
+	DrinksOther = 'drinks_other',
+	Friendliness = 'friendliness',
+	Attentiveness = 'attentiveness',
+	SpeedOfService = 'speed_of_service',
+	OrderAccuracy = 'order_accuracy',
+	Advice = 'advice',
+	ReservationHandling = 'reservation_handling',
+	ComplaintHandling = 'complaint_handling',
+	TakeawayHandling = 'takeaway_handling',
+	StaffChange = 'staff_change',
+	ServiceOther = 'service_other',
+	Atmosphere = 'atmosphere',
+	Noise = 'noise',
+	Space = 'space',
+	Interior = 'interior',
+	OutdoorSeating = 'outdoor_seating',
+	Crowding = 'crowding',
+	Location = 'location',
+	FamilyPets = 'family_pets',
+	VibeOther = 'vibe_other',
+	PriceLevel = 'price_level',
+	ValueForMoney = 'value_for_money',
+	PriceIncrease = 'price_increase',
+	ExtraCharges = 'extra_charges',
+	PriceOther = 'price_other',
+	CashOnly = 'cash_only',
+	CardPayment = 'card_payment',
+	Tipping = 'tipping',
+	Billing = 'billing',
+	PaymentOther = 'payment_other',
+	Queue = 'queue',
+	WaitForFood = 'wait_for_food',
+	WaitForTable = 'wait_for_table',
+	WaitOther = 'wait_other',
+	Toilets = 'toilets',
+	DiningArea = 'dining_area',
+	FoodHygiene = 'food_hygiene',
+	CleanlinessOther = 'cleanliness_other',
+	OpeningHours = 'opening_hours',
+	Accessibility = 'accessibility',
+	OwnershipChange = 'ownership_change',
+	Renovation = 'renovation',
+	DeliveryPlatform = 'delivery_platform',
+	Amenities = 'amenities',
+}
+
+export enum ReportFeedbackPointTopicEnum {
+	Food = 'food',
+	Drinks = 'drinks',
+	Service = 'service',
+	Vibe = 'vibe',
+	Price = 'price',
+	Payment = 'payment',
+	Wait = 'wait',
+	Cleanliness = 'cleanliness',
+	Other = 'other',
+}
+
 export interface ReportHighlights {
 	actions: ReportPoint[];
 	headline: string;
@@ -7105,8 +8781,9 @@ export interface ReportNearbyCreator {
 }
 
 export enum ReportNearbyCreatorPlatformEnum {
-	Tiktok = 'tiktok',
+	Blog = 'blog',
 	Instagram = 'instagram',
+	Tiktok = 'tiktok',
 }
 
 export interface ReportNeighbour {
@@ -7138,10 +8815,10 @@ export interface ReportNeighbourhoodChange {
 }
 
 export enum ReportNeighbourhoodChangeKindEnum {
+	Reopened = 'reopened',
 	Opened = 'opened',
 	TemporarilyClosed = 'temporarily_closed',
 	PermanentlyClosed = 'permanently_closed',
-	Reopened = 'reopened',
 }
 
 /** `posts`: an opening only a matched post announced (`Mention.isNewOpening`); absent when a scrape saw it */
@@ -7199,8 +8876,8 @@ export interface ReportOwnAccount {
 }
 
 export enum ReportOwnAccountPlatformEnum {
-	Tiktok = 'tiktok',
 	Instagram = 'instagram',
+	Tiktok = 'tiktok',
 }
 
 /** Google's busiest hour, from the mean of the month's samples. */
@@ -7236,29 +8913,45 @@ export interface ReportPoint {
 export interface ReportPost {
 	author?: string;
 	authorFans?: number;
-	complaints: FeedbackPoint[];
-	dishes: FeedbackDish[];
+	complaints: ReportFeedbackPoint[];
+	dishes: ReportPostDish[];
 	engagements: number;
 	platform: ReportPostPlatformEnum;
 	postId: string;
 	postedAt: string;
-	praise: FeedbackPoint[];
+	praise: ReportFeedbackPoint[];
 	promotional: boolean;
 	sentiment: ReportPostSentimentEnum;
 	summary: string;
+	/** A blog article's headline; absent for TikTok and Instagram, and in reports built before it was kept */
+	title?: string;
 	url: string;
 	views: number;
 	visited: boolean;
 }
 
+/** A dish a post names, with how it came across, as a report keeps it */
+export interface ReportPostDish {
+	name: string;
+	sentiment: ReportPostDishSentimentEnum;
+}
+
+export enum ReportPostDishSentimentEnum {
+	Mixed = 'mixed',
+	Positive = 'positive',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
 export enum ReportPostPlatformEnum {
-	Tiktok = 'tiktok',
+	Blog = 'blog',
 	Instagram = 'instagram',
+	Tiktok = 'tiktok',
 }
 
 export enum ReportPostSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -7294,7 +8987,7 @@ export interface ReportPreviousMonth {
 	actions?: ReportPoint[];
 	month: string;
 	/** Absent when no review of that month is stored: reviews were not scraped for it */
-	reviews?: PickReportReviewStatscountwrittenavgStarsreplyRate;
+	reviews?: PickReportReviewStatscountwrittenreplyRateavgStars;
 	/** From T, pick a set of properties whose keys are in the union K */
 	social: PickReportSocialStatsviewspostCountcreatorsengagementspromotional;
 }
@@ -7403,7 +9096,7 @@ export interface ReportReplyDraft {
 }
 
 export interface ReportReviewGroup {
-	complaintDetails: FeedbackPoint[];
+	complaintDetails: ReportFeedbackPoint[];
 	/** Construct a type with a set of properties K of type T */
 	complaintThemes?: Recordstringnumber;
 	/** Construct a type with a set of properties K of type T */
@@ -7412,7 +9105,7 @@ export interface ReportReviewGroup {
 	/** Construct a type with a set of properties K of type T */
 	praise: Recordstringnumber;
 	/** What they said, the first few points of the group */
-	praiseDetails: FeedbackPoint[];
+	praiseDetails: ReportFeedbackPoint[];
 	/**
 	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
@@ -7469,6 +9162,8 @@ export interface ReportReviewStats {
 	avgStars?: number;
 	/** Google and TripAdvisor side by side (the counts above cover both); absent without a TripAdvisor side */
 	byPlatform?: ReportReviewPlatform[];
+	/** The same changes by what changed (`groupChanges`): absent from reports built before them */
+	changeThemes?: ReportChangeTheme[];
 	/** Changes a reviewer noticed, one entry per review */
 	changes: {
 		changes: string[];
@@ -7531,6 +9226,68 @@ export interface ReportSearchRank {
 		rating?: number;
 		reviewsCount?: number;
 	}[];
+}
+
+/**
+ * A report section as the API reads and writes it: its kind and the settings that kind has
+ * (the others absent). One flat shape for every kind, so the client gets one type; the server
+ * makes it the kind's own class (`toSections`).
+ */
+export interface ReportSectionDto {
+	kind: ReportSectionDtoKindEnum;
+	/** cover: the figure tiles, in order */
+	kpis?: ReportSectionDtoKpisEnum[];
+	/** posts: top posts shown as cards; media: blog articles shown; dishes: dishes listed */
+	limit?: number;
+	/** creators: also the creators who covered the neighbours but not the brand */
+	nearby?: boolean;
+	/** places: each place's blocks, in order */
+	parts?: ReportSectionDtoPartsEnum[];
+	/** posts: the platforms it lists and counts; empty is every platform */
+	platforms?: ReportSectionDtoPlatformsEnum[];
+}
+
+export enum ReportSectionDtoKindEnum {
+	Cover = 'cover',
+	Stars = 'stars',
+	Branches = 'branches',
+	Competitors = 'competitors',
+	Actions = 'actions',
+	Posts = 'posts',
+	OwnAccounts = 'own_accounts',
+	Comments = 'comments',
+	Press = 'press',
+	Media = 'media',
+	Creators = 'creators',
+	Reviews = 'reviews',
+	Replies = 'replies',
+	Dishes = 'dishes',
+	Places = 'places',
+	Patterns = 'patterns',
+	City = 'city',
+	Appendix = 'appendix',
+}
+
+export enum ReportSectionDtoKpisEnum {
+	Views = 'views',
+	Creators = 'creators',
+	Interactions = 'interactions',
+	Stars = 'stars',
+	Reviews = 'reviews',
+	Answered = 'answered',
+}
+
+export enum ReportSectionDtoPartsEnum {
+	Busyness = 'busyness',
+	Prices = 'prices',
+	Neighbourhood = 'neighbourhood',
+	SearchRanks = 'search_ranks',
+}
+
+export enum ReportSectionDtoPlatformsEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
 }
 
 export interface ReportSentimentCounts {
@@ -7596,6 +9353,8 @@ export type RevokeReportShareData = AdminReportShareOutputDto;
 
 export type RevokeSessionData = OkResponse;
 
+export type RunLlmBacklogsData = AdminRunLlmBacklogsOutputDto;
+
 export type SearchBrandBranchesData = any;
 
 /** A topic's Google search interest and mention share, the month against the one before. */
@@ -7618,6 +9377,8 @@ export type SearchPortalCompetitorsData = PortalCompetitorSearchOutputDto;
 
 export type SendReportData = AdminReportOutputDto;
 
+export type SetDefaultReportTemplateData = AdminReportTemplateOutputDto;
+
 export type SetIgnoredWordData = any;
 
 /** A report opened through a private link: the same document the admin sees, without its delivery record. */
@@ -7633,6 +9394,11 @@ export interface SharedReportOutputDto {
 		name: string;
 		slug: string;
 	};
+	/** The brand's configuration it was built for; absent for a default report or once deleted */
+	config?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	createdAt: string;
 	/**
@@ -7644,8 +9410,17 @@ export interface SharedReportOutputDto {
 	highlights: ReportHighlights;
 	id: string;
 	month: string;
+	/** Its configuration's (or the default template's) name at the build */
+	name: string;
 	postCount: number;
 	reviewCount: number;
+	/** What it shows, in order: its type's sections as they were at the build */
+	sections: ReportSectionDto[];
+	/** The template behind it; absent for a custom configuration or once the template is deleted */
+	template?: {
+		id: string;
+		name: string;
+	};
 	/** @format date-time */
 	updatedAt: string;
 }
@@ -7713,6 +9488,8 @@ export type SplitAccountData = AdminSplitAccountOutputDto;
 export type SplitBrandData = AdminBrandOutputDto;
 
 export type StartPipelineRunData = AdminPipelineRunOutputDto;
+
+export type SubscribeToNewsletterData = any;
 
 export type SuggestCitySourcesData = AdminSuggestCitySourcesOutputDto;
 
@@ -7875,7 +9652,11 @@ export type UnpublishCityHighlightData = AdminCityHighlightOutputDto;
 
 export type UnpublishFoodTrendsData = AdminFoodTrendsReportOutputDto;
 
+export type UnpublishLandingEditionData = AdminLandingEditionOutputDto;
+
 export type UnreadNotificationData = OkResponse;
+
+export type UnsubscribeFromNewsletterData = NewsletterSubscriptionOutputDto;
 
 export interface UpdateBlogEntryInputDto {
 	content?: string;
@@ -7902,9 +9683,13 @@ export type UpdateCitySourceData = AdminCitySourceOutputDto;
 
 export type UpdateCreatorData = AdminCreatorOutputDto;
 
+export type UpdateDishNameData = AdminUpdatedDishNameOutputDto;
+
 export type UpdateEntryData = AdminBlogEntryOutputDto;
 
 export type UpdateFoodTopicData = AdminFoodTopicBaseOutputDto;
+
+export type UpdateHashtagData = AdminHashtagOutputDto;
 
 export type UpdateMeData = GetMeOutputDto;
 
@@ -7934,6 +9719,10 @@ export type UpdateMentionData = AdminMentionOutputDto;
 export type UpdatePortalSettingsData = PortalSettingsOutputDto;
 
 export type UpdateProspectData = AdminProspectOutputDto;
+
+export type UpdateReportConfigData = AdminReportConfigOutputDto;
+
+export type UpdateReportTemplateData = AdminReportTemplateOutputDto;
 
 export type UpdateTagData = BlogTagOutputDto;
 
@@ -8963,6 +10752,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description Tags the city doesn't scrape that keep coming up on its matched posts (three months, 3+ brands, 5+ posts): candidates to add, from the data, free. Nothing is saved.
+		 *
+		 * @name ListCityHashtagSuggestions
+		 * @request GET:/admin/cities/{id}/hashtag-suggestions
+		 * @response `200` `ListCityHashtagSuggestionsData`
+		 */
+		listCityHashtagSuggestions: (id: string, params: RequestParams = {}) =>
+			this.request<ListCityHashtagSuggestionsData, any>({
+				path: `/admin/cities/${id}/hashtag-suggestions`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description Asks the LLM for hashtags and searches (one call) and adds them as disabled, `suggested` sources for review; ones the city already has are skipped.
 		 *
 		 * @name SuggestCitySources
@@ -9677,6 +11481,159 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description After the dish pass's instruction changed: its links whose phrase doesn't name the dish go back to the `feedback-dish-links` backlog, which looks at them again within the day's allowance.
+		 *
+		 * @name RecheckDishLinks
+		 * @request POST:/admin/feedback/dish-links/recheck
+		 * @response `201` `RecheckDishLinksData`
+		 */
+		recheckDishLinks: (params: RequestParams = {}) =>
+			this.request<RecheckDishLinksData, any>({
+				path: `/admin/feedback/dish-links/recheck`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description After editing the vocabulary: `realign` (topics follow their theme, points of a removed theme go back to filing), then files up to `limit` unfiled points. Free (the LLM allowance). The daily LLM backlog `feedback-themes` files the rest on its own; this is for a city that can't wait.
+		 *
+		 * @name FileFeedbackThemes
+		 * @request POST:/admin/feedback-themes/backfill
+		 * @response `201` `FileFeedbackThemesData`
+		 */
+		fileFeedbackThemes: (data: AdminFileFeedbackThemesInputDto, params: RequestParams = {}) =>
+			this.request<FileFeedbackThemesData, any>({
+				path: `/admin/feedback-themes/backfill`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description How many venues had a waiting complaint in the city's month, and how long the stated waits were
+		 *
+		 * @name GetWaitComplaints
+		 * @request GET:/admin/feedback/wait-complaints
+		 * @response `200` `GetWaitComplaintsData`
+		 */
+		getWaitComplaints: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				month: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetWaitComplaintsData, any>({
+				path: `/admin/feedback/wait-complaints`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The city's dish names with the food topic each points at, who decided it, and the agent's suggested topics for those without one (the Trends "Dish names" tab)
+		 *
+		 * @name GetDishNames
+		 * @request GET:/admin/dish-names
+		 * @response `200` `GetDishNamesData`
+		 */
+		getDishNames: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * @min 1
+				 * @max 200
+				 */
+				limit?: number;
+				/** @min 0 */
+				offset?: number;
+				/**
+				 * Part of the name
+				 * @maxLength 100
+				 */
+				q?: string;
+				/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
+				status?: GetDishNamesParamsStatusEnum;
+				/**
+				 * Only the names the agent suggested this topic for
+				 * @maxLength 100
+				 */
+				suggestion?: string;
+				/**
+				 * Only the names of this topic
+				 * @maxLength 64
+				 */
+				topicKey?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetDishNamesData, any>({
+				path: `/admin/dish-names`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description An admin's topic for a name (or none, or back to automatic); its feedback rows follow at once
+		 *
+		 * @name UpdateDishName
+		 * @request PATCH:/admin/dish-names/{id}
+		 * @response `200` `UpdateDishNameData`
+		 */
+		updateDishName: (
+			id: number,
+			data: AdminUpdateDishNameInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<UpdateDishNameData, any>({
+				path: `/admin/dish-names/${id}`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Every registered LLM backlog in run order: what is left, the last seven days, the newest run
+		 *
+		 * @name ListLlmBacklogs
+		 * @request GET:/admin/llm-backlogs
+		 * @response `200` `ListLlmBacklogsData`
+		 */
+		listLlmBacklogs: (params: RequestParams = {}) =>
+			this.request<ListLlmBacklogsData, any>({
+				path: `/admin/llm-backlogs`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Queues the daily drain now; it goes on within what is left of today's budget
+		 *
+		 * @name RunLlmBacklogs
+		 * @request POST:/admin/llm-backlogs/run
+		 * @response `201` `RunLlmBacklogsData`
+		 */
+		runLlmBacklogs: (params: RequestParams = {}) =>
+			this.request<RunLlmBacklogsData, any>({
+				path: `/admin/llm-backlogs/run`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description Every food topic with the city's mentions and venues on it, and the city's unmapped cuisine keys.
 		 *
 		 * @name GetFoodTopics
@@ -9718,10 +11675,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Dismisses an unrecognised word (no kind of food to map), or brings it back.
+		 * @description Queues the re-link of everything stored against food topics (`FoodTopicRelinkJob`: mentions, menu items, feedback dishes, then every city's venue tags). A topic or alias change queues it on its own; this is for a first fill or after a change made outside the admin.
+		 *
+		 * @name RelinkFoodTopics
+		 * @request POST:/admin/food-topics/relink
+		 * @response `201` `RelinkFoodTopicsData`
+		 */
+		relinkFoodTopics: (params: RequestParams = {}) =>
+			this.request<RelinkFoodTopicsData, any>({
+				path: `/admin/food-topics/relink`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
 		 *
 		 * @name SetIgnoredWord
-		 * @summary Dismisses an unrecognised word (no kind of food to map), or brings it back
 		 * @request PUT:/admin/food-topics/ignored-words
 		 * @response `200` `SetIgnoredWordData`
 		 */
@@ -9848,6 +11819,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @format uuid
 				 */
 				creatorId?: string;
+				/**
+				 * Only posts whose caption carries this hashtag (with or without #, any case)
+				 * @maxLength 200
+				 */
+				hashtag?: string;
 				/** Only posts with at least one mention matched to a brand. */
 				matchedOnly?: boolean;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -9937,6 +11913,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		updateMention: (id: number, data: AdminUpdateMentionInputDto, params: RequestParams = {}) =>
 			this.request<UpdateMentionData, any>({
 				path: `/admin/mentions/${id}`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Marks a tag as noise, so it is never suggested as a source, or takes that back.
+		 *
+		 * @name UpdateHashtag
+		 * @summary Marks a tag as noise, so it is never suggested as a source, or takes that back
+		 * @request PATCH:/admin/hashtags/{id}
+		 * @response `200` `UpdateHashtagData`
+		 */
+		updateHashtag: (id: number, data: AdminUpdateHashtagInputDto, params: RequestParams = {}) =>
+			this.request<UpdateHashtagData, any>({
+				path: `/admin/hashtags/${id}`,
 				method: 'PATCH',
 				body: data,
 				type: ContentType.Json,
@@ -10243,26 +12237,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Files stored praise and complaint points that have no theme yet (extracted before themes existed) under one each, reading the phrases alone, so past months count by theme without re-extracting posts. Up to `limit` reviews and `limit` mentions a call, newest first; free (the LLM allowance). Call it again until `remaining` is zero.
-		 *
-		 * @name BackfillFeedbackThemes
-		 * @request POST:/admin/feedback-themes/backfill
-		 * @response `201` `BackfillFeedbackThemesData`
-		 */
-		backfillFeedbackThemes: (
-			data: AdminBackfillFeedbackThemesInputDto,
-			params: RequestParams = {},
-		) =>
-			this.request<BackfillFeedbackThemesData, any>({
-				path: `/admin/feedback-themes/backfill`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
 		 * @description Reads a month's stored posts again for the "just opened" flag only (`MentionExtractionService.reflagOpenings`): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero.
 		 *
 		 * @name ReflagOpenings
@@ -10295,6 +12269,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @format uuid
 				 */
 				cityId?: string;
+				/**
+				 * Reports of this configuration
+				 * @format uuid
+				 */
+				configId?: string;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 				month?: string;
 				/** @min 1 */
@@ -10302,6 +12281,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				/** @min 1 */
 				size: number;
 				sort?: ListReportsParamsSortEnum;
+				/**
+				 * Reports made from this template
+				 * @format uuid
+				 */
+				templateId?: string;
 			},
 			params: RequestParams = {},
 		) =>
@@ -10314,10 +12298,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Builds (or rebuilds) a brand's report on its branches in a city, or (no `cityId`) in all its cities, for a month. Takes a few seconds: two LLM calls.
+		 * @description Builds (or rebuilds) a brand's reports on its branches in a city, or (no `cityId`) in all its cities, for a month: one per active configuration (or the default), or only `configId`'s. Returns the first. Takes a few seconds: LLM calls.
 		 *
 		 * @name BuildReport
-		 * @summary Builds (or rebuilds) a brand's report on its branches in a city, or (no `cityId`) in all its cities, for a month. Takes a few seconds: two LLM calls
 		 * @request POST:/admin/reports
 		 * @response `201` `BuildReportData`
 		 */
@@ -10378,6 +12361,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description A brand's report data as a rebuild would compute it now, without the LLM calls (no highlights, no reply drafts) and without saving anything: to check what a change to the data would move before rebuilding.
+		 *
+		 * @name PreviewReportData
+		 * @request POST:/admin/reports/preview
+		 * @response `201` `PreviewReportDataData`
+		 */
+		previewReportData: (data: AdminBuildReportInputDto, params: RequestParams = {}) =>
+			this.request<PreviewReportDataData, any>({
+				path: `/admin/reports/preview`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description Newest first, revoked ones included.
 		 *
 		 * @name ListReportShares
@@ -10420,6 +12420,200 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		revokeReportShare: (id: string, shareId: string, params: RequestParams = {}) =>
 			this.request<RevokeReportShareData, any>({
 				path: `/admin/reports/${id}/shares/${shareId}`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ListReportTemplates
+		 * @request GET:/admin/report-templates
+		 * @response `200` `ListReportTemplatesData`
+		 */
+		listReportTemplates: (params: RequestParams = {}) =>
+			this.request<ListReportTemplatesData, any>({
+				path: `/admin/report-templates`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name CreateReportTemplate
+		 * @request POST:/admin/report-templates
+		 * @response `201` `CreateReportTemplateData`
+		 */
+		createReportTemplate: (
+			data: AdminCreateReportTemplateInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<CreateReportTemplateData, any>({
+				path: `/admin/report-templates`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name GetReportTemplate
+		 * @request GET:/admin/report-templates/{id}
+		 * @response `200` `GetReportTemplateData`
+		 */
+		getReportTemplate: (id: string, params: RequestParams = {}) =>
+			this.request<GetReportTemplateData, any>({
+				path: `/admin/report-templates/${id}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Changes the template; configurations already copied from it keep their sections.
+		 *
+		 * @name UpdateReportTemplate
+		 * @summary Changes the template; configurations already copied from it keep their sections
+		 * @request PATCH:/admin/report-templates/{id}
+		 * @response `200` `UpdateReportTemplateData`
+		 */
+		updateReportTemplate: (
+			id: string,
+			data: AdminUpdateReportTemplateInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<UpdateReportTemplateData, any>({
+				path: `/admin/report-templates/${id}`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Deletes a template that is not the default; its configurations and reports keep theirs, the link null.
+		 *
+		 * @name DeleteReportTemplate
+		 * @summary Deletes a template that is not the default; its configurations and reports keep theirs, the link null
+		 * @request DELETE:/admin/report-templates/{id}
+		 * @response `200` `DeleteReportTemplateData`
+		 */
+		deleteReportTemplate: (id: string, params: RequestParams = {}) =>
+			this.request<DeleteReportTemplateData, any>({
+				path: `/admin/report-templates/${id}`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Makes it what brands without an active configuration get.
+		 *
+		 * @name SetDefaultReportTemplate
+		 * @summary Makes it what brands without an active configuration get
+		 * @request POST:/admin/report-templates/{id}/default
+		 * @response `201` `SetDefaultReportTemplateData`
+		 */
+		setDefaultReportTemplate: (id: string, params: RequestParams = {}) =>
+			this.request<SetDefaultReportTemplateData, any>({
+				path: `/admin/report-templates/${id}/default`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ListBrandReportConfigs
+		 * @request GET:/admin/brands/{brandId}/report-configs
+		 * @response `200` `ListBrandReportConfigsData`
+		 */
+		listBrandReportConfigs: (brandId: string, params: RequestParams = {}) =>
+			this.request<ListBrandReportConfigsData, any>({
+				path: `/admin/brands/${brandId}/report-configs`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A copy of a template (or a custom one, from the full layout) for the brand.
+		 *
+		 * @name CreateBrandReportConfig
+		 * @summary A copy of a template (or a custom one, from the full layout) for the brand
+		 * @request POST:/admin/brands/{brandId}/report-configs
+		 * @response `201` `CreateBrandReportConfigData`
+		 */
+		createBrandReportConfig: (
+			brandId: string,
+			data: AdminCreateReportConfigInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<CreateBrandReportConfigData, any>({
+				path: `/admin/brands/${brandId}/report-configs`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name GetReportConfig
+		 * @request GET:/admin/report-configs/{id}
+		 * @response `200` `GetReportConfigData`
+		 */
+		getReportConfig: (id: string, params: RequestParams = {}) =>
+			this.request<GetReportConfigData, any>({
+				path: `/admin/report-configs/${id}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Renames it, changes its sections or switches it on or off; built reports keep theirs.
+		 *
+		 * @name UpdateReportConfig
+		 * @summary Renames it, changes its sections or switches it on or off; built reports keep theirs
+		 * @request PATCH:/admin/report-configs/{id}
+		 * @response `200` `UpdateReportConfigData`
+		 */
+		updateReportConfig: (
+			id: string,
+			data: AdminUpdateReportConfigInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<UpdateReportConfigData, any>({
+				path: `/admin/report-configs/${id}`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Deletes it; its reports stay, the link null.
+		 *
+		 * @name DeleteReportConfig
+		 * @summary Deletes it; its reports stay, the link null
+		 * @request DELETE:/admin/report-configs/{id}
+		 * @response `200` `DeleteReportConfigData`
+		 */
+		deleteReportConfig: (id: string, params: RequestParams = {}) =>
+			this.request<DeleteReportConfigData, any>({
+				path: `/admin/report-configs/${id}`,
 				method: 'DELETE',
 				format: 'json',
 				...params,
@@ -10555,6 +12749,58 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description One feedback theme in the city's month: its complaints, praise and noticed changes, the picked side over six months, where it came up, by dish and by kind of food, the numbers its points state, and the sentences filed under it with their review or post, narrowed by the filters.
+		 *
+		 * @name GetThemeInsight
+		 * @request GET:/admin/theme-insights/{theme}
+		 * @response `200` `GetThemeInsightData`
+		 */
+		getThemeInsight: (
+			theme: string,
+			query: {
+				/**
+				 * Only this brand's sentences
+				 * @format uuid
+				 */
+				brandId?: string;
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * Only the sentences about one dish: a `dishes` row's key (`topic:<key>` or `dish:<key>`)
+				 * @maxLength 200
+				 */
+				dish?: string;
+				/**
+				 * Only the brands of one kind of food: a food topic's key
+				 * @maxLength 64
+				 */
+				food?: string;
+				/** Only reviews, or only posts */
+				kind?: GetThemeInsightParamsKindEnum;
+				/**
+				 * 50 when absent
+				 * @min 1
+				 * @max 200
+				 */
+				limit?: number;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				month: string;
+				/** @min 0 */
+				offset?: number;
+				/** Complaints when absent */
+				side?: GetThemeInsightParamsSideEnum;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetThemeInsightData, any>({
+				path: `/admin/theme-insights/${theme}`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * No description
 		 *
 		 * @name ListPipelineRuns
@@ -10634,6 +12880,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<ListApifyRunsData, any>({
 				path: `/admin/apify-runs`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name GetCreatorWatch
+		 * @request GET:/admin/creators/{id}/watch
+		 * @response `200` `GetCreatorWatchData`
+		 */
+		getCreatorWatch: (
+			id: string,
+			query?: {
+				/**
+				 * The report month whose brands decide (customers, top brands, rivals); the last finished month without
+				 * @pattern ^[0-9]{4}-[0-9]{2}$
+				 */
+				month?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetCreatorWatchData, any>({
+				path: `/admin/creators/${id}/watch`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -11153,6 +13425,116 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<UnpublishFoodTrendsData, any>({
 				path: `/admin/food-trends/${id}/unpublish`,
 				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The city's editions, newest first, and which one the page shows.
+		 *
+		 * @name GetLandingEditions
+		 * @summary The city's editions, newest first, and which one the page shows
+		 * @request GET:/admin/landing-editions
+		 * @response `200` `GetLandingEditionsData`
+		 */
+		getLandingEditions: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetLandingEditionsData, any>({
+				path: `/admin/landing-editions`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name GetLandingEdition
+		 * @request GET:/admin/landing-editions/{id}
+		 * @response `200` `GetLandingEditionResult`
+		 */
+		getLandingEdition: (id: string, params: RequestParams = {}) =>
+			this.request<GetLandingEditionResult, any>({
+				path: `/admin/landing-editions/${id}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Queues a build of today's edition (it replaces one built earlier today and publishes itself).
+		 *
+		 * @name BuildLandingEdition
+		 * @summary Queues a build of today's edition (it replaces one built earlier today and publishes itself)
+		 * @request POST:/admin/landing-editions/build
+		 * @response `201` `BuildLandingEditionData`
+		 */
+		buildLandingEdition: (data: AdminBuildLandingEditionInputDto, params: RequestParams = {}) =>
+			this.request<BuildLandingEditionData, any>({
+				path: `/admin/landing-editions/build`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name PublishLandingEdition
+		 * @request POST:/admin/landing-editions/{id}/publish
+		 * @response `201` `PublishLandingEditionData`
+		 */
+		publishLandingEdition: (id: string, params: RequestParams = {}) =>
+			this.request<PublishLandingEditionData, any>({
+				path: `/admin/landing-editions/${id}/publish`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Takes the edition off the page; the newest other published edition shows instead.
+		 *
+		 * @name UnpublishLandingEdition
+		 * @summary Takes the edition off the page; the newest other published edition shows instead
+		 * @request POST:/admin/landing-editions/{id}/unpublish
+		 * @response `201` `UnpublishLandingEditionData`
+		 */
+		unpublishLandingEdition: (id: string, params: RequestParams = {}) =>
+			this.request<UnpublishLandingEditionData, any>({
+				path: `/admin/landing-editions/${id}/unpublish`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A city's newsletter addresses by state: confirmed, waiting for the link, unsubscribed.
+		 *
+		 * @name GetNewsletterCounts
+		 * @summary A city's newsletter addresses by state: confirmed, waiting for the link, unsubscribed
+		 * @request GET:/admin/newsletter/counts
+		 * @response `200` `GetNewsletterCountsData`
+		 */
+		getNewsletterCounts: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetNewsletterCountsData, any>({
+				path: `/admin/newsletter/counts`,
+				method: 'GET',
+				query: query,
 				format: 'json',
 				...params,
 			}),
@@ -11694,10 +14076,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description The Google and TripAdvisor reviews of every branch, filtered, newest first; reply drafts under unanswered ones.
+		 * @description The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it says (`feedback`); reply drafts under unanswered ones. The topic filter is any point of the topic.
 		 *
 		 * @name ListPortalReviews
-		 * @summary The Google and TripAdvisor reviews of every branch, filtered, newest first; reply drafts under unanswered ones
 		 * @request GET:/portal/brands/{brandId}/reviews
 		 * @response `200` `ListPortalReviewsData`
 		 */
@@ -11782,10 +14163,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Every post about the brand (any branch, or the brand alone), newest first.
+		 * @description Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`feedback`).
 		 *
 		 * @name ListPortalPosts
-		 * @summary Every post about the brand (any branch, or the brand alone), newest first
+		 * @summary Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`feedback`)
 		 * @request GET:/portal/brands/{brandId}/posts
 		 * @response `200` `ListPortalPostsData`
 		 */
@@ -11967,6 +14348,76 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<GetFoodTrendsReportData, any>({
 				path: `/food-trends/${citySlug}/${quarter}`,
 				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+	};
+	landing = {
+		/**
+		 * @description The newest published edition of the city; 404 for an unknown city or one without any.
+		 *
+		 * @name GetLandingEdition
+		 * @summary The newest published edition of the city; 404 for an unknown city or one without any
+		 * @request GET:/landing/{citySlug}
+		 * @response `200` `GetLandingEditionData`
+		 */
+		getLandingEdition: (citySlug: string, params: RequestParams = {}) =>
+			this.request<GetLandingEditionData, any>({
+				path: `/landing/${citySlug}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+	};
+	newsletter = {
+		/**
+		 * @description Answers the same whether the address was new, pending or already confirmed.
+		 *
+		 * @name SubscribeToNewsletter
+		 * @summary Answers the same whether the address was new, pending or already confirmed
+		 * @request POST:/newsletter/subscriptions
+		 * @response `201` `SubscribeToNewsletterData`
+		 */
+		subscribeToNewsletter: (data: NewsletterSubscribeInputDto, params: RequestParams = {}) =>
+			this.request<SubscribeToNewsletterData, any>({
+				path: `/newsletter/subscriptions`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ConfirmNewsletter
+		 * @request POST:/newsletter/subscriptions/confirm
+		 * @response `201` `ConfirmNewsletterData`
+		 */
+		confirmNewsletter: (data: NewsletterTokenInputDto, params: RequestParams = {}) =>
+			this.request<ConfirmNewsletterData, any>({
+				path: `/newsletter/subscriptions/confirm`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name UnsubscribeFromNewsletter
+		 * @request POST:/newsletter/subscriptions/unsubscribe
+		 * @response `201` `UnsubscribeFromNewsletterData`
+		 */
+		unsubscribeFromNewsletter: (data: NewsletterTokenInputDto, params: RequestParams = {}) =>
+			this.request<UnsubscribeFromNewsletterData, any>({
+				path: `/newsletter/subscriptions/unsubscribe`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
 				format: 'json',
 				...params,
 			}),

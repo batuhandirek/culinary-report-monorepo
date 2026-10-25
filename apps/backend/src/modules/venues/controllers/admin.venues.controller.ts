@@ -146,6 +146,7 @@ export class AdminVenuesController {
 			filters.publishedAt = { $gte: start, $lt: end };
 		}
 		const [items, totalItems] = await this.em.findAndCount(Review, filters, {
+			populate: ['feedback', 'feedback.foodTopic'],
 			orderBy: { publishedAt: QueryOrder.DESC },
 			offset: (query.page - 1) * query.size,
 			limit: query.size,
@@ -156,6 +157,7 @@ export class AdminVenuesController {
 					wrap(review).serialize({
 						skipNull: true,
 						forceObject: true,
+						populate: ['feedback', 'feedback.foodTopic'],
 					}) as unknown as AdminReviewOutputDto,
 			),
 			totalItems,

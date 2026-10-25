@@ -9,6 +9,8 @@ import type {
 	ReportHighlights,
 } from 'src/modules/reports/interfaces/report-data.interface.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import type { LeadSignals } from 'src/modules/venues/interfaces/lead-score.interface.js';
@@ -103,6 +105,8 @@ describe('Pitch hook (pglite)', () => {
 				OutreachService,
 				PitchHookService,
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				{ provide: PitchHookAgent, useValue: agent },
 			],
 		});

@@ -74,9 +74,6 @@ describe('FoodTopicService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		mention(ramen, 'Tonkotsu ramen');
 		mention(ramen, null); // the category: ramen
@@ -149,6 +146,12 @@ describe('FoodTopicService (pglite)', () => {
 				kind: FoodTopicKindEnum.DISH,
 			}),
 		).rejects.toThrow(ConflictException);
+		await expect(
+			controller.createFoodTopic({
+				label: 'philly  cheesesteak',
+				kind: FoodTopicKindEnum.DISH,
+			}),
+		).rejects.toThrow('makes the key "philly cheesesteak", which Philly Cheesesteak has');
 		await expect(
 			controller.createFoodTopic({ label: 'Restaurant', kind: FoodTopicKindEnum.FORMAT }),
 		).rejects.toThrow(BadRequestException);

@@ -14,6 +14,7 @@ import type {
 	ReportData,
 	ReportHighlights,
 } from 'src/modules/reports/interfaces/report-data.interface.js';
+import { AccountRejectedBrand } from 'src/modules/social/entities/account-rejected-brand.entity.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -28,6 +29,7 @@ import { AdminBrandsController } from '../controllers/admin.brands.controller.js
 import { Brand, BrandReportScopeEnum } from '../entities/brand.entity.js';
 import { BrandCompetitor } from '../entities/brand-competitor.entity.js';
 import { BrandDismissal } from '../entities/brand-dismissal.entity.js';
+import { BrandExcludedVenue } from '../entities/brand-excluded-venue.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueLookup } from '../entities/venue-lookup.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
@@ -142,9 +144,6 @@ describe('BrandService (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Good.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 
 	it('gives a venue saved without a brand one of its own, named like it', async () => {
@@ -278,9 +277,14 @@ describe('BrandService (pglite)', () => {
 			{ associations: { city: berlin }, transient: { em } },
 		);
 		const rejected = socialAccountFactory.build(
-			{ handle: 'mitte.foodie', rejectedBrandIds: [mitte.brand.id] },
+			{ handle: 'mitte.foodie' },
 			{ associations: { city: berlin }, transient: { em } },
 		);
+		// Kotti's own account, said not to be Mitte's
+		const kottiOwn = ownAccount(em, kotti.brand, berlin, 'burgermeister.kotti');
+		await em.flush();
+		em.create(AccountRejectedBrand, { account: rejected, brand: mitte.brand });
+		em.create(AccountRejectedBrand, { account: kottiOwn, brand: mitte.brand });
 		await em.flush();
 		const keep = kotti.brand.id;
 		const gone = mitte.brand.id;
@@ -311,16 +315,16 @@ describe('BrandService (pglite)', () => {
 		expect(await em.findOneOrFail(Mention, { venue: mitte.id })).toMatchObject({
 			brand: { id: keep },
 		});
-		// Its own accounts move to the chain; "not theirs" for a merged brand says nothing of the chain
+		// Its own accounts move to the chain; "not theirs" for a merged brand is for the chain now,
+		// except on the chain's own account
 		expect(await em.findOneOrFail(SocialAccount, { id: own.id })).toMatchObject({
 			brand: { id: keep },
 		});
 		expect(await em.findOneOrFail(SocialAccount, { id: suggested.id })).toMatchObject({
 			suggestedBrand: { id: keep },
 		});
-		expect(
-			(await em.findOneOrFail(SocialAccount, { id: rejected.id })).rejectedBrandIds,
-		).toEqual([]);
+		const rejections = await em.find(AccountRejectedBrand, {}, { populate: ['account', 'brand'] });
+		expect(rejections.map(r => [r.account.handle, r.brand.id])).toEqual([['mitte.foodie', keep]]);
 	});
 
 	it('refuses to merge two prospects', async () => {
@@ -358,6 +362,30 @@ describe('BrandService (pglite)', () => {
 		);
 	});
 
+	it('keeps an exclusion through a merge into the chain, and drops it with the venue', async () => {
+		const em = harness.orm.em;
+		const brand = await brandFactory.create({ name: 'Burgermeister' });
+		const kotti = branch(berlin, 'Burgermeister Kotti', 900, {}, brand);
+		const mitte = branch(berlin, 'Burgermeister Mitte', 300);
+		const stranger = branch(berlin, 'Burgermeister Döner', 12);
+		await em.flush();
+		const offered = async (id: string) => (await service.candidates(await service.get(id))).map(v => v.id);
+		expect(await offered(brand.id)).toContain(stranger.id);
+
+		// Mitte, a brand of its own, says the döner place is not its; then joins the chain
+		await controller.excludeBrandVenue(mitte.brand.id, { venueId: stranger.id });
+		await controller.excludeBrandVenue(mitte.brand.id, { venueId: stranger.id });
+		const merged = await service.merge({ name: 'Burgermeister', venueIds: [kotti.id, mitte.id] });
+		em.clear();
+		const rows = await em.find(BrandExcludedVenue, {}, { populate: ['brand', 'venue'] });
+		expect(rows.map(r => [r.brand.id, r.venue.id])).toEqual([[merged.id, stranger.id]]);
+		expect(await offered(merged.id)).not.toContain(stranger.id);
+
+		// The place gone, so is the exclusion
+		await em.nativeDelete(Venue, { id: stranger.id });
+		expect(await em.count(BrandExcludedVenue, {})).toBe(0);
+	});
+
 	it('takes a branch off into a brand of its own, its mentions with it, and keeps the last one', async () => {
 		const em = harness.orm.em;
 		const brand = await brandFactory.create({ name: 'Burgermeister' });
@@ -386,9 +414,9 @@ describe('BrandService (pglite)', () => {
 		// The report stays with the brand
 		expect(await em.count(Report, { brand: brand.id })).toBe(1);
 		// Taken off for good: never offered or joined again by itself
-		expect((await em.findOneOrFail(Brand, { id: brand.id })).excludedVenueIds).toEqual([
-			mitte.id,
-		]);
+		expect(
+			(await em.find(BrandExcludedVenue, { brand: brand.id }, { populate: ['venue'] })).map(e => e.venue.id),
+		).toEqual([mitte.id]);
 		await expect(service.removeBranch(brand.id, kotti.id)).rejects.toThrow(
 			"the brand's only branch",
 		);

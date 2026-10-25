@@ -22,6 +22,7 @@ import type {
 	ReportRatingBenchmark,
 	ReportSearchRank,
 } from '../interfaces/report-data.interface.js';
+import { cityThemes, type CityThemeComplaint } from '../util/city-themes.js';
 import { BaselineReview, baselineVenues, citySection } from '../util/city-section.js';
 import { ratingBenchmark } from '../util/rating-benchmark.js';
 import { neighbourhoodChanges } from '../util/neighbourhood.js';
@@ -95,7 +96,7 @@ export class ReportCityService {
 		const { trends, mentions } = await this.trendService.monthWithMentions(month, cityId);
 		const peers = [...new Set([brandId, ...(peerBrandIds ?? (await this.reportBrandIds(cityId, month)))])];
 		const index = await this.foodTopicService.index();
-		const tags = await this.venueFoodTopicService.tags(branches, index);
+		const tags = await this.venueFoodTopicService.tags(branches);
 		const primaries = branches.flatMap(b => (tags.get(b.id) ?? []).filter(t => t.primary).map(t => t.key));
 		const counts = _.countBy(primaries);
 		const section = citySection({
@@ -111,8 +112,42 @@ export class ReportCityService {
 		if (section) {
 			const searches = await this.searchInterestService.reportDeltas(cityId, month, section.cuisine?.key);
 			if (searches.length) section.searches = searches;
+			const themes = cityThemes({ brandId, ...(await this.complaintThemes(peers, cityId, month)) });
+			if (themes?.length) section.themes = themes;
 		}
 		return section;
+	}
+
+	/**
+	 * The month's complaint points of these brands' written reviews in the city, and their written
+	 * reviews per brand: what `cityThemes` compares.
+	 */
+	private async complaintThemes(
+		brandIds: string[],
+		cityId: string,
+		month: string,
+	): Promise<{ complaints: CityThemeComplaint[]; written: Map<string, number> }> {
+		const { start, end } = monthRange(month);
+		const conn = this.em.getConnection();
+		const marks = brandIds.map(() => '?').join(', ');
+		const params = [...brandIds, cityId, start, end];
+		const where = `v.brand_id in (${marks}) and v.city_id = ? and r.published_at >= ? and r.published_at < ?
+			and coalesce(r.text_translated, r.text, '') <> ''`;
+		const complaints: { brand_id: string; review_id: string; theme: string | null }[] = await conn.execute(
+			`select v.brand_id, r.id as review_id, f.theme
+			from reviews r join venues v on v.id = r.venue_id
+			join feedback_points f on f.review_id = r.id and f.sentiment = 'negative' and f.detail is not null
+			where ${where}`,
+			params,
+		);
+		const written: { brand_id: string; n: number }[] = await conn.execute(
+			`select v.brand_id, count(*)::int as n from reviews r join venues v on v.id = r.venue_id where ${where} group by 1`,
+			params,
+		);
+		return {
+			complaints: complaints.map(c => ({ brandId: c.brand_id, reviewId: c.review_id, theme: c.theme })),
+			written: new Map(written.map(w => [w.brand_id, w.n])),
+		};
 	}
 
 	/**
@@ -145,22 +180,8 @@ export class ReportCityService {
 			const peers = rows
 				.map(r => ({ ...r, rating: Number(r.rating), reviewsCount: r.reviews_count }))
 				.filter(p => isRatingPeer(p));
-			const tags = await this.venueFoodTopicService.tags(
-				_.uniqBy(
-					[
-						...peers.map(p => ({
-							id: p.id,
-							name: p.name,
-							category: p.category,
-							categories: p.categories,
-							details: { reviewsTags: p.review_tags ?? undefined } as VenueDetails,
-						})),
-						...inCity,
-					],
-					v => v.id,
-				),
-				index,
-			);
+			// Stored tags: each peer's and branch's, by id
+			const tags = await this.venueFoodTopicService.tags(_.uniqBy([...peers, ...inCity], v => v.id));
 			for (const branch of inCity) {
 				const benchmark = ratingBenchmark({
 					branch: branch as RatingPeer,

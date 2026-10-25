@@ -363,11 +363,12 @@ export class BrandLeadScoreService {
 					`select venue_id, count(*)::int total,
 						count(*) filter (where analysed_at is not null and coalesce(text_translated, text) is not null)::int analysed,
 						count(*) filter (where analysed_at is not null and coalesce(text_translated, text) is not null
-							and jsonb_array_length(coalesce(complaints, '[]'::jsonb)) > 0)::int with_complaints,
+							and exists (select 1 from feedback_points f where f.review_id = r.id
+								and f.sentiment = 'negative' and f.detail is not null))::int with_complaints,
 						count(*) filter (where owner_response is not null)::int replied,
 						count(*) filter (where coalesce(stars, 5) <= 3 and coalesce(text_translated, text) is not null
 							and owner_response is null)::int unanswered_critical,
-						count(*) filter (where jsonb_array_length(coalesce(changes, '[]'::jsonb)) > 0)::int with_changes
+						count(*) filter (where exists (select 1 from feedback_points f where f.review_id = r.id and f.change))::int with_changes
 					from reviews r where published_at >= ? and published_at < ? and venue_id in (${marks(ids)})
 					group by venue_id`,
 					[start, end, ...ids],

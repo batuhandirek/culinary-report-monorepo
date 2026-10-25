@@ -1,11 +1,14 @@
 <script lang="ts">
 	import {
+		type AdminCreatorFindOutputDto,
+		AdminCreatorFindOutputDtoKindEnum as FindKind,
 		type AdminCreatorOutputDto,
 		type AdminSocialPostListItemOutputDto,
 		ListPostsParamsSortEnum
 	} from 'client';
 
 	import CreatorAccountsPanel from './components/CreatorAccountsPanel.svelte';
+	import CreatorWatchPanel from './components/CreatorWatchPanel.svelte';
 
 	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/state';
@@ -42,6 +45,28 @@
 		Math.max(...creator.accounts.map((a) => a.latest?.followers ?? a.followers ?? -1))
 	);
 	const busiest = $derived(Math.max(1, ...creator.months.map((m) => m.posts)));
+
+	// What found their posts, in words: the city's hashtag or search, a blog, a venue search, a
+	// profile (a creator source, or a watched brand's own account)
+	const FIND_KINDS: Record<FindKind, string> = {
+		[FindKind.TiktokHashtag]: 'TikTok hashtag',
+		[FindKind.TiktokSearch]: 'TikTok search',
+		[FindKind.InstagramHashtag]: 'Instagram hashtag',
+		[FindKind.Blog]: 'Blog',
+		[FindKind.VenueSearch]: 'TikTok search for a venue',
+		[FindKind.VenuePlace]: "Instagram venue's place page",
+		[FindKind.TiktokAccount]: 'Their TikTok profile',
+		[FindKind.InstagramAccount]: 'Their Instagram profile'
+	};
+	const findValue = (find: AdminCreatorFindOutputDto) =>
+		find.kind === FindKind.TiktokHashtag || find.kind === FindKind.InstagramHashtag ? `#${find.value}`
+		: find.kind === FindKind.TiktokAccount || find.kind === FindKind.InstagramAccount ? `@${find.value}`
+		: find.venue ? find.venue.name
+		: find.value;
+	const findHref = (find: AdminCreatorFindOutputDto) =>
+		find.venue ? `/admin/venues/${find.venue.id}`
+		: find.sourceId ? `/admin/cities/${find.city.id}?tab=sources`
+		: undefined;
 
 	// The name field, reset to the creator's whenever it changes
 	let name = $derived(creator.name);
@@ -104,6 +129,8 @@
 		<CreatorAccountsPanel {creator} {month} />
 
 		<div class="flex min-w-0 flex-col gap-5">
+			<CreatorWatchPanel {creator} {month} />
+
 			<AdminPanel title="Six months" note="posts we stored">
 				<ul class="m-0 flex list-none flex-col gap-1.5 p-0 text-sm">
 					{#each creator.months as m (m.month)}
@@ -116,6 +143,36 @@
 						</li>
 					{/each}
 				</ul>
+			</AdminPanel>
+
+			<AdminPanel title="Found through" note="all their posts we stored">
+				{#if creator.foundBy.length}
+					<ul class="divide-line m-0 flex list-none flex-col divide-y p-0 text-sm">
+						{#each creator.foundBy as find, i (i)}
+							<li class="flex items-center gap-3 py-2">
+								<span class="text-muted-foreground w-44 shrink-0 text-xs">{FIND_KINDS[find.kind]}</span>
+								<span class="min-w-0 flex-1 truncate">
+									{#if findHref(find)}
+										<a href={findHref(find)} class="font-medium hover:underline">{findValue(find)}</a>
+									{:else}
+										<span class="font-medium">{findValue(find)}</span>
+									{/if}
+									<span class="text-muted-foreground text-xs">
+										· {find.city.name}{find.sourceId && !find.sourceEnabled ? ' · source switched off' : ''}{!find.sourceId &&
+										(find.kind === FindKind.TiktokAccount || find.kind === FindKind.InstagramAccount)
+											? ' · as a brand’s own account'
+											: ''}
+									</span>
+								</span>
+								<span class="text-muted-foreground shrink-0 text-xs tabular-nums">
+									{find.posts} {find.posts === 1 ? 'post' : 'posts'} · last {onDay(find.lastPostedAt)}
+								</span>
+							</li>
+						{/each}
+					</ul>
+				{:else}
+					<EmptyState title="No find recorded" hint="None of their stored posts has a source on record." ground="none" size="sm" />
+				{/if}
 			</AdminPanel>
 
 			<AdminPanel title="Brands they named" note={creator.brands.length || undefined}>

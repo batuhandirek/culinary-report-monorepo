@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
+import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
+import { PipelineRun, PipelineRunStatusEnum } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { ApifyRun, ApifyRunStatusEnum } from '../entities/apify-run.entity.js';
@@ -95,6 +98,50 @@ describe('ApifyService (pglite)', () => {
 		harness.orm.em
 			.fork()
 			.findOneOrFail(ApifyRun, { purpose: 'test' }, { orderBy: { createdAt: 'desc' } });
+	// A pipeline run to start Apify runs in, as `PipelineService.execute` does
+	const pipelineRun = async () => {
+		const em = harness.orm.em.fork();
+		const run = em.create(PipelineRun, {
+			step: PipelineStepEnum.SCRAPE_TIKTOK,
+			city: testCity(em),
+			month: '2026-09',
+			status: PipelineRunStatusEnum.RUNNING,
+		});
+		await em.flush();
+		return run.id;
+	};
+
+	it("joins a pipeline run's Apify runs, and lets them go when the run is deleted", async () => {
+		const em = harness.orm.em.fork();
+		const runId = await pipelineRun();
+		const paid = (costUsd: number, pipelineRun: string | null) =>
+			em.create(ApifyRun, {
+				actorId: 'x',
+				purpose: 'joined',
+				maxCostUsd: 1,
+				status: ApifyRunStatusEnum.SUCCEEDED,
+				costUsd,
+				pipelineRun,
+			});
+		paid(0.4, runId);
+		paid(0.35, runId);
+		paid(2, null);
+		await em.flush();
+		const [{ runs, cost }] = await em.getConnection().execute<{ runs: number; cost: number }[]>(
+			`select count(a.id)::int as runs, sum(a.cost_usd)::float as cost
+			from pipeline_runs pr join apify_runs a on a.pipeline_run_id = pr.id where pr.id = ?`,
+			[runId],
+		);
+		expect([runs, cost]).toEqual([2, 0.75]);
+
+		await em.nativeDelete(PipelineRun, { id: runId });
+		const left = await harness.orm.em.fork().find(ApifyRun, { purpose: 'joined' }, { orderBy: { costUsd: 'asc' } });
+		expect(left.map(a => [a.costUsd, a.pipelineRun ?? null])).toEqual([
+			[0.35, null],
+			[0.4, null],
+			[2, null],
+		]);
+	});
 
 	it('records the settled cost, not the $0 the finished call reports', async () => {
 		useClient(fakeClient([0.003]));
@@ -260,19 +307,19 @@ describe('ApifyService (pglite)', () => {
 
 	it('tags a run with the pipeline step it was started in', async () => {
 		useClient(fakeClient([0.01]));
-		const context = { pipelineRunId: '00000000-0000-4000-8000-000000000001', stepKey: '1. SCRAPE_TIKTOK' };
+		const context = { pipelineRunId: await pipelineRun(), stepKey: '1. SCRAPE_TIKTOK' };
 
 		await apifyRunContext.run(context, () =>
 			service.runActor('clockworks/tiktok-scraper', { a: 1 }, { maxCostUsd: 1, purpose: 'test' }),
 		);
 
 		const run = await lastRun();
-		expect(run.pipelineRunId).toBe(context.pipelineRunId);
+		expect(run.pipelineRun?.id).toBe(context.pipelineRunId);
 		expect(run.stepKey).toBe(context.stepKey);
 	});
 
 	it('re-attaches a resumed step to the run its earlier attempt started, without paying again', async () => {
-		const context = { pipelineRunId: '00000000-0000-4000-8000-000000000002', stepKey: '3. SCRAPE_REVIEWS' };
+		const context = { pipelineRunId: await pipelineRun(), stepKey: '3. SCRAPE_REVIEWS' };
 		const input = { placeIds: ['p1', 'p2'], since: '2026-09-01' };
 		const em = harness.orm.em.fork();
 		const earlier = em.create(ApifyRun, {
@@ -282,7 +329,7 @@ describe('ApifyService (pglite)', () => {
 			status: ApifyRunStatusEnum.RUNNING,
 			apifyRunId: 'run-before-restart',
 			inputHash: hashActorInput('compass/Google-Maps-Reviews-Scraper', { since: '2026-09-01', placeIds: ['p1', 'p2'] }),
-			pipelineRunId: context.pipelineRunId,
+			pipelineRun: context.pipelineRunId,
 			stepKey: context.stepKey,
 		});
 		await em.flush();
@@ -295,7 +342,7 @@ describe('ApifyService (pglite)', () => {
 
 		expect(items).toHaveLength(2);
 		expect(client.started).toHaveLength(0);
-		const runs = await harness.orm.em.fork().find(ApifyRun, { pipelineRunId: context.pipelineRunId });
+		const runs = await harness.orm.em.fork().find(ApifyRun, { pipelineRun: context.pipelineRunId });
 		expect(runs).toHaveLength(1);
 		expect(runs[0].id).toBe(earlier.id);
 		expect(runs[0].status).toBe(ApifyRunStatusEnum.SUCCEEDED);
@@ -309,14 +356,14 @@ describe('ApifyService (pglite)', () => {
 	});
 
 	it('never re-attaches to another step, another input or a failed run', async () => {
-		const context = { pipelineRunId: '00000000-0000-4000-8000-000000000003', stepKey: '1. SCRAPE_TIKTOK' };
+		const context = { pipelineRunId: await pipelineRun(), stepKey: '1. SCRAPE_TIKTOK' };
 		const em = harness.orm.em.fork();
 		const base = {
 			actorId: 'clockworks/tiktok-scraper',
 			purpose: 'test',
 			maxCostUsd: 1,
 			apifyRunId: 'old',
-			pipelineRunId: context.pipelineRunId,
+			pipelineRun: context.pipelineRunId,
 		};
 		em.create(ApifyRun, { ...base, status: ApifyRunStatusEnum.RUNNING, stepKey: '2. OTHER', inputHash: hashActorInput(base.actorId, { a: 1 }) });
 		em.create(ApifyRun, { ...base, status: ApifyRunStatusEnum.RUNNING, stepKey: context.stepKey, inputHash: hashActorInput(base.actorId, { a: 2 }) });
@@ -334,10 +381,10 @@ describe('ApifyService (pglite)', () => {
 
 	it('settles the runs a restart left RUNNING, except those a resumed step will re-attach to', async () => {
 		const em = harness.orm.em.fork();
-		const kept = '00000000-0000-4000-8000-000000000004';
+		const kept = await pipelineRun();
 		const orphan = em.create(ApifyRun, { actorId: 'x', purpose: 'orphan', maxCostUsd: 1, status: ApifyRunStatusEnum.RUNNING, apifyRunId: 'run-orphan' });
 		const neverStarted = em.create(ApifyRun, { actorId: 'x', purpose: 'orphan', maxCostUsd: 1, status: ApifyRunStatusEnum.RUNNING });
-		const resumed = em.create(ApifyRun, { actorId: 'x', purpose: 'kept', maxCostUsd: 1, status: ApifyRunStatusEnum.RUNNING, apifyRunId: 'run-kept', pipelineRunId: kept, stepKey: '1. X' });
+		const resumed = em.create(ApifyRun, { actorId: 'x', purpose: 'kept', maxCostUsd: 1, status: ApifyRunStatusEnum.RUNNING, apifyRunId: 'run-kept', pipelineRun: kept, stepKey: '1. X' });
 		await em.flush();
 		useClient(fakeClient([0.42]));
 

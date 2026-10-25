@@ -136,9 +136,7 @@ export const cuisinePlacement = (
 	// Venues posts named for this food, ranked by the views of their posts this month
 	const ofKind = new Set(
 		mentions
-			.filter(m =>
-				index.withParents(index.resolveMention(m.cuisine, m.category)).includes(key),
-			)
+			.filter(m => index.withParents(m.topics).includes(key))
 			.map(m => m.brandId),
 	);
 	const views = (id: string) =>

@@ -19,6 +19,8 @@ import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { Report } from '../entities/report.entity.js';
 import { ReportService } from '../services/report.service.js';
+import { ReportConfigService } from '../services/report-config.service.js';
+import { ReportTemplateService } from '../services/report-template.service.js';
 
 const HIGHLIGHTS = {
 	title: 'A good month',
@@ -42,6 +44,8 @@ describe('ReportService.build (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				ReportConfigService,
+				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,
@@ -84,9 +88,6 @@ describe('ReportService.build (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Nice.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 		return p;
 	};
@@ -234,9 +235,6 @@ describe('ReportService.build (pglite)', () => {
 			visited: true,
 			sentiment: 'positive',
 			summary: 'Again.',
-			dishes: [],
-			praise: [],
-			complaints: [],
 		});
 		await em.flush();
 
@@ -261,5 +259,28 @@ describe('ReportService.build (pglite)', () => {
 		expect(report.data.creatorsNearby).toEqual([]);
 		expect(report.data.branches[0].ratingTrend).toEqual([]);
 		expect(report.data.reviews.replyDrafts).toEqual([]);
+	});
+
+	it("keeps a blog article's headline on its post, for the media coverage section", async () => {
+		const em = harness.orm.em;
+		const venue = em.create(Venue, { city: testCity(em), placeId: 'p-blog', name: 'Kiezküche', category: 'Restaurant' });
+		post(venue, 'berlinfoodstories.com', '2026-09-08T12:00:00Z', {
+			platform: SocialPlatformEnum.BLOG,
+			url: 'https://berlinfoodstories.com/kiezkueche',
+			views: 0,
+			text: 'Kiezküche: lunch worth the queue\n\nWe went on a Tuesday and the place was full …',
+		});
+		post(venue, 'eater', '2026-09-09T12:00:00Z', { text: 'Best lunch\n\nso good' });
+		await em.flush();
+
+		const report = await service.build(venue.brand.id, venue.city.id, '2026-09');
+		const byPlatform = Object.fromEntries(report.data.posts.map(p => [p.platform, p]));
+		expect(byPlatform.blog).toMatchObject({
+			title: 'Kiezküche: lunch worth the queue',
+			author: 'berlinfoodstories.com',
+			url: 'https://berlinfoodstories.com/kiezkueche',
+			summary: 'Nice.',
+		});
+		expect(byPlatform.tiktok.title).toBeUndefined();
 	});
 });

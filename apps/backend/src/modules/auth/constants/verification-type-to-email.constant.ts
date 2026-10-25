@@ -23,7 +23,7 @@ export const VERIFICATION_TYPE_TO_EMAIL: Partial<
 	},
 	// Only the venue portal signs in by code, and its people read English
 	[CredentialVerificationRequestTypeEnum.LOGIN_EMAIL]: {
-		subject: 'Your Culinary Report sign-in code',
+		subject: 'Your Munchwerk sign-in code',
 		template: PortalLoginCodeEmail,
 	},
 };

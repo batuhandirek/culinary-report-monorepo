@@ -9,7 +9,7 @@ import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import type { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { linkFoodTopics, seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SitemapService } from 'src/modules/sitemap/services/sitemap.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
@@ -292,9 +292,6 @@ describe('FoodTrendsReportService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Good.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 				isNewOpening: opts.isNewOpening ?? false,
 			});
 		};
@@ -343,6 +340,7 @@ describe('FoodTrendsReportService (pglite)', () => {
 		related(4, 'quiet corner ramen', 300);
 		related(1, 'ramen near me', 100, false);
 		await em.flush();
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {

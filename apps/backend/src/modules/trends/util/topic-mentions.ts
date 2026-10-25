@@ -9,8 +9,8 @@ export interface TopicMentionRow {
 	month: string;
 	brand_id: string;
 	brand_name: string;
-	category: string | null;
-	cuisine: string | null;
+	/** Its stored food topics (`MentionFoodTopic`), in the order its text names them */
+	topics: string[];
 	/** By one of the brand's own accounts (`ownPostSql`) */
 	own: boolean;
 }
@@ -32,9 +32,9 @@ const bump = (map: Map<string, Map<string, number>>, key: string, month: string)
 
 /**
  * Counts mentions by others (a brand's own account left out) per topic and month: a mention's
- * topics are its cuisine's, else its venue's Google category's (a chain's most reviewed branch's
- * when the post named no branch), each with its parents, and it
- * counts once per topic ("vegan döner" is vegan, döner and Turkish).
+ * topics are its stored ones (its cuisine's, else its venue's Google category's, a chain's most
+ * reviewed branch's when the post named no branch), each with its parents, and it counts once per
+ * topic ("vegan döner" is vegan, döner and Turkish).
  */
 export const countTopicMentions = (
 	rows: TopicMentionRow[],
@@ -46,7 +46,7 @@ export const countTopicMentions = (
 	for (const r of rows) {
 		if (r.own) continue;
 		bump(byBrand, r.brand_id, r.month);
-		const keys = index.withParents(index.resolveMention(r.cuisine, r.category));
+		const keys = index.withParents(r.topics);
 		if (!keys.length) continue;
 		totals.set(r.month, (totals.get(r.month) ?? 0) + 1);
 		for (const key of keys) bump(byTopic, key, r.month);
@@ -67,16 +67,15 @@ export const topicShares = (
 			:	null;
 	});
 
+/** SQL: a mention's (`alias`) stored food topic keys, in the order its text names them */
+export const mentionTopicsSql = (alias: string) =>
+	`(select coalesce(array_agg(t.key order by mt.rank), '{}') from mention_food_topics mt
+		join food_topics t on t.id = mt.topic_id where mt.mention_id = ${alias}.id)`;
+
 /** The SQL behind `TopicMentionRow`: a city's matched mentions in [start, end). */
 export const TOPIC_MENTIONS_SQL = `select to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') as month, m.brand_id,
-		b.name as brand_name,
-		coalesce(v.category, (
-			select o.category from venues o where o.brand_id = m.brand_id and o.city_id = p.city_id
-			order by o.reviews_count desc nulls last, o.id limit 1
-		)) as category,
-		m.cuisine, ${ownPostSql('p', 'm.brand_id')} as own
+		b.name as brand_name, ${mentionTopicsSql('m')} as topics, ${ownPostSql('p', 'm.brand_id')} as own
 	from mentions m
 	join social_posts p on p.id = m.post_id
 	join brands b on b.id = m.brand_id
-	left join venues v on v.id = m.venue_id
 	where p.city_id = ? and p.posted_at >= ? and p.posted_at < ?`;

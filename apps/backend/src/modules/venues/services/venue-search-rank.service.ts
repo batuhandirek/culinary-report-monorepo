@@ -46,7 +46,7 @@ export class VenueSearchRankService {
 	): Promise<{ venues: number; queries: number; ranked: number; notInTop: number }> {
 		const plan = new Map<Venue, string[]>();
 		const index = await this.foodTopicService.index();
-		const tags = await this.venueFoodTopicService.tags(venues, index);
+		const tags = await this.venueFoodTopicService.tags(venues);
 		for (const venue of venues) {
 			const queries = searchQueries(venue.district, tags.get(venue.id) ?? [], index);
 			if (queries.length) plan.set(venue, queries);

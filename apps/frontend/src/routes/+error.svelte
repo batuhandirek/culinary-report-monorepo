@@ -19,13 +19,13 @@
 </script>
 
 <svelte:head>
-	<title>{copy.title} | Culinary Report</title>
+	<title>{copy.title} | Munchwerk</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <div class="flex min-h-dvh flex-col">
 	<header class="narrow flex h-16 items-center">
-		<Logo width={104} />
+		<Logo width={150} />
 	</header>
 	<!-- `data-sveltekit-reload` on the ways out: an error page can be the result of a broken
 	     client state, so leaving it should start fresh. -->

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { AdminReportListItemOutputDto } from 'client';
+	import type { AdminReportListItemOutputDto, AdminReportTemplateOutputDto } from 'client';
 
 	import { ListReportsParamsSortEnum } from 'client';
 
@@ -10,6 +10,7 @@
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import type { Column, Filter, Sort } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
+	import Button from '#ui/wrapped/Button.svelte';
 
 	const SORTS: Sort[] = [
 		{ value: ListReportsParamsSortEnum.UpdatedAtDesc, name: 'Latest built' },
@@ -18,8 +19,20 @@
 		{ value: ListReportsParamsSortEnum.MonthDesc, name: 'Newest month' }
 	];
 	adminCitiesStore.load();
+	// Which reports were made from which template
+	let templates = $state<AdminReportTemplateOutputDto[]>([]);
+	api.admin
+		.listReportTemplates()
+		.then((list) => (templates = list))
+		.catch(() => (templates = []));
 	const FILTERS: Filter[] = $derived([
 		cityFilter(adminCitiesStore.list),
+		{
+			key: 'templateId',
+			name: 'Template',
+			type: 'select',
+			options: templates.map((t) => ({ name: t.name, value: t.id }))
+		},
 		{
 			key: 'month',
 			name: 'Month',
@@ -37,6 +50,14 @@
 		},
 		{ type: 'value', name: 'City', value: (row) => row.city?.name ?? 'All cities' },
 		{ type: 'value', name: 'Month', value: (row) => monthLabel(row.month) },
+		{ type: 'value', name: 'Report', truncate: 28, value: (row) => row.name },
+		{
+			type: 'link',
+			name: 'Template',
+			truncate: 28,
+			href: (row) => (row.template ? `/admin/reports/templates/${row.template.id}` : ''),
+			value: (row) => row.template?.name ?? (row.config ? 'Custom' : '—')
+		},
 		{ type: 'value', name: 'Headline', truncate: 80, value: (row) => row.headline },
 		{
 			type: 'count',
@@ -64,6 +85,10 @@
 </script>
 
 <AdminListPage>
+	{#snippet actions()}
+		<Button size="sm" variant="outline" href="/admin/reports/templates"
+			>Report templates</Button>
+	{/snippet}
 	<PaginatedDataTable
 		syncWithSearchParams
 		{filters}

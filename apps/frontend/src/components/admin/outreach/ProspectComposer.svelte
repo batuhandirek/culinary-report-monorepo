@@ -1,13 +1,16 @@
 <script lang="ts">
-	import { AtSign, Check, Copy, Download, Mail, MapPin, Phone, Printer, Search } from '@lucide/svelte';
+	import { AtSign, Check, Copy, Download, Link, Mail, MapPin, Phone, Printer, Search } from '@lucide/svelte';
 	import type {
 		AdminLogOutreachTouchInputDtoKindEnum,
 		AdminLogOutreachTouchInputDtoOutcomeEnum,
 		AdminProspectOutputDto,
+		AdminReportListItemOutputDto,
 		AdminUpdateProspectInputDtoLanguageEnum
 	} from 'client';
 
 	import { untrack } from 'svelte';
+
+	import { ListReportsParamsSortEnum } from 'client';
 
 	import { downloadLeaveBehindPdf, downloadReportPdf } from './report-pdf.js';
 
@@ -19,6 +22,7 @@
 		type OutreachLanguage
 	} from '#constants/OUTREACH_TEMPLATES.js';
 	import { api } from '#lib/api.js';
+	import { monthLabel } from '#lib/culinary.js';
 	import { needsEmailConsent, TOUCH_OUTCOMES } from '#lib/outreach-status.js';
 	import {
 		draftFrom,
@@ -105,7 +109,33 @@
 	const resetEdits = () => {
 		editedSubject = null;
 		editedBody = null;
+		linked = null;
 	};
+
+	// A link to one of the brand's reports in the message: a fresh share, so the log shows
+	// whether this message's link was opened
+	let reports = $state<AdminReportListItemOutputDto[]>([]);
+	let reportId = $state('');
+	let linked = $state<{ reportId: string; shareId: string; url: string; month: string } | null>(null);
+	$effect(() => {
+		const brandId = prospect.brand.id;
+		untrack(() => {
+			api.admin.listReports({ brandId, page: 1, size: 24, sort: ListReportsParamsSortEnum.MonthDesc }).then(({ items }) => {
+				reports = items;
+				reportId = items[0]?.id ?? '';
+			});
+		});
+	});
+	const reportItems = $derived(
+		reports.map((r) => ({ value: r.id, label: `${monthLabel(r.month)}${r.city ? ` · ${r.city.name}` : ''}` }))
+	);
+	const linkAction = createAction(() => api.admin.createReportShare(reportId), {
+		onSuccess: (share) => {
+			const picked = reports.find((r) => r.id === reportId);
+			editedBody = `${body.trimEnd()}\n\n${share.url}`;
+			linked = { reportId, shareId: share.id, url: share.url, month: picked?.month ?? '' };
+		}
+	});
 
 	// When the conversation moves on (a message logged here, a reply logged in the log),
 	// the next template follows it
@@ -204,7 +234,11 @@
 					outcome: (outcome || undefined) as AdminLogOutreachTouchInputDtoOutcomeEnum | undefined,
 					comeBackAt: comeBackAt ? new Date(comeBackAt).toISOString() : undefined,
 					emailConsent: emailConsent || undefined
-				})
+				}),
+				// Only while the link is still in what was sent
+				...(template.attachReport &&
+					linked &&
+					body.includes(linked.url) && { reportId: linked.reportId, shareId: linked.shareId })
 			});
 		},
 		{
@@ -297,6 +331,32 @@
 					{/each}
 				</ul>
 			</Notice>
+		{/if}
+
+		{#if template.attachReport && reports.length}
+			<div class="flex flex-wrap items-center gap-3">
+				<Select
+					items={reportItems}
+					value={reportId}
+					onValueChange={(v) => (reportId = v)}
+					aria-label="Report to link"
+					width={220} />
+				<Button
+					variant="outline"
+					icon={Link}
+					loading={linkAction.executing}
+					disabled={!reportId}
+					onclick={() => linkAction.execute()}>
+					Add a report link
+				</Button>
+				<span class="text-muted-foreground text-xs">
+					{#if linked && body.includes(linked.url)}
+						The {monthLabel(linked.month)} report's link is in the message: the log shows when it is opened.
+					{:else}
+						A link of its own, so the log shows whether this message's was opened.
+					{/if}
+				</span>
+			</div>
 		{/if}
 
 		{#if inPerson}

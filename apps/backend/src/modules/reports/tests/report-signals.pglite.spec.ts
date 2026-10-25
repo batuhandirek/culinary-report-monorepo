@@ -1,10 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
+import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
+import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -127,16 +129,19 @@ describe('ReportSignalsService (pglite)', () => {
 
 		// 13 reviews a month over the summer, then a September with a jump after the viral week
 		let n = 0;
-		const reviews = (count: number, day: string, complaints: string[] = []) => {
+		const reviews = (count: number, day: string, complaints: FeedbackTopic[] = []) => {
 			for (let i = 0; i < count; i++)
-				em.create(Review, {
-					venue,
-					reviewId: `r${++n}`,
-					publishedAt: new Date(`${day}T12:${String(i).padStart(2, '0')}:00Z`),
-					stars: complaints.length ? 2 : 5,
-					text: 'Text',
-					complaints: complaints.map(topic => ({ topic, detail: 'x' })) as Review['complaints'],
-				});
+				addFeedback(
+					em,
+					em.create(Review, {
+						venue,
+						reviewId: `r${++n}`,
+						publishedAt: new Date(`${day}T12:${String(i).padStart(2, '0')}:00Z`),
+						stars: complaints.length ? 2 : 5,
+						text: 'Text',
+					}),
+					{ complaints: complaints.map(topic => ({ topic, detail: 'x' })) },
+				);
 		};
 		for (const day of ['2026-06-10', '2026-07-10', '2026-08-10']) reviews(13, day);
 		reviews(2, '2026-09-02');
@@ -146,6 +151,8 @@ describe('ReportSignalsService (pglite)', () => {
 		reviews(2, '2026-09-29');
 		reviews(1, '2026-10-02');
 		await em.flush();
+		// The stored food-topic links, as the app's writers and refresh keep them
+		await linkFoodTopics(em);
 	});
 
 	afterAll(async () => {
@@ -217,6 +224,7 @@ describe('ReportSignalsService (pglite)', () => {
 		const san = place('ramen-san', 'Japanese restaurant', { 'Spicy Ramen': 12.8, 'Sushi Platter': 18 });
 		const pizzeria = place('pizzeria', 'Pizza restaurant', { Margherita: 9, Diavola: 11 });
 		await em.flush();
+		await linkFoodTopics(em);
 		const against = (...venues: Venue[]): SignalsInput => ({
 			...input(),
 			dishes: [],

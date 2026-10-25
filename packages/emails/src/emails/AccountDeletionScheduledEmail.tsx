@@ -23,7 +23,7 @@ export const AccountDeletionScheduledEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview={`Hesabın ${formatDay(deletionDate)} tarihinde silinecek. O güne kadar vazgeçebilirsin.`}
-		reason="Bu e-postayı, Culinary Report hesabını silmemizi istediğin için aldın."
+		reason="Bu e-postayı, Munchwerk hesabını silmemizi istediğin için aldın."
 	>
 		<Title>Hesap silme isteğini aldık</Title>
 		<P>

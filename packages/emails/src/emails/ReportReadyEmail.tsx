@@ -48,7 +48,7 @@ const COPY = {
 		link: 'The link opens on any phone without a login, with a PDF to download.',
 		stop: 'No longer want these reports? Reply “stop” and we won’t write again.',
 		reason: (venue: string) =>
-			`You got this e-mail because ${venue} receives the monthly Culinary Report.`,
+			`You got this e-mail because ${venue} receives the monthly Munchwerk report.`,
 	},
 	de: {
 		subject: (venue: string, month: string) => `${venue}: Ihr Bericht für ${month}`,
@@ -65,7 +65,7 @@ const COPY = {
 		link: 'Der Link öffnet sich auf jedem Handy ohne Anmeldung, mit PDF zum Herunterladen.',
 		stop: 'Sie möchten keine Berichte mehr? Antworten Sie mit „Stopp“, dann schreiben wir Ihnen nicht mehr.',
 		reason: (venue: string) =>
-			`Sie erhalten diese E-Mail, weil ${venue} den monatlichen Culinary Report bekommt.`,
+			`Sie erhalten diese E-Mail, weil ${venue} den monatlichen Munchwerk-Bericht bekommt.`,
 	},
 } satisfies Record<ReportMailLanguage, unknown>;
 
@@ -165,7 +165,7 @@ ReportReadyEmail.PreviewProps = {
 			text: '11 of 34 reviews got an answer (32%); the critical ones none.',
 		},
 	],
-	shareUrl: 'https://culinaryreport.com/r/0123456789abcdefghijkl',
+	shareUrl: 'https://munchwerk.com/r/0123456789abcdefghijkl',
 } satisfies ReportReadyEmailProps;
 
 export default ReportReadyEmail;

@@ -17,10 +17,10 @@ export const EmailVerificationEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview="E-posta adresini doğrulamak için kodun hazır."
-		reason="Bu e-postayı, bu adres Culinary Report'ta doğrulanmak istendiği için aldın."
+		reason="Bu e-postayı, bu adres Munchwerk'te doğrulanmak istendiği için aldın."
 	>
 		<Title>E-posta adresini doğrula</Title>
-		<P>Culinary Report'ta bu adresi doğrulamak için aşağıdaki kodu gir.</P>
+		<P>Munchwerk'te bu adresi doğrulamak için aşağıdaki kodu gir.</P>
 		<Code>{code}</Code>
 		<Small>
 			Kodu kimseyle paylaşma; biz de senden istemeyiz. Bu kodu sen istemediysen e-postayı yok

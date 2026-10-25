@@ -152,9 +152,6 @@ describe('OverviewService (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Nice.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 		mention(MentionMatchMethodEnum.NONE);
 		mention(MentionMatchMethodEnum.NONE);

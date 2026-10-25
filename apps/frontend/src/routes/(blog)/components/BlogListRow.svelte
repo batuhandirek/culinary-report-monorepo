@@ -34,11 +34,11 @@
 		iconSize={26} />
 	<div class="flex min-w-0 flex-1 flex-col gap-1.5">
 		{#if topic}
-			<div class="eyebrow text-beet truncate">{blogTagLabel(topic)}</div>
+			<div class="stamp text-beet truncate">{blogTagLabel(topic)}</div>
 		{/if}
 		<svelte:element
 			this={heading}
-			class="type-title text-ink m-0 line-clamp-3 text-base group-hover:underline sm:line-clamp-2 sm:text-xl">
+			class="type-display text-ink m-0 line-clamp-3 text-lg group-hover:underline sm:line-clamp-2 sm:text-2xl">
 			{entry.title}
 		</svelte:element>
 		{#if entry.excerpt}

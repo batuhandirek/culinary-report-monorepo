@@ -34,10 +34,10 @@ export interface VenueTopicInput {
 	category: string | null | undefined;
 	/** Google's other categories */
 	categories?: string[] | null;
-	/** Its posts by others, by the cuisine extraction gave, with how many */
-	mentionCuisines: { cuisine: string | null; n: number }[];
-	/** Its latest delivery menu (`resolveMenuItem`) */
-	menuItems?: { name: string; category?: string | null }[];
+	/** Its posts by others: each mention's stored cuisine topics (`MentionFoodTopic`, source `cuisine`) */
+	mentionTopics: { keys: string[]; n: number }[];
+	/** Its latest delivery menu: each item's stored topics (`MenuItemFoodTopic`) */
+	menuItems?: { keys: string[] }[];
 	/** Google's "people often mention" (`VenueDetails.reviewsTags`), all-time counts */
 	reviewTags?: { title: string; count: number }[] | null;
 	/** An admin's tags and exclusions */
@@ -91,14 +91,16 @@ export const venueTopics = (input: VenueTopicInput, index: FoodTopicIndex): Venu
 	for (const category of input.categories ?? [])
 		index.resolve(category).forEach(key => add(key, 'category', 0.5));
 
+	// A stored key of a topic since deleted counts for nothing
+	const known = (keys: string[]) => keys.filter(key => index.get(key));
 	const fromPosts = counted(
-		input.mentionCuisines.map(({ cuisine, n }) => ({ keys: index.resolve(cuisine), n })),
+		input.mentionTopics.map(({ keys, n }) => ({ keys: known(keys), n })),
 		MIN_TAG_MENTIONS,
 		MIN_TAG_SHARE,
 	);
 	const notPlace = (key: string) => index.get(key)!.kind !== FoodTopicKindEnum.FORMAT;
 	const fromMenu = counted(
-		(input.menuItems ?? []).map(item => ({ keys: index.resolveMenuItem(item), n: 1 })),
+		(input.menuItems ?? []).map(item => ({ keys: known(item.keys), n: 1 })),
 		MIN_MENU_ITEMS,
 		MIN_MENU_SHARE,
 	);

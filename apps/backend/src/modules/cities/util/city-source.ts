@@ -1,4 +1,5 @@
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
+import { normalizeAccountHandle } from 'src/modules/social/util/accounts.js';
 import { isPublicWebUrl } from 'src/shared/util/public-fetch.js';
 
 import { CitySourceKindEnum } from '../entities/city-source.entity.js';
@@ -23,26 +24,42 @@ const normalizeBlogUrl = (value: string): string => {
 	return url.pathname === '/' && !url.search ? href.replace(/\/$/, '') : href;
 };
 
-/** A source as stored: hashtags without `#`, lowercased; searches trimmed; blogs as URLs. */
+/**
+ * A source as stored: hashtags without `#`, lowercased; searches trimmed; blogs as URLs; accounts
+ * as handles (`@Name`, a profile URL → `name`; empty for anything that is no handle).
+ */
 export const normalizeSourceValue = (kind: CitySourceKindEnum, value: string): string => {
 	if (kind === CitySourceKindEnum.BLOG) return normalizeBlogUrl(value);
+	if (isAccountKind(kind)) return normalizeAccountHandle(value) ?? '';
 	const trimmed = value.trim().replace(/\s+/g, ' ');
 	return kind === CitySourceKindEnum.TIKTOK_SEARCH ? trimmed : trimmed.replace(/^#+/, '').toLowerCase();
 };
 
-/** The platform and `SocialPost.source` a source's posts carry. */
-export const sourcePost = (
-	kind: CitySourceKindEnum,
-	value: string,
-): { platform: SocialPlatformEnum; source: string } => {
+/** The platform a source's posts are on. */
+export const sourcePlatform = (kind: CitySourceKindEnum): SocialPlatformEnum => {
 	switch (kind) {
 		case CitySourceKindEnum.TIKTOK_HASHTAG:
-			return { platform: SocialPlatformEnum.TIKTOK, source: `#${value}` };
 		case CitySourceKindEnum.TIKTOK_SEARCH:
-			return { platform: SocialPlatformEnum.TIKTOK, source: `search:${value}` };
+		case CitySourceKindEnum.TIKTOK_ACCOUNT:
+			return SocialPlatformEnum.TIKTOK;
 		case CitySourceKindEnum.INSTAGRAM_HASHTAG:
-			return { platform: SocialPlatformEnum.INSTAGRAM, source: `#${value}` };
+		case CitySourceKindEnum.INSTAGRAM_ACCOUNT:
+			return SocialPlatformEnum.INSTAGRAM;
 		case CitySourceKindEnum.BLOG:
-			return { platform: SocialPlatformEnum.BLOG, source: `blog:${value}` };
+			return SocialPlatformEnum.BLOG;
 	}
 };
+
+/** A hashtag source, which points at its `Hashtag`. */
+export const isHashtagKind = (kind: CitySourceKindEnum): boolean =>
+	kind === CitySourceKindEnum.TIKTOK_HASHTAG || kind === CitySourceKindEnum.INSTAGRAM_HASHTAG;
+
+/** An account source: one creator's profile, `value` its handle. */
+export const isAccountKind = (kind: CitySourceKindEnum): boolean =>
+	kind === CitySourceKindEnum.TIKTOK_ACCOUNT || kind === CitySourceKindEnum.INSTAGRAM_ACCOUNT;
+
+/** The account source kind of a profile platform. */
+export const accountSourceKind = (platform: SocialPlatformEnum): CitySourceKindEnum | null =>
+	platform === SocialPlatformEnum.TIKTOK ? CitySourceKindEnum.TIKTOK_ACCOUNT
+	: platform === SocialPlatformEnum.INSTAGRAM ? CitySourceKindEnum.INSTAGRAM_ACCOUNT
+	: null;

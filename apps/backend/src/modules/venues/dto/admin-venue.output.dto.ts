@@ -1,13 +1,12 @@
 import { tags } from 'typia';
 
+import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
 import type { ImageOutputDto } from 'src/modules/image/dto/image.output.dto.js';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
 import type {
-	FeedbackDish,
-	FeedbackPoint,
 	FeedbackSentiment,
 } from '../interfaces/feedback.interface.js';
 import type { LeadSignals } from '../interfaces/lead-score.interface.js';
@@ -105,10 +104,8 @@ export interface AdminReviewOutputDto {
 	ownerResponse?: string;
 	ownerResponseAt?: Date;
 	sentiment?: FeedbackSentiment;
-	praise?: FeedbackPoint[];
-	complaints?: FeedbackPoint[];
-	dishes?: FeedbackDish[];
-	changes?: string[];
+	/** What it says, as feedback rows (none before it is analysed) */
+	feedback: FeedbackPointOutputDto[];
 	analysedAt?: Date;
 }
 

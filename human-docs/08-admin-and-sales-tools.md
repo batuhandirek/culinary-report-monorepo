@@ -15,7 +15,7 @@ Every brand in the city for a month, one row each: kind of food and district (or
 Header: name, icon, stage, score, rating (a chain's: its stars over all its places' reviews); month and city pickers; **Build report**; **Add to sales**. Tabs:
 
 - **Overview**: the month's figures with changes, six months, the most viewed posts, the report, the sales card, own accounts, branches, and **todos** (what to do about this brand, each naming the tab).
-- **Posts**, **Reviews** (the month, "needs a reply", all months), **Branches**, **Competitors** (list, suggestions, add a place or a whole rival), **Signals** (open tables, busyness, search ranks, rating over time, for any branch you pick), **Reports** (every month, rebuild, share links, PDF, send), **Sales**, **Settings** (report scope, split).
+- **Posts**, **Reviews** (the month, "needs a reply", all months), **Branches**, **Competitors** (list, suggestions, add a place or a whole rival), **Signals** (open tables, busyness, search ranks, rating over time, for any branch you pick), **Reports** (its report configurations: add one from a template or from scratch, rename, edit, pause; every month's reports, rebuild, share links, PDF, send), **Sales**, **Settings** (report scope, split).
 
 ### The Sales tab
 
@@ -44,11 +44,13 @@ A name on the city's chain deny list keeps half its score. 60+ is a suggested pr
 
 ## Reports (`/admin/reports`, `/admin/reports/<id>`)
 
-The report as the owner sees it, the PDF, **Share** (a private link `/r/<token>`: anyone with it reads the report without login; opens are counted from the browser, admins excluded; revoke replaces it; the share is logged as a touch when the brand is a prospect), **E-mail** (send now to a won prospect's address), **Rebuild**.
+**Report templates** (`/admin/reports/templates`): ready-made layouts a brand's configuration starts from, with a live preview on a built report; the default one, how many brands have a copy, and every report made from each. The report as the owner sees it, the PDF, **Share** (a private link `/r/<token>`: anyone with it reads the report without login; opens are counted from the browser, admins excluded; revoke replaces it; the share is logged as a touch when the brand is a prospect), **E-mail** (send now to a won prospect's address), **Rebuild**.
 
 ## Social (`/admin/posts`)
 
 Every post with the brands it names and its creator; **Creators** (the city's month by person); **Own accounts** (venues' own handles with followers and the month's posts); **To review** (the matcher's "this account looks like a venue's own" suggestions: confirm or reject; a confirmed own account is removed from every word-of-mouth count at once).
+
+A **creator's page** shows their accounts, six months of posts, the brands they named, what found their posts (a city hashtag or search, a blog, a search for a venue, their own profile) and **Watched**: for each profile, why we scrape it every week, or that we don't. The ties are "Berlin's discovery" (the city follows them: a creator source on the city's Sources tab, with a switch to stop), or a brand's own-account tracking because the brand is a paying customer, one of the month's most talked-about brands, or a rival a report compares with. "Watch in <city>" adds an unwatched creator to the city's sources.
 
 ## Trends (`/admin/trends`)
 
@@ -56,7 +58,7 @@ Topics (every kind of food with a signal: venues, posts, searches, ranked by pos
 
 ## Cities (`/admin/cities`)
 
-The city row: sources (hashtags and searches with their yield: posts found first, matched, views over three months; "Suggest sources"), districts and postal codes ("Suggest from venues"), the calendar (weather, holidays, events), budgets per step, the chain deny list, the OSM boundary id.
+The city row: sources (hashtags and searches with their yield over three months: posts found, matched, how many of the matched ones only that source found (what dropping it would lose), views; "Suggest sources" from the LLM, and "Hashtags from the data": tags we don't scrape that keep showing up on posts about 3+ brands, free), districts and postal codes ("Suggest from venues"), the calendar (weather, holidays, events), budgets per step, the chain deny list, the OSM boundary id.
 
 ## Data (`/admin/data`)
 

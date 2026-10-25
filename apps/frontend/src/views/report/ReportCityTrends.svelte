@@ -25,6 +25,7 @@
 				: Math.abs(c) < 0.05
 					? 'flat'
 					: `${c > 0 ? 'up' : 'down'} ${Math.round(Math.abs(c) * 100)}%`;
+	const pct = (share: number) => `${Math.round(share * 100)}%`;
 	const points = (delta: number) => `${delta > 0 ? '+' : '−'}${Math.abs(delta).toFixed(1)} pts`;
 
 	const cuisine = $derived(city.cuisine);
@@ -64,7 +65,7 @@
 
 {#snippet rising(title: string, rows: ReportTrendRow[], unit: string)}
 	<div class="min-w-0">
-		<p class="eyebrow text-beet m-0 mb-2">{title}</p>
+		<p class="stamp text-beet m-0 mb-2">{title}</p>
 		{#if rows.length}
 			<ol class="m-0 flex list-none flex-col p-0">
 				{#each rows as row, i (row.key)}
@@ -112,7 +113,7 @@
 
 	{#if city.searches?.length}
 		<div class="min-w-0 break-inside-avoid">
-			<p class="eyebrow text-beet m-0 mb-2">Searched and talked about</p>
+			<p class="stamp text-beet m-0 mb-2">Searched and talked about</p>
 			<ol class="m-0 flex list-none flex-col p-0">
 				{#each city.searches as row (row.key)}
 					<li class="border-line flex items-baseline justify-between gap-3 border-t py-2 text-[13px]">
@@ -132,7 +133,7 @@
 
 	{#if baseline.length}
 		<div class="break-inside-avoid">
-			<p class="eyebrow text-beet m-0 mb-2">You against the city</p>
+			<p class="stamp text-beet m-0 mb-2">You against the city</p>
 			<div
 				class="bg-line border-line grid grid-cols-2 gap-px overflow-hidden rounded-md border sm:grid-cols-4">
 				{#each baseline as b (b.label)}
@@ -151,6 +152,26 @@
 				Medians over the {city.baseline.venues} places in {city.cityName} we report on this month. Shares are
 				of the city's {compact(city.mentions)} venue mentions in posts by others, so they do not move with how
 				much we collected.
+			</p>
+		</div>
+	{/if}
+
+	{#if city.themes?.length}
+		{@const themes = city.themes}
+		<div class="break-inside-avoid">
+			<p class="stamp text-beet m-0 mb-2">What guests criticise, against the city</p>
+			<ul class="m-0 list-none p-0">
+				{#each themes as t (t.key)}
+					<li class="border-line grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-x-4 border-t py-2 text-[13px]">
+						<span class="text-ink font-medium">{t.label}</span>
+						<span class="text-beet font-semibold tabular-nums">{pct(t.venueShare)} of yours</span>
+						<span class="text-muted-foreground tabular-nums">{pct(t.median)} in {city.cityName}</span>
+					</li>
+				{/each}
+			</ul>
+			<p class="text-muted-foreground m-0 mt-2 text-xs">
+				Share of your written reviews this month criticising each, against the median of the {themes[0].venues} other
+				places in {city.cityName} we report on, each with five or more written reviews.
 			</p>
 		</div>
 	{/if}

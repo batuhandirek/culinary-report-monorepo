@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
+import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
+import { CitySource, CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -9,8 +11,10 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 
 import { AdminAccountsController } from '../controllers/admin.accounts.controller.js';
 import { AdminCreatorsController } from '../controllers/admin.creators.controller.js';
+import { AccountRejectedBrand } from '../entities/account-rejected-brand.entity.js';
 import { Creator } from '../entities/creator.entity.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
+import { PostSource, PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { AccountMatchingService } from '../services/account-matching.service.js';
@@ -101,9 +105,6 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 				visited: true,
 				sentiment: 'positive',
 				summary: 'Nice.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			});
 			await em.flush();
 		}
@@ -176,7 +177,7 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 		const controller = harness.moduleRef.get(AdminAccountsController);
 		const soriAccount = await account('soriramen.berlin', SocialPlatformEnum.INSTAGRAM);
 		const rejected = await controller.decideAccount(soriAccount.id, { action: 'reject' });
-		expect(rejected).toMatchObject({ rejectedBrandIds: [sori.brand.id], brandSource: 'admin' });
+		expect(rejected).toMatchObject({ rejections: [{ brand: { id: sori.brand.id } }], brandSource: 'admin' });
 		expect(rejected.brand).toBeUndefined();
 		await matching.match(city);
 		expect((await account('soriramen.berlin', SocialPlatformEnum.INSTAGRAM)).brand).toBeNull();
@@ -190,7 +191,7 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 
 		// Linking again lifts the rejection
 		await controller.decideAccount(soriAccount.id, { action: 'link', brandId: sori.brand.id });
-		expect((await account('soriramen.berlin', SocialPlatformEnum.INSTAGRAM)).rejectedBrandIds).toEqual([]);
+		expect(await harness.orm.em.fork().count(AccountRejectedBrand, { account: soriAccount.id })).toBe(0);
 	});
 
 	it('confirms a suggestion, and refuses a branch of another brand', async () => {
@@ -244,6 +245,21 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 			expect(detail.months.at(-1)).toEqual({ month: '2026-09', posts: 1, views: 100 });
 			expect(detail.months).toHaveLength(6);
 			expect(detail.brands).toEqual([expect.objectContaining({ id: paula.brand.id, posts: 1, own: false })]);
+			expect(detail.foundBy).toEqual([]);
+
+			// What found their posts: the city's hashtag (a source) and a venue search (none)
+			const em = harness.orm.em;
+			const post = await em.findOneOrFail(SocialPost, { account: eats.id });
+			const tag = em.create(CitySource, { city, kind: CitySourceKindEnum.TIKTOK_HASHTAG, value: 'berlinfood' });
+			em.create(PostSource, { post, kind: PostSourceKindEnum.TIKTOK_HASHTAG, value: 'berlinfood', source: tag, foundAt: new Date() });
+			em.create(PostSource, { post, kind: PostSourceKindEnum.VENUE_SEARCH, value: 'Cafe Paula Berlin', venue: paula, foundAt: new Date() });
+			await em.flush();
+			const found = (await controller.getCreator(eats.creator.id, { month: '2026-09' })).foundBy;
+			expect(_.sortBy(found, f => f.kind)).toEqual([
+				expect.objectContaining({ kind: 'tiktok_hashtag', value: 'berlinfood', sourceId: tag.id, sourceEnabled: true, posts: 1 }),
+				expect.objectContaining({ kind: 'venue_search', venue: { id: paula.id, name: paula.name }, posts: 1, city: { id: city.id, name: city.name } }),
+			]);
+			expect(found.find(f => f.kind === 'venue_search')).not.toHaveProperty('sourceId');
 		});
 
 		it('merges accounts into one creator and splits one out again', async () => {

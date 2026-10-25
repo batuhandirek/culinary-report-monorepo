@@ -11,6 +11,7 @@ import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 
 import { Brand, BrandReportScopeEnum } from '../entities/brand.entity.js';
 import { BrandDismissal } from '../entities/brand-dismissal.entity.js';
+import { BrandExcludedVenue } from '../entities/brand-excluded-venue.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { BrandChangedJob } from '../jobs/brand-changed.job.js';
 import { BrandSearchJob } from '../jobs/brand-search.job.js';
@@ -153,7 +154,7 @@ export class BrandService {
 	async candidates(brand: Brand): Promise<Venue[]> {
 		const cities = await this.cityService.list();
 		const words = new Map(cities.map(c => [c.id, cityStopwords(c.nameStopwords)]));
-		const excluded = new Set(brand.excludedVenueIds);
+		const excluded = (await this.excludedVenues([brand.id])).get(brand.id) ?? new Set<string>();
 		const venues = (await this.loneVenues({ closed: false })).filter(
 			v =>
 				v.brand.id !== brand.id &&
@@ -197,7 +198,7 @@ export class BrandService {
 	 * city's suggestions whose branches give one site named after the brand becomes a chain.
 	 * Name alone, two sites, or one branch's site stay suggestions for
 	 * an admin. An admin's word stays: dismissed and split keys are not suggested, and a branch
-	 * taken off is in `excludedVenueIds`.
+	 * taken off is excluded (`BrandExcludedVenue`).
 	 */
 	async autoMerge(cityId: string): Promise<{ joined: number; merged: number }> {
 		const city = await this.cityService.getById(cityId);
@@ -210,7 +211,9 @@ export class BrandService {
 			isFoodVenue(v.category),
 		);
 		const taken = new Set<string>();
-		for (const chain of await this.list()) {
+		const chains = await this.list();
+		const exclusions = await this.excludedVenues(chains.map(c => c.id));
+		for (const chain of chains) {
 			// The chain's own sites, by their letters: "losteria.net" and "losteria.de" are one
 			const sites = new Set(
 				chain.branches
@@ -224,7 +227,7 @@ export class BrandService {
 			const riders =
 				chain.branches.getItems().some(v => v.city.id === city.id) &&
 				isDistinctiveBrand(chain.name, words);
-			const excluded = new Set(chain.excludedVenueIds);
+			const excluded = exclusions.get(chain.id) ?? new Set<string>();
 			const venues = lone.filter(v => {
 				if (taken.has(v.id) || excluded.has(v.id) || !isBrandName(v.name, chain.key, words))
 					return false;
@@ -300,7 +303,7 @@ export class BrandService {
 	/**
 	 * Takes a branch off the brand: it becomes a brand of its own, named like it, and the brand's
 	 * records (reports, prospect, members) stay with the brand. It is never offered or joined
-	 * again (`excludedVenueIds`), or `autoMerge` would put it back; with `exclude`, a venue that
+	 * again (`BrandExcludedVenue`), or `autoMerge` would put it back; with `exclude`, a venue that
 	 * is no branch is excluded too, so "Not a branch" works on a candidate. A brand's last branch
 	 * can't be taken off.
 	 */
@@ -310,8 +313,7 @@ export class BrandService {
 		const wasBranch = venue.brand.id === brand.id;
 		if (wasBranch && brand.branches.length === 1)
 			throw new BadRequestException(`${venue.name} is the brand's only branch`);
-		if ((exclude || wasBranch) && !brand.excludedVenueIds.includes(venueId))
-			brand.excludedVenueIds = [...brand.excludedVenueIds, venueId];
+		if (exclude || wasBranch) await this.exclude(brand, venue);
 		if (wasBranch) {
 			await this.standAlone([venue]);
 			await this.changed([brand.id, venue.brand.id], [venue, ...brand.branches.getItems()]);
@@ -418,10 +420,11 @@ export class BrandService {
 		const result = await this.venueScrapeService.searchBrands(city, brands, budgetUsd);
 		const now = new Date().toISOString();
 		let candidates = 0;
+		const exclusions = await this.excludedVenues(brands.map(b => b.id));
 		for (const brand of brands) {
 			brand.branchesSearchedAt = { ...brand.branchesSearchedAt, [city.id]: now };
 			candidates += (result.branches.get(brand.key) ?? []).filter(
-				v => v.brand.id !== brand.id && !brand.excludedVenueIds.includes(v.id),
+				v => v.brand.id !== brand.id && !exclusions.get(brand.id)?.has(v.id),
 			).length;
 		}
 		await this.em.flush();
@@ -497,7 +500,7 @@ export class BrandService {
 			{ populate: ['brand'] },
 		);
 		const keep = await this.absorb(brand, [brand, ...venues.map(v => v.brand)]);
-		keep.excludedVenueIds = keep.excludedVenueIds.filter(v => !venueIds.includes(v));
+		await this.em.nativeDelete(BrandExcludedVenue, { brand: keep.id, venue: { $in: _.uniq(venueIds) } });
 		await this.em.flush();
 		return venues;
 	}
@@ -528,6 +531,28 @@ export class BrandService {
 				...(await this.em.find(Venue, { id: { $in: ids } }, { populate: ['favicon'] })),
 			);
 		return venues;
+	}
+
+	/** The venues each of these brands excluded, by brand id (`BrandExcludedVenue`). */
+	async excludedVenues(brandIds: string[]): Promise<Map<string, Set<string>>> {
+		const out = new Map<string, Set<string>>();
+		for (const ids of _.chunk(_.uniq(brandIds), 1000)) {
+			if (!ids.length) continue;
+			const rows: { brand_id: string; venue_id: string }[] = await this.em
+				.getConnection()
+				.execute(`select brand_id, venue_id from brand_excluded_venues where brand_id in (${marks(ids)})`, ids);
+			for (const r of rows) {
+				const set = out.get(r.brand_id) ?? new Set<string>();
+				set.add(r.venue_id);
+				out.set(r.brand_id, set);
+			}
+		}
+		return out;
+	}
+
+	/** Records that the venue is not the brand's branch, once. Does not flush. */
+	private async exclude(brand: Brand, venue: Venue): Promise<void> {
+		if (!(await this.em.findOne(BrandExcludedVenue, { brand, venue }))) this.em.create(BrandExcludedVenue, { brand, venue });
 	}
 
 	/** Gives each venue a brand of its own, named like it; its own mentions follow it. Flushes. */
@@ -589,10 +614,6 @@ export class BrandService {
 		if (others.length === 0) return keep;
 		const ids = others.map(b => b.id);
 		const all = [keep.id, ...ids];
-		const excludedVenueIds = _.uniq([
-			...keep.excludedVenueIds,
-			...others.flatMap(b => b.excludedVenueIds),
-		]);
 		const branchesSearchedAt = Object.assign(
 			{},
 			...others.map(b => b.branchesSearchedAt),
@@ -624,10 +645,22 @@ export class BrandService {
 				`update social_accounts set suggested_brand_id = null, suggested_score = null where suggested_brand_id = brand_id`,
 				[],
 			);
+			// "Not theirs" for a merged brand is for the chain now; never for the chain's own account
 			await sql(
-				`update social_accounts set rejected_brand_ids = rejected_brand_ids - array[${marks(ids)}]::text[]
-				where exists (select 1 from jsonb_array_elements_text(rejected_brand_ids) r where r in (${marks(ids)}))`,
-				[...ids, ...ids],
+				`update account_rejected_brands r set brand_id = ? where r.brand_id in (${marks(ids)})
+				and not exists (select 1 from account_rejected_brands k where k.account_id = r.account_id and k.brand_id = ?)`,
+				[keep.id, ...ids, keep.id],
+			);
+			await sql(
+				`delete from account_rejected_brands r using social_accounts a
+				where a.id = r.account_id and r.brand_id = ? and a.brand_id = ?`,
+				[keep.id, keep.id],
+			);
+			// The places an admin said are not the merged brands' are not the chain's either
+			await sql(
+				`update brand_excluded_venues e set brand_id = ? where e.brand_id in (${marks(ids)})
+				and not exists (select 1 from brand_excluded_venues k where k.venue_id = e.venue_id and k.brand_id = ?)`,
+				[keep.id, ...ids, keep.id],
 			);
 			await sql(
 				`delete from reports r where r.brand_id in (${marks(ids)}) and exists (
@@ -709,7 +742,7 @@ export class BrandService {
 		// The identity map still holds the deleted brands and the venues' old brands
 		this.em.clear();
 		const kept = await this.em.findOneOrFail(Brand, { id: keep.id });
-		Object.assign(kept, { excludedVenueIds, branchesSearchedAt });
+		Object.assign(kept, { branchesSearchedAt });
 		await this.em.flush();
 		this.logger.log(`Merged ${others.length} brands into ${kept.name}`);
 		return kept;

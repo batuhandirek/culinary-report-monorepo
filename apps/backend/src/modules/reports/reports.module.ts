@@ -16,20 +16,26 @@ import { VenuesModule } from '../venues/venues.module.js';
 import { ReportHighlightsAgent } from './agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from './agents/review-reply.agent.js';
 import { AdminReportSharesController } from './controllers/admin.report-shares.controller.js';
+import { AdminReportConfigsController } from './controllers/admin.report-configs.controller.js';
+import { AdminReportTemplatesController } from './controllers/admin.report-templates.controller.js';
 import { AdminReportsController } from './controllers/admin.reports.controller.js';
 import { SharedReportsController } from './controllers/shared-reports.controller.js';
 import { Report } from './entities/report.entity.js';
 import { ReportShare } from './entities/report-share.entity.js';
+import { BrandReportConfig } from './entities/brand-report-config.entity.js';
+import { ReportTemplate } from './entities/report-template.entity.js';
 import { ReportService } from './services/report.service.js';
 import { ReportCityService } from './services/report-city.service.js';
 import { ReportPdfService } from './services/report-pdf.service.js';
 import { ReportReachService } from './services/report-reach.service.js';
 import { ReportShareService } from './services/report-share.service.js';
 import { ReportSignalsService } from './services/report-signals.service.js';
+import { ReportConfigService } from './services/report-config.service.js';
+import { ReportTemplateService } from './services/report-template.service.js';
 
 @Module({
 	imports: [
-		MikroOrmModule.forFeature([Report, ReportShare, User, UserSession]),
+		MikroOrmModule.forFeature([Report, ReportShare, ReportTemplate, BrandReportConfig, User, UserSession]),
 		AuthModule,
 		CitiesModule,
 		FoodTopicsModule,
@@ -38,7 +44,7 @@ import { ReportSignalsService } from './services/report-signals.service.js';
 		SocialModule,
 		TrendsModule,
 	],
-	controllers: [AdminReportsController, AdminReportSharesController, SharedReportsController],
+	controllers: [AdminReportsController, AdminReportSharesController, AdminReportTemplatesController, AdminReportConfigsController, SharedReportsController],
 	providers: [
 		ReportService,
 		ReportReachService,
@@ -46,6 +52,8 @@ import { ReportSignalsService } from './services/report-signals.service.js';
 		ReportSignalsService,
 		ReportPdfService,
 		ReportShareService,
+		ReportTemplateService,
+		ReportConfigService,
 		ReportHighlightsAgent,
 		ReviewReplyAgent,
 	],

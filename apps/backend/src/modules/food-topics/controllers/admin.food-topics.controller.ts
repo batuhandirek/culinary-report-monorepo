@@ -10,6 +10,7 @@ import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guar
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
 
 import {
+	AdminRelinkFoodTopicsOutputDto,
 	AdminCreateFoodTopicInputDto,
 	AdminFoodTopicBaseOutputDto,
 	AdminFoodTopicsOutputDto,
@@ -51,6 +52,17 @@ export class AdminFoodTopicsController {
 	}
 
 	/** Dismisses an unrecognised word (no kind of food to map), or brings it back. */
+	/**
+	 * Queues the re-link of everything stored against food topics (`FoodTopicRelinkJob`: mentions,
+	 * menu items, feedback dishes, then every city's venue tags). A topic or alias change queues it
+	 * on its own; this is for a first fill or after a change made outside the admin.
+	 */
+	@TypedRoute.Post('/relink')
+	async relinkFoodTopics(): Promise<AdminRelinkFoodTopicsOutputDto> {
+		await this.foodTopicService.queueRelink();
+		return { queued: true };
+	}
+
 	@TypedRoute.Put('/ignored-words')
 	async setIgnoredWord(@TypedBody() body: AdminIgnoreWordInputDto): Promise<void> {
 		await this.foodTopicService.setIgnored(body.word, body.ignored);

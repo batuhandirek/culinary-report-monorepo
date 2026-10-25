@@ -48,14 +48,14 @@ export class AdminReviewsController {
 			});
 		}
 		const [items, totalItems] = await this.em.findAndCount(Review, filters, {
-			populate: ['venue'],
+			populate: ['venue', 'feedback', 'feedback.foodTopic'],
 			orderBy: query.needsReply ? { stars: QueryOrder.ASC, publishedAt: QueryOrder.DESC } : { publishedAt: QueryOrder.DESC },
 			offset: (query.page - 1) * query.size,
 			limit: query.size,
 		});
 		return {
 			items: items.map(review => {
-				const plain = wrap(review).serialize({ skipNull: true, forceObject: true }) as unknown as Omit<
+				const plain = wrap(review).serialize({ skipNull: true, forceObject: true, populate: ['feedback', 'feedback.foodTopic'] }) as unknown as Omit<
 					AdminBranchReviewOutputDto,
 					'branch'
 				>;

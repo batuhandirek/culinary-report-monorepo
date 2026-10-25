@@ -12,9 +12,12 @@ import { AdminBrandAccountsController } from '../controllers/admin.brand-account
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
 import { SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
+import { AccountScrapeService } from '../services/account-scrape.service.js';
+import { HashtagService } from '../services/hashtag.service.js';
 import { OwnAccountService } from '../services/own-account.service.js';
 import { SocialAccountService } from '../services/social-account.service.js';
-import { instagramProfileFigures, tiktokProfileFigures } from '../util/accounts.js';
+import { SocialPostService } from '../services/social-post.service.js';
+import { instagramProfileFigures, type ProfilePlatform, tiktokProfileFigures } from '../util/accounts.js';
 
 import { ownAccount } from './factories/social-account.factory.js';
 
@@ -73,6 +76,9 @@ describe('OwnAccountService (pglite)', () => {
 			providers: [
 				OwnAccountService,
 				SocialAccountService,
+				AccountScrapeService,
+				SocialPostService,
+				HashtagService,
 				AdminBrandAccountsController,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
@@ -112,22 +118,34 @@ describe('OwnAccountService (pglite)', () => {
 		const controller = harness.moduleRef.get(AdminBrandAccountsController);
 		const list = await controller.removeBrandAccount(brand.id, account.id);
 		// Still listed on the brand page, to undo
-		expect(list.find(a => a.id === account.id)).toMatchObject({ rejectedBrandIds: [brand.id] });
+		expect(list.find(a => a.id === account.id)).toMatchObject({ rejections: [{ brand: { id: brand.id } }] });
 		expect(list.find(a => a.id === account.id)?.brand).toBeUndefined();
 		expect(await service.addProspectHandles([{ brandId: brand.id, instagram: 'chenche.teehaus' }])).toEqual({
 			created: 0,
 		});
 	});
 
+	// The monthly run's scrape of the brand's linked accounts (the watch list decides which)
+	const scrapeMonth = async (month: string, now: Date) => {
+		const accounts = await harness.orm.em.find(SocialAccount, { brand: brand.id });
+		return harness.moduleRef.get(AccountScrapeService).scrape(
+			city,
+			accounts.map(a => ({ platform: a.platform as ProfilePlatform, handle: a.handle })),
+			{ since: `${month}-01T00:00:00.000Z`, budgetUsd: 2, snapshotMonth: month, label: month, now },
+		);
+	};
+
 	it('scrapes a snapshot per month per account and reports the growth', async () => {
 		const em = harness.orm.em;
-		const first = await service.scrapeMonth([brand.id], '2026-08', 2, new Date('2026-09-02T06:00:00Z'));
+		const first = await scrapeMonth('2026-08', new Date('2026-09-02T06:00:00Z'));
 		// The removed account is not scraped; the budget splits by paid items (1 vs 10)
-		expect(first).toEqual({ accounts: 2, snapshots: 2 });
+		expect(first).toMatchObject({ accounts: 2, profiles: 2, snapshots: 2 });
 		const [igCall, ttCall] = runActor.mock.calls;
 		expect(igCall[1]).toEqual({ usernames: ['chenche_berlin'] });
 		expect(igCall[2].maxCostUsd).toBeCloseTo(2 / 11);
+		// A snapshot run takes the latest ten videos whatever their date: the averages are over them
 		expect(ttCall[1]).toMatchObject({ profiles: ['chenche.berlin'], resultsPerPage: 10, profileSorting: 'latest' });
+		expect(ttCall[1]).not.toHaveProperty('oldestPostDateUnified');
 		expect(ttCall[2].maxCostUsd).toBeCloseTo(20 / 11);
 		// The accounts take the profile's name and followers
 		const ig = await em.findOneOrFail(SocialAccount, { handle: 'chenche_berlin' });
@@ -140,9 +158,9 @@ describe('OwnAccountService (pglite)', () => {
 		]);
 
 		instagramFollowers = 4440;
-		await service.scrapeMonth([brand.id], '2026-09', 2, new Date('2026-10-02T06:00:00Z'));
+		await scrapeMonth('2026-09', new Date('2026-10-02T06:00:00Z'));
 		// Scraping a month again replaces its snapshot
-		await service.scrapeMonth([brand.id], '2026-09', 2, new Date('2026-10-02T07:00:00Z'));
+		await scrapeMonth('2026-09', new Date('2026-10-02T07:00:00Z'));
 		expect(await em.count(SocialAccountSnapshot, {})).toBe(4);
 
 		expect(await service.forReport(brand.id, city.id, '2026-09')).toEqual([
@@ -198,7 +216,7 @@ describe('OwnAccountService (pglite)', () => {
 		});
 		expect(relinked.find(a => a.handle === 'chenche.teehaus' && a.platform === 'instagram')).toMatchObject({
 			brand: { id: brand.id },
-			rejectedBrandIds: [],
+			rejections: [],
 		});
 		await expect(
 			controller.addBrandAccount(brand.id, { platform: SocialPlatformEnum.INSTAGRAM, handle: 'not a handle' }),

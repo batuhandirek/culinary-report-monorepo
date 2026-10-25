@@ -1,13 +1,11 @@
-import type { Rel } from '@mikro-orm/core';
-import { Entity, Enum, Index, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
+import { Collection, type Rel } from '@mikro-orm/core';
+import { Entity, Enum, Index, ManyToOne, OneToMany, Property } from '@mikro-orm/decorators/legacy';
+
+import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
 
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
-import type {
-	FeedbackDish,
-	FeedbackPoint,
-	FeedbackSentiment,
-} from '../interfaces/feedback.interface.js';
+import type { FeedbackSentiment } from '../interfaces/feedback.interface.js';
 import { ReviewRepository } from '../repositories/review.repository.js';
 
 import { Venue } from './venue.entity.js';
@@ -76,23 +74,15 @@ export class Review extends MikroOrmEntityAbstractClass<'likes' | 'platform'> {
 	@Property({ type: 'text', nullable: true })
 	replyDraft?: string | null;
 
-	// Filled by the review analysis
+	// Filled by the review analysis; what it says is its `feedback` rows
 	@Property({ type: 'text', nullable: true })
 	sentiment?: FeedbackSentiment | null;
 
-	@Property({ type: 'jsonb', nullable: true })
-	praise?: FeedbackPoint[] | null;
-
-	@Property({ type: 'jsonb', nullable: true })
-	complaints?: FeedbackPoint[] | null;
-
-	@Property({ type: 'jsonb', nullable: true })
-	dishes?: FeedbackDish[] | null;
-
-	// Changes the reviewer noticed, e.g. "new owner", "prices went up"
-	@Property({ type: 'jsonb', nullable: true })
-	changes?: string[] | null;
 
 	@Property({ type: 'datetime', nullable: true })
 	analysedAt?: Date | null;
+
+	/** What it says, one row per point and per dish no point names (`FeedbackService`) */
+	@OneToMany(() => FeedbackPoint, point => point.review, { orderBy: { id: 'asc' }, orphanRemoval: true })
+	feedback = new Collection<FeedbackPoint>(this);
 }

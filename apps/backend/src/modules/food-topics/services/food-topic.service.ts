@@ -4,11 +4,13 @@ import { BadRequestException, ConflictException, Injectable } from '@nestjs/comm
 
 import _ from 'lodash';
 
+import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { FoodTopic, FoodTopicKindEnum } from '../entities/food-topic.entity.js';
 import { FoodTopicIgnoredWord } from '../entities/food-topic-ignored-word.entity.js';
+import { FoodTopicRelinkJob } from '../jobs/food-topic-relink.job.js';
 import { FoodTopicIndex } from '../util/food-topics.js';
 
 // Unmapped keys the admin read lists, most used first, each with the venues it was said of
@@ -47,7 +49,21 @@ export interface FoodTopicInput {
  */
 @Injectable()
 export class FoodTopicService {
-	constructor(private readonly em: EntityManager) {}
+	constructor(
+		private readonly em: EntityManager,
+		private readonly pgBossService: PgBossService,
+	) {}
+
+	/**
+	 * Queues the re-link of everything stored against topics (`FoodTopicRelinkService`): after every
+	 * change to a topic or its aliases, so a new alias reaches every page the way matching on read did.
+	 * One runs and one waits.
+	 */
+	async queueRelink(): Promise<void> {
+		await this.pgBossService.sendJob(FoodTopicRelinkJob.jobName, new FoodTopicRelinkJob({}), {
+			singletonKey: FoodTopicRelinkJob.singletonKey,
+		});
+	}
 
 	async all(): Promise<FoodTopic[]> {
 		return this.em.find(FoodTopic, { deletedAt: null }, { orderBy: { key: 'asc' } });
@@ -65,7 +81,7 @@ export class FoodTopicService {
 
 	/**
 	 * A new topic. Its key is the `normalizeCuisine` key of `key`, else of the label: 400 when that
-	 * says nothing ("Restaurant"), 409 when a topic has it.
+	 * says nothing ("Restaurant"), 409 naming the topic that has it ("Coffee" is the café's "cafe").
 	 */
 	async create(
 		input: FoodTopicInput & { label: string; kind: FoodTopicKindEnum; key?: string },
@@ -73,8 +89,12 @@ export class FoodTopicService {
 		const key = normalizeCuisine(input.key ?? input.label);
 		if (!key)
 			throw new BadRequestException(`"${input.key ?? input.label}" names no kind of food`);
-		if (await this.em.count(FoodTopic, { key }))
-			throw new ConflictException(`A topic "${key}" exists`);
+		const taken = await this.em.findOne(FoodTopic, { key });
+		// "Coffee" makes the key "cafe": say which topic has it, so the admin picks another label
+		if (taken)
+			throw new ConflictException(
+				`"${input.key ?? input.label}" makes the key "${key}", which ${taken.label} has: pick another label`,
+			);
 		const topic = this.em.create(FoodTopic, {
 			key,
 			label: input.label.trim(),
@@ -82,6 +102,7 @@ export class FoodTopicService {
 		});
 		await this.apply(topic, input);
 		await this.em.flush();
+		await this.queueRelink();
 		return topic;
 	}
 
@@ -90,6 +111,7 @@ export class FoodTopicService {
 		const topic = await this.em.findOneOrFail(FoodTopic, { id, deletedAt: null });
 		await this.apply(topic, input);
 		await this.em.flush();
+		await this.queueRelink();
 		return topic;
 	}
 
@@ -238,6 +260,7 @@ export class FoodTopicService {
 const toIndex = (topics: FoodTopic[]) =>
 	new FoodTopicIndex(
 		topics.map(t => ({
+			id: t.id,
 			key: t.key,
 			label: t.label,
 			kind: t.kind,

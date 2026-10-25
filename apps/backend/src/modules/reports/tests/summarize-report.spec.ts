@@ -1,8 +1,17 @@
 import { describe, expect, it } from '@jest/globals';
 
 import {
+	type FeedbackPointView,
+	type AnsweredDish,
+	type AnsweredPoint,
+	feedbackRows,
+} from 'src/modules/feedback/util/feedback-rows.js';
+import { dishKey } from 'src/modules/venues/util/dishes.js';
+
+import {
+	articleTitle,
+	groupChanges,
 	compareMonths,
-	dishKey,
 	excerpt,
 	ratingTrend,
 	selectNearbyCreators,
@@ -13,7 +22,22 @@ import {
 	SummaryReview,
 } from '../util/summarize-report.js';
 
-const mention = (overrides: Partial<SummaryMention>): SummaryMention => ({
+/** What a source says, as an extraction writes its rows */
+interface Said {
+	praise?: AnsweredPoint[];
+	complaints?: AnsweredPoint[];
+	dishes?: AnsweredDish[];
+	changes?: string[];
+}
+const said = ({ praise = [], complaints = [], dishes = [], changes = [] }: Said) =>
+	feedbackRows({ praise, complaints, dishes, changes }, { asked: true });
+
+const mention = ({
+	praise = [{ topic: 'food', detail: 'great chicken' }],
+	complaints = [],
+	dishes = [{ name: 'Half chicken', sentiment: 'positive' }],
+	...overrides
+}: Partial<SummaryMention> & Said): SummaryMention => ({
 	postId: 'p1',
 	platform: 'tiktok',
 	url: 'https://tiktok.com/x',
@@ -30,16 +54,15 @@ const mention = (overrides: Partial<SummaryMention>): SummaryMention => ({
 	visited: true,
 	sentiment: 'positive',
 	summary: 'Great chicken.',
-	praise: [{ topic: 'food', detail: 'great chicken' }],
-	complaints: [],
-	dishes: [{ name: 'Half chicken', sentiment: 'positive' }],
+	feedback: said({ praise, complaints, dishes }),
 	...overrides,
 });
 
 let reviewCount = 0;
-const review = (overrides: Partial<SummaryReview>): SummaryReview => ({
+const review = ({ praise, complaints, dishes, changes, ...overrides }: Partial<SummaryReview> & Said): SummaryReview => ({
 	reviewId: `r${++reviewCount}`,
 	publishedAt: new Date('2026-09-15T12:00:00Z'),
+	feedback: said({ praise, complaints, dishes, changes }),
 	...overrides,
 });
 
@@ -93,6 +116,10 @@ describe('summarizeReport', () => {
 		expect(data.reviews.changes).toEqual([
 			{ stars: 1, changes: ['new owner', 'food got worse'] },
 		]);
+		// Not filed yet: together, under "Other changes"
+		expect(data.reviews.changeThemes).toEqual([
+			{ label: 'Other changes', reviews: 1, details: ['new owner', 'food got worse'] },
+		]);
 		expect(data.reviews.critical).toEqual([
 			{ stars: 1, text: 'New owner, worse food', replied: false },
 		]);
@@ -127,6 +154,49 @@ describe('summarizeReport', () => {
 			complaints: { service: 2 },
 		});
 		expect(data.reviews.split.belowFive.complaintDetails).toHaveLength(4);
+	});
+
+	// A theme counts once per source, like a topic, and is absent while a point is unfiled
+	it('counts themes per source and leaves them out while a point has no theme', () => {
+		const increase = (detail: string) => ({ theme: 'price_increase', detail });
+		const data = summarizeReport({
+			venue: VENUE,
+			month: '2026-09',
+			mentions: [],
+			reviews: [
+				review({ stars: 2, text: 'Dearer', complaints: [increase('prices went up'), increase('dürüm now €9.50')] }),
+				review({ stars: 3, text: 'Dearer still', complaints: [increase('prices are way more now'), { theme: 'price_level', detail: 'expensive' }] }),
+			],
+		});
+		expect(data.reviews.complaints).toEqual({ price: 2 });
+		expect(data.reviews.complaintThemes).toEqual({ price_increase: 2, price_level: 1 });
+		expect(data.reviews.split.belowFive.complaintThemes).toEqual({ price_increase: 2, price_level: 1 });
+
+		const unfiled = summarizeReport({
+			venue: VENUE,
+			month: '2026-09',
+			mentions: [],
+			reviews: [review({ stars: 2, text: 'Dear', complaints: [{ topic: 'price', detail: 'expensive' }] })],
+		});
+		expect([unfiled.reviews.complaints, unfiled.reviews.complaintThemes]).toEqual([{ price: 1 }, undefined]);
+	});
+
+	// A dish a point names is one dish of that source, with the point's sentiment
+	it('counts a dish a point names once, with how the point came across', () => {
+		const data = summarizeReport({
+			venue: VENUE,
+			month: '2026-09',
+			mentions: [],
+			reviews: [
+				review({
+					stars: 2,
+					text: 'Pricey burger',
+					complaints: [{ theme: 'price_increase', detail: 'the burger got pricier', dish: 'burger' }],
+					dishes: [{ name: 'Burgers', sentiment: 'neutral' }],
+				}),
+			],
+		});
+		expect(data.dishes).toEqual([{ name: 'burger', count: 1, positive: 0, negative: 1 }]);
 	});
 
 	it('merges dishes from posts and reviews by name', () => {
@@ -406,5 +476,47 @@ describe('ratingTrend', () => {
 			rating: 4.7,
 			reviewsCount: 100,
 		});
+	});
+
+	it('groups noticed changes by what changed, a review once per theme', () => {
+		const filed = (theme: string, detail: string): FeedbackPointView => ({
+			topic: 'food',
+			theme: theme as FeedbackPointView['theme'],
+			detail,
+		});
+		expect(
+			groupChanges([
+				[filed('portion_size', 'burgers are getting smaller'), filed('portion_size', 'made smaller')],
+				[filed('portion_size', 'Burgers are smaller than before'), filed('ownership_change', 'new owner')],
+				[filed('portion_size', 'made smaller'), { topic: 'other', detail: 'new menu' }],
+				[filed('other', 'new kebab shop'), filed('renovation', 'renovated')],
+			]),
+		).toEqual([
+			{
+				theme: 'portion_size',
+				label: 'Portion size',
+				reviews: 3,
+				details: ['burgers are getting smaller', 'made smaller', 'Burgers are smaller than before'],
+			},
+			{ theme: 'ownership_change', label: 'Ownership change', reviews: 1, details: ['new owner'] },
+			{ theme: 'renovation', label: 'Renovation', reviews: 1, details: ['renovated'] },
+			// A catch-all theme, then what isn't filed yet, last
+			{ theme: 'other', label: 'Other', reviews: 1, details: ['new kebab shop'] },
+			{ label: 'Other changes', reviews: 1, details: ['new menu'] },
+		]);
+	});
+});
+
+describe('articleTitle', () => {
+	it("takes a blog article's first paragraph, the title the blog scrape wrote", () => {
+		expect(articleTitle('blog', 'Die besten Döner in  Kreuzberg\n\nWir haben getestet …')).toBe(
+			'Die besten Döner in Kreuzberg',
+		);
+	});
+
+	it('cuts a long one and leaves other platforms without one', () => {
+		expect(articleTitle('blog', 'x'.repeat(300))).toHaveLength(160);
+		expect(articleTitle('tiktok', 'Best döner\n\nso good')).toBeUndefined();
+		expect(articleTitle('blog', null)).toBeUndefined();
 	});
 });

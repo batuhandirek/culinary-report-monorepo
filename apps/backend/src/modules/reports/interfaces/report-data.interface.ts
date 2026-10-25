@@ -1,10 +1,7 @@
 import type { MonthContext } from 'src/modules/cities/util/month-context.js';
 import type { SearchDelta } from 'src/modules/trends/util/search-interest.js';
-import type {
-	FeedbackDish,
-	FeedbackPoint,
-	FeedbackSentiment,
-} from 'src/modules/venues/interfaces/feedback.interface.js';
+import type { FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
+import type { FeedbackSentiment, FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import type { ReviewsDistribution } from 'src/modules/venues/interfaces/venue-details.interface.js';
 
 import type {
@@ -21,11 +18,29 @@ import type {
 	ReportPrices,
 } from './report-signals.interface.js';
 
+/**
+ * A praise or complaint point as a report keeps it: the report's own copy, built from the feedback
+ * rows at build time, so a stored report never moves with them.
+ */
+export interface ReportFeedbackPoint {
+	topic: FeedbackTopic;
+	theme?: FeedbackTheme;
+	detail: string;
+}
+
+/** A dish a post names, with how it came across, as a report keeps it */
+export interface ReportPostDish {
+	name: string;
+	sentiment: FeedbackSentiment;
+}
+
 /** One post about the venue, as the report lists it. */
 export interface ReportPost {
 	postId: string;
 	platform: 'tiktok' | 'instagram' | 'blog';
 	url: string;
+	/** A blog article's headline; absent for TikTok and Instagram, and in reports built before it was kept */
+	title?: string;
 	author?: string;
 	authorFans?: number;
 	postedAt: string;
@@ -35,9 +50,9 @@ export interface ReportPost {
 	visited: boolean;
 	sentiment: FeedbackSentiment;
 	summary: string;
-	praise: FeedbackPoint[];
-	complaints: FeedbackPoint[];
-	dishes: FeedbackDish[];
+	praise: ReportFeedbackPoint[];
+	complaints: ReportFeedbackPoint[];
+	dishes: ReportPostDish[];
 }
 
 export interface ReportDishCount {
@@ -86,8 +101,19 @@ export interface ReportReviewGroup {
 	praiseThemes?: Record<string, number>;
 	complaintThemes?: Record<string, number>;
 	/** What they said, the first few points of the group */
-	praiseDetails: FeedbackPoint[];
-	complaintDetails: FeedbackPoint[];
+	praiseDetails: ReportFeedbackPoint[];
+	complaintDetails: ReportFeedbackPoint[];
+}
+
+/** The changes guests noticed about one thing (a feedback theme), across the month's reviews. */
+export interface ReportChangeTheme {
+	/** Absent while the changes are not filed yet */
+	theme?: FeedbackTheme;
+	label: string;
+	/** Reviews noticing it, each once */
+	reviews: number;
+	/** How they put it, each spelling once */
+	details: string[];
 }
 
 export interface ReportReviewStats {
@@ -111,6 +137,8 @@ export interface ReportReviewStats {
 	split: { fiveStar: ReportReviewGroup; belowFive: ReportReviewGroup };
 	/** Changes a reviewer noticed, one entry per review */
 	changes: { stars?: number; changes: string[] }[];
+	/** The same changes by what changed (`groupChanges`): absent from reports built before them */
+	changeThemes?: ReportChangeTheme[];
 	/** The month's critical reviews (3 stars or fewer) worth reading */
 	critical: { stars?: number; text: string; replied: boolean }[];
 	/** Every review of the month, newest first: the appendix the counts can be checked against */
@@ -416,6 +444,27 @@ export interface ReportCitySection {
 	};
 	/** Google search interest against mention share per cuisine (`SEARCH_INTEREST`); absent when not pulled */
 	searches?: SearchDelta[];
+	/**
+	 * The complaint themes of the brand's written reviews against the month's report venues
+	 * (`cityThemes`), the biggest gap first; absent below 5 written reviews or 5 peers, while a
+	 * point is unfiled, and in reports built before it
+	 */
+	themes?: ReportCityTheme[];
+}
+
+/** A complaint theme of the brand's month against the month's report venues of its city */
+export interface ReportCityTheme {
+	key: string;
+	label: string;
+	topic: string;
+	/** The brand's written reviews raising it */
+	reviews: number;
+	/** 0–1 of the brand's written reviews */
+	venueShare: number;
+	/** 0–1: the median share at the other report venues with 5+ written reviews */
+	median: number;
+	/** How many report venues the median is over */
+	venues: number;
 }
 
 /** One finding or suggestion in a report's summary. */

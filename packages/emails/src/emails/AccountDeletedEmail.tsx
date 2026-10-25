@@ -19,11 +19,11 @@ export const AccountDeletedEmail = ({
 	<Layout
 		appUrl={appUrl}
 		preview="İstediğin gibi hesabın ve ona bağlı her şey silindi."
-		reason="Bu e-postayı, Culinary Report hesabını silmemizi istediğin için aldın. Bu adrese başka e-posta göndermeyeceğiz."
+		reason="Bu e-postayı, Munchwerk hesabını silmemizi istediğin için aldın. Bu adrese başka e-posta göndermeyeceğiz."
 	>
 		<Title>Hesabın silindi</Title>
 		<P>
-			Merhaba {user.firstName}, istediğin gibi Culinary Report hesabını ve ona bağlı
+			Merhaba {user.firstName}, istediğin gibi Munchwerk hesabını ve ona bağlı
 			verileri kalıcı olarak sildik.
 		</P>
 		<P>Bir gün geri dönmek istersen yeni bir hesap açabilirsin.</P>

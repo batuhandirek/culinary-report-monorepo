@@ -30,7 +30,7 @@ const reportDto = (report: FoodTrendsReport) =>
 	}) as unknown as AdminFoodTrendsReportOutputDto;
 
 /**
- * The admin side of a city's quarterly food trends (Trends › Food trends report): pull the
+ * The admin side of a city's quarterly food trends (Public reports › Food trends): pull the
  * anchored searches (paid), build from stored data, preview, publish, take it down.
  */
 @Controller('/admin/food-trends')

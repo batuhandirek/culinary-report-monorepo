@@ -3,6 +3,7 @@ import { tags } from 'typia';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
+import type { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import type { SocialPlatformEnum } from '../entities/social-post.entity.js';
 
 import type { AdminAccountOutputDto } from './admin-account.output.dto.js';
@@ -76,6 +77,22 @@ export interface AdminCreatorOutputDto {
 	/** Every post of theirs we stored, and their views */
 	posts: number;
 	views: number;
+	/** What found their posts, the most posts first (15 at most) */
+	foundBy: AdminCreatorFindOutputDto[];
+}
+
+/** One thing that found a creator's posts: a city's source, a venue search or place page, or their own profile. */
+export interface AdminCreatorFindOutputDto {
+	kind: PostSourceKindEnum;
+	/** A tag without #, a query, a blog's URL, the venue's search name or the profile's handle */
+	value: string;
+	/** The city's source it is (absent for a venue search, or a watched brand's profile) */
+	sourceId?: string;
+	sourceEnabled?: boolean;
+	city: { id: string; name: string };
+	venue?: { id: string; name: string };
+	posts: number;
+	lastPostedAt: Date;
 }
 
 export interface AdminUpdateCreatorInputDto {

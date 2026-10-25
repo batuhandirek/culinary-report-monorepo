@@ -41,7 +41,7 @@
 			href="/admin"
 			class="flex h-14 shrink-0 items-center gap-2 px-4"
 			aria-label="Admin overview">
-			<Logo width={104} noNav />
+			<Logo width={136} noNav />
 			<span class="eyebrow text-sand/60 mt-0.5">Admin</span>
 		</a>
 	{/if}

@@ -2,18 +2,19 @@
 	import { ExternalLink, Pencil } from '@lucide/svelte';
 	import type { AdminSearchRelatedQueryOutputDto, AdminTopicInsightOutputDto } from 'client';
 
-	import FoodTopicFormDialog from '#components/admin/topics/FoodTopicFormDialog.svelte';
-	import TopicTable from '#components/admin/topics/TopicTable.svelte';
-	import { kindLabel } from '#lib/food-topic-kinds.js';
-	import { change, points, tone, topicHref } from '#lib/topic-format.js';
+	import TopicDishNames from './components/TopicDishNames.svelte';
 
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
+	import FoodTopicFormDialog from '#components/admin/topics/FoodTopicFormDialog.svelte';
+	import TopicTable from '#components/admin/topics/TopicTable.svelte';
 	import MonthChart from '#components/charts/MonthChart.svelte';
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
+	import { kindLabel } from '#lib/food-topic-kinds.js';
+	import { change, points, tone, topicHref } from '#lib/topic-format.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
@@ -25,7 +26,7 @@
 
 	// One food topic in a city: its venues, how much posts talk about it and how Google searches
 	// for it move over twelve months, what it costs on the month's delivery menus, what people
-	// search alongside it, and the topics under it
+	// search alongside it, the dish names that count for a dish or drink, and the topics under it
 	const key = $derived(decodeURIComponent(page.params.key ?? ''));
 
 	adminCitiesStore.load();
@@ -226,6 +227,10 @@
 				<p class="text-muted-foreground m-0 text-sm">No related searches stored for this month's pull.</p>
 			{/if}
 		</AdminPanel>
+
+		{#if data.row.kind === 'dish' || data.row.kind === 'drink'}
+			<TopicDishNames {cityId} topicKey={key} label={data.row.label} />
+		{/if}
 
 		{#if data.children.length}
 			<AdminPanel title="Under it" note={`${data.children.length}`}>

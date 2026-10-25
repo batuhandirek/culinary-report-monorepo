@@ -2,6 +2,8 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
+import { Report } from 'src/modules/reports/entities/report.entity.js';
+import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 
 import {
@@ -51,6 +53,10 @@ export interface OutreachTouchInput {
 	comeBackAt?: Date;
 	/** VISIT or CALL only: they said we may e-mail them; stamps the prospect's `emailConsentAt`. */
 	emailConsent?: boolean;
+	/** The report it sent: the prospect's brand's (400 otherwise) */
+	reportId?: string;
+	/** The link it sent: a share of that report (its report when `reportId` is absent) */
+	shareId?: string;
 }
 
 export interface OutreachSummary {
@@ -158,6 +164,26 @@ export class OutreachService {
 		return prospect;
 	}
 
+	/**
+	 * The report and link a touch sent, checked: the report is the prospect's brand's, the link
+	 * one of that report's. Neither for a touch without them.
+	 */
+	private async reportLink(
+		prospect: Prospect,
+		input: Pick<OutreachTouchInput, 'reportId' | 'shareId'>,
+	): Promise<{ report: Report | null; share: ReportShare | null }> {
+		if (!input.reportId && !input.shareId) return { report: null, share: null };
+		const share = input.shareId ? await this.em.findOne(ReportShare, { id: input.shareId }) : null;
+		if (input.shareId && !share) throw new BadRequestException('No such report link');
+		const reportId = input.reportId ?? share!.report.id;
+		if (share && share.report.id !== reportId) throw new BadRequestException('That link is of another report');
+		const report = await this.em.findOne(Report, { id: reportId });
+		if (!report) throw new BadRequestException('No such report');
+		if (report.brand.id !== prospect.brand.id)
+			throw new BadRequestException(`That report is not ${prospect.brand.name}'s`);
+		return { report, share };
+	}
+
 	/** Records an outreach, a reply or a note, and moves the prospect along. Flushes. */
 	async log(id: string, input: OutreachTouchInput): Promise<OutreachTouch> {
 		if (input.kind === OutreachTouchKindEnum.STAGE)
@@ -175,6 +201,7 @@ export class OutreachService {
 				'An outcome, a come-back time and consent belong to a visit or a call',
 			);
 
+		const { report, share } = await this.reportLink(prospect, input);
 		const at = input.at ?? new Date();
 		const touch = this.em.create(OutreachTouch, {
 			prospect,
@@ -186,6 +213,8 @@ export class OutreachService {
 			outcome: input.outcome ?? null,
 			comeBackAt: input.comeBackAt ?? null,
 			emailConsent: !!input.emailConsent,
+			report,
+			share,
 		});
 		if (input.emailConsent) prospect.emailConsentAt = at;
 

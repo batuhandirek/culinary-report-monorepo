@@ -7,7 +7,7 @@
 	} from 'client';
 
 	import { api } from '#lib/api.js';
-	import { compact, PLATFORM_LABELS } from '#lib/culinary.js';
+	import { authorLabel, compact, PLATFORM_LABELS } from '#lib/culinary.js';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
@@ -56,7 +56,7 @@
 					]}>
 					<div class="flex min-w-0 flex-1 flex-col gap-0.5">
 						<span class="flex flex-wrap items-baseline gap-x-2">
-							<span class="text-ink font-semibold break-all">@{creator.author}</span>
+							<span class="text-ink font-semibold break-all">{authorLabel(creator.platform, creator.author)}</span>
 							<span class="eyebrow text-beet">{PLATFORM_LABELS[creator.platform] ?? creator.platform}</span>
 							{#if creator.own}<span class="eyebrow text-muted-foreground">Your account</span>{/if}
 						</span>

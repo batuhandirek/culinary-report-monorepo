@@ -5,9 +5,15 @@
 		AdminThemeInsightsOutputDto
 	} from 'client';
 
+	import { tick, untrack } from 'svelte';
+
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel, TOPIC_LABELS } from '#lib/culinary.js';
+	import { themeHref } from '#lib/feedback.js';
+	import { topicHref } from '#lib/topic-format.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
@@ -17,8 +23,11 @@
 	// What the city's guests praise and criticise, across every venue: per feedback theme ("price
 	// increase", "cash only"), the month's written reviews and posts by others raising it, each
 	// counted once however often it says so. A row opens its sample details, the brands it came up
-	// at most and the kinds of food (a brand's is the main food of most of its places); the picker
-	// narrows every count to the brands of one kind of food
+	// at most, the dishes its points were about (a food topic's dishes as one) and the kinds of food
+	// (a brand's is the main food of most of its places); the picker
+	// narrows every count to the brands of one kind of food. Side, topic and the opened theme are
+	// in the URL (`?side=praise`, `?topic=wait`, `?theme=wait_for_food`; complaints, every topic
+	// and none opened stay out of it), so a post's "Talks about" can link to a theme's row
 	interface Props {
 		cityId: string;
 		month: string;
@@ -50,8 +59,9 @@
 		...foods.map((f) => ({ label: `${f.label} · ${(f.reviews + f.posts).toLocaleString('en-GB')}`, value: f.key }))
 	]);
 
-	let polarity = $state<'complaints' | 'praise'>('complaints');
-	let topic = $state<string>('all');
+	const initial = untrack(() => page.url.searchParams);
+	let polarity = $state<'complaints' | 'praise'>(initial.get('side') === 'praise' ? 'praise' : 'complaints');
+	let topic = $state<string>(initial.get('topic') ?? 'all');
 	const SORTS = [
 		{ value: 'raised', label: 'Most raised' },
 		{ value: 'reviews', label: 'Gaining in reviews' },
@@ -70,7 +80,28 @@
 			.filter((r) => topic === 'all' || r.topic === topic)
 			.toSorted((a, b) => sortKey[sort](b) - sortKey[sort](a) || a.label.localeCompare(b.label))
 	);
-	let open = $state<string | null>(null);
+	let open = $state<string | null>(initial.get('theme'));
+	// What is picked, written back to the URL without a reload or a scroll
+	$effect(() => {
+		const wanted = { side: polarity === 'praise' ? 'praise' : null, topic: topic === 'all' ? null : topic, theme: open };
+		untrack(() => {
+			const current = page.shallow?.url ?? page.url;
+			const url = new URL(current.href);
+			for (const [name, value] of Object.entries(wanted)) {
+				if (value) url.searchParams.set(name, value);
+				else url.searchParams.delete(name);
+			}
+			if (url.search !== current.search) goto(url, { replace: true, shallow: true });
+		});
+	});
+	// A linked theme's row comes into view once the month has loaded
+	let scrolled = false;
+	$effect(() => {
+		if (!data || scrolled || !open) return;
+		scrolled = true;
+		const key = open;
+		tick().then(() => document.getElementById(`theme-${key}`)?.scrollIntoView({ block: 'center' }));
+	});
 
 	const monthName = $derived(data ? monthLabel(data.month) : '');
 	const prevName = $derived(data ? monthLabel(data.previous).split(' ')[0] : '');
@@ -172,7 +203,7 @@
 				</div>
 				<ul class="divide-line m-0 flex list-none flex-col divide-y p-0 text-sm">
 					{#each rows as row (row.key)}
-						<li>
+						<li id={`theme-${row.key}`}>
 							<button
 								type="button"
 								class="hover:bg-sand grid w-full grid-cols-[minmax(0,1fr)_9rem_9rem_4.5rem] items-center gap-3 py-2 text-left"
@@ -187,7 +218,7 @@
 								<span class="text-right tabular-nums">{row.venues}</span>
 							</button>
 							{#if open === row.key}
-								<div class={['grid grid-cols-1 gap-4 pb-3', data.food ? 'md:grid-cols-2' : 'md:grid-cols-3']}>
+								<div class={['grid grid-cols-1 gap-4 pb-3 md:grid-cols-2', data.food ? 'xl:grid-cols-3' : 'xl:grid-cols-4']}>
 									<div>
 										<p class="text-muted-foreground m-0 mb-1 text-xs">What they said</p>
 										<ul class="m-0 flex list-none flex-col gap-1 p-0">
@@ -195,6 +226,11 @@
 												<li>“{sample}”</li>
 											{/each}
 										</ul>
+										<a
+											class="text-beet mt-1.5 inline-block text-xs underline-offset-2 hover:underline"
+											href={themeHref(row.key, polarity, { cityId, month, food })}>
+											Every sentence, by brand and dish →
+										</a>
 									</div>
 									<div>
 										<p class="text-muted-foreground m-0 mb-1 text-xs">Where it came up most</p>
@@ -204,6 +240,27 @@
 													<a href={`/admin/brands/${brand.id}?month=${data.month}`} class="min-w-0 truncate hover:underline">{brand.name}</a>
 													<span class="text-muted-foreground tabular-nums">{plural(brand.sources, 'time')}</span>
 												</li>
+											{/each}
+										</ul>
+									</div>
+									<div>
+										<p class="text-muted-foreground m-0 mb-1 text-xs">By dish</p>
+										<ul class="m-0 flex list-none flex-col gap-1 p-0">
+											{#each row.dishes as dish (dish.key)}
+												<li class="flex justify-between gap-3">
+													{#if dish.foodTopic}
+														<a href={topicHref(dish.foodTopic)} class="min-w-0 truncate hover:underline">{dish.label}</a>
+													{:else}
+														<span class="min-w-0 truncate">{dish.label}</span>
+													{/if}
+													<span
+														class="text-muted-foreground tabular-nums"
+														title={`Of the ${polarity === 'praise' ? 'praise' : 'complaints'} about it`}>
+														{dish.sources} · {dish.share.toFixed(1)} %
+													</span>
+												</li>
+											{:else}
+												<li class="text-muted-foreground">No point named a dish</li>
 											{/each}
 										</ul>
 									</div>

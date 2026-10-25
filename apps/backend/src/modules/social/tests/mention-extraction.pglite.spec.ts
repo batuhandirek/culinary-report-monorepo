@@ -83,4 +83,25 @@ describe('MentionExtractionService (pglite)', () => {
 		// The post said the place had just opened
 		expect(mention.isNewOpening).toBe(true);
 	});
+
+	it('gives the agent a blog article as an article: the blog, its title and text', async () => {
+		const em = harness.orm.em;
+		agent.generate.mockClear();
+		em.create(SocialPost, {
+			city: testCity(em),
+			externalId: 'blog_me2',
+			platform: SocialPlatformEnum.BLOG,
+			url: 'https://www.berlinfoodstories.com/top-lists/best-pho',
+			author: 'berlinfoodstories.com',
+			text: 'The best pho in Berlin\n\nPho House in Neukölln serves a broth that simmers for twelve hours.',
+			postedAt: new Date('2026-09-11T12:00:00Z'),
+		});
+		await em.flush();
+
+		expect(await service.extract({ limit: 10 })).toEqual({ analysed: 1, mentions: 1 });
+		const [prompt] = agent.generate.mock.calls[0] as [string];
+		expect(prompt).toBe(
+			'Platform: blog article on berlinfoodstories.com\n\nArticle:\nThe best pho in Berlin\n\nPho House in Neukölln serves a broth that simmers for twelve hours.',
+		);
+	});
 });

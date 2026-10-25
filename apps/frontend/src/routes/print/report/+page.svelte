@@ -22,7 +22,7 @@
 	const cssString = (s: string) => `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
 	const pageStyle = $derived(
 		report
-			? `<style>@page { @bottom-left { content: ${cssString(`Culinary Report · ${report.brand.name} · ${report.city?.name ?? 'All cities'} · ${monthLabel(report.month)}`)}; } }</style>`
+			? `<style>@page { @bottom-left { content: ${cssString(`Munchwerk · ${report.brand.name} · ${report.city?.name ?? 'All cities'} · ${monthLabel(report.month)}`)}; } }</style>`
 			: ''
 	);
 </script>
@@ -50,7 +50,7 @@
 		@bottom-left {
 			font-family: 'Onest', sans-serif;
 			font-size: 7.5pt;
-			color: #766b79;
+			color: #5e556a;
 			vertical-align: top;
 			padding-top: 4mm;
 		}
@@ -58,7 +58,7 @@
 			content: counter(page) ' / ' counter(pages);
 			font-family: 'Onest', sans-serif;
 			font-size: 7.5pt;
-			color: #766b79;
+			color: #5e556a;
 			vertical-align: top;
 			padding-top: 4mm;
 		}

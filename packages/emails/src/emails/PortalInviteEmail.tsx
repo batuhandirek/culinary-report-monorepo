@@ -17,9 +17,9 @@ interface PortalInviteEmailProps {
 
 const COPY = {
 	en: {
-		subject: (venue: string) => `Your Culinary Report portal for ${venue}`,
+		subject: (venue: string) => `Your Munchwerk portal for ${venue}`,
 		preview: 'Your monthly reports and charts, in one place.',
-		reason: 'You got this e-mail because Culinary Report invited this address to a venue portal.',
+		reason: 'You got this e-mail because Munchwerk invited this address to a venue portal.',
 		title: 'Your portal is ready',
 		body: (venue: React.ReactNode) => (
 			<>
@@ -33,10 +33,10 @@ const COPY = {
 		ignore: "If you didn't expect this, you can ignore this e-mail.",
 	},
 	de: {
-		subject: (venue: string) => `Ihr Culinary-Report-Portal für ${venue}`,
+		subject: (venue: string) => `Ihr Munchwerk-Portal für ${venue}`,
 		preview: 'Ihre monatlichen Berichte und Diagramme an einem Ort.',
 		reason:
-			'Sie erhalten diese E-Mail, weil Culinary Report diese Adresse zu einem Portal eingeladen hat.',
+			'Sie erhalten diese E-Mail, weil Munchwerk diese Adresse zu einem Portal eingeladen hat.',
 		title: 'Ihr Portal ist bereit',
 		body: (venue: React.ReactNode) => (
 			<>
@@ -76,7 +76,7 @@ export const PortalInviteEmail = ({
 
 PortalInviteEmail.PreviewProps = {
 	venueName: 'Café Kranzler',
-	loginUrl: 'https://culinaryreport.com/portal/login?email=owner%40example.com',
+	loginUrl: 'https://munchwerk.com/portal/login?email=owner%40example.com',
 } satisfies PortalInviteEmailProps;
 
 export default PortalInviteEmail;

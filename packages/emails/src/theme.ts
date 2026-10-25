@@ -1,28 +1,33 @@
-// The app's "Kum & Piksel" tokens (apps/frontend/src/app.css) as literals: a mail has no
-// stylesheet to read them from, and most clients only honour inline styles.
+// The Munchwerk brand tokens (`.claude/skills/brand/design-tokens.txt`, day theme) as
+// literals: a mail has no stylesheet to read them from, and most clients only honour inline
+// styles. Acid is a fill with ink on it, never text on light; grape is text (links) on paper.
 export const color = {
-	sand: '#F6EFE2', // the ground
-	paper: '#FFFCF6', // the sheet
-	line: '#E6DCCA', // hairlines, the sheet's edge
-	wash: '#E9DFCB', // photo wells
-	tint: '#F1E3C6', // deadline strips
-	ink: '#1C1714',
-	muted: '#6B5F55',
-	faint: '#9C8F82',
-	primary: '#FFA115', // price tags and the one button, always under ink text
-	dash: '#C8BFB1', // dashed rules between facts
+	sand: '#F2EDE3', // oat: the ground
+	paper: '#FBF9F4', // the sheet
+	line: '#DAD7D5', // hairline: ink at 15% on paper, solid (Outlook draws no alpha)
+	wash: '#E8E1D3', // photo wells
+	tint: '#EBF1CC', // brine: deadline strips
+	ink: '#1F1724', // plum-black: text, rules, the stamp's frame and offset
+	muted: '#5E556A', // ink-muted: 6.7:1 on paper
+	faint: '#5E556A', // the footer's last line: ink-muted too (anything lighter fails on oat)
+	primary: '#C6F135', // acid: the one button and the wordmark, always under ink text
+	grape: '#6A2BEA', // text-purple: links (6.3:1 on paper)
+	dash: '#C4C0C0', // dashed rules between facts: ink at 25% on paper
 };
 
 // What every client can draw. Inline styles carry these; `webFontCss` upgrades them where
-// a client loads fonts.
+// a client loads fonts. `display` is the headline face: Bricolage Grotesque 800 where it
+// loads, a heavy system sans where it doesn't.
 export const font = {
 	sans: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+	display: "'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif",
 	mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Courier New', monospace",
 };
 
 // Class names the head stylesheet targets (`Layout`).
 export const cls = {
 	pixel: 'bk-pixel',
+	display: 'bk-display',
 	mono: 'bk-mono',
 	sheet: 'bk-sheet',
 	photo: 'bk-photo',
@@ -52,13 +57,25 @@ const LATIN_EXT =
 const fontFace = (family: string, weight: string, file: string, range: string) =>
 	`@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url(https://fonts.gstatic.com/s/${file}.woff2) format('woff2');unicode-range:${range}}`;
 
-// Onest and the pixel face, from Google Fonts (the files its css2 endpoint names). All of
+// Onest, Bricolage Grotesque 800 and the pixel face, from Google Fonts (the files its css2 endpoint names). All of
 // it sits inside `@media screen`: Outlook's Word engine skips media queries, and shown a
 // web font it drops the whole stack for Times New Roman. Clients that strip `@font-face`
 // (Gmail) fall through to the system fonts named after it.
 export const webFontCss = `@media screen{${[
 	fontFace('Onest', '400 700', 'onest/v11/gNMKW3F-SZuj7xmf-HYoEoey', LATIN),
 	fontFace('Onest', '400 700', 'onest/v11/gNMKW3F-SZuj7xmR-HYoEoeyxMI', LATIN_EXT),
+	fontFace(
+		'Bricolage Grotesque',
+		'800',
+		'bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvl-Molss4MHt0GOQ',
+		LATIN,
+	),
+	fontFace(
+		'Bricolage Grotesque',
+		'800',
+		'bricolagegrotesque/v9/3y9U6as8bTXq_nANBjzKo3IeZx8z6up5BeSl5jBNz_19PpbpMXuECpwUxJBOm_OJWiaaD30YfKfjZZoLvZvl-MQlss4MHt0GOSj5',
+		LATIN_EXT,
+	),
 	fontFace(
 		'Press Start 2P',
 		'400',
@@ -72,6 +89,7 @@ export const webFontCss = `@media screen{${[
 		LATIN_EXT,
 	),
 	`body,table,td,p,a,span,h1,h2{font-family:Onest,${font.sans} !important}`,
+	`.${cls.display}{font-family:${font.display} !important}`,
 	`.${cls.pixel}{font-family:'Press Start 2P',Onest,${font.sans} !important}`,
 	`.${cls.mono}{font-family:${font.mono} !important}`,
 ].join('')}}`;

@@ -6,6 +6,7 @@ import { BrandAccessGuard } from 'src/modules/auth/guards/brand-access.guard.js'
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
+import { BrandReportConfig } from 'src/modules/reports/entities/brand-report-config.entity.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import type {
 	ReportData,
@@ -15,6 +16,8 @@ import type {
 } from 'src/modules/reports/interfaces/report-data.interface.js';
 import type { ReportCorrelations } from 'src/modules/reports/interfaces/report-signals.interface.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
+import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { SocialAccountService } from 'src/modules/social/services/social-account.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -69,7 +72,7 @@ describe('the portal patterns (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [BrandService, CityService, PortalService, ReportService, OutreachService, VenueBusynessService, OwnAccountService, SocialAccountService],
+			providers: [BrandService, CityService, PortalService, ReportService, ReportConfigService, ReportTemplateService, OutreachService, VenueBusynessService, OwnAccountService, SocialAccountService],
 		});
 		service = harness.moduleRef.get(PortalService);
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -159,6 +162,25 @@ describe('the portal patterns (pglite)', () => {
 		expect(at('2026-09-14')!.busyness).toBeUndefined();
 		// Ends in October, which has no report
 		expect(at('2026-09-28')).toEqual({ week: '2026-09-28', posts: 0, views: 0, reviews: 0, partial: true });
+	});
+
+	it("counts a month once when it has a report per configuration (they share one data)", async () => {
+		const em = harness.orm.em;
+		const september = await em.findOneOrFail(Report, { brand: venue.brand, month: '2026-09' });
+		const config = em.create(BrandReportConfig, { brand: venue.brand, name: 'Reviews', sections: [] });
+		em.create(Report, {
+			brand: venue.brand,
+			city: venue.city,
+			month: '2026-09',
+			config,
+			name: 'Reviews',
+			data: september.data,
+			highlights: { title: 'T2', headline: 'H2', highlights: [], actions: [] } as ReportHighlights,
+		});
+		await em.flush();
+
+		const { weeks } = await service.patterns(venue.brand.id, 4, undefined, now);
+		expect(weeks.find(w => w.week === '2026-09-14')).toEqual({ week: '2026-09-14', posts: 1, views: 50, reviews: 0 });
 	});
 
 	it('is behind BrandAccessGuard', () => {

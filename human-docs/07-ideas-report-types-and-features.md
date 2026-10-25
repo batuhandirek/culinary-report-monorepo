@@ -4,6 +4,8 @@ A brainstorm, sorted by how much of the data already exists. Nothing here is dec
 
 ## Report types for the same buyer (the owner)
 
+A report type is now a setting: a brand can have several **report configurations**, each a report it gets every month, with the sections it shows, in which order, and a few settings per section (the cover's figures, which platforms' posts, how many posts and dishes, which place blocks). A configuration starts as a copy of a **template** (four are ready-made: **Full report**, the default for brands without one, **Social buzz**, **Reviews and reputation**, **Competitor watch**) or from scratch, and an admin names it, edits it or pauses it for that brand alone. The ideas below that only leave things out or reorder them can be a configuration today; the ones that need new data or another period (weekly, quarterly, a first 90 days) still need building.
+
 | Type | What it is | Data exists? | Notes |
 |---|---|---|---|
 | **Monthly brand report** (today) | The full picture, once a month | Yes | The product |
