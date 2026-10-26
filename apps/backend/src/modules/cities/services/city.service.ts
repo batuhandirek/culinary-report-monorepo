@@ -30,6 +30,7 @@ export type CityFields = Pick<
 	| 'nameStopwords'
 	| 'chainDenyList'
 	| 'stepBudgetsUsd'
+	| 'dishSearchEveryDays'
 	| 'topBrands'
 	| 'cronEnabled'
 	| 'active'

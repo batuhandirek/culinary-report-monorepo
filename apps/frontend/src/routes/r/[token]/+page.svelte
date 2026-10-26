@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Download } from '@lucide/svelte';
-	import type { AdminReportOutputDto } from 'client';
+	import type { SharedReportOutputDto } from 'client';
 
 	import { onMount } from 'svelte';
 
@@ -11,7 +11,7 @@
 	import ReportView from '#views/report/ReportView.svelte';
 
 	let { data } = $props();
-	let report: AdminReportOutputDto = $derived(data.report);
+	let report: SharedReportOutputDto = $derived(data.report);
 
 	// Counted from the browser only: link previews and the server render never run this, and the
 	// API leaves out an admin checking the link

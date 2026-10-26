@@ -56,3 +56,46 @@ export const monthWeeks = (month: string): string[] => {
 	}
 	return weeks;
 };
+
+/** An instant's day on the local calendar, split out for snapshot rows that SQL groups by. */
+export interface CalendarDay {
+	/** `YYYY-MM-DD` */
+	date: string;
+	year: number;
+	/** `YYYY-MM`, the month key monthly tables use */
+	month: string;
+	monthOfYear: number;
+	dayOfMonth: number;
+	/** 1–366 */
+	dayOfYear: number;
+	/** ISO 8601 week-numbering year: the last days of December can be week 1 of the next one */
+	isoYear: number;
+	/** ISO 8601 week, Monday first; week 1 holds the year's first Thursday */
+	isoWeek: number;
+	/** ISO weekday: 1 = Monday … 7 = Sunday */
+	weekday: number;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+/** The local calendar day of an instant in `timeZone`, with its year, month, week and weekday. */
+export const calendarDay = (at: Date, timeZone: string): CalendarDay => {
+	const { date, weekday } = localParts(at, timeZone);
+	const [year, monthOfYear, dayOfMonth] = date.split('-').map(Number);
+	const day = Date.UTC(year, monthOfYear - 1, dayOfMonth);
+	const isoWeekday = weekday === 0 ? 7 : weekday;
+	// The Thursday of its ISO week decides the week's year and number
+	const thursday = new Date(day + (4 - isoWeekday) * DAY_MS);
+	const isoYear = thursday.getUTCFullYear();
+	return {
+		date,
+		year,
+		month: date.slice(0, 7),
+		monthOfYear,
+		dayOfMonth,
+		dayOfYear: (day - Date.UTC(year, 0, 1)) / DAY_MS + 1,
+		isoYear,
+		isoWeek: Math.floor((thursday.getTime() - Date.UTC(isoYear, 0, 1)) / DAY_MS / 7) + 1,
+		weekday: isoWeekday,
+	};
+};

@@ -8,8 +8,8 @@ import {
 	PostCommentQuestionTopicEnum,
 } from 'src/modules/social/entities/post-comment.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
-import { SocialAccountSnapshot } from 'src/modules/social/entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
+import { accountSnapshot } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
 import { SocialAccountService } from 'src/modules/social/services/social-account.service.js';
@@ -63,19 +63,17 @@ describe('Report reach sections (pglite)', () => {
 			handle: 'cafefrieda',
 			brandSource: AccountBrandSourceEnum.ADMIN,
 		});
+		// Each taken by the monthly run on the 2nd, closing the month before
 		for (const [month, followers] of [
 			['2026-08', 4200],
 			['2026-09', 4440],
 		] as const)
-			em.create(SocialAccountSnapshot, {
-				account,
-				month,
+			accountSnapshot(em, account, new Date(month === '2026-08' ? '2026-09-02T06:00:00Z' : '2026-10-02T06:00:00Z'), {
 				followers,
 				posts: month === '2026-08' ? 110 : 122,
 				avgViews: 500,
 				avgLikes: 40,
 				postsLast30Days: 12,
-				scrapedAt: new Date(),
 			});
 
 		// A creator's post with its comments
@@ -178,6 +176,8 @@ describe('Report reach sections (pglite)', () => {
 				url: 'https://www.instagram.com/cafefrieda/',
 				followers: 4440,
 				followersChange: 240,
+				// The days a scrape saw the profile in the month: the analysis's week-level points
+				followerPoints: [{ date: '2026-09-02', followers: 4200 }],
 				posts: 122,
 				postsAdded: 12,
 				avgViews: 500,

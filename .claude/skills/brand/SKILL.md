@@ -43,6 +43,7 @@ The friend who always knows where everyone's eating, and can prove it.
 - **Short.** Sentence case for every title and heading. Second person for venues ("your guests", "your branch").
 - **English** for public content. A venue's report and outreach follow the prospect's language (`domain-outreach`; the report itself stays English until the `report-language` decision).
 - **Write "creator", never "influencer"**; "place" or the venue's name, rarely "establishment" or "venue" in public copy.
+- **Reasons are possibilities.** When copy explains a move, it says "could", "may have", "one possible reason", with how sure we are (likely / possible / can't tell from the data); never "because" or "caused". The report's analysis section is the pattern.
 - **Avoid**: "insights", "analytics", "data-driven", "solutions", "leverage", "hidden gem", "foodie", "must-try", "viral sensation", "game-changer", exclamation marks in a row, more than two emoji in a caption.
 
 ## Patterns

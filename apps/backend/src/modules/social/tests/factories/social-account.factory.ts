@@ -7,7 +7,9 @@ import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { getEntityManager } from 'src/shared/util/em.js';
 
 import { AccountBrandSourceEnum, SocialAccount } from '../../entities/social-account.entity.js';
+import { AccountSnapshotSourceEnum, SocialAccountSnapshot } from '../../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../../entities/social-post.entity.js';
+import { type SnapshotFigures, snapshotDateParts } from '../../util/account-snapshots.js';
 
 export interface SocialAccountTransientParams {
 	em?: EntityManager;
@@ -43,3 +45,16 @@ export const ownAccount = (
 	platform = SocialPlatformEnum.TIKTOK,
 ): SocialAccount =>
 	socialAccountFactory.build({ handle, platform }, { associations: { brand, city }, transient: { em } });
+
+/**
+ * A snapshot of the account taken at `scrapedAt` (a profile scrape unless `source` says), not
+ * flushed. One taken in a month's first week closes the month before.
+ */
+export const accountSnapshot = (
+	em: EntityManager,
+	account: SocialAccount,
+	scrapedAt: Date,
+	figures: SnapshotFigures = {},
+	source = AccountSnapshotSourceEnum.PROFILE,
+): SocialAccountSnapshot =>
+	em.create(SocialAccountSnapshot, { account, scrapedAt, ...snapshotDateParts(scrapedAt), source, ...figures });

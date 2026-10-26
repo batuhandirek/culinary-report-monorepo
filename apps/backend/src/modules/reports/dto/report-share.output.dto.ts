@@ -1,3 +1,5 @@
+import type { ReportAnalysisPublic } from '../interfaces/report-analysis.interface.js';
+
 import type { AdminReportOutputDto } from './admin-report.output.dto.js';
 
 /** A private link to a report, as the admin report page lists it. */
@@ -15,5 +17,11 @@ export interface AdminReportShareOutputDto {
 	createdBy?: { id: string; firstName: string; lastName: string };
 }
 
-/** A report opened through a private link: the same document the admin sees, without its delivery record. */
-export interface SharedReportOutputDto extends Omit<AdminReportOutputDto, 'sentAt'> {}
+/**
+ * A report opened through a private link: the same document the admin sees, without its delivery
+ * record and without the analysis's trace (`toPublicOutput`).
+ */
+export interface SharedReportOutputDto extends Omit<AdminReportOutputDto, 'sentAt' | 'analysis'> {
+	/** What moved, and why it might have; absent for reports built before it */
+	analysis?: ReportAnalysisPublic;
+}

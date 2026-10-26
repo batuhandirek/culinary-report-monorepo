@@ -73,13 +73,13 @@ describe('AccountScrapeService (pglite)', () => {
 		{ platform: SocialPlatformEnum.TIKTOK, handle: 'berlingoodfood' },
 	] as const;
 
-	it("stores the week's posts found on each profile, without a snapshot, paying TikTok only for the week", async () => {
+	it("stores the week's posts found on each profile and a snapshot of each, paying TikTok only for the week", async () => {
 		const em = harness.orm.em;
 		const result = await service.scrape(city, [...targets], { since: SINCE, budgetUsd: 2, label: 'last week', now: NOW });
 
 		// Two Instagram posts since the 17th (a recent pinned one counts, an old pinned one not)
 		// and one TikTok video; the refused Instagram timeline and the gone handle bring none
-		expect(result).toEqual({ accounts: 4, profiles: 3, snapshots: 0, found: 3, saved: 3 });
+		expect(result).toEqual({ accounts: 4, profiles: 3, snapshots: 3, found: 3, saved: 3 });
 		const [igCall, ttCall] = runActor.mock.calls;
 		expect(igCall[1]).toEqual({ usernames: ['berlindeneyenir', 'churrolade_berlin'] });
 		expect(ttCall[1]).toMatchObject({
@@ -118,24 +118,44 @@ describe('AccountScrapeService (pglite)', () => {
 			[SocialPlatformEnum.TIKTOK, 'berlingoodfood', 'berlingoodfood', 569],
 			[SocialPlatformEnum.INSTAGRAM, 'churrolade_berlin', 'Churrolade.official', 2708],
 		]);
-		expect(await em.count(SocialAccountSnapshot, {})).toBe(0);
+		// One snapshot a profile, though its posts carried the count again; TikTok's week of videos
+		// gives no averages, Instagram's item always has its latest posts
+		const snapshots = await em.find(SocialAccountSnapshot, {}, { populate: ['account'], orderBy: { account: { handle: 'asc' } } });
+		expect(
+			snapshots.map(s => [s.account.handle, s.source, s.year, s.month, s.day, s.followers, s.following, s.avgViews != null]),
+		).toEqual([
+			['berlindeneyenir', 'profile', 2026, 10, 25, 18915, 1646, true],
+			['berlingoodfood', 'profile', 2026, 10, 25, 569, null, false],
+			['churrolade_berlin', 'profile', 2026, 10, 25, 2708, 2, false],
+		]);
+		expect(snapshots.every(s => s.scrapedAt.getTime() === NOW.getTime())).toBe(true);
 	});
 
-	it('a snapshot run writes the month for every profile that came back, and takes the latest ten videos whatever their date', async () => {
+	it('the monthly run takes the latest ten videos whatever their date, for averages over them', async () => {
 		const em = harness.orm.em;
 		const result = await service.scrape(city, [...targets], {
 			since: '2026-10-01T00:00:00.000Z',
 			budgetUsd: 4,
-			snapshotMonth: '2026-10',
+			latestTen: true,
 			label: '2026-10',
 			now: NOW,
 		});
 		expect(result).toMatchObject({ profiles: 3, snapshots: 3 });
 		expect(runActor.mock.calls[1][1]).not.toHaveProperty('oldestPostDateUnified');
 		em.clear();
-		const snapshots = await em.find(SocialAccountSnapshot, {}, { populate: ['account'] });
-		const byHandle = new Map(snapshots.map(s => [s.account.handle, s]));
-		expect(byHandle.get('berlingoodfood')).toMatchObject({ month: '2026-10', followers: 569, posts: 189 });
+		// Every run adds a snapshot a profile: the weekly test's and this one's
+		expect(await em.count(SocialAccountSnapshot, {})).toBe(6);
+		const tiktok = await em.find(SocialAccountSnapshot, { account: { handle: 'berlingoodfood' } });
+		expect(tiktok.map(s => [s.month, s.followers, s.posts, s.avgViews != null]).sort()).toEqual([
+			[10, 569, 189, false],
+			[10, 569, 189, true],
+		]);
+		const byHandle = new Map(
+			(await em.find(SocialAccountSnapshot, { account: { handle: 'churrolade_berlin' } }, { populate: ['account'] })).map(s => [
+				s.account.handle,
+				s,
+			]),
+		);
 		// The refused timeline: followers known, no posts to average
 		expect(byHandle.get('churrolade_berlin')).toMatchObject({ followers: 2708, avgViews: null, postsLast30Days: 0 });
 		// Posts seen again stay one row each; October's earlier ones join them (an Instagram post

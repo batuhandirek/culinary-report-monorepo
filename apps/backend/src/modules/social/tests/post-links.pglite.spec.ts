@@ -112,6 +112,8 @@ describe('Post sources and hashtags (pglite)', () => {
 
 	it('records every source that finds a post; a known post only refreshes its counts', async () => {
 		const first = fields({
+			// Two days old: its counts still move with each find (they are kept from seven days)
+			postedAt: new Date(Date.now() - 2 * 24 * 3600 * 1000),
 			text: 'Smash burgers at Burger Bros #BerlinFood #smashburger',
 			hashtags: ['BerlinFood', 'smashburger'],
 			finds: [tag('berlinfood')],

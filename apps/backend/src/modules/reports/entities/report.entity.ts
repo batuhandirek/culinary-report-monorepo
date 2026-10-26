@@ -5,6 +5,7 @@ import { City } from 'src/modules/cities/entities/city.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
+import type { ReportAnalysis } from '../interfaces/report-analysis.interface.js';
 import type { ReportData, ReportHighlights } from '../interfaces/report-data.interface.js';
 
 import { BrandReportConfig } from './brand-report-config.entity.js';
@@ -40,6 +41,12 @@ export class Report extends MikroOrmEntityAbstractClass<
 
 	@Property({ type: 'jsonb' })
 	highlights: ReportHighlights;
+
+	// "What moved, and why it might have": computed once per build like `data`, the same on every
+	// configuration's report; null for reports built before it. Its `trace` is admin-only
+	// (`toPublicOutput` strips it)
+	@Property({ type: 'jsonb', nullable: true })
+	analysis?: ReportAnalysis | null;
 
 	// The brand's configuration it was built for; null for the default report of a brand without
 	// an active configuration, and once the configuration is deleted

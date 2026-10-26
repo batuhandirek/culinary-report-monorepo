@@ -10,6 +10,7 @@ import { Mention } from './mention.entity.js';
 import { PostHashtag } from './post-hashtag.entity.js';
 import { PostSource } from './post-source.entity.js';
 import { SocialAccount } from './social-account.entity.js';
+import { SocialPostSnapshot } from './social-post-snapshot.entity.js';
 
 export enum SocialPlatformEnum {
 	TIKTOK = 'tiktok',
@@ -22,7 +23,7 @@ export enum SocialPlatformEnum {
 /** A TikTok video, an Instagram post or a blog article about food and drink in the city. */
 @Entity({ tableName: 'social_posts', repository: () => SocialPostRepository })
 export class SocialPost extends MikroOrmEntityAbstractClass<
-	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions' | 'hashtagLinks' | 'foundBy'
+	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions' | 'hashtagLinks' | 'foundBy' | 'snapshots'
 > {
 	// The platform's own id: a TikTok video id, `ig_<postId>` for Instagram, `blog_<hash of the URL>`
 	// for a blog article
@@ -55,6 +56,9 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'int', nullable: true })
 	authorFans?: number | null;
 
+	// The counts below are compared at one age: every read updates them until one at
+	// `POST_COUNTS_AGE_DAYS` or later, which is kept (`countsFinalAt`); every read is also a
+	// `snapshots` row. `SocialPostService.readCounts` is their one writer
 	@Property({ type: 'int', default: 0 })
 	views: number = 0;
 
@@ -69,6 +73,16 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 
 	@Property({ type: 'int', default: 0 })
 	saves: number = 0;
+
+	// When the counts were read: a scrape that found the post, or the refresh. Null for a blog
+	// article, which has none
+	@Property({ type: 'datetime', nullable: true })
+	countsAt?: Date | null;
+
+	// When the read at `POST_COUNTS_AGE_DAYS` or later was (a first find that late is one), or when
+	// the refresh found the post deleted or private: the counts stay as they are from then on
+	@Property({ type: 'datetime', nullable: true })
+	countsFinalAt?: Date | null;
 
 	// Marked as an ad or a paid partnership by the platform
 	@Property({ type: 'boolean', default: false })
@@ -120,4 +134,8 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 	// Every source that found it (`PostSource`), first find first
 	@OneToMany(() => PostSource, find => find.post, { orderBy: { foundAt: 'asc', id: 'asc' } })
 	foundBy = new Collection<PostSource>(this);
+
+	// Every read of its counts (`SocialPostSnapshot`), oldest first
+	@OneToMany(() => SocialPostSnapshot, snapshot => snapshot.post, { orderBy: { at: 'asc' } })
+	snapshots = new Collection<SocialPostSnapshot>(this);
 }

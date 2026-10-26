@@ -12,7 +12,7 @@ import { SharedReportOutputDto } from '../dto/report-share.output.dto.js';
 import { ReportPdfService } from '../services/report-pdf.service.js';
 import { ReportShareService } from '../services/report-share.service.js';
 
-import { reportFileName, toOutput } from './admin.reports.controller.js';
+import { reportFileName, toPublicOutput } from './admin.reports.controller.js';
 
 type ShareToken = string & tags.Pattern<'^[A-Za-z0-9_-]{22,64}$'>;
 const TOKEN = /^[A-Za-z0-9_-]{22,64}$/;
@@ -37,7 +37,7 @@ export class SharedReportsController {
 	/** The report. Reading it does not count as an open: link previews and the page's server render read it too. */
 	@TypedRoute.Get('/:token')
 	async getSharedReport(@TypedParam('token') token: ShareToken): Promise<SharedReportOutputDto> {
-		return toOutput(await this.reportShareService.findReport(token));
+		return toPublicOutput(await this.reportShareService.findReport(token));
 	}
 
 	/** Counts an open. The page calls it from the browser, so bots and admins checking the link don't count. */
@@ -58,7 +58,7 @@ export class SharedReportsController {
 	@Get('/:token/pdf')
 	async getSharedReportPdf(@Param('token') token: string, @Res() res: Response): Promise<void> {
 		if (!TOKEN.test(token)) throw new NotFoundException();
-		const report = toOutput(await this.reportShareService.findReport(token));
+		const report = toPublicOutput(await this.reportShareService.findReport(token));
 		const pdf = await this.printOnce(report);
 		const name = reportFileName(report);
 		res.setHeader('Content-Type', 'application/pdf');

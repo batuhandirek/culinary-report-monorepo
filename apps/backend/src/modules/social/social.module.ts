@@ -45,6 +45,7 @@ import { OwnAccountService } from './services/own-account.service.js';
 import { PostCommentService } from './services/post-comment.service.js';
 import { SocialAccountService } from './services/social-account.service.js';
 import { HashtagService } from './services/hashtag.service.js';
+import { PostCountsService } from './services/post-counts.service.js';
 import { SocialPostService } from './services/social-post.service.js';
 import { SocialScrapeService } from './services/social-scrape.service.js';
 import { BrandChangedWorker } from './workers/brand-changed.worker.js';
@@ -83,6 +84,7 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 	],
 	providers: [
 		SocialPostService,
+		PostCountsService,
 		HashtagService,
 		BlogFetchService,
 		BlogScrapeService,
@@ -104,6 +106,7 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 	],
 	exports: [
 		SocialScrapeService,
+		PostCountsService,
 		BlogScrapeService,
 		SocialAccountService,
 		OwnAccountService,

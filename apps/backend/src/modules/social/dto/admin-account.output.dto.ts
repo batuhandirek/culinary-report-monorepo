@@ -1,18 +1,22 @@
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 
 import type { AccountBrandSourceEnum } from '../entities/social-account.entity.js';
+import type { AccountSnapshotSourceEnum } from '../entities/social-account-snapshot.entity.js';
 import type { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import type { AccountMatchResult } from '../services/account-matching.service.js';
 
-/** One month's profile scrape of an account. */
+/** An account's newest figures: each from the newest snapshot that has it. */
 export interface AdminAccountSnapshotOutputDto {
-	month: string;
+	/** The newest snapshot, and the scrape that took it */
+	scrapedAt: Date;
+	source: AccountSnapshotSourceEnum;
 	followers?: number;
+	following?: number;
 	posts?: number;
+	/** Over its latest posts, ten at most: from the newest profile scrape that gave them */
 	avgViews?: number;
 	avgLikes?: number;
 	postsLast30Days?: number;
-	scrapedAt: Date;
 }
 
 /** What our own scrapes saw an account post. */
@@ -52,9 +56,9 @@ export interface AdminAccountOutputDto {
 	suggestedScore?: number;
 	/** Brands an admin said it is not */
 	rejections: { brand: { id: string; name: string } }[];
-	/** The latest profile scrape; absent when it was never scraped */
+	/** Its newest figures; absent when no scrape gave a follower count */
 	latest?: AdminAccountSnapshotOutputDto;
-	/** Followers since the scrape before the latest; absent without two */
+	/** Followers against the newest count 30 or more days older; absent without one */
 	followersChange?: number;
 	stats: AdminAccountStatsOutputDto;
 }

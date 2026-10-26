@@ -37,11 +37,11 @@ export interface AdminAccountOutputDto {
 	followers?: number;
 	/** @format date-time */
 	followersAt?: string;
-	/** Followers since the scrape before the latest; absent without two */
+	/** Followers against the newest count 30 or more days older; absent without one */
 	followersChange?: number;
 	handle: string;
 	id: string;
-	/** The latest profile scrape; absent when it was never scraped */
+	/** Its newest figures; absent when no scrape gave a follower count */
 	latest?: AdminAccountSnapshotOutputDto;
 	platform: AdminAccountOutputDtoPlatformEnum;
 	/** Brands an admin said it is not */
@@ -75,16 +75,27 @@ export enum AdminAccountOutputDtoPlatformEnum {
 	Blog = 'blog',
 }
 
-/** One month's profile scrape of an account. */
+/** An account's newest figures: each from the newest snapshot that has it. */
 export interface AdminAccountSnapshotOutputDto {
 	postsLast30Days?: number;
 	avgLikes?: number;
+	/** Over its latest posts, ten at most: from the newest profile scrape that gave them */
 	avgViews?: number;
 	followers?: number;
-	month: string;
+	following?: number;
 	posts?: number;
-	/** @format date-time */
+	/**
+	 * The newest snapshot, and the scrape that took it
+	 * @format date-time
+	 */
 	scrapedAt: string;
+	source: AdminAccountSnapshotOutputDtoSourceEnum;
+}
+
+export enum AdminAccountSnapshotOutputDtoSourceEnum {
+	Profile = 'profile',
+	Lookup = 'lookup',
+	Post = 'post',
 }
 
 /** What our own scrapes saw an account post. */
@@ -801,6 +812,8 @@ export interface AdminCityOutputDto {
 	/** @format date-time */
 	createdAt: string;
 	cronEnabled: boolean;
+	/** Days between two dish-search snapshots; 0 = off */
+	dishSearchEveryDays: number;
 	districts: CityDistrict[];
 	doNotListCreators: string[];
 	doNotListVenues: string[];
@@ -982,6 +995,12 @@ export interface AdminCreateCityInputDto {
 	 */
 	country: string;
 	cronEnabled?: boolean;
+	/**
+	 * Days between two dish-search snapshots (every dish × district); 0 turns them off
+	 * @min 0
+	 * @max 365
+	 */
+	dishSearchEveryDays?: number;
 	districts?: AdminCityDistrictInputDto[];
 	/** Creators who asked to be left out of public pages (handles, with or without */
 	doNotListCreators?: string[];
@@ -1291,11 +1310,13 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
 	SCORE_LEADS = 'SCORE_LEADS',
@@ -1304,6 +1325,7 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	MONTHLY = 'MONTHLY',
 }
 
@@ -1381,11 +1403,13 @@ export enum AdminDataStepOutputDtoStepEnum {
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
 	SCORE_LEADS = 'SCORE_LEADS',
@@ -1394,6 +1418,7 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	MONTHLY = 'MONTHLY',
 }
 
@@ -1438,6 +1463,41 @@ export interface AdminDishNamesOutputDto {
 		pendingNames: number;
 	};
 	total: number;
+}
+
+/** One dish's search in one district ("pasta Mitte Berlin"). */
+export interface AdminDishSearchDistrictOutputDto {
+	district: string;
+	places: AdminDishSearchPlaceOutputDto[];
+	/** Whether the same search ran in the snapshot before: without it a place's move is unknown */
+	previousSearched: boolean;
+	/** @format date-time */
+	searchedAt: string;
+}
+
+/** One place in a dish search's top ten. */
+export interface AdminDishSearchPlaceOutputDto {
+	name: string;
+	placeId: string;
+	/** Its rank on the same search in the snapshot before; absent when it was not in that top ten */
+	previousRank?: number;
+	rank: number;
+	rating?: number;
+	reviewsCount?: number;
+	/** Our venue, when we keep the place */
+	venueId?: string;
+}
+
+/** A dish's Google Maps top ten in each district of a city, in one dated snapshot. */
+export interface AdminDishSearchesOutputDto {
+	/** Districts searched in the snapshot, alphabetical */
+	districts: AdminDishSearchDistrictOutputDto[];
+	/** The snapshot before it, what `previousRank` compares with; absent for the first */
+	previousOn?: string;
+	/** The snapshot shown; absent when the dish was never searched */
+	searchedOn?: string;
+	/** Every snapshot the dish was searched in (`YYYY-MM-DD`), newest first */
+	snapshots: string[];
 }
 
 export interface AdminDismissBrandInputDto {
@@ -1694,6 +1754,21 @@ export enum AdminGetDishNamesInputDtoStatusEnum {
 	Pending = 'pending',
 	Unlinked = 'unlinked',
 	Linked = 'linked',
+}
+
+export interface AdminGetDishSearchesInputDto {
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * The snapshot to show, `YYYY-MM-DD`; the newest when absent
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	searchedOn?: string;
+	/**
+	 * The dish topic's key, e.g. `pasta`
+	 * @minLength 1
+	 */
+	topicKey: string;
 }
 
 export interface AdminGetFoodTopicsInputDto {
@@ -2995,11 +3070,13 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
 	SCORE_LEADS = 'SCORE_LEADS',
@@ -3008,6 +3085,7 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	MONTHLY = 'MONTHLY',
 }
 
@@ -3039,11 +3117,13 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
 	SCORE_LEADS = 'SCORE_LEADS',
@@ -3052,6 +3132,7 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	MONTHLY = 'MONTHLY',
 }
 
@@ -3167,6 +3248,18 @@ export enum AdminPostFindOutputDtoKindEnum {
 
 export interface AdminPostHashtagOutputDto {
 	hashtag: AdminHashtagOutputDto;
+}
+
+/** One read of a post's counts: a scrape that found it, or the refresh at seven days. */
+export interface AdminPostSnapshotOutputDto {
+	/** @format date-time */
+	at: string;
+	comments: number;
+	id: string;
+	likes: number;
+	saves: number;
+	shares: number;
+	views: number;
 }
 
 /** The business a prospect is. */
@@ -3444,6 +3537,8 @@ export interface AdminReportListItemOutputDto {
 
 /** Its configuration and template are named on the admin's routes only (not on the portal or a shared link). */
 export interface AdminReportOutputDto {
+	/** What moved, and why it might have, with the admin's trace; absent for reports built before it */
+	analysis?: ReportAnalysis;
 	/** The business it is on */
 	brand: {
 		id: string;
@@ -3730,6 +3825,16 @@ export interface AdminSocialPostOutputDto {
 	/** The city whose scrape found it */
 	city: AdminCityRefOutputDto;
 	comments: number;
+	/**
+	 * When the counts shown were read; absent for a blog article
+	 * @format date-time
+	 */
+	countsAt?: string;
+	/**
+	 * When they became final: read at seven days or later (or the post was found gone)
+	 * @format date-time
+	 */
+	countsFinalAt?: string;
 	/** @format date-time */
 	createdAt: string;
 	externalId: string;
@@ -3748,6 +3853,8 @@ export interface AdminSocialPostOutputDto {
 	postedAt: string;
 	saves: number;
 	shares: number;
+	/** Every read of its counts, oldest first, also those after they became final */
+	snapshots: AdminPostSnapshotOutputDto[];
 	subtitles?: string;
 	subtitlesLanguage?: string;
 	taggedHandles?: string[];
@@ -3815,11 +3922,13 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
 	SCORE_LEADS = 'SCORE_LEADS',
@@ -3828,6 +3937,7 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	MONTHLY = 'MONTHLY',
 }
 
@@ -4552,6 +4662,12 @@ export interface AdminUpdateCityInputDto {
 	 */
 	country?: string;
 	cronEnabled?: boolean;
+	/**
+	 * Days between two dish-search snapshots (every dish × district); 0 turns them off
+	 * @min 0
+	 * @max 365
+	 */
+	dishSearchEveryDays?: number;
 	districts?: AdminCityDistrictInputDto[];
 	/** Creators who asked to be left out of public pages (handles, with or without */
 	doNotListCreators?: string[];
@@ -4900,6 +5016,25 @@ export interface AdminVenueDemandOutputDto {
 	reservations: AdminVenueReservationSampleOutputDto[];
 }
 
+/** One dish search a venue was in the top ten of. */
+export interface AdminVenueDishSearchOutputDto {
+	district: string;
+	/** One per snapshot the search ran in, newest first; `rank` absent when it was not in the top ten */
+	ranks: {
+		rank?: number;
+		searchedOn: string;
+	}[];
+	topicKey: string;
+	topicLabel: string;
+}
+
+/** A venue's places on the dish searches of its city. */
+export interface AdminVenueDishSearchesOutputDto {
+	searches: AdminVenueDishSearchOutputDto[];
+	/** Its city's latest snapshots (`YYYY-MM-DD`), newest first (six at most) */
+	snapshots: string[];
+}
+
 export interface AdminVenueFoodTopicOutputDto {
 	key: string;
 	kind: AdminVenueFoodTopicOutputDtoKindEnum;
@@ -5183,6 +5318,8 @@ export interface AdminWatchRefOutputDto {
 	id: string;
 	name: string;
 }
+
+export type AnalyseReportData = AdminReportOutputDto;
 
 export interface BlogEntryAuthorOutputDto {
 	id: string;
@@ -6021,6 +6158,8 @@ export enum GetDishNamesParamsStatusEnum {
 	Linked = 'linked',
 }
 
+export type GetDishSearchesData = AdminDishSearchesOutputDto;
+
 export type GetEntriesData = SitemapEntriesOutputDto;
 
 export type GetEntryData = BlogEntryOutputDto;
@@ -6151,6 +6290,8 @@ export type GetUserData = AdminUserOutputDto;
 export type GetVenueData = AdminVenueOutputDto;
 
 export type GetVenueDemandData = AdminVenueDemandOutputDto;
+
+export type GetVenueDishSearchesData = AdminVenueDishSearchesOutputDto;
 
 export type GetVenueFoodTopicsData = AdminVenueFoodTopicsOutputDto;
 
@@ -6997,6 +7138,12 @@ export interface NotificationPreferencesPatch {
 	};
 }
 
+export interface ObservationPoint {
+	/** A month `YYYY-MM`, or a week's Monday `YYYY-MM-DD` */
+	at: string;
+	value: number;
+}
+
 export interface OkResponse {
 	ok: boolean;
 }
@@ -7056,7 +7203,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1112'?: PartialOmitCredentialVerificationRequestuserOptionalProps1112Enum;
+	'__@OptionalProps@1124'?: PartialOmitCredentialVerificationRequestuserOptionalProps1124Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -7082,7 +7229,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1112Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1124Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -7104,12 +7251,14 @@ export interface PartialRecordPipelineStepEnumnumber {
 	ANALYSE_REVIEWS?: number;
 	BUILD_REPORTS?: number;
 	EXTRACT_MENTIONS?: number;
+	FILL_ACCOUNT_FOLLOWERS?: number;
 	FILL_COMPETITORS?: number;
 	FIND_OWN_ACCOUNTS?: number;
 	LOOKUP_OSM_PLACES?: number;
 	LOOKUP_VENUES?: number;
 	MATCH_MENTIONS?: number;
 	MONTHLY?: number;
+	REFRESH_POST_COUNTS?: number;
 	REFRESH_VENUE_DETAILS?: number;
 	SAMPLE_BUSYNESS?: number;
 	SAMPLE_RESERVATIONS?: number;
@@ -7132,6 +7281,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SEARCH_INTEREST?: number;
 	SNAPSHOT_RATINGS?: number;
 	SYNC_OSM_PLACES?: number;
+	TRACK_DISH_SEARCHES?: number;
 	TRACK_SEARCH_RANKS?: number;
 	WATCH_REVIEWS?: number;
 }
@@ -7162,6 +7312,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	FILL_ACCOUNT_FOLLOWERS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	FILL_COMPETITORS?: number;
 	/**
 	 * @min 0
@@ -7188,6 +7343,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	MONTHLY?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	REFRESH_POST_COUNTS?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -7298,6 +7458,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	SYNC_OSM_PLACES?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	TRACK_DISH_SEARCHES?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -7330,6 +7495,12 @@ export interface PeopleAlsoSearchPlace {
 }
 
 /** From T, pick a set of properties whose keys are in the union K */
+export interface PickReportDishCountnamecount {
+	count: number;
+	name: string;
+}
+
+/** From T, pick a set of properties whose keys are in the union K */
 export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars {
 	avgStars?: number;
 	/** Construct a type with a set of properties K of type T */
@@ -7343,12 +7514,19 @@ export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgSt
 	written: number;
 }
 
-/** From T, pick a set of properties whose keys are in the union K */
-export interface PickReportReviewStatscountwrittenreplyRateavgStars {
+export interface PickReportReviewStatscountwrittenreplyRateavgStarsPartialPickReportReviewStatsstarscomplaintscomplaintThemes {
 	avgStars?: number;
+	/** Construct a type with a set of properties K of type T */
+	complaintThemes?: Recordstringnumber;
+	/** Construct a type with a set of properties K of type T */
+	complaints?: Recordstringnumber;
 	count: number;
 	/** Share of the month's reviews the owner answered, 0–1 */
 	replyRate?: number;
+	stars?: {
+		count: number;
+		stars: number;
+	}[];
 	/** Reviews with text; the rest are stars only */
 	written: number;
 }
@@ -7762,6 +7940,8 @@ export interface PortalReportListItemOutputDto {
 
 /** A report as the brand reads it: the shared link's document, without the delivery record. */
 export interface PortalReportOutputDto {
+	/** What moved, and why it might have; absent for reports built before it */
+	analysis?: ReportAnalysisPublic;
 	/** The business it is on */
 	brand: {
 		id: string;
@@ -8231,6 +8411,63 @@ export type RemovePortalMemberData = AdminProspectOutputDto;
 
 export type RemoveProspectData = any;
 
+export interface ReportAnalysis {
+	builtAt: string;
+	/** For the top observations, in their order */
+	investigations: ReportInvestigation[];
+	/** Ranked, the most important first, every one found (capped), each with its checks */
+	observations: ReportObservation[];
+	/** How the analysis went: for the admin report page. */
+	trace: ReportAnalysisTrace;
+}
+
+/** What a shared link or the portal gets: the trace is the admin's. */
+export interface ReportAnalysisPublic {
+	builtAt: string;
+	/** For the top observations, in their order */
+	investigations: ReportInvestigation[];
+	/** Ranked, the most important first, every one found (capped), each with its checks */
+	observations: ReportObservation[];
+}
+
+/** How the analysis went: for the admin report page. */
+export interface ReportAnalysisTrace {
+	durationMs: number;
+	/** The agent failed: the investigations are fallbacks */
+	error?: string;
+	model: string;
+	/** The model's own steps (each tool round is one) */
+	modelSteps?: number;
+	/** The model's own notes on what it looked up and why each label is what it is */
+	notes?: string;
+	/** Lines the check dropped or replaced */
+	problems: {
+		problem: string;
+		where: string;
+	}[];
+	/** The model's reasoning text, cut */
+	reasoning?: string;
+	/** The agent was not called: `no notable move`, `no previous month` */
+	skipped?: string;
+	steps: ReportAnalysisTraceStep[];
+	/** Tool calls that ran (a refused one is in `steps` only) */
+	toolCalls: number;
+	usage?: {
+		inputTokens?: number;
+		outputTokens?: number;
+		totalTokens?: number;
+	};
+}
+
+export interface ReportAnalysisTraceStep {
+	durationMs?: number;
+	input: any;
+	/** The result cut short */
+	resultSummary: string;
+	step: number;
+	tool: string;
+}
+
 /** One figure of the venue against the month's report venues of its city. */
 export interface ReportBaselineMetric {
 	/** Median over the report venues that have one */
@@ -8413,6 +8650,30 @@ export enum ReportChangeThemeThemeEnum {
 	Renovation = 'renovation',
 	DeliveryPlatform = 'delivery_platform',
 	Amenities = 'amenities',
+}
+
+/** A standard question about a move, answered in code before the model sees it. */
+export interface ReportCheck {
+	/** One quotable sentence with its numbers */
+	answer: string;
+	question: string;
+	resolution: ReportCheckResolutionEnum;
+	/** What the answer does to "something at your place changed"; `unknown` when the data is missing */
+	verdict: ReportCheckVerdictEnum;
+}
+
+export enum ReportCheckResolutionEnum {
+	Week = 'week',
+	Day = 'day',
+	Month = 'month',
+}
+
+/** What the answer does to "something at your place changed"; `unknown` when the data is missing */
+export enum ReportCheckVerdictEnum {
+	Unknown = 'unknown',
+	Neutral = 'neutral',
+	Supports = 'supports',
+	Weakens = 'weakens',
 }
 
 /** "What the city is talking about": its rising cuisines and dishes and the venue's standing. */
@@ -8766,6 +9027,34 @@ export interface ReportHighlights {
 	title: string;
 }
 
+export interface ReportHypothesis {
+	confidence: ReportHypothesisConfidenceEnum;
+	evidenceAgainst: string[];
+	evidenceFor: string[];
+	/** Worded as a possibility ("could", "may have"), never a fact */
+	reason: string;
+}
+
+export enum ReportHypothesisConfidenceEnum {
+	Likely = 'likely',
+	Possible = 'possible',
+	Unclear = 'unclear',
+}
+
+/** What the model made of one observation, after the check. */
+export interface ReportInvestigation {
+	/** What the data cannot settle */
+	cannotTell?: string;
+	/** `whatHappened` is the observation's own sentence: the model's line failed the check or was missing */
+	fallback?: boolean;
+	hypotheses: ReportHypothesis[];
+	/** The observation's key */
+	key: string;
+	whatHappened: string;
+	/** Things only the owner can check, each starting with a verb */
+	worthChecking: string[];
+}
+
 /** A creator who covered district neighbours this month but not the venue: someone to invite. */
 export interface ReportNearbyCreator {
 	author: string;
@@ -8850,6 +9139,90 @@ export interface ReportNeighbourhoodChanges {
 	venues: ReportNeighbourhoodChange[];
 }
 
+/** One notable move of the month, found by `observe`. */
+export interface ReportObservation {
+	/** A place figure's branch; never summed across branches */
+	branchId?: string;
+	branchName?: string;
+	/** In the unit; shares and points as percentage points */
+	change: number;
+	/** For counts */
+	changePercent?: number;
+	/** The playbook's answers */
+	checks: ReportCheck[];
+	/** "August 2026", "your usual pace (6 months)", "the city median" */
+	comparedWith: string;
+	competitor?: string;
+	from: number;
+	/** Stable: `views`, `rating:<venueId>`, `search_rank:<venueId>:<query>`, `complaint_theme:wait` */
+	key: string;
+	kind: ReportObservationKindEnum;
+	/** "Views", "Google rating · Oranienstraße" */
+	label: string;
+	metric: ReportObservationMetricEnum;
+	/** The report month, `YYYY-MM` */
+	month: string;
+	query?: string;
+	/** Keys of sibling observations (posts and views moving together) */
+	related?: string[];
+	resolution: ReportObservationResolutionEnum;
+	/** Ranking score; admin only */
+	score: number;
+	/** The deterministic sentence: the fallback when the model's fails the check */
+	sentence: string;
+	/** For the sparkline, oldest first */
+	series: ObservationPoint[];
+	/** "TikTok and Instagram", "Google reviews", "Google Maps", "Instagram */
+	source: string;
+	theme?: string;
+	to: number;
+	unit: ReportObservationUnitEnum;
+}
+
+export enum ReportObservationKindEnum {
+	Shift = 'shift',
+	Dip = 'dip',
+	Spike = 'spike',
+	RankMove = 'rank_move',
+}
+
+export enum ReportObservationMetricEnum {
+	Views = 'views',
+	Posts = 'posts',
+	Rating = 'rating',
+	Reviews = 'reviews',
+	Creators = 'creators',
+	Followers = 'followers',
+	Busyness = 'busyness',
+	WrittenReviews = 'written_reviews',
+	ReviewWeek = 'review_week',
+	AvgStars = 'avg_stars',
+	ReplyRate = 'reply_rate',
+	FiveStarShare = 'five_star_share',
+	Booked = 'booked',
+	SearchRank = 'search_rank',
+	ComplaintTheme = 'complaint_theme',
+	DishShare = 'dish_share',
+	CompetitorReach = 'competitor_reach',
+}
+
+export enum ReportObservationResolutionEnum {
+	Week = 'week',
+	Day = 'day',
+	Month = 'month',
+}
+
+export enum ReportObservationUnitEnum {
+	Views = 'views',
+	Index = 'index',
+	Count = 'count',
+	Points = 'points',
+	Share = 'share',
+	Followers = 'followers',
+	Rank = 'rank',
+	Stars = 'stars',
+}
+
 /** One of the brand's own accounts at the close of the month (the brand's, or a branch's in the report's city). */
 export interface ReportOwnAccount {
 	postsLast30Days?: number;
@@ -8863,6 +9236,14 @@ export interface ReportOwnAccount {
 	 * decimal: "creators got 18× the views of your own posts". Absent when either is unknown
 	 */
 	creatorViewsMultiple?: number;
+	/**
+	 * The follower count each day a scrape saw the profile in the month, oldest first (the weekly
+	 * profile scrape, a post item repeating it): week-level points for the analysis; absent without any
+	 */
+	followerPoints?: {
+		date: string;
+		followers: number;
+	}[];
 	followers?: number;
 	/** Since the month before's snapshot; absent without one */
 	followersChange?: number;
@@ -8985,9 +9366,14 @@ export enum ReportPressItemKindEnum {
 export interface ReportPreviousMonth {
 	/** The actions its report suggested, when one was built */
 	actions?: ReportPoint[];
+	/** The dishes named most that month (top eight); absent in reports built before */
+	dishes?: PickReportDishCountnamecount[];
 	month: string;
-	/** Absent when no review of that month is stored: reviews were not scraped for it */
-	reviews?: PickReportReviewStatscountwrittenreplyRateavgStars;
+	/**
+	 * Absent when no review of that month is stored: reviews were not scraped for it. The star
+	 * histogram and the complaint counts let the analysis see shifts; absent in reports built before
+	 */
+	reviews?: PickReportReviewStatscountwrittenreplyRateavgStarsPartialPickReportReviewStatsstarscomplaintscomplaintThemes;
 	/** From T, pick a set of properties whose keys are in the union K */
 	social: PickReportSocialStatsviewspostCountcreatorsengagementspromotional;
 }
@@ -9237,7 +9623,7 @@ export interface ReportSectionDto {
 	kind: ReportSectionDtoKindEnum;
 	/** cover: the figure tiles, in order */
 	kpis?: ReportSectionDtoKpisEnum[];
-	/** posts: top posts shown as cards; media: blog articles shown; dishes: dishes listed */
+	/** posts: top posts shown as cards; media: blog articles shown; dishes: dishes listed; analysis: moves shown */
 	limit?: number;
 	/** creators: also the creators who covered the neighbours but not the brand */
 	nearby?: boolean;
@@ -9249,6 +9635,7 @@ export interface ReportSectionDto {
 
 export enum ReportSectionDtoKindEnum {
 	Cover = 'cover',
+	Analysis = 'analysis',
 	Stars = 'stars',
 	Branches = 'branches',
 	Competitors = 'competitors',
@@ -9381,8 +9768,13 @@ export type SetDefaultReportTemplateData = AdminReportTemplateOutputDto;
 
 export type SetIgnoredWordData = any;
 
-/** A report opened through a private link: the same document the admin sees, without its delivery record. */
+/**
+ * A report opened through a private link: the same document the admin sees, without its delivery
+ * record and without the analysis's trace (`toPublicOutput`).
+ */
 export interface SharedReportOutputDto {
+	/** What moved, and why it might have; absent for reports built before it */
+	analysis?: ReportAnalysisPublic;
 	/** The business it is on */
 	brand: {
 		id: string;
@@ -11169,6 +11561,55 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description A dish's Google Maps top ten in each district of the city in one snapshot (`TRACK_DISH_SEARCHES`), the newest by default.
+		 *
+		 * @name GetDishSearches
+		 * @summary A dish's Google Maps top ten in each district of the city in one snapshot (`TRACK_DISH_SEARCHES`), the newest by default
+		 * @request GET:/admin/dish-searches
+		 * @response `200` `GetDishSearchesData`
+		 */
+		getDishSearches: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * The snapshot to show, `YYYY-MM-DD`; the newest when absent
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				searchedOn?: string;
+				/**
+				 * The dish topic's key, e.g. `pasta`
+				 * @minLength 1
+				 */
+				topicKey: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetDishSearchesData, any>({
+				path: `/admin/dish-searches`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The dish searches a venue was in the top ten of, over its city's last six snapshots.
+		 *
+		 * @name GetVenueDishSearches
+		 * @summary The dish searches a venue was in the top ten of, over its city's last six snapshots
+		 * @request GET:/admin/venues/{id}/dish-searches
+		 * @response `200` `GetVenueDishSearchesData`
+		 */
+		getVenueDishSearches: (id: string, params: RequestParams = {}) =>
+			this.request<GetVenueDishSearchesData, any>({
+				path: `/admin/venues/${id}/dish-searches`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description Groups of a city's venues that look like one brand; nothing is saved until confirmed.
 		 *
 		 * @name ListBrandSuggestions
@@ -12373,6 +12814,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Runs the analysis ("what moved, and why it might have") again on the report's stored data: the observations, their checks, the agent and the line check. Written on every report of that build (they share one data). The highlights are not rewritten: Rebuild does that. Takes up to a few minutes: an agent call with tools.
+		 *
+		 * @name AnalyseReport
+		 * @request POST:/admin/reports/{id}/analyse
+		 * @response `201` `AnalyseReportData`
+		 */
+		analyseReport: (id: string, params: RequestParams = {}) =>
+			this.request<AnalyseReportData, any>({
+				path: `/admin/reports/${id}/analyse`,
+				method: 'POST',
 				format: 'json',
 				...params,
 			}),

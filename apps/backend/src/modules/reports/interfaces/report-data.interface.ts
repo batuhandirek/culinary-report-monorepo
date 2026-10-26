@@ -340,8 +340,14 @@ export interface ReportPreviousMonth {
 		ReportSocialStats,
 		'postCount' | 'views' | 'engagements' | 'creators' | 'promotional'
 	>;
-	/** Absent when no review of that month is stored: reviews were not scraped for it */
-	reviews?: Pick<ReportReviewStats, 'count' | 'written' | 'avgStars' | 'replyRate'>;
+	/**
+	 * Absent when no review of that month is stored: reviews were not scraped for it. The star
+	 * histogram and the complaint counts let the analysis see shifts; absent in reports built before
+	 */
+	reviews?: Pick<ReportReviewStats, 'count' | 'written' | 'avgStars' | 'replyRate'> &
+		Partial<Pick<ReportReviewStats, 'stars' | 'complaints' | 'complaintThemes'>>;
+	/** The dishes named most that month (top eight); absent in reports built before */
+	dishes?: Pick<ReportDishCount, 'name' | 'count'>[];
 	/** The actions its report suggested, when one was built */
 	actions?: ReportPoint[];
 }

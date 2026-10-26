@@ -1,6 +1,6 @@
 # What is in the monthly report
 
-One report = one brand × one city × one month. It is a web page (private link, no login) and an A4 PDF printed from the same page. The data is computed once when the report is built; rebuilding replaces it. The written parts (cover title, headline, three findings, two or three actions, reply drafts) are written by the LLM (gpt-5.4) from the numbers only; it is told to quote figures as given, attribute each point to its source, and never compute or estimate.
+One report = one brand × one city × one month. It is a web page (private link, no login) and an A4 PDF printed from the same page. The data is computed once when the report is built; rebuilding replaces it. The written parts (cover title, headline, three findings, two or three actions, reply drafts, and the possible reasons behind the month's moves) are written by the LLM (gpt-5.4) from the numbers only; it is told to quote figures as given, attribute each point to its source, and never compute or estimate. The moves themselves and the standard checks about each are found by code before the model sees anything.
 
 A chain's report covers all its branches: posts, reviews, dishes, creators, competitors, own accounts, comments, press and "what followed what" are the brand's; the place sections (popular times and tables, prices, who got talked about nearby and the openings, Google Maps searches, the rating and Google details) come once per branch, one branch after another, each about that address only (they are never added up or averaged across branches). A single place gets them once, its facts on the cover.
 
@@ -8,13 +8,16 @@ Which sections a brand's report has, and in which order, is its **report configu
 
 A rule that shapes every section: **a section that has no data is left out, never shown as zero.** "Not scraped" and "none" are different things, and the report only ever says the first by omission.
 
+**Views and likes are each post's at seven days old**, so a post seen by a scrape on its first day and one seen a week later compare fairly. The report is built on the 2nd, so the month's last six days of posts aren't seven days old yet: theirs are the latest read, usually a few days after posting, and lower than they will end up.
+
 ## Sections, roughly in page order
 
 | Section | The owner's question | What it shows | Data behind it | Missing when |
 |---|---|---|---|---|
 | **Cover** | What was the month's one story? | A title (≤ 8 words), a headline (≤ 35 words), the place's facts: category, district, street, all-time Google rating and review count, where that rating stands among the district's food venues and the city's venues of its kind of food (percentile, venues with 20+ reviews; for a chain in each place's header), what Google says it offers (outdoor seating, delivery, …), the all-time star distribution, a six-month rating sparkline | Google Maps list + detail pages; rating snapshots from each review scrape | Amenities and distribution: no detail page yet. Sparkline: fewer than two snapshots |
 | **The month in numbers** | Did the month go up or down? | Posts by others, views, interactions, this month's average stars, reply rate, each with the change on the month before | Posts + reviews of this month and the one before | Deltas: no previous month with posts or reviews (first report) |
-| **Three findings** | What matters? | Three points with the evidence and the source; one compares with competitors when there are any; one compares branches for a chain; one may place the month in the city | Everything below, pre-summarised for the LLM | Never (always written) |
+| **Three findings** | What matters? | Three points with the evidence and the source; one compares with competitors when there are any; one compares branches for a chain; one may place the month in the city; one may quote a move from the next row with its possible reasons, keeping their labels | Everything below, pre-summarised for the LLM | Never (always written) |
+| **What moved, and why it might have** | Why did X move? | Up to three notable moves (posts, views, creators, reviews, stars, reply rate, Google rating, followers, weekend tables, foot traffic, a Google Maps search, a complaint theme, a dish, a competitor pulling away), each with its figure and change, a small line of its months or weeks, "what we checked" (standard questions answered in code: did you post in the week before the follower jump, did competitors' reviews move the same way, what stars did the busy weeks give, was there rain or a holiday), the possible reasons each marked likely / possible / can't tell from the data with the evidence for and against, what the data can't settle, and what only the owner can check | This month against the last and the six before, the month's reviews by week, the calendar, the competitors, the city's complaint shares; one gpt-5.4 call with read tools, every line checked | A first report, or nothing moved past the thresholds |
 | **What decides the stars** | Why do guests give 4 instead of 5? | What 5-star reviews praise next to what reviews below 5 criticise, as "19 of 34 written reviews" bars, with sample quotes | This month's Google (+ TripAdvisor) reviews, LLM topics | Fewer than 3 written reviews on either side |
 | **Branch by branch** (chains) | Which location is the problem? | Each branch's posts, views, reviews, stars, reply rate, praise and complaint shares side by side; posts that named the brand but no branch counted apart | Every branch's mentions and reviews | One-branch brand |
 | **How you compare** | Am I ahead of the places I compete with? | Up to five competitors: reach (posts, views, creators), reviews, stars, reply rate, praise and complaint matrices on percentages; weekend tables and foot-traffic change columns when sampled | The same scrapes for each competitor | No competitor on the list (17 of 21 September reports had some). A competitor's reviews show "—" when we don't track them |
@@ -42,7 +45,9 @@ A rule that shapes every section: **a section that has no data is left out, neve
 - Only numbers that are in the data or counted from its lists.
 - Topic counts as "19 of 34 written reviews", never "19 complaints".
 - Competitor and branch comparisons only on percentages and only where a group has 5+ written reviews.
-- "Followed by", never "caused". Weather and holidays in one clause, never as a cause.
+- Reasons are possibilities, never proven causes: each is labelled likely, possible or can't tell from the data, with the evidence for and against, and worded "could" / "may have"; a line saying "because" or "caused" is dropped before anyone reads it. The correlation sentences ("what followed what") keep "followed by". Weather and holidays are context in one clause, never a reason on their own.
+- Every number in a reason or a finding is one the model was given (a figure, a check, a tool answer); a line with a number we didn't give it is dropped and the admin sees why.
+- Timing never finer than the data: monthly figures compare whole months; follower counts move "between snapshots" unless the month has weekly points.
 - Each point names its source (TikTok, Instagram, Google reviews).
 - Paid or gifted posts weigh less.
 - A rating move of 0.1 or more gets mentioned.

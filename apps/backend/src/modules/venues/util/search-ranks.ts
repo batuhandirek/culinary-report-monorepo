@@ -40,6 +40,19 @@ export const searchQueries = (
 };
 
 /**
+ * One search's places in Google's order (`rank`, else the dataset's order), each place once and
+ * only those with a place id: a dataset can hold them out of order.
+ */
+export const orderedPlaces = <T extends SearchPlaceItem>(items: T[]): T[] =>
+	_.uniqBy(
+		_.sortBy(
+			items.map((item, i) => ({ item, at: item.rank ?? i + 1 })),
+			r => r.at,
+		).filter(r => r.item.placeId),
+		r => r.item.placeId,
+	).map(r => r.item);
+
+/**
  * One search's results in Google's order: the venue's place (null when it is not among them)
  * and the top ten. `venueIds` maps our known place ids to venues.
  */
@@ -48,13 +61,7 @@ export const rankInResults = (
 	placeId: string,
 	venueIds: Map<string, string>,
 ): { rank: number | null; results: number; top: VenueSearchRankEntry[] } => {
-	const ordered = _.uniqBy(
-		_.sortBy(
-			items.map((item, i) => ({ item, at: item.rank ?? i + 1 })),
-			r => r.at,
-		).filter(r => r.item.placeId),
-		r => r.item.placeId,
-	).map(r => r.item);
+	const ordered = orderedPlaces(items);
 	const index = ordered.findIndex(item => item.placeId === placeId);
 	return {
 		rank: index >= 0 ? index + 1 : null,

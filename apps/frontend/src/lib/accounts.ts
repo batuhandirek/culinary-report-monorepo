@@ -14,11 +14,11 @@ export const ACCOUNT_SOURCE_LABELS: Record<string, string> = {
 
 type AccountLike = Pick<AdminAccountOutputDto, 'followers' | 'latest' | 'followersChange'>;
 
-/** The best follower count we have: the latest profile scrape, else what a post said. */
+/** The best follower count we have: the newest snapshot's, else the account's own. */
 export const accountFollowers = (account: AccountLike): number | undefined =>
 	account.latest?.followers ?? account.followers;
 
-/** "4.4K followers (+240)", or a dash when unknown. */
+/** "4.4K (+240)", the change over 30 days or more, or a dash when unknown. */
 export const followersText = (account: AccountLike): string => {
 	const followers = accountFollowers(account);
 	if (followers === undefined) return '—';

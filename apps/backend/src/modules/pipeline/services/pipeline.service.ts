@@ -26,6 +26,7 @@ import { MentionExtractionService } from 'src/modules/social/services/mention-ex
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
+import { PostCountsService } from 'src/modules/social/services/post-counts.service.js';
 import { SocialScrapeService } from 'src/modules/social/services/social-scrape.service.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { Brand, BrandReportScopeEnum } from 'src/modules/venues/entities/brand.entity.js';
@@ -33,6 +34,7 @@ import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { BrandLeadScoreService } from 'src/modules/venues/services/brand-lead-score.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
+import { DishSearchService } from 'src/modules/venues/services/dish-search.service.js';
 import { OsmPlaceService } from 'src/modules/venues/services/osm-place.service.js';
 import { RatingSnapshotService } from 'src/modules/venues/services/rating-snapshot.service.js';
 import { ReviewService } from 'src/modules/venues/services/review.service.js';
@@ -111,6 +113,7 @@ export class PipelineService {
 		private readonly venueReservationService: VenueReservationService,
 		private readonly venueDeliveryService: VenueDeliveryService,
 		private readonly venueSearchRankService: VenueSearchRankService,
+		private readonly dishSearchService: DishSearchService,
 		private readonly mentionFoodTopicService: MentionFoodTopicService,
 		private readonly venueFoodTopicService: VenueFoodTopicService,
 		private readonly searchInterestService: SearchInterestService,
@@ -120,6 +123,7 @@ export class PipelineService {
 		private readonly accountScrapeService: AccountScrapeService,
 		private readonly accountTwinService: AccountTwinService,
 		private readonly accountWatchService: AccountWatchService,
+		private readonly postCountsService: PostCountsService,
 	) {}
 
 	/**
@@ -559,7 +563,7 @@ export class PipelineService {
 			case PipelineStepEnum.SCRAPE_ACCOUNTS: {
 				// Outreach's handles become the report brands' accounts (the rest matched by
 				// MATCH_MENTIONS), then every watched profile once: its posts since the month began
-				// and the month's snapshot
+				// and a snapshot with the averages over its latest ten, the one closing the month
 				const brands = await topBrands();
 				const fromProspects = await this.ownAccountService.addProspectHandles(
 					await this.prospectQueryService.instagramHandles(brands.map(t => t.brand.id)),
@@ -571,7 +575,7 @@ export class PipelineService {
 					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched), {
 						since,
 						budgetUsd,
-						snapshotMonth: month,
+						latestTen: true,
 						label: month,
 					})),
 				};
@@ -593,6 +597,9 @@ export class PipelineService {
 					})),
 				};
 			}
+			case PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS:
+				// The month is a label: the brand accounts with no follower count today
+				return this.accountScrapeService.fillFollowers(city, budgetUsd);
 			case PipelineStepEnum.FIND_OWN_ACCOUNTS:
 				// What the brands' sites and the posts' tags give is linked free by every
 				// MATCH_MENTIONS (`AccountMatchingService`); this pays for the brands still missing
@@ -622,6 +629,9 @@ export class PipelineService {
 			case PipelineStepEnum.TRACK_SEARCH_RANKS:
 				await this.refreshFoodTopics(city.id);
 				return this.venueSearchRankService.track(city, month, await branches(), budgetUsd);
+			case PipelineStepEnum.TRACK_DISH_SEARCHES:
+				// Today's snapshot of every dish in every district; the run's month is a label
+				return this.dishSearchService.sweep(city, budgetUsd);
 			case PipelineStepEnum.SEARCH_INTEREST: {
 				// The city's top cuisines, and the names of the subscribers with a branch in the city
 				const won = await this.prospectQueryService.wonBrandIds();
@@ -702,6 +712,9 @@ export class PipelineService {
 					budgetUsd,
 				);
 			}
+			case PipelineStepEnum.REFRESH_POST_COUNTS:
+				// The month is a label: the posts that are seven days old today
+				return this.postCountsService.refresh(city, budgetUsd);
 			case PipelineStepEnum.MONTHLY:
 				throw new Error('MONTHLY is a sequence, not a step');
 		}

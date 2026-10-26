@@ -98,8 +98,25 @@ export interface AdminSocialPostListItemOutputDto {
 	mentions: AdminMentionOutputDto[];
 }
 
+/** One read of a post's counts: a scrape that found it, or the refresh at seven days. */
+export interface AdminPostSnapshotOutputDto {
+	id: string;
+	at: Date;
+	views: number;
+	likes: number;
+	shares: number;
+	comments: number;
+	saves: number;
+}
+
 export interface AdminSocialPostOutputDto extends AdminSocialPostListItemOutputDto {
 	createdAt: Date;
+	/** When the counts shown were read; absent for a blog article */
+	countsAt?: Date;
+	/** When they became final: read at seven days or later (or the post was found gone) */
+	countsFinalAt?: Date;
+	/** Every read of its counts, oldest first, also those after they became final */
+	snapshots: AdminPostSnapshotOutputDto[];
 	/** The city whose scrape found it */
 	city: AdminCityRefOutputDto;
 	/** The caption's hashtags, in its order, with the food topic or brand each names */

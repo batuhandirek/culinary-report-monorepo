@@ -37,10 +37,14 @@ export enum PipelineStepEnum {
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	// Every watched TikTok and Instagram account (`AccountWatchService`: the creators the city
 	// follows, the report brands' and their rivals' own accounts): their posts since the month
-	// began and the month's profile snapshot (followers, reach per post)
+	// began and a profile snapshot (followers, reach per post over the latest ten)
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
-	// The same accounts' posts of the last week (the weekly cron), no snapshot
+	// The same accounts' posts of the last week (the weekly cron) and a snapshot (followers;
+	// TikTok's without averages, as only the week's videos come)
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	// Brands' own accounts with no follower count yet: their profiles only, no posts (the daily
+	// cron), so every brand account has followers within days of being linked
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	// Brands' own accounts on the platform they have none on: their other account's handle looked
 	// up there, linked when the profile proves it (the weekly cron, after matching)
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -51,6 +55,9 @@ export enum PipelineStepEnum {
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	// The report venues' places on the Google Maps searches a guest would type ("ramen Mitte")
 	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
+	// A dated snapshot of every dish topic × every district on Google Maps ("pasta Mitte Berlin"),
+	// the top ten each (`DishSearchCron`, every `City.dishSearchEveryDays`; not part of MONTHLY)
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	// Google Trends: search interest per cuisine and won venue over twelve months, in the city's region
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
@@ -68,6 +75,9 @@ export enum PipelineStepEnum {
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	// Wolt / Lieferando ratings, fees and menus of the report venues and competitors
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	// Views, likes, shares and comments of every post that turned seven days old without a read
+	// at that age, read again and kept (`PostCountsService`, the daily cron)
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	// Every step above but the venue list, in order, for one month
 	MONTHLY = 'MONTHLY',
 }
@@ -140,6 +150,10 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.SCRAPE_ACCOUNTS]: 4,
 	// The week's videos only (TikTok's date filter), so a quiet account costs a profile at most
 	[PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT]: 2,
+	// An Instagram profile at ~$0.003, a TikTok one (its latest video) at ~$0.004: ~300 profiles a
+	// day. Berlin's backlog in 2026-10 was ~1,200 accounts (~$3.40, four days); then only the
+	// accounts linked since, cents a day
+	[PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS]: 1,
 	// An Instagram profile at ~$0.003, a TikTok one (its latest video) at ~$0.004: ~300 lookups.
 	// Each account is looked up once, so the weekly run spends only on brands new to an account
 	[PipelineStepEnum.FIND_OWN_ACCOUNTS]: 1,
@@ -149,6 +163,9 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// Up to three searches of twenty places per report branch, ~$0.06 a search (Berlin 2026-09:
 	// 42 searches for 20 branches, $2.42); every branch of a chain counts, about a third more
 	[PipelineStepEnum.TRACK_SEARCH_RANKS]: 4,
+	// A snapshot: up to ten places a search at ~$0.004, 47 dishes × 12 districts in Berlin is
+	// 564 searches, ~$24 at most; ~$15 in practice, since many searches find fewer than ten
+	[PipelineStepEnum.TRACK_DISH_SEARCHES]: 25,
 	// Two runs of signalbench/google-trends-scraper (~110 food topics, then the won venues) at
 	// ~$0.004 a term; the actor refuses a cap under $1, so each run gets at least that
 	[PipelineStepEnum.SEARCH_INTEREST]: 2,
@@ -160,6 +177,10 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.SNAPSHOT_RATINGS]: 3,
 	// Wolt menus on 30 %, then Lieferando's city listing, whose actor refuses a cap under $5
 	[PipelineStepEnum.SCRAPE_DELIVERY]: 7,
+	// Every post once, at seven days, at ~$0.0039 (TikTok) / $0.0027 (Instagram): Berlin's
+	// October 2026 was ~100 posts a day, ~$0.35 a day and ~$10 a month. Room for a busy day; a
+	// post the cap leaves waits a day
+	[PipelineStepEnum.REFRESH_POST_COUNTS]: 2,
 };
 
 /** How many of the month's most talked-about venues get reviews, venue scrapes and reports. */

@@ -59,6 +59,19 @@ export class VenueFoodTopicService {
 		return out;
 	}
 
+	/** How many open venues of the city carry each topic as a stored tag, by topic key (no parents). */
+	async venueCounts(cityId: string): Promise<Map<string, number>> {
+		const rows: { key: string; n: number }[] = await this.em.getConnection().execute(
+			`select t.key, count(distinct vt.venue_id)::int as n from venue_food_topics vt
+			join food_topics t on t.id = vt.topic_id
+			join venues v on v.id = vt.venue_id
+			where vt.computed and v.city_id = ? and not v.closed
+			group by t.key`,
+			[cityId],
+		);
+		return new Map(rows.map(r => [r.key, Number(r.n)]));
+	}
+
 	/**
 	 * Works out these venues' tags (`venueTopics`) from what is stored and replaces their computed
 	 * rows; the admin's rows are never touched. Safe to run twice at once: rows are upserted on

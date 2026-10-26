@@ -27,8 +27,8 @@ Filenames are kebab-case. Per module, files live in the directory matching their
 | `*.enum.constant.ts`, `*.constant.ts` | `constants/` | |
 | `*.config.ts` | `config/` | class-validator env classes; env from `env/server/` |
 | `*.gateway.ts` | `gateways/` | socket.io; payloads shared via `sdk` |
-| `*.agent.ts` | `agent/` | extends `BaseMastraAgent`, zod output schema |
-| `*.tool.ts` | `tools/` | Mastra tools exposed via `getTools()` |
+| `*.agent.ts` | `agents/` | extends `BaseMastraAgent`, zod output schema |
+| `*.tool.ts` | `tools/` | Mastra tools exposed via `getTools()`; made with `defineTool` (`reports/tools/define-tool.ts`), since `createTool`'s own inference over a zod v4 schema goes "excessively deep" for tsc |
 | `*.job.ts` | `jobs/` | pg-boss, with `static readonly jobName` |
 | `*.subscriber.ts` | `subscribers/` | MikroORM `EventSubscriber`, registered in `subscribers` of `mikro-orm.config.ts` (the test harness reuses the list) |
 

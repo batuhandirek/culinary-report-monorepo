@@ -12,6 +12,7 @@ import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { cityStopwords } from 'src/modules/venues/util/venue-names.js';
 
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
+import { AccountSnapshotSourceEnum } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { SUGGEST_MIN_SCORE } from '../util/account-match.js';
 import type { ProfilePlatform } from '../util/accounts.js';
@@ -24,15 +25,8 @@ import {
 	tiktokProfileFacts,
 } from '../util/profile-proof.js';
 
-import { INSTAGRAM_PROFILE_ACTOR, TIKTOK_PROFILE_ACTOR } from './account-scrape.service.js';
+import { INSTAGRAM_PROFILE_ACTOR, PROFILE_ONLY_USD, TIKTOK_PROFILE_ACTOR } from './account-scrape.service.js';
 import { SocialAccountService } from './social-account.service.js';
-
-// What one lookup costs at most: an Instagram profile ~$0.0026, a TikTok profile its one
-// latest video at ~$0.003; a missing profile costs less
-const LOOKUP_USD: Record<ProfilePlatform, number> = {
-	[SocialPlatformEnum.INSTAGRAM]: 0.003,
-	[SocialPlatformEnum.TIKTOK]: 0.004,
-};
 
 const otherPlatform = (platform: ProfilePlatform): ProfilePlatform =>
 	platform === SocialPlatformEnum.INSTAGRAM ?
@@ -108,7 +102,7 @@ export class AccountTwinService {
 		};
 		let left = budgetUsd;
 		const picked = rows.filter(row => {
-			const cost = LOOKUP_USD[otherPlatform(row.platform)];
+			const cost = PROFILE_ONLY_USD[otherPlatform(row.platform)];
 			if (cost > left) return false;
 			left -= cost;
 			return true;
@@ -138,7 +132,7 @@ export class AccountTwinService {
 					INSTAGRAM_PROFILE_ACTOR,
 					{ usernames: instagram },
 					{
-						maxCostUsd: Math.max(instagram.length * LOOKUP_USD.instagram, 0.05),
+						maxCostUsd: Math.max(instagram.length * PROFILE_ONLY_USD.instagram, 0.05),
 						purpose: `instagram twins ${city.name}: ${instagram.length}`,
 					},
 				)
@@ -156,7 +150,7 @@ export class AccountTwinService {
 						shouldDownloadAvatars: false,
 					},
 					{
-						maxCostUsd: Math.max(tiktok.length * LOOKUP_USD.tiktok, 0.05),
+						maxCostUsd: Math.max(tiktok.length * PROFILE_ONLY_USD.tiktok, 0.05),
 						purpose: `tiktok twins ${city.name}: ${tiktok.length}`,
 					},
 				)
@@ -233,7 +227,12 @@ export class AccountTwinService {
 					profile.platform,
 					profile.handle,
 					city,
-					{ displayName: profile.displayName, followers: profile.followers },
+					{
+						displayName: profile.displayName,
+						followers: profile.followers,
+						following: profile.following,
+						source: AccountSnapshotSourceEnum.LOOKUP,
+					},
 					now,
 				));
 			if (!account) continue;
@@ -246,6 +245,8 @@ export class AccountTwinService {
 					{
 						displayName: profile.displayName,
 						followers: profile.followers,
+						following: profile.following,
+						source: AccountSnapshotSourceEnum.LOOKUP,
 					},
 					now,
 				);

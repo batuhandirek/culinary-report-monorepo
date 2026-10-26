@@ -18,8 +18,11 @@ import { VenuesModule } from '../venues/venues.module.js';
 import { AdminCreatorWatchController } from './controllers/admin.creator-watch.controller.js';
 import { AdminPipelineController } from './controllers/admin.pipeline.controller.js';
 import { DemandSampleCron } from './crons/demand-sample.cron.js';
+import { DishSearchCron } from './crons/dish-search.cron.js';
 import { InstagramRecentCron } from './crons/instagram-recent.cron.js';
 import { MonthlyPipelineCron } from './crons/monthly-pipeline.cron.js';
+import { AccountFollowersCron } from './crons/account-followers.cron.js';
+import { PostCountsCron } from './crons/post-counts.cron.js';
 import { RatingSnapshotCron } from './crons/rating-snapshot.cron.js';
 import { ReviewWatchCron } from './crons/review-watch.cron.js';
 import { WeeklyListeningCron } from './crons/weekly-listening.cron.js';
@@ -51,9 +54,12 @@ import { RunPipelineWorker } from './workers/run-pipeline.worker.js';
 		MonthlyPipelineCron,
 		DemandSampleCron,
 		RatingSnapshotCron,
+		DishSearchCron,
 		ReviewWatchCron,
 		InstagramRecentCron,
 		WeeklyListeningCron,
+		PostCountsCron,
+		AccountFollowersCron,
 	],
 })
 export class PipelineModule {}

@@ -23,6 +23,7 @@
 		{ key: 'SAMPLE_RESERVATIONS', label: 'Sample open tables', fallback: 1 },
 		{ key: 'SNAPSHOT_RATINGS', label: 'Snapshot ratings, twice a week', fallback: 3 },
 		{ key: 'TRACK_SEARCH_RANKS', label: 'Track search ranks', fallback: 3 },
+		{ key: 'TRACK_DISH_SEARCHES', label: 'Track dish searches (every dish × district)', fallback: 25 },
 		{ key: 'SEARCH_INTEREST', label: 'Google Trends', fallback: 2 }
 	] as const;
 </script>
@@ -190,6 +191,15 @@
 				hint: 'One per line: Name | postal codes | neighbouring districts. A border written on one side counts for both.',
 				value: districtsToText(city?.districts ?? [])
 			},
+			dishSearchEveryDays: {
+				type: 'number' as const,
+				label: 'Dish searches every N days',
+				min: 0,
+				max: 365,
+				value: city?.dishSearchEveryDays ?? 30,
+				hint: 'A dated snapshot of every dish in every district on Google Maps, top ten each (~$15 a snapshot in Berlin: every 30 days ≈ $15 a month, every 7 ≈ $65). 0 turns them off.',
+				col: 12
+			},
 			...Object.fromEntries(
 				BUDGETED_STEPS.map((step) => [
 					`budget_${step.key}`,
@@ -260,6 +270,7 @@
 			timezone: String(v.timezone).trim(),
 			locationQuery: String(v.locationQuery).trim(),
 			topBrands: num(v.topBrands) ?? 20,
+			dishSearchEveryDays: num(v.dishSearchEveryDays) ?? 30,
 			region: String(v.region ?? '').trim() || null,
 			lat: num(v.lat) ?? null,
 			lng: num(v.lng) ?? null,

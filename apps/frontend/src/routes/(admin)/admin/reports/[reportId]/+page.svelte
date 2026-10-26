@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { Download, Network, RefreshCw } from '@lucide/svelte';
+	import { Download, Network, RefreshCw, Search } from '@lucide/svelte';
 	import type { AdminReportOutputDto } from 'client';
 
+	import ReportAnalysisTrace from './components/ReportAnalysisTrace.svelte';
 	import ReportDeliveryPanel from './components/ReportDeliveryPanel.svelte';
 	import ReportSharePanel from './components/ReportSharePanel.svelte';
 
-	import { goto } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import { at } from '#components/admin/admin-format.js';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import { api } from '#lib/api.js';
@@ -31,6 +32,13 @@
 			successNotification: { title: 'Report rebuilt', text: 'With the data as it is now' }
 		}
 	);
+
+	// The analysis alone, on the stored data: the observations, their checks, the agent and the
+	// line check; the highlights stay (Rebuild rewrites them)
+	const analyseAction = createAction(() => api.admin.analyseReport(report.id), {
+		onSuccess: () => invalidate(`report:${report.id}`),
+		successNotification: { title: 'Analysed again', text: 'On the data as it was built' }
+	});
 
 	// The server prints the PDF in headless Chrome, so it matches this page
 	const pdfAction = createAction(
@@ -81,6 +89,14 @@
 			<Button
 				size="sm"
 				variant="outline"
+				icon={Search}
+				loading={analyseAction.executing}
+				onclick={() => analyseAction.execute()}>
+				Analyse again
+			</Button>
+			<Button
+				size="sm"
+				variant="outline"
 				icon={RefreshCw}
 				loading={rebuildAction.executing}
 				onclick={() => rebuildAction.execute()}>
@@ -102,6 +118,7 @@
 		{#key report.id}
 			<ReportDeliveryPanel {report} />
 			<ReportSharePanel {report} />
+			<ReportAnalysisTrace analysis={report.analysis} />
 		{/key}
 	</div>
 	<div

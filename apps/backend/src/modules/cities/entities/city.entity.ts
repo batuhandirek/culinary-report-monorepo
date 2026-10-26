@@ -22,6 +22,7 @@ export class City extends MikroOrmEntityAbstractClass<
 	| 'doNotListVenues'
 	| 'doNotListCreators'
 	| 'stepBudgetsUsd'
+	| 'dishSearchEveryDays'
 	| 'topBrands'
 	| 'cronEnabled'
 	| 'active'
@@ -95,6 +96,11 @@ export class City extends MikroOrmEntityAbstractClass<
 	// Apify cap per pipeline step, in USD; a step not listed uses `DEFAULT_STEP_BUDGET_USD`
 	@Property({ type: 'jsonb' })
 	stepBudgetsUsd: Partial<Record<PipelineStepEnum, number>> = {};
+
+	// Days between two snapshots of the dish searches (`TRACK_DISH_SEARCHES`, every dish in every
+	// district, ~$23 a snapshot in Berlin); 0 turns them off
+	@Property({ type: 'int', default: 30 })
+	dishSearchEveryDays: number = 30;
 
 	// How many of the month's most talked-about brands get reviews and reports (won ones on top)
 	@Property({ type: 'int', default: 20 })

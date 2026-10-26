@@ -121,12 +121,12 @@ export class AdminSocialController {
 
 	@TypedRoute.Get('/posts/:id')
 	async getPost(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminSocialPostOutputDto> {
-		const post = await this.em.findOneOrFail(SocialPost, { id }, { populate: [...POST_POPULATE] });
+		const post = await this.em.findOneOrFail(SocialPost, { id }, { populate: [...POST_POPULATE, 'snapshots'] });
 		return wrap(post).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: [...POST_POPULATE],
-			exclude: [...EXCLUDE],
+			populate: [...POST_POPULATE, 'snapshots'],
+			exclude: [...EXCLUDE, 'snapshots.post'],
 		}) as unknown as AdminSocialPostOutputDto;
 	}
 

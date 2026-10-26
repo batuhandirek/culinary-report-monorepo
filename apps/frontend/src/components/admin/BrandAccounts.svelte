@@ -23,8 +23,8 @@
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// A brand's own TikTok and Instagram accounts, several if it has them (one per platform, one
-	// per branch), with their figures: the latest monthly profile scrape (followers, views per
-	// post) and the posts we stored of theirs in the month. The matcher links them by handle and
+	// per branch), with their figures: the newest snapshot's (followers, views per post from the
+	// newest profile scrape) and the posts we stored of theirs in the month. The matcher links them by handle and
 	// by a branch's Google website; its likely ones wait here to confirm, and "Not theirs" is
 	// final. A branch's own account counts in reports of the branch's city only. `branches` are
 	// the ones an account can belong to (a chain's); `branchId` shows a branch page's view: the
@@ -156,7 +156,7 @@
 							<span class="text-faint truncate text-xs">
 								{account.branch ? `${branchLabel(account.branch)}'s own · ` : ''}{account.brandSource
 									? ACCOUNT_SOURCE_LABELS[account.brandSource]
-									: ''}{account.latest ? '' : ' · profile not scraped yet'}
+									: ''}{account.latest ? '' : ' · no follower count seen yet'}
 							</span>
 						</div>
 						{#if branches.length && !branchId}

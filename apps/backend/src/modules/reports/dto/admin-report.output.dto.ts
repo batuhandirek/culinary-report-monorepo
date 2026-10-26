@@ -3,6 +3,7 @@ import { tags } from 'typia';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
+import type { ReportAnalysis } from '../interfaces/report-analysis.interface.js';
 import type { ReportData, ReportHighlights } from '../interfaces/report-data.interface.js';
 import type { ReportSectionDto } from '../interfaces/report-section.interface.js';
 
@@ -34,6 +35,8 @@ export interface AdminReportListItemOutputDto {
 export interface AdminReportOutputDto extends Omit<AdminReportListItemOutputDto, 'headline'> {
 	data: ReportData;
 	highlights: ReportHighlights;
+	/** What moved, and why it might have, with the admin's trace; absent for reports built before it */
+	analysis?: ReportAnalysis;
 	/** What it shows, in order: its type's sections as they were at the build */
 	sections: ReportSectionDto[];
 }

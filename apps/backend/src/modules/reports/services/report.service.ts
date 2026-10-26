@@ -20,13 +20,21 @@ import {
 	isFeedbackTheme,
 } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
-import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
+import { monthName, monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { offeredAmenities } from 'src/modules/venues/util/venue-details.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
+import { ReportAnalysisAgent } from '../agents/report-analysis.agent.js';
 import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
+import { ANALYSIS_MODEL, ANALYSIS_TIMEOUT_MS, MAX_INVESTIGATIONS } from '../constants/report-analysis.constant.js';
 import { Report } from '../entities/report.entity.js';
+import type {
+	ReportAnalysis,
+	ReportAnalysisAnswer,
+	ReportAnalysisTrace,
+	ReportObservation,
+} from '../interfaces/report-analysis.interface.js';
 import {
 	ReportBranch,
 	ReportCompetitor,
@@ -37,7 +45,11 @@ import {
 	ReportReviewGroup,
 } from '../interfaces/report-data.interface.js';
 import { ReportBuiltEvent } from '../persisted-events/report-built.persisted-event.js';
+import { ToolRun } from '../tools/tool-run.js';
+import { checkAnalysis } from '../util/analysis-check.js';
 import { reachPromptInput } from '../util/reach.js';
+import { observe, pickInvestigated, type ReportHistoryMonth } from '../util/report-observations.js';
+import { runPlaybook } from '../util/report-playbooks.js';
 import { ratingBenchmarkSentence } from '../util/rating-benchmark.js';
 import { replyCandidates } from '../util/reply-drafts.js';
 import { type PromptScope, sectionsOutput, toSections, trimForSections } from '../util/report-sections.js';
@@ -54,6 +66,7 @@ import {
 } from '../util/summarize-report.js';
 
 import { ReportCityService } from './report-city.service.js';
+import { type EvidenceBuild, ReportEvidenceService } from './report-evidence.service.js';
 import { ReportReachService } from './report-reach.service.js';
 import { ReportSignalsService, signalsPromptInput } from './report-signals.service.js';
 import { ReportConfigService } from './report-config.service.js';
@@ -115,6 +128,8 @@ export class ReportService {
 		private readonly reportReachService: ReportReachService,
 		private readonly brandService: BrandService,
 		private readonly reportConfigService: ReportConfigService,
+		private readonly reportAnalysisAgent: ReportAnalysisAgent,
+		private readonly reportEvidenceService: ReportEvidenceService,
 	) {}
 
 	/**
@@ -130,7 +145,9 @@ export class ReportService {
 	 * each branch's place figures (busyness, open tables, prices, search ranks, neighbourhood,
 	 * rating trend, Google details) go in its own `ReportData.branches` entry. A report across
 	 * cities has no city section and no calendar: one city's peers don't compare with a brand in
-	 * several. 400 when there is no open branch.
+	 * several. The analysis ("what moved, and why it might have") is computed once before the
+	 * highlights, which quote it where a configuration shows the section; it never fails the
+	 * build. 400 when there is no open branch.
 	 */
 	async buildAll(
 		brandId: string,
@@ -142,13 +159,15 @@ export class ReportService {
 		const { data, branches, city, cityNames } = await this.compute(brandId, cityId, month, { peerBrandIds });
 		const [first] = branches;
 		const { brand } = first;
+		const analysis = await this.analyse(await this.evidenceBuild(branches, city, month, data), cityNames.join(', '));
 		const [replyDrafts, ...highlights] = await Promise.all([
 			this.draftReplies(branches, month, data),
 			...targets.map(target => {
 				const trimmed = trimForSections(data, target.sections);
-				return this.reportHighlightsAgent.generate(JSON.stringify(this.highlightsInput(trimmed.data, trimmed.scope)), {
-					cityName: cityNames.join(', '),
-				});
+				return this.reportHighlightsAgent.generate(
+					JSON.stringify(this.highlightsInput(trimmed.data, trimmed.scope, analysis)),
+					{ cityName: cityNames.join(', ') },
+				);
 			}),
 		]);
 		data.reviews.replyDrafts = replyDrafts;
@@ -165,6 +184,7 @@ export class ReportService {
 			// A copy: the configuration's own objects stay its own
 			report.sections = toSections(sectionsOutput(target.sections));
 			report.highlights = highlights[i].object;
+			report.analysis = analysis;
 			report.postCount = data.social.postCount;
 			report.reviewCount = data.reviews.count;
 			reports.push(report);
@@ -271,6 +291,162 @@ export class ReportService {
 	/** One report with its brand and city, or null. */
 	async get(id: string): Promise<Report | null> {
 		return this.em.findOne(Report, { id }, { populate: ['brand', 'city'] });
+	}
+
+	/**
+	 * Runs the analysis again on a report's stored data (the observations, their checks, the
+	 * agent and the check), writing it on every report of that build (the brand's reports of the
+	 * month in that city share one data), flushed. The highlights are not rewritten: a rebuild
+	 * does that. 404 for an unknown report, 400 when the brand has no open branch any more.
+	 */
+	async analyseAgain(reportId: string): Promise<Report> {
+		const report = await this.em.findOneOrFail(Report, { id: reportId }, { populate: ['brand', 'city'] });
+		const cityId = report.city?.id ?? null;
+		const branches =
+			cityId ? await this.brandService.branchesIn(report.brand.id, cityId) : await this.brandService.openBranches(report.brand.id);
+		if (!branches.length) throw new BadRequestException('The brand has no open branch to analyse');
+		await this.em.populate(branches, ['city', 'brand']);
+		const cityNames = _.uniq(branches.map(b => b.city.name)).join(', ');
+		const analysis = await this.analyse(await this.evidenceBuild(branches, report.city ?? null, report.month, report.data), cityNames);
+		const siblings = await this.em.find(Report, { brand: report.brand, city: cityId, month: report.month });
+		for (const sibling of siblings) sibling.analysis = analysis;
+		report.analysis = analysis;
+		await this.em.flush();
+		return report;
+	}
+
+	/** The build's inputs for the analysis: the data, the month before's stored report and the months before it. */
+	private async evidenceBuild(branches: Venue[], city: City | null, month: string, data: ReportData): Promise<EvidenceBuild> {
+		const { brand } = branches[0];
+		const before = previousMonth(monthRange(month).start);
+		const beforeReport = await this.em.findOne(Report, { brand, city: city ?? null, month: before });
+		const history = await this.history(brand.id, city?.id ?? null, before);
+		return { branches, city, month, data, ...(beforeReport && { previousData: beforeReport.data }), history };
+	}
+
+	/**
+	 * The brand's earlier months from its stored reports in a city (or across cities), oldest
+	 * first, `count` at most before `beforeMonth`: the figures the observations draw as a series.
+	 * One row per month (every configuration's report carries the same data).
+	 */
+	async history(brandId: string, cityId: string | null, beforeMonth: string, count = 5): Promise<ReportHistoryMonth[]> {
+		const rows: { month: string; social: ReportData['social'] | null; reviews: ReportData['reviews'] | null; own_accounts: ReportData['ownAccounts'] | null }[] =
+			await this.em.getConnection().execute(
+				`select distinct on (month) month, data->'social' as social, data->'reviews' as reviews, data->'ownAccounts' as own_accounts
+				from reports where brand_id = ? and city_id is not distinct from ? and month < ?
+				order by month desc, updated_at desc limit ?`,
+				[brandId, cityId, beforeMonth, count],
+			);
+		return rows.reverse().map(r => ({
+			month: r.month,
+			...(r.social && { social: _.pick(r.social, ['postCount', 'views', 'creators']) }),
+			...(r.reviews?.count && { reviews: _.pick(r.reviews, ['count', 'written', 'avgStars', 'replyRate']) }),
+			...(r.own_accounts?.length && {
+				followers: r.own_accounts.flatMap(a =>
+					a.followers === undefined ? [] : [{ platform: a.platform, handle: a.handle, followers: a.followers }],
+				),
+			}),
+		}));
+	}
+
+	/**
+	 * "What moved, and why it might have": the observations found in code with their checks, then
+	 * one capped agent call with the evidence tools for the top ones, then the line-by-line check.
+	 * A failing agent never fails the build: the investigations fall back to the observations'
+	 * own sentences and the trace says why.
+	 */
+	private async analyse(build: EvidenceBuild, cityName: string): Promise<ReportAnalysis> {
+		const started = Date.now();
+		const trace: ReportAnalysisTrace = { model: ANALYSIS_MODEL, steps: [], toolCalls: 0, problems: [], durationMs: 0 };
+		try {
+			return await this.investigate(build, cityName, trace, started);
+		} catch (e) {
+			// Reading the evidence or finding the moves failed: the report still builds
+			this.logger.warn(`Analysis for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`);
+			return {
+				builtAt: new Date().toISOString(),
+				observations: [],
+				investigations: [],
+				trace: { ...trace, error: (e as Error).message, durationMs: Date.now() - started },
+			};
+		}
+	}
+
+	private async investigate(build: EvidenceBuild, cityName: string, trace: ReportAnalysisTrace, started: number): Promise<ReportAnalysis> {
+		const ctx = await this.reportEvidenceService.context(build);
+		const { data } = build;
+		const observations: ReportObservation[] = observe({
+			data,
+			previousData: build.previousData,
+			history: build.history,
+			timeZone: ctx.timeZone,
+		}).map(o => ({ ...o, checks: runPlaybook(o, ctx) }));
+		const done = (investigations: ReportAnalysis['investigations']): ReportAnalysis => ({
+			builtAt: new Date().toISOString(),
+			observations,
+			investigations,
+			trace: { ...trace, durationMs: Date.now() - started },
+		});
+		if (!observations.length) {
+			trace.skipped = data.previous ? 'no notable move' : 'no previous month';
+			return done([]);
+		}
+
+		// The top moves, one of each sibling group (posts, views and creators rising together are one story)
+		const asked = pickInvestigated(observations, MAX_INVESTIGATIONS);
+		const input = this.analysisInput(data, asked);
+		const run = new ToolRun();
+		const tools = this.reportEvidenceService.tools(ctx, run);
+		let answer: ReportAnalysisAnswer | null = null;
+		try {
+			const res = await this.reportAnalysisAgent.generate(
+				JSON.stringify(input),
+				{ cityName, tools },
+				{ abortSignal: AbortSignal.timeout(ANALYSIS_TIMEOUT_MS) },
+			);
+			answer = res.object ?? null;
+			// What Mastra reports past the object; a mocked agent gives none of it
+			const full = res as Partial<{
+				totalUsage: ReportAnalysisTrace['usage'];
+				usage: ReportAnalysisTrace['usage'];
+				reasoningText: string;
+				steps: unknown[];
+			}>;
+			const usage = full.totalUsage ?? full.usage;
+			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'outputTokens', 'totalTokens']);
+			if (full.reasoningText) trace.reasoning = full.reasoningText.slice(0, 4_000);
+			if (full.steps?.length) trace.modelSteps = full.steps.length;
+			if (answer?.notes) trace.notes = answer.notes;
+		} catch (e) {
+			trace.error = (e as Error).message;
+			this.logger.warn(`Analysis for ${data.brand.name} ${data.month} failed: ${trace.error}`);
+		}
+		trace.steps = run.calls;
+		trace.toolCalls = run.ran;
+		const investigations = checkAnalysis(answer, asked, [input, ...run.given], (where, problem) =>
+			trace.problems.push({ where, problem }),
+		);
+		return done(investigations);
+	}
+
+	/** The agent's user message: who, when, the observations with their checks, the calendar and last month's actions. */
+	private analysisInput(data: ReportData, observations: ReportObservation[]) {
+		const chain = data.branches.length > 1;
+		return {
+			venue: {
+				name: data.brand.name,
+				category: data.brand.category,
+				...(!chain && { district: data.branches[0].district }),
+				places: data.branches.map(b => ({ id: b.venueId, name: b.name, street: b.street, district: b.district })),
+			},
+			month: monthName(data.month),
+			previousMonth: data.previous ? monthName(data.previous.month) : undefined,
+			observations: observations.map(o => _.omit(o, ['score', 'related'])),
+			context: {
+				cityCalendar: data.context,
+				actionsSuggestedLastMonth: data.previous?.actions,
+			},
+		};
 	}
 
 	private async collect(branches: Venue[], month: string, city: City | null): Promise<ReportData> {
@@ -604,7 +780,7 @@ export class ReportService {
 			}));
 	}
 
-	private highlightsInput(data: ReportData, scope: PromptScope) {
+	private highlightsInput(data: ReportData, scope: PromptScope, analysis?: ReportAnalysis) {
 		const chain = data.branches.length > 1;
 		const previous = compareMonths(data);
 		return {
@@ -620,6 +796,16 @@ export class ReportService {
 				googleReviews: scope.reviews ? previous.googleReviews : undefined,
 			},
 			cityCalendar: data.context,
+			// The month's notable moves with their possible reasons, as the analysis section shows them
+			whatMovedAndWhy:
+				scope.analysis && analysis ?
+					analysis.investigations.slice(0, scope.analysis).map(i => ({
+						whatHappened: i.whatHappened,
+						possibleReasons: i.hypotheses.map(h => `${h.confidence}: ${h.reason}`),
+						cannotTell: i.cannotTell,
+						worthChecking: i.worthChecking,
+					}))
+				:	undefined,
 			// The brand's relations over every branch; each place's own sentences are in places
 			demandAndPrices: signalsPromptInput({ correlations: data.correlations }),
 			reachAndPress: reachPromptInput(data),

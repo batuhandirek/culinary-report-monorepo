@@ -18,6 +18,7 @@
 		KPI_LABELS,
 		MAX_ARTICLES_SHOWN,
 		MAX_DISHES_SHOWN,
+		MAX_OBSERVATIONS_SHOWN,
 		MAX_POSTS_SHOWN,
 		newSection,
 		PART_LABELS,
@@ -282,6 +283,22 @@
 											(e.target as HTMLInputElement).value,
 											MAX_ARTICLES_SHOWN,
 											6
+										))} />
+							</label>
+						{:else if section.kind === SectionKind.Analysis}
+							<label class="mt-2 ml-6 flex items-center gap-2 text-xs">
+								<span class="text-muted-foreground">Moves shown</span>
+								<Input
+									type="number"
+									class="h-8 w-20"
+									min={1}
+									max={MAX_OBSERVATIONS_SHOWN}
+									value={section.limit}
+									onchange={(e: Event) =>
+										(section.limit = limit(
+											(e.target as HTMLInputElement).value,
+											MAX_OBSERVATIONS_SHOWN,
+											3
 										))} />
 							</label>
 						{:else if section.kind === SectionKind.Dishes}

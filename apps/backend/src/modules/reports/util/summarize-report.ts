@@ -369,6 +369,8 @@ export const summarizeCompetitor = (
 	]),
 });
 
+const PREVIOUS_DISHES = 8;
+
 /** The previous month's KPIs, or undefined when the venue had neither posts nor reviews then. */
 export const summarizePrevious = (
 	data: ReportSummary,
@@ -380,17 +382,19 @@ export const summarizePrevious = (
 		social: _.pick(data.social, ['postCount', 'views', 'engagements', 'creators', 'promotional']),
 		reviews:
 			data.reviews.count ?
-				_.pick(data.reviews, ['count', 'written', 'avgStars', 'replyRate'])
+				_.pick(data.reviews, ['count', 'written', 'avgStars', 'replyRate', 'stars', 'complaints', 'complaintThemes'])
 			:	undefined,
+		dishes: data.dishes.length ? data.dishes.slice(0, PREVIOUS_DISHES).map(d => _.pick(d, ['name', 'count'])) : undefined,
 		actions: actions?.length ? actions : undefined,
 	};
 };
 
-const short = (n: number) =>
+/** "197.1k", "1.2m": a count the way people say it (the observations use it too). */
+export const short = (n: number) =>
 	Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 })
 		.format(n)
 		.toLowerCase();
-const signed = (n: number, text: string) => `${n > 0 ? '+' : n < 0 ? '-' : '±'}${text}`;
+export const signed = (n: number, text: string) => `${n > 0 ? '+' : n < 0 ? '-' : '±'}${text}`;
 
 /** "from 197.1k to 978.8k (+781.7k, +397%)", worked out so the model quotes it, never computes it. */
 const comparison = (

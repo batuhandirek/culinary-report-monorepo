@@ -5,6 +5,8 @@
 export enum ReportSectionKindEnum {
 	// Brand, month, the key figures and the findings: always the first section
 	COVER = 'cover',
+	// What moved, and why it might have: the notable moves, what we checked, the possible reasons
+	ANALYSIS = 'analysis',
 	// What five-star reviews praise next to what the rest criticise
 	STARS = 'stars',
 	// A chain's places side by side (drawn for a chain only)

@@ -50,10 +50,9 @@ UI:
 - Venue and Brand page details should 
 
 DATA:
--	Scrape blog pages, and collect 'mentions' from there
-	-	https://www.berlinfoodstories.com/
-- Storing #hashtags or somehow having a place to show them, maybe even suggesting them in a report
-	- already in the post 
-- Captions also have @mentions
-	- taggedHandles in a post
-- Adding creators to be scraped for posts occasionally
+?
+
+Question:
+- Why admin/posts/a1f0729b-c690-484a-b46a-0993f2c7c617 does not have Samurai Berlin tagged?
+	- There is an address on the post, cant we match with it?
+	- There is an handle there, can't we use that?

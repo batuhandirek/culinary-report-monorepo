@@ -22,6 +22,7 @@ A cap is a ceiling, not a spend; a run stops when it reaches it. Actual runs com
 | | Google Trends | $2 | 2 |
 | | **Monthly run total** | | **76** |
 | Daily | Instagram recent posts | $2 | ~60 ceiling, ~45 at today's ~$1.50/day |
+| Daily | Post counts at seven days (every post read once more at seven days: ~$0.004 a TikTok, $0.0027 an Instagram post) | $2 | ~60 ceiling, ~10 at ~$0.35/day (Berlin, ~100 posts a day) |
 | Weekly | TikTok, this week (searches + short hashtag pages) | $6 | ~26 ceiling, ~10 at ~$2.30/week (the search's $4 cap is the actor's floor; it spends ~$0.60) |
 | Weekly | Instagram reels | $1 | ~4 ceiling, ~0.50 at ~$0.11/week |
 | Weekly | Watched accounts, the week's posts (TikTok pays only for the week's videos) | $2 | ~9 ceiling, ~2 at ~$0.50/week |
@@ -31,14 +32,15 @@ A cap is a ceiling, not a spend; a run stops when it reaches it. Actual runs com
 | Weekly | Open tables | $1 | ~4 (Google's page is free; TheFork/OpenTable paid) |
 | Weekly | Review watch | $1 | ~4 (only with subscribers) |
 | Monthly | OSM lookups | $10 | 10 (~2,000 places; drops to cents once caught up) |
+| Every 30 days (per city: every N days) | Dish searches (a snapshot of every dish × district, top ten each; Berlin 564 searches) | $25 | 25 ceiling, ~15 at ~$15 a snapshot (Berlin: many searches find fewer than ten places; every 7 days would be ~$65) |
 | Quarterly | City-wide Google list + brand branch search | $20 + $2 | ~7 amortised |
 | Quarterly, by hand | Food trends page: Google Trends compared five kinds of food at a time | ~$1.30 (28 runs at $0.10 cap) | ~0.45 amortised |
-| | **Everything, ceiling** | | **~$239** |
-| | **Realistic, after the first months** | | **$120–150** |
+| | **Everything, ceiling** | | **~$264** (over the $250 limit only if every cap were reached in one month) |
+| | **Realistic, after the first months** | | **$135–165** |
 
 For reference: October's actual spend on dev is $43 over 121 runs, with most monthly steps not yet run for October.
 
-Unit prices worth knowing: a Google Maps place ~$0.004 from a search, $0.006 looked up by its id (the detail page is always billed); an Instagram post $0.0027; an Instagram profile with its twelve latest posts ~$0.0026; a TikTok profile video ~$0.003; a TikTok comment $0.00125; a Google review $0.0006; a TripAdvisor review $0.0004; a Google Trends term ~$0.004 (compared five at a time for the food trends page: $0.009 each); a TheFork venue ~$0.006; an OpenTable date ~$0.26; a Wolt menu a few cents. Some actors refuse small caps: the TikTok search needs $4 a run, the Lieferando listing $5, Google Trends $1.
+Unit prices worth knowing: a Google Maps place ~$0.004 from a search, $0.006 looked up by its id (the detail page is always billed); an Instagram post $0.0027 (also to read its counts again); a TikTok post's counts read again ~$0.004; an Instagram profile with its twelve latest posts ~$0.0026; a TikTok profile video ~$0.003; a TikTok comment $0.00125; a Google review $0.0006; a TripAdvisor review $0.0004; a Google Trends term ~$0.004 (compared five at a time for the food trends page: $0.009 each); a TheFork venue ~$0.006; an OpenTable date ~$0.26; a Wolt menu a few cents. Some actors refuse small caps: the TikTok search needs $4 a run, the Lieferando listing $5, Google Trends $1.
 
 ## What the Apify plan limits
 

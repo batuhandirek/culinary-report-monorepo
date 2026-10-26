@@ -16,6 +16,7 @@ import { LLMModule } from '../llm/llm.module.js';
 import { PressClassificationAgent } from './agents/press-classification.agent.js';
 import { ReviewAnalysisAgent } from './agents/review-analysis.agent.js';
 import { AdminBrandsController } from './controllers/admin.brands.controller.js';
+import { AdminDishSearchesController } from './controllers/admin.dish-searches.controller.js';
 import { AdminReviewsController } from './controllers/admin.reviews.controller.js';
 import { AdminVenueSearchRanksController } from './controllers/admin.venue-search-ranks.controller.js';
 import { AdminVenueStatusChangesController } from './controllers/admin.venue-status-changes.controller.js';
@@ -32,6 +33,7 @@ import { WebMention } from './entities/web-mention.entity.js';
 import { BrandService } from './services/brand.service.js';
 import { BrandLeadScoreService } from './services/brand-lead-score.service.js';
 import { CompetitorService } from './services/competitor.service.js';
+import { DishSearchService } from './services/dish-search.service.js';
 import { FaviconFetchService } from './services/favicon-fetch.service.js';
 import { GoogleReserveAvailabilityService } from './services/google-reserve-availability.service.js';
 import { OpenTableAvailabilityService } from './services/opentable-availability.service.js';
@@ -80,6 +82,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		AdminVenuesController,
 		AdminVenueStatusChangesController,
 		AdminVenueSearchRanksController,
+		AdminDishSearchesController,
 		AdminBrandsController,
 	],
 	providers: [
@@ -93,6 +96,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueScrapeService,
 		VenueStatusChangeService,
 		VenueSearchRankService,
+		DishSearchService,
 		OverpassService,
 		OsmPlaceService,
 		CompetitorService,
@@ -118,6 +122,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueScrapeService,
 		VenueStatusChangeService,
 		VenueSearchRankService,
+		DishSearchService,
 		OsmPlaceService,
 		CompetitorService,
 		BrandLeadScoreService,

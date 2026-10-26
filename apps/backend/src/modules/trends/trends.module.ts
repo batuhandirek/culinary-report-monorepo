@@ -25,6 +25,7 @@ import { TrendService } from './services/trend.service.js';
 	imports: [MikroOrmModule.forFeature([TrendSearchInterest, TrendRelatedQuery, User, UserSession]), AuthModule, ApifyModule, FoodTopicsModule],
 	controllers: [AdminTrendsController, AdminSearchInterestController, AdminTopicInsightsController, AdminThemeInsightsController],
 	providers: [TrendService, SearchInterestService, TopicInsightService, ThemeInsightService],
-	exports: [TrendService, SearchInterestService],
+	// ThemeInsightService: the report analysis reads the city's complaint themes
+	exports: [TrendService, SearchInterestService, ThemeInsightService],
 })
 export class TrendsModule {}

@@ -30,6 +30,8 @@ export interface AdminCityOutputDto extends AdminCityRefOutputDto {
 	doNotListVenues: string[];
 	doNotListCreators: string[];
 	stepBudgetsUsd: Partial<Record<PipelineStepEnum, number>>;
+	/** Days between two dish-search snapshots; 0 = off */
+	dishSearchEveryDays: number;
 	topBrands: number;
 	cronEnabled: boolean;
 	active: boolean;

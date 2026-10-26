@@ -183,12 +183,12 @@ describe('AccountWatchService (pglite)', () => {
 		expect((targets as { handle: string }[]).map(t => t.handle).sort()).toEqual(
 			['berlingoodfood', 'buzzing_tt', 'customer_ig', 'new_creator', 'place_tt', 'rival_ig'].sort(),
 		);
-		expect(opts).toMatchObject({ since: `${MONTH}-01T00:00:00.000Z`, snapshotMonth: MONTH, budgetUsd: 4 });
+		expect(opts).toMatchObject({ since: `${MONTH}-01T00:00:00.000Z`, latestTen: true, budgetUsd: 4 });
 
 		const weekly = await run(PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT);
 		expect(weekly.status).toBe(PipelineRunStatusEnum.SUCCEEDED);
-		const weeklyOpts = scrape.mock.calls[1][2] as { since: string; snapshotMonth?: string; budgetUsd: number };
-		expect(weeklyOpts.snapshotMonth).toBeUndefined();
+		const weeklyOpts = scrape.mock.calls[1][2] as { since: string; latestTen?: boolean; budgetUsd: number };
+		expect(weeklyOpts.latestTen).toBeUndefined();
 		expect(weeklyOpts.budgetUsd).toBe(2);
 		expect(Date.now() - new Date(weeklyOpts.since).getTime()).toBeGreaterThan(7.9 * 24 * 3600 * 1000);
 	});

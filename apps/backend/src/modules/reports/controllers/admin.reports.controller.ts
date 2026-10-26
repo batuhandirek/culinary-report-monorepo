@@ -5,6 +5,7 @@ import { Controller, Get, Param, ParseUUIDPipe, Res, UseGuards } from '@nestjs/c
 
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
 import type { Response } from 'express';
+import _ from 'lodash';
 import { tags } from 'typia';
 
 import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant.js';
@@ -21,6 +22,7 @@ import {
 	AdminReportListItemOutputDto,
 	AdminReportOutputDto,
 } from '../dto/admin-report.output.dto.js';
+import { SharedReportOutputDto } from '../dto/report-share.output.dto.js';
 import { Report } from '../entities/report.entity.js';
 import type { ReportData } from '../interfaces/report-data.interface.js';
 import { ReportService } from '../services/report.service.js';
@@ -35,7 +37,7 @@ const refs = (report: Pick<Report, 'brand' | 'city'>) => ({
 });
 
 /** A report's file name: the brand, the city (none across cities) and the month. */
-export const reportFileName = (report: AdminReportOutputDto) =>
+export const reportFileName = (report: SharedReportOutputDto) =>
 	[report.brand.name, report.city?.name, report.month]
 		.filter(Boolean)
 		.join('-')
@@ -60,12 +62,23 @@ export const toOutput = (report: Report): AdminReportOutputDto => ({
 	...refs(report),
 	data: report.data,
 	highlights: report.highlights,
+	...(report.analysis && { analysis: report.analysis }),
 	name: report.name,
 	sections: sectionsOutput(report.sections),
 	// Named where they were loaded (the admin's routes)
 	...links(report),
 	sentAt: report.sentAt ?? undefined,
 });
+
+/**
+ * A report for a shared link or the portal: the admin's output without the delivery record and
+ * without the analysis's trace (the admin's: tool calls, the model's notes, problems). Stripped
+ * here, not by the DTO alone, since the print page gets the object as is.
+ */
+export const toPublicOutput = (report: Report): SharedReportOutputDto => {
+	const { sentAt: _sentAt, analysis, ...rest } = toOutput(report);
+	return { ...rest, ...(analysis && { analysis: _.omit(analysis, 'trace') }) };
+};
 
 @Controller('/admin/reports')
 @UseGuards(AuthenticationGuard, RolesGuard)
@@ -184,6 +197,19 @@ export class AdminReportsController {
 	@TypedRoute.Post('/preview')
 	async previewReportData(@TypedBody() body: AdminBuildReportInputDto): Promise<ReportData> {
 		return (await this.reportService.compute(body.brandId, body.cityId ?? null, body.month)).data;
+	}
+
+	/**
+	 * Runs the analysis ("what moved, and why it might have") again on the report's stored data:
+	 * the observations, their checks, the agent and the line check. Written on every report of
+	 * that build (they share one data). The highlights are not rewritten: Rebuild does that.
+	 * Takes up to a few minutes: an agent call with tools.
+	 */
+	@TypedRoute.Post('/:id/analyse')
+	async analyseReport(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminReportOutputDto> {
+		const report = await this.reportService.analyseAgain(id);
+		await this.em.populate(report, ['brand', 'city', 'config', 'template']);
+		return toOutput(report);
 	}
 
 	/**

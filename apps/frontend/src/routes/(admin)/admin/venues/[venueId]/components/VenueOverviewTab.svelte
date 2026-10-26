@@ -8,6 +8,7 @@
 	import BrandAccounts from '#components/admin/BrandAccounts.svelte';
 	import VenueDemandPanel from '#components/admin/venues/VenueDemandPanel.svelte';
 	import VenueDetailsPanel from '#components/admin/venues/VenueDetailsPanel.svelte';
+	import VenueDishSearchesPanel from '#components/admin/venues/VenueDishSearchesPanel.svelte';
 	import VenueFoodTopicsPanel from '#components/admin/venues/VenueFoodTopicsPanel.svelte';
 	import VenueRatingPanel from '#components/admin/venues/VenueRatingPanel.svelte';
 	import VenueSearchRanksPanel from '#components/admin/venues/VenueSearchRanksPanel.svelte';
@@ -51,6 +52,7 @@
 	<div class="flex min-w-0 flex-col gap-5">
 		<VenueDemandPanel {venue} />
 		<VenueSearchRanksPanel {venue} />
+		<VenueDishSearchesPanel {venue} />
 		<VenueRatingPanel {venue} />
 	</div>
 </div>

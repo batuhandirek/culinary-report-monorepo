@@ -13,11 +13,32 @@ import { monthRange } from 'src/modules/venues/util/month.js';
 import { AccountRejectedBrand } from '../entities/account-rejected-brand.entity.js';
 import { Creator } from '../entities/creator.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
-import { SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
+import { AccountSnapshotSourceEnum, SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
 import { normalizeHandle } from '../util/accounts.js';
+import {
+	followersChange,
+	latestFigures,
+	SNAPSHOT_FIGURES,
+	type SnapshotFigures,
+	snapshotDateParts,
+} from '../util/account-snapshots.js';
 import { CREATOR_KEY_SQL, creatorKeyOf } from '../util/creators.js';
+
+/**
+ * Figures seen again this soon after the account's last snapshot (in the same unit of work)
+ * update it rather than add one: one scrape returns many posts of one author, and a profile
+ * scrape saves its posts after the profile.
+ */
+const SNAPSHOT_MERGE_MS = 3600 * 1000;
+
+// A richer scrape's source wins when two land in one snapshot
+const SOURCE_RANK = {
+	[AccountSnapshotSourceEnum.POST]: 0,
+	[AccountSnapshotSourceEnum.LOOKUP]: 1,
+	[AccountSnapshotSourceEnum.PROFILE]: 2,
+};
 
 /** What our own scrapes saw an account post: a month's, and all of it. */
 export interface AccountPostStats {
@@ -27,12 +48,18 @@ export interface AccountPostStats {
 	lastPostedAt?: Date;
 }
 
-/** An account on the admin pages: its latest profile snapshot, the one before it and what we saw it post. */
+/** The newest figures of an account's snapshots: each field from the newest snapshot that has it. */
+export interface LatestAccountFigures extends SnapshotFigures {
+	scrapedAt: Date;
+	source: AccountSnapshotSourceEnum;
+}
+
+/** An account on the admin pages: its latest figures, the followers change and what we saw it post. */
 export interface AccountWithFigures {
 	account: SocialAccount;
-	latest: SocialAccountSnapshot | null;
-	/** The snapshot before `latest`: the change in followers */
-	previous: SocialAccountSnapshot | null;
+	latest: LatestAccountFigures | null;
+	/** Followers against the newest count `FOLLOWERS_CHANGE_DAYS` or more older; absent without one */
+	followersChange?: number;
 	stats: AccountPostStats;
 }
 
@@ -40,6 +67,11 @@ export interface AccountWithFigures {
 export interface AccountSeen {
 	displayName?: string | null;
 	followers?: number | null;
+	following?: number | null;
+	/** Everything the profile shows */
+	posts?: number | null;
+	/** What kind of scrape saw it; a post's item by default */
+	source?: AccountSnapshotSourceEnum;
 }
 
 /**
@@ -104,15 +136,17 @@ export class SocialAccountService {
 		};
 	}
 
-	/** The latest two snapshots and the posts we saw, for each account. */
+	/** The latest figures, the followers change and the posts we saw, for each account. */
 	async withFigures(accounts: SocialAccount[], month: string): Promise<AccountWithFigures[]> {
 		if (!accounts.length) return [];
 		const ids = accounts.map(a => a.id);
-		const snapshots = await this.em.find(
-			SocialAccountSnapshot,
-			{ account: { $in: ids } },
-			{ orderBy: { month: QueryOrder.DESC } },
-		);
+		const snapshots = (
+			await this.em.find(
+				SocialAccountSnapshot,
+				{ account: { $in: ids } },
+				{ orderBy: { scrapedAt: QueryOrder.DESC } },
+			)
+		).map(s => ({ ...s, accountId: s.account.id }));
 		const { start, end } = monthRange(month);
 		const rows: { account_id: string; month_posts: string; month_views: string; posts: string; last_posted_at: Date | null }[] =
 			await this.em.getConnection().execute(
@@ -125,12 +159,14 @@ export class SocialAccountService {
 			);
 		const stats = new Map(rows.map(r => [r.account_id, r]));
 		return accounts.map(account => {
-			const own = snapshots.filter(s => s.account.id === account.id);
+			const own = snapshots.filter(s => s.accountId === account.id);
 			const row = stats.get(account.id);
+			const change = followersChange(own);
 			return {
 				account,
-				latest: own[0] ?? null,
-				previous: own[1] ?? null,
+				// Newest first
+				latest: own.length ? { ...latestFigures(own), scrapedAt: own[0].scrapedAt, source: own[0].source } : null,
+				...(change !== undefined && { followersChange: change }),
 				stats: {
 					monthPosts: Number(row?.month_posts ?? 0),
 					monthViews: Number(row?.month_views ?? 0),
@@ -148,6 +184,10 @@ export class SocialAccountService {
 	 * takes the newer display name and follower count. Does not flush; finds accounts created
 	 * earlier in the same flush. Null for a handle it cannot use.
 	 */
+	// Keyed by the managed entity, so one unit of work's scrape shares its snapshots and a new
+	// request (a new entity) starts afresh
+	private readonly lastSnapshots = new WeakMap<SocialAccount, SocialAccountSnapshot>();
+
 	async ensure(
 		platform: SocialPlatformEnum,
 		input: string | null | undefined,
@@ -166,8 +206,50 @@ export class SocialAccountService {
 		if (typeof seen.followers === 'number' && seen.followers >= 0) {
 			account.followers = seen.followers;
 			account.followersAt = now;
+			this.recordSnapshot(
+				account,
+				{ followers: seen.followers, following: seen.following, posts: seen.posts },
+				seen.source ?? AccountSnapshotSourceEnum.POST,
+				now,
+			);
 		}
 		return account;
+	}
+
+	/**
+	 * The one writer of `SocialAccountSnapshot`: the figures a scrape saw for an account at `at`.
+	 * The account's last snapshot in this unit of work takes them instead when it is under
+	 * `SNAPSHOT_MERGE_MS` old (one scrape's profile and posts are one snapshot), each given field
+	 * over its own and the richer source kept. Negative or missing figures stay unknown. Does
+	 * not flush.
+	 */
+	recordSnapshot(
+		account: SocialAccount,
+		figures: SnapshotFigures,
+		source: AccountSnapshotSourceEnum,
+		at = new Date(),
+	): SocialAccountSnapshot {
+		const known = Object.fromEntries(
+			SNAPSHOT_FIGURES.flatMap(field => {
+				const value = figures[field];
+				return typeof value === 'number' && value >= 0 ? [[field, value]] : [];
+			}),
+		) as SnapshotFigures;
+		const last = this.lastSnapshots.get(account);
+		if (last && Math.abs(at.getTime() - last.scrapedAt.getTime()) < SNAPSHOT_MERGE_MS) {
+			Object.assign(last, known);
+			if (SOURCE_RANK[source] > SOURCE_RANK[last.source]) last.source = source;
+			return last;
+		}
+		const snapshot = this.em.create(SocialAccountSnapshot, {
+			account,
+			scrapedAt: at,
+			...snapshotDateParts(at),
+			source,
+			...known,
+		});
+		this.lastSnapshots.set(account, snapshot);
+		return snapshot;
 	}
 
 	/** An account created in this unit of work but not flushed yet. */

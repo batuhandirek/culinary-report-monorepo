@@ -135,6 +135,7 @@ export const accountUrl = (platform: SocialPlatformEnum, handle: string): string
 /** What one profile scrape gives a `SocialAccountSnapshot`. */
 export interface AccountFigures {
 	followers: number | null;
+	following: number | null;
 	posts: number | null;
 	avgViews: number | null;
 	avgLikes: number | null;
@@ -179,6 +180,7 @@ export const instagramProfileFigures = (item: any, now: Date): AccountFigures | 
 		}));
 	return {
 		followers: count(item.followersCount),
+		following: count(item.followsCount),
 		posts: count(item.postsCount),
 		...recentFigures(posts, now),
 	};
@@ -194,6 +196,7 @@ export const tiktokProfileFigures = (items: any[], now: Date): AccountFigures | 
 	const author = videos[0].authorMeta;
 	return {
 		followers: count(author.fans),
+		following: count(author.following),
 		posts: count(author.video),
 		...recentFigures(
 			videos

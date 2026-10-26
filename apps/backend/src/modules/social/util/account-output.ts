@@ -2,6 +2,8 @@
 
 import { wrap } from '@mikro-orm/core';
 
+import _ from 'lodash';
+
 import type { AdminAccountOutputDto, AdminAccountSnapshotOutputDto } from '../dto/admin-account.output.dto.js';
 import type { AccountWithFigures } from '../services/social-account.service.js';
 
@@ -9,7 +11,7 @@ import { accountUrl } from './accounts.js';
 
 export const ACCOUNT_POPULATE = ['creator', 'brand', 'branch', 'suggestedBrand', 'rejections', 'rejections.brand'] as const;
 
-export const accountOutput = ({ account, latest, previous, stats }: AccountWithFigures): AdminAccountOutputDto => ({
+export const accountOutput = ({ account, latest, followersChange, stats }: AccountWithFigures): AdminAccountOutputDto => ({
 	...(wrap(account).serialize({
 		skipNull: true,
 		forceObject: true,
@@ -18,9 +20,8 @@ export const accountOutput = ({ account, latest, previous, stats }: AccountWithF
 	}) as unknown as Omit<AdminAccountOutputDto, 'url' | 'latest' | 'followersChange' | 'stats'>),
 	url: accountUrl(account.platform, account.handle),
 	...(latest && {
-		latest: wrap(latest).serialize({ skipNull: true, forceObject: true }) as unknown as AdminAccountSnapshotOutputDto,
+		latest: _.omitBy(latest, v => v == null) as unknown as AdminAccountSnapshotOutputDto,
 	}),
-	...(latest?.followers != null &&
-		previous?.followers != null && { followersChange: latest.followers - previous.followers }),
+	...(followersChange !== undefined && { followersChange }),
 	stats,
 });

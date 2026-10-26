@@ -10,6 +10,7 @@ import {
 	ReportSectionKindEnum as Kind,
 } from '../constants/report-section.constant.js';
 import {
+	AnalysisReportSection,
 	CoverReportSection,
 	MediaReportSection,
 	PlacesReportSection,
@@ -55,6 +56,7 @@ describe('toSections', () => {
 		['too many posts', [{ kind: Kind.COVER }, { kind: Kind.POSTS, limit: 25 }]],
 		['no posts', [{ kind: Kind.COVER }, { kind: Kind.POSTS, limit: 0 }]],
 		['too many articles', [{ kind: Kind.COVER }, { kind: Kind.MEDIA, limit: 21 }]],
+		['too many moves', [{ kind: Kind.COVER }, { kind: Kind.ANALYSIS, limit: 7 }]],
 	])('refuses %s', (_, input) => {
 		expect(() => toSections(input)).toThrow(BadRequestException);
 	});
@@ -65,6 +67,15 @@ describe('toSections', () => {
 		expect(sectionsOutput([media])).toEqual([{ kind: Kind.MEDIA, limit: 6 }]);
 		const [, twelve] = toSections([{ kind: Kind.COVER }, { kind: Kind.MEDIA, limit: 12 }]);
 		expect((twelve as MediaReportSection).limit).toBe(12);
+	});
+
+	it('makes the analysis section its own class with its limit, second in the full layout', () => {
+		const [, analysis] = toSections([{ kind: Kind.COVER }, { kind: Kind.ANALYSIS }]);
+		expect(analysis).toBeInstanceOf(AnalysisReportSection);
+		expect(sectionsOutput([analysis])).toEqual([{ kind: Kind.ANALYSIS, limit: 3 }]);
+		const [, five] = toSections([{ kind: Kind.COVER }, { kind: Kind.ANALYSIS, limit: 5 }]);
+		expect((five as AnalysisReportSection).limit).toBe(5);
+		expect(FULL_REPORT_SECTIONS().map(s => s.kind).slice(0, 3)).toEqual([Kind.COVER, Kind.ANALYSIS, Kind.STARS]);
 	});
 
 	it('allows posts of every platform (no platform picked)', () => {
@@ -108,7 +119,7 @@ describe('trimForSections', () => {
 	it('keeps everything for the full layout', () => {
 		const { data: out, scope } = trimForSections(data, FULL_REPORT_SECTIONS());
 		expect(out).toEqual(data);
-		expect(scope).toEqual({ social: true, reviews: true, stars: true, branches: true });
+		expect(scope).toEqual({ social: true, reviews: true, stars: true, branches: true, analysis: 3 });
 	});
 
 	it('leaves out what the sections leave out, on a copy', () => {
@@ -132,7 +143,7 @@ describe('trimForSections', () => {
 		expect(out.city).toBeUndefined();
 		expect(out.branches[0]).toEqual({ prices: {}, neighbours: [] });
 		// A star tile keeps the review counts; no social tile, no posts section: no social figures
-		expect(scope).toEqual({ social: false, reviews: true, stars: false, branches: false });
+		expect(scope).toEqual({ social: false, reviews: true, stars: false, branches: false, analysis: false });
 		// The stored data is untouched
 		expect(data.posts).toHaveLength(3);
 		expect(data.branches[0].busyness).toBeDefined();

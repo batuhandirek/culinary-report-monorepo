@@ -39,6 +39,8 @@ export interface AdminCreateCityInputDto {
 	/** Creators who asked to be left out of public pages (handles, with or without @) */
 	doNotListCreators?: (string & tags.MaxLength<100>)[];
 	stepBudgetsUsd?: Partial<Record<PipelineStepEnum, number & tags.Minimum<0> & tags.Maximum<100>>>;
+	/** Days between two dish-search snapshots (every dish × district); 0 turns them off */
+	dishSearchEveryDays?: number & tags.Type<'uint32'> & tags.Maximum<365>;
 	topBrands?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<200>;
 	cronEnabled?: boolean;
 	active?: boolean;

@@ -94,6 +94,11 @@ export class SocialAccount extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'datetime', nullable: true })
 	twinCheckedAt?: Date | null;
 
+	// When the daily follower fill last asked for this brand account's profile
+	// (`AccountScrapeService.fillFollowers`): one that didn't come back is asked again a month on
+	@Property({ type: 'datetime', nullable: true })
+	followersAskedAt?: Date | null;
+
 	// Brands an admin said it is not (`AccountRejectedBrand`): never linked to or suggested again
 	@OneToMany(() => AccountRejectedBrand, rejection => rejection.account)
 	rejections = new Collection<AccountRejectedBrand>(this);

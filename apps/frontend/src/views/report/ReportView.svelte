@@ -1,9 +1,10 @@
 <script lang="ts">
 	import ArrowDownIcon from '@lucide/svelte/icons/arrow-down';
 	import ArrowUpIcon from '@lucide/svelte/icons/arrow-up';
-	import type { AdminReportOutputDto } from 'client';
+	import type { AdminReportOutputDto, ReportAnalysisPublic } from 'client';
 
 	import RatingSparkline from './RatingSparkline.svelte';
+	import ReportAnalysis from './ReportAnalysis.svelte';
 	import ReportAppendix from './ReportAppendix.svelte';
 	import ReportBranches from './ReportBranches.svelte';
 	import ReportBusyness from './ReportBusyness.svelte';
@@ -49,6 +50,8 @@
 	interface Props {
 		report: Pick<AdminReportOutputDto, 'data' | 'highlights'> & {
 			sections?: AdminReportOutputDto['sections'];
+			/** What moved, and why it might have; absent in reports built before it */
+			analysis?: ReportAnalysisPublic;
 		};
 	}
 
@@ -398,6 +401,8 @@
 	// A section is drawn when it has something to show
 	const isVisible = (section: Section): boolean => {
 		switch (section.kind) {
+			case SectionKind.Analysis:
+				return !!report.analysis?.observations.length;
 			case SectionKind.Stars:
 				return showSplit;
 			case SectionKind.Branches:
@@ -448,6 +453,7 @@
 
 	// Sections are numbered in the order they appear; empty ones drop out
 	const NUMBER_KEYS: Partial<Record<SectionKind, string>> = {
+		[SectionKind.Analysis]: 'moved',
 		[SectionKind.Stars]: 'stars',
 		[SectionKind.Branches]: 'branches',
 		[SectionKind.Competitors]: 'compare',
@@ -1433,7 +1439,16 @@
 	{@render coverSection()}
 
 	{#each body as section, i (section.kind)}
-		{#if section.kind === SectionKind.Stars}
+		{#if section.kind === SectionKind.Analysis && report.analysis}
+			<section>
+				{@render sectionHead(
+					'moved',
+					'This month against the last',
+					'What moved, and why it might have'
+				)}
+				<ReportAnalysis analysis={report.analysis} limit={section.limit ?? 3} />
+			</section>
+		{:else if section.kind === SectionKind.Stars}
 			{@render starsSection()}
 		{:else if section.kind === SectionKind.Branches}
 			{@render branchesSection()}

@@ -45,6 +45,7 @@ import { PostHashtag } from 'src/modules/social/entities/post-hashtag.entity.js'
 import { PostSource } from 'src/modules/social/entities/post-source.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialAccountSnapshot } from 'src/modules/social/entities/social-account-snapshot.entity.js';
+import { SocialPostSnapshot } from 'src/modules/social/entities/social-post-snapshot.entity.js';
 import { SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { SocialAccountSubscriber } from 'src/modules/social/subscribers/social-account.subscriber.js';
 import { TrendRelatedQuery } from 'src/modules/trends/entities/trend-related-query.entity.js';
@@ -53,6 +54,7 @@ import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { BrandCompetitor } from 'src/modules/venues/entities/brand-competitor.entity.js';
 import { BrandDismissal } from 'src/modules/venues/entities/brand-dismissal.entity.js';
 import { BrandExcludedVenue } from 'src/modules/venues/entities/brand-excluded-venue.entity.js';
+import { DishSearchRank } from 'src/modules/venues/entities/dish-search-rank.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { OsmPlace } from 'src/modules/venues/entities/osm-place.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
@@ -98,6 +100,7 @@ export default defineConfig({
 		VenueSnapshot,
 		VenueStatusChange,
 		VenueSearchRank,
+		DishSearchRank,
 		BrandCompetitor,
 		VenueLookup,
 		OsmPlace,
@@ -112,6 +115,7 @@ export default defineConfig({
 		SocialPost,
 		SocialAccount,
 		SocialAccountSnapshot,
+		SocialPostSnapshot,
 		Creator,
 		Mention,
 		PostComment,

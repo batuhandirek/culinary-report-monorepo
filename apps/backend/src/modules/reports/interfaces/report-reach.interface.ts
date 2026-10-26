@@ -12,6 +12,11 @@ export interface ReportOwnAccount {
 	followers?: number;
 	/** Since the month before's snapshot; absent without one */
 	followersChange?: number;
+	/**
+	 * The follower count each day a scrape saw the profile in the month, oldest first (the weekly
+	 * profile scrape, a post item repeating it): week-level points for the analysis; absent without any
+	 */
+	followerPoints?: { date: string; followers: number }[];
 	/** Everything the profile shows */
 	posts?: number;
 	/** Posts added since the month before's snapshot; absent without one */

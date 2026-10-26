@@ -2,6 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { MAX_OBSERVATIONS_SHOWN } from '../constants/report-analysis.constant.js';
 import {
 	MAX_ARTICLES_SHOWN,
 	MAX_DISHES_SHOWN,
@@ -32,6 +33,7 @@ export const newSection = <K extends ReportSectionKindEnum>(kind: K) =>
 export const FULL_REPORT_SECTIONS = (): AnyReportSection[] =>
 	[
 		Kind.COVER,
+		Kind.ANALYSIS,
 		Kind.STARS,
 		Kind.BRANCHES,
 		Kind.COMPETITORS,
@@ -86,6 +88,9 @@ export const toSections = (input: ReportSectionDto[]): AnyReportSection[] => {
 			case Kind.COVER:
 				section.kpis = uniqueList(dto.kpis, 'Cover figures') ?? section.kpis;
 				break;
+			case Kind.ANALYSIS:
+				section.limit = inRange(dto.limit, MAX_OBSERVATIONS_SHOWN, 'Moves shown') ?? section.limit;
+				break;
 			case Kind.POSTS:
 				section.platforms =
 					uniqueList(dto.platforms, 'Platforms', { allowEmpty: true }) ??
@@ -125,6 +130,8 @@ export interface PromptScope {
 	stars: boolean;
 	// A chain's branches compared
 	branches: boolean;
+	// The analysis section: how many moves it shows, or false without one
+	analysis: number | false;
 }
 
 const SOCIAL_KPIS = [
@@ -206,6 +213,7 @@ export const trimForSections = (
 				kpis.some(k => REVIEW_KPIS.includes(k)),
 			stars: has(Kind.STARS),
 			branches: has(Kind.BRANCHES),
+			analysis: of(Kind.ANALYSIS)?.limit ?? false,
 		},
 	};
 };

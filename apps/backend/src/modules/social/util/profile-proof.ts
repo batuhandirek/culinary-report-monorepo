@@ -23,6 +23,7 @@ export interface ProfileFacts {
 	exists: boolean;
 	displayName?: string | null;
 	followers?: number | null;
+	following?: number | null;
 	bio?: string | null;
 	/** Its website link(s) */
 	links: string[];
@@ -47,6 +48,7 @@ export const instagramProfileFacts = (item: any): ProfileFacts | null => {
 		exists: true,
 		displayName: item.fullName || null,
 		followers: typeof item.followersCount === 'number' ? item.followersCount : null,
+		following: typeof item.followsCount === 'number' ? item.followsCount : null,
 		bio: item.biography || null,
 		links: [...new Set(links.map(decodeLink))],
 	};
@@ -70,6 +72,7 @@ export const tiktokProfileFacts = (item: any): ProfileFacts | null => {
 		exists: true,
 		displayName: author.nickName || null,
 		followers: typeof author.fans === 'number' ? author.fans : null,
+		following: typeof author.following === 'number' ? author.following : null,
 		bio: author.signature || null,
 		links: typeof bioLink === 'string' && bioLink.trim() ? [decodeLink(bioLink)] : [],
 	};

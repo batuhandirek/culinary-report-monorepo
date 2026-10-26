@@ -185,12 +185,7 @@
 					: { value: '—', class: 'text-faint' }
 		},
 		{ type: 'date', name: 'Last post', format: 'date', value: (row) => row.stats.lastPostedAt },
-		{
-			type: 'value',
-			name: 'Profile',
-			label: 'Profile scraped',
-			value: (row) => (row.latest ? monthLabel(row.latest.month) : { value: 'never', class: 'text-faint' })
-		}
+		{ type: 'date', name: 'Seen', label: 'Figures seen', format: 'date', value: (row) => row.latest?.scrapedAt }
 	]);
 </script>
 

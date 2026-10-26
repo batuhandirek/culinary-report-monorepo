@@ -9,8 +9,10 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { PostHashtag } from '../entities/post-hashtag.entity.js';
 import { PostSource, PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
+import { SocialPostSnapshot } from '../entities/social-post-snapshot.entity.js';
 import { captionHashtags, ensureHashtags, normalizeHashtag } from '../util/hashtags.js';
 import { hashtagOfTagUrl } from '../util/instagram-tags.js';
+import { clockworksCounts, COUNT_FIELDS, countsOf, instagramCounts, isFinalAge, type PostCounts } from '../util/post-counts.js';
 import { linkPostSources, type PostFind } from '../util/post-sources.js';
 
 import { HashtagService } from './hashtag.service.js';
@@ -90,23 +92,29 @@ export class SocialPostService {
 	}
 
 	/**
-	 * Creates the post in the city whose scrape found it, or refreshes its counts (a known post
-	 * keeps its first city and caption), and links it to its author's account
+	 * Creates the post in the city whose scrape found it, or reads its counts again (a known post
+	 * keeps its first city and caption; `readCounts`), and links it to its author's account
 	 * (`SocialAccountService.ensure`, which takes the item's display name and follower count).
 	 * Every find is recorded (`PostSource`), new post or known; a new post's hashtags are stored
-	 * as rows (`PostHashtag`). Returns false for an item it cannot use. Does not flush; the finds
+	 * as rows (`PostHashtag`); `seenAt` dates the author's follower snapshot. Returns false for an
+	 * item it cannot use. Does not flush; the finds
 	 * reach their city source with `linkPostSources` after the flush.
 	 */
-	async upsert(fields: PostFields, city: City): Promise<boolean> {
+	async upsert(fields: PostFields, city: City, seenAt = new Date()): Promise<boolean> {
 		const { authorName, hashtags, finds, ...postFields } = fields;
-		const account = await this.socialAccountService.ensure(fields.platform, fields.author, city, {
-			displayName: authorName,
-			followers: fields.authorFans,
-		});
+		const account = await this.socialAccountService.ensure(
+			fields.platform,
+			fields.author,
+			city,
+			{ displayName: authorName, followers: fields.authorFans },
+			seenAt,
+		);
 		const existing = await this.em.findOne(SocialPost, { externalId: fields.externalId });
 		if (existing) {
-			// Counts move, the rest stays as first seen; subtitles only fill a gap
-			Object.assign(existing, _.pick(postFields, ['views', 'likes', 'shares', 'comments', 'saves', 'authorFans']));
+			// Counts move until final, the author's followers always; the rest stays as first
+			// seen, subtitles only fill a gap
+			Object.assign(existing, _.pick(postFields, ['authorFans']));
+			this.readCounts(existing, postFields, seenAt);
 			existing.subtitles ??= fields.subtitles ?? null;
 			existing.subtitlesLanguage ??= fields.subtitlesLanguage ?? null;
 			existing.account ??= account;
@@ -119,6 +127,7 @@ export class SocialPostService {
 			account,
 			city,
 		});
+		this.readCounts(post, postFields, seenAt);
 		const tagIds = await ensureHashtags(this.em, hashtags ?? []);
 		_.uniq((hashtags ?? []).map(normalizeHashtag).filter(Boolean)).forEach((tag, rank) =>
 			this.em.create(PostHashtag, { post, hashtag: tagIds.get(tag)!, rank }),
@@ -141,6 +150,30 @@ export class SocialPostService {
 				this.em.create(PostSource, { post, kind: find.kind, value: find.value, venue: find.venueId ?? null, foundAt: now });
 	}
 
+	/**
+	 * Records one read of a post's counts (a scrape that found it, or the refresh): always a
+	 * snapshot; the post's own counts only while they aren't final, and they become final when the
+	 * read is at `POST_COUNTS_AGE_DAYS` or later, so every post is compared at the same age. A
+	 * count the read doesn't carry keeps the post's. Blog articles have no counts. Does not flush.
+	 */
+	readCounts(post: SocialPost, fields: Partial<PostCounts>, at = new Date()): void {
+		if (post.platform === SocialPlatformEnum.BLOG) return;
+		const read = _.pick(fields, COUNT_FIELDS);
+		this.em.create(SocialPostSnapshot, { post, at, ...countsOf({ ...countsOf(post), ...read }) });
+		if (post.countsFinalAt) return;
+		Object.assign(post, read);
+		post.countsAt = at;
+		if (isFinalAge(post.postedAt, at)) post.countsFinalAt = at;
+	}
+
+	/**
+	 * The refresh found the post deleted or private: its counts stay as last read, final, so it
+	 * is never paid for again. Does not flush.
+	 */
+	closeCounts(post: SocialPost, at = new Date()): void {
+		post.countsFinalAt ??= at;
+	}
+
 	/** One item of `clockworks/tiktok-scraper` (hashtags) or `clockworks/tiktok-hashtag-scraper`. */
 	async fromClockworks(row: any): Promise<PostFields | null> {
 		if (!row?.id || !row.webVideoUrl || !row.createTimeISO || row.error) return null;
@@ -153,11 +186,7 @@ export class SocialPostService {
 			author: row.authorMeta?.name ?? null,
 			authorName: row.authorMeta?.nickName ?? null,
 			authorFans: row.authorMeta?.fans ?? null,
-			views: row.playCount ?? 0,
-			likes: row.diggCount ?? 0,
-			shares: row.shareCount ?? 0,
-			comments: row.commentCount ?? 0,
-			saves: row.collectCount ?? 0,
+			...clockworksCounts(row),
 			isAd: !!(row.isAd || row.isSponsored),
 			locationName: row.locationMeta?.locationName ?? null,
 			finds: clockworksFinds(row),
@@ -248,7 +277,6 @@ export class SocialPostService {
 		const hashtag = hashtagOfTagUrl(row?.inputUrl);
 		if (!row?.id || !row.url || !row.timestamp || !hashtag) return null;
 		const caption: string = row.caption ?? '';
-		const count = (n: unknown) => (typeof n === 'number' && n > 0 ? n : 0);
 		const usernames = (list: unknown) =>
 			Array.isArray(list) ? list.map((u: any) => u?.username).filter(Boolean) : [];
 		return {
@@ -260,10 +288,7 @@ export class SocialPostService {
 			author: row.ownerUsername ?? null,
 			authorName: row.ownerFullName ?? null,
 			authorFans: null,
-			views: count(row.videoPlayCount ?? row.videoViewCount),
-			likes: count(row.likesCount),
-			shares: count(row.sharesCount),
-			comments: count(row.commentsCount),
+			...instagramCounts(row),
 			isAd: !!(row.paidPartnership || row.isSponsored),
 			locationName: typeof row.locationName === 'string' && row.locationName.trim() ? row.locationName.trim() : null,
 			finds: [{ kind: PostSourceKindEnum.INSTAGRAM_HASHTAG, value: normalizeHashtag(hashtag) }],
@@ -286,7 +311,6 @@ export class SocialPostService {
 	fromInstagramProfilePost(post: any, profile: any): PostFields | null {
 		if (!post?.id || !post.url || !post.timestamp) return null;
 		const caption: string = post.caption ?? '';
-		const count = (n: unknown) => (typeof n === 'number' && n > 0 ? n : 0);
 		const usernames = (list: unknown) =>
 			Array.isArray(list) ? list.map((u: any) => u?.username).filter(Boolean) : [];
 		const author = post.ownerUsername ?? profile?.username ?? null;
@@ -298,10 +322,7 @@ export class SocialPostService {
 			author,
 			authorName: profile?.fullName ?? null,
 			authorFans: typeof profile?.followersCount === 'number' ? profile.followersCount : null,
-			views: count(post.videoPlayCount ?? post.videoViewCount),
-			likes: count(post.likesCount),
-			shares: 0,
-			comments: count(post.commentsCount),
+			...instagramCounts(post),
 			isAd: !!(post.paidPartnership || post.isSponsored),
 			locationName: typeof post.locationName === 'string' && post.locationName.trim() ? post.locationName.trim() : null,
 			text: caption,

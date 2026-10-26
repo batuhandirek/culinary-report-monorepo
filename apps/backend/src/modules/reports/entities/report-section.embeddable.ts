@@ -2,6 +2,7 @@ import { Embeddable, Enum, Property } from '@mikro-orm/decorators/legacy';
 
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 
+import { DEFAULT_OBSERVATIONS_SHOWN } from '../constants/report-analysis.constant.js';
 import {
 	DEFAULT_ARTICLES_SHOWN,
 	DEFAULT_DISHES_SHOWN,
@@ -31,6 +32,15 @@ export class CoverReportSection extends ReportSection {
 	// The figure tiles, in this order
 	@Enum({ items: () => ReportCoverKpiEnum, array: true })
 	kpis: ReportCoverKpiEnum[] = [...REPORT_COVER_KPIS];
+}
+
+@Embeddable({ discriminatorValue: ReportSectionKindEnum.ANALYSIS })
+export class AnalysisReportSection extends ReportSection {
+	override kind = ReportSectionKindEnum.ANALYSIS as const;
+
+	// Moves shown, the most important first
+	@Property({ type: 'int' })
+	limit: number = DEFAULT_OBSERVATIONS_SHOWN;
 }
 
 @Embeddable({ discriminatorValue: ReportSectionKindEnum.STARS })
@@ -144,6 +154,7 @@ export class AppendixReportSection extends ReportSection {
 /** Every section class by its kind: what `@Embedded` lists and what new sections are made from. */
 export const REPORT_SECTION_CLASSES = {
 	[ReportSectionKindEnum.COVER]: CoverReportSection,
+	[ReportSectionKindEnum.ANALYSIS]: AnalysisReportSection,
 	[ReportSectionKindEnum.STARS]: StarsReportSection,
 	[ReportSectionKindEnum.BRANCHES]: BranchesReportSection,
 	[ReportSectionKindEnum.COMPETITORS]: CompetitorsReportSection,

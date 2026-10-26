@@ -14,4 +14,5 @@ Prereqs: `env/server/.env.local` must exist (env is validated at import — boot
 5. Data: there is no production database to copy from (root `CLAUDE.md`); the dev database is the only data, so back it up (`docker exec culinary-report-dev-db pg_dump -U postgres -Fc culinary_report > dev.dump`) before a risky migration.
 
 Notes:
-- Backend dev build is `nest build --watch` + `tsc-alias --watch`; first compile takes a while, watch output shows readiness.
+- Backend dev is a one-shot `nest build` + `tsc-alias`, then `nest start --watch` + `tsc-alias --watch`; first compile takes a while, watch output shows readiness. The one-shot build exits on **any** type error in `src/` (spec files too), which stops all of `start:dev`, while the watch only reports errors and keeps serving. When another session's half-written file blocks boot, run turbo dev with `--filter='!backend'` and, in `apps/backend`, the watch half of its `dev` script (`npx tsc-alias && NODE_ENV=development NODE_OPTIONS='--max-old-space-size=4096' npx concurrently --kill-others 'tsc-alias --watch' 'nest start --watch --preserveWatchOutput'`); `dist` was still emitted.
+- The watcher runs out of heap after several hours ("JavaScript heap out of memory"); the app it last started keeps answering on :3015 with that build, orphaned. Stop it (`lsof -iTCP:3015 -sTCP:LISTEN`) before starting dev again.

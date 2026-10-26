@@ -17,7 +17,7 @@ export interface ReportSectionDto {
 	kpis?: ReportCoverKpiEnum[];
 	/** posts: the platforms it lists and counts; empty is every platform */
 	platforms?: SocialPlatformEnum[];
-	/** posts: top posts shown as cards; media: blog articles shown; dishes: dishes listed */
+	/** posts: top posts shown as cards; media: blog articles shown; dishes: dishes listed; analysis: moves shown */
 	limit?: number;
 	/** creators: also the creators who covered the neighbours but not the brand */
 	nearby?: boolean;

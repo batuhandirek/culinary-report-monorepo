@@ -50,3 +50,14 @@ export const WEEKLY_LISTENING_DAYS = 8;
 
 // The rating snapshots: Tuesdays and Fridays, 04:30 UTC, after the daily Instagram run is queued
 export const RATING_SNAPSHOT_CRON = '30 4 * * 2,5';
+
+// The dish-search snapshots: daily, 05:15 UTC, a city's run queued only when its newest snapshot
+// is `City.dishSearchEveryDays` old (`dishSearchDue`)
+export const DISH_SEARCH_CRON = '15 5 * * *';
+
+// The post counts at seven days: daily, 05:30 UTC, after the day's scrapes are queued (a post they
+// find at seven days or older needs no paid read) and before a monthly run on the 2nd
+export const POST_COUNTS_CRON = '30 5 * * *';
+
+// The follower fill: daily, 05:45 UTC, after the day's other crons are queued
+export const ACCOUNT_FOLLOWERS_CRON = '45 5 * * *';

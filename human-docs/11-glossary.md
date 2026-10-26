@@ -62,6 +62,8 @@
 
 **Booked out** — the share of 15-minute slots between 18:00 and 22:00 that are closed on a booking page for a table of two, sampled Thursdays for the coming Friday and Saturday.
 
+**Views, likes (a post's counts)** — a post's views, likes, comments, shares and saves as read seven days after it was posted, so posts compare at the same age whatever day a scrape saw them: the first read at seven days or later is kept, and a post first found older keeps that first read. Every read is stored too and listed on the admin post page. Instagram photos and carousels have no views, only likes and comments; blog articles have none.
+
 **Busyness index** — the mean of Google's ten busiest hours in a venue's popular-times histogram (0–100, scaled to the venue's own peak: comparable over time, never between venues). Empty today.
 
 **City section** — the report's "What \<city\> is talking about": rising cuisines and dishes, the venue's rank for its kind of food, and its figures against the median of the month's report brands. Needs 200 matched mentions in the month.
@@ -71,3 +73,4 @@
 **Finish the month** — rerun a month's run, skipping paid steps that already succeeded.
 
 **Rebuild** — recompute a report's data and rewrite its highlights (after corrections or new data). Mails nobody.
+**Hypothesis / confidence** — a possible reason for a move in the report, marked likely, possible or can't tell from the data, with the evidence for and against; checked against the numbers, never a proven cause.

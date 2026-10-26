@@ -19,7 +19,7 @@ import { SocialAccountService } from '../services/social-account.service.js';
 import { SocialPostService } from '../services/social-post.service.js';
 import { instagramProfileFigures, type ProfilePlatform, tiktokProfileFigures } from '../util/accounts.js';
 
-import { ownAccount } from './factories/social-account.factory.js';
+import { accountSnapshot, ownAccount } from './factories/social-account.factory.js';
 
 // One item in the shape `apify/instagram-profile-scraper` documents
 const instagramProfile = (followersCount: number, postsCount: number) => ({
@@ -131,11 +131,11 @@ describe('OwnAccountService (pglite)', () => {
 		return harness.moduleRef.get(AccountScrapeService).scrape(
 			city,
 			accounts.map(a => ({ platform: a.platform as ProfilePlatform, handle: a.handle })),
-			{ since: `${month}-01T00:00:00.000Z`, budgetUsd: 2, snapshotMonth: month, label: month, now },
+			{ since: `${month}-01T00:00:00.000Z`, budgetUsd: 2, latestTen: true, label: month, now },
 		);
 	};
 
-	it('scrapes a snapshot per month per account and reports the growth', async () => {
+	it('scrapes a snapshot per run per account and reports the growth between month closes', async () => {
 		const em = harness.orm.em;
 		const first = await scrapeMonth('2026-08', new Date('2026-09-02T06:00:00Z'));
 		// The removed account is not scraped; the budget splits by paid items (1 vs 10)
@@ -159,9 +159,19 @@ describe('OwnAccountService (pglite)', () => {
 
 		instagramFollowers = 4440;
 		await scrapeMonth('2026-09', new Date('2026-10-02T06:00:00Z'));
-		// Scraping a month again replaces its snapshot
+		// Scraping again adds a snapshot; the month reads the latest that closes it
 		await scrapeMonth('2026-09', new Date('2026-10-02T07:00:00Z'));
-		expect(await em.count(SocialAccountSnapshot, {})).toBe(4);
+		expect(await em.count(SocialAccountSnapshot, {})).toBe(6);
+		const igSnapshots = await em.find(
+			SocialAccountSnapshot,
+			{ account: { handle: 'chenche_berlin' } },
+			{ orderBy: { scrapedAt: 'asc' } },
+		);
+		expect(igSnapshots.map(s => [s.year, s.month, s.day, s.source, s.followers, s.following])).toEqual([
+			[2026, 9, 2, 'profile', 4200, 80],
+			[2026, 10, 2, 'profile', 4440, 80],
+			[2026, 10, 2, 'profile', 4440, 80],
+		]);
 
 		expect(await service.forReport(brand.id, city.id, '2026-09')).toEqual([
 			{
@@ -170,6 +180,7 @@ describe('OwnAccountService (pglite)', () => {
 				url: 'https://www.instagram.com/chenche_berlin/',
 				followers: 4440,
 				followersChange: 240,
+				followerPoints: [{ date: '2026-09-02', followers: 4200 }],
 				posts: 120,
 				postsAdded: 0,
 				avgViews: 6000,
@@ -182,6 +193,7 @@ describe('OwnAccountService (pglite)', () => {
 				url: 'https://www.tiktok.com/@chenche.berlin',
 				followers: 1500,
 				followersChange: 0,
+				followerPoints: [{ date: '2026-09-02', followers: 1500 }],
 				posts: 42,
 				postsAdded: 0,
 				avgViews: 12_000,
@@ -206,7 +218,7 @@ describe('OwnAccountService (pglite)', () => {
 		});
 		expect(added?.latest).toBeUndefined();
 		expect(list.find(a => a.handle === 'chenche_berlin')).toMatchObject({
-			latest: { month: '2026-09', followers: 4440 },
+			latest: { source: 'profile', followers: 4440, following: 80, scrapedAt: new Date('2026-10-02T07:00:00Z') },
 			followersChange: 240,
 		});
 		// The admin's add brings a removed account back
@@ -227,6 +239,7 @@ describe('OwnAccountService (pglite)', () => {
 		const now = new Date('2026-10-02T06:00:00Z');
 		expect(instagramProfileFigures(instagramProfile(4200, 120), now)).toEqual({
 			followers: 4200,
+			following: 80,
 			posts: 120,
 			avgViews: 6000,
 			avgLikes: 200,
@@ -266,7 +279,7 @@ describe('OwnAccountService (pglite)', () => {
 			branch.branch = wedding;
 			await em.flush();
 			for (const account of [brandWide, branch])
-				em.create(SocialAccountSnapshot, { account, month: '2026-09', followers: 100, scrapedAt: new Date() });
+				accountSnapshot(em, account, new Date('2026-10-02T06:00:00Z'), { followers: 100 });
 			await em.flush();
 		});
 
@@ -281,12 +294,7 @@ describe('OwnAccountService (pglite)', () => {
 			});
 			const hh = list.find(a => a.handle === 'kottiburger.hh')!;
 			expect(hh.branch).toMatchObject({ id: hamburg.id });
-			em.create(SocialAccountSnapshot, {
-				account: em.getReference(SocialAccount, hh.id),
-				month: '2026-09',
-				followers: 50,
-				scrapedAt: new Date(),
-			});
+			accountSnapshot(em, em.getReference(SocialAccount, hh.id), new Date('2026-10-02T06:00:00Z'), { followers: 50 });
 			await em.flush();
 
 			const berlin = await service.forReport(chain.id, city.id, '2026-09');

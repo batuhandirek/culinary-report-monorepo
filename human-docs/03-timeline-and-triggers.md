@@ -10,6 +10,8 @@ All clock times are UTC unless marked "city time" (Berlin is UTC+1/+2).
 | Hourly | :20 | Venue websites: due venues' websites for up to 20 minutes, one fetch per website, for the icon and the Instagram and TikTok profiles the site links | All open venues |
 | Daily | 04:00 | **Instagram, recent posts**: the newest page of each hashtag, kept two days back, then the free extraction and matching of the new posts | Cities with Instagram on |
 | Daily | 05:00 | Weather and holidays, last 7 days refreshed | Active cities |
+| Daily | 05:15 | **Dish searches**: a dated snapshot of every dish in every district on Google Maps ("pasta Mitte Berlin"), the top ten each (~$15 in Berlin), queued only when the city's newest is as old as its "every N days" (default 30) | Cities with the cron on and districts |
+| Daily | 05:30 | **Post counts at seven days**: every TikTok and Instagram post that turned seven days old without being read at that age is read once more, and that read is kept as its views, likes and comments (~$0.35 a day in Berlin) | Cities with the cron on |
 | Daily | 06:30 | **Front page**: for a city whose front page is five days old, the last 30 days counted again (places, dishes, openings, trends), the lines written by the full model (one call) and checked, and the new edition published on munchwerk.com | Cities with the cron on |
 | Weekly | Sunday 03:00 | **Weekly listening**: the TikTok searches over the last week and a short page of each TikTok hashtag, the Instagram hashtags' top reels, the new articles of the city's food blogs (free), the week's posts of every watched profile (creators the city follows, report brands' and their competitors' own accounts), then the free extraction and matching, a Google Maps lookup of the names nothing matched (only names not searched lately, cents a week), matching again, and last a lookup of each brand's handle on the platform it has no own account on ($1) | Cities with the cron on (TikTok where it has sources, reels where Instagram is on, blogs where it has some, watched profiles everywhere) |
 | Weekly | Monday 05:00 | **Review watch**: subscribers' reviews of the last 10 days, then an alert mail per new critical review | Cities with at least one subscriber |
@@ -73,6 +75,7 @@ flowchart LR
         mo5["Monday 05:00"] --> watch["Review watch"]
         thu["Thu/Sat 19:00 city"] --> samples["Busyness / open tables"]
         d5["Daily 05:00"] --> days["Weather + holidays"]
+        d530["Daily 05:30"] --> pcounts["Post counts at seven days"]
     end
 
     run --> built["report-built event"]

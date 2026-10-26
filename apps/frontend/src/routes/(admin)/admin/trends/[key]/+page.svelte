@@ -3,6 +3,7 @@
 	import type { AdminSearchRelatedQueryOutputDto, AdminTopicInsightOutputDto } from 'client';
 
 	import TopicDishNames from './components/TopicDishNames.svelte';
+	import TopicDishSearches from './components/TopicDishSearches.svelte';
 
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
@@ -26,7 +27,8 @@
 
 	// One food topic in a city: its venues, how much posts talk about it and how Google searches
 	// for it move over twelve months, what it costs on the month's delivery menus, what people
-	// search alongside it, the dish names that count for a dish or drink, and the topics under it
+	// search alongside it, who Google Maps lists first for a dish in each district, the dish names
+	// that count for a dish or drink, and the topics under it
 	const key = $derived(decodeURIComponent(page.params.key ?? ''));
 
 	adminCitiesStore.load();
@@ -227,6 +229,10 @@
 				<p class="text-muted-foreground m-0 text-sm">No related searches stored for this month's pull.</p>
 			{/if}
 		</AdminPanel>
+
+		{#if data.row.kind === 'dish'}
+			<TopicDishSearches {cityId} topicKey={key} label={data.row.label} />
+		{/if}
 
 		{#if data.row.kind === 'dish' || data.row.kind === 'drink'}
 			<TopicDishNames {cityId} topicKey={key} label={data.row.label} />

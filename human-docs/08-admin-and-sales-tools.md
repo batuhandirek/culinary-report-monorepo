@@ -15,7 +15,7 @@ Every brand in the city for a month, one row each: kind of food and district (or
 Header: name, icon, stage, score, rating (a chain's: its stars over all its places' reviews); month and city pickers; **Build report**; **Add to sales**. Tabs:
 
 - **Overview**: the month's figures with changes, six months, the most viewed posts, the report, the sales card, own accounts, branches, and **todos** (what to do about this brand, each naming the tab).
-- **Posts**, **Reviews** (the month, "needs a reply", all months), **Branches**, **Competitors** (list, suggestions, add a place or a whole rival), **Signals** (open tables, busyness, search ranks, rating over time, for any branch you pick), **Reports** (its report configurations: add one from a template or from scratch, rename, edit, pause; every month's reports, rebuild, share links, PDF, send), **Sales**, **Settings** (report scope, split).
+- **Posts**, **Reviews** (the month, "needs a reply", all months), **Branches**, **Competitors** (list, suggestions, add a place or a whole rival), **Signals** (open tables, busyness, search ranks, the dish searches it is in the top ten of (snapshot by snapshot), rating over time, for any branch you pick), **Reports** (its report configurations: add one from a template or from scratch, rename, edit, pause; every month's reports, rebuild, share links, PDF, send), **Sales**, **Settings** (report scope, split).
 
 ### The Sales tab
 
@@ -54,7 +54,7 @@ A **creator's page** shows their accounts, six months of posts, the brands they 
 
 ## Trends (`/admin/trends`)
 
-Topics (every kind of food with a signal: venues, posts, searches, ranked by posts; a topic's own page adds how many delivery menus sell it and at what median price, which lean to report venues and their competitors since only their menus are read), what posts talked about (cuisines, dishes, rising brands, districts, creators), searches (Google Trends with related queries), openings and closures, unrecognised food words (map them to a topic so the next read counts them).
+Topics (every kind of food with a signal: venues, posts, searches, ranked by posts; a topic's own page adds how many delivery menus sell it and at what median price, which lean to report venues and their competitors since only their menus are read, and for a dish the Google Maps top ten in each district, snapshot by snapshot, with each place's move since the snapshot before), what posts talked about (cuisines, dishes, rising brands, districts, creators), searches (Google Trends with related queries), openings and closures, unrecognised food words (map them to a topic so the next read counts them).
 
 ## Cities (`/admin/cities`)
 

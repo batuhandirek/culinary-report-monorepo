@@ -5,6 +5,7 @@
 
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import VenueDemandPanel from '#components/admin/venues/VenueDemandPanel.svelte';
+	import VenueDishSearchesPanel from '#components/admin/venues/VenueDishSearchesPanel.svelte';
 	import VenueRatingPanel from '#components/admin/venues/VenueRatingPanel.svelte';
 	import VenueSearchRanksPanel from '#components/admin/venues/VenueSearchRanksPanel.svelte';
 	import { api } from '#lib/api.js';
@@ -68,6 +69,7 @@
 				<VenueDemandPanel {venue} />
 				<div class="flex min-w-0 flex-col gap-5">
 					<VenueSearchRanksPanel {venue} />
+					<VenueDishSearchesPanel {venue} />
 					<VenueRatingPanel {venue} />
 				</div>
 			</div>

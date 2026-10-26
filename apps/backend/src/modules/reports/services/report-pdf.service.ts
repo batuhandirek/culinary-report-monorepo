@@ -4,7 +4,7 @@ import puppeteer, { Browser } from 'puppeteer';
 
 import { mainConfig } from 'src/config/main.config.js';
 
-import type { AdminReportOutputDto } from '../dto/admin-report.output.dto.js';
+import type { SharedReportOutputDto } from '../dto/report-share.output.dto.js';
 import type { LeaveBehindData } from '../interfaces/leave-behind.interface.js';
 
 // How long the print page may take to load its fonts and lay the report out
@@ -22,7 +22,7 @@ export class ReportPdfService implements OnModuleDestroy {
 	private browser?: Promise<Browser>;
 
 	/** The report on A4. */
-	render(report: AdminReportOutputDto): Promise<Uint8Array> {
+	render(report: SharedReportOutputDto): Promise<Uint8Array> {
 		return this.print('/print/report', '__REPORT__', report);
 	}
 

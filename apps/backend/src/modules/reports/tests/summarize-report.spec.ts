@@ -402,6 +402,8 @@ describe('previous month', () => {
 			month: '2026-08',
 			social: { postCount: 1, views: 400, engagements: 16, creators: 1, promotional: 0 },
 			reviews: undefined,
+			// The dishes named, for the analysis's dish shifts
+			dishes: [{ name: 'Half chicken', count: 1 }],
 			actions,
 		});
 	});

@@ -19,6 +19,11 @@ export const SECTION_INFO: Record<Kind, { label: string; description: string }> 
 		label: 'Cover',
 		description: 'Brand, month, the key figures and the three findings.'
 	},
+	[Kind.Analysis]: {
+		label: 'What moved, and why it might have',
+		description:
+			"The month's notable moves, what we checked, and the possible reasons with how sure we are."
+	},
 	[Kind.Stars]: {
 		label: 'What decides the stars',
 		description: 'What five-star reviews praise next to what the rest criticise.'
@@ -115,12 +120,15 @@ export const PLATFORM_NAMES: Record<Platform, string> = {
 export const MAX_POSTS_SHOWN = 24;
 export const MAX_DISHES_SHOWN = 30;
 export const MAX_ARTICLES_SHOWN = 20;
+export const MAX_OBSERVATIONS_SHOWN = 6;
 
 /** A new section of a kind with that kind's defaults (the server's, `report-section.embeddable.ts`). */
 export const newSection = (kind: Kind): Section => {
 	switch (kind) {
 		case Kind.Cover:
 			return { kind, kpis: Object.values(Kpi) };
+		case Kind.Analysis:
+			return { kind, limit: 3 };
 		case Kind.Posts:
 			return { kind, platforms: [], limit: 6 };
 		case Kind.Creators:

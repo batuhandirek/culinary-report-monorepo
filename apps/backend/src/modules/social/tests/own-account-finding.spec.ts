@@ -198,6 +198,7 @@ describe('a profile proving itself a brand’s', () => {
 			exists: true,
 			displayName: 'Munchies',
 			followers: 16740,
+			following: 279,
 			bio: expect.stringContaining('Bergmannstraße 19'),
 			links: ['https://www.eatmunchies.de/home#ordernow'],
 		});

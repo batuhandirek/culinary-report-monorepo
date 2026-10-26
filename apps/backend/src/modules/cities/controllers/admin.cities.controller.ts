@@ -84,6 +84,7 @@ export class AdminCitiesController {
 				nameStopwords: [],
 				chainDenyList: [],
 				stepBudgetsUsd: {},
+				dishSearchEveryDays: 30,
 				topBrands: 20,
 				cronEnabled: false,
 				active: true,

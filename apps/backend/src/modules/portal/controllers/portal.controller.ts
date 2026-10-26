@@ -9,7 +9,7 @@ import { AuthenticatedUserId } from 'src/modules/auth/decorators/authenticated-u
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { BrandAccessGuard } from 'src/modules/auth/guards/brand-access.guard.js';
 import { BrandMemberService } from 'src/modules/auth/services/brand-member.service.js';
-import { reportFileName, toOutput } from 'src/modules/reports/controllers/admin.reports.controller.js';
+import { reportFileName, toPublicOutput } from 'src/modules/reports/controllers/admin.reports.controller.js';
 import { ReportPdfService } from 'src/modules/reports/services/report-pdf.service.js';
 
 import {
@@ -104,7 +104,7 @@ export class PortalController {
 		@TypedParam('brandId') brandId: Uuid,
 		@TypedParam('reportId') reportId: Uuid,
 	): Promise<PortalReportOutputDto> {
-		return toOutput(await this.portalService.report(brandId, reportId));
+		return toPublicOutput(await this.portalService.report(brandId, reportId));
 	}
 
 	/** The report as an A4 PDF. Takes a few seconds: headless Chrome prints it. */
@@ -115,7 +115,7 @@ export class PortalController {
 		@Param('reportId', ParseUUIDPipe) reportId: string,
 		@Res() res: Response,
 	): Promise<void> {
-		const report = toOutput(await this.portalService.report(brandId, reportId));
+		const report = toPublicOutput(await this.portalService.report(brandId, reportId));
 		const pdf = await this.reportPdfService.render(report);
 		const name = reportFileName(report);
 		res.setHeader('Content-Type', 'application/pdf');

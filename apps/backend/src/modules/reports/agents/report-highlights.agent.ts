@@ -101,9 +101,13 @@ export class ReportHighlightsAgent extends BaseMastraAgent<
 			'cityCalendar is the month in the city: weekends with rain, public holidays, school holidays and events. Use it only ' +
 			'to put a quiet or busy month in context in one clause (e.g. "with rain on 3 of 4 weekends" or "over the marathon ' +
 			'weekend"), never as a proven cause and never when nothing about the month stands out. ' +
+			'whatMovedAndWhy lists the month\'s notable moves with possible reasons, each labelled likely, possible or unclear. ' +
+			'A finding may quote a move with its numbers and its reasons as given, keeping the label\'s word ("one likely reason ' +
+			'is…", "it is unclear whether…"); never upgrade possible to likely, never drop the label, and never state a cause: ' +
+			'write "could" and "may have", not "because" or "caused". Reasons live only there: do not invent reasons for other figures. ' +
 			'demandAndPrices (the brand\'s: buzzToReviews, complaintTimes, paidVsOrganic; each place\'s: footTraffic, openTables, ' +
 			'weekendTables, competitorFootTraffic, prices) holds pre-written sentences: quote their numbers as given and keep their wording "followed by" / ' +
-			'"came from"; never say one thing caused another, and leave out what is absent. weekendTables puts the venue\'s ' +
+			'"came from", and leave out what is absent. weekendTables puts the venue\'s ' +
 			'booked-out evenings next to its competitors\' and the district\'s median (e.g. "your Friday and Saturday evenings ' +
 			'were 70 % booked, your competitors\' 45 %, the district\'s 38 %"): it may carry a finding. competitorFootTraffic ' +
 			'gives busyness changes in points: compare the changes only, never one venue\'s busyness level with another\'s. ' +
