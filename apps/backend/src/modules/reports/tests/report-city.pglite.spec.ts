@@ -218,7 +218,12 @@ describe('ReportCityService (pglite)', () => {
 	it('counts the openings a matched post announced, once per venue', async () => {
 		const em = harness.orm.em;
 		let n = 0;
-		const flag = (venue: Venue, date: string) =>
+		// Two people's posts each: one post alone is no opening (`postOpeningsSql`)
+		const flag = (venue: Venue, date: string) => {
+			flagOne(venue, date);
+			flagOne(venue, date);
+		};
+		const flagOne = (venue: Venue, date: string) =>
 			em.create(Mention, {
 				post: em.create(SocialPost, {
 					city,

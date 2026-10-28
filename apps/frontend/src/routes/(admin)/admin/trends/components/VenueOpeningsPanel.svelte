@@ -93,9 +93,10 @@
 				{summary.totals.opened} opened, {closed(summary.totals)} closed ({summary.totals
 					.permanentlyClosed} for good), {summary.totals.reopened} reopened{fromPosts
 					? ` (${fromPosts} of the openings from posts)`
-					: ''}. Dates are when a scrape first saw the change, or the first post saying so; an
-				opening is a place a city scrape found for the first time with few reviews, or one a post
-				said had just opened, still under 300 reviews.
+					: ''}. Dates are when a scrape first saw the change, or the first post saying so (never an
+				opening date); an opening is a place a city scrape found for the first time with few
+				reviews, or one posts said had just opened, still under 300 reviews, when two people
+				said so or its first reviews, its review count or a scrape agree.
 			</p>
 			<div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
 				<div class="min-w-0">{@render groupTable(summary.byDistrict, 'District')}</div>
@@ -117,7 +118,9 @@
 							<span class="text-muted-foreground block"
 								>{SOURCE_LABELS[change.source] ?? change.source}</span>
 							<span class="text-muted-foreground block tabular-nums"
-								>{new Date(change.at).toLocaleDateString('en-GB', {
+								>{change.source === 'posts' ? 'first post ' : ''}{new Date(
+									change.at
+								).toLocaleDateString('en-GB', {
 									day: 'numeric',
 									month: 'short'
 								})}</span>

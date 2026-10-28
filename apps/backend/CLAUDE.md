@@ -63,7 +63,7 @@ Agent tools: keep the tool file provider-agnostic (a factory returning a `Tool` 
 
 ## Testing
 
-- `npm run backend:test` from root (jest ESM + in-process PGlite Postgres). Always via the script — it supplies the ESM node flags and `--runInBand`. Slow by design.
+- `npm run backend:test` from root (jest ESM + in-process PGlite Postgres). Always via the script — it supplies the ESM node flags. Four recycled workers, ~9 min; never add `--runInBand` (it runs out of heap).
 - DB suites are `*.pglite.spec.ts` in the module's `tests/`, using the helpers in `src/tests/` and fishery factories in `tests/factories/`. Details in the `pglite-test` skill. **Any new implementation MUST add PGlite tests.**
 - User-journey suites are `*.integration.spec.ts` in `src/tests/integration/`: black-box against a live server, run on demand (not in `backend:test`), also the dev-DB seed. How to run, write and which flow each covers: the `integration-test` skill.
 - **Tests move with the code.** A change that alters behaviour updates the PGlite suites asserting the old behaviour, and the journeys driving that flow (the skill's table), in the same change, and runs both. When a test fails, find which side moved before fixing either: a rule changed on purpose means the test is stale; otherwise the code regressed.

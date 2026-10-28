@@ -38,7 +38,7 @@ const mentionExtractionSchema = z.object({
 				isNewOpening: z
 					.boolean()
 					.describe(
-						'True only when the post itself says this venue is new or has recently opened ("just opened", "new in Neukölln", "soft opening", "opening week"). False for a new dish, menu or branch of an old place, a reopening or new concept of an existing place, a place telling how long it has been open ("six months already"), a #new hashtag alone, for "new to me", and for anything you know about the venue but the post does not say',
+						'True only when the post itself says this venue has opened or is opening (eröffnet, Neueröffnung, grand opening, just opened, soft opening, opening week). Calling it "new", "neu", "a new spot" or "a new foodspot" is not enough: that is how places get promoted. False for a new dish, menu or branch of an old place, a reopening or new concept of an existing place, a place telling how long it has been open ("six months already"), a #new hashtag alone, for "new to me", and for anything you know about the venue but the post does not say',
 					),
 				sentiment: z.enum(FEEDBACK_SENTIMENTS),
 				summary: z.string().describe('One sentence in English on what was said about this venue'),

@@ -193,4 +193,16 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 		expect(p1).toMatchObject({ isPromotional: false, analysisTokens: 1234 });
 		expect(p1.analysedAt?.toISOString()).toBe('2026-10-15T12:00:00.000Z');
 	});
+	it('reads only the posts with a flagged mention when asked, whenever they were analysed', async () => {
+		agent.generate.mockClear();
+		// rf-1 and rf-3 carry a flag after the first pass; rf-2 and rf-6 none
+		const res = await service.reflagOpenings({
+			month: '2026-10',
+			onlyFlagged: true,
+			limit: 10,
+			offset: 0,
+		});
+		expect(res).toMatchObject({ total: 2, posts: 2, read: 2 });
+		expect(agent.generate).toHaveBeenCalledTimes(2);
+	});
 });

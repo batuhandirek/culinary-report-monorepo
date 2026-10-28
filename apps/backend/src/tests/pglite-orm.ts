@@ -10,7 +10,8 @@ import { createServer } from 'node:net';
  * `pg` driver speaks the wire protocol, so {@link PGLiteSocketServer} bridges them on a
  * localhost TCP port. The `vector` extension is loaded + created so pgvector entities work.
  *
- * PGlite is single-connection — pin the pool to 1 and run pglite suites with `--runInBand`.
+ * PGlite is single-connection — pin the pool to 1. Each suite has its own PGlite on its own port,
+ * so suites may run in parallel workers.
  */
 
 /** Ask the OS for a free TCP port (bind :0, read the assigned port, release it). */

@@ -3444,6 +3444,11 @@ export interface AdminReflagOpeningsInputDto {
 	 * @min 0
 	 */
 	offset?: number;
+	/**
+	 * Only posts with a mention flagged now: after a wording change that can only take flags away,
+	 * re-reading those is enough
+	 */
+	onlyFlagged?: boolean;
 }
 
 export interface AdminReflagOpeningsOutputDto {

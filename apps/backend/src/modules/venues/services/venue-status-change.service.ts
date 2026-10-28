@@ -17,6 +17,7 @@ import {
 } from '../constants/venue-status.constant.js';
 import { Venue } from '../entities/venue.entity.js';
 import { monthRange } from '../util/month.js';
+import { PostOpeningRow, postOpeningsSql } from '../util/post-openings.js';
 import {
 	countStatusChanges,
 	groupStatusChanges,
@@ -51,8 +52,9 @@ interface ChangeRow {
 /**
  * Reads the venues' openings and closures: the `VenueStatusChange` rows a Google Maps scrape
  * wrote (only `VenueService.saveGooglePlace` does) and, as openings with the source `posts`, the
- * venues a matched mention said had just opened (`Mention.isNewOpening`): the post's day, the
- * venue open and under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews, no row written. The trends panel,
+ * venues posts by others said had just opened (`Mention.isNewOpening`) with a second signal
+ * agreeing (`postOpeningsSql`): dated the first such post, the venue open and under
+ * `LEAD_NEW_PLACE_MAX_REVIEWS` reviews, no row written. The trends panel,
  * the report's neighbourhood line, the "new venues" filter and the lead score's new-place bonus
  * read it.
  */
@@ -111,8 +113,8 @@ export class VenueStatusChangeService {
 	}
 
 	/**
-	 * Venues of the city (or every city) that are new: an `opened` change, or a post flagging them
-	 * as just opened (open, under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews), in the last
+	 * Venues of the city (or every city) that are new: an `opened` change, or posts saying they
+	 * just opened with a second signal agreeing (`postOpenings`), in the last
 	 * `LEAD_NEW_PLACE_MONTHS` months.
 	 */
 	async newVenueIds(cityId?: string, now = new Date()): Promise<string[]> {
@@ -178,9 +180,9 @@ export class VenueStatusChangeService {
 	}
 
 	/**
-	 * Open venues under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews that a matched mention flagged as a
-	 * new opening in a post of the window (`to` open-ended when absent), dated the first such post,
-	 * newest first.
+	 * Open venues under `LEAD_NEW_PLACE_MAX_REVIEWS` reviews whose posts by others in the window
+	 * (`to` open-ended when absent) said they just opened, with a second signal agreeing
+	 * (`postOpeningsSql`), dated the first such post, newest first.
 	 */
 	private async postOpenings(
 		where: string,
@@ -188,15 +190,14 @@ export class VenueStatusChangeService {
 		from: Date,
 		to?: Date,
 	): Promise<VenueStatusChangeRow[]> {
-		const rows: ChangeRow[] = await this.em.getConnection().execute(
-			`select m.venue_id, v.name, v.district, v.category, v.street, min(p.posted_at) as at
-				from mentions m join social_posts p on p.id = m.post_id join venues v on v.id = m.venue_id
-				where m.is_new_opening and ${where} and p.posted_at >= ?${to ? ' and p.posted_at < ?' : ''}
-					and v.deleted_at is null and not v.closed and coalesce(v.reviews_count, 0) < ?
-				group by m.venue_id, v.name, v.district, v.category, v.street
-				order by min(p.posted_at) desc, v.name`,
-			[...params, from, ...(to ? [to] : []), LEAD_NEW_PLACE_MAX_REVIEWS],
-		);
+		const rows: PostOpeningRow[] = await this.em
+			.getConnection()
+			.execute(postOpeningsSql(where, !!to), [
+				...params,
+				from,
+				...(to ? [to] : []),
+				LEAD_NEW_PLACE_MAX_REVIEWS,
+			]);
 		return rows.map(r => ({
 			...this.row(r),
 			kind: VenueStatusChangeKindEnum.OPENED,

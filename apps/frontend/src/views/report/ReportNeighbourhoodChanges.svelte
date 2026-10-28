@@ -28,7 +28,15 @@
 	const sentence = (items: string[]) =>
 		items.length > 1 ? `${items.slice(0, -1).join(', ')} and ${items.at(-1)}` : (items[0] ?? '');
 
-	// Openings a creator's post announced count with the scans' and are marked
+	// "20 Aug" from `YYYY-MM-DD`, read as UTC so the day never shifts
+	const dayLabel = (date: string) =>
+		new Date(`${date}T00:00:00Z`).toLocaleDateString('en-GB', {
+			day: 'numeric',
+			month: 'short',
+			timeZone: 'UTC'
+		});
+
+	// Openings creators' posts announced count with the scans' and are marked with the first post's day
 	const fromPosts = $derived(changes.openedFromPosts ?? 0);
 	const street = $derived(changes.street ? parts(changes.street) : []);
 	const district = $derived(parts(changes));
@@ -53,13 +61,13 @@
 					<span class="min-w-0 truncate"
 						>{v.name}{v.category ? ` · ${v.category}` : ''}{v.sameStreet && v.street
 							? ` · ${v.street}`
-							: ''}{#if v.source === 'posts'}<span class="text-muted-foreground"> · from a post</span>{/if}</span>
+							: ''}{#if v.source === 'posts'}<span class="text-muted-foreground"> · first post {dayLabel(v.date)}</span>{/if}</span>
 				</li>
 			{/each}
 		</ul>
 		<p class="text-muted-foreground m-0 mt-2 text-xs">
 			{monthLabel(changes.from)} to {monthLabel(changes.to)}, as our Google Maps scans saw them{fromPosts
-				? `; ${fromPosts === 1 ? 'one opening' : `${fromPosts} openings`} from posts: a creator's post said the place had just opened`
+				? `; ${fromPosts === 1 ? 'one opening' : `${fromPosts} openings`} from posts: creators' posts said the place had just opened, dated the first one`
 				: ''}.
 		</p>
 	</div>

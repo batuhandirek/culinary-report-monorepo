@@ -117,11 +117,13 @@ export class MentionExtractionService {
 	 * the answer's flag. Nothing else is written: no mention is added, a post's analysis stays, and
 	 * an admin's correction keeps its venue, brand and note (an `ignored` mention is not a venue and
 	 * is never flagged). `extract` can't do this: it adds mentions to posts not analysed yet.
+	 * `onlyFlagged` reads only posts with a flagged mention: after a stricter wording, enough.
 	 */
 	async reflagOpenings(opts: {
 		month: string;
 		cityId?: string;
 		analysedBefore?: Date;
+		onlyFlagged?: boolean;
 		limit: number;
 		offset: number;
 	}): Promise<{
@@ -139,6 +141,7 @@ export class MentionExtractionService {
 		const where = `p.posted_at >= ? and p.posted_at < ?
 			${opts.cityId ? 'and p.city_id = ?' : ''}
 			${opts.analysedBefore ? 'and p.analysed_at < ?' : ''}
+			${opts.onlyFlagged ? 'and exists (select 1 from mentions f where f.post_id = p.id and f.is_new_opening)' : ''}
 			and exists (select 1 from mentions m where m.post_id = p.id
 				and m.match_method is distinct from '${MentionMatchMethodEnum.IGNORED}')`;
 		const params = [

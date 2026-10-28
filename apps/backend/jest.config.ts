@@ -42,7 +42,12 @@ const config: Config = {
 		// `npm run backend:test:integration` (jest.integration.config.ts), never here.
 		'\\.integration\\.spec\\.ts$',
 	],
-	maxWorkers: 1,
+	// Each suite boots its own PGlite on an OS-assigned port, so suites in separate workers
+	// never share a database. One process for every file (`--runInBand`, which
+	// `--detectOpenHandles` also forces) ran out of heap: jest-ESM keeps each file's module
+	// graph alive. Workers are recycled once their heap passes the idle limit.
+	maxWorkers: 4,
+	workerIdleMemoryLimit: '1536MB',
 	// Generous: app-module suites boot pglite + build the full schema in beforeAll.
 	testTimeout: 120000,
 	// Dummy env before any app module (config classes validate process.env at import).

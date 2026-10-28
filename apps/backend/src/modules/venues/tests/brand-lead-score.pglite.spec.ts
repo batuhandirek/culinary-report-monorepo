@@ -188,7 +188,7 @@ describe('BrandLeadScoreService (pglite)', () => {
 		expect(await service.ranked({ limit: 10, minScore: first.leadScore! })).toHaveLength(1);
 	});
 
-	it('gives the new-place bonus to a venue a recent post said had just opened, under the review cap', async () => {
+	it('gives the new-place bonus to a venue recent posts said had just opened, under the review cap', async () => {
 		const em = harness.orm.em;
 		const city = testCity(em, { name: 'Leipzig' });
 		const venue = (placeId: string, reviewsCount: number) =>
@@ -196,27 +196,31 @@ describe('BrandLeadScoreService (pglite)', () => {
 		const fresh = venue('n-fresh', 40);
 		const old = venue('n-old', 40);
 		const big = venue('n-big', 300);
+		const lone = venue('n-lone', 40);
 		await em.flush();
 		let n = 0;
-		const flagged = (v: Venue, postedAt: string) => {
-			const p = em.create(SocialPost, {
-				city,
-				externalId: `n${++n}`,
-				platform: SocialPlatformEnum.TIKTOK,
-				url: `https://tiktok.com/n${n}`,
-				postedAt: new Date(postedAt),
-				author: 'foodie',
-				views: 1000,
-			});
-			em.create(Mention, {
-				post: p,
-				venueName: v.name,
-				venue: v,
-				visited: true,
-				isNewOpening: true,
-				sentiment: 'positive',
-				summary: 'Just opened.',
-			});
+		// Two people's posts say so: one post alone is no opening (`postOpeningsSql`)
+		const flagged = (v: Venue, postedAt: string, authors = ['foodie', 'eater']) => {
+			for (const author of authors) {
+				const p = em.create(SocialPost, {
+					city,
+					externalId: `n${++n}`,
+					platform: SocialPlatformEnum.TIKTOK,
+					url: `https://tiktok.com/n${n}`,
+					postedAt: new Date(postedAt),
+					author,
+					views: 1000,
+				});
+				em.create(Mention, {
+					post: p,
+					venueName: v.name,
+					venue: v,
+					visited: true,
+					isNewOpening: true,
+					sentiment: 'positive',
+					summary: 'Just opened.',
+				});
+			}
 		};
 		// Last month of the report month: new
 		flagged(fresh, '2026-08-15T00:00:00Z');
@@ -224,6 +228,8 @@ describe('BrandLeadScoreService (pglite)', () => {
 		flagged(old, '2026-02-15T00:00:00Z');
 		// LEAD_NEW_PLACE_MAX_REVIEWS reviews: not new, whatever the post says
 		flagged(big, '2026-08-15T00:00:00Z');
+		// One person's post and nothing agreeing: not new
+		flagged(lone, '2026-08-15T00:00:00Z', ['foodie']);
 		await em.flush();
 
 		await service.scoreAll('2026-09', city.id);
@@ -234,5 +240,6 @@ describe('BrandLeadScoreService (pglite)', () => {
 		expect(await bonus('n-fresh')).toBe(5);
 		expect(await bonus('n-old')).toBe(0);
 		expect(await bonus('n-big')).toBe(0);
+		expect(await bonus('n-lone')).toBe(0);
 	});
 });

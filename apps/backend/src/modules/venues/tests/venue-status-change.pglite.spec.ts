@@ -4,6 +4,7 @@ import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
 import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
@@ -15,7 +16,9 @@ import {
 	VenueScrapeSourceEnum,
 	VenueStatusChangeKindEnum,
 } from '../constants/venue-status.constant.js';
+import { Review } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
+import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
 import { GooglePlaceItem, VenueService } from '../services/venue.service.js';
 import { VenueScrapeService } from '../services/venue-scrape.service.js';
@@ -234,13 +237,14 @@ describe('VenueStatusChange (pglite)', () => {
 		const sevenMonthsAgo = new Date();
 		sevenMonthsAgo.setUTCMonth(sevenMonthsAgo.getUTCMonth() - 7);
 		let n = 0;
-		const post = (v: Venue, postedAt: Date, isNewOpening: boolean) => {
+		// Two people's posts: one post alone lists nothing (the next test)
+		const post = (v: Venue, postedAt: Date, isNewOpening: boolean, author = 'eater') => {
 			const p = em.create(SocialPost, {
 				city: v.city,
 				externalId: `flag-${++n}`,
 				platform: SocialPlatformEnum.TIKTOK,
 				url: `https://tiktok.com/flag/${n}`,
-				author: 'eater',
+				author,
 				views: 100,
 				postedAt,
 			});
@@ -256,14 +260,17 @@ describe('VenueStatusChange (pglite)', () => {
 		};
 		post(fresh, lastMonth, true);
 		// A later post saying so again: the first one dates the opening
-		post(fresh, new Date(), true);
-		post(stale, sevenMonthsAgo, true);
-		post(big, lastMonth, true);
-		post(gone, lastMonth, true);
-		post(unflagged, lastMonth, false);
+		post(fresh, new Date(), true, 'foodie');
+		for (const author of ['eater', 'foodie']) {
+			post(stale, sevenMonthsAgo, true, author);
+			post(big, lastMonth, true, author);
+			post(gone, lastMonth, true, author);
+			post(unflagged, lastMonth, false, author);
+		}
 		// A venue a city scrape already saw open is listed once, as the scrape's
 		const scraped = await em.findOneOrFail(Venue, { placeId: 'new-1' });
 		post(scraped, lastMonth, true);
+		post(scraped, lastMonth, true, 'foodie');
 		await em.flush();
 
 		expect(await statusService.newVenueIds(postCity.id)).toEqual([fresh.id]);
@@ -295,5 +302,93 @@ describe('VenueStatusChange (pglite)', () => {
 		);
 		// No row is written from a post
 		expect(await em.count(VenueStatusChange, { venue: fresh })).toBe(0);
+	});
+	it('lists a post-flagged opening only when a second signal agrees', async () => {
+		const em = harness.orm.em;
+		const postCity = await cityFactory.create({ name: 'Köln' });
+		const day = 24 * 3600 * 1000;
+		const ago = (days: number) => new Date(Date.now() - days * day);
+		const dateOf = (d: Date) => d.toISOString().slice(0, 10);
+		const venue = (placeId: string, reviewsCount = 40) =>
+			em.create(Venue, {
+				city: postCity,
+				placeId,
+				name: `Place ${placeId}`,
+				district: 'Ehrenfeld',
+				category: 'Cafe',
+				reviewsCount,
+			});
+		const ownOnly = venue('own-only');
+		const ownAndOne = venue('own-and-one');
+		const oneAuthor = venue('one-author');
+		const twoAuthors = venue('two-authors');
+		const firstReview = venue('first-review', 3);
+		const oldReview = venue('old-review', 3);
+		const partHistory = venue('part-history', 40);
+		const growing = venue('growing');
+		const slow = venue('slow');
+		await em.flush();
+		let n = 0;
+		const post = (v: Venue, postedAt: Date, author: string, own = false) => {
+			const p = em.create(SocialPost, {
+				city: postCity,
+				externalId: `corroborate-${++n}`,
+				platform: SocialPlatformEnum.TIKTOK,
+				url: `https://tiktok.com/corroborate/${n}`,
+				author,
+				views: 100,
+				postedAt,
+				...(own && { account: ownAccount(em, v.brand, postCity, `${author}_${n}`) }),
+			});
+			em.create(Mention, {
+				post: p,
+				venueName: v.name,
+				venue: v,
+				brand: v.brand,
+				visited: true,
+				isNewOpening: true,
+				sentiment: 'positive',
+				summary: 'Just opened.',
+			});
+		};
+		const reviews = (v: Venue, dates: Date[]) =>
+			dates.forEach((publishedAt, i) =>
+				em.create(Review, { reviewId: `${v.placeId}-${i}`, venue: v, publishedAt }),
+			);
+		const snapshot = (v: Venue, at: Date, reviewsCount: number) =>
+			em.create(VenueSnapshot, { venue: v, snapshotDate: dateOf(at), reviewsCount });
+
+		// The place's own account says so twice: never enough, with or without one outsider
+		post(ownOnly, ago(60), 'ownonly', true);
+		post(ownOnly, ago(50), 'ownonly', true);
+		post(ownAndOne, ago(60), 'ownandone', true);
+		post(ownAndOne, ago(55), 'eater');
+		// One outsider, twice, is one person
+		post(oneAuthor, ago(60), 'eater');
+		post(oneAuthor, ago(40), 'eater');
+		post(twoAuthors, ago(60), 'eater');
+		post(twoAuthors, ago(45), 'foodie');
+		// One outsider and the first Google review ten days later, from a history we hold whole
+		post(firstReview, ago(60), 'eater');
+		reviews(firstReview, [ago(50), ago(40), ago(30)]);
+		// ... but not a first review a year before
+		post(oldReview, ago(60), 'eater');
+		reviews(oldReview, [ago(365), ago(40), ago(30)]);
+		// ... nor one from a history we hold two reviews of forty of
+		post(partHistory, ago(60), 'eater');
+		reviews(partHistory, [ago(50), ago(40)]);
+		// One outsider and review counts climbing fast from low: 20 to 50 in 20 days
+		post(growing, ago(60), 'eater');
+		snapshot(growing, ago(50), 20);
+		snapshot(growing, ago(30), 50);
+		// ... but not a slow climb
+		post(slow, ago(60), 'eater');
+		snapshot(slow, ago(50), 20);
+		snapshot(slow, ago(30), 22);
+		await em.flush();
+
+		expect((await statusService.newVenueIds(postCity.id)).sort()).toEqual(
+			[twoAuthors.id, firstReview.id, growing.id].sort(),
+		);
 	});
 });

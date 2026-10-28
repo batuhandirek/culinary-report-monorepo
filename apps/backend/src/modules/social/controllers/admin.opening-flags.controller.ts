@@ -35,6 +35,7 @@ export class AdminOpeningFlagsController {
 			month: body.month,
 			cityId: body.cityId,
 			analysedBefore: body.analysedBefore ? new Date(body.analysedBefore) : undefined,
+			onlyFlagged: body.onlyFlagged,
 			limit: body.limit ?? DEFAULT_LIMIT,
 			offset,
 		});

@@ -299,8 +299,9 @@ describe('FoodTrendsReportService (pglite)', () => {
 		for (let i = 0; i < 60; i++) mention(ramenBar, `2026-0${7 + (i % 3)}-1${i % 9}`, 'Ramen');
 		for (let i = 0; i < 40; i++) mention(doner, `2026-0${7 + (i % 3)}-2${i % 9}`, 'Döner');
 		for (let i = 0; i < 30; i++) mention(ramenBar, '2026-08-05', 'Ramen', { own: true });
-		// A post says a place just opened: counted under its kind of food, never named
+		// Two people's posts say a place just opened: counted under its kind of food, never named
 		mention(newSpot, '2026-08-14', 'Ramen', { isNewOpening: true });
+		mention(newSpot, '2026-08-16', 'Ramen', { isNewOpening: true });
 		// Q2 2026: 100 posts, ramen a fifth of them, so ramen gained on the quarter before
 		for (let i = 0; i < 20; i++) mention(ramenBar, '2026-05-10', 'Ramen');
 		for (let i = 0; i < 80; i++) mention(doner, '2026-05-11', 'Döner');
@@ -403,13 +404,13 @@ describe('FoodTrendsReportService (pglite)', () => {
 
 	it('lists the kinds of food posts by others named, rises only, and openings as counts', async () => {
 		const { data } = await service.build(city.id, '2026-q3');
-		// 101 mentions with a kind of food (the opening's included), the ramen bar's own 30 out
-		expect(data!.talked!.mentions).toBe(101);
+		// 102 mentions with a kind of food (the opening's two included), the ramen bar's own 30 out
+		expect(data!.talked!.mentions).toBe(102);
 		const talked = new Map(data!.talked!.topics.map(t => [t.key, t]));
-		expect(talked.get('ramen')).toMatchObject({ mentions: 61, share: 60.4 });
+		expect(talked.get('ramen')).toMatchObject({ mentions: 62, share: 60.8 });
 		// Its parent counts the child
-		expect(talked.get('japanese')).toMatchObject({ mentions: 61 });
-		expect(talked.get('ramen')!.gain).toBeCloseTo(40.4, 1);
+		expect(talked.get('japanese')).toMatchObject({ mentions: 62 });
+		expect(talked.get('ramen')!.gain).toBeCloseTo(40.8, 1);
 		// Döner fell on the quarter before: no "gain" on it
 		expect(talked.get('kebab')?.gain).toBeUndefined();
 		expect(data!.openings).toEqual({

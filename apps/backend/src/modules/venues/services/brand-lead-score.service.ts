@@ -25,6 +25,7 @@ import type {
 	LeadSignals,
 } from '../interfaces/lead-score.interface.js';
 import { monthRange, previousMonth } from '../util/month.js';
+import { PostOpeningRow, postOpeningsSql } from '../util/post-openings.js';
 import { districtRatingStanding, RATING_BENCHMARK_MIN_REVIEWS } from '../util/rating-benchmark.js';
 import { normalizeVenueName } from '../util/venue-names.js';
 
@@ -244,8 +245,6 @@ interface VenueRow {
 	brand_id: string;
 	brand_name: string;
 	opened_at: Date | null;
-	// The newest post whose matched mention said it had just opened (`Mention.isNewOpening`)
-	flagged_new_at: Date | null;
 	reviews_count: number | null;
 	district: string | null;
 	category: string | null;
@@ -321,9 +320,7 @@ export class BrandLeadScoreService {
 				v.website, v.phone, v.closed, v.press_searched_at,
 				v.brand_id, b.name brand_name,
 				(select max(s.at) from venue_status_changes s
-					where s.venue_id = v.id and s.kind = 'opened') as opened_at,
-				(select max(p.posted_at) from mentions m join social_posts p on p.id = m.post_id
-					where m.venue_id = v.id and m.is_new_opening) as flagged_new_at
+					where s.venue_id = v.id and s.kind = 'opened') as opened_at
 			from venues v join brands b on b.id = v.brand_id
 			where v.deleted_at is null and v.brand_id in (
 				select brand_id from venues where city_id = ? and not closed and deleted_at is null
@@ -333,6 +330,16 @@ export class BrandLeadScoreService {
 		const brandIds = _.uniq(venues.map(v => v.brand_id));
 		const venueIds = venues.map(v => v.id);
 		if (brandIds.length === 0) return { scored: 0, prospects: 0 };
+
+		// The newest post saying a branch just opened, where a second signal agrees
+		const flagged: PostOpeningRow[] = await conn.execute(
+			postOpeningsSql(
+				'v.brand_id in (select brand_id from venues where city_id = ? and not closed and deleted_at is null)',
+				false,
+			),
+			[city.id, new Date(0), LEAD_NEW_PLACE_MAX_REVIEWS],
+		);
+		const flaggedAt = new Map(flagged.map(r => [r.venue_id, r.last_at]));
 
 		// One row per brand × author: own accounts are told apart in TypeScript. A post naming two
 		// branches counts once for the brand
@@ -426,10 +433,11 @@ export class BrandLeadScoreService {
 			const others = rows.filter(r => !r.own);
 			const sum = <T>(rs: T[], f: (r: T) => number) => rs.reduce((a, r) => a + f(r), 0);
 			const reviews = members.map(v => reviewsByVenue.get(v.id)).filter(r => !!r);
-			// A branch is new from a scrape's `opened` change or a post saying so, whichever is later;
+			// A branch is new from a scrape's `opened` change or posts saying so with a second signal
+			// agreeing (`postOpeningsSql`), whichever is later;
 			// `scoreBrand` applies the window and the review cap
 			const opened = members.map(v => {
-				const dates = [v.opened_at, v.flagged_new_at]
+				const dates = [v.opened_at, flaggedAt.get(v.id)]
 					.filter((d): d is Date => !!d)
 					.map(d => new Date(d));
 				return dates.length ? _.max(dates)! : null;

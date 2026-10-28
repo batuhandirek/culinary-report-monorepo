@@ -45,14 +45,34 @@ FUTURE:
 - "https://console.apify.com/actors/nrQeUJPbeJLVVsXPH/info/readme?build=latest"
 
 
+IDEAS:
+- We need 'report scheduling' - maybe twice a month, weekly etc.
+
+
 UI:
 - Put instagram/tiktok logos in the admin in Creators
 - Venue and Brand page details should 
 
+
 DATA:
-?
+- Facebook
+- https://tasteandstories.de/neue-restaurants-berlin/ -> Has new openings
+- https://www.yelp.com/biz/schnitzelei-mitte-berlin?osq=Dinner#reviews 
+- https://www.tripadvisor.com
+- https://www.opentable.de/ (For reviews?)
+
 
 Question:
 - Why admin/posts/a1f0729b-c690-484a-b46a-0993f2c7c617 does not have Samurai Berlin tagged?
 	- There is an address on the post, cant we match with it?
 	- There is an handle there, can't we use that?
+- Should we do user/creator profiling?
+	- Tends to leave X kind of reviews
+	- Better suggestion of who can I invite to the venue
+	- Who are local, who are not
+- 'Ayran' is not a thing currently? Also, "ginger beer" is under "beer" - does it make sense?
+	- I think we need 
+
+Report sections:
+- Upcoming "New Year's / Halloween etc." - what can be done kind of suggestion?
+ 
