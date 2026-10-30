@@ -2,11 +2,7 @@
 
 import _ from 'lodash';
 
-import {
-	FEEDBACK_THEMES,
-	type FeedbackTheme,
-	isFeedbackTheme,
-} from 'src/modules/venues/constants/feedback-themes.constant.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import type {
 	FeedbackSentiment,
 	FeedbackTopic,
@@ -19,7 +15,8 @@ import { AMOUNT_UNITS, parseAmount } from './amounts.js';
 
 /** A praise or complaint point as an agent answers it, or as it was stored before rows */
 export interface AnsweredPoint {
-	theme?: FeedbackTheme | string | null;
+	/** An aspect's key (`Topic.key`) */
+	theme?: string | null;
 	/** Only points stored before themes carry it without a theme */
 	topic?: FeedbackTopic | null;
 	detail: string;
@@ -47,7 +44,9 @@ export interface FeedbackAnswer {
 export interface FeedbackRowDraft {
 	sentiment: FeedbackSentiment;
 	topic: FeedbackTopic | null;
-	theme: FeedbackTheme | null;
+	theme: string | null;
+	/** The aspect row's id, with `theme`; null while unfiled */
+	aspectId: string | null;
 	detail: string | null;
 	dish: string | null;
 	dishKey: string | null;
@@ -64,19 +63,24 @@ export interface FeedbackRowDraft {
 /** The topics whose points can be about one dish or drink: the dish pass asks only these */
 export const DISH_TOPICS: FeedbackTopic[] = ['food', 'drinks'];
 
+/** What the writers check an agent's aspect key against: the index (`TopicIndex.aspect`) */
+export type AspectLookup = Pick<TopicIndex, 'aspect'>;
+
 /**
  * A source's rows: one per praise point (`positive`) and complaint point (`negative`), then one per
  * listed dish no point names (same `dishKey`), with the dish's sentiment.
  *
- * `asked`: the agent was asked for each point's dish and amount (an extraction now), so a point
- * without one has none. Otherwise (points stored before rows) the phrase is read: a point naming
+ * `aspects`: the index the agents' aspect keys are checked against: a known aspect gives the row its
+ * `theme`, `aspectId` and `topic` (the aspect's root); an unknown key leaves the point unfiled (the
+ * `feedback-themes` backlog files it). `asked`: the agent was asked for each point's dish and amount
+ * (an extraction now), so a point without one has none. Otherwise (points stored before rows) the phrase is read: a point naming
  * exactly one listed dish takes it, and a wait or price point takes the amount its phrase states;
  * the rest are left for the LLM passes (`dishChecked` / `amountChecked` false), a dish only for a
  * food or drinks point of a source that lists dishes.
  */
 export const feedbackRows = (
 	answer: FeedbackAnswer,
-	opts: { asked: boolean },
+	opts: { asked: boolean; aspects: AspectLookup },
 ): FeedbackRowDraft[] => {
 	const dishes = _.uniqBy(
 		answer.dishes
@@ -85,8 +89,9 @@ export const feedbackRows = (
 		d => d.key,
 	);
 	const point = (p: AnsweredPoint, sentiment: 'positive' | 'negative'): FeedbackRowDraft => {
-		const theme = p.theme && isFeedbackTheme(p.theme) ? p.theme : null;
-		const topic = theme ? FEEDBACK_THEMES[theme].topic : (p.topic ?? 'other');
+		const aspect = p.theme ? opts.aspects.aspect(p.theme) : undefined;
+		const theme = aspect?.key ?? null;
+		const topic = (aspect?.root ?? p.topic ?? 'other') as FeedbackTopic;
 		const detail = p.detail.trim();
 
 		let dish = p.dish?.trim() || null;
@@ -110,6 +115,7 @@ export const feedbackRows = (
 			sentiment,
 			topic,
 			theme,
+			aspectId: aspect?.id ?? null,
 			detail,
 			dish,
 			dishKey: dish ? dishKey(dish) || null : null,
@@ -131,6 +137,7 @@ export const feedbackRows = (
 			sentiment: d.sentiment,
 			topic: null,
 			theme: null,
+			aspectId: null,
 			detail: null,
 			dish: d.name,
 			dishKey: d.key,
@@ -152,6 +159,7 @@ export const changeRows = (changes: string[]): FeedbackRowDraft[] =>
 		sentiment: 'neutral',
 		topic: null,
 		theme: null,
+		aspectId: null,
 		detail,
 		dish: null,
 		dishKey: null,
@@ -166,7 +174,7 @@ export const changeRows = (changes: string[]): FeedbackRowDraft[] =>
 export interface FeedbackRowLike {
 	sentiment: FeedbackSentiment | string;
 	topic?: FeedbackTopic | string | null;
-	theme?: FeedbackTheme | string | null;
+	theme?: string | null;
 	detail?: string | null;
 	dish?: string | null;
 	dishKey?: string | null;
@@ -176,7 +184,8 @@ export interface FeedbackRowLike {
 /** A praise or complaint point as reports and prompts show it */
 export interface FeedbackPointView {
 	topic: FeedbackTopic;
-	theme?: FeedbackTheme;
+	/** The aspect's key; absent while unfiled */
+	theme?: string;
 	detail: string;
 }
 
@@ -184,7 +193,7 @@ const isPoint = (row: FeedbackRowLike) => !!row.detail && !row.change;
 
 const view = (row: FeedbackRowLike): FeedbackPointView => ({
 	topic: (row.topic ?? 'other') as FeedbackTopic,
-	...(row.theme && { theme: row.theme as FeedbackTheme }),
+	...(row.theme && { theme: row.theme }),
 	detail: row.detail!,
 });
 

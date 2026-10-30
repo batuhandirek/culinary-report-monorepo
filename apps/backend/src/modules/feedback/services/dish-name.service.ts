@@ -11,16 +11,17 @@ import {
 import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FoodTopicRelinkService } from 'src/modules/food-topics/services/food-topic-relink.service.js';
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { TopicRelinkService } from 'src/modules/topics/services/topic-relink.service.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { dishKey } from 'src/modules/venues/util/dishes.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import { DishTopicAgent, DishTopicInputName } from '../agents/dish-topic.agent.js';
 import { DishName, DishNameDecider } from '../entities/dish-name.entity.js';
 import { DishTopics, isDishTopic, matchedTopicId } from '../util/dish-topics.js';
+import { reviewTagTopic } from '../util/review-tag-topics.js';
 
 const NAMES_PER_CALL = 100;
 const CONCURRENCY = 5;
@@ -81,8 +82,8 @@ export class DishNameService implements OnModuleInit {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly foodTopicRelinkService: FoodTopicRelinkService,
+		private readonly topicService: TopicService,
+		private readonly topicRelinkService: TopicRelinkService,
 		private readonly llmBacklogRegistry: LlmBacklogRegistry,
 		private readonly dishTopicAgent: DishTopicAgent,
 	) {}
@@ -99,7 +100,7 @@ export class DishNameService implements OnModuleInit {
 			},
 		});
 		// A row's food topic follows the topics: re-linked by the one re-link job
-		this.foodTopicRelinkService.register({
+		this.topicRelinkService.register({
 			key: 'dish-names',
 			relink: index => this.relink(index),
 		});
@@ -107,13 +108,40 @@ export class DishNameService implements OnModuleInit {
 
 	/** What the writers link a new row's dish with: the decided names, read fresh, and the index */
 	async dishTopics(): Promise<DishTopics> {
-		const index = await this.foodTopicService.index();
+		const index = await this.topicService.index();
 		const rows: { key: string; topic: string | null }[] = await this.em
 			.getConnection()
 			.execute(
 				`select key, food_topic_id as topic from dish_names where decided_by is not null`,
 			);
 		return new DishTopics(index, new Map(rows.map(r => [r.key, r.topic])));
+	}
+
+	/**
+	 * The food topic each of Google's review tags names, by title (absent for none): the dish
+	 * names' decisions first, so a tag links where the feedback rows of that dish do
+	 * (`reviewTagTopic`). Reads only the tags' names, never the whole table.
+	 */
+	async reviewTagTopics(titles: string[]): Promise<Map<string, { key: string; label: string }>> {
+		const out = new Map<string, { key: string; label: string }>();
+		if (!titles.length) return out;
+		const [index, names] = await Promise.all([
+			this.topicService.index(),
+			this.em.find(
+				DishName,
+				{ key: { $in: [...new Set(titles.map(dishKey))] }, decidedBy: { $ne: null } },
+				{ populate: ['foodTopic'] },
+			),
+		]);
+		const decided = new Map(
+			names.map(n => [n.key, n.foodTopic && !n.foodTopic.deletedAt ? n.foodTopic.key : null]),
+		);
+		for (const title of titles) {
+			const key = reviewTagTopic(index, decided, title);
+			const topic = key ? index.get(key) : undefined;
+			if (topic) out.set(title, { key: topic.key, label: topic.label });
+		}
+		return out;
 	}
 
 	/** Names still to decide: undecided ones, and the rows' names that have no row yet */
@@ -132,7 +160,7 @@ export class DishNameService implements OnModuleInit {
 	 * agent; their rows take the name's topic. Plain SQL, idempotent. Returns the names added and
 	 * the rows changed.
 	 */
-	async sync(index: FoodTopicIndex): Promise<{ added: number; rows: number }> {
+	async sync(index: TopicIndex): Promise<{ added: number; rows: number }> {
 		const conn = this.em.getConnection();
 		const missing: { key: string; name: string }[] = await conn.execute(
 			`select f.dish_key as key, mode() within group (order by f.dish) as name
@@ -167,7 +195,7 @@ export class DishNameService implements OnModuleInit {
 	async decide(opts: {
 		limit: number;
 	}): Promise<{ looked: number; linked: number; tokens: number }> {
-		const index = await this.foodTopicService.index();
+		const index = await this.topicService.index();
 		await this.sync(index);
 		const ids: { id: number }[] = await this.em.getConnection().execute(
 			`select d.id from dish_names d
@@ -214,7 +242,7 @@ export class DishNameService implements OnModuleInit {
 							: answer.topic ? index.exact(answer.topic)
 							: undefined;
 						const topicId = key && isDishTopic(index, key) ? index.get(key)!.id! : null;
-						name.foodTopic = topicId ? this.em.getReference(FoodTopic, topicId) : null;
+						name.foodTopic = topicId ? this.em.getReference(Topic, topicId) : null;
 						// A suggestion is a missing topic: one naming a topic the agent passed over is dropped
 						const suggestion = answer.newTopic?.trim().slice(0, SUGGESTION_MAX) || null;
 						name.suggestion =
@@ -267,9 +295,9 @@ export class DishNameService implements OnModuleInit {
 	 * else waits for the agent again when a dish or drink topic was created since. Then every row
 	 * gets its name's topic. Pure matching, no LLM.
 	 */
-	async relink(index: FoodTopicIndex): Promise<Record<string, number>> {
+	async relink(index: TopicIndex): Promise<Record<string, number>> {
 		const synced = await this.sync(index);
-		const topics = await this.foodTopicService.all();
+		const topics = await this.topicService.all();
 		const keyOf = new Map(topics.map(t => [t.id, t.key]));
 		const createdAt = new Map(topics.map(t => [t.key, t.createdAt.getTime()]));
 		const newest =
@@ -296,7 +324,7 @@ export class DishNameService implements OnModuleInit {
 			const matched = matchedTopicId(index, name.name) ?? matchedTopicId(index, name.key);
 			if (matched) {
 				if (name.decidedBy !== 'match' || name.foodTopic?.id !== matched) {
-					name.foodTopic = this.em.getReference(FoodTopic, matched);
+					name.foodTopic = this.em.getReference(Topic, matched);
 					name.decidedBy = 'match';
 					name.decidedAt = now;
 					name.suggestion = null;
@@ -312,7 +340,7 @@ export class DishNameService implements OnModuleInit {
 				const suggested = name.suggestion ? index.dishTopic(name.suggestion) : undefined;
 				const created = suggested ? createdAt.get(suggested) : undefined;
 				if (suggested && created !== undefined && created > decidedAt) {
-					name.foodTopic = this.em.getReference(FoodTopic, index.get(suggested)!.id!);
+					name.foodTopic = this.em.getReference(Topic, index.get(suggested)!.id!);
 					name.suggestion = null;
 					name.decidedAt = now;
 					counts.bySuggestion++;
@@ -346,7 +374,7 @@ export class DishNameService implements OnModuleInit {
 		},
 	): Promise<DishNameList> {
 		// Names rows got since the last pass are listed too, waiting
-		await this.sync(await this.foodTopicService.index());
+		await this.sync(await this.topicService.index());
 		const rows: {
 			id: number;
 			key: string;
@@ -361,7 +389,7 @@ export class DishNameService implements OnModuleInit {
 				count(f.id)::int as notes
 			from dish_names d
 			join feedback_points f on f.dish_key = d.key and f.city_id = ?
-			left join food_topics t on t.id = d.food_topic_id
+			left join topics t on t.id = d.food_topic_id
 			group by d.id, t.key, t.label`,
 			[cityId],
 		);
@@ -434,11 +462,11 @@ export class DishNameService implements OnModuleInit {
 	async change(id: number, change: DishNameChange): Promise<DishName> {
 		const name = await this.em.findOne(DishName, id, { populate: ['foodTopic'] });
 		if (!name) throw new NotFoundException(`No dish name ${id}`);
-		const index = await this.foodTopicService.index();
+		const index = await this.topicService.index();
 		const now = new Date();
 		if ('auto' in change) {
 			const matched = matchedTopicId(index, name.name) ?? matchedTopicId(index, name.key);
-			name.foodTopic = matched ? this.em.getReference(FoodTopic, matched) : null;
+			name.foodTopic = matched ? this.em.getReference(Topic, matched) : null;
 			name.decidedBy = matched ? 'match' : null;
 			name.decidedAt = matched ? now : null;
 		} else {
@@ -446,7 +474,7 @@ export class DishNameService implements OnModuleInit {
 				throw new BadRequestException(`No dish or drink topic "${change.topicKey}"`);
 			name.foodTopic =
 				change.topicKey ?
-					this.em.getReference(FoodTopic, index.get(change.topicKey)!.id!)
+					this.em.getReference(Topic, index.get(change.topicKey)!.id!)
 				:	null;
 			name.decidedBy = 'admin';
 			name.decidedAt = now;

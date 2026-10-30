@@ -16,7 +16,7 @@
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api, isNotFoundError } from '#lib/api.js';
 	import { lastMonth, monthLabel, PLATFORM_LABELS, recentMonths, TOPIC_LABELS } from '#lib/culinary.js';
-	import { amountLabel, themeLabel, themeRowHref, type ThemeSide } from '#lib/feedback.js';
+	import { amountLabel, themeRowHref, type ThemeSide } from '#lib/feedback.js';
 	import { topicHref } from '#lib/topic-format.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
@@ -175,7 +175,7 @@
 	</button>
 {/snippet}
 
-<AdminPageHeader title={data?.label ?? themeLabel(theme)}>
+<AdminPageHeader title={data?.label ?? theme}>
 	{#snippet aboveTitle()}
 		<span class="text-muted-foreground text-xs">Theme{data ? ` · ${TOPIC_LABELS[data.topic] ?? data.topic}` : ''}</span>
 	{/snippet}
@@ -184,7 +184,7 @@
 			<p class="text-muted-foreground m-0 mt-1.5 max-w-3xl text-sm">
 				Covers {data.hint}. Praised and criticised points are filed here by what they are about, never by whether
 				it was good or bad.
-				<a class="text-beet" href={themeRowHref(theme, side === 'praise' ? 'praise' : 'complaints', { cityId, month })}>All themes</a>
+				<a class="text-beet" href={themeRowHref(theme, side === 'praise' ? 'praise' : 'complaints', { cityId, month, root: data.topic })}>All themes</a>
 			</p>
 		{/if}
 	{/snippet}

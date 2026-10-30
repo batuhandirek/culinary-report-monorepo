@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { AdminTopicInsightRowOutputDto } from 'client';
 
-	import { kindLabel } from '#lib/food-topic-kinds.js';
-	import { change, points, tone, topicHref } from '#lib/topic-format.js';
-
 	import SearchSpark from './SearchSpark.svelte';
+
+	import { change, points, tone, topicHref } from '#lib/topic-format.js';
+	import { kindLabel } from '#lib/topic-kinds.js';
 
 	// Topics side by side: supply (venues tagged), buzz (the month's posts by others and their
 	// share) and demand (Google searches, a line per topic on its own axis). Each row opens the topic

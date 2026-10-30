@@ -3,7 +3,7 @@
 
 import _ from 'lodash';
 
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { monthsUpTo, termKey } from 'src/modules/trends/util/search-interest.js';
 import type { TopicMentionCounts } from 'src/modules/trends/util/topic-mentions.js';
 import { isDenied } from 'src/modules/venues/services/brand-lead-score.service.js';
@@ -38,7 +38,7 @@ import { quarterBefore, quarterMonths } from './quarter.js';
 export interface FoodTrendsTopicInfo {
 	key: string;
 	label: string;
-	kind: FoodTopicKindEnum;
+	kind: TopicKindEnum;
 }
 
 /** One of Google's rising related queries of a searched topic. */
@@ -65,7 +65,7 @@ export interface FoodTrendsInput {
 
 // Kinds of place (café, bar, fast food) are not kinds of food: off the public lists
 const isFood = (topic: FoodTrendsTopicInfo | undefined): topic is FoodTrendsTopicInfo =>
-	!!topic && topic.kind !== FoodTopicKindEnum.FORMAT;
+	!!topic && topic.kind !== TopicKindEnum.FORMAT;
 
 const round1 = (n: number) => Math.round(n * 10) / 10;
 

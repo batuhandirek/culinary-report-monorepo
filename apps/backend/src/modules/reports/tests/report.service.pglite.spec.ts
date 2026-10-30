@@ -13,26 +13,39 @@ import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { Report } from '../entities/report.entity.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
 import { ReportTemplateService } from '../services/report-template.service.js';
 
-const HIGHLIGHTS = {
+// The editor's answer, and the written part it becomes once checked
+const ANSWER = {
+	kind: 'story',
 	title: 'A good month',
 	headline: 'Things went well.',
+	letter: ['Things went well.'],
+	attention: [],
+	tryThis: [{ title: 'Answer reviews', text: 'Reply to every review.' }],
+	notes: 'Nothing to look up.',
+};
+const HIGHLIGHTS = {
+	title: ANSWER.title,
+	headline: ANSWER.headline,
 	highlights: [],
-	actions: [{ title: 'Answer reviews', text: 'Reply to every review.' }],
+	actions: ANSWER.tryThis,
 };
 
 describe('ReportService.build (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: ReportService;
-	const highlightsAgent = mockAgent(HIGHLIGHTS);
+	const highlightsAgent = mockAgent(ANSWER);
 	// Answers every review it is given, in a made-up voice the test can recognise
 	const replyAgent = mockAgent((input: unknown) => ({
 		replies: (JSON.parse(input as string) as { reviews: { reviewId: string }[] }).reviews.map(
@@ -44,12 +57,14 @@ describe('ReportService.build (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportConfigService,
 				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,
-				{ provide: ReportHighlightsAgent, useValue: highlightsAgent },
+				{ provide: ReportEditorAgent, useValue: highlightsAgent },
 				{ provide: ReviewReplyAgent, useValue: replyAgent },
 			],
 		});
@@ -104,6 +119,7 @@ describe('ReportService.build (pglite)', () => {
 
 	it('builds the trend, the previous month, nearby creators and reply drafts', async () => {
 		const em = harness.orm.em;
+		seedTopics(em, ASPECT_SEED.map(a => a.key));
 		const city = testCity(em);
 		const venue = em.create(Venue, {
 			city,
@@ -177,11 +193,21 @@ describe('ReportService.build (pglite)', () => {
 			actions: HIGHLIGHTS.actions,
 		});
 
+		// The vocabulary the theme counts are keyed by travels with the report, roots first
+		expect(data.aspects![0]).toEqual({ key: 'food', label: 'Food', root: 'food' });
+		expect(data.aspects).toContainEqual({ key: 'price_increase', label: 'Price increase', root: 'price' });
+		expect(data.aspects).toHaveLength(ASPECT_SEED.length);
+
 		expect(data.creators.map(c => c.author)).toEqual(['loyal']);
 		expect(data.creatorsNearby.map(c => c.author)).toEqual(['newcomer']);
 		expect(data.creatorsNearby[0].venues).toEqual(['Zola']);
 		expect(data.branches[0].neighbours.map(n => n.name)).toEqual(['Zola']);
-		expect(highlightsAgent.generate).toHaveBeenLastCalledWith(expect.any(String), { cityName: 'Berlin' });
+		// The editor gets the city and the read tools (none here: the evidence service is mocked away,
+		// so it writes from the material alone), and its answer is stored checked, with its trace
+		const [, context] = highlightsAgent.generate.mock.calls.at(-1)! as [string, { cityName: string; tools: Record<string, unknown> }];
+		expect(context).toEqual({ cityName: 'Berlin', tools: {} });
+		expect(report.highlights).toMatchObject({ ...HIGHLIGHTS, kind: 'story', letter: ANSWER.letter, notes: ANSWER.notes });
+		expect(report.highlights.trace).toMatchObject({ model: 'openai/gpt-5.4', toolCalls: 0, problems: [] });
 
 		expect(data.reviews.list).toHaveLength(14);
 		expect(data.reviews.list[0].reviewId).toBe('five-10');
@@ -193,16 +219,13 @@ describe('ReportService.build (pglite)', () => {
 		expect(drafted).not.toContain('answered');
 		expect(drafted).not.toContain('stars-only');
 
-		// The model got the previous month and the creators
+		// The editor got the month before (by name, so the letter never quotes a key or a YYYY-MM), last month's actions and the creators
 		const input = JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string);
-		// By name, so the findings never quote a key or a YYYY-MM
-		expect(input.previousMonth).toMatchObject({
-			month: 'August 2026',
-			actionsSuggestedLastMonth: HIGHLIGHTS.actions,
-		});
-		expect(input.nearbyCreatorsWhoDidNotPostAboutYou[0].author).toBe('newcomer');
+		expect(input.inNumbers.monthBefore).toMatchObject({ month: 'August 2026', postsByOthers: 1, reviews: 2 });
+		expect(input.actionsSuggestedLastMonth).toEqual(HIGHLIGHTS.actions);
+		expect(input.creatorsWhoCoveredNeighboursButNotYou[0]).toMatchObject({ creator: expect.stringMatching(/^@newcomer on TikTok, \d+ followers$/), covered: ['Zola'] });
 		// The trend is the place's own
-		expect(input.places[0].googleRatingTrend).toHaveLength(2);
+		expect(input.places[0].ratingAtEachMonthsClose).toHaveLength(2);
 
 		// Stored as built
 		harness.orm.em.clear();

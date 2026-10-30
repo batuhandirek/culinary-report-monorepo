@@ -34,6 +34,8 @@ const MENTION_POPULATE = [
 	'mentions.brand',
 	'mentions.feedback',
 	'mentions.feedback.foodTopic',
+	'mentions.feedback.aspect',
+	'mentions.feedback.aspect.parent',
 	'account',
 	'account.creator',
 	'account.brand',
@@ -44,12 +46,12 @@ const MENTION_POPULATE = [
 // A post's page also lists its hashtags with what they name
 const POST_POPULATE = [
 	...MENTION_POPULATE,
-	'mentions.foodTopics',
-	'mentions.foodTopics.topic',
+	'mentions.topics',
+	'mentions.topics.topic',
 	'city',
 	'hashtagLinks',
 	'hashtagLinks.hashtag',
-	'hashtagLinks.hashtag.foodTopic',
+	'hashtagLinks.hashtag.topic',
 	'hashtagLinks.hashtag.brand',
 ] as const;
 const EXCLUDE = [
@@ -57,8 +59,8 @@ const EXCLUDE = [
 	'account.brand.branches',
 	'mentions.brand.branches',
 	'hashtagLinks.hashtag.brand.branches',
-	'mentions.foodTopics.mention',
-	'mentions.foodTopics.topic.parent',
+	'mentions.topics.mention',
+	'mentions.topics.topic.parent',
 ] as const;
 
 @Controller('/admin')
@@ -140,7 +142,7 @@ export class AdminSocialController {
 			const { start, end } = monthRange(query.month);
 			filters.post = { postedAt: { $gte: start, $lt: end } };
 		}
-		const populate = ['post', 'venue', 'brand', 'feedback', 'feedback.foodTopic'] as const;
+		const populate = ['post', 'venue', 'brand', 'feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'] as const;
 		const [items, totalItems] = await this.em.findAndCount(Mention, filters, {
 			populate: [...populate],
 			orderBy: { post: { postedAt: QueryOrder.DESC } },
@@ -169,11 +171,11 @@ export class AdminSocialController {
 		@TypedBody() body: AdminUpdateMentionInputDto,
 	): Promise<AdminMentionOutputDto> {
 		const mention = await this.mentionMatchingService.correct(id, body);
-		await this.em.populate(mention, ['feedback', 'feedback.foodTopic']);
+		await this.em.populate(mention, ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent']);
 		return wrap(mention).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: ['venue', 'brand', 'feedback', 'feedback.foodTopic'],
+			populate: ['venue', 'brand', 'feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
 		}) as unknown as AdminMentionOutputDto;
 	}
 }

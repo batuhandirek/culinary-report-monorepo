@@ -47,7 +47,9 @@ FUTURE:
 
 IDEAS:
 - We need 'report scheduling' - maybe twice a month, weekly etc.
-
+- We need 'CHANGES_NOTICED.entity' from reviews maybe, also pooled, bucketed
+- We need a chatbot in the Portal, accepting free-form questions
+	- Save them, review them later
 
 UI:
 - Put instagram/tiktok logos in the admin in Creators
@@ -57,6 +59,7 @@ UI:
 DATA:
 - Facebook
 - https://tasteandstories.de/neue-restaurants-berlin/ -> Has new openings
+- Reddit!!
 - https://www.yelp.com/biz/schnitzelei-mitte-berlin?osq=Dinner#reviews 
 - https://www.tripadvisor.com
 - https://www.opentable.de/ (For reviews?)
@@ -66,13 +69,26 @@ Question:
 - Why admin/posts/a1f0729b-c690-484a-b46a-0993f2c7c617 does not have Samurai Berlin tagged?
 	- There is an address on the post, cant we match with it?
 	- There is an handle there, can't we use that?
+- /admin/posts/1109b3b3-cd14-4976-9e4b-4301f01d9805 does not
+	- Why doesn't it have Magic Bitte?
 - Should we do user/creator profiling?
 	- Tends to leave X kind of reviews
 	- Better suggestion of who can I invite to the venue
 	- Who are local, who are not
 - 'Ayran' is not a thing currently? Also, "ginger beer" is under "beer" - does it make sense?
 	- I think we need 
+- /admin/public-reports has @unhinged4him / TikTok / 6.9M views · 1 posts · 1 place
+	- Where?
+- https://www.the-berliner.com/food/best-restaurants-berlin-101-places-to-eat/?utm_campaign=feed&utm_medium=referral&utm_source=later-linkinbio#Prenzlauer_Berg
+	- Can we really parse all of these?
 
 Report sections:
 - Upcoming "New Year's / Halloween etc." - what can be done kind of suggestion?
- 
+
+
+To add
+Creators:
+	- theberlinermag instagram/facebook
+	- https://www.the-berliner.com blog
+Notes:
+	- If a brand owned instagram post talks about another brand, FLAG THAT!!

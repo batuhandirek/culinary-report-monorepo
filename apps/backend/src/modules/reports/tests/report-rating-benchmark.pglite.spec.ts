@@ -2,9 +2,9 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -17,7 +17,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportCityService } from '../services/report-city.service.js';
 import { ReportService } from '../services/report.service.js';
@@ -46,21 +46,21 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 				BrandService,
 				CityService,
 				VenueSearchRankService,
-				{ provide: ReportHighlightsAgent, useValue: highlights },
+				{ provide: ReportEditorAgent, useValue: highlights },
 				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },
 				ReportCityService,
 				TrendService,
 				VenueStatusChangeService,
 				SearchInterestService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 			],
 		});
 		service = harness.moduleRef.get(ReportCityService);
 		reports = harness.moduleRef.get(ReportService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
-		seedFoodTopics(em, ['ramen', 'pizza']);
+		seedTopics(em, ['ramen', 'pizza']);
 		city = testCity(em, { name: 'Berlin' });
 
 		let n = 0;
@@ -109,8 +109,8 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 		for (const rating of [4.0, 4.2, 4.3, 3.8]) venue('Pankow', 'Pizza restaurant', rating);
 		unrated = venue('Pankow', 'Pizza restaurant', null, 0);
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 		await em.populate([ramen, pizza, unrated], ['city']);
 	});
 
@@ -150,7 +150,7 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 			topic: { key: 'japanese' },
 		});
 		const input = JSON.parse(highlights.generate.mock.calls.at(-1)![0] as string);
-		expect(input.places[0].googleRatingAgainstOthers).toBe(
+		expect(input.places[0].ratingAgainstOthers).toBe(
 			ratingBenchmarkSentence(report.data.branches[0].ratingBenchmark!),
 		);
 	});

@@ -360,7 +360,7 @@ export const THEME_REVIEW_DETAIL_SQL = `select f.id::text as id, ${MONTH('r.publ
 	join reviews r on r.id = f.review_id
 	join venues v on v.id = r.venue_id
 	join brands b on b.id = v.brand_id
-	left join food_topics ft on ft.id = f.food_topic_id
+	left join topics ft on ft.id = f.food_topic_id
 	where f.theme = ? and f.detail is not null and v.city_id = ? and r.published_at >= ? and r.published_at < ? and ${REVIEW_WRITTEN}`;
 
 /** `ThemeDetailRow`s of one theme (`?`) in a city's mentions matched to a brand in [start, end), own posts out. */
@@ -374,7 +374,7 @@ export const THEME_POST_DETAIL_SQL = `select f.id::text as id, ${MONTH('p.posted
 	join social_posts p on p.id = m.post_id
 	join brands b on b.id = m.brand_id
 	left join venues v on v.id = m.venue_id
-	left join food_topics ft on ft.id = f.food_topic_id
+	left join topics ft on ft.id = f.food_topic_id
 	where f.theme = ? and f.detail is not null and p.city_id = ? and p.posted_at >= ? and p.posted_at < ?
 		and not ${ownPostSql('p', 'm.brand_id')}`;
 

@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
@@ -30,7 +30,7 @@ describe('TodayService (pglite)', () => {
 				CityService,
 				DataCoverageService,
 				{ provide: BrandService, useValue: { suggestions: async () => [{}, {}] } },
-				{ provide: FoodTopicService, useValue: { overview: async () => ({ unmapped: [{ key: 'kumpir' }] }) } },
+				{ provide: TopicService, useValue: { overview: async () => ({ unmapped: [{ key: 'kumpir' }] }) } },
 				{ provide: ProspectQueryService, useValue: { due: async () => [], suggested: async () => [] } },
 			],
 		});

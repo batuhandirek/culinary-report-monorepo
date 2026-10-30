@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 
-import type { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import type { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 
 import type { AdminSearchRelatedQueriesOutputDto } from './admin-search-interest.dto.js';
 
@@ -12,7 +12,7 @@ export interface AdminGetTopicInsightsInputDto {
 export interface AdminTopicInsightRowOutputDto {
 	key: string;
 	label: string;
-	kind: FoodTopicKindEnum;
+	kind: TopicKindEnum;
 	parentKey?: string;
 	/** Topics directly under it */
 	children: number;

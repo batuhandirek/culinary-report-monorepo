@@ -8,10 +8,10 @@ import _ from 'lodash';
 import { ExceptionCodes } from 'exceptions';
 
 import { areNeighbourDistricts } from 'src/modules/cities/util/city.js';
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { sharedFood } from 'src/modules/food-topics/util/venue-topics.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { sharedFood } from 'src/modules/topics/util/venue-topics.js';
 
 import { Brand } from '../entities/brand.entity.js';
 import { BrandCompetitor, CompetitorPickedByEnum } from '../entities/brand-competitor.entity.js';
@@ -70,8 +70,8 @@ export const googleAlsoSearched = (
 export class CompetitorService {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly topicService: TopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/**
@@ -257,11 +257,11 @@ export class CompetitorService {
 				...(venue.district ? { district: { $ne: null } } : {}),
 			})
 		).filter(c => isFoodVenue(c.category) && !taken.has(c.id));
-		const index = await this.foodTopicService.index();
-		const tags = await this.venueFoodTopicService.tags([venue, ...candidates]);
+		const index = await this.topicService.index();
+		const tags = await this.venueTopicService.tags([venue, ...candidates]);
 		const own = tags.get(venue.id) ?? [];
 		const diets = (keys: { key: string }[]) =>
-			keys.map(t => t.key).filter(k => index.get(k)?.kind === FoodTopicKindEnum.DIET);
+			keys.map(t => t.key).filter(k => index.get(k)?.kind === TopicKindEnum.DIET);
 		const ownDiets = diets(own);
 
 		const scored: CompetitorSuggestion[] = [];

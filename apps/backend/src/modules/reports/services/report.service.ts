@@ -10,24 +10,22 @@ import { CityDayService } from 'src/modules/cities/services/city-day.service.js'
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { VenueSnapshot } from 'src/modules/venues/entities/venue-snapshot.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
-import {
-	FEEDBACK_THEMES,
-	feedbackThemeLabel,
-	isFeedbackTheme,
-} from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { monthName, monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { offeredAmenities } from 'src/modules/venues/util/venue-details.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { ReportAnalysisAgent } from '../agents/report-analysis.agent.js';
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ANALYSIS_MODEL, ANALYSIS_TIMEOUT_MS, MAX_INVESTIGATIONS } from '../constants/report-analysis.constant.js';
+import { EDITOR_MAX_TOOL_CALLS, EDITOR_MODEL, EDITOR_TIMEOUT_MS } from '../constants/report-editor.constant.js';
 import { Report } from '../entities/report.entity.js';
 import type {
 	ReportAnalysis,
@@ -39,25 +37,27 @@ import {
 	ReportBranch,
 	ReportCompetitor,
 	ReportData,
-	ReportFeedbackPoint,
+	ReportEditorTrace,
+	ReportHighlights,
 	ReportNeighbour,
 	ReportReplyDraft,
-	ReportReviewGroup,
 } from '../interfaces/report-data.interface.js';
+import type { EvidenceContext } from '../interfaces/report-evidence.interface.js';
 import { ReportBuiltEvent } from '../persisted-events/report-built.persisted-event.js';
 import { ToolRun } from '../tools/tool-run.js';
 import { checkAnalysis } from '../util/analysis-check.js';
-import { reachPromptInput } from '../util/reach.js';
+import { editorPack } from '../util/editor-pack.js';
+import { checkHighlights, type EditorAnswer } from '../util/highlights-check.js';
 import { observe, pickInvestigated, type ReportHistoryMonth } from '../util/report-observations.js';
 import { runPlaybook } from '../util/report-playbooks.js';
-import { ratingBenchmarkSentence } from '../util/rating-benchmark.js';
 import { replyCandidates } from '../util/reply-drafts.js';
 import { type PromptScope, sectionsOutput, toSections, trimForSections } from '../util/report-sections.js';
 import {
 	articleTitle,
-	compareMonths,
 	NeighbourPost,
 	ratingTrend,
+	type ReportAspects,
+	reportAspects,
 	selectNearbyCreators,
 	summarizeCompetitor,
 	summarizePrevious,
@@ -68,49 +68,18 @@ import {
 import { ReportCityService } from './report-city.service.js';
 import { type EvidenceBuild, ReportEvidenceService } from './report-evidence.service.js';
 import { ReportReachService } from './report-reach.service.js';
-import { ReportSignalsService, signalsPromptInput } from './report-signals.service.js';
+import { ReportSignalsService } from './report-signals.service.js';
 import { ReportConfigService } from './report-config.service.js';
 
 const creatorKey = (platform: string, author: string) => `${platform}:${author.toLowerCase()}`;
 
-/** Topic counts as the model should quote them, largest first: `{ food: '19 of 34 written reviews (56%)' }`. */
-const shares = (counts: Record<string, number>, total: number, unit: string) =>
-	Object.fromEntries(
-		_.sortBy(Object.entries(counts), ([, n]) => -n).map(([topic, n]) => [
-			topic,
-			`${n} of ${total} ${unit} (${total ? Math.round((n / total) * 100) : 0}%)`,
-		]),
-	);
-
-/**
- * Theme counts the same way, keyed "price / price increase"; the topics' catch-all themes are
- * left out (the topic counts carry them). Undefined when the counts are (a point without a theme).
- */
-const themeShares = (counts: Record<string, number> | undefined, total: number, unit: string) =>
-	counts &&
-	shares(
-		Object.fromEntries(
-			Object.entries(counts)
-				.filter(([theme]) => isFeedbackTheme(theme) && !FEEDBACK_THEMES[theme].label.endsWith(', other') && theme !== 'other')
-				.map(([theme, n]) => [feedbackThemeLabel(theme as keyof typeof FEEDBACK_THEMES), n]),
-		),
-		total,
-		unit,
-	);
-
-/** "price / price increase: prices went up", or the topic for a point without a theme. */
-const pointLine = (p: ReportFeedbackPoint) => `${p.theme ? feedbackThemeLabel(p.theme) : p.topic}: ${p.detail}`;
-
-const reviewGroupInput = (group: ReportReviewGroup) => ({
-	reviews: group.count,
-	writtenReviews: group.written,
-	praisingTopic: shares(group.praise, group.written, 'written reviews'),
-	criticisingTopic: shares(group.complaints, group.written, 'written reviews'),
-	praisingTheme: themeShares(group.praiseThemes, group.written, 'written reviews'),
-	criticisingTheme: themeShares(group.complaintThemes, group.written, 'written reviews'),
-	whatTheyPraised: group.praiseDetails.map(pointLine),
-	whatTheyCriticised: group.complaintDetails.map(pointLine),
-});
+/** What Mastra reports past the object; a mocked agent gives none of it. */
+type FullGenerate = Partial<{
+	totalUsage: ReportAnalysisTrace['usage'];
+	usage: ReportAnalysisTrace['usage'];
+	reasoningText: string;
+	steps: unknown[];
+}>;
 
 @Injectable()
 export class ReportService {
@@ -118,7 +87,7 @@ export class ReportService {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly reportHighlightsAgent: ReportHighlightsAgent,
+		private readonly reportEditorAgent: ReportEditorAgent,
 		private readonly reviewReplyAgent: ReviewReplyAgent,
 		private readonly competitorService: CompetitorService,
 		private readonly pgBossService: PgBossService,
@@ -130,6 +99,7 @@ export class ReportService {
 		private readonly reportConfigService: ReportConfigService,
 		private readonly reportAnalysisAgent: ReportAnalysisAgent,
 		private readonly reportEvidenceService: ReportEvidenceService,
+		private readonly topicService: TopicService,
 	) {}
 
 	/**
@@ -146,8 +116,10 @@ export class ReportService {
 	 * rating trend, Google details) go in its own `ReportData.branches` entry. A report across
 	 * cities has no city section and no calendar: one city's peers don't compare with a brand in
 	 * several. The analysis ("what moved, and why it might have") is computed once before the
-	 * highlights, which quote it where a configuration shows the section; it never fails the
-	 * build. 400 when there is no open branch.
+	 * written part; the editor reads it with the rest of the month's material (`editorPack`) and
+	 * the same read tools, once per configuration, over only the data its sections show. Neither
+	 * fails the build: a failing editor leaves the code-written fallback and the trace says why.
+	 * 400 when there is no open branch.
 	 */
 	async buildAll(
 		brandId: string,
@@ -159,15 +131,17 @@ export class ReportService {
 		const { data, branches, city, cityNames } = await this.compute(brandId, cityId, month, { peerBrandIds });
 		const [first] = branches;
 		const { brand } = first;
-		const analysis = await this.analyse(await this.evidenceBuild(branches, city, month, data), cityNames.join(', '));
-		const [replyDrafts, ...highlights] = await Promise.all([
+		const cityName = cityNames.join(', ');
+		const build = await this.evidenceBuild(branches, city, month, data);
+		const ctx = await this.evidenceContext(build);
+		const analysis = await this.analyse(build, ctx, cityName);
+		// The vocabulary the editor names themes with: the context's, read again only when it failed
+		const aspects = ctx?.aspects ?? (await this.topicService.index());
+		const [replyDrafts, ...written] = await Promise.all([
 			this.draftReplies(branches, month, data),
 			...targets.map(target => {
 				const trimmed = trimForSections(data, target.sections);
-				return this.reportHighlightsAgent.generate(
-					JSON.stringify(this.highlightsInput(trimmed.data, trimmed.scope, analysis)),
-					{ cityName: cityNames.join(', ') },
-				);
+				return this.write(trimmed.data, trimmed.scope, analysis, ctx, cityName, aspects);
 			}),
 		]);
 		data.reviews.replyDrafts = replyDrafts;
@@ -176,14 +150,14 @@ export class ReportService {
 		for (const [i, target] of targets.entries()) {
 			const report =
 				(await this.em.findOne(Report, { brand, city: city ?? null, month, config: target.config ?? null })) ??
-				this.em.create(Report, { brand, city, month, data, highlights: highlights[i].object });
+				this.em.create(Report, { brand, city, month, data, highlights: written[i] });
 			report.data = data;
 			report.config = target.config;
 			report.template = target.template;
 			report.name = target.name;
 			// A copy: the configuration's own objects stay its own
 			report.sections = toSections(sectionsOutput(target.sections));
-			report.highlights = highlights[i].object;
+			report.highlights = written[i];
 			report.analysis = analysis;
 			report.postCount = data.social.postCount;
 			report.reviewCount = data.reviews.count;
@@ -223,7 +197,9 @@ export class ReportService {
 		const [first] = branches;
 		const city = cityId ? first.city : null;
 		const cityNames = _.uniq(branches.map(b => b.city.name));
-		const data = await this.collect(branches, month, city);
+		// Read once per build: the aspect vocabulary the counts are keyed by, kept in the data
+		const index = await this.topicService.index();
+		const data = await this.collect(branches, month, city, index);
 		if (city) data.city = await this.reportCityService.section(branches, month, peerBrandIds);
 		if (cityNames.length === 1) data.context = await this.cityDayService.month(first.city.id, month);
 		// The relations over every branch's reviews, and the competitors' open tables and busyness
@@ -307,7 +283,8 @@ export class ReportService {
 		if (!branches.length) throw new BadRequestException('The brand has no open branch to analyse');
 		await this.em.populate(branches, ['city', 'brand']);
 		const cityNames = _.uniq(branches.map(b => b.city.name)).join(', ');
-		const analysis = await this.analyse(await this.evidenceBuild(branches, report.city ?? null, report.month, report.data), cityNames);
+		const build = await this.evidenceBuild(branches, report.city ?? null, report.month, report.data);
+		const analysis = await this.analyse(build, await this.evidenceContext(build), cityNames);
 		const siblings = await this.em.find(Report, { brand: report.brand, city: cityId, month: report.month });
 		for (const sibling of siblings) sibling.analysis = analysis;
 		report.analysis = analysis;
@@ -350,16 +327,72 @@ export class ReportService {
 	}
 
 	/**
+	 * What the analysis and the editor read beyond the data, loaded once per build; null when
+	 * reading it failed (the analysis then records the error, the editor writes without tools).
+	 */
+	private async evidenceContext(build: EvidenceBuild): Promise<EvidenceContext | null> {
+		try {
+			return await this.reportEvidenceService.context(build);
+		} catch (e) {
+			this.logger.warn(`Evidence for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`);
+			return null;
+		}
+	}
+
+	/**
+	 * The written part: the editor's read of the month over the material and the read tools,
+	 * then the line-by-line check. A failing agent never fails the build: the fallback stands in
+	 * and the trace says why.
+	 */
+	private async write(
+		data: ReportData,
+		scope: PromptScope,
+		analysis: ReportAnalysis,
+		ctx: EvidenceContext | null,
+		cityName: string,
+		aspects: ReportAspects,
+	): Promise<ReportHighlights> {
+		const started = Date.now();
+		const trace: ReportEditorTrace = { model: EDITOR_MODEL, steps: [], toolCalls: 0, problems: [], durationMs: 0 };
+		const pack = editorPack(data, scope, aspects, analysis);
+		const run = new ToolRun(EDITOR_MAX_TOOL_CALLS);
+		const tools = ctx ? this.reportEvidenceService.tools(ctx, run) : {};
+		let answer: EditorAnswer | null = null;
+		try {
+			const res = await this.reportEditorAgent.generate(
+				JSON.stringify(pack),
+				{ cityName, tools },
+				{ abortSignal: AbortSignal.timeout(EDITOR_TIMEOUT_MS) },
+			);
+			answer = (res.object as EditorAnswer | undefined) ?? null;
+			const full = res as FullGenerate;
+			const usage = full.totalUsage ?? full.usage;
+			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'outputTokens', 'totalTokens']);
+			if (full.steps?.length) trace.modelSteps = full.steps.length;
+		} catch (e) {
+			trace.error = (e as Error).message;
+			this.logger.warn(`The editor for ${data.brand.name} ${data.month} failed: ${trace.error}`);
+		}
+		trace.steps = run.calls;
+		trace.toolCalls = run.ran;
+		const written = checkHighlights(answer, pack, [pack, ...run.given], (where, problem) =>
+			trace.problems.push({ where, problem }),
+		);
+		return { ...written, trace: { ...trace, durationMs: Date.now() - started } };
+	}
+
+	/**
 	 * "What moved, and why it might have": the observations found in code with their checks, then
 	 * one capped agent call with the evidence tools for the top ones, then the line-by-line check.
 	 * A failing agent never fails the build: the investigations fall back to the observations'
 	 * own sentences and the trace says why.
 	 */
-	private async analyse(build: EvidenceBuild, cityName: string): Promise<ReportAnalysis> {
+	private async analyse(build: EvidenceBuild, ctx: EvidenceContext | null, cityName: string): Promise<ReportAnalysis> {
 		const started = Date.now();
 		const trace: ReportAnalysisTrace = { model: ANALYSIS_MODEL, steps: [], toolCalls: 0, problems: [], durationMs: 0 };
 		try {
-			return await this.investigate(build, cityName, trace, started);
+			if (!ctx) throw new Error('The evidence could not be read');
+			return await this.investigate(build, ctx, cityName, trace, started);
 		} catch (e) {
 			// Reading the evidence or finding the moves failed: the report still builds
 			this.logger.warn(`Analysis for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`);
@@ -372,14 +405,20 @@ export class ReportService {
 		}
 	}
 
-	private async investigate(build: EvidenceBuild, cityName: string, trace: ReportAnalysisTrace, started: number): Promise<ReportAnalysis> {
-		const ctx = await this.reportEvidenceService.context(build);
+	private async investigate(
+		build: EvidenceBuild,
+		ctx: EvidenceContext,
+		cityName: string,
+		trace: ReportAnalysisTrace,
+		started: number,
+	): Promise<ReportAnalysis> {
 		const { data } = build;
 		const observations: ReportObservation[] = observe({
 			data,
 			previousData: build.previousData,
 			history: build.history,
 			timeZone: ctx.timeZone,
+			aspects: ctx.aspects,
 		}).map(o => ({ ...o, checks: runPlaybook(o, ctx) }));
 		const done = (investigations: ReportAnalysis['investigations']): ReportAnalysis => ({
 			builtAt: new Date().toISOString(),
@@ -405,13 +444,7 @@ export class ReportService {
 				{ abortSignal: AbortSignal.timeout(ANALYSIS_TIMEOUT_MS) },
 			);
 			answer = res.object ?? null;
-			// What Mastra reports past the object; a mocked agent gives none of it
-			const full = res as Partial<{
-				totalUsage: ReportAnalysisTrace['usage'];
-				usage: ReportAnalysisTrace['usage'];
-				reasoningText: string;
-				steps: unknown[];
-			}>;
+			const full = res as FullGenerate;
 			const usage = full.totalUsage ?? full.usage;
 			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'outputTokens', 'totalTokens']);
 			if (full.reasoningText) trace.reasoning = full.reasoningText.slice(0, 4_000);
@@ -449,7 +482,7 @@ export class ReportService {
 		};
 	}
 
-	private async collect(branches: Venue[], month: string, city: City | null): Promise<ReportData> {
+	private async collect(branches: Venue[], month: string, city: City | null, index: TopicIndex): Promise<ReportData> {
 		const [first] = branches;
 		const brand = first.brand;
 		const cityIds = _.uniq(branches.map(b => b.city.id));
@@ -464,6 +497,7 @@ export class ReportService {
 					brandWide: !!competitor.link.rival,
 					name: competitor.name,
 				})),
+				aspects: index,
 			});
 			const reviewsTracked =
 				(await this.em.count(Review, { venue: { $in: competitor.venues.map(v => v.id) } })) > 0;
@@ -482,7 +516,7 @@ export class ReportService {
 		const before = previousMonth(new Date(`${month}-01T00:00:00Z`));
 		const beforeReport = await this.em.findOne(Report, { brand, city: city ?? null, month: before });
 		const previous = summarizePrevious(
-			summarizeReport(await this.monthInput(first, before, { branches, brandWide: true })),
+			summarizeReport({ ...(await this.monthInput(first, before, { branches, brandWide: true })), aspects: index }),
 			beforeReport?.highlights.actions,
 		);
 
@@ -490,6 +524,7 @@ export class ReportService {
 		const brandAuthors = new Set(input.mentions.filter(m => m.author).map(m => creatorKey(m.platform, m.author!)));
 		const { venue: _subject, ...summary } = summarizeReport({
 			...input,
+			aspects: index,
 			competitors,
 			creatorsNearby: selectNearbyCreators(await this.nearbyPosts(branches, month), brandAuthors),
 			previous,
@@ -505,8 +540,9 @@ export class ReportService {
 				...(category && { category }),
 				brandOnlyPosts: summary.posts.filter(p => !named.has(p.postId)).length,
 			},
-			branches: await this.branchRows(branches, month, !city),
+			branches: await this.branchRows(branches, month, !city, index),
 			...summary,
+			aspects: reportAspects(index),
 		};
 	}
 
@@ -515,10 +551,10 @@ export class ReportService {
 	 * its reviews, cut down like a competitor), where it is, its Google details, its rating trend
 	 * and its district's neighbours. The place sections come after (`placeFigures`).
 	 */
-	private async branchRows(branches: Venue[], month: string, acrossCities: boolean): Promise<ReportBranch[]> {
+	private async branchRows(branches: Venue[], month: string, acrossCities: boolean, index: TopicIndex): Promise<ReportBranch[]> {
 		const rows: ReportBranch[] = [];
 		for (const branch of branches) {
-			const own = summarizeReport(await this.monthInput(branch, month, { branches: [branch] }));
+			const own = summarizeReport({ ...(await this.monthInput(branch, month, { branches: [branch] })), aspects: index });
 			const figures = _.pick(summarizeCompetitor(own, true), [
 				'venueId',
 				'name',
@@ -694,6 +730,8 @@ export class ReportService {
 			{ venue: { $in: ids }, publishedAt: { $gte: start, $lt: end } },
 			{ populate: ['feedback'], orderBy: { publishedAt: 'desc', id: 'asc' } },
 		);
+		// A chain's reviews say which branch (its street, else its name), as the view labels places
+		const branchLabels = new Map(branches.length > 1 ? branches.map(b => [b.id, b.street ?? b.name]) : []);
 
 		return {
 			venue: {
@@ -737,6 +775,7 @@ export class ReportService {
 					textTranslated: r.textTranslated,
 					ownerResponse: r.ownerResponse,
 					feedback: r.feedback.getItems(),
+					...(branchLabels.has(r.venue.id) && { branch: branchLabels.get(r.venue.id) }),
 				}),
 			),
 		};
@@ -778,255 +817,5 @@ export class ReportService {
 				posts: r.posts,
 				views: Number(r.views),
 			}));
-	}
-
-	private highlightsInput(data: ReportData, scope: PromptScope, analysis?: ReportAnalysis) {
-		const chain = data.branches.length > 1;
-		const previous = compareMonths(data);
-		return {
-			venue: {
-				name: data.brand.name,
-				category: data.brand.category,
-				...(!chain && _.pick(data.branches[0], ['district', 'rating'])),
-			},
-			month: data.month,
-			previousMonth: previous && {
-				...previous,
-				socialMedia: scope.social ? previous.socialMedia : undefined,
-				googleReviews: scope.reviews ? previous.googleReviews : undefined,
-			},
-			cityCalendar: data.context,
-			// The month's notable moves with their possible reasons, as the analysis section shows them
-			whatMovedAndWhy:
-				scope.analysis && analysis ?
-					analysis.investigations.slice(0, scope.analysis).map(i => ({
-						whatHappened: i.whatHappened,
-						possibleReasons: i.hypotheses.map(h => `${h.confidence}: ${h.reason}`),
-						cannotTell: i.cannotTell,
-						worthChecking: i.worthChecking,
-					}))
-				:	undefined,
-			// The brand's relations over every branch; each place's own sentences are in places
-			demandAndPrices: signalsPromptInput({ correlations: data.correlations }),
-			reachAndPress: reachPromptInput(data),
-			socialMedia: scope.social ? {
-				postsByOthers: data.social.postCount,
-				ofWhichPromotional: data.social.promotional,
-				..._.pick(data.social, [
-					'tiktokCount',
-					'instagramCount',
-					'views',
-					'creators',
-					'sentiment',
-				]),
-				postsPraisingTopic: shares(data.social.praise, data.social.postCount, 'posts'),
-				postsCriticisingTopic: shares(
-					data.social.complaints,
-					data.social.postCount,
-					'posts',
-				),
-				postsPraisingTheme: themeShares(data.social.praiseThemes, data.social.postCount, 'posts'),
-				postsCriticisingTheme: themeShares(
-					data.social.complaintThemes,
-					data.social.postCount,
-					'posts',
-				),
-				posts: data.posts.map(p =>
-					_.pick(p, [
-						'platform',
-						'author',
-						'authorFans',
-						'views',
-						'sentiment',
-						'summary',
-						'praise',
-						'complaints',
-						'promotional',
-						'visited',
-					]),
-				),
-				topDishes: data.dishes.slice(0, 8),
-			} : undefined,
-			ownPosts: data.ownPosts.length ? {
-				note: 'Posted by the venue itself, not word of mouth',
-				count: data.ownPosts.length,
-				views: _.sumBy(data.ownPosts, p => p.views),
-			} : undefined,
-			googleReviews: scope.reviews ? {
-				..._.pick(data.reviews, ['count', 'avgStars', 'replyRate', 'stars', 'critical']),
-				writtenReviews: data.reviews.written,
-				reviewsPraisingTopic: shares(
-					data.reviews.praise,
-					data.reviews.written,
-					'written reviews',
-				),
-				reviewsCriticisingTopic: shares(
-					data.reviews.complaints,
-					data.reviews.written,
-					'written reviews',
-				),
-				reviewsPraisingTheme: themeShares(
-					data.reviews.praiseThemes,
-					data.reviews.written,
-					'written reviews',
-				),
-				reviewsCriticisingTheme: themeShares(
-					data.reviews.complaintThemes,
-					data.reviews.written,
-					'written reviews',
-				),
-				fiveStarReviews: scope.stars ? reviewGroupInput(data.reviews.split.fiveStar) : undefined,
-				reviewsBelowFiveStars: scope.stars ? reviewGroupInput(data.reviews.split.belowFive) : undefined,
-				// One entry per review, so the model counts reviews rather than changes
-				reviewsNoticingChanges: data.reviews.changes,
-			} : undefined,
-			topCreators: data.creators.map(c =>
-				_.pick(c, ['author', 'platform', 'authorFans', 'posts', 'views', 'promotional']),
-			),
-			nearbyCreatorsWhoDidNotPostAboutYou: data.creatorsNearby.map(c => ({
-				author: c.author,
-				platform: c.platform,
-				followers: c.authorFans,
-				postedAbout: c.venues,
-			})),
-			// Every place on its own: never sum or average these across places
-			places: data.branches.map(b => {
-				const competitors = data.competitors.filter(c => !c.branchId || c.branchId === b.venueId);
-				return {
-					name: b.name,
-					district: b.district,
-					street: b.street,
-					city: b.city,
-					googleRatingAllTime: b.rating,
-					// One pre-written sentence: its rating against its district's and its kind of food's venues
-					googleRatingAgainstOthers: b.ratingBenchmark && ratingBenchmarkSentence(b.ratingBenchmark),
-					// All-time Google figures at the close of each month, oldest first
-					googleRatingTrend:
-						b.ratingTrend.length >= 2 ?
-							b.ratingTrend.map(p => _.pick(p, ['month', 'rating', 'reviewsCount']))
-						:	undefined,
-					// A chain's branch: the posts that named it and its reviews
-					...(chain && scope.branches && {
-						postsByOthersNamingIt: b.social.postCount,
-						views: b.social.views,
-						googleReviews:
-							b.reviews.written >= 5 ?
-								{
-									count: b.reviews.count,
-									writtenReviews: b.reviews.written,
-									avgStars: b.reviews.avgStars,
-									replyRate: b.reviews.replyRate,
-									reviewsPraisingTopic: shares(b.reviews.praise, b.reviews.written, 'written reviews'),
-									reviewsCriticisingTopic: shares(b.reviews.complaints, b.reviews.written, 'written reviews'),
-								}
-							:	`${b.reviews.count} reviews: too few written to compare`,
-					}),
-					demandAndPrices: signalsPromptInput({ ...b, competitors }),
-					neighbours: b.neighbours.map(n => _.pick(n, ['name', 'category', 'posts', 'views'])),
-					googleMapsSearchRanks: b.searchRanks?.map(r => ({
-						search: r.query,
-						yourPlace: r.rank ?? `not in the top ${r.results}`,
-						earlierMonths: r.history.map(h => ({
-							month: h.month,
-							place: h.rank ?? 'not in the results',
-						})),
-						topThree: r.top.slice(0, 3).map(t => (t.isVenue ? `${t.name} (you)` : t.name)),
-					})),
-					// Seen by our Google Maps scrapes, so "first seen", not an opening date; an
-					// opening with `source: posts` is one a creator's post announced
-					openingsAndClosuresNearbyThisQuarter: b.neighbourhood && {
-						district: b.neighbourhood.changes.district,
-						..._.pick(b.neighbourhood.changes, ['opened', 'openedFromPosts', 'closed', 'reopened']),
-						onYourStreet: b.neighbourhood.changes.street,
-						venues: b.neighbourhood.changes.venues
-							.slice(0, 6)
-							.map(v => _.pick(v, ['name', 'category', 'kind', 'sameStreet', 'source'])),
-					},
-				};
-			}),
-			city: data.city && {
-				name: data.city.cityName,
-				risingCuisines: data.city.risingCuisines.map(r => ({
-					cuisine: r.label,
-					shareOfCityMentions: `${r.prevShare}% → ${r.share}%`,
-				})),
-				risingDishes: data.city.risingDishes.map(r => ({
-					dish: r.label,
-					shareOfPostsAndReviewsNamingADish: `${r.prevShare}% → ${r.share}%`,
-				})),
-				yourKindOfFood: data.city.cuisine && {
-					cuisine: data.city.cuisine.label,
-					venuesMentionedForIt: data.city.cuisine.venues,
-					yourPlaceByViews: data.city.cuisine.rank,
-					shareOfCityMentions:
-						data.city.cuisine.share !== undefined ?
-							`${data.city.cuisine.prevShare}% → ${data.city.cuisine.share}%`
-						:	undefined,
-				},
-				// Google search interest (0–100, the term's own 12-month peak) against mention share
-				googleSearchesByCuisine: data.city.searches?.map(r => ({
-					cuisine: r.label,
-					searches:
-						r.searchChange !== undefined ?
-							`${r.prevInterest} → ${r.interest} (${r.searchChange >= 0 ? '+' : ''}${Math.round(r.searchChange * 100)}%)`
-						:	`${r.interest}`,
-					shareOfCityMentions:
-						r.share !== undefined && r.prevShare !== undefined ?
-							`${r.prevShare}% → ${r.share}%`
-						:	undefined,
-				})),
-				// Pre-written: the model quotes the shares, never computes them
-				complaintThemesAgainstReportVenues: data.city.themes?.map(
-					t =>
-						`${t.label.toLowerCase()} was criticised in ${Math.round(t.venueShare * 100)}% of your written reviews; ` +
-						`${Math.round(t.median * 100)}% at the month's report venues (median of ${t.venues})`,
-				),
-				youAgainstThisMonthsReportVenues: {
-					venuesCompared: data.city.baseline.venues,
-					..._.mapValues(
-						_.pick(data.city.baseline, ['posts', 'views', 'avgStars', 'replyRate']),
-						m => ({
-							you: m.venue,
-							median: m.median,
-							youAreAheadOfPercent: m.percentile,
-						}),
-					),
-				},
-			},
-			// A chain: posts and reviews above cover every branch; each branch's own month is in places
-			brand: chain && scope.branches ? { name: data.brand.name, postsNamingNoBranch: data.brand.brandOnlyPosts } : undefined,
-			competitors: data.competitors.map(c => ({
-				name: c.name,
-				// A chain's places together; one picked for a branch compares with that branch only
-				wholeChainOfPlaces: c.branches,
-				comparedWithYourBranch: c.against,
-				category: c.category,
-				googleRatingAllTime: c.rating,
-				socialMedia: {
-					postsByOthers: c.social.postCount,
-					views: c.social.views,
-					creators: c.social.creators,
-				},
-				googleReviews:
-					c.reviewsTracked ?
-						{
-							count: c.reviews.count,
-							writtenReviews: c.reviews.written,
-							avgStars: c.reviews.avgStars,
-							replyRate: c.reviews.replyRate,
-							reviewsPraisingTopic: shares(
-								c.reviews.praise,
-								c.reviews.written,
-								'written reviews',
-							),
-							reviewsCriticisingTopic: shares(
-								c.reviews.complaints,
-								c.reviews.written,
-								'written reviews',
-							),
-						}
-					:	'not tracked: do not compare reviews with this one',
-			})),
-		};
 	}
 }

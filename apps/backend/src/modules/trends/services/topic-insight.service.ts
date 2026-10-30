@@ -5,15 +5,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import _ from 'lodash';
 
 import {
-	FoodTopic,
-	FoodTopicKindEnum,
-} from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
-import type { MenuTopicPrice } from 'src/modules/food-topics/util/menu-topics.js';
-import { VenueTopicTag } from 'src/modules/food-topics/util/venue-topics.js';
+	Topic,
+	TopicKindEnum,
+} from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { TopicIndex } from 'src/modules/topics/util/topics.js';
+import type { MenuTopicPrice } from 'src/modules/topics/util/menu-topics.js';
+import { VenueTopicTag } from 'src/modules/topics/util/venue-topics.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
@@ -38,7 +38,7 @@ import { RelatedQuery, SEARCH_WINDOW_MONTHS } from './search-interest.service.js
 export interface TopicInsightRow {
 	key: string;
 	label: string;
-	kind: FoodTopicKindEnum;
+	kind: TopicKindEnum;
 	parentKey?: string;
 	/** How many topics sit directly under it */
 	children: number;
@@ -79,7 +79,7 @@ export interface TopicVenueRow {
 }
 
 export interface TopicInsightDetail {
-	topic: FoodTopic;
+	topic: Topic;
 	parent?: { key: string; label: string };
 	row: TopicInsightRow;
 	children: TopicInsightRow[];
@@ -100,8 +100,8 @@ const byBuzz = (rows: TopicInsightRow[]) =>
 
 interface CityData {
 	months: string[];
-	index: FoodTopicIndex;
-	topics: FoodTopic[];
+	index: TopicIndex;
+	topics: Topic[];
 	counts: TopicMentionCounts;
 	searches: Map<string, (number | null)[]>;
 	venues: Venue[];
@@ -118,8 +118,8 @@ interface CityData {
 export class TopicInsightService {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly topicService: TopicService,
+		private readonly venueTopicService: VenueTopicService,
 		private readonly menuTopicService: MenuTopicService,
 	) {}
 
@@ -194,7 +194,7 @@ export class TopicInsightService {
 		};
 	}
 
-	private row(topic: FoodTopic, data: CityData): TopicInsightRow {
+	private row(topic: Topic, data: CityData): TopicInsightRow {
 		const { months, index, counts } = data;
 		const last = months.length - 1;
 		const shares = topicShares(counts, topic.key, months);
@@ -232,8 +232,8 @@ export class TopicInsightService {
 	private async cityData(cityId: string, month: string): Promise<CityData> {
 		const months = monthsUpTo(month, SEARCH_WINDOW_MONTHS);
 		const [index, topics, rows, stored, venues] = await Promise.all([
-			this.foodTopicService.index(),
-			this.foodTopicService.all(),
+			this.topicService.index(),
+			this.topicService.all(),
 			this.em
 				.getConnection()
 				.execute<TopicMentionRow[]>(TOPIC_MENTIONS_SQL, [
@@ -262,7 +262,7 @@ export class TopicInsightService {
 			counts: countTopicMentions(rows, index),
 			searches,
 			venues: food,
-			tags: await this.venueFoodTopicService.tags(food),
+			tags: await this.venueTopicService.tags(food),
 		};
 	}
 }

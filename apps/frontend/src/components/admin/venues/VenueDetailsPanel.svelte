@@ -4,6 +4,7 @@
 	import { onDay } from '#components/admin/admin-format.js';
 	import AdminFacts, { type AdminFact } from '#components/admin/AdminFacts.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
+	import { topicHref } from '#lib/topic-format.js';
 	import { Badge } from '#ui/primitives-new/badge/index.js';
 
 	interface Props {
@@ -16,6 +17,8 @@
 	// a list scrape fills hours, stars and accessibility; the monthly REFRESH_VENUE_DETAILS
 	// step's detail pages add the rest. Missing reads as "unknown", never as "none".
 	const details = $derived(venue.details);
+	// The food topic each review tag names, by its title
+	const tagTopics = $derived(new Map(venue.reviewTagTopics.map(t => [t.title, t])));
 
 	const STARS = [
 		{ key: 'fiveStar', label: '5' },
@@ -182,10 +185,23 @@
 				{#if details.reviewsTags?.length}
 					<p class="m-0 flex flex-wrap gap-x-3 gap-y-1">
 						{#each details.reviewsTags.slice(0, 12) as tag (tag.title)}
-							<span>{tag.title} <span class="text-muted-foreground text-xs tabular-nums">{tag.count}</span></span>
+							{@const topic = tagTopics.get(tag.title)}
+							<span>
+								{#if topic}
+									<a
+										class="text-beet underline-offset-2 hover:underline"
+										href={topicHref(topic.key)}
+										title={`Food topic: ${topic.label}`}>{tag.title}</a>
+								{:else}
+									{tag.title}
+								{/if}
+								<span class="text-muted-foreground text-xs tabular-nums">{tag.count}</span>
+							</span>
 						{/each}
 					</p>
-					<p class="text-muted-foreground m-0 mt-1 text-xs">Google's count over all reviews, not the month's.</p>
+					<p class="text-muted-foreground m-0 mt-1 text-xs">
+						Google's count over all reviews, not the month's. A tag naming a kind of food links to its topic.
+					</p>
 				{:else}
 					<p class="text-muted-foreground m-0">Unknown until a detail-page refresh.</p>
 				{/if}

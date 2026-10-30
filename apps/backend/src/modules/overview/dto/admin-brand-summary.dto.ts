@@ -78,5 +78,16 @@ export interface AdminBrandSummaryOutputDto {
 	 * (in the city), most first, twelve at most. All-time counts, not the month's; empty until a
 	 * detail-page refresh.
 	 */
-	reviewTags: { title: string; count: number }[];
+	reviewTags: AdminBrandReviewTagOutputDto[];
+}
+
+/** One of Google's "people often mention" tags, summed over the brand's places. */
+export interface AdminBrandReviewTagOutputDto {
+	title: string;
+	count: number;
+	/**
+	 * The food topic it names, where the feedback rows of that dish point (a dish name's decided
+	 * topic, else a whole-name match); absent for what is no food ("waiting time", "cash only")
+	 */
+	topic?: { key: string; label: string };
 }

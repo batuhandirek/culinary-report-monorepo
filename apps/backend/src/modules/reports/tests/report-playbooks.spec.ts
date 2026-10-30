@@ -1,5 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+
 import type { ReportObservation } from '../interfaces/report-analysis.interface.js';
 import type { ReportData, ReportPost } from '../interfaces/report-data.interface.js';
 import { type PlaybookContext, reviewWeeksOf, runPlaybook } from '../util/report-playbooks.js';
@@ -72,6 +74,7 @@ const context = (data: Partial<ReportData>, extra: Partial<PlaybookContext> = {}
 	reviewWeeks: [],
 	baselinePerWeek: null,
 	competitorsPrevious: new Map(),
+	aspects: seedIndex(),
 	...extra,
 });
 

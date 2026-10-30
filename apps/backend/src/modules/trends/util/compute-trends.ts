@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 
 import type {
 	CityTrends,
@@ -29,7 +29,7 @@ export interface TrendMention {
 	brandName: string;
 	district: string | null;
 	category: string | null;
-	/** Its stored food topics (`MentionFoodTopic`: its cuisine's, else its venue's category's), in order */
+	/** Its stored food topics (`MentionTopic`: its cuisine's, else its venue's category's), in order */
 	topics: string[];
 	dishes: TrendDish[];
 	postId: string;
@@ -178,28 +178,28 @@ const topLabel = (t: Tally, fallback: string) =>
 
 /** One month's tallies. */
 // What a venue is known for, before a diet or a kind of place
-const FOOD_KINDS = new Set([FoodTopicKindEnum.CUISINE, FoodTopicKindEnum.DISH]);
+const FOOD_KINDS = new Set([TopicKindEnum.CUISINE, TopicKindEnum.DISH]);
 
 /**
  * The one topic a mention counts for in the trend tables (each sums to 100): the first cuisine or
  * dish of its stored topics ("Vegan Döner": döner; a mention whose cuisine names none has its
  * venue's Google category's), else its first topic of any kind; null for none.
  */
-export const mentionTopic = (m: Pick<TrendMention, 'topics'>, index: FoodTopicIndex): string | null => {
+export const mentionTopic = (m: Pick<TrendMention, 'topics'>, index: TopicIndex): string | null => {
 	const keys = m.topics.filter(k => index.get(k));
 	return keys.find(k => FOOD_KINDS.has(index.get(k)!.kind)) ?? keys[0] ?? null;
 };
 
-const DISH_KINDS = new Set([FoodTopicKindEnum.DISH, FoodTopicKindEnum.DRINK]);
+const DISH_KINDS = new Set([TopicKindEnum.DISH, TopicKindEnum.DRINK]);
 
 /** The dish or drink topic a key is, if any: its row is labelled with the topic's label. */
-const dishTopic = (key: string, index: FoodTopicIndex) => {
+const dishTopic = (key: string, index: TopicIndex) => {
 	const topic = index.get(key);
 	return topic && DISH_KINDS.has(topic.kind) ? topic : undefined;
 };
 
 
-const tally = ({ mentions, reviews }: TrendMonthInput, index: FoodTopicIndex) => {
+const tally = ({ mentions, reviews }: TrendMonthInput, index: TopicIndex) => {
 	const cuisines = new Tallies();
 	const dishes = new Tallies();
 	const districts = new Tallies();
@@ -363,7 +363,7 @@ export const computeTrends = (
 	previousMonth: string,
 	current: TrendMonthInput,
 	previous: TrendMonthInput,
-	index: FoodTopicIndex,
+	index: TopicIndex,
 ): CityTrends => {
 	const cur = tally(current, index);
 	const prev = tally(previous, index);

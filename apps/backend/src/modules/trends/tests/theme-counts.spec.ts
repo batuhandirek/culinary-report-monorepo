@@ -1,5 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+
 import { countThemes, type ThemePointRow } from '../util/theme-counts.js';
 
 /* A theme broken down by the dishes its points were about: a food topic's dishes are one row, a
@@ -38,6 +40,7 @@ describe('countThemes dishes', () => {
 			],
 			'2026-09',
 			'2026-08',
+			seedIndex(),
 		);
 		const temperature = result.complaints.find(r => r.key === 'temperature')!;
 		expect(temperature.dishes).toEqual([

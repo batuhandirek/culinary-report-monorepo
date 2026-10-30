@@ -5,8 +5,8 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
@@ -56,7 +56,7 @@ export class LandingEditionService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 		private readonly landingCopyAgent: LandingCopyAgent,
 		private readonly pgBossService: PgBossService,
 	) {}
@@ -118,7 +118,7 @@ export class LandingEditionService {
 			previous,
 			venues: await this.venueRows(city.id, brandIds),
 			openingSigns: await this.openingSigns(city.id, end),
-			index: await this.foodTopicService.index(),
+			index: await this.topicService.index(),
 			doNotList: { venues: city.doNotListVenues, creators: city.doNotListCreators },
 		});
 		const { copy, copyError } = await this.writeCopy(city, data, current, start, end);
@@ -309,14 +309,14 @@ export class LandingEditionService {
 			dish_key: string | null;
 			topic_key: string | null;
 			topic_label: string | null;
-			topic_kind: FoodTopicKindEnum | null;
+			topic_kind: TopicKindEnum | null;
 		}[] = await this.em.getConnection().execute(
 			`select f.mention_id, p.id as post_id, m.brand_id, p.views, f.sentiment, f.theme, f.detail, f.dish, f.dish_key,
 				t.key as topic_key, t.label as topic_label, t.kind as topic_kind
 			from feedback_points f
 			join mentions m on m.id = f.mention_id
 			join social_posts p on p.id = m.post_id
-			left join food_topics t on t.id = f.food_topic_id
+			left join topics t on t.id = f.food_topic_id
 			where f.source_kind = 'mention' and not f.change and m.brand_id is not null and ${COUNTS}`,
 			[cityId, start, end],
 		);

@@ -8,12 +8,13 @@ import {
 	type FeedbackRowLike,
 	praiseOf,
 } from 'src/modules/feedback/util/feedback-rows.js';
-import { FEEDBACK_THEMES, type FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import type { FeedbackSentiment } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { monthName } from 'src/modules/venues/util/month.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import type {
+	ReportAspect,
 	ReportChangeTheme,
 	ReportCompetitor,
 	ReportCreator,
@@ -63,15 +64,28 @@ export interface SummaryReview {
 	ownerResponse?: string | null;
 	/** What it says: its feedback rows (none before it is analysed), its noticed changes among them */
 	feedback: FeedbackRowLike[];
+	/** A chain's branch it is of (its street, else its name); absent for a one-branch brand */
+	branch?: string;
 }
+
+/**
+ * What the report's readers need of the aspect vocabulary (`TopicIndex`): which keys are aspects,
+ * which are roots (a point "about price, nothing finer": what used to be a catch-all), and each
+ * one's label, prompt label and root. The services fetch the index once per build and pass it down.
+ */
+export type ReportAspects = Pick<TopicIndex, 'isAspect' | 'isRoot' | 'label' | 'promptLabel' | 'rootOf'>;
+
+/** The vocabulary as a report keeps it (`ReportData.aspects`): every aspect, roots first, with its label and root. */
+export const reportAspects = (index: Pick<TopicIndex, 'aspects' | 'rootOf'>): ReportAspect[] =>
+	index.aspects.map(t => ({ key: t.key, label: t.label, root: index.rootOf(t.key) ?? t.key }));
 
 /**
  * Noticed changes by what changed: per theme, the reviews noticing it (a review once) and how they
  * put it ("burgers are getting smaller", "made smaller": portion size), the most noticed first;
- * a catch-all theme ("Other", "Food, other") and the changes not filed yet last.
+ * a root ("Other", "Food") and the changes not filed yet last. `aspects` names each theme.
  */
-export const groupChanges = (reviews: FeedbackPointView[][]): ReportChangeTheme[] => {
-	const groups = new Map<string, { theme?: FeedbackTheme; reviews: number; details: Map<string, string> }>();
+export const groupChanges = (reviews: FeedbackPointView[][], aspects: Pick<ReportAspects, 'label' | 'isRoot'>): ReportChangeTheme[] => {
+	const groups = new Map<string, { theme?: string; reviews: number; details: Map<string, string> }>();
 	for (const changes of reviews) {
 		const seen = new Set<string>();
 		for (const change of changes) {
@@ -88,11 +102,11 @@ export const groupChanges = (reviews: FeedbackPointView[][]): ReportChangeTheme[
 	return _.orderBy(
 		[...groups.values()].map(g => ({
 			...(g.theme && { theme: g.theme }),
-			label: g.theme ? FEEDBACK_THEMES[g.theme].label : 'Other changes',
+			label: g.theme ? aspects.label(g.theme) : 'Other changes',
 			reviews: g.reviews,
 			details: [...g.details.values()],
 		})),
-		[g => (!g.theme ? 2 : g.theme === 'other' || g.theme.endsWith('_other') ? 1 : 0), g => g.reviews, g => g.label],
+		[g => (!g.theme ? 2 : aspects.isRoot(g.theme) ? 1 : 0), g => g.reviews, g => g.label],
 		['asc', 'desc', 'asc'],
 	);
 };
@@ -129,6 +143,7 @@ const toReviewItem = (r: SummaryReview): ReportReviewItem => {
 	const text = r.textTranslated || r.text;
 	return {
 		reviewId: r.reviewId,
+		...(r.branch && { branch: r.branch }),
 		publishedAt: r.publishedAt.toISOString(),
 		stars: r.stars ?? undefined,
 		excerpt: text ? excerpt(text) : undefined,
@@ -237,13 +252,15 @@ export type ReportSummary = { venue: SummaryVenue } & Pick<
 
 /**
  * What a month's report shows, from the mentions and reviews of a brand (or one place). Its own
- * accounts' posts are split off: they are not word of mouth.
+ * accounts' posts are split off: they are not word of mouth. `aspects` names the noticed changes'
+ * themes (`groupChanges`); the counts keep the keys.
  */
 export const summarizeReport = (input: {
 	venue: SummaryVenue;
 	month: string;
 	mentions: SummaryMention[];
 	reviews: SummaryReview[];
+	aspects: Pick<ReportAspects, 'label' | 'isRoot'>;
 	competitors?: ReportCompetitor[];
 	creatorsNearby?: ReportData['creatorsNearby'];
 	previous?: ReportData['previous'];
@@ -325,14 +342,19 @@ export const summarizeReport = (input: {
 				belowFive: reviewGroup(belowFive),
 			},
 			changes: reviews
-				.map(r => ({ stars: r.stars ?? undefined, changes: changesOf(r.feedback).map(c => c.detail) }))
+				.map(r => ({
+					stars: r.stars ?? undefined,
+					...(r.branch && { branch: r.branch }),
+					changes: changesOf(r.feedback).map(c => c.detail),
+				}))
 				.filter(r => r.changes.length),
-			changeThemes: groupChanges(reviews.map(r => changesOf(r.feedback))),
+			changeThemes: groupChanges(reviews.map(r => changesOf(r.feedback)), input.aspects),
 			critical: reviews
 				.filter(r => (r.stars ?? 5) <= 3 && (r.textTranslated || r.text))
 				.slice(0, 6)
 				.map(r => ({
 					stars: r.stars ?? undefined,
+					...(r.branch && { branch: r.branch }),
 					text: (r.textTranslated || r.text)!.slice(0, 400),
 					replied: !!r.ownerResponse,
 				})),

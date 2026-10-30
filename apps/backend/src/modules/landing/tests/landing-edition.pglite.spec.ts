@@ -6,11 +6,11 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import {
-	seedFoodTopics,
+	seedTopics,
 	seedIndex,
-} from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+} from 'src/modules/topics/tests/factories/topic.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
@@ -44,7 +44,7 @@ describe('LandingEditionService (pglite)', () => {
 			providers: [
 				LandingEditionService,
 				CityService,
-				FoodTopicService,
+				TopicService,
 				{ provide: LandingCopyAgent, useValue: agent },
 				{ provide: PgBossService, useValue: pgBoss },
 			],
@@ -52,7 +52,7 @@ describe('LandingEditionService (pglite)', () => {
 		service = harness.moduleRef.get(LandingEditionService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
-		seedFoodTopics(em, ['ramen']);
+		seedTopics(em, ['ramen']);
 
 		city = testCity(em, {
 			slug: 'berlin',

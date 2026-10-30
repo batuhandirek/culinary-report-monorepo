@@ -9,9 +9,9 @@
 	import VenueDemandPanel from '#components/admin/venues/VenueDemandPanel.svelte';
 	import VenueDetailsPanel from '#components/admin/venues/VenueDetailsPanel.svelte';
 	import VenueDishSearchesPanel from '#components/admin/venues/VenueDishSearchesPanel.svelte';
-	import VenueFoodTopicsPanel from '#components/admin/venues/VenueFoodTopicsPanel.svelte';
 	import VenueRatingPanel from '#components/admin/venues/VenueRatingPanel.svelte';
 	import VenueSearchRanksPanel from '#components/admin/venues/VenueSearchRanksPanel.svelte';
+	import VenueTopicsPanel from '#components/admin/venues/VenueTopicsPanel.svelte';
 
 	// The place itself: Google's facts and details, the food it is known for, demand and where it
 	// ranks. What is said about the business as a whole lives on its brand's page.
@@ -46,7 +46,7 @@
 				branchId: venue.id,
 				branches: [{ id: venue.id, name: venue.name, street: venue.street ?? undefined }]
 			}} />
-		<VenueFoodTopicsPanel {venue} />
+		<VenueTopicsPanel {venue} />
 		<VenueDetailsPanel {venue} />
 	</div>
 	<div class="flex min-w-0 flex-col gap-5">

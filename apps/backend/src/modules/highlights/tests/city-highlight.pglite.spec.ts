@@ -5,8 +5,8 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { SitemapService } from 'src/modules/sitemap/services/sitemap.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
@@ -34,7 +34,7 @@ describe('CityHighlightService (pglite)', () => {
 				CityHighlightService,
 				CityService,
 				TrendService,
-				FoodTopicService,
+				TopicService,
 				MentionMatchingService,
 				SitemapService,
 			],
@@ -43,7 +43,7 @@ describe('CityHighlightService (pglite)', () => {
 		sitemap = harness.moduleRef.get(SitemapService);
 		service.onModuleInit();
 		entityManagerManager.setEntityManager(harness.orm.em);
-		seedFoodTopics(harness.orm.em);
+		seedTopics(harness.orm.em);
 
 		const em = harness.orm.em;
 		city = testCity(em, {

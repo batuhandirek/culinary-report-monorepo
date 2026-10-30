@@ -1,7 +1,11 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+
 import type { ReportBranch, ReportData } from '../interfaces/report-data.interface.js';
 import { observe, OBSERVATION_FLOORS, pickInvestigated } from '../util/report-observations.js';
+
+const aspects = seedIndex();
 
 const TZ = 'Europe/Berlin';
 
@@ -57,11 +61,11 @@ const data = (extra: Partial<ReportData> = {}, previous: Partial<NonNullable<Rep
 	}) as ReportData;
 
 const keys = (input: ReportData, previousData?: Partial<ReportData>) =>
-	observe({ data: input, previousData, history: [], timeZone: TZ }).map(o => o.key);
+	observe({ data: input, previousData, history: [], timeZone: TZ, aspects }).map(o => o.key);
 
 describe('observe', () => {
 	it('finds nothing without a previous month, and nothing when nothing moved', () => {
-		expect(observe({ data: data({ previous: undefined }), history: [], timeZone: TZ })).toEqual([]);
+		expect(observe({ data: data({ previous: undefined }), history: [], timeZone: TZ, aspects })).toEqual([]);
 		expect(keys(data())).toEqual([]);
 	});
 
@@ -76,7 +80,7 @@ describe('observe', () => {
 	});
 
 	it('writes the move as a sentence with both months and the change', () => {
-		const [views] = observe({ data: data({ social: { ...data().social, views: 250_000 } }), history: [], timeZone: TZ });
+		const [views] = observe({ data: data({ social: { ...data().social, views: 250_000 } }), history: [], timeZone: TZ, aspects });
 		expect(views).toMatchObject({ metric: 'views', kind: 'spike', from: 100_000, to: 250_000, change: 150_000, changePercent: 150, comparedWith: 'August 2026', resolution: 'month' });
 		expect(views.sentence).toBe('Views of posts by others went from 100k in August 2026 to 250k in September 2026 (+150k, +150%).');
 		expect(views.series).toEqual([
@@ -96,7 +100,7 @@ describe('observe', () => {
 			social: { ...data().social, postCount: 16, views: 180_000, creators: 13 },
 			reviews: { ...data().reviews, avgStars: 4.0 },
 		});
-		const out = observe({ data: month, history: [], timeZone: TZ });
+		const out = observe({ data: month, history: [], timeZone: TZ, aspects });
 		expect(out[0].key).toBe('avg_stars');
 		const views = out.find(o => o.key === 'views')!;
 		const posts = out.find(o => o.key === 'posts')!;
@@ -111,7 +115,7 @@ describe('observe', () => {
 				reviews: {
 					...data().reviews,
 					stars: stars({ 5: 6, 4: 8, 3: 6 }),
-					complaintThemes: { wait_for_food: 5, service_other: 2 },
+					complaintThemes: { wait_for_food: 5, service: 2 },
 				},
 				dishes: [
 					{ name: 'Pho', count: 8, positive: 7, negative: 1 },
@@ -126,13 +130,13 @@ describe('observe', () => {
 				],
 			},
 		);
-		const out = observe({ data: month, history: [], timeZone: TZ });
+		const out = observe({ data: month, history: [], timeZone: TZ, aspects });
 		expect(out.map(o => o.key)).toEqual(expect.arrayContaining(['five_star_share', 'complaint_theme:wait_for_food', 'dish_share:pho']));
 		expect(out.find(o => o.key === 'complaint_theme:wait_for_food')!.sentence).toBe(
 			'Complaints about wait for food went from 1 of 16 written google reviews (6%) in August 2026 to 5 of 16 (31%) in September 2026.',
 		);
-		// The catch-all theme never counts
-		expect(out.some(o => o.key.includes('service_other'))).toBe(false);
+		// A root ("about service, nothing finer") never counts
+		expect(out.some(o => o.key === 'complaint_theme:service')).toBe(false);
 	});
 
 	it('reads a complaint far above the city median from the city section', () => {
@@ -146,7 +150,7 @@ describe('observe', () => {
 				themes: [{ key: 'wait_for_food', label: 'Wait for food', topic: 'service', reviews: 5, venueShare: 0.31, median: 0.08, venues: 14 }],
 			},
 		});
-		const [theme] = observe({ data: month, history: [], timeZone: TZ });
+		const [theme] = observe({ data: month, history: [], timeZone: TZ, aspects });
 		expect(theme).toMatchObject({ key: 'complaint_theme:wait_for_food', from: 8, to: 31, comparedWith: 'the city median' });
 	});
 
@@ -156,14 +160,14 @@ describe('observe', () => {
 			...Array.from({ length: 8 }, (_, i) => ({ reviewId: `b${i}`, publishedAt: `2026-09-0${(i % 7) + 1}T12:00:00Z`, replied: false, praise: [], complaints: [] })),
 		];
 		const month = data({ reviews: { ...data().reviews, count: 19, list } });
-		const week = observe({ data: month, history: [], timeZone: TZ }).find(o => o.key === 'review_week')!;
+		const week = observe({ data: month, history: [], timeZone: TZ, aspects }).find(o => o.key === 'review_week')!;
 		expect(week).toMatchObject({ metric: 'review_week', resolution: 'week', to: 11 });
 		expect(week.sentence).toMatch(/^11 of your 19 Google reviews came in the week of 14 September 2026, against /);
 	});
 
 	it('reads followers from the own accounts, at week resolution when the month has points', () => {
 		const monthly = data({ ownAccounts: [{ platform: 'instagram', handle: 'chenche', url: 'u', followers: 1_450, followersChange: 250 }] });
-		const [m] = observe({ data: monthly, history: [], timeZone: TZ });
+		const [m] = observe({ data: monthly, history: [], timeZone: TZ, aspects });
 		expect(m).toMatchObject({ key: 'followers:instagram:chenche', resolution: 'month', from: 1_200, to: 1_450, change: 250, changePercent: 21 });
 		expect(m.sentence).toBe('@chenche on Instagram went from 1,200 followers to 1,450 (+250, +21%) between the August 2026 and September 2026 snapshots.');
 
@@ -184,7 +188,7 @@ describe('observe', () => {
 				},
 			],
 		});
-		const [w] = observe({ data: weekly, history: [], timeZone: TZ });
+		const [w] = observe({ data: weekly, history: [], timeZone: TZ, aspects });
 		expect(w.resolution).toBe('week');
 		expect(w.series).toHaveLength(4);
 		expect(w.sentence).toMatch(/in the week of 14 September 2026\.$/);
@@ -212,7 +216,7 @@ describe('observe', () => {
 				branch({ venueId: 'v2', name: 'Rosenthaler Str.', ratingTrend: [{ month: '2026-08', date: '2026-09-02', rating: 4.6 }, { month: '2026-09', date: '2026-10-02', rating: 4.6 }] }),
 			],
 		});
-		const out = observe({ data: month, history: [], timeZone: TZ });
+		const out = observe({ data: month, history: [], timeZone: TZ, aspects });
 		expect(out.map(o => o.key)).toEqual(expect.arrayContaining(['rating:v1', 'busyness:v1', 'booked:v1', 'search_rank:v1:pho kreuzberg']));
 		expect(out.some(o => o.key === 'rating:v2' || o.key.includes('vietnamese'))).toBe(false);
 		const rating = out.find(o => o.key === 'rating:v1')!;
@@ -230,7 +234,7 @@ describe('observe', () => {
 			social: { ...data().social, views: 55_000 },
 			competitors: [{ ...competitor, social: { ...competitor.social, views: 80_000 } }],
 		});
-		const out = observe({ data: month, previousData: { competitors: [competitor] }, history: [], timeZone: TZ });
+		const out = observe({ data: month, previousData: { competitors: [competitor] }, history: [], timeZone: TZ, aspects });
 		const rel = out.find(o => o.key === 'competitor_reach:c1')!;
 		expect(rel.sentence).toBe("Your views went from 100k in August 2026 to 55k in September 2026 (-45%), while Monsieur Vuong's went from 50k to 80k (+60%).");
 	});
@@ -244,6 +248,7 @@ describe('observe', () => {
 				{ month: '2026-07', social: { postCount: 7, views: 70_000, creators: 6 } },
 			],
 			timeZone: TZ,
+			aspects,
 		});
 		expect(views.series.map(p => p.at)).toEqual(['2026-06', '2026-07', '2026-08', '2026-09']);
 		expect(OBSERVATION_FLOORS.views.abs).toBe(5_000);

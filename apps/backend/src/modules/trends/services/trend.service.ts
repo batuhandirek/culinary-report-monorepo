@@ -2,7 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
 
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
@@ -19,7 +19,7 @@ import { mentionTopicsSql } from '../util/topic-mentions.js';
 /** SQL: the dishes a source's feedback rows name (`where` picks the source), in their order */
 const DISHES_OF = (where: string) =>
 	`(select coalesce(json_agg(json_build_object('name', f.dish, 'key', f.dish_key, 'topic', t.key) order by f.id), '[]'::json)
-		from feedback_points f left join food_topics t on t.id = f.food_topic_id
+		from feedback_points f left join topics t on t.id = f.food_topic_id
 		where ${where} and f.dish is not null)`;
 
 /**
@@ -31,7 +31,7 @@ const DISHES_OF = (where: string) =>
 export class TrendService {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 	) {}
 
 	/** The city's trend tables for a month (`YYYY-MM`) against the month before. */
@@ -57,7 +57,7 @@ export class TrendService {
 				prev,
 				current,
 				previous,
-				await this.foodTopicService.index(),
+				await this.topicService.index(),
 			),
 			mentions: current.mentions,
 		};

@@ -7,7 +7,7 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 
 import { LandingCopyAgent } from './agents/landing-copy.agent.js';
@@ -28,7 +28,7 @@ import { LandingBuildWorker } from './workers/landing-build.worker.js';
 		MikroOrmModule.forFeature([LandingEdition, User, UserSession]),
 		AuthModule,
 		CitiesModule,
-		FoodTopicsModule,
+		TopicsModule,
 		LLMModule,
 	],
 	controllers: [LandingController, AdminLandingController],

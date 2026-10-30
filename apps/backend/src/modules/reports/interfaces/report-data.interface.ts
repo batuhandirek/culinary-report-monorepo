@@ -1,6 +1,5 @@
 import type { MonthContext } from 'src/modules/cities/util/month-context.js';
 import type { SearchDelta } from 'src/modules/trends/util/search-interest.js';
-import type { FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import type { FeedbackSentiment, FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import type { ReviewsDistribution } from 'src/modules/venues/interfaces/venue-details.interface.js';
 
@@ -11,6 +10,7 @@ import type {
 	ReportPress,
 	ReportReviewPlatform,
 } from './report-reach.interface.js';
+import type { ReportAnalysisTraceStep } from './report-analysis.interface.js';
 import type {
 	ReportBusyness,
 	ReportCorrelations,
@@ -23,9 +23,24 @@ import type {
  * rows at build time, so a stored report never moves with them.
  */
 export interface ReportFeedbackPoint {
+	/** The aspect's root key */
 	topic: FeedbackTopic;
-	theme?: FeedbackTheme;
+	/** The aspect's key (`ReportData.aspects` names it); absent while unfiled */
+	theme?: string;
 	detail: string;
+}
+
+/**
+ * One aspect of the vocabulary the report was built with (`TopicIndex.aspects`): what the theme
+ * keys in the counts and points mean, kept in the report so a view needs no live vocabulary and
+ * a stored report reads the same after an admin renames or removes an aspect.
+ */
+export interface ReportAspect {
+	key: string;
+	/** "Price increase" */
+	label: string;
+	/** The topmost ancestor's key (the key itself for a root): the `topic` the key counts under */
+	root: string;
 }
 
 /** A dish a post names, with how it came across, as a report keeps it */
@@ -82,7 +97,7 @@ export interface ReportSocialStats {
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
 	/**
-	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
 	 */
 	praiseThemes?: Record<string, number>;
@@ -95,7 +110,7 @@ export interface ReportReviewGroup {
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
 	/**
-	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
 	 */
 	praiseThemes?: Record<string, number>;
@@ -105,10 +120,11 @@ export interface ReportReviewGroup {
 	complaintDetails: ReportFeedbackPoint[];
 }
 
-/** The changes guests noticed about one thing (a feedback theme), across the month's reviews. */
+/** The changes guests noticed about one thing (an aspect), across the month's reviews. */
 export interface ReportChangeTheme {
-	/** Absent while the changes are not filed yet */
-	theme?: FeedbackTheme;
+	/** The aspect's key; absent while the changes are not filed yet */
+	theme?: string;
+	/** The aspect's label at build ("Other changes" for the unfiled) */
 	label: string;
 	/** Reviews noticing it, each once */
 	reviews: number;
@@ -128,19 +144,19 @@ export interface ReportReviewStats {
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
 	/**
-	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
 	 */
 	praiseThemes?: Record<string, number>;
 	complaintThemes?: Record<string, number>;
 	/** The same counts for 5-star reviews and the rest: what separates a 5 from a 4 */
 	split: { fiveStar: ReportReviewGroup; belowFive: ReportReviewGroup };
-	/** Changes a reviewer noticed, one entry per review */
-	changes: { stars?: number; changes: string[] }[];
+	/** Changes a reviewer noticed, one entry per review; `branch` for a chain (the branch's street, else its name) */
+	changes: { stars?: number; branch?: string; changes: string[] }[];
 	/** The same changes by what changed (`groupChanges`): absent from reports built before them */
 	changeThemes?: ReportChangeTheme[];
-	/** The month's critical reviews (3 stars or fewer) worth reading */
-	critical: { stars?: number; text: string; replied: boolean }[];
+	/** The month's critical reviews (3 stars or fewer) worth reading; `branch` for a chain */
+	critical: { stars?: number; branch?: string; text: string; replied: boolean }[];
 	/** Every review of the month, newest first: the appendix the counts can be checked against */
 	list: ReportReviewItem[];
 	/** Ready-to-post replies to unanswered written reviews, critical first; filled at build */
@@ -156,6 +172,8 @@ export interface ReportReviewItem {
 	reviewId: string;
 	/** Set for a TripAdvisor review; absent means Google */
 	platform?: 'tripadvisor';
+	/** A chain's branch the review is of (its street, else its name); absent for a one-branch brand */
+	branch?: string;
 	publishedAt: string;
 	stars?: number;
 	/** At most 240 characters of the translated text, else the original; absent for stars only */
@@ -388,6 +406,12 @@ export interface ReportData {
 	comments?: ReportComments;
 	/** The month's press and listicles naming the brand; absent when none was found */
 	press?: ReportPress;
+	/**
+	 * The aspect vocabulary at build (`TopicIndex.aspects`, roots first, each followed by its
+	 * children): the label and root of every theme key in the counts, points and change themes.
+	 * Absent in reports built before it was kept: a view then shows the key
+	 */
+	aspects?: ReportAspect[];
 }
 
 /** A rising row of the city's trend tables: shares of the month, in percent. */
@@ -480,12 +504,44 @@ export interface ReportPoint {
 	text: string;
 }
 
+/** `story`: something happened this month; `quiet`: little moved, and the letter says so. */
+export type ReportMonthKind = 'story' | 'quiet';
+
+/** How the editor's read went: for the admin report page only (`toPublicOutput` strips it). */
+export interface ReportEditorTrace {
+	model: string;
+	steps: ReportAnalysisTraceStep[];
+	/** Tool calls that ran (a refused one is in `steps` only) */
+	toolCalls: number;
+	/** The model's own steps (each tool round is one) */
+	modelSteps?: number;
+	usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
+	/** Lines the check dropped or cut */
+	problems: { where: string; problem: string }[];
+	/** The agent failed: the letter is the code-written fallback */
+	error?: string;
+	durationMs: number;
+}
+
+/**
+ * The written part of a report: the editor's read of the month (`ReportEditorAgent`). The
+ * letter is the holistic read; `highlights` are the "worth your attention" cards and `actions`
+ * the "try this" ones (named as the mail, the pitch hook and the leave-behind read them).
+ */
 export interface ReportHighlights {
 	/** The cover title, at most 8 words */
 	title: string;
+	/** One sentence summing the month up: the mail, the pitch and the link previews quote it */
 	headline: string;
+	/** Absent in reports built before the editor */
+	kind?: ReportMonthKind;
+	/** The letter to the owner, paragraph by paragraph; absent in reports built before the editor */
+	letter?: string[];
 	highlights: ReportPoint[];
 	actions: ReportPoint[];
+	/** The editor's notes for the admin: what it read, what it looked up, what it left out */
+	notes?: string;
+	trace?: ReportEditorTrace;
 }
 
 /** A neighbour that opened, closed or reopened this quarter. */

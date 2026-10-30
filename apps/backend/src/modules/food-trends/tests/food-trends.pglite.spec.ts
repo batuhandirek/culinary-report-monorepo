@@ -6,10 +6,10 @@ import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import type { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { linkFoodTopics, seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import type { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SitemapService } from 'src/modules/sitemap/services/sitemap.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
@@ -201,7 +201,7 @@ describe('FoodTrendsReportService (pglite)', () => {
 	let service: FoodTrendsReportService;
 	let sitemap: SitemapService;
 	let city: City;
-	let topics: Map<string, FoodTopic>;
+	let topics: Map<string, Topic>;
 	const apify = {
 		runActor: jest.fn(async (_actor: string, input: { searchTerms: string[] }) =>
 			compareRun(input.searchTerms),
@@ -215,8 +215,8 @@ describe('FoodTrendsReportService (pglite)', () => {
 			providers: [
 				FoodTrendsReportService,
 				CityService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				SearchInterestService,
 				VenueStatusChangeService,
 				SitemapService,
@@ -233,7 +233,7 @@ describe('FoodTrendsReportService (pglite)', () => {
 		city = testCity(em, { slug: 'berlin', region: 'DE-BE', doNotListVenues: ['Quiet Corner'] });
 		// Searched: pizza and italian, kebab and turkish, ramen and japanese, korean, thai,
 		// vietnamese; café is a kind of place, never compared
-		topics = seedFoodTopics(em, [
+		topics = seedTopics(em, [
 			'pizza',
 			'kebab',
 			'ramen',
@@ -341,7 +341,7 @@ describe('FoodTrendsReportService (pglite)', () => {
 		related(4, 'quiet corner ramen', 300);
 		related(1, 'ramen near me', 100, false);
 		await em.flush();
-		await linkFoodTopics(em);
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {

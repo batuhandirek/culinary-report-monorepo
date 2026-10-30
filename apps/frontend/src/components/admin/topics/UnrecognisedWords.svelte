@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Search } from '@lucide/svelte';
-	import type { AdminFoodTopicOutputDto, AdminFoodTopicsOutputDto, AdminTrendsTopicOutputDto } from 'client';
+	import type { AdminTopicOutputDto, AdminTopicsOutputDto, AdminTrendsTopicOutputDto } from 'client';
 
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
@@ -26,8 +26,8 @@
 
 	let { cityId, onNewTopic, version }: Props = $props();
 
-	let data = $state<AdminFoodTopicsOutputDto | null>(null);
-	const loader = createLoader((query: { cityId: string }) => api.admin.getFoodTopics(query), {
+	let data = $state<AdminTopicsOutputDto | null>(null);
+	const loader = createLoader((query: { cityId: string }) => api.admin.getTopics(query), {
 		onSuccess: (res) => (data = res)
 	});
 	$effect(() => {
@@ -43,8 +43,8 @@
 
 	let mapTo = $state<Record<string, string>>({});
 	const mapAction = createAction(
-		(topic: AdminFoodTopicOutputDto, key: string) =>
-			api.admin.updateFoodTopic(topic.id, { aliases: [...topic.aliases, key] }),
+		(topic: AdminTopicOutputDto, key: string) =>
+			api.admin.updateTopic(topic.id, { aliases: [...topic.aliases, key] }),
 		{
 			onSuccess: (saved) => {
 				notificationManager.addNotification({ title: `Now counts as ${saved.label}`, success: true });

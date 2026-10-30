@@ -13,10 +13,10 @@ import {
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import {
-	FoodTopic,
-	FoodTopicKindEnum,
-} from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+	Topic,
+	TopicKindEnum,
+} from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SitemapService } from 'src/modules/sitemap/services/sitemap.service.js';
 import {
@@ -82,7 +82,7 @@ export class FoodTrendsReportService implements OnModuleInit {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 		private readonly searchInterestService: SearchInterestService,
 		private readonly venueStatusChangeService: VenueStatusChangeService,
 		private readonly apifyService: ApifyService,
@@ -139,10 +139,10 @@ export class FoodTrendsReportService implements OnModuleInit {
 
 	/** The topics an anchored pull compares: every searched kind of food, the anchor first. */
 	private async compareTerms(): Promise<{ anchor: CompareTerm; topics: CompareTerm[] }> {
-		const searched = (await this.foodTopicService.searched()).filter(
-			t => t.kind !== FoodTopicKindEnum.FORMAT,
+		const searched = (await this.topicService.searched()).filter(
+			t => t.kind !== TopicKindEnum.FORMAT,
 		);
-		const term = (t: FoodTopic): CompareTerm => ({
+		const term = (t: Topic): CompareTerm => ({
 			key: t.key,
 			query: t.trendsTopicId || trendsQuery(t.trendsQuery!),
 		});
@@ -304,8 +304,8 @@ export class FoodTrendsReportService implements OnModuleInit {
 			this.em.create(FoodTrendsReport, { city, quarter });
 
 		const [all, index] = [
-			await this.foodTopicService.all(),
-			await this.foodTopicService.index(),
+			await this.topicService.all(),
+			await this.topicService.index(),
 		];
 		const topics = new Map<string, FoodTrendsTopicInfo>(
 			all.map(t => [t.key, { key: t.key, label: t.label, kind: t.kind }]),
@@ -323,7 +323,7 @@ export class FoodTrendsReportService implements OnModuleInit {
 
 		const table = await this.searchInterestService.table(city.id, last);
 		const relatedRows: FoodTrendsRelatedRow[] = table.topics.flatMap(row =>
-			row.topicKind === FoodTopicKindEnum.FORMAT ?
+			row.topicKind === TopicKindEnum.FORMAT ?
 				[]
 			:	(row.related?.rising ?? []).map(q => ({
 					topic: row.label,

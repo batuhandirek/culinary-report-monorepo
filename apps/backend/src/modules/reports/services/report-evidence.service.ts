@@ -8,8 +8,9 @@ import _ from 'lodash';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityDayService } from 'src/modules/cities/services/city-day.service.js';
 import { changesOf, complaintsOf, praiseOf } from 'src/modules/feedback/util/feedback-rows.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { ThemeInsightService } from 'src/modules/trends/services/theme-insight.service.js';
-import { FEEDBACK_THEMES, type FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { Review, ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
@@ -46,13 +47,15 @@ const EXCERPT_CHARS = 160;
 /** The week after the month: reviews a post late in the month brings in */
 const AFTER_DAYS = 7;
 
-const themeLabel = (p: { theme?: FeedbackTheme; topic: string }) => (p.theme ? FEEDBACK_THEMES[p.theme].label : p.topic);
+/** A point's theme label, the topic for a point without one */
+const themeLabel = (p: { theme?: string; topic: string }, index: TopicIndex) => (p.theme ? index.label(p.theme) : p.topic);
 
 /**
  * What the analysis reads beyond `ReportData`, loaded once per build (`context`): the brand's
  * review rows of the month with their themes, the city's stored days, the city's complaint
- * themes (`ThemeInsightService`) and the month before's competitors. `tools` makes the agent's
- * read tools over it, each call counted by one `ToolRun` (the budget and the trace).
+ * themes (`ThemeInsightService`), the month before's competitors and the aspect vocabulary
+ * (`TopicService.index`, read once). `tools` makes the agent's read tools over it, each call
+ * counted by one `ToolRun` (the budget and the trace).
  */
 @Injectable()
 export class ReportEvidenceService {
@@ -62,9 +65,11 @@ export class ReportEvidenceService {
 		private readonly em: EntityManager,
 		private readonly cityDayService: CityDayService,
 		private readonly themeInsightService: ThemeInsightService,
+		private readonly topicService: TopicService,
 	) {}
 
 	async context({ branches, city, month, data, previousData, history }: EvidenceBuild): Promise<EvidenceContext> {
+		const index = await this.topicService.index();
 		const timeZone = branches[0].city.timezone;
 		const cityId = city?.id ?? null;
 		const chain = branches.length > 1;
@@ -83,8 +88,8 @@ export class ReportEvidenceService {
 				week: weekStart(r.publishedAt, timeZone),
 				...(r.stars != null && { stars: r.stars }),
 				...(text && { excerpt: excerpt(text, EXCERPT_CHARS) }),
-				complaints: _.uniq(complaintsOf(feedback).map(themeLabel)),
-				praise: _.uniq(praiseOf(feedback).map(themeLabel)),
+				complaints: _.uniq(complaintsOf(feedback).map(p => themeLabel(p, index))),
+				praise: _.uniq(praiseOf(feedback).map(p => themeLabel(p, index))),
 				changes: changesOf(feedback).map(c => c.detail),
 				replied: !!r.ownerResponse || !!r.markedRepliedAt,
 				platform: r.platform === ReviewPlatformEnum.TRIPADVISOR ? 'tripadvisor' : 'google',
@@ -132,6 +137,7 @@ export class ReportEvidenceService {
 			cityId,
 			...(city && { cityName: city.name }),
 			reviews,
+			aspects: index,
 		};
 	}
 

@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
+import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
 import { Review, ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import { ReservationPlatformEnum } from 'src/modules/venues/entities/venue-reservation-sample.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -17,7 +17,7 @@ import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness
 import { VenueDeliveryService } from 'src/modules/venues/services/venue-delivery.service.js';
 import { VenueReservationService } from 'src/modules/venues/services/venue-reservation.service.js';
 import { busiestHour, meanHistogram } from 'src/modules/venues/util/busyness.js';
-import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
+import { monthName, monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { bookedMedian, bookedPercent, eveningsBooked, meanBooked } from 'src/modules/venues/util/reservations.js';
 import { addDays, monthWeeks, weekStart } from 'src/modules/venues/util/week.js';
 
@@ -220,15 +220,29 @@ export class ReportSignalsService {
 		const menus = await this.venueDeliveryService.menus([venue.id, ...competitorIds], month);
 		const own = menus.filter(m => m.venueId === venue.id);
 		if (own.length === 0) return null;
-		const listing = (l: VenueDeliveryListing): ReportDeliveryListing => ({
-			platform: l.platform,
-			url: l.url,
-			...(l.rating != null && { rating: Math.round(l.rating * 10) / 10 }),
-			...(l.reviewsCount != null && { reviewsCount: l.reviewsCount }),
-			...(l.deliveryFee != null && { deliveryFee: l.deliveryFee }),
-			...(l.minOrder != null && { minOrder: l.minOrder }),
-			...(l.currency && { currency: l.currency }),
-		});
+		// The figures of the report month's scrape; the listing row (the latest scrape) only for a
+		// listing scraped before snapshots were kept
+		const figures = await this.venueDeliveryService.figures(menus.map(m => m.listing.id), month);
+		const rating = (r: number | null | undefined) => (r != null ? Math.round(r * 10) / 10 : undefined);
+		const listing = (l: VenueDeliveryListing): ReportDeliveryListing => {
+			const current = figures.get(l.id)?.current ?? l;
+			const previous = figures.get(l.id)?.previous;
+			const before = previous && {
+				month: previous.month,
+				...(previous.rating != null && { rating: rating(previous.rating) }),
+				...(previous.reviewsCount != null && { reviewsCount: previous.reviewsCount }),
+			};
+			return {
+				platform: l.platform,
+				url: l.url,
+				...(current.rating != null && { rating: rating(current.rating) }),
+				...(current.reviewsCount != null && { reviewsCount: current.reviewsCount }),
+				...(current.deliveryFee != null && { deliveryFee: current.deliveryFee }),
+				...(current.minOrder != null && { minOrder: current.minOrder }),
+				...(l.currency && { currency: l.currency }),
+				...(before && (before.rating !== undefined || before.reviewsCount !== undefined) && { previous: before }),
+			};
+		};
 		const names = new Map(data.competitors.map(c => [c.venueId, c.name]));
 		const prices: ReportPrices = {
 			listings: _.sortBy(own, m => (m.listing.platform === DeliveryPlatformEnum.WOLT ? 0 : 1)).map(m => listing(m.listing)),
@@ -396,6 +410,18 @@ export const priceSentence = (prices: ReportPrices): string | undefined => {
 			parts.push(
 				`your ${dish.dish} costs ${money(dish.price, menu.currency)} against ${money(dish.othersMedian!, menu.currency)}`,
 			);
+	}
+	for (const l of prices.listings) {
+		const was = l.previous;
+		if (l.rating === undefined || was?.rating === undefined) continue;
+		const platform = PLATFORM_NAMES[l.platform] ?? l.platform;
+		const count = (n: number | undefined) => (n !== undefined ? ` from ${n.toLocaleString('en')} ratings` : '');
+		const unchanged = was.rating === l.rating && was.reviewsCount === l.reviewsCount;
+		const then = unchanged ? 'unchanged since' : `${was.rating.toFixed(1)}${count(was.reviewsCount)} in`;
+		parts.push(
+			`${parts.length ? 'your' : 'Your'} ${platform} rating is ${l.rating.toFixed(1)}${count(l.reviewsCount)}, ` +
+				`${then} ${monthName(was.month)}`,
+		);
 	}
 	const pc = prices.priceComplaints;
 	if (pc && pc.others > 0 && pc.othersMedian !== undefined)

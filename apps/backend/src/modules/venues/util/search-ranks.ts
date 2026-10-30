@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
-import type { VenueTopicTag } from 'src/modules/food-topics/util/venue-topics.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
+import type { VenueTopicTag } from 'src/modules/topics/util/venue-topics.js';
 
 import type { VenueSearchRankEntry } from '../interfaces/venue-search-rank.interface.js';
 import type { GooglePlaceItem } from '../services/venue.service.js';
@@ -30,7 +30,7 @@ export interface SearchPlaceItem extends GooglePlaceItem {
 export const searchQueries = (
 	district: string | null | undefined,
 	tags: VenueTopicTag[],
-	index: FoodTopicIndex,
+	index: TopicIndex,
 	n = SEARCH_QUERIES_PER_VENUE,
 ): string[] => {
 	if (!district) return [];

@@ -7,14 +7,14 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 import { SocialModule } from '../social/social.module.js';
 import { TrendsModule } from '../trends/trends.module.js';
 import { VenuesModule } from '../venues/venues.module.js';
 
 import { ReportAnalysisAgent } from './agents/report-analysis.agent.js';
-import { ReportHighlightsAgent } from './agents/report-highlights.agent.js';
+import { ReportEditorAgent } from './agents/report-editor.agent.js';
 import { ReviewReplyAgent } from './agents/review-reply.agent.js';
 import { AdminReportSharesController } from './controllers/admin.report-shares.controller.js';
 import { AdminReportConfigsController } from './controllers/admin.report-configs.controller.js';
@@ -40,7 +40,7 @@ import { ReportTemplateService } from './services/report-template.service.js';
 		MikroOrmModule.forFeature([Report, ReportShare, ReportTemplate, BrandReportConfig, User, UserSession]),
 		AuthModule,
 		CitiesModule,
-		FoodTopicsModule,
+		TopicsModule,
 		LLMModule,
 		VenuesModule,
 		SocialModule,
@@ -56,7 +56,7 @@ import { ReportTemplateService } from './services/report-template.service.js';
 		ReportShareService,
 		ReportTemplateService,
 		ReportConfigService,
-		ReportHighlightsAgent,
+		ReportEditorAgent,
 		ReviewReplyAgent,
 		ReportAnalysisAgent,
 		ReportEvidenceService,

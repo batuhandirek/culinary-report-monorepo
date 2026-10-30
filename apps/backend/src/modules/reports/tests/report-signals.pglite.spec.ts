@@ -3,10 +3,10 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -15,6 +15,7 @@ import {
 	DeliveryPlatformEnum,
 	VenueDeliveryListing,
 } from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
+import { VenueDeliverySnapshot } from 'src/modules/venues/entities/venue-delivery-snapshot.entity.js';
 import {
 	ReservationPlatformEnum,
 	VenueReservationSample,
@@ -69,8 +70,8 @@ describe('ReportSignalsService (pglite)', () => {
 				VenueReservationService,
 				VenueDeliveryService,
 				MenuTopicService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 			],
 		});
 		service = harness.moduleRef.get(ReportSignalsService);
@@ -78,7 +79,7 @@ describe('ReportSignalsService (pglite)', () => {
 
 		const em = harness.orm.em;
 		// Only ramen (and Japanese): the döner venues keep no food topic
-		seedFoodTopics(em, ['ramen']);
+		seedTopics(em, ['ramen']);
 		const city = testCity(em);
 		venue = em.create(Venue, { city, placeId: 'sig-venue', name: 'Döner Pro', district: 'Kreuzberg' });
 		quiet = em.create(Venue, { city, placeId: 'sig-quiet', name: 'Quiet', district: 'Kreuzberg' });
@@ -151,8 +152,8 @@ describe('ReportSignalsService (pglite)', () => {
 		reviews(2, '2026-09-29');
 		reviews(1, '2026-10-02');
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {
@@ -204,6 +205,50 @@ describe('ReportSignalsService (pglite)', () => {
 		);
 	});
 
+	it('reads the delivery figures of the report month and the change since the month before', async () => {
+		const em = harness.orm.em;
+		const own = await em.findOneOrFail(VenueDeliveryListing, { venue });
+		const rivals = await em.findOneOrFail(VenueDeliveryListing, { venue: rival });
+		const snapshot = (listing: VenueDeliveryListing, month: string, rating: number, reviewsCount: number) =>
+			em.create(VenueDeliverySnapshot, { listing, month, rating, reviewsCount, deliveryFee: 1.99, fetchedAt: new Date() });
+		snapshot(own, '2026-07', 4.2, 60);
+		snapshot(own, '2026-08', 4.4, 80);
+		snapshot(own, '2026-09', 4.55, 100);
+		// The listing row moved on since (October's scrape); September's report keeps September's
+		snapshot(own, '2026-10', 4.9, 130);
+		// The rival skipped August: no change to show
+		snapshot(rivals, '2026-07', 4.0, 40);
+		snapshot(rivals, '2026-09', 4.2, 50);
+		await em.flush();
+
+		try {
+			const { prices } = await service.placeSections(venue, '2026-09', input());
+			expect(prices!.listings).toEqual([
+				expect.objectContaining({
+					platform: 'wolt',
+					rating: 4.6,
+					reviewsCount: 100,
+					previous: { month: '2026-08', rating: 4.4, reviewsCount: 80 },
+				}),
+			]);
+			expect(prices!.competitorListings).toEqual([
+				expect.objectContaining({ name: 'Rival', rating: 4.2, reviewsCount: 50 }),
+			]);
+			expect(prices!.competitorListings[0].previous).toBeUndefined();
+			expect(prices!.sentence).toContain(
+				'your Wolt rating is 4.6 from 100 ratings, 4.4 from 80 ratings in August 2026;',
+			);
+
+			// August: the rival wasn't scraped, so it reads July's figures, with no change
+			const august = (await service.placeSections(venue, '2026-08', input())).prices!;
+			expect(august.listings[0]).toMatchObject({ rating: 4.4, reviewsCount: 80, previous: { month: '2026-07' } });
+			expect(august.competitorListings[0]).toMatchObject({ rating: 4, reviewsCount: 40 });
+			expect(august.competitorListings[0].previous).toBeUndefined();
+		} finally {
+			await em.nativeDelete(VenueDeliverySnapshot, {});
+		}
+	});
+
 	it('leads the menu with its own kind of food against the same on the competitors’ menus', async () => {
 		const em = harness.orm.em;
 		const city = testCity(em);
@@ -224,7 +269,7 @@ describe('ReportSignalsService (pglite)', () => {
 		const san = place('ramen-san', 'Japanese restaurant', { 'Spicy Ramen': 12.8, 'Sushi Platter': 18 });
 		const pizzeria = place('pizzeria', 'Pizza restaurant', { Margherita: 9, Diavola: 11 });
 		await em.flush();
-		await linkFoodTopics(em);
+		await linkTopics(em);
 		const against = (...venues: Venue[]): SignalsInput => ({
 			...input(),
 			dishes: [],

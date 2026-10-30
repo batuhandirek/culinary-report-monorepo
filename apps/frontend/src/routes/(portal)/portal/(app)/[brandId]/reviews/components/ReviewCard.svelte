@@ -3,7 +3,6 @@
 	import type { PortalReviewOutputDto } from 'client';
 
 	import { api } from '#lib/api.js';
-	import { TOPIC_LABELS } from '#lib/culinary.js';
 	import { topicsOf } from '#lib/feedback.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { notificationManager } from '#ui/lib/notification-manager.js';
@@ -40,9 +39,10 @@
 			timeZone: 'UTC'
 		})
 	);
+	// The roots its points raise, labelled as the aspect vocabulary names them
 	const topics = $derived([
-		...topicsOf(review.feedback, 'praise').map((t) => ({ topic: t, good: true })),
-		...topicsOf(review.feedback, 'complaints').map((t) => ({ topic: t, good: false }))
+		...topicsOf(review.feedback, 'praise').map((t) => ({ topic: t.key, label: t.label, good: true })),
+		...topicsOf(review.feedback, 'complaints').map((t) => ({ topic: t.key, label: t.label, good: false }))
 	]);
 
 	const markAction = createAction(
@@ -138,7 +138,7 @@
 						t.good ? 'text-primary-darker' : 'text-beet'
 					]}>
 					{t.good ? '+' : '−'}
-					{TOPIC_LABELS[t.topic] ?? t.topic}
+					{t.label}
 				</li>
 			{/each}
 		</ul>

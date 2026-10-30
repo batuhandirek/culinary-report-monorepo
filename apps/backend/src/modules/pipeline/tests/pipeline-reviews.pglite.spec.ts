@@ -5,7 +5,7 @@ import { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
-import { ReportHighlightsAgent } from 'src/modules/reports/agents/report-highlights.agent.js';
+import { ReportEditorAgent } from 'src/modules/reports/agents/report-editor.agent.js';
 import { ReviewReplyAgent } from 'src/modules/reports/agents/review-reply.agent.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
 import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
@@ -28,6 +28,7 @@ import { VenueDeliveryService } from 'src/modules/venues/services/venue-delivery
 import { VenueReservationService } from 'src/modules/venues/services/venue-reservation.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { PipelineStepEnum, REVIEW_BACKFILL_BUDGET_SHARE } from '../constants/pipeline.constant.js';
@@ -73,6 +74,8 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 				ReviewService,
 				VenueService,
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportConfigService,
 				ReportTemplateService,
 				ReportSignalsService,
@@ -86,7 +89,7 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 					useValue: { findPages: async () => ({ searched: 0, found: 0 }), scrapeMonth: async () => 0 },
 				},
 				{
-					provide: ReportHighlightsAgent,
+					provide: ReportEditorAgent,
 					useValue: mockAgent({ title: 'First report', headline: 'Hello.', highlights: [], actions: [] }),
 				},
 				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },

@@ -76,8 +76,13 @@ export const toOutput = (report: Report): AdminReportOutputDto => ({
  * here, not by the DTO alone, since the print page gets the object as is.
  */
 export const toPublicOutput = (report: Report): SharedReportOutputDto => {
-	const { sentAt: _sentAt, analysis, ...rest } = toOutput(report);
-	return { ...rest, ...(analysis && { analysis: _.omit(analysis, 'trace') }) };
+	const { sentAt: _sentAt, analysis, highlights, ...rest } = toOutput(report);
+	return {
+		...rest,
+		// The editor's notes and trace are the admin's too
+		highlights: _.omit(highlights, ['notes', 'trace']),
+		...(analysis && { analysis: _.omit(analysis, 'trace') }),
+	};
 };
 
 @Controller('/admin/reports')

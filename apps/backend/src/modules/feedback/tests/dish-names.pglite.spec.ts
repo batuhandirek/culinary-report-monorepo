@@ -2,13 +2,13 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FoodTopicRelinkService } from 'src/modules/food-topics/services/food-topic-relink.service.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { TopicRelinkService } from 'src/modules/topics/services/topic-relink.service.js';
 import {
-	seedFoodTopics,
+	seedTopics,
 	seedIndex,
-} from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+} from 'src/modules/topics/tests/factories/topic.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -60,8 +60,8 @@ describe('Dish names', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				DishNameService,
-				FoodTopicService,
-				FoodTopicRelinkService,
+				TopicService,
+				TopicRelinkService,
 				AdminDishNamesController,
 				{ provide: PgBossService, useValue: pgBoss },
 				{ provide: DishTopicAgent, useValue: agent },
@@ -69,7 +69,7 @@ describe('Dish names', () => {
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
 		harness.moduleRef.get(DishNameService).onModuleInit();
-		seedFoodTopics(em(), ['burgers', 'kebab', 'pasta']);
+		seedTopics(em(), ['burgers', 'kebab', 'pasta']);
 		city = testCity(em());
 		venue = venueFactory.build(
 			{ name: 'Trattoria Eck', category: 'Italian restaurant' },
@@ -150,7 +150,7 @@ describe('Dish names', () => {
 
 	it('stores each name once, decided by a name match where it is a topic, the rest waiting', async () => {
 		expect(await service().countPending()).toBe(6);
-		expect(await service().sync(await harness.moduleRef.get(FoodTopicService).index())).toEqual(
+		expect(await service().sync(await harness.moduleRef.get(TopicService).index())).toEqual(
 			{
 				added: 6,
 				rows: 1,
@@ -287,9 +287,9 @@ describe('Dish names', () => {
 	});
 
 	it('re-links after topics change: a new topic takes the names that suggested it, re-opens the agent\'s other "none" answers, keeps admins\'', async () => {
-		const topics = harness.moduleRef.get(FoodTopicService);
-		await topics.create({ label: 'Fries', kind: FoodTopicKindEnum.DISH });
-		const counts = await harness.moduleRef.get(FoodTopicRelinkService).relinkAll();
+		const topics = harness.moduleRef.get(TopicService);
+		await topics.create({ label: 'Fries', kind: TopicKindEnum.DISH });
+		const counts = await harness.moduleRef.get(TopicRelinkService).relinkAll();
 		expect(counts['dish-names']).toMatchObject({
 			added: 0,
 			bySuggestion: 1,
@@ -310,7 +310,7 @@ describe('Dish names', () => {
 		await topics.update(kebab.id, {
 			aliases: [...kebab.aliases.filter(a => a !== 'durum'), 'vegan doner'],
 		});
-		const again = await harness.moduleRef.get(FoodTopicRelinkService).relinkAll();
+		const again = await harness.moduleRef.get(TopicRelinkService).relinkAll();
 		expect(again['dish-names']).toMatchObject({ matched: 1, reopened: 1 });
 		expect(await names()).toMatchObject({
 			'vegan doner': ['kebab', 'match', null],
@@ -321,7 +321,7 @@ describe('Dish names', () => {
 
 	it('re-opens an agent "none" once a dish or drink topic is created after it, dropping a suggestion of an older topic', async () => {
 		const dish = await em().fork().findOneOrFail(DishName, { key: 'pomme' });
-		const topics = harness.moduleRef.get(FoodTopicService);
+		const topics = harness.moduleRef.get(TopicService);
 		const burgersAt = (await topics.all()).find(t => t.key === 'burgers')!.createdAt.getTime();
 		// Pretend the agent had answered none for it, suggesting a topic that existed, before the next topic
 		await em()
@@ -337,8 +337,8 @@ describe('Dish names', () => {
 				},
 			);
 		em().clear();
-		await topics.create({ label: 'Hummus', kind: FoodTopicKindEnum.DISH });
-		const counts = await harness.moduleRef.get(FoodTopicRelinkService).relinkAll();
+		await topics.create({ label: 'Hummus', kind: TopicKindEnum.DISH });
+		const counts = await harness.moduleRef.get(TopicRelinkService).relinkAll();
 		// Hummus may fit it: it waits for the agent again
 		expect(counts['dish-names']).toMatchObject({ dropped: 1, reopened: 1 });
 		expect((await names()).pomme).toEqual([null, null, null]);

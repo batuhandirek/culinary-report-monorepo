@@ -8,6 +8,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { MenuItem } from '../entities/menu-item.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { DeliveryPlatformEnum, VenueDeliveryListing } from '../entities/venue-delivery-listing.entity.js';
+import { VenueDeliverySnapshot } from '../entities/venue-delivery-snapshot.entity.js';
 import {
 	type LieferandoItem,
 	matchLieferando,
@@ -146,7 +147,7 @@ describe('VenueDeliveryService (pglite)', () => {
 		await harness.stop();
 	});
 
-	it('stores Wolt menus per month and Lieferando listings for the rest', async () => {
+	it('stores Wolt menus per month, Lieferando listings for the rest, and each listing\'s figures per month', async () => {
 		const em = harness.orm.em;
 		const city = testCity(em);
 		const doner = em.create(Venue, {
@@ -181,13 +182,28 @@ describe('VenueDeliveryService (pglite)', () => {
 			['Pinoli Restaurant', 'lieferando', 4.6, 120, 1.49, 12],
 		]);
 
-		// The same month again replaces its menu; another month keeps both
+		// The same month again replaces its menu and snapshot; another month keeps both
 		await service.scrape([doner], city, '2026-09', 3);
+		runActor.mockImplementation(async () => [{ ...WOLT_ITEM, ratingScore: 9.4, reviewCount: 430 }]);
 		await service.scrape([doner], city, '2026-10', 3);
 		em.clear();
 		expect(await em.count(MenuItem, { month: '2026-09' })).toBe(5);
 		expect(await em.count(MenuItem, { month: '2026-10' })).toBe(5);
 		expect(await em.count(VenueDeliveryListing, {})).toBe(2);
+
+		// The listing holds the latest figures; the snapshots keep each month's
+		const woltListing = await em.findOneOrFail(VenueDeliveryListing, { venue: doner.id, platform: DeliveryPlatformEnum.WOLT });
+		expect([woltListing.rating, woltListing.reviewsCount]).toEqual([4.7, 430]);
+		const snapshots = await em.find(
+			VenueDeliverySnapshot,
+			{},
+			{ populate: ['listing'], orderBy: { month: 'asc', listing: { platform: 'asc' } } },
+		);
+		expect(snapshots.map(s => [s.month, s.listing.platform, s.rating, s.reviewsCount, s.deliveryFee, s.minOrder])).toEqual([
+			['2026-09', 'wolt', 4.6, 412, 1.99, null],
+			['2026-09', 'lieferando', 4.6, 120, 1.49, 12],
+			['2026-10', 'wolt', 4.7, 430, 1.99, null],
+		]);
 
 		const menus = await service.menus([doner.id, pinoli.id], '2026-09');
 		expect(menus.map(m => [m.listing.platform, m.month, m.items.length])).toEqual([

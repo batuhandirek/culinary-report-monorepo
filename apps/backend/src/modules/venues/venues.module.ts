@@ -9,7 +9,7 @@ import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
 import { FeedbackModule } from '../feedback/feedback.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { ImagesModule } from '../image/images.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 
@@ -73,7 +73,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		AuthModule,
 		FeedbackModule,
 		CitiesModule,
-		FoodTopicsModule,
+		TopicsModule,
 		ImagesModule,
 		LLMModule,
 	],

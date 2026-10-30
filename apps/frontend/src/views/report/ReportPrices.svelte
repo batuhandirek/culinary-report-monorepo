@@ -29,6 +29,23 @@
 				});
 	const menu = $derived(prices.menu);
 	const pct = (share: number) => `${Math.round(share * 100)} %`;
+	// The listing against the month before's scrape: "+0.2★ · +20 ratings since August 2026"
+	const changeText = (listing: ReportPrices['listings'][number]) => {
+		const was = listing.previous;
+		if (!was) return undefined;
+		const parts: string[] = [];
+		if (listing.rating !== undefined && was.rating !== undefined) {
+			const d = Math.round((listing.rating - was.rating) * 10) / 10;
+			if (d) parts.push(`${d > 0 ? '+' : '−'}${Math.abs(d).toFixed(1)}★`);
+		}
+		if (listing.reviewsCount !== undefined && was.reviewsCount !== undefined) {
+			const d = listing.reviewsCount - was.reviewsCount;
+			if (d) parts.push(`${d > 0 ? '+' : '−'}${Math.abs(d).toLocaleString('en')} ratings`);
+		}
+		return parts.length
+			? `${parts.join(' · ')} since ${monthLabel(was.month)}`
+			: `Unchanged since ${monthLabel(was.month)}`;
+	};
 	const diffText = (diff: number) =>
 		Math.abs(diff) < 0.03
 			? 'about the same'
@@ -53,6 +70,9 @@
 							>{listing.reviewsCount.toLocaleString('en')} ratings</span>
 					{/if}
 				</p>
+				{#if changeText(listing)}
+					<p class="text-ink m-0 mb-1 text-xs tabular-nums">{changeText(listing)}</p>
+				{/if}
 				<p class="text-muted-foreground m-0 text-xs">
 					Delivery {money(listing.deliveryFee, listing.currency)}{listing.minOrder !== undefined
 						? ` · minimum order ${money(listing.minOrder, listing.currency)}`

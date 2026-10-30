@@ -4,8 +4,8 @@ import _ from 'lodash';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -23,10 +23,10 @@ describe('TrendService (pglite)', () => {
 	let city: City;
 
 	beforeAll(async () => {
-		harness = await createPgliteTestingModule({ providers: [TrendService, FoodTopicService] });
+		harness = await createPgliteTestingModule({ providers: [TrendService, TopicService] });
 		service = harness.moduleRef.get(TrendService);
 		entityManagerManager.setEntityManager(harness.orm.em);
-		seedFoodTopics(harness.orm.em);
+		seedTopics(harness.orm.em);
 
 		const em = harness.orm.em;
 		city = testCity(em);
@@ -55,7 +55,7 @@ describe('TrendService (pglite)', () => {
 		// The venues' brands come with the flush; each author has an account (and a creator)
 		await em.flush();
 		// Dish rows get their food topic as the writer resolves it
-		const index = await harness.moduleRef.get(FoodTopicService).index();
+		const index = await harness.moduleRef.get(TopicService).index();
 		const accounts = new Map<string, SocialAccount>([['donerx', ownAccount(em, doner.brand, city, 'donerx')]]);
 		let n = 0;
 		const mention = (
@@ -129,8 +129,8 @@ describe('TrendService (pglite)', () => {
 			{ index },
 		);
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {

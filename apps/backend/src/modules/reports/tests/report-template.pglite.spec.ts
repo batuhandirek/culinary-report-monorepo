@@ -12,9 +12,10 @@ import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.j
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import {
 	ReportConfigStatusEnum,
@@ -50,12 +51,14 @@ describe('report templates and brand configurations (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportTemplateService,
 				ReportConfigService,
 				CompetitorService,
 				BrandService,
 				CityService,
-				{ provide: ReportHighlightsAgent, useValue: highlightsAgent },
+				{ provide: ReportEditorAgent, useValue: highlightsAgent },
 				{ provide: ReviewReplyAgent, useValue: replyAgent },
 			],
 		});
@@ -365,14 +368,14 @@ describe('report templates and brand configurations (pglite)', () => {
 			const report = await reports.build(brand.id, city.id, '2026-09');
 
 			const input = JSON.parse(highlightsAgent.generate.mock.calls[0][0] as string);
-			expect(input.socialMedia.posts.map((p: { platform: string }) => p.platform)).toEqual([
-				'instagram',
+			expect(input.postsByOthers.map((p: { creator: string }) => p.creator)).toEqual([
+				expect.stringContaining('on Instagram'),
 			]);
 			// The cover still counts every platform
-			expect(input.socialMedia.postsByOthers).toBe(2);
-			expect(input.googleReviews).toBeUndefined();
+			expect(input.inNumbers.postsByOthers).toBe(2);
+			expect(input.reviews).toBeUndefined();
 			expect(input.competitors).toEqual([]);
-			expect(input.topCreators).toEqual([]);
+			expect(input.creatorsWhoCoveredNeighboursButNotYou).toEqual([]);
 			// The stored data stays whole
 			expect(report.data.posts).toHaveLength(2);
 		});

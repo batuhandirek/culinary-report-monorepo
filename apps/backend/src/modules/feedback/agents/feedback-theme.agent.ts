@@ -7,14 +7,16 @@ import {
 	BaseMastraAgent,
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
-import { FEEDBACK_THEMES_INSTRUCTION } from 'src/modules/venues/agents/review-analysis.agent.js';
-import { FEEDBACK_THEME_KEYS } from 'src/modules/venues/constants/feedback-themes.constant.js';
+import {
+	type AspectsContext,
+	aspectsInstruction,
+} from 'src/modules/venues/agents/review-analysis.agent.js';
 
 const feedbackThemeSchema = z.object({
 	points: z.array(
 		z.object({
 			id: z.string(),
-			theme: z.enum(FEEDBACK_THEME_KEYS),
+			theme: z.string().describe('The key of the aspect, from the aspects in the instructions'),
 		}),
 	),
 });
@@ -35,7 +37,7 @@ export interface FeedbackThemeInputPoint {
  * their phrase alone: the `feedback-themes` backlog's classifier.
  */
 @Injectable()
-export class FeedbackThemeAgent extends BaseMastraAgent<typeof feedbackThemeSchema> {
+export class FeedbackThemeAgent extends BaseMastraAgent<typeof feedbackThemeSchema, AspectsContext> {
 	protected readonly config: BaseMastraAgentConfig<typeof feedbackThemeSchema> = {
 		id: 'feedback-theme',
 		name: 'FeedbackThemeAgent',
@@ -47,15 +49,15 @@ export class FeedbackThemeAgent extends BaseMastraAgent<typeof feedbackThemeSche
 		return 'openai/gpt-5.4-mini';
 	}
 
-	protected getInstructions(): string {
+	protected getInstructions(context?: AspectsContext): string {
 		return (
 			'You file short phrases of praise or complaint, extracted from reviews and social media posts about restaurants, bars and cafés, ' +
-			'under one theme each. Each phrase comes with whether it was praise or a complaint and the topic it was filed under: pick the ' +
-			'theme under that topic where one fits, under another topic when the phrase clearly belongs there. A phrase of kind change ' +
+			'under one aspect each. Each phrase comes with whether it was praise or a complaint and the root it was filed under: pick the ' +
+			'aspect under that root where one fits, under another root when the phrase clearly belongs there. A phrase of kind change ' +
 			'is something the reviewer says changed since before: file it under what changed ("new owner": ownership_change, "prices went ' +
 			'up": price_increase, "portions got smaller": portion_size, "the food got worse": quality_change, "renovated": renovation, "new ' +
 			'staff": staff_change, "now card only": card_payment). ' +
-			FEEDBACK_THEMES_INSTRUCTION +
+			aspectsInstruction(context?.legend ?? '') +
 			'Return one entry per id.'
 		);
 	}

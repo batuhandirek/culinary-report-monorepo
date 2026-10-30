@@ -2,7 +2,7 @@ import type { Rel } from '@mikro-orm/core';
 import { Entity, Index, ManyToOne, Property, Unique } from '@mikro-orm/decorators/legacy';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
 
 import { Venue } from './venue.entity.js';
@@ -25,9 +25,9 @@ export class DishSearchRank extends MikroOrmSimpleEntityAbstractClass {
 	@ManyToOne({ entity: () => City, deleteRule: 'cascade' })
 	city: Rel<City>;
 
-	// The dish searched (a `FoodTopic` of kind dish); its key is the word typed
-	@ManyToOne({ entity: () => FoodTopic, deleteRule: 'cascade' })
-	topic: Rel<FoodTopic>;
+	// The dish searched (a `Topic` of kind dish); its key is the word typed
+	@ManyToOne({ entity: () => Topic, deleteRule: 'cascade' })
+	topic: Rel<Topic>;
 
 	// One of `City.districts`, as typed into the search
 	@Property({ type: 'text' })

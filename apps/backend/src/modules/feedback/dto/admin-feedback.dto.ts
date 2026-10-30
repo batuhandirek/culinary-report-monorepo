@@ -1,7 +1,5 @@
 import { tags } from 'typia';
 
-import type { FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
-
 export interface AdminFileFeedbackThemesInputDto {
 	/** Only this city's points */
 	cityId?: string & tags.Format<'uuid'>;
@@ -10,8 +8,8 @@ export interface AdminFileFeedbackThemesInputDto {
 }
 
 export interface AdminFileFeedbackThemesOutputDto {
-	/** What `realign` changed first: topics moved to their theme's, points sent back to filing */
-	realigned: { topicsMoved: number; unfiled: number };
+	/** What `realign` changed first: points linked to their aspect row, points of a gone aspect filed at its root, topics moved to the aspect's root */
+	realigned: { linked: number; movedToRoot: number; topicsMoved: number };
 	/** Points filed this call */
 	points: number;
 	/** Points still without a theme (of the city, when given) */
@@ -30,7 +28,7 @@ export interface AdminWaitComplaintsOutputDto {
 	sources: number;
 	reviews: number;
 	posts: number;
-	byTheme: { theme: FeedbackTheme; venues: number; brands: number; sources: number }[];
+	byTheme: { theme: string; venues: number; brands: number; sources: number }[];
 	stated: {
 		complaints: number;
 		of: number;

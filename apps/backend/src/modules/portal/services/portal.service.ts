@@ -326,7 +326,14 @@ export class PortalService {
 				visited: mention.visited,
 				feedback: mention.feedback
 					.getItems()
-					.map(row => wrap(row).serialize({ skipNull: true, populate: ['foodTopic'] }) as unknown as FeedbackPointOutputDto),
+					.map(
+						row =>
+							wrap(row).serialize({
+								skipNull: true,
+								forceObject: true,
+								populate: ['foodTopic', 'aspect', 'aspect.parent'],
+							}) as unknown as FeedbackPointOutputDto,
+					),
 			})),
 			totalItems: total,
 			page,
@@ -407,7 +414,7 @@ export class PortalService {
 		const { replyDraft: _stored, ...fields } = wrap(review).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: ['feedback', 'feedback.foodTopic'],
+			populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
 		}) as unknown as PortalReviewOutputDto;
 		return {
 			...fields,

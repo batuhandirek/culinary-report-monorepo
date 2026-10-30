@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import type {
 	CityTrends,
 	TrendShareRow,
@@ -119,7 +119,7 @@ export const baselineVenues = (
 };
 
 /**
- * The venue's kind of food (its primary food topic, `VenueFoodTopicService.tags`) and its place
+ * The venue's kind of food (its primary food topic, `VenueTopicService.tags`) and its place
  * by views among the venues posts named for that food or a kind of it this month (a ramen post
  * counts for Japanese).
  */
@@ -128,7 +128,7 @@ export const cuisinePlacement = (
 	venueTopic: string | null | undefined,
 	mentions: TrendMention[],
 	cuisines: TrendShareRow[],
-	index: FoodTopicIndex,
+	index: TopicIndex,
 ): ReportCuisinePlacement | undefined => {
 	const key = venueTopic;
 	if (!key || !index.get(key)) return undefined;
@@ -182,7 +182,7 @@ export const citySection = (input: {
 	brandId: string;
 	/** The venue's primary food topic */
 	venueTopic?: string | null;
-	index: FoodTopicIndex;
+	index: TopicIndex;
 	trends: CityTrends;
 	mentions: TrendMention[];
 	baseline: BaselineVenue[];

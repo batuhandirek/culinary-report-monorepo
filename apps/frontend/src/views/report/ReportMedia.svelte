@@ -1,9 +1,8 @@
 <script lang="ts">
-	import type { ReportFeedbackPoint, ReportPost } from 'client';
+	import type { ReportAspect, ReportFeedbackPoint, ReportPost } from 'client';
 	import { renderSVG } from 'uqr';
 
 	import { authorLabel, TOPIC_LABELS } from '#lib/culinary.js';
-	import { isCatchAllTheme, themeLabel } from '#lib/feedback.js';
 
 	// Media coverage: each blog article that wrote about the brand this month, newest first, in a
 	// block of its own: the blog, the headline, what it says about the brand, its praise and
@@ -13,9 +12,13 @@
 		articles: ReportPost[];
 		// How many get a block; the rest are named in one line
 		limit: number;
+		/** The aspect vocabulary at the build (`ReportData.aspects`): the themes' labels */
+		aspects?: ReportAspect[];
 	}
 
-	let { articles, limit }: Props = $props();
+	let { articles, limit, aspects }: Props = $props();
+
+	const byKey = $derived(new Map((aspects ?? []).map((a) => [a.key, a])));
 
 	const sorted = $derived([...articles].sort((a, b) => b.postedAt.localeCompare(a.postedAt)));
 	const shown = $derived(sorted.slice(0, limit));
@@ -29,11 +32,10 @@
 			timeZone: 'UTC'
 		});
 
-	// What a point is about: its theme, or its topic for a catch-all or an unfiled point
+	// What a point is about: its theme as the report's vocabulary labels it (a root's label is the
+	// topic's), the key itself in a report built before the vocabulary was kept, its topic unfiled
 	const pointLabel = (p: ReportFeedbackPoint) =>
-		p.theme && !isCatchAllTheme(p.theme)
-			? themeLabel(p.theme)
-			: (TOPIC_LABELS[p.topic] ?? p.topic);
+		p.theme ? (byKey.get(p.theme)?.label ?? p.theme) : (TOPIC_LABELS[p.topic] ?? p.topic);
 
 	// One row per theme and side, with how the article put it
 	const pointRows = (post: ReportPost) =>

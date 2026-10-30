@@ -1,7 +1,7 @@
 import { tags } from 'typia';
 
-import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
+import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { ImageOutputDto } from 'src/modules/image/dto/image.output.dto.js';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
@@ -71,6 +71,11 @@ export interface AdminVenueOutputDto extends Omit<AdminVenueListItemOutputDto, '
 	/** Hours, amenities, popular times, "people also search"; absent fields are unknown */
 	details?: VenueDetails;
 	detailsAt?: Date;
+	/**
+	 * The food topic each of its review tags (`details.reviewsTags`) names, by the tag's title;
+	 * tags that name no food are left out (`DishNameService.reviewTagTopics`)
+	 */
+	reviewTagTopics: { title: string; key: string; label: string }[];
 }
 
 type AdminListVenuesSortField =

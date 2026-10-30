@@ -2,9 +2,8 @@ import type { Rel } from '@mikro-orm/core';
 import { Check, Entity, Index, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
-import type { FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import type {
 	FeedbackSentiment,
@@ -58,9 +57,13 @@ export class FeedbackPoint extends MikroOrmSimpleEntityAbstractClass<'change'> {
 	@Property({ type: 'text', nullable: true })
 	topic?: FeedbackTopic | null;
 
-	/** A `FEEDBACK_THEMES` key; null on a dish-only row and on a point not filed yet */
+	/** The aspect's key (`Topic.key`); null on a dish-only row and on a point not filed yet. Kept with `aspect` for the SQL readers */
 	@Property({ type: 'text', nullable: true })
-	theme?: FeedbackTheme | null;
+	theme?: string | null;
+
+	/** The aspect the point is filed under: the `Topic` row of `theme`; set with it, null while unfiled */
+	@ManyToOne({ entity: () => Topic, nullable: true, deleteRule: 'set null', index: true })
+	aspect?: Rel<Topic> | null;
 
 	/** The phrase, in English; null on a dish-only row */
 	@Property({ type: 'text', nullable: true })
@@ -74,9 +77,9 @@ export class FeedbackPoint extends MikroOrmSimpleEntityAbstractClass<'change'> {
 	@Property({ type: 'text', nullable: true })
 	dishKey?: string | null;
 
-	/** The dish or drink topic the dish names as a whole (`FoodTopicIndex.dishTopic`), re-linked when topics change */
-	@ManyToOne({ entity: () => FoodTopic, nullable: true, deleteRule: 'set null' })
-	foodTopic?: Rel<FoodTopic> | null;
+	/** The dish or drink topic the dish names as a whole (`TopicIndex.dishTopic`), re-linked when topics change */
+	@ManyToOne({ entity: () => Topic, nullable: true, deleteRule: 'set null' })
+	foodTopic?: Rel<Topic> | null;
 
 	/** The number the point states ("waited 40 min": 40), never estimated */
 	@Property({ type: 'double', nullable: true })

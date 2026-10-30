@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { talksAbout, themeHref, themeLabel } from '#lib/feedback.js';
+	import { talksAbout, themeHref } from '#lib/feedback.js';
 	import { topicHref } from '#lib/topic-format.js';
 
 	// What a post's mention or a review talks about: each theme it raises once, complaints then
@@ -23,20 +23,20 @@
 {#if !empty}
 	<p class={['m-0 flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-xs', compact && 'leading-5']}>
 		{#if !compact}<span class="text-muted-foreground">Talks about</span>{/if}
-		{#each about.complaints as theme (theme)}
+		{#each about.complaints as theme (theme.key)}
 			<a
 				class="text-destructive underline-offset-2 hover:underline"
-				href={themeHref(theme, 'complaints', { cityId, month })}
+				href={themeHref(theme.key, 'complaints', { cityId, month })}
 				title="Criticised: every sentence filed under the theme this month">
-				− {themeLabel(theme)}
+				− {theme.label}
 			</a>
 		{/each}
-		{#each about.praise as theme (theme)}
+		{#each about.praise as theme (theme.key)}
 			<a
 				class="text-success underline-offset-2 hover:underline"
-				href={themeHref(theme, 'praise', { cityId, month })}
+				href={themeHref(theme.key, 'praise', { cityId, month })}
 				title="Praised: every sentence filed under the theme this month">
-				+ {themeLabel(theme)}
+				+ {theme.label}
 			</a>
 		{/each}
 		{#each about.dishes as dish (dish.key ?? dish.label)}

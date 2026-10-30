@@ -3,14 +3,14 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import {
-	seedFoodTopics,
-	linkFoodTopics,
+	seedTopics,
+	linkTopics,
 	seedIndex,
-} from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
-import { venueTopics } from 'src/modules/food-topics/util/venue-topics.js';
+} from 'src/modules/topics/tests/factories/topic.factory.js';
+import { venueTopics } from 'src/modules/topics/util/venue-topics.js';
 import { reportSearchRanks } from 'src/modules/reports/util/search-ranks.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -137,8 +137,8 @@ describe('VenueSearchRankService (pglite)', () => {
 				VenueSearchRankService,
 				VenueScrapeService,
 				VenueService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});
@@ -146,7 +146,7 @@ describe('VenueSearchRankService (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		const em = harness.orm.em;
-		seedFoodTopics(em);
+		seedTopics(em);
 		city = await cityFactory.create();
 		me = em.create(Venue, {
 			city,
@@ -187,7 +187,7 @@ describe('VenueSearchRankService (pglite)', () => {
 			summary: 'Good.',
 		});
 		await em.flush();
-		await linkFoodTopics(em);
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {

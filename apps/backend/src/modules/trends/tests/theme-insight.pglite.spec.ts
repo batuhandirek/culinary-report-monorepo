@@ -4,12 +4,13 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import type { AnsweredPoint } from 'src/modules/feedback/util/feedback-rows.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import {
-	linkFoodTopics,
-	seedFoodTopics,
-} from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+	linkTopics,
+	seedTopics,
+} from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import type { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -48,13 +49,14 @@ describe('ThemeInsightService (pglite)', () => {
 			providers: [
 				ThemeInsightService,
 				AdminThemeInsightsController,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
-		seedFoodTopics(em, ['kebab', 'cafe']);
+		// The two kinds of food the brands are, and every aspect: the service reads the vocabulary from the table
+		seedTopics(em, ['kebab', 'cafe', ...ASPECT_SEED.map(a => a.key)]);
 		const city: City = testCity(em);
 		const elsewhere: City = testCity(em, { name: 'Hamburg' });
 		const doner = venueFactory.build(
@@ -173,12 +175,12 @@ describe('ThemeInsightService (pglite)', () => {
 		);
 		mention(post('2026-09-14'), undefined, [], [increase('unmatched')]);
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 		await em
 			.getConnection()
 			.execute(
-				`update feedback_points set food_topic_id = (select id from food_topics where key = 'kebab') where dish in ('Döner', 'doner kebab', 'Dürüm')`,
+				`update feedback_points set food_topic_id = (select id from topics where key = 'kebab') where dish in ('Döner', 'doner kebab', 'Dürüm')`,
 			);
 		await em
 			.getConnection()

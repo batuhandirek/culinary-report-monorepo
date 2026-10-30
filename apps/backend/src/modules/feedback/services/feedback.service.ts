@@ -1,18 +1,14 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
-import {
-	FEEDBACK_THEME_KEYS,
-	FEEDBACK_THEMES,
-	type FeedbackTheme,
-	themesOfTopic,
-} from 'src/modules/venues/constants/feedback-themes.constant.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { TopicRelinkService } from 'src/modules/topics/services/topic-relink.service.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 
@@ -32,7 +28,7 @@ export interface WaitComplaints {
 	sources: number;
 	reviews: number;
 	posts: number;
-	byTheme: { theme: FeedbackTheme; venues: number; brands: number; sources: number }[];
+	byTheme: { theme: string; venues: number; brands: number; sources: number }[];
 	/** The minutes complaints state */
 	stated: {
 		complaints: number;
@@ -54,13 +50,20 @@ const monthOf = (date: Date) => date.toISOString().slice(0, 7);
  * the raw sources; every reader joins brand and venue through them, never copied here.
  */
 @Injectable()
-export class FeedbackService {
+export class FeedbackService implements OnModuleInit {
 	private readonly logger = new Logger(FeedbackService.name);
 
 	constructor(
 		private readonly em: EntityManager,
 		private readonly dishNameService: DishNameService,
+		private readonly topicService: TopicService,
+		private readonly topicRelinkService: TopicRelinkService,
 	) {}
+
+	/** A point's aspect follows the topics: after an aspect is deleted or moved, the relink job runs `realign` */
+	onModuleInit() {
+		this.topicRelinkService.register({ key: 'feedback-aspects', relink: () => this.realign() });
+	}
 
 	/** What the writers link dishes with (`DishNameService.dishTopics`), read fresh */
 	dishTopics(): Promise<DishTopics> {
@@ -99,12 +102,13 @@ export class FeedbackService {
 				"FeedbackService.replaceFor needs the review's venue or the mention's post loaded",
 			);
 		source.feedback.removeAll();
-		return feedbackRows(answer, opts).map(row =>
+		return feedbackRows(answer, { asked: opts.asked, aspects: opts.topics.index }).map(row =>
 			this.em.create(FeedbackPoint, {
 				...base,
 				sentiment: row.sentiment,
 				topic: row.topic,
 				theme: row.theme,
+				aspect: row.aspectId ? this.em.getReference(Topic, row.aspectId) : null,
 				detail: row.detail,
 				dish: row.dish,
 				dishKey: row.dishKey,
@@ -119,35 +123,50 @@ export class FeedbackService {
 	}
 
 	/** The stored link for a dish: its name's topic (`DishTopics.topicId`) */
-	topicRef(dish: string | null | undefined, topics: DishTopics): FoodTopic | null {
+	topicRef(dish: string | null | undefined, topics: DishTopics): Topic | null {
 		const id = topics.topicId(dish);
-		return id ? this.em.getReference(FoodTopic, id) : null;
+		return id ? this.em.getReference(Topic, id) : null;
 	}
 
 	/**
-	 * After the vocabulary changed: every filed row's `topic` set from `FEEDBACK_THEMES` (a theme
-	 * moved to another topic), and rows whose theme no longer exists sent back to filing (theme
-	 * null, kept on their stored topic), which the `feedback-themes` backlog picks up. Cheap SQL.
+	 * After the aspects changed (the relink job, after an admin created, moved or deleted one): every
+	 * filed row linked to the aspect row of its `theme` key; a row whose aspect is gone filed at its
+	 * root (`theme` = `topic`, the parent of a deleted leaf: counts stay whole, no LLM); every row's
+	 * `topic` set to its aspect's root (an aspect moved under another root). Cheap SQL. Registered as
+	 * the re-linker `feedback-aspects`.
 	 */
-	async realign(): Promise<{ topicsMoved: number; unfiled: number }> {
+	async realign(): Promise<{ linked: number; movedToRoot: number; topicsMoved: number }> {
 		const conn = this.em.getConnection();
-		const pairs = FEEDBACK_THEME_KEYS.map(key => [key, FEEDBACK_THEMES[key].topic]);
-		const moved = await conn.execute(
-			`update feedback_points f set topic = x.topic
-			from (values ${pairs.map(() => '(?, ?)').join(', ')}) as x(theme, topic)
-			where f.theme = x.theme and f.topic is distinct from x.topic`,
-			pairs.flat(),
+		const live = `t.kind = 'aspect' and t.deleted_at is null`;
+		const linked = await conn.execute(
+			`update feedback_points f set aspect_id = t.id
+			from topics t where t.key = f.theme and ${live} and f.aspect_id is distinct from t.id`,
+			[],
 			'run',
 		);
-		const unfiled = await conn.execute(
-			`update feedback_points set theme = null
-			where theme is not null and theme not in (${FEEDBACK_THEME_KEYS.map(() => '?').join(', ')})`,
-			[...FEEDBACK_THEME_KEYS],
+		const movedToRoot = await conn.execute(
+			`update feedback_points f set theme = f.topic, aspect_id = r.id
+			from topics r
+			where r.key = f.topic and r.kind = 'aspect' and r.deleted_at is null
+				and f.theme is not null
+				and not exists (select 1 from topics t where t.key = f.theme and ${live})`,
+			[],
 			'run',
 		);
-		const result = { topicsMoved: affected(moved), unfiled: affected(unfiled) };
-		if (result.topicsMoved || result.unfiled)
-			this.logger.log(`Realigned feedback themes: ${JSON.stringify(result)}`);
+		const topicsMoved = await conn.execute(
+			`update feedback_points f set topic = root.key
+			from topics t join topics root on root.id = coalesce(t.parent_id, t.id)
+			where t.id = f.aspect_id and f.topic is distinct from root.key`,
+			[],
+			'run',
+		);
+		const result = {
+			linked: affected(linked),
+			movedToRoot: affected(movedToRoot),
+			topicsMoved: affected(topicsMoved),
+		};
+		if (result.linked || result.movedToRoot || result.topicsMoved)
+			this.logger.log(`Realigned feedback aspects: ${JSON.stringify(result)}`);
 		return result;
 	}
 
@@ -159,8 +178,9 @@ export class FeedbackService {
 	 */
 	async waitComplaints(cityId: string, month: string): Promise<WaitComplaints> {
 		const { start, end } = monthRange(month);
+		const waitAspects = (await this.topicService.index()).descendants('wait');
 		const rows: {
-			theme: FeedbackTheme;
+			theme: string;
 			source: string;
 			venue: string | null;
 			brand: string;
@@ -209,7 +229,7 @@ export class FeedbackService {
 			...count(rows),
 			reviews: new Set(rows.filter(r => r.kind === 'review').map(r => r.source)).size,
 			posts: new Set(rows.filter(r => r.kind === 'mention').map(r => r.source)).size,
-			byTheme: themesOfTopic('wait')
+			byTheme: waitAspects
 				.map(theme => ({ theme, ...count(rows.filter(r => r.theme === theme)) }))
 				.filter(t => t.sources),
 			stated: {

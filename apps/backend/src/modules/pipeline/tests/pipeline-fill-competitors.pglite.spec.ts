@@ -2,9 +2,9 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
@@ -34,8 +34,8 @@ describe('FILL_COMPETITORS (pglite)', () => {
 			providers: [
 				PipelineService,
 				CompetitorService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				ProspectQueryService,
 				BrandLeadScoreService,
 				BrandService,
@@ -48,7 +48,7 @@ describe('FILL_COMPETITORS (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		const em = harness.orm.em;
-		seedFoodTopics(em);
+		seedTopics(em);
 		city = testCity(em);
 		const add = (key: string, name: string, category: string, district: string) =>
 			(venues[key] = em.create(Venue, { city, placeId: key, name, category, district }));

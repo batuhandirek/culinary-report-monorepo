@@ -3,9 +3,9 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { FeedbackService } from 'src/modules/feedback/services/feedback.service.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { MentionFoodTopicService } from 'src/modules/food-topics/services/mention-food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 import { normalizeVenueName, plain } from 'src/modules/venues/util/venue-names.js';
 import { runPool } from 'src/shared/util/pool.js';
@@ -23,10 +23,10 @@ export class MentionExtractionService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly mentionExtractionAgent: MentionExtractionAgent,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 		private readonly feedbackService: FeedbackService,
-		private readonly mentionFoodTopicService: MentionFoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly mentionTopicService: MentionTopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/**
@@ -62,9 +62,11 @@ export class MentionExtractionService {
 		// Too short to name anything: marked analysed so they are not picked up again
 		for (const post of candidates.filter(p => !posts.includes(p))) post.analysedAt = new Date();
 
-		const foodTopics =
-			posts.length ? (await this.foodTopicService.all()).map(t => t.label) : [];
 		const topics = posts.length ? await this.feedbackService.dishTopics() : undefined;
+		// The food topics' labels for the cuisine field, the aspects' legend for the points
+		const index = posts.length ? await this.topicService.index() : undefined;
+		const topicLabels = index?.food.map(t => t.label) ?? [];
+		const legend = index?.aspectLegend() ?? '';
 		let mentions = 0;
 		let analysed = 0;
 		const created: Mention[] = [];
@@ -76,7 +78,8 @@ export class MentionExtractionService {
 				async post => {
 					const res = await this.mentionExtractionAgent.generate(this.prompt(post), {
 						cityName: post.city.name,
-						foodTopics,
+						topics: topicLabels,
+						legend,
 					});
 					for (const { praise, complaints, dishes, ...m } of res.object.mentions) {
 						const mention = this.em.create(Mention, { post, ...m });
@@ -104,8 +107,8 @@ export class MentionExtractionService {
 		await this.em.flush();
 		// What the new mentions are about, and their cities' venue tags by job
 		if (created.length) {
-			await this.mentionFoodTopicService.relink({ mentionIds: created.map(m => m.id) });
-			await this.venueFoodTopicService.queueCityRefresh(posts.map(p => p.city.id));
+			await this.mentionTopicService.relink({ mentionIds: created.map(m => m.id) });
+			await this.venueTopicService.queueCityRefresh(posts.map(p => p.city.id));
 		}
 		return { analysed, mentions };
 	}
@@ -178,7 +181,9 @@ export class MentionExtractionService {
 			{ id: { $in: ids } },
 			{ populate: ['city', 'mentions', 'hashtagLinks.hashtag'] },
 		);
-		const foodTopics = (await this.foodTopicService.all()).map(t => t.label);
+		const index = await this.topicService.index();
+		const topics = index.food.map(t => t.label);
+		const legend = index.aspectLegend();
 		const key = (name: string) => normalizeVenueName(name) || plain(name);
 		try {
 			await runPool(
@@ -187,7 +192,8 @@ export class MentionExtractionService {
 				async post => {
 					const res = await this.mentionExtractionAgent.generate(this.prompt(post), {
 						cityName: post.city.name,
-						foodTopics,
+						topics,
+						legend,
 					});
 					const left = [...post.mentions.getItems()];
 					const pairs: [Mention, boolean][] = [];

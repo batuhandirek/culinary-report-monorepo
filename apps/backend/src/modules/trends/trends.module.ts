@@ -7,7 +7,7 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 
 import { AdminSearchInterestController } from './controllers/admin.search-interest.controller.js';
 import { AdminThemeInsightsController } from './controllers/admin.theme-insights.controller.js';
@@ -22,7 +22,7 @@ import { TrendService } from './services/trend.service.js';
 
 /** City-level trends over mentions and reviews. Reports import it for their city section. */
 @Module({
-	imports: [MikroOrmModule.forFeature([TrendSearchInterest, TrendRelatedQuery, User, UserSession]), AuthModule, ApifyModule, FoodTopicsModule],
+	imports: [MikroOrmModule.forFeature([TrendSearchInterest, TrendRelatedQuery, User, UserSession]), AuthModule, ApifyModule, TopicsModule],
 	controllers: [AdminTrendsController, AdminSearchInterestController, AdminTopicInsightsController, AdminThemeInsightsController],
 	providers: [TrendService, SearchInterestService, TopicInsightService, ThemeInsightService],
 	// ThemeInsightService: the report analysis reads the city's complaint themes

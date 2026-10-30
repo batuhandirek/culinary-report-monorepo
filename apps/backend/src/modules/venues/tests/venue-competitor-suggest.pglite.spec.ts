@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { VenueFoodTopic } from 'src/modules/food-topics/entities/venue-food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -24,13 +24,13 @@ describe('CompetitorService suggestions (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [CompetitorService, FoodTopicService, VenueFoodTopicService],
+			providers: [CompetitorService, TopicService, VenueTopicService],
 		});
 		service = harness.moduleRef.get(CompetitorService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		const em = harness.orm.em;
-		seedFoodTopics(em);
+		seedTopics(em);
 		const city = testCity(em);
 		cityId = city.id;
 		const add = (
@@ -83,8 +83,8 @@ describe('CompetitorService suggestions (pglite)', () => {
 		mention(venues.imbiss, 'Kebap');
 		for (let i = 0; i < 20; i++) mention(venues.pizza, 'Pizza');
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {
@@ -101,18 +101,18 @@ describe('CompetitorService suggestions (pglite)', () => {
 
 	it("follows an admin's tags: excluded food is no match, a shared diet adds", async () => {
 		const em = harness.orm.em;
-		const topics = await harness.moduleRef.get(FoodTopicService).all();
+		const topics = await harness.moduleRef.get(TopicService).all();
 		const topic = (key: string) => topics.find(t => t.key === key)!;
-		em.create(VenueFoodTopic, { venue: venues.imbiss, topic: topic('kebab'), excluded: true });
-		em.create(VenueFoodTopic, { venue: venues.doner, topic: topic('vegan') });
-		em.create(VenueFoodTopic, { venue: venues.ruyam, topic: topic('vegan') });
+		em.create(VenueTopic, { venue: venues.imbiss, topic: topic('kebab'), excluded: true });
+		em.create(VenueTopic, { venue: venues.doner, topic: topic('vegan') });
+		em.create(VenueTopic, { venue: venues.ruyam, topic: topic('vegan') });
 		await em.flush();
-		await linkFoodTopics(em);
+		await linkTopics(em);
 		const suggestions = await service.suggest(venues.doner.brand.id);
 		expect(suggestions.map(s => s.venue.placeId)).toEqual(['ruyam', 'mustafa']);
 		expect(suggestions[0].reasons).toEqual(['same food (Döner & kebab)', 'both vegan', 'same district']);
-		await em.nativeDelete(VenueFoodTopic, {});
-		await linkFoodTopics(em);
+		await em.nativeDelete(VenueTopic, {});
+		await linkTopics(em);
 	});
 
 	it('leaves out current competitors', async () => {

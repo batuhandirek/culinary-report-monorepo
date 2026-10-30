@@ -3,7 +3,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
@@ -49,7 +49,7 @@ export class TodayService {
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
 		private readonly brandService: BrandService,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 		private readonly prospectQueryService: ProspectQueryService,
 		private readonly dataCoverageService: DataCoverageService,
 	) {}
@@ -229,7 +229,7 @@ export class TodayService {
 			),
 			...cities.map(city =>
 				tryRead(`words ${city.name}`, async () => {
-					const words = (await this.foodTopicService.overview(city.id)).unmapped.length;
+					const words = (await this.topicService.overview(city.id)).unmapped.length;
 					if (words)
 						todos.push({
 							key: `words-${city.id}`,

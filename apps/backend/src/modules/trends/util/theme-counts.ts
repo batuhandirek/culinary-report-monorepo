@@ -2,12 +2,11 @@
 // every venue in it.
 
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
-import {
-	FEEDBACK_THEMES,
-	type FeedbackTheme,
-	isFeedbackTheme,
-} from 'src/modules/venues/constants/feedback-themes.constant.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
+
+/** What the counts need of the aspect vocabulary: which keys are aspects, and each one's label and root */
+export type ThemeAspects = Pick<TopicIndex, 'isAspect' | 'label' | 'rootOf'>;
 
 export type ThemePolarity = 'praise' | 'complaint';
 export type ThemeSourceKind = 'review' | 'post';
@@ -77,9 +76,11 @@ export interface ThemeBrand {
 	sources: number;
 }
 
-/** One theme in one polarity, in a city and month. */
+/** One theme (an aspect) in one polarity, in a city and month. */
 export interface ThemeRow {
-	key: FeedbackTheme;
+	/** The aspect's key */
+	key: string;
+	/** Its root's key */
 	topic: FeedbackTopic;
 	label: string;
 	/** Written reviews raising it */
@@ -161,14 +162,15 @@ interface Tally {
  * Counts the month's themes, praise and complaints apart, over rows of `month` and `previous`
  * (the month before, for the change). A review or a post counts once per theme and polarity,
  * however often it raises it, so "prices went up" and "way more than before" in two reviews are
- * two, in one review one. A brand's own posts are left out. A point without a known theme counts
- * under none: its source is counted in `coverage` as unfiled, never under a catch-all. `foods`
- * (brand id → its food, `brandFoods`) breaks each theme down by kind of food.
+ * two, in one review one. A brand's own posts are left out. A point whose theme `aspects` does
+ * not know counts under none: its source is counted in `coverage` as unfiled, never under a root.
+ * `foods` (brand id → its food, `brandFoods`) breaks each theme down by kind of food.
  */
 export const countThemes = (
 	rows: ThemePointRow[],
 	month: string,
 	previous: string,
+	aspects: ThemeAspects,
 	foods: Map<string, ThemeFood> = new Map(),
 ): ThemeCounts => {
 	const base = { [month]: { review: new Set<string>(), post: new Set<string>() }, [previous]: { review: new Set<string>(), post: new Set<string>() } };
@@ -187,7 +189,7 @@ export const countThemes = (
 	for (const r of rows) {
 		if (r.own || !base[r.month]) continue;
 		base[r.month][r.kind].add(r.source_id);
-		const known = r.theme !== null && isFeedbackTheme(r.theme);
+		const known = r.theme !== null && aspects.isAspect(r.theme);
 		if (r.month === previous) {
 			if (!known) continue;
 			const key = `${r.polarity}:${r.theme}`;
@@ -248,14 +250,14 @@ export const countThemes = (
 		[...tallies.entries()]
 			.filter(([key]) => key.startsWith(`${polarity}:`))
 			.map(([key, t]) => {
-				const theme = key.slice(polarity.length + 1) as FeedbackTheme;
+				const theme = key.slice(polarity.length + 1);
 				const prev = before.get(key);
 				const reviewShare = percent(t.reviews.size, now.review.size);
 				const postShare = percent(t.posts.size, now.post.size);
 				return {
 					key: theme,
-					topic: FEEDBACK_THEMES[theme].topic,
-					label: FEEDBACK_THEMES[theme].label,
+					topic: (aspects.rootOf(theme) ?? theme) as FeedbackTopic,
+					label: aspects.label(theme),
 					reviews: t.reviews.size,
 					posts: t.posts.size,
 					reviewShare,
@@ -359,7 +361,7 @@ export const brandFoods = (places: BrandPlaceFood[]): Map<string, ThemeFood> => 
 
 /** A source's points (`f`, joined on `on`): praise and complaints, dish-only and change rows left out; their dish's food topic (`ft`). */
 const pointsOf = (on: string) =>
-	`join feedback_points f on ${on} and f.detail is not null and not f.change left join food_topics ft on ft.id = f.food_topic_id`;
+	`join feedback_points f on ${on} and f.detail is not null and not f.change left join topics ft on ft.id = f.food_topic_id`;
 const DISH_FIELDS = `f.dish, f.dish_key, ft.key as food_topic_key, ft.label as food_topic_label`;
 const POLARITY = `case when f.sentiment = 'positive' then 'praise' else 'complaint' end as polarity`;
 

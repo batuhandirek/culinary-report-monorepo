@@ -32,7 +32,7 @@ export interface AdminMentionOutputDto {
 	/** What it says, as feedback rows */
 	feedback: FeedbackPointOutputDto[];
 	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
-	foodTopics?: { source: 'cuisine' | 'category'; topic: { key: string; label: string } }[];
+	topics?: { source: 'cuisine' | 'category'; topic: { key: string; label: string } }[];
 	/** The brand it was matched to */
 	brand?: { id: string; name: string };
 	/** The branch, when the post says which; a chain's mention may have the brand only */
@@ -58,7 +58,7 @@ export interface AdminHashtagOutputDto {
 	id: number;
 	tag: string;
 	ignored: boolean;
-	foodTopic?: { key: string; label: string };
+	topic?: { key: string; label: string };
 	brand?: { id: string; name: string };
 }
 

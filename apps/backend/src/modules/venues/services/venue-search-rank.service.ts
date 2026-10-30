@@ -4,8 +4,8 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSearchRank } from '../entities/venue-search-rank.entity.js';
@@ -30,8 +30,8 @@ export class VenueSearchRankService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly venueScrapeService: VenueScrapeService,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly topicService: TopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/**
@@ -45,8 +45,8 @@ export class VenueSearchRankService {
 		budgetUsd: number,
 	): Promise<{ venues: number; queries: number; ranked: number; notInTop: number }> {
 		const plan = new Map<Venue, string[]>();
-		const index = await this.foodTopicService.index();
-		const tags = await this.venueFoodTopicService.tags(venues);
+		const index = await this.topicService.index();
+		const tags = await this.venueTopicService.tags(venues);
 		for (const venue of venues) {
 			const queries = searchQueries(venue.district, tags.get(venue.id) ?? [], index);
 			if (queries.length) plan.set(venue, queries);

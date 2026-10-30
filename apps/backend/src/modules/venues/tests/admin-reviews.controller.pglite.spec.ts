@@ -2,7 +2,7 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -55,9 +55,9 @@ describe('AdminReviewsController (pglite)', () => {
 		]);
 	});
 
-	it('serves a feedback row with the food topic of its dish, so a page can link to the topic', async () => {
+	it('serves a feedback row with its aspect and parent, and the food topic of its dish, so a page can name and link them', async () => {
 		const em = harness.orm.em;
-		const topics = seedFoodTopics(em, ['burgers']);
+		const topics = seedTopics(em, ['burgers', 'taste']);
 		const city = await cityFactory.create({ name: 'Hamburg' });
 		const brand = brandFactory.build({ name: 'Patty Place' });
 		const venue = venueFactory.build({ name: 'Patty Place' }, { associations: { city, brand } });
@@ -71,17 +71,42 @@ describe('AdminReviewsController (pglite)', () => {
 			sentiment: 'positive',
 			topic: 'food',
 			theme: 'taste',
+			aspect: topics.get('taste'),
 			detail: 'juicy patty',
 			dish: 'Smash burger',
 			dishKey: 'smash burger',
 			foodTopic: topics.get('burgers'),
 		});
+		// A point filed at a root: an aspect without a parent
+		em.create(FeedbackPoint, {
+			sourceKind: 'review',
+			review,
+			city,
+			month: '2026-09',
+			sentiment: 'negative',
+			topic: 'food',
+			theme: 'food',
+			aspect: topics.get('food'),
+			detail: 'not great',
+		});
 		await em.flush();
 		em.clear();
 
+		// Called directly, so the entity's other fields are still there: the DTO narrows them on the wire
 		const { items } = await controller.listReviews({ page: 1, size: 25, brandId: brand.id });
 		expect(items[0].feedback).toEqual([
-			expect.objectContaining({ dish: 'Smash burger', foodTopic: expect.objectContaining({ key: 'burgers', label: 'Burgers' }) }),
+			expect.objectContaining({
+				theme: 'taste',
+				aspect: expect.objectContaining({
+					key: 'taste',
+					label: 'Taste',
+					parent: expect.objectContaining({ key: 'food', label: 'Food' }),
+				}),
+				dish: 'Smash burger',
+				foodTopic: expect.objectContaining({ key: 'burgers', label: 'Burgers' }),
+			}),
+			expect.objectContaining({ theme: 'food', aspect: expect.objectContaining({ key: 'food', label: 'Food' }) }),
 		]);
+		expect(items[0].feedback[1].aspect).not.toHaveProperty('parent');
 	});
 });

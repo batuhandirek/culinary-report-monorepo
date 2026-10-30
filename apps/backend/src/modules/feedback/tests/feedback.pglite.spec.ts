@@ -5,11 +5,12 @@ import { LlmBacklogService } from 'src/modules/backlog/services/llm-backlog.serv
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicRelinkJob } from 'src/modules/food-topics/jobs/food-topic-relink.job.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FoodTopicRelinkService } from 'src/modules/food-topics/services/food-topic-relink.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
+import { Topic, TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicRelinkJob } from 'src/modules/topics/jobs/topic-relink.job.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { TopicRelinkService } from 'src/modules/topics/services/topic-relink.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { MentionExtractionAgent } from 'src/modules/social/agents/mention-extraction.agent.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
@@ -42,18 +43,24 @@ import { addFeedback } from './factories/feedback.factory.js';
 
 /** The review agent's answer for each review it is sent: one per review id */
 let reviewAnswer: (reviewId: string) => object = () => ({});
+/** The theme agent's answer for a point's phrase: the aspect key */
+const defaultThemeAnswer = (detail: string): string =>
+	detail.includes('cash') ? 'cash_only' : 'price_level';
+let themeAnswer: (detail: string) => string = defaultThemeAnswer;
 
 /*
  * What posts and reviews say is rows: written with their source, replaced on re-analysis, gone with
- * it; dishes linked to food topics and re-linked when topics change; the jsonb moved over once; the
- * LLM passes over stored rows drained as daily backlogs, each point asked once.
+ * it; each point filed under an aspect row (the agents answer its key; an unknown key waits for the
+ * theme backlog) and realigned when aspects are deleted or moved; dishes linked to food topics and
+ * re-linked when topics change; the LLM passes over stored rows drained as daily backlogs, each point
+ * asked once.
  */
 describe('feedback rows (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let feedback: FeedbackService;
 	let city: City;
 	let venue: Venue;
-	let topics: Map<string, FoodTopic>;
+	let topics: Map<string, Topic>;
 	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => undefined) };
 
 	const reviewAgent = mockAgent((prompt: unknown) => {
@@ -99,12 +106,7 @@ describe('feedback rows (pglite)', () => {
 		const { points } = JSON.parse(prompt as string) as {
 			points: { id: string; detail: string }[];
 		};
-		return {
-			points: points.map(p => ({
-				id: p.id,
-				theme: p.detail.includes('cash') ? 'cash_only' : 'price_level',
-			})),
-		};
+		return { points: points.map(p => ({ id: p.id, theme: themeAnswer(p.detail) })) };
 	});
 	const dishAgent = mockAgent((prompt: unknown) => {
 		const { points } = JSON.parse(prompt as string) as {
@@ -152,8 +154,8 @@ describe('feedback rows (pglite)', () => {
 				FeedbackAmountService,
 				ReviewService,
 				MentionExtractionService,
-				FoodTopicService,
-				FoodTopicRelinkService,
+				TopicService,
+				TopicRelinkService,
 				LlmBacklogRegistry,
 				LlmBacklogService,
 				{ provide: PgBossService, useValue: pgBoss },
@@ -168,12 +170,14 @@ describe('feedback rows (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 		feedback = harness.moduleRef.get(FeedbackService);
 		// Registered as at module init
+		feedback.onModuleInit();
 		harness.moduleRef.get(DishNameService).onModuleInit();
 		harness.moduleRef.get(FeedbackThemeService).onModuleInit();
 		harness.moduleRef.get(FeedbackDishService).onModuleInit();
 		harness.moduleRef.get(FeedbackAmountService).onModuleInit();
 		const em = harness.orm.em;
-		topics = seedFoodTopics(em, ['burgers', 'kebab']);
+		// Two kinds of food, and the whole aspect vocabulary the agents' keys are checked against
+		topics = seedTopics(em, ['burgers', 'kebab', ...ASPECT_SEED.map(s => s.key)]);
 		city = testCity(em);
 		venue = venueFactory.build(
 			{ name: 'Burger Bros', category: 'Hamburger restaurant' },
@@ -220,8 +224,14 @@ describe('feedback rows (pglite)', () => {
 	const rowsOf = (where: object) =>
 		harness.orm.em.find(FeedbackPoint, where, {
 			orderBy: { id: 'asc' },
-			populate: ['foodTopic'],
+			populate: ['foodTopic', 'aspect'],
 		});
+	/** A seeded aspect row's id */
+	const aspectId = (key: string) => {
+		const topic = topics.get(key);
+		if (!topic) throw new Error(`No seeded aspect "${key}"`);
+		return topic.id;
+	};
 
 	it("writes a review's rows with its analysis, replaces them on a second one, and drops them with it", async () => {
 		const em = harness.orm.em;
@@ -284,6 +294,13 @@ describe('feedback rows (pglite)', () => {
 			['positive', null, 'Milkshake', null, null, null, '2026-09', city.id],
 		]);
 		expect(rows[2].foodTopic?.key).toBe('burgers');
+		// Each point is filed under the aspect row of the key the agent answered, at that aspect's root
+		expect(rows.map(p => [p.topic ?? null, p.aspect?.id ?? null])).toEqual([
+			['food', aspectId('taste')],
+			['wait', aspectId('wait_for_food')],
+			['price', aspectId('price_increase')],
+			[null, null],
+		]);
 
 		// Analysed again: the rows are replaced, not added to
 		await em.nativeUpdate(Review, { id: r.id }, { analysedAt: null });
@@ -367,15 +384,72 @@ describe('feedback rows (pglite)', () => {
 		const mention = await em.findOneOrFail(Mention, { post: p.id });
 		const rows = await rowsOf({ mention: mention.id });
 		expect(
-			rows.map(r => [r.sentiment, r.topic, r.theme, r.dish, r.foodTopic?.key, r.detail]),
+			rows.map(r => [
+				r.sentiment,
+				r.topic,
+				r.theme,
+				r.aspect?.key,
+				r.dish,
+				r.foodTopic?.key,
+				r.detail,
+			]),
 		).toEqual([
-			['positive', 'food', 'taste', null, undefined, 'juicy patty'],
-			['negative', 'price', 'price_increase', 'burger', 'burgers', 'the burger got pricier'],
+			['positive', 'food', 'taste', 'taste', null, undefined, 'juicy patty'],
+			[
+				'negative',
+				'price',
+				'price_increase',
+				'price_increase',
+				'burger',
+				'burgers',
+				'the burger got pricier',
+			],
 		]);
 		// A point names the burger, so no dish-only row for it
 		expect(rows.filter(r => !r.detail)).toEqual([]);
 		// The mention keeps only its overall sentiment and summary
 		expect([mention.sentiment, mention.summary]).toEqual(['mixed', 'Pricier than before.']);
+	});
+
+	it('stores a point answered with a key the table lacks unfiled, and the theme backlog files it from the legend', async () => {
+		const em = harness.orm.em;
+		const themes = harness.moduleRef.get(FeedbackThemeService);
+		const r = review({ reviewId: 'fb-unknown-key' });
+		await em.flush();
+		// A key of the old vocabulary: "about price, nothing finer" is the root `price` now
+		reviewAnswer = () => ({
+			complaints: [{ theme: 'price_other', detail: 'pricey for what it is', dish: null, amount: null }],
+		});
+		await harness.moduleRef.get(ReviewService).analyseMonth('2026-09');
+		em.clear();
+		let [row] = await rowsOf({ review: r.id });
+		expect([row.theme ?? null, row.aspect ?? null, row.topic]).toEqual([null, null, 'other']);
+		expect(await themes.countUnfiled(city.id)).toBe(1);
+
+		// The backlog answering a key nobody has files nothing: the point is asked again next run
+		themeAnswer = () => 'nonsense';
+		expect(await themes.fileThemes({ cityId: city.id, limit: 100 })).toMatchObject({ points: 0 });
+		em.clear();
+		[row] = await rowsOf({ review: r.id });
+		expect([row.theme ?? null, row.aspect ?? null, row.topic]).toEqual([null, null, 'other']);
+		expect(await themes.countUnfiled(city.id)).toBe(1);
+
+		// Answered from the legend: filed under the aspect row, the topic its root
+		themeAnswer = defaultThemeAnswer;
+		themeAgent.generate.mockClear();
+		expect(await themes.fileThemes({ cityId: city.id, limit: 100 })).toMatchObject({ points: 1 });
+		const [, context] = themeAgent.generate.mock.calls[0];
+		expect((context as { legend: string }).legend).toContain(
+			'price: price (about prices, when nothing finer fits), ',
+		);
+		em.clear();
+		[row] = await rowsOf({ review: r.id });
+		expect([row.theme, row.aspect?.id, row.topic]).toEqual([
+			'price_level',
+			aspectId('price_level'),
+			'price',
+		]);
+		expect(await themes.countUnfiled(city.id)).toBe(0);
 	});
 
 	it('re-links dish rows when a topic gains an alias, and unlinks them when the topic goes', async () => {
@@ -403,44 +477,83 @@ describe('feedback rows (pglite)', () => {
 		pgBoss.sendJob.mockClear();
 		const kebab = topics.get('kebab')!;
 		await harness.moduleRef
-			.get(FoodTopicService)
+			.get(TopicService)
 			.update(kebab.id, { aliases: [...kebab.aliases, 'pide'] });
-		expect(pgBoss.sendJob).toHaveBeenCalledWith(FoodTopicRelinkJob.jobName, expect.anything(), {
+		expect(pgBoss.sendJob).toHaveBeenCalledWith(TopicRelinkJob.jobName, expect.anything(), {
 			singletonKey: 'all',
 		});
 		// What the job runs
 		expect(
-			(await harness.moduleRef.get(FoodTopicRelinkService).relinkAll())['dish-names'],
+			(await harness.moduleRef.get(TopicRelinkService).relinkAll())['dish-names'],
 		).toMatchObject({ rows: 1 });
 		em.clear();
 		expect(await linked()).toEqual({ Dürüm: 'kebab', Pide: 'kebab' });
 
 		// The topic deleted: its rows lose the link, nothing else
-		await em.nativeDelete(FoodTopic, { id: kebab.id });
+		await em.nativeDelete(Topic, { id: kebab.id });
 		em.clear();
 		expect(await linked()).toEqual({ Dürüm: null, Pide: null });
 	});
 
-	it('realigns topics to the vocabulary and sends points of a removed theme back to filing', async () => {
+	it('realigns rows to the aspects: links each key, files a deleted aspect’s rows at its root, follows a move', async () => {
 		const em = harness.orm.em;
-		const r = review({ reviewId: 'fb-realign' });
-		const [moved, removed] = addFeedback(em, r, {
-			complaints: [
-				{ theme: 'price_level', detail: 'too pricey' },
-				{ theme: 'price_level', detail: 'odd one' },
-			],
+		const topicService = harness.moduleRef.get(TopicService);
+		// Everything stored so far linked, so the counts below are this case's alone
+		await feedback.realign();
+		// An admin's new aspect under waiting, and a point filed under it and one under tipping
+		const bill = await topicService.create({
+			label: 'Wait for the bill',
+			kind: TopicKindEnum.ASPECT,
+			parentKey: 'wait',
+			hint: 'the bill taking long to come',
 		});
+		const r = review({ reviewId: 'fb-realign' });
+		const [slowBill, tip] = addFeedback(
+			em,
+			r,
+			{
+				complaints: [
+					{ theme: 'wait_for_the_bill', detail: 'the bill took ages' },
+					{ theme: 'tipping', detail: 'a tip prompt on the terminal' },
+				],
+			},
+			{ index: await topicService.index() },
+		);
 		await em.flush();
-		// As if the vocabulary had moved price_level elsewhere, and dropped a theme
-		await em.nativeUpdate(FeedbackPoint, { id: moved.id }, { topic: 'food' });
-		await em.nativeUpdate(FeedbackPoint, { id: removed.id }, { theme: 'gone_theme' as never });
-
-		expect(await feedback.realign()).toEqual({ topicsMoved: 1, unfiled: 1 });
+		expect([slowBill.topic, slowBill.theme, tip.topic, tip.theme]).toEqual([
+			'wait',
+			'wait_for_the_bill',
+			'payment',
+			'tipping',
+		]);
+		// As stored by key alone: the link follows from the key
+		await em.nativeUpdate(FeedbackPoint, { review: r.id }, { aspect: null });
+		expect(await feedback.realign()).toEqual({ linked: 2, movedToRoot: 0, topicsMoved: 0 });
 		em.clear();
-		const [a, b] = await rowsOf({ review: r.id });
-		expect([a.topic, a.theme]).toEqual(['price', 'price_level']);
-		expect([b.topic, b.theme]).toEqual(['price', null]);
-		expect(await feedback.realign()).toEqual({ topicsMoved: 0, unfiled: 0 });
+		let [a, b] = await rowsOf({ review: r.id });
+		expect([a.aspect?.id, b.aspect?.id]).toEqual([bill.id, aspectId('tipping')]);
+		// Nothing stale in the unit of work: the re-linkers' flushes write their own changes alone
+		em.clear();
+
+		// The new aspect deleted and tipping moved under price: each queues the re-link job
+		pgBoss.sendJob.mockClear();
+		await topicService.update(aspectId('tipping'), { parentKey: 'price' });
+		await topicService.remove(bill.id);
+		expect(pgBoss.sendJob).toHaveBeenCalledTimes(2);
+		expect(pgBoss.sendJob).toHaveBeenCalledWith(TopicRelinkJob.jobName, expect.anything(), {
+			singletonKey: 'all',
+		});
+		// What the job runs: the re-linker this service registered
+		expect(
+			(await harness.moduleRef.get(TopicRelinkService).relinkAll())['feedback-aspects'],
+		).toEqual({ linked: 0, movedToRoot: 1, topicsMoved: 1 });
+		em.clear();
+		[a, b] = await rowsOf({ review: r.id });
+		// The deleted aspect's point is "about waiting, nothing finer": no LLM, the count stays whole
+		expect([a.topic, a.theme, a.aspect?.id]).toEqual(['wait', 'wait', aspectId('wait')]);
+		// The moved aspect's point keeps its aspect and follows it to the new root
+		expect([b.topic, b.theme, b.aspect?.id]).toEqual(['price', 'tipping', aspectId('tipping')]);
+		expect(await feedback.realign()).toEqual({ linked: 0, movedToRoot: 0, topicsMoved: 0 });
 	});
 
 	it('drains the passes as daily backlogs: themes, dishes and amounts, each point asked once', async () => {
@@ -457,7 +570,9 @@ describe('feedback rows (pglite)', () => {
 			r,
 			{
 				complaints: [
+					// Two stored before the aspects, with a topic alone
 					{ topic: 'payment', detail: 'cash only' },
+					{ topic: 'price', detail: 'expensive' },
 					{ topic: 'food', theme: 'temperature', detail: 'burger and fries cold' },
 					{ topic: 'food', theme: 'portion_size', detail: 'small' },
 					{ topic: 'wait', theme: 'wait_for_food', detail: 'long wait' },
@@ -479,7 +594,6 @@ describe('feedback rows (pglite)', () => {
 			{ asked: false },
 		);
 		await em.flush();
-		// The realign case left a point to file
 		const before = [
 			await themes.countUnfiled(),
 			await dishes.countPending(),
@@ -501,7 +615,17 @@ describe('feedback rows (pglite)', () => {
 		const rows = Object.fromEntries(
 			(await rowsOf({ review: r.id })).map(x => [x.detail ?? `dish:${x.dish}`, x]),
 		);
-		expect(rows['cash only'].theme).toBe('cash_only');
+		// Filed under the aspect row the backlog answered, under its root
+		expect([rows['cash only'].theme, rows['cash only'].topic, rows['cash only'].aspect?.id]).toEqual([
+			'cash_only',
+			'payment',
+			aspectId('cash_only'),
+		]);
+		expect([rows['expensive'].theme, rows['expensive'].topic, rows['expensive'].aspect?.id]).toEqual([
+			'price_level',
+			'price',
+			aspectId('price_level'),
+		]);
 		// "burger and fries cold" took the burger: its dish-only row is gone
 		expect([
 			rows['burger and fries cold'].dish,

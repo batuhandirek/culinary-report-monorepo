@@ -21,6 +21,7 @@ import {
 	SummaryMention,
 	SummaryReview,
 } from '../util/summarize-report.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 
 /** What a source says, as an extraction writes its rows */
 interface Said {
@@ -29,8 +30,9 @@ interface Said {
 	dishes?: AnsweredDish[];
 	changes?: string[];
 }
+const index = seedIndex();
 const said = ({ praise = [], complaints = [], dishes = [], changes = [] }: Said) =>
-	feedbackRows({ praise, complaints, dishes, changes }, { asked: true });
+	feedbackRows({ praise, complaints, dishes, changes }, { asked: true, aspects: index });
 
 const mention = ({
 	praise = [{ topic: 'food', detail: 'great chicken' }],
@@ -71,6 +73,7 @@ const VENUE = { id: 'v1', name: 'Chén Chè', district: 'Mitte' };
 describe('summarizeReport', () => {
 	it("keeps the venue's own posts out of the word-of-mouth numbers", () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [
@@ -86,6 +89,7 @@ describe('summarizeReport', () => {
 
 	it('counts a post that names the venue twice once, and each topic once per post', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [mention({}), mention({ praise: [{ topic: 'vibe', detail: 'cosy' }] })],
@@ -97,6 +101,7 @@ describe('summarizeReport', () => {
 
 	it('summarizes reviews: stars, replies, changes per review and the critical ones', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -128,6 +133,7 @@ describe('summarizeReport', () => {
 
 	it('counts reviews per topic, not complaint points, and splits 5 stars from the rest', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -160,6 +166,7 @@ describe('summarizeReport', () => {
 	it('counts themes per source and leaves them out while a point has no theme', () => {
 		const increase = (detail: string) => ({ theme: 'price_increase', detail });
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -173,6 +180,7 @@ describe('summarizeReport', () => {
 		expect(data.reviews.split.belowFive.complaintThemes).toEqual({ price_increase: 2, price_level: 1 });
 
 		const unfiled = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -184,6 +192,7 @@ describe('summarizeReport', () => {
 	// A dish a point names is one dish of that source, with the point's sentiment
 	it('counts a dish a point names once, with how the point came across', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -201,6 +210,7 @@ describe('summarizeReport', () => {
 
 	it('merges dishes from posts and reviews by name', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [mention({})],
@@ -216,6 +226,7 @@ describe('summarizeReport', () => {
 
 	it('folds English plurals per word, so "burgers" and "burger" are one dish', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [
@@ -248,6 +259,7 @@ describe('summarizeReport', () => {
 
 	it('cuts a competitor down to what a report compares, and passes competitors through', () => {
 		const competitorData = summarizeReport({
+			aspects: index,
 			venue: { id: 'v2', name: 'Rüyam', rating: 4.8 },
 			month: '2026-09',
 			mentions: [mention({ views: 5000 })],
@@ -270,6 +282,7 @@ describe('summarizeReport', () => {
 		});
 
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -284,6 +297,7 @@ describe('reviews.list', () => {
 	it('lists every review newest first, with a capped excerpt and its topics', () => {
 		const long = `${'Very good food and friendly staff. '.repeat(10)}End.`;
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
@@ -330,6 +344,7 @@ describe('reviews.list', () => {
 describe('creators', () => {
 	it('groups posts by creator, most viewed first, with their flags', () => {
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [
@@ -389,7 +404,7 @@ describe('creators', () => {
 
 describe('previous month', () => {
 	const month = (mentions: SummaryMention[], reviews: SummaryReview[]) =>
-		summarizeReport({ venue: VENUE, month: '2026-08', mentions, reviews });
+		summarizeReport({ venue: VENUE, month: '2026-08', mentions, reviews, aspects: index });
 
 	it('is undefined when the month had neither posts nor reviews', () => {
 		expect(summarizePrevious(month([], []))).toBeUndefined();
@@ -416,6 +431,7 @@ describe('previous month', () => {
 			),
 		);
 		const data = summarizeReport({
+			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [mention({ postId: 'a', views: 1500 }), mention({ postId: 'b', views: 500 })],
@@ -487,12 +503,15 @@ describe('ratingTrend', () => {
 			detail,
 		});
 		expect(
-			groupChanges([
-				[filed('portion_size', 'burgers are getting smaller'), filed('portion_size', 'made smaller')],
-				[filed('portion_size', 'Burgers are smaller than before'), filed('ownership_change', 'new owner')],
-				[filed('portion_size', 'made smaller'), { topic: 'other', detail: 'new menu' }],
-				[filed('other', 'new kebab shop'), filed('renovation', 'renovated')],
-			]),
+			groupChanges(
+				[
+					[filed('portion_size', 'burgers are getting smaller'), filed('portion_size', 'made smaller')],
+					[filed('portion_size', 'Burgers are smaller than before'), filed('ownership_change', 'new owner')],
+					[filed('portion_size', 'made smaller'), { topic: 'other', detail: 'new menu' }],
+					[filed('other', 'new kebab shop'), filed('renovation', 'renovated')],
+				],
+				index,
+			),
 		).toEqual([
 			{
 				theme: 'portion_size',
@@ -502,7 +521,7 @@ describe('ratingTrend', () => {
 			},
 			{ theme: 'ownership_change', label: 'Ownership change', reviews: 1, details: ['new owner'] },
 			{ theme: 'renovation', label: 'Renovation', reviews: 1, details: ['renovated'] },
-			// A catch-all theme, then what isn't filed yet, last
+			// A root (a change "about something else, nothing finer"), then what isn't filed yet, last
 			{ theme: 'other', label: 'Other', reviews: 1, details: ['new kebab shop'] },
 			{ label: 'Other changes', reviews: 1, details: ['new menu'] },
 		]);

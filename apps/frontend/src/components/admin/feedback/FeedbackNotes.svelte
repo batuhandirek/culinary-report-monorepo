@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { TOPIC_LABELS } from '#lib/culinary.js';
-	import { amountLabel, pointsOf, sideOf, themeHref, themeLabel, type ThemeSide } from '#lib/feedback.js';
+	import { amountLabel, pointsOf, sideOf, themeHref, type ThemeSide } from '#lib/feedback.js';
 	import { topicHref } from '#lib/topic-format.js';
 
 	// Every note a review or a post's mention gave: its praise, its complaints and the changes it
@@ -36,7 +36,7 @@
 							class={['shrink-0 text-xs font-medium underline-offset-2 hover:underline', s.tone]}
 							href={themeHref(note.theme, s.side, { cityId, month })}
 							title="Every sentence filed under this theme this month">
-							{themeLabel(note.theme)}
+							{note.aspect?.label ?? note.theme}
 						</a>
 					{:else}
 						<span class="text-muted-foreground shrink-0 text-xs" title="Not filed under a theme yet">

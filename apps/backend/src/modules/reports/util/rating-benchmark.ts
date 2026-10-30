@@ -1,7 +1,7 @@
 // Pure: a branch's all-time Google rating against its district's and its kind of food's venues.
 
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
-import type { VenueTopicTag } from 'src/modules/food-topics/util/venue-topics.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
+import type { VenueTopicTag } from 'src/modules/topics/util/venue-topics.js';
 import {
 	districtRatingStanding,
 	isRatingPeer,
@@ -24,7 +24,7 @@ export const ratingBenchmark = (input: {
 	cityName: string;
 	peers: RatingPeer[];
 	tags: Map<string, VenueTopicTag[]>;
-	index: FoodTopicIndex;
+	index: TopicIndex;
 }): ReportRatingBenchmark | undefined => {
 	const { branch, index } = input;
 	if (branch.rating == null) return undefined;

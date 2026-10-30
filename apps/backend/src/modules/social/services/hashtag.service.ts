@@ -4,9 +4,9 @@ import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/com
 
 import _ from 'lodash';
 
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FoodTopicRelinkService } from 'src/modules/food-topics/services/food-topic-relink.service.js';
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { TopicRelinkService } from 'src/modules/topics/services/topic-relink.service.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 
 import { Hashtag } from '../entities/hashtag.entity.js';
 import { hashtagBrandIndex, hashtagKey, hashtagLinks } from '../util/hashtags.js';
@@ -14,8 +14,8 @@ import { hashtagBrandIndex, hashtagKey, hashtagLinks } from '../util/hashtags.js
 const CHUNK = 500;
 
 /**
- * Hashtags' links, pure matching, no LLM: the one writer of `Hashtag.foodTopic` and `Hashtag.brand`
- * (`hashtagLinks`), and of `ignored`. `relink` runs over every tag after posts are saved, from `FoodTopicRelinkJob` and
+ * Hashtags' links, pure matching, no LLM: the one writer of `Hashtag.topic` and `Hashtag.brand`
+ * (`hashtagLinks`), and of `ignored`. `relink` runs over every tag after posts are saved, from `TopicRelinkJob` and
  * after a brand change; it writes only what changed.
  */
 @Injectable()
@@ -24,20 +24,20 @@ export class HashtagService implements OnModuleInit {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly foodTopicRelinkService: FoodTopicRelinkService,
+		private readonly topicService: TopicService,
+		private readonly topicRelinkService: TopicRelinkService,
 	) {}
 
 	onModuleInit() {
-		this.foodTopicRelinkService.register({ key: 'hashtags', relink: index => this.relink({ index }) });
+		this.topicRelinkService.register({ key: 'hashtags', relink: index => this.relink({ index }) });
 	}
 
-	async relink(opts: { index?: FoodTopicIndex } = {}): Promise<{ tags: number; changed: number }> {
-		const index = opts.index ?? (await this.foodTopicService.index());
+	async relink(opts: { index?: TopicIndex } = {}): Promise<{ tags: number; changed: number }> {
+		const index = opts.index ?? (await this.topicService.index());
 		const conn = this.em.getConnection();
 		const [tags, brands, handles, cities, evidence] = await Promise.all([
-			conn.execute<{ id: number; tag: string; food_topic_id: string | null; brand_id: string | null }[]>(
-				`select id, tag, food_topic_id, brand_id from hashtags`,
+			conn.execute<{ id: number; tag: string; topic_id: string | null; brand_id: string | null }[]>(
+				`select id, tag, topic_id, brand_id from hashtags`,
 			),
 			conn.execute<{ id: string; name: string }[]>(`select id, name from brands where deleted_at is null`),
 			conn.execute<{ brandId: string; handle: string }[]>(
@@ -63,11 +63,11 @@ export class HashtagService implements OnModuleInit {
 		const changed: [number, string | null, string | null][] = [];
 		for (const t of tags) {
 			const link = hashtagLinks(t, ctx);
-			if (link.topicId !== t.food_topic_id || link.brandId !== t.brand_id) changed.push([t.id, link.topicId, link.brandId]);
+			if (link.topicId !== t.topic_id || link.brandId !== t.brand_id) changed.push([t.id, link.topicId, link.brandId]);
 		}
 		for (const chunk of _.chunk(changed, CHUNK))
 			await conn.execute(
-				`update hashtags h set food_topic_id = v.topic_id, brand_id = v.brand_id
+				`update hashtags h set topic_id = v.topic_id, brand_id = v.brand_id
 				from (values ${chunk.map(() => '(?::int, ?::uuid, ?::uuid)').join(', ')}) as v(id, topic_id, brand_id)
 				where h.id = v.id`,
 				chunk.flat(),

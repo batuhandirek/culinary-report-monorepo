@@ -116,8 +116,8 @@
 					<ul class="m-0 flex list-none flex-wrap gap-x-4 gap-y-1.5 p-0 text-sm">
 						{#each post.hashtagLinks as { hashtag } (hashtag.id)}
 							<li>
-								<a class="underline-offset-2 hover:underline" href={`/admin/posts?hashtag=${encodeURIComponent(hashtag.tag)}`}>#{hashtag.tag}</a>{#if hashtag.foodTopic}
-									<span class="text-muted-foreground"> → </span><a class="text-beet underline-offset-2 hover:underline" href={`/admin/trends/${encodeURIComponent(hashtag.foodTopic.key)}`}>{hashtag.foodTopic.label}</a>
+								<a class="underline-offset-2 hover:underline" href={`/admin/posts?hashtag=${encodeURIComponent(hashtag.tag)}`}>#{hashtag.tag}</a>{#if hashtag.topic}
+									<span class="text-muted-foreground"> → </span><a class="text-beet underline-offset-2 hover:underline" href={`/admin/trends/${encodeURIComponent(hashtag.topic.key)}`}>{hashtag.topic.label}</a>
 								{:else if hashtag.brand}
 									<span class="text-muted-foreground"> → </span><a class="text-beet underline-offset-2 hover:underline" href={`/admin/brands/${hashtag.brand.id}`}>{hashtag.brand.name}</a>
 								{/if}
@@ -233,10 +233,10 @@
 										: 'Matched to no brand: theme pages leave these notes out until it is.'}
 								</p>
 							{/if}
-							{#if mention.foodTopics?.length}
+							{#if mention.topics?.length}
 								<p class="m-0 flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-xs">
 									<span class="text-muted-foreground">Food</span>
-									{#each mention.foodTopics as link (link.topic.key)}
+									{#each mention.topics as link (link.topic.key)}
 										<a
 											class="text-beet underline-offset-2 hover:underline"
 											href={topicHref(link.topic.key)}

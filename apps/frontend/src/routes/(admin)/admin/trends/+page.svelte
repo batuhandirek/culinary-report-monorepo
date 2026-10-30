@@ -12,13 +12,14 @@
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
-	import FoodTopicFormDialog from '#components/admin/topics/FoodTopicFormDialog.svelte';
+	import TopicFormDialog from '#components/admin/topics/TopicFormDialog.svelte';
 	import UnrecognisedWords from '#components/admin/topics/UnrecognisedWords.svelte';
 	import { findAdminMenu } from '#constants/ADMIN_MENUS.js';
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
 	import { topicHref } from '#lib/topic-format.js';
+	import { type TopicOption, toTopicOption } from '#lib/topic-kinds.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
@@ -56,15 +57,15 @@
 	let newLabel = $state('');
 	let newKind = $state<'cuisine' | 'dish' | 'drink'>('cuisine');
 	let version = $state(0);
-	// Every topic, as the new one's possible parents
-	let topics = $state<{ key: string; label: string }[]>([]);
+	// Every topic, as the new one's possible parents (its own side of the tree)
+	let topics = $state<TopicOption[]>([]);
 	const newTopic = async (label = '', kind: 'cuisine' | 'dish' | 'drink' = 'cuisine') => {
 		newLabel = label;
 		newKind = kind;
 		dialogOpen = true;
 		if (!topics.length && cityId) {
-			const res = await api.admin.getFoodTopics({ cityId });
-			topics = res.topics.map((t) => ({ key: t.key, label: t.label }));
+			const res = await api.admin.getTopics({ cityId });
+			topics = res.topics.map(toTopicOption);
 		}
 	};
 </script>
@@ -108,7 +109,7 @@
 	{/if}
 </div>
 
-<FoodTopicFormDialog
+<TopicFormDialog
 	bind:active={dialogOpen}
 	label={newLabel}
 	kind={newKind}

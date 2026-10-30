@@ -2,7 +2,7 @@ import type { Rel } from '@mikro-orm/core';
 import { Entity, Enum, Index, ManyToOne, Property, Unique } from '@mikro-orm/decorators/legacy';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
 
@@ -29,8 +29,8 @@ export class TrendRelatedQuery extends MikroOrmSimpleEntityAbstractClass<'breako
 	@Property({ type: 'text' })
 	term: string;
 
-	@ManyToOne({ entity: () => FoodTopic, deleteRule: 'cascade', nullable: true })
-	topic?: Rel<FoodTopic> | null;
+	@ManyToOne({ entity: () => Topic, deleteRule: 'cascade', nullable: true })
+	topic?: Rel<Topic> | null;
 
 	@ManyToOne({ entity: () => Brand, deleteRule: 'cascade', nullable: true })
 	brand?: Rel<Brand> | null;

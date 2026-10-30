@@ -6,9 +6,9 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { districtNames } from 'src/modules/cities/util/city.js';
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 
 import { DishSearchRank } from '../entities/dish-search-rank.entity.js';
 import { Venue } from '../entities/venue.entity.js';
@@ -66,8 +66,8 @@ export class DishSearchService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly venueScrapeService: VenueScrapeService,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly topicService: TopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/**
@@ -92,9 +92,9 @@ export class DishSearchService {
 	}> {
 		const day = calendarDay(now, city.timezone);
 		const districts = districtNames(city);
-		const served = await this.venueFoodTopicService.venueCounts(city.id);
+		const served = await this.venueTopicService.venueCounts(city.id);
 		const dishes = _.orderBy(
-			(await this.foodTopicService.all()).filter(t => t.kind === FoodTopicKindEnum.DISH),
+			(await this.topicService.all()).filter(t => t.kind === TopicKindEnum.DISH),
 			[t => served.get(t.key) ?? 0, t => t.key],
 			['desc', 'asc'],
 		);
@@ -207,7 +207,7 @@ export class DishSearchService {
 		const snapshots = (
 			(await this.em.getConnection().execute(
 				`select distinct d.searched_on::text as searched_on from dish_search_ranks d
-				join food_topics t on t.id = d.topic_id
+				join topics t on t.id = d.topic_id
 				where d.city_id = ? and t.key = ? order by 1 desc limit ?`,
 				[cityId, topicKey, TOPIC_SNAPSHOTS],
 			)) as { searched_on: string }[]

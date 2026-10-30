@@ -31,7 +31,7 @@ export const ANALYSIS_BANNED = [
 	/\binsights?\b/i,
 	/\banalytics\b/i,
 	/\bdata-driven\b/i,
-	/\bleverag/i,
+	/\bleverag\w*/i,
 	/\binfluencers?\b/i,
 	/\bviral\b/i,
 	/\bmust-try\b/i,

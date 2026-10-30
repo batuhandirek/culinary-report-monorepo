@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -40,14 +40,14 @@ describe('MentionExtractionService (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				MentionExtractionService,
-				FoodTopicService,
+				TopicService,
 				{ provide: MentionExtractionAgent, useValue: agent },
 			],
 		});
 		service = harness.moduleRef.get(MentionExtractionService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
-		seedFoodTopics(em, ['pho', 'kebab']);
+		seedTopics(em, ['pho', 'kebab']);
 		em.create(SocialPost, {
 			city: testCity(em),
 			externalId: 'me-1',
@@ -69,10 +69,10 @@ describe('MentionExtractionService (pglite)', () => {
 		expect(await service.extract({ limit: 10 })).toEqual({ analysed: 1, mentions: 1 });
 		const [, context] = agent.generate.mock.calls[0] as [
 			string,
-			{ cityName: string; foodTopics: string[] },
+			{ cityName: string; topics: string[] },
 		];
 		expect(context.cityName).toBe('Berlin');
-		expect([...context.foodTopics].sort()).toEqual([
+		expect([...context.topics].sort()).toEqual([
 			'Döner & kebab',
 			'Pho',
 			'Turkish',

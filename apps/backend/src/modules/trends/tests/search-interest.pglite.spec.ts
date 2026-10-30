@@ -3,9 +3,9 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
@@ -96,7 +96,7 @@ describe('SearchInterestService (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				SearchInterestService,
-				FoodTopicService,
+				TopicService,
 				AdminSearchInterestController,
 				{ provide: ApifyService, useValue: apify },
 			],
@@ -108,7 +108,7 @@ describe('SearchInterestService (pglite)', () => {
 		const em = harness.orm.em;
 		city = testCity(em, { region: 'DE-BE' });
 		// Searched: kebab, its parent turkish, pho, vietnamese (pho's parent); `bowls` has no Trends id
-		seedFoodTopics(em, ['kebab', 'pho', 'bowls']);
+		seedTopics(em, ['kebab', 'pho', 'bowls']);
 		pho = em.create(Venue, {
 			city,
 			placeId: 'pho',
@@ -157,8 +157,8 @@ describe('SearchInterestService (pglite)', () => {
 		mention(doner, '2026-09-13', 'Döner');
 		mention(doner, '2026-09-14', 'Döner');
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {
@@ -260,7 +260,7 @@ describe('SearchInterestService (pglite)', () => {
 			kind: SearchTermKindEnum.TOPIC,
 			term: 'vietnamese',
 			label: 'Vietnamese',
-			topicKind: FoodTopicKindEnum.CUISINE,
+			topicKind: TopicKindEnum.CUISINE,
 			searchChange: 0.4,
 			// 25 % of August's cuisine mentions, 50 % of September's
 			mentionChange: 1,
@@ -280,7 +280,7 @@ describe('SearchInterestService (pglite)', () => {
 		expect(second).toMatchObject({
 			term: 'kebab',
 			label: 'Döner & kebab',
-			topicKind: FoodTopicKindEnum.DISH,
+			topicKind: TopicKindEnum.DISH,
 			searchChange: null,
 		});
 		// This pull returned none for kebab: the second pull's are replaced, not added to

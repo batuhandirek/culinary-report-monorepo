@@ -2,7 +2,6 @@ import { tags } from 'typia';
 
 import type { FeedbackUnit } from 'src/modules/feedback/entities/feedback-point.entity.js';
 import type { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
-import type { FeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import type { ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import type {
 	FeedbackSentiment,
@@ -58,7 +57,9 @@ export interface AdminThemeDishOutputDto {
 }
 
 export interface AdminThemeInsightRowOutputDto {
-	key: FeedbackTheme;
+	/** The aspect's key (`Topic.key`) */
+	key: string;
+	/** Its root's key */
 	topic: FeedbackTopic;
 	/** "Price increase" */
 	label: string;
@@ -213,7 +214,9 @@ export interface AdminThemePointOutputDto {
 }
 
 export interface AdminThemeInsightOutputDto {
-	key: FeedbackTheme;
+	/** The aspect's key (`Topic.key`) */
+	key: string;
+	/** Its root's key */
 	topic: FeedbackTopic;
 	/** "Price increase" */
 	label: string;

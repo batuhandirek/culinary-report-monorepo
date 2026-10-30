@@ -5,17 +5,19 @@
 	import TopicDishNames from './components/TopicDishNames.svelte';
 	import TopicDishSearches from './components/TopicDishSearches.svelte';
 
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
-	import FoodTopicFormDialog from '#components/admin/topics/FoodTopicFormDialog.svelte';
+	import TopicFormDialog from '#components/admin/topics/TopicFormDialog.svelte';
 	import TopicTable from '#components/admin/topics/TopicTable.svelte';
 	import MonthChart from '#components/charts/MonthChart.svelte';
 	import { cityItems } from '#lib/admin-cities.js';
-	import { api } from '#lib/api.js';
+	import { api, isNotFoundError } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
-	import { kindLabel } from '#lib/food-topic-kinds.js';
+	import { themeHref } from '#lib/feedback.js';
 	import { change, points, tone, topicHref } from '#lib/topic-format.js';
+	import { isAspectKind, kindLabel, type TopicOption, toTopicOption } from '#lib/topic-kinds.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
@@ -70,16 +72,46 @@
 	const rising = (q: AdminSearchRelatedQueryOutputDto) => (q.breakout ? 'Breakout' : `+${q.value.toLocaleString('en')} %`);
 	const trendsUrl = (id: string) => `https://trends.google.com/trends/explore?cat=71&q=${encodeURIComponent(id)}`;
 
-	// Editing needs every topic for the parent picker
+	// Editing needs every topic for the parent picker; an aspect's page reads them too
 	let editing = $state(false);
-	let allTopics = $state<{ key: string; label: string }[]>([]);
+	let allTopics = $state<(TopicOption & { id: string; hint?: string })[]>([]);
+	const loadTopics = async () => {
+		if (!allTopics.length && cityId)
+			allTopics = (await api.admin.getTopics({ cityId })).topics.map((t) => ({ ...toTopicOption(t), id: t.id, hint: t.hint }));
+	};
 	const openEdit = async () => {
-		if (!allTopics.length)
-			allTopics = (await api.admin.getFoodTopics({ cityId })).topics.map((t) => ({ key: t.key, label: t.label }));
+		await loadTopics();
 		editing = true;
 	};
 	const labelOf = (k: string) =>
 		data?.children.find((c) => c.key === k)?.label ?? k.charAt(0).toUpperCase() + k.slice(1);
+
+	// An aspect (what guests say about a place) has no venues, posts or searches: its figures are on
+	// its theme page. Here it shows what the vocabulary says about it, whether the insight came back
+	// for it or answered 404
+	$effect(() => {
+		if ((data && isAspectKind(data.row.kind)) || (loader.error && isNotFoundError(loader.error))) loadTopics();
+	});
+	const aspect = $derived(allTopics.find((t) => t.key === key && isAspectKind(t.kind)));
+	const aspectParent = $derived(aspect?.parentKey ? allTopics.find((t) => t.key === aspect.parentKey) : undefined);
+	const aspectChildren = $derived(aspect ? allTopics.filter((t) => t.parentKey === aspect.key).sort((a, b) => a.label.localeCompare(b.label)) : []);
+	const editTopic = $derived(
+		data
+			? {
+					id: data.id,
+					key: data.row.key,
+					label: data.row.label,
+					kind: data.row.kind,
+					parentKey: data.parent?.key,
+					aliases: data.aliases,
+					trendsTopicId: data.trendsTopicId,
+					trendsQuery: data.trendsQuery,
+					hint: aspect?.hint
+				}
+			: aspect
+				? { id: aspect.id, key: aspect.key, label: aspect.label, kind: aspect.kind, parentKey: aspect.parentKey, aliases: [], hint: aspect.hint }
+				: null
+	);
 </script>
 
 {#snippet queries(title: string, list: AdminSearchRelatedQueryOutputDto[], isRising: boolean)}
@@ -102,12 +134,21 @@
 	</div>
 {/snippet}
 
-<AdminPageHeader title={data?.row.label ?? labelOf(key)}>
+<AdminPageHeader title={data?.row.label ?? aspect?.label ?? labelOf(key)}>
 	{#snippet aboveTitle()}
-		<span class="text-muted-foreground text-xs">Topic{data ? ` · ${kindLabel(data.row.kind)}` : ''}</span>
+		<span class="text-muted-foreground text-xs">Topic{data ? ` · ${kindLabel(data.row.kind)}` : aspect ? ' · Aspect' : ''}</span>
 	{/snippet}
 	{#snippet belowTitle()}
-		{#if data}
+		{#if aspect}
+			<div class="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+				{#if aspectParent}
+					<span>Part of <a href={topicHref(aspectParent.key)}>{aspectParent.label}</a></span>
+				{:else}
+					<span>A root: a point about it with nothing finer to say is filed here.</span>
+				{/if}
+				<a href={themeHref(key, 'complaints', { cityId, month })}>Praise and complaints under it</a>
+			</div>
+		{:else if data}
 			<div class="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
 				{#if data.parent}
 					<span>Part of <a href={topicHref(data.parent.key)}>{data.parent.label}</a></span>
@@ -129,13 +170,35 @@
 		<div class="flex items-center gap-2">
 			<Select items={cityItems(adminCitiesStore.list)} bind:value={cityId} aria-label="City" size="sm" />
 			<Select items={MONTHS} bind:value={month} aria-label="Month" size="sm" />
-			<Button size="sm" variant="outline" icon={Pencil} disabled={!data} onclick={openEdit}>Edit</Button>
+			<Button size="sm" variant="outline" icon={Pencil} disabled={!editTopic} onclick={openEdit}>Edit</Button>
 		</div>
 	{/snippet}
 </AdminPageHeader>
 
 <div class="flex min-w-0 flex-col gap-5 pb-12">
-	{#if loader.error && !data}
+	{#if aspect}
+		<AdminPanel title="What it covers" note="told to the agents filing points">
+			<p class="m-0 text-sm">{aspect.hint || 'No hint yet: the agents go by the label alone.'}</p>
+		</AdminPanel>
+		{#if aspectChildren.length}
+			<AdminPanel title="Under it" note={`${aspectChildren.length}`}>
+				<ul class="m-0 flex list-none flex-col gap-1 p-0 text-sm">
+					{#each aspectChildren as child (child.key)}
+						<li class="flex flex-wrap items-baseline gap-x-3">
+							<a class="font-medium" href={topicHref(child.key)}>{child.label}</a>
+							{#if child.hint}<span class="text-muted-foreground text-xs">{child.hint}</span>{/if}
+						</li>
+					{/each}
+				</ul>
+			</AdminPanel>
+		{/if}
+		<AdminPanel title="Its figures" note="on the theme page">
+			<p class="text-muted-foreground m-0 text-sm">
+				An aspect has no venues, posts or searches of its own: what guests praised and criticised under it, by month, brand and dish, is on
+				<a href={themeHref(key, 'complaints', { cityId, month })}>its theme page</a>.
+			</p>
+		</AdminPanel>
+	{:else if loader.error && !data}
 		<ErrorState onRetry={load} />
 	{:else if !data}
 		<AdminPanel><SkeletonRows count={6} lines={1} trailing /></AdminPanel>
@@ -289,19 +352,14 @@
 	{/if}
 </div>
 
-{#if data}
-	<FoodTopicFormDialog
+{#if editTopic}
+	<TopicFormDialog
 		bind:active={editing}
-		topic={{
-			id: data.id,
-			key: data.row.key,
-			label: data.row.label,
-			kind: data.row.kind,
-			parentKey: data.parent?.key,
-			aliases: data.aliases,
-			trendsTopicId: data.trendsTopicId,
-			trendsQuery: data.trendsQuery
-		}}
+		topic={editTopic}
 		topics={allTopics}
-		onSaved={() => load()} />
+		onSaved={() => {
+			allTopics = [];
+			load();
+		}}
+		onDeleted={() => goto(aspectParent ? topicHref(aspectParent.key) : '/admin/trends?tab=themes')} />
 {/if}

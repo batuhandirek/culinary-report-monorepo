@@ -1,6 +1,6 @@
 import { tags } from 'typia';
 
-import type { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import type { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 
 import type { SearchTermKindEnum } from '../entities/trend-search-interest.entity.js';
 
@@ -15,7 +15,7 @@ export interface AdminSearchInterestRowOutputDto {
 	term: string;
 	label: string;
 	/** Topics: the kind of food it is */
-	topicKind?: FoodTopicKindEnum;
+	topicKind?: TopicKindEnum;
 	brandId?: string;
 	/** Google's 0–100 per month, oldest first; null where it has too little data */
 	interest: (number | null)[];

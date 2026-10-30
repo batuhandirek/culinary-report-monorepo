@@ -5,7 +5,7 @@
 	import TopicTable from '#components/admin/topics/TopicTable.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
-	import { KIND_ITEMS } from '#lib/food-topic-kinds.js';
+	import { KIND_ITEMS } from '#lib/topic-kinds.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';

@@ -1,10 +1,13 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+
 import { type CityThemeComplaint, cityThemes } from '../util/city-themes.js';
 
 /* A brand's complaint themes against the month's report venues: shares of written reviews, a review
-   once per theme, against the median of peers with five written reviews. */
+   once per theme, against the median of peers with five written reviews; the aspects named by the index. */
 describe('cityThemes', () => {
+	const aspects = seedIndex();
 	const complaint = (brandId: string, reviewId: string, theme: string | null): CityThemeComplaint => ({
 		brandId,
 		reviewId,
@@ -25,6 +28,7 @@ describe('cityThemes', () => {
 	it('gives the brand\'s share per theme against the peers\' median, the biggest gap first', () => {
 		const themes = cityThemes({
 			brandId: 'me',
+			aspects,
 			written,
 			complaints: [
 				...base,
@@ -33,8 +37,8 @@ describe('cityThemes', () => {
 				complaint('me', 'm-1', 'price_increase'),
 				complaint('me', 'm-2', 'price_increase'),
 				complaint('me', 'm-3', 'queue'),
-				// A catch-all is no finding
-				complaint('me', 'm-4', 'food_other'),
+				// A root ("about food, nothing finer") is no finding
+				complaint('me', 'm-4', 'food'),
 			],
 		});
 		expect(themes).toEqual([
@@ -45,9 +49,9 @@ describe('cityThemes', () => {
 
 	it('is absent below the floors and while a point of the brand is unfiled', () => {
 		const mine = [complaint('me', 'm-1', 'price_increase')];
-		expect(cityThemes({ brandId: 'me', written: new Map([...written, ['me', 4]]), complaints: [...base, ...mine] })).toBeUndefined();
-		expect(cityThemes({ brandId: 'me', written, complaints: [...base, ...mine, complaint('me', 'm-2', null)] })).toBeUndefined();
+		expect(cityThemes({ brandId: 'me', aspects, written: new Map([...written, ['me', 4]]), complaints: [...base, ...mine] })).toBeUndefined();
+		expect(cityThemes({ brandId: 'me', aspects, written, complaints: [...base, ...mine, complaint('me', 'm-2', null)] })).toBeUndefined();
 		// Four peers left once one has an unfiled point
-		expect(cityThemes({ brandId: 'me', written, complaints: [...base, ...mine, complaint('p5', 'p5-a', null)] })).toBeUndefined();
+		expect(cityThemes({ brandId: 'me', aspects, written, complaints: [...base, ...mine, complaint('p5', 'p5-a', null)] })).toBeUndefined();
 	});
 });

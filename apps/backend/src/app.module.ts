@@ -29,7 +29,7 @@ import { ReportsModule } from './modules/reports/reports.module.js';
 import { S3Module } from './modules/s3/s3.module.js';
 import { SitemapModule } from './modules/sitemap/sitemap.module.js';
 import { SocialModule } from './modules/social/social.module.js';
-import { FoodTopicsModule } from './modules/food-topics/food-topics.module.js';
+import { TopicsModule } from './modules/topics/topics.module.js';
 import { TrendsModule } from './modules/trends/trends.module.js';
 import { TurnstileModule } from './modules/turnstile/turnstile.module.js';
 import { VenuesModule } from './modules/venues/venues.module.js';
@@ -76,7 +76,7 @@ import sdk from './tracing.js';
 		OutreachModule,
 		PortalModule,
 		OverviewModule,
-		FoodTopicsModule,
+		TopicsModule,
 		TrendsModule,
 		HighlightsModule,
 		FoodTrendsModule,

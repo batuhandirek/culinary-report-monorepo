@@ -2,8 +2,8 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
 
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
 import _ from 'lodash';
@@ -42,8 +42,8 @@ export class ReportCityService {
 		private readonly searchInterestService: SearchInterestService,
 		private readonly venueStatusChangeService: VenueStatusChangeService,
 		private readonly venueSearchRankService: VenueSearchRankService,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly topicService: TopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/** The venue's Google Maps search ranks of the month with their history (`TRACK_SEARCH_RANKS`). */
@@ -95,8 +95,8 @@ export class ReportCityService {
 		const brandId = first.brand.id;
 		const { trends, mentions } = await this.trendService.monthWithMentions(month, cityId);
 		const peers = [...new Set([brandId, ...(peerBrandIds ?? (await this.reportBrandIds(cityId, month)))])];
-		const index = await this.foodTopicService.index();
-		const tags = await this.venueFoodTopicService.tags(branches);
+		const index = await this.topicService.index();
+		const tags = await this.venueTopicService.tags(branches);
 		const primaries = branches.flatMap(b => (tags.get(b.id) ?? []).filter(t => t.primary).map(t => t.key));
 		const counts = _.countBy(primaries);
 		const section = citySection({
@@ -112,7 +112,7 @@ export class ReportCityService {
 		if (section) {
 			const searches = await this.searchInterestService.reportDeltas(cityId, month, section.cuisine?.key);
 			if (searches.length) section.searches = searches;
-			const themes = cityThemes({ brandId, ...(await this.complaintThemes(peers, cityId, month)) });
+			const themes = cityThemes({ brandId, aspects: index, ...(await this.complaintThemes(peers, cityId, month)) });
 			if (themes?.length) section.themes = themes;
 		}
 		return section;
@@ -160,7 +160,7 @@ export class ReportCityService {
 		const out = new Map<string, ReportRatingBenchmark>();
 		const rated = branches.filter(b => b.rating != null);
 		if (!rated.length) return out;
-		const index = await this.foodTopicService.index();
+		const index = await this.topicService.index();
 		for (const inCity of Object.values(_.groupBy(rated, b => b.city.id))) {
 			const rows: {
 				id: string;
@@ -181,7 +181,7 @@ export class ReportCityService {
 				.map(r => ({ ...r, rating: Number(r.rating), reviewsCount: r.reviews_count }))
 				.filter(p => isRatingPeer(p));
 			// Stored tags: each peer's and branch's, by id
-			const tags = await this.venueFoodTopicService.tags(_.uniqBy([...peers, ...inCity], v => v.id));
+			const tags = await this.venueTopicService.tags(_.uniqBy([...peers, ...inCity], v => v.id));
 			for (const branch of inCity) {
 				const benchmark = ratingBenchmark({
 					branch: branch as RatingPeer,

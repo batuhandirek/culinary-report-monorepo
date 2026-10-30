@@ -31,11 +31,11 @@ export class AdminHashtagsController {
 		@TypedBody() body: AdminUpdateHashtagInputDto,
 	): Promise<AdminHashtagOutputDto> {
 		const tag = await this.hashtagService.setIgnored(id, body.ignored);
-		await this.em.populate(tag, ['foodTopic', 'brand']);
+		await this.em.populate(tag, ['topic', 'brand']);
 		return wrap(tag).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: ['foodTopic', 'brand'],
+			populate: ['topic', 'brand'],
 			exclude: ['brand.branches'],
 		}) as unknown as AdminHashtagOutputDto;
 	}

@@ -20,6 +20,7 @@
 		sentimentVariant
 	} from '#lib/culinary.js';
 	import { isDueToday, stageLabel } from '#lib/outreach-status.js';
+	import { topicHref } from '#lib/topic-format.js';
 	import Stat from '#ui/components/Stat.svelte';
 	import { cn } from '#ui/lib/utils.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
@@ -213,12 +214,22 @@
 					<AdminPanel title="Google reviews often mention" note="all time">
 						<p class="m-0 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
 							{#each summary.reviewTags as tag (tag.title)}
-								<span>{tag.title} <span class="text-muted-foreground text-xs tabular-nums">{tag.count}</span></span>
+								<span>
+									{#if tag.topic}
+										<a
+											class="text-beet underline-offset-2 hover:underline"
+											href={topicHref(tag.topic.key)}
+											title={`Food topic: ${tag.topic.label}`}>{tag.title}</a>
+									{:else}
+										{tag.title}
+									{/if}
+									<span class="text-muted-foreground text-xs tabular-nums">{tag.count}</span>
+								</span>
 							{/each}
 						</p>
 						<p class="text-muted-foreground m-0 mt-2 text-xs">
 							Google's own count over all of {chain ? 'its branches’' : 'its'} reviews: dishes guests come for, and what
-							bothers them ("queue", "cash only").
+							bothers them ("queue", "cash only"). A tag naming a kind of food links to its topic.
 						</p>
 					</AdminPanel>
 				{/if}

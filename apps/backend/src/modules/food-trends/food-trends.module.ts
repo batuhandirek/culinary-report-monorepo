@@ -8,7 +8,7 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { TrendsModule } from '../trends/trends.module.js';
 import { VenuesModule } from '../venues/venues.module.js';
 
@@ -29,7 +29,7 @@ import { FoodTrendsSearchPullWorker } from './workers/food-trends-search-pull.wo
 		AuthModule,
 		ApifyModule,
 		CitiesModule,
-		FoodTopicsModule,
+		TopicsModule,
 		TrendsModule,
 		VenuesModule,
 	],

@@ -6,7 +6,6 @@
 
 import _ from 'lodash';
 
-import { FEEDBACK_THEMES, isFeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { monthName } from 'src/modules/venues/util/month.js';
 import { addDays, monthWeeks, weekStart } from 'src/modules/venues/util/week.js';
 
@@ -18,7 +17,10 @@ import type {
 import type { ReportCompetitor, ReportData, ReportPost } from '../interfaces/report-data.interface.js';
 
 import type { ReportHistoryMonth } from './report-observations.js';
-import { short, signed } from './summarize-report.js';
+import { type ReportAspects, short, signed } from './summarize-report.js';
+
+/** What the playbooks need of the aspect vocabulary */
+type PlaybookAspects = Pick<ReportAspects, 'isAspect' | 'isRoot' | 'label' | 'rootOf'>;
 
 /** One stored day of the city (`CityDay`). */
 export interface PlaybookDay {
@@ -65,6 +67,8 @@ export interface PlaybookContext {
 	cityThemes?: PlaybookCityTheme[];
 	/** The month before's competitors by venue id */
 	competitorsPrevious: Map<string, ReportCompetitor>;
+	/** The aspect vocabulary (`TopicService.index`, read once per build): the names of every theme key */
+	aspects: ReportAspects;
 }
 
 /** A city theme row by key. */
@@ -287,7 +291,7 @@ const reviewsChecks = (o: ReportObservation, ctx: PlaybookContext): ReportCheck[
 		),
 	);
 	if (ctx.cityThemes && data.reviews.complaintThemes && data.previous?.reviews?.complaintThemes) {
-		const grown = grownThemes(data, data.previous.reviews.written);
+		const grown = grownThemes(data, data.previous.reviews.written, ctx.aspects);
 		const cityGrown = grown.filter(g => (ctx.cityThemes!.find(t => t.key === g.theme)?.reviewShareChange ?? 0) >= 3);
 		if (grown.length)
 			out.push(
@@ -304,17 +308,17 @@ const reviewsChecks = (o: ReportObservation, ctx: PlaybookContext): ReportCheck[
 	return out;
 };
 
-/** Complaint themes whose share of written reviews grew `THEME_GREW_POINTS`+ against the month before. */
-const grownThemes = (data: ReportData, prevWritten: number) => {
+/** Complaint themes whose share of written reviews grew `THEME_GREW_POINTS`+ against the month before; the roots left out. */
+const grownThemes = (data: ReportData, prevWritten: number, aspects: PlaybookAspects) => {
 	const prev = data.previous?.reviews?.complaintThemes ?? {};
 	const now = data.reviews.complaintThemes ?? {};
 	return _.orderBy(
 		Object.entries(now).flatMap(([theme, n]) => {
-			if (!isFeedbackTheme(theme) || theme === 'other' || FEEDBACK_THEMES[theme].label.endsWith(', other')) return [];
+			if (!aspects.isAspect(theme) || aspects.isRoot(theme)) return [];
 			const before = prev[theme] ?? 0;
 			const change = percent(n, data.reviews.written) - percent(before, prevWritten);
 			return change >= THEME_GREW_POINTS ?
-					[{ theme, label: FEEDBACK_THEMES[theme].label.toLowerCase(), topic: FEEDBACK_THEMES[theme].topic, n, before, change }]
+					[{ theme, label: aspects.label(theme).toLowerCase(), topic: aspects.rootOf(theme) ?? theme, n, before, change }]
 				:	[];
 		}),
 		g => -g.change,
@@ -326,7 +330,7 @@ const starsChecks = (o: ReportObservation, ctx: PlaybookContext): ReportCheck[] 
 	const prev = data.previous?.reviews;
 	const out: ReportCheck[] = [];
 	if (prev?.complaintThemes && data.reviews.complaintThemes) {
-		const grown = grownThemes(data, prev.written).slice(0, 3);
+		const grown = grownThemes(data, prev.written, ctx.aspects).slice(0, 3);
 		out.push(
 			check(
 				'Which complaints grew against last month?',
@@ -365,8 +369,9 @@ const starsChecks = (o: ReportObservation, ctx: PlaybookContext): ReportCheck[] 
 		);
 	}
 
-	if (o.metric === 'complaint_theme' && o.theme && isFeedbackTheme(o.theme)) {
-		const topic = FEEDBACK_THEMES[o.theme].topic;
+	if (o.metric === 'complaint_theme' && o.theme && ctx.aspects.isAspect(o.theme)) {
+		// The competitors' complaint counts are per root
+		const topic = ctx.aspects.rootOf(o.theme) ?? o.theme;
 		const tracked = data.competitors.filter(c => c.reviewsTracked && c.reviews.written >= 5);
 		const theirs = tracked.map(c => percent(c.reviews.complaints[topic] ?? 0, c.reviews.written));
 		const competitorMedian = theirs.length ? _.sortBy(theirs)[Math.floor(theirs.length / 2)] : undefined;

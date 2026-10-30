@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames, districtNames } from 'src/modules/cities/util/city.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { faviconSite } from 'src/modules/venues/util/favicon.js';
@@ -67,7 +67,7 @@ export class AccountMatchingService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly socialAccountService: SocialAccountService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	async match(city: City): Promise<AccountMatchResult> {
@@ -153,7 +153,7 @@ export class AccountMatchingService {
 			`Accounts ${city.name}: ${result.linked} linked, ${result.unlinked} unlinked, ${result.suggested} suggested, ${websites} from Google websites, ${result.fromSites} linked and ${result.siteSuggested} suggested from sites, ${fromTags} new from tags`,
 		);
 		// An own account moves what posts by others say a venue's food is: its city's tags by job
-		await this.venueFoodTopicService.queueCityRefresh([city.id]);
+		await this.venueTopicService.queueCityRefresh([city.id]);
 		return result;
 	}
 

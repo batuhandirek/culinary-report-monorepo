@@ -7,11 +7,11 @@ import _ from 'lodash';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import {
-	FoodTopic,
-	FoodTopicKindEnum,
-} from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+	Topic,
+	TopicKindEnum,
+} from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 
@@ -57,7 +57,7 @@ export interface SearchInterestRow {
 	term: string;
 	label: string;
 	/** Topics: the kind of food it is */
-	topicKind?: FoodTopicKindEnum;
+	topicKind?: TopicKindEnum;
 	brandId?: string;
 	/** Google's 0–100 per month; null where it has too little data */
 	interest: (number | null)[];
@@ -94,7 +94,7 @@ interface PullTerm {
 	kind: SearchTermKindEnum;
 	term: string;
 	query: string;
-	topic: FoodTopic | null;
+	topic: Topic | null;
 	brand: Pick<Brand, 'id' | 'name'> | null;
 }
 
@@ -128,11 +128,11 @@ export class SearchInterestService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly apifyService: ApifyService,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 	) {}
 
 	/**
-	 * Pulls the window ending with `month` for every searched food topic (`FoodTopicService.searched`)
+	 * Pulls the window ending with `month` for every searched food topic (`TopicService.searched`)
 	 * and the given brands (the pipeline passes the won prospects'), and stores one row per term and
 	 * month, overwriting an earlier pull. A term Google has no data for is stored as null; one the
 	 * run returned nothing for is left as it was.
@@ -147,7 +147,7 @@ export class SearchInterestService {
 	): Promise<SearchInterestPullResult> {
 		const city = await this.em.findOneOrFail(City, { id: cityId });
 		const months = monthsUpTo(month, SEARCH_WINDOW_MONTHS);
-		const topicTerms: PullTerm[] = (await this.foodTopicService.searched()).map(topic => ({
+		const topicTerms: PullTerm[] = (await this.topicService.searched()).map(topic => ({
 			kind: SearchTermKindEnum.TOPIC,
 			term: topic.key,
 			query: topic.trendsTopicId || trendsQuery(topic.trendsQuery!),
@@ -229,7 +229,7 @@ export class SearchInterestService {
 			});
 			for (const t of fetched) {
 				const brand = t.brand ? em.getReference(Brand, t.brand.id) : null;
-				const topic = t.topic ? em.getReference(FoodTopic, t.topic.id) : null;
+				const topic = t.topic ? em.getReference(Topic, t.topic.id) : null;
 				const interest = monthlyInterest(t.item.interestOverTime, months);
 				if ([...interest.values()].some(v => v !== null)) withData++;
 				for (const m of months) {
@@ -272,7 +272,7 @@ export class SearchInterestService {
 				{ city: cityId, month: { $in: months } },
 				{ populate: ['topic'] },
 			),
-			this.foodTopicService.index(),
+			this.topicService.index(),
 			this.em.find(TrendRelatedQuery, { city: cityId, month }, { orderBy: { rank: 'asc' } }),
 		]);
 		const shares = await this.topicShares(cityId, months, index);
@@ -335,7 +335,7 @@ export class SearchInterestService {
 			{ populate: ['topic'] },
 		);
 		if (!stored.length) return [];
-		const index = await this.foodTopicService.index();
+		const index = await this.topicService.index();
 		// The venue's own kind of food is a topic key already
 		const own = new Set(ownCuisine && index.get(ownCuisine) ? [ownCuisine] : []);
 		const shares = await this.topicShares(cityId, months, index);
@@ -375,7 +375,7 @@ export class SearchInterestService {
 	private async topicShares(
 		cityId: string,
 		months: string[],
-		index: FoodTopicIndex,
+		index: TopicIndex,
 	): Promise<Map<string, (number | null)[]>> {
 		const rows = await this.em
 			.getConnection()

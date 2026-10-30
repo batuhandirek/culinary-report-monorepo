@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { seedIndex } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 
 import { captionHashtags, hashtagBrandIndex, hashtagLinks, normalizeHashtag } from '../util/hashtags.js';
 

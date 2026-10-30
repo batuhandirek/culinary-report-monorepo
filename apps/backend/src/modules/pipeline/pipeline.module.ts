@@ -8,7 +8,7 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { OutreachModule } from '../outreach/outreach.module.js';
 import { ReportsModule } from '../reports/reports.module.js';
 import { SocialModule } from '../social/social.module.js';
@@ -38,7 +38,7 @@ import { RunPipelineWorker } from './workers/run-pipeline.worker.js';
 		ApifyModule,
 		AuthModule,
 		CitiesModule,
-		FoodTopicsModule,
+		TopicsModule,
 		VenuesModule,
 		SocialModule,
 		ReportsModule,

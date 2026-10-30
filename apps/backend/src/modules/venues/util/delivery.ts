@@ -47,7 +47,7 @@ export const itemsForDish = <T extends { name: string }>(items: T[], dish: strin
 export interface MenuForPricing {
 	venueId: string;
 	name: string;
-	/** `topics`: the item's stored food topics (`MenuItemFoodTopic`), when the topic comparison needs them */
+	/** `topics`: the item's stored food topics (`MenuItemTopic`), when the topic comparison needs them */
 	items: { name: string; price: number; category?: string | null; topics?: string[] }[];
 }
 

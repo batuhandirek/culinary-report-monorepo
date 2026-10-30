@@ -3,8 +3,8 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -50,8 +50,8 @@ describe('VenueScrapeService.lookupNames (pglite)', () => {
 			providers: [
 				VenueScrapeService,
 				VenueService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});

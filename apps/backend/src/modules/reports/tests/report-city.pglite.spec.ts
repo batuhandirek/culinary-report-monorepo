@@ -3,9 +3,9 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
@@ -42,13 +42,13 @@ describe('ReportCityService (pglite)', () => {
 				TrendService,
 				VenueStatusChangeService,
 				SearchInterestService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 			],
 		});
 		service = harness.moduleRef.get(ReportCityService);
 		entityManagerManager.setEntityManager(harness.orm.em);
-		seedFoodTopics(harness.orm.em);
+		seedTopics(harness.orm.em);
 
 		const em = harness.orm.em;
 		city = testCity(em);
@@ -116,8 +116,8 @@ describe('ReportCityService (pglite)', () => {
 		});
 		mention(thin, '2026-09-05', 'Austrian', 100);
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 		await em.populate([me, thin], ['city']);
 	});
 

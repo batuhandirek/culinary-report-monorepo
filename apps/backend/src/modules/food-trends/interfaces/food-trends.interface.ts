@@ -1,4 +1,4 @@
-import type { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import type { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 
 /**
  * A city's quarter of food trends in public: what `FoodTrendsReport.data` stores and the page
@@ -37,7 +37,7 @@ export interface FoodTrendsSearches {
 export interface FoodTrendsSearchTopic {
 	key: string;
 	label: string;
-	kind: FoodTopicKindEnum;
+	kind: TopicKindEnum;
 	/** The quarter's mean search level, the anchor's two-year mean = 100 */
 	level: number;
 	/** The same quarter a year earlier, on the same scale */
@@ -75,7 +75,7 @@ export interface FoodTrendsTalked {
 export interface FoodTrendsTalkedTopic {
 	key: string;
 	label: string;
-	kind: FoodTopicKindEnum;
+	kind: TopicKindEnum;
 	/** Share of the quarter's mentions with a kind of food naming it or a kind under it, percent */
 	share: number;
 	mentions: number;

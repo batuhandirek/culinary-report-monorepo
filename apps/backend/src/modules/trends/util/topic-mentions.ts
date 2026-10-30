@@ -1,6 +1,6 @@
 // Pure: counting a city's mentions per food topic and month.
 
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 
 /** One matched mention as the topic readers select it. */
@@ -9,7 +9,7 @@ export interface TopicMentionRow {
 	month: string;
 	brand_id: string;
 	brand_name: string;
-	/** Its stored food topics (`MentionFoodTopic`), in the order its text names them */
+	/** Its stored food topics (`MentionTopic`), in the order its text names them */
 	topics: string[];
 	/** By one of the brand's own accounts (`ownPostSql`) */
 	own: boolean;
@@ -38,7 +38,7 @@ const bump = (map: Map<string, Map<string, number>>, key: string, month: string)
  */
 export const countTopicMentions = (
 	rows: TopicMentionRow[],
-	index: FoodTopicIndex,
+	index: TopicIndex,
 ): TopicMentionCounts => {
 	const totals = new Map<string, number>();
 	const byTopic = new Map<string, Map<string, number>>();
@@ -69,8 +69,8 @@ export const topicShares = (
 
 /** SQL: a mention's (`alias`) stored food topic keys, in the order its text names them */
 export const mentionTopicsSql = (alias: string) =>
-	`(select coalesce(array_agg(t.key order by mt.rank), '{}') from mention_food_topics mt
-		join food_topics t on t.id = mt.topic_id where mt.mention_id = ${alias}.id)`;
+	`(select coalesce(array_agg(t.key order by mt.rank), '{}') from mention_topics mt
+		join topics t on t.id = mt.topic_id where mt.mention_id = ${alias}.id)`;
 
 /** The SQL behind `TopicMentionRow`: a city's matched mentions in [start, end). */
 export const TOPIC_MENTIONS_SQL = `select to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') as month, m.brand_id,

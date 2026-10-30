@@ -7,9 +7,9 @@ import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.facto
 import type { AnsweredPoint } from 'src/modules/feedback/util/feedback-rows.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import type {
@@ -107,8 +107,8 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				ReviewService,
 				BrandPostsService,
 				CompetitorService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				BrandService,
 				CityService,
 			],
@@ -117,7 +117,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 		competitors = harness.moduleRef.get(CompetitorService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		city = testCity(em());
-		seedFoodTopics(em());
+		seedTopics(em());
 		await em().flush();
 	});
 

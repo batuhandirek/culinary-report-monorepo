@@ -3,8 +3,10 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
 import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { BrandPostsService } from 'src/modules/social/services/brand-posts.service.js';
 import { ThemeInsightService } from 'src/modules/trends/services/theme-insight.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
@@ -18,7 +20,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
 import { ReportTemplateService } from '../services/report-template.service.js';
@@ -37,16 +39,19 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 				CityService,
 				MentionMatchingService,
 				ThemeInsightService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				BrandPostsService,
 				{
-					provide: ReportHighlightsAgent,
+					provide: ReportEditorAgent,
 					useValue: mockAgent({ title: 'T', headline: 'H', highlights: [], actions: [] }),
 				},
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
+		// The aspects the points are filed under: the readers take the vocabulary from the table
+		seedTopics(harness.orm.em, ASPECT_SEED.map(a => a.key));
+		await harness.orm.em.flush();
 	});
 
 	afterAll(async () => {

@@ -15,11 +15,11 @@ import { CitySource } from 'src/modules/cities/entities/city-source.entity.js';
 import { Embedding } from 'src/modules/embeddings/entities/embedding.entity.js';
 import { DishName } from 'src/modules/feedback/entities/dish-name.entity.js';
 import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { FoodTopicIgnoredWord } from 'src/modules/food-topics/entities/food-topic-ignored-word.entity.js';
-import { MentionFoodTopic } from 'src/modules/food-topics/entities/mention-food-topic.entity.js';
-import { MenuItemFoodTopic } from 'src/modules/food-topics/entities/menu-item-food-topic.entity.js';
-import { VenueFoodTopic } from 'src/modules/food-topics/entities/venue-food-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicIgnoredWord } from 'src/modules/topics/entities/topic-ignored-word.entity.js';
+import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
+import { MenuItemTopic } from 'src/modules/topics/entities/menu-item-topic.entity.js';
+import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
 import { FoodTrendsReport } from 'src/modules/food-trends/entities/food-trends-report.entity.js';
 import { FsmStateChange } from 'src/modules/fsm/entities/fsm-state-change.entity.js';
 import { CityHighlight } from 'src/modules/highlights/entities/city-highlight.entity.js';
@@ -61,6 +61,7 @@ import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { VenueBusyness } from 'src/modules/venues/entities/venue-busyness.entity.js';
 import { VenueDeliveryListing } from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
+import { VenueDeliverySnapshot } from 'src/modules/venues/entities/venue-delivery-snapshot.entity.js';
 import { VenueLookup } from 'src/modules/venues/entities/venue-lookup.entity.js';
 import { VenueReservationSample } from 'src/modules/venues/entities/venue-reservation-sample.entity.js';
 import { VenueSearchRank } from 'src/modules/venues/entities/venue-search-rank.entity.js';
@@ -92,9 +93,9 @@ export default defineConfig({
 		LandingEdition,
 		NewsletterSubscriber,
 		TrendSearchInterest,
-		FoodTopic,
-		VenueFoodTopic,
-		FoodTopicIgnoredWord,
+		Topic,
+		VenueTopic,
+		TopicIgnoredWord,
 		TrendRelatedQuery,
 		Venue,
 		VenueSnapshot,
@@ -110,6 +111,7 @@ export default defineConfig({
 		VenueBusyness,
 		VenueReservationSample,
 		VenueDeliveryListing,
+		VenueDeliverySnapshot,
 		MenuItem,
 		Review,
 		SocialPost,
@@ -135,8 +137,8 @@ export default defineConfig({
 		BacklogRun,
 		FeedbackPoint,
 		DishName,
-		MentionFoodTopic,
-		MenuItemFoodTopic,
+		MentionTopic,
+		MenuItemTopic,
 		Prospect,
 		OutreachTouch,
 		BrandMember,

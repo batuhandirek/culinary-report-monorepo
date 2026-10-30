@@ -2,7 +2,6 @@ import type { Component } from 'svelte';
 
 import { page } from '$app/state';
 import { ADMIN_MENUS, findAdminMenu } from '#constants/ADMIN_MENUS.js';
-import { themeLabel } from '#lib/feedback.js';
 
 export interface AdminBreadcrumb {
 	// Empty for the page you are on: it is not a link.
@@ -63,7 +62,8 @@ export function constructAdminBreadcrumbs(): AdminBreadcrumb[] {
 		}
 		const theme = pathname.split('/').filter(Boolean)[3];
 		crumbs.push({ href: `/admin/trends?${params}`, name: 'Praise and complaints' });
-		crumbs.push({ href: '', name: theme ? themeLabel(decodeURIComponent(theme)) : 'Theme' });
+		// Its label comes with the page's data (the vocabulary lives in the topics table): the key reads well enough
+		crumbs.push({ href: '', name: theme ? sentence(decodeURIComponent(theme).replaceAll('_', ' ')) : 'Theme' });
 		return crumbs;
 	}
 	// Report templates sit beside the reports: Reports › Report templates › a template

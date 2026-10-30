@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { DishNameService } from 'src/modules/feedback/services/dish-name.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
@@ -17,10 +18,12 @@ import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
 import type { AdminBrandMonthFiguresOutputDto } from '../dto/admin-brand-list.dto.js';
 import type {
+	AdminBrandReviewTagOutputDto,
 	AdminBrandSummaryOutputDto,
 	AdminBrandTodoOutputDto,
 	AdminBrandTopPostOutputDto,
 } from '../dto/admin-brand-summary.dto.js';
+import { reviewTags } from '../util/review-tags.js';
 
 import { BrandListService, monthBefore } from './brand-list.service.js';
 
@@ -29,26 +32,13 @@ const SERIES_MONTHS = 6;
 const monthName = (month: string) =>
 	new Date(`${month}-01T00:00:00Z`).toLocaleString('en', { month: 'long', timeZone: 'UTC' });
 
-/** Google's review tags of these places, summed by title (case and accents aside), most first. */
-export const reviewTags = (venues: Pick<Venue, 'details'>[], limit = 12): { title: string; count: number }[] => {
-	const byKey = new Map<string, { title: string; count: number }>();
-	for (const venue of venues) {
-		for (const tag of venue.details?.reviewsTags ?? []) {
-			const key = tag.title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-			const entry = byKey.get(key) ?? { title: tag.title, count: 0 };
-			entry.count += tag.count;
-			byKey.set(key, entry);
-		}
-	}
-	return _.orderBy([...byKey.values()], ['count', 'title'], ['desc', 'asc']).slice(0, limit);
-};
-
 /** The brand page's Overview: the month in numbers, six months of them, its best posts and what to do. */
 @Injectable()
 export class BrandSummaryService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly brandListService: BrandListService,
+		private readonly dishNameService: DishNameService,
 	) {}
 
 	async summary(
@@ -119,7 +109,7 @@ export class BrandSummaryService {
 					outreachCount: prospect.outreachCount,
 				},
 			}),
-			reviewTags: reviewTags(branches),
+			reviewTags: await this.reviewTags(branches),
 			todos: this.todos({
 				month,
 				figures,
@@ -133,6 +123,16 @@ export class BrandSummaryService {
 				now,
 			}),
 		};
+	}
+
+	/** Its places' Google review tags, each with the food topic it names */
+	private async reviewTags(branches: Venue[]): Promise<AdminBrandReviewTagOutputDto[]> {
+		const tags = reviewTags(branches);
+		const topics = await this.dishNameService.reviewTagTopics(tags.map(t => t.title));
+		return tags.map(tag => {
+			const topic = topics.get(tag.title);
+			return { ...tag, ...(topic && { topic }) };
+		});
 	}
 
 	/** What an admin can do about the brand now, most pressing first. */

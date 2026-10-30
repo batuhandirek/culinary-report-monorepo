@@ -5,7 +5,6 @@
 
 import _ from 'lodash';
 
-import { FEEDBACK_THEMES, isFeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
 import { monthName } from 'src/modules/venues/util/month.js';
 import { weekStart } from 'src/modules/venues/util/week.js';
 
@@ -23,7 +22,7 @@ import type {
 	ReportSocialStats,
 } from '../interfaces/report-data.interface.js';
 
-import { short, signed } from './summarize-report.js';
+import { type ReportAspects, short, signed } from './summarize-report.js';
 
 /** One earlier month of the brand, read from its stored report (`ReportService.history`). */
 export interface ReportHistoryMonth {
@@ -41,6 +40,8 @@ export interface ObservationInput {
 	/** The months before the previous one, oldest first; may be empty */
 	history: ReportHistoryMonth[];
 	timeZone: string;
+	/** The aspect vocabulary: which complaint theme keys are aspects and roots, and their labels */
+	aspects: Pick<ReportAspects, 'isAspect' | 'isRoot' | 'label'>;
 }
 
 /** Thresholds: a move counts when its relative and its absolute change both pass. */
@@ -200,7 +201,7 @@ const reviewSource = (data: ReportData) =>
 	data.reviews.byPlatform?.some(p => p.platform === 'tripadvisor') ? 'Google and TripAdvisor reviews' : 'Google reviews';
 
 /** The month's notable moves, the most important first, `MAX_OBSERVATIONS` at most; empty without a previous month. */
-export const observe = ({ data, previousData, history, timeZone }: ObservationInput): Omit<ReportObservation, 'checks'>[] => {
+export const observe = ({ data, previousData, history, timeZone, aspects }: ObservationInput): Omit<ReportObservation, 'checks'>[] => {
 	const prev = data.previous;
 	const month = data.month;
 	const chain = data.branches.length > 1;
@@ -318,7 +319,7 @@ export const observe = ({ data, previousData, history, timeZone }: ObservationIn
 					});
 			}
 
-			// A complaint theme's share against the month before (the catch-all themes left out)
+			// A complaint theme's share against the month before (the roots, "about price, nothing finer", left out)
 			const prevThemes = prev.reviews.complaintThemes;
 			if (
 				prevThemes &&
@@ -327,14 +328,14 @@ export const observe = ({ data, previousData, history, timeZone }: ObservationIn
 				prev.reviews.written >= OBSERVATION_FLOORS.complaint_theme.written
 			) {
 				for (const [theme, n] of Object.entries(data.reviews.complaintThemes)) {
-					if (!isFeedbackTheme(theme) || theme === 'other' || FEEDBACK_THEMES[theme].label.endsWith(', other')) continue;
+					if (!aspects.isAspect(theme) || aspects.isRoot(theme)) continue;
 					if (n < OBSERVATION_FLOORS.complaint_theme.min) continue;
 					const before = prevThemes[theme] ?? 0;
 					const from = percent(before / prev.reviews.written);
 					const to = percent(n / data.reviews.written);
 					const change = to - from;
 					if (change < OBSERVATION_FLOORS.complaint_theme.points) continue;
-					const label = FEEDBACK_THEMES[theme].label.toLowerCase();
+					const label = aspects.label(theme).toLowerCase();
 					drafts.push({
 						key: `complaint_theme:${theme}`,
 						metric: 'complaint_theme',

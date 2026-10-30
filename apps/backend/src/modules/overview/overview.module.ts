@@ -7,7 +7,8 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { FeedbackModule } from '../feedback/feedback.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { OutreachModule } from '../outreach/outreach.module.js';
 import { VenuesModule } from '../venues/venues.module.js';
 
@@ -30,7 +31,8 @@ import { TodayService } from './services/today.service.js';
 		MikroOrmModule.forFeature([User, UserSession]),
 		AuthModule,
 		CitiesModule,
-		FoodTopicsModule,
+		FeedbackModule,
+		TopicsModule,
 		OutreachModule,
 		VenuesModule,
 	],

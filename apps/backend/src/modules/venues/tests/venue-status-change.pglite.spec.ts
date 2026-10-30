@@ -6,9 +6,9 @@ import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js'
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { linkFoodTopics, seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -79,8 +79,8 @@ describe('VenueStatusChange (pglite)', () => {
 				VenueService,
 				VenueScrapeService,
 				VenueStatusChangeService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});
@@ -88,7 +88,7 @@ describe('VenueStatusChange (pglite)', () => {
 		scrapeService = harness.moduleRef.get(VenueScrapeService);
 		statusService = harness.moduleRef.get(VenueStatusChangeService);
 		entityManagerManager.setEntityManager(harness.orm.em);
-		seedFoodTopics(harness.orm.em);
+		seedTopics(harness.orm.em);
 		city = await cityFactory.create();
 	});
 
@@ -192,7 +192,7 @@ describe('VenueStatusChange (pglite)', () => {
 
 	it("sums the city's quarter by district and food, and lists new venues", async () => {
 		const month = new Date().toISOString().slice(0, 7);
-		await linkFoodTopics(harness.orm.em);
+		await linkTopics(harness.orm.em);
 		const summary = await statusService.quarter(city.id, month);
 		expect(summary.totals).toEqual({
 			opened: 1,
@@ -280,7 +280,7 @@ describe('VenueStatusChange (pglite)', () => {
 		);
 
 		const month = new Date().toISOString().slice(0, 7);
-		await linkFoodTopics(harness.orm.em);
+		await linkTopics(harness.orm.em);
 		const summary = await statusService.quarter(postCity.id, month);
 		expect(summary.totals.opened).toBe(1);
 		expect(summary.changes).toEqual([

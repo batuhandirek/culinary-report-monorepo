@@ -5,8 +5,8 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { MentionFoodTopicService } from 'src/modules/food-topics/services/mention-food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
@@ -177,8 +177,8 @@ export class MentionMatchingService {
 		private readonly em: EntityManager,
 		private readonly venueMatchAgent: VenueMatchAgent,
 		private readonly cityService: CityService,
-		private readonly mentionFoodTopicService: MentionFoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly mentionTopicService: MentionTopicService,
+		private readonly venueTopicService: VenueTopicService,
 		private readonly hashtagService: HashtagService,
 	) {}
 
@@ -188,8 +188,8 @@ export class MentionMatchingService {
 	 */
 	private async relinkFood(mentions: Mention[]): Promise<void> {
 		if (!mentions.length) return;
-		await this.mentionFoodTopicService.relink({ mentionIds: mentions.map(m => m.id) });
-		await this.venueFoodTopicService.queueCityRefresh(_.uniq(mentions.map(m => m.post.city.id)));
+		await this.mentionTopicService.relink({ mentionIds: mentions.map(m => m.id) });
+		await this.venueTopicService.queueCityRefresh(_.uniq(mentions.map(m => m.post.city.id)));
 	}
 
 	/**

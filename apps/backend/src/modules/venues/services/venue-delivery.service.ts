@@ -3,10 +3,10 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 
@@ -16,7 +16,9 @@ import {
 	DeliveryPlatformEnum,
 	VenueDeliveryListing,
 } from '../entities/venue-delivery-listing.entity.js';
+import { VenueDeliverySnapshot } from '../entities/venue-delivery-snapshot.entity.js';
 import { deliveryPlatformOf } from '../util/delivery.js';
+import { previousMonth } from '../util/month.js';
 import { isSameVenue, nameSimilarity, normalizeVenueName } from '../util/venue-names.js';
 
 const WOLT_ACTOR = 'needy_hammock/wolt-restaurant-menu-scraper';
@@ -71,6 +73,12 @@ export interface DeliveryMenu {
 	month: string | null;
 }
 
+/** A listing's figures as of a month: that month's snapshot, and the month before's when stored. */
+export interface DeliveryFigures {
+	current: VenueDeliverySnapshot;
+	previous?: VenueDeliverySnapshot;
+}
+
 export interface DeliveryScrapeResult {
 	venues: number;
 	wolt: { linked: number; saved: number; menuItems: number; failed: number };
@@ -78,7 +86,7 @@ export interface DeliveryScrapeResult {
 }
 
 /**
- * The one writer of delivery listings and their menus. Wolt is read per restaurant from the
+ * The one writer of delivery listings, their monthly snapshots and their menus. Wolt is read per restaurant from the
  * Wolt link Google lists under "Order online" (full menu, cents); Lieferando only by matching
  * the city's restaurant list by name and postcode (rating, fee, minimum order; the actor fetches
  * menus only for a whole search, so none are stored for Lieferando).
@@ -90,9 +98,9 @@ export class VenueDeliveryService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly apifyService: ApifyService,
-		private readonly foodTopicService: FoodTopicService,
+		private readonly topicService: TopicService,
 		private readonly menuTopicService: MenuTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/** Scrapes these venues' delivery listings for `month`, replacing that month's menus. Flushes. */
@@ -122,7 +130,7 @@ export class VenueDeliveryService {
 		const perRun = Math.max(WOLT_MIN_RUN_USD, woltLinks.size ? woltBudget / woltLinks.size : 0);
 		const onWolt = new Set<string>();
 		// Menu items are stored with their food topics
-		const index = woltLinks.size ? await this.foodTopicService.index() : undefined;
+		const index = woltLinks.size ? await this.topicService.index() : undefined;
 		for (const [venue, url] of woltLinks) {
 			try {
 				const [item] = await this.apifyService.runActor<WoltItem>(
@@ -163,7 +171,7 @@ export class VenueDeliveryService {
 			for (const venue of rest) {
 				const row = matchLieferando(venue, rows);
 				if (!row) continue;
-				await this.upsertListing(venue, DeliveryPlatformEnum.LIEFERANDO, {
+				await this.upsertListing(venue, DeliveryPlatformEnum.LIEFERANDO, month, {
 					url: row.url ?? `https://www.lieferando.de/speisekarte/${row.restaurantId ?? ''}`,
 					externalId: row.restaurantId ?? null,
 					rating: row.rating ?? null,
@@ -178,19 +186,31 @@ export class VenueDeliveryService {
 			await this.em.flush();
 		}
 		// A new menu moves its venues' tags: their cities' by job
-		if (result.wolt.saved) await this.venueFoodTopicService.queueCityRefresh(venues.map(v => v.city.id));
+		if (result.wolt.saved) await this.venueTopicService.queueCityRefresh(venues.map(v => v.city.id));
 		return result;
 	}
 
+	/** Saves the listing's latest figures and `month`'s snapshot of them (replacing that month's). */
 	private async upsertListing(
 		venue: Venue,
 		platform: DeliveryPlatformEnum,
+		month: string,
 		fields: Omit<VenueDeliveryListing, 'id' | 'venue' | 'platform' | 'menuItems' | 'createdAt' | 'updatedAt' | 'deletedAt'>,
 	): Promise<VenueDeliveryListing> {
-		const listing =
-			(await this.em.findOne(VenueDeliveryListing, { venue, platform })) ??
-			this.em.create(VenueDeliveryListing, { venue, platform, ...fields });
+		const existing = await this.em.findOne(VenueDeliveryListing, { venue, platform });
+		const listing = existing ?? this.em.create(VenueDeliveryListing, { venue, platform, ...fields });
 		this.em.assign(listing, fields);
+		const figures = {
+			rating: fields.rating ?? null,
+			reviewsCount: fields.reviewsCount ?? null,
+			deliveryFee: fields.deliveryFee ?? null,
+			minOrder: fields.minOrder ?? null,
+			fetchedAt: fields.fetchedAt,
+		};
+		// A new listing has no snapshot yet (and no id to look one up by)
+		const snapshot = existing && (await this.em.findOne(VenueDeliverySnapshot, { listing: existing, month }));
+		if (snapshot) this.em.assign(snapshot, figures);
+		else this.em.create(VenueDeliverySnapshot, { listing, month, ...figures });
 		return listing;
 	}
 
@@ -200,9 +220,9 @@ export class VenueDeliveryService {
 		item: WoltItem,
 		month: string,
 		now: Date,
-		index: FoodTopicIndex,
+		index: TopicIndex,
 	): Promise<number> {
-		const listing = await this.upsertListing(venue, DeliveryPlatformEnum.WOLT, {
+		const listing = await this.upsertListing(venue, DeliveryPlatformEnum.WOLT, month, {
 			url: item.url ?? url,
 			externalId: item.id ?? null,
 			// The 0–10 score halved is finer than the 0–5 band
@@ -247,6 +267,28 @@ export class VenueDeliveryService {
 			);
 			const items = latest ? await this.em.find(MenuItem, { listing, month: latest.month }) : [];
 			out.push({ venueId: listing.venue.id, listing, items, month: latest?.month ?? null });
+		}
+		return out;
+	}
+
+	/**
+	 * These listings' figures as of `month`, by listing id: the latest snapshot up to it, and the
+	 * month before's only when the latest is `month` itself. A listing without one is left out.
+	 */
+	async figures(listingIds: string[], month: string): Promise<Map<string, DeliveryFigures>> {
+		const out = new Map<string, DeliveryFigures>();
+		if (listingIds.length === 0) return out;
+		const before = previousMonth(new Date(`${month}-01T00:00:00Z`));
+		const snapshots = await this.em.find(
+			VenueDeliverySnapshot,
+			{ listing: { $in: listingIds }, month: { $lte: month } },
+			{ orderBy: { month: QueryOrder.DESC } },
+		);
+		for (const snapshot of snapshots) {
+			const id = snapshot.listing.id;
+			const seen = out.get(id);
+			if (!seen) out.set(id, { current: snapshot });
+			else if (!seen.previous && seen.current.month === month && snapshot.month === before) seen.previous = snapshot;
 		}
 		return out;
 	}

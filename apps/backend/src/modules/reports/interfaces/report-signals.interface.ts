@@ -1,5 +1,5 @@
 // The report's demand and price sections: computed at build from the samples and listings the
-// pipeline stores (`VenueBusyness`, `VenueReservationSample`, `VenueDeliveryListing` /
+// pipeline stores (`VenueBusyness`, `VenueReservationSample`, `VenueDeliverySnapshot` /
 // `MenuItem`) and from the report's own posts and reviews. Every field is optional on
 // `ReportData`: absent means not tracked or below its floors, never zero.
 
@@ -73,7 +73,7 @@ export interface ReportBookedMedian {
 	venues: number;
 }
 
-/** The venue's (or a competitor's) page on a delivery platform. */
+/** The venue's (or a competitor's) page on a delivery platform, its figures as of the report month. */
 export interface ReportDeliveryListing {
 	platform: string;
 	url: string;
@@ -82,6 +82,8 @@ export interface ReportDeliveryListing {
 	deliveryFee?: number;
 	minOrder?: number;
 	currency?: string;
+	/** The month before's rating and rating count; absent when that month wasn't scraped */
+	previous?: { month: string; rating?: number; reviewsCount?: number };
 }
 
 /** "Your prices next to your competitors'", and the delivery reputation. */

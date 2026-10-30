@@ -4,6 +4,7 @@
 
 	import ReportAnalysisTrace from './components/ReportAnalysisTrace.svelte';
 	import ReportDeliveryPanel from './components/ReportDeliveryPanel.svelte';
+	import ReportEditorTrace from './components/ReportEditorTrace.svelte';
 	import ReportSharePanel from './components/ReportSharePanel.svelte';
 
 	import { goto, invalidate } from '$app/navigation';
@@ -118,6 +119,7 @@
 		{#key report.id}
 			<ReportDeliveryPanel {report} />
 			<ReportSharePanel {report} />
+			<ReportEditorTrace highlights={report.highlights} />
 			<ReportAnalysisTrace analysis={report.analysis} />
 		{/key}
 	</div>

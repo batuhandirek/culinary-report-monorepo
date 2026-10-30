@@ -4,10 +4,10 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { MenuTopicService } from 'src/modules/food-topics/services/menu-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics, linkFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
@@ -38,8 +38,8 @@ describe('TopicInsightService (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				TopicInsightService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				MenuTopicService,
 				AdminTopicInsightsController,
 			],
@@ -47,7 +47,7 @@ describe('TopicInsightService (pglite)', () => {
 		controller = harness.moduleRef.get(AdminTopicInsightsController);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
-		const topics = seedFoodTopics(em);
+		const topics = seedTopics(em);
 		city = testCity(em);
 		const ramen = em.create(Venue, {
 			city,
@@ -145,8 +145,8 @@ describe('TopicInsightService (pglite)', () => {
 			breakout: false,
 		});
 		await em.flush();
-		// The stored food-topic links, as the app's writers and refresh keep them
-		await linkFoodTopics(em);
+		// The stored topic links, as the app's writers and refresh keep them
+		await linkTopics(em);
 	});
 
 	afterAll(async () => {

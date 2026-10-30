@@ -296,6 +296,7 @@ export class ReviewService {
 			_.chunk(group, ANALYSIS_BATCH_SIZE),
 		);
 		const topics = reviews.length ? await this.feedbackService.dishTopics() : undefined;
+		const legend = topics?.index.aspectLegend() ?? '';
 
 		let analysed = 0;
 		// A provider failure (no credits) stops the pool: keep what was finished before it
@@ -313,6 +314,7 @@ export class ReviewService {
 								text: r.textTranslated || r.text,
 							})),
 						}),
+						{ legend },
 					);
 					const byId = new Map(batch.map(r => [r.reviewId, r]));
 					for (const result of res.object.reviews) {
@@ -436,7 +438,7 @@ export class ReviewService {
 		const reviews = await this.em.find(
 			Review,
 			{ id: { $in: rows.map(r => r.id) } },
-			{ populate: ['feedback', 'feedback.foodTopic'] },
+			{ populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'] },
 		);
 		const byId = new Map(reviews.map(r => [r.id, r]));
 		return { items: rows.map(r => byId.get(r.id)!), total: rows[0].total };
@@ -491,7 +493,7 @@ export class ReviewService {
 		const review = await this.em.findOne(
 			Review,
 			{ id, venue: { $in: [venueIds].flat() } },
-			{ populate: ['feedback', 'feedback.foodTopic'] },
+			{ populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'] },
 		);
 		if (!review) throw new NotFoundException();
 		review.markedRepliedAt = replied ? (review.markedRepliedAt ?? new Date()) : null;

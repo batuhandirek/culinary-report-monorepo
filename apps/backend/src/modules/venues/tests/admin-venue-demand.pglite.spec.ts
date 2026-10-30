@@ -1,6 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { DishNameService } from 'src/modules/feedback/services/dish-name.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -19,7 +22,14 @@ describe('GET /admin/venues/:id/demand (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [AdminVenuesController, VenueBusynessService, VenueReservationService, VenueDeliveryService],
+			providers: [
+				AdminVenuesController,
+				VenueBusynessService,
+				VenueReservationService,
+				VenueDeliveryService,
+				DishNameService,
+				TopicService,
+			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
 	});
@@ -82,5 +92,25 @@ describe('GET /admin/venues/:id/demand (pglite)', () => {
 		expect((await controller.updateVenue(venue.id, {})).bookingUrl).toBe(url);
 		await expect(controller.updateVenue(venue.id, { bookingUrl: 'https://example.com/book' })).rejects.toThrow();
 		expect((await controller.updateVenue(venue.id, { bookingUrl: null })).bookingUrl).toBeUndefined();
+	});
+
+	it("links the review tags that name a kind of food to their topic", async () => {
+		const em = harness.orm.em;
+		seedTopics(em, ['kebab']);
+		const venue = em.create(Venue, {
+			city: testCity(em),
+			placeId: 'tags',
+			name: 'Tags',
+			details: {
+				reviewsTags: [
+					{ title: 'Dürüm', count: 7 },
+					{ title: 'waiting time', count: 3 },
+				],
+			},
+		});
+		await em.flush();
+
+		const res = await harness.moduleRef.get(AdminVenuesController).getVenue(venue.id);
+		expect(res.reviewTagTopics).toEqual([{ title: 'Dürüm', key: 'kebab', label: 'Döner & kebab' }]);
 	});
 });

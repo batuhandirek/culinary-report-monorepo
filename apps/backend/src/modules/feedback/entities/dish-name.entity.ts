@@ -1,7 +1,7 @@
 import type { Rel } from '@mikro-orm/core';
 import { Entity, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
 
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
 
 /**
@@ -28,8 +28,8 @@ export class DishName extends MikroOrmSimpleEntityAbstractClass {
 	name: string;
 
 	/** A dish or drink topic; null for none (decided) or not decided yet */
-	@ManyToOne({ entity: () => FoodTopic, nullable: true, deleteRule: 'set null', index: true })
-	foodTopic?: Rel<FoodTopic> | null;
+	@ManyToOne({ entity: () => Topic, nullable: true, deleteRule: 'set null', index: true })
+	foodTopic?: Rel<Topic> | null;
 
 	@Property({ type: 'text', nullable: true })
 	decidedBy?: DishNameDecider | null;

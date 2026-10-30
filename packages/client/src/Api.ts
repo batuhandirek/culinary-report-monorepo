@@ -435,6 +435,20 @@ export enum AdminBrandRefOutputDtoReportScopeEnum {
 	All = 'all',
 }
 
+/** One of Google's "people often mention" tags, summed over the brand's places. */
+export interface AdminBrandReviewTagOutputDto {
+	count: number;
+	title: string;
+	/**
+	 * The food topic it names, where the feedback rows of that dish point (a dish name's decided
+	 * topic, else a whole-name match); absent for what is no food ("waiting time", "cash only")
+	 */
+	topic?: {
+		key: string;
+		label: string;
+	};
+}
+
 export interface AdminBrandRowOutputDto {
 	/** Open branches (in the city) */
 	branches: number;
@@ -552,10 +566,7 @@ export interface AdminBrandSummaryOutputDto {
 	 * (in the city), most first, twelve at most. All-time counts, not the month's; empty until a
 	 * detail-page refresh.
 	 */
-	reviewTags: {
-		count: number;
-		title: string;
-	}[];
+	reviewTags: AdminBrandReviewTagOutputDto[];
 	/** The six months up to `month`, oldest first */
 	series: AdminBrandSeriesPointOutputDto[];
 	todos: AdminBrandTodoOutputDto[];
@@ -666,13 +677,13 @@ export interface AdminBuildReportInputDto {
 	month: string;
 }
 
-export interface AdminChangeVenueFoodTopicInputDto {
+export interface AdminChangeVenueTopicInputDto {
 	/** `tag` adds the topic, `exclude` keeps it off, `clear` lets categories and posts decide again */
-	change: AdminChangeVenueFoodTopicInputDtoChangeEnum;
+	change: AdminChangeVenueTopicInputDtoChangeEnum;
 }
 
 /** `tag` adds the topic, `exclude` keeps it off, `clear` lets categories and posts decide again */
-export enum AdminChangeVenueFoodTopicInputDtoChangeEnum {
+export enum AdminChangeVenueTopicInputDtoChangeEnum {
 	Exclude = 'exclude',
 	Tag = 'tag',
 	Clear = 'clear',
@@ -1069,36 +1080,6 @@ export interface AdminCreateCityInputDto {
 	topBrands?: number;
 }
 
-export interface AdminCreateFoodTopicInputDto {
-	/** @maxItems 100 */
-	aliases?: string[];
-	/**
-	 * Defaults to the label's `normalizeCuisine` key; must be one
-	 * @maxLength 80
-	 */
-	key?: string;
-	kind: AdminCreateFoodTopicInputDtoKindEnum;
-	/**
-	 * @minLength 1
-	 * @maxLength 80
-	 */
-	label: string;
-	parentKey?: string;
-	/** @maxLength 100 */
-	trendsQuery?: string;
-	/** @pattern ^/(m|g)/[0-9A-Za-z_]+$ */
-	trendsTopicId?: string;
-}
-
-export enum AdminCreateFoodTopicInputDtoKindEnum {
-	Cuisine = 'cuisine',
-	Dish = 'dish',
-	Drink = 'drink',
-	Diet = 'diet',
-	Format = 'format',
-	Meal = 'meal',
-}
-
 export interface AdminCreateReportConfigInputDto {
 	/**
 	 * Absent: the template's name (numbered when the brand has it already)
@@ -1126,6 +1107,42 @@ export interface AdminCreateReportTemplateInputDto {
 	 * @minItems 1
 	 */
 	sections?: ReportSectionDto[];
+}
+
+export interface AdminCreateTopicInputDto {
+	/** @maxItems 100 */
+	aliases?: string[];
+	/**
+	 * An aspect's: what it covers, told to the agents
+	 * @maxLength 300
+	 */
+	hint?: string;
+	/**
+	 * Defaults to the label's `normalizeCuisine` key; must be one
+	 * @maxLength 80
+	 */
+	key?: string;
+	kind: AdminCreateTopicInputDtoKindEnum;
+	/**
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	label: string;
+	parentKey?: string;
+	/** @maxLength 100 */
+	trendsQuery?: string;
+	/** @pattern ^/(m|g)/[0-9A-Za-z_]+$ */
+	trendsTopicId?: string;
+}
+
+export enum AdminCreateTopicInputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 /** One of a creator's accounts in a list row. */
@@ -1542,10 +1559,11 @@ export interface AdminFileFeedbackThemesInputDto {
 export interface AdminFileFeedbackThemesOutputDto {
 	/** Points filed this call */
 	points: number;
-	/** What `realign` changed first: topics moved to their theme's, points sent back to filing */
+	/** What `realign` changed first: points linked to their aspect row, points of a gone aspect filed at its root, topics moved to the aspect's root */
 	realigned: {
+		linked: number;
+		movedToRoot: number;
 		topicsMoved: number;
-		unfiled: number;
 	};
 	/** Points still without a theme (of the city, when given) */
 	remaining: number;
@@ -1585,62 +1603,6 @@ export interface AdminFillCompetitorsOutputDto {
 	filled: number;
 	/** Brands that already had competitors, left as they were */
 	skipped: number;
-}
-
-export interface AdminFoodTopicBaseOutputDto {
-	aliases: string[];
-	id: string;
-	key: string;
-	kind: AdminFoodTopicBaseOutputDtoKindEnum;
-	label: string;
-	/** The parent topic's key: a child counts for it too */
-	parentKey?: string;
-	trendsQuery?: string;
-	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
-	trendsTopicId?: string;
-}
-
-export enum AdminFoodTopicBaseOutputDtoKindEnum {
-	Cuisine = 'cuisine',
-	Dish = 'dish',
-	Drink = 'drink',
-	Diet = 'diet',
-	Format = 'format',
-	Meal = 'meal',
-}
-
-export interface AdminFoodTopicOutputDto {
-	aliases: string[];
-	id: string;
-	key: string;
-	kind: AdminFoodTopicOutputDtoKindEnum;
-	label: string;
-	/** The city's matched mentions resolving to it, all time */
-	mentions: number;
-	/** The parent topic's key: a child counts for it too */
-	parentKey?: string;
-	trendsQuery?: string;
-	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
-	trendsTopicId?: string;
-	/** The city's venues whose Google category resolves to it */
-	venues: number;
-}
-
-export enum AdminFoodTopicOutputDtoKindEnum {
-	Cuisine = 'cuisine',
-	Dish = 'dish',
-	Drink = 'drink',
-	Diet = 'diet',
-	Format = 'format',
-	Meal = 'meal',
-}
-
-export interface AdminFoodTopicsOutputDto {
-	/** Words an admin dismissed (every city), left out of `unmapped` */
-	ignored: string[];
-	topics: AdminFoodTopicOutputDto[];
-	/** Cuisine keys of the city that resolve to no topic, most used first */
-	unmapped: AdminUnmappedCuisineOutputDto[];
 }
 
 export interface AdminFoodTrendsOutputDto {
@@ -1771,11 +1733,6 @@ export interface AdminGetDishSearchesInputDto {
 	topicKey: string;
 }
 
-export interface AdminGetFoodTopicsInputDto {
-	/** @format uuid */
-	cityId: string;
-}
-
 export interface AdminGetFoodTrendsInputDto {
 	/** @format uuid */
 	cityId: string;
@@ -1856,6 +1813,11 @@ export interface AdminGetTopicInsightsInputDto {
 	month: string;
 }
 
+export interface AdminGetTopicsInputDto {
+	/** @format uuid */
+	cityId: string;
+}
+
 export interface AdminGetTrendsInputDto {
 	/** @format uuid */
 	cityId: string;
@@ -1878,13 +1840,13 @@ export interface AdminHashtagOutputDto {
 		id: string;
 		name: string;
 	};
-	foodTopic?: {
-		key: string;
-		label: string;
-	};
 	id: number;
 	ignored: boolean;
 	tag: string;
+	topic?: {
+		key: string;
+		label: string;
+	};
 }
 
 export interface AdminIgnoreWordInputDto {
@@ -2736,14 +2698,6 @@ export interface AdminMentionOutputDto {
 	cuisine?: string;
 	/** What it says, as feedback rows */
 	feedback: FeedbackPointOutputDto[];
-	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
-	foodTopics?: {
-		source: AdminMentionOutputDtoSourceEnum;
-		topic: {
-			key: string;
-			label: string;
-		};
-	}[];
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionOutputDtoMatchMethodEnum;
@@ -2751,6 +2705,14 @@ export interface AdminMentionOutputDto {
 	matchScore?: number;
 	sentiment: AdminMentionOutputDtoSentimentEnum;
 	summary: string;
+	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
+	topics?: {
+		source: AdminMentionOutputDtoSourceEnum;
+		topic: {
+			key: string;
+			label: string;
+		};
+	}[];
 	/** The branch, when the post says which; a chain's mention may have the brand only */
 	venue?: AdminVenueRefOutputDto;
 	venueName: string;
@@ -2789,14 +2751,6 @@ export interface AdminMentionWithPostOutputDto {
 	cuisine?: string;
 	/** What it says, as feedback rows */
 	feedback: FeedbackPointOutputDto[];
-	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
-	foodTopics?: {
-		source: AdminMentionWithPostOutputDtoSourceEnum;
-		topic: {
-			key: string;
-			label: string;
-		};
-	}[];
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionWithPostOutputDtoMatchMethodEnum;
@@ -2806,6 +2760,14 @@ export interface AdminMentionWithPostOutputDto {
 	post: OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount;
 	sentiment: AdminMentionWithPostOutputDtoSentimentEnum;
 	summary: string;
+	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
+	topics?: {
+		source: AdminMentionWithPostOutputDtoSourceEnum;
+		topic: {
+			key: string;
+			label: string;
+		};
+	}[];
 	/** The branch, when the post says which; a chain's mention may have the brand only */
 	venue?: AdminVenueRefOutputDto;
 	venueName: string;
@@ -3472,7 +3434,7 @@ export interface AdminReflagOpeningsOutputDto {
 	unpaired: number;
 }
 
-export interface AdminRelinkFoodTopicsOutputDto {
+export interface AdminRelinkTopicsOutputDto {
 	queued: boolean;
 }
 
@@ -3568,6 +3530,11 @@ export interface AdminReportOutputDto {
 	 * every branch in `branches`; each place figure is in its branch's entry.
 	 */
 	data: ReportData;
+	/**
+	 * The written part of a report: the editor's read of the month (`ReportEditorAgent`). The
+	 * letter is the holistic read; `highlights` are the "worth your attention" cards and `actions`
+	 * the "try this" ones (named as the mail, the pitch hook and the leave-behind read them).
+	 */
 	highlights: ReportHighlights;
 	id: string;
 	month: string;
@@ -3706,6 +3673,7 @@ export enum AdminSearchInterestRowOutputDtoTopicKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 export interface AdminSearchRelatedQueriesOutputDto {
@@ -4087,7 +4055,8 @@ export interface AdminThemeInsightOutputDto {
 	foods: AdminThemeFoodOutputDto[];
 	/** What the theme covers, as the agents are told */
 	hint: string;
-	key: AdminThemeInsightOutputDtoKeyEnum;
+	/** The aspect's key (`Topic.key`) */
+	key: string;
 	/** "Price increase" */
 	label: string;
 	month: string;
@@ -4100,75 +4069,12 @@ export interface AdminThemeInsightOutputDto {
 	side: AdminThemeInsightOutputDtoSideEnum;
 	/** Each side's reviews and posts this month */
 	sides: AdminThemeSideCountOutputDto[];
+	/** Its root's key */
 	topic: AdminThemeInsightOutputDtoTopicEnum;
 	/** Sentences matching the filters */
 	total: number;
 	/** The reviews and posts they come from */
 	totalSources: number;
-}
-
-export enum AdminThemeInsightOutputDtoKeyEnum {
-	Language = 'language',
-	Taste = 'taste',
-	Other = 'other',
-	Freshness = 'freshness',
-	Temperature = 'temperature',
-	Cooking = 'cooking',
-	Seasoning = 'seasoning',
-	PortionSize = 'portion_size',
-	IngredientQuality = 'ingredient_quality',
-	MenuVariety = 'menu_variety',
-	Availability = 'availability',
-	QualityChange = 'quality_change',
-	Authenticity = 'authenticity',
-	Presentation = 'presentation',
-	FoodOther = 'food_other',
-	DrinkQuality = 'drink_quality',
-	DrinkSelection = 'drink_selection',
-	DrinksOther = 'drinks_other',
-	Friendliness = 'friendliness',
-	Attentiveness = 'attentiveness',
-	SpeedOfService = 'speed_of_service',
-	OrderAccuracy = 'order_accuracy',
-	Advice = 'advice',
-	ReservationHandling = 'reservation_handling',
-	ComplaintHandling = 'complaint_handling',
-	TakeawayHandling = 'takeaway_handling',
-	StaffChange = 'staff_change',
-	ServiceOther = 'service_other',
-	Atmosphere = 'atmosphere',
-	Noise = 'noise',
-	Space = 'space',
-	Interior = 'interior',
-	OutdoorSeating = 'outdoor_seating',
-	Crowding = 'crowding',
-	Location = 'location',
-	FamilyPets = 'family_pets',
-	VibeOther = 'vibe_other',
-	PriceLevel = 'price_level',
-	ValueForMoney = 'value_for_money',
-	PriceIncrease = 'price_increase',
-	ExtraCharges = 'extra_charges',
-	PriceOther = 'price_other',
-	CashOnly = 'cash_only',
-	CardPayment = 'card_payment',
-	Tipping = 'tipping',
-	Billing = 'billing',
-	PaymentOther = 'payment_other',
-	Queue = 'queue',
-	WaitForFood = 'wait_for_food',
-	WaitForTable = 'wait_for_table',
-	WaitOther = 'wait_other',
-	Toilets = 'toilets',
-	DiningArea = 'dining_area',
-	FoodHygiene = 'food_hygiene',
-	CleanlinessOther = 'cleanliness_other',
-	OpeningHours = 'opening_hours',
-	Accessibility = 'accessibility',
-	OwnershipChange = 'ownership_change',
-	Renovation = 'renovation',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
 }
 
 export enum AdminThemeInsightOutputDtoSideEnum {
@@ -4177,7 +4083,9 @@ export enum AdminThemeInsightOutputDtoSideEnum {
 	Changes = 'changes',
 }
 
+/** Its root's key */
 export enum AdminThemeInsightOutputDtoTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -4186,7 +4094,6 @@ export enum AdminThemeInsightOutputDtoTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
 export interface AdminThemeInsightRowOutputDto {
@@ -4194,7 +4101,8 @@ export interface AdminThemeInsightRowOutputDto {
 	dishes: AdminThemeDishOutputDto[];
 	/** The three kinds of food it came up at most */
 	foods: AdminThemeFoodOutputDto[];
-	key: AdminThemeInsightRowOutputDtoKeyEnum;
+	/** The aspect's key (`Topic.key`) */
+	key: string;
 	/** "Price increase" */
 	label: string;
 	/** Of the month's posts by others with any point, percent */
@@ -4212,76 +4120,15 @@ export interface AdminThemeInsightRowOutputDto {
 	samples: string[];
 	/** The three it came up at most */
 	topBrands: AdminThemeBrandOutputDto[];
+	/** Its root's key */
 	topic: AdminThemeInsightRowOutputDtoTopicEnum;
 	/** Brands it came up at */
 	venues: number;
 }
 
-export enum AdminThemeInsightRowOutputDtoKeyEnum {
-	Language = 'language',
-	Taste = 'taste',
-	Other = 'other',
-	Freshness = 'freshness',
-	Temperature = 'temperature',
-	Cooking = 'cooking',
-	Seasoning = 'seasoning',
-	PortionSize = 'portion_size',
-	IngredientQuality = 'ingredient_quality',
-	MenuVariety = 'menu_variety',
-	Availability = 'availability',
-	QualityChange = 'quality_change',
-	Authenticity = 'authenticity',
-	Presentation = 'presentation',
-	FoodOther = 'food_other',
-	DrinkQuality = 'drink_quality',
-	DrinkSelection = 'drink_selection',
-	DrinksOther = 'drinks_other',
-	Friendliness = 'friendliness',
-	Attentiveness = 'attentiveness',
-	SpeedOfService = 'speed_of_service',
-	OrderAccuracy = 'order_accuracy',
-	Advice = 'advice',
-	ReservationHandling = 'reservation_handling',
-	ComplaintHandling = 'complaint_handling',
-	TakeawayHandling = 'takeaway_handling',
-	StaffChange = 'staff_change',
-	ServiceOther = 'service_other',
-	Atmosphere = 'atmosphere',
-	Noise = 'noise',
-	Space = 'space',
-	Interior = 'interior',
-	OutdoorSeating = 'outdoor_seating',
-	Crowding = 'crowding',
-	Location = 'location',
-	FamilyPets = 'family_pets',
-	VibeOther = 'vibe_other',
-	PriceLevel = 'price_level',
-	ValueForMoney = 'value_for_money',
-	PriceIncrease = 'price_increase',
-	ExtraCharges = 'extra_charges',
-	PriceOther = 'price_other',
-	CashOnly = 'cash_only',
-	CardPayment = 'card_payment',
-	Tipping = 'tipping',
-	Billing = 'billing',
-	PaymentOther = 'payment_other',
-	Queue = 'queue',
-	WaitForFood = 'wait_for_food',
-	WaitForTable = 'wait_for_table',
-	WaitOther = 'wait_other',
-	Toilets = 'toilets',
-	DiningArea = 'dining_area',
-	FoodHygiene = 'food_hygiene',
-	CleanlinessOther = 'cleanliness_other',
-	OpeningHours = 'opening_hours',
-	Accessibility = 'accessibility',
-	OwnershipChange = 'ownership_change',
-	Renovation = 'renovation',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
-}
-
+/** Its root's key */
 export enum AdminThemeInsightRowOutputDtoTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -4290,7 +4137,6 @@ export enum AdminThemeInsightRowOutputDtoTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
 export interface AdminThemeInsightsOutputDto {
@@ -4444,6 +4290,31 @@ export enum AdminTodoOutputDtoToneEnum {
 	Todo = 'todo',
 }
 
+export interface AdminTopicBaseOutputDto {
+	aliases: string[];
+	/** An aspect's: what it covers, told to the agents */
+	hint?: string;
+	id: string;
+	key: string;
+	kind: AdminTopicBaseOutputDtoKindEnum;
+	label: string;
+	/** The parent topic's key: a child counts for it too */
+	parentKey?: string;
+	trendsQuery?: string;
+	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
+	trendsTopicId?: string;
+}
+
+export enum AdminTopicBaseOutputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+	Aspect = 'aspect',
+}
+
 export interface AdminTopicInsightOutputDto {
 	aliases: string[];
 	children: AdminTopicInsightRowOutputDto[];
@@ -4498,6 +4369,7 @@ export enum AdminTopicInsightRowOutputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 export interface AdminTopicInsightsOutputDto {
@@ -4522,6 +4394,35 @@ export interface AdminTopicMenuOutputDto {
 	menus: number;
 	/** Of those, the ones with the topic (or a child) on it */
 	venues?: number;
+}
+
+export interface AdminTopicOutputDto {
+	aliases: string[];
+	/** An aspect's: what it covers, told to the agents */
+	hint?: string;
+	id: string;
+	key: string;
+	kind: AdminTopicOutputDtoKindEnum;
+	label: string;
+	/** The city's matched mentions resolving to it, all time */
+	mentions: number;
+	/** The parent topic's key: a child counts for it too */
+	parentKey?: string;
+	trendsQuery?: string;
+	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
+	trendsTopicId?: string;
+	/** The city's venues whose Google category resolves to it */
+	venues: number;
+}
+
+export enum AdminTopicOutputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 export interface AdminTopicVenueOutputDto {
@@ -4549,6 +4450,14 @@ export enum AdminTopicVenueOutputDtoSourceEnum {
 	Menu = 'menu',
 	Reviews = 'reviews',
 	Manual = 'manual',
+}
+
+export interface AdminTopicsOutputDto {
+	/** Words an admin dismissed (every city), left out of `unmapped` */
+	ignored: string[];
+	topics: AdminTopicOutputDto[];
+	/** Cuisine keys of the city that resolve to no topic, most used first */
+	unmapped: AdminUnmappedCuisineOutputDto[];
 }
 
 export interface AdminTrendsLookupInputDto {
@@ -4762,32 +4671,6 @@ export interface AdminUpdateDishNameInputDto {
 	topicKey?: string | null;
 }
 
-/** Only the fields given change; null clears a parent, a Trends id or a query. The key never changes. */
-export interface AdminUpdateFoodTopicInputDto {
-	/** @maxItems 100 */
-	aliases?: string[];
-	kind?: AdminUpdateFoodTopicInputDtoKindEnum;
-	/**
-	 * @minLength 1
-	 * @maxLength 80
-	 */
-	label?: string;
-	parentKey?: string | null;
-	/** @maxLength 100 */
-	trendsQuery?: string | null;
-	/** @pattern ^/(m|g)/[0-9A-Za-z_]+$ */
-	trendsTopicId?: string | null;
-}
-
-export enum AdminUpdateFoodTopicInputDtoKindEnum {
-	Cuisine = 'cuisine',
-	Dish = 'dish',
-	Drink = 'drink',
-	Diet = 'diet',
-	Format = 'format',
-	Meal = 'meal',
-}
-
 export interface AdminUpdateHashtagInputDto {
 	/** Noise (#fyp, #viral): never suggested as a source */
 	ignored: boolean;
@@ -4886,6 +4769,35 @@ export interface AdminUpdateReportTemplateInputDto {
 	 * @minItems 1
 	 */
 	sections?: ReportSectionDto[];
+}
+
+/** Only the fields given change; null clears a parent, a Trends id or a query. The key never changes. */
+export interface AdminUpdateTopicInputDto {
+	/** @maxItems 100 */
+	aliases?: string[];
+	/** @maxLength 300 */
+	hint?: string | null;
+	kind?: AdminUpdateTopicInputDtoKindEnum;
+	/**
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	label?: string;
+	parentKey?: string | null;
+	/** @maxLength 100 */
+	trendsQuery?: string | null;
+	/** @pattern ^/(m|g)/[0-9A-Za-z_]+$ */
+	trendsTopicId?: string | null;
+}
+
+export enum AdminUpdateTopicInputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 export interface AdminUpdateUserRolesInputDto {
@@ -5040,45 +4952,6 @@ export interface AdminVenueDishSearchesOutputDto {
 	snapshots: string[];
 }
 
-export interface AdminVenueFoodTopicOutputDto {
-	key: string;
-	kind: AdminVenueFoodTopicOutputDtoKindEnum;
-	label: string;
-	/** The one kind of food it is known for */
-	primary: boolean;
-	/** 1 for its main category or an admin's tag, 0.5 for another category, else its share of the posts, menu items or review tags */
-	score: number;
-	/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
-	source: AdminVenueFoodTopicOutputDtoSourceEnum;
-}
-
-export enum AdminVenueFoodTopicOutputDtoKindEnum {
-	Cuisine = 'cuisine',
-	Dish = 'dish',
-	Drink = 'drink',
-	Diet = 'diet',
-	Format = 'format',
-	Meal = 'meal',
-}
-
-/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
-export enum AdminVenueFoodTopicOutputDtoSourceEnum {
-	Mentions = 'mentions',
-	Category = 'category',
-	Menu = 'menu',
-	Reviews = 'reviews',
-	Manual = 'manual',
-}
-
-export interface AdminVenueFoodTopicsOutputDto {
-	/** Topics an admin keeps off it */
-	excluded: {
-		key: string;
-		label: string;
-	}[];
-	tags: AdminVenueFoodTopicOutputDto[];
-}
-
 export interface AdminVenueListItemOutputDto {
 	/** The brand it is a branch of: its lead score is the brand's */
 	brand: AdminBrandRefOutputDto;
@@ -5135,6 +5008,15 @@ export interface AdminVenueOutputDto {
 	rating?: number;
 	/** The platform behind its Google booking page ("OpenTable"), from the latest Google sample */
 	reservationPartner?: string;
+	/**
+	 * The food topic each of its review tags (`details.reviewsTags`) names, by the tag's title;
+	 * tags that name no food are left out (`DishNameService.reviewTagTopics`)
+	 */
+	reviewTagTopics: {
+		key: string;
+		label: string;
+		title: string;
+	}[];
 	reviewsCount?: number;
 	snapshots: AdminVenueSnapshotOutputDto[];
 	street?: string;
@@ -5187,7 +5069,7 @@ export interface AdminVenueSnapshotOutputDto {
 }
 
 export interface AdminVenueStatusChangesOutputDto {
-	/** By the venue's main food topic (`VenueFoodTopicService.tags`), else its Google category */
+	/** By the venue's main food topic (`VenueTopicService.tags`), else its Google category */
 	byCategory: VenueStatusGroup[];
 	byDistrict: VenueStatusGroup[];
 	/** Newest first; an opening a post flagged carries the source `posts` */
@@ -5197,6 +5079,46 @@ export interface AdminVenueStatusChangesOutputDto {
 	to: string;
 	/** Changes counted per kind. */
 	totals: VenueStatusCounts;
+}
+
+export interface AdminVenueTopicOutputDto {
+	key: string;
+	kind: AdminVenueTopicOutputDtoKindEnum;
+	label: string;
+	/** The one kind of food it is known for */
+	primary: boolean;
+	/** 1 for its main category or an admin's tag, 0.5 for another category, else its share of the posts, menu items or review tags */
+	score: number;
+	/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
+	source: AdminVenueTopicOutputDtoSourceEnum;
+}
+
+export enum AdminVenueTopicOutputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+	Aspect = 'aspect',
+}
+
+/** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
+export enum AdminVenueTopicOutputDtoSourceEnum {
+	Mentions = 'mentions',
+	Category = 'category',
+	Menu = 'menu',
+	Reviews = 'reviews',
+	Manual = 'manual',
+}
+
+export interface AdminVenueTopicsOutputDto {
+	/** Topics an admin keeps off it */
+	excluded: {
+		key: string;
+		label: string;
+	}[];
+	tags: AdminVenueTopicOutputDto[];
 }
 
 export interface AdminWaitComplaintsInputDto {
@@ -5211,7 +5133,7 @@ export interface AdminWaitComplaintsOutputDto {
 	byTheme: {
 		brands: number;
 		sources: number;
-		theme: AdminWaitComplaintsOutputDtoThemeEnum;
+		theme: string;
 		venues: number;
 	}[];
 	month: string;
@@ -5226,70 +5148,6 @@ export interface AdminWaitComplaintsOutputDto {
 		upperQuartile?: number;
 	};
 	venues: number;
-}
-
-export enum AdminWaitComplaintsOutputDtoThemeEnum {
-	Language = 'language',
-	Taste = 'taste',
-	Other = 'other',
-	Freshness = 'freshness',
-	Temperature = 'temperature',
-	Cooking = 'cooking',
-	Seasoning = 'seasoning',
-	PortionSize = 'portion_size',
-	IngredientQuality = 'ingredient_quality',
-	MenuVariety = 'menu_variety',
-	Availability = 'availability',
-	QualityChange = 'quality_change',
-	Authenticity = 'authenticity',
-	Presentation = 'presentation',
-	FoodOther = 'food_other',
-	DrinkQuality = 'drink_quality',
-	DrinkSelection = 'drink_selection',
-	DrinksOther = 'drinks_other',
-	Friendliness = 'friendliness',
-	Attentiveness = 'attentiveness',
-	SpeedOfService = 'speed_of_service',
-	OrderAccuracy = 'order_accuracy',
-	Advice = 'advice',
-	ReservationHandling = 'reservation_handling',
-	ComplaintHandling = 'complaint_handling',
-	TakeawayHandling = 'takeaway_handling',
-	StaffChange = 'staff_change',
-	ServiceOther = 'service_other',
-	Atmosphere = 'atmosphere',
-	Noise = 'noise',
-	Space = 'space',
-	Interior = 'interior',
-	OutdoorSeating = 'outdoor_seating',
-	Crowding = 'crowding',
-	Location = 'location',
-	FamilyPets = 'family_pets',
-	VibeOther = 'vibe_other',
-	PriceLevel = 'price_level',
-	ValueForMoney = 'value_for_money',
-	PriceIncrease = 'price_increase',
-	ExtraCharges = 'extra_charges',
-	PriceOther = 'price_other',
-	CashOnly = 'cash_only',
-	CardPayment = 'card_payment',
-	Tipping = 'tipping',
-	Billing = 'billing',
-	PaymentOther = 'payment_other',
-	Queue = 'queue',
-	WaitForFood = 'wait_for_food',
-	WaitForTable = 'wait_for_table',
-	WaitOther = 'wait_other',
-	Toilets = 'toilets',
-	DiningArea = 'dining_area',
-	FoodHygiene = 'food_hygiene',
-	CleanlinessOther = 'cleanliness_other',
-	OpeningHours = 'opening_hours',
-	Accessibility = 'accessibility',
-	OwnershipChange = 'ownership_change',
-	Renovation = 'renovation',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
 }
 
 /** One reason a profile is scraped, or would be. */
@@ -5499,7 +5357,7 @@ export interface ChangePasswordInputDto {
 	oldPassword?: string;
 }
 
-export type ChangeVenueFoodTopicData = AdminVenueFoodTopicsOutputDto;
+export type ChangeVenueTopicData = AdminVenueTopicsOutputDto;
 
 export type CheckStatusData = HealthCheckResponseDto;
 
@@ -5757,13 +5615,13 @@ export type CreateCityData = AdminCityOutputDto;
 
 export type CreateEntryData = AdminBlogEntryOutputDto;
 
-export type CreateFoodTopicData = AdminFoodTopicBaseOutputDto;
-
 export type CreateReportShareData = AdminReportShareOutputDto;
 
 export type CreateReportTemplateData = AdminReportTemplateOutputDto;
 
 export type CreateTagData = BlogTagOutputDto;
+
+export type CreateTopicData = AdminTopicBaseOutputDto;
 
 export enum DecideAccountActionEnum {
 	Link = 'link',
@@ -5811,6 +5669,8 @@ export type DeleteReportTemplateData = any;
 
 export type DeleteTagData = OkResponse;
 
+export type DeleteTopicData = any;
+
 export type DeleteUserData = OkResponseO1;
 
 export type DeleteUserSessionData = OkResponse;
@@ -5838,6 +5698,19 @@ export enum ExportUsersCsvParamsRolesEnum {
 	VenueOwner = 'venue_owner',
 }
 
+/** The aspect a point is filed under, with its parent when it has one: what a page shows and links */
+export interface FeedbackAspectOutputDto {
+	/** The aspect's key (`Topic.key`): the same as `theme` */
+	key: string;
+	/** "Price increase" */
+	label: string;
+	/** The aspect above it; absent for a root (a point "about price, nothing finer") */
+	parent?: {
+		key: string;
+		label: string;
+	};
+}
+
 /**
  * One thing a review or a mention says (a `FeedbackPoint` row). A point has a `detail`, praise
  * `positive` and a complaint `negative`; a dish-only row has a `dish`, the dish's sentiment and no
@@ -5847,6 +5720,8 @@ export enum ExportUsersCsvParamsRolesEnum {
 export interface FeedbackPointOutputDto {
 	/** The number it states: minutes for a wait, the price for a price */
 	amount?: number;
+	/** The aspect of `theme`, with its label; absent with it. Every route serving rows populates it (`aspect`, `aspect.parent`) */
+	aspect?: FeedbackAspectOutputDto;
 	/** A change the reviewer noticed since before ("new owner"), not a praise or complaint */
 	change: boolean;
 	detail?: string;
@@ -5858,8 +5733,9 @@ export interface FeedbackPointOutputDto {
 		label: string;
 	};
 	sentiment: FeedbackPointOutputDtoSentimentEnum;
-	/** Absent until the point is filed, and on a dish-only row */
-	theme?: FeedbackPointOutputDtoThemeEnum;
+	/** The aspect's key; absent until the point is filed, and on a dish-only row */
+	theme?: string;
+	/** The aspect's root key */
 	topic?: FeedbackPointOutputDtoTopicEnum;
 	unit?: FeedbackPointOutputDtoUnitEnum;
 }
@@ -5871,72 +5747,9 @@ export enum FeedbackPointOutputDtoSentimentEnum {
 	Neutral = 'neutral',
 }
 
-/** Absent until the point is filed, and on a dish-only row */
-export enum FeedbackPointOutputDtoThemeEnum {
-	Language = 'language',
-	Taste = 'taste',
-	Other = 'other',
-	Freshness = 'freshness',
-	Temperature = 'temperature',
-	Cooking = 'cooking',
-	Seasoning = 'seasoning',
-	PortionSize = 'portion_size',
-	IngredientQuality = 'ingredient_quality',
-	MenuVariety = 'menu_variety',
-	Availability = 'availability',
-	QualityChange = 'quality_change',
-	Authenticity = 'authenticity',
-	Presentation = 'presentation',
-	FoodOther = 'food_other',
-	DrinkQuality = 'drink_quality',
-	DrinkSelection = 'drink_selection',
-	DrinksOther = 'drinks_other',
-	Friendliness = 'friendliness',
-	Attentiveness = 'attentiveness',
-	SpeedOfService = 'speed_of_service',
-	OrderAccuracy = 'order_accuracy',
-	Advice = 'advice',
-	ReservationHandling = 'reservation_handling',
-	ComplaintHandling = 'complaint_handling',
-	TakeawayHandling = 'takeaway_handling',
-	StaffChange = 'staff_change',
-	ServiceOther = 'service_other',
-	Atmosphere = 'atmosphere',
-	Noise = 'noise',
-	Space = 'space',
-	Interior = 'interior',
-	OutdoorSeating = 'outdoor_seating',
-	Crowding = 'crowding',
-	Location = 'location',
-	FamilyPets = 'family_pets',
-	VibeOther = 'vibe_other',
-	PriceLevel = 'price_level',
-	ValueForMoney = 'value_for_money',
-	PriceIncrease = 'price_increase',
-	ExtraCharges = 'extra_charges',
-	PriceOther = 'price_other',
-	CashOnly = 'cash_only',
-	CardPayment = 'card_payment',
-	Tipping = 'tipping',
-	Billing = 'billing',
-	PaymentOther = 'payment_other',
-	Queue = 'queue',
-	WaitForFood = 'wait_for_food',
-	WaitForTable = 'wait_for_table',
-	WaitOther = 'wait_other',
-	Toilets = 'toilets',
-	DiningArea = 'dining_area',
-	FoodHygiene = 'food_hygiene',
-	CleanlinessOther = 'cleanliness_other',
-	OpeningHours = 'opening_hours',
-	Accessibility = 'accessibility',
-	OwnershipChange = 'ownership_change',
-	Renovation = 'renovation',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
-}
-
+/** The aspect's root key */
 export enum FeedbackPointOutputDtoTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -5945,7 +5758,6 @@ export enum FeedbackPointOutputDtoTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
 export enum FeedbackPointOutputDtoUnitEnum {
@@ -6078,6 +5890,7 @@ export enum FoodTrendsSearchTopicKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 export interface FoodTrendsSearches {
@@ -6121,6 +5934,7 @@ export enum FoodTrendsTalkedTopicKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Aspect = 'aspect',
 }
 
 export type ForgotPasswordData = VerificationTokenOutputDto;
@@ -6170,8 +5984,6 @@ export type GetEntriesData = SitemapEntriesOutputDto;
 export type GetEntryData = BlogEntryOutputDto;
 
 export type GetEntryResult = AdminBlogEntryOutputDto;
-
-export type GetFoodTopicsData = AdminFoodTopicsOutputDto;
 
 export type GetFoodTrendsData = AdminFoodTrendsOutputDto;
 
@@ -6288,6 +6100,8 @@ export type GetTopicInsightData = AdminTopicInsightOutputDto;
 
 export type GetTopicInsightsData = AdminTopicInsightsOutputDto;
 
+export type GetTopicsData = AdminTopicsOutputDto;
+
 export type GetTrendsData = AdminTrendsOutputDto;
 
 export type GetUserData = AdminUserOutputDto;
@@ -6298,9 +6112,9 @@ export type GetVenueDemandData = AdminVenueDemandOutputDto;
 
 export type GetVenueDishSearchesData = AdminVenueDishSearchesOutputDto;
 
-export type GetVenueFoodTopicsData = AdminVenueFoodTopicsOutputDto;
-
 export type GetVenueStatusChangesData = AdminVenueStatusChangesOutputDto;
+
+export type GetVenueTopicsData = AdminVenueTopicsOutputDto;
 
 export type GetWaitComplaintsData = AdminWaitComplaintsOutputDto;
 
@@ -6858,6 +6672,7 @@ export enum ListPortalReviewsParamsPlatformEnum {
 
 /** A topic the review praised or criticised */
 export enum ListPortalReviewsParamsTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -6866,7 +6681,6 @@ export enum ListPortalReviewsParamsTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
 export type ListPostCommentsData = AdminPostCommentsOutputDto;
@@ -7208,7 +7022,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1124'?: PartialOmitCredentialVerificationRequestuserOptionalProps1124Enum;
+	'__@OptionalProps@1128'?: PartialOmitCredentialVerificationRequestuserOptionalProps1128Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -7234,7 +7048,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1124Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1128Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -7778,6 +7592,7 @@ export enum PortalListReviewsInputDtoPlatformEnum {
 
 /** A topic the review praised or criticised */
 export enum PortalListReviewsInputDtoTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -7786,7 +7601,6 @@ export enum PortalListReviewsInputDtoTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
 export interface PortalMarkReviewRepliedInputDto {
@@ -7971,6 +7785,11 @@ export interface PortalReportOutputDto {
 	 * every branch in `branches`; each place figure is in its branch's entry.
 	 */
 	data: ReportData;
+	/**
+	 * The written part of a report: the editor's read of the month (`ReportEditorAgent`). The
+	 * letter is the holistic read; `highlights` are the "worth your attention" cards and `actions`
+	 * the "try this" ones (named as the mail, the pitch hook and the leave-behind read them).
+	 */
 	highlights: ReportHighlights;
 	id: string;
 	month: string;
@@ -8024,6 +7843,7 @@ export enum PortalReviewFiltersOutputDtoPlatformEnum {
 }
 
 export enum PortalReviewFiltersOutputDtoTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -8032,7 +7852,6 @@ export enum PortalReviewFiltersOutputDtoTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
 /** A Google or TripAdvisor review as the portal lists it. The entity stores no reviewer names. */
@@ -8398,7 +8217,7 @@ export interface RefreshTokenOutputDto {
 
 export type RegisterViewData = OkResponse;
 
-export type RelinkFoodTopicsData = AdminRelinkFoodTopicsOutputDto;
+export type RelinkTopicsData = AdminRelinkTopicsOutputDto;
 
 export type RemoveBrandAccountData = AdminAccountOutputDto[];
 
@@ -8471,6 +8290,19 @@ export interface ReportAnalysisTraceStep {
 	resultSummary: string;
 	step: number;
 	tool: string;
+}
+
+/**
+ * One aspect of the vocabulary the report was built with (`TopicIndex.aspects`): what the theme
+ * keys in the counts and points mean, kept in the report so a view needs no live vocabulary and
+ * a stored report reads the same after an admin renames or removes an aspect.
+ */
+export interface ReportAspect {
+	key: string;
+	/** "Price increase" */
+	label: string;
+	/** The topmost ancestor's key (the key itself for a root): the `topic` the key counts under */
+	root: string;
 }
 
 /** One figure of the venue against the month's report venues of its city. */
@@ -8581,80 +8413,16 @@ export interface ReportBusynessWeek {
 	week: string;
 }
 
-/** The changes guests noticed about one thing (a feedback theme), across the month's reviews. */
+/** The changes guests noticed about one thing (an aspect), across the month's reviews. */
 export interface ReportChangeTheme {
 	/** How they put it, each spelling once */
 	details: string[];
+	/** The aspect's label at build ("Other changes" for the unfiled) */
 	label: string;
 	/** Reviews noticing it, each once */
 	reviews: number;
-	/** Absent while the changes are not filed yet */
-	theme?: ReportChangeThemeThemeEnum;
-}
-
-/** Absent while the changes are not filed yet */
-export enum ReportChangeThemeThemeEnum {
-	Language = 'language',
-	Taste = 'taste',
-	Other = 'other',
-	Freshness = 'freshness',
-	Temperature = 'temperature',
-	Cooking = 'cooking',
-	Seasoning = 'seasoning',
-	PortionSize = 'portion_size',
-	IngredientQuality = 'ingredient_quality',
-	MenuVariety = 'menu_variety',
-	Availability = 'availability',
-	QualityChange = 'quality_change',
-	Authenticity = 'authenticity',
-	Presentation = 'presentation',
-	FoodOther = 'food_other',
-	DrinkQuality = 'drink_quality',
-	DrinkSelection = 'drink_selection',
-	DrinksOther = 'drinks_other',
-	Friendliness = 'friendliness',
-	Attentiveness = 'attentiveness',
-	SpeedOfService = 'speed_of_service',
-	OrderAccuracy = 'order_accuracy',
-	Advice = 'advice',
-	ReservationHandling = 'reservation_handling',
-	ComplaintHandling = 'complaint_handling',
-	TakeawayHandling = 'takeaway_handling',
-	StaffChange = 'staff_change',
-	ServiceOther = 'service_other',
-	Atmosphere = 'atmosphere',
-	Noise = 'noise',
-	Space = 'space',
-	Interior = 'interior',
-	OutdoorSeating = 'outdoor_seating',
-	Crowding = 'crowding',
-	Location = 'location',
-	FamilyPets = 'family_pets',
-	VibeOther = 'vibe_other',
-	PriceLevel = 'price_level',
-	ValueForMoney = 'value_for_money',
-	PriceIncrease = 'price_increase',
-	ExtraCharges = 'extra_charges',
-	PriceOther = 'price_other',
-	CashOnly = 'cash_only',
-	CardPayment = 'card_payment',
-	Tipping = 'tipping',
-	Billing = 'billing',
-	PaymentOther = 'payment_other',
-	Queue = 'queue',
-	WaitForFood = 'wait_for_food',
-	WaitForTable = 'wait_for_table',
-	WaitOther = 'wait_other',
-	Toilets = 'toilets',
-	DiningArea = 'dining_area',
-	FoodHygiene = 'food_hygiene',
-	CleanlinessOther = 'cleanliness_other',
-	OpeningHours = 'opening_hours',
-	Accessibility = 'accessibility',
-	OwnershipChange = 'ownership_change',
-	Renovation = 'renovation',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
+	/** The aspect's key; absent while the changes are not filed yet */
+	theme?: string;
 }
 
 /** A standard question about a move, answered in code before the model sees it. */
@@ -8853,6 +8621,12 @@ export interface ReportCuisinePlacement {
  * every branch in `branches`; each place figure is in its branch's entry.
  */
 export interface ReportData {
+	/**
+	 * The aspect vocabulary at build (`TopicIndex.aspects`, roots first, each followed by its
+	 * children): the label and root of every theme key in the counts, points and change themes.
+	 * Absent in reports built before it was kept: a view then shows the key
+	 */
+	aspects?: ReportAspect[];
 	/** Every open branch covered, the most Google reviews first */
 	branches: ReportBranch[];
 	/** The business the report is on. */
@@ -8886,12 +8660,18 @@ export interface ReportData {
 	social: ReportSocialStats;
 }
 
-/** The venue's (or a competitor's) page on a delivery platform. */
+/** The venue's (or a competitor's) page on a delivery platform, its figures as of the report month. */
 export interface ReportDeliveryListing {
 	currency?: string;
 	deliveryFee?: number;
 	minOrder?: number;
 	platform: string;
+	/** The month before's rating and rating count; absent when that month wasn't scraped */
+	previous?: {
+		month: string;
+		rating?: number;
+		reviewsCount?: number;
+	};
 	rating?: number;
 	reviewsCount?: number;
 	url: string;
@@ -8903,6 +8683,12 @@ export interface ReportDeliveryListingnamestring {
 	minOrder?: number;
 	name: string;
 	platform: string;
+	/** The month before's rating and rating count; absent when that month wasn't scraped */
+	previous?: {
+		month: string;
+		rating?: number;
+		reviewsCount?: number;
+	};
 	rating?: number;
 	reviewsCount?: number;
 	url: string;
@@ -8938,81 +8724,44 @@ export interface ReportDishCount {
 	positive: number;
 }
 
+/** How the editor's read went: for the admin report page only (`toPublicOutput` strips it). */
+export interface ReportEditorTrace {
+	durationMs: number;
+	/** The agent failed: the letter is the code-written fallback */
+	error?: string;
+	model: string;
+	/** The model's own steps (each tool round is one) */
+	modelSteps?: number;
+	/** Lines the check dropped or cut */
+	problems: {
+		problem: string;
+		where: string;
+	}[];
+	steps: ReportAnalysisTraceStep[];
+	/** Tool calls that ran (a refused one is in `steps` only) */
+	toolCalls: number;
+	usage?: {
+		inputTokens?: number;
+		outputTokens?: number;
+		totalTokens?: number;
+	};
+}
+
 /**
  * A praise or complaint point as a report keeps it: the report's own copy, built from the feedback
  * rows at build time, so a stored report never moves with them.
  */
 export interface ReportFeedbackPoint {
 	detail: string;
-	theme?: ReportFeedbackPointThemeEnum;
+	/** The aspect's key (`ReportData.aspects` names it); absent while unfiled */
+	theme?: string;
+	/** The aspect's root key */
 	topic: ReportFeedbackPointTopicEnum;
 }
 
-export enum ReportFeedbackPointThemeEnum {
-	Language = 'language',
-	Taste = 'taste',
-	Other = 'other',
-	Freshness = 'freshness',
-	Temperature = 'temperature',
-	Cooking = 'cooking',
-	Seasoning = 'seasoning',
-	PortionSize = 'portion_size',
-	IngredientQuality = 'ingredient_quality',
-	MenuVariety = 'menu_variety',
-	Availability = 'availability',
-	QualityChange = 'quality_change',
-	Authenticity = 'authenticity',
-	Presentation = 'presentation',
-	FoodOther = 'food_other',
-	DrinkQuality = 'drink_quality',
-	DrinkSelection = 'drink_selection',
-	DrinksOther = 'drinks_other',
-	Friendliness = 'friendliness',
-	Attentiveness = 'attentiveness',
-	SpeedOfService = 'speed_of_service',
-	OrderAccuracy = 'order_accuracy',
-	Advice = 'advice',
-	ReservationHandling = 'reservation_handling',
-	ComplaintHandling = 'complaint_handling',
-	TakeawayHandling = 'takeaway_handling',
-	StaffChange = 'staff_change',
-	ServiceOther = 'service_other',
-	Atmosphere = 'atmosphere',
-	Noise = 'noise',
-	Space = 'space',
-	Interior = 'interior',
-	OutdoorSeating = 'outdoor_seating',
-	Crowding = 'crowding',
-	Location = 'location',
-	FamilyPets = 'family_pets',
-	VibeOther = 'vibe_other',
-	PriceLevel = 'price_level',
-	ValueForMoney = 'value_for_money',
-	PriceIncrease = 'price_increase',
-	ExtraCharges = 'extra_charges',
-	PriceOther = 'price_other',
-	CashOnly = 'cash_only',
-	CardPayment = 'card_payment',
-	Tipping = 'tipping',
-	Billing = 'billing',
-	PaymentOther = 'payment_other',
-	Queue = 'queue',
-	WaitForFood = 'wait_for_food',
-	WaitForTable = 'wait_for_table',
-	WaitOther = 'wait_other',
-	Toilets = 'toilets',
-	DiningArea = 'dining_area',
-	FoodHygiene = 'food_hygiene',
-	CleanlinessOther = 'cleanliness_other',
-	OpeningHours = 'opening_hours',
-	Accessibility = 'accessibility',
-	OwnershipChange = 'ownership_change',
-	Renovation = 'renovation',
-	DeliveryPlatform = 'delivery_platform',
-	Amenities = 'amenities',
-}
-
+/** The aspect's root key */
 export enum ReportFeedbackPointTopicEnum {
+	Other = 'other',
 	Food = 'food',
 	Drinks = 'drinks',
 	Service = 'service',
@@ -9021,15 +8770,34 @@ export enum ReportFeedbackPointTopicEnum {
 	Payment = 'payment',
 	Wait = 'wait',
 	Cleanliness = 'cleanliness',
-	Other = 'other',
 }
 
+/**
+ * The written part of a report: the editor's read of the month (`ReportEditorAgent`). The
+ * letter is the holistic read; `highlights` are the "worth your attention" cards and `actions`
+ * the "try this" ones (named as the mail, the pitch hook and the leave-behind read them).
+ */
 export interface ReportHighlights {
 	actions: ReportPoint[];
+	/** One sentence summing the month up: the mail, the pitch and the link previews quote it */
 	headline: string;
 	highlights: ReportPoint[];
+	/** Absent in reports built before the editor */
+	kind?: ReportHighlightsKindEnum;
+	/** The letter to the owner, paragraph by paragraph; absent in reports built before the editor */
+	letter?: string[];
+	/** The editor's notes for the admin: what it read, what it looked up, what it left out */
+	notes?: string;
 	/** The cover title, at most 8 words */
 	title: string;
+	/** How the editor's read went: for the admin report page only (`toPublicOutput` strips it). */
+	trace?: ReportEditorTrace;
+}
+
+/** Absent in reports built before the editor */
+export enum ReportHighlightsKindEnum {
+	Quiet = 'quiet',
+	Story = 'story',
 }
 
 export interface ReportHypothesis {
@@ -9498,7 +9266,7 @@ export interface ReportReviewGroup {
 	/** What they said, the first few points of the group */
 	praiseDetails: ReportFeedbackPoint[];
 	/**
-	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
 	 */
 	praiseThemes?: Recordstringnumber;
@@ -9507,6 +9275,8 @@ export interface ReportReviewGroup {
 
 /** One Google review in the report's appendix. The entity stores no reviewer names. */
 export interface ReportReviewItem {
+	/** A chain's branch the review is of (its street, else its name); absent for a one-branch brand */
+	branch?: string;
 	complaints: string[];
 	/** At most 240 characters of the translated text, else the original; absent for stars only */
 	excerpt?: string;
@@ -9555,8 +9325,9 @@ export interface ReportReviewStats {
 	byPlatform?: ReportReviewPlatform[];
 	/** The same changes by what changed (`groupChanges`): absent from reports built before them */
 	changeThemes?: ReportChangeTheme[];
-	/** Changes a reviewer noticed, one entry per review */
+	/** Changes a reviewer noticed, one entry per review; `branch` for a chain (the branch's street, else its name) */
 	changes: {
+		branch?: string;
 		changes: string[];
 		stars?: number;
 	}[];
@@ -9565,8 +9336,9 @@ export interface ReportReviewStats {
 	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
 	count: number;
-	/** The month's critical reviews (3 stars or fewer) worth reading */
+	/** The month's critical reviews (3 stars or fewer) worth reading; `branch` for a chain */
 	critical: {
+		branch?: string;
 		replied: boolean;
 		stars?: number;
 		text: string;
@@ -9578,7 +9350,7 @@ export interface ReportReviewStats {
 	/** topic → how many reviews praised / criticised it */
 	praise: Recordstringnumber;
 	/**
-	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
 	 */
 	praiseThemes?: Recordstringnumber;
@@ -9701,7 +9473,7 @@ export interface ReportSocialStats {
 	/** topic → how many posts praised / criticised it */
 	praise: Recordstringnumber;
 	/**
-	 * theme (`FEEDBACK_THEMES`) → how many raised it, once per source like the topics; absent when
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
 	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
 	 */
 	praiseThemes?: Recordstringnumber;
@@ -9804,6 +9576,11 @@ export interface SharedReportOutputDto {
 	 * every branch in `branches`; each place figure is in its branch's entry.
 	 */
 	data: ReportData;
+	/**
+	 * The written part of a report: the editor's read of the month (`ReportEditorAgent`). The
+	 * letter is the holistic read; `highlights` are the "worth your attention" cards and `actions`
+	 * the "try this" ones (named as the mail, the pitch hook and the leave-behind read them).
+	 */
 	highlights: ReportHighlights;
 	id: string;
 	month: string;
@@ -10084,8 +9861,6 @@ export type UpdateDishNameData = AdminUpdatedDishNameOutputDto;
 
 export type UpdateEntryData = AdminBlogEntryOutputDto;
 
-export type UpdateFoodTopicData = AdminFoodTopicBaseOutputDto;
-
 export type UpdateHashtagData = AdminHashtagOutputDto;
 
 export type UpdateMeData = GetMeOutputDto;
@@ -10122,6 +9897,8 @@ export type UpdateReportConfigData = AdminReportConfigOutputDto;
 export type UpdateReportTemplateData = AdminReportTemplateOutputDto;
 
 export type UpdateTagData = BlogTagOutputDto;
+
+export type UpdateTopicData = AdminTopicBaseOutputDto;
 
 export type UpdateUserRolesData = OkResponseO1;
 
@@ -12082,20 +11859,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * @description Every food topic with the city's mentions and venues on it, and the city's unmapped cuisine keys.
 		 *
-		 * @name GetFoodTopics
+		 * @name GetTopics
 		 * @summary Every food topic with the city's mentions and venues on it, and the city's unmapped cuisine keys
-		 * @request GET:/admin/food-topics
-		 * @response `200` `GetFoodTopicsData`
+		 * @request GET:/admin/topics
+		 * @response `200` `GetTopicsData`
 		 */
-		getFoodTopics: (
+		getTopics: (
 			query: {
 				/** @format uuid */
 				cityId: string;
 			},
 			params: RequestParams = {},
 		) =>
-			this.request<GetFoodTopicsData, any>({
-				path: `/admin/food-topics`,
+			this.request<GetTopicsData, any>({
+				path: `/admin/topics`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -12105,14 +11882,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * @description A new topic; 409 when its key exists.
 		 *
-		 * @name CreateFoodTopic
+		 * @name CreateTopic
 		 * @summary A new topic; 409 when its key exists
-		 * @request POST:/admin/food-topics
-		 * @response `201` `CreateFoodTopicData`
+		 * @request POST:/admin/topics
+		 * @response `201` `CreateTopicData`
 		 */
-		createFoodTopic: (data: AdminCreateFoodTopicInputDto, params: RequestParams = {}) =>
-			this.request<CreateFoodTopicData, any>({
-				path: `/admin/food-topics`,
+		createTopic: (data: AdminCreateTopicInputDto, params: RequestParams = {}) =>
+			this.request<CreateTopicData, any>({
+				path: `/admin/topics`,
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
@@ -12121,15 +11898,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Queues the re-link of everything stored against food topics (`FoodTopicRelinkJob`: mentions, menu items, feedback dishes, then every city's venue tags). A topic or alias change queues it on its own; this is for a first fill or after a change made outside the admin.
+		 * @description Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions, menu items, feedback dishes, then every city's venue tags). A topic or alias change queues it on its own; this is for a first fill or after a change made outside the admin.
 		 *
-		 * @name RelinkFoodTopics
-		 * @request POST:/admin/food-topics/relink
-		 * @response `201` `RelinkFoodTopicsData`
+		 * @name RelinkTopics
+		 * @request POST:/admin/topics/relink
+		 * @response `201` `RelinkTopicsData`
 		 */
-		relinkFoodTopics: (params: RequestParams = {}) =>
-			this.request<RelinkFoodTopicsData, any>({
-				path: `/admin/food-topics/relink`,
+		relinkTopics: (params: RequestParams = {}) =>
+			this.request<RelinkTopicsData, any>({
+				path: `/admin/topics/relink`,
 				method: 'POST',
 				format: 'json',
 				...params,
@@ -12139,12 +11916,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * No description
 		 *
 		 * @name SetIgnoredWord
-		 * @request PUT:/admin/food-topics/ignored-words
+		 * @request PUT:/admin/topics/ignored-words
 		 * @response `200` `SetIgnoredWordData`
 		 */
 		setIgnoredWord: (data: AdminIgnoreWordInputDto, params: RequestParams = {}) =>
 			this.request<SetIgnoredWordData, any>({
-				path: `/admin/food-topics/ignored-words`,
+				path: `/admin/topics/ignored-words`,
 				method: 'PUT',
 				body: data,
 				type: ContentType.Json,
@@ -12157,7 +11934,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 *
 		 * @name LookupTrendsTopics
 		 * @summary Google Trends topic ids for some words (Trends' autocomplete), to set a topic's `trendsTopicId`
-		 * @request GET:/admin/food-topics/trends-lookup
+		 * @request GET:/admin/topics/trends-lookup
 		 * @response `200` `LookupTrendsTopicsData`
 		 */
 		lookupTrendsTopics: (
@@ -12171,7 +11948,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			params: RequestParams = {},
 		) =>
 			this.request<LookupTrendsTopicsData, any>({
-				path: `/admin/food-topics/trends-lookup`,
+				path: `/admin/topics/trends-lookup`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -12181,18 +11958,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * @description Changes the fields given; an unmapped key is mapped by adding it to `aliases`.
 		 *
-		 * @name UpdateFoodTopic
+		 * @name UpdateTopic
 		 * @summary Changes the fields given; an unmapped key is mapped by adding it to `aliases`
-		 * @request PATCH:/admin/food-topics/{id}
-		 * @response `200` `UpdateFoodTopicData`
+		 * @request PATCH:/admin/topics/{id}
+		 * @response `200` `UpdateTopicData`
 		 */
-		updateFoodTopic: (
-			id: string,
-			data: AdminUpdateFoodTopicInputDto,
-			params: RequestParams = {},
-		) =>
-			this.request<UpdateFoodTopicData, any>({
-				path: `/admin/food-topics/${id}`,
+		updateTopic: (id: string, data: AdminUpdateTopicInputDto, params: RequestParams = {}) =>
+			this.request<UpdateTopicData, any>({
+				path: `/admin/topics/${id}`,
 				method: 'PATCH',
 				body: data,
 				type: ContentType.Json,
@@ -12201,16 +11974,32 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description Deletes an aspect (400 for a kind of food, a root, or one with children); its points move to its parent.
+		 *
+		 * @name DeleteTopic
+		 * @summary Deletes an aspect (400 for a kind of food, a root, or one with children); its points move to its parent
+		 * @request DELETE:/admin/topics/{id}
+		 * @response `200` `DeleteTopicData`
+		 */
+		deleteTopic: (id: string, params: RequestParams = {}) =>
+			this.request<DeleteTopicData, any>({
+				path: `/admin/topics/${id}`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description The venue's food topics, primary first, and the ones an admin keeps off it.
 		 *
-		 * @name GetVenueFoodTopics
+		 * @name GetVenueTopics
 		 * @summary The venue's food topics, primary first, and the ones an admin keeps off it
-		 * @request GET:/admin/venues/{venueId}/food-topics
-		 * @response `200` `GetVenueFoodTopicsData`
+		 * @request GET:/admin/venues/{venueId}/topics
+		 * @response `200` `GetVenueTopicsData`
 		 */
-		getVenueFoodTopics: (venueId: string, params: RequestParams = {}) =>
-			this.request<GetVenueFoodTopicsData, any>({
-				path: `/admin/venues/${venueId}/food-topics`,
+		getVenueTopics: (venueId: string, params: RequestParams = {}) =>
+			this.request<GetVenueTopicsData, any>({
+				path: `/admin/venues/${venueId}/topics`,
 				method: 'GET',
 				format: 'json',
 				...params,
@@ -12219,19 +12008,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * @description Tags the venue with a topic, keeps one off it, or clears the admin's word on it.
 		 *
-		 * @name ChangeVenueFoodTopic
+		 * @name ChangeVenueTopic
 		 * @summary Tags the venue with a topic, keeps one off it, or clears the admin's word on it
-		 * @request PUT:/admin/venues/{venueId}/food-topics/{key}
-		 * @response `200` `ChangeVenueFoodTopicData`
+		 * @request PUT:/admin/venues/{venueId}/topics/{key}
+		 * @response `200` `ChangeVenueTopicData`
 		 */
-		changeVenueFoodTopic: (
+		changeVenueTopic: (
 			venueId: string,
 			key: string,
-			data: AdminChangeVenueFoodTopicInputDto,
+			data: AdminChangeVenueTopicInputDto,
 			params: RequestParams = {},
 		) =>
-			this.request<ChangeVenueFoodTopicData, any>({
-				path: `/admin/venues/${venueId}/food-topics/${key}`,
+			this.request<ChangeVenueTopicData, any>({
+				path: `/admin/venues/${venueId}/topics/${key}`,
 				method: 'PUT',
 				body: data,
 				type: ContentType.Json,

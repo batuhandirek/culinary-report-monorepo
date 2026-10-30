@@ -4,8 +4,8 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 
 import {
 	LEAD_NEW_PLACE_MAX_REVIEWS,
@@ -34,7 +34,7 @@ export interface VenueStatusSummary {
 	to: string;
 	totals: VenueStatusCounts;
 	byDistrict: VenueStatusGroup[];
-	/** By the venue's main food topic (`VenueFoodTopicService.tags`), else its Google category */
+	/** By the venue's main food topic (`VenueTopicService.tags`), else its Google category */
 	byCategory: VenueStatusGroup[];
 	/** Newest first; an opening a post flagged carries the source `posts` */
 	changes: VenueStatusChangeRow[];
@@ -62,8 +62,8 @@ interface ChangeRow {
 export class VenueStatusChangeService {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly foodTopicService: FoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly topicService: TopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/**
@@ -74,12 +74,12 @@ export class VenueStatusChangeService {
 	async quarter(cityId: string, month: string): Promise<VenueStatusSummary> {
 		const { from } = quarterWindow(month);
 		const changes = await this.window('v.city_id = ?', [cityId], month);
-		const index = await this.foodTopicService.index();
+		const index = await this.topicService.index();
 		const venues =
 			changes.length ?
 				await this.em.find(Venue, { id: { $in: _.uniq(changes.map(c => c.venueId)) } })
 			:	[];
-		const tags = await this.venueFoodTopicService.tags(venues);
+		const tags = await this.venueTopicService.tags(venues);
 		const food = (venueId: string) => {
 			const primary = tags.get(venueId)?.find(t => t.primary);
 			return primary ? index.get(primary.key)?.label : undefined;

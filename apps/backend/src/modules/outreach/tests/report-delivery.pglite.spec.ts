@@ -9,7 +9,7 @@ import { SendEmailJob, SendEmailJobPayload } from 'src/modules/email/jobs/send-e
 import { EmailService } from 'src/modules/email/services/email.service.js';
 import { renderEmail } from 'src/modules/email/util/render-email.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
-import { ReportHighlightsAgent } from 'src/modules/reports/agents/report-highlights.agent.js';
+import { ReportEditorAgent } from 'src/modules/reports/agents/report-editor.agent.js';
 import { ReviewReplyAgent } from 'src/modules/reports/agents/review-reply.agent.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
@@ -23,6 +23,7 @@ import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { OutreachTouchKindEnum, ProspectStageEnum } from '../constants/outreach.constant.js';
@@ -34,16 +35,20 @@ import {
 	ReportDeliveryService,
 } from '../services/report-delivery.service.js';
 
+// The editor's answer: its "worth your attention" cards are the mail's findings
 const HIGHLIGHTS = {
+	kind: 'story',
 	title: 'The spit decides the stars',
 	headline: 'Reviews held back on the meat.',
-	highlights: [
+	letter: ['Reviews held back on the meat.'],
+	attention: [
 		{ title: 'Meat', text: 'Dry, say 9 of 14.' },
 		{ title: 'Creators', text: '6 posts.' },
 		{ title: 'Replies', text: 'None to critics.' },
 		{ title: 'Fourth', text: 'Left out of the mail.' },
 	],
-	actions: [],
+	tryThis: [],
+	notes: '',
 };
 
 /* A build publishes `report-built`; the outreach side mails a won prospect with an address,
@@ -91,6 +96,8 @@ describe('Report e-mail delivery (pglite)', () => {
 				BrandService,
 				CityService,
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportConfigService,
 				ReportTemplateService,
 				CompetitorService,
@@ -98,7 +105,7 @@ describe('Report e-mail delivery (pglite)', () => {
 				OutreachService,
 				ReportDeliveryService,
 				EmailService,
-				{ provide: ReportHighlightsAgent, useValue: mockAgent(HIGHLIGHTS) },
+				{ provide: ReportEditorAgent, useValue: mockAgent(HIGHLIGHTS) },
 				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },
 				{ provide: PgBossService, useValue: pgBossService },
 			],

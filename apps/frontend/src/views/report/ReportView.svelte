@@ -409,6 +409,8 @@
 				return chain;
 			case SectionKind.Competitors:
 				return competitors.length > 0;
+			case SectionKind.Actions:
+				return highlights.actions.length > 0;
 			case SectionKind.OwnAccounts:
 				return !!(data.ownPosts.length || data.ownAccounts?.length);
 			case SectionKind.Comments:
@@ -544,7 +546,9 @@
 			</div>
 
 			<div class="border-sand/25 border-t pt-5">
-				<p class="stamp text-lavender m-0 mb-3">The story of the month</p>
+				<p class="stamp text-lavender m-0 mb-3">
+					{highlights.kind === 'quiet' ? 'A quiet month' : 'The story of the month'}
+				</p>
 				<p class="type-display text-acid m-0 text-[28px] text-balance sm:text-[34px]">
 					{highlights.title}
 				</p>
@@ -553,6 +557,18 @@
 				</p>
 			</div>
 		</div>
+
+		<!-- The letter: the editor's read of the month, in prose (absent in reports built before it) -->
+		{#if highlights.letter?.length}
+			<div class="border-ink border-l-4 pl-4 break-inside-avoid sm:pl-5">
+				<p class="stamp text-beet m-0 mb-2">The letter</p>
+				<div class="flex max-w-[62ch] flex-col gap-3">
+					{#each highlights.letter as paragraph, i (i)}
+						<p class="text-reading-ink m-0 text-[15px] leading-relaxed">{paragraph}</p>
+					{/each}
+				</div>
+			</div>
+		{/if}
 
 		<div>
 			{#if only?.ratingBenchmark}
@@ -626,8 +642,9 @@
 			</p>
 		{/if}
 
+		{#if highlights.highlights.length}
 		<div>
-			<p class="stamp text-beet m-0 mb-2">What we found</p>
+			<p class="stamp text-beet m-0 mb-2">Worth your attention</p>
 			<ol class="m-0 flex list-none flex-col p-0">
 				{#each highlights.highlights as point, i (i)}
 					<li
@@ -644,6 +661,7 @@
 				{/each}
 			</ol>
 		</div>
+		{/if}
 	</section>
 {/snippet}
 
@@ -905,7 +923,7 @@
 {#snippet actionsSection()}
 	<!-- What to do -->
 	<section>
-		{@render sectionHead('next', 'For next month', 'What to do next')}
+		{@render sectionHead('next', 'Try this', 'What to do next')}
 		<div class="grid grid-cols-1 gap-3">
 			{#each highlights.actions as action, i (i)}
 				<div
@@ -1012,6 +1030,7 @@
 					complaints={postStats.complaints}
 					praiseThemes={postStats.praiseThemes}
 					complaintThemes={postStats.complaintThemes}
+					aspects={data.aspects}
 					unit="posts" />
 			</div>
 		{:else}
@@ -1147,6 +1166,7 @@
 						complaints={reviews.complaints}
 						praiseThemes={reviews.praiseThemes}
 						complaintThemes={reviews.complaintThemes}
+						aspects={data.aspects}
 						unit="reviews" />
 					<p class="text-muted-foreground m-0 mt-1 text-xs">
 						Out of {reviews.written} written {reviews.written === 1
@@ -1474,7 +1494,7 @@
 		{:else if section.kind === SectionKind.Media}
 			<section>
 				{@render sectionHead('media', 'Media coverage', 'What the blogs wrote about you')}
-				<ReportMedia {articles} limit={ARTICLES_SHOWN} />
+				<ReportMedia {articles} limit={ARTICLES_SHOWN} aspects={data.aspects} />
 			</section>
 		{:else if section.kind === SectionKind.Creators}
 			{@render creatorsSection()}

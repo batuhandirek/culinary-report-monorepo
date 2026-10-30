@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -52,7 +52,7 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				MentionExtractionService,
-				FoodTopicService,
+				TopicService,
 				{ provide: MentionExtractionAgent, useValue: agent },
 			],
 		});

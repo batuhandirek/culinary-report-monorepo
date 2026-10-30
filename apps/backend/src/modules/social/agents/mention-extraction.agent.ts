@@ -6,10 +6,10 @@ import { z } from 'zod/v4';
 import { BaseMastraAgent, BaseMastraAgentConfig } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 import {
 	feedbackDishSchema,
+	aspectsInstruction,
 	FEEDBACK_POINT_INSTRUCTION,
 	feedbackPointSchema,
 	FEEDBACK_SENTIMENTS,
-	FEEDBACK_THEMES_INSTRUCTION,
 } from 'src/modules/venues/agents/review-analysis.agent.js';
 
 const mentionExtractionSchema = z.object({
@@ -50,11 +50,13 @@ const mentionExtractionSchema = z.object({
 		.describe('Every specific food or drink venue talked about. Empty if none.'),
 });
 
-/** The city whose scrape found the post (`City.name`), and the food topics' labels. */
+/** The city whose scrape found the post (`City.name`), the food topics' labels and the aspects' legend. */
 export interface MentionExtractionContext {
 	cityName: string;
-	/** `FoodTopic` labels: the cuisine words the reports group by */
-	foodTopics?: string[];
+	/** The food topics' labels (`TopicIndex.food`): the cuisine words the reports group by */
+	topics?: string[];
+	/** The aspects' legend (`TopicIndex.aspectLegend`) */
+	legend: string;
 }
 
 /** The venues a post talks about, with what it says about each. */
@@ -85,11 +87,11 @@ export class MentionExtractionAgent extends BaseMastraAgent<
 			`Hashtags of a city also attract posts about other cities, so record the venue's city when known. ` +
 			`A post tagged at a venue that describes a visit there counts as a mention of that venue, even if the caption does not repeat its name. ` +
 			`Only include venues that are specifically named or tagged. Do not invent dishes, praise or complaints that are not stated. ` +
-			FEEDBACK_THEMES_INSTRUCTION +
+			aspectsInstruction(context?.legend ?? '') +
 			FEEDBACK_POINT_INSTRUCTION +
 			`Mark a venue as a new opening only when the post itself says it is new or has just opened; a new dish, a new menu or a creator's first visit is not an opening. ` +
-			(context?.foodTopics?.length ?
-				`For cuisine, use these words where one fits: ${context.foodTopics.join(', ')}. Use another short English word only when none fits. `
+			(context?.topics?.length ?
+				`For cuisine, use these words where one fits: ${context.topics.join(', ')}. Use another short English word only when none fits. `
 			:	'') +
 			`Write everything in concise English.`
 		);

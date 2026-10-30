@@ -4,7 +4,7 @@ import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { cityFactory, testCitySource } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -223,7 +223,7 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 				SocialPostService,
 				CityService,
 				HashtagService,
-				FoodTopicService,
+				TopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});

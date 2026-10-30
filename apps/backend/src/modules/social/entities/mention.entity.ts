@@ -2,7 +2,7 @@ import { Collection, type Rel } from '@mikro-orm/core';
 import { Entity, Enum, Index, ManyToOne, OneToMany, Property } from '@mikro-orm/decorators/legacy';
 
 import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
-import { MentionFoodTopic } from 'src/modules/food-topics/entities/mention-food-topic.entity.js';
+import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import type { FeedbackSentiment } from 'src/modules/venues/interfaces/feedback.interface.js';
@@ -31,7 +31,7 @@ export enum MentionMatchMethodEnum {
 
 /** One venue talked about in a post, as the LLM read it, and the brand (and branch) it was matched to. */
 @Entity({ tableName: 'mentions', repository: () => MentionRepository })
-export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 'foodTopics'> {
+export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 'topics'> {
 	@ManyToOne({ entity: () => SocialPost, deleteRule: 'cascade' })
 	post: Rel<SocialPost>;
 
@@ -94,7 +94,7 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 
 	@OneToMany(() => FeedbackPoint, point => point.mention, { orderBy: { id: 'asc' }, orphanRemoval: true })
 	feedback = new Collection<FeedbackPoint>(this);
 
-	// The food topics it is about (`MentionFoodTopic`, written by `MentionFoodTopicService` only), in its text's order
-	@OneToMany(() => MentionFoodTopic, link => link.mention, { orderBy: { rank: 'asc' } })
-	foodTopics = new Collection<MentionFoodTopic>(this);
+	// The food topics it is about (`MentionTopic`, written by `MentionTopicService` only), in its text's order
+	@OneToMany(() => MentionTopic, link => link.mention, { orderBy: { rank: 'asc' } })
+	topics = new Collection<MentionTopic>(this);
 }

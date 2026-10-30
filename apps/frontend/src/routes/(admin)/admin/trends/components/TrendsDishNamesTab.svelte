@@ -86,7 +86,7 @@
 	// Dish and drink topics only: what a name can count for
 	let topicItems = $state<{ value: string; label: string }[]>([]);
 	$effect(() => {
-		api.admin.getFoodTopics({ cityId }).then((res) => {
+		api.admin.getTopics({ cityId }).then((res) => {
 			topicItems = res.topics
 				.filter((t) => t.kind === 'dish' || t.kind === 'drink')
 				.map((t) => ({ value: t.key, label: t.label }))

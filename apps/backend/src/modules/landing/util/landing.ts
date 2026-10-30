@@ -4,15 +4,10 @@
 
 import _ from 'lodash';
 
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { isDeniedCreator, isDeniedVenue } from 'src/modules/highlights/util/highlights.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
-import {
-	FEEDBACK_THEMES,
-	type FeedbackTheme,
-	isFeedbackTheme,
-} from 'src/modules/venues/constants/feedback-themes.constant.js';
 
 import {
 	LANDING_DISH_MIN_POSTS,
@@ -80,7 +75,7 @@ export interface LandingFeedbackRow {
 	/** The dish or drink topic of its dish name, when it has one */
 	topicKey: string | null;
 	topicLabel: string | null;
-	topicKind: FoodTopicKindEnum | null;
+	topicKind: TopicKindEnum | null;
 }
 
 /** An open venue of a brand the edition names. */
@@ -117,7 +112,7 @@ export interface LandingInput {
 	venues: LandingVenueRow[];
 	/** Every place's first sign of being new, from posts and from scrapes, up to the window's end */
 	openingSigns: LandingOpeningSign[];
-	index: FoodTopicIndex;
+	index: TopicIndex;
 	doNotList: { venues: readonly string[]; creators: readonly string[] };
 }
 
@@ -216,14 +211,14 @@ const rankBrands = (
 
 interface DishTally {
 	key: string;
-	kind: FoodTopicKindEnum | null;
+	kind: TopicKindEnum | null;
 	labels: Map<string, number>;
 	topicLabel: string | null;
 	posts: Set<string>;
 	brands: Map<string, Set<string>>;
 }
 
-const DISH_KINDS = new Set([FoodTopicKindEnum.DISH, FoodTopicKindEnum.DRINK]);
+const DISH_KINDS = new Set([TopicKindEnum.DISH, TopicKindEnum.DRINK]);
 
 /**
  * Each post counts a dish once, however many of its names fall in it: the dish or drink topic
@@ -289,13 +284,13 @@ const shareTable = (pairs: { postId: string; key: string }[]) => {
 	};
 };
 
-// Catch-all themes say nothing a city could decide
-const isStoryTheme = (theme: string): theme is FeedbackTheme =>
-	isFeedbackTheme(theme) && theme !== 'other' && !theme.endsWith('_other');
+// A root ("about food, nothing finer") says nothing a city could decide; nor does a key no aspect has
+const isStoryTheme = (theme: string, index: Pick<TopicIndex, 'isAspect' | 'isRoot'>) =>
+	index.isAspect(theme) && !index.isRoot(theme);
 
 /** The first cuisine a mention names (its stored topics, else its venue's category's). */
-const cuisineOf = (topics: string[], index: FoodTopicIndex) =>
-	topics.find(k => index.get(k)?.kind === FoodTopicKindEnum.CUISINE) ?? null;
+const cuisineOf = (topics: string[], index: TopicIndex) =>
+	topics.find(k => index.get(k)?.kind === TopicKindEnum.CUISINE) ?? null;
 
 /**
  * The edition's numbers and facts. Every list leaves out the venues and creators on the city's
@@ -387,7 +382,7 @@ export const computeLanding = (input: LandingInput): LandingEditionData => {
 		.map(d => dishLabel(d.t));
 
 	const eligible = dishRows.filter(d => d.t.posts.size >= LANDING_DISH_MIN_POSTS);
-	const isDrink = (d: (typeof dishRows)[number]) => d.t.kind === FoodTopicKindEnum.DRINK;
+	const isDrink = (d: (typeof dishRows)[number]) => d.t.kind === TopicKindEnum.DRINK;
 	const picked = new Set<string>();
 	const pick = (role: LandingDishRole, rows: typeof dishRows, order: 'delta' | 'posts') => {
 		const candidates = rows.filter(
@@ -582,7 +577,7 @@ const computeStories = (ctx: {
 	// A praise theme on the rise: share of the posts praising anything
 	const praisePairs = (rows: LandingFeedbackRow[]) =>
 		rows
-			.filter(r => r.sentiment === 'positive' && r.theme && isStoryTheme(r.theme))
+			.filter(r => r.sentiment === 'positive' && r.theme && isStoryTheme(r.theme, index))
 			.map(r => ({ postId: r.postId, key: r.theme! }));
 	const praiseNow = shareTable(praisePairs(current.feedback));
 	const praiseBefore = shareTable(praisePairs(previous.feedback));
@@ -600,7 +595,7 @@ const computeStories = (ctx: {
 		['desc', 'desc', 'asc'],
 	)[0];
 	if (praise) {
-		const label = FEEDBACK_THEMES[praise.key as FeedbackTheme].label;
+		const label = index.label(praise.key);
 		trends.push({
 			id: 'praise',
 			kind: 'praise',

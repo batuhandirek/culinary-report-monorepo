@@ -2,7 +2,7 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 
 import _ from 'lodash';
 
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { plain } from 'src/modules/venues/util/venue-names.js';
 
 /** A hashtag as `Hashtag.tag` stores it: no `#`, lowercased, Unicode letters kept; '' for none. */
@@ -65,7 +65,7 @@ export const hashtagBrandIndex = (
 };
 
 /**
- * What a tag names: the food topic it is as a whole (`FoodTopicIndex.exact`: #smashburger is
+ * What a tag names: the food topic it is as a whole (`TopicIndex.exact`: #smashburger is
  * burgers), else the one brand whose name or own account handle it is, letters and digits only
  * (#burgerbros), and only once a post carrying it mentions that brand or is by its own account
  * (so #restaurant is not a venue called "Restaurant"). A city's name or alias is neither (#berlin
@@ -74,7 +74,7 @@ export const hashtagBrandIndex = (
 export const hashtagLinks = (
 	tag: { id: number; tag: string },
 	ctx: {
-		index: FoodTopicIndex;
+		index: TopicIndex;
 		brandOf: Map<string, string | null>;
 		cityKeys: ReadonlySet<string>;
 		seenWith: ReadonlySet<string>;

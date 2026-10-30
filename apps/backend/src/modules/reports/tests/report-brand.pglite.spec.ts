@@ -14,9 +14,10 @@ import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.j
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { Report } from '../entities/report.entity.js';
 import { ReportService } from '../services/report.service.js';
@@ -35,12 +36,14 @@ describe('ReportService.build for a brand (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportConfigService,
 				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,
-				{ provide: ReportHighlightsAgent, useValue: highlightsAgent },
+				{ provide: ReportEditorAgent, useValue: highlightsAgent },
 				{ provide: ReviewReplyAgent, useValue: replyAgent },
 			],
 		});
@@ -149,9 +152,12 @@ describe('ReportService.build for a brand (pglite)', () => {
 		expect(report.data.branches.map(b => b.neighbours.map(nb => nb.name))).toEqual([['Hisar'], ['Hisar']]);
 		// The model gets every place on its own, and the brand
 		const input = JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string);
-		expect(input.brand).toEqual({ name: 'Burgermeister', postsNamingNoBranch: 2 });
+		expect(input.brand).toMatchObject({ name: 'Burgermeister', postsByOthersNamingNoBranch: 2 });
 		expect(input.places.map((p: { name: string }) => p.name)).toEqual([main.name, kotti.name]);
-		expect(input.places[1]).toMatchObject({ postsByOthersNamingIt: 1, neighbours: [{ name: 'Hisar' }] });
+		expect(input.places[1]).toMatchObject({
+			thisMonth: { postsByOthersNamingIt: 1 },
+			talkedAboutNearbyThisMonth: [{ name: 'Hisar' }],
+		});
 
 		// Each city its own report: Hamburg's has its one branch and its post
 		const inHamburg = await service.build(brand.id, hamburg.id, '2026-09');
@@ -159,8 +165,10 @@ describe('ReportService.build for a brand (pglite)', () => {
 		expect(inHamburg.data.branches.map(b => b.venueId)).toEqual([elsewhere.id]);
 		expect(inHamburg.data.social.postCount).toBe(1);
 		expect(inHamburg.data.brand.brandOnlyPosts).toBe(0);
-		// A single place: the prompt has no branch comparison
-		expect(JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string).brand).toBeUndefined();
+		// A single place: no brand-only posts to keep apart, and its month is the brand's
+		const single = JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string);
+		expect(single.brand.postsByOthersNamingNoBranch).toBeUndefined();
+		expect(single.places[0].thisMonth).toBeUndefined();
 		expect(await em.count(Report, { brand })).toBe(2);
 		// A rebuild replaces the city's row
 		await service.build(brand.id, city.id, '2026-09');
@@ -185,7 +193,7 @@ describe('ReportService.build for a brand (pglite)', () => {
 			['Burgermeister', 'Hamburg'],
 		]);
 		// The model is told both cities
-		expect(highlightsAgent.generate.mock.calls.at(-1)![1]).toEqual({ cityName: 'Berlin, Hamburg' });
+		expect(highlightsAgent.generate.mock.calls.at(-1)![1]).toMatchObject({ cityName: 'Berlin, Hamburg' });
 
 		// A rebuild finds the city-less row again: the null key is not unique in Postgres
 		const again = await service.build(brand.id, null, '2026-09');

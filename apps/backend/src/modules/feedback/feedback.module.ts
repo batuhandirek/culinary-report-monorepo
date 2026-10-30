@@ -7,7 +7,7 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { BacklogModule } from '../backlog/backlog.module.js';
-import { FoodTopicsModule } from '../food-topics/food-topics.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 
 import { DishTopicAgent } from './agents/dish-topic.agent.js';
@@ -34,7 +34,7 @@ import { FeedbackThemeService } from './services/feedback-theme.service.js';
 		MikroOrmModule.forFeature([FeedbackPoint, DishName, User, UserSession]),
 		AuthModule,
 		BacklogModule,
-		FoodTopicsModule,
+		TopicsModule,
 		LLMModule,
 	],
 	controllers: [AdminFeedbackController, AdminDishNamesController],
@@ -49,6 +49,6 @@ import { FeedbackThemeService } from './services/feedback-theme.service.js';
 		FeedbackAmountAgent,
 		DishTopicAgent,
 	],
-	exports: [FeedbackService],
+	exports: [FeedbackService, DishNameService],
 })
 export class FeedbackModule {}

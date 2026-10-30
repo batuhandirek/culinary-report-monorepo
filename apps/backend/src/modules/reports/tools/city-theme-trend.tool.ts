@@ -1,8 +1,6 @@
 import type { Tool } from '@mastra/core/tools';
 import { z } from 'zod/v4';
 
-import { FEEDBACK_THEMES, isFeedbackTheme } from 'src/modules/venues/constants/feedback-themes.constant.js';
-
 import type { EvidenceContext } from '../interfaces/report-evidence.interface.js';
 
 import { defineTool } from './define-tool.js';
@@ -31,7 +29,7 @@ export const cityThemeTrendTool = (ctx: EvidenceContext, run: ToolRun): Tool =>
 				return {
 					theme: row.key,
 					label: row.label,
-					topic: isFeedbackTheme(row.key) ? FEEDBACK_THEMES[row.key].topic : undefined,
+					topic: ctx.aspects.rootOf(row.key),
 					cityShareOfWrittenReviewsPercent: row.reviewShare !== null ? Math.round(row.reviewShare) : 'no written review with a point this month',
 					changeOnLastMonthPoints: row.reviewShareChange !== null ? Math.round(row.reviewShareChange) : 'no month before to compare',
 					atBrands: row.venues,

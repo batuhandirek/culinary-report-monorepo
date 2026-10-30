@@ -9,9 +9,10 @@ import { DETAIL_ITEM } from 'src/modules/venues/tests/fixtures/google-place-item
 import { venueDetailsFromItem } from 'src/modules/venues/util/venue-details.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
@@ -25,13 +26,15 @@ describe('ReportData.venue Google Maps details (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportConfigService,
 				ReportTemplateService,
 				CompetitorService,
 				BrandService,
 				CityService,
 				{
-					provide: ReportHighlightsAgent,
+					provide: ReportEditorAgent,
 					useValue: mockAgent({ title: 'T', headline: 'H', highlights: [], actions: [] }),
 				},
 				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },

@@ -143,7 +143,7 @@
 			out. A brand's kind of food is the main food of most of its places in the city.
 			{#if data.coverage.unfiledReviews || data.coverage.unfiledPosts}
 				{plural(data.coverage.unfiledReviews, 'review')} and {plural(data.coverage.unfiledPosts, 'post')} have a point
-				not filed under a theme yet and count under none (run the feedback-themes backfill).
+				not filed under a theme yet and count under none (the nightly LLM backlog on the Data page files them).
 			{/if}
 		</p>
 

@@ -1,7 +1,7 @@
 import type { Rel } from '@mikro-orm/core';
 import { Entity, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
 
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
 
@@ -15,9 +15,9 @@ export class Hashtag extends MikroOrmSimpleEntityAbstractClass<'ignored'> {
 	@Property({ type: 'text', unique: true })
 	tag: string;
 
-	// The food topic it names as a whole (#smashburger: burgers), re-linked by `FoodTopicRelinkJob`
-	@ManyToOne({ entity: () => FoodTopic, nullable: true, deleteRule: 'set null', index: true })
-	foodTopic?: Rel<FoodTopic> | null;
+	// The food topic it names as a whole (#smashburger: burgers), re-linked by `TopicRelinkJob`
+	@ManyToOne({ entity: () => Topic, nullable: true, deleteRule: 'set null', index: true })
+	topic?: Rel<Topic> | null;
 
 	// The one brand whose name or own account handle it is (#burgerbros), re-checked on brand changes
 	@ManyToOne({ entity: () => Brand, nullable: true, deleteRule: 'set null', index: true })

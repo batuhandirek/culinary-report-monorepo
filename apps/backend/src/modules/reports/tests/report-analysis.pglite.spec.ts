@@ -12,10 +12,11 @@ import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.j
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { ReportAnalysisAgent } from '../agents/report-analysis.agent.js';
-import { ReportHighlightsAgent } from '../agents/report-highlights.agent.js';
+import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportSectionKindEnum as Kind } from '../constants/report-section.constant.js';
 import { toOutput, toPublicOutput } from '../controllers/admin.reports.controller.js';
@@ -63,13 +64,15 @@ describe('report analysis (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				ReportService,
+				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
+				TopicService,
 				ReportTemplateService,
 				ReportConfigService,
 				ReportEvidenceService,
 				CompetitorService,
 				BrandService,
 				CityService,
-				{ provide: ReportHighlightsAgent, useValue: highlightsAgent },
+				{ provide: ReportEditorAgent, useValue: highlightsAgent },
 				{ provide: ReviewReplyAgent, useValue: replyAgent },
 				{ provide: ReportAnalysisAgent, useValue: analysisAgent },
 			],
@@ -169,20 +172,24 @@ describe('report analysis (pglite)', () => {
 		]);
 		expect(options.abortSignal).toBeInstanceOf(AbortSignal);
 
-		// The default (full) layout shows the section: the highlights quote the moves with their labels
+		// The editor reads the moves with their checks and the investigations with their labels
 		const highlightsInput = JSON.parse(highlightsAgent.generate.mock.calls[0][0] as string);
-		expect(highlightsInput.whatMovedAndWhy).toHaveLength(analysis.investigations.length);
-		expect(highlightsInput.whatMovedAndWhy[0].possibleReasons[0]).toMatch(/^possible: /);
+		expect(highlightsInput.whatMovedAndWhy.movesFound).toHaveLength(analysis.observations.length);
+		expect(highlightsInput.whatMovedAndWhy.investigated).toHaveLength(analysis.investigations.length);
+		expect(highlightsInput.whatMovedAndWhy.investigated[0].possibleReasons[0]).toMatch(/^possible: /);
 
-		// The admin sees the trace, a shared link or the portal doesn't
+		// The admin sees the traces, a shared link or the portal doesn't
 		await harness.orm.em.populate(report, ['brand', 'city']);
 		expect(toOutput(report).analysis?.trace).toBeDefined();
+		expect(toOutput(report).highlights.trace).toBeDefined();
 		expect('trace' in (toPublicOutput(report).analysis ?? {})).toBe(false);
+		expect(toPublicOutput(report).highlights).not.toHaveProperty('trace');
+		expect(toPublicOutput(report).highlights).not.toHaveProperty('notes');
 		expect(toPublicOutput(report).analysis?.investigations).toHaveLength(analysis.investigations.length);
 		expect((toPublicOutput(report) as { sentAt?: Date }).sentAt).toBeUndefined();
 	});
 
-	it('leaves the moves out of the highlights of a configuration without the section, cut to the limit with it', async () => {
+	it('runs one analysis for a build of several configurations, and every editor reads the moves', async () => {
 		const { city, brand } = await seed('Bún Bò');
 		const without = await configs.create(brand.id, { name: 'No analysis' });
 		await configs.update(without.id, { sections: [{ kind: Kind.COVER }, { kind: Kind.POSTS }] });
@@ -194,9 +201,10 @@ describe('report analysis (pglite)', () => {
 		// One analysis for the build, stored on both
 		expect(analysisAgent.generate).toHaveBeenCalledTimes(1);
 		expect(built[0].analysis).toEqual(built[1].analysis);
+		// The moves are the month's material whatever the sections: the letter is its own section
 		const inputs = highlightsAgent.generate.mock.calls.map(c => JSON.parse(c[0] as string));
-		expect(inputs[0].whatMovedAndWhy).toBeUndefined();
-		expect(inputs[1].whatMovedAndWhy).toHaveLength(1);
+		expect(inputs[0].whatMovedAndWhy.movesFound.length).toBeGreaterThan(0);
+		expect(inputs[1].whatMovedAndWhy).toEqual(inputs[0].whatMovedAndWhy);
 	});
 
 	it('keeps the report when the agent fails, with fallbacks and the error in the trace', async () => {

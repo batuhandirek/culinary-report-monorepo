@@ -1,18 +1,18 @@
 // Pure: the food topic a feedback row's dish points at.
 
-import { FoodTopicKindEnum } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import type { FoodTopicIndex } from 'src/modules/food-topics/util/food-topics.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { dishKey } from 'src/modules/venues/util/dishes.js';
 
-const DISH_KINDS = new Set([FoodTopicKindEnum.DISH, FoodTopicKindEnum.DRINK]);
+const DISH_KINDS = new Set([TopicKindEnum.DISH, TopicKindEnum.DRINK]);
 
 /**
  * What a writer links a row's dish with: its name's decided topic (`DishName`, by `dishKey`), else,
- * for a name not decided yet, the dish or drink topic it names as a whole (`FoodTopicIndex.dishTopic`).
+ * for a name not decided yet, the dish or drink topic it names as a whole (`TopicIndex.dishTopic`).
  */
 export class DishTopics {
 	constructor(
-		readonly index: FoodTopicIndex,
+		readonly index: TopicIndex,
 		/** Decided names' topic ids by key, null for "none" */
 		private readonly decided: ReadonlyMap<string, string | null>,
 	) {}
@@ -27,13 +27,13 @@ export class DishTopics {
 }
 
 /** The id of the dish or drink topic a name is as a whole, its key or one of its other names */
-export const matchedTopicId = (index: FoodTopicIndex, name: string): string | null => {
+export const matchedTopicId = (index: TopicIndex, name: string): string | null => {
 	const key = index.dishTopic(name);
 	return (key && index.get(key)?.id) || null;
 };
 
 /** Whether a topic key is one a dish name can point at: a dish or a drink */
-export const isDishTopic = (index: FoodTopicIndex, key: string | null | undefined): boolean => {
+export const isDishTopic = (index: TopicIndex, key: string | null | undefined): boolean => {
 	const kind = key ? index.get(key)?.kind : undefined;
 	return !!kind && DISH_KINDS.has(kind);
 };

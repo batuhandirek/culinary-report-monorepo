@@ -1,31 +1,41 @@
 <script lang="ts">
+	import type { ReportAspect } from 'client';
+
 	import { TOPIC_LABELS } from '#lib/culinary.js';
-	import { FEEDBACK_THEME_LABELS, isCatchAllTheme, themeLabel } from '#lib/feedback.js';
 
 	// Complaints against praise per topic on one diverging axis: complaints run left in beet,
 	// praise right in olive, each count printed at the bar's end. With theme counts (reports built
-	// since themes), each topic's themes are listed under its bars, the same sides.
+	// since themes), each topic's themes are listed under its bars, the same sides. Labels and which
+	// root a theme counts under come from the report's own aspect vocabulary (`aspects`); a report
+	// built before it was kept lists no themes, since nothing says which topic they sit under.
 	interface Props {
 		praise: Record<string, number>;
 		complaints: Record<string, number>;
 		praiseThemes?: Record<string, number>;
 		complaintThemes?: Record<string, number>;
+		/** The aspect vocabulary at the build (`ReportData.aspects`), roots first */
+		aspects?: ReportAspect[];
 		/** What a count counts: "reviews" or "posts" */
 		unit: string;
 	}
 
-	let { praise, complaints, praiseThemes, complaintThemes, unit }: Props = $props();
+	let { praise, complaints, praiseThemes, complaintThemes, aspects, unit }: Props = $props();
 
-	// A topic's themes on one side, most raised first, catch-alls left out, three at most
+	const byKey = $derived(new Map((aspects ?? []).map((a) => [a.key, a])));
+	const label = (key: string) => byKey.get(key)?.label ?? TOPIC_LABELS[key] ?? key;
+
+	// A topic's themes on one side, most raised first, the root itself left out (a point filed
+	// there says nothing finer than the topic), three at most
 	const THEMES_SHOWN = 3;
 	const themesOf = (counts: Record<string, number> | undefined, topic: string) =>
 		Object.entries(counts ?? {})
-			.filter(([key, n]) => n && !isCatchAllTheme(key) && FEEDBACK_THEME_LABELS[key as keyof typeof FEEDBACK_THEME_LABELS]?.topic === topic)
+			.filter(([key, n]) => n && key !== topic && byKey.get(key)?.root === topic)
 			.sort(([, a], [, b]) => b - a)
 			.slice(0, THEMES_SHOWN);
 
+	const roots = $derived(aspects?.length ? aspects.filter((a) => a.root === a.key).map((a) => a.key) : Object.keys(TOPIC_LABELS));
 	const topics = $derived(
-		Object.keys(TOPIC_LABELS)
+		roots
 			// 'Other' says nothing on its own
 			.filter((t) => t !== 'other' && (praise[t] || complaints[t]))
 			.sort(
@@ -40,6 +50,7 @@
 		Math.max(1, ...topics.flatMap((t) => [praise[t] ?? 0, complaints[t] ?? 0]))
 	);
 	const width = (n: number) => `${n ? Math.max(3, (n / max) * 100) : 0}%`;
+	const themed = $derived(!!aspects?.length && !!(praiseThemes || complaintThemes));
 </script>
 
 {#if topics.length}
@@ -58,7 +69,7 @@
 			{#each topics as topic (topic)}
 				{@const bad = complaints[topic] ?? 0}
 				{@const good = praise[topic] ?? 0}
-				<span class="text-ink text-sm">{TOPIC_LABELS[topic]}</span>
+				<span class="text-ink text-sm">{label(topic)}</span>
 				<div
 					class="border-ink/60 flex h-5 items-center justify-end gap-1.5 border-r pr-0.5">
 					{#if bad}<span class="text-ink text-xs font-medium tabular-nums">{bad}</span
@@ -76,16 +87,16 @@
 				{#if badThemes.length || goodThemes.length}
 					<span></span>
 					<span class="text-muted-foreground -mt-1 pr-2 text-right text-xs leading-snug">
-						{badThemes.map(([key, n]) => `${themeLabel(key)} ${n}`).join(' · ')}
+						{badThemes.map(([key, n]) => `${label(key)} ${n}`).join(' · ')}
 					</span>
 					<span class="text-muted-foreground -mt-1 pl-2 text-xs leading-snug">
-						{goodThemes.map(([key, n]) => `${themeLabel(key)} ${n}`).join(' · ')}
+						{goodThemes.map(([key, n]) => `${label(key)} ${n}`).join(' · ')}
 					</span>
 				{/if}
 			{/each}
 		</div>
 		<p class="text-muted-foreground m-0 mt-2 text-xs">
-			Number of {unit} that raised each topic{praiseThemes || complaintThemes ? ', and under it the points they raised most' : ''}.
+			Number of {unit} that raised each topic{themed ? ', and under it the points they raised most' : ''}.
 		</p>
 	</div>
 {:else}

@@ -5,10 +5,9 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
-import {
-	FEEDBACK_THEMES,
-	type FeedbackTheme,
-} from 'src/modules/venues/constants/feedback-themes.constant.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import { FeedbackThemeAgent, FeedbackThemeInputPoint } from '../agents/feedback-theme.agent.js';
@@ -24,9 +23,9 @@ const BACKLOG_BATCH_POINTS = 600;
 export const UNFILED_SQL = 'f.detail is not null and f.theme is null';
 
 /**
- * Themes for points that have none: stored before themes, or sent back by `FeedbackService.realign`
- * after the vocabulary changed. Read from the phrase alone (`FeedbackThemeAgent`), never by
- * extracting a source again. A daily LLM backlog (`feedback-themes`).
+ * Aspects for points that have none: stored before the aspects existed, or answered with a key the
+ * table doesn't have. Read from the phrase alone (`FeedbackThemeAgent`, the legend from the table),
+ * never by extracting a source again. A daily LLM backlog (`feedback-themes`).
  */
 @Injectable()
 export class FeedbackThemeService implements OnModuleInit {
@@ -36,6 +35,7 @@ export class FeedbackThemeService implements OnModuleInit {
 		private readonly em: EntityManager,
 		private readonly feedbackThemeAgent: FeedbackThemeAgent,
 		private readonly llmBacklogRegistry: LlmBacklogRegistry,
+		private readonly topicService: TopicService,
 	) {}
 
 	/** Unfiled points are a daily LLM backlog; reports leave theme counts out until they are filed */
@@ -77,6 +77,8 @@ export class FeedbackThemeService implements OnModuleInit {
 			{ orderBy: { month: 'desc', id: 'asc' }, limit: opts.limit },
 		);
 		const byId = new Map(rows.map(r => [String(r.id), r]));
+		const index = await this.topicService.index();
+		const legend = index.aspectLegend();
 		let filed = 0;
 		let tokens = 0;
 		try {
@@ -95,14 +97,18 @@ export class FeedbackThemeService implements OnModuleInit {
 					}));
 					const res = await this.feedbackThemeAgent.generate(
 						JSON.stringify({ points: input }),
+						{ legend },
 					);
 					tokens += res.usage?.totalTokens ?? 0;
 					const asked = new Set(input.map(p => p.id));
 					for (const answer of res.object.points) {
 						const row = asked.has(answer.id) ? byId.get(answer.id) : undefined;
-						if (!row || row.theme) continue;
-						row.theme = answer.theme as FeedbackTheme;
-						row.topic = FEEDBACK_THEMES[row.theme].topic;
+						// An unknown key is no answer: the point is asked again next run
+						const aspect = index.aspect(answer.theme);
+						if (!row || row.theme || !aspect) continue;
+						row.theme = aspect.key;
+						row.aspect = aspect.id ? this.em.getReference(Topic, aspect.id) : null;
+						row.topic = aspect.root as FeedbackTopic;
 						filed++;
 					}
 				},

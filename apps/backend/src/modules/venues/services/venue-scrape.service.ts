@@ -4,7 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
@@ -50,7 +50,7 @@ export class VenueScrapeService {
 		private readonly apifyService: ApifyService,
 		private readonly venueService: VenueService,
 		private readonly pgBossService: PgBossService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/** The venue master list: every place Google Maps finds for these terms in the city. */
@@ -361,7 +361,7 @@ export class VenueScrapeService {
 					singletonKey: cityId,
 				},
 			);
-		// A saved place may have new categories or review tags: its city's food-topic links by job
-		await this.venueFoodTopicService.queueCityRefresh(cityIds);
+		// A saved place may have new categories or review tags: its city's topic links by job
+		await this.venueTopicService.queueCityRefresh(cityIds);
 	}
 }

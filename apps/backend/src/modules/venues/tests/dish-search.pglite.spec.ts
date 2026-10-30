@@ -3,11 +3,11 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@je
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { VenueFoodTopic } from 'src/modules/food-topics/entities/venue-food-topic.entity.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -68,8 +68,8 @@ describe('DishSearchService (pglite)', () => {
 				DishSearchService,
 				VenueScrapeService,
 				VenueService,
-				FoodTopicService,
-				VenueFoodTopicService,
+				TopicService,
+				VenueTopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});
@@ -78,7 +78,7 @@ describe('DishSearchService (pglite)', () => {
 
 		const em = harness.orm.em;
 		// Two dishes and their cuisine parent (Italian), which is no dish and never searched
-		seedFoodTopics(em, ['pasta', 'pizza']);
+		seedTopics(em, ['pasta', 'pizza']);
 		city = await cityFactory.create();
 		trattoria = em.create(Venue, {
 			city,
@@ -205,10 +205,10 @@ describe('DishSearchService (pglite)', () => {
 
 	it('searches the dishes most open venues serve first, as many as the budget covers in every district', async () => {
 		const em = harness.orm.em;
-		const topic = (key: string) => em.findOneOrFail(FoodTopic, { key });
+		const topic = (key: string) => em.findOneOrFail(Topic, { key });
 		const [pasta, pizza] = [await topic('pasta'), await topic('pizza')];
-		const tag = (placeId: string, food: FoodTopic, closed = false) =>
-			em.create(VenueFoodTopic, {
+		const tag = (placeId: string, food: Topic, closed = false) =>
+			em.create(VenueTopic, {
 				venue: em.create(Venue, {
 					city,
 					placeId,

@@ -2,6 +2,10 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import { DishName } from 'src/modules/feedback/entities/dish-name.entity.js';
+import { DishNameService } from 'src/modules/feedback/services/dish-name.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
@@ -17,6 +21,7 @@ import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
+import { dishKey } from 'src/modules/venues/util/dishes.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -81,7 +86,7 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [BrandListService, BrandSummaryService, DataCoverageService],
+			providers: [BrandListService, BrandSummaryService, DataCoverageService, DishNameService, TopicService],
 		});
 		list = harness.moduleRef.get(BrandListService);
 		summary = harness.moduleRef.get(BrandSummaryService);
@@ -90,13 +95,23 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		const em = harness.orm.em;
 
 		city = await cityFactory.create({ name: 'Berlin' });
+		const topics = seedTopics(em, ['kebab', 'vegan']);
+		// The agent linked a name no topic names as a whole
+		em.create(DishName, { key: dishKey('Chicken Döner'), name: 'Chicken Döner', foodTopic: topics.get('kebab'), decidedBy: 'ai' });
 		doner = venueFactory.build(
 			{
 				name: 'Döner Pro',
 				reviewsCount: 333,
 				rating: 4.8,
 				district: 'Kreuzberg',
-				details: { reviewsTags: [{ title: 'vegan meat', count: 12 }, { title: 'Dürüm', count: 7 }] },
+				details: {
+					reviewsTags: [
+						{ title: 'vegan meat', count: 12 },
+						{ title: 'Dürüm', count: 7 },
+						{ title: 'Chicken Döner', count: 5 },
+						{ title: 'waiting time', count: 3 },
+					],
+				},
 			},
 			{ associations: { city } },
 		);
@@ -198,9 +213,12 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		expect(res.topPosts.map(p => p.author)).toEqual(['creator_b', 'creator_a', 'creator_a']);
 		expect(res.report).toMatchObject({ month: '2026-09', title: 'Food wins' });
 		expect(res.todos.map(t => t.key)).toEqual(['unanswered', 'competitors']);
+		// Each tag with the food topic it names: by name, or as its dish name was decided
 		expect(res.reviewTags).toEqual([
 			{ title: 'vegan meat', count: 12 },
-			{ title: 'Dürüm', count: 7 },
+			{ title: 'Dürüm', count: 7, topic: { key: 'kebab', label: 'Döner & kebab' } },
+			{ title: 'Chicken Döner', count: 5, topic: { key: 'kebab', label: 'Döner & kebab' } },
+			{ title: 'waiting time', count: 3 },
 		]);
 		expect(res.todos[0]).toMatchObject({ tone: 'info', tab: 'reviews' });
 	});

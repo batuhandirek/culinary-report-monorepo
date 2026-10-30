@@ -13,8 +13,8 @@ import {
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { stepBudgetUsd } from 'src/modules/cities/util/city.js';
-import { MentionFoodTopicService } from 'src/modules/food-topics/services/mention-food-topic.service.js';
-import { VenueFoodTopicService } from 'src/modules/food-topics/services/venue-food-topic.service.js';
+import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
@@ -114,8 +114,8 @@ export class PipelineService {
 		private readonly venueDeliveryService: VenueDeliveryService,
 		private readonly venueSearchRankService: VenueSearchRankService,
 		private readonly dishSearchService: DishSearchService,
-		private readonly mentionFoodTopicService: MentionFoodTopicService,
-		private readonly venueFoodTopicService: VenueFoodTopicService,
+		private readonly mentionTopicService: MentionTopicService,
+		private readonly venueTopicService: VenueTopicService,
 		private readonly searchInterestService: SearchInterestService,
 		private readonly brandService: BrandService,
 		private readonly osmPlaceService: OsmPlaceService,
@@ -368,13 +368,13 @@ export class PipelineService {
 	}
 
 	/**
-	 * The city's stored food-topic links brought up to date in the step (the mentions' topics, then
+	 * The city's stored topic links brought up to date in the step (the mentions' topics, then
 	 * the venue tags), so a step reading tags never reads what the queued refresh hasn't caught up
 	 * with. Pure matching, a few seconds a city.
 	 */
-	private async refreshFoodTopics(cityId: string): Promise<void> {
-		await this.mentionFoodTopicService.relink({ cityId });
-		await this.venueFoodTopicService.refreshCity(cityId);
+	private async refreshTopics(cityId: string): Promise<void> {
+		await this.mentionTopicService.relink({ cityId });
+		await this.venueTopicService.refreshCity(cityId);
 	}
 
 	private async runStep(
@@ -478,7 +478,7 @@ export class PipelineService {
 					budgetUsd,
 				});
 			case PipelineStepEnum.FILL_COMPETITORS:
-				await this.refreshFoodTopics(city.id);
+				await this.refreshTopics(city.id);
 				return this.fillCompetitors(city.id, month, top);
 			case PipelineStepEnum.SCRAPE_REVIEWS: {
 				// Every branch (a chain's report compares them) and the competitors, inside the same
@@ -627,7 +627,7 @@ export class PipelineService {
 					...(await this.webMentionService.classifyMonth(city, month)),
 				};
 			case PipelineStepEnum.TRACK_SEARCH_RANKS:
-				await this.refreshFoodTopics(city.id);
+				await this.refreshTopics(city.id);
 				return this.venueSearchRankService.track(city, month, await branches(), budgetUsd);
 			case PipelineStepEnum.TRACK_DISH_SEARCHES:
 				// Today's snapshot of every dish in every district; the run's month is a label
@@ -639,7 +639,7 @@ export class PipelineService {
 				return this.searchInterestService.pull(city.id, month, { brands, budgetUsd });
 			}
 			case PipelineStepEnum.BUILD_REPORTS: {
-				await this.refreshFoodTopics(city.id);
+				await this.refreshTopics(city.id);
 				let built = 0;
 				let acrossCities = 0;
 				let waiting = 0;

@@ -7,10 +7,10 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FoodTopicService } from 'src/modules/food-topics/services/food-topic.service.js';
-import { FoodTopic } from 'src/modules/food-topics/entities/food-topic.entity.js';
-import { MentionFoodTopic } from 'src/modules/food-topics/entities/mention-food-topic.entity.js';
-import { seedFoodTopics } from 'src/modules/food-topics/tests/factories/food-topic.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -64,7 +64,7 @@ describe('Post sources and hashtags (pglite)', () => {
 		};
 	};
 	const hashtag = (value: string) =>
-		em.fork().findOneOrFail(Hashtag, { tag: value }, { populate: ['foodTopic', 'brand'] });
+		em.fork().findOneOrFail(Hashtag, { tag: value }, { populate: ['topic', 'brand'] });
 	// A post matched to a venue (its brand comes with the subscriber)
 	const matchedPost = async (externalId: string, venue: Venue) => {
 		const post = await em.findOneOrFail(SocialPost, { externalId });
@@ -85,7 +85,7 @@ describe('Post sources and hashtags (pglite)', () => {
 			providers: [
 				SocialPostService,
 				HashtagService,
-				FoodTopicService,
+				TopicService,
 				CityService,
 				AdminCitiesController,
 				AdminHashtagsController,
@@ -96,7 +96,7 @@ describe('Post sources and hashtags (pglite)', () => {
 		em = harness.orm.em as EntityManager;
 		posts = harness.moduleRef.get(SocialPostService);
 		cities = harness.moduleRef.get(AdminCitiesController);
-		seedFoodTopics(em, ['burgers']);
+		seedTopics(em, ['burgers']);
 		city = testCity(em, { name: 'Berlin', aliases: [] });
 		for (const name of ['Burger Bros', 'Kiez Kebab', 'Pho Ga', 'Lucky Noodle'])
 			venues[name] = em.create(Venue, { city, placeId: `pl-${name}`, name });
@@ -149,9 +149,9 @@ describe('Post sources and hashtags (pglite)', () => {
 		expect(tagRows.map(t => t.tag)).toEqual(['berlinfood']);
 		expect((await stored(second.externalId)).tags).toEqual(['berlinfood', 'berlin', 'burgerbros', 'kiezkebab']);
 
-		expect((await hashtag('smashburger')).foodTopic?.key).toBe('burgers');
+		expect((await hashtag('smashburger')).topic?.key).toBe('burgers');
 		// The city's own name names no food and no brand
-		expect(await hashtag('berlin')).toMatchObject({ foodTopic: null, brand: null });
+		expect(await hashtag('berlin')).toMatchObject({ topic: null, brand: null });
 		// A brand's name, but no post carrying it is about the brand yet
 		expect((await hashtag('burgerbros')).brand).toBeNull();
 
@@ -215,11 +215,11 @@ describe('Post sources and hashtags (pglite)', () => {
 			summary: 'Good.',
 		});
 		await em.flush();
-		em.create(MentionFoodTopic, { mention, topic: (await em.findOneOrFail(FoodTopic, { key: 'burgers' })), source: 'cuisine', rank: 0 });
+		em.create(MentionTopic, { mention, topic: (await em.findOneOrFail(Topic, { key: 'burgers' })), source: 'cuisine', rank: 0 });
 		await em.flush();
 		em.clear();
 		const page = await social.getPost(post.id);
-		expect(page.mentions[0].foodTopics).toEqual([
+		expect(page.mentions[0].topics).toEqual([
 			expect.objectContaining({ source: 'cuisine', topic: expect.objectContaining({ key: 'burgers', label: 'Burgers' }) }),
 		]);
 		expect(page.foundBy[0]).toMatchObject({ kind: 'tiktok_hashtag', value: 'berlinfood', source: { enabled: true } });

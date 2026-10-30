@@ -1,5 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+import { TopicIndex } from 'src/modules/topics/util/topics.js';
+
 import { complaintsOf, dishesOf, feedbackRows, praiseOf, topicsOf } from '../util/feedback-rows.js';
 
 /* What a source says, as rows: one per point, one per dish no point names; read back for reports. */
@@ -25,7 +29,7 @@ describe('feedbackRows', () => {
 					{ name: 'Fries', sentiment: 'neutral' },
 				],
 			},
-			{ asked: true },
+			{ asked: true, aspects: seedIndex() },
 		);
 		expect(
 			rows.map(r => [
@@ -86,7 +90,7 @@ describe('feedbackRows', () => {
 					{ name: 'Fries', sentiment: 'negative' },
 				],
 			},
-			{ asked: false },
+			{ asked: false, aspects: seedIndex() },
 		);
 		const byDetail = Object.fromEntries(rows.filter(r => r.detail).map(r => [r.detail, r]));
 		expect([
@@ -134,10 +138,59 @@ describe('feedbackRows', () => {
 				],
 				dishes: [],
 			},
-			{ asked: false },
+			{ asked: false, aspects: seedIndex() },
 		);
 		expect([moved.topic, moved.theme]).toEqual(['price', 'price_increase']);
 		expect([gone.topic, gone.theme]).toEqual(['vibe', null]);
+	});
+
+	it('files a point by the aspect row its key names: a root is one, a kind of food or an unknown key is none', () => {
+		const stored = (key: string, parentKey: string | null, id?: string) => ({
+			id,
+			key,
+			label: key,
+			kind: TopicKindEnum.ASPECT,
+			parentKey,
+			aliases: [],
+		});
+		// Built from stored rows, so the aspects have ids
+		const aspects = new TopicIndex([
+			stored('price', null, 'root-price'),
+			stored('price_level', 'price', 'leaf-price-level'),
+			{ id: 'food-pizza', key: 'pizza', label: 'Pizza', kind: TopicKindEnum.DISH, parentKey: null, aliases: [] },
+		]);
+		const [leaf, root, oldKey, unknownNoTopic, food] = feedbackRows(
+			{
+				praise: [],
+				complaints: [
+					{ theme: 'price_level', detail: 'pricey' },
+					// "About price, nothing finer": the root itself
+					{ theme: 'price', detail: 'the prices' },
+					// A key the table no longer has: unfiled, its stored topic kept
+					{ topic: 'price', theme: 'price_other', detail: 'odd pricing' },
+					{ theme: 'price_other', detail: 'no topic either' },
+					// A kind of food is no aspect
+					{ topic: 'food', theme: 'pizza', detail: 'great pizza' },
+				],
+				dishes: [],
+			},
+			{ asked: true, aspects },
+		);
+		expect([leaf.topic, leaf.theme, leaf.aspectId]).toEqual(['price', 'price_level', 'leaf-price-level']);
+		expect([root.topic, root.theme, root.aspectId]).toEqual(['price', 'price', 'root-price']);
+		expect([oldKey.topic, oldKey.theme, oldKey.aspectId]).toEqual(['price', null, null]);
+		expect([unknownNoTopic.topic, unknownNoTopic.theme, unknownNoTopic.aspectId]).toEqual([
+			'other',
+			null,
+			null,
+		]);
+		expect([food.topic, food.theme, food.aspectId]).toEqual(['food', null, null]);
+		// The seed index knows the keys but has no rows to link
+		const [seeded] = feedbackRows(
+			{ praise: [], complaints: [{ theme: 'price', detail: 'the prices' }], dishes: [] },
+			{ asked: true, aspects: seedIndex() },
+		);
+		expect([seeded.topic, seeded.theme, seeded.aspectId]).toEqual(['price', 'price', null]);
 	});
 
 	it('reads rows back: points by polarity, topics once, dishes once with a merged sentiment', () => {
@@ -152,7 +205,7 @@ describe('feedbackRows', () => {
 				],
 				dishes: [{ name: 'Fries', sentiment: 'neutral' }],
 			},
-			{ asked: true },
+			{ asked: true, aspects: seedIndex() },
 		);
 		expect(praiseOf(rows)).toEqual([
 			{ topic: 'food', theme: 'taste', detail: 'great burger' },
@@ -177,7 +230,7 @@ describe('feedbackRows', () => {
 					{ name: '牛肉面', sentiment: 'positive' },
 				],
 			},
-			{ asked: false },
+			{ asked: false, aspects: seedIndex() },
 		);
 		expect(rows.map(r => [r.dish, r.dishKey])).toEqual([
 			['تشريب الكص العراقي', 'تشريب الكص العراقي'],
