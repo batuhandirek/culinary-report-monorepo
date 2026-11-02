@@ -1,0 +1,230 @@
+{
+  "id": "post-8d8803aa",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "ora.berlin",
+    "locationName": "ORA Restaurant & Wine Bar",
+    "hashtags": [
+      "wearehiring",
+      "hiringberlin",
+      "gastrojobs",
+      "foodberlin"
+    ],
+    "taggedHandles": [
+      "michelbergerhotel.com"
+    ],
+    "text": "#wearehiring\nWe are looking for a new Chef de Partie (M/F/X) starting in November 2026.\n\nWe are a Wine Bar & Restaurant located in a beautiful historical pharmacy from 1860 in Kreuzberg.\n\nOur cooking style is seasonal, straightforward, and rooted in European culinary traditions.\n\nIf you would like to apply for this FULL TIME position, please let us now who you are and why you would love to be a part of Ora alongside with your CV to: jobs@michelbergerhotel.com\n\nLooking forward to all your applications!\n#hiringberlin #gastrojobs #foodberlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "8d8803aa-c275-49e0-93bf-572d75cb0261",
+    "externalId": "ig_4004729991899695036",
+    "url": "https://www.instagram.com/p/DeTqLWsiMe8/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-10T08:31:17.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:54:47.941Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "ORA Restaurant & Wine Bar",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "9769a014-a407-44c9-9024-fc200e152573",
+          "brandName": "ORA Restaurant & Wine Bar",
+          "venueId": "bf80c92d-6275-4b52-aed7-76bb76dd7748",
+          "venueName": "ORA Restaurant & Wine Bar"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "beautiful historical pharmacy from 1860",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "seasonal, straightforward cooking rooted in European culinary traditions",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:24:34.404Z",
+    "usage": {
+      "inputTokens": 9948,
+      "outputTokens": 1786,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "A job ad posted by the venue itself, so it is promotional and the place is not visited. The hiring itself is kept as a neutral fact with no aspect. The cooking-style description reads as approving, but it could also be read as a neutral fact.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "ORA Restaurant & Wine Bar",
+        "locationHint": "Kreuzberg, historical pharmacy from 1860",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "9769a014-a407-44c9-9024-fc200e152573",
+          "brandName": "ORA Restaurant & Wine Bar",
+          "venueId": "bf80c92d-6275-4b52-aed7-76bb76dd7748",
+          "venueName": "ORA Restaurant & Wine Bar",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "ORA is looking for a new Chef de Partie starting in November 2026",
+        "quote": "We are looking for a new Chef de Partie (M/F/X) starting in November 2026",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chef de Partie position at ORA is full time",
+        "quote": "FULL TIME position",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ORA is a wine bar and restaurant",
+        "quote": "We are a Wine Bar & Restaurant",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ORA is located in a beautiful historical pharmacy from 1860 in Kreuzberg",
+        "quote": "located in a beautiful historical pharmacy from 1860 in Kreuzberg",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ORA's cooking style is seasonal, straightforward and rooted in European culinary traditions",
+        "quote": "Our cooking style is seasonal, straightforward, and rooted in European culinary traditions",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.440Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.433Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -8,7 +8,9 @@ import {
 	MonitorSmartphone,
 	Newspaper,
 	Palette,
+	ScanText,
 	Store,
+	Telescope,
 	TrendingUp,
 	Users,
 	Workflow
@@ -89,9 +91,18 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/trends',
 		icon: TrendingUp,
 		group: 'Market',
-		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'dish names', 'unrecognised words'],
+		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'terms', 'wordings', 'unrecognised words'],
 		description:
 			'What the city eats and talks about: each kind of food with its venues, posts and Google searches, and how the month moved against the last.'
+	}),
+	menu({
+		name: 'Explore',
+		href: '/admin/explore',
+		icon: Telescope,
+		group: 'Market',
+		keywords: ['who talked about', 'what they say', 'praise', 'complaints', 'themes', 'aspects', 'claims', 'statements', 'google tags', 'waiting', 'price', 'dish', 'wording', 'breakdown'],
+		description:
+			'Who talked about anything, how much, and what they said: any topic or wording, in the city, a district, a brand or a branch, over any months.'
 	}),
 	menu({
 		name: 'Cities',
@@ -118,6 +129,15 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		group: 'Operations',
 		keywords: ['pipeline', 'scrape', 'apify', 'cron', 'jobs', 'costs', 'coverage', 'runs'],
 		description: 'Which months are complete, what each step found, what failed, and what it cost.'
+	}),
+	menu({
+		name: 'Digestion',
+		href: '/admin/digestion',
+		icon: ScanText,
+		group: 'Operations',
+		keywords: ['digested', 'ingestion', 'reviews', 'posts', 'gate', 'skipped', 'agent a', 'agent b', 'claims', 'statements', 'parts', 'mentions', 'matching', 'quotes'],
+		description:
+			'Every review and post we read, and what the pipeline turned it into: the gate, the places and their matches, the claims and their parts.'
 	}),
 
 	menu({

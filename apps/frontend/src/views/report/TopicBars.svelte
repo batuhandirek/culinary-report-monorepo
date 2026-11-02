@@ -1,13 +1,12 @@
 <script lang="ts">
 	import type { ReportAspect } from 'client';
 
-	import { TOPIC_LABELS } from '#lib/culinary.js';
-
 	// Complaints against praise per topic on one diverging axis: complaints run left in beet,
 	// praise right in olive, each count printed at the bar's end. With theme counts (reports built
 	// since themes), each topic's themes are listed under its bars, the same sides. Labels and which
 	// root a theme counts under come from the report's own aspect vocabulary (`aspects`); a report
-	// built before it was kept lists no themes, since nothing says which topic they sit under.
+	// built before it was kept shows the keys and lists no themes, since nothing says which topic
+	// they sit under.
 	interface Props {
 		praise: Record<string, number>;
 		complaints: Record<string, number>;
@@ -22,7 +21,7 @@
 	let { praise, complaints, praiseThemes, complaintThemes, aspects, unit }: Props = $props();
 
 	const byKey = $derived(new Map((aspects ?? []).map((a) => [a.key, a])));
-	const label = (key: string) => byKey.get(key)?.label ?? TOPIC_LABELS[key] ?? key;
+	const label = (key: string) => byKey.get(key)?.label ?? key;
 
 	// A topic's themes on one side, most raised first, the root itself left out (a point filed
 	// there says nothing finer than the topic), three at most
@@ -33,7 +32,12 @@
 			.sort(([, a], [, b]) => b - a)
 			.slice(0, THEMES_SHOWN);
 
-	const roots = $derived(aspects?.length ? aspects.filter((a) => a.root === a.key).map((a) => a.key) : Object.keys(TOPIC_LABELS));
+	// The roots in the vocabulary's order; without a vocabulary, whatever the counts name
+	const roots = $derived(
+		aspects?.length
+			? aspects.filter((a) => a.root === a.key).map((a) => a.key)
+			: [...new Set([...Object.keys(praise), ...Object.keys(complaints)])]
+	);
 	const topics = $derived(
 		roots
 			// 'Other' says nothing on its own

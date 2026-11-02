@@ -1,0 +1,593 @@
+{
+  "id": "review-99fbc478",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "99fbc478-ab55-497f-a40e-d84bfaffd418",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2poVGVIWkpNM1JXVnpKWlJUUjNXWFZrY1hwTVpWRRAB",
+    "platform": "google",
+    "language": "nl",
+    "venue": "Borchardt",
+    "venueId": "c0f474be-f6bc-44b1-b4b9-018598e98753",
+    "brand": "Borchardt",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-20T10:54:37.933Z",
+    "stars": 1,
+    "text": "Een industriële fabriek!!!!!\nHier komen we nooit terug. We hadden op voorhand gereserveerd en toch moesten we 's avonds buiten eten.\nMijn partner had het koud. Het begon ook licht te regenen. Ze hebben wél gigantische paraplu 's geopend.\nDe fameuze schnitzel die we besteld hadden werd vrij vlug aan tafel gebracht.\nJammer dat ik geen foto gemaakt heb. Het was één  flap papperig gepanneerd deeg, groter dan het bord zelf. Daaronder lagen koude aardappelen geprakt, een stukje citroen en één kapper moest je ook onder de reuzenflap zoeken.  We hebben zeker dit onsmakelijke bord niet opgegeten.\nBij het afrekenen, dat ding koste wel 38€ per persoon, hebben ze ons een troostdrankje aangeboden.\nVandaar dat ene sterretje",
+    "textTranslated": "An industrial factory!!!!!\n\nWe are never coming back here. We had reserved in advance, and yet we still had to eat outside in the evening.\n\nMy partner was cold. It also started to rain lightly. They did, however, open gigantic umbrellas.\n\nThe famous schnitzel we had ordered was brought to the table quite quickly.\nIt is a pity I didn't take a photo. It was one mushy, breaded pastry, bigger than the plate itself. Underneath lay mashed cold potatoes, a slice of lemon, and you also had to look for a single caper under the giant pastry. We certainly did not finish this unappetizing plate.\nWhen paying the bill—that thing cost a whopping €38 per person—they offered us a consolation drink.\nHence that one star."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:36:42.514Z",
+    "claims": [
+      {
+        "text": "it was an industrial factory",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we will never coming back here",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had reserved in advance",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we still had to eat outside in the evening",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "my partner was cold",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it started to rain lightly",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they opened gigantic umbrellas",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had ordered the famous schnitzel",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the schnitzel was brought to the table quite quickly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the schnitzel was one mushy, breaded pastry",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "presentation",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the schnitzel was bigger than the plate itself",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "underneath lay mashed cold potatoes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [
+          "potatoes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was a slice of lemon",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "lemon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was a single caper under the giant pastry",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "caper"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we did not finish this unappetizing plate",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "plate"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "that one cost a whopping €38 per person",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 38,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "they offered us a consolation drink",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:19:11.498Z",
+    "usage": {
+      "inputTokens": 5915,
+      "outputTokens": 4222,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the aspect of 'industrial factory' (atmosphere vs crowding/vibe), whether 'bigger than the plate' is critical (read as negative in context), and the consolation-drink quote, which contains the price clause because the original sentence wraps around it; 'dat ding' and 'bord' are read as the schnitzel.",
+    "claims": [
+      {
+        "text": "the place is like an industrial factory",
+        "quote": "Een industriële fabriek",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "crowding"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "we will never come back here",
+        "quote": "Hier komen we nooit terug",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "despite reserving in advance we had to eat outside in the evening",
+        "quote": "We hadden op voorhand gereserveerd en toch moesten we 's avonds buiten eten",
+        "sentiment": "negative",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "outdoor_seating",
+            "wait_for_table"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the partner was cold sitting outside",
+        "quote": "Mijn partner had het koud",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "outdoor_seating"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it started to rain lightly",
+        "quote": "Het begon ook licht te regenen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "outdoor_seating"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the staff did open gigantic umbrellas",
+        "quote": "Ze hebben wél gigantische paraplu 's geopend",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness",
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the famous schnitzel was brought to the table quite quickly",
+        "quote": "De fameuze schnitzel die we besteld hadden werd vrij vlug aan tafel gebracht",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a pity the reviewer took no photo",
+        "quote": "Jammer dat ik geen foto gemaakt heb",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the schnitzel was a flap of mushy breaded dough",
+        "quote": "één  flap papperig gepanneerd deeg",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the schnitzel was bigger than the plate itself",
+        "quote": "groter dan het bord zelf",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral",
+            "mixed"
+          ],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "cold mashed potatoes lay underneath",
+        "quote": "Daaronder lagen koude aardappelen geprakt",
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [
+          "aardappelen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there was a piece of lemon",
+        "quote": "een stukje citroen",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "citroen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "presentation",
+            "portion_size"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "you had to search for a single caper under the giant flap",
+        "quote": "één kapper moest je ook onder de reuzenflap zoeken",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "kapper"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the unappetizing schnitzel plate was left unfinished",
+        "quote": "We hebben zeker dit onsmakelijke bord niet opgegeten",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the schnitzel cost a whopping 38€ per person",
+        "quote": "dat ding koste wel 38€ per persoon",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": 38,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "when paying they offered a consolation drink",
+        "quote": "Bij het afrekenen, dat ding koste wel 38€ per persoon, hebben ze ons een troostdrankje aangeboden",
+        "sentiment": "positive",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the consolation drink is why the review gives one star",
+        "quote": "Vandaar dat ene sterretje",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.431Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

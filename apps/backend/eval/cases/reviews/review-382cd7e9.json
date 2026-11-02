@@ -1,0 +1,283 @@
+{
+  "id": "review-382cd7e9",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "382cd7e9-7d3f-4850-8254-ddf3f5c04a57",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tZekxWQlFWVmhOWjBoUVpHeGpjMGhJVjJ4MFVFRRAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Burgermeister Kottbusser Tor",
+    "venueId": "c73cd88c-bd43-4c93-9592-49b0156b6b11",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-10T22:21:27.013Z",
+    "stars": 1,
+    "text": "Una tristeza la remodelación. Quitaron mucho espacio para las personas y ya no hay acceso al baño. El mensaje es claro: No nos importan las personas, sólo su dinero. A pesar de que la CADENA de restaurantes ya tiene suficiente dinero parece que aún quieren más sin importarles nada sus clientes. Huele a mucha avaricia! Qué mal",
+    "textTranslated": "The renovation is a real shame. They took away so much space from people, and there's no longer access to the restroom. The message is clear: They don't care about people, only their money. Even though the restaurant chain already has plenty of money, it seems they still want more, without any regard for their customers. It reeks of greed! How awful."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:42:29.900Z",
+    "claims": [
+      {
+        "text": "the renovation is a real shame",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      },
+      {
+        "text": "they took away so much space from people",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "there's no longer access to the restroom",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "amenities",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "they don't care about people",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they care only about their money",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the restaurant chain already has plenty of money",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they still want more",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "without any regard for their customers",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it reeks of greed",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "how awful",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:29.518Z",
+    "usage": {
+      "inputTokens": 5133,
+      "outputTokens": 1573,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the restroom access fits amenities (toilets for guests) better than the cleanliness toilets aspect. The greed and 'don't care about people' remarks are read as being about the chain's management (ownership), though null is also defensible. The renovation claims are changes.",
+    "claims": [
+      {
+        "text": "the renovation is a real shame",
+        "quote": "Una tristeza la remodelación.",
+        "sentiment": "negative",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "space"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the renovation took away a lot of space for people",
+        "quote": "Quitaron mucho espacio para las personas",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there is no longer access to the restroom",
+        "quote": "ya no hay acceso al baño",
+        "sentiment": "negative",
+        "aspect": "amenities",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "toilets"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the message is that they don't care about people, only their money",
+        "quote": "No nos importan las personas, sólo su dinero",
+        "sentiment": "negative",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the restaurant chain already has plenty of money but still wants more without regard for its customers",
+        "quote": "A pesar de que la CADENA de restaurantes ya tiene suficiente dinero parece que aún quieren más sin importarles nada sus clientes",
+        "sentiment": "negative",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the renovation reeks of greed",
+        "quote": "Huele a mucha avaricia!",
+        "sentiment": "negative",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "how awful",
+        "quote": "Qué mal",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -87,8 +87,6 @@ describe('CityHighlightService (pglite)', () => {
 					venueName: v.name,
 					cuisine: 'Ramen',
 					visited: true,
-					sentiment: 'positive',
-					summary: 'Good.',
 				});
 			}
 		};

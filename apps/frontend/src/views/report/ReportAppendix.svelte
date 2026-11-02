@@ -128,7 +128,7 @@
 							<td class="py-1.5 pr-3 text-right tabular-nums"
 								>{viewsLabel(post.platform, post.views)}</td>
 							<td class="py-1.5">
-								<span class="text-reading-ink">{post.summary}</span>
+								<span class="text-reading-ink">{post.said.join(' · ')}</span>
 								<span class="mt-1 flex flex-wrap items-center gap-1">
 									{#if post.own}{@render flag('your account')}{/if}
 									{#if post.promotional}{@render flag('paid or gifted')}{/if}

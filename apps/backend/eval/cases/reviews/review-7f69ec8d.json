@@ -1,0 +1,155 @@
+{
+  "id": "review-7f69ec8d",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "7f69ec8d-36e0-4634-8350-dc871bf8e726",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pKck0xbGtORVkzVldOVE9ERktNbXN0VjBGbWJtYxAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-01T16:11:20.900Z",
+    "stars": 1,
+    "text": "Gereksiz yere sıra bekletiyor. Kesinlikle değmez kuyruğa kanıp iyi yermiş diye beklemeyin",
+    "textTranslated": "They make you wait in line unnecessarily. It's definitely not worth it; don't be fooled into waiting in line thinking it's a good place."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:00.866Z",
+    "claims": [
+      {
+        "text": "make you wait in line unnecessarily",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's definitely not worth it",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "don't be fooled into waiting in line",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's a good place",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:41.710Z",
+    "usage": {
+      "inputTokens": 4997,
+      "outputTokens": 990,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call was whether 'Kesinlikle değmez' stands alone as a verdict or is part of the warning not to queue. It may be merged into that warning, so it is marked optional. Its aspect is null, or queue because it refers to the wait; it is not about money, so value_for_money does not apply.",
+    "claims": [
+      {
+        "text": "they make you wait in line unnecessarily",
+        "quote": "Gereksiz yere sıra bekletiyor",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it is definitely not worth it",
+        "quote": "Kesinlikle değmez",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "don't be fooled by the queue into waiting thinking it's a good place",
+        "quote": "kuyruğa kanıp iyi yermiş diye beklemeyin",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "wait"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.213Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

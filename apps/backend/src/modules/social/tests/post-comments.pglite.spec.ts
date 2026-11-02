@@ -26,7 +26,13 @@ import { plainIntent } from '../util/post-comments.js';
 import { ownAccount } from './factories/social-account.factory.js';
 
 // Items in the shape `clockworks/tiktok-comments-scraper` returns (run rhsFO9MZCe9FYTBlr)
-const comment = (cid: string, text: string, videoId: string, diggCount = 0, repliesToId: string | null = null) => {
+const comment = (
+	cid: string,
+	text: string,
+	videoId: string,
+	diggCount = 0,
+	repliesToId: string | null = null,
+) => {
 	const url = `https://www.tiktok.com/@foodie.berlin/video/${videoId}`;
 	return {
 		videoWebUrl: url,
@@ -66,9 +72,11 @@ const ITEMS: Record<string, any[]> = {
 		comment('x1', 'not ours', '7000000000000000000'),
 		comment('r1', 'same here', TOP, 0, 'c1'),
 	],
-	[SECOND]: [comment('c7', 'been there, so good', SECOND, 2), comment('c8', 'Was kostet das?', SECOND)],
+	[SECOND]: [
+		comment('c7', 'been there, so good', SECOND, 2),
+		comment('c8', 'Was kostet das?', SECOND),
+	],
 };
-
 
 describe('Post comments (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -76,19 +84,38 @@ describe('Post comments (pglite)', () => {
 	let comments: PostCommentService;
 	let city: City;
 	let venue: Venue;
-	const runActor = jest.fn(async (_actor: string, input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
-		const url: string = input.postURLs[0];
-		return ITEMS[url.split('/').at(-1)!] ?? [];
-	});
+	const runActor = jest.fn(
+		async (_actor: string, input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
+			const url: string = input.postURLs[0];
+			return ITEMS[url.split('/').at(-1)!] ?? [];
+		},
+	);
 	const agent = mockAgent((input: unknown) => {
-		const { comments: batch } = JSON.parse(input as string) as { comments: { id: string; text: string }[] };
-		const read: Record<string, [PostCommentIntentEnum, PostCommentQuestionTopicEnum | null, string | null]> = {
-			c1: [PostCommentIntentEnum.QUESTION, PostCommentQuestionTopicEnum.LOCATION, 'Where is it?'],
+		const { comments: batch } = JSON.parse(input as string) as {
+			comments: { id: string; text: string }[];
+		};
+		const read: Record<
+			string,
+			[PostCommentIntentEnum, PostCommentQuestionTopicEnum | null, string | null]
+		> = {
+			c1: [
+				PostCommentIntentEnum.QUESTION,
+				PostCommentQuestionTopicEnum.LOCATION,
+				'Where is it?',
+			],
 			c2: [PostCommentIntentEnum.INTENT, null, null],
 			c4: [PostCommentIntentEnum.DISAGREEMENT, null, null],
-			c5: [PostCommentIntentEnum.QUESTION, PostCommentQuestionTopicEnum.LOCATION, 'Where is it?'],
+			c5: [
+				PostCommentIntentEnum.QUESTION,
+				PostCommentQuestionTopicEnum.LOCATION,
+				'Where is it?',
+			],
 			c7: [PostCommentIntentEnum.CONFIRMATION, null, null],
-			c8: [PostCommentIntentEnum.QUESTION, PostCommentQuestionTopicEnum.PRICE, 'How much is it?'],
+			c8: [
+				PostCommentIntentEnum.QUESTION,
+				PostCommentQuestionTopicEnum.PRICE,
+				'How much is it?',
+			],
 		};
 		return {
 			comments: batch.map(c => ({
@@ -97,7 +124,8 @@ describe('Post comments (pglite)', () => {
 				questionTopic: read[c.id][1],
 				question: read[c.id][2],
 			})),
-			disagreement: batch.some(c => c.id === 'c4') ? 'One says the portions got smaller.' : null,
+			disagreement:
+				batch.some(c => c.id === 'c4') ? 'One says the portions got smaller.' : null,
 		};
 	});
 
@@ -119,11 +147,21 @@ describe('Post comments (pglite)', () => {
 
 		const em = harness.orm.em;
 		city = testCity(em);
-		venue = em.create(Venue, { city, placeId: 'p-chenche', name: 'Chén Chè', category: 'Vietnamese restaurant' });
+		venue = em.create(Venue, {
+			city,
+			placeId: 'p-chenche',
+			name: 'Chén Chè',
+			category: 'Vietnamese restaurant',
+		});
 		// Its own brand comes with the flush
 		await em.flush();
 		await em.populate(venue, ['brand.branches']);
-		const post = (externalId: string, author: string, views: number, extra: Partial<SocialPost> = {}) => {
+		const post = (
+			externalId: string,
+			author: string,
+			views: number,
+			extra: Partial<SocialPost> = {},
+		) => {
 			const p = em.create(SocialPost, {
 				city,
 				externalId,
@@ -143,8 +181,6 @@ describe('Post comments (pglite)', () => {
 				venue,
 				matchMethod: MentionMatchMethodEnum.EXACT,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Nice.',
 			});
 		};
 		post(TOP, 'foodie.berlin', 300_000);
@@ -165,13 +201,19 @@ describe('Post comments (pglite)', () => {
 	it('picks each brand’s most viewed posts by others with comments', async () => {
 		const top = await comments.topPosts([venue.brand], city.id, '2026-09', 5);
 		expect(top.map(p => p.externalId).sort()).toEqual([TOP, SECOND]);
-		expect((await comments.topPosts([venue.brand], city.id, '2026-09', 1)).map(p => p.externalId)).toEqual([TOP]);
+		expect(
+			(await comments.topPosts([venue.brand], city.id, '2026-09', 1)).map(p => p.externalId),
+		).toEqual([TOP]);
 	});
 
 	it('stores comments once per externalId, one run per post, without authors', async () => {
 		const em = harness.orm.em;
 		const posts = await comments.topPosts([venue.brand], city.id, '2026-09', 5);
-		expect(await scrape.scrapeComments(posts, 100, 10)).toEqual({ posts: 2, found: 11, saved: 8 });
+		expect(await scrape.scrapeComments(posts, 100, 10)).toEqual({
+			posts: 2,
+			found: 11,
+			saved: 8,
+		});
 		expect(runActor).toHaveBeenCalledTimes(2);
 		const [actor, input, opts] = runActor.mock.calls[0];
 		expect(actor).toBe('clockworks/tiktok-comments-scraper');
@@ -189,11 +231,19 @@ describe('Post comments (pglite)', () => {
 		await scrape.scrapeComments([top], 100, 0.05);
 		expect(await em.count(PostComment, {})).toBe(8);
 		// $0.05 buys forty comments at $0.00125: the run ends before Apify's cap stops it
-		expect(runActor.mock.calls[0][1]).toMatchObject({ topLevelCommentsPerPost: 40, commentsPerPost: 40 });
+		expect(runActor.mock.calls[0][1]).toMatchObject({
+			topLevelCommentsPerPost: 40,
+			commentsPerPost: 40,
+		});
 		// Scraped posts are never picked again
 		expect(await comments.topPosts([venue.brand], city.id, '2026-09', 5)).toEqual([]);
 		const stored = await em.findOneOrFail(PostComment, { externalId: 'c1' });
-		expect(stored).toMatchObject({ text: 'wo ist das??', likes: 40, language: null, commentedAt: new Date('2026-09-15T17:28:42.000Z') });
+		expect(stored).toMatchObject({
+			text: 'wo ist das??',
+			likes: 40,
+			language: null,
+			commentedAt: new Date('2026-09-15T17:28:42.000Z'),
+		});
 		expect(JSON.stringify(stored)).not.toContain('someone');
 	});
 
@@ -201,7 +251,10 @@ describe('Post comments (pglite)', () => {
 		const em = harness.orm.em;
 		expect(await comments.analyse(city)).toEqual({ analysed: 8, calls: 2 });
 		// Told the venue each post is about
-		expect(agent.generate.mock.calls[0][1]).toEqual({ venueName: 'Chén Chè', cityName: 'Berlin' });
+		expect(agent.generate.mock.calls[0][1]).toEqual({
+			venueName: 'Chén Chè',
+			cityName: 'Berlin',
+		});
 		const sent = agent.generate.mock.calls.flatMap(([input]) =>
 			(JSON.parse(input as string) as { comments: { id: string }[] }).comments.map(c => c.id),
 		);
@@ -211,8 +264,16 @@ describe('Post comments (pglite)', () => {
 		const byId = new Map((await em.find(PostComment, {})).map(c => [c.externalId, c]));
 		expect(byId.get('c3')?.intent).toBe(PostCommentIntentEnum.TAG);
 		expect(byId.get('c6')?.intent).toBe(PostCommentIntentEnum.OTHER);
-		expect(byId.get('c1')).toMatchObject({ intent: 'question', questionTopic: 'location', question: 'Where is it?' });
-		expect(byId.get('c2')).toMatchObject({ intent: 'intent', questionTopic: null, question: null });
+		expect(byId.get('c1')).toMatchObject({
+			intent: 'question',
+			questionTopic: 'location',
+			question: 'Where is it?',
+		});
+		expect(byId.get('c2')).toMatchObject({
+			intent: 'intent',
+			questionTopic: null,
+			question: null,
+		});
 		const top = await em.findOneOrFail(SocialPost, { externalId: TOP });
 		expect(top.commentsDisagreement).toBe('One says the portions got smaller.');
 		// Nothing left to classify
@@ -230,11 +291,17 @@ describe('Post comments (pglite)', () => {
 
 	it('lists a post’s comments for the admin, most liked first', async () => {
 		const top = await harness.orm.em.findOneOrFail(SocialPost, { externalId: TOP });
-		const res = await harness.moduleRef.get(AdminPostCommentsController).listPostComments(top.id);
+		const res = await harness.moduleRef
+			.get(AdminPostCommentsController)
+			.listPostComments(top.id);
 		expect(res.disagreement).toBe('One says the portions got smaller.');
 		expect(res.scrapedAt).toBeTruthy();
 		expect(res.comments.map(c => c.likes)).toEqual([40, 12, 8, 3, 0, 0]);
-		expect(res.comments[0]).toMatchObject({ text: 'wo ist das??', intent: 'question', questionTopic: 'location' });
+		expect(res.comments[0]).toMatchObject({
+			text: 'wo ist das??',
+			intent: 'question',
+			questionTopic: 'location',
+		});
 	});
 
 	it('knows tag-only and emoji-only comments', () => {

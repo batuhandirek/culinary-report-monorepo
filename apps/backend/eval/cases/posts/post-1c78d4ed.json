@@ -1,0 +1,488 @@
+{
+  "id": "post-1c78d4ed",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "weroastcoffeeberlin",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "specialtycoffeeroaster",
+      "specialtycoffee",
+      "berlincoffee",
+      "kaffeerösterei",
+      "kaffeeröstung"
+    ],
+    "taggedHandles": [
+      "col_spirit_",
+      "lamarzoccodeutschland"
+    ],
+    "text": "Our favorite espresso within our current range is El Líbano, responsibly sourced from Colombia’s Cordillera Central. High altitude, mineral-rich soils — perfect for coffee.\n\nThe beans are washed, and a single origin blend of four varieties: Caturra, Colombia, Castillo and Tabi.\n\nEL LÍBANO Espresso\nWe taste stone fruits, vanilla and cocoa.\nORIGIN El Líbano, Tolima, Colombia\nSPECIES Arabica\nVARIETAL Caturra, Colombia, Castillo & Tabi\nPROCESS Washed\nROAST Espresso\n\nThese beans are responsibly sourced in partnership with Col-Spirit @col_spirit_ \nAvailable through our webshop and at select resellers throughout Berlin.\n—\n\nUnser Lieblingsespresso aus unserem aktuellen Sortiment ist El Líbano, verantwortungsvoll bezogen aus der kolumbianischen Zentralkordillere. Große Höhenlagen und mineralreiche Böden bieten ideale Bedingungen für den Kaffeeanbau.\n\nDie Bohnen werden gewaschen aufbereitet und stammen aus einer Single-Origin-Mischung aus vier Varietäten: Caturra, Colombia, Castillo und Tabi.\n\nEL LÍBANO Espresso\nWir schmecken Steinobst, Vanille und Kakao.\nHERKUNFT El Líbano, Tolima, Kolumbien\nSORTE Arabica\nVARIETÄT Caturra, Colombia, Castillo & Tabi\nAUFBEREITUNG Washed\nRÖSTUNG Espresso\n\nDiese Bohnen werden verantwortungsbewusst in Partnerschaft mit Col-Spirit @col_spirit_ \nVerfügbar über unseren Webshop sowie bei ausgewählten Händlern in ganz Berlin.\n\n#specialtycoffeeroaster #specialtycoffee #berlincoffee #kaffeerösterei #kaffeeröstung",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "1c78d4ed-54de-433f-83c0-141d237fb968",
+    "externalId": "ig_4010028608202119381",
+    "url": "https://www.instagram.com/p/Deme8XrCpjV/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-20T07:25:06.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:50:06.717Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Col-Spirit",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "El Líbano is the favorite espresso in the current range",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "espresso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the coffee is responsibly sourced from Colombia’s Cordillera Central",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the beans are washed",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "El Líbano is a single-origin blend of four varieties",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the varieties are Caturra, Colombia, Castillo and Tabi",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the coffee tastes like stone fruits, vanilla and cocoa",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "origin is El Líbano, Tolima, Colombia",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "species is Arabica",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "available through the webshop and select resellers throughout Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:00.201Z",
+    "usage": {
+      "inputTokens": 7035,
+      "outputTokens": 2772,
+      "cachedInputTokens": 6206,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The posting roaster is never named and the only tagged location is the city, so there are no places; Col-Spirit is a sourcing partner, not a venue, and the claims about the espresso are subject none. The bilingual caption repeats itself, so each claim is quoted once from the English half. Whether 'responsibly sourced' and the tasting notes count as approving judgements or as neutral facts is the main sentiment call.",
+    "isPromotional": true,
+    "places": [],
+    "claims": [
+      {
+        "text": "El Líbano is the roaster's favourite espresso in its current range",
+        "quote": "Our favorite espresso within our current range is El Líbano",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "El Líbano"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "El Líbano is responsibly sourced from Colombia's Cordillera Central",
+        "quote": "responsibly sourced from Colombia’s Cordillera Central",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "El Líbano"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The high-altitude, mineral-rich soils are perfect for coffee",
+        "quote": "High altitude, mineral-rich soils — perfect for coffee.",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The El Líbano beans are washed-processed",
+        "quote": "The beans are washed",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "beans"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "ingredient_quality",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The El Líbano beans are a single-origin blend of four varieties: Caturra, Colombia, Castillo and Tabi",
+        "quote": "a single origin blend of four varieties: Caturra, Colombia, Castillo and Tabi",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Caturra",
+          "Colombia",
+          "Castillo",
+          "Tabi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "ingredient_quality",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The El Líbano espresso tastes of stone fruits, vanilla and cocoa",
+        "quote": "We taste stone fruits, vanilla and cocoa.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "EL LÍBANO Espresso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The El Líbano espresso is Arabica",
+        "quote": "SPECIES Arabica",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "EL LÍBANO Espresso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The El Líbano beans are sourced in partnership with Col-Spirit",
+        "quote": "These beans are responsibly sourced in partnership with Col-Spirit",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "beans"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ingredient_quality",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The El Líbano beans are available through the roaster's webshop and select resellers throughout Berlin",
+        "quote": "Available through our webshop and at select resellers throughout Berlin.",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "beans"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "El Líbano originates from El Líbano, Tolima, Colombia",
+        "quote": "ORIGIN El Líbano, Tolima, Colombia",
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "subject": "none",
+        "place": null,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the roast is Espresso",
+        "quote": "ROAST Espresso",
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "subject": "none",
+        "place": null,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The Tolima origin is a neutral fact about the coffee that largely overlaps the sourcing claim, so keeping it or folding it in are both acceptable."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The roast type is a neutral spec fact about the coffee; listing it separately is permissible though not required."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Neither null nor 'other' clearly beats the other for a processing-method spec."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): For a varietal blend fact, 'other' and null are effectively equivalent."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): For the species fact, 'other' and null are effectively equivalent."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): This duplicates n7; 'other' and null are effectively equivalent."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): No aspect clearly fits the sourcing partnership, so 'other' or null are both acceptable."
+      },
+      {
+        "at": "2026-11-01T15:11:31.434Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.227Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.421Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

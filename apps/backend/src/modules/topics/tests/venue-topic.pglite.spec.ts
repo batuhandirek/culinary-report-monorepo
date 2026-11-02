@@ -56,8 +56,6 @@ describe('VenueTopicService (pglite)', () => {
 				venueName: venue.name,
 				cuisine,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		mention('Pho, Vietnamese', 'eater1');
 		mention('Pho', 'eater2');

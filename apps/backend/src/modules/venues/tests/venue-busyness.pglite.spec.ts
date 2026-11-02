@@ -19,7 +19,11 @@ describe('busyness index', () => {
 		// Top ten: Sa 100, Fr 95, Sa 90, Fr 86, Sa 70, Th 70, Fr 67, Th 63, Sa 60, Mo 60
 		const index = busynessIndex(DETAIL_ITEM.popularTimesHistogram);
 		expect(index).toBe(76.1);
-		expect(busiestHour(DETAIL_ITEM.popularTimesHistogram)).toEqual({ day: 'Sa', hour: 20, percent: 100 });
+		expect(busiestHour(DETAIL_ITEM.popularTimesHistogram)).toEqual({
+			day: 'Sa',
+			hour: 20,
+			percent: 100,
+		});
 	});
 
 	it('is null without popular times', () => {
@@ -32,10 +36,16 @@ describe('busyness index', () => {
 		expect(
 			meanHistogram([
 				{ Fr: [{ hour: 19, occupancyPercent: 60 }] },
-				{ Fr: [{ hour: 19, occupancyPercent: 100 }], Sa: [{ hour: 20, occupancyPercent: 50 }] },
+				{
+					Fr: [{ hour: 19, occupancyPercent: 100 }],
+					Sa: [{ hour: 20, occupancyPercent: 50 }],
+				},
 				null,
 			]),
-		).toEqual({ Fr: [{ hour: 19, occupancyPercent: 80 }], Sa: [{ hour: 20, occupancyPercent: 50 }] });
+		).toEqual({
+			Fr: [{ hour: 19, occupancyPercent: 80 }],
+			Sa: [{ hour: 20, occupancyPercent: 50 }],
+		});
 	});
 
 	it('buckets by the Monday of the local week', () => {
@@ -56,11 +66,20 @@ describe('VenueBusynessService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: VenueBusynessService;
 	const scrapeDetailPages =
-		jest.fn<(placeIds: string[], budgetUsd: number, purpose: string) => Promise<{ items: GooglePlaceItem[]; saved: number }>>();
+		jest.fn<
+			(
+				placeIds: string[],
+				budgetUsd: number,
+				purpose: string,
+			) => Promise<{ items: GooglePlaceItem[]; saved: number }>
+		>();
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [VenueBusynessService, { provide: VenueScrapeService, useValue: { scrapeDetailPages } }],
+			providers: [
+				VenueBusynessService,
+				{ provide: VenueScrapeService, useValue: { scrapeDetailPages } },
+			],
 		});
 		service = harness.moduleRef.get(VenueBusynessService);
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -90,16 +109,26 @@ describe('VenueBusynessService (pglite)', () => {
 		const res = await service.sample([busy, quiet, missing], 1, now);
 
 		expect(res).toEqual({ requested: 3, sampled: 2, withPopularTimes: 1, withLive: 1 });
-		expect(scrapeDetailPages.mock.calls[0][0].sort()).toEqual(['place-busy', 'place-missing', 'place-quiet']);
+		expect(scrapeDetailPages.mock.calls[0][0].sort()).toEqual([
+			'place-busy',
+			'place-missing',
+			'place-quiet',
+		]);
 		em.clear();
-		const rows = await em.find(VenueBusyness, {}, { populate: ['venue'], orderBy: { id: 'asc' } });
+		const rows = await em.find(
+			VenueBusyness,
+			{},
+			{ populate: ['venue'], orderBy: { id: 'asc' } },
+		);
 		expect(rows.map(r => [r.venue.name, r.busynessIndex, r.livePercent, r.liveText])).toEqual([
 			['Busy', busynessIndex(DETAIL_ITEM.popularTimesHistogram), 35, 'Usually not too busy'],
 			['Quiet', null, null, null],
 		]);
 		expect(rows[0].histogram?.Sa?.length).toBe(6);
 		expect(rows[1].histogram).toBeNull();
-		expect((await service.between(busy.id, new Date('2026-10-01'), new Date('2026-11-01'))).length).toBe(1);
+		expect(
+			(await service.between(busy.id, new Date('2026-10-01'), new Date('2026-11-01'))).length,
+		).toBe(1);
 		expect((await service.latest(missing.id)).length).toBe(0);
 	});
 });

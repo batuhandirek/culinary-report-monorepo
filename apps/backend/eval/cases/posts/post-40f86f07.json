@@ -1,0 +1,363 @@
+{
+  "id": "post-40f86f07",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "_justjaime_",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlin",
+      "friends"
+    ],
+    "taggedHandles": [
+      "amo_cafe_berlin.",
+      "jan.burgerrestaurant",
+      "jaavii.acosta",
+      "valeriadelme.soprano",
+      "dasechteberlin",
+      "_tarasky",
+      "lamarzocco",
+      "dakcoffeeroasters",
+      "rozalicoffee",
+      "trigger.roastery",
+      "amo_cafe_berlin"
+    ],
+    "text": "[Unpaid advertisement] - Quality time in Wilmersdorf… Walks, friends, coffee & food.\n\nEnjoying great coffee, cookies & talks at this beautiful little neighborhood coffee shop @amo_cafe_berlin. Dinner was at @jan.burgerrestaurant and yes, I only went for their truffle fries and ended up eating a burger as well…and it was super worth it. \n\nW/ @jaavii.acosta & @valeriadelme.soprano ♥️ // #berlin #friends",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "40f86f07-9949-4e99-9b31-8bf5d605ed93",
+    "externalId": "ig_4011619979099179085",
+    "url": "https://www.instagram.com/p/DesIx3UEQhN/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-19T20:39:49.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T04:00:43.632Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Amo Cafe Berlin",
+        "locationHint": "Wilmersdorf",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "30e2cd8c-c6ec-433e-b2b9-b5af3582efd3",
+          "brandName": "ama Café",
+          "venueId": "21e9e27a-71d5-4b92-9f81-d6e05f4f985f",
+          "venueName": "ama Café"
+        }
+      },
+      {
+        "venueName": "Jan Burger Restaurant",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "743fdbdb-c319-4b7c-b1b2-c320152f266a",
+          "brandName": "Jan",
+          "venueId": "4016a7a0-c54d-490f-9248-75385ff3ec54",
+          "venueName": "Jan"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "great coffee",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cookies and food were enjoyed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "cookie"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "beautiful little neighborhood coffee shop",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "super worth it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "truffle fries and burger were enjoyed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "truffle fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:37:16.816Z",
+    "usage": {
+      "inputTokens": 11993,
+      "outputTokens": 2056,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'[Unpaid advertisement]' is the German creator disclosure for unpaid tagging, so not treated as promotional. 'Great' may or may not extend to the cookies, and 'super worth it' is not clearly about money, so food, taste and value_for_money are all allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Amo Café",
+        "locationHint": "Wilmersdorf",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Amo Café in Wilmersdorf is not among the candidates; ama Café is in Mitte and the other similar names are different venues."
+        }
+      },
+      {
+        "venueName": "Jan Burgerrestaurant",
+        "locationHint": "Wilmersdorf",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "743fdbdb-c319-4b7c-b1b2-c320152f266a",
+          "brandName": "Jan",
+          "venueId": "4016a7a0-c54d-490f-9248-75385ff3ec54",
+          "venueName": "Jan",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the coffee at Amo Café was great",
+        "quote": "great coffee",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "enjoyed cookies at Amo Café",
+        "quote": "cookies",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "cookies"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Amo Café is a beautiful little neighborhood coffee shop",
+        "quote": "beautiful little neighborhood coffee shop",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "vibe",
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "dinner was at Jan Burgerrestaurant",
+        "quote": "Dinner was at @jan.burgerrestaurant",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "went to Jan Burgerrestaurant only for the truffle fries",
+        "quote": "I only went for their truffle fries",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "truffle fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "ended up eating a burger as well at Jan Burgerrestaurant",
+        "quote": "ended up eating a burger as well",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "eating the burger at Jan Burgerrestaurant was super worth it",
+        "quote": "it was super worth it",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money",
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.232Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.425Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "id": "review-da01994c",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "da01994c-bb63-416f-9ca8-630883ddcf77",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xadVdEWmFZa0Y0V1VSbVNGQjBUVEp5VEVacUxYYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Joseph-Roth-Diele",
+    "venueId": "5febd6b2-ea92-41bf-a564-4598d8041db5",
+    "brand": "Joseph-Roth-Diele",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-02T18:30:48.266Z",
+    "stars": 2,
+    "text": "Schmeckte leider nicht gut, superkleine Portionen, originelle/urige Einrichtung.",
+    "textTranslated": "Unfortunately, the food didn't taste good, the portions were tiny, but the decor was original/quaint."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:49:06.574Z",
+    "claims": [
+      {
+        "text": "the food didn't taste good",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portions were tiny",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the decor was original/quaint",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:34.449Z",
+    "usage": {
+      "inputTokens": 4970,
+      "outputTokens": 397,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "A straightforward review with three clear claims. 'Schmeckte' has no subject, so the claim is about the food in general and names no food.",
+    "claims": [
+      {
+        "text": "the food did not taste good",
+        "quote": "Schmeckte leider nicht gut",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the portions were tiny",
+        "quote": "superkleine Portionen",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the decor was original/quaint",
+        "quote": "originelle/urige Einrichtung",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.219Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "id": "review-266fe0b8",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "266fe0b8-525c-4dc1-a83d-186819628e21",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pOZlVYQlRURW96TWxwc2FYZExlV2RqV1ZOWlEzYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Kottbusser Tor",
+    "venueId": "c73cd88c-bd43-4c93-9592-49b0156b6b11",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-27T19:33:18.697Z",
+    "stars": 5,
+    "text": "I went in the store and the food was very delicious.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:03:33.275Z",
+    "claims": [
+      {
+        "text": "I went in the store",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was very delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:31.384Z",
+    "usage": {
+      "inputTokens": 4910,
+      "outputTokens": 272,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Short review; the visit statement is a minor neutral fact kept optional. 'Delicious' fits taste, with the root food also acceptable.",
+    "claims": [
+      {
+        "text": "the food was very delicious",
+        "quote": "the food was very delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "went in the store",
+        "quote": "I went in the store",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.205Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

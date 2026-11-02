@@ -1,0 +1,401 @@
+{
+  "id": "review-ff9ad17d",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "ff9ad17d-c73e-48ad-9345-e1dc1023449e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2sxVFExQjZOM1pWVVZGb1pWa3djR2hpVkZSclVFRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Burgermeister Konstanzer",
+    "venueId": "eee40163-98e1-4f14-8011-182f396e772d",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-13T12:54:01.731Z",
+    "stars": 3,
+    "text": "Soeben über Uber eats bestellt. Der Chili Cheeseburger war soweit ok, aber nichts besonderes, sehr dünner Patty der leicht fettig ist.\nWas aber gar nicht geht sind diese mehligen Pommes mit der  Cheesesauce.  Die waren so kalt und pappig, als ob sie schon paar Stunden rumgelegen haben. Für fast 6 Euro ist das rausgeworfenes Geld.\nSchade, unter handgemachtem Gourmetburger hätte ich mir mehr vorgestellt.\n\nI",
+    "textTranslated": "Just ordered via Uber Eats. The chili cheeseburger was okay, but nothing special—a very thin patty that was slightly greasy.\n\nBut what was completely unacceptable were the mealy fries with the cheese sauce. They were so cold and soggy, as if they'd been sitting out for hours. At almost €6, that was a complete waste of money.\n\nWhat a shame; I expected more from a handmade gourmet burger.\n\nI"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:42:30.226Z",
+    "claims": [
+      {
+        "text": "ordered via Uber Eats",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chili cheeseburger was okay",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "chili cheeseburger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chili cheeseburger was nothing special",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "chili cheeseburger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chili cheeseburger had a very thin patty",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "chili cheeseburger",
+          "patty"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the patty was slightly greasy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "patty"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries with the cheese sauce were completely unacceptable",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "fries",
+          "cheese sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were mealy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were cold and soggy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries had cheese sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "fries",
+          "cheese sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries cost almost €6",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "fries"
+        ],
+        "amount": 6,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "the meal was a complete waste of money",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [
+          "meal"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "expected more from a handmade gourmet burger",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "handmade gourmet burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:59.353Z",
+    "usage": {
+      "inputTokens": 5252,
+      "outputTokens": 2582,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the thin patty is portion_size or ingredient_quality, splitting cold and soggy Pommes into temperature and freshness, and keeping the almost-6-euro price as its own fact beside the waste-of-money judgement. The trailing 'I' is ignored.",
+    "claims": [
+      {
+        "text": "ordered via Uber Eats",
+        "quote": "Soeben über Uber eats bestellt.",
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Chili Cheeseburger was okay but nothing special",
+        "quote": "Der Chili Cheeseburger war soweit ok, aber nichts besonderes",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "Chili Cheeseburger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Patty was very thin",
+        "quote": "sehr dünner Patty",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "Patty"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Patty was slightly greasy",
+        "quote": "Patty der leicht fettig ist",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "Patty"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the mealy Pommes with the Cheesesauce were completely unacceptable",
+        "quote": "Was aber gar nicht geht sind diese mehligen Pommes mit der  Cheesesauce.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "Pommes",
+          "Cheesesauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "cooking"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes were cold",
+        "quote": "Die waren so kalt",
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "delivery_platform"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes were soggy, as if they had been sitting for hours",
+        "quote": "pappig, als ob sie schon paar Stunden rumgelegen haben",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes cost almost 6 euros",
+        "quote": "fast 6 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": 6,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes for almost 6 euros were money thrown away",
+        "quote": "Für fast 6 Euro ist das rausgeworfenes Geld.",
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": 6,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a pity, expected more from a handmade Gourmetburger",
+        "quote": "Schade, unter handgemachtem Gourmetburger hätte ich mir mehr vorgestellt.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "Gourmetburger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.222Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

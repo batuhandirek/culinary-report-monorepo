@@ -1,0 +1,148 @@
+{
+  "id": "review-19801259",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "19801259-273a-4b38-af69-c3b2cfac62fa",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25ZelVWcGxZbEJPVlVWWlNITnFaWEJIVkVwelFrRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister",
+    "venueId": "26636764-820f-4b12-ad9b-3570a76647d2",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-07T20:06:43.771Z",
+    "stars": 5,
+    "text": "Really good burgers and the shakes were so good too. Definitely coming back!",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:06.756Z",
+    "claims": [
+      {
+        "text": "the burgers were really good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the shakes were so good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "shake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "coming back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:15.067Z",
+    "usage": {
+      "inputTokens": 4911,
+      "outputTokens": 404,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Shakes could be read as a drink (drink_quality) or as food taste; drink_quality fits best, with taste and drinks also allowed.",
+    "claims": [
+      {
+        "text": "the burgers were really good",
+        "quote": "Really good burgers",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the shakes were so good too",
+        "quote": "the shakes were so good too",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "shakes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "definitely coming back",
+        "quote": "Definitely coming back!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.204Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

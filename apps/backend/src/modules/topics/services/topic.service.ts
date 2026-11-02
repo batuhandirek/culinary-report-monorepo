@@ -9,9 +9,8 @@ import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
-import { TopicIgnoredWord } from '../entities/topic-ignored-word.entity.js';
 import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
-import { aspectKey, TopicIndex } from '../util/topics.js';
+import { aspectKey, type IndexedTerm, TopicIndex } from '../util/topics.js';
 
 // Unmapped keys the admin read lists, most used first, each with the venues it was said of
 const UNMAPPED_LIMIT = 100;
@@ -38,7 +37,6 @@ export interface TopicInput {
 	label?: string;
 	kind?: TopicKindEnum;
 	parentKey?: string | null;
-	aliases?: string[];
 	trendsTopicId?: string | null;
 	trendsQuery?: string | null;
 	/** An aspect's: what it covers, for the agents */
@@ -72,9 +70,26 @@ export class TopicService {
 		return this.em.find(Topic, { deletedAt: null }, { orderBy: { key: 'asc' } });
 	}
 
-	/** The index over every topic, read fresh: topics are few and an admin may have just edited one. */
+	/**
+	 * The index over every topic and every decided term, read fresh: topics are few, an admin may have
+	 * just edited one, and the terms are one query.
+	 */
 	async index(): Promise<TopicIndex> {
-		return toIndex(await this.all());
+		const [topics, terms] = await Promise.all([this.all(), this.decidedTerms()]);
+		return toIndex(topics, terms);
+	}
+
+	/** Every decided wording with the keys of the topics it is (`Term`, `TermTopic`), for the index */
+	private async decidedTerms(): Promise<IndexedTerm[]> {
+		const rows: { key: string; name: string; topics: string[] }[] = await this.em.getConnection().execute(
+			`select t.key, t.name, coalesce(array_agg(x.key order by tt.rank) filter (where x.key is not null), '{}') as topics
+			from terms t
+			left join term_topics tt on tt.term_id = t.id
+			left join topics x on x.id = tt.topic_id and x.deleted_at is null
+			where t.decided_by is not null
+			group by t.id`,
+		);
+		return rows.map(r => ({ key: r.key, name: r.name, topicKeys: r.topics ?? [] }));
 	}
 
 	/** The topics Google Trends is searched for: those with a topic id or a query. */
@@ -88,7 +103,7 @@ export class TopicService {
 	 * "cafe"). An aspect's key is `aspectKey` of the same ("Tip prompts" → `tip_prompts`).
 	 */
 	async create(
-		input: TopicInput & { label: string; kind: TopicKindEnum; key?: string },
+		input: TopicInput & { label: string; kind: TopicKindEnum; key?: string; discovered?: boolean },
 	): Promise<Topic> {
 		const raw = input.key ?? input.label;
 		const key =
@@ -111,6 +126,7 @@ export class TopicService {
 		topic.key = key;
 		topic.label = input.label.trim();
 		topic.kind = input.kind;
+		if (input.discovered) topic.discoveredAt = new Date();
 		await this.apply(topic, input);
 		this.em.persist(topic);
 		await this.em.flush();
@@ -129,9 +145,9 @@ export class TopicService {
 
 	/**
 	 * Deletes an aspect. A kind of food is never deleted (stored trends rows and tags carry its key),
-	 * nor a root (readers group by the roots), nor an aspect with children (400 each). Its points
-	 * move to its parent: `FeedbackService.realign`, run by the relink job this queues, files a point
-	 * whose aspect is gone at its root, so counts stay whole without an LLM.
+	 * nor a root (readers group by the roots), nor an aspect with children (400 each). The claims
+	 * filed under it move to its parent (their aspect parts re-pointed by SQL), so counts stay whole
+	 * without an LLM; a term the agent linked to it alone is asked again.
 	 */
 	async remove(id: string): Promise<void> {
 		const topic = await this.em.findOneOrFail(Topic, { id, deletedAt: null }, { populate: ['parent'] });
@@ -141,6 +157,20 @@ export class TopicService {
 		const children = await this.em.count(Topic, { parent: topic, deletedAt: null });
 		if (children)
 			throw new BadRequestException(`"${topic.label}" has ${children} aspects under it: move or delete them first`);
+		// The links go with the topic; a term the agent linked to it alone is asked again (an admin's stays "none")
+		await this.em.getConnection().execute(
+			`update terms t set decided_by = null, decided_at = null
+			where t.decided_by in ('ai', 'match')
+				and exists (select 1 from term_topics tt where tt.term_id = t.id and tt.topic_id = ?)
+				and (select count(*) from term_topics tt where tt.term_id = t.id) = 1`,
+			[topic.id],
+			'run',
+		);
+		await this.em.getConnection().execute(
+			`update statement_parts set topic_id = ? where topic_id = ? and role = 'aspect'`,
+			[topic.parent.id, topic.id],
+			'run',
+		);
 		this.em.remove(topic);
 		await this.em.flush();
 		await this.queueRelink();
@@ -167,12 +197,8 @@ export class TopicService {
 				);
 			topic.kind = input.kind;
 		}
-		if (isAspect(topic.kind)) {
-			if (input.aliases?.length)
-				throw new BadRequestException('An aspect has no aliases: wordings link to it as terms');
-			if (input.trendsTopicId || input.trendsQuery)
-				throw new BadRequestException('An aspect is not searched on Google Trends');
-		}
+		if (isAspect(topic.kind) && (input.trendsTopicId || input.trendsQuery))
+			throw new BadRequestException('An aspect is not searched on Google Trends');
 		if (input.hint !== undefined) topic.hint = input.hint?.trim() || null;
 		if (input.parentKey !== undefined) {
 			if (input.parentKey === null) topic.parent = null;
@@ -201,41 +227,23 @@ export class TopicService {
 				topic.parent = parent;
 			}
 		}
-		if (input.aliases !== undefined) {
-			const index = toIndex(others);
-			const aliases = _.uniqBy(
-				input.aliases.map(a => a.trim()).filter(Boolean),
-				a => normalizeCuisine(a) ?? a.toLowerCase(),
-			).filter(a => normalizeCuisine(a) !== topic.key);
-			for (const alias of aliases) {
-				const taken = index.exact(alias);
-				if (taken)
-					throw new BadRequestException(
-						`"${alias}" already means "${index.get(taken)?.label ?? taken}"`,
-					);
-			}
-			topic.aliases = aliases;
-		}
 		if (input.trendsTopicId !== undefined)
 			topic.trendsTopicId = input.trendsTopicId?.trim() || null;
 		if (input.trendsQuery !== undefined) topic.trendsQuery = input.trendsQuery?.trim() || null;
 	}
 
-	/** Dismisses a word from the unrecognised list (`ignore`), or brings it back. Idempotent; flushes. */
-	async setIgnored(word: string, ignored: boolean): Promise<void> {
-		const key = normalizeCuisine(word) ?? word.trim().toLowerCase();
-		const row = await this.em.findOne(TopicIgnoredWord, { key });
-		if (ignored && !row) this.em.create(TopicIgnoredWord, { key });
-		if (!ignored && row) this.em.remove(row);
-		await this.em.flush();
-	}
-
 	async overview(cityId: string): Promise<TopicOverview> {
-		const topics = await this.all();
-		const ignored = (
-			await this.em.find(TopicIgnoredWord, {}, { orderBy: { key: 'asc' } })
-		).map(w => w.key);
-		const index = toIndex(topics);
+		const [topics, terms, ignoredRows] = await Promise.all([
+			this.all(),
+			this.decidedTerms(),
+			// The words an admin dismissed: admin terms with no topic (`TermService.setIgnored`)
+			this.em.getConnection().execute<{ name: string }[]>(
+				`select t.name from terms t where t.decided_by = 'admin'
+					and not exists (select 1 from term_topics tt where tt.term_id = t.id) order by t.name`,
+			),
+		]);
+		const ignored = _.uniq(ignoredRows.map(r => normalizeCuisine(r.name) ?? r.name.trim().toLowerCase()));
+		const index = toIndex(topics, terms);
 		const conn = this.em.getConnection();
 		const [mentionRows, venueRows] = await Promise.all([
 			conn.execute<
@@ -313,7 +321,7 @@ export class TopicService {
 	}
 }
 
-const toIndex = (topics: Topic[]) =>
+const toIndex = (topics: Topic[], terms: IndexedTerm[] = []) =>
 	new TopicIndex(
 		topics.map(t => ({
 			id: t.id,
@@ -321,7 +329,7 @@ const toIndex = (topics: Topic[]) =>
 			label: t.label,
 			kind: t.kind,
 			parentKey: t.parent ? (topics.find(p => p.id === t.parent!.id)?.key ?? null) : null,
-			aliases: t.aliases,
 			hint: t.hint ?? null,
 		})),
+		terms,
 	);

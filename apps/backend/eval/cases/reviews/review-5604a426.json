@@ -1,0 +1,202 @@
+{
+  "id": "review-5604a426",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "5604a426-4b9f-492f-b64c-c234288b053e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xkcVRHUjJWM0YyUm5aclF6ZzRTV05RTW1GU01rRRAB",
+    "platform": "google",
+    "language": "nl",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-03T18:46:43.384Z",
+    "stars": 3,
+    "text": "Gisteren dachten we weer te kunnen genieten van een lekker broodje gemuse kebab. We kwamen van een koude kermis thuis: de kebab zwom in een zee van saus. Het was misselijkmakend. Daar moesten we dan ook nog eens enorm lang op wachten.",
+    "textTranslated": "Yesterday, we thought we would enjoy a tasty Gemuse kebab sandwich again. We were sorely disappointed: the kebab was swimming in a sea of ​​sauce. It was nauseating. On top of that, we had to wait an incredibly long time for it."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:50:26.127Z",
+    "claims": [
+      {
+        "text": "they thought they would enjoy a tasty Gemuse kebab sandwich again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gemuse kebab sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab was swimming in a sea of sauce",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was nauseating",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they had to wait an incredibly long time",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:21.974Z",
+    "usage": {
+      "inputTokens": 5092,
+      "outputTokens": 1531,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'again' and the disappointment hint at a worse-than-before visit, but the review states no earlier quality explicitly, so the disappointment is an opinion with change allowed as an alternative. Drowning in sauce is read as seasoning (oversauced), with taste as an alternative.",
+    "claims": [
+      {
+        "text": "came yesterday expecting to enjoy a tasty broodje gemuse kebab again",
+        "quote": "Gisteren dachten we weer te kunnen genieten van een lekker broodje gemuse kebab",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "broodje gemuse kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they were sorely disappointed by the broodje gemuse kebab",
+        "quote": "We kwamen van een koude kermis thuis",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "taste"
+          ],
+          "kinds": [
+            "change"
+          ]
+        }
+      },
+      {
+        "text": "the kebab was swimming in a sea of sauce",
+        "quote": "de kebab zwom in een zee van saus",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "kebab",
+          "saus"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab was nauseating",
+        "quote": "Het was misselijkmakend.",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had to wait an incredibly long time for the kebab",
+        "quote": "Daar moesten we dan ook nog eens enorm lang op wachten.",
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.210Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

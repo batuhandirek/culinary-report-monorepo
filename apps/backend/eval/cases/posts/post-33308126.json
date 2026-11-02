@@ -1,0 +1,255 @@
+{
+  "id": "post-33308126",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "rogacki.berlin",
+    "locationName": null,
+    "hashtags": [
+      "rogacki",
+      "backfisch",
+      "foodberlin",
+      "markthallneun"
+    ],
+    "taggedHandles": [],
+    "text": "IHR HABT GEFRAGT, WIR HABEN ZUGEHÖRT. 🐟💚\n\nViele von euch haben sich Seelachs bei Rogacki gewünscht. Und weil wir eure Wünsche ernst nehmen, probieren wir ihn jetzt 1 Woche aus!\n\nAb Dienstag gibt’s bei uns Seelachs im knusprigen Teig, natürlich mit Kartoffelsalat. 🥔\n\nDer Teig bleibt, nur der Fisch ist ein anderer. 😉\n\n🐟 Seelachs im knusprigen Teig\n🥔 Mit Kartoffelsalat\n💚 14,90 €\n\nWer kommt am Dienstag vorbei zum Probieren? 👀\n\n📍 Rogacki, Markthalle Neun, Kreuzberg\n\n#Rogacki #Backfisch #Foodberlin #MarkthallNeun",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "33308126-64b4-43b1-ab9b-f971aa8ea94d",
+    "externalId": "ig_4005409546794202056",
+    "url": "https://www.instagram.com/p/DeWEsLgoHPI/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-11T07:00:02.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:54:47.194Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rogacki",
+        "locationHint": "Markthalle Neun, Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "new pollock in crispy batter offered for a trial week",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "Seelachs im knusprigen Teig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:14.990Z",
+    "usage": {
+      "inputTokens": 10086,
+      "outputTokens": 2297,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Venue's own promo for a one-week Seelachs trial: kind new_item, with deal allowed since it is time-limited; the price is a fact with deal as alternative. Markthalle Neun is treated as Rogacki's location rather than a separate place, and the closing call-to-action question is left out as narration.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Rogacki",
+        "locationHint": "Markthalle Neun, Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post is by Rogacki itself, and no candidate is named Rogacki; the similar names (Roj, Rodi, Roma, etc.) are different venues."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "many followers wished for Seelachs at Rogacki",
+        "quote": "Viele von euch haben sich Seelachs bei Rogacki gewünscht.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Seelachs"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rogacki is trying out Seelachs for 1 week",
+        "quote": "probieren wir ihn jetzt 1 Woche aus",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Seelachs"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "from Tuesday Rogacki serves Seelachs in crispy batter with Kartoffelsalat",
+        "quote": "Ab Dienstag gibt’s bei uns Seelachs im knusprigen Teig, natürlich mit Kartoffelsalat.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Seelachs",
+          "Kartoffelsalat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the batter stays the same, only the fish is different",
+        "quote": "Der Teig bleibt, nur der Fisch ist ein anderer.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Teig",
+          "Fisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "new_item"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Seelachs im knusprigen Teig with Kartoffelsalat costs 14,90 €",
+        "quote": "14,90 €",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Seelachs im knusprigen Teig",
+          "Kartoffelsalat"
+        ],
+        "amount": 14.9,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rogacki is located in Markthalle Neun, Kreuzberg",
+        "quote": "Rogacki, Markthalle Neun, Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.435Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.230Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.424Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

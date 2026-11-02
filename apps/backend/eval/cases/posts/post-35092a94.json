@@ -1,0 +1,391 @@
+{
+  "id": "post-35092a94",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "omiskebab",
+    "locationName": "Ömi's Gemüsekebap",
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "🥙🔥 Ömis Gemüse Kebap – Frisch. Saftig. Anders. 🔥🥙\n\nSaftiges Fleisch direkt vom Spieß, dazu frisch gegrilltes Gemüse 🍅🥒🌶️\nKnackig, aromatisch und jeden Tag mit Liebe vorbereitet ❤️\nOb im Brot, als Dürüm oder auf dem Teller –\nbei uns bekommst du Geschmack, der dich wiederkommen lässt 🤤\n\n👉 Kein Standard-Döner. Das ist Ömis.\n📍 Dominicusstraße 55, 10827 Berlin\n\nKomm vorbei und überzeug dich selbst!\n\n#ömisgemüsekebap #dominicusstraße #berlinfood #schöneberg #dönerliebe #gemüsekebap #halalfood #streetfood #reelsdeutschland #berlindöner",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "35092a94-e756-4d2c-9ab1-bdf6e3917189",
+    "externalId": "7617397082378210582",
+    "url": "https://www.tiktok.com/@omiskebab/video/7617397082378210582",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-15T11:00:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:39:22.162Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Ömi's Gemüsekebap",
+        "locationHint": "Dominicusstraße 55, Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "a486a1a1-1b8c-4b2f-94fd-079e8b7ed5ba",
+          "brandName": "Ömi's Gemüsekebap",
+          "venueId": "5a5f3d84-9d24-4a34-86f8-5a7691b1263d",
+          "venueName": "Ömi's Gemüsekebap"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "fresh meat from the spit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "freshly grilled vegetables",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is prepared with love every day",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is served in bread, as dürüm, or on a plate",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "no standard döner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:35:29.912Z",
+    "usage": {
+      "inputTokens": 10004,
+      "outputTokens": 3071,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue's own promotional post ('bei uns'), so visited is false and every claim is self-praise; the slogan 'Frisch. Saftig. Anders.' is kept as one claim, and the call to action and #halalfood are marked optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Ömi's Gemüsekebap",
+        "locationHint": "Dominicusstraße 55, 10827 Berlin (Schöneberg)",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "a486a1a1-1b8c-4b2f-94fd-079e8b7ed5ba",
+          "brandName": "Ömi's Gemüsekebap",
+          "venueId": "5a5f3d84-9d24-4a34-86f8-5a7691b1263d",
+          "venueName": "Ömi's Gemüsekebap",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Ömis Gemüse Kebap is fresh, juicy and different",
+        "quote": "Frisch. Saftig. Anders.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meat is juicy, straight from the spit",
+        "quote": "Saftiges Fleisch direkt vom Spieß",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meat comes with freshly grilled Gemüse",
+        "quote": "dazu frisch gegrilltes Gemüse",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Gemüse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Gemüse is crunchy and aromatic",
+        "quote": "Knackig, aromatisch",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gemüse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is prepared with love every day",
+        "quote": "jeden Tag mit Liebe vorbereitet",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "available in Brot, as Dürüm or on a plate",
+        "quote": "Ob im Brot, als Dürüm oder auf dem Teller",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Brot",
+          "Dürüm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the taste makes you come back",
+        "quote": "bei uns bekommst du Geschmack, der dich wiederkommen lässt",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ömis is not a standard Döner",
+        "quote": "Kein Standard-Döner. Das ist Ömis.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ömis is located at Dominicusstraße 55, 10827 Berlin",
+        "quote": "Dominicusstraße 55, 10827 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "come by and see for yourself",
+        "quote": "Komm vorbei und überzeug dich selbst!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is halal",
+        "quote": "#halalfood",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.230Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.424Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

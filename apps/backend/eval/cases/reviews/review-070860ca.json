@@ -1,0 +1,343 @@
+{
+  "id": "review-070860ca",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:2",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "070860ca-a6a7-4fa3-9bae-738e109b2497",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25WUVRESXdRbUZVUzJkVE1WZHVjVmsxYjB4c1RuYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Ming Dynastie Jannowitzbrücke Berlin",
+    "venueId": "1bf3dd55-959e-4575-ba19-7ddbf150ccb2",
+    "brand": "Ming Dynastie",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-09T19:13:32.132Z",
+    "stars": 2,
+    "text": "Not happy . Ordered from here on a Sunday night for delivery through wolt where we then received the wrong order which we were then met with a very unhelpful and very angry man who hung up on me ! We then received a refund and had to reorder and didn't get our correct order until 2 hours late . When the food arrived it was mid nothing to write home about and not worth the hassle .",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:06:50.343Z",
+    "claims": [
+      {
+        "text": "ordered from here on a Sunday night",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "delivery through wolt",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "received the wrong order",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "met with a very unhelpful man",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "met with a very angry man",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "he hung up on me",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "received a refund",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had to reorder",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "didn't get our correct order until 2 hours late",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 2,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the food was mid",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was not worth the hassle",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:37.560Z",
+    "usage": {
+      "inputTokens": 5020,
+      "outputTokens": 2203,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the wrong delivery order fits both order_accuracy and takeaway_handling. The 2-hour-late delivery is read as wait_for_food (120 minutes), with delivery and takeaway aspects also allowed. 'Not worth the hassle' is not about money, so it gets aspect null.",
+    "claims": [
+      {
+        "text": "the reviewer is not happy",
+        "quote": "Not happy",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "ordered on a Sunday night for delivery through Wolt",
+        "quote": "Ordered from here on a Sunday night for delivery through wolt",
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "takeaway_handling"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "received the wrong order",
+        "quote": "received the wrong order",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "a very unhelpful and very angry man hung up on the reviewer",
+        "quote": "a very unhelpful and very angry man who hung up on me",
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "received a refund",
+        "quote": "We then received a refund",
+        "sentiment": "neutral",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had to reorder",
+        "quote": "had to reorder",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "complaint_handling",
+            "takeaway_handling"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the correct order arrived 2 hours late",
+        "quote": "didn't get our correct order until 2 hours late",
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 120,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling",
+            "delivery_platform",
+            "wait"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the food was mid, nothing to write home about",
+        "quote": "the food arrived it was mid nothing to write home about",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "not worth the hassle",
+        "quote": "not worth the hassle",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.202Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.401Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -58,11 +58,20 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 		pizzaA = place('p-pizza-a', 'Pizza Napoli', { category: 'Pizza restaurant' });
 		pizzaB = place('p-pizza-b', 'Pizza Napoli', { category: 'Pizza restaurant' });
 		// Its Google website is its Instagram profile
-		paula = place('p-paula', 'Café Paula', { category: 'Cafe', website: 'https://www.instagram.com/cafepaula/?hl=de' });
+		paula = place('p-paula', 'Café Paula', {
+			category: 'Cafe',
+			website: 'https://www.instagram.com/cafepaula/?hl=de',
+		});
 		// A chain whose branches give different profiles: each branch's own
 		const chain = em.create(Brand, { name: 'Bandol', key: 'bandol' });
-		chainA = place('p-bandol-mitte', 'Bandol Mitte', { brand: chain, website: 'https://instagram.com/bandol.mitte' });
-		chainB = place('p-bandol-xberg', 'Bandol Kreuzberg', { brand: chain, website: 'https://instagram.com/bandol.xberg' });
+		chainA = place('p-bandol-mitte', 'Bandol Mitte', {
+			brand: chain,
+			website: 'https://instagram.com/bandol.mitte',
+		});
+		chainB = place('p-bandol-xberg', 'Bandol Kreuzberg', {
+			brand: chain,
+			website: 'https://instagram.com/bandol.xberg',
+		});
 		await em.flush();
 	});
 
@@ -103,8 +112,6 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 				brand: venue.brand,
 				matchMethod: MentionMatchMethodEnum.EXACT,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Nice.',
 			});
 			await em.flush();
 		}
@@ -112,16 +119,27 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 	};
 
 	const account = (handle: string, platform = SocialPlatformEnum.TIKTOK) =>
-		harness.orm.em.findOneOrFail(SocialAccount, { platform, handle }, { populate: ['creator', 'brand', 'branch', 'suggestedBrand'], refresh: true });
+		harness.orm.em.findOneOrFail(
+			SocialAccount,
+			{ platform, handle },
+			{ populate: ['creator', 'brand', 'branch', 'suggestedBrand'], refresh: true },
+		);
 
 	it('gives every author an account and a creator; one person’s two platforms are one creator', async () => {
 		const em = harness.orm.em;
-		await save('Polina_Iz_Berlina', SocialPlatformEnum.TIKTOK, undefined, { authorName: 'Polina', authorFans: 1200 });
+		await save('Polina_Iz_Berlina', SocialPlatformEnum.TIKTOK, undefined, {
+			authorName: 'Polina',
+			authorFans: 1200,
+		});
 		await save('polina_iz_berlina', SocialPlatformEnum.TIKTOK);
 		await save('polina.iz.berlina', SocialPlatformEnum.INSTAGRAM);
 		const tiktok = await account('polina_iz_berlina');
 		const instagram = await account('polina.iz.berlina', SocialPlatformEnum.INSTAGRAM);
-		expect(tiktok).toMatchObject({ displayName: 'Polina', followers: 1200, city: { id: city.id } });
+		expect(tiktok).toMatchObject({
+			displayName: 'Polina',
+			followers: 1200,
+			city: { id: city.id },
+		});
 		expect(instagram.creator.id).toBe(tiktok.creator.id);
 		expect(await em.count(SocialPost, { account: tiktok })).toBe(2);
 		expect(await em.count(Creator, { name: 'Polina' })).toBe(1);
@@ -150,8 +168,12 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 			brandSource: AccountBrandSourceEnum.WEBSITE,
 		});
 		// A chain's branches with profiles of their own
-		expect((await account('bandol.mitte', SocialPlatformEnum.INSTAGRAM)).branch?.id).toBe(chainA.id);
-		expect((await account('bandol.xberg', SocialPlatformEnum.INSTAGRAM)).branch?.id).toBe(chainB.id);
+		expect((await account('bandol.mitte', SocialPlatformEnum.INSTAGRAM)).branch?.id).toBe(
+			chainA.id,
+		);
+		expect((await account('bandol.xberg', SocialPlatformEnum.INSTAGRAM)).branch?.id).toBe(
+			chainB.id,
+		);
 
 		// Running again changes nothing
 		expect(await matching.match(city)).toMatchObject({ linked: 0, unlinked: 0, websites: 0 });
@@ -160,7 +182,10 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 	it('the posts settle two places of one name', async () => {
 		await save('pizza.napoli.berlin', SocialPlatformEnum.TIKTOK, pizzaB);
 		await matching.match(city);
-		expect(await account('pizza.napoli.berlin')).toMatchObject({ brand: { id: pizzaB.brand.id }, suggestedBrand: null });
+		expect(await account('pizza.napoli.berlin')).toMatchObject({
+			brand: { id: pizzaB.brand.id },
+			suggestedBrand: null,
+		});
 	});
 
 	it('own posts no longer rank a brand', async () => {
@@ -169,7 +194,9 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 		await save('eats.berlin', SocialPlatformEnum.TIKTOK, paula);
 		await save('tom.isst', SocialPlatformEnum.TIKTOK, paula);
 		await em.flush();
-		const top = await harness.moduleRef.get(MentionMatchingService).topBrandIds('2026-09', 2, city.id);
+		const top = await harness.moduleRef
+			.get(MentionMatchingService)
+			.topBrandIds('2026-09', 2, city.id);
 		expect(top[0]).toBe(paula.brand.id);
 	});
 
@@ -177,21 +204,32 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 		const controller = harness.moduleRef.get(AdminAccountsController);
 		const soriAccount = await account('soriramen.berlin', SocialPlatformEnum.INSTAGRAM);
 		const rejected = await controller.decideAccount(soriAccount.id, { action: 'reject' });
-		expect(rejected).toMatchObject({ rejections: [{ brand: { id: sori.brand.id } }], brandSource: 'admin' });
+		expect(rejected).toMatchObject({
+			rejections: [{ brand: { id: sori.brand.id } }],
+			brandSource: 'admin',
+		});
 		expect(rejected.brand).toBeUndefined();
 		await matching.match(city);
 		expect((await account('soriramen.berlin', SocialPlatformEnum.INSTAGRAM)).brand).toBeNull();
 
 		// Linked by hand to a brand its name says nothing about: the matcher leaves it
 		const foodie = await account('foodie.bln');
-		const linked = await controller.decideAccount(foodie.id, { action: 'link', brandId: paula.brand.id });
-		expect(linked).toMatchObject({ brand: { id: paula.brand.id, name: 'Café Paula' }, brandSource: 'admin' });
+		const linked = await controller.decideAccount(foodie.id, {
+			action: 'link',
+			brandId: paula.brand.id,
+		});
+		expect(linked).toMatchObject({
+			brand: { id: paula.brand.id, name: 'Café Paula' },
+			brandSource: 'admin',
+		});
 		await matching.match(city);
 		expect((await account('foodie.bln')).brand?.id).toBe(paula.brand.id);
 
 		// Linking again lifts the rejection
 		await controller.decideAccount(soriAccount.id, { action: 'link', brandId: sori.brand.id });
-		expect(await harness.orm.em.fork().count(AccountRejectedBrand, { account: soriAccount.id })).toBe(0);
+		expect(
+			await harness.orm.em.fork().count(AccountRejectedBrand, { account: soriAccount.id }),
+		).toBe(0);
 	});
 
 	it('confirms a suggestion, and refuses a branch of another brand', async () => {
@@ -207,34 +245,60 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 			brandSource: 'admin',
 		});
 		expect((await account('sori.ramen.official')).suggestedBrand).toBeNull();
-		await expect(controller.decideAccount(acc.id, { action: 'branch', branchId: chainA.id })).rejects.toThrow(
-			'not a branch',
-		);
+		await expect(
+			controller.decideAccount(acc.id, { action: 'branch', branchId: chainA.id }),
+		).rejects.toThrow('not a branch');
 	});
 
 	it('lists venues’ own accounts and the open suggestions, counted per status', async () => {
 		const controller = harness.moduleRef.get(AdminAccountsController);
-		const linked = await controller.listAccounts({ page: 1, size: 50, cityId: city.id, status: 'linked', month: '2026-09' });
+		const linked = await controller.listAccounts({
+			page: 1,
+			size: 50,
+			cityId: city.id,
+			status: 'linked',
+			month: '2026-09',
+		});
 		expect(linked.counts.linked).toBe(linked.totalItems);
-		expect(linked.items.map(a => a.handle)).toEqual(expect.arrayContaining(['soriramen.berlin', 'cafepaula', 'bandol.mitte']));
+		expect(linked.items.map(a => a.handle)).toEqual(
+			expect.arrayContaining(['soriramen.berlin', 'cafepaula', 'bandol.mitte']),
+		);
 		const sori = linked.items.find(a => a.handle === 'soriramen.berlin')!;
 		expect(sori.stats).toMatchObject({ monthPosts: 1, monthViews: 100, posts: 1 });
 		expect(sori.creator.name).toBe('soriramen.berlin');
-		const searched = await controller.listAccounts({ page: 1, size: 50, q: 'bandol', status: 'linked' });
+		const searched = await controller.listAccounts({
+			page: 1,
+			size: 50,
+			q: 'bandol',
+			status: 'linked',
+		});
 		expect(searched.items.map(a => a.handle).sort()).toEqual(['bandol.mitte', 'bandol.xberg']);
 	});
 
 	describe('creators', () => {
 		it('lists who posted in the month over all their accounts, venues’ own left out', async () => {
 			const controller = harness.moduleRef.get(AdminCreatorsController);
-			const res = await controller.listCreators({ page: 1, size: 50, cityId: city.id, month: '2026-09' });
+			const res = await controller.listCreators({
+				page: 1,
+				size: 50,
+				cityId: city.id,
+				month: '2026-09',
+			});
 			const polina = res.items.find(c => c.name === 'Polina')!;
 			expect(polina.accounts.map(a => a.platform).sort()).toEqual(['instagram', 'tiktok']);
 			expect(polina.month).toMatchObject({ posts: 3, views: 300 });
 			expect(res.items.some(c => c.name === 'soriramen.berlin')).toBe(false);
-			const all = await controller.listCreators({ page: 1, size: 50, cityId: city.id, month: '2026-09', includeOwn: true });
+			const all = await controller.listCreators({
+				page: 1,
+				size: 50,
+				cityId: city.id,
+				month: '2026-09',
+				includeOwn: true,
+			});
 			expect(all.items.find(c => c.name === 'soriramen.berlin')).toMatchObject({ own: true });
-			expect((await controller.listCreators({ page: 1, size: 50, month: '2026-08' })).items).toEqual([]);
+			expect(
+				(await controller.listCreators({ page: 1, size: 50, month: '2026-08' })).items,
+			).toEqual([]);
 		});
 
 		it('shows a creator’s accounts, months and the brands they named', async () => {
@@ -244,20 +308,50 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 			expect(detail.accounts.map(a => a.handle)).toEqual(['eats.berlin']);
 			expect(detail.months.at(-1)).toEqual({ month: '2026-09', posts: 1, views: 100 });
 			expect(detail.months).toHaveLength(6);
-			expect(detail.brands).toEqual([expect.objectContaining({ id: paula.brand.id, posts: 1, own: false })]);
+			expect(detail.brands).toEqual([
+				expect.objectContaining({ id: paula.brand.id, posts: 1, own: false }),
+			]);
 			expect(detail.foundBy).toEqual([]);
 
 			// What found their posts: the city's hashtag (a source) and a venue search (none)
 			const em = harness.orm.em;
 			const post = await em.findOneOrFail(SocialPost, { account: eats.id });
-			const tag = em.create(CitySource, { city, kind: CitySourceKindEnum.TIKTOK_HASHTAG, value: 'berlinfood' });
-			em.create(PostSource, { post, kind: PostSourceKindEnum.TIKTOK_HASHTAG, value: 'berlinfood', source: tag, foundAt: new Date() });
-			em.create(PostSource, { post, kind: PostSourceKindEnum.VENUE_SEARCH, value: 'Cafe Paula Berlin', venue: paula, foundAt: new Date() });
+			const tag = em.create(CitySource, {
+				city,
+				kind: CitySourceKindEnum.TIKTOK_HASHTAG,
+				value: 'berlinfood',
+			});
+			em.create(PostSource, {
+				post,
+				kind: PostSourceKindEnum.TIKTOK_HASHTAG,
+				value: 'berlinfood',
+				source: tag,
+				foundAt: new Date(),
+			});
+			em.create(PostSource, {
+				post,
+				kind: PostSourceKindEnum.VENUE_SEARCH,
+				value: 'Cafe Paula Berlin',
+				venue: paula,
+				foundAt: new Date(),
+			});
 			await em.flush();
-			const found = (await controller.getCreator(eats.creator.id, { month: '2026-09' })).foundBy;
+			const found = (await controller.getCreator(eats.creator.id, { month: '2026-09' }))
+				.foundBy;
 			expect(_.sortBy(found, f => f.kind)).toEqual([
-				expect.objectContaining({ kind: 'tiktok_hashtag', value: 'berlinfood', sourceId: tag.id, sourceEnabled: true, posts: 1 }),
-				expect.objectContaining({ kind: 'venue_search', venue: { id: paula.id, name: paula.name }, posts: 1, city: { id: city.id, name: city.name } }),
+				expect.objectContaining({
+					kind: 'tiktok_hashtag',
+					value: 'berlinfood',
+					sourceId: tag.id,
+					sourceEnabled: true,
+					posts: 1,
+				}),
+				expect.objectContaining({
+					kind: 'venue_search',
+					venue: { id: paula.id, name: paula.name },
+					posts: 1,
+					city: { id: city.id, name: city.name },
+				}),
 			]);
 			expect(found.find(f => f.kind === 'venue_search')).not.toHaveProperty('sourceId');
 		});
@@ -268,14 +362,18 @@ describe('accounts, creators and own-account matching (pglite)', () => {
 			const eats = await account('eats.berlin');
 			const tom = await account('tom.isst');
 			const tomsCreator = tom.creator.id;
-			const merged = await controller.mergeCreatorAccounts(eats.creator.id, { accountIds: [tom.id] });
+			const merged = await controller.mergeCreatorAccounts(eats.creator.id, {
+				accountIds: [tom.id],
+			});
 			expect(merged.accounts.map(a => a.handle).sort()).toEqual(['eats.berlin', 'tom.isst']);
 			// Tom's own creator went with it
 			expect(await harness.orm.em.count(Creator, { id: tomsCreator })).toBe(0);
 			const { creatorId } = await accounts.splitAccount(tom.id);
 			expect((await account('tom.isst')).creator.id).toBe(creatorId);
 			await expect(accounts.splitAccount(tom.id)).rejects.toThrow('only one');
-			const renamed = await controller.updateCreator(eats.creator.id, { name: 'Eats Berlin' });
+			const renamed = await controller.updateCreator(eats.creator.id, {
+				name: 'Eats Berlin',
+			});
 			expect(renamed.name).toBe('Eats Berlin');
 		});
 	});

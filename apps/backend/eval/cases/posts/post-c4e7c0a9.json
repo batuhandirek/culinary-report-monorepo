@@ -1,0 +1,700 @@
+{
+  "id": "post-c4e7c0a9",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "SABON — MEDITERRANES WEINBISTRO FÜR LANGE ABENDE UNTER FREUND:INNEN\n\nSind wir mal ehrlich: Ich probiere mich erst seit kurzem durch die Welt der Weine. Daher weiß ich oft nicht, welches wohl das richtige Glas für mich sein könnte. Unzählige Seiten im Weinmenü, mir unbekannte Regionen und dazu die Jahrgänge, die mir nichts sagen – wo fängt man an? In der Bar Sabon verfliegt dieses Gefühl allerdings sofort. Das mediterrane Weinbistro von Luca Simon und Dustin Franke dreht sich um zwei Dinge, die die beiden selbst am liebsten mögen: gute Weine und unkompliziertes Essen. Am besten in Form langer Abende mit guten Freund:innen. Luca ist Halbitaliener und hat Wurzeln in der Emilia-Romagna, Dustin lebt seit vierzehn Jahren in Berlin. Gemeinsam haben sie bereits die Bar Nonno in Schöneberg eröffnet. Mit Sabon wollten sie den Blick auf mediterrane Einflüsse vereinen – nicht nur Italien, sondern auch Portugal, Spanien und Frankreich. Vor allem aber sollte ein Ort entstehen, der das genaue Gegenteil jener Weinbars mit langen, einschüchternden Karten ist. Stattdessen fühlt sich das Sabon eher an wie das Wohnzimmer guter Freund:innen – ein Ort, an dem Du spontan auf ein Glas Wein, ein paar Austern oder einen Teller Pasta vorbeischaust und am Ende doch bis spät in den Abend bleibst.\nFrüher wurden in den Räumen ein Café und ein Barbershop betrieben, getrennt durch eine große Wand. Bei der Übernahme entschied Luca, genau diese Trennung aufzubrechen und den Raum zu öffnen. Als die alte Tapete entfernt wurde, kam im linken Bereich eine wunderschöne blaue Wandfarbe zum Vorschein – heute wird sie “Blau Zaal” genannt. Der Raum eignet sich perfekt für Geburtstagsfeiern und größere Runden. Und im Sommer laden auch Plätze draußen an der Oderberger Straße zum Verweilen ein. Jeder Wein auf der Karte wird glasweise ausgeschenkt und darf natürlich vorher probiert werden. Bei meinem Besuch habe ich mich durch drei verschiedene Weine probiert: zwei Orange Wines und einen klassischen Rotwein. Der La Sapata Orange Feteasca Regala ist leicht und angenehm unkonventionell, während der Moinho do Gato Tinto mit dunkler Frucht und schöner Balance überzeugt. Die größte Überraschung war jedoch der Sumenjak Pinot Grigio Orange – mein persönlicher Favorit des Abends. Inspiration holten sich Luca und Dustin von ihren Lieblingsorten in Berlin und Lissabon sowie von mediterranen Bistros, in denen Menschen stundenlang draußen sitzen, Essen und Wein teilen und die Stimmung im Laufe des Abends lebhafter wird. Auch die Karte bleibt in Bewegung: Saisonale Gerichte wechseln regelmäßig, dazu kommt jede Woche eine neue Weinempfehlung. Gründe für einen weiteren Besuch gibt es also mehr als genug.\nText: Stefania Basano / Fotos: Mohit Amlani\nSabon, Oderberger Str.43, 10435 Berlin–Prenzlauer Berg; Stadtplan\n@sabon_weinbistro",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "c4e7c0a9-96ac-4d29-9b43-52e5b226aeec",
+    "externalId": "blog_d04c0912a63abfdaab0d4054",
+    "url": "https://ceecee.cc/sabon-mediterranes-weinbistro-fuer-lange-abende-unter-freundinnen/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-06-18T13:01:47.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:19.745Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Sabon",
+        "locationHint": "Oderberger Str. 43",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ee56513e-69c6-40d2-862d-b030849feef3",
+          "brandName": "sabon",
+          "venueId": "b69414e4-6cd0-484b-a4a2-b7ed0c6d9937",
+          "venueName": "sabon"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "feels like the living room of good friends",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "summer seats outside on Oderberger Straße",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "wine can be ordered by the glass and tried first",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "seasonal dishes change regularly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "new wine recommendation every week",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:50:20.520Z",
+    "usage": {
+      "inputTokens": 13685,
+      "outputTokens": 7151,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Sabon",
+        "locationHint": "Oderberger Str. 43, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ee56513e-69c6-40d2-862d-b030849feef3",
+          "brandName": "sabon",
+          "venueId": "b69414e4-6cd0-484b-a4a2-b7ed0c6d9937",
+          "venueName": "sabon",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Bar Nonno",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "bb0fd588-aed4-4871-bb1f-2b272a47929a",
+          "brandName": "Bar Nonno",
+          "venueId": "0a78056c-c582-4bc3-838d-108d4c50ad59",
+          "venueName": "Bar Nonno",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "at Bar Sabon the feeling of not knowing which wine to choose disappears immediately",
+        "quote": "In der Bar Sabon verfliegt dieses Gefühl allerdings sofort.",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "advice",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sabon is a Mediterranean wine bistro run by Luca Simon and Dustin Franke",
+        "quote": "Das mediterrane Weinbistro von Luca Simon und Dustin Franke",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sabon revolves around good wines and uncomplicated food",
+        "quote": "gute Weine und unkompliziertes Essen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Weine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "drinks",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "co-owner Luca is half-Italian with roots in Emilia-Romagna",
+        "quote": "Luca ist Halbitaliener und hat Wurzeln in der Emilia-Romagna",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "co-owner Dustin has lived in Berlin for fourteen years",
+        "quote": "Dustin lebt seit vierzehn Jahren in Berlin",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Luca and Dustin already opened Bar Nonno in Schöneberg",
+        "quote": "Gemeinsam haben sie bereits die Bar Nonno in Schöneberg eröffnet.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Sabon combines Mediterranean influences from Italy, Portugal, Spain and France",
+        "quote": "mediterrane Einflüsse vereinen – nicht nur Italien, sondern auch Portugal, Spanien und Frankreich",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sabon is the opposite of wine bars with long, intimidating lists",
+        "quote": "das genaue Gegenteil jener Weinbars mit langen, einschüchternden Karten",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sabon feels like the living room of good friends",
+        "quote": "fühlt sich das Sabon eher an wie das Wohnzimmer guter Freund:innen",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Sabon you drop by spontaneously for a glass of wine, some oysters or a plate of pasta and end up staying late into the evening",
+        "quote": "ein Ort, an dem Du spontan auf ein Glas Wein, ein paar Austern oder einen Teller Pasta vorbeischaust und am Ende doch bis spät in den Abend bleibst",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [
+          "Wein",
+          "Austern",
+          "Pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the space used to house a café and a barbershop separated by a large wall",
+        "quote": "Früher wurden in den Räumen ein Café und ein Barbershop betrieben, getrennt durch eine große Wand.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "on taking over, Luca removed the dividing wall and opened up the room",
+        "quote": "Bei der Übernahme entschied Luca, genau diese Trennung aufzubrechen und den Raum zu öffnen.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a beautiful blue wall colour, now called \"Blau Zaal\", was uncovered in the left area",
+        "quote": "kam im linken Bereich eine wunderschöne blaue Wandfarbe zum Vorschein – heute wird sie “Blau Zaal” genannt",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the room is perfect for birthday parties and larger groups",
+        "quote": "Der Raum eignet sich perfekt für Geburtstagsfeiern und größere Runden.",
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "in summer there are inviting seats outside on Oderberger Straße",
+        "quote": "im Sommer laden auch Plätze draußen an der Oderberger Straße zum Verweilen ein",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "every wine on the list is served by the glass",
+        "quote": "Jeder Wein auf der Karte wird glasweise ausgeschenkt",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "every wine can be tasted beforehand",
+        "quote": "darf natürlich vorher probiert werden",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "advice",
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author tried three wines: two orange wines and a classic red wine",
+        "quote": "habe ich mich durch drei verschiedene Weine probiert: zwei Orange Wines und einen klassischen Rotwein",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Orange Wines",
+          "Rotwein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the La Sapata Orange Feteasca Regala is light and pleasantly unconventional",
+        "quote": "Der La Sapata Orange Feteasca Regala ist leicht und angenehm unkonventionell",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "La Sapata Orange Feteasca Regala"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Moinho do Gato Tinto convinces with dark fruit and nice balance",
+        "quote": "der Moinho do Gato Tinto mit dunkler Frucht und schöner Balance überzeugt",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Moinho do Gato Tinto"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Sumenjak Pinot Grigio Orange was the biggest surprise and the author's favourite of the evening",
+        "quote": "Die größte Überraschung war jedoch der Sumenjak Pinot Grigio Orange – mein persönlicher Favorit des Abends",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Sumenjak Pinot Grigio Orange"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owners drew inspiration from their favourite places in Berlin and Lisbon and from Mediterranean bistros",
+        "quote": "Inspiration holten sich Luca und Dustin von ihren Lieblingsorten in Berlin und Lissabon sowie von mediterranen Bistros",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "seasonal dishes on the menu change regularly",
+        "quote": "Saisonale Gerichte wechseln regelmäßig",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is a new wine recommendation every week",
+        "quote": "jede Woche eine neue Weinempfehlung",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "new_item"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are more than enough reasons for another visit to Sabon",
+        "quote": "Gründe für einen weiteren Besuch gibt es also mehr als genug.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.604Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent folded tasting beforehand into its claim about glass pours."
+      },
+      {
+        "at": "2026-11-01T14:39:43.604Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The agent's claim leaves out the owners, so drinks fits its wine-bistro framing."
+      },
+      {
+        "at": "2026-11-01T14:39:43.604Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): The agent's claim only states what can be ordered, so neutral is defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.604Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): The agent's claim lists offerings, so fact is defensible."
+      },
+      {
+        "at": "2026-11-01T21:36:47.251Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -7,7 +7,7 @@ export const isFatalProviderError = (error: unknown): boolean => {
 	const e = error as { message?: string; statusCode?: number; status?: number } | undefined;
 	// 402 is not enough: Apify answers a run refused for the plan's memory with it
 	if ((e?.statusCode ?? e?.status) === 401) return true;
-	return /no credits remaining|insufficient_quota|exceeded your current quota|credit balance is too low|invalid (x-)?api[ -_]?key|incorrect api key/i.test(
+	return /no credits remaining|no model can serve|insufficient_quota|exceeded your current quota|credit balance is too low|reached your specified (workspace )?api usage limits|invalid (x-)?api[ -_]?key|incorrect api key/i.test(
 		e?.message ?? '',
 	);
 };

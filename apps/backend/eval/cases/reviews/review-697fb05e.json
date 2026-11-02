@@ -1,0 +1,115 @@
+{
+  "id": "review-697fb05e",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "697fb05e-9810-4798-9a63-a56b1026fc4a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2psbGNYTk1XVkoyUkU5b2NtazBZV1ZIYlU5ZmFHYxAB",
+    "platform": "google",
+    "language": "ko",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-09T16:30:18.776Z",
+    "stars": 5,
+    "text": "독일 최고 케밥맛집. 비교불가",
+    "textTranslated": "Germany's best kebab restaurant. Unrivaled"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:05:45.627Z",
+    "claims": [
+      {
+        "text": "Germany's best kebab restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab restaurant"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "unrivaled",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:55.569Z",
+    "usage": {
+      "inputTokens": 4940,
+      "outputTokens": 739,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Both sentences are whole-place verdicts. 케밥맛집 means 'tasty kebab place', so taste is also an acceptable aspect for the first claim. 'Unrivaled' restates the first claim, so it may be kept apart or merged into it.",
+    "claims": [
+      {
+        "text": "the best kebab restaurant in Germany",
+        "quote": "독일 최고 케밥맛집",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "케밥"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab restaurant is unrivaled",
+        "quote": "비교불가",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.211Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.408Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

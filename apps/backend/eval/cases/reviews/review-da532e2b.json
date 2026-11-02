@@ -1,0 +1,167 @@
+{
+  "id": "review-da532e2b",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "da532e2b-1c53-4052-968b-83429faa2b48",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tGck9YUnJSRVpITlRCQllqTjVZVVYwZVZvMUxVRRAB",
+    "platform": "google",
+    "language": "it",
+    "venue": "Burgermeister Potsdamer Platz",
+    "venueId": "2b2d22ae-898b-4369-83c7-fd82a867d973",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-09T12:14:39.192Z",
+    "stars": 4,
+    "text": "Semplice, pulito discretamente a patto di non dover andare in bagno. Purtroppo pochi vegetali, ma ci può stare…",
+    "textTranslated": "Simple, reasonably clean as long as you don't have to go to the bathroom. Unfortunately, there aren't many vegetables, but that's okay..."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:06:12.050Z",
+    "claims": [
+      {
+        "text": "the place is simple",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is reasonably clean",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there aren't many vegetables",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:42.326Z",
+    "usage": {
+      "inputTokens": 4998,
+      "outputTokens": 1157,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Semplice' is ambiguous (place or food), so vibe/interior/null all allowed. 'pochi vegetali' may mean few vegetable options or few vegetables on the burgers; kept with its softening 'ma ci può stare' as one mixed claim.",
+    "claims": [
+      {
+        "text": "the place is simple",
+        "quote": "Semplice",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "interior",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is reasonably clean",
+        "quote": "pulito discretamente",
+        "sentiment": "positive",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "dining_area"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the bathroom is not clean",
+        "quote": "a patto di non dover andare in bagno",
+        "sentiment": "negative",
+        "aspect": "toilets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "unfortunately few vegetables, but that's acceptable",
+        "quote": "Purtroppo pochi vegetali, ma ci può stare",
+        "sentiment": "mixed",
+        "aspect": "menu_variety",
+        "foods": [
+          "vegetali"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "food",
+            "portion_size"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.219Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

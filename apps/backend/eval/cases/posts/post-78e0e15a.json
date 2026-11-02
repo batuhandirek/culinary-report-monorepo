@@ -1,0 +1,1954 @@
+{
+  "id": "post-78e0e15a",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "phoodndrinx",
+    "locationName": null,
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "berlinfoodspots",
+      "berlinbrunch",
+      "whattodoinberlin"
+    ],
+    "taggedHandles": [],
+    "text": "This is you Berlin food guide so be ready eat GOOD 🫦\n\nI love you Berlin 🫶🏻\n\n1. Wurst Pate\n2. Zacharias Tagesbar\n3. Niko Izakaya\n4. Bar Pluto \n5. Ikigai Teabar\n6. Gaffel Haus, Brauhaus Restaurant \n7. Atelier Dough\n8. Annelies\n9. Lap Coffee\n10. Canal\n11. Sofi\n12. Shodo Udon Lab\n13. Gate Kebab\n\n#berlin #berlinfood #berlinfoodspots #berlinbrunch #whattodoinberlin ",
+    "subtitles": "Berlin has to be one of the best foodie cities,\nso you better bet that I freaking ate my way through it.\n13 spots. Get ready and listen up!\nStarted at worst paid for a curry west\nof course. Run by the most lovely lady.\n€5. 60 for a mound of fries\nparty sausages with that delicious curry sauce.\nI mean cargo. Next up is the cutest one.\nI'm bar with so many outdoor seating.\nGenerally the most perfect way to spend your afternoon\nhopping over to Japan real quick.\nNikko Zakai literally feels like you're in Tokyo.\nSmall dishes, very reasonably price.\nWe pretty much ordered the whole menu.\nIt was all so delicious.\nBut make sure you get the grilled miso pork and the beef cutlet.\nOh my favourite bar that we went to was Bar Pluto.\nThe vibes, the dim lighting,\neverything was just sexy. Okay,\nif you're craving matcha,\nIkigai Teabar has such fun drinks like this mango sticky rice matcha.\nOur house restaurant has all the German food that you want.\nPork knuckle schnitzels, braised beef.\nPerfect spot to just take that.\nGerman food get off the list,\nyou know? Oh my gosh,\nif you like doughnuts, this maple bacon from Natalia Dough\nwas genuinely the best doughnut I've ever had in my life.\nSo many options to choose from,\nand freshly made every day as well.\nI'm sure you've heard of Annalise,\nprobably the most famous brunch spot in Berlin.\nAnd I genuinely mean This,\nbut it's not overhyped at all.\nJust do yourself a favour and get that breakfast sandwich.\nOh okay. Lap coffee of stores all around Germany.\nGreat spot to just grab a quick coffee or a matcha.\nLove the aesthetics as well.\nCanal in Berlin is known for the gelato.\nDo not miss out on their pastries,\nespecially this tiramisu.\nThey've got all your classic pastries and even this apricot croissant.\nDivine. If you love your baked goods,\nSophie definitely has everything that you're looking for. Cookies,\ncroissants for katsu sandwiches.\nAnd if you try the soft serve,\nplease let me know if it's good.\nHands down the best udon I've ever had.\nFreshly made in house, right in front of you.\nShodo Udon Lab knows what's up.\nPerfectly thick and chewy in that super yummy broth.\nAnd you can't leave Berlin without having a kebab.\nCan you literally believe that this was a smaller sized Donna?\nHonestly, save this post,\nsend it to a friend, and do whatever you gotta do. Happy eating!",
+    "subtitlesLanguage": "eng-US",
+    "id": "78e0e15a-0126-46b5-b7ed-da12e16d6d61",
+    "externalId": "7665267609234967830",
+    "url": "https://www.tiktok.com/@phoodndrinx/video/7665267609234967830",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-22T08:33:19.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:36.892Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Wurst Pate",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "3a79dc5c-2303-4a4b-8fac-fe0dbeb4185d",
+          "brandName": "Wurstpate",
+          "venueId": "b720fa11-4c95-4e99-bcde-cd96990c217c",
+          "venueName": "Wurstpate"
+        }
+      },
+      {
+        "venueName": "Zacharias Tagesbar",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "546ad892-5995-4e47-8f38-c974a9a58d19",
+          "brandName": "Tagesbar",
+          "venueId": "801b79fb-93ed-407f-b5c9-16ce6bd5c59b",
+          "venueName": "Tagesbar"
+        }
+      },
+      {
+        "venueName": "Niko Izakaya",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f2e9e1c3-7c33-4a1c-b99a-e5c32e889413",
+          "brandName": "Izakaya Yancha",
+          "venueId": "ed97a07a-3076-45ea-835a-f66f2f6d016e",
+          "venueName": "Izakaya Yancha"
+        }
+      },
+      {
+        "venueName": "Bar Pluto",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "589ca843-4557-4f89-8b1d-d7182e4c5f3c",
+          "brandName": "Pluto",
+          "venueId": "5c7257fd-7ee1-4f01-9138-1102c913a987",
+          "venueName": "Pluto"
+        }
+      },
+      {
+        "venueName": "Ikigai Teabar",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f627375a-6c8a-436e-a521-44f98bd923db",
+          "brandName": "ikigai teabar",
+          "venueId": "249585f0-206a-4d53-b72e-0eddd04d9b6c",
+          "venueName": "ikigai teabar"
+        }
+      },
+      {
+        "venueName": "Gaffel Haus, Brauhaus Restaurant",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "fdbbd62b-04e4-4197-ae28-00209b03712e",
+          "brandName": "Gaffel Haus Berlin - Das Kölsche Konsulat in der Hauptstadt",
+          "venueId": "b81816f3-ebaf-4473-a602-d60624a53c99",
+          "venueName": "Gaffel Haus Berlin - Das Kölsche Konsulat in der Hauptstadt"
+        }
+      },
+      {
+        "venueName": "Atelier Dough",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "4ac12646-ea28-446b-9f3c-326fb207fb2b",
+          "brandName": "Atelier Dough",
+          "venueId": "f868f59a-1673-447b-9eae-50c46f7cb395",
+          "venueName": "Atelier Dough"
+        }
+      },
+      {
+        "venueName": "Annelies",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "3fbcc763-e313-439e-acee-241c3a995c3d",
+          "brandName": "annelies",
+          "venueId": "83439320-5265-4fc2-bb8a-6f9408380a9d",
+          "venueName": "annelies"
+        }
+      },
+      {
+        "venueName": "Lap Coffee",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e3d0d0d9-55d3-4567-b642-f2feb1bb1bcd",
+          "brandName": "LAP COFFEE",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Canal",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "b0d09537-e132-4231-bf08-0934100ef932",
+          "brandName": "CANAL",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Sofi",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f2679569-78f3-4688-b236-dee9e89fea71",
+          "brandName": "SOFI",
+          "venueId": "a365f30e-d8dd-465e-a47d-31c3d7656749",
+          "venueName": "SOFI"
+        }
+      },
+      {
+        "venueName": "Shodo Udon Lab",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "915a57fa-09e9-4533-9289-ea7ef27d75a7",
+          "brandName": "Shōdo Udon Lab",
+          "venueId": "3e7620c9-8cad-4e88-8d1c-37667afd3056",
+          "venueName": "Shōdo Udon Lab"
+        }
+      },
+      {
+        "venueName": "Gate Kebab",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "65807aad-8a53-4bdf-834c-f72f6c448a77",
+          "brandName": "Gate Kebap",
+          "venueId": "3e0587fa-6ad5-4b4c-87f5-e2122fbdeb12",
+          "venueName": "Gate Kebap"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Berlin is one of the best foodie cities",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "ate my way through Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "13 spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "paid €5.60 for a mound of fries",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "fries"
+        ],
+        "amount": 5.6,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the currywurst came with delicious curry sauce",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Currywurst",
+          "curry sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the bar had so many outdoor seats",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "felt like you're in Tokyo",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the dishes were very reasonably priced",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "ordered the whole menu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the grilled miso pork was especially good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "grilled miso pork"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the beef cutlet was especially good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "beef cutlet"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the vibes were sexy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the dim lighting was sexy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "has such fun drinks",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "mango sticky rice matcha",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "mango sticky rice matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "has all the German food you want",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "pork knuckle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "pork knuckle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "schnitzels",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "braised beef",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "braised beef"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "the maple bacon doughnut was the best doughnut ever",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "maple bacon doughnut"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "many options to choose from",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "doughnuts are freshly made every day",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "doughnut"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "is probably the most famous brunch spot in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "is not overhyped",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "get the breakfast sandwich",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "breakfast sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "great spot to grab a quick coffee or a matcha",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [
+          "coffee",
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "the aesthetics were lovely",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "is known for gelato",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "gelato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "do not miss the pastries",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "pastries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "especially the tiramisu",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "classic pastries",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pastries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "apricot croissant",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "apricot croissant"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "has everything you're looking for",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "cookies",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "cookie"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "croissants",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "croissant"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "katsu sandwiches",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "katsu sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "the soft serve might be good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "soft serve"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "the udon was the best ever had",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "udon",
+          "broth"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "freshly made in house",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "udon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "right in front of you",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "udon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "perfectly thick and chewy broth",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "broth"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "cannot leave Berlin without having a kebab",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the döner was a smaller size",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 12
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:32.972Z",
+    "usage": {
+      "inputTokens": 71816,
+      "outputTokens": 12992,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Venues are attributed by matching the transcript's garbled names (worst paid, Nikko Zakai, Our house, Natalia Dough, Annalise, Sophie, Donna) to the caption list in order. The kebab line is read as a city-level remark, and the rhetorical 'smaller sized' döner as praise of the portion rather than a question.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Wurst Pate",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "3a79dc5c-2303-4a4b-8fac-fe0dbeb4185d",
+          "brandName": "Wurstpate",
+          "venueId": "b720fa11-4c95-4e99-bcde-cd96990c217c",
+          "venueName": "Wurstpate",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Zacharias Tagesbar",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "81d2eef8-340d-490c-b65f-ec095923f140",
+          "brandName": "Zacharias.Kaffeebar",
+          "venueId": "23474ac8-6d29-4aeb-9c4a-abef062dcb29",
+          "venueName": "Zacharias.Kaffeebar",
+          "note": "'Zacharias' is a distinctive name and the café fits the description, though the listing says Kaffeebar rather than Tagesbar."
+        }
+      },
+      {
+        "venueName": "Niko Izakaya",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "d4d5b6b9-7ade-44d0-86ec-9b1e1a198e92",
+          "brandName": "Niko Izakaya",
+          "venueId": "3b56fffb-95b5-4bbb-8e57-7d1c329d8b88",
+          "venueName": "Niko Izakaya",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Bar Pluto",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "589ca843-4557-4f89-8b1d-d7182e4c5f3c",
+          "brandName": "Pluto",
+          "venueId": "5c7257fd-7ee1-4f01-9138-1102c913a987",
+          "venueName": "Pluto",
+          "note": "'Bar Pluto' is taken to be the Pluto wine bar, the only Pluto candidate."
+        }
+      },
+      {
+        "venueName": "Ikigai Teabar",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f627375a-6c8a-436e-a521-44f98bd923db",
+          "brandName": "ikigai teabar",
+          "venueId": "249585f0-206a-4d53-b72e-0eddd04d9b6c",
+          "venueName": "ikigai teabar",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Gaffel Haus",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "fdbbd62b-04e4-4197-ae28-00209b03712e",
+          "brandName": "Gaffel Haus Berlin - Das Kölsche Konsulat in der Hauptstadt",
+          "venueId": "b81816f3-ebaf-4473-a602-d60624a53c99",
+          "venueName": "Gaffel Haus Berlin - Das Kölsche Konsulat in der Hauptstadt",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Atelier Dough",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "4ac12646-ea28-446b-9f3c-326fb207fb2b",
+          "brandName": "Atelier Dough",
+          "venueId": "f868f59a-1673-447b-9eae-50c46f7cb395",
+          "venueName": "Atelier Dough",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Annelies",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "3fbcc763-e313-439e-acee-241c3a995c3d",
+          "brandName": "annelies",
+          "venueId": "83439320-5265-4fc2-bb8a-6f9408380a9d",
+          "venueName": "annelies",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Lap Coffee",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e3d0d0d9-55d3-4567-b642-f2feb1bb1bcd",
+          "brandName": "LAP COFFEE",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Canal",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b0d09537-e132-4231-bf08-0934100ef932",
+          "brandName": "CANAL",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Sofi",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f2679569-78f3-4688-b236-dee9e89fea71",
+          "brandName": "SOFI",
+          "venueId": "a365f30e-d8dd-465e-a47d-31c3d7656749",
+          "venueName": "SOFI",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Shodo Udon Lab",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "915a57fa-09e9-4533-9289-ea7ef27d75a7",
+          "brandName": "Shōdo Udon Lab",
+          "venueId": "3e7620c9-8cad-4e88-8d1c-37667afd3056",
+          "venueName": "Shōdo Udon Lab",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Gate Kebab",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "65807aad-8a53-4bdf-834c-f72f6c448a77",
+          "brandName": "Gate Kebap",
+          "venueId": "3e0587fa-6ad5-4b4c-87f5-e2122fbdeb12",
+          "venueName": "Gate Kebap",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Berlin is one of the best foodie cities",
+        "quote": "Berlin has to be one of the best foodie cities",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "had a currywurst at Wurst Pate",
+        "quote": "Started at worst paid for a curry west",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "currywurst"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Wurst Pate is run by the most lovely lady",
+        "quote": "Run by the most lovely lady.",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "€5.60 for a mound of fries",
+        "quote": "€5. 60 for a mound of fries",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "fries"
+        ],
+        "amount": 5.6,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price",
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "party sausages with delicious curry sauce",
+        "quote": "party sausages with that delicious curry sauce",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "party sausages",
+          "curry sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Zacharias Tagesbar is the cutest one",
+        "quote": "Next up is the cutest one.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Zacharias Tagesbar has so much outdoor seating",
+        "quote": "so many outdoor seating",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Zacharias Tagesbar is the most perfect way to spend your afternoon",
+        "quote": "Generally the most perfect way to spend your afternoon",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Niko Izakaya feels like being in Tokyo",
+        "quote": "literally feels like you're in Tokyo",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Niko Izakaya serves small dishes",
+        "quote": "Small dishes",
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Niko Izakaya is very reasonably priced",
+        "quote": "very reasonably price",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "they ordered pretty much the whole menu at Niko Izakaya",
+        "quote": "We pretty much ordered the whole menu.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "all the food at Niko Izakaya was so delicious",
+        "quote": "It was all so delicious.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "get the grilled miso pork and the beef cutlet at Niko Izakaya",
+        "quote": "make sure you get the grilled miso pork and the beef cutlet",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "grilled miso pork",
+          "beef cutlet"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Bar Pluto was their favourite bar",
+        "quote": "my favourite bar that we went to was Bar Pluto",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the vibes and dim lighting at Bar Pluto were sexy",
+        "quote": "The vibes, the dim lighting,\neverything was just sexy.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Ikigai Teabar has such fun drinks",
+        "quote": "Ikigai Teabar has such fun drinks",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality",
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Ikigai Teabar serves a mango sticky rice matcha",
+        "quote": "like this mango sticky rice matcha",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "mango sticky rice matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Gaffel Haus has all the German food you want",
+        "quote": "has all the German food that you want",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Gaffel Haus serves pork knuckle, schnitzels and braised beef",
+        "quote": "Pork knuckle schnitzels, braised beef.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Pork knuckle",
+          "schnitzels",
+          "braised beef"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Gaffel Haus is the perfect spot to tick German food off the list",
+        "quote": "Perfect spot to just take that.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "the maple bacon doughnut at Atelier Dough was the best doughnut they ever had",
+        "quote": "this maple bacon from Natalia Dough\nwas genuinely the best doughnut I've ever had in my life.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "maple bacon doughnut"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Atelier Dough has so many options to choose from",
+        "quote": "So many options to choose from",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Atelier Dough's doughnuts are freshly made every day",
+        "quote": "freshly made every day as well",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Annelies is probably the most famous brunch spot in Berlin",
+        "quote": "probably the most famous brunch spot in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Annelies is not overhyped at all",
+        "quote": "but it's not overhyped at all.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "get the breakfast sandwich at Annelies",
+        "quote": "Just do yourself a favour and get that breakfast sandwich.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "breakfast sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Lap Coffee has stores all around Germany",
+        "quote": "Lap coffee of stores all around Germany.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Lap Coffee is a great spot to grab a quick coffee or a matcha",
+        "quote": "Great spot to just grab a quick coffee or a matcha.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "coffee",
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "they love the aesthetics of Lap Coffee",
+        "quote": "Love the aesthetics as well.",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Canal is known for its gelato",
+        "quote": "Canal in Berlin is known for the gelato.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "gelato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "do not miss Canal's pastries, especially the tiramisu",
+        "quote": "Do not miss out on their pastries,\nespecially this tiramisu.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "pastries",
+          "tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "Canal has all the classic pastries and an apricot croissant",
+        "quote": "They've got all your classic pastries and even this apricot croissant.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "pastries",
+          "apricot croissant"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "the apricot croissant at Canal was divine",
+        "quote": "Divine.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "apricot croissant"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "Sofi has everything you look for in baked goods",
+        "quote": "Sophie definitely has everything that you're looking for.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Sofi has cookies, croissants and katsu sandwiches",
+        "quote": "Cookies,\ncroissants for katsu sandwiches.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Cookies",
+          "croissants",
+          "katsu sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "is the soft serve at Sofi good?",
+        "quote": "And if you try the soft serve,\nplease let me know if it's good.",
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "soft serve"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Shodo Udon Lab has the best udon they ever had",
+        "quote": "Hands down the best udon I've ever had.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "udon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "the udon at Shodo Udon Lab is freshly made in house in front of you",
+        "quote": "Freshly made in house, right in front of you.",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "Shodo Udon Lab knows what's up",
+        "quote": "Shodo Udon Lab knows what's up.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "the udon at Shodo Udon Lab is perfectly thick and chewy",
+        "quote": "Perfectly thick and chewy",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "udon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "the broth at Shodo Udon Lab is super yummy",
+        "quote": "super yummy broth",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "broth"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "you can't leave Berlin without having a kebab",
+        "quote": "you can't leave Berlin without having a kebab",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the döner at Gate Kebab was surprisingly big for a smaller size",
+        "quote": "Can you literally believe that this was a smaller sized Donna?",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 12
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.241Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.431Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

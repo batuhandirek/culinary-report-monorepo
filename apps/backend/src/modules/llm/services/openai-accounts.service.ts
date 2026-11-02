@@ -1,6 +1,6 @@
 import { Logger } from '@nestjs/common';
 
-import { isFatalProviderError } from 'src/shared/util/pool.js';
+import { accountErrorReason, isProviderAccountError } from '../util/provider-errors.js';
 
 export interface OpenAIAccount {
 	/** `#1 (…abcd)`: position in `OPENAI_API_KEYS` and the key's last four characters, for logs */
@@ -23,35 +23,14 @@ interface Block {
 }
 
 /**
- * The errors and their causes an AI SDK / Mastra call can wrap: `cause`, and `lastError` of
- * the SDK's RetryError (thrown once its retries on a 429 run out).
+ * Every account is blocked for the model. The message carries OpenAI's own reasons, so
+ * `isFatalProviderError` matches it.
  */
-type ChainedError = { url?: unknown; message?: string; cause?: unknown; lastError?: unknown };
+export class NoOpenAIAccountError extends Error {}
 
-const errorChain = (error: unknown): ChainedError[] => {
-	const chain: ChainedError[] = [];
-	const queue: unknown[] = [error];
-	while (queue.length > 0 && chain.length < 10) {
-		const e = queue.shift();
-		if (!e || typeof e !== 'object' || chain.includes(e)) continue;
-		chain.push(e);
-		queue.push((e as ChainedError).cause, (e as ChainedError).lastError);
-	}
-	return chain;
-};
-
-/**
- * The account itself is unusable: OpenAI answered that it has no credits, its quota is used up
- * or its key is wrong. Only an answer from OpenAI counts, so a 401 from a tool's own API (Apify)
- * never blocks an account.
- */
-export const isOpenAIAccountError = (error: unknown): boolean => {
-	const chain = errorChain(error);
-	return (
-		chain.some(e => typeof e.url === 'string' && e.url.includes('api.openai.com')) &&
-		chain.some(e => isFatalProviderError(e))
-	);
-};
+/** OpenAI answered that the account has no credits, its quota is used up or its key is wrong */
+export const isOpenAIAccountError = (error: unknown): boolean =>
+	isProviderAccountError(error, 'api.openai.com');
 
 /**
  * Hands out the OpenAI accounts' keys (`OPENAI_API_KEYS`). One account serves
@@ -89,7 +68,8 @@ export class OpenAIAccountsService {
 
 	/**
 	 * Runs `fn` with an account's key for `model` (`openai/gpt-5.4-mini`). An account error moves
-	 * the call to the next account; any other error is rethrown as is.
+	 * the call to the next account; any other error is rethrown as is. Once no account is left it
+	 * throws the last account's error, or `NoOpenAIAccountError` when every one was blocked already.
 	 */
 	async run<T>(model: string, fn: (account: OpenAIAccount) => Promise<T>): Promise<T> {
 		let lastError: unknown;
@@ -138,15 +118,13 @@ export class OpenAIAccountsService {
 				return `${account.label} until ${new Date(block.until).toISOString()}: ${block.reason}`;
 			})
 			.join('; ');
-		// The reasons are OpenAI's own messages, so `isFatalProviderError` matches this too
-		throw new Error(`No OpenAI account can serve ${model}. ${blocked}`);
+		throw new NoOpenAIAccountError(`No OpenAI account can serve ${model}. ${blocked}`);
 	}
 
 	private block(account: OpenAIAccount, model: string, error: unknown): void {
 		const index = this.accounts.indexOf(account);
 		const until = this.now() + this.blockMs;
-		const reason =
-			errorChain(error).find(e => isFatalProviderError(e))?.message ?? String(error);
+		const reason = accountErrorReason(error);
 		// Calls in flight on the same account fail together; log the first
 		if (!this.blockOf(index, model)) {
 			this.logger.warn(

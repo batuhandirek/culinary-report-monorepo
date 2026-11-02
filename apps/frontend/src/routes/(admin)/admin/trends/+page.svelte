@@ -2,8 +2,10 @@
 	import { Plus } from '@lucide/svelte';
 
 	import SearchInterestPanel from './components/SearchInterestPanel.svelte';
-	import TrendsDishNamesTab from './components/TrendsDishNamesTab.svelte';
+	import TrendsClaimsTab from './components/TrendsClaimsTab.svelte';
+	import TrendsMissingAspectsTab from './components/TrendsMissingAspectsTab.svelte';
 	import TrendsPostsTab from './components/TrendsPostsTab.svelte';
+	import TrendsTermsTab from './components/TrendsTermsTab.svelte';
 	import TrendsThemesTab from './components/TrendsThemesTab.svelte';
 	import TrendsTopicsTab from './components/TrendsTopicsTab.svelte';
 	import VenueOpeningsPanel from './components/VenueOpeningsPanel.svelte';
@@ -25,9 +27,9 @@
 	import Select from '#ui/wrapped/Select.svelte';
 
 	// What the city eats and talks about. Topics first: each kind of food with its venues (supply),
-	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, searches,
-	// openings and closures, the dish names reviews and posts use (each counting for a topic), and the
-	// words no topic covers yet.
+	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, every claim the month was split into, the aspects the tree lacks (its claims no aspect fits, grouped by meaning), searches,
+	// openings and closures, the terms (every wording reviews, posts and Google's tags use, linked to
+	// its topics), and the words no topic covers yet.
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
 	const cityId = $derived(
@@ -46,22 +48,28 @@
 		{ value: 'topics', label: 'Topics' },
 		{ value: 'posts', label: 'In posts' },
 		{ value: 'themes', label: 'Praise and complaints' },
+		{ value: 'claims', label: 'Claims' },
+		{ value: 'missing', label: 'Missing aspects' },
 		{ value: 'searches', label: 'Searches' },
 		{ value: 'openings', label: 'Openings and closures' },
-		{ value: 'dishes', label: 'Dish names' },
+		{ value: 'terms', label: 'Terms' },
 		{ value: 'words', label: 'Unrecognised words' }
 	];
 	let tab = $state('topics');
 
 	let dialogOpen = $state(false);
 	let newLabel = $state('');
-	let newKind = $state<'cuisine' | 'dish' | 'drink'>('cuisine');
+	let newKind = $state<string>('cuisine');
+	let newParent = $state<string | undefined>(undefined);
+	let newHint = $state('');
 	let version = $state(0);
 	// Every topic, as the new one's possible parents (its own side of the tree)
 	let topics = $state<TopicOption[]>([]);
-	const newTopic = async (label = '', kind: 'cuisine' | 'dish' | 'drink' = 'cuisine') => {
+	const newTopic = async (label = '', kind: string = 'cuisine', parent?: string, hint = '') => {
 		newLabel = label;
 		newKind = kind;
+		newParent = parent;
+		newHint = hint;
 		dialogOpen = true;
 		if (!topics.length && cityId) {
 			const res = await api.admin.getTopics({ cityId });
@@ -96,12 +104,16 @@
 				<TrendsPostsTab {cityId} {month} />
 			{:else if tab === 'themes'}
 				<TrendsThemesTab {cityId} {month} />
+			{:else if tab === 'claims'}
+				<TrendsClaimsTab {cityId} {month} />
+			{:else if tab === 'missing'}
+				<TrendsMissingAspectsTab {cityId} {month} onCreateAspect={(label, parent, hint) => newTopic(label, 'aspect', parent, hint)} />
 			{:else if tab === 'searches'}
 				<div class="pb-12"><SearchInterestPanel {cityId} {month} /></div>
 			{:else if tab === 'openings'}
 				<div class="pb-12"><VenueOpeningsPanel {cityId} {month} /></div>
-			{:else if tab === 'dishes'}
-				<TrendsDishNamesTab {cityId} {version} onNewTopic={newTopic} />
+			{:else if tab === 'terms'}
+				<TrendsTermsTab {cityId} {version} onNewTopic={newTopic} />
 			{:else}
 				<div class="pb-12"><UnrecognisedWords {cityId} {version} onNewTopic={newTopic} /></div>
 			{/if}
@@ -113,6 +125,8 @@
 	bind:active={dialogOpen}
 	label={newLabel}
 	kind={newKind}
+	parent={newParent}
+	aspectHint={newHint}
 	{topics}
 	onSaved={(saved) => {
 		version++;

@@ -1,0 +1,252 @@
+{
+  "id": "review-7d7ef8ca",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "7d7ef8ca-3a46-4fe1-aa3f-a9cc9f96d756",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2s1MlMweENSbVpyYmtjdGQyaEpSemRNVmxkSFpFRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "LYFE",
+    "venueId": "c7d59929-f40b-4742-9768-f36efb65c87b",
+    "brand": "LYFE",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-06T10:41:27.968Z",
+    "stars": 4,
+    "text": "Das Essen ist super lecker, dennoch etwas pricey aber dennoch eine sehr tolle Erfahrung. Man muss etwas Zeit mitbringen - auch unter der Woche. Haben glaube ich knapp 40 Minuten gewartet auf unser Essen. Getränke kriegt man schneller, sind allerdings bis zum Essen schon fast wieder leer.",
+    "textTranslated": "The food is absolutely delicious, though a bit pricey, but still a fantastic experience. You need to allow some time – even on weekdays. I think we waited almost 40 minutes for our food. Drinks arrive faster, but we're almost finished by the time the food arrives."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:44.000Z",
+    "claims": [
+      {
+        "text": "the food is absolutely delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food is a bit pricey",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was a fantastic experience",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we waited almost 40 minutes for our food",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 40,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "drinks arrive faster",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "speed_of_service",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we're almost finished by the time the food arrives",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:35.882Z",
+    "usage": {
+      "inputTokens": 5111,
+      "outputTokens": 1608,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'sehr tolle Erfahrung' is a verdict or an opinion, and whether the 40-minute wait is a neutral fact or a negative opinion; context frames it as a complaint. 'Getränke' is a general word, so no foods are named.",
+    "claims": [
+      {
+        "text": "the food is super delicious",
+        "quote": "Das Essen ist super lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is a bit pricey",
+        "quote": "etwas pricey",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it was still a very great experience",
+        "quote": "dennoch eine sehr tolle Erfahrung",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "you need to allow some time, even on weekdays",
+        "quote": "Man muss etwas Zeit mitbringen - auch unter der Woche",
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited almost 40 minutes for the food",
+        "quote": "knapp 40 Minuten gewartet auf unser Essen",
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 40,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "drinks arrive faster",
+        "quote": "Getränke kriegt man schneller",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the drinks are almost empty again by the time the food arrives",
+        "quote": "sind allerdings bis zum Essen schon fast wieder leer",
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.213Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -181,8 +181,6 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 				brand: fresh.brand,
 				matchMethod: MentionMatchMethodEnum.EXACT,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Nice.',
 			});
 		}
 		await em.flush();

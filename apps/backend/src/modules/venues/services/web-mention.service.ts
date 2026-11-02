@@ -30,12 +30,17 @@ const GOOGLE_SEARCH_ACTOR = 'apify/google-search-scraper';
 // Articles per venue from Google News
 const NEWS_PER_VENUE = 20;
 // Results sent to the LLM in one call
-const CLASSIFY_BATCH_SIZE = 20;
+// Pages read side by side, one a call
+const CLASSIFY_CONCURRENCY = 10;
 
 /** The share of the press budget that goes to Google News; the rest to web search. */
 const NEWS_BUDGET_SHARE = 0.6;
 
-const KIND_ORDER = [WebMentionKindEnum.FEATURE, WebMentionKindEnum.LISTICLE, WebMentionKindEnum.PASSING];
+const KIND_ORDER = [
+	WebMentionKindEnum.FEATURE,
+	WebMentionKindEnum.LISTICLE,
+	WebMentionKindEnum.PASSING,
+];
 
 /**
  * The one entry point for press and web mentions: the monthly search, its classification and
@@ -118,14 +123,21 @@ export class WebMentionService {
 		const candidates = _.uniqBy(
 			results.filter(r => {
 				const venue = byQuery.get(r.query);
-				return venue && isPressCandidate(r, { name: venueSearchName(venue), website: venue.website });
+				return (
+					venue &&
+					isPressCandidate(r, { name: venueSearchName(venue), website: venue.website })
+				);
 			}),
 			r => r.url,
 		);
 		const known = new Set(
 			candidates.length ?
 				(
-					await this.em.find(WebMention, { url: { $in: candidates.map(r => r.url) } }, { fields: ['url'] })
+					await this.em.find(
+						WebMention,
+						{ url: { $in: candidates.map(r => r.url) } },
+						{ fields: ['url'] },
+					)
 				).map(m => m.url)
 			:	[],
 		);
@@ -150,53 +162,45 @@ export class WebMentionService {
 		return { found: results.length, saved };
 	}
 
-	/** Classifies the city's mentions of the month that have no kind yet, a venue at a time. Flushes once. */
+	/** Classifies the city's mentions of the month that have no kind yet, one page a call. Flushes once. */
 	async classifyMonth(city: City, month: string): Promise<{ classified: number }> {
 		const mentions = await this.em.find(
 			WebMention,
 			{ month, analysedAt: null, venue: { city } },
 			{ populate: ['venue', 'venue.brand'] },
 		);
-		const batches = Object.values(_.groupBy(mentions, m => m.venue.id)).flatMap(group =>
-			_.chunk(group, CLASSIFY_BATCH_SIZE),
-		);
 		let classified = 0;
 		// A provider failure (no credits) stops the pool: keep what was finished before it
 		try {
+			// One page a call
 			await runPool(
-				batches,
-				4,
-				async batch => {
-					const venue = batch[0].venue;
+				mentions,
+				CLASSIFY_CONCURRENCY,
+				async mention => {
+					const venue = mention.venue;
 					const res = await this.pressClassificationAgent.generate(
-						JSON.stringify(
-							batch.map(m => ({
-								id: m.id,
-								title: m.title,
-								outlet: m.outlet,
-								snippet: m.snippet?.slice(0, 500) ?? null,
-							})),
-						),
-						// The search was the brand's name: a chain's page names the brand, not this branch
-						{ venueName: venueSearchName(venue), district: venue.district ?? undefined, cityName: city.name },
+						JSON.stringify({
+							// The search was the brand's name: a chain's page names the brand, not this branch
+							venue: venueSearchName(venue),
+							...(venue.district && { district: venue.district }),
+							title: mention.title,
+							outlet: mention.outlet,
+							snippet: mention.snippet?.slice(0, 500) ?? null,
+						}),
+						{ cityName: city.name },
 					);
-					const byId = new Map(batch.map(m => [m.id, m]));
-					for (const result of res.object.results) {
-						const mention = byId.get(result.id);
-						if (!mention) continue;
-						mention.kind = result.kind;
-						mention.summary = result.summary.trim();
-						mention.analysedAt = new Date();
-						classified++;
-					}
+					mention.kind = res.object.kind;
+					mention.summary = res.object.summary.trim();
+					mention.analysedAt = new Date();
+					classified++;
 				},
-				(batch, e) => this.logger.warn(`Press of ${batch[0].venue.name} failed: ${e.message}`),
+				(mention, e) => this.logger.warn(`Press page ${mention.url} failed: ${e.message}`),
 			);
 		} catch (e) {
 			await this.em.flush();
 			throw e;
 		}
-		// One flush at the end: the batches run side by side on this entity manager
+		// One flush at the end: the pages are read side by side on this entity manager
 		await this.em.flush();
 		return { classified };
 	}
@@ -208,7 +212,11 @@ export class WebMentionService {
 	async forReport(brandId: string, cityId: string | null, month: string): Promise<WebMention[]> {
 		const mentions = await this.em.find(
 			WebMention,
-			{ venue: { brand: brandId, ...(cityId && { city: cityId }) }, month, kind: { $in: KIND_ORDER } },
+			{
+				venue: { brand: brandId, ...(cityId && { city: cityId }) },
+				month,
+				kind: { $in: KIND_ORDER },
+			},
 			{ orderBy: { publishedAt: QueryOrder.DESC_NULLS_LAST, createdAt: QueryOrder.ASC } },
 		);
 		return _.sortBy(mentions, m => KIND_ORDER.indexOf(m.kind!));

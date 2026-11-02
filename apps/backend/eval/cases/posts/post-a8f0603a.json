@@ -1,0 +1,332 @@
+{
+  "id": "post-a8f0603a",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "umami_restaurants",
+    "locationName": "UMAMI Ku’damm",
+    "hashtags": [
+      "umamiberlin",
+      "umamikudamm",
+      "halloweenatumami",
+      "berlinfoodie"
+    ],
+    "taggedHandles": [
+      "tuyenphamberlin"
+    ],
+    "text": "Spooky vibes have officially taken over 📍UMAMI Ku’damm. 👻🎃\n\nA little reminder that our October specials are still here to make your spooky season even sweeter. 🍂\n\n🥃 KÜRBICILLIN — Pumpkin-infused blended whisky, ginger, pumpkin spice, lime juice & Angostura bitters.\n\n🥭 PUMP IT UP — Creamy pumpkin smoothie with fresh mango, cherry nectar, ginger & coconut milk.\n\n🍫 CHOCOLATE DREAM — Freshly baked chocolate brownie with almonds, walnuts & fresh fruit.\n\n✨ GOLDEN LUCK — Mango-passion fruit mousse cake with soft sponge layers & fresh fruit.\n\nCome for the spooky vibes, stay for the treats. 🖤\n\nOnly until the end of October. See you at UMAMI Ku’damm!\n\n#UmamiBerlin #UmamiKudamm #HalloweenAtUmami #BerlinFoodie",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "a8f0603a-6738-4785-99a9-496504e62c2f",
+    "externalId": "ig_4017987161957391900",
+    "url": "https://www.instagram.com/p/DfCwgkcjN4c/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-28T15:30:16.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:01:17.223Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "UMAMI Ku’damm",
+        "locationHint": "Ku’damm",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "20b730ee-c220-4b44-92cf-7a511815930a",
+          "brandName": "Umami Ku'damm",
+          "venueId": "56e562fa-39f5-4950-8623-beaf11824be3",
+          "venueName": "Umami Ku'damm"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "spooky vibes for Halloween season",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "October specials still available until the end of October",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:53.405Z",
+    "usage": {
+      "inputTokens": 10504,
+      "outputTokens": 3097,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Venue's own promotional post. The hard calls were whether the limited-time seasonal specials are new items or a deal, since they have dates but no discount, and whether the Halloween theme counts as an event or simply as atmosphere.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "UMAMI Ku’damm",
+        "locationHint": "Ku’damm",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "20b730ee-c220-4b44-92cf-7a511815930a",
+          "brandName": "Umami Ku'damm",
+          "venueId": "56e562fa-39f5-4950-8623-beaf11824be3",
+          "venueName": "Umami Ku'damm",
+          "note": "The tagged location and the text both name UMAMI Ku'damm, which matches the single-branch Umami Ku'damm on Rankestraße near the Kurfürstendamm."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Halloween-themed spooky vibes have taken over UMAMI Ku’damm",
+        "quote": "Spooky vibes have officially taken over 📍UMAMI Ku’damm.",
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "UMAMI Ku’damm's October specials are still available",
+        "quote": "our October specials are still here",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The KÜRBICILLIN special is pumpkin-infused blended whisky with ginger, pumpkin spice, lime juice and Angostura bitters",
+        "quote": "KÜRBICILLIN — Pumpkin-infused blended whisky, ginger, pumpkin spice, lime juice & Angostura bitters.",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "KÜRBICILLIN",
+          "Pumpkin-infused blended whisky",
+          "ginger",
+          "pumpkin spice",
+          "lime juice",
+          "Angostura bitters"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The PUMP IT UP special is a creamy pumpkin smoothie with fresh mango, cherry nectar, ginger and coconut milk",
+        "quote": "PUMP IT UP — Creamy pumpkin smoothie with fresh mango, cherry nectar, ginger & coconut milk.",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "PUMP IT UP",
+          "pumpkin smoothie",
+          "mango",
+          "cherry nectar",
+          "ginger",
+          "coconut milk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The CHOCOLATE DREAM special is a freshly baked chocolate brownie with almonds, walnuts and fresh fruit",
+        "quote": "CHOCOLATE DREAM — Freshly baked chocolate brownie with almonds, walnuts & fresh fruit.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "CHOCOLATE DREAM",
+          "chocolate brownie",
+          "almonds",
+          "walnuts",
+          "fresh fruit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "freshness",
+            "menu_variety"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The GOLDEN LUCK special is a mango-passion fruit mousse cake with soft sponge layers and fresh fruit",
+        "quote": "GOLDEN LUCK — Mango-passion fruit mousse cake with soft sponge layers & fresh fruit.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "GOLDEN LUCK",
+          "Mango-passion fruit mousse cake",
+          "sponge layers",
+          "fresh fruit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Come to UMAMI Ku’damm for the spooky vibes and stay for the treats",
+        "quote": "Come for the spooky vibes, stay for the treats.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The October specials at UMAMI Ku’damm are available only until the end of October",
+        "quote": "Only until the end of October.",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "deal",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

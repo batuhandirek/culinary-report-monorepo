@@ -1,0 +1,115 @@
+{
+  "id": "review-21c1bb10",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "21c1bb10-c4d8-4e6f-a989-7c8710d2a62a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xWQ01WcDNNMjkzY0dJMlV6bGZaRVZFV21aSVpWRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Markthalle Neun",
+    "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+    "brand": "Markthalle Neun",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-06T08:48:34.456Z",
+    "stars": 4,
+    "text": "Schöne Atmosphäre, junges Publikum",
+    "textTranslated": "Nice atmosphere, young audience"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:45:13.552Z",
+    "claims": [
+      {
+        "text": "nice atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "young audience",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:22.189Z",
+    "usage": {
+      "inputTokens": 4926,
+      "outputTokens": 325,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call is 'junges Publikum': it describes who the guests are, with no clear judgement. Crowding is the closest aspect key, and atmosphere or vibe are also defensible; reading it as mild praise is allowed.",
+    "claims": [
+      {
+        "text": "nice atmosphere",
+        "quote": "Schöne Atmosphäre",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "young crowd",
+        "quote": "junges Publikum",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "atmosphere",
+            "vibe"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.205Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

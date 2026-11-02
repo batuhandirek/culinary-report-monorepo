@@ -1,0 +1,644 @@
+{
+  "id": "review-0ac47c59",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:1",
+    "platform:google",
+    "length:long",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "0ac47c59-02f1-4926-a243-99d49c848660",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25CVk9YUkdiMloxWjFCb01ubzBhRXRvVjJNMmVrRRAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-17T07:43:55.243Z",
+    "stars": 1,
+    "text": "Tam bir hayal kırıklığı. Googleda en çok yorum alan ve puanı yüksek berlin dönercisi diye geldik ancak görünce muhtemelen yorumların da şişirilmiş olduğunu düşünüyorum. Önce dışarıya kadar taşan bi sıra ile karşılaştık. Sıra ilerlemiyor yaklaşık 1saati biraz daha aşan sürede sıra bekledik. Sıra yaklaşınca farkettim ki bu bir satış politikası, en öndeki kişiden bilerek sipariş alınmıyor sıra azalınca satış yavaşlıyor. Sırasın uzun olma sebebini dönerin hazırlanmasından dolayı diye düşünüyordum meğer sipariş verdikten sonra da bi o kadar daha döneri almak için elinde sipariş numarası ile beklemek gerekiyormuş. Çalışan herkes türk , kebapçının adı türkçe ama Türkçe bi soru sorunca no turkish şeklinde cevap alıyorsunuz. Gelelim dönerin tadına, asla türk döneri tadı olmayan bol köri sosu dökülmüş hint mutfağı tadında bir tavuk eti ve büzüşmüş ve yumuşamış marul domates soğandan oluşan salataları. Yani mekanı övecek bir şey arıyorum okuduğum yorumlar ile karşılaştığım manzara çok alakasız . Sadece çay ikramı var ona da 1 puan verebildim. Kesinlikle önermiyorum.",
+    "textTranslated": "A complete disappointment. We came here because it was the most reviewed and highly-rated kebab shop in Berlin on Google, but after seeing it, I think the reviews were probably inflated. First, we were faced with a line that stretched outside. The line didn't move; we waited for a little over an hour. As the line got closer, I realized it was a sales tactic; they deliberately didn't take orders from the person at the front of the line, slowing down sales as the line shortened. I thought the long line was because the kebab was being prepared, but it turns out you have to wait another hour with your order number to get your kebab. Everyone working there is Turkish, the kebab shop's name is Turkish, but when you ask a question in Turkish, you get a \"no Turkish\" answer. As for the taste of the kebab, it was nothing like Turkish kebab; it was chicken meat with a lot of curry sauce, resembling Indian cuisine, and the salad consisted of wilted and soggy lettuce, tomatoes, and onions. I was looking for something to praise about the place, but the reviews I read were completely different from what I saw. They only offered complimentary tea, which I could only give 1 point for. I definitely do not recommend it."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:32.087Z",
+    "claims": [
+      {
+        "text": "came here because it was the most reviewed kebab shop in Berlin on Google",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "came here because it was highly-rated kebab shop in Berlin on Google",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "reviews were probably inflated",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "faced a line that stretched outside",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "waited a little over an hour",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "they deliberately didn't take orders from the person at the front of the line",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you have to wait another hour with your order number to get your kebab",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "everyone working there is Turkish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "language",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab shop's name is Turkish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "when you ask a question in Turkish, you get a \"no Turkish\" answer",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "language",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab was nothing like Turkish kebab",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab was chicken meat with a lot of curry sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "kebab",
+          "chicken",
+          "curry sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab resembled Indian cuisine",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the salad consisted of wilted lettuce",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "salad",
+          "lettuce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the salad consisted of soggy lettuce",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "salad",
+          "lettuce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the salad consisted of tomatoes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "salad",
+          "tomatoes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the salad consisted of onions",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "salad",
+          "onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they only offered complimentary tea",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T10:59:30.092Z",
+    "usage": {
+      "inputTokens": 5840,
+      "outputTokens": 4513,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 4778
+    },
+    "notes": "The second wait is 'bi o kadar daha' (as long again) in the original; only the translation says 'another hour', so no amount is given. The curry-chicken claim reads mainly as 'not Turkish' (authenticity), with taste/seasoning also fair; Turkish food words are given in their base form, without case suffixes.",
+    "claims": [
+      {
+        "text": "a complete disappointment",
+        "quote": "Tam bir hayal kırıklığı.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "came because it was the most reviewed, highly rated kebab shop in Berlin on Google",
+        "quote": "Googleda en çok yorum alan ve puanı yüksek berlin dönercisi diye geldik",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviews were probably inflated",
+        "quote": "muhtemelen yorumların da şişirilmiş olduğunu düşünüyorum",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a line stretching outside",
+        "quote": "dışarıya kadar taşan bi sıra ile karşılaştık",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the line didn't move",
+        "quote": "Sıra ilerlemiyor",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited in line a little over an hour",
+        "quote": "yaklaşık 1saati biraz daha aşan sürede sıra bekledik",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "orders deliberately not taken from the person at the front of the line as a sales tactic",
+        "quote": "en öndeki kişiden bilerek sipariş alınmıyor sıra azalınca satış yavaşlıyor",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "after ordering, waited as long again with an order number to get the döner",
+        "quote": "sipariş verdikten sonra da bi o kadar daha döneri almak için elinde sipariş numarası ile beklemek gerekiyormuş",
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "everyone working there is Turkish",
+        "quote": "Çalışan herkes türk",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "language"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab shop's name is Turkish",
+        "quote": "kebapçının adı türkçe",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "asking a question in Turkish gets a 'no Turkish' answer",
+        "quote": "Türkçe bi soru sorunca no turkish şeklinde cevap alıyorsunuz",
+        "sentiment": "negative",
+        "aspect": "language",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the döner tasted nothing like Turkish döner",
+        "quote": "asla türk döneri tadı olmayan",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the chicken meat was covered in lots of curry sauce, tasting like Indian cuisine",
+        "quote": "bol köri sosu dökülmüş hint mutfağı tadında bir tavuk eti",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "köri sosu",
+          "tavuk eti"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the salad of lettuce, tomato and onion was wilted and soggy",
+        "quote": "büzüşmüş ve yumuşamış marul domates soğandan oluşan salataları",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "marul",
+          "domates",
+          "soğan",
+          "salata"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "found nothing to praise about the place",
+        "quote": "mekanı övecek bir şey arıyorum",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the reviews read were completely different from what was found",
+        "quote": "okuduğum yorumlar ile karşılaştığım manzara çok alakasız",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "complimentary tea is offered, the only thing earning 1 point",
+        "quote": "Sadece çay ikramı var ona da 1 puan verebildim",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "çay"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "service"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "definitely does not recommend it",
+        "quote": "Kesinlikle önermiyorum.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "sales slowed down as the line shortened",
+        "quote": "sıra azalınca satış yavaşlıyor",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the chicken meat was in the döner",
+        "quote": "bir tavuk eti",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "tavuk eti",
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.591Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The slowing of sales is part of the sales-tactic remark and can be kept apart or folded in."
+      },
+      {
+        "at": "2026-11-01T14:39:43.591Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The chicken meat is named in the review, so it can be kept separately or folded into the curry-sauce claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.591Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): A stated wait time can be read as a fact, as the reference itself allows for the first wait."
+      },
+      {
+        "at": "2026-11-01T21:36:47.202Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.401Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { MastraModelConfig } from '@mastra/core/llm';
 import { z } from 'zod/v4';
 
 import {
 	BaseMastraAgent,
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 const suggestionSchema = z.object({
 	value: z.string().describe('The hashtag without # (lowercase, no spaces) or the search query'),
@@ -34,8 +34,8 @@ export class CitySourceSuggestionAgent extends BaseMastraAgent<typeof citySource
 		outputSchema: citySourceSuggestionSchema,
 	};
 
-	protected getModel(): MastraModelConfig {
-		return 'openai/gpt-5.4';
+	protected getModel(): LlmModelChoice {
+		return 'full';
 	}
 
 	protected getInstructions(): string {

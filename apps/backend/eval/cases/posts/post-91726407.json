@@ -1,0 +1,135 @@
+{
+  "id": "post-91726407",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "jounisto",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlin",
+      "berlinclassics",
+      "berlinfood"
+    ],
+    "taggedHandles": [
+      "berlinfoodstories"
+    ],
+    "text": "Berlin Classics Part 13: Das Metzer Eck 🫶\n\n#berlin #berlinclassics #berlinfood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "91726407-4539-4853-9c8c-caffcae1b884",
+    "externalId": "ig_4008612973116632332",
+    "url": "https://www.instagram.com/p/DehdEKwo60M/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-15T17:08:01.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:34.469Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Das Metzer Eck",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "df82c976-fa17-4bc2-9a86-c3021042fcc9",
+          "brandName": "Metzer Eck",
+          "venueId": "f949635a-21ab-4f04-8bc3-7e6300ea5847",
+          "venueName": "Metzer Eck"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Das Metzer Eck is a Berlin classic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:44:26.891Z",
+    "usage": {
+      "inputTokens": 9016,
+      "outputTokens": 913,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption only names the venue as part 13 of a 'Berlin Classics' series, with a heart emoji. The one claim is that it is a Berlin classic: verdict, with opinion or a neutral fact also defensible. 'Visited' is assumed from the post being a series feature, since there is no transcript.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Metzer Eck",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "df82c976-fa17-4bc2-9a86-c3021042fcc9",
+          "brandName": "Metzer Eck",
+          "venueId": "f949635a-21ab-4f04-8bc3-7e6300ea5847",
+          "venueName": "Metzer Eck",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Metzer Eck is a Berlin classic",
+        "quote": "Berlin Classics Part 13: Das Metzer Eck",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

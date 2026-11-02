@@ -1,0 +1,965 @@
+{
+  "id": "post-2b231637",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:many"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "tasteandstories.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Die besten Eisdielen in Berlin: 11 Spots für den Sommer 2026\n\nStand: Juli 2026. Wenn Berlin schwitzt, führt kein Weg an einer guten Kugel vorbei. Wir haben die Eisdielen zusammengetragen, die Berlins Food-Redaktionen – Berlin Food Stories, CeeCee, Tagesspiegel – immer wieder nennen: vom sizilianischen Gelato bis zum Berliner Craft-Eis. Alle Adressen findest du auch auf unserer Karte.\nSizilianisches Gelato & Craft-Eis\nDuo Sicilian Ice Cream – sizilianisches Gelato, empfohlen von Berlin Food Stories und dem Tagesspiegel (★ 4,8 bei Google).\nZàgara (Kreuzberg) – sizilianisches Eis, Tipp von Berlin Food Stories (★ 4,8).\nCuore di Vetro (Mitte) – Gelato-Manufaktur, empfohlen von Berlin Food Stories (★ 4,5).\nMarina macht Eis – handgemachtes Eis, Berlin-Food-Stories-Empfehlung (★ 4,8).\nBerliner Klassiker & Institutionen\nHokey Pokey (Mitte) – eine der bekanntesten Eis-Adressen der Stadt, gelistet bei Berlin Food Stories und Tagesspiegel (★ 4,6).\nJones Ice Cream (Schöneberg) – Craft Ice Cream, empfohlen von Berlin Food Stories und Tagesspiegel (★ 4,7).\nDie Eismacher – italienische Eismanufaktur (★ 4,7).\nNeu & unter dem Radar\nTribeca Ice Cream (Prenzlauer Berg & Kreuzberg) – CeeCee-Tipp, inzwischen mit zweiter Filiale am Graefekiez.\nChipi Chipi Bombón – frisch über CeeCee entdeckt.\nSchöne & das Biest (Kreuzberg) – kleine Eismanufaktur (★ 4,6).\nEiscafé Monheim (Charlottenburg) – klassisches Eiscafé.\nAlle Eisdielen auf einen Blick: → auf der Karte öffnen\nAuswahl kuratiert aus den Empfehlungen der Berliner Food-Redaktionen, Google-Bewertungen und eigenen Besuchen. Angaben ohne Gewähr – Öffnungszeiten vorab prüfen.\nDer Beitrag Die besten Eisdielen in Berlin: 11 Spots für den Sommer 2026 erschien zuerst auf taste & stories.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "2b231637-286e-43e9-ae1a-651e4185a5cb",
+    "externalId": "blog_737411ff96587e948a18c5f9",
+    "url": "https://tasteandstories.de/beste-eisdielen-berlin/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-16T08:41:09.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:05:45.519Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Duo Sicilian Ice Cream",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "344d27f9-6775-4ffb-a3ea-57d7ec1270dd",
+          "brandName": "Duo Sicilian Ice Cream",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Zàgara",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f91088c7-1e17-4389-a53c-356f0ef3d208",
+          "brandName": "zàgara - gelato e caffè",
+          "venueId": "6384eec1-3808-4bd6-9594-8355a74851b6",
+          "venueName": "zàgara - gelato e caffè"
+        }
+      },
+      {
+        "venueName": "Cuore di Vetro",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "2a87cb85-cef4-4a78-a484-c16b47a717c4",
+          "brandName": "Cuore di Vetro",
+          "venueId": "bfb8893b-f54d-4ab4-ad8b-3a4dc7b9761a",
+          "venueName": "Cuore di Vetro"
+        }
+      },
+      {
+        "venueName": "Marina macht Eis",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "736cf4c4-1b59-49f4-9a14-c6810ce93fae",
+          "brandName": "Marina macht Eis",
+          "venueId": "0c38d766-8b8a-46b3-9182-37a8ab31dcda",
+          "venueName": "Marina macht Eis"
+        }
+      },
+      {
+        "venueName": "Hokey Pokey",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "95cff11a-1b21-4aa8-a059-b1becc7ca07d",
+          "brandName": "Eispatisserie Hokey Pokey",
+          "venueId": "ff79df33-441e-44b1-970c-6ac87feb4e55",
+          "venueName": "Eispatisserie Hokey Pokey Mitte"
+        }
+      },
+      {
+        "venueName": "Jones Ice Cream",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "21641050-1215-4ac6-b2cd-ef3015f6805a",
+          "brandName": "Jones ice cream",
+          "venueId": "241f2084-03ff-400d-adf5-937c02e2c859",
+          "venueName": "Jones ice cream"
+        }
+      },
+      {
+        "venueName": "Die Eismacher",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "80a0d80c-69ca-479c-836f-6bde47af866b",
+          "brandName": "Die Eismacher",
+          "venueId": "29a9ed0c-9671-404c-950b-fbb002c41ce0",
+          "venueName": "Die Eismacher"
+        }
+      },
+      {
+        "venueName": "Tribeca Ice Cream",
+        "locationHint": "Prenzlauer Berg & Kreuzberg, Graefekiez",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "266172e0-4b4e-47e4-81b8-15d91275ac46",
+          "brandName": "Tribeca Ice Cream",
+          "venueId": "cac1757d-1ce7-4663-91c8-bddc3135c6cf",
+          "venueName": "Tribeca Ice Cream Kreuzberg"
+        }
+      },
+      {
+        "venueName": "Chipi Chipi Bombón",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "663fdb73-afdc-4505-bd98-49283d231aab",
+          "brandName": "Chipi Chipi Bombón",
+          "venueId": "8a6e46e2-09e9-4ffc-a4b8-d52152d82de8",
+          "venueName": "Chipi Chipi Bombón"
+        }
+      },
+      {
+        "venueName": "Schöne & das Biest",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "6a3c1b50-f07b-4e87-a287-629bc48212fa",
+          "brandName": "Schöne & das Biest",
+          "venueId": "1064ff3b-c181-4943-9858-33210174d015",
+          "venueName": "Schöne & das Biest"
+        }
+      },
+      {
+        "venueName": "Eiscafé Monheim",
+        "locationHint": "Charlottenburg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "bbd4b74c-0044-42db-a3b4-6a52e49f6863",
+          "brandName": "Eiscafé-Monheim",
+          "venueId": "1b1b523a-dad0-427e-97e8-f8b31d09194c",
+          "venueName": "Eiscafé-Monheim"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "second branch in Graefekiez",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:35:35.612Z",
+    "usage": {
+      "inputTokens": 56130,
+      "outputTokens": 8939,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'Neu & unter dem Radar' heading was not taken as saying those shops have just opened (Tribeca's second branch is a branch, not an opening; Chipi Chipi Bombón is only 'freshly discovered'). Google star ratings and editors' recommendations were read as positive verdicts on the place, with fact allowed; no venue is marked visited since the own visits are not tied to any one shop.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Duo Sicilian Ice Cream",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "344d27f9-6775-4ffb-a3ea-57d7ec1270dd",
+          "brandName": "Duo Sicilian Ice Cream",
+          "venueId": null,
+          "venueName": null,
+          "note": "Three brands share the exact name. The post gives no location, so I picked the five-branch chain without a branch."
+        }
+      },
+      {
+        "venueName": "Zàgara",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f91088c7-1e17-4389-a53c-356f0ef3d208",
+          "brandName": "zàgara - gelato e caffè",
+          "venueId": "6384eec1-3808-4bd6-9594-8355a74851b6",
+          "venueName": "zàgara - gelato e caffè",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Cuore di Vetro",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "2a87cb85-cef4-4a78-a484-c16b47a717c4",
+          "brandName": "Cuore di Vetro",
+          "venueId": "bfb8893b-f54d-4ab4-ad8b-3a4dc7b9761a",
+          "venueName": "Cuore di Vetro",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Marina macht Eis",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "736cf4c4-1b59-49f4-9a14-c6810ce93fae",
+          "brandName": "Marina macht Eis",
+          "venueId": "0c38d766-8b8a-46b3-9182-37a8ab31dcda",
+          "venueName": "Marina macht Eis",
+          "note": "Two single-branch brands share the exact name, both in Oberschöneweide. The post gives no location, so I picked the first."
+        }
+      },
+      {
+        "venueName": "Hokey Pokey",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "95cff11a-1b21-4aa8-a059-b1becc7ca07d",
+          "brandName": "Eispatisserie Hokey Pokey",
+          "venueId": "ff79df33-441e-44b1-970c-6ac87feb4e55",
+          "venueName": "Eispatisserie Hokey Pokey Mitte",
+          "note": "The other 'Hokey Pokey' brand has only Pankow branches. Mitte fits the Eispatisserie's Torstraße branch."
+        }
+      },
+      {
+        "venueName": "Jones Ice Cream",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "21641050-1215-4ac6-b2cd-ef3015f6805a",
+          "brandName": "Jones ice cream",
+          "venueId": "241f2084-03ff-400d-adf5-937c02e2c859",
+          "venueName": "Jones ice cream",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Die Eismacher",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "80a0d80c-69ca-479c-836f-6bde47af866b",
+          "brandName": "Die Eismacher",
+          "venueId": "29a9ed0c-9671-404c-950b-fbb002c41ce0",
+          "venueName": "Die Eismacher",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Tribeca Ice Cream",
+        "locationHint": "Prenzlauer Berg & Kreuzberg; second branch at Graefekiez",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "266172e0-4b4e-47e4-81b8-15d91275ac46",
+          "brandName": "Tribeca Ice Cream",
+          "venueId": null,
+          "venueName": null,
+          "note": "The post names several branches (Prenzlauer Berg and Kreuzberg/Graefekiez), so no single branch is picked."
+        }
+      },
+      {
+        "venueName": "Chipi Chipi Bombón",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "663fdb73-afdc-4505-bd98-49283d231aab",
+          "brandName": "Chipi Chipi Bombón",
+          "venueId": "8a6e46e2-09e9-4ffc-a4b8-d52152d82de8",
+          "venueName": "Chipi Chipi Bombón",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Schöne & das Biest",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "6a3c1b50-f07b-4e87-a287-629bc48212fa",
+          "brandName": "Schöne & das Biest",
+          "venueId": "1064ff3b-c181-4943-9858-33210174d015",
+          "venueName": "Schöne & das Biest",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Eiscafé Monheim",
+        "locationHint": "Charlottenburg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "bbd4b74c-0044-42db-a3b4-6a52e49f6863",
+          "brandName": "Eiscafé-Monheim",
+          "venueId": "1b1b523a-dad0-427e-97e8-f8b31d09194c",
+          "venueName": "Eiscafé-Monheim",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "when Berlin sweats there is no way around a good Kugel of ice cream",
+        "quote": "Wenn Berlin schwitzt, führt kein Weg an einer guten Kugel vorbei",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Kugel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Duo Sicilian Ice Cream serves Sicilian Gelato",
+        "quote": "sizilianisches Gelato",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Gelato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Duo Sicilian Ice Cream is recommended by Berlin Food Stories and the Tagesspiegel",
+        "quote": "empfohlen von Berlin Food Stories und dem Tagesspiegel",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Duo Sicilian Ice Cream has a 4.8 rating on Google",
+        "quote": "★ 4,8 bei Google",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Zàgara serves Sicilian Eis",
+        "quote": "sizilianisches Eis",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Eis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Zàgara is a tip from Berlin Food Stories",
+        "quote": "Tipp von Berlin Food Stories",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Zàgara has a 4.8 rating",
+        "quote": "★ 4,8",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Cuore di Vetro is a Gelato manufactory",
+        "quote": "Gelato-Manufaktur",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Gelato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Cuore di Vetro is recommended by Berlin Food Stories",
+        "quote": "empfohlen von Berlin Food Stories",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Cuore di Vetro has a 4.5 rating",
+        "quote": "★ 4,5",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Marina macht Eis makes handmade Eis",
+        "quote": "handgemachtes Eis",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Eis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Marina macht Eis is a Berlin Food Stories recommendation",
+        "quote": "Berlin-Food-Stories-Empfehlung",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Marina macht Eis has a 4.8 rating",
+        "quote": "★ 4,8",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Hokey Pokey is one of the best-known ice cream addresses in the city",
+        "quote": "eine der bekanntesten Eis-Adressen der Stadt",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Hokey Pokey is listed by Berlin Food Stories and Tagesspiegel",
+        "quote": "gelistet bei Berlin Food Stories und Tagesspiegel",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Hokey Pokey has a 4.6 rating",
+        "quote": "★ 4,6",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Jones Ice Cream makes Craft Ice Cream",
+        "quote": "Craft Ice Cream",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Craft Ice Cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Jones Ice Cream is recommended by Berlin Food Stories and Tagesspiegel",
+        "quote": "empfohlen von Berlin Food Stories und Tagesspiegel",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Jones Ice Cream has a 4.7 rating",
+        "quote": "★ 4,7",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Die Eismacher is an Italian ice cream manufactory",
+        "quote": "italienische Eismanufaktur",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Die Eismacher has a 4.7 rating",
+        "quote": "★ 4,7",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Tribeca Ice Cream is a CeeCee tip",
+        "quote": "CeeCee-Tipp",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Tribeca Ice Cream now has a second branch at Graefekiez",
+        "quote": "inzwischen mit zweiter Filiale am Graefekiez",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Chipi Chipi Bombón was freshly discovered via CeeCee",
+        "quote": "frisch über CeeCee entdeckt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Schöne & das Biest is a small ice cream manufactory",
+        "quote": "kleine Eismanufaktur",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "Schöne & das Biest has a 4.6 rating",
+        "quote": "★ 4,6",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "Eiscafé Monheim is a classic ice cream café",
+        "quote": "klassisches Eiscafé",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.229Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.423Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

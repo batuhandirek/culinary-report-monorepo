@@ -1,0 +1,336 @@
+{
+  "id": "review-13683c42",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "13683c42-15f9-4dd4-b790-92e57b603a2b",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xWTWFGY3hiMnB1UTJOM1JGUnNhRFpDY201NWVVRRAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Burgermeister",
+    "venueId": "01025f6d-d3fe-4fb9-b7e9-b85fbd6af888",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-27T06:15:46.420Z",
+    "stars": 3,
+    "text": "Es una cadena de hamburgueserías,  tiene varios locales en Berlín.  Las hamburguesas son correctas y el precio es  similar a McDonald's,  pero las hamburguesas no tan industriales como las del McDonald's.  Las patatas fritas también están más ricas que las del McDonald's . Es una opción para comer o cenar rápido y a un precio razonable.  Algunos de los locales solo tienen terraza con mesas altas y el asiento es bastante incómodo.",
+    "textTranslated": "It's a burger chain with several locations in Berlin. The burgers are decent and the price is similar to McDonald's, but they're not as mass-produced. The fries are also better than McDonald's. It's a good option for a quick and reasonably priced lunch or dinner. Some locations only have outdoor seating with high tables, and the chairs are quite uncomfortable."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:54:41.770Z",
+    "claims": [
+      {
+        "text": "it's a burger chain with several locations in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burgers are decent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the price is similar to McDonald's",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burgers are not as mass-produced",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries are better than McDonald's",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's a good option for a quick and reasonably priced lunch or dinner",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "some locations only have outdoor seating with high tables",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chairs are quite uncomfortable",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:07.372Z",
+    "usage": {
+      "inputTokens": 5176,
+      "outputTokens": 2462,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'opción para comer o cenar rápido' is speed_of_service or a verdict, and where uncomfortable seats on the high-table terrace belong (interior vs outdoor_seating). 'Correctas' read as mildly positive, with mixed allowed.",
+    "claims": [
+      {
+        "text": "Burgermeister is a chain of burger restaurants",
+        "quote": "Es una cadena de hamburgueserías",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the chain has several locations in Berlin",
+        "quote": "tiene varios locales en Berlín",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "location"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the hamburguesas are decent",
+        "quote": "Las hamburguesas son correctas",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "hamburguesas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the price is similar to McDonald's",
+        "quote": "el precio es  similar a McDonald's",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the hamburguesas are not as industrial as McDonald's",
+        "quote": "las hamburguesas no tan industriales como las del McDonald's",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "hamburguesas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the patatas fritas are tastier than McDonald's",
+        "quote": "Las patatas fritas también están más ricas que las del McDonald's",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "patatas fritas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Burgermeister is an option for a quick lunch or dinner",
+        "quote": "Es una opción para comer o cenar rápido",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the price is reasonable",
+        "quote": "a un precio razonable",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "some locations only have a terrace with high tables",
+        "quote": "Algunos de los locales solo tienen terraza con mesas altas",
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "space"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the seating is quite uncomfortable",
+        "quote": "el asiento es bastante incómodo",
+        "sentiment": "negative",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "outdoor_seating"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.203Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

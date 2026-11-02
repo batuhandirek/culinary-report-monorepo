@@ -66,7 +66,12 @@ describe('VenueService (pglite)', () => {
 
 	it("fills a missing district from the city's postal codes, else the postal code's most common one", async () => {
 		const em = harness.orm.em;
-		const save = (placeId: string, postalCode: string, district: string | null, inCity = city) =>
+		const save = (
+			placeId: string,
+			postalCode: string,
+			district: string | null,
+			inCity = city,
+		) =>
 			service.saveGooglePlace(
 				{ placeId, title: placeId, postalCode, neighborhood: district ?? undefined },
 				new Date(),
@@ -92,7 +97,9 @@ describe('VenueService (pglite)', () => {
 		expect(await service.fillDistricts(city)).toBe(2);
 		em.clear();
 		expect((await em.findOneOrFail(Venue, { placeId: 'd' })).district).toBe('Neukölln');
-		expect((await em.findOneOrFail(Venue, { placeId: 'e' })).district).toBe('Friedrichshain-Kreuzberg');
+		expect((await em.findOneOrFail(Venue, { placeId: 'e' })).district).toBe(
+			'Friedrichshain-Kreuzberg',
+		);
 		expect((await em.findOneOrFail(Venue, { placeId: 'f' })).district).toBeNull();
 	});
 });

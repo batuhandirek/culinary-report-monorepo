@@ -1,0 +1,174 @@
+{
+  "id": "post-de30c08d",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "valeriia.berlin",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlinrestaurant",
+      "titanichotels",
+      "newrestaurant",
+      "newopening",
+      "seafood"
+    ],
+    "taggedHandles": [
+      "titanichotelsberlin",
+      "themainberlin"
+    ],
+    "text": "The Main — a restaurant in Berlin with steaks, seafood and a lovely atmosphere ✨🥂\n\n•••\n\n#berlinrestaurant #titanichotels #newrestaurant #newopening #seafood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "de30c08d-fc3a-4c0b-ab76-2c107538a849",
+    "externalId": "ig_4015048264524923186",
+    "url": "https://www.instagram.com/p/De4UR-7DoEy/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T14:11:12.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-25T04:01:41.109Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "The Main",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": true,
+        "match": {
+          "method": "llm",
+          "brandId": "39cdb270-8923-4548-8df3-3a89f2f2fe79",
+          "brandName": "the Main by Beef Grill Club",
+          "venueId": "e500082e-6494-4891-a51e-80d942408bb5",
+          "venueName": "the Main by Beef Grill Club"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "lovely atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:51:18.067Z",
+    "usage": {
+      "inputTokens": 9052,
+      "outputTokens": 1242,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The only signal of a new opening is the #newopening/#newrestaurant hashtags, which are part of the post, so the place is marked as new. The tone and the hotel account tag read as promotional, with no clear first-hand visit, so visited is false. Steaks and seafood are kept together as one menu fact.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "The Main",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "39cdb270-8923-4548-8df3-3a89f2f2fe79",
+          "brandName": "the Main by Beef Grill Club",
+          "venueId": "e500082e-6494-4891-a51e-80d942408bb5",
+          "venueName": "the Main by Beef Grill Club",
+          "note": "The post's 'The Main' steak and seafood restaurant with the #titanichotels tag matches 'the Main by Beef Grill Club', which is at the Titanic Gendarmenmarkt on Französische Str. It is a single-branch brand, so that branch is the venue."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "The Main serves steaks and seafood",
+        "quote": "steaks, seafood",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "steaks",
+          "seafood"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Main has a lovely atmosphere",
+        "quote": "a lovely atmosphere",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Main is a new opening",
+        "quote": "#newopening",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.440Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

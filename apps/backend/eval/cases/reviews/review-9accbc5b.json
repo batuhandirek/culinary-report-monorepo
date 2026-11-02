@@ -1,0 +1,187 @@
+{
+  "id": "review-9accbc5b",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "9accbc5b-1852-40c3-8fe1-ed6fc809701c",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21kaFgyNTVXVUV5V0VwaFptbFpaV3hHVG5SelZFRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-07T13:29:15.240Z",
+    "stars": 1,
+    "text": "Wir hatten das Schnitzel. Es war eine ganz schlechte Qualität. Ich vermute Tiefkühlware.  Dass ein Starkoch seinen Namen dafür hergibt umso schlimmer.",
+    "textTranslated": "We had the schnitzel. It was of very poor quality. I suspect it was frozen. The fact that a celebrity chef lent his name to it makes it even worse."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:06.745Z",
+    "claims": [
+      {
+        "text": "we had the schnitzel",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the schnitzel was of very poor quality",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the schnitzel was frozen",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a celebrity chef lent his name to it",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "that makes it even worse",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:12.124Z",
+    "usage": {
+      "inputTokens": 5025,
+      "outputTokens": 1109,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The poor quality and the frozen suspicion are both ingredient quality (frozen is named there), though plain food is defensible for the vague 'quality'. The celebrity-chef remark concerns who runs or brands the place, so ownership is the best fit.",
+    "claims": [
+      {
+        "text": "had the Schnitzel",
+        "quote": "Wir hatten das Schnitzel.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Schnitzel was of very poor quality",
+        "quote": "Es war eine ganz schlechte Qualität.",
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "suspects the Schnitzel was frozen",
+        "quote": "Ich vermute Tiefkühlware.",
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a celebrity chef lending his name to this makes it even worse",
+        "quote": "Dass ein Starkoch seinen Namen dafür hergibt umso schlimmer.",
+        "sentiment": "negative",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other",
+            "none"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

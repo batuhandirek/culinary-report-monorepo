@@ -2,7 +2,6 @@
 	import { MessageSquareText } from '@lucide/svelte';
 	import type {
 		ListPortalReviewsParamsPlatformEnum,
-		ListPortalReviewsParamsTopicEnum,
 		PortalReviewFiltersOutputDto,
 		PortalReviewOutputDto,
 		PortalReviewsOutputDto
@@ -12,7 +11,8 @@
 
 	import { page } from '$app/state';
 	import { api } from '#lib/api.js';
-	import { monthLabel, TOPIC_LABELS } from '#lib/culinary.js';
+	import { monthLabel } from '#lib/culinary.js';
+	import { rootLabels } from '#lib/statements.js';
 	import PaginatedResultFetcher from '#ui/components/PaginatedResultFetcher.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
@@ -58,7 +58,7 @@
 	const filters = $derived({
 		...(month !== ALL && { month }),
 		...(stars !== ALL && { stars: Number(stars) }),
-		...(topic !== ALL && { topic: topic as ListPortalReviewsParamsTopicEnum }),
+		...(topic !== ALL && { topic }),
 		...(answered !== ALL && { answered: answered === 'yes' }),
 		...(language !== ALL && { language }),
 		...(platform !== ALL && { platform: platform as ListPortalReviewsParamsPlatformEnum })
@@ -76,9 +76,13 @@
 		{ value: ALL, label: 'Any stars' },
 		...[1, 2, 3, 4, 5].map((n) => ({ value: String(n), label: `${n} ${n === 1 ? 'star' : 'stars'}` }))
 	];
+	// The facets hold root keys only; a root's name comes from the loaded reviews' own aspects
+	// and stays once learnt, the key (capitalised) until a review under it has loaded
+	let rootNames = $state<Record<string, string>>({});
+	const titled = (key: string) => key.charAt(0).toUpperCase() + key.slice(1);
 	const topicItems = $derived([
 		{ value: ALL, label: 'Any topic' },
-		...(facets?.topics ?? []).map((t) => ({ value: t.topic, label: TOPIC_LABELS[t.topic] ?? t.topic }))
+		...(facets?.topics ?? []).map((t) => ({ value: t.topic, label: rootNames[t.topic] ?? titled(t.topic) }))
 	]);
 	const ANSWERED_ITEMS = [
 		{ value: ALL, label: 'Answered or not' },
@@ -104,6 +108,11 @@
 	let results = $state<PortalReviewOutputDto[]>([]);
 	const listReviews = (query: { page: number; size: number }) =>
 		api.portal.listPortalReviews(brandId, query);
+	$effect(() => {
+		const found = rootLabels([...needs, ...results].flatMap((r) => r.statements));
+		const missing = [...found].filter(([key]) => !rootNames[key]);
+		if (missing.length) rootNames = { ...rootNames, ...Object.fromEntries(missing) };
+	});
 
 	// A mark updates the card wherever it shows and moves it off (or back onto) the to-do list
 	const changed = (review: PortalReviewOutputDto) => {

@@ -1,0 +1,834 @@
+{
+  "id": "post-047130f4",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "berlinlovesyou.com",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Look out Friedrichshain, Salami Social Club wants a Pizza the Action.\n\nHUNGRY\nLook out Friedrichshain, Salami Social Club wants a Pizza the Action.\nBy Brendan Power . July 8, 2026\nSalami Social Club is still serving Berlin — verified August 2026\nWe first reviewed Salami Social Club in 2016. The place remains active in 2026. The original review is preserved below as a record of our visit.\nCurrent status: Open · Verified 22 August 2026\nAddress: Frankfurter Allee 43, 10247 Berlin-Friedrichshain\nOfficial website · Google Maps\nOpening hours and menus can change. Check the official channels before visiting.\nOur original review from 2016\nIf you don’t like pizza, then stop reading now. No seriously, stop. We’ve got your click, which is all we need really, so that’ll do. If, on the other hand, you’re an absolute pig like me, and you actually daydream about shoving a hot slice in your face… read on, my friend, and learn all about Salami Social Club, the tasty new kid on the Friedrichshain block. We met with founders Jacob and Ben to learn more.\n#1 What are the first three words that come to mind when you hear the word “Pizza”?\nBen – ‘pass the mayonnaise’\nJacob – ‘breakfast, lunch, dinner’\n#2 Like 98% of the people on this planet, I love pizza and will devour it almost any time of the day or night. Having said that there are only small handful of places in Berlin which I would classify as “good pizza”. Why do you think that is?\nThere’s that classics line “Sex is like pizza, even when it’s bad it’s still pretty good.” We kind of just assume that Berlin just likes sex/pizza and doesn’t mind the shame the morning after.\n#3 How and why did you get started in this business?\nWe met when we both applied for the same job at a french restaurant, here in Berlin. The restaurant had an old pizza oven, from when it was once an Italian. We started making pizza for staff meals and realized we actually had a solid product. We built the concept before we knew we were going to even look for a location!\n#4 What makes Salami Social Club different to other places in Berlin?\nWe’re not trying to reshape the wheel and our concept is pretty simple: “good pizza, beer and music”. We are having a lot of fun playing with some cool pizza combinations though (check out the black dough with blutwurst and bacon in the shot below).\nEssentially though we just want to create a great atmosphere to grab a slice and drink some of the best beer we can get Our hands on.\n#5 Craft beer seems to be here to stay, with more and more places popping up in recent years. How do you see yourself fitting into this ecosystem?\nThe craft beer scene is undoubtedly one of the most exciting things happening here in Berlin. It’s got a really tight community that have been so welcoming of us. Where we fit in? We’d like to get out and about to all the beer events and festivals next summer with a woodfire oven, but in the mean time we’ll just serve quality Berlin brews and beers from further a field at the best price we can.\n#6 We are all for experimentation with food but you have to draw the line somewhere. Can you give us an example of a an unusual pizza topping that everyone should try once in their life, and one which you have tried that should never be repeated again.\nWe’re true believers in this, Ben still says the best pizza we sell is just the plain old salami.\nYou’d be surprised at how far you can go – we just put an Hawaiian on the menu (it’s actually really good!)\nThings to try\nBen: Nudja which is a spicy soft chili salami meat – extremely hot but absolutely delicious\nJacob: Black pudding/blutwurst – first pizza we made, still an absolute game changer\nNot to eat on a pizza\nBen: Salmon – nice idea, just doesn’t work,\nJacob: Tuna fish – Nah, fuck tuna fish\n#7 Beer and Pizza… one of the enduring partnerships of modern life. Can you think of a famous/celebrity couple whose relationship is comparable to this?\nBen: Morrissey and Marr (The Smiths)\nJacob: Matt Stone and Trey Parker (South Park creators)\nSalami Social Club\nFrankfurter Allee 43\nBerlin, Germany\nsalamisocialclub.de\nSalami Social Club on Facebook",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "047130f4-9921-4b3a-9c66-2adfe2933db0",
+    "externalId": "blog_e550c081250c3d259be2cffc",
+    "url": "https://berlinlovesyou.com/look-friedrichshain-salami-social-club-wants-pizza-action/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-08T10:00:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:13.529Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Salami Social Club",
+        "locationHint": "Frankfurter Allee 43",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ab307e6e-7771-40e0-87cd-cda4072cf0c6",
+          "brandName": "Salami Social Club",
+          "venueId": "eb16afcc-0f5f-4627-a716-361c1b2790c4",
+          "venueName": "Salami Social Club"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Salami Social Club serves good pizza, beer and music",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "pizza",
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the atmosphere is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they serve quality Berlin brews and beers from further afield",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Berlin brews",
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they want to create a great atmosphere to grab a slice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the plain old salami pizza is the best pizza they sell",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Salami pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they just put an Hawaiian on the menu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Hawaiian"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Hawaiian pizza is really good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hawaiian pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the black dough with blutwurst and bacon is shown",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [
+          "black dough",
+          "Blutwurst",
+          "bacon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nudja is extremely hot but absolutely delicious",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "Nudja"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "black pudding/blutwurst was the first pizza they made",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "black pudding/blutwurst"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "salmon does not work on pizza",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "salmon",
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "tuna fish should never be repeated on pizza",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "tuna fish",
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:32:03.564Z",
+    "usage": {
+      "inputTokens": 11513,
+      "outputTokens": 7467,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 2016 review calls the place the 'new kid on the block', but the 2026 article frames it as open since at least 2016, so it is not marked a new opening. The founders' 'things to try / not to eat' toppings are treated as general food opinions (subject none), except the blutwurst pizza, which they say was their own first pizza.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Salami Social Club",
+        "locationHint": "Frankfurter Allee 43, Friedrichshain",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ab307e6e-7771-40e0-87cd-cda4072cf0c6",
+          "brandName": "Salami Social Club",
+          "venueId": "eb16afcc-0f5f-4627-a716-361c1b2790c4",
+          "venueName": "Salami Social Club",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Salami Social Club is still serving in Berlin in 2026",
+        "quote": "Salami Social Club is still serving Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club is at Frankfurter Allee 43 in Friedrichshain",
+        "quote": "Frankfurter Allee 43, 10247 Berlin-Friedrichshain",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club is the tasty new kid on the Friedrichshain block",
+        "quote": "the tasty new kid on the Friedrichshain block",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club was founded by Jacob and Ben",
+        "quote": "founders Jacob and Ben",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "only a small handful of places in Berlin serve good pizza",
+        "quote": "there are only small handful of places in Berlin which I would classify as “good pizza”",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Berlin likes pizza even when it is bad",
+        "quote": "Berlin just likes sex/pizza",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the founders started making pizza for staff meals and realized they had a solid product",
+        "quote": "We started making pizza for staff meals and realized we actually had a solid product",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club's concept is good pizza, beer and music",
+        "quote": "good pizza, beer and music",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "pizza",
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club plays with cool pizza combinations",
+        "quote": "We are having a lot of fun playing with some cool pizza combinations",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club serves a black dough pizza with blutwurst and bacon",
+        "quote": "the black dough with blutwurst and bacon",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "black dough",
+          "blutwurst",
+          "bacon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club wants a great atmosphere to grab a slice",
+        "quote": "we just want to create a great atmosphere to grab a slice",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club serves some of the best beer they can get",
+        "quote": "drink some of the best beer we can get Our hands on",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the craft beer scene is one of the most exciting things in Berlin",
+        "quote": "The craft beer scene is undoubtedly one of the most exciting things happening here in Berlin",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "craft beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Berlin's craft beer community has been very welcoming of Salami Social Club",
+        "quote": "It’s got a really tight community that have been so welcoming of us",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "craft beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Salami Social Club wants to go to beer events and festivals next summer with a woodfire oven",
+        "quote": "We’d like to get out and about to all the beer events and festivals next summer with a woodfire oven",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club serves quality Berlin brews and beers from further afield",
+        "quote": "we’ll just serve quality Berlin brews and beers from further a field",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "Berlin brews",
+          "beers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club serves its beers at the best price they can",
+        "quote": "at the best price we can",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ben says the best pizza they sell is the plain old salami",
+        "quote": "the best pizza we sell is just the plain old salami",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "salami"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Salami Social Club just put a Hawaiian on the menu",
+        "quote": "we just put an Hawaiian on the menu",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Hawaiian"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Hawaiian is actually really good",
+        "quote": "it’s actually really good!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hawaiian"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nudja, a spicy soft chili salami, is extremely hot on pizza",
+        "quote": "extremely hot",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [
+          "Nudja"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Nudja on pizza is absolutely delicious",
+        "quote": "absolutely delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Nudja"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the black pudding/blutwurst pizza was the first pizza Salami Social Club made",
+        "quote": "Black pudding/blutwurst – first pizza we made",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Black pudding",
+          "blutwurst"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the black pudding/blutwurst pizza is still an absolute game changer",
+        "quote": "still an absolute game changer",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Black pudding",
+          "blutwurst"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "salmon on pizza just doesn't work",
+        "quote": "Salmon – nice idea, just doesn’t work",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Salmon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "tuna fish should not be eaten on pizza",
+        "quote": "Tuna fish – Nah, fuck tuna fish",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Tuna fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.223Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

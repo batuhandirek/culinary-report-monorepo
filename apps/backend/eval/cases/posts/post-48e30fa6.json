@@ -1,0 +1,333 @@
+{
+  "id": "post-48e30fa6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "gauchos_del_gusto",
+    "locationName": "Kaufland Oranienburg",
+    "hashtags": [
+      "gauchosdelgusto",
+      "berlinfood",
+      "streetfoodberlin",
+      "foodtruck",
+      "bbqlovers"
+    ],
+    "taggedHandles": [],
+    "text": "“}\n🔥 BERLIN, ES WIRD HEISS 🔥\n\nArgentinischer Streetfood-Geschmack direkt vom Grill 🇦🇷🐂\nSaftig. Ehrlich. Unvergesslich.\n\n📍 18.–19. März\nOranienpark / Kaufland Oranienburg\n⏰ 11:00 – 18:30 Uhr\n\n📍 20.–22. März\nTrabrennbahn Karlshorst\n\nKomm vorbei und überzeug dich selbst 😏🔥\n\n#gauchosdelgusto #berlinfood #streetfoodberlin #foodtruck #bbqlovers    ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "48e30fa6-71fd-469e-a483-97cd180d29a3",
+    "externalId": "7618134984758431009",
+    "url": "https://www.tiktok.com/@gauchos_del_gusto/video/7618134984758431009",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-17T08:14:44.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:07.773Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Gauchos del Gusto",
+        "locationHint": "Oranienpark / Kaufland Oranienburg",
+        "city": "Oranienburg",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "other_city",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Gauchos del Gusto",
+        "locationHint": "Trabrennbahn Karlshorst",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Argentinischer Streetfood-Geschmack direkt vom Grill",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the food is saftig",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the food is ehrlich",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the food is unvergesslich",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:38:20.674Z",
+    "usage": {
+      "inputTokens": 9628,
+      "outputTokens": 2581,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue is named only by the hashtag #gauchosdelgusto; Kaufland Oranienburg is just where the truck stands, so it is a location hint, not a place, and the city is left null as the stops span Oranienburg and Berlin-Karlshorst. The dated stops read as pop-up events but fact is also allowed; the call to 'come by' is an optional verdict.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Gauchos del Gusto",
+        "locationHint": "food truck; Oranienpark / Kaufland Oranienburg (18–19 March), Trabrennbahn Karlshorst (20–22 March)",
+        "city": null,
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The author is Gauchos del Gusto, a food truck posting about itself, and no candidate has that name; the similar names are other venues."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Gauchos del Gusto serves Argentinian street food flavour straight from the grill",
+        "quote": "Argentinischer Streetfood-Geschmack direkt vom Grill",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "authenticity",
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the grilled food is juicy",
+        "quote": "Saftig.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is honest",
+        "quote": "Ehrlich.",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is unforgettable",
+        "quote": "Unvergesslich.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the truck is at Oranienpark / Kaufland Oranienburg on 18–19 March",
+        "quote": "18.–19. März\nOranienpark / Kaufland Oranienburg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "open 11:00 to 18:30 at Oranienburg",
+        "quote": "⏰ 11:00 – 18:30 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the truck is at Trabrennbahn Karlshorst on 20–22 March",
+        "quote": "20.–22. März\nTrabrennbahn Karlshorst",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "come by and convince yourself of Gauchos del Gusto",
+        "quote": "Komm vorbei und überzeug dich selbst",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.233Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

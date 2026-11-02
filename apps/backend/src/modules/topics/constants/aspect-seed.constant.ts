@@ -4,8 +4,11 @@
 // what the agents are told the aspect covers, both polarities: an aspect says what a point is about,
 // never whether it was good or bad (`portion_size` praised is generous, criticised small). Inserted
 // by `Migration20261030110000_aspect_topics` from the vocabulary that lived in code until then
-// (`FEEDBACK_THEMES`); tests seed from here; an admin adds, moves and rehints aspects in the topic
+// (once a list in code); tests seed from here; an admin adds, moves and rehints aspects in the topic
 // dialog, and the agents read the legend from the table on every call.
+// An aspect never says "it changed": that is the claim's kind (`change`), so the change-only leaves
+// (price increase, quality, staff and ownership change, renovation) were folded into the aspect a claim
+// is about by `Migration20261031180000_claim_model_v2`, which added `ownership`.
 import { TopicKindEnum } from '../entities/topic.entity.js';
 
 import type { TopicSeed } from './topic-seed.constant.js';
@@ -50,7 +53,6 @@ export const ASPECT_SEED: TopicSeed[] = [
 	leaf('ingredient_quality', 'food', 'Ingredients', 'the quality of the ingredients, meat, produce; or cheap, industrial, frozen'),
 	leaf('menu_variety', 'food', 'Menu variety', 'the choice on the menu, vegan and vegetarian options; or too little choice'),
 	leaf('availability', 'food', 'Availability', 'a dish sold out, missing, only on some days or hours'),
-	leaf('quality_change', 'food', 'Quality change', 'better or worse than before: declined, gone downhill, improved since the last visit (better than other places is no change)'),
 	leaf('authenticity', 'food', 'Authenticity', 'authentic, like at home, or not authentic'),
 	leaf('presentation', 'food', 'Presentation', 'how it looked: plating, photogenic, or sloppy'),
 
@@ -68,7 +70,6 @@ export const ASPECT_SEED: TopicSeed[] = [
 	leaf('reservation_handling', 'service', 'Reservations', 'a reservation honoured, or lost, no table despite booking, walk-ins refused'),
 	leaf('complaint_handling', 'service', 'Complaint handling', 'how staff or the owner dealt with a problem or a complaint'),
 	leaf('takeaway_handling', 'service', 'Takeaway handling', 'packaging, pickup, a delivery order prepared right or wrong'),
-	leaf('staff_change', 'service', 'Staff change', 'new staff, a known waiter gone, the team changed'),
 
 	root('vibe', 'Atmosphere', 'about the atmosphere, when nothing finer fits'),
 	leaf('atmosphere', 'vibe', 'Atmosphere', 'cosy, a nice vibe, romantic, or unpleasant, cold; a room too hot, stuffy or cold'),
@@ -83,7 +84,6 @@ export const ASPECT_SEED: TopicSeed[] = [
 	root('price', 'Price', 'about prices, when nothing finer fits'),
 	leaf('price_level', 'price', 'Price level', 'expensive, pricey, or cheap, affordable, for what it is'),
 	leaf('value_for_money', 'price', 'Value for money', 'worth the money, or not worth the price, small portions for the price ("worth a visit" is not about money)'),
-	leaf('price_increase', 'price', 'Price increase', 'prices went up since an earlier visit, now cost more than before'),
 	leaf('extra_charges', 'price', 'Extra charges', 'charged for water, sauce, a container, a service fee; the bill differs from the menu'),
 
 	root('payment', 'Payment', 'about paying, when nothing finer fits'),
@@ -105,8 +105,7 @@ export const ASPECT_SEED: TopicSeed[] = [
 	root('other', 'Other', 'nothing else fits'),
 	leaf('opening_hours', 'other', 'Opening hours', 'the hours, closed when listed open, closed early'),
 	leaf('accessibility', 'other', 'Accessibility', 'stairs, wheelchair access, parking, hard to find'),
-	leaf('ownership_change', 'other', 'Ownership change', 'a new owner or management'),
-	leaf('renovation', 'other', 'Renovation', 'renovated, rebuilt, closed for works'),
+	leaf('ownership', 'other', 'Ownership', 'who owns or runs the place: the owner, the family, the management'),
 	leaf('delivery_platform', 'other', 'Delivery platform', 'the delivery app order: late, cold, missing (not the kitchen)'),
 	leaf('amenities', 'other', 'Amenities', 'wifi, sockets, heating, air conditioning, toilets for guests'),
 ];

@@ -1,0 +1,85 @@
+{
+  "id": "review-e53beaad",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e53beaad-409b-4dcb-8507-3693390f8738",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21oNWRUVkVNR0ZsYjJ4WWNEYzVWVmRqVWpsTFdsRRAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-06T18:16:41.941Z",
+    "stars": 5,
+    "text": "Çok şik bir restoran",
+    "textTranslated": "A very stylish restaurant."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:44:47.009Z",
+    "claims": [
+      {
+        "text": "a very stylish restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:57.554Z",
+    "usage": {
+      "inputTokens": 4919,
+      "outputTokens": 184,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Single claim; 'stylish' most naturally refers to decor/design (interior), though atmosphere or the vibe root are defensible readings.",
+    "claims": [
+      {
+        "text": "the restaurant is very stylish",
+        "quote": "Çok şik bir restoran",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "vibe"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "id": "post-cb866ce5",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "morganscifo",
+    "locationName": "Munchies Kreuzberg",
+    "hashtags": [
+      "berlinfood",
+      "munchiesberlin",
+      "foodreview",
+      "berlineats",
+      "vegantacos"
+    ],
+    "taggedHandles": [],
+    "text": "Checking out Munchies to see if their veggie tacos live up to the hype. But was it worth it?\n\n#berlinfood  #munchiesberlin  #foodreview  #berlineats  #vegantacos",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "cb866ce5-84be-4f59-b4e1-1f1ddaa8fdac",
+    "externalId": "7616448274530110742",
+    "url": "https://www.tiktok.com/@morganscifo/video/7616448274530110742",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-12T19:09:19.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:00.410Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Munchies",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "4ee49474-ab3e-4b69-9813-9cfec5b5b0bd",
+          "brandName": "Munchies",
+          "venueId": "2d241dc0-27fa-40d5-9b7b-7c09c5860914",
+          "venueName": "Munchies"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator checked out Munchies",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the venue serves veggie tacos",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "veggie tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the veggie tacos were hyped",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "veggie tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:49:46.657Z",
+    "usage": {
+      "inputTokens": 9700,
+      "outputTokens": 1222,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption only teases a review. The hard calls were whether the 'hype' is a claim of its own (kept optional) and whether 'was it worth it?' is about money or the visit as a whole.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Munchies",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "4ee49474-ab3e-4b69-9813-9cfec5b5b0bd",
+          "brandName": "Munchies",
+          "venueId": "2d241dc0-27fa-40d5-9b7b-7c09c5860914",
+          "venueName": "Munchies",
+          "note": "Tagged location 'Munchies Kreuzberg' fits only the Bergmannstraße branch, the one branch in Friedrichshain-Kreuzberg."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator checks out Munchies to see if the veggie tacos live up to the hype",
+        "quote": "Checking out Munchies to see if their veggie tacos live up to the hype",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "veggie tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "question"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Munchies' veggie tacos are hyped",
+        "quote": "their veggie tacos live up to the hype",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "veggie tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "was the visit to Munchies worth it?",
+        "quote": "But was it worth it?",
+        "sentiment": "neutral",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.251Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

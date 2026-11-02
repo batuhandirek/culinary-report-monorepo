@@ -1,0 +1,142 @@
+{
+  "id": "review-9078dce6",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "9078dce6-2aa8-4e18-b96f-d6fa4fe699ae",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25nd01taDZSMWRFUVRsdk0yTXRWRTlVTW14WU5HYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-29T16:57:18.492Z",
+    "stars": 5,
+    "text": "Super essen und trinken\nBedienung vom feinsten",
+    "textTranslated": "Excellent food and drinks\nTop-notch service"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:03:52.867Z",
+    "claims": [
+      {
+        "text": "excellent food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "excellent drinks",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "top-notch service",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:52.970Z",
+    "usage": {
+      "inputTokens": 4939,
+      "outputTokens": 427,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call was whether \"Super essen\" is about taste or about the food in general. Taste fits a judgement of how good the food was, but the root food is also allowed. The same holds for the drinks: drink_quality, with drinks as the alternative.",
+    "claims": [
+      {
+        "text": "the food was excellent",
+        "quote": "Super essen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the drinks were excellent",
+        "quote": "Super essen und trinken",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was top-notch",
+        "quote": "Bedienung vom feinsten",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

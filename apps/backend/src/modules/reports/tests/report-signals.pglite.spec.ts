@@ -1,7 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
-import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
-import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
@@ -128,21 +126,17 @@ describe('ReportSignalsService (pglite)', () => {
 		listing(venue, 4.6, { 'Döner im Brot': 8.5, 'Döner Teller': 13, Lahmacun: 7, Ayran: 2.5 });
 		listing(rival, 4.2, { 'Döner im Brot': 7, 'Döner Teller': 11, Pide: 9 });
 
-		// 13 reviews a month over the summer, then a September with a jump after the viral week
+		// 13 reviews a month over the summer, then a September with a jump after the viral week; none complains
 		let n = 0;
-		const reviews = (count: number, day: string, complaints: FeedbackTopic[] = []) => {
+		const reviews = (count: number, day: string) => {
 			for (let i = 0; i < count; i++)
-				addFeedback(
-					em,
-					em.create(Review, {
-						venue,
-						reviewId: `r${++n}`,
-						publishedAt: new Date(`${day}T12:${String(i).padStart(2, '0')}:00Z`),
-						stars: complaints.length ? 2 : 5,
-						text: 'Text',
-					}),
-					{ complaints: complaints.map(topic => ({ topic, detail: 'x' })) },
-				);
+				em.create(Review, {
+					venue,
+					reviewId: `r${++n}`,
+					publishedAt: new Date(`${day}T12:${String(i).padStart(2, '0')}:00Z`),
+					stars: 5,
+					text: 'Text',
+				});
 		};
 		for (const day of ['2026-06-10', '2026-07-10', '2026-08-10']) reviews(13, day);
 		reviews(2, '2026-09-02');

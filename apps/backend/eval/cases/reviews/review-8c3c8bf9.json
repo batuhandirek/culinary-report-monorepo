@@ -1,0 +1,118 @@
+{
+  "id": "review-8c3c8bf9",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "8c3c8bf9-ce2b-408a-af08-549f7368ee4f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pabFFsQkdTR1JYV0hSNVdHbFJXbkF5WVVGeFozYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-25T21:58:23.694Z",
+    "stars": 5,
+    "text": "Best Team and Food!",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:33:49.024Z",
+    "claims": [
+      {
+        "text": "the team was best",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the food was best",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:41.655Z",
+    "usage": {
+      "inputTokens": 5326,
+      "outputTokens": 585,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review is split into two claims, the team and the food, rather than one verdict, because each praises a specific part of the visit. 'Team' is read as the staff in general, so the claim goes under the service root, with friendliness also allowed. 'Food' is read as food in general, with taste also allowed.",
+    "claims": [
+      {
+        "text": "the team is the best",
+        "quote": "Best Team",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is the best",
+        "quote": "Best Team and Food",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.430Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -4,12 +4,13 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { DishNameService } from 'src/modules/feedback/services/dish-name.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import type { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { mentionSaidSql, mentionSentimentSql } from 'src/modules/statements/util/statement-sql.js';
+import { TermService } from 'src/modules/topics/services/term.service.js';
 import { LEAD_PROSPECT_SCORE } from 'src/modules/venues/constants/lead-score.constant.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { BrandCompetitor } from 'src/modules/venues/entities/brand-competitor.entity.js';
@@ -38,7 +39,7 @@ export class BrandSummaryService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly brandListService: BrandListService,
-		private readonly dishNameService: DishNameService,
+		private readonly termService: TermService,
 	) {}
 
 	async summary(
@@ -128,7 +129,7 @@ export class BrandSummaryService {
 	/** Its places' Google review tags, each with the food topic it names */
 	private async reviewTags(branches: Venue[]): Promise<AdminBrandReviewTagOutputDto[]> {
 		const tags = reviewTags(branches);
-		const topics = await this.dishNameService.reviewTagTopics(tags.map(t => t.title));
+		const topics = await this.termService.reviewTagTopics(tags.map(t => t.title));
 		return tags.map(tag => {
 			const topic = topics.get(tag.title);
 			return { ...tag, ...(topic && { topic }) };
@@ -253,13 +254,13 @@ export class BrandSummaryService {
 			author: string | null;
 			posted_at: Date;
 			views: number;
-			summary: string;
+			summary: string | null;
 			sentiment: string;
 			venue_id: string | null;
 			venue_name: string | null;
 		}[] = await this.em.getConnection().execute(
 			`select distinct on (p.id) p.id, p.platform, p.url, p.author, p.posted_at, p.views,
-				m.summary, m.sentiment, v.id as venue_id, v.name as venue_name
+				${mentionSaidSql('m')} as summary, ${mentionSentimentSql('m')} as sentiment, v.id as venue_id, v.name as venue_name
 			from mentions m
 			join social_posts p on p.id = m.post_id
 			left join venues v on v.id = m.venue_id
@@ -277,7 +278,7 @@ export class BrandSummaryService {
 				...(r.author && { author: r.author }),
 				postedAt: new Date(r.posted_at),
 				views: r.views,
-				summary: r.summary,
+				...(r.summary && { summary: r.summary }),
 				sentiment: r.sentiment,
 				...(r.venue_id && r.venue_name && { branch: { id: r.venue_id, name: r.venue_name } }),
 			}));

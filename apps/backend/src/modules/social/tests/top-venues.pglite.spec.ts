@@ -29,8 +29,18 @@ describe('MentionMatchingService.topBrandIds (pglite)', () => {
 		const em = harness.orm.em;
 		const city = testCity(em);
 		const elsewhere = testCity(em, { name: 'Wien' });
-		const a = em.create(Venue, { city, placeId: 'p-a', name: 'Venue A', category: 'Restaurant' });
-		const c = em.create(Venue, { city: elsewhere, placeId: 'p-c', name: 'Café C', category: 'Cafe' });
+		const a = em.create(Venue, {
+			city,
+			placeId: 'p-a',
+			name: 'Venue A',
+			category: 'Restaurant',
+		});
+		const c = em.create(Venue, {
+			city: elsewhere,
+			placeId: 'p-c',
+			name: 'Café C',
+			category: 'Cafe',
+		});
 		const b = em.create(Venue, {
 			city,
 			placeId: 'p-b',
@@ -60,8 +70,6 @@ describe('MentionMatchingService.topBrandIds (pglite)', () => {
 				venue,
 				matchMethod: MentionMatchMethodEnum.EXACT,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Nice.',
 			});
 		};
 		for (let i = 0; i < 5; i++) post(a, 'venue_a_berlin', 10_000);

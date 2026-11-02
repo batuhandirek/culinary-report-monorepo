@@ -12,7 +12,7 @@ import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
-import { mockAgent } from 'src/tests/mock-agent.js';
+import { MOCK_AGENT_MODEL, mockAgent } from 'src/tests/mock-agent.js';
 import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
@@ -101,8 +101,6 @@ describe('ReportService.build (pglite)', () => {
 			brand: brandOf(venue),
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Nice.',
 		});
 		return p;
 	};
@@ -195,7 +193,7 @@ describe('ReportService.build (pglite)', () => {
 
 		// The vocabulary the theme counts are keyed by travels with the report, roots first
 		expect(data.aspects![0]).toEqual({ key: 'food', label: 'Food', root: 'food' });
-		expect(data.aspects).toContainEqual({ key: 'price_increase', label: 'Price increase', root: 'price' });
+		expect(data.aspects).toContainEqual({ key: 'price_level', label: 'Price level', root: 'price' });
 		expect(data.aspects).toHaveLength(ASPECT_SEED.length);
 
 		expect(data.creators.map(c => c.author)).toEqual(['loyal']);
@@ -207,7 +205,7 @@ describe('ReportService.build (pglite)', () => {
 		const [, context] = highlightsAgent.generate.mock.calls.at(-1)! as [string, { cityName: string; tools: Record<string, unknown> }];
 		expect(context).toEqual({ cityName: 'Berlin', tools: {} });
 		expect(report.highlights).toMatchObject({ ...HIGHLIGHTS, kind: 'story', letter: ANSWER.letter, notes: ANSWER.notes });
-		expect(report.highlights.trace).toMatchObject({ model: 'openai/gpt-5.4', toolCalls: 0, problems: [] });
+		expect(report.highlights.trace).toMatchObject({ model: MOCK_AGENT_MODEL, toolCalls: 0, problems: [] });
 
 		expect(data.reviews.list).toHaveLength(14);
 		expect(data.reviews.list[0].reviewId).toBe('five-10');
@@ -256,8 +254,6 @@ describe('ReportService.build (pglite)', () => {
 			brand: brandOf(neighbour),
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Again.',
 		});
 		await em.flush();
 
@@ -302,7 +298,9 @@ describe('ReportService.build (pglite)', () => {
 			title: 'Kiezküche: lunch worth the queue',
 			author: 'berlinfoodstories.com',
 			url: 'https://berlinfoodstories.com/kiezkueche',
-			summary: 'Nice.',
+			// What it said comes from its claims (none here)
+			said: [],
+			sentiment: 'neutral',
 		});
 		expect(byPlatform.tiktok.title).toBeUndefined();
 	});

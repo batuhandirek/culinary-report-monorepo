@@ -1,0 +1,1027 @@
+{
+  "id": "post-6c0e92d2",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "KROQUE BERLIN: GETOASTET, HAUSGEMACHT, UND GANZ VIEL KÄSE\n\nHinter Kroque steckt Lukas Rozsaffy. Ursprünglich aus Troyes in Frankreich, zog er mit 18 Jahren nach Berlin und verbrachte seine ersten Monate damit, im französischen Restaurant François at La Buvette zu arbeiten. Später studierte er Design und Kommunikation und arbeitete als Tätowierer, bevor er seinen Weg in die Küche fand. Was als kleines Foodbike begann, das auf verschiedenen Märkten Halt machte, hat inzwischen ein festes Zuhause in der Senefelderstraße gefunden. Sein Partner Josue Kashala wuchs im französischen Dünkirchen auf und arbeitet seit seinem 17. Lebensjahr in der Gastronomie. Dabei entdeckte er auch seine Liebe zum Wein. Während seiner Zeit in Paris lernte er, dass jedes Restaurant seinen ganz eigenen Charakter hat. Als Lukas ihn also fragte, ob er die Bar übernehmen wolle, musste er nicht lange überlegen. Die Idee? Ein Ort für gute Kroques, Wein und Cocktails. Übrigens ist Josue auch für die Desserts verantwortlich.\n„Das Grundkonzept war schon immer, Croque Monsieurs mit so vielen hausgemachten Zutaten wie möglich zuzubereiten“, erzählt Lukas. Und das meint er ernst. Schinken, Roastbeef und Halal-Putenschinken werden allesamt selbst hergestellt. „Ich konnte mir einfach nicht vorstellen, industriell verarbeitetes Fleisch voller Zusatzstoffe zu kaufen, es auf ein Sandwich zu legen und das Ganze dann als meine eigene Kreation zu verkaufen.“ Jeder Kroque folgt einem einfachen Prinzip: hausgemachter Aufschnitt, eine Mischung aus drei Käsesorten, hausgemachte Mayo (mit Lauch, confiertem Knoblauch oder Schnittlauch) und etwas Eingelegtes oder Mariniertes. Alles zwischen zwei Scheiben Pain de Mie gepackt und goldbraun getoastet.\nWir starteten mit dem Le Classique: hausgemachter Schinken „cuit au torchon“, eingelegte Zwiebeln, eine Mischung aus Gouda, Emmentaler und Comté sowie eine gefährlich gute Geheimsoße. Danach kam das Le Rostbif mit Roastbeef, Schnittlauch-Mayo, eingelegten Zwiebeln, Gouda, Gruyère und Cheddar. Herzhaft, käsig und genau die richtige Portion Genuss. Beim nächsten Mal probieren wir das La Dindz, die mediterran inspirierte Variante mit frischen Zitronennoten, Feta und marinierten Antipasti. Dazu gibt es hausgemachte Beilagen und Dips, mit denen man sich seine ganz persönliche Kombination zusammenstellen kann. „Es ist fast schon interaktiv“, sagt Lukas.\nIrgendwie hatten wir trotzdem noch Platz für ein Dessert. Die Mousse au Chocolat mit Zitronenabrieb und einer Prise Meersalz war innerhalb weniger Minuten verschwunden. Eigentlich eher Sekunden. Und da die Franzosen einem Aperitif zur Mittagszeit bekanntlich nicht abgeneigt sind, kommen bei Kroque auch die Drinks nicht zu kurz. Wer zu seinem Sandwich Lust auf etwas Verspielteres hat, sollte den frisch gemixten Himbeer-Daiquiri probieren. Gerade süß genug und vielleicht ein bisschen zu süffig für die Mittagspause.\nDen Raum hat Lukas selbst gestaltet und ausgebaut. Angefangen hat alles mit dem Holzboden, den er unter dem alten Linoleum entdeckte. Dazu kommen Sitzmöbel aus Fichtenholz, eine großzügige Bar mit orangefarbenen Fliesen und eine dazu passende orangefarbene Fassade. Vorne erinnert alles an einen Retro-Diner, hinten geht es eher in Richtung Club. Und Kroque zeigt schon jetzt, dass es mehr als nur ein Lunchspot ist. Es gab bereits Abende mit Gast-DJs und besonderen Drinks – und weitere sind in Planung. Ein bisschen Sandwichladen, ein bisschen Cocktailbar, ein bisschen intimer Veranstaltungsort. Und was kommt als Nächstes? „Wir sind für alles offen!“\nText: Stefania Basano / Photos: Aditya Christian\nKroque, Senefelderstr.4, 10437 Berlin–Prenzlauer Berg; map\n@kroque_berlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "6c0e92d2-c3df-402c-9dfd-c531fc6465f0",
+    "externalId": "blog_557204b25c820e9723af9576",
+    "url": "https://ceecee.cc/kroque-berlin-getoastet-hausgemacht-und-ganz-viel-kaese/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-22T14:25:23.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:46.493Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Kroque",
+        "locationHint": "Senefelderstr. 4, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "dc2b6a39-55b0-4b95-afb4-32c092b52545",
+          "brandName": "Kroque",
+          "venueId": "9b5f2058-776a-440f-9bac-fda390d7bced",
+          "venueName": "Kroque"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "homemade meats and sauces",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "croques described as hearty, cheesy and delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "customizable sides and dips",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "freshly mixed raspberry daiquiri",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Raspberry Daiquiri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "self-designed room with retro diner front and club-like back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "feels like part sandwich shop, part cocktail bar, part intimate event space",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:24:22.450Z",
+    "usage": {
+      "inputTokens": 14785,
+      "outputTokens": 11229,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "François at La Buvette is only named as where the owner once worked; it is kept as a place because the article says it is a French restaurant. Kroque's move from a food bike to a fixed shop is not called a new opening, so isNewOpening is false and the move is read as a change. Approving descriptions of homemade ingredients and decor are positive, with neutral facts allowed as alternatives.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Kroque",
+        "locationHint": "Senefelderstr. 4, 10437 Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "dc2b6a39-55b0-4b95-afb4-32c092b52545",
+          "brandName": "Kroque",
+          "venueId": "9b5f2058-776a-440f-9bac-fda390d7bced",
+          "venueName": "Kroque",
+          "note": null
+        }
+      },
+      {
+        "venueName": "François at La Buvette",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "1fba8dcb-dcc9-496d-bf42-bd0ecb97bad1",
+          "brandName": "La Buvette",
+          "venueId": null,
+          "venueName": null,
+          "note": "The French restaurant 'La Buvette' matches the brand. 'François' may echo the 'Grill Français' branch, but it is not a location, so no branch is chosen."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Kroque is run by Lukas Rozsaffy",
+        "quote": "Hinter Kroque steckt Lukas Rozsaffy.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque owner Lukas is originally from Troyes in France",
+        "quote": "Ursprünglich aus Troyes in Frankreich",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "François at La Buvette is a French restaurant",
+        "quote": "im französischen Restaurant François at La Buvette",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Kroque started as a small food bike at various markets and now has a permanent home on Senefelderstraße",
+        "quote": "Was als kleines Foodbike begann, das auf verschiedenen Märkten Halt machte, hat inzwischen ein festes Zuhause in der Senefelderstraße gefunden",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lukas's partner Josue Kashala has worked in gastronomy since he was 17 and loves wine",
+        "quote": "Sein Partner Josue Kashala wuchs im französischen Dünkirchen auf und arbeitet seit seinem 17. Lebensjahr in der Gastronomie",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Josue Kashala took over the bar at Kroque",
+        "quote": "ob er die Bar übernehmen wolle",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque is a place for good Kroques, wine and cocktails",
+        "quote": "Ein Ort für gute Kroques, Wein und Cocktails.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Kroques",
+          "Wein",
+          "Cocktails"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Josue is responsible for the desserts at Kroque",
+        "quote": "Josue auch für die Desserts verantwortlich",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque makes Croque Monsieurs with as many homemade ingredients as possible",
+        "quote": "Croque Monsieurs mit so vielen hausgemachten Zutaten wie möglich zuzubereiten",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Croque Monsieurs"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ham, roast beef and halal turkey ham are all made in-house",
+        "quote": "Schinken, Roastbeef und Halal-Putenschinken werden allesamt selbst hergestellt",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Schinken",
+          "Roastbeef",
+          "Halal-Putenschinken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lukas refuses to use industrially processed meat full of additives",
+        "quote": "Ich konnte mir einfach nicht vorstellen, industriell verarbeitetes Fleisch voller Zusatzstoffe zu kaufen",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "every Kroque has homemade cold cuts, a mix of three cheeses, homemade mayo with leek, confit garlic or chives, and something pickled or marinated",
+        "quote": "Jeder Kroque folgt einem einfachen Prinzip: hausgemachter Aufschnitt, eine Mischung aus drei Käsesorten, hausgemachte Mayo (mit Lauch, confiertem Knoblauch oder Schnittlauch) und etwas Eingelegtes oder Mariniertes.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Kroque",
+          "Aufschnitt",
+          "Käsesorten",
+          "Mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kroques are packed between two slices of Pain de Mie and toasted golden brown",
+        "quote": "Alles zwischen zwei Scheiben Pain de Mie gepackt und goldbraun getoastet",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Kroque",
+          "Pain de Mie"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they had the Le Classique with homemade ham cuit au torchon, pickled onions and a mix of Gouda, Emmentaler and Comté",
+        "quote": "Wir starteten mit dem Le Classique: hausgemachter Schinken „cuit au torchon“, eingelegte Zwiebeln, eine Mischung aus Gouda, Emmentaler und Comté",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Le Classique",
+          "Schinken",
+          "Zwiebeln",
+          "Gouda",
+          "Emmentaler",
+          "Comté"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the secret sauce on the Le Classique is dangerously good",
+        "quote": "eine gefährlich gute Geheimsoße",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Geheimsoße",
+          "Le Classique"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they then had the Le Rostbif with roast beef, chive mayo, pickled onions, Gouda, Gruyère and Cheddar",
+        "quote": "Danach kam das Le Rostbif mit Roastbeef, Schnittlauch-Mayo, eingelegten Zwiebeln, Gouda, Gruyère und Cheddar.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Le Rostbif",
+          "Roastbeef",
+          "Schnittlauch-Mayo",
+          "Zwiebeln",
+          "Gouda",
+          "Gruyère",
+          "Cheddar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Le Rostbif was hearty, cheesy and just the right amount of indulgence",
+        "quote": "Herzhaft, käsig und genau die richtige Portion Genuss.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Le Rostbif"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they will try the La Dindz next time",
+        "quote": "Beim nächsten Mal probieren wir das La Dindz",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "La Dindz"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the La Dindz is a Mediterranean-inspired Kroque with fresh lemon notes, feta and marinated antipasti",
+        "quote": "die mediterran inspirierte Variante mit frischen Zitronennoten, Feta und marinierten Antipasti",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "La Dindz",
+          "Feta",
+          "Antipasti"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque offers homemade sides and dips to build your own combination",
+        "quote": "Dazu gibt es hausgemachte Beilagen und Dips, mit denen man sich seine ganz persönliche Kombination zusammenstellen kann.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Beilagen",
+          "Dips"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Mousse au Chocolat with lemon zest and a pinch of sea salt was gone within minutes",
+        "quote": "Die Mousse au Chocolat mit Zitronenabrieb und einer Prise Meersalz war innerhalb weniger Minuten verschwunden.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Mousse au Chocolat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "seasoning"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "drinks get their due at Kroque",
+        "quote": "kommen bei Kroque auch die Drinks nicht zu kurz",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the freshly mixed raspberry daiquiri is worth trying with a sandwich",
+        "quote": "sollte den frisch gemixten Himbeer-Daiquiri probieren",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Himbeer-Daiquiri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the raspberry daiquiri is just sweet enough and maybe a bit too drinkable for a lunch break",
+        "quote": "Gerade süß genug und vielleicht ein bisschen zu süffig für die Mittagspause.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Himbeer-Daiquiri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lukas designed and built out the room himself",
+        "quote": "Den Raum hat Lukas selbst gestaltet und ausgebaut.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque has a wooden floor found under the old linoleum",
+        "quote": "dem Holzboden, den er unter dem alten Linoleum entdeckte",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque has pine seating, a generous bar with orange tiles and a matching orange facade",
+        "quote": "Sitzmöbel aus Fichtenholz, eine großzügige Bar mit orangefarbenen Fliesen und eine dazu passende orangefarbene Fassade",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the front of Kroque feels like a retro diner, the back more like a club",
+        "quote": "Vorne erinnert alles an einen Retro-Diner, hinten geht es eher in Richtung Club.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque is already more than just a lunch spot",
+        "quote": "Kroque zeigt schon jetzt, dass es mehr als nur ein Lunchspot ist",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque has held evenings with guest DJs and special drinks, with more planned",
+        "quote": "Es gab bereits Abende mit Gast-DJs und besonderen Drinks – und weitere sind in Planung.",
+        "sentiment": "neutral",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kroque is a bit sandwich shop, a bit cocktail bar, a bit intimate venue",
+        "quote": "Ein bisschen Sandwichladen, ein bisschen Cocktailbar, ein bisschen intimer Veranstaltungsort.",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the La Dindz has fresh lemon notes, feta and marinated antipasti",
+        "quote": "mit frischen Zitronennoten, Feta und marinierten Antipasti",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "La Dindz"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "subject": "place",
+        "place": 0,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the mousse au chocolat disappeared within minutes, actually seconds",
+        "quote": "innerhalb weniger Minuten verschwunden. Eigentlich eher Sekunden.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Mousse au Chocolat"
+        ],
+        "amount": 1,
+        "unit": "minutes",
+        "kind": "fact",
+        "subject": "place",
+        "place": 0,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Kroque also serves drinks",
+        "quote": "kommen bei Kroque auch die Drinks nicht zu kurz",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "subject": "place",
+        "place": 0,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the raspberry daiquiri may be a bit too easy to drink for lunch",
+        "quote": "vielleicht ein bisschen zu süffig für die Mittagspause",
+        "sentiment": "mixed",
+        "aspect": "drink_quality",
+        "foods": [
+          "Himbeer-Daiquiri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "place",
+        "place": 0,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's \"Kroque also serves drinks\" covers the same sentence; the scorer just failed to pair them."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The agent split the La Dindz description into two claims, which is an acceptable split of the reference's single claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The agent split the mousse ingredients from its disappearing quickly, which is a valid split of the reference claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This is the same drinks sentence as the reference's \"drinks get their due\" claim, just unpaired."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The agent split \"too drinkable for lunch\" off from \"just sweet enough\", which is acceptable."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Being responsible for desserts is a staff role, so neither ownership nor other is clearly better."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The agent's matched claim is about lemon zest and sea salt, where seasoning fits, while taste fits the reference's merged claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): Listing the ingredients is a fact, while the reference's merged claim includes an approving part, so both kinds fit."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): \"Desserts\" is a general category word like \"snacks\", and the claim is about Josue's role rather than a food."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "change.missed (both_ok): The reference itself accepts \"fact\" as the kind, so the agent's fact reading is allowed."
+      },
+      {
+        "at": "2026-11-01T15:11:31.439Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.240Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.430Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

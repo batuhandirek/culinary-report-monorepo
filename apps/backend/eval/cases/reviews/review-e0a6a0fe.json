@@ -1,0 +1,182 @@
+{
+  "id": "review-e0a6a0fe",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e0a6a0fe-0d93-4ade-a91b-ed9135f95918",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tGVVZXOXlOalJWYTBoMVdXNXpUbXhrTTJGQ2MzYxAB",
+    "platform": "google",
+    "language": "ru",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-15T11:33:08.370Z",
+    "stars": 4,
+    "text": "Еда вкусная, только не слушают о чем просят, просили без лука и петрушки а сделали со всем этим) так же забыли сделать еще одну шаурму в заказе.",
+    "textTranslated": "The food is delicious, but they don't listen to what you ask for. We asked for it without onions and parsley, but they made it with all of that. They also forgot to make another shawarma in the order."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:08.747Z",
+    "claims": [
+      {
+        "text": "the food was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they don't listen to what you ask for",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "asked for it without onions and parsley",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they made it with all of that",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they forgot to make another shawarma in the order",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "shawarma"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:50.602Z",
+    "usage": {
+      "inputTokens": 5020,
+      "outputTokens": 933,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The general 'they don't listen to what you ask for' can stand alone or be folded into the onions-and-parsley claim, so it is optional. Onions and parsley are named as ingredients and kept as foods in the review's spelling.",
+    "claims": [
+      {
+        "text": "the food is delicious",
+        "quote": "Еда вкусная",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff don't listen to what you ask for",
+        "quote": "не слушают о чем просят",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "asked for it without onions and parsley but it was made with them",
+        "quote": "просили без лука и петрушки а сделали со всем этим",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "лука",
+          "петрушки"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they forgot to make another shawarma in the order",
+        "quote": "забыли сделать еще одну шаурму в заказе",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "шаурму"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.219Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

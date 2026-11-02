@@ -68,12 +68,15 @@ describe('Post counts at a fixed age (pglite)', () => {
 	});
 
 	const stored = (externalId: string) =>
-		harness.orm.em.fork().findOneOrFail(SocialPost, { externalId }, { populate: ['snapshots'] });
+		harness.orm.em
+			.fork()
+			.findOneOrFail(SocialPost, { externalId }, { populate: ['snapshots'] });
 
 	/** A stored post whose counts were last read `readDaysAfter` days after it was posted. */
 	const seed = (
 		city: City,
-		fields: Partial<SocialPost> & Pick<SocialPost, 'externalId' | 'platform' | 'url' | 'postedAt'>,
+		fields: Partial<SocialPost> &
+			Pick<SocialPost, 'externalId' | 'platform' | 'url' | 'postedAt'>,
 		readDaysAfter = 1,
 	) =>
 		harness.orm.em.create(SocialPost, {
@@ -104,11 +107,18 @@ describe('Post counts at a fixed age (pglite)', () => {
 		// The read at seven days is kept
 		const atSeven = new Date(post.postedAt.getTime() + POST_COUNTS_AGE_DAYS * DAY);
 		const live = await em.findOneOrFail(SocialPost, { externalId: '7100000000000000001' });
-		posts.readCounts(live, { views: 900, likes: 80, shares: 4, comments: 9, saves: 6 }, atSeven);
+		posts.readCounts(
+			live,
+			{ views: 900, likes: 80, shares: 4, comments: 9, saves: 6 },
+			atSeven,
+		);
 		await em.flush();
 
 		// A later find adds a snapshot and the author's followers, never the counts
-		await posts.upsert({ ...tiktok('7100000000000000001', daysAgo(2), 5000), authorFans: 2500 }, city);
+		await posts.upsert(
+			{ ...tiktok('7100000000000000001', daysAgo(2), 5000), authorFans: 2500 },
+			city,
+		);
 		await em.flush();
 		post = await stored('7100000000000000001');
 		expect(post).toMatchObject({ views: 900, likes: 80, saves: 6, authorFans: 2500 });
@@ -175,7 +185,12 @@ describe('Post counts at a fixed age (pglite)', () => {
 			url: instagramGoneItem.url,
 			postedAt: daysAgo(10),
 		});
-		seed(city, { externalId: 'blog_x', platform: SocialPlatformEnum.BLOG, url: 'https://blog.example/x', postedAt: daysAgo(8) });
+		seed(city, {
+			externalId: 'blog_x',
+			platform: SocialPlatformEnum.BLOG,
+			url: 'https://blog.example/x',
+			postedAt: daysAgo(8),
+		});
 		seed(other, {
 			externalId: '7100000000000000007',
 			platform: SocialPlatformEnum.TIKTOK,
@@ -184,13 +199,28 @@ describe('Post counts at a fixed age (pglite)', () => {
 		});
 		await em.flush();
 		runActor.mockImplementation(async actor =>
-			actor === 'clockworks/tiktok-scraper' ? [tiktokGoneItem, tiktokPostItem] : [instagramGoneItem, instagramPhotoItem],
+			actor === 'clockworks/tiktok-scraper' ?
+				[tiktokGoneItem, tiktokPostItem]
+			:	[instagramGoneItem, instagramPhotoItem],
 		);
 
 		const result = await counts.refresh(city, 2);
 
-		expect(result).toEqual({ due: 5, tiktok: 3, instagram: 2, read: 2, gone: 2, notReturned: 1, waiting: 0 });
-		const calls = Object.fromEntries(runActor.mock.calls.map(([actor, input, opts]) => [actor, { input, cap: opts.maxCostUsd }]));
+		expect(result).toEqual({
+			due: 5,
+			tiktok: 3,
+			instagram: 2,
+			read: 2,
+			gone: 2,
+			notReturned: 1,
+			waiting: 0,
+		});
+		const calls = Object.fromEntries(
+			runActor.mock.calls.map(([actor, input, opts]) => [
+				actor,
+				{ input, cap: opts.maxCostUsd },
+			]),
+		);
 		expect(calls['clockworks/tiktok-scraper'].input).toEqual({
 			postURLs: [
 				tiktokGoneItem.url,
@@ -212,7 +242,13 @@ describe('Post counts at a fixed age (pglite)', () => {
 		expect(calls['apify/instagram-scraper'].cap).toBeCloseTo((2 * 0.0054) / 0.0171, 5);
 
 		const read = await stored(tiktokPostItem.id);
-		expect(read).toMatchObject({ views: 6055, likes: 126, shares: 91, comments: 17, saves: 66 });
+		expect(read).toMatchObject({
+			views: 6055,
+			likes: 126,
+			shares: 91,
+			comments: 17,
+			saves: 66,
+		});
 		expect(read.countsFinalAt).toEqual(read.countsAt);
 		expect(read.snapshots.getItems().map(s => s.views)).toEqual([6055]);
 		const gone = await stored('7000000000000000000');
@@ -228,7 +264,7 @@ describe('Post counts at a fixed age (pglite)', () => {
 		expect((await counts.due(city)).map(p => p.externalId)).toEqual(['7100000000000000003']);
 	});
 
-	it("leaves Instagram posts while Instagram is off, and keeps the oldest first when the budget runs short", async () => {
+	it('leaves Instagram posts while Instagram is off, and keeps the oldest first when the budget runs short', async () => {
 		const em = harness.orm.em;
 		const city = await cityFactory.create({ instagramEnabled: false });
 		for (const [id, days] of [
@@ -262,7 +298,14 @@ describe('Post counts at a fixed age (pglite)', () => {
 		]);
 		// Clockworks refuses a cap under $0.50: a cap, not a spend
 		expect(opts.maxCostUsd).toBe(0.5);
-		expect(result).toMatchObject({ due: 3, tiktok: 2, instagram: 0, read: 0, notReturned: 2, waiting: 1 });
+		expect(result).toMatchObject({
+			due: 3,
+			tiktok: 2,
+			instagram: 0,
+			read: 0,
+			notReturned: 2,
+			waiting: 1,
+		});
 	});
 
 	it("keeps one platform's reads when the other run fails, then fails", async () => {

@@ -1,0 +1,314 @@
+{
+  "id": "post-ab4f0cb7",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "berlin.bestplace",
+    "locationName": "Utopie cafè Berlin",
+    "hashtags": [
+      "utopiecafe",
+      "neukölln",
+      "neukolln",
+      "berlinfood",
+      "berlinbestplace"
+    ],
+    "taggedHandles": [
+      "utopie.berlin",
+      "monsieur.clement",
+      "testingtheworld",
+      "foodie_juli",
+      "berlincity.food"
+    ],
+    "text": "Italienisches Frühstück, Pastagerichte, sardische Spezialitäten zum Teilen und dazu ein Glas Wein? Klingt nach einem ziemlich guten Plan. 🍷\n\nIm @utopie.berlin in Neukölln kannst du morgens mit einem Frühstück starten, dich später durch kleine Leckereien probieren oder bei sardischen Spezialitäten gemeinsam mehrere Teller bestellen. Und weil man hier nicht nach dem letzten Bissen direkt wieder aufstehen muss, bleibt man am Ende vielleicht doch länger als geplant. 🫒😁\n\n#utopiecafe #neukölln #neukolln #berlinfood #berlinbestplace",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "ab4f0cb7-63ed-4d54-9ee1-75ef246ebc73",
+    "externalId": "ig_4013620188200593242",
+    "url": "https://www.instagram.com/p/DezPkvNCGda/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-22T14:53:52.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-23T04:00:54.677Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Utopie Café",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e287ef53-5e1d-45ec-b5c3-a7e964f27d86",
+          "brandName": "Utopie café",
+          "venueId": "68ace07e-04f3-49ae-8ecd-e58faa693202",
+          "venueName": "Utopie café"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "offers breakfast, pasta, small bites and Sardinian specialties",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a place where you stay longer than planned",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:10.069Z",
+    "usage": {
+      "inputTokens": 9945,
+      "outputTokens": 2643,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the menu listing reads as a neutral fact or approving description (both allowed), and whether 'sounds like a pretty good plan' is a verdict on the place. Breakfast, small treats and sharing plates partly repeat the opening list, so the overlapping ones are optional; no #ad, so not marked promotional despite the advertorial tone.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Utopie",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e287ef53-5e1d-45ec-b5c3-a7e964f27d86",
+          "brandName": "Utopie café",
+          "venueId": "68ace07e-04f3-49ae-8ecd-e58faa693202",
+          "venueName": "Utopie café",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Utopie serves Italian breakfast, pasta dishes, Sardinian specialties to share and a glass of wine",
+        "quote": "Italienisches Frühstück, Pastagerichte, sardische Spezialitäten zum Teilen und dazu ein Glas Wein",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Italienisches Frühstück",
+          "Pastagerichte",
+          "sardische Spezialitäten",
+          "Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "eating and drinking at Utopie sounds like a pretty good plan",
+        "quote": "Klingt nach einem ziemlich guten Plan",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Utopie is in Neukölln",
+        "quote": "Im @utopie.berlin in Neukölln",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Utopie you can start the morning with breakfast",
+        "quote": "morgens mit einem Frühstück starten",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Frühstück"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "later in the day you can try your way through small treats at Utopie",
+        "quote": "dich später durch kleine Leckereien probieren",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "with the Sardinian specialties you can order several plates together to share",
+        "quote": "bei sardischen Spezialitäten gemeinsam mehrere Teller bestellen",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "sardischen Spezialitäten"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Utopie you don't have to get up right after the last bite",
+        "quote": "weil man hier nicht nach dem letzten Bissen direkt wieder aufstehen muss",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "guests may end up staying at Utopie longer than planned",
+        "quote": "bleibt man am Ende vielleicht doch länger als geplant",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.441Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.437Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

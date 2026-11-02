@@ -1,0 +1,195 @@
+{
+  "id": "review-2b737ce5",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:2",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "2b737ce5-a25e-4fe0-b122-efaeaaacdd98",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2s5VFZqUm9WbWxIZDA5Q1JIRmpja3B0Y0ZWclpVRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Mr. Noodle Chen",
+    "venueId": "0282cc21-d340-4357-bdf0-ec8b9de4d9d1",
+    "brand": "Mr. Noodle Chen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-24T14:09:43.634Z",
+    "stars": 2,
+    "text": "The beef noodle soup I had today contained lots of MSG. Before that it was okay with affordable price so I came here from time to time but no more again.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:34:36.635Z",
+    "claims": [
+      {
+        "text": "the beef noodle soup contained lots of MSG",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "beef noodle soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was okay with affordable price",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the reviewer came here from time to time",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact"
+      },
+      {
+        "text": "no more again",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:52.995Z",
+    "usage": {
+      "inputTokens": 4940,
+      "outputTokens": 1238,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call is the before/after contrast: 'Before that it was okay' marks the place as worse than on earlier visits, so that claim is a change, while the MSG claim is mainly about today's soup (change allowed as an alternative). MSG reads best as seasoning, with ingredient_quality also allowed.",
+    "claims": [
+      {
+        "text": "the beef noodle soup had today contained lots of MSG",
+        "quote": "The beef noodle soup I had today contained lots of MSG",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "beef noodle soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "change"
+          ]
+        }
+      },
+      {
+        "text": "before today the food was okay",
+        "quote": "Before that it was okay",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the price was affordable",
+        "quote": "affordable price",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer came here from time to time",
+        "quote": "I came here from time to time",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer will not come back anymore",
+        "quote": "no more again",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

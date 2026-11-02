@@ -92,8 +92,6 @@ describe('BrandLeadScoreService with brands (pglite)', () => {
 					venueName: venue.name,
 					venue,
 					visited: true,
-					sentiment: 'positive',
-					summary: 'Good.',
 				});
 		};
 		// One post names both branches, one only the brand
@@ -115,8 +113,6 @@ describe('BrandLeadScoreService with brands (pglite)', () => {
 			venueName: 'Nhas City Chicken',
 			brand,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 		for (const [i, venue] of [mitte, neukolln].entries())
 			em.create(Review, {

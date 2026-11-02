@@ -1,0 +1,139 @@
+{
+  "id": "review-7c7e8180",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "7c7e8180-ea30-4ea4-b5e0-7d3043701f33",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tnNExUQmtWREpRYWpnMU1ISnRjVnA1U1RCYVpFRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "All Seasons",
+    "venueId": "5657c44f-dca3-41db-9be9-f2fe1ec2faa5",
+    "brand": "All Seasons",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-18T07:17:03.467Z",
+    "stars": 1,
+    "text": "The waiter doesn't know how to behave respectfully with visitors. He rushes you to choose some drinks, and if you're not sure, he make ugly faces .",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:59:53.989Z",
+    "claims": [
+      {
+        "text": "the waiter doesn't know how to behave respectfully with visitors",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "he rushes you to choose some drinks",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "advice",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "he make ugly faces",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:26.876Z",
+    "usage": {
+      "inputTokens": 4938,
+      "outputTokens": 487,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call was the aspect for being rushed to order drinks. It is pressure from the waiter, so attentiveness fits best, with friendliness or the service root also allowed. It is not speed_of_service, which is about slow or quick service.",
+    "claims": [
+      {
+        "text": "the waiter doesn't know how to behave respectfully with visitors",
+        "quote": "The waiter doesn't know how to behave respectfully with visitors.",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the waiter rushes you to choose some drinks",
+        "quote": "He rushes you to choose some drinks",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service",
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the waiter makes ugly faces if you're not sure",
+        "quote": "if you're not sure, he make ugly faces",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.213Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

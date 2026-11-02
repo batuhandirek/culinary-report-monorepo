@@ -2,6 +2,7 @@ import { Collection, type Rel } from '@mikro-orm/core';
 import { Entity, Enum, Index, ManyToOne, OneToMany, Property } from '@mikro-orm/decorators/legacy';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
+import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
 import { SocialPostRepository } from '../repositories/social-post.repository.js';
@@ -20,10 +21,26 @@ export enum SocialPlatformEnum {
 	BLOG = 'blog',
 }
 
+/** Why a post was not digested: what the gate saw it is about instead of eating and drinking out in the city */
+export enum PostSkipReasonEnum {
+	/** No caption worth reading and no transcript */
+	NO_CONTENT = 'no_content',
+	/** Not about food or drink: music, fashion, politics, a creator's life */
+	NOT_FOOD = 'not_food',
+	/** Cooking at home: a recipe, meal prep */
+	HOME_COOKING = 'home_cooking',
+	/** Groceries: supermarket deals, products on a shelf */
+	GROCERIES = 'groceries',
+	/** Outdoors: foraging, a picnic, a garden */
+	OUTDOORS = 'outdoors',
+	/** About food or drink in another city */
+	OTHER_CITY = 'other_city',
+}
+
 /** A TikTok video, an Instagram post or a blog article about food and drink in the city. */
 @Entity({ tableName: 'social_posts', repository: () => SocialPostRepository })
 export class SocialPost extends MikroOrmEntityAbstractClass<
-	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions' | 'hashtagLinks' | 'foundBy' | 'snapshots'
+	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions' | 'hashtagLinks' | 'foundBy' | 'snapshots' | 'statements'
 > {
 	// The platform's own id: a TikTok video id, `ig_<postId>` for Instagram, `blog_<hash of the URL>`
 	// for a blog article
@@ -109,6 +126,17 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'datetime', nullable: true })
 	analysedAt?: Date | null;
 
+	/**
+	 * Why it was not digested (no places, no claims), as the gate judged it (`PostGateAgent`, or
+	 * `no_content` in code); null when it was digested or not gated yet
+	 */
+	@Enum({ items: () => PostSkipReasonEnum, nativeEnumName: 'post_skip_reason', nullable: true })
+	skipReason?: PostSkipReasonEnum | null;
+
+	/** When the gate last judged it; a prompt change clears it to judge again */
+	@Property({ type: 'datetime', nullable: true })
+	gatedAt?: Date | null;
+
 	// Paid, gifted or invited, as the LLM read the caption
 	@Property({ type: 'boolean', nullable: true })
 	isPromotional?: boolean | null;
@@ -126,6 +154,10 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 
 	@OneToMany(() => Mention, mention => mention.post)
 	mentions = new Collection<Mention>(this);
+
+	/** Every claim it makes (`StatementService`): about a place it names (with its `mention`), the city, or nothing */
+	@OneToMany(() => Statement, statement => statement.post, { orderBy: { id: 'asc' }, orphanRemoval: true })
+	statements = new Collection<Statement>(this);
 
 	// The hashtags in its caption, in the caption's order
 	@OneToMany(() => PostHashtag, link => link.post, { orderBy: { rank: 'asc' } })

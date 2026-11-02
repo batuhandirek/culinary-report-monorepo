@@ -1,0 +1,635 @@
+{
+  "id": "post-0d1e7abc",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "sophia_sofire",
+    "locationName": null,
+    "hashtags": [
+      "berlincoffee",
+      "berlinfood",
+      "berlinberlin",
+      "foodberlin",
+      "berlincafe"
+    ],
+    "taggedHandles": [
+      "islacoffeeberlin",
+      "vnnhtl",
+      "simko__"
+    ],
+    "text": "✨NOT NEW, STILL HOT!✨\n\nEs wird Zeit, dass ich mal wieder ein paar alte Lieblingsspots besuche, und ihr kommt mit! Seit 10 Jahren gibt’s das @islacoffeeberlin jetzt schon und genauso lange gehe ich da bereits hin. Im Isla gibt’s nicht nur unfassbar guten Kaffee (und Kaffeebohnen für zuhause), sondern auch richtig gutes Essen. Ich liebe die Kuchen und das Gebäck oder die leckeren warmen Gerichte. Es gibt super viele vegane Optionen, die Speisen sind saisonal und low waste und alle super lecker. Ich mag besonders das Grilled Cheese mit Kimchi. Im Hinterhof lässt es sich gut chillen und man bekommt dort nichts mit von der wuseligen Hermannstrasse. Die Preise sind angemessen für die Qualität! \n\n📍Isla, Hermannstraße 37, 12049 Berlin \n\n#berlincoffee #berlinfood #berlinberlin #foodberlin #berlincafe",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "0d1e7abc-fae3-4ad1-86e7-3224374c4245",
+    "externalId": "ig_4001253790528501777",
+    "url": "https://www.instagram.com/p/DeHTx94ovgR/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-05T13:27:04.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:26:53.009Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Isla",
+        "locationHint": "Hermannstraße 37, 12049 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "666d876a-44e1-40a8-8696-96b993dd4322",
+          "brandName": "Isla",
+          "venueId": "0935d72c-1abd-44fc-8ad7-76569236dc3d",
+          "venueName": "Isla"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the coffee is incredibly good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they sell coffee beans for home",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "coffee beans"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is really good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cakes are loved",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "cakes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pastries are loved",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "pastries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they have warm dishes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they have many vegan options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dishes are seasonal",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dishes are low waste",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the grilled cheese with kimchi is especially liked",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "grilled cheese",
+          "kimchi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the backyard is good for chilling",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you do not notice the busy Hermannstraße there",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the prices are reasonable for the quality",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they have been open for 10 years",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:19:54.797Z",
+    "usage": {
+      "inputTokens": 10559,
+      "outputTokens": 3973,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 6206
+    },
+    "notes": "The headline and 'alte Lieblingsspots' are read as optional verdicts; the 10-year existence is a fact, not an anniversary event. 'Seasonal and low waste' could be a neutral fact or approving description; the courtyard shielding from Hermannstrasse is noise with atmosphere/location also fitting.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Isla",
+        "locationHint": "Hermannstraße 37, 12049 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "666d876a-44e1-40a8-8696-96b993dd4322",
+          "brandName": "Isla",
+          "venueId": "0935d72c-1abd-44fc-8ad7-76569236dc3d",
+          "venueName": "Isla",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Isla is not new but still hot",
+        "quote": "NOT NEW, STILL HOT!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Isla is one of the author's old favourite spots",
+        "quote": "alte Lieblingsspots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Isla has existed for 10 years",
+        "quote": "Seit 10 Jahren gibt’s das @islacoffeeberlin jetzt schon",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author has been going to Isla for 10 years",
+        "quote": "genauso lange gehe ich da bereits hin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Isla has unbelievably good Kaffee",
+        "quote": "unfassbar guten Kaffee",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Isla sells Kaffeebohnen for home",
+        "quote": "Kaffeebohnen für zuhause",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Kaffeebohnen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Isla has really good food",
+        "quote": "richtig gutes Essen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author loves the Kuchen and the Gebäck",
+        "quote": "Ich liebe die Kuchen und das Gebäck",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kuchen",
+          "Gebäck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the warm dishes are tasty",
+        "quote": "die leckeren warmen Gerichte",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are very many vegan options",
+        "quote": "Es gibt super viele vegane Optionen",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dishes are seasonal and low waste",
+        "quote": "die Speisen sind saisonal und low waste",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety",
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "all the dishes are super tasty",
+        "quote": "alle super lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author especially likes the Grilled Cheese mit Kimchi",
+        "quote": "Ich mag besonders das Grilled Cheese mit Kimchi",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Grilled Cheese mit Kimchi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the back courtyard is a good place to chill",
+        "quote": "Im Hinterhof lässt es sich gut chillen",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "in the courtyard you notice nothing of the bustling Hermannstrasse",
+        "quote": "man bekommt dort nichts mit von der wuseligen Hermannstrasse",
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the prices are appropriate for the quality",
+        "quote": "Die Preise sind angemessen für die Qualität!",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Isla is at Hermannstraße 37, 12049 Berlin",
+        "quote": "Isla, Hermannstraße 37, 12049 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.433Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.224Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.420Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,288 @@
+{
+  "id": "review-7f3142f7",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "7f3142f7-0bd5-4520-9e74-3f95652488b6",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xaVFExQmZVSE5RVDNSU2RFUXlObFpmTUhScFJsRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-30T19:29:04.733Z",
+    "stars": 3,
+    "text": "Went to the after work event in the upstairs with colleagues\n\nThink they need to update their website, website says tickets include 2 litres of beer per person; this, according to our server, is not the case and actually only covers entry.  Very misleading.\n\nOther than that food is good, music is loud and lively.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:03:52.866Z",
+    "claims": [
+      {
+        "text": "went to the after work event in the upstairs",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "went with colleagues",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the website says tickets include 2 litres of beer per person",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "payment",
+        "foods": [],
+        "amount": 2,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "the server said tickets only cover entry",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "billing",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the website was very misleading",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "food is good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "music is loud and lively",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:35.421Z",
+    "usage": {
+      "inputTokens": 5414,
+      "outputTokens": 1713,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the ticket/beer mismatch is price or other, and the sentiment of 'music is loud and lively', which reads as approving after 'Other than that' but loud alone could be a complaint. The 2 litres is a volume, not minutes or money, so no amount.",
+    "claims": [
+      {
+        "text": "went to the after work event upstairs with colleagues",
+        "quote": "Went to the after work event in the upstairs with colleagues",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        }
+      },
+      {
+        "text": "the venue needs to update its website",
+        "quote": "Think they need to update their website",
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the website says event tickets include 2 litres of beer per person",
+        "quote": "website says tickets include 2 litres of beer per person",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "extra_charges",
+            "other"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "according to the server the ticket does not include the beer and only covers entry",
+        "quote": "according to our server, is not the case and actually only covers entry",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "extra_charges"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the website's ticket information is very misleading",
+        "quote": "Very misleading.",
+        "sentiment": "negative",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other",
+            "extra_charges"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is good",
+        "quote": "food is good",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music is loud",
+        "quote": "music is loud",
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the atmosphere is lively",
+        "quote": "lively",
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.430Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.213Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

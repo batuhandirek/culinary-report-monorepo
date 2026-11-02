@@ -11,7 +11,7 @@ import { CompetitorService } from 'src/modules/venues/services/competitor.servic
 import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
-import { mockAgent } from 'src/tests/mock-agent.js';
+import { MOCK_AGENT_MODEL, mockAgent } from 'src/tests/mock-agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -110,8 +110,6 @@ describe('report analysis (pglite)', () => {
 			brand: venue.brand,
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 	};
 
@@ -150,7 +148,7 @@ describe('report analysis (pglite)', () => {
 		);
 		expect(analysis.investigations[0].hypotheses[0]).toMatchObject({ confidence: 'possible' });
 		expect(analysis.investigations.every(i => !i.fallback)).toBe(true);
-		expect(analysis.trace).toMatchObject({ model: 'openai/gpt-5.4', toolCalls: 0, notes: 'Read the checks; nothing to look up.', problems: [] });
+		expect(analysis.trace).toMatchObject({ model: MOCK_AGENT_MODEL, toolCalls: 0, notes: 'Read the checks; nothing to look up.', problems: [] });
 		expect(analysis.trace.error).toBeUndefined();
 
 		// The agent got the observations with their checks and the tools

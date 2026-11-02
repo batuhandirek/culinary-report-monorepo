@@ -1,0 +1,112 @@
+{
+  "id": "review-fd35af1d",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "fd35af1d-a1a5-4071-ac49-8788efffa0a7",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21jdFdEbENhbFpxYmtwck9VUTVja2N4T0hWWFIzYxAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-03T12:56:31.055Z",
+    "stars": 1,
+    "text": "Una tristeza ver el lugar vacio y si pides una mesa junto a la ventana no te la den",
+    "textTranslated": "It's sad to see the place empty, and if you ask for a table by the window they won't give it to you."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:04.174Z",
+    "claims": [
+      {
+        "text": "the place was empty",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "if you ask for a table by the window they won't give it to you",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:41.301Z",
+    "usage": {
+      "inputTokens": 4958,
+      "outputTokens": 736,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The empty room is crowding, the aspect for how full a place is, with atmosphere also allowed. The refused window table fits no fine service aspect cleanly, so the service root is primary. reservation_handling, which covers table allocation, is allowed too.",
+    "claims": [
+      {
+        "text": "it is sad to see the place empty",
+        "quote": "Una tristeza ver el lugar vacio",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "if you ask for a table by the window they won't give it to you",
+        "quote": "si pides una mesa junto a la ventana no te la den",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "reservation_handling"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.222Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

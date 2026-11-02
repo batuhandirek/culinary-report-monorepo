@@ -12,12 +12,12 @@ export const CITY_THEME_MIN_WRITTEN = 5;
 export const CITY_THEME_MIN_PEERS = 5;
 const CITY_THEMES_SHOWN = 5;
 
-/** One complaint point of a written review this month, with the brand whose branch it is about */
+/** One complaint (a negative claim with its aspect) of a written review this month, with the brand whose branch it is about */
 export interface CityThemeComplaint {
 	brandId: string;
 	reviewId: string;
-	/** Null while the point is not filed */
-	theme: string | null;
+	/** The aspect's key (a claim about no aspect is no complaint here) */
+	aspect: string;
 }
 
 const median = (values: number[]) => {
@@ -33,9 +33,7 @@ const round3 = (n: number) => Math.round(n * 1000) / 1000;
  * raising it (a review once per theme) against the median share at the month's other report brands
  * with `CITY_THEME_MIN_WRITTEN`+ written reviews: "a price increase was criticised in 18 % of your
  * written reviews; 4 % at the month's report venues". The biggest gap first; a root ("about price,
- * nothing finer") and a key `aspects` does not know are no finding. Undefined below the floors, and
- * while any of the brand's complaint points is unfiled (a share is whole or absent); a peer with an
- * unfiled point stays out of the medians.
+ * nothing finer") and a key `aspects` does not know are no finding. Undefined below the floors.
  */
 export const cityThemes = (input: {
 	brandId: string;
@@ -47,19 +45,17 @@ export const cityThemes = (input: {
 	const own = input.written.get(input.brandId) ?? 0;
 	if (own < CITY_THEME_MIN_WRITTEN) return undefined;
 	const byBrand = _.groupBy(input.complaints, c => c.brandId);
-	if ((byBrand[input.brandId] ?? []).some(c => !c.theme)) return undefined;
-	// Theme → reviews raising it, per brand
+	// Aspect → reviews raising it, per brand
 	const shares = (brandId: string) => {
 		const written = input.written.get(brandId) ?? 0;
 		const reviews = _.mapValues(
-			_.groupBy(byBrand[brandId] ?? [], c => c.theme),
+			_.groupBy(byBrand[brandId] ?? [], c => c.aspect),
 			list => new Set(list.map(c => c.reviewId)).size,
 		);
 		return { written, reviews };
 	};
 	const peers = [...input.written.keys()]
 		.filter(id => id !== input.brandId && (input.written.get(id) ?? 0) >= CITY_THEME_MIN_WRITTEN)
-		.filter(id => !(byBrand[id] ?? []).some(c => !c.theme))
 		.map(shares);
 	if (peers.length < CITY_THEME_MIN_PEERS) return undefined;
 	const mine = shares(input.brandId);

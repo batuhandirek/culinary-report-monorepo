@@ -1,0 +1,164 @@
+{
+  "id": "review-b871be75",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "b871be75-8d58-4941-81df-0f4ad7a1d8d0",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25vNU1TMUhVMUpRZDFKNFdEaE1VRE0zTjA1Vk1sRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Borchardt",
+    "venueId": "c0f474be-f6bc-44b1-b4b9-018598e98753",
+    "brand": "Borchardt",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-11T07:31:16.338Z",
+    "stars": 5,
+    "text": "Wonderful atmosphere. Well prepared dishes and professional staff. Will be back.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:42:21.861Z",
+    "claims": [
+      {
+        "text": "wonderful atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "well prepared dishes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "professional staff",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "will be back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:40.265Z",
+    "usage": {
+      "inputTokens": 4918,
+      "outputTokens": 499,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Well prepared dishes' could be cooking or general food; 'professional staff' fits no finer service aspect, so the service root applies.",
+    "claims": [
+      {
+        "text": "the atmosphere was wonderful",
+        "quote": "Wonderful atmosphere.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the dishes were well prepared",
+        "quote": "Well prepared dishes",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were professional",
+        "quote": "professional staff",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "will be back",
+        "quote": "Will be back.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -3,8 +3,6 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
-import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
-import type { AnsweredPoint } from 'src/modules/feedback/util/feedback-rows.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
@@ -23,6 +21,8 @@ import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { BrandPostsService } from 'src/modules/social/services/brand-posts.service.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { CompetitorPickedByEnum } from 'src/modules/venues/entities/brand-competitor.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
@@ -42,6 +42,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 	let controller: PortalController;
 	let competitors: CompetitorService;
 	let city: City;
+	let index: TopicIndex;
 	let count = 0;
 
 	const em = () => harness.orm.em;
@@ -57,10 +58,13 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			...extra,
 		} as Venue);
 
-	/** A review; `praise` / `complaints` become its feedback rows */
+	/** A claim as a test states it: the text and the aspect key it is filed under */
+	type Claim = { text: string; aspect: string };
+
+	/** A review; `praise` / `complaints` become its statements (positive / negative claims) */
 	const newReview = (
 		venue: Venue,
-		{ praise = [], complaints = [], ...extra }: Partial<Review> & { praise?: AnsweredPoint[]; complaints?: AnsweredPoint[] },
+		{ praise = [], complaints = [], ...extra }: Partial<Review> & { praise?: Claim[]; complaints?: Claim[] },
 	) => {
 		const review = em().create(Review, {
 			reviewId: `review-${count++}`,
@@ -68,12 +72,20 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			publishedAt: new Date('2026-09-10T12:00:00Z'),
 			...extra,
 		} as Review);
-		addFeedback(em(), review, { praise, complaints });
+		addStatements(
+			em(),
+			review,
+			[
+				...praise.map(c => ({ ...c, sentiment: 'positive' as const })),
+				...complaints.map(c => ({ ...c, sentiment: 'negative' as const })),
+			],
+			{ index },
+		);
 		return review;
 	};
 
-	/** A post about the venue; `brandOnly`: it named the brand but no branch. */
-	const newPost = (venue: Venue, extra: Partial<SocialPost>, summary = 'Good döner', brandOnly = false) => {
+	/** A post about the venue, with a praising claim when `claim` is given; `brandOnly`: it named the brand but no branch. */
+	const newPost = (venue: Venue, extra: Partial<SocialPost>, claim?: string, brandOnly = false) => {
 		const post = em().create(SocialPost, {
 			externalId: `post-${count++}`,
 			platform: SocialPlatformEnum.TIKTOK,
@@ -88,10 +100,14 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			venue: brandOnly ? null : venue,
 			venueName: venue.name,
 			visited: true,
-			sentiment: 'positive',
-			summary,
 		});
-		addFeedback(em(), mention, { dishes: [{ name: 'döner', sentiment: 'positive' }] });
+		// A dish the post named that no claim names: a dish-only statement
+		addStatements(
+			em(),
+			mention,
+			[...(claim ? [{ text: claim, sentiment: 'positive' as const }] : []), { foods: ['döner'], sentiment: 'positive' }],
+			{ index },
+		);
 		return post;
 	};
 
@@ -119,6 +135,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 		city = testCity(em());
 		seedTopics(em());
 		await em().flush();
+		index = await harness.moduleRef.get(TopicService).index();
 	});
 
 	afterAll(async () => {
@@ -139,7 +156,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				text: 'Kalt und langsam',
 				textTranslated: 'Cold and slow',
 				language: 'de',
-				complaints: [{ topic: 'service', detail: 'slow' }],
+				complaints: [{ text: 'slow', aspect: 'service' }],
 				replyDraft: 'Danke, das schauen wir uns an.',
 			});
 			answered = newReview(venue, {
@@ -147,13 +164,13 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				text: 'Rude staff',
 				language: 'en',
 				ownerResponse: 'Sorry!',
-				complaints: [{ topic: 'service', detail: 'rude' }],
+				complaints: [{ text: 'rude', aspect: 'service' }],
 			});
 			drafted = newReview(venue, {
 				stars: 3,
 				text: 'Okay food',
 				language: 'en',
-				praise: [{ topic: 'food', detail: 'okay' }],
+				praise: [{ text: 'okay', aspect: 'food' }],
 				publishedAt: new Date('2026-08-20T12:00:00Z'),
 			});
 			newReview(venue, { stars: 5, publishedAt: new Date('2026-09-12T12:00:00Z') });
@@ -161,7 +178,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				stars: 5,
 				text: 'Great',
 				language: 'en',
-				praise: [{ topic: 'food', detail: 'great' }],
+				praise: [{ text: 'great', aspect: 'taste' }],
 			});
 			newReview(other, { stars: 1, text: 'Not this venue', language: 'en' });
 			em().create(Report, {
@@ -196,12 +213,28 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			expect((await list({ page: 9, size: 2 })).totalItems).toBe(5);
 		});
 
-		it('filters by month, stars, topic, answered and language', async () => {
+		it('filters by month, stars, topic (an aspect root: a claim under it), answered and language', async () => {
 			expect((await list({ month: '2026-08' })).items.map(r => r.id)).toEqual([drafted.id]);
 			expect((await list({ stars: 2 })).items.map(r => r.id)).toEqual([critical.id]);
 			expect((await list({ topic: 'service' })).items.map(r => r.id).sort()).toEqual(
 				[critical.id, answered.id].sort(),
 			);
+			// "great" is filed under taste, a child of food
+			expect((await list({ topic: 'food' })).items.map(r => r.text).sort()).toEqual(['Great', 'Okay food']);
+			expect((await list({ topic: 'wait' })).items).toEqual([]);
+			// Each review's statements come with their parts, the aspect with its root
+			expect((await list({ topic: 'food', month: '2026-09' })).items[0].statements).toEqual([
+				expect.objectContaining({
+					text: 'great',
+					sentiment: 'positive',
+					parts: [
+						expect.objectContaining({
+							role: 'aspect',
+							topic: expect.objectContaining({ key: 'taste', parent: expect.objectContaining({ key: 'food' }) }),
+						}),
+					],
+				}),
+			]);
 			expect((await list({ answered: true })).items.map(r => r.id)).toEqual([answered.id]);
 			expect((await list({ language: 'de' })).items.map(r => r.id)).toEqual([critical.id]);
 		});
@@ -292,7 +325,9 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 
 			const posts = await controller.listPortalPosts(brand.id, { page: 1, size: 10 });
 			expect(posts.items.map(p => p.views).sort()).toEqual([100, 200, 300]);
-			expect(posts.items.find(p => p.views === 100)?.summary).toBe('Nefis is great');
+			// Its sentiment comes from its claims (no stored one since claim model v2)
+			const nefis = posts.items.find(p => p.views === 100)!;
+			expect([nefis.sentiment, nefis.statements.map(s => s.text).filter(Boolean)]).toEqual(['positive', ['Nefis is great']]);
 			expect((await controller.listPortalCreators(brand.id, {})).items).toHaveLength(3);
 
 			// Its own branches are never its competition
@@ -335,9 +370,26 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			expect(all.items[1]).toMatchObject({
 				paid: true,
 				own: false,
-				summary: 'Good döner',
+				// A dish-only statement judges nothing: the post's sentiment is neutral
+				sentiment: 'neutral',
 				visited: true,
 			});
+			// What the post says about the brand: its mention's statements with their parts
+			expect(all.items[1].statements).toEqual([
+				expect.objectContaining({
+					sentiment: 'positive',
+					parts: [
+						expect.objectContaining({
+							role: 'food',
+							term: expect.objectContaining({
+								name: 'döner',
+								topics: [expect.objectContaining({ topic: expect.objectContaining({ key: 'kebab' }) })],
+							}),
+						}),
+					],
+				}),
+			]);
+			expect(all.items[1].statements[0]).not.toHaveProperty('text');
 			expect(all.items[2]).toMatchObject({ own: true, platform: 'instagram' });
 
 			expect(

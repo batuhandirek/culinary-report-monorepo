@@ -1,0 +1,268 @@
+{
+  "id": "review-bef6212c",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "bef6212c-cb90-4912-81f5-faa6b4d55916",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2poM1lYWnNjVmhxWkVKV2VWOUdkbDgxUldSaFJtYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-28T06:15:49.870Z",
+    "stars": 2,
+    "text": "Ambiente toll, Service toll, Suppe war komplett überwürzt und der Hauptgang ging gerade so! Dessert war okay. Ein weiterer Besuch kommt bei der Qualität des Essens nicht mehr in Frage! Bei den Bestellungen handelte es sich nicht um ein Gericht von Tim Raue!",
+    "textTranslated": "The ambiance was great, the service was great, but the soup was completely over-seasoned and the main course was just about edible! Dessert was okay. Given the quality of the food, I won't be returning! And the dishes I ordered weren't even from Tim Raue!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:53:44.016Z",
+    "claims": [
+      {
+        "text": "the ambiance was great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the soup was completely over-seasoned",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the main course was just about edible",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "dessert was okay",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I won't be returning",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the dishes I ordered weren't even from Tim Raue",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:10.173Z",
+    "usage": {
+      "inputTokens": 5097,
+      "outputTokens": 1772,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'Hauptgang' and 'Dessert' count as foods (kept Dessert as a named dish, treated Hauptgang as a general course word); the aspect for the complaint that the dishes were not Tim Raue's own is unclear (menu_variety, with authenticity/food/null allowed).",
+    "claims": [
+      {
+        "text": "the ambiance was great",
+        "quote": "Ambiente toll",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was great",
+        "quote": "Service toll",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Suppe was completely over-seasoned",
+        "quote": "Suppe war komplett überwürzt",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "Suppe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the main course was just about passable",
+        "quote": "der Hauptgang ging gerade so",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Dessert was okay",
+        "quote": "Dessert war okay",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "Dessert"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive",
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "given the quality of the food, another visit is out of the question",
+        "quote": "Ein weiterer Besuch kommt bei der Qualität des Essens nicht mehr in Frage!",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the dishes ordered were not dishes by Tim Raue",
+        "quote": "Bei den Bestellungen handelte es sich nicht um ein Gericht von Tim Raue!",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity",
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

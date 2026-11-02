@@ -1,0 +1,244 @@
+{
+  "id": "review-436b38b2",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "436b38b2-347f-4e47-a82f-e21048a484a1",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25SbVJsUmZaRFUyWDIxdGVtZGtUbmxrVG1SUGFIYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Kaiser's – Kaiser'schmarrn",
+    "venueId": "5d781be9-217a-4052-b852-ea88cd2c1485",
+    "brand": "Kaiser's – Kaiser'schmarrn",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-31T10:57:32.053Z",
+    "stars": 2,
+    "text": "Das Essen schmeckt gut, allerdings war ich von der Bedienung enttäuscht. Während meines Besuchs wurde durchgehend telefoniert und meine Bestellung wurde zudem falsch serviert. Auf meinen Hinweis wurde leider kaum reagiert. Insgesamt habe ich mich nicht wirklich beachtet gefühlt. Daher werde ich hier nicht noch einmal essen.",
+    "textTranslated": "The food tasted good, however, I was disappointed with the service. They were constantly on the phone during my visit, and my order was also served incorrectly. Unfortunately, my complaint was barely acknowledged. Overall, I didn't feel very welcome. Therefore, I won't be eating here again."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:22.499Z",
+    "claims": [
+      {
+        "text": "the food tasted good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was disappointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they were constantly on the phone during the visit",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the order was served incorrectly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the complaint was barely acknowledged",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they didn't feel very welcome",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they won't be eating here again",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:48.943Z",
+    "usage": {
+      "inputTokens": 5149,
+      "outputTokens": 988,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'nicht beachtet' means not noticed or attended to, so it is attentiveness, despite the translation's 'not welcome' (friendliness is allowed). Phone use and the wrong order are judged negatively in context, so they are opinions, with fact allowed.",
+    "claims": [
+      {
+        "text": "the food tastes good",
+        "quote": "Das Essen schmeckt gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "disappointed with the service",
+        "quote": "allerdings war ich von der Bedienung enttäuscht",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "staff were on the phone constantly during the visit",
+        "quote": "Während meines Besuchs wurde durchgehend telefoniert",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the order was served wrong",
+        "quote": "meine Bestellung wurde zudem falsch serviert",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "staff barely reacted when the wrong order was pointed out",
+        "quote": "Auf meinen Hinweis wurde leider kaum reagiert",
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "did not really feel attended to overall",
+        "quote": "Insgesamt habe ich mich nicht wirklich beachtet gefühlt",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "will not eat here again",
+        "quote": "werde ich hier nicht noch einmal essen",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -9,16 +9,7 @@ import type {
 	TrendRisingBrandRow,
 	TrendShareRow,
 } from '../interfaces/city-trends.interface.js';
-
-/**
- * A dish a post or review names, from its feedback rows: the stored `dishKey`, and the dish or drink
- * topic the name names as a whole (`FeedbackPoint.foodTopic`'s key), when one does.
- */
-export interface TrendDish {
-	name: string;
-	key: string;
-	topic?: string | null;
-}
+import type { StatementFood } from 'src/modules/statements/util/statement-foods.js';
 
 /**
  * A matched mention in a post by someone other than the brand. Counted per brand: a chain's
@@ -31,7 +22,8 @@ export interface TrendMention {
 	category: string | null;
 	/** Its stored food topics (`MentionTopic`: its cuisine's, else its venue's category's), in order */
 	topics: string[];
-	dishes: TrendDish[];
+	/** The foods and drinks its statements name (their food parts), each with its wording's dish or drink topics */
+	dishes: StatementFood[];
 	postId: string;
 	/** The post's creator (`Creator.name`): one person's accounts count as one */
 	creator: string | null;
@@ -42,7 +34,7 @@ export interface TrendMention {
 export interface TrendReview {
 	brandId: string;
 	brandName: string;
-	dishes: TrendDish[];
+	dishes: StatementFood[];
 }
 
 export interface TrendMonthInput {
@@ -216,12 +208,15 @@ const tally = ({ mentions, reviews }: TrendMonthInput, index: TopicIndex) => {
 	>();
 	const posts = new Map<string, number>();
 	let dishSources = 0;
-	// Each post or review counts a row once, however many of its names fall in it: the dish or
-	// drink topic the name names as a whole ("döner", "doner kebab", "kebabs": kebab), else its
-	// `dishKey` ("vegetable kebab" stays apart); both stored on the feedback row
-	const rowsOf = (named: TrendDish[]) =>
+	// Each post or review counts a row once, however many of its names fall in it: every dish or
+	// drink topic its wording is linked to ("döner", "doner kebab", "kebabs": kebab; a compound
+	// wording each of its dishes), else the wording's own key ("vegetable kebab" stays apart until
+	// a decision links it)
+	const rowsOf = (named: StatementFood[]) =>
 		_.uniqBy(
-			named.map(d => [d.topic ?? d.key, d] as const).filter(([row]) => row),
+			named
+				.flatMap(d => (d.topics.length ? d.topics.map(t => [t.key, d] as const) : [[d.key, d] as const]))
+				.filter(([row]) => row),
 			([row]) => row,
 		);
 

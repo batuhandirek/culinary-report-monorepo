@@ -1,0 +1,279 @@
+{
+  "id": "review-b8f6f582",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "b8f6f582-799f-49f6-a26b-9bb684b9f27f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xoRVUyMW9aV3hMV25wT1VXaHNjV1UzTWs5eWVYYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Café YOHAKU",
+    "venueId": "e0eb7d10-db32-4f80-9af0-5df3c684fe36",
+    "brand": "Café YOHAKU",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-01T08:06:21.831Z",
+    "stars": 4,
+    "text": "The onigiri is SO delicious!!! I thought the Agepan was also good, but very very very oily and I had a difficult time finishing it. It’s still delicious, but just a bit difficult to eat.\nMatcha latte was okay.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:27.312Z",
+    "claims": [
+      {
+        "text": "the onigiri is SO delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "onigiri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Agepan was also good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Agepan was very very very oily",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had a difficult time finishing the Agepan",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Agepan is still delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Agepan is a bit difficult to eat",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the matcha latte was okay",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drink_quality",
+        "foods": [
+          "matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:55.229Z",
+    "usage": {
+      "inputTokens": 5389,
+      "outputTokens": 1505,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The Agepan sentences repeat themselves (good / oily / hard to finish / still delicious but hard to eat), so the restatements are optional and may be merged with the oily claim. 'Okay' for the matcha latte is lukewarm: mixed, with positive also allowed.",
+    "claims": [
+      {
+        "text": "the onigiri is so delicious",
+        "quote": "The onigiri is SO delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "onigiri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Agepan was also good",
+        "quote": "I thought the Agepan was also good",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Agepan was very oily",
+        "quote": "very very very oily",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer had a difficult time finishing the Agepan",
+        "quote": "I had a difficult time finishing it",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Agepan is still delicious",
+        "quote": "It’s still delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Agepan is a bit difficult to eat",
+        "quote": "just a bit difficult to eat",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "Agepan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Matcha latte was okay",
+        "quote": "Matcha latte was okay",
+        "sentiment": "mixed",
+        "aspect": "drink_quality",
+        "foods": [
+          "Matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.432Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,12 +1,9 @@
 import { describe, expect, it } from '@jest/globals';
 
-import {
-	type FeedbackPointView,
-	type AnsweredDish,
-	type AnsweredPoint,
-	feedbackRows,
-} from 'src/modules/feedback/util/feedback-rows.js';
-import { dishKey } from 'src/modules/venues/util/dishes.js';
+import type { TestClaim } from 'src/modules/statements/tests/factories/statement.factory.js';
+import type { StatementView } from 'src/modules/statements/util/statement-views.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+import { termKey } from 'src/modules/venues/util/dishes.js';
 
 import {
 	articleTitle,
@@ -21,23 +18,17 @@ import {
 	SummaryMention,
 	SummaryReview,
 } from '../util/summarize-report.js';
-import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+import { said } from './factories/statement-like.factory.js';
 
-/** What a source says, as an extraction writes its rows */
-interface Said {
-	praise?: AnsweredPoint[];
-	complaints?: AnsweredPoint[];
-	dishes?: AnsweredDish[];
-	changes?: string[];
-}
 const index = seedIndex();
-const said = ({ praise = [], complaints = [], dishes = [], changes = [] }: Said) =>
-	feedbackRows({ praise, complaints, dishes, changes }, { asked: true, aspects: index });
+
+/** What a source says, as agents A and B leave it: its claims with their parts (`said`) */
+interface Said {
+	claims?: TestClaim[];
+}
 
 const mention = ({
-	praise = [{ topic: 'food', detail: 'great chicken' }],
-	complaints = [],
-	dishes = [{ name: 'Half chicken', sentiment: 'positive' }],
+	claims = [{ text: 'great chicken', sentiment: 'positive', aspect: 'food' }, { foods: ['Half chicken'] }],
 	...overrides
 }: Partial<SummaryMention> & Said): SummaryMention => ({
 	postId: 'p1',
@@ -54,17 +45,15 @@ const mention = ({
 	isAd: false,
 	isPromotional: false,
 	visited: true,
-	sentiment: 'positive',
-	summary: 'Great chicken.',
-	feedback: said({ praise, complaints, dishes }),
+	statements: said(index, claims),
 	...overrides,
 });
 
 let reviewCount = 0;
-const review = ({ praise, complaints, dishes, changes, ...overrides }: Partial<SummaryReview> & Said): SummaryReview => ({
+const review = ({ claims = [], ...overrides }: Partial<SummaryReview> & Said): SummaryReview => ({
 	reviewId: `r${++reviewCount}`,
 	publishedAt: new Date('2026-09-15T12:00:00Z'),
-	feedback: said({ praise, complaints, dishes, changes }),
+	statements: said(index, claims),
 	...overrides,
 });
 
@@ -87,16 +76,44 @@ describe('summarizeReport', () => {
 		expect(data.ownPosts.map(p => p.postId)).toEqual(['own']);
 	});
 
-	it('counts a post that names the venue twice once, and each topic once per post', () => {
+	it('counts a post that names the venue twice once, and each root once per post', () => {
 		const data = summarizeReport({
 			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
-			mentions: [mention({}), mention({ praise: [{ topic: 'vibe', detail: 'cosy' }] })],
+			mentions: [mention({}), mention({ claims: [{ text: 'cosy', sentiment: 'positive', aspect: 'vibe' }] })],
 			reviews: [],
 		});
 		expect(data.social.postCount).toBe(1);
 		expect(data.social.praise).toEqual({ food: 1, vibe: 1 });
+	});
+
+	it("keeps a post's neutral and mixed claims as noted, counted as neither praise nor complaint", () => {
+		const data = summarizeReport({
+			aspects: index,
+			venue: VENUE,
+			month: '2026-09',
+			mentions: [
+				mention({
+					claims: [
+						{ text: 'fries for 10 euros', sentiment: 'neutral', aspect: 'price_level', amount: 10, unit: 'money', foods: ['fries'] },
+						{ text: 'good but pricey', sentiment: 'mixed', aspect: 'value_for_money' },
+					],
+				}),
+			],
+			reviews: [],
+		});
+		expect(data.social.praise).toEqual({});
+		expect(data.social.complaints).toEqual({});
+		expect(data.posts[0].noted).toEqual([
+			{ topic: 'price', theme: 'price_level', detail: 'fries for 10 euros' },
+			{ topic: 'price', theme: 'value_for_money', detail: 'good but pricey' },
+		]);
+		// The wording a neutral claim names is a dish of the post, as the claim came across
+		expect(data.posts[0].dishes).toEqual([{ name: 'fries', sentiment: 'neutral' }]);
+		expect(data.dishes).toEqual([{ name: 'fries', count: 1, positive: 0, negative: 0 }]);
+		const plain = summarizeReport({ aspects: index, venue: VENUE, month: '2026-09', mentions: [mention({})], reviews: [] });
+		expect(plain.posts[0].noted).toBeUndefined();
 	});
 
 	it('summarizes reviews: stars, replies, changes per review and the critical ones', () => {
@@ -110,7 +127,10 @@ describe('summarizeReport', () => {
 				review({
 					stars: 1,
 					text: 'New owner, worse food',
-					changes: ['new owner', 'food got worse'],
+					claims: [
+						{ text: 'new owner', change: true },
+						{ text: 'food got worse', change: true },
+					],
 				}),
 				review({ stars: 4, text: null }),
 			],
@@ -121,7 +141,7 @@ describe('summarizeReport', () => {
 		expect(data.reviews.changes).toEqual([
 			{ stars: 1, changes: ['new owner', 'food got worse'] },
 		]);
-		// Not filed yet: together, under "Other changes"
+		// Under no aspect yet: together, under "Other changes"
 		expect(data.reviews.changeThemes).toEqual([
 			{ label: 'Other changes', reviews: 1, details: ['new owner', 'food got worse'] },
 		]);
@@ -131,7 +151,8 @@ describe('summarizeReport', () => {
 		expect(data.reviews.stars.find(s => s.stars === 5)?.count).toBe(1);
 	});
 
-	it('counts reviews per topic, not complaint points, and splits 5 stars from the rest', () => {
+	it('counts reviews per root, not complaints, and splits 5 stars from the rest', () => {
+		const complaint = (text: string): TestClaim => ({ text, sentiment: 'negative', aspect: 'service' });
 		const data = summarizeReport({
 			aspects: index,
 			venue: VENUE,
@@ -141,14 +162,10 @@ describe('summarizeReport', () => {
 				review({
 					stars: 1,
 					text: 'Rude sommelier',
-					complaints: [
-						{ topic: 'service', detail: 'rude' },
-						{ topic: 'service', detail: 'spilled wine' },
-						{ topic: 'service', detail: 'no help choosing' },
-					],
+					claims: [complaint('rude'), complaint('spilled wine'), complaint('no help choosing')],
 				}),
-				review({ stars: 4, text: 'Slow', complaints: [{ topic: 'service', detail: 'slow' }] }),
-				review({ stars: 5, text: 'Great meat', praise: [{ topic: 'food', detail: 'juicy meat' }] }),
+				review({ stars: 4, text: 'Slow', claims: [complaint('slow')] }),
+				review({ stars: 5, text: 'Great meat', claims: [{ text: 'juicy meat', sentiment: 'positive', aspect: 'food' }] }),
 				review({ stars: 5, text: null }),
 			],
 		});
@@ -160,37 +177,44 @@ describe('summarizeReport', () => {
 			complaints: { service: 2 },
 		});
 		expect(data.reviews.split.belowFive.complaintDetails).toHaveLength(4);
+		expect(data.reviews.split.belowFive.complaintDetails[0]).toEqual({ topic: 'service', theme: 'service', detail: 'rude' });
 	});
 
-	// A theme counts once per source, like a topic, and is absent while a point is unfiled
-	it('counts themes per source and leaves them out while a point has no theme', () => {
-		const increase = (detail: string) => ({ theme: 'price_increase', detail });
+	// An aspect counts once per source, like a root; a claim about no aspect counts under neither
+	it('counts aspects per source, and a claim about no aspect under none', () => {
+		const charge = (text: string): TestClaim => ({ text, sentiment: 'negative', aspect: 'extra_charges' });
 		const data = summarizeReport({
 			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
 			reviews: [
-				review({ stars: 2, text: 'Dearer', complaints: [increase('prices went up'), increase('dürüm now €9.50')] }),
-				review({ stars: 3, text: 'Dearer still', complaints: [increase('prices are way more now'), { theme: 'price_level', detail: 'expensive' }] }),
+				review({ stars: 2, text: 'Extras', claims: [charge('charged for water'), charge('the sauce costs extra')] }),
+				review({
+					stars: 3,
+					text: 'Extras and dear',
+					claims: [charge('a service fee on the bill'), { text: 'expensive', sentiment: 'negative', aspect: 'price_level' }],
+				}),
 			],
 		});
 		expect(data.reviews.complaints).toEqual({ price: 2 });
-		expect(data.reviews.complaintThemes).toEqual({ price_increase: 2, price_level: 1 });
-		expect(data.reviews.split.belowFive.complaintThemes).toEqual({ price_increase: 2, price_level: 1 });
+		expect(data.reviews.complaintThemes).toEqual({ extra_charges: 2, price_level: 1 });
+		expect(data.reviews.split.belowFive.complaintThemes).toEqual({ extra_charges: 2, price_level: 1 });
 
-		const unfiled = summarizeReport({
+		const none = summarizeReport({
 			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [],
-			reviews: [review({ stars: 2, text: 'Dear', complaints: [{ topic: 'price', detail: 'expensive' }] })],
+			reviews: [review({ stars: 2, text: 'Dear', claims: [{ text: 'expensive', sentiment: 'negative' }] })],
 		});
-		expect([unfiled.reviews.complaints, unfiled.reviews.complaintThemes]).toEqual([{ price: 1 }, undefined]);
+		expect([none.reviews.complaints, none.reviews.complaintThemes]).toEqual([{}, {}]);
+		// Kept as said: the report's copy files it under `other`
+		expect(none.reviews.split.belowFive.complaintDetails).toEqual([{ topic: 'other', detail: 'expensive' }]);
 	});
 
-	// A dish a point names is one dish of that source, with the point's sentiment
-	it('counts a dish a point names once, with how the point came across', () => {
+	// A wording a claim names is one dish of that source, with the claim's sentiment
+	it('counts a dish a claim names once, with how the claim came across', () => {
 		const data = summarizeReport({
 			aspects: index,
 			venue: VENUE,
@@ -200,8 +224,7 @@ describe('summarizeReport', () => {
 				review({
 					stars: 2,
 					text: 'Pricey burger',
-					complaints: [{ theme: 'price_increase', detail: 'the burger got pricier', dish: 'burger' }],
-					dishes: [{ name: 'Burgers', sentiment: 'neutral' }],
+					claims: [{ text: 'the burger is pricey', sentiment: 'negative', aspect: 'price_level', foods: ['burger'] }],
 				}),
 			],
 		});
@@ -214,7 +237,7 @@ describe('summarizeReport', () => {
 			venue: VENUE,
 			month: '2026-09',
 			mentions: [mention({})],
-			reviews: [review({ stars: 2, dishes: [{ name: 'half chicken', sentiment: 'negative' }] })],
+			reviews: [review({ stars: 2, claims: [{ foods: ['half chicken'], sentiment: 'negative' }] })],
 		});
 		expect(data.dishes[0]).toEqual({
 			name: 'Half chicken',
@@ -229,23 +252,8 @@ describe('summarizeReport', () => {
 			aspects: index,
 			venue: VENUE,
 			month: '2026-09',
-			mentions: [
-				mention({
-					dishes: [
-						{ name: 'Burgers', sentiment: 'positive' },
-						{ name: 'burger', sentiment: 'positive' },
-						{ name: 'Fries', sentiment: 'positive' },
-					],
-				}),
-			],
-			reviews: [
-				review({
-					dishes: [
-						{ name: 'burger', sentiment: 'negative' },
-						{ name: 'French fries', sentiment: 'positive' },
-					],
-				}),
-			],
+			mentions: [mention({ claims: [{ foods: ['Burgers'] }, { foods: ['burger'] }, { foods: ['Fries'] }] })],
+			reviews: [review({ claims: [{ foods: ['burger'], sentiment: 'negative' }, { foods: ['French fries'] }] })],
 		});
 		expect(data.dishes.map(d => [d.name, d.count])).toEqual([
 			['Burgers', 2],
@@ -253,7 +261,7 @@ describe('summarizeReport', () => {
 			['French fries', 1],
 		]);
 		expect(
-			['cookies', 'Cookie', 'fries', 'fry', 'kebabs', 'hummus', 'Glass', 'Ribs'].map(dishKey),
+			['cookies', 'Cookie', 'fries', 'fry', 'kebabs', 'hummus', 'Glass', 'Ribs'].map(termKey),
 		).toEqual(['cooky', 'cooky', 'fry', 'fry', 'kebab', 'hummus', 'glass', 'rib']);
 	});
 
@@ -267,7 +275,7 @@ describe('summarizeReport', () => {
 				review({
 					stars: 2,
 					text: 'Long queue',
-					complaints: [{ topic: 'wait', detail: 'long queue' }],
+					claims: [{ text: 'long queue', sentiment: 'negative', aspect: 'wait' }],
 				}),
 			],
 		});
@@ -294,7 +302,7 @@ describe('summarizeReport', () => {
 });
 
 describe('reviews.list', () => {
-	it('lists every review newest first, with a capped excerpt and its topics', () => {
+	it('lists every review newest first, with a capped excerpt and its roots', () => {
 		const long = `${'Very good food and friendly staff. '.repeat(10)}End.`;
 		const data = summarizeReport({
 			aspects: index,
@@ -311,9 +319,9 @@ describe('reviews.list', () => {
 					textTranslated: long,
 					language: 'de',
 					ownerResponse: 'Sorry',
-					complaints: [
-						{ topic: 'wait', detail: 'slow' },
-						{ topic: 'wait', detail: 'very slow' },
+					claims: [
+						{ text: 'slow', sentiment: 'negative', aspect: 'wait' },
+						{ text: 'very slow', sentiment: 'negative', aspect: 'wait_for_food' },
 					],
 				}),
 				review({ reviewId: 'mid', publishedAt: new Date('2026-09-10'), text: 'Nice' }),
@@ -496,19 +504,21 @@ describe('ratingTrend', () => {
 		});
 	});
 
-	it('groups noticed changes by what changed, a review once per theme', () => {
-		const filed = (theme: string, detail: string): FeedbackPointView => ({
-			topic: 'food',
-			theme: theme as FeedbackPointView['theme'],
-			detail,
+	it('groups noticed changes by what changed, a review once per aspect', () => {
+		const filed = (aspect: string, text: string): StatementView => ({
+			text,
+			sentiment: 'neutral',
+			kind: 'change',
+			aspect,
+			root: index.rootOf(aspect)!,
 		});
 		expect(
 			groupChanges(
 				[
 					[filed('portion_size', 'burgers are getting smaller'), filed('portion_size', 'made smaller')],
-					[filed('portion_size', 'Burgers are smaller than before'), filed('ownership_change', 'new owner')],
-					[filed('portion_size', 'made smaller'), { topic: 'other', detail: 'new menu' }],
-					[filed('other', 'new kebab shop'), filed('renovation', 'renovated')],
+					[filed('portion_size', 'Burgers are smaller than before'), filed('ownership', 'new owner')],
+					[filed('portion_size', 'made smaller'), { text: 'new menu', sentiment: 'neutral', kind: 'change' }],
+					[filed('other', 'new kebab shop'), filed('interior', 'renovated')],
 				],
 				index,
 			),
@@ -519,9 +529,9 @@ describe('ratingTrend', () => {
 				reviews: 3,
 				details: ['burgers are getting smaller', 'made smaller', 'Burgers are smaller than before'],
 			},
-			{ theme: 'ownership_change', label: 'Ownership change', reviews: 1, details: ['new owner'] },
-			{ theme: 'renovation', label: 'Renovation', reviews: 1, details: ['renovated'] },
-			// A root (a change "about something else, nothing finer"), then what isn't filed yet, last
+			{ theme: 'interior', label: 'Interior', reviews: 1, details: ['renovated'] },
+			{ theme: 'ownership', label: 'Ownership', reviews: 1, details: ['new owner'] },
+			// A root (a change "about something else, nothing finer"), then the changes under no aspect, last
 			{ theme: 'other', label: 'Other', reviews: 1, details: ['new kebab shop'] },
 			{ label: 'Other changes', reviews: 1, details: ['new menu'] },
 		]);

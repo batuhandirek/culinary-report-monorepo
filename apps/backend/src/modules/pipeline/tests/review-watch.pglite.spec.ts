@@ -16,7 +16,9 @@ import {
 } from 'src/modules/outreach/services/review-alert.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReviewReplyAgent } from 'src/modules/reports/agents/review-reply.agent.js';
-import { ReviewAnalysisAgent } from 'src/modules/venues/agents/review-analysis.agent.js';
+import { StatementService } from 'src/modules/statements/services/statement.service.js';
+import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
+import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { ReviewAlertEvent } from 'src/modules/venues/persisted-events/review-alert.persisted-event.js';
@@ -52,9 +54,11 @@ describe('the weekly review watch (pglite)', () => {
 	const published: { name: string; reviewId: string }[] = [];
 	const pgBossService = {
 		sendJob: jest.fn<PgBossService['sendJob']>(async () => undefined),
-		publishWithEm: jest.fn(async (_em: unknown, name: string, event: { payload: { reviewId: string } }) => {
-			published.push({ name, reviewId: event.payload.reviewId });
-		}),
+		publishWithEm: jest.fn(
+			async (_em: unknown, name: string, event: { payload: { reviewId: string } }) => {
+				published.push({ name, reviewId: event.payload.reviewId });
+			},
+		),
 	};
 	const replyAgent = mockAgent((input: unknown) => ({
 		replies: (JSON.parse(input as string).reviews as { reviewId: string }[]).map(r => ({
@@ -62,16 +66,8 @@ describe('the weekly review watch (pglite)', () => {
 			reply: 'Danke, das schauen wir uns an.',
 		})),
 	}));
-	const analysisAgent = mockAgent((input: unknown) => ({
-		reviews: (JSON.parse(input as string).reviews as { reviewId: string }[]).map(r => ({
-			reviewId: r.reviewId,
-			sentiment: 'negative',
-			praise: [],
-			complaints: [{ theme: 'cooking', detail: 'dry meat' }],
-			dishes: [],
-			changes: [],
-		})),
-	}));
+	// Agent A reads one review a call
+	const claimsAgent = mockAgent(() => ({ claims: [{ text: 'dry meat', quote: null }] }));
 
 	const mails = () =>
 		pgBossService.sendJob.mock.calls
@@ -92,11 +88,23 @@ describe('the weekly review watch (pglite)', () => {
 			reviewsCount: 512,
 		},
 		// Five stars: no alert
-		{ reviewId: 'r-happy', placeId: won.placeId, publishedAtDate: daysAgo(3), stars: 5, text: 'Super!' },
+		{
+			reviewId: 'r-happy',
+			placeId: won.placeId,
+			publishedAtDate: daysAgo(3),
+			stars: 5,
+			text: 'Super!',
+		},
 		// Stars only: nothing to answer
 		{ reviewId: 'r-stars-only', placeId: won.placeId, publishedAtDate: daysAgo(3), stars: 1 },
 		// Older than the window: not kept
-		{ reviewId: 'r-old', placeId: won.placeId, publishedAtDate: daysAgo(30), stars: 1, text: 'Old news' },
+		{
+			reviewId: 'r-old',
+			placeId: won.placeId,
+			publishedAtDate: daysAgo(30),
+			stars: 1,
+			text: 'Old news',
+		},
 	];
 
 	const runWatch = async () => {
@@ -118,9 +126,15 @@ describe('the weekly review watch (pglite)', () => {
 				OutreachService,
 				ReviewAlertService,
 				EmailService,
+				StatementService,
 				{ provide: ApifyService, useValue: { runActor } },
 				{ provide: PgBossService, useValue: pgBossService },
-				{ provide: ReviewAnalysisAgent, useValue: analysisAgent },
+				{ provide: ReviewClaimsAgent, useValue: claimsAgent },
+				// Agent B is not under test here: the claims stay without parts
+				{
+					provide: StatementPartsService,
+					useValue: { read: async () => ({ read: 0, tokens: 0 }) },
+				},
 				{ provide: ReviewReplyAgent, useValue: replyAgent },
 			],
 		});
@@ -164,7 +178,9 @@ describe('the weekly review watch (pglite)', () => {
 		const runs = await harness.orm.em
 			.fork()
 			.find(PipelineRun, { step: PipelineStepEnum.WATCH_REVIEWS }, { populate: ['city'] });
-		expect(runs.map(r => [r.city.id, r.status])).toEqual([[city.id, PipelineRunStatusEnum.QUEUED]]);
+		expect(runs.map(r => [r.city.id, r.status])).toEqual([
+			[city.id, PipelineRunStatusEnum.QUEUED],
+		]);
 		expect(pgBossService.sendJob).toHaveBeenCalledTimes(1);
 	});
 
@@ -180,7 +196,9 @@ describe('the weekly review watch (pglite)', () => {
 		);
 		expect(options.maxCostUsd).toBe(1);
 
-		const saved = await harness.orm.em.fork().find(Review, {}, { orderBy: { reviewId: 'asc' } });
+		const saved = await harness.orm.em
+			.fork()
+			.find(Review, {}, { orderBy: { reviewId: 'asc' } });
 		expect(saved.map(r => r.reviewId)).toEqual(['r-critical', 'r-happy', 'r-stars-only']);
 		const critical = saved.find(r => r.reviewId === 'r-critical')!;
 		expect(critical.alertedAt).toBeInstanceOf(Date);
@@ -196,7 +214,9 @@ describe('the weekly review watch (pglite)', () => {
 	});
 
 	it('mails the owner the review with a reply draft, in their language, and logs it', async () => {
-		const critical = await harness.orm.em.fork().findOneOrFail(Review, { reviewId: 'r-critical' });
+		const critical = await harness.orm.em
+			.fork()
+			.findOneOrFail(Review, { reviewId: 'r-critical' });
 		expect(await alerts.send(critical.id)).toBe(true);
 
 		const [mail, ...rest] = mails();

@@ -1,0 +1,257 @@
+{
+  "id": "post-f0fb51e5",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "pizzamonimontana",
+    "locationName": "Hackescher Markt",
+    "hashtags": [
+      "tastethetradition",
+      "berlinfood",
+      "neapolitanpizza",
+      "streetfoodberlin"
+    ],
+    "taggedHandles": [],
+    "text": "Warten lohnt sich, versprochen. Wenn der Teig perfekt aufgegangen ist und Berlin für einen kurzen Moment nach Neapel schmeckt, weiß man „Es gibt Dinge, die man einfach probiert haben muss.“ Fragt sich nur, wer sich morgen als Erstes anstellt?\n\n#TasteTheTradition #BerlinFood #NeapolitanPizza #StreetFoodBerlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "f0fb51e5-7fbd-483b-98fc-0523eee89eca",
+    "externalId": "ig_4018115053829157321",
+    "url": "https://www.instagram.com/p/DfDNlpCIvHJ/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-28T19:44:46.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:01:25.996Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Hackescher Markt",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "1f04646c-f659-4769-ae57-8ec18eb7be38",
+          "brandName": "Hackescher Markt",
+          "venueId": "14c347c9-51ad-42bd-a239-d5a786b224f7",
+          "venueName": "Hackescher Markt"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "waiting is worth it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Berlin tastes like Naples for a moment",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dough rose perfectly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "people will line up tomorrow",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:49.716Z",
+    "usage": {
+      "inputTokens": 6030,
+      "outputTokens": 1699,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The tagged location Hackescher Markt is a square, not a venue, and no venue is named, so there are no places; all claims are subject none. The post reads as a vendor's own promotion. The Berlin-tastes-like-Naples line is about the pizza, not the city's food scene.",
+    "isPromotional": true,
+    "places": [],
+    "claims": [
+      {
+        "text": "waiting is worth it",
+        "quote": "Warten lohnt sich, versprochen.",
+        "sentiment": "positive",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Teig is perfectly risen",
+        "quote": "Wenn der Teig perfekt aufgegangen ist",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Teig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "for a brief moment Berlin tastes like Naples",
+        "quote": "Berlin für einen kurzen Moment nach Neapel schmeckt",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it is something you simply have to have tried",
+        "quote": "Es gibt Dinge, die man einfach probiert haben muss.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "asks who will be first in line tomorrow",
+        "quote": "Fragt sich nur, wer sich morgen als Erstes anstellt?",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Neapolitan pizza",
+        "quote": "#NeapolitanPizza",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "NeapolitanPizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.255Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.442Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -52,7 +52,10 @@ export const postsTool = (ctx: EvidenceContext, run: ToolRun): Tool =>
 						paidOrGifted: p.promotional,
 						visited: p.visited,
 						sentiment: p.sentiment,
-						summary: p.summary.length > SUMMARY_CHARS ? `${p.summary.slice(0, SUMMARY_CHARS - 1)}…` : p.summary,
+						// What it said, its own words where kept
+						said: p.said.map(s =>
+							s.length > SUMMARY_CHARS ? `${s.slice(0, SUMMARY_CHARS - 1)}…` : s,
+						),
 						praised: _.uniq(p.praise.map(x => x.topic)),
 						criticised: _.uniq(p.complaints.map(x => x.topic)),
 						dishes: p.dishes.map(d => d.name),

@@ -1,0 +1,241 @@
+{
+  "id": "post-d90ac864",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "ossyandarii",
+    "locationName": "Restaurant Al Rabuah",
+    "hashtags": [
+      "foodies",
+      "berlin",
+      "germany",
+      "viral"
+    ],
+    "taggedHandles": [
+      "@alrabuah.resturant"
+    ],
+    "text": "Russian trying arabic food #foodies #berlin #germany #viral @alrabuah.resturant ",
+    "subtitles": "try It\noh so cute\ngood\nyeah duh\nso cute\ndo You wanna try okay\ngut\nja gut okay von 10 was sagst du\nvon 1010 wow okay willst du jalanche probieren\n아\ngefällt dir okay danke danke dir",
+    "subtitlesLanguage": "deu-DE",
+    "id": "d90ac864-9d8c-4c9a-ac4c-e886b3b2e3a1",
+    "externalId": "7697944186581978401",
+    "url": "https://www.tiktok.com/@ossyandarii/video/7697944186581978401",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-18T09:55:03.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:43:12.512Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Restaurant Al Rabuah",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "31ac8313-8bc5-4fed-ae46-a5430ad63a14",
+          "brandName": "Restaurant Al Rabuah",
+          "venueId": "d384dd1f-1f42-462a-8520-21a063ccb12b",
+          "venueName": "Restaurant Al Rabuah"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Arabic food was tried",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Arabic food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food was cute",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food was good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food got 10/10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": 10,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:51:05.993Z",
+    "usage": {
+      "inputTokens": 9253,
+      "outputTokens": 1397,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The transcript is fragmentary; the ratings 'gut' and 'von 10... 1010' are read as praise of the food, and the 10/10 could be a verdict. Jalanche is the only dish named, so it is kept as a neutral fact.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Restaurant Al Rabuah",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "31ac8313-8bc5-4fed-ae46-a5430ad63a14",
+          "brandName": "Restaurant Al Rabuah",
+          "venueId": "d384dd1f-1f42-462a-8520-21a063ccb12b",
+          "venueName": "Restaurant Al Rabuah",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "a Russian tries Arabic food at Restaurant Al Rabuah",
+        "quote": "Russian trying arabic food",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Arabic food was good",
+        "quote": "ja gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food was rated 10 out of 10",
+        "quote": "von 1010 wow",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "jalanche is offered to try",
+        "quote": "willst du jalanche probieren",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "jalanche"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.440Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

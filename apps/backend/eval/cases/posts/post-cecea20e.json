@@ -1,0 +1,188 @@
+{
+  "id": "post-cecea20e",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "berlinfoodweek",
+    "locationName": "Bikini Berlin",
+    "hashtags": [
+      "throwback"
+    ],
+    "taggedHandles": [
+      "hal.and_official",
+      "jokolade",
+      "eduardteas",
+      "bikiniberlin",
+      "spain",
+      "madhuhoney.de",
+      "supergruenberlin",
+      "tausendschoen_genuss",
+      "dufte_berlin"
+    ],
+    "text": "#throwback Two days, 40+ producers, brands & start-ups, thousands of tastings and more good conversations than we can count. Thank you to every founder, producer and food lover who came through Bikini Berlin this weekend.\n\nSee you next year. 🖤\n\n📷 Patricia Kaiser, @hal.and_official @jokolade @eduardteas",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "cecea20e-503b-409d-9bee-ece5a6bc112b",
+    "externalId": "ig_4013640562745338952",
+    "url": "https://www.instagram.com/p/DezUNOeiOxI/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-22T15:34:21.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-23T04:00:57.839Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Bikini Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "40+ producers, brands and start-ups took part",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "thousands of tastings",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "good conversations and a successful weekend event",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:49:58.949Z",
+    "usage": {
+      "inputTokens": 6024,
+      "outputTokens": 1155,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Bikini Berlin is a shopping mall hosting a food event, and events are never places; the tagged brand accounts appear only as photo credits with nothing said about them, so no places are listed and the event claims go to the city.",
+    "isPromotional": true,
+    "places": [],
+    "claims": [
+      {
+        "text": "the food event at Bikini Berlin ran for two days with 40+ producers, brands & start-ups",
+        "quote": "Two days, 40+ producers, brands & start-ups",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the event at Bikini Berlin had thousands of tastings",
+        "quote": "thousands of tastings",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the food event will return next year",
+        "quote": "See you next year.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.251Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,337 @@
+{
+  "id": "post-2927e673",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "berlindeneyenir",
+    "locationName": null,
+    "hashtags": [
+      "berlin",
+      "reichstag",
+      "berlindeneyenir",
+      "getyourguide",
+      "getyourguidecommunity",
+      "berlinfood"
+    ],
+    "taggedHandles": [
+      "getyourguide",
+      "getyourguidecommunity"
+    ],
+    "text": "Werbung | @getyourguide @getyourguidecommunity\n\nReichstag’ın çatısında öğle yemeği yemek ister misiniz? 🏛️\n\nSıra beklemeden içeri giriyorsun, çatıdaki Käfer restoranında Berlin manzarasına karşı başlangıç, ana yemek ve tatlı. Yemekten sonra da kubbeye çıkıp manzaranın tadını çıkarıyorsun 🥂\n\nBerlin’e gelen misafirlerinizi götürmek için de çok güzel bir plan.\n\n🔗 Rezervasyon linki bio’da (GetYourGuide)\n📲 GetYourGuide app’te ilk rezervasyona %5 indirim: BERLINDENEYENIR5\n📍 Reichstag, Platz der Republik 1, Berlin\n\n#berlin #reichstag #berlindeneyenir #getyourguide #getyourguidecommunity #berlinfood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "2927e673-b15b-4b80-8b85-f5908800cb00",
+    "externalId": "ig_4012237201383600968",
+    "url": "https://www.instagram.com/p/DeuVHoXE7NI/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-20T17:06:35.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:50:23.420Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Käfer",
+        "locationHint": "Reichstag, Platz der Republik 1",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "00383331-585b-49d8-82f4-efeef11c476d",
+          "brandName": "Käfer",
+          "venueId": "075216ca-b861-4c8d-aae8-a1dd00a1e253",
+          "venueName": "Käfer"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the post is an ad",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "you can eat lunch on the Reichstag roof",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you go in without waiting in line",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meal includes a starter, main course and dessert",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant has a view of Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "after the meal you can go up to the dome",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is a 5% discount on the first reservation in the GetYourGuide app",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 5,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:34:23.018Z",
+    "usage": {
+      "inputTokens": 9709,
+      "outputTokens": 2558,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Sponsored GetYourGuide post written in second person, so whether Käfer was visited is uncertain; the dome climb is about a landmark, not food, and was left out, and the 5% code is a booking-platform deal, attached to Käfer as optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Käfer",
+        "locationHint": "rooftop of the Reichstag, Platz der Republik 1",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "00383331-585b-49d8-82f4-efeef11c476d",
+          "brandName": "Käfer",
+          "venueId": "075216ca-b861-4c8d-aae8-a1dd00a1e253",
+          "venueName": "Käfer",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Lunch can be eaten on the roof of the Reichstag",
+        "quote": "Reichstag’ın çatısında öğle yemeği yemek ister misiniz?",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "question"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "With the booking you enter the Reichstag without queuing",
+        "quote": "Sıra beklemeden içeri giriyorsun",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Käfer restaurant is on the roof of the Reichstag with a view of Berlin",
+        "quote": "çatıdaki Käfer restoranında Berlin manzarasına karşı",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The lunch at Käfer is a starter, main course and dessert",
+        "quote": "başlangıç, ana yemek ve tatlı",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lunch at Käfer is a very nice plan for taking guests visiting Berlin",
+        "quote": "Berlin’e gelen misafirlerinizi götürmek için de çok güzel bir plan.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "5% discount on the first GetYourGuide app booking with code BERLINDENEYENIR5",
+        "quote": "GetYourGuide app’te ilk rezervasyona %5 indirim: BERLINDENEYENIR5",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The address is Reichstag, Platz der Republik 1, Berlin",
+        "quote": "Reichstag, Platz der Republik 1, Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.228Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.423Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,450 @@
+{
+  "id": "post-b41bb2f8",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "berlinnaijafoodie",
+    "locationName": "Alexanderplatz",
+    "hashtags": [
+      "allyoucaneatberlin",
+      "allyoucaneat",
+      "nigerianmeals",
+      "goodfoodgoodmood",
+      "africanrestaurantinberlin"
+    ],
+    "taggedHandles": [],
+    "text": "My Birthday is tomorrow and \nBuffet Sunday already looking like a full house💃\n\nThe Buffet Sunday Experience Birthday Edition is set, and it’s already shaping up to be something special.\n\nA full spread of proper Nigerian flavours from jollof, soups, sides, proteins, small chops and chef-curated surprise birthday specials all in one space, with good people for just 35€\n\nBecause we like our guests comfortability, this will be a batch dining experience.\n\nSunday, March 22\nDining Sessions: 1st Batch: 1:30pm – 3:00pm\n\n2nd Batch: 3:30pm – 5:00pm\n\n3rd Batch: 5:30pm – 7:00pm\nAdults: 35€\nKids: 20€\n\nSeats are limited and reservations are already coming in steadily.\nIf you know, you know😉\n\nSend a DM or WhatsApp message to secure your spot.\n\nOlayinka\nFounder, Berlin Naija Foodie\n.\n.\n#allyoucaneatberlin #allyoucaneat  #nigerianmeals #goodfoodgoodmood  #africanrestaurantinberlin ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "b41bb2f8-1139-45cc-bdf5-e5ac548d1d5c",
+    "externalId": "7618487824358067489",
+    "url": "https://www.tiktok.com/@berlinnaijafoodie/video/7618487824358067489",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Berlin Naija Foodie",
+    "postedAt": "2026-03-18T07:03:50.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:43:06.973Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Berlin Naija Foodie",
+        "locationHint": "Alexanderplatz",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ad1ed69e-50c2-4b56-96f3-758d38138059",
+          "brandName": "Berlin Naija Foodie",
+          "venueId": "ae69caaf-5d60-4573-917b-6a9abbcaf1f8",
+          "venueName": "Berlin Naija Foodie"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Buffet Sunday is Birthday Edition",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the buffet has jollof, soups, sides, proteins and small chops",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "jollof",
+          "soup",
+          "sides",
+          "proteins",
+          "small chops"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the buffet includes chef-curated surprise birthday specials",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the buffet costs 35€ for adults",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 35,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the buffet costs 20€ for kids",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 20,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dining is batch dining",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "reservations are already coming in steadily",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:48:26.284Z",
+    "usage": {
+      "inputTokens": 10070,
+      "outputTokens": 3198,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5871
+    },
+    "notes": "Alexanderplatz is a square, not a place; all claims go to Berlin Naija Foodie. The birthday buffet is a dated event with its own prices, so the 35€ and 20€ prices could be deal, fact or event, and the batch dining claim could be space, crowding or atmosphere.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Berlin Naija Foodie",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ad1ed69e-50c2-4b56-96f3-758d38138059",
+          "brandName": "Berlin Naija Foodie",
+          "venueId": "ae69caaf-5d60-4573-917b-6a9abbcaf1f8",
+          "venueName": "Berlin Naija Foodie",
+          "note": "The post is by the venue's own account and names it exactly, and the brand has a single branch; the Alexanderplatz tag reads as a generic city tag rather than an address that contradicts Baumschulenstraße."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "The Buffet Sunday Experience Birthday Edition is set",
+        "quote": "The Buffet Sunday Experience Birthday Edition is set",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Buffet Sunday is already looking like a full house",
+        "quote": "Buffet Sunday already looking like a full house",
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The buffet offers a full spread of proper Nigerian flavours: jollof, soups, sides, proteins, small chops and chef-curated surprise birthday specials",
+        "quote": "A full spread of proper Nigerian flavours from jollof, soups, sides, proteins, small chops and chef-curated surprise birthday specials",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "jollof",
+          "soups",
+          "small chops"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": [
+            "opinion",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The buffet costs just 35€ for adults",
+        "quote": "for just 35€",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 35,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact",
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The buffet costs 20€ for kids",
+        "quote": "Kids: 20€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 20,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "family_pets"
+          ],
+          "kinds": [
+            "fact",
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The buffet is a batch dining experience for guests' comfort",
+        "quote": "Because we like our guests comfortability, this will be a batch dining experience.",
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "crowding",
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The buffet is on Sunday, March 22 in three sessions: 1:30pm–3:00pm, 3:30pm–5:00pm and 5:30pm–7:00pm",
+        "quote": "Sunday, March 22\nDining Sessions: 1st Batch: 1:30pm – 3:00pm\n\n2nd Batch: 3:30pm – 5:00pm\n\n3rd Batch: 5:30pm – 7:00pm",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Seats are limited and reservations are coming in steadily",
+        "quote": "Seats are limited and reservations are already coming in steadily.",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "crowding",
+            "space"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Spots are reserved by DM or WhatsApp message",
+        "quote": "Send a DM or WhatsApp message to secure your spot.",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Olayinka is the founder of Berlin Naija Foodie",
+        "quote": "Olayinka\nFounder, Berlin Naija Foodie",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A split-out 'spread includes X' item is a neutral fact, while the combined claim with 'proper Nigerian flavours' is positive."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A split-out 'spread includes X' item is a neutral fact, while the combined claim with 'proper Nigerian flavours' is positive."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A split-out 'spread includes X' item is a neutral fact, while the combined claim with 'proper Nigerian flavours' is positive."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A split-out 'spread includes X' item is a neutral fact, while the combined claim with 'proper Nigerian flavours' is positive."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A split-out 'spread includes X' item is a neutral fact, while the combined claim with 'proper Nigerian flavours' is positive."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A split-out 'spread includes X' item is a neutral fact, while the combined claim with 'proper Nigerian flavours' is positive."
+      },
+      {
+        "at": "2026-11-01T21:36:47.249Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.437Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

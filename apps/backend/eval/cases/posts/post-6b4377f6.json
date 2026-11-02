@@ -1,0 +1,790 @@
+{
+  "id": "post-6b4377f6",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "tip-berlin.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Viel Herz und viel Geist: Das Lunchlokal Hier\n\nEssen gehen\nViel Herz und viel Geist: Das Lunchlokal Hier\nArbeiten mit „brutal regionalen“ Zutaten: Das Hier in Prenzlauer Berg kehrt zurück zum Kochhandwerk und Zutaten aus der Region. Die Karte wechselt wöchentlich, die Lust bleibt\nText: Marianne Rennella\nVeröffentlicht am: 07.07.2026\nHome » Food » Seite 5\nWhatsApp\nFacebook\nE-Mail\nX\nBluesky\nChiara Strobl, Marc Schmidheiny und Jan Wichert (v.l.) vom Restaurant Hier © Nils Hasenau\nIhr könnt euch Artikel von tipBerlin in der Google-Suche nun bevorzugt anzeigen lassen.\nJetzt aktivieren\nMehr erfahren\nMan sollte sich nicht blenden lassen vom hochglänzenden, sehr cleanen Onlineauftritt dieses Restaurants. Hier ist nicht der zigste „healthy lunch spot“ in Mitte, sondern ein Ort mit viel Herz und viel Geist. Es geht um die Rückbesinnung auf Regionales, das handwerkliche Kochen und die Frage, was es für gutes Essen eigentlich braucht.\nFragt man die Gründerin und Geschäftsführerin Chiara Strobl, erfährt man, was es jedenfalls nicht braucht: weitgereiste Zutaten. Der Name des Mittagslokals, das sie zusammen mit Geschäftspartner Marc Schmidheiny gerade an der Schönhauser Allee eröffnet hat, deutet es bereits an. Es geht um Produkte von hier. Strobl und ihr Team arbeiten mit Landwirtschaftsbetrieben aus Brandenburg und richten sich komplett nach der Saison. Das Menü wechselt wöchentlich, der Aufbau bleibt immer ähnlich: ein Getreidesalat, ein Kartoffelsalat, ein grüner Salat, zwei Suppen und etwas aus dem Ofen, wie Frittata, Empanadas oder Quiche.\nDas Gute liegt so nah im Restaurant Hier\nHier im Prenzlauer Berg: Das Beste aus Brandenburg, das Beste der Saison. Foto: Nils Hasenau\nIm offenen Teil der Küche, die in den großen, freundlichen Gastraum übergeht, sieht man Jan Wichert Gemüse schneiden, Kräuter vorbereiten und Teller anrichten. Wichert war Küchenchef im Remi, einen Namen machte er sich mit seinem Pop-up „from earth“. Wichert und Strobl lernten sich in der Küche des Lode & Stijn kennen. Denn auch Chiara Strobl ist Köchin, ihr Werdegang gehört kurz geschildert. Mit 26 begann die gebürtige Österreicherin ihre Ausbildung zur Köchin, sie war dabei, als das Wiener Restaurant Mraz & Sohn seinen zweiten Stern erhielt und wechselte anschließend nach Berlin ins Nobelhart & Schmutzig. Drei Jahre lang lernte sie das Arbeiten mit „brutal regionalen“ Zutaten und Minimalismus auf dem Teller kennen. Schließlich leitete sie die Kantine einer Waldorfschule. Dort sorgte sie für die grundsätzlichste Mahlzeit: das Mittagsessen. Und kochte für die schärfsten Kritiker: Kinder.\nUm nun die Frage, was es für gutes Essen braucht, für sich selbst zu beantworten, hilft ein Besuch im Hier ganz ungemein. Der Biss in die warme Quiche mit konfierten Zwiebeln, die den mürbesten Rand der Welt hat, die Scheibe Kartoffel im Senfdressing, gezogen durch das Kürbiskernpesto und ein Löffel von der samtigen Gurkenkaltschale mit Rapsöl und Dill geben Auskunft. Spätestens beim Polentakuchen aus Brandenburger Mais und einem Iced Muckefuck, hergestellt aus gerösteten Lupinen, sollte klar sein, dass Chiara Strobl mit ihrer Antwort recht hat.\nEin beeindruckendes Lokal, das den Tag schon vor dem Abend lobt, mit angenehm nahbaren Preisen.\nHier Schönhauser Allee 8, Prenzlauer Berg, Mo–Fr 11.30 bis 15 Uhr, mehr Infos online\nMehr zum Thema\nWir versorgen euch mit Neuigkeiten und Rezension: Essen gehen in Berlin – von Imbiss bis Restaurant. Prost: Trinken gehen in Berlin – was wir über Drinks, Bars und Kneipen schreiben, lest ihr hier. Für zuhause, die Küche oder Vorratsammer: Einkaufen – Produkte, Geschäfte und Entwicklungen. Berlins Food-Guide: Hier bestellt ihr die Speisekarte.\nThe post Viel Herz und viel Geist: Das Lunchlokal Hier appeared first on tipBerlin.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "6b4377f6-2ec2-4da4-b647-adda5275a573",
+    "externalId": "blog_9c1f5e3adab779b01e4199a3",
+    "url": "https://www.tip-berlin.de/food/essen-gehen/lunchlokal-hier/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-07T11:24:15.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:35.141Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Hier",
+        "locationHint": "Schönhauser Allee 8, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "llm",
+          "brandId": "f237aa34-f3d0-4001-ab85-25556eaea13a",
+          "brandName": "hier. Gastronomie GmbH",
+          "venueId": "91606746-1486-4157-b2ec-6b80718b0bc7",
+          "venueName": "hier. Gastronomie GmbH"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "regional Brandenburg ingredients",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "well executed mustard dressing and pesto pairing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "potato slice in mustard dressing with pumpkin seed pesto"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "warm quiche and polenta cake praised as delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "warm quiche with confited onions"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "handcrafted cooking",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "weekly changing menu with soups, salads and oven dishes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "pleasantly affordable prices",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:41:48.465Z",
+    "usage": {
+      "inputTokens": 16478,
+      "outputTokens": 8278,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls were which career-stop restaurants count as places: Mraz & Sohn (second star) and Nobelhart & Schmutzig (regional, minimalist cooking) get something said about them, while Remi and Lode & Stijn are only where the chefs worked. The dishes in the tasting passage are implicitly praised, so they are positive with neutral allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Hier",
+        "locationHint": "Schönhauser Allee 8, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "f237aa34-f3d0-4001-ab85-25556eaea13a",
+          "brandName": "hier. Gastronomie GmbH",
+          "venueId": "91606746-1486-4157-b2ec-6b80718b0bc7",
+          "venueName": "hier. Gastronomie GmbH",
+          "note": "The post names a lunch spot called Hier on Schönhauser Allee, which matches hier. Gastronomie GmbH at Schönhauser Allee 8."
+        }
+      },
+      {
+        "venueName": "Mraz & Sohn",
+        "locationHint": null,
+        "city": "Vienna",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Nobelhart & Schmutzig",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "7cee0e20-fa9c-48ad-bd2a-70a4ff5aa244",
+          "brandName": "Nobelhart & Schmutzig",
+          "venueId": "2abc768f-7206-4aa4-9075-8aebd441b5de",
+          "venueName": "Nobelhart & Schmutzig",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Hier works with \"brutal regional\" ingredients",
+        "quote": "Arbeiten mit „brutal regionalen“ Zutaten",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier returns to cooking craft and regional ingredients",
+        "quote": "Das Hier in Prenzlauer Berg kehrt zurück zum Kochhandwerk und Zutaten aus der Region",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier's menu changes weekly",
+        "quote": "Die Karte wechselt wöchentlich",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier has a glossy, very clean online presence",
+        "quote": "hochglänzenden, sehr cleanen Onlineauftritt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier is not just another healthy lunch spot but a place with a lot of heart and soul",
+        "quote": "ein Ort mit viel Herz und viel Geist",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "atmosphere"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier was founded and is run by Chiara Strobl with business partner Marc Schmidheiny",
+        "quote": "die Gründerin und Geschäftsführerin Chiara Strobl",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier has just opened on Schönhauser Allee",
+        "quote": "gerade an der Schönhauser Allee eröffnet hat",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier uses no far-travelled ingredients",
+        "quote": "weitgereiste Zutaten",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier works with farms from Brandenburg",
+        "quote": "arbeiten mit Landwirtschaftsbetrieben aus Brandenburg",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier cooks fully according to the season",
+        "quote": "richten sich komplett nach der Saison",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety",
+            "freshness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier's menu always has a Getreidesalat, a Kartoffelsalat, a grüner Salat, two Suppen and something from the oven like Frittata, Empanadas or Quiche",
+        "quote": "ein Getreidesalat, ein Kartoffelsalat, ein grüner Salat, zwei Suppen und etwas aus dem Ofen, wie Frittata, Empanadas oder Quiche",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Getreidesalat",
+          "Kartoffelsalat",
+          "grüner Salat",
+          "Suppen",
+          "Frittata",
+          "Empanadas",
+          "Quiche"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier has a partly open kitchen",
+        "quote": "Im offenen Teil der Küche",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier's dining room is large and friendly",
+        "quote": "großen, freundlichen Gastraum",
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Jan Wichert, former head chef at Remi, cooks at Hier",
+        "quote": "Wichert war Küchenchef im Remi",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier's co-founder Chiara Strobl is a trained chef",
+        "quote": "auch Chiara Strobl ist Köchin",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mraz & Sohn received its second star",
+        "quote": "das Wiener Restaurant Mraz & Sohn seinen zweiten Stern erhielt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Nobelhart & Schmutzig works with \"brutal regional\" ingredients and minimalism on the plate",
+        "quote": "das Arbeiten mit „brutal regionalen“ Zutaten und Minimalismus auf dem Teller",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the Quiche with konfierten Zwiebeln at Hier was warm",
+        "quote": "die warme Quiche mit konfierten Zwiebeln",
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [
+          "Quiche",
+          "konfierten Zwiebeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Quiche has the crumbliest crust in the world",
+        "quote": "die den mürbesten Rand der Welt hat",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Quiche"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the slice of Kartoffel in Senfdressing drawn through the Kürbiskernpesto",
+        "quote": "die Scheibe Kartoffel im Senfdressing, gezogen durch das Kürbiskernpesto",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kartoffel",
+          "Senfdressing",
+          "Kürbiskernpesto"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Gurkenkaltschale with Rapsöl and Dill was velvety",
+        "quote": "samtigen Gurkenkaltschale mit Rapsöl und Dill",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gurkenkaltschale",
+          "Rapsöl",
+          "Dill"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Polentakuchen made from Brandenburger Mais",
+        "quote": "Polentakuchen aus Brandenburger Mais",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Polentakuchen",
+          "Brandenburger Mais"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste",
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Iced Muckefuck made from roasted Lupinen",
+        "quote": "einem Iced Muckefuck, hergestellt aus gerösteten Lupinen",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "Iced Muckefuck",
+          "Lupinen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier is an impressive place",
+        "quote": "Ein beeindruckendes Lokal",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier has pleasantly affordable prices",
+        "quote": "angenehm nahbaren Preisen",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier is at Schönhauser Allee 8, Prenzlauer Berg",
+        "quote": "Schönhauser Allee 8, Prenzlauer Berg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hier is open Monday to Friday 11.30 to 15",
+        "quote": "Mo–Fr 11.30 bis 15 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.239Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.430Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

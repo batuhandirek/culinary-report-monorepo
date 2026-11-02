@@ -1,0 +1,450 @@
+{
+  "id": "post-4590c8ff",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "baerlintaster",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlintaster",
+      "maomaster",
+      "berlinfood",
+      "berlineats",
+      "ad"
+    ],
+    "taggedHandles": [],
+    "text": ".\nOne of the most interactive dining concepts in Berlin!🌶️🥢\n\nAt Mao Master Berlin you build your own bowl exactly the way you like it. Choose from a wide selection of fresh vegetables, meats, seafood, mushrooms, noodles, and other ingredients, then pick your favorite broth or sauce and let the kitchen do the rest.\n\n📍 Kantstraße 50, 10625 Berlin\n\nThe result is a meal that’s different every time you visit, whether you prefer a comforting soup, a rich beef broth, or the bold flavors of Sichuan-style mala.\n\nA fun concept, generous selection, and a great spot to customize your meal exactly to your taste.\n\n#Berlintaster #MaoMaster #BerlinFood #BerlinEats #Ad",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "4590c8ff-99aa-40cb-b14a-7176e66a12ee",
+    "externalId": "7669866145985367329",
+    "url": "https://www.tiktok.com/@baerlintaster/video/7669866145985367329",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-08-03T17:57:56.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:46:19.962Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Mao Master Berlin",
+        "locationHint": "Kantstraße 50",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "0336f0ea-d1d2-43a2-89bc-7e01f023edfb",
+          "brandName": "Mao Master Berlin",
+          "venueId": "1da7dbff-a578-4beb-9f95-2c8ae8a5e151",
+          "venueName": "Mao Master Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "build your own bowl",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "choose from fresh vegetables, meats, seafood, mushrooms, noodles, and other ingredients",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "fresh vegetables",
+          "meat",
+          "seafood",
+          "mushrooms",
+          "noodle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "pick your favorite broth or sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "broth",
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meal is different every time you visit",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can prefer a comforting soup",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can prefer a rich beef broth",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "beef broth"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can prefer Sichuan-style mala flavors",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the concept is fun",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the selection is generous",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a great spot to customize your meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:37:29.784Z",
+    "usage": {
+      "inputTokens": 9604,
+      "outputTokens": 2922,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Marked #ad, so promotional. Hard calls: aspects for the concept claims ('interactive', 'fun concept') fit no finer key well, so null with vibe allowed; the superlative opener and closing 'great spot' read as verdicts on the place as a whole.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Mao Master Berlin",
+        "locationHint": "Kantstraße 50, 10625 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "0336f0ea-d1d2-43a2-89bc-7e01f023edfb",
+          "brandName": "Mao Master Berlin",
+          "venueId": "1da7dbff-a578-4beb-9f95-2c8ae8a5e151",
+          "venueName": "Mao Master Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Mao Master is one of the most interactive dining concepts in Berlin",
+        "quote": "One of the most interactive dining concepts in Berlin!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "At Mao Master you build your own bowl exactly the way you like it",
+        "quote": "At Mao Master Berlin you build your own bowl exactly the way you like it",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "You choose from a wide selection of fresh vegetables, meats, seafood, mushrooms, noodles and other ingredients",
+        "quote": "Choose from a wide selection of fresh vegetables, meats, seafood, mushrooms, noodles, and other ingredients",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "vegetables",
+          "meats",
+          "seafood",
+          "mushrooms",
+          "noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "You pick your favorite broth or sauce and the kitchen does the rest",
+        "quote": "then pick your favorite broth or sauce and let the kitchen do the rest",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "broth",
+          "sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mao Master is at Kantstraße 50, 10625 Berlin",
+        "quote": "Kantstraße 50, 10625 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The meal at Mao Master is different every time you visit",
+        "quote": "The result is a meal that’s different every time you visit",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "You can have a comforting soup, a rich beef broth or the bold flavors of Sichuan-style mala",
+        "quote": "whether you prefer a comforting soup, a rich beef broth, or the bold flavors of Sichuan-style mala",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "soup",
+          "beef broth",
+          "Sichuan-style mala"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mao Master is a fun concept",
+        "quote": "A fun concept",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mao Master has a generous selection",
+        "quote": "generous selection",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mao Master is a great spot to customize your meal exactly to your taste",
+        "quote": "a great spot to customize your meal exactly to your taste",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.233Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

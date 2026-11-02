@@ -1,5 +1,5 @@
 // The front page's live edition, from rows the service reads. Pure: `LandingEditionService.build`
-// feeds it the window's and the window before's mentions in posts by others, their feedback rows
+// feeds it the window's and the window before's mentions in posts by others, their statements
 // and the venues of the places involved.
 
 import _ from 'lodash';
@@ -8,6 +8,7 @@ import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { isDeniedCreator, isDeniedVenue } from 'src/modules/highlights/util/highlights.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
+import type { StatementFood } from 'src/modules/statements/util/statement-foods.js';
 
 import {
 	LANDING_DISH_MIN_POSTS,
@@ -61,21 +62,19 @@ export interface LandingMentionRow {
 	topics: string[];
 }
 
-/** One feedback row of such a mention (changes left out). */
-export interface LandingFeedbackRow {
+/** One statement of such a mention (changes left out): a claim, or a dish the post lists (no text). */
+export interface LandingStatementRow {
 	mentionId: number;
 	postId: string;
 	brandId: string;
 	views: number;
-	sentiment: string;
-	theme: string | null;
-	detail: string | null;
-	dish: string | null;
-	dishKey: string | null;
-	/** The dish or drink topic of its dish name, when it has one */
-	topicKey: string | null;
-	topicLabel: string | null;
-	topicKind: TopicKindEnum | null;
+	/** null until agent B judged it: counts as nothing */
+	sentiment: string | null;
+	/** The aspect's key (its `aspect` part); null without one */
+	aspect: string | null;
+	text: string | null;
+	/** The foods and drinks it names, each with its wording's dish or drink topics */
+	foods: StatementFood[];
 }
 
 /** An open venue of a brand the edition names. */
@@ -99,7 +98,7 @@ export interface LandingOpeningSign {
 
 export interface LandingWindowInput {
 	mentions: LandingMentionRow[];
-	feedback: LandingFeedbackRow[];
+	statements: LandingStatementRow[];
 }
 
 export interface LandingInput {
@@ -218,35 +217,47 @@ interface DishTally {
 	brands: Map<string, Set<string>>;
 }
 
-const DISH_KINDS = new Set([TopicKindEnum.DISH, TopicKindEnum.DRINK]);
-
 /**
- * Each post counts a dish once, however many of its names fall in it: the dish or drink topic
- * of its name ("döner", "doner kebab": Döner & kebab), else its `dishKey`.
+ * The rows a statement's foods fall in: every dish or drink topic its wording is linked to
+ * ("döner", "doner kebab": Döner & kebab; a compound wording each of its dishes), else the
+ * wording's own key until a decision links it.
  */
-const tallyDishes = (rows: LandingFeedbackRow[]) => {
+interface DishRow {
+	key: string;
+	kind: TopicKindEnum | null;
+	topicLabel: string | null;
+	spelling: string;
+}
+
+const dishRowsOf = (foods: StatementFood[]): DishRow[] =>
+	foods.flatMap((f): DishRow[] =>
+		f.topics.length ?
+			f.topics.map(t => ({ key: t.key, kind: t.kind as TopicKindEnum, topicLabel: t.label, spelling: f.name }))
+		:	[{ key: f.key, kind: null, topicLabel: null, spelling: f.name }],
+	);
+
+/** Each post counts a dish row once, however many of its names fall in it. */
+const tallyDishes = (rows: LandingStatementRow[]) => {
 	const dishes = new Map<string, DishTally>();
 	const sources = new Set<string>();
 	for (const r of rows) {
-		if (!r.dish) continue;
-		const isTopic = !!r.topicKey && !!r.topicKind && DISH_KINDS.has(r.topicKind);
-		const key = isTopic ? r.topicKey! : r.dishKey;
-		if (!key) continue;
-		const t = dishes.get(key) ?? {
-			key,
-			kind: isTopic ? r.topicKind : null,
-			labels: new Map(),
-			topicLabel: isTopic ? r.topicLabel : null,
-			posts: new Set(),
-			brands: new Map(),
-		};
-		t.labels.set(r.dish, (t.labels.get(r.dish) ?? 0) + 1);
-		t.posts.add(r.postId);
-		const brandPosts = t.brands.get(r.brandId) ?? new Set();
-		brandPosts.add(r.postId);
-		t.brands.set(r.brandId, brandPosts);
-		dishes.set(key, t);
-		sources.add(r.postId);
+		for (const row of dishRowsOf(r.foods)) {
+			const t = dishes.get(row.key) ?? {
+				key: row.key,
+				kind: row.kind,
+				labels: new Map(),
+				topicLabel: row.topicLabel,
+				posts: new Set(),
+				brands: new Map(),
+			};
+			t.labels.set(row.spelling, (t.labels.get(row.spelling) ?? 0) + 1);
+			t.posts.add(r.postId);
+			const brandPosts = t.brands.get(r.brandId) ?? new Set();
+			brandPosts.add(r.postId);
+			t.brands.set(r.brandId, brandPosts);
+			dishes.set(row.key, t);
+			sources.add(r.postId);
+		}
 	}
 	return { dishes, sources: sources.size };
 };
@@ -255,7 +266,7 @@ const dishLabel = (t: DishTally) =>
 	t.topicLabel ?? _.maxBy([...t.labels.entries()], ([label, n]) => n * 1000 - label.length)![0];
 
 /** The dish a set of a brand's posts named most, with 2+ posts. */
-const namedMost = (rows: LandingFeedbackRow[], brandId: string): LandingNamedDish | undefined => {
+const namedMost = (rows: LandingStatementRow[], brandId: string): LandingNamedDish | undefined => {
 	const { dishes } = tallyDishes(rows.filter(r => r.brandId === brandId));
 	const top = _.orderBy(
 		[...dishes.values()],
@@ -285,8 +296,8 @@ const shareTable = (pairs: { postId: string; key: string }[]) => {
 };
 
 // A root ("about food, nothing finer") says nothing a city could decide; nor does a key no aspect has
-const isStoryTheme = (theme: string, index: Pick<TopicIndex, 'isAspect' | 'isRoot'>) =>
-	index.isAspect(theme) && !index.isRoot(theme);
+const isStoryAspect = (aspect: string, index: Pick<TopicIndex, 'isAspect' | 'isRoot'>) =>
+	index.isAspect(aspect) && !index.isRoot(aspect);
 
 /** The first cuisine a mention names (its stored topics, else its venue's category's). */
 const cuisineOf = (topics: string[], index: TopicIndex) =>
@@ -346,7 +357,7 @@ export const computeLanding = (input: LandingInput): LandingEditionData => {
 	const places: LandingPlace[] = ranked.slice(0, LANDING_PLACES).map((t, i) => {
 		const rank = i + 1;
 		const before = prevRank.get(t.brandId);
-		const dish = namedMost(current.feedback, t.brandId);
+		const dish = namedMost(current.statements, t.brandId);
 		const move =
 			before === undefined ? ('new' as const)
 			: before > rank ? ('up' as const)
@@ -369,8 +380,8 @@ export const computeLanding = (input: LandingInput): LandingEditionData => {
 	});
 
 	// Dishes: shares of the posts naming a dish, against the window before
-	const cur = tallyDishes(current.feedback);
-	const prev = tallyDishes(previous.feedback);
+	const cur = tallyDishes(current.statements);
+	const prev = tallyDishes(previous.statements);
 	const dishShare = (t: DishTally | undefined, sources: number) =>
 		pct(t?.posts.size ?? 0, sources);
 	const dishRows = [...cur.dishes.values()].map(t => {
@@ -448,7 +459,7 @@ export const computeLanding = (input: LandingInput): LandingEditionData => {
 	);
 	const openings: LandingOpening[] = openingRows.slice(0, LANDING_OPENINGS).map(({ seen, t }) => {
 		const home = homeOf(t.brandId);
-		const dish = namedMost(current.feedback, t.brandId);
+		const dish = namedMost(current.statements, t.brandId);
 		return {
 			brandId: t.brandId,
 			name: t.name,
@@ -574,13 +585,13 @@ const computeStories = (ctx: {
 		});
 	}
 
-	// A praise theme on the rise: share of the posts praising anything
-	const praisePairs = (rows: LandingFeedbackRow[]) =>
+	// A praised aspect on the rise: share of the posts praising anything
+	const praisePairs = (rows: LandingStatementRow[]) =>
 		rows
-			.filter(r => r.sentiment === 'positive' && r.theme && isStoryTheme(r.theme, index))
-			.map(r => ({ postId: r.postId, key: r.theme! }));
-	const praiseNow = shareTable(praisePairs(current.feedback));
-	const praiseBefore = shareTable(praisePairs(previous.feedback));
+			.filter(r => r.sentiment === 'positive' && r.aspect && isStoryAspect(r.aspect, index))
+			.map(r => ({ postId: r.postId, key: r.aspect! }));
+	const praiseNow = shareTable(praisePairs(current.statements));
+	const praiseBefore = shareTable(praisePairs(previous.statements));
 	const praise = _.orderBy(
 		praiseNow.keys
 			.filter(k => praiseNow.posts(k) >= LANDING_STORY_MIN_POSTS)
@@ -821,24 +832,18 @@ export const promptMaterial = (
 	const praise = new Map<string, string[]>();
 	const dishPraise = new Map<string, string[]>();
 	const positive = _.orderBy(
-		current.feedback.filter(r => r.sentiment === 'positive' && r.detail),
+		current.statements.filter(r => r.sentiment === 'positive' && r.text),
 		[r => r.views, r => r.mentionId],
 		['desc', 'asc'],
 	);
 	for (const r of positive) {
 		const list = praise.get(r.brandId) ?? [];
-		if (list.length < opts.phrases && !list.includes(r.detail!)) list.push(r.detail!);
+		if (list.length < opts.phrases && !list.includes(r.text!)) list.push(r.text!);
 		praise.set(r.brandId, list);
-		const isTopic = !!r.topicKey && !!r.topicKind && DISH_KINDS.has(r.topicKind);
-		const key =
-			r.dish ?
-				isTopic ? r.topicKey!
-				:	r.dishKey
-			:	null;
-		if (key) {
+		for (const key of new Set(dishRowsOf(r.foods).map(row => row.key))) {
 			const dishList = dishPraise.get(key) ?? [];
-			if (dishList.length < opts.phrases && !dishList.includes(r.detail!))
-				dishList.push(r.detail!);
+			if (dishList.length < opts.phrases && !dishList.includes(r.text!))
+				dishList.push(r.text!);
 			dishPraise.set(key, dishList);
 		}
 	}

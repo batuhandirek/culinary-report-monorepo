@@ -1,0 +1,225 @@
+{
+  "id": "post-421f8a5b",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "sandosberlin",
+    "locationName": "Berlin Pensionsaufenthalt",
+    "hashtags": [
+      "sandos",
+      "foodies",
+      "berlin",
+      "japan"
+    ],
+    "taggedHandles": [],
+    "text": "Morgen um 14 Uhr in der Scharnweberstr 2613405 Berlin #sandos #foodies #berlin #japan",
+    "subtitles": "3 süße sandos für nur 10 Euro\noder 1 süßen Sando mit unserem Matcha Cloud\nfür nur 5 Euro kriegt ihr AB morgen\n14 Uhr bei uns",
+    "subtitlesLanguage": "deu-DE",
+    "id": "421f8a5b-c5df-41d8-9bbd-2386c8452a20",
+    "externalId": "7681750096286993686",
+    "url": "https://www.tiktok.com/@sandosberlin/video/7681750096286993686",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Sandos",
+    "postedAt": "2026-09-04T18:33:44.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:34:53.171Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Berlin Pensionsaufenthalt",
+        "locationHint": "Scharnweberstr. 26, 13405 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "3 sweet sandos cost 10 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "sandos"
+        ],
+        "amount": 10,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "1 sweet sando with Matcha Cloud costs 5 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "sandos",
+          "Matcha Cloud"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "available from tomorrow at 14:00",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:30.515Z",
+    "usage": {
+      "inputTokens": 9661,
+      "outputTokens": 1555,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 6272
+    },
+    "notes": "The post says the offer is available 'ab morgen 14 Uhr bei uns', which hints at a launch but never says the place is new, so isNewOpening is false. The two prices are kept as deals because they start at a stated time, with fact also allowed. The tagged location 'Berlin Pensionsaufenthalt' is not a food venue and is ignored.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Sandos",
+        "locationHint": "Scharnweberstr 26, 13405 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "9c082f9b-5f8b-44ea-b774-e916110bddc0",
+          "brandName": "Sandos",
+          "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+          "venueName": "Sandos",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "3 sweet sandos cost only 10 euros",
+        "quote": "3 süße sandos für nur 10 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "sandos"
+        ],
+        "amount": 10,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price",
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "1 sweet Sando with the Matcha Cloud costs only 5 euros",
+        "quote": "1 süßen Sando mit unserem Matcha Cloud\nfür nur 5 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Sando",
+          "Matcha Cloud"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price",
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the sandos are available from tomorrow at 14:00 at Scharnweberstr 26",
+        "quote": "Morgen um 14 Uhr in der Scharnweberstr 2613405 Berlin",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": [
+            "event",
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.435Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.232Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

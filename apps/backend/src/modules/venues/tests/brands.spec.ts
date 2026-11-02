@@ -145,7 +145,9 @@ describe('suggestBrands', () => {
 		const groups = suggestBrands(
 			[
 				v('1', 'Kinza', { website: 'https://www.instagram.com/kinza.berlin/' }),
-				v('2', 'Taste of Japan', { website: 'https://instagram.com/kinza.berlin?igsh=abc' }),
+				v('2', 'Taste of Japan', {
+					website: 'https://instagram.com/kinza.berlin?igsh=abc',
+				}),
 				v('3', 'Noodle Town', { website: 'https://www.tiktok.com/@thenoodletown' }),
 				v('4', 'Hanoi Kitchen', { website: 'https://tiktok.com/@thenoodletown/' }),
 				// A TikTok page without the @ is no profile; a Lieferando page is no one's own

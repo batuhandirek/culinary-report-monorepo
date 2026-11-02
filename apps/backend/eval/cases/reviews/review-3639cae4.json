@@ -1,0 +1,351 @@
+{
+  "id": "review-3639cae4",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "3639cae4-cae1-4c10-a801-f88985555a97",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT205bk5VdHJUVGRvWjJ0UGNYTjJVek4wTldKTVprRRAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-13T20:20:14.626Z",
+    "stars": 1,
+    "text": "Nie rozumiem zachwytu tym kebabem. Jeden z gorszych jakich jedliśmy. W kebabie mnóstwo cytryny, prosiliśmy bez sera a dostaliśmy z serem. Sosów praktycznie nie było. Bułka gorzka a mięso suche.\nJedliśmy w drugiej filii dwa lata temu i był tam sztos. Ten natomiast okropny.",
+    "textTranslated": "I don't understand the enthusiasm for this kebab. It was one of the worst we've ever had. The kebab was chock-full of lemon; we asked for it without cheese, but it came with it. There was practically no sauce. The bun was bitter, and the meat was dry.\n\nWe ate at the other location two years ago, and it was fantastic. This one, however, was awful."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:41.208Z",
+    "claims": [
+      {
+        "text": "the kebab was one of the worst we've ever had",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab was chock-full of lemon",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we asked for it without cheese",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it came with cheese",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was practically no sauce",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bun was bitter",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "bun"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the meat was dry",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we ate at the other location two years ago",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the other location was fantastic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      },
+      {
+        "text": "this one was awful",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:12.281Z",
+    "usage": {
+      "inputTokens": 5165,
+      "outputTokens": 2216,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The comparison with the other branch two years ago is not a change (another location), so it is kept as an opinion about that branch. 'One of the worst' is read as a verdict like 'best kebab in Berlin', with opinion also allowed. 'Almost no sauce' is filed as portion_size, with food also allowed.",
+    "claims": [
+      {
+        "text": "doesn't understand the enthusiasm for this kebab",
+        "quote": "Nie rozumiem zachwytu tym kebabem.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "kebabem"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the kebab was one of the worst they have eaten",
+        "quote": "Jeden z gorszych jakich jedliśmy.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the kebab had loads of lemon",
+        "quote": "W kebabie mnóstwo cytryny",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "kebabie",
+          "cytryny"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "asked for the kebab without cheese but got it with cheese",
+        "quote": "prosiliśmy bez sera a dostaliśmy z serem",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "sera"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "there were practically no sauces",
+        "quote": "Sosów praktycznie nie było.",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "Sosów"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the bun was bitter",
+        "quote": "Bułka gorzka",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Bułka"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the meat was dry",
+        "quote": "mięso suche",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "mięso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "ate at the other branch two years ago and the kebab there was great",
+        "quote": "Jedliśmy w drugiej filii dwa lata temu i był tam sztos.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the kebab at this branch was awful",
+        "quote": "Ten natomiast okropny.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

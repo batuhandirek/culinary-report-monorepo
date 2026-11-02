@@ -1,0 +1,279 @@
+{
+  "id": "post-db280ef6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "572pasta",
+    "locationName": null,
+    "hashtags": [
+      "charlottenburg",
+      "kantstraße",
+      "berlinfood",
+      "lunchberlin",
+      "572pasta"
+    ],
+    "taggedHandles": [],
+    "text": "Charlottenburg, aufgepasst! 🍝💸 \n\nMittagspause in der Kantstraße unter 18€? Fast unmöglich. Aber bei uns bekommt ihr hausgemachte Pasta direkt an der Ecke Bleibtreustraße für unter 10€ – und das sogar inklusive Getränk! 🥤✨\n\nSchluss mit überteuertem Lunch. Wer kommt heute vorbei? ⬇️\n\n#Charlottenburg #Kantstraße #BerlinFood #LunchBerlin #572Pasta",
+    "subtitles": "Charlottenburg paid attention\nin the fight street you usually get\nnothing less than 18 euros during lunch break\nbut with us you get homemade pasta\nin the corner of kampfstraße remains faithful\nunder 10 euros even with drink",
+    "subtitlesLanguage": "eng-US",
+    "id": "db280ef6-a5fb-44c8-8687-d89d9f03f51e",
+    "externalId": "7668019904389385504",
+    "url": "https://www.tiktok.com/@572pasta/video/7668019904389385504",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "572Pasta",
+    "postedAt": "2026-07-29T18:33:32.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:42.999Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "572 Pasta",
+        "locationHint": "Kantstraße Ecke Bleibtreustraße (corner of Kantstraße and Bleibtreustraße)",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "0b11e208-0435-4e5d-b28a-01f6dd42ea0b",
+          "brandName": "572Pasta",
+          "venueId": "050a0794-9203-4524-b33b-80796f9c1f5c",
+          "venueName": "572 Pasta"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the lunch in Kantstraße is usually at least 18 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "lunch"
+        ],
+        "amount": 18,
+        "unit": "money",
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the pasta is homemade",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pasta costs under 10 euros",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "pasta"
+        ],
+        "amount": 10,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the drink is included",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:33.571Z",
+    "usage": {
+      "inputTokens": 10141,
+      "outputTokens": 1881,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 6277
+    },
+    "notes": "Own-account promo: the Kantstraße lunch-price claim is about the street/city, not the venue; the under-10€-with-drink price is read as a standing price (fact), with deal and a positive reading allowed. 'Wer kommt heute vorbei?' is a call to action and left out.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "572Pasta",
+        "locationHint": "Kantstraße, corner of Bleibtreustraße, Charlottenburg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "0b11e208-0435-4e5d-b28a-01f6dd42ea0b",
+          "brandName": "572Pasta",
+          "venueId": "050a0794-9203-4524-b33b-80796f9c1f5c",
+          "venueName": "572 Pasta",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "lunch on Kantstraße for under 18€ is almost impossible",
+        "quote": "Mittagspause in der Kantstraße unter 18€? Fast unmöglich.",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 18,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "572Pasta serves homemade pasta",
+        "quote": "bei uns bekommt ihr hausgemachte Pasta",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "572Pasta is at the corner of Bleibtreustraße",
+        "quote": "direkt an der Ecke Bleibtreustraße",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the homemade pasta costs under 10€ including a drink",
+        "quote": "für unter 10€ – und das sogar inklusive Getränk!",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Pasta"
+        ],
+        "amount": 10,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "value_for_money",
+            "price"
+          ],
+          "kinds": [
+            "deal",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "572Pasta ends overpriced lunch",
+        "quote": "Schluss mit überteuertem Lunch.",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.442Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.440Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -37,7 +37,11 @@ describe('rankCandidates with brands', () => {
 		}),
 		candidate('pankow', 'Burgermeister', { district: 'Pankow' }),
 		candidate('zoo', 'Burgermeister', { district: 'Charlottenburg-Wilmersdorf' }),
-		candidate('other', 'Burger Vision', { brandId: 'bv', brandName: 'Burger Vision', branchCount: 1 }),
+		candidate('other', 'Burger Vision', {
+			brandId: 'bv',
+			brandName: 'Burger Vision',
+			branchCount: 1,
+		}),
 	];
 
 	it('makes a chain one candidate, its branch unknown when the post names none', () => {
@@ -50,20 +54,38 @@ describe('rankCandidates with brands', () => {
 		expect(ranked[0]).toMatchObject({ brandId: 'b', branchKnown: false, branches: 3 });
 		expect(ranked.filter(c => c.brandId === 'b')).toHaveLength(1);
 		// A one-branch brand is a plain venue: its branch is known
-		expect(ranked.find(c => c.brandId === 'bv')).toMatchObject({ id: 'other', branchKnown: true });
+		expect(ranked.find(c => c.brandId === 'bv')).toMatchObject({
+			id: 'other',
+			branchKnown: true,
+		});
 	});
 
 	it('never gives the brand to a branch named just like it, on the name alone', () => {
 		const bare = [
-			candidate('bare', 'Frittenwerk', { district: 'Mitte', brandName: 'Frittenwerk', branchCount: 2 }),
-			candidate('alexa', 'Frittenwerk Alexa', { district: 'Mitte', brandName: 'Frittenwerk', branchCount: 2 }),
+			candidate('bare', 'Frittenwerk', {
+				district: 'Mitte',
+				brandName: 'Frittenwerk',
+				branchCount: 2,
+			}),
+			candidate('alexa', 'Frittenwerk Alexa', {
+				district: 'Mitte',
+				brandName: 'Frittenwerk',
+				branchCount: 2,
+			}),
 		];
-		expect(rankCandidates({ venueName: 'Frittenwerk', locationHint: null }, null, bare, words)[0]).toMatchObject({
+		expect(
+			rankCandidates({ venueName: 'Frittenwerk', locationHint: null }, null, bare, words)[0],
+		).toMatchObject({
 			branchKnown: false,
 		});
 		// One branch alone among the candidates is no clue either
 		expect(
-			rankCandidates({ venueName: 'Frittenwerk', locationHint: null }, null, bare.slice(0, 1), words)[0],
+			rankCandidates(
+				{ venueName: 'Frittenwerk', locationHint: null },
+				null,
+				bare.slice(0, 1),
+				words,
+			)[0],
 		).toMatchObject({ branchKnown: false });
 	});
 
@@ -88,12 +110,25 @@ describe('rankCandidates with brands', () => {
 
 	it('reads a street in the hint however it is spelled, house number or not', () => {
 		const streets = [
-			candidate('mitte', 'Bandol', { street: 'Oranienburger Str. 50', brandName: 'Bandol', brandId: 'bd', branchCount: 2 }),
-			candidate('kant', 'Bandol', { street: 'Kantstraße 67', brandName: 'Bandol', brandId: 'bd', branchCount: 2 }),
+			candidate('mitte', 'Bandol', {
+				street: 'Oranienburger Str. 50',
+				brandName: 'Bandol',
+				brandId: 'bd',
+				branchCount: 2,
+			}),
+			candidate('kant', 'Bandol', {
+				street: 'Kantstraße 67',
+				brandName: 'Bandol',
+				brandId: 'bd',
+				branchCount: 2,
+			}),
 		];
 		const rank = (locationHint: string) =>
 			rankCandidates({ venueName: 'Bandol', locationHint }, null, streets, words)[0];
-		expect(rank('Oranienburger Straße 50, 10117 Berlin')).toMatchObject({ id: 'mitte', branchKnown: true });
+		expect(rank('Oranienburger Straße 50, 10117 Berlin')).toMatchObject({
+			id: 'mitte',
+			branchKnown: true,
+		});
 		expect(rank('Kantstr.')).toMatchObject({ id: 'kant', branchKnown: true });
 		// Both streets: no branch
 		expect(rank('Oranienburger Straße and Kantstraße')).toMatchObject({ branchKnown: false });
@@ -135,8 +170,6 @@ describe('MentionMatchingService with brands (pglite)', () => {
 			post: p,
 			venueName,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 			...extra,
 		});
 
@@ -201,13 +234,25 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		em.clear();
 		const read = (m: Mention) => em.findOneOrFail(Mention, { id: m.id });
 		expect(await read(brandOnly)).toMatchObject({ brand: { id: brand.id }, venue: null });
-		expect(await read(inPankow)).toMatchObject({ brand: { id: brand.id }, venue: { id: pankow.id } });
+		expect(await read(inPankow)).toMatchObject({
+			brand: { id: brand.id },
+			venue: { id: pankow.id },
+		});
 		// The creator tagged one branch
-		expect(await read(tagged)).toMatchObject({ brand: { id: brand.id }, venue: { id: main.id } });
+		expect(await read(tagged)).toMatchObject({
+			brand: { id: brand.id },
+			venue: { id: main.id },
+		});
 		// Hamburg has one branch of the chain: there it is a plain venue, its branch known
-		expect(await read(hamburgPost)).toMatchObject({ brand: { id: brand.id }, venue: { id: inHamburg.id } });
+		expect(await read(hamburgPost)).toMatchObject({
+			brand: { id: brand.id },
+			venue: { id: inHamburg.id },
+		});
 		// A brand of its own: the brand and the venue
-		expect(await read(lone)).toMatchObject({ brand: { id: hisar.brand.id }, venue: { id: hisar.id } });
+		expect(await read(lone)).toMatchObject({
+			brand: { id: hisar.brand.id },
+			venue: { id: hisar.id },
+		});
 		expect(generate).not.toHaveBeenCalled();
 	});
 
@@ -222,7 +267,10 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		await service.match();
 		expect(generate).toHaveBeenCalledTimes(1);
 		const input = JSON.parse((generate.mock.calls[0] as unknown as [string])[0]);
-		expect(input.mention).toMatchObject({ author: 'burgermeisterei.berlin', locationHint: 'Frankfurter Allee 21' });
+		expect(input.mention).toMatchObject({
+			author: 'burgermeisterei.berlin',
+			locationHint: 'Frankfurter Allee 21',
+		});
 		const chain = input.candidates.find((c: { branches?: number }) => c.branches);
 		expect(chain).toMatchObject({ name: 'Burgermeister', branches: 3 });
 		// Every Berlin branch, most reviewed first; never the Hamburg one
@@ -232,13 +280,20 @@ describe('MentionMatchingService with brands (pglite)', () => {
 			'Mitte',
 		]);
 		em.clear();
-		expect(await em.findOneOrFail(Mention, { id: own.id })).toMatchObject({ brand: null, venue: null });
+		expect(await em.findOneOrFail(Mention, { id: own.id })).toMatchObject({
+			brand: null,
+			venue: null,
+		});
 	});
 
 	it('asks the LLM for the branch when the chain is sure but the code cannot place the hint', async () => {
 		const em = harness.orm.em;
-		const near = mention(post(berlin), 'Burgermeister', { locationHint: 'near Rosenthaler Platz' });
-		const vague = mention(post(berlin), 'Burgermeister', { locationHint: 'multiple locations' });
+		const near = mention(post(berlin), 'Burgermeister', {
+			locationHint: 'near Rosenthaler Platz',
+		});
+		const vague = mention(post(berlin), 'Burgermeister', {
+			locationHint: 'multiple locations',
+		});
 		const noHint = mention(post(berlin), 'Burgermeister', { locationHint: '/' });
 		await em.flush();
 		// The LLM knows Rosenthaler Platz for the first, and gives no branch for the second
@@ -272,17 +327,22 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		const streets = await em.find(Venue, { id: { $in: [main.id, pankow.id] } });
 		streets[0].street = 'Oranienstraße 187';
 		streets[1].street = 'Reichsstraße 87';
-		const both = mention(post(berlin), 'Burgermeister', { locationHint: 'Oranienstraße 187, Reichsstraße 87' });
+		const both = mention(post(berlin), 'Burgermeister', {
+			locationHint: 'Oranienstraße 187, Reichsstraße 87',
+		});
 		await em.flush();
 
 		await service.match();
 		expect(generate).not.toHaveBeenCalled();
 		em.clear();
-		expect(await em.findOneOrFail(Mention, { id: both.id })).toMatchObject({ brand: { id: brand.id }, venue: null });
+		expect(await em.findOneOrFail(Mention, { id: both.id })).toMatchObject({
+			brand: { id: brand.id },
+			venue: null,
+		});
 		await em.nativeUpdate(Venue, { id: { $in: [main.id, pankow.id] } }, { street: null });
 	});
 
-	it("never takes a branch of another brand from the LLM", async () => {
+	it('never takes a branch of another brand from the LLM', async () => {
 		const em = harness.orm.em;
 		const hisar = await em.findOneOrFail(Venue, { name: 'Hisar' });
 		const m = mention(post(berlin), 'Burgermeister', { locationHint: 'near Hisar' });
@@ -296,7 +356,10 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		expect(input.candidates).toHaveLength(1);
 		expect(input.candidates[0].locations.map((l: { id: string }) => l.id)).toContain(pankow.id);
 		em.clear();
-		expect(await em.findOneOrFail(Mention, { id: m.id })).toMatchObject({ brand: { id: brand.id }, venue: null });
+		expect(await em.findOneOrFail(Mention, { id: m.id })).toMatchObject({
+			brand: { id: brand.id },
+			venue: null,
+		});
 	});
 
 	it("rematches the brand's mentions after a change, never an admin's correction", async () => {
@@ -346,6 +409,9 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		mention(quiet, 'Hisar', { venue: hisar, brand: hisar.brand });
 		await em.flush();
 
-		expect(await service.topBrandIds('2026-09', 10, berlin.id)).toEqual([brand.id, hisar.brand.id]);
+		expect(await service.topBrandIds('2026-09', 10, berlin.id)).toEqual([
+			brand.id,
+			hisar.brand.id,
+		]);
 	});
 });

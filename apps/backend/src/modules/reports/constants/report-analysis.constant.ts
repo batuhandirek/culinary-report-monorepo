@@ -1,3 +1,5 @@
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
+
 /** Observations kept on a report, the most important first. */
 export const MAX_OBSERVATIONS = 8;
 /** Observations the agent investigates (the top ones). */
@@ -12,4 +14,4 @@ export const MAX_TOOL_CALLS = 12;
 /** The whole investigation, shared across account failover. */
 export const ANALYSIS_TIMEOUT_MS = 8 * 60 * 1000;
 
-export const ANALYSIS_MODEL = 'openai/gpt-5.4';
+export const ANALYSIS_MODEL: LlmModelChoice = 'full';

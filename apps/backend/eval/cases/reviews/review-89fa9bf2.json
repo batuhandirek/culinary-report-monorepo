@@ -1,0 +1,209 @@
+{
+  "id": "review-89fa9bf2",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "89fa9bf2-0b9d-45d3-9aa6-3233f548adb0",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xoVmNsOW5kVlZmUkZGblJsZHlWbXhYYjJSdVQxRRAB",
+    "platform": "google",
+    "language": "it",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-04T22:35:56.729Z",
+    "stars": 3,
+    "text": "Serata simpatica in compagnia di un amico. Abbiamo mangiato discretamente bene. Il servizio è stato veloce e molto cortese. Il costo proporzionale a quanto consumato.",
+    "textTranslated": "A pleasant evening with a friend. We ate quite well. The service was quick and very courteous. The price was reasonable for what we ate."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:27.939Z",
+    "claims": [
+      {
+        "text": "a pleasant evening with a friend",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we ate quite well",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was quick",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was very courteous",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the price was reasonable",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the price was reasonable for what we ate",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:45.878Z",
+    "usage": {
+      "inputTokens": 5016,
+      "outputTokens": 722,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Serata simpatica' could be read as the atmosphere or as an overall verdict on the evening. 'Discretamente bene' is lukewarm praise, so mixed is also allowed. 'Costo proporzionale' could be read as neutral, since it is a price in line with consumption.",
+    "claims": [
+      {
+        "text": "a pleasant evening with a friend",
+        "quote": "Serata simpatica in compagnia di un amico.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the food was quite good",
+        "quote": "Abbiamo mangiato discretamente bene.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was quick",
+        "quote": "Il servizio è stato veloce",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was very courteous",
+        "quote": "molto cortese",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the price was reasonable for what was consumed",
+        "quote": "Il costo proporzionale a quanto consumato.",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

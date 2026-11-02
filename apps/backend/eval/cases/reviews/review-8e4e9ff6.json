@@ -1,0 +1,92 @@
+{
+  "id": "review-8e4e9ff6",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:2",
+    "platform:google",
+    "length:short",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "8e4e9ff6-63b2-43bd-905d-b1468edc0aeb",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xWclJFTjBSMHBpY1VsUGJGaHJOVmhtYUZSWGMxRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-13T13:37:18.663Z",
+    "stars": 2,
+    "text": "I found a hair in the middle of my pork cordon blue",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:47.657Z",
+    "claims": [
+      {
+        "text": "found a hair in the middle of my pork cordon blue",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "pork cordon blue"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:38.598Z",
+    "usage": {
+      "inputTokens": 5340,
+      "outputTokens": 225,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "A single claim. The hair in the food is food_hygiene, and the reviewer's spelling \"cordon blue\" is kept. The kind is opinion because it reports a hygiene complaint rather than neutral information.",
+    "claims": [
+      {
+        "text": "found a hair in the middle of the pork cordon blue",
+        "quote": "I found a hair in the middle of my pork cordon blue",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "pork cordon blue"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.431Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

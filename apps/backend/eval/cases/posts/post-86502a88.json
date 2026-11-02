@@ -1,0 +1,460 @@
+{
+  "id": "post-86502a88",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "nuamaedit",
+    "locationName": "FAT HENRY Berlin",
+    "hashtags": [
+      "nuamaedit",
+      "berlinsushi",
+      "berlinmitte",
+      "berlinrestaurants",
+      "berlinfood"
+    ],
+    "taggedHandles": [
+      "fathenryberlin"
+    ],
+    "text": "We came for sushi and stayed for more. 🍣\n\nAt @fathenryberlin, the best seat is at the chef’s bar: fish torched to order, plates built one by one, the whole kitchen moving in front of you.\n\nHalfway through dinner, a smell too good to ignore made us ask the chef what it was. A new sauce he was still working on, and he added it to our lobster sandwich. Exactly why we’d sit at the counter again.\n\nOur favourite? The tuna ponzu. Rich, full of flavour, and the first thing we’d order next time.\n\nTip: sit at the chef’s bar and ask what’s cooking.\nTested by us. Nothing paid for.\n\n📍 Fat Henry, Joachimstraße 7, Berlin-Mitte\n\n#nuamaedit #berlinsushi #berlinmitte #berlinrestaurants #berlinfood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "86502a88-7170-4ff2-bb6b-29bde12cfd26",
+    "externalId": "ig_4017383774341688273",
+    "url": "https://www.instagram.com/p/DfAnUH8DevR/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-27T19:31:27.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:01:23.337Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Fat Henry",
+        "locationHint": "Joachimstraße 7, Berlin-Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e898347a-aa8e-4da9-bbf5-e0c422986f86",
+          "brandName": "FAT HENRY Berlin",
+          "venueId": "70d0a85d-aa13-43da-b67e-18d3e81edc0c",
+          "venueName": "FAT HENRY Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "best seat is at the chef’s bar",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "plates built one by one",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fish torched to order",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "rich, full of flavour",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna ponzu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "chef added a new sauce to the lobster sandwich",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "lobster sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:50.181Z",
+    "usage": {
+      "inputTokens": 9809,
+      "outputTokens": 3493,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "\"Tested by us. Nothing paid for.\" makes it non-promotional. The hard calls were the chef adding his in-progress sauce to the lobster sandwich, read as a positive service fact rather than a new menu item, and whether \"first thing we'd order next time\" is a dish opinion or a verdict.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Fat Henry",
+        "locationHint": "Joachimstraße 7, Berlin-Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e898347a-aa8e-4da9-bbf5-e0c422986f86",
+          "brandName": "FAT HENRY Berlin",
+          "venueId": "70d0a85d-aa13-43da-b67e-18d3e81edc0c",
+          "venueName": "FAT HENRY Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "they came to Fat Henry for sushi and stayed for more",
+        "quote": "We came for sushi and stayed for more.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "sushi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the best seat at Fat Henry is at the chef's bar",
+        "quote": "the best seat is at the chef’s bar",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the fish is torched to order at the chef's bar",
+        "quote": "fish torched to order",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the plates are built one by one at the chef's bar",
+        "quote": "plates built one by one",
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at the chef's bar the whole kitchen moves in front of you",
+        "quote": "the whole kitchen moving in front of you",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe",
+            "interior"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a smell too good to ignore made them ask the chef what it was",
+        "quote": "a smell too good to ignore",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chef added a new sauce he was still working on to their lobster sandwich",
+        "quote": "A new sauce he was still working on, and he added it to our lobster sandwich",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [
+          "sauce",
+          "lobster sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "attentiveness",
+            "food"
+          ],
+          "kinds": [
+            "opinion",
+            "new_item"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "that is exactly why they would sit at the counter of Fat Henry again",
+        "quote": "Exactly why we’d sit at the counter again",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tuna ponzu was their favourite",
+        "quote": "Our favourite? The tuna ponzu.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna ponzu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tuna ponzu was rich and full of flavour",
+        "quote": "Rich, full of flavour",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna ponzu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tuna ponzu is the first thing they would order next time",
+        "quote": "the first thing we’d order next time",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna ponzu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tip: sit at the chef's bar of Fat Henry and ask what's cooking",
+        "quote": "sit at the chef’s bar and ask what’s cooking",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Fat Henry is at Joachimstraße 7, Berlin-Mitte",
+        "quote": "Fat Henry, Joachimstraße 7, Berlin-Mitte",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.243Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.433Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

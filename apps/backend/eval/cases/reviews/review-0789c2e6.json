@@ -1,0 +1,141 @@
+{
+  "id": "review-0789c2e6",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "0789c2e6-6b80-4475-a0bb-b02be104d072",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT201NGNtTk9RVEJCTFZGaWFFWmlZbVpsV0Vab1FYYxAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-29T12:06:54.440Z",
+    "stars": 4,
+    "text": "Dla odwiedzających Berlin, na pewno warto odwiedzić to miejsce ! Bardzo dobry kebab ! Każdy znajdzie coś dla siebie :)",
+    "textTranslated": "For anyone visiting Berlin, this place is definitely worth a visit! Very good kebab! There's something for everyone :)"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:50:30.864Z",
+    "claims": [
+      {
+        "text": "the place is worth a visit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab was very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there's something for everyone",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:33.588Z",
+    "usage": {
+      "inputTokens": 5005,
+      "outputTokens": 488,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call was 'something for everyone': I read it as menu choice (menu_variety). 'Very good kebab' is mainly about taste, so the food root is also allowed. The worth-a-visit line is a verdict on the whole place with no aspect, and it is not about value for money.",
+    "claims": [
+      {
+        "text": "for visitors to Berlin the place is definitely worth a visit",
+        "quote": "Dla odwiedzających Berlin, na pewno warto odwiedzić to miejsce !",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab is very good",
+        "quote": "Bardzo dobry kebab !",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there is something for everyone",
+        "quote": "Każdy znajdzie coś dla siebie",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.202Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.401Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

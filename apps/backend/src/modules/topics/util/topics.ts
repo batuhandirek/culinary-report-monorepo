@@ -3,7 +3,7 @@
 
 import { cuisineWords, normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { isMainCourse } from 'src/modules/venues/util/delivery.js';
-import { dishKey } from 'src/modules/venues/util/dishes.js';
+import { termKey } from 'src/modules/venues/util/dishes.js';
 
 import { ASPECT_ROOTS } from '../constants/aspect-seed.constant.js';
 import { TopicKindEnum } from '../entities/topic.entity.js';
@@ -18,9 +18,15 @@ export interface IndexedTopic {
 	label: string;
 	kind: TopicKindEnum;
 	parentKey: string | null;
-	aliases: string[];
 	/** An aspect's: what it covers, for the agents' legend */
 	hint?: string | null;
+}
+
+/** What the index needs of a decided `Term`: the wording and the topics it is (empty: "none") */
+export interface IndexedTerm {
+	key: string;
+	name: string;
+	topicKeys: string[];
 }
 
 /** An aspect as the writers resolve an agent's answer: the row to link, its key and its root */
@@ -53,30 +59,53 @@ export const aspectKey = (raw: string | null | undefined): string | null => {
 };
 
 /**
- * Every topic by key, and every food topic by its key's and its aliases' normalized forms. A key
- * wins over another topic's alias for the same form; between aliases, the topic listed first wins.
- * Aspects are in the tree (`get`, `withParents`, `descendants`, the legend) and never in the cuisine
- * lookup: "Vegan Food" is vegan, not the root `food`; "#service" names no aspect.
+ * Every topic by key, and two lookups. Whole-wording matches (`exactAll`, `exact`, `dishTopic`):
+ * every food topic by its key's and its label's normalized forms, every decided term by its wording's
+ * forms (as said and as its key), each form pointing at the topics the wording is — one for most,
+ * several for a compound ("vegan döner": kebab, vegan) — an aspect among them only through a decided
+ * term ("waiting time" → Waiting), never through its own key or label ("food", "service" are words). The cuisine lookup (`resolve`, word runs over a cuisine string, a
+ * category, a menu item): kinds of food only — topic keys and decided terms' food topics; so "Vegan
+ * Food" is vegan, not the root `food`, "#service" names no aspect, and "waiting time döner" is kebab
+ * alone. A key wins over a label and over a term for the same form; between terms, the first given
+ * wins. A term decided as none takes no form.
  */
 export class TopicIndex {
 	private readonly byKey = new Map<string, IndexedTopic>();
-	private readonly lookup = new Map<string, string>();
+	/** The cuisine lookup: kinds of food only, by a topic's key forms and a decided term's forms (`resolve`) */
+	private readonly lookup = new Map<string, string[]>();
+	/** Whole-wording matches: every topic by its key and label forms, every decided term by its forms, aspects included (`exactAll`) */
+	private readonly whole = new Map<string, string[]>();
 	private readonly children = new Map<string, IndexedTopic[]>();
 	// The longest form in words, so a span longer than it is never tried
 	private readonly maxWords: number;
 
-	constructor(topics: IndexedTopic[]) {
+	constructor(topics: IndexedTopic[], terms: IndexedTerm[] = []) {
 		for (const t of topics) this.byKey.set(t.key, t);
 		for (const t of topics) {
 			if (!t.parentKey) continue;
 			this.children.set(t.parentKey, [...(this.children.get(t.parentKey) ?? []), t]);
 		}
-		const food = topics.filter(t => t.kind !== TopicKindEnum.ASPECT);
-		for (const t of food) for (const form of lookupForms(t.key)) this.lookup.set(form, t.key);
-		for (const t of food) {
-			for (const alias of t.aliases) {
-				for (const form of lookupForms(alias))
-					if (!this.lookup.has(form)) this.lookup.set(form, t.key);
+		const isFood = (key: string) => this.byKey.get(key)?.kind !== TopicKindEnum.ASPECT;
+		const food = topics.filter(t => isFood(t.key));
+		// Keys first, then labels: a key wins over another topic's label for the same form. An aspect's
+		// key or label is no match ("food", "service", "drinks" are words a dish list or a hashtag uses):
+		// an aspect is reached only through a decided term ("waiting time", "Cash only" → the agent or an admin)
+		for (const t of food) for (const form of lookupForms(t.key)) this.whole.set(form, [t.key]);
+		for (const t of food)
+			for (const form of lookupForms(t.label))
+				if (!this.whole.has(form)) this.whole.set(form, [t.key]);
+		for (const t of food) for (const form of lookupForms(t.key)) this.lookup.set(form, [t.key]);
+		// A label resolves to its topic too (extraction writes cuisines as labels: "Desserts" is `dessert`), never over a key
+		for (const t of food)
+			for (const form of lookupForms(t.label))
+				if (!this.lookup.has(form)) this.lookup.set(form, [t.key]);
+		for (const term of terms) {
+			const keys = term.topicKeys.filter(k => this.byKey.has(k));
+			if (!keys.length) continue;
+			const food = keys.filter(isFood);
+			for (const form of [...lookupForms(term.name), ...lookupForms(term.key)]) {
+				if (!this.whole.has(form)) this.whole.set(form, keys);
+				if (food.length && !this.lookup.has(form)) this.lookup.set(form, food);
 			}
 		}
 		this.maxWords = Math.max(1, ...[...this.lookup.keys()].map(f => f.split(' ').length));
@@ -104,8 +133,8 @@ export class TopicIndex {
 			.filter(t => t.kind === TopicKindEnum.ASPECT && !t.parentKey)
 			.sort(
 				(a, b) =>
-					(rootOrder.get(a.key) ?? ASPECT_ROOTS.length) - (rootOrder.get(b.key) ?? ASPECT_ROOTS.length) ||
-					byLabel(a, b),
+					(rootOrder.get(a.key) ?? ASPECT_ROOTS.length) -
+						(rootOrder.get(b.key) ?? ASPECT_ROOTS.length) || byLabel(a, b),
 			);
 		const out: IndexedTopic[] = [];
 		const walk = (t: IndexedTopic) => {
@@ -188,26 +217,37 @@ export class TopicIndex {
 			.join('; ');
 	}
 
-	/** The topic a spelling names as a whole (a key or an alias), without splitting it into words. */
-	exact(raw: string): string | undefined {
+	/**
+	 * The topics a spelling names as a whole (a topic's key, or a decided term's wording), without
+	 * splitting it into words: one for most, several for a compound term. Empty for none.
+	 */
+	exactAll(raw: string): string[] {
 		for (const form of lookupForms(raw)) {
-			const hit = this.lookup.get(form);
-			if (hit) return hit;
+			const hit = this.whole.get(form);
+			if (hit) return [...hit];
 		}
-		return undefined;
+		return [];
+	}
+
+	/** The first topic a spelling names as a whole (`exactAll`): what a single-topic reader takes. */
+	exact(raw: string): string | undefined {
+		return this.exactAll(raw)[0];
 	}
 
 	/**
-	 * The dish or drink topic a dish name names as a whole, as written or by its `dishKey`
-	 * ("döner", "doner kebab", "kebabs": kebab; "burger": burgers); none for a name it doesn't
-	 * name whole ("vegetable kebab") or for another kind of topic. A feedback row's `foodTopic`.
+	 * The dish or drink topic a dish name names as a whole, as written or by its `termKey`
+	 * ("döner", "doner kebab", "kebabs": kebab; "burger": burgers; a decided term's first dish or
+	 * drink: "vegan döner" → kebab); none for a name it doesn't name whole ("vegetable kebab") or
+	 * that is only another kind of topic. What a dish wording names as a whole.
 	 */
 	dishTopic(name: string): string | undefined {
-		const key = dishKey(name);
+		const key = termKey(name);
 		if (!key) return undefined;
-		const topic = this.exact(name) ?? this.exact(key);
-		const kind = topic ? this.byKey.get(topic)?.kind : undefined;
-		return topic && kind && DISH_KINDS.has(kind) ? topic : undefined;
+		const hits = this.exactAll(name).length ? this.exactAll(name) : this.exactAll(key);
+		return hits.find(k => {
+			const kind = this.byKey.get(k)?.kind;
+			return !!kind && DISH_KINDS.has(kind);
+		});
 	}
 
 	/**
@@ -221,7 +261,7 @@ export class TopicIndex {
 		const key = normalizeCuisine(raw);
 		if (!key) return [];
 		const whole = this.lookup.get(key);
-		if (whole) return [whole];
+		if (whole) return [...whole];
 		const words = key.split(' ');
 		const found: string[] = [];
 		for (let i = 0; i < words.length;) {
@@ -229,7 +269,7 @@ export class TopicIndex {
 			for (let j = Math.min(words.length, i + this.maxWords); j > i; j--) {
 				const hit = this.lookup.get(words.slice(i, j).join(' '));
 				if (hit) {
-					if (!found.includes(hit)) found.push(hit);
+					for (const k of hit) if (!found.includes(k)) found.push(k);
 					i = j;
 					matched = true;
 					break;

@@ -1,0 +1,368 @@
+{
+  "id": "post-dfe2d586",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "blog",
+    "author": "mitvergnuegen.com",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Wenn Bubble Tea auf Gaming trifft: VALORANT landet bei The Alley\n\nBubble Tea hatte schon einige Leben. Erst war er ein Hype, dann vermeintlich wieder weg und heute einfach überall. Milk Tea, Matcha, Brown Sugar Boba und Co. gehören mittlerweile zur Berliner Food-Szene wie Naturwein und Sauerteigbrot.\nÄhnlich sieht es beim Gaming aus: Längst raus aus der Nerd-Nische, sind Games heute Popkultur. Und wenn zwei Welten mit derart enthusiastischen Fans aufeinandertreffen, kann dabei eigentlich nur etwas Spannendes herauskommen. Genau das passiert gerade bei The Alley: Anlässlich der VALORANT Champions Shanghai 2026 bekommt ihr dort noch bis zum 25. Oktober 2026 zwei Bubble Teas, die von den VALORANT Agents Sage und Viper inspiriert sind. Für The Alley ist es die erste Gaming-Kooperation in Deutschland.\nTeam Sage oder Team Viper?\nFalls ihr bei VALORANT sofort wisst, welchen Agent ihr wählt, könnt ihr direkt zur wichtigen Frage springen: Welcher Bubble Tea passt zu euch? Alle anderen bekommen vorher einen kleinen Crashkurs:\nVALORANT ist ein kostenloser taktischer 5v5-Shooter von Riot Games, bei dem verschiedene Agents mit individuellen Fähigkeiten gegeneinander antreten. Seit seinem Launch 2020 ist das Game zu einem der großen internationalen Gaming-Titel geworden!\n© Riot Games, Jian Chen\nFür die Kooperation mit The Alley verlassen zwei dieser Agents nun zumindest geschmacklich den Bildschirm: Der grüne “Viper’s Sparkling Matcha Refresher” kombiniert prickelnden Matcha mit frischer Gurke und Crystal Boba. Wer im Gegensatz dazu Bubble Tea lieber cremig mag, bestellt “Sage’s Lavender Assam Milk Tea”: Assam-Milchtee mit einer Lavendel-Milchhaube und Brown Sugar Jelly.\nDamit funktioniert die Kooperation in beide Richtungen: Wenn ihr ohnehin jeden neuen Bubble-Tea-Spot ausprobieren müsst, habt ihr jetzt gleich zwei special und limitierte Sorten für eure Food-Bucketlist. Und wenn ihr VALORANT spielt, könnt ihr euch nicht nur für einen Agent, sondern auch für dessen Drink entscheiden.\n© Riot Games, Jian Chen\nVon Shanghai nach Berlin\nAnlass für die beiden Drinks sind die VALORANT Champions Shanghai, das Saisonfinale der VALORANT Champions Tour. Dort treten die besten Teams der Welt gegeneinander an. Das Interesse daran ist längst riesig: Die VALORANT Champions in Paris wurden 2025 weltweit von mehr als 28 Millionen Zuschauer*innen verfolgt.\nOb ihr nun hauptsächlich wegen VALORANT kommt oder eure persönliche Bubble-Tea-Rangliste sehr ernst nehmt, ist am Ende ziemlich egal. Gerade das macht die Zusammenarbeit interessant: Zwei Communitys treffen sich an einem Ort, an dem beide etwas entdecken können. Also schnappt euch eure Gaming-Crew, eure Bubble-Tea-Buddys oder Menschen, die einfach gerne neue Sachen probieren, und macht den Geschmackstest. Bleibt eigentlich nur noch eine Frage zu klären: Team Sage oder Team Viper? Im Zweifelsfall gilt natürlich: mit Freund*innen hingehen, beide bestellen und durchprobieren!",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "dfe2d586-3eb4-48a7-8f64-a2ec36394616",
+    "externalId": "blog_ef3b3a94103faf2aeffaf75e",
+    "url": "https://mitvergnuegen.com/2026/valorant-alley-bubble-tea-sage-viper/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-12T09:12:51.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:12.521Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "The Alley",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f1b7addb-3982-4231-8fb6-bf49c544efb9",
+          "brandName": "The Alley",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "two limited special drinks for the collaboration",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "first gaming collaboration in Germany",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:26:07.812Z",
+    "usage": {
+      "inputTokens": 12453,
+      "outputTokens": 4088,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Paid-partnership style article, marked promotional. Hard calls were the kind of the 'until 25 October' limited availability (new_item, with deal or fact allowed) and whether the drink descriptions are neutral or approving. The VALORANT game and esports viewer facts were left out as not about food, drink or a place.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "The Alley",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f1b7addb-3982-4231-8fb6-bf49c544efb9",
+          "brandName": "The Alley",
+          "venueId": null,
+          "venueName": null,
+          "note": "The post names The Alley in Berlin with no location. The chain brand fits best, though a separate Wilmersdorf listing also exists."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "bubble tea was a hype, then seemingly gone, and is now everywhere",
+        "quote": "Erst war er ein Hype, dann vermeintlich wieder weg und heute einfach überall",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Bubble Tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Milk Tea, Matcha, Brown Sugar Boba and co. are now part of Berlin's food scene like natural wine and sourdough bread",
+        "quote": "Milk Tea, Matcha, Brown Sugar Boba und Co. gehören mittlerweile zur Berliner Food-Szene wie Naturwein und Sauerteigbrot",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Milk Tea",
+          "Matcha",
+          "Brown Sugar Boba"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "The Alley offers two bubble teas inspired by the VALORANT agents Sage and Viper for the VALORANT Champions Shanghai 2026",
+        "quote": "zwei Bubble Teas, die von den VALORANT Agents Sage und Viper inspiriert sind",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Bubble Teas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the two VALORANT bubble teas are available at The Alley only until 25 October 2026",
+        "quote": "noch bis zum 25. Oktober 2026",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Bubble Teas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "deal",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the VALORANT collaboration is The Alley's first gaming cooperation in Germany",
+        "quote": "Für The Alley ist es die erste Gaming-Kooperation in Deutschland",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the green Viper's Sparkling Matcha Refresher combines sparkling matcha with fresh cucumber and Crystal Boba",
+        "quote": "Der grüne “Viper’s Sparkling Matcha Refresher” kombiniert prickelnden Matcha mit frischer Gurke und Crystal Boba",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Viper’s Sparkling Matcha Refresher",
+          "Matcha",
+          "Gurke",
+          "Crystal Boba"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety",
+            "drink_selection"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creamy Sage's Lavender Assam Milk Tea is Assam milk tea with a lavender milk cap and Brown Sugar Jelly",
+        "quote": "bestellt “Sage’s Lavender Assam Milk Tea”: Assam-Milchtee mit einer Lavendel-Milchhaube und Brown Sugar Jelly",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Sage’s Lavender Assam Milk Tea",
+          "Assam-Milchtee",
+          "Lavendel-Milchhaube",
+          "Brown Sugar Jelly"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety",
+            "drink_selection"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Alley's two special limited flavours belong on your food bucket list",
+        "quote": "zwei special und limitierte Sorten für eure Food-Bucketlist",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability",
+            "drink_selection"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Alley is a place where gaming and bubble tea communities can both discover something",
+        "quote": "Zwei Communitys treffen sich an einem Ort, an dem beide etwas entdecken können",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "recommended to go to The Alley with friends, order both drinks and try them",
+        "quote": "mit Freund*innen hingehen, beide bestellen und durchprobieren!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.604Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The claim is about the two Bubble Teas named in its quote, so foods should not be empty."
+      },
+      {
+        "at": "2026-11-01T15:11:31.442Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.253Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.440Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

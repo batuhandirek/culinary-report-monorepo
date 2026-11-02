@@ -1,0 +1,326 @@
+{
+  "id": "review-c117171d",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "c117171d-6736-4918-8b38-da56c836ed2f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xWak0ydGhRM1E0Tm1WTlZXa3hNR1pqWldOQ09WRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Mehringdamm",
+    "venueId": "fd5df7d5-f62e-4e90-890b-2d09b5981bea",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-31T17:35:56.997Z",
+    "stars": 4,
+    "text": "I have to admit that it’s degrading. The cheeseburger is already 6.40€, but instead of signature caramelized onions they now put just a slice of a fresh red onion that overwhelms the taste.\nMoreover, they no longer offer you to take napkins, instead they give only one which I find not enough taking the nature of the food into account.\nThe bottle of water is 3.10€.\nThe toilet is in poor condition and had no toilet paper.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:31.047Z",
+    "claims": [
+      {
+        "text": "the cheeseburger is 6.40€",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "cheeseburger"
+        ],
+        "amount": 6.4,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "instead of signature caramelized onions they now put just a slice of a fresh red onion",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "caramelized onions",
+          "fresh red onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the fresh red onion overwhelms the taste",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "fresh red onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they no longer offer you to take napkins",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "they give only one napkin",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [
+          "napkins"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bottle of water is 3.10€",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "water"
+        ],
+        "amount": 3.1,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "the toilet is in poor condition",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "toilets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the toilet had no toilet paper",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "toilets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:20.891Z",
+    "usage": {
+      "inputTokens": 5041,
+      "outputTokens": 2299,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'already 6.40€' is a price change (implied by 'already' and 'degrading' but no earlier price stated), so opinion with fact/change allowed; and the napkin claims, which fit service or amenities. The one-napkin judgement may sit inside the napkin change claim.",
+    "claims": [
+      {
+        "text": "the place is degrading",
+        "quote": "I have to admit that it’s degrading",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the cheeseburger is already 6.40€",
+        "quote": "The cheeseburger is already 6.40€",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [
+          "cheeseburger"
+        ],
+        "amount": 6.4,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "change"
+          ]
+        }
+      },
+      {
+        "text": "instead of the signature caramelized onions they now put just a slice of fresh red onion on the cheeseburger",
+        "quote": "instead of signature caramelized onions they now put just a slice of a fresh red onion",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "caramelized onions",
+          "red onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the fresh red onion overwhelms the taste",
+        "quote": "overwhelms the taste",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "red onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they no longer offer to take napkins, they give only one",
+        "quote": "they no longer offer you to take napkins, instead they give only one",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "amenities"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "one napkin is not enough given the nature of the food",
+        "quote": "which I find not enough taking the nature of the food into account",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "amenities"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the bottle of water is 3.10€",
+        "quote": "The bottle of water is 3.10€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "water"
+        ],
+        "amount": 3.1,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "price"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the toilet is in poor condition",
+        "quote": "The toilet is in poor condition",
+        "sentiment": "negative",
+        "aspect": "toilets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the toilet had no toilet paper",
+        "quote": "had no toilet paper",
+        "sentiment": "negative",
+        "aspect": "toilets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

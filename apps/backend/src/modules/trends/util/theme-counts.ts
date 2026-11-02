@@ -1,9 +1,10 @@
-// Pure: counting what a city's reviews and posts praise and criticise, per feedback theme, across
-// every venue in it.
+// Pure: counting what a city's reviews and posts praise and criticise, per theme (an aspect),
+// across every venue in it, over statements and their parts.
 
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { foodRowKey, foodRowsOf, FOODS_SQL, type StatementFood } from 'src/modules/statements/util/statement-foods.js';
+import { judgingSql } from 'src/modules/statements/util/statement-sql.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
-import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 
 /** What the counts need of the aspect vocabulary: which keys are aspects, and each one's label and root */
 export type ThemeAspects = Pick<TopicIndex, 'isAspect' | 'label' | 'rootOf'>;
@@ -11,8 +12,11 @@ export type ThemeAspects = Pick<TopicIndex, 'isAspect' | 'label' | 'rootOf'>;
 export type ThemePolarity = 'praise' | 'complaint';
 export type ThemeSourceKind = 'review' | 'post';
 
-/** One praise or complaint point of a review or a post, as `THEME_REVIEW_POINTS_SQL` and `THEME_POST_POINTS_SQL` select it. */
-export interface ThemePointRow {
+/**
+ * One praise or complaint claim of a review or a post (a statement with text, judged positive or
+ * negative, not a noticed change), as `THEME_REVIEW_CLAIMS_SQL` and `THEME_POST_CLAIMS_SQL` select it.
+ */
+export interface ThemeClaimRow {
 	/** YYYY-MM, UTC */
 	month: string;
 	kind: ThemeSourceKind;
@@ -21,17 +25,13 @@ export interface ThemePointRow {
 	brand_id: string;
 	brand_name: string;
 	polarity: ThemePolarity;
-	/** Null for a point stored before themes and not backfilled yet */
-	theme: string | null;
-	detail: string | null;
+	/** The aspect's key (its `aspect` part); null for a claim agent B filed under no aspect yet */
+	aspect: string | null;
+	text: string | null;
 	/** A post by one of the brand's own accounts (`ownPostSql`); false for reviews */
 	own: boolean;
-	/** The dish the point is about (`FeedbackPoint.dish`), as spelled, and its key */
-	dish?: string | null;
-	dish_key?: string | null;
-	/** The dish's food topic, when it has one: dishes of one topic are one row */
-	food_topic_key?: string | null;
-	food_topic_label?: string | null;
+	/** The foods and drinks it names, each with its dish or drink topics (`FOODS_SQL`) */
+	foods?: StatementFood[] | null;
 }
 
 /** A kind of food (a food topic): a brand's is the main one of most of its places (`brandFoods`). */
@@ -44,28 +44,28 @@ export interface ThemeFood {
 export interface ThemeFoodRow extends ThemeFood {
 	/** Reviews and posts of its brands raising the theme */
 	sources: number;
-	/** Of its brands' reviews and posts with any point this month, percent */
+	/** Of its brands' reviews and posts with any claim this month, percent */
 	share: number;
 }
 
-/** One kind of food in the month: its brands' reviews and posts with any point. */
+/** One kind of food in the month: its brands' reviews and posts with any claim. */
 export interface ThemeFoodCoverage extends ThemeFood {
 	reviews: number;
 	posts: number;
 	brands: number;
 }
 
-/** One dish a theme's sources were about: a food topic ("Döner & kebab") or, without one, the dish itself. */
+/** One dish a theme's sources were about: a dish or drink topic ("Döner & kebab") or, without one, the wording itself. */
 export interface ThemeDishRow {
-	/** `topic:<food topic key>` or `dish:<dish key>` */
+	/** `topic:<dish or drink topic key>` or `dish:<term key>` */
 	key: string;
-	/** The topic's label, else the dish as most often spelled */
+	/** The topic's label, else the wording as most often spelled */
 	label: string;
-	/** The food topic, for a link to its page */
+	/** The dish or drink topic, for a link to its page */
 	foodTopic?: string;
 	/** Reviews and posts raising the theme about it, each once */
 	sources: number;
-	/** Of the reviews and posts with a point of this side about it, percent */
+	/** Of the reviews and posts with a claim of this side about it, percent */
 	share: number;
 }
 
@@ -81,15 +81,15 @@ export interface ThemeRow {
 	/** The aspect's key */
 	key: string;
 	/** Its root's key */
-	topic: FeedbackTopic;
+	topic: string;
 	label: string;
 	/** Written reviews raising it */
 	reviews: number;
 	/** Posts by others raising it */
 	posts: number;
-	/** Of the month's written reviews with any point, percent; null without any */
+	/** Of the month's written reviews with any claim, percent; null without any */
 	reviewShare: number | null;
-	/** Of the month's posts by others with any point, percent; null without any */
+	/** Of the month's posts by others with any claim, percent; null without any */
 	postShare: number | null;
 	/** Against the month before, in percentage points; null when either month has none */
 	reviewShareChange: number | null;
@@ -100,22 +100,22 @@ export interface ThemeRow {
 	topBrands: ThemeBrand[];
 	/** The three kinds of food it came up at most, by the brands' food */
 	foods: ThemeFoodRow[];
-	/** The five dishes its points were about most (`FeedbackPoint.dish`) */
+	/** The five dishes its claims named most (their food parts) */
 	dishes: ThemeDishRow[];
-	/** Up to five distinct details, in row order (newest first) */
+	/** Up to five distinct claims, in row order (newest first) */
 	samples: string[];
 }
 
 /** What the counts stand on. */
 export interface ThemeCoverage {
-	/** The month's written reviews with any praise or complaint point */
+	/** The month's written reviews with any praise or complaint claim */
 	reviews: number;
 	/** The brands those reviews are of: reviews are scraped for report venues and their competitors only */
 	reviewBrands: number;
-	/** The month's posts by others with any point about a matched venue */
+	/** The month's posts by others with any claim about a matched venue */
 	posts: number;
 	postBrands: number;
-	/** Of those, the ones with a point not filed under a theme yet: counted under no theme */
+	/** Of those, the ones with a claim under no aspect yet (agent B named none, or one the table lacks): counted under no theme */
 	unfiledReviews: number;
 	unfiledPosts: number;
 }
@@ -131,15 +131,15 @@ const TOP_BRANDS = 3;
 const TOP_FOODS = 3;
 const TOP_DISHES = 5;
 
-/** A point's dish as one row: its food topic when it has one ("döner" and "doner kebab" are kebab), else its key. */
-export const themeDishOf = (
-	r: Pick<ThemePointRow, 'dish' | 'dish_key' | 'food_topic_key' | 'food_topic_label'>,
-): { key: string; topic?: string; topicLabel?: string; spelling: string } | null => {
-	if (!r.dish) return null;
-	if (r.food_topic_key) return { key: `topic:${r.food_topic_key}`, topic: r.food_topic_key, topicLabel: r.food_topic_label ?? r.food_topic_key, spelling: r.dish };
-	const key = r.dish_key || r.dish.trim().toLowerCase();
-	return key ? { key: `dish:${key}`, spelling: r.dish } : null;
-};
+/** The dish rows a claim's foods fall in (`foodRowsOf`), keyed as the pages name them. */
+export const themeDishesOf = (
+	foods: StatementFood[] | null | undefined,
+): { key: string; topic?: string; topicLabel?: string; spelling: string }[] =>
+	foodRowsOf(foods ?? []).map(row => ({
+		key: foodRowKey(row),
+		...(row.topic && { topic: row.topic.key, topicLabel: row.topic.label }),
+		spelling: row.spelling,
+	}));
 
 const percent = (n: number, of: number): number | null => (of ? Math.round((n / of) * 1000) / 10 : null);
 const pointsChange = (now: number | null, before: number | null): number | null =>
@@ -152,7 +152,7 @@ interface Tally {
 	brands: Map<string, Set<string>>;
 	/** Per kind of food, its sources */
 	foods: Map<string, Set<string>>;
-	/** Per dish row (`themeDishOf`), its sources */
+	/** Per dish row (`themeDishesOf`), its sources */
 	dishes: Map<string, Set<string>>;
 	samples: string[];
 	seen: Set<string>;
@@ -162,12 +162,13 @@ interface Tally {
  * Counts the month's themes, praise and complaints apart, over rows of `month` and `previous`
  * (the month before, for the change). A review or a post counts once per theme and polarity,
  * however often it raises it, so "prices went up" and "way more than before" in two reviews are
- * two, in one review one. A brand's own posts are left out. A point whose theme `aspects` does
- * not know counts under none: its source is counted in `coverage` as unfiled, never under a root.
- * `foods` (brand id → its food, `brandFoods`) breaks each theme down by kind of food.
+ * two, in one review one. A brand's own posts are left out. A claim whose aspect `aspects` does
+ * not know, or that has none, counts under no theme: its source is counted in `coverage` as
+ * unfiled, never under a root. `foods` (brand id → its food, `brandFoods`) breaks each theme down
+ * by kind of food; a claim's own foods break it down by dish, a source once per dish row.
  */
 export const countThemes = (
-	rows: ThemePointRow[],
+	rows: ThemeClaimRow[],
 	month: string,
 	previous: string,
 	aspects: ThemeAspects,
@@ -175,13 +176,13 @@ export const countThemes = (
 ): ThemeCounts => {
 	const base = { [month]: { review: new Set<string>(), post: new Set<string>() }, [previous]: { review: new Set<string>(), post: new Set<string>() } };
 	const unfiled = { review: new Set<string>(), post: new Set<string>() };
-	const brandsWithPoints = { review: new Set<string>(), post: new Set<string>() };
+	const brandsWithClaims = { review: new Set<string>(), post: new Set<string>() };
 	const tallies = new Map<string, Tally>();
 	const before = new Map<string, { review: Set<string>; post: Set<string> }>();
 	const names = new Map<string, string>();
-	/** Per kind of food, the month's sources with any point */
+	/** Per kind of food, the month's sources with any claim */
 	const foodBase = new Map<string, Set<string>>();
-	/** Per side and dish row, the month's sources with a point of that side about it */
+	/** Per side and dish row, the month's sources with a claim of that side about it */
 	const dishBase = new Map<string, Set<string>>();
 	/** Per dish row, its topic and how it is spelled */
 	const dishNames = new Map<string, { topic?: string; topicLabel?: string; spellings: Map<string, number> }>();
@@ -189,21 +190,21 @@ export const countThemes = (
 	for (const r of rows) {
 		if (r.own || !base[r.month]) continue;
 		base[r.month][r.kind].add(r.source_id);
-		const known = r.theme !== null && aspects.isAspect(r.theme);
+		const known = r.aspect !== null && aspects.isAspect(r.aspect);
 		if (r.month === previous) {
 			if (!known) continue;
-			const key = `${r.polarity}:${r.theme}`;
+			const key = `${r.polarity}:${r.aspect}`;
 			const prev = before.get(key) ?? { review: new Set<string>(), post: new Set<string>() };
 			prev[r.kind].add(r.source_id);
 			before.set(key, prev);
 			continue;
 		}
-		brandsWithPoints[r.kind].add(r.brand_id);
+		brandsWithClaims[r.kind].add(r.brand_id);
 		const food = foods.get(r.brand_id);
 		const source = `${r.kind}:${r.source_id}`;
 		if (food) foodBase.set(food.key, (foodBase.get(food.key) ?? new Set<string>()).add(source));
-		const dish = themeDishOf(r);
-		if (dish) {
+		const dishes = themeDishesOf(r.foods);
+		for (const dish of dishes) {
 			const side = `${r.polarity}:${dish.key}`;
 			dishBase.set(side, (dishBase.get(side) ?? new Set<string>()).add(source));
 			const names = dishNames.get(dish.key) ?? { topic: dish.topic, topicLabel: dish.topicLabel, spellings: new Map<string, number>() };
@@ -215,7 +216,7 @@ export const countThemes = (
 			continue;
 		}
 		names.set(r.brand_id, r.brand_name);
-		const key = `${r.polarity}:${r.theme}`;
+		const key = `${r.polarity}:${r.aspect}`;
 		const t: Tally = tallies.get(key) ?? {
 			reviews: new Set(),
 			posts: new Set(),
@@ -228,11 +229,11 @@ export const countThemes = (
 		(r.kind === 'review' ? t.reviews : t.posts).add(r.source_id);
 		t.brands.set(r.brand_id, (t.brands.get(r.brand_id) ?? new Set<string>()).add(source));
 		if (food) t.foods.set(food.key, (t.foods.get(food.key) ?? new Set<string>()).add(source));
-		if (dish) t.dishes.set(dish.key, (t.dishes.get(dish.key) ?? new Set<string>()).add(source));
-		const detail = r.detail?.trim();
-		if (detail && t.samples.length < SAMPLES && !t.seen.has(detail.toLowerCase())) {
-			t.seen.add(detail.toLowerCase());
-			t.samples.push(detail);
+		for (const dish of dishes) t.dishes.set(dish.key, (t.dishes.get(dish.key) ?? new Set<string>()).add(source));
+		const text = r.text?.trim();
+		if (text && t.samples.length < SAMPLES && !t.seen.has(text.toLowerCase())) {
+			t.seen.add(text.toLowerCase());
+			t.samples.push(text);
 		}
 		tallies.set(key, t);
 	}
@@ -256,7 +257,7 @@ export const countThemes = (
 				const postShare = percent(t.posts.size, now.post.size);
 				return {
 					key: theme,
-					topic: (aspects.rootOf(theme) ?? theme) as FeedbackTopic,
+					topic: aspects.rootOf(theme) ?? theme,
 					label: aspects.label(theme),
 					reviews: t.reviews.size,
 					posts: t.posts.size,
@@ -298,9 +299,9 @@ export const countThemes = (
 		complaints: rowsOf('complaint'),
 		coverage: {
 			reviews: now.review.size,
-			reviewBrands: brandsWithPoints.review.size,
+			reviewBrands: brandsWithClaims.review.size,
 			posts: now.post.size,
-			postBrands: brandsWithPoints.post.size,
+			postBrands: brandsWithClaims.post.size,
 			unfiledReviews: unfiled.review.size,
 			unfiledPosts: unfiled.post.size,
 		},
@@ -308,10 +309,10 @@ export const countThemes = (
 };
 
 /**
- * The month's kinds of food, by the brands' food: their reviews and posts with any point, own
+ * The month's kinds of food, by the brands' food: their reviews and posts with any claim, own
  * posts out, the most first. What the theme counts can be narrowed to.
  */
-export const themeFoods = (rows: ThemePointRow[], month: string, foods: Map<string, ThemeFood>): ThemeFoodCoverage[] => {
+export const themeFoods = (rows: ThemeClaimRow[], month: string, foods: Map<string, ThemeFood>): ThemeFoodCoverage[] => {
 	const byFood = new Map<string, { food: ThemeFood; review: Set<string>; post: Set<string>; brands: Set<string> }>();
 	for (const r of rows) {
 		const food = foods.get(r.brand_id);
@@ -359,31 +360,37 @@ export const brandFoods = (places: BrandPlaceFood[]): Map<string, ThemeFood> => 
 	return out;
 };
 
-/** A source's points (`f`, joined on `on`): praise and complaints, dish-only and change rows left out; their dish's food topic (`ft`). */
-const pointsOf = (on: string) =>
-	`join feedback_points f on ${on} and f.detail is not null and not f.change left join topics ft on ft.id = f.food_topic_id`;
-const DISH_FIELDS = `f.dish, f.dish_key, ft.key as food_topic_key, ft.label as food_topic_label`;
-const POLARITY = `case when f.sentiment = 'positive' then 'praise' else 'complaint' end as polarity`;
+/**
+ * A source's praise and complaint claims (`s`, joined on `on`): statements with text, judged
+ * positive or negative, not a noticed change; neutral and mixed claims and claims agent B has not
+ * judged count as nothing. With the aspect part's key (`a`, null while unfiled) and the foods named.
+ */
+const claimsOf = (on: string) =>
+	`join statements s on ${on} and s.text is not null and ${judgingSql('s')} and s.sentiment in ('positive', 'negative')
+	left join statement_parts ap on ap.statement_id = s.id and ap.role = 'aspect'
+	left join topics a on a.id = ap.topic_id`;
+const CLAIM_FIELDS = `a.key as aspect, s.text, ${FOODS_SQL('st.id = s.id')} as foods`;
+const POLARITY = `case when s.sentiment = 'positive' then 'praise' else 'complaint' end as polarity`;
 
-/** `ThemePointRow`s of a city's written, analysed reviews in [start, end), newest first. */
-export const THEME_REVIEW_POINTS_SQL = `select to_char(r.published_at at time zone 'UTC', 'YYYY-MM') as month, 'review' as kind,
+/** `ThemeClaimRow`s of a city's written, analysed reviews in [start, end), newest first. */
+export const THEME_REVIEW_CLAIMS_SQL = `select s.month, 'review' as kind,
 		r.id::text as source_id, v.brand_id, b.name as brand_name, ${POLARITY},
-		f.theme, f.detail, false as own, ${DISH_FIELDS}
+		false as own, ${CLAIM_FIELDS}
 	from reviews r
 	join venues v on v.id = r.venue_id
 	join brands b on b.id = v.brand_id
-	${pointsOf('f.review_id = r.id')}
+	${claimsOf('s.review_id = r.id')}
 	where v.city_id = ? and r.published_at >= ? and r.published_at < ?
 		and r.analysed_at is not null and coalesce(r.text_translated, r.text, '') <> ''
-	order by r.published_at desc, r.id, f.id`;
+	order by r.published_at desc, r.id, s.id`;
 
-/** `ThemePointRow`s of a city's mentions matched to a brand in [start, end), newest post first. */
-export const THEME_POST_POINTS_SQL = `select to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') as month, 'post' as kind,
+/** `ThemeClaimRow`s of a city's mentions matched to a brand in [start, end), newest post first. */
+export const THEME_POST_CLAIMS_SQL = `select s.month, 'post' as kind,
 		p.id::text as source_id, m.brand_id, b.name as brand_name, ${POLARITY},
-		f.theme, f.detail, ${ownPostSql('p', 'm.brand_id')} as own, ${DISH_FIELDS}
+		${ownPostSql('p', 'm.brand_id')} as own, ${CLAIM_FIELDS}
 	from mentions m
 	join social_posts p on p.id = m.post_id
 	join brands b on b.id = m.brand_id
-	${pointsOf('f.mention_id = m.id')}
+	${claimsOf('s.mention_id = m.id')}
 	where p.city_id = ? and p.posted_at >= ? and p.posted_at < ?
-	order by p.posted_at desc, p.id, m.id, f.id`;
+	order by p.posted_at desc, p.id, m.id, s.id`;

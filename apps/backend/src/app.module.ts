@@ -9,7 +9,7 @@ import { PgBossModule } from 'src/modules/pgboss/pgboss.module.js';
 import { mainConfig } from './config/main.config.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { BacklogModule } from './modules/backlog/backlog.module.js';
-import { FeedbackModule } from './modules/feedback/feedback.module.js';
+import { StatementsModule } from './modules/statements/statements.module.js';
 import { BlogModule } from './modules/blog/blog.module.js';
 import { CitiesModule } from './modules/cities/cities.module.js';
 import { EmailModule } from './modules/email/email.module.js';
@@ -72,7 +72,7 @@ import sdk from './tracing.js';
 		ReportsModule,
 		PipelineModule,
 		BacklogModule,
-		FeedbackModule,
+		StatementsModule,
 		OutreachModule,
 		PortalModule,
 		OverviewModule,

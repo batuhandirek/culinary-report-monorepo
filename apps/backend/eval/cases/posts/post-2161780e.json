@@ -1,0 +1,216 @@
+{
+  "id": "post-2161780e",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "vietnamvegan.de",
+    "locationName": "Bergmannstraße (Berlin)",
+    "hashtags": [
+      "goodmorningvietnamvegan",
+      "veganberlin",
+      "vegandeutschland",
+      "veganfood",
+      "vegandessert"
+    ],
+    "taggedHandles": [],
+    "text": "🍵💚 HEALTHY MATCHA – BEWUSST GENIESSEN, ENTSPANNT DURCHATMEN! 🌿\n\nEin bisschen Frische, ein bisschen Leichtigkeit und eine Extraportion Wohlfühlmomente für deinen Tag! 💚✨\n\nUnser Healthy Matcha ist genau das Richtige für alle, die den feinen Geschmack von Matcha lieben und sich im Alltag eine kleine Auszeit gönnen möchten. 🍃\n\n📍 Goodmorning Vietnam Vegan\n\n👉 Jetzt Tisch reservieren:\nwww.goodmorningvietnamvegan.de\n\nWir freuen uns auf euch! 🥰🌱\n\n#GoodmorningVietnamVegan #VeganBerlin #VeganDeutschland #VeganFood #VeganDessert PannaCotta Ananas Schule Kinder Schüler VietnameseFood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "2161780e-7b93-4dbb-bf3f-95f188a0c6d9",
+    "externalId": "ig_4016194109440722712",
+    "url": "https://www.instagram.com/p/De8Y0OKOwcY/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Good Morning Vietnam Vegan",
+    "postedAt": "2026-10-26T04:09:56.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:50:13.080Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Goodmorning Vietnam Vegan",
+        "locationHint": "Bergmannstraße",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "fuzzy",
+          "brandId": "f4ec3920-fd67-467a-b15d-453b7d389a90",
+          "brandName": "Good Morning Vietnam Vegan",
+          "venueId": "5a9031ca-7096-4764-ab27-fa777a87c904",
+          "venueName": "Good Morning Vietnam Vegan"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Healthy Matcha is for people who love the fine taste of matcha",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Healthy Matcha",
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Healthy Matcha offers a little break in everyday life",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "Healthy Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:33:02.089Z",
+    "usage": {
+      "inputTokens": 10009,
+      "outputTokens": 1650,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5880
+    },
+    "notes": "Own-account promo of a matcha drink tagged at Bergmannstraße; main claim is the promotional praise of the Healthy Matcha. The reservation call-to-action and the untagged keyword list (PannaCotta Ananas) are borderline and marked optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Good Morning Vietnam Vegan",
+        "locationHint": "Bergmannstraße",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f4ec3920-fd67-467a-b15d-453b7d389a90",
+          "brandName": "Good Morning Vietnam Vegan",
+          "venueId": "5a9031ca-7096-4764-ab27-fa777a87c904",
+          "venueName": "Good Morning Vietnam Vegan",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Healthy Matcha is just right for everyone who loves the fine taste of matcha",
+        "quote": "Unser Healthy Matcha ist genau das Richtige für alle, die den feinen Geschmack von Matcha lieben",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Healthy Matcha",
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Healthy Matcha brings a bit of freshness and lightness",
+        "quote": "Ein bisschen Frische, ein bisschen Leichtigkeit",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tables can be reserved online at goodmorningvietnamvegan.de",
+        "quote": "Jetzt Tisch reservieren",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "PannaCotta with Ananas is mentioned",
+        "quote": "PannaCotta Ananas",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "PannaCotta",
+          "Ananas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.227Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.422Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

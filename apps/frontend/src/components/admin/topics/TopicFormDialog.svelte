@@ -30,6 +30,10 @@
 		label?: string;
 		/** A new topic's type, cuisine unless given */
 		kind?: string;
+		/** A new topic's parent key (an aspect found by "Missing aspects": its root) */
+		parent?: string;
+		/** A new aspect's hint, what it covers */
+		aspectHint?: string;
 		/** Every topic: the parent picker (its own side of the tree) and whether an aspect has children */
 		topics: TopicOption[];
 		active?: boolean;
@@ -38,7 +42,17 @@
 		onDeleted?: () => void;
 	}
 
-	let { topic, label = '', kind = 'cuisine', topics, active = $bindable(false), onSaved, onDeleted }: Props = $props();
+	let {
+		topic,
+		label = '',
+		kind = 'cuisine',
+		parent,
+		aspectHint = '',
+		topics,
+		active = $bindable(false),
+		onSaved,
+		onDeleted
+	}: Props = $props();
 
 	// The type picked while the dialog is open decides which fields show, so a change rebuilds the
 	// form with what was typed carried over; both are cleared when the dialog closes
@@ -66,7 +80,7 @@
 	]);
 	const carriedText = (name: string, saved: string) => (typeof carried[name] === 'string' ? (carried[name] as string) : saved);
 	const parentValue = $derived.by(() => {
-		const wanted = carriedText('parentKey', topic?.parentKey ?? NO_PARENT);
+		const wanted = carriedText('parentKey', topic ? (topic.parentKey ?? NO_PARENT) : (parent ?? NO_PARENT));
 		return parentItems.some((p) => p.value === wanted) ? wanted : NO_PARENT;
 	});
 
@@ -117,7 +131,7 @@
 								type: 'textarea' as const,
 								label: 'What it covers',
 								placeholder: 'being asked for a tip, tip screens, service charge added unasked',
-								value: carriedText('hint', topic?.hint ?? ''),
+								value: carriedText('hint', topic ? (topic.hint ?? '') : aspectHint),
 								hint: 'Told to the agents filing points: what belongs here, what does not.',
 								maxlength: 300,
 								counter: true,

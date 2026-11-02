@@ -1,0 +1,237 @@
+{
+  "id": "review-1eca7dfe",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "1eca7dfe-9fa8-4f48-9bd8-2ec19f604ca0",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pSNFRISjBUREE1Wm14eGIxWnJXRVZ3ZDB4dFJtYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Chengdu Nudelhaus 蜀味记",
+    "venueId": "f4c6392e-020c-4c16-a63b-ef0452b83ee9",
+    "brand": "Chengdu Nudelhaus 蜀味记",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-29T18:27:35.606Z",
+    "stars": 5,
+    "text": "Schönes Restaurant, lecker Essen. Nudelsuppe sehr lecker.\nDie Schärfegrad kann man ansagen.\nSchönes Ambiente und sehr nette Bedienung.",
+    "textTranslated": "Lovely restaurant, delicious food. The noodle soup was very tasty.\n\nYou can specify the spice level.\n\nNice atmosphere and very friendly service."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:04:39.923Z",
+    "claims": [
+      {
+        "text": "the restaurant was lovely",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the noodle soup was very tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "noodle soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you can specify the spice level",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere was nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was very friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:10.110Z",
+    "usage": {
+      "inputTokens": 5460,
+      "outputTokens": 1204,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 5200
+    },
+    "notes": "Hard calls: 'Schönes Restaurant' is a general praise of the place (vibe, could be read as interior or a verdict); choosing the spice level is a neutral fact about seasoning, though it can be read as approving.",
+    "claims": [
+      {
+        "text": "the restaurant is lovely",
+        "quote": "Schönes Restaurant",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "atmosphere",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the food is delicious",
+        "quote": "lecker Essen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Nudelsuppe was very tasty",
+        "quote": "Nudelsuppe sehr lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Nudelsuppe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "you can specify the spice level",
+        "quote": "Die Schärfegrad kann man ansagen.",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the atmosphere is nice",
+        "quote": "Schönes Ambiente",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service is very friendly",
+        "quote": "sehr nette Bedienung",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.428Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.205Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,503 @@
+{
+  "id": "review-90e99b19",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "90e99b19-4d0d-4207-aa27-abdae59b8fae",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25wQlVuUkliMlJ2UlhocU1HMXVkbVp5V1hrellsRRAB",
+    "platform": "google",
+    "language": "ko",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-30T11:18:35.954Z",
+    "stars": 3,
+    "text": "매장은 약간 넓은 편인데 깨끗한 편이지만 분위기는 평범하고 맛은 괜찮기는 하지만 굳이 여길 찾아와서 먹어야할 수준은 아님. 서비스가 좋냐 하면 뭐 딱히 안좋지는 않은데 좋지도 않고. 불친절하다기보다는 그냥 전반적으로 독일스러운 무뚝뚝한 느낌으로 대응해요. 제 맞은편 테이블에서 케밥에 뭐가 나왔는지 이물질로 보이는 걸 주방으로 들고가던데 이후 되너 새로 가져다주더라고요. 제가 앉은 테이블 정리해주시려다가 행주를 테이블에 그냥 놓고 가셨음. 베를린 물가치고 약간 저렴한 듯 하고 양이 많다는 게 장점인 것 같아요. 근처에 지나갈 일이 있다면 모르겠지만 이동시간 15분 이상 투자해서 갈 곳은 아닌 것 같아요. 재방문의사는 없습니다.",
+    "textTranslated": "The restaurant is fairly spacious and clean, but the atmosphere is ordinary. The food is decent, but not good enough to warrant a special trip. As for the service, it’s not particularly bad, but it’s not great either. It’s not so much that they are unfriendly, but rather that they respond with a generally blunt, German vibe. At the table across from me, they took what looked like a foreign object from the kebab to the kitchen, and then brought a new döner afterwards. They tried to clear my table but just left the dishcloth there. The advantages seem to be that it is slightly cheaper than average for Berlin and the portions are large. It might be okay if you happen to be passing by, but I don't think it's worth investing more than 15 minutes of travel time to go there. I have no intention of visiting again."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:50:43.403Z",
+    "claims": [
+      {
+        "text": "the restaurant is fairly spacious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the restaurant is clean",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere is ordinary",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food is decent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food is not good enough to warrant a special trip",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service is not particularly bad",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service is not great either",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they respond with a generally blunt, German vibe",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "language",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they took what looked like a foreign object from the kebab to the kitchen",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food_hygiene",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they brought a new döner afterwards",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "order_accuracy",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they tried to clear my table",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they left the dishcloth there",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it is slightly cheaper than average for Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portions are large",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it might be okay if you happen to be passing by",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it is not worth more than 15 minutes of travel time",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": 15,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "I have no intention of visiting again",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:19:04.561Z",
+    "usage": {
+      "inputTokens": 5965,
+      "outputTokens": 3643,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the 'not worth a special trip' line could be read as a food opinion or a verdict on the place. The 15 minutes is travel time rather than a wait, but the number is stated, so it is kept with minutes as the unit. Staff replacing the döner after the foreign object is read as positive complaint handling, with a neutral fact allowed.",
+    "claims": [
+      {
+        "text": "the restaurant is fairly spacious",
+        "quote": "매장은 약간 넓은 편인데",
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the restaurant is fairly clean",
+        "quote": "깨끗한 편이지만",
+        "sentiment": "positive",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "dining_area"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the atmosphere is ordinary",
+        "quote": "분위기는 평범하고",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food tastes decent",
+        "quote": "맛은 괜찮기는 하지만",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is not good enough to warrant a special trip",
+        "quote": "굳이 여길 찾아와서 먹어야할 수준은 아님",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the service is not particularly bad but not good either",
+        "quote": "서비스가 좋냐 하면 뭐 딱히 안좋지는 않은데 좋지도 않고",
+        "sentiment": "mixed",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff are not unfriendly but respond in a blunt German manner",
+        "quote": "불친절하다기보다는 그냥 전반적으로 독일스러운 무뚝뚝한 느낌으로 대응해요",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a foreign object was found in a kebab at the table opposite and taken to the kitchen",
+        "quote": "케밥에 뭐가 나왔는지 이물질로 보이는 걸 주방으로 들고가던데",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "케밥"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff then brought a new döner to that table",
+        "quote": "이후 되너 새로 가져다주더라고요",
+        "sentiment": "positive",
+        "aspect": "complaint_handling",
+        "foods": [
+          "되너"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "staff clearing the reviewer's table left the dishcloth on the table",
+        "quote": "행주를 테이블에 그냥 놓고 가셨음",
+        "sentiment": "negative",
+        "aspect": "dining_area",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness",
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are slightly cheap for Berlin",
+        "quote": "베를린 물가치고 약간 저렴한 듯 하고",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the portions are large",
+        "quote": "양이 많다는 게",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place might be okay if passing nearby",
+        "quote": "근처에 지나갈 일이 있다면 모르겠지만",
+        "sentiment": "mixed",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is not worth more than 15 minutes of travel",
+        "quote": "이동시간 15분 이상 투자해서 갈 곳은 아닌 것 같아요",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": 15,
+        "unit": "minutes",
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer has no intention of returning",
+        "quote": "재방문의사는 없습니다",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.431Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

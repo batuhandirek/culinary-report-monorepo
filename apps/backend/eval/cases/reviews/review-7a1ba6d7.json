@@ -1,0 +1,352 @@
+{
+  "id": "review-7a1ba6d7",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "7a1ba6d7-d76c-4ee5-bbc9-7fa2a12a5862",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pOallXTndjMk0wU2tKTmJWWkJWWGxyVVdGRk9GRRAB",
+    "platform": "google",
+    "language": "fr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-29T12:16:52.688Z",
+    "stars": 4,
+    "text": "Les kebabs ont un très bon goût petit + pour la sauce sesame qui est incroyable ! Un peu salé pour nous mais nous nous y attendions, les frites ne sont pas maison mais très bonne quand même !\nLe thé et le café sont gratuits sur place ! L’ambiance est bonne et très bon goût musicaux.\nLes serveurs sont gentils et souriant !\nJe recommande",
+    "textTranslated": "The kebabs taste great, and the sesame sauce is amazing! A little salty for us, but we expected that. The fries aren't homemade, but they're still very good! Tea and coffee are free! The atmosphere is nice, and the music is great.\nThe servers are friendly and smiling!\nI recommend it."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:50:43.173Z",
+    "claims": [
+      {
+        "text": "the kebabs taste great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the sesame sauce is amazing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sesame sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries aren't homemade",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries are very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "tea is free",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price",
+        "foods": [
+          "tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "coffee is free",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere is nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the servers are friendly and smiling",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:34.888Z",
+    "usage": {
+      "inputTokens": 5143,
+      "outputTokens": 2106,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The saltiness has no stated subject; it is read as being about the kebabs. Free tea and coffee is a standing offer rather than a limited one, so it is a fact about price, with deal and the other price aspects allowed. \"Not homemade\" counts as a mild criticism of the ingredients, with a neutral fact also allowed.",
+    "claims": [
+      {
+        "text": "the kebabs taste very good",
+        "quote": "Les kebabs ont un très bon goût",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebabs"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the sauce sesame is incredible",
+        "quote": "la sauce sesame qui est incroyable",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sauce sesame"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebabs were a little salty for them, but they expected it",
+        "quote": "Un peu salé pour nous mais nous nous y attendions",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "kebabs"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the frites are not homemade",
+        "quote": "les frites ne sont pas maison",
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the frites are still very good",
+        "quote": "très bonne quand même",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the thé and café are free on site",
+        "quote": "Le thé et le café sont gratuits sur place",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "thé",
+          "café"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "extra_charges",
+            "value_for_money",
+            "price"
+          ],
+          "kinds": [
+            "deal",
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the atmosphere is good",
+        "quote": "L’ambiance est bonne",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music choice is in very good taste",
+        "quote": "très bon goût musicaux",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "noise"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the servers are kind and smiling",
+        "quote": "Les serveurs sont gentils et souriant",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer recommends the place",
+        "quote": "Je recommande",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

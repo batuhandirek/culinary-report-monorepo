@@ -1,0 +1,435 @@
+{
+  "id": "post-b90bced2",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "zermanta",
+    "locationName": null,
+    "hashtags": [
+      "mezamematcha",
+      "tastetest",
+      "matcha",
+      "berlin"
+    ],
+    "taggedHandles": [],
+    "text": "mezame matcha - honest review #mezamematcha #tastetest #matcha #berlin ",
+    "subtitles": "wir testen heute einen der neuesten Matcha Laden in Berlin\nnatürlich ist die Sprache von mesami\nMatcha in der linienstraße\nhab schon viele Videos gesehen und der sieht so lecker Aus\nMir wurde der salted Vanilla\nBean empfohlen und den hab ich dann auch genommen\nI love it du hast diesen Salty Geschmack\nVanillegeschmack\nund wirklich richtig intensiven Matcha Geschmack\nalso ich muss sagen er hat wirklich ganz\nbesonders geschmeckt\nes ist nicht dein everyday Matcha\naber ich würd ihn Mir auf jeden Fall wiederholen",
+    "subtitlesLanguage": "deu-DE",
+    "id": "b90bced2-2bac-49bb-b53a-5064e241aa1a",
+    "externalId": "7696208610963098913",
+    "url": "https://www.tiktok.com/@zermanta/video/7696208610963098913",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-13T17:40:08.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:01.840Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Mezame Matcha",
+        "locationHint": "Linienstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "8e1b07f8-0ca7-4ac1-b57c-3fc9f794d3a3",
+          "brandName": "Mezame Matcha",
+          "venueId": "a8b2e413-fadf-4809-9407-ccdf765df34e",
+          "venueName": "Mezame Matcha"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "one of the newest matcha shops in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mezame Matcha is on Linienstraße",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted vanilla bean was recommended",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "advice",
+        "foods": [
+          "Salted Vanilla Bean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the drink had a salty taste",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the drink had vanilla flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the drink had a really intense matcha flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it tasted very special",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it is not an everyday matcha",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they would order it again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:48:42.216Z",
+    "usage": {
+      "inputTokens": 9569,
+      "outputTokens": 3088,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Marked as a new opening because the creator calls it one of the newest matcha shops in Berlin. 'der sieht so lecker aus' is read as being about the matcha seen in videos. Quotes keep the transcript's line breaks.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Mezame Matcha",
+        "locationHint": "Linienstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "8e1b07f8-0ca7-4ac1-b57c-3fc9f794d3a3",
+          "brandName": "Mezame Matcha",
+          "venueId": "a8b2e413-fadf-4809-9407-ccdf765df34e",
+          "venueName": "Mezame Matcha",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Mezame Matcha is one of the newest matcha shops in Berlin",
+        "quote": "einen der neuesten Matcha Laden in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mezame Matcha is on Linienstraße",
+        "quote": "Matcha in der linienstraße",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha looks so delicious in the many videos seen",
+        "quote": "der sieht so lecker Aus",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted Vanilla Bean was recommended and ordered",
+        "quote": "Mir wurde der salted Vanilla\nBean empfohlen",
+        "sentiment": "neutral",
+        "aspect": "advice",
+        "foods": [
+          "salted Vanilla\nBean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "loves the salted Vanilla Bean",
+        "quote": "I love it",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "salted Vanilla Bean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted Vanilla Bean has a salty taste and a vanilla taste",
+        "quote": "du hast diesen Salty Geschmack\nVanillegeschmack",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "salted Vanilla Bean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted Vanilla Bean has a really intense matcha taste",
+        "quote": "wirklich richtig intensiven Matcha Geschmack",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted Vanilla Bean tasted really special",
+        "quote": "er hat wirklich ganz\nbesonders geschmeckt",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "salted Vanilla Bean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted Vanilla Bean is not your everyday matcha",
+        "quote": "es ist nicht dein everyday Matcha",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "would definitely order the salted Vanilla Bean again",
+        "quote": "aber ich würd ihn Mir auf jeden Fall wiederholen",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "salted Vanilla Bean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.249Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.438Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

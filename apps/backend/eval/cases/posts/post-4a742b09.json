@@ -1,0 +1,316 @@
+{
+  "id": "post-4a742b09",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "mrwilliewillieofberlin",
+    "locationName": "RiskyLounge (Village House)",
+    "hashtags": [
+      "mwob",
+      "entrepreneurship",
+      "berlinrestaurant",
+      "fyp",
+      "nigerianrestaurant"
+    ],
+    "taggedHandles": [
+      "@Village House"
+    ],
+    "text": "Running a restaurant in your 30s hits different. One minute you’re chasing invoices, the next you’re plating a dish you’re proud of. Some days are packed, some days test your patience, but every day you show up again.\n\nBuilding something in Berlin isn’t just about food, it’s about resilience, community, and believing your dream belongs at the table.\n\nMake it a date with us this weekend at the @Village House \n#mwob #entrepreneurship #berlinrestaurant #fyp #nigerianrestaurant ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "4a742b09-6a9c-4ad0-8e7f-fea0d892b8e8",
+    "externalId": "7616633534026911009",
+    "url": "https://www.tiktok.com/@mrwilliewillieofberlin/video/7616633534026911009",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-13T07:08:21.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:49.454Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Village House",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "running a restaurant in your 30s hits different",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "chasing invoices",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "plating a dish the creator is proud of",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "some days are packed",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "some days test your patience",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "every day you show up again",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "building something in Berlin is about resilience, community, and believing your dream belongs at the table",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "make it a date with us this weekend at Village House",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:38:37.785Z",
+    "usage": {
+      "inputTokens": 9478,
+      "outputTokens": 1719,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Owner's promotional post; the tagged location 'RiskyLounge (Village House)' vs the mention @Village House makes the venue name ambiguous, I used Village House. Most of the caption is entrepreneurial reflection, kept only food/place-related bits, mostly optional; the 'make it a date' invitation is read as a promotional verdict.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Village House",
+        "locationHint": "RiskyLounge",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Village House (a Nigerian restaurant at RiskyLounge) is not among the candidates. Bantou Village is African but has a different name."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Village House is a Nigerian restaurant",
+        "quote": "#nigerianrestaurant",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owners plate dishes they are proud of at Village House",
+        "quote": "plating a dish you’re proud of",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "some days Village House is packed",
+        "quote": "Some days are packed",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "invitation to make it a date this weekend at Village House",
+        "quote": "Make it a date with us this weekend at the @Village House",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "building a restaurant in Berlin is about resilience, community and believing in the dream",
+        "quote": "Building something in Berlin isn’t just about food, it’s about resilience, community, and believing your dream belongs at the table.",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The vague statement about resilience and community fits ownership or other about equally."
+      },
+      {
+        "at": "2026-11-01T14:39:43.595Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.subject (both_ok): Building something in Berlin can be read as about the city or about this restaurant's owners."
+      },
+      {
+        "at": "2026-11-01T21:36:47.233Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

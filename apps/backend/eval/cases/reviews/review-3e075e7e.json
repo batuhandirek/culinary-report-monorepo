@@ -1,0 +1,325 @@
+{
+  "id": "review-3e075e7e",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "3e075e7e-a0fc-4b2b-9d17-667905592ac4",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xaUlRYaFZZVVZLZDFoMVdGRmphRTkwY21WWFJYYxAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-26T16:43:40.298Z",
+    "stars": 3,
+    "text": "Lokal fajny, taki uliczny, muzyka która w nim gra też, obsługa komunikatywna i przyjemna, ale jeśli chodzi o gemuse kebaba i wrapa to serio to jest ten jeden z najlepszych kebabów na świecie XD? Te całe \"muala\" to beka, jadłem tam 2 kebsy obydwa średnie więc nie wiem czym ludzie się zachwycają",
+    "textTranslated": "The place is cool, street style, the music is good too, the service is communicative and pleasant, but when it comes to the gemuse kebab and wrap, is this seriously one of the best kebabs in the world? XD The whole \"muala\" thing is ridiculous. I've had two kebabs there, both average, so I don't know what people are raving about."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:53:38.707Z",
+    "claims": [
+      {
+        "text": "the place is cool",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "street style",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music is good too",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "music"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service is communicative and pleasant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the gemuse kebab and wrap are average",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "gemuse kebab",
+          "wrap"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "\"muala\" is ridiculous",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I had two kebabs there",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "both kebabs were average",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "people are raving about it",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:50.316Z",
+    "usage": {
+      "inputTokens": 5157,
+      "outputTokens": 2324,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The rhetorical 'one of the best kebabs in the world?' is read as a negative opinion on the food; it is phrased as a question, so question is allowed too. 'Średnie' (average) is read as negative criticism given the context, with mixed also allowed. The 'muala' hype and 'what people rave about' have no fitting aspect.",
+    "claims": [
+      {
+        "text": "the place is cool",
+        "quote": "Lokal fajny",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the place has a street style",
+        "quote": "taki uliczny",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe",
+            "interior"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the music playing in the place is cool too",
+        "quote": "muzyka która w nim gra też",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "noise",
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service is communicative and pleasant",
+        "quote": "obsługa komunikatywna i przyjemna",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service",
+            "language"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "doubts the gemuse kebab and wrap are really one of the best kebabs in the world",
+        "quote": "jeśli chodzi o gemuse kebaba i wrapa to serio to jest ten jeden z najlepszych kebabów na świecie XD?",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "gemuse kebaba",
+          "wrapa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "question"
+          ]
+        }
+      },
+      {
+        "text": "the whole \"muala\" thing is ridiculous",
+        "quote": "Te całe \"muala\" to beka",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "ate 2 kebsy there, both average",
+        "quote": "jadłem tam 2 kebsy obydwa średnie",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebsy"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "doesn't know what people are raving about",
+        "quote": "nie wiem czym ludzie się zachwycają",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.591Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The agent split off 'communicative', and being able to communicate reasonably fits the language aspect."
+      },
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

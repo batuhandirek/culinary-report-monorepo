@@ -1,0 +1,802 @@
+{
+  "id": "post-5bdc34a6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "david_lerosier",
+    "locationName": "Oranienstraße",
+    "hashtags": [
+      "dönerpro",
+      "berlinfood",
+      "kreuzberg",
+      "veganberlin",
+      "berlinfoodsociety"
+    ],
+    "taggedHandles": [],
+    "text": "Anzeige: 🌱 Döner vom Spieß – aber komplett ohne Fleisch? Bei Döner Pro in Kreuzberg dreht sich ein veganer Dönerspieß aus Erbsenprotein. Das Ziel: Geschmack, Geruch und Biss möglichst nah am klassischen Berliner Döner – nur eben plant-based. 🥙🔥 Mit hinter dem Konzept: Frederick und Annika Lau. Und der Standort könnte kaum Berliner sein: mitten in Kreuzberg auf der Oranienstraße. Ich hab den neuen Döner getestet – und gerade wenn ihr normalerweise Fleisch esst, ist der Vergleich ziemlich spannend. 📍 Döner Pro Oranienstraße 190 10999 Berlin-Kreuzberg 👉 Würdet ihr einen veganen Döner vom Spieß dem klassischen Döner vorziehen? Schreibt’s in die Kommentare! #DönerPro #BerlinFood #Kreuzberg #VeganBerlin #BerlinFoodSociety ",
+    "subtitles": "der 1. geile vegane Döner in Kreuzberg.\nich glaube das ist die beste Idee, die man machen kann.\ndas Fleisch 100 Prozent vegan, Soßen 100 Prozent vegan. ich hab's probiert.\nschmeckt mega.\nPRO…tein \nganz Klein geschrieben. für die Leute, die nicht wussten, wofür das PRO steht.\ndie haben hier nicht nur versucht Fleisch nachzumachen.\nMH, das Ding ist besser als n Berliner Hack spieß.\nfeine Textur,\nschön geschnitten. für die Sportler, für alle gemacht. schmeckt nach Döner.\nes sieht Aus wie n Döner vom Spieß geschnitten wie n richtiger Döner,\nist aber tatsächlich kein Fleisch, sondern Erbsenprotein.\nso siehts Aus. kein Touristengag. das Ding funktioniert gerade in Berlin.",
+    "subtitlesLanguage": "deu-DE",
+    "id": "5bdc34a6-20cf-43ad-977d-72a6180cfde2",
+    "externalId": "7685472392503692576",
+    "url": "https://www.tiktok.com/@david_lerosier/video/7685472392503692576",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-14T19:18:08.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:38.216Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Döner Pro",
+        "locationHint": "Oranienstraße, Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e93929df-8e83-455d-a0e9-fea90c3a80e9",
+          "brandName": "Döner Pro",
+          "venueId": "2920bc3e-9660-444f-9c1b-c18123c43e60",
+          "venueName": "Döner Pro"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the post is an ad",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "a vegan döner spit is made from pea protein",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "vegan döner spit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the goal is to match the taste, smell and bite of a classic Berlin döner",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Berlin Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Frederick and Annika Lau are behind the concept",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator tested the new döner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan meat is 100 percent vegan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "vegan meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the sauces are 100 percent vegan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator tried it",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it tastes great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is better than a Berlin hack spit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "Berlin hack spit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it has a fine texture",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is nicely cut",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it looks like a döner sliced from a spit",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is made from pea protein, not meat",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "pea protein",
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it works in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:40:34.964Z",
+    "usage": {
+      "inputTokens": 10549,
+      "outputTokens": 6283,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Marked as promotional (Anzeige). Not marked a new opening: 'den neuen Döner' and 'der 1. vegane Döner' describe a new product, not an explicit opening. Several transcript lines overlap the caption (pea protein); the repeats are optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Döner Pro",
+        "locationHint": "Oranienstraße 190, 10999 Berlin-Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e93929df-8e83-455d-a0e9-fea90c3a80e9",
+          "brandName": "Döner Pro",
+          "venueId": "2920bc3e-9660-444f-9c1b-c18123c43e60",
+          "venueName": "Döner Pro",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Döner Pro has a vegan Dönerspieß made of Erbsenprotein",
+        "quote": "Bei Döner Pro in Kreuzberg dreht sich ein veganer Dönerspieß aus Erbsenprotein",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Dönerspieß",
+          "Erbsenprotein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the goal is taste, smell and bite as close as possible to the classic Berlin Döner, just plant-based",
+        "quote": "Das Ziel: Geschmack, Geruch und Biss möglichst nah am klassischen Berliner Döner – nur eben plant-based.",
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Frederick and Annika Lau are behind the concept",
+        "quote": "Mit hinter dem Konzept: Frederick und Annika Lau.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the location in the middle of Kreuzberg on Oranienstraße could hardly be more Berlin",
+        "quote": "der Standort könnte kaum Berliner sein: mitten in Kreuzberg auf der Oranienstraße",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator tested the new Döner",
+        "quote": "Ich hab den neuen Döner getestet",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "new_item"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the comparison is quite exciting especially for people who normally eat meat",
+        "quote": "gerade wenn ihr normalerweise Fleisch esst, ist der Vergleich ziemlich spannend",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Döner Pro is at Oranienstraße 190, 10999 Berlin-Kreuzberg",
+        "quote": "Döner Pro Oranienstraße 190 10999 Berlin-Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "asks whether viewers would prefer a vegan Döner vom Spieß over the classic Döner",
+        "quote": "Würdet ihr einen veganen Döner vom Spieß dem klassischen Döner vorziehen?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Döner vom Spieß",
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Döner Pro has the first great vegan Döner in Kreuzberg",
+        "quote": "der 1. geile vegane Döner in Kreuzberg.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner concept is the best idea one can have",
+        "quote": "ich glaube das ist die beste Idee, die man machen kann.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "menu_variety"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Fleisch is 100 percent vegan",
+        "quote": "das Fleisch 100 Prozent vegan",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Soßen are 100 percent vegan",
+        "quote": "Soßen 100 Prozent vegan",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Soßen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner tastes great",
+        "quote": "schmeckt mega.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the PRO in Döner Pro stands for protein",
+        "quote": "PRO…tein",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they did not just try to imitate meat",
+        "quote": "die haben hier nicht nur versucht Fleisch nachzumachen.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner is better than a Berlin Hack spieß",
+        "quote": "das Ding ist besser als n Berliner Hack spieß",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hack spieß"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner has a fine texture",
+        "quote": "feine Textur",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner is nicely cut",
+        "quote": "schön geschnitten",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner is made for athletes and for everyone",
+        "quote": "für die Sportler, für alle gemacht",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner tastes like Döner",
+        "quote": "schmeckt nach Döner",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner looks like a Döner vom Spieß and is cut like a real Döner",
+        "quote": "es sieht Aus wie n Döner vom Spieß geschnitten wie n richtiger Döner",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Döner vom Spieß",
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Döner is not meat but Erbsenprotein",
+        "quote": "ist aber tatsächlich kein Fleisch, sondern Erbsenprotein",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Erbsenprotein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan Döner is no tourist gimmick and works especially in Berlin",
+        "quote": "kein Touristengag. das Ding funktioniert gerade in Berlin.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.237Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,524 @@
+{
+  "id": "review-70467fba",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "70467fba-0262-483a-bf4e-cff4c4af4ccd",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tack1WaFZaRkZSTlVaS2NVbHdWRU14YTFoTWNXYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-07T13:51:41.367Z",
+    "stars": 3,
+    "text": "Good kebab, but honestly, I think this place is a bit overrated. The taste was good and definitely worth trying, but I wouldn’t say it was extraordinary or worth waiting forever for.\n\nThe queue was honestly a nightmare. We waited a long time, and the staff were quite slow, which made the whole experience even longer. The prices are actually reasonable considering the location and the popularity of the place.\n\nOverall, it’s a good kebab and I enjoyed it, but the hype and the extremely long queues make it feel overrated. Good food, but not worth spending a huge amount of time waiting for.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:45:28.196Z",
+    "claims": [
+      {
+        "text": "good kebab",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is a bit overrated",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the taste was good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "worth trying",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was not extraordinary",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "not worth waiting forever",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the queue was a nightmare",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we waited a long time",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff were quite slow",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the prices are actually reasonable",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "considering the location and the popularity of the place",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it’s a good kebab",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I enjoyed it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the hype makes it feel overrated",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the extremely long queues make it feel overrated",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "good food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "not worth spending a huge amount of time waiting for",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:37.858Z",
+    "usage": {
+      "inputTokens": 5516,
+      "outputTokens": 3117,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review repeats itself (good kebab, overrated, long waits), so the restatements in the closing paragraph are marked optional. The waits are read as the queue to order, since that is a takeaway line, with wait as an alternative. 'Overrated' is taken as an opinion about the place, with verdict allowed.",
+    "claims": [
+      {
+        "text": "the kebab was good",
+        "quote": "Good kebab",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is a bit overrated",
+        "quote": "I think this place is a bit overrated",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the taste of the kebab was good",
+        "quote": "The taste was good",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab is definitely worth trying",
+        "quote": "definitely worth trying",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the kebab was not extraordinary",
+        "quote": "I wouldn’t say it was extraordinary",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab was not worth waiting forever for",
+        "quote": "I wouldn’t say it was extraordinary or worth waiting forever for",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the queue was a nightmare",
+        "quote": "The queue was honestly a nightmare",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they waited a long time",
+        "quote": "We waited a long time",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were quite slow",
+        "quote": "the staff were quite slow",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the slow staff made the whole experience even longer",
+        "quote": "which made the whole experience even longer",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait",
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are reasonable considering the location and the popularity of the place",
+        "quote": "The prices are actually reasonable considering the location and the popularity of the place",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab is good and the reviewer enjoyed it",
+        "quote": "it’s a good kebab and I enjoyed it",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the hype and the extremely long queues make the place feel overrated",
+        "quote": "the hype and the extremely long queues make it feel overrated",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait",
+            "crowding"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was good",
+        "quote": "Good food",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is not worth spending a huge amount of time waiting for",
+        "quote": "not worth spending a huge amount of time waiting for",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.430Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

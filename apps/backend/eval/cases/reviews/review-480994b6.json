@@ -1,0 +1,420 @@
+{
+  "id": "review-480994b6",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:long",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "480994b6-1d7b-4423-9b54-dc9d43a675b4",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2psRFlUSTBRMDVITjA5TkxYYzNNMjVhUTJKeldHYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Wen Cheng",
+    "venueId": "39c59d16-58a4-4a69-a194-09ac4965bc58",
+    "brand": "Wen Cheng",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-19T17:10:26.113Z",
+    "stars": 5,
+    "text": "Wir waren zu zweit da und haben das selbe Essen bestellt. Einer von uns hat es super geschmeckt und der anderen war es zu scharf. Aufjedenfall war die Portion groß und die Nudeln dick, vielleicht ein tacken zu dick. Ist jedem glaube ich selbst überlassen und Geschmacksache. Der Kellner war super freundlich und der Service richtig schnell. Die open Kitchen und die vielen Menschen haben den Raum relativ laut gemacht. Die Musikauswahl war spitze aber manchmal konnte man sie nicht richtig höhren. Alles in allem sehr empfehlenswert",
+    "textTranslated": "There were two of us, and we ordered the same food. One of us loved it, while the other found it too spicy. The portion was definitely large, and the noodles were thick, perhaps a tad too thick. I think that's a matter of personal taste. The waiter was incredibly friendly, and the service was really fast. The open kitchen and the large number of people made the place quite noisy. The music selection was excellent, but sometimes it was hard to hear. All in all, highly recommended."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:00:13.788Z",
+    "claims": [
+      {
+        "text": "there were two of us",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we ordered the same food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "one of us loved it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the other found it too spicy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portion was definitely large",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the noodles were thick",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "noodle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the noodles were perhaps a tad too thick",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "noodle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the waiter was incredibly friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was really fast",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the open kitchen made the place quite noisy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the large number of people made the place quite noisy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music selection was excellent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "sometimes it was hard to hear",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:25.530Z",
+    "usage": {
+      "inputTokens": 5691,
+      "outputTokens": 2681,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the noodle thickness (no finer aspect for texture, so food; mildly negative or mixed) and the 'matter of taste' hedge, kept optional. 'Essen' is a general word, so no foods for the taste/spice claims.",
+    "claims": [
+      {
+        "text": "came as two people",
+        "quote": "Wir waren zu zweit da",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "both ordered the same food",
+        "quote": "haben das selbe Essen bestellt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "one of the two found the food delicious",
+        "quote": "Einer von uns hat es super geschmeckt",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the other found the food too spicy",
+        "quote": "der anderen war es zu scharf",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the portion was large",
+        "quote": "die Portion groß",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Nudeln were thick, perhaps a tad too thick",
+        "quote": "die Nudeln dick, vielleicht ein tacken zu dick",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "Nudeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the noodle thickness is a matter of personal taste",
+        "quote": "Ist jedem glaube ich selbst überlassen und Geschmacksache",
+        "sentiment": "mixed",
+        "aspect": "food",
+        "foods": [
+          "Nudeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the waiter was super friendly",
+        "quote": "Der Kellner war super freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was really fast",
+        "quote": "der Service richtig schnell",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the open kitchen and the many people made the room quite loud",
+        "quote": "Die open Kitchen und die vielen Menschen haben den Raum relativ laut gemacht",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music selection was excellent",
+        "quote": "Die Musikauswahl war spitze",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music sometimes could not be heard properly",
+        "quote": "manchmal konnte man sie nicht richtig höhren",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "all in all highly recommended",
+        "quote": "Alles in allem sehr empfehlenswert",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.429Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.209Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

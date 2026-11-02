@@ -1,0 +1,234 @@
+{
+  "id": "review-75c84f72",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "75c84f72-1f9c-4966-94e9-6347e3bec79b",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2paT1pVY3RaMUpaUjFKeFlYZEtTRWw1ZHpkM1pVRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Markthalle Neun",
+    "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+    "brand": "Markthalle Neun",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-17T19:01:45.086Z",
+    "stars": 3,
+    "text": "A nice place, but we were there at 09.30 and it was deserted. We are used for marketplace to open at 07.00 max. It looked nice and had breakfast at a cafe next to it.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:39:34.134Z",
+    "claims": [
+      {
+        "text": "a nice place",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we were there at 09.30",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "it was deserted",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we are used for marketplace to open at 07.00 max",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it looked nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had breakfast at a cafe next to it",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "breakfast"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:22.268Z",
+    "usage": {
+      "inputTokens": 4951,
+      "outputTokens": 1460,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'deserted' at 09.30 is crowding or opening hours (the complaint is really that it was not open/busy early), and whether 'breakfast' counts as a food (treated as a general meal word, so foods left empty). The 09.30 and 07.00 are clock times, not waits or prices, so no amount.",
+    "claims": [
+      {
+        "text": "Markthalle Neun is a nice place",
+        "quote": "A nice place",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "atmosphere"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the reviewers were there at 09.30",
+        "quote": "we were there at 09.30",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the market was deserted at 09.30",
+        "quote": "it was deserted",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the reviewers are used to marketplaces opening at 07.00 at the latest",
+        "quote": "We are used for marketplace to open at 07.00 max",
+        "sentiment": "negative",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "Markthalle Neun looked nice",
+        "quote": "It looked nice",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewers had breakfast at a cafe next to Markthalle Neun",
+        "quote": "had breakfast at a cafe next to it",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

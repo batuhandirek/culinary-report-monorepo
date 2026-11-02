@@ -1,0 +1,237 @@
+{
+  "id": "review-faa8e03c",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "faa8e03c-3f41-4817-8b9b-12189a43a4a8",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2s1alRIWnpOWGMzUWxRMGNWWm1aalJQU1RsUWRHYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Nhas City Chicken",
+    "venueId": "14f38160-dec4-438b-b067-43e7b1088587",
+    "brand": "Nhas City Chicken",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-30T19:36:26.753Z",
+    "stars": 1,
+    "text": "Leider war ich von meinem Besuch enttäuscht. Ich habe Chicken Wings bestellt und musste feststellen, dass sich noch Federn vom Huhn an den Wings befanden, wie auf dem Foto deutlich zu sehen ist. Das ist für mich absolut unhygienisch und sollte bei der Zubereitung und Reinigung des Fleisches nicht vorkommen. Ich hoffe, dass das Restaurant in Zukunft mehr auf die Hygiene und die sorgfältige Vorbereitung der Speisen achtet.",
+    "textTranslated": "Unfortunately, I was disappointed with my visit. I ordered chicken wings and discovered that there were still chicken feathers attached to them, as you can clearly see in the photo. This is completely unhygienic in my opinion and should not happen during the preparation and cleaning of the meat. I hope that the restaurant will pay more attention to hygiene and the careful preparation of food in the future."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:24.179Z",
+    "claims": [
+      {
+        "text": "I was disappointed with my visit",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I ordered chicken wings",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "order_accuracy",
+        "foods": [
+          "chicken wings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there were still chicken feathers attached to them",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "chicken wings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken feathers were clearly visible in the photo",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food_hygiene",
+        "foods": [
+          "chicken feathers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this is completely unhygienic",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this should not happen during the preparation and cleaning of the meat",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the restaurant should pay more attention to hygiene in the future",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the restaurant should pay more attention to the careful preparation of food in the future",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:32.392Z",
+    "usage": {
+      "inputTokens": 5217,
+      "outputTokens": 891,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The feathers claim names the wings as the reviewer writes them there ('Wings'), with the full 'Chicken Wings' kept in the ordering fact. The closing hope is a wish, not a change, so it is an opinion about food hygiene. The opening disappointment is about the place as a whole: verdict, with opinion also acceptable.",
+    "claims": [
+      {
+        "text": "disappointed with the visit",
+        "quote": "Leider war ich von meinem Besuch enttäuscht.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "ordered Chicken Wings",
+        "quote": "Ich habe Chicken Wings bestellt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Chicken Wings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there were still chicken feathers on the Wings",
+        "quote": "dass sich noch Federn vom Huhn an den Wings befanden",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "Wings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "feathers on the Wings are absolutely unhygienic and should not happen in preparing and cleaning the meat",
+        "quote": "Das ist für mich absolut unhygienisch und sollte bei der Zubereitung und Reinigung des Fleisches nicht vorkommen.",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "hopes the restaurant pays more attention to hygiene and careful food preparation in future",
+        "quote": "Ich hoffe, dass das Restaurant in Zukunft mehr auf die Hygiene und die sorgfältige Vorbereitung der Speisen achtet.",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cleanliness"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.221Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

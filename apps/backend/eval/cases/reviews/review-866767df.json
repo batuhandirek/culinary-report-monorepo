@@ -1,0 +1,140 @@
+{
+  "id": "review-866767df",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "866767df-4c9f-4f06-9c67-9e46cee7a2a0",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT20xMmEyWnpjVWQyZVhSdWJFWnZWMUJpUWpOd0xWRRAB",
+    "platform": "google",
+    "language": "nl",
+    "venue": "Chén Chè",
+    "venueId": "61541635-ec21-4a90-8496-5f3f9358dbc3",
+    "brand": "Chén Chè",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-03-14T19:38:14.936Z",
+    "stars": 5,
+    "text": "Heerlijk en rustig gegeten. Een aangename verrassing",
+    "textTranslated": "We had a delicious and peaceful meal. A pleasant surprise."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:49.254Z",
+    "claims": [
+      {
+        "text": "we had a delicious meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had a peaceful meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a pleasant surprise",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:40.058Z",
+    "usage": {
+      "inputTokens": 4940,
+      "outputTokens": 431,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Rustig' (peaceful/quiet) fits noise or atmosphere. 'A pleasant surprise' is an overall judgement of the visit, so it is read as a verdict with no aspect, though opinion is also defensible.",
+    "claims": [
+      {
+        "text": "the meal was delicious",
+        "quote": "Heerlijk",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the meal was peaceful",
+        "quote": "rustig gegeten",
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place was a pleasant surprise",
+        "quote": "Een aangename verrassing",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,377 @@
+{
+  "id": "post-5476133a",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "renebeukert",
+    "locationName": "Kadewe Kaufhaus des Westens Berlin",
+    "hashtags": [
+      "kadewe",
+      "berlin",
+      "visitberlin",
+      "berlinfood",
+      "feinkost",
+      "foodlovers",
+      "gourmet",
+      "delikatessen",
+      "fooddesign",
+      "packagingdesign",
+      "kulinarik",
+      "berlinlifestyle",
+      "travelgermany",
+      "instafood",
+      "shoppingberlin"
+    ],
+    "taggedHandles": [],
+    "text": "📍 KaDeWe Berlin – Wenn selbst Konservendosen zu Kunstwerken werden\n\nWer denkt, dass Feinkost nur über Geschmack begeistert, war noch nicht im KaDeWe. Zwischen den unzähligen Delikatessen habe ich diese beeindruckende Wand entdeckt: Sardinen-, Muschel-, Tintenfisch- und Fischkonserven, die fast zu schön sind, um sie zu öffnen. 🎨🐟\n\nDie liebevoll gestalteten Verpackungen erzählen Geschichten von Küsten, Traditionen und Handwerkskunst. Jede Dose wirkt wie ein kleines Designobjekt und zeigt, dass Genuss nicht nur auf dem Teller beginnt, sondern bereits bei der Präsentation. Besonders faszinierend ist die Vielfalt an Farben, Illustrationen und kreativen Markenauftritten, die aus einem alltäglichen Produkt ein echtes Highlight machen.\n\nDas KaDeWe beweist einmal mehr, warum es zu den bekanntesten Warenhäusern Europas gehört: Hier wird Einkaufen zum Erlebnis, Entdecken zur Inspiration und Genuss zur Kunstform. Wer in Berlin unterwegs ist, sollte sich die Feinschmeckeretage nicht entgehen lassen. Zwischen internationalen Spezialitäten und außergewöhnlichen Produkten gibt es an jeder Ecke etwas Neues zu entdecken.\n\nWelches Design würde euch am ehesten ins Einkaufskörbchen springen? 👀\n\n#KaDeWe #Berlin #VisitBerlin #BerlinFood #Feinkost #FoodLovers #Gourmet #Delikatessen #FoodDesign #PackagingDesign #Kulinarik #BerlinLifestyle #TravelGermany #InstaFood #ShoppingBerlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "5476133a-b4d9-4ce3-a3e3-588ee8cde70e",
+    "externalId": "ig_4010802071019742837",
+    "url": "https://www.instagram.com/p/DepOzvDiGZ1/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-18T17:34:47.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-19T07:59:38.640Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "KaDeWe Kaufhaus des Westens",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "wide range of international specialties and unusual products",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "gourmet floor feels inspiring and worth discovering",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "beautiful packaging design turns canned seafood into art",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "shopping experience described as an experience and an inspiration",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:21:31.355Z",
+    "usage": {
+      "inputTokens": 11905,
+      "outputTokens": 3366,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "KaDeWe is a department store but its Feinschmeckeretage is a food hall selling food, so it is kept as a place. The closing engagement question about tin designs is kept as an optional question claim; the 'best-known department stores' claim fits no aspect well.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "KaDeWe",
+        "locationHint": "Feinschmeckeretage",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post means the KaDeWe department store's food hall as a whole; the candidates are specific restaurants, a bar and a bakery inside it, not the store itself."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "KaDeWe has countless delicacies",
+        "quote": "Zwischen den unzähligen Delikatessen",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "KaDeWe has an impressive wall of sardine, mussel, squid and fish tins",
+        "quote": "diese beeindruckende Wand entdeckt: Sardinen-, Muschel-, Tintenfisch- und Fischkonserven",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Sardinen",
+          "Muschel",
+          "Tintenfisch",
+          "Fischkonserven"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the fish tins are almost too beautiful to open",
+        "quote": "fast zu schön sind, um sie zu öffnen",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Sardinen",
+          "Muschel",
+          "Tintenfisch",
+          "Fischkonserven"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tins' packaging is lovingly designed and tells stories of coasts, traditions and craftsmanship",
+        "quote": "Die liebevoll gestalteten Verpackungen erzählen Geschichten von Küsten, Traditionen und Handwerkskunst",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "each tin looks like a small design object",
+        "quote": "Jede Dose wirkt wie ein kleines Designobjekt",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the variety of colours, illustrations and creative brand designs on the tins is fascinating",
+        "quote": "Besonders faszinierend ist die Vielfalt an Farben, Illustrationen und kreativen Markenauftritten",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "KaDeWe is one of the best-known department stores in Europe",
+        "quote": "zu den bekanntesten Warenhäusern Europas gehört",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at KaDeWe shopping becomes an experience",
+        "quote": "Hier wird Einkaufen zum Erlebnis",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "anyone in Berlin should not miss KaDeWe's Feinschmeckeretage",
+        "quote": "Wer in Berlin unterwegs ist, sollte sich die Feinschmeckeretage nicht entgehen lassen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "KaDeWe's food floor has international specialties and unusual products, with something new to discover at every corner",
+        "quote": "Zwischen internationalen Spezialitäten und außergewöhnlichen Produkten gibt es an jeder Ecke etwas Neues zu entdecken",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "which tin design would readers put in their shopping basket?",
+        "quote": "Welches Design würde euch am ehesten ins Einkaufskörbchen springen?",
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.437Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.235Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

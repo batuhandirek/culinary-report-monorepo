@@ -31,6 +31,7 @@ const KEY_ORDER = [
 	'failed-runs',
 	'coverage',
 	'unmatched',
+	'unconfirmed',
 	'merges',
 	'accounts',
 	'words',
@@ -173,6 +174,22 @@ export class TodayService {
 						text: `${plural(posts, 'post since', 'posts since')} ${name} 1 name a place no venue matches`,
 						href: '/admin/posts?unmatchedOnly=true&sort=views:desc',
 						cta: 'Link',
+					});
+			}),
+			// A re-read of the post no longer named a matched place: the match may be wrong (a park matched to a café)
+			tryRead('unconfirmed', async () => {
+				const [{ posts }]: { posts: number }[] = await em()
+					.getConnection()
+					.execute(
+						`select count(distinct m.post_id)::int as posts from mentions m where m.unconfirmed_at is not null`,
+					);
+				if (posts)
+					todos.push({
+						key: 'unconfirmed',
+						tone: 'todo',
+						text: `${plural(posts, 'post holds', 'posts hold')} a matched place a new read no longer finds`,
+						href: '/admin/posts?unconfirmedOnly=true&sort=views:desc',
+						cta: 'Check',
 					});
 			}),
 			...cities.map(city =>

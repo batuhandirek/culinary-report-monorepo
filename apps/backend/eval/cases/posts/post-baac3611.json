@@ -1,0 +1,377 @@
+{
+  "id": "post-baac3611",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "beguna__",
+    "locationName": "44 CHKN - Korean Fried Chicken",
+    "hashtags": [],
+    "taggedHandles": [
+      "BeGuNa",
+      "44CHKN"
+    ],
+    "text": "Gute Nachrichten für Berlin! 🍗❤️ 44 CHKN eröffnet bald seine dritte Filiale! 🎉 Bis zur Eröffnung gibt’s jeden Freitag, Samstag und Sonntag Chicken Burger für nur 5 €! 🍔🔥 🎁 GEWINNSPIEL! Gemeinsam mit 44 CHKN verlosen wir einen 50 € Gutschein! 🇰🇷✨ So seid ihr dabei: ❤️ Beitrag liken 👥 Person markieren, mit der ihr essen gehen würdet 📲 @BeGuNa und @44CHKN folgen ⏰ Das Gewinnspiel läuft, bis wir den Gewinner bekannt geben und die Kommentare schließen. Viel Glück! 🍀 Folgt @BeGuNa & @44CHKN für mehr gute Nachrichten aus Berlin. ❤️",
+    "subtitles": "wir verlosen 150 Euro Gutschein bei Forty four Chicken\ngute Nachrichten für Berlin\nwir befinden uns gerade in der kampfstraße\nund hier ist der Inhaber von Forty four Chicken\njeden Freitag\nSamstag und Sonntag\nbekommt ihr den Chickenburger für nur 5 Euro\noh namaste\nhe he und das bis zur Eröffnung des neuen standautes\nBody For Chicken eröffnet bald seine 3. Filiale\naber das ist noch nicht alles\nzur neuen Filiale erwarten euch 4 neue Bulls\nund 6 neue Dips\ndie ihr unbedingt probieren müsst\nund authentische asiatische Getränke\ndie ihr so nicht überall finden könnt\nund wir verlosen 150 Euro Gutschein\nalso auf jeden Fall mitmachen\nverlinkt beguna Forty four Chicken\nund verlinkt natürlich mit\nWen ihr gerne hier essen gehen wollen würdet\nganz einfach für mehr gute Nachrichten folgt beguna",
+    "subtitlesLanguage": "deu-DE",
+    "id": "baac3611-3775-405b-bed4-317a26af8b3e",
+    "externalId": "7698786247988268321",
+    "url": "https://www.tiktok.com/@beguna__/video/7698786247988268321",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-20T16:22:41.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:28:10.710Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "44 CHKN",
+        "locationHint": "Kampfstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "exact",
+          "brandId": "1a5ebe09-b7a1-4b0a-84d2-85ae7771388b",
+          "brandName": "44 CHKN",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "44 CHKN is opening its third branch soon",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "chicken burgers cost 5 euros on Fridays, Saturdays and Sundays until the opening",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "chicken burger"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there will be 4 new bowls and 6 new dips",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "bowl",
+          "dip"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there will be authentic Asian drinks",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Asian drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Berlin has good news",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "there is a giveaway for a 50 euro voucher",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:49:11.614Z",
+    "usage": {
+      "inputTokens": 11861,
+      "outputTokens": 3380,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Promotional giveaway collaboration. The upcoming third branch is not yet open, so the tagged venue is not marked as a new opening. The caption says a 50 € voucher while the transcript says 150 Euro; the caption figure is used. 'Bulls' is the transcript's misspelling of bowls and is kept as written.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "44 CHKN - Korean Fried Chicken",
+        "locationHint": "Kampfstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "1a5ebe09-b7a1-4b0a-84d2-85ae7771388b",
+          "brandName": "44 CHKN",
+          "venueId": "82183c8e-dc72-4d63-b54c-7fc2c5fbeb54",
+          "venueName": "44 CHKN - Korean Fried Chicken",
+          "note": "'kampfstraße' comes from a speech transcript and is most likely a mishearing of Kantstraße, where one 44 CHKN branch (Kantstraße 123) is."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "44 CHKN is opening its third branch soon",
+        "quote": "44 CHKN eröffnet bald seine dritte Filiale!",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Chicken Burger for only 5 € every Friday, Saturday and Sunday until the opening",
+        "quote": "jeden Freitag, Samstag und Sonntag Chicken Burger für nur 5 €",
+        "sentiment": "positive",
+        "aspect": "price",
+        "foods": [
+          "Chicken Burger"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "giveaway of a 50 € voucher for 44 CHKN",
+        "quote": "verlosen wir einen 50 € Gutschein",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": 50,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner of 44 CHKN is present",
+        "quote": "hier ist der Inhaber von Forty four Chicken",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the video is filmed at the Kampfstraße location",
+        "quote": "wir befinden uns gerade in der kampfstraße",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the new branch will offer 4 new Bulls (bowls)",
+        "quote": "4 neue Bulls",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Bulls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the new branch will offer 6 new Dips",
+        "quote": "6 neue Dips",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Dips"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the new Bulls and Dips are a must-try",
+        "quote": "die ihr unbedingt probieren müsst",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Bulls",
+          "Dips"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the new branch will offer authentic Asian drinks not found everywhere",
+        "quote": "authentische asiatische Getränke",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.250Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.438Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

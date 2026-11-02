@@ -1,0 +1,235 @@
+{
+  "id": "post-8e94e7ea",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "alzaeemberlin",
+    "locationName": "Alzaeem Restaurant مطعم الزعيم",
+    "hashtags": [
+      "berlin",
+      "alzaeemberlin",
+      "sonnenallee",
+      "halalberlin",
+      "berlinfood"
+    ],
+    "taggedHandles": [],
+    "text": "Wenn der Tisch so aussieht, ist „nur eine Kleinigkeit“ offiziell vorbei. 😂🔥\nوهون بتبلّش المشكلة… بدك تذوق من كل شي 😏\nPommes, Grill, Brot, Salat — und plötzlich ist Teilen keine Option mehr.\n📍 Al Zaeem · Sonnenallee 16 · Berlin-Neukölln\n#Berlin #AlZaeemBerlin #Sonnenallee #HalalBerlin #berlinfood ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "8e94e7ea-4280-46f1-91ec-9d69f5eda27e",
+    "externalId": "7691355166183853344",
+    "url": "https://www.tiktok.com/@alzaeemberlin/video/7691355166183853344",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Alzaeem Restaurant مطعم الزعيم",
+    "postedAt": "2026-09-30T15:46:19.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:33:38.818Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Alzaeem Restaurant مطعم الزعيم",
+        "locationHint": "Sonnenallee 16, Berlin-Neukölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "5910940c-89a8-4735-923c-e7b2dc68e50c",
+          "brandName": "Alzaeem Restaurant مطعم الزعيم",
+          "venueId": "a941108c-10c4-4f1e-b494-b67314bf8e24",
+          "venueName": "Alzaeem Restaurant مطعم الزعيم"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the table had fries, grill, bread and salad",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "fries",
+          "grill",
+          "bread",
+          "salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "sharing was no longer an option",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:44:11.658Z",
+    "usage": {
+      "inputTokens": 9712,
+      "outputTokens": 1603,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5898
+    },
+    "notes": "Own-account promotional post; the hard calls were the aspect of the 'nur eine Kleinigkeit' line (a big spread, read as portion_size) and whether 'Teilen keine Option mehr' stands as its own claim or rides with the food list.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Alzaeem Restaurant مطعم الزعيم",
+        "locationHint": "Sonnenallee 16, Berlin-Neukölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "5910940c-89a8-4735-923c-e7b2dc68e50c",
+          "brandName": "Alzaeem Restaurant مطعم الزعيم",
+          "venueId": "a941108c-10c4-4f1e-b494-b67314bf8e24",
+          "venueName": "Alzaeem Restaurant مطعم الزعيم",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "When the table at Al Zaeem looks like this, 'just a little something' is officially over",
+        "quote": "Wenn der Tisch so aussieht, ist „nur eine Kleinigkeit“ offiziell vorbei.",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "At Al Zaeem you want to taste everything",
+        "quote": "بدك تذوق من كل شي",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The table at Al Zaeem has Pommes, Grill, Brot and Salat",
+        "quote": "Pommes, Grill, Brot, Salat",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Pommes",
+          "Grill",
+          "Brot",
+          "Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "With the Pommes, Grill, Brot and Salat, sharing is suddenly no longer an option",
+        "quote": "und plötzlich ist Teilen keine Option mehr",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Al Zaeem is at Sonnenallee 16 in Berlin-Neukölln",
+        "quote": "Al Zaeem · Sonnenallee 16 · Berlin-Neukölln",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

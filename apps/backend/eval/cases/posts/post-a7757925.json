@@ -1,0 +1,1070 @@
+{
+  "id": "post-a7757925",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "kwayway",
+    "locationName": null,
+    "hashtags": [
+      "banhmi",
+      "helal",
+      "vegan",
+      "cafe",
+      "lunch"
+    ],
+    "taggedHandles": [
+      "HOM",
+      "omarleeydaily"
+    ],
+    "text": "@HOMì.  mit @omarleeydaily 🌚 📍 Reinhardtstraße 29c, 10117 Berlin #banhmi #helal #vegan #cafe #lunch ",
+    "subtitles": "es gibt 1 neuen Spot in Berlin\nder heller benmi und veganes benmi verkauft\nund dafür waren wir heute dafür bei Homie\ndass 1 vietnamesisches Cafe mitten in Berlin\ndas Cafe ist optisch sehr cool designt\nmit den grauen Wänden und den kromfarbenen Accessoires\ndementsprechend auch 1 cooler Spot für diese kalten Tage\nwo man sich gerne mal länger aufhält\nseht ihr einmal deren Karte\ndie haben auch 1 lunchmenü\nwo ihr für 12 Euro 1 bermi und 1 Getränk kriegt\nwir haben uns\n1 bisschen durch die Karte probiert und haben sowohl\nverschiedene Getränke als auch beide bermis probiert\nder Mann ist glücklich\nbei dem Brot denkt man immer so es kann nicht so soft sein\nes kann es ist viel zu Crispy und so soft zu sein\ndu gehst da rein du beißt rein\nhol das so gleich schmeckt auch sehr lecker\nalso erstmal bei Mir super Erfahrung\nschmeckt übertrieben lecker\nvegane aber nie fertig\nschmeckt Anders als das mit Hähnchen auf jeden Fall\nvon der ganzen Flavour Zusammensetzung\ndiese frische Meeren Kräuter lass ich\ndas andere war so bisschen mehr süße von der Soße her\nfrische Chili\nauch gut das mähnchen gefällt Mir mehr\nfür Veganer ne gute Alternative\nich glaub is ne Art Tofu\nschmeckt sehr weich\nhat auf jeden Fall ne Fleisch ähnliche Konsistenz\nintensivere Soße noch aufmachen würde\nden Geschmack noch mal back bisschen kicken\nSchuhe kann man machen\nchinesischer Kaffee ist sehr sehr stark\nauf jeden Fall Kondensmilch drinne das schmeckt man aber\ndas macht's geil hier\nschlimmer vorgestellt so richtigen Kaffeegeschmack\naber is geil Litschi Matcha Getränk\nder Matcha schmeckt tot so gut auf Ernst Litschi\nhätt ich nicht gedacht\ndass es so gut kombiniert\nerfrischend ich werd da mal für denken\nich will nich übertreiben\naber das is das beste Matcha Getränk\nwas ich jetz hier in Berlin probiert hab\nso glücklich nach m Matcha Getränk war ich noch nie\ndas war's mit dem Video\ncheckt unbedingt den Laden AB der hat's drauf",
+    "subtitlesLanguage": "deu-DE",
+    "id": "a7757925-233c-42ed-8920-96c6474471ef",
+    "externalId": "7700242007364504864",
+    "url": "https://www.tiktok.com/@kwayway/video/7700242007364504864",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T14:31:47.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:03.197Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "HOM",
+        "locationHint": "Reinhardtstraße 29c, 10117 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "8b4cc792-8abb-4f5a-b96c-de8a0297890e",
+          "brandName": "HOMÌ.",
+          "venueId": "1ffd3808-2dcb-4de9-8403-e40a4a68fdb5",
+          "venueName": "HOMÌ."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "there is a new spot in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "it sells halal banh mi and vegan banh mi",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "bánh mì"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a Vietnamese café in the middle of Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café is very cool designed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café has grey walls and chrome accessories",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a cool spot for cold days where you want to stay longer",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it has a lunch menu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the lunch menu costs 12 euros for a banh mi and a drink",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "bánh mì",
+          "drinks"
+        ],
+        "amount": 12,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they tried different drinks and both banh mi",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "drinks",
+          "bánh mì"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the banh mi was very tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bánh mì"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi tastes different from the chicken one",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "vegan banh mi",
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi has fresh sea herbs and a sweeter sauce",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "vegan banh mi",
+          "sea herbs",
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi has fresh chili",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "vegan banh mi",
+          "chili"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi is a good alternative for vegans",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "vegan banh mi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi seems to be a kind of tofu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "vegan banh mi",
+          "tofu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi is very soft",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "vegan banh mi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan banh mi has a meat-like texture",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "vegan banh mi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken version has a more intense sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chinese coffee is very strong",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Chinese coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chinese coffee has condensed milk",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Chinese coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chinese coffee tastes good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Chinese coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the lychee matcha drink is very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "lychee matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the lychee matcha drink is refreshing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "lychee matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the lychee matcha drink is the best matcha drink they have tried in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "lychee matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:47:31.048Z",
+    "usage": {
+      "inputTokens": 11017,
+      "outputTokens": 8680,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Venue name taken from the caption tag 'HOMì' over the transcript's 'Homie'; marked a new opening because the transcript calls it a new spot. The 12-euro lunch menu is a price tied to a condition (deal) but a fact reading is allowed, and the garbled transcript makes the chicken/vegan attribution of some taste lines uncertain.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "HOMì",
+        "locationHint": "Reinhardtstraße 29c, 10117 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "8b4cc792-8abb-4f5a-b96c-de8a0297890e",
+          "brandName": "HOMÌ.",
+          "venueId": "1ffd3808-2dcb-4de9-8403-e40a4a68fdb5",
+          "venueName": "HOMÌ.",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "HOMì is a new spot in Berlin",
+        "quote": "es gibt 1 neuen Spot in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "HOMì sells halal benmi and vegan benmi",
+        "quote": "der heller benmi und veganes benmi verkauft",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "benmi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "HOMì is a Vietnamese café in the middle of Berlin",
+        "quote": "1 vietnamesisches Cafe mitten in Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café is visually very coolly designed",
+        "quote": "das Cafe ist optisch sehr cool designt",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café has grey walls and chrome-coloured accessories",
+        "quote": "mit den grauen Wänden und den kromfarbenen Accessoires",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "HOMì is a cool spot for cold days where you like to stay longer",
+        "quote": "1 cooler Spot für diese kalten Tage",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the lunch menu gives a bermi and a drink for 12 euros",
+        "quote": "wo ihr für 12 Euro 1 bermi und 1 Getränk kriegt",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "bermi"
+        ],
+        "amount": 12,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they tried various drinks and both bermis",
+        "quote": "verschiedene Getränke als auch beide bermis probiert",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "bermis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Brot is both crispy and soft",
+        "quote": "bei dem Brot denkt man immer so es kann nicht so soft sein",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Brot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it was a super experience",
+        "quote": "also erstmal bei Mir super Erfahrung",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken bermi tastes extremely delicious",
+        "quote": "schmeckt übertrieben lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bermi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan bermi tastes different from the one with Hähnchen in its flavour composition",
+        "quote": "schmeckt Anders als das mit Hähnchen auf jeden Fall",
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "Hähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan bermi has fresh Kräuter",
+        "quote": "diese frische Meeren Kräuter",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Kräuter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the other bermi had a bit more sweetness from the Soße",
+        "quote": "das andere war so bisschen mehr süße von der Soße her",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [
+          "Soße"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the bermi has fresh Chili",
+        "quote": "frische Chili",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Chili"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan bermi is also good but the mähnchen one is preferred",
+        "quote": "auch gut das mähnchen gefällt Mir mehr",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "mähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan bermi is a good alternative for vegans",
+        "quote": "für Veganer ne gute Alternative",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan bermi filling is probably a kind of Tofu",
+        "quote": "ich glaub is ne Art Tofu",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Tofu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Tofu tastes very soft and has a meat-like consistency",
+        "quote": "hat auf jeden Fall ne Fleisch ähnliche Konsistenz",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Tofu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "cooking",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a more intense Soße would kick up the vegan bermi's flavour",
+        "quote": "intensivere Soße noch aufmachen würde",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "Soße"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chinesischer Kaffee is very very strong",
+        "quote": "chinesischer Kaffee ist sehr sehr stark",
+        "sentiment": "neutral",
+        "aspect": "drink_quality",
+        "foods": [
+          "chinesischer Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the coffee has Kondensmilch in it, which you can taste",
+        "quote": "auf jeden Fall Kondensmilch drinne das schmeckt man aber",
+        "sentiment": "neutral",
+        "aspect": "drink_quality",
+        "foods": [
+          "Kondensmilch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kondensmilch makes the coffee great",
+        "quote": "das macht's geil hier",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the coffee was better than expected, with a real coffee taste",
+        "quote": "so richtigen Kaffeegeschmack",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Litschi Matcha Getränk is great",
+        "quote": "aber is geil Litschi Matcha Getränk",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Litschi Matcha Getränk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Matcha tastes so good with Litschi and combines surprisingly well",
+        "quote": "der Matcha schmeckt tot so gut auf Ernst Litschi",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Matcha",
+          "Litschi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Litschi Matcha drink is refreshing",
+        "quote": "erfrischend",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is the best Matcha Getränk tried in Berlin",
+        "quote": "das is das beste Matcha Getränk",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Matcha Getränk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "never been so happy after a Matcha Getränk",
+        "quote": "so glücklich nach m Matcha Getränk war ich noch nie",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Matcha Getränk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "definitely check out HOMì, it has what it takes",
+        "quote": "checkt unbedingt den Laden AB der hat's drauf",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.247Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

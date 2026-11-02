@@ -13,7 +13,11 @@ const at = (iso: string) => new Date(iso);
 
 describe('account snapshots', () => {
 	it("stores a snapshot's UTC date parts", () => {
-		expect(snapshotDateParts(at('2026-10-31T23:30:00Z'))).toEqual({ year: 2026, month: 10, day: 31 });
+		expect(snapshotDateParts(at('2026-10-31T23:30:00Z'))).toEqual({
+			year: 2026,
+			month: 10,
+			day: 31,
+		});
 	});
 
 	it("closes the month before in a month's first week", () => {
@@ -31,11 +35,21 @@ describe('account snapshots', () => {
 		const figures = monthFigures(
 			[
 				// The monthly run on the 2nd, with averages
-				{ accountId: 'a', scrapedAt: at('2026-10-02T06:00:00Z'), followers: 900, avgViews: 5000 },
+				{
+					accountId: 'a',
+					scrapedAt: at('2026-10-02T06:00:00Z'),
+					followers: 900,
+					avgViews: 5000,
+				},
 				// A post seen later that week: newer followers, no averages
 				{ accountId: 'a', scrapedAt: at('2026-10-05T06:00:00Z'), followers: 910 },
 				// September's own days
-				{ accountId: 'a', scrapedAt: at('2026-09-20T06:00:00Z'), followers: 850, avgViews: 4000 },
+				{
+					accountId: 'a',
+					scrapedAt: at('2026-09-20T06:00:00Z'),
+					followers: 850,
+					avgViews: 4000,
+				},
 				// October's, closing no asked month
 				{ accountId: 'a', scrapedAt: at('2026-10-20T06:00:00Z'), followers: 990 },
 				{ accountId: 'b', scrapedAt: at('2026-08-15T06:00:00Z'), followers: 10 },

@@ -1,0 +1,248 @@
+{
+  "id": "post-85b04bf2",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "berlinerschnipsel",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlinfoodguide",
+      "berlinrestaurants",
+      "berlinergenuss",
+      "lieblingsorteberlin",
+      "berlinerschnipsel"
+    ],
+    "taggedHandles": [],
+    "text": "Was macht ein Restaurant für euch wirklich ausgezeichnet?\n\nBerlin hat so viele wunderbare Restaurants. Für mich zeigt sich ihre besondere Qualität nicht allein in der Küche, sondern vor allem darin, wie herzlich man empfangen und wie aufmerksam man durch den Abend begleitet wird.\n\nIch habe schon vieles erlebt: Getuschel über Gäste, abwertende Blicke und Momente, in denen man spürt, dass man nicht wirklich willkommen ist. Vielleicht achte ich deshalb heute ganz besonders auf die ersten Augenblicke. Oft merke ich sofort, ob ich mich wohlfühlen werde.\n\nUmso dankbarer bin ich für all die wunderbaren Orte in meiner Lieblingsstadt, an denen Herzlichkeit selbstverständlich ist und man sich einfach willkommen fühlt. Danke, Berlin – und danke an die Menschen, die diese besonderen Restaurants ausmachen. ❤️\n\n#BerlinFoodGuide #BerlinRestaurants #BerlinerGenuss #LieblingsorteBerlin #Berlinerschnipsel",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "85b04bf2-c0ce-4ceb-9194-8fd1e94e293f",
+    "externalId": "ig_4012994794977572364",
+    "url": "https://www.instagram.com/p/DexBYEYITYM/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-21T18:13:26.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T04:01:06.350Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "herzlicher Empfang",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "aufmerksam durch den Abend begleitet",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "man fühlt sich willkommen",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Getuschel über Gäste und abwertende Blicke an manchen Orten",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:37.482Z",
+    "usage": {
+      "inputTokens": 6311,
+      "outputTokens": 1963,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named or tagged (the tag is Berlin itself), so all claims are about the city or restaurants in general. The bad past experiences are not tied to Berlin and are kept as subject none; the thank-you to restaurant people is optional as it largely repeats the welcoming-places claim.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "the author asks what really makes a restaurant excellent",
+        "quote": "Was macht ein Restaurant für euch wirklich ausgezeichnet?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Berlin has so many wonderful restaurants",
+        "quote": "Berlin hat so viele wunderbare Restaurants.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "for the author a restaurant's quality shows not only in the kitchen but mainly in how warmly guests are welcomed and how attentively they are looked after through the evening",
+        "quote": "sondern vor allem darin, wie herzlich man empfangen und wie aufmerksam man durch den Abend begleitet wird",
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the author has experienced restaurant staff whispering about guests, disparaging looks and not feeling really welcome",
+        "quote": "Getuschel über Gäste, abwertende Blicke und Momente, in denen man spürt, dass man nicht wirklich willkommen ist",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Berlin has many wonderful places where warmth is natural and guests simply feel welcome",
+        "quote": "all die wunderbaren Orte in meiner Lieblingsstadt, an denen Herzlichkeit selbstverständlich ist und man sich einfach willkommen fühlt",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the author thanks the people who make Berlin's special restaurants",
+        "quote": "danke an die Menschen, die diese besonderen Restaurants ausmachen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.243Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

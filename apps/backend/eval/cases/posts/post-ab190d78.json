@@ -1,0 +1,481 @@
+{
+  "id": "post-ab190d78",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "zuzu.motherhood24h",
+    "locationName": "Al Abdallah Chicken",
+    "hashtags": [
+      "iftarmenü",
+      "hähnchen",
+      "berlinfood",
+      "alabdallah",
+      "halalfood"
+    ],
+    "taggedHandles": [
+      "@alabdalla.de"
+    ],
+    "text": "Libanesisches Restaurant Al Abdallah Chicken in Berlin und ich habe das 21 Euro Iftar-Menü für euch getestet.\nMit dabei: Dattel zum Fastenbrechen, Linsensuppe, Fattoush-Salat, frittiertes Brot mit Special-Soße, Gürkchen, Zigarrenbörek, Hummus, Pommes und ein richtig saftiges halbes Holzkohle-Hähnchen. Die Qualität merkt man sofort.\nMein Highlight? Das Hähnchen-Sandwich… ehrlich, das war mehr eine kleine Delikatesse als nur ein Sandwich! Bitte unbedingt mit der Special Soße probieren!\nHähnchen Sandwich 8,50 Euro\nHalbes Hähnchen 14,99 Euro\nGanzes Hähnchen 27,99 Euro\n@alabdalla.de \n📍 Al Abdallah Chicken\nGotzkowskystraße 35,\n10555 Berlin\n\n #iftarmenü  #hähnchen #berlinfood #alabdallah #halalfood ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "ab190d78-bfcc-4fe2-bdff-96e0aa218808",
+    "externalId": "7617860691457838369",
+    "url": "https://www.tiktok.com/@zuzu.motherhood24h/video/7617860691457838369",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-16T14:30:14.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:33:27.204Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Al Abdallah Chicken",
+        "locationHint": "Gotzkowskystraße 35",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f070dee0-b535-4ff8-9d86-32beb470c764",
+          "brandName": "Al Abdalla",
+          "venueId": "1ca5a436-cd50-49e7-8fb3-8f9696d3bf9a",
+          "venueName": "Al Abdalla"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the 21 euro iftar menu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 21,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the menu includes dates for breaking the fast, lentil soup, fattoush salad, fried bread with special sauce, pickles, cigar börek, hummus, fries and half a charcoal chicken",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "date",
+          "lentil soup",
+          "fattoush salad",
+          "fried bread",
+          "special sauce",
+          "pickles",
+          "cigar börek",
+          "hummus",
+          "fries",
+          "half a charcoal chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the quality is immediately noticeable",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken was very juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken sandwich was a small delicacy rather than just a sandwich",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "chicken sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken sandwich should be tried with the special sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "advice",
+        "foods": [
+          "chicken sandwich",
+          "special sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken sandwich costs 8.50 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "chicken sandwich"
+        ],
+        "amount": 8.5,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "half a chicken costs 14.99 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "half a chicken"
+        ],
+        "amount": 14.99,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a whole chicken costs 27.99 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "whole chickens"
+        ],
+        "amount": 27.99,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:47:19.236Z",
+    "usage": {
+      "inputTokens": 10004,
+      "outputTokens": 3832,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The Iftar menu's price could be read as a time-bound offer (deal) as well as a plain fact. The menu contents are kept as one listing claim, with the juicy half chicken split out as its own opinion. The halal hashtag alone was not treated as a claim.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Al Abdallah Chicken",
+        "locationHint": "Gotzkowskystraße 35, 10555 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f070dee0-b535-4ff8-9d86-32beb470c764",
+          "brandName": "Al Abdalla",
+          "venueId": "1ca5a436-cd50-49e7-8fb3-8f9696d3bf9a",
+          "venueName": "Al Abdalla",
+          "note": "The name differs slightly (Al Abdalla vs Al Abdallah Chicken), but the address Gotzkowskystraße 35 and the handle @alabdalla.de match."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Al Abdallah Chicken is a Lebanese restaurant in Berlin",
+        "quote": "Libanesisches Restaurant Al Abdallah Chicken in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator tested the Iftar-Menü, which costs 21 euros",
+        "quote": "ich habe das 21 Euro Iftar-Menü für euch getestet",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Iftar-Menü"
+        ],
+        "amount": 21,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Iftar-Menü includes a Dattel for breaking the fast, Linsensuppe, Fattoush-Salat, frittiertes Brot with Special-Soße, Gürkchen, Zigarrenbörek, Hummus, Pommes and a half Holzkohle-Hähnchen",
+        "quote": "Mit dabei: Dattel zum Fastenbrechen, Linsensuppe, Fattoush-Salat, frittiertes Brot mit Special-Soße, Gürkchen, Zigarrenbörek, Hummus, Pommes und ein richtig saftiges halbes Holzkohle-Hähnchen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Dattel",
+          "Linsensuppe",
+          "Fattoush-Salat",
+          "frittiertes Brot",
+          "Special-Soße",
+          "Gürkchen",
+          "Zigarrenbörek",
+          "Hummus",
+          "Pommes",
+          "Holzkohle-Hähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the half Holzkohle-Hähnchen was really juicy",
+        "quote": "ein richtig saftiges halbes Holzkohle-Hähnchen",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Holzkohle-Hähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the quality is noticeable immediately",
+        "quote": "Die Qualität merkt man sofort.",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Hähnchen-Sandwich was the highlight, more a small delicacy than just a sandwich",
+        "quote": "Mein Highlight? Das Hähnchen-Sandwich… ehrlich, das war mehr eine kleine Delikatesse als nur ein Sandwich!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hähnchen-Sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Hähnchen-Sandwich should definitely be tried with the Special Soße",
+        "quote": "Bitte unbedingt mit der Special Soße probieren!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hähnchen-Sandwich",
+          "Special Soße"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Hähnchen Sandwich costs 8,50 euros",
+        "quote": "Hähnchen Sandwich 8,50 Euro",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Hähnchen Sandwich"
+        ],
+        "amount": 8.5,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a Halbes Hähnchen costs 14,99 euros",
+        "quote": "Halbes Hähnchen 14,99 Euro",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Halbes Hähnchen"
+        ],
+        "amount": 14.99,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a Ganzes Hähnchen costs 27,99 euros",
+        "quote": "Ganzes Hähnchen 27,99 Euro",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Ganzes Hähnchen"
+        ],
+        "amount": 27.99,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Al Abdallah Chicken is at Gotzkowskystraße 35, 10555 Berlin",
+        "quote": "Gotzkowskystraße 35,\n10555 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -150,8 +150,6 @@ describe('OverviewService (pglite)', () => {
 				venueName: 'Somewhere',
 				matchMethod,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Nice.',
 			});
 		mention(MentionMatchMethodEnum.NONE);
 		mention(MentionMatchMethodEnum.NONE);

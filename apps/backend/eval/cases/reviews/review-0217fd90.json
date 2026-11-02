@@ -1,0 +1,172 @@
+{
+  "id": "review-0217fd90",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "0217fd90-a0c5-40a6-a9c3-bdf0610806fe",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21GRlpFNDNTMmRKTTFkdlZtUktTM0pNTVdGcVFrRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Yangguofu Malatang (杨国福柏林Stegliz店)",
+    "venueId": "22f38462-c073-4d60-ac99-c9c550be318f",
+    "brand": "Yangguofu Malatang (杨国福柏林Stegliz店)",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-16T17:33:28.018Z",
+    "stars": 5,
+    "text": "Sehr lecker! Die Suppe war wirklich unglaublich gut und voller Geschmack. Wir kommen gerne wieder! 😍",
+    "textTranslated": "Absolutely delicious! The soup was incredibly good and full of flavor. We'll definitely be back! 😍"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:00:31.363Z",
+    "claims": [
+      {
+        "text": "the food was absolutely delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the soup was incredibly good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the soup was full of flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we'll definitely be back",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:16.212Z",
+    "usage": {
+      "inputTokens": 5000,
+      "outputTokens": 543,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 4778
+    },
+    "notes": "The opening 'Sehr lecker!' is a general food judgement. It could also be read as an overall verdict. 'Full of flavour' can be its own claim or stay inside the soup claim.",
+    "claims": [
+      {
+        "text": "very delicious",
+        "quote": "Sehr lecker!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the soup was really incredibly good",
+        "quote": "Die Suppe war wirklich unglaublich gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Suppe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the soup was full of flavour",
+        "quote": "voller Geschmack",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Suppe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "we will gladly come back",
+        "quote": "Wir kommen gerne wieder!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.201Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.400Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

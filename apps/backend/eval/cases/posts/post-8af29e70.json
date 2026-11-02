@@ -1,0 +1,145 @@
+{
+  "id": "post-8af29e70",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "pho_noodlebar.berlin",
+    "locationName": "Berlin",
+    "hashtags": [
+      "vietnamesefood",
+      "gastro",
+      "vietnamesecuisine",
+      "berlinfood",
+      "berlinrestaurant"
+    ],
+    "taggedHandles": [],
+    "text": "Are you curious about how our PHO Mitte will look like? Let us show you our final design!\n🇻🇳🍜\n#vietnamesefood #gastro #vietnamesecuisine #berlinfood #berlinrestaurant ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "8af29e70-2534-4adf-a2c7-997ad234e842",
+    "externalId": "7616818175245700384",
+    "url": "https://www.tiktok.com/@pho_noodlebar.berlin/video/7616818175245700384",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "PHO - Noodlebar (Mitte)",
+    "postedAt": "2026-03-13T19:04:44.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:46:21.462Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "PHO Mitte",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "47c75461-cf31-49f7-b02d-2cebfbc50b1f",
+          "brandName": "PHO - Noodlebar (Mitte)",
+          "venueId": "6c87b05b-e582-4653-ad2f-ec148588cb74",
+          "venueName": "PHO - Noodlebar (Mitte)"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "PHO Mitte will look like this",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "final design",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:56.262Z",
+    "usage": {
+      "inputTokens": 9761,
+      "outputTokens": 792,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5885
+    },
+    "notes": "The caption implies the Mitte location is not finished yet ('will look like'), but it never says it is new or opening, so isNewOpening is false. The only claim is the reveal of the final design, which is about the interior.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "PHO - Noodlebar (Mitte)",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "47c75461-cf31-49f7-b02d-2cebfbc50b1f",
+          "brandName": "PHO - Noodlebar (Mitte)",
+          "venueId": "6c87b05b-e582-4653-ad2f-ec148588cb74",
+          "venueName": "PHO - Noodlebar (Mitte)",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "PHO Mitte shows its final design",
+        "quote": "Let us show you our final design!",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.243Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.433Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

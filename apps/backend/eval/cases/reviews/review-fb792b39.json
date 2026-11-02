@@ -1,0 +1,178 @@
+{
+  "id": "review-fb792b39",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "fb792b39-f32b-45e0-a676-c1bb332d434b",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xGVlpXaHZkMVp0U25CRVV6QXhNalIxTjJWRFRHYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Ormos by Milchhäuschen",
+    "venueId": "2dc24f47-907f-4355-bf9a-4b7745749833",
+    "brand": "Ormos by Milchhäuschen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-02T17:09:46.428Z",
+    "stars": 1,
+    "text": "Die Hälfte der Tische ist frei. Am Eingang eine Schlange. Frau darf sich nicht setzen, denn: \"Sie werden platziert!\" Nein Danke! Ich verzichte!",
+    "textTranslated": "Half the tables are empty. There's a queue at the entrance. My wife isn't allowed to sit down because: \"You will be seated!\" No thanks! I'll pass!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:24.645Z",
+    "claims": [
+      {
+        "text": "half the tables are empty",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there's a queue at the entrance",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "my wife isn't allowed to sit down",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "\"You will be seated!\"",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:39.081Z",
+    "usage": {
+      "inputTokens": 5030,
+      "outputTokens": 1084,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard calls were the first two claims. 'Half the tables are empty' and 'a queue at the entrance' are stated as facts but used as criticism next to the seating rule, so both negative and neutral are allowed. The empty tables fit crowding or wait_for_table about equally well.",
+    "claims": [
+      {
+        "text": "half the tables are empty",
+        "quote": "Die Hälfte der Tische ist frei.",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "wait_for_table",
+            "space"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "there is a queue at the entrance",
+        "quote": "Am Eingang eine Schlange.",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "wait_for_table"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer's wife was not allowed to sit down because guests are seated by staff",
+        "quote": "Frau darf sich nicht setzen, denn: \"Sie werden platziert!\"",
+        "sentiment": "negative",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service",
+            "friendliness"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "no thanks, the reviewer will pass on the place",
+        "quote": "Nein Danke! Ich verzichte!",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.222Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

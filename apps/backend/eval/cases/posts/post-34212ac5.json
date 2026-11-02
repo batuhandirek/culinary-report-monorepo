@@ -1,0 +1,132 @@
+{
+  "id": "post-34212ac5",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "berlin.wanderlust",
+    "locationName": "Berlin Entire House",
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "kudamm",
+      "berlinrestaurants",
+      "berlintips"
+    ],
+    "taggedHandles": [],
+    "text": "The Dawn Kudamm\nKurfürstendamm 17, 10719 Berlin, Germany\n\n#Berlin #BerlinFood #Kudamm #BerlinRestaurants #BerlinTips ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "34212ac5-994f-41ee-a5da-13a8892cc722",
+    "externalId": "7683777143662218528",
+    "url": "https://www.tiktok.com/@berlin.wanderlust/video/7683777143662218528",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-10T05:39:44.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:33:54.101Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "The Dawn Kudamm",
+        "locationHint": "Kurfürstendamm 17",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "0c713385-5784-44d0-8c67-af191e2ed5ca",
+          "brandName": "The Dawn",
+          "venueId": "63f6dc90-d853-416e-aec7-8ef9022e9b91",
+          "venueName": "The Dawn"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "The Dawn Kudamm is at Kurfürstendamm 17, 10719 Berlin, Germany",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:35:04.531Z",
+    "usage": {
+      "inputTokens": 9279,
+      "outputTokens": 1044,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The post only gives a venue name and address; the tagged location 'Berlin Entire House' is not a recognisable food venue, so it is left out. The address is kept as an optional neutral fact. 'The Dawn Kudamm' is treated as a restaurant because of the restaurant hashtags.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "The Dawn Kudamm",
+        "locationHint": "Kurfürstendamm 17, 10719 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "0c713385-5784-44d0-8c67-af191e2ed5ca",
+          "brandName": "The Dawn",
+          "venueId": "63f6dc90-d853-416e-aec7-8ef9022e9b91",
+          "venueName": "The Dawn",
+          "note": "The name matches exactly and the street is the same (Kurfürstendamm); only the house number differs (17 vs 20), so this is very likely the same single-branch venue."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "The Dawn Kudamm is at Kurfürstendamm 17, 10719 Berlin",
+        "quote": "Kurfürstendamm 17, 10719 Berlin, Germany",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.230Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.424Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

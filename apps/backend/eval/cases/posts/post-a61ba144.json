@@ -1,0 +1,98 @@
+{
+  "id": "post-a61ba144",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "claire.kom",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "vlog",
+      "diml"
+    ],
+    "taggedHandles": [],
+    "text": "Welche Hype Foodspots könnt ihr empfehlen? 🥟\n\n#berlin #berlinfood #vlog #diml ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "a61ba144-c391-4c20-a973-1f1e6e2d6dca",
+    "externalId": "7619069484661312801",
+    "url": "https://www.tiktok.com/@claire.kom/video/7619069484661312801",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-19T20:40:58.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:22.962Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "asks for recommended hype food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:20.295Z",
+    "usage": {
+      "inputTokens": 5903,
+      "outputTokens": 622,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named or tagged; only the city is tagged. The one call was whether the caption's question to the audience is a claim. I kept it as a city-level question about Berlin's food scene rather than treating it as video narration.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "asks which hyped food spots in Berlin people can recommend",
+        "quote": "Welche Hype Foodspots könnt ihr empfehlen?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.247Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

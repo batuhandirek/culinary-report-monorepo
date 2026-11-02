@@ -28,6 +28,7 @@ import { monthRange, previousMonth } from '../util/month.js';
 import { PostOpeningRow, postOpeningsSql } from '../util/post-openings.js';
 import { districtRatingStanding, RATING_BENCHMARK_MIN_REVIEWS } from '../util/rating-benchmark.js';
 import { normalizeVenueName } from '../util/venue-names.js';
+import { changeSql, judgingSql, mentionSentimentSql } from 'src/modules/statements/util/statement-sql.js';
 
 // Venues written in one update statement
 const UPDATE_CHUNK = 500;
@@ -352,7 +353,7 @@ export class BrandLeadScoreService {
 						count(*) filter (where p.is_ad or p.is_promotional)::int promotional,
 						count(*) filter (where m.negative)::int negative
 					from (
-						select m.brand_id, m.post_id, bool_or(m.sentiment in ('negative', 'mixed')) negative
+						select m.brand_id, m.post_id, bool_or(${mentionSentimentSql('m')} in ('negative', 'mixed')) negative
 						from mentions m where m.brand_id in (${marks(ids)}) group by 1, 2
 					) m join social_posts p on p.id = m.post_id
 					left join social_accounts a on a.id = p.account_id
@@ -361,7 +362,8 @@ export class BrandLeadScoreService {
 					[...ids, start, end],
 				)),
 			);
-		// Same definitions as the report: written = text, critical = 3 stars or fewer with text
+		// Same definitions as the report: written = text, critical = 3 stars or fewer with text, a
+		// complaint = a negative claim (a change or a question is none), a change = a claim of kind `change`
 		const reviewRows: ReviewRow[] = [];
 		const pressRows: PressRow[] = [];
 		for (const ids of _.chunk(venueIds, 1000)) {
@@ -370,12 +372,12 @@ export class BrandLeadScoreService {
 					`select venue_id, count(*)::int total,
 						count(*) filter (where analysed_at is not null and coalesce(text_translated, text) is not null)::int analysed,
 						count(*) filter (where analysed_at is not null and coalesce(text_translated, text) is not null
-							and exists (select 1 from feedback_points f where f.review_id = r.id
-								and f.sentiment = 'negative' and f.detail is not null))::int with_complaints,
+							and exists (select 1 from statements s where s.review_id = r.id
+								and s.sentiment = 'negative' and s.text is not null and ${judgingSql('s')}))::int with_complaints,
 						count(*) filter (where owner_response is not null)::int replied,
 						count(*) filter (where coalesce(stars, 5) <= 3 and coalesce(text_translated, text) is not null
 							and owner_response is null)::int unanswered_critical,
-						count(*) filter (where exists (select 1 from feedback_points f where f.review_id = r.id and f.change))::int with_changes
+						count(*) filter (where exists (select 1 from statements s where s.review_id = r.id and ${changeSql('s')}))::int with_changes
 					from reviews r where published_at >= ? and published_at < ? and venue_id in (${marks(ids)})
 					group by venue_id`,
 					[start, end, ...ids],

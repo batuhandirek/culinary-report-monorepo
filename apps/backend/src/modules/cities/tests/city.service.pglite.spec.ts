@@ -154,8 +154,6 @@ describe('CityService (pglite)', () => {
 				venue: matched ? venue : null,
 				matchMethod: matched ? MentionMatchMethodEnum.EXACT : MentionMatchMethodEnum.NONE,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Kölsch.',
 			});
 		};
 		const tag: [PostSourceKindEnum, string] = [PostSourceKindEnum.TIKTOK_HASHTAG, 'koelnfood'];
@@ -227,8 +225,6 @@ describe('CityService (pglite)', () => {
 				venue: matched ? venue : null,
 				matchMethod: matched ? MentionMatchMethodEnum.EXACT : MentionMatchMethodEnum.NONE,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		};
 		const unique = async () =>

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { AdminSocialPostListItemOutputDto } from 'client';
 
-	import { ListPostsParamsPlatformEnum, ListPostsParamsSortEnum } from 'client';
+	import { ListPostsParamsPlatformEnum, ListPostsParamsSkipReasonEnum, ListPostsParamsSortEnum } from 'client';
 
 	import PostBrandsCell from './PostBrandsCell.svelte';
 
 	import { cityFilter } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
-	import { monthLabel, PLATFORM_LABELS, recentMonths, viewsLabel } from '#lib/culinary.js';
+	import { monthLabel, PLATFORM_LABELS, recentMonths, SKIP_REASON_LABELS, viewsLabel } from '#lib/culinary.js';
 	import { findLabel } from '#lib/post-sources.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import type { Column, Filter, Sort } from '#ui/components/paginated-data-table/index.js';
@@ -42,7 +42,15 @@
 		},
 		{ key: 'matchedOnly', name: 'Mentions a known venue', type: 'toggle' },
 		// Names nothing matched: open the post and link the mention by hand
-		{ key: 'unmatchedOnly', name: 'Unmatched', type: 'toggle' }
+		{ key: 'unmatchedOnly', name: 'Unmatched', type: 'toggle' },
+		// A matched place a new read no longer names: link it again or mark it not a venue
+		{ key: 'unconfirmedOnly', name: 'Unconfirmed match', type: 'toggle' },
+		{
+			key: 'skipReason',
+			name: 'Not digested',
+			type: 'select',
+			options: Object.values(ListPostsParamsSkipReasonEnum).map((value) => ({ name: SKIP_REASON_LABELS[value] ?? value, value }))
+		}
 	]);
 
 

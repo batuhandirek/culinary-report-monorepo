@@ -1,0 +1,488 @@
+{
+  "id": "post-606d88e9",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "myvegan.blog",
+    "locationName": "Cafe Neue Liebe",
+    "hashtags": [
+      "vegan",
+      "plantbased",
+      "berlin",
+      "travel",
+      "food"
+    ],
+    "taggedHandles": [],
+    "text": "Omg this was seriously delicious \\ud83e\\udd24 \n\nIt’s a fully plant based cafe in Berlin, came highly recommended (by chatgpt \\ud83d\\ude44) and it did not disappoint. My favorite had to be the white chocolate \\u0026 apple coffee cake (I took 3 different ones for to go to try them out). The most moist plant based coffee cake I've ever tasted. I am going back again just for it. But everything was super delicious. And the best part no exploitation of animals was done. Because why would I choose otherwise? The cafe is super cute. 10 out of 10. Thanks chatgpt \\ud83d\\ude01\n\n#vegan #plantbased #berlin #travel #food ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "606d88e9-95d5-4a67-a362-00f49a30165e",
+    "externalId": "7694660099943468302",
+    "url": "https://www.tiktok.com/@myvegan.blog/video/7694660099943468302",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-09T13:31:40.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:16.938Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Cafe Neue Liebe",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ddb36963-d3ac-4c0c-96e6-ac956078f2c2",
+          "brandName": "Cafe Neue Liebe",
+          "venueId": "af2ec668-b5fc-4cb2-978b-0ccd2ee880a6",
+          "venueName": "Cafe Neue Liebe"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the cafe is fully plant based",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cafe is in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it came highly recommended by ChatGPT",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the white chocolate and apple coffee cake was the favorite",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "white chocolate and apple coffee cake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the white chocolate and apple coffee cake was the most moist plant based coffee cake ever tasted",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "white chocolate and apple coffee cake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator took 3 different cakes to go",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "cakes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "everything was super delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "no exploitation of animals was done",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the cafe is super cute",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cafe got 10 out of 10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:23:01.418Z",
+    "usage": {
+      "inputTokens": 9923,
+      "outputTokens": 3139,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Quotes and food names keep the literal \\u0026 escape as it appears in the input. The ChatGPT recommendation and the 'no exploitation' line are judgement calls on kind and aspect; 'moist' coffee cake read as cooking (not dry), with taste/freshness allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Cafe Neue Liebe",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ddb36963-d3ac-4c0c-96e6-ac956078f2c2",
+          "brandName": "Cafe Neue Liebe",
+          "venueId": "af2ec668-b5fc-4cb2-978b-0ccd2ee880a6",
+          "venueName": "Cafe Neue Liebe",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the food at Cafe Neue Liebe was seriously delicious",
+        "quote": "this was seriously delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cafe Neue Liebe is a fully plant based cafe",
+        "quote": "It’s a fully plant based cafe in Berlin",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cafe Neue Liebe came highly recommended by ChatGPT",
+        "quote": "came highly recommended",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cafe Neue Liebe did not disappoint",
+        "quote": "it did not disappoint",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the white chocolate & apple coffee cake was the favorite",
+        "quote": "My favorite had to be the white chocolate \\u0026 apple coffee cake",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "white chocolate \\u0026 apple coffee cake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "took 3 different coffee cakes to go to try them",
+        "quote": "I took 3 different ones for to go to try them out",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "coffee cake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the coffee cake was the most moist plant based coffee cake ever tasted",
+        "quote": "The most moist plant based coffee cake I've ever tasted",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "coffee cake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "freshness",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "going back to Cafe Neue Liebe just for the coffee cake",
+        "quote": "I am going back again just for it.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "coffee cake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "everything at Cafe Neue Liebe was super delicious",
+        "quote": "everything was super delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "no animals were exploited for the food at Cafe Neue Liebe",
+        "quote": "no exploitation of animals was done",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cafe Neue Liebe is super cute",
+        "quote": "The cafe is super cute",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cafe Neue Liebe is 10 out of 10",
+        "quote": "10 out of 10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.438Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.238Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

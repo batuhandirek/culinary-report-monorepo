@@ -1,4 +1,5 @@
-import { topicsOf } from 'src/modules/feedback/util/feedback-rows.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import { rootsOf } from 'src/modules/statements/util/statement-views.js';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
@@ -332,12 +333,13 @@ export class ReportSignalsService {
 				platform: ReviewPlatformEnum.GOOGLE,
 				publishedAt: { $gte: baselineFrom, $lt: weekAfter },
 			},
-			{ populate: ['feedback'] },
+			{ populate: [...STATEMENT_POPULATE] },
 		);
 		const asInput = (r: Review) => ({
 			publishedAt: r.publishedAt.toISOString(),
 			stars: r.stars,
-			complaints: topicsOf(r.feedback.getItems(), 'negative'),
+			// The aspect roots its complaints raise, once each
+			complaints: rootsOf(r.statements.getItems(), 'negative'),
 			written: !!r.text?.trim(),
 		});
 		const baseline = reviews.filter(r => r.publishedAt < start).map(asInput);

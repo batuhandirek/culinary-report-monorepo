@@ -1,0 +1,318 @@
+{
+  "id": "post-1e024518",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "mirchmasala.berlin",
+    "locationName": null,
+    "hashtags": [
+      "masaladosa",
+      "köpenick",
+      "berlinfood",
+      "halalberlin"
+    ],
+    "taggedHandles": [],
+    "text": "So sieht unser Masala Dosa aus. 🥞\n\nHauchdünn, goldbraun, gefüllt mit würziger Kartoffel. Dazu Sambar und Chutneys. Frisch gemacht in Berlin-Köpenick.\n\n👉 Bestell direkt: masalas.de (Link in Bio)\n\n#MasalaDosa #Köpenick #BerlinFood #HalalBerlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "1e024518-e385-4e17-b559-76bab07012a1",
+    "externalId": "ig_4015022684018646554",
+    "url": "https://www.instagram.com/p/De4OdvOER4a/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T13:20:33.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:50:09.484Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Masala Dosa",
+        "locationHint": "Berlin-Köpenick",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "b76c3a71-2e7f-40d2-8812-49b5ea81cd13",
+          "brandName": "Masala",
+          "venueId": "a8172b0b-1b73-4e26-9dee-0fd539fa6eaf",
+          "venueName": "Masala"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "made fresh",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Masala Dosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "hauchdünn and goldbraun",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Masala Dosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "würzige Kartoffel filling",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Masala Dosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "masala dosa",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Masala Dosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "filled with spiced potato",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "spiced potato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "served with sambar and chutneys",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "sambar",
+          "chutneys"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "made fresh in Berlin-Köpenick",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:32:45.262Z",
+    "usage": {
+      "inputTokens": 9255,
+      "outputTokens": 2256,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The post is the venue's own promotion ('unser Masala Dosa'); the venue is named only through its order site masalas.de, which I took as naming it 'Masalas' in Köpenick. The ordering link is borderline narration, so it is optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Masalas",
+        "locationHint": "Köpenick",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post is by the venue's own account, 'mirchmasala.berlin', with the shop masalas.de. That points to a 'Mirch Masala'/'Masalas' business, not the plain 'Masala' at Slabystraße, despite both being in Treptow-Köpenick."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Masala Dosa is paper-thin and golden brown",
+        "quote": "Hauchdünn, goldbraun",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Masala Dosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Masala Dosa is filled with spicy potato",
+        "quote": "gefüllt mit würziger Kartoffel",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Masala Dosa",
+          "Kartoffel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Masala Dosa comes with Sambar and Chutneys",
+        "quote": "Dazu Sambar und Chutneys.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Sambar",
+          "Chutneys"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Masala Dosa is freshly made in Berlin-Köpenick",
+        "quote": "Frisch gemacht in Berlin-Köpenick",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Masala Dosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "orders can be placed directly at masalas.de",
+        "quote": "Bestell direkt: masalas.de",
+        "sentiment": "neutral",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "delivery_platform"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.594Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The freshly made claim points at the Masala Dosa, so it should be listed as a food."
+      },
+      {
+        "at": "2026-11-01T21:36:47.227Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.422Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

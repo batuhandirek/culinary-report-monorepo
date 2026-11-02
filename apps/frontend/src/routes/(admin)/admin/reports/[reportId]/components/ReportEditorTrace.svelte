@@ -40,7 +40,7 @@
 							label: 'Tokens',
 							value: tokens,
 							hint: trace.usage
-								? `${trace.usage.inputTokens ?? '—'} in · ${trace.usage.outputTokens ?? '—'} out`
+								? `${trace.usage.inputTokens ?? '—'} in${trace.usage.cachedInputTokens ? ` (${trace.usage.cachedInputTokens} cached)` : ''} · ${trace.usage.outputTokens ?? '—'} out`
 								: undefined
 						},
 						{ label: 'Duration', value: `${(trace.durationMs / 1000).toFixed(1)} s` },

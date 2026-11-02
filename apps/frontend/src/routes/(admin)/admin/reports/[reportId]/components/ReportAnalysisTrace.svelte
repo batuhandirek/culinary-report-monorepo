@@ -39,7 +39,7 @@
 						{ label: 'Built', value: at(analysis.builtAt) },
 						{ label: 'Model steps', value: trace.modelSteps },
 						{ label: 'Tool calls', value: trace.toolCalls },
-						{ label: 'Tokens', value: tokens, hint: trace.usage ? `${trace.usage.inputTokens ?? '—'} in · ${trace.usage.outputTokens ?? '—'} out` : undefined },
+						{ label: 'Tokens', value: tokens, hint: trace.usage ? `${trace.usage.inputTokens ?? '—'} in${trace.usage.cachedInputTokens ? ` (${trace.usage.cachedInputTokens} cached)` : ''} · ${trace.usage.outputTokens ?? '—'} out` : undefined },
 						{ label: 'Duration', value: `${(trace.durationMs / 1000).toFixed(1)} s` },
 						{ label: 'Problems', value: trace.problems.length, tone: trace.problems.length ? 'danger' : 'muted' }
 					]} />

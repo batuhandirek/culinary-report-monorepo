@@ -5,11 +5,11 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { FOODS_SQL, type StatementFood } from 'src/modules/statements/util/statement-foods.js';
 import { mentionTopicsSql } from 'src/modules/trends/util/topic-mentions.js';
 
 import { LandingCopyAgent } from '../agents/landing-copy.agent.js';
@@ -23,15 +23,16 @@ import type { LandingCopy, LandingEditionData } from '../interfaces/landing-edit
 import { LandingBuildJob } from '../jobs/landing-build.job.js';
 import {
 	computeLanding,
-	type LandingFeedbackRow,
 	type LandingMentionRow,
 	type LandingOpeningSign,
+	type LandingStatementRow,
 	type LandingVenueRow,
 	landingWindow,
 	promptMaterial,
 } from '../util/landing.js';
 import { checkCopy, type LandingCopyAnswer } from '../util/landing-copy.js';
 import { landingPrompt } from '../util/landing-prompt.js';
+import { judgingSql, mentionSaidSql, mentionSentimentSql } from 'src/modules/statements/util/statement-sql.js';
 
 const DAY_MS = 24 * 3600 * 1000;
 // The daily cron runs at one hour; an edition built a little later than it on day 0 is still due on day 5
@@ -104,11 +105,11 @@ export class LandingEditionService {
 		const { start, end, previousStart } = landingWindow(now);
 		const current = {
 			mentions: await this.mentionRows(city.id, start, end),
-			feedback: await this.feedbackRows(city.id, start, end),
+			statements: await this.statementRows(city.id, start, end),
 		};
 		const previous = {
 			mentions: await this.mentionRows(city.id, previousStart, start),
-			feedback: await this.feedbackRows(city.id, previousStart, start),
+			statements: await this.statementRows(city.id, previousStart, start),
 		};
 		const brandIds = [...new Set(current.mentions.map(r => r.brandId))];
 		const data = computeLanding({
@@ -204,7 +205,7 @@ export class LandingEditionService {
 	private async writeCopy(
 		city: City,
 		data: LandingEditionData,
-		current: { mentions: LandingMentionRow[]; feedback: LandingFeedbackRow[] },
+		current: { mentions: LandingMentionRow[]; statements: LandingStatementRow[] },
 		windowStart: Date,
 		windowEnd: Date,
 	): Promise<{ copy: LandingCopy; copyError?: string }> {
@@ -261,7 +262,7 @@ export class LandingEditionService {
 				coalesce(a.handle, p.author) as handle,
 				coalesce(a.creator_id::text, 'author:' || lower(p.author), 'post:' || p.id::text) as creator_key,
 				m.brand_id, b.name as brand_name, m.venue_id, v.district, v.street,
-				m.sentiment, m.summary, ${mentionTopicsSql('m')} as topics
+				${mentionSentimentSql('m')} as sentiment, ${mentionSaidSql('m')} as summary, ${mentionTopicsSql('m')} as topics
 			from mentions m
 			join social_posts p on p.id = m.post_id
 			join brands b on b.id = m.brand_id
@@ -291,33 +292,34 @@ export class LandingEditionService {
 		}));
 	}
 
-	/** The feedback rows of the window's mentions that count; changes noticed are no praise. */
-	private async feedbackRows(
+	/**
+	 * The statements of the window's mentions that count (a post's claims about the place it
+	 * names, and the dishes it lists): their sentiment, aspect and foods. Changes noticed are no
+	 * praise and are left out.
+	 */
+	private async statementRows(
 		cityId: string,
 		start: Date,
 		end: Date,
-	): Promise<LandingFeedbackRow[]> {
+	): Promise<LandingStatementRow[]> {
 		const rows: {
 			mention_id: number;
 			post_id: string;
 			brand_id: string;
 			views: string | number | null;
-			sentiment: string;
-			theme: string | null;
-			detail: string | null;
-			dish: string | null;
-			dish_key: string | null;
-			topic_key: string | null;
-			topic_label: string | null;
-			topic_kind: TopicKindEnum | null;
+			sentiment: string | null;
+			aspect: string | null;
+			text: string | null;
+			foods: StatementFood[] | null;
 		}[] = await this.em.getConnection().execute(
-			`select f.mention_id, p.id as post_id, m.brand_id, p.views, f.sentiment, f.theme, f.detail, f.dish, f.dish_key,
-				t.key as topic_key, t.label as topic_label, t.kind as topic_kind
-			from feedback_points f
-			join mentions m on m.id = f.mention_id
+			`select s.mention_id, p.id as post_id, m.brand_id, p.views, s.sentiment, a.key as aspect, s.text,
+				${FOODS_SQL('st.id = s.id')} as foods
+			from statements s
+			join mentions m on m.id = s.mention_id
 			join social_posts p on p.id = m.post_id
-			left join topics t on t.id = f.food_topic_id
-			where f.source_kind = 'mention' and not f.change and m.brand_id is not null and ${COUNTS}`,
+			left join statement_parts ap on ap.statement_id = s.id and ap.role = 'aspect'
+			left join topics a on a.id = ap.topic_id
+			where ${judgingSql('s')} and m.brand_id is not null and ${COUNTS}`,
 			[cityId, start, end],
 		);
 		return rows.map(r => ({
@@ -326,13 +328,9 @@ export class LandingEditionService {
 			brandId: r.brand_id,
 			views: Number(r.views ?? 0),
 			sentiment: r.sentiment,
-			theme: r.theme,
-			detail: r.detail,
-			dish: r.dish,
-			dishKey: r.dish_key,
-			topicKey: r.topic_key,
-			topicLabel: r.topic_label,
-			topicKind: r.topic_kind,
+			aspect: r.aspect,
+			text: r.text,
+			foods: r.foods ?? [],
 		}));
 	}
 

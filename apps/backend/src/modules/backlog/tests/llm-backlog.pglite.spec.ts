@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
+import { isLlmFreeOnly } from 'src/modules/llm/util/llm-scope.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -110,6 +111,37 @@ describe('LLM backlog (pglite)', () => {
 		expect([rb.key, rb.batches, rb.done, rb.stopReason, rb.remaining]).toEqual(['b-second', 0, 0, 'budget', 50]);
 	});
 
+	it('runs every batch on the free models only', async () => {
+		const freeOnly: boolean[] = [];
+		const a = fakeBacklog('a-first', 10, { items: 20, perBatch: 10, tokens: 100 });
+		const runBatch = a.backlog.runBatch;
+		a.backlog.runBatch = async () => {
+			freeOnly.push(isLlmFreeOnly());
+			return runBatch();
+		};
+		registry.register(a.backlog);
+
+		await service.drain({ budget: 1_000_000, now: at('2026-10-22T22:00:00Z') });
+
+		expect(freeOnly).toEqual([true, true]);
+		expect(isLlmFreeOnly()).toBe(false);
+	});
+
+	it('lets the batches use paid models when the user allowed it', async () => {
+		const freeOnly: boolean[] = [];
+		const a = fakeBacklog('a-first', 10, { items: 10, perBatch: 10, tokens: 100 });
+		const runBatch = a.backlog.runBatch;
+		a.backlog.runBatch = async () => {
+			freeOnly.push(isLlmFreeOnly());
+			return runBatch();
+		};
+		registry.register(a.backlog);
+
+		await service.drain({ budget: 1_000_000, allowPaid: true, now: at('2026-10-22T22:00:00Z') });
+
+		expect(freeOnly).toEqual([false]);
+	});
+
 	it('moves on to the next backlog when one is empty', async () => {
 		const a = fakeBacklog('a-first', 10, { items: 15, perBatch: 10, tokens: 100 });
 		const b = fakeBacklog('b-second', 20, { items: 5, perBatch: 10, tokens: 100 });
@@ -124,7 +156,7 @@ describe('LLM backlog (pglite)', () => {
 		]);
 	});
 
-	it('stops the day on the allowance without failing, and the next run goes on', async () => {
+	it('stops a backlog with no model left without failing, goes on with the next, and the next run goes on', async () => {
 		const a = fakeBacklog('a-first', 10, {
 			items: 40,
 			perBatch: 10,
@@ -136,10 +168,11 @@ describe('LLM backlog (pglite)', () => {
 		registry.register(b.backlog);
 
 		await expect(service.drain({ budget: 1_000_000, now: at('2026-10-22T22:00:00Z') })).resolves.toHaveLength(2);
-		expect(b.state.batches).toBe(0);
+		// b may run on another model (`LLM_AGENT_MODELS`): a's allowance says nothing about it
+		expect(b.state.batches).toBe(1);
 		expect((await runs()).map(r => [r.key, r.batches, r.done, r.stopReason, r.remaining])).toEqual([
 			['a-first', 1, 10, 'allowance', 30],
-			['b-second', 0, 0, 'allowance', 10],
+			['b-second', 1, 10, 'empty', 0],
 		]);
 
 		// The next day: on where it stopped
@@ -149,7 +182,7 @@ describe('LLM backlog (pglite)', () => {
 		const next = (await runs()).filter(r => r.day === '2026-10-23');
 		expect(next.map(r => [r.key, r.done, r.stopReason, r.remaining])).toEqual([
 			['a-first', 30, 'empty', 0],
-			['b-second', 10, 'empty', 0],
+			['b-second', 0, 'empty', 0],
 		]);
 	});
 
@@ -244,5 +277,28 @@ describe('LLM backlog (pglite)', () => {
 			new LlmBacklogJob({ trigger: 'admin' }),
 			{ singletonKey: LLM_BACKLOG_SINGLETON_KEY },
 		);
+	});
+
+	it('runs no batch of a backlog that waits, says why, and goes on with the next', async () => {
+		const waiting = fakeBacklog('a-waiting', 10, { items: 30, perBatch: 10, tokens: 100 });
+		waiting.backlog.waitsFor = async () => 'The spend is not approved yet';
+		const next = fakeBacklog('b-next', 20, { items: 10, perBatch: 10, tokens: 100 });
+		registry.register(waiting.backlog);
+		registry.register(next.backlog);
+
+		await service.drain({ budget: 10_000, now: at('2026-10-22T22:00:00Z') });
+
+		expect(waiting.state.batches).toBe(0);
+		expect(next.state.batches).toBe(1);
+		const [ra, rb] = await runs();
+		expect([ra.stopReason, ra.error, ra.batches, ra.remaining]).toEqual(['waiting', 'The spend is not approved yet', 0, 30]);
+		expect(rb.stopReason).toBe('empty');
+
+		// Once it may run, it runs
+		waiting.backlog.waitsFor = async () => null;
+		await service.drain({ budget: 10_000, now: at('2026-10-22T23:00:00Z') });
+		expect(waiting.state.batches).toBe(3);
+		const [again] = await runs();
+		expect([again.stopReason, again.error]).toEqual(['empty', null]);
 	});
 });

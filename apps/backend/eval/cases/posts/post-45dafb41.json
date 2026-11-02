@@ -1,0 +1,926 @@
+{
+  "id": "post-45dafb41",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "tip-berlin.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Römische Pizza, Kreuzberger Gefühl: Monti in der Fichtestraße\n\nEssen gehen\nRömische Pizza, Kreuzberger Gefühl: Monti in der Fichtestraße\nEine Frage, die die Berliner spaltet: Soll die Pizza neapolitanisch oder doch lieber römisch sein? Die Stadt scheint sich auf Neapel geeinigt zu haben. Das Monti zeigt, wie gut Pizza à la Roma sein kann\nText: Clemens Niedenthal\nVeröffentlicht am: 23.09.2026\nHome » Food » Seite 2\nWhatsApp\nFacebook\nE-Mail\nX\nBluesky\nUnbedingt mit Schere schneiden: die römische Pizza im Monti © Clemens Niedenthal\nIhr könnt euch Artikel von tipBerlin in der Google-Suche nun bevorzugt anzeigen lassen.\nJetzt aktivieren\nMehr erfahren\nHertha oder Union, Kebab oder Currywurst, das Wochenende im Berghain oder in der Uckermark? Es ist nicht so, dass wir Berliner und Berlinerinnen nicht auch unsere Glaubensfragen kennen. Was aber sind die gegen dieses italienische Dilemma: Soll die Pizza neapolitanisch oder römisch sein? Berlin plädierte für Neapel. Was vor allem daran lag, dass der moderne Stil Pizza zu backen – Sauerteig, lange Teigführung – mit neapolitanischen Pizzerien wie Standard oder Malafemmena nach Berlin gekommen war.\nWie herrlich auch die römische Pizzaschule schmecken kann, wenn man dem Teig die gleiche Aufmerksamkeit widmet, dass zeigt das jüngst eröffnete Monti in der Kreuzberger Fichtestraße. Der zentrale Unterschied: Werden neapolitanische Pizzen sehr kurz und sehr heiß gebacken, lässt man sich in Rom mehr Zeit.\nRömische Pizzen sind knuspriger, Olivenöl verleiht ihrem Geschmack zudem eine angenehme Tiefe. Doch zurück ins Monti, das seinen Namen von einem römischen Stadtviertel hat. Dort nämlich sind Renate Dengg und Max Setrak – Gastgeber:innen im herrlich Wienerischen Jolesch – auf die Idee einer Pizzeria gekommen.\nMonti in Kreuzberg: Eine Liebesgeschichte zwischen Rom und Berlin\nGastgeberin ist ihre Tochter Clara Dengg. Sie interpretiert das Monti als zugewandtes Nachbarschaftslokal, wo sich selbst ambitioniert gestartete Pizzaprojekte inzwischen eher als Schnellimbiss verstehen. Als Vorspeise einen ganzen Kopfsalat (12 Euro), dazu den herrlichen Landschinken aus Kärnten, den man bereits aus dem Jolesch kennt: Das Monti ist ein vollwertiges Restaurant mit einer so bewussten wie niederschwelligen Weinauswahl.\nDer „Kiezwein“ für 18 Euro im halben Liter ist mehr als nur ein Angebot an die Nachbarschaft, flaschenweise hält man, zumal aus Österreich, auch Charakterstarkes bereit. Vor allem aber passen die Pizzen aus Rom ganz wunderbar nach Berlin.\nOb mit Burrata, Mortadella, gerösteten Pinienkernen und Zitronenzeste (17 Euro). Oder frittiertem Rucola, Chimichurri und Tagliata vom toskanischen Chianina Rind. Einzige Nachfrage: Hätte nicht auch ein gut gekühlter Lambrusco diesen Abend sehr herrlich begleitet? Aber darüber, so Clara Dengg, habe man auch schon nachgedacht.\nMonti Fichterstr. 32, Kreuzberg, Mo–Sa 17–9 Uhr, mehr Infos hier\nMehr zum Thema\nEr ist der The Duc Ngo seiner Generation: Don Santanaviboon begeistert im Rram auf der Torstraße. Senfeier und Filterkaffee: Das neue Café Zart ist eine ehrliche Haut. Komplexe chinesische Küche: Das FúFú Bistro in der Kantstraße. Nach dem Berghain einen Hauswein: Das Magma ist hot – aber auf die coole Art. Erstklassiges Interieur und erstklassiger Kaffee: Das Nyde Café in Schöneberg. Büsumer Krabben, Sorbet vom Eisenkraut: Tim Lentl begeistert im Qiu.Vom Acker nach Neukölln: Das Merold setzt auf regionale Gemeinschaft. Ohne Kohlenhydrate ins Glück: Das Pêle-Mêle beendet die Ära der Avocadostulle. Wir versorgen euch mit Neuigkeiten und Rezension: Essen gehen in Berlin – von Imbiss bis Restaurant. Prost: Trinken gehen in Berlin – was wir über Drinks, Bars und Kneipen schreiben, lest ihr hier.\nThe post Römische Pizza, Kreuzberger Gefühl: Monti in der Fichtestraße appeared first on tipBerlin.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "45dafb41-23ca-4d42-9398-bc73015ff792",
+    "externalId": "blog_21e5c72c1eea389e8ebc26ff",
+    "url": "https://www.tip-berlin.de/food/essen-gehen/monti-pizza-fichtestrasse/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-23T11:59:37.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:27.860Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Monti",
+        "locationHint": "Fichtestraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "llm",
+          "brandId": "7c4aa8ae-63f7-4d90-8032-23f19bf66638",
+          "brandName": "Monti Pizza",
+          "venueId": "60a63def-ab99-4ac4-baa2-83180b9dc574",
+          "venueName": "Monti Pizza"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Roman-style pizza is described as very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Roman-style pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Roman pizzas are said to be especially well made",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Roman-style pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "positioned as a neighborhood place rather than a rushed takeaway",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "offers starters, pizza and a considered wine selection",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "carefully chosen wine list with characterful bottles",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the writer wonders whether chilled Lambrusco would have matched the meal better",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:38:45.255Z",
+    "usage": {
+      "inputTokens": 18753,
+      "outputTokens": 11379,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'Mehr zum Thema' teasers (Rram, Café Zart, FúFú Bistro, Magma, Nyde Café, Qiu, Merold, Pêle-Mêle) are links to other articles, not this article's content, so they are left out. Standard and Malafemmena are kept because the article credits them with bringing the sourdough style to Berlin, and Jolesch is kept because it is called wonderfully Viennese; the Lambrusco line is a rhetorical question hinting at a gap in the wine list.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Monti",
+        "locationHint": "Fichtestraße 32, Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "7c4aa8ae-63f7-4d90-8032-23f19bf66638",
+          "brandName": "Monti Pizza",
+          "venueId": "60a63def-ab99-4ac4-baa2-83180b9dc574",
+          "venueName": "Monti Pizza",
+          "note": "Monti Pizza is at Fichtestraße 32 in Kreuzberg, exactly the address the article gives."
+        }
+      },
+      {
+        "venueName": "Standard",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "00331a2c-933d-4e4d-bf48-9c029600233c",
+          "brandName": "Standard Serious Pizza",
+          "venueId": null,
+          "venueName": null,
+          "note": "The article names the pizzeria 'Standard' as the place that brought Neapolitan sourdough pizza to Berlin, which is the Standard Serious Pizza chain; it gives no branch."
+        }
+      },
+      {
+        "venueName": "Malafemmena",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "57520b91-edd0-401d-96a9-2e04dbb09941",
+          "brandName": "Malafemmena",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Jolesch",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "d267696a-bc84-4b18-ad38-9d7e101b3597",
+          "brandName": "Restaurant Jolesch",
+          "venueId": "bbac39fc-8125-4175-a2e9-a64893987d49",
+          "venueName": "Restaurant Jolesch",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Berliners are divided on whether pizza should be Neapolitan or Roman",
+        "quote": "Eine Frage, die die Berliner spaltet: Soll die Pizza neapolitanisch oder doch lieber römisch sein?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Berlin seems to have settled on Neapolitan pizza",
+        "quote": "Die Stadt scheint sich auf Neapel geeinigt zu haben.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Monti shows how good Roman-style pizza can be",
+        "quote": "Das Monti zeigt, wie gut Pizza à la Roma sein kann",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pizza à la Roma"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Standard brought the modern pizza style with sourdough and long dough fermentation to Berlin",
+        "quote": "der moderne Stil Pizza zu backen – Sauerteig, lange Teigführung – mit neapolitanischen Pizzerien wie Standard oder Malafemmena nach Berlin gekommen war",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "Pizza",
+          "Sauerteig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Malafemmena brought the modern pizza style with sourdough and long dough fermentation to Berlin",
+        "quote": "der moderne Stil Pizza zu backen – Sauerteig, lange Teigführung – mit neapolitanischen Pizzerien wie Standard oder Malafemmena nach Berlin gekommen war",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "Pizza",
+          "Sauerteig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the Roman pizza at Monti tastes wonderful because the dough gets the same attention",
+        "quote": "Wie herrlich auch die römische Pizzaschule schmecken kann, wenn man dem Teig die gleiche Aufmerksamkeit widmet",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Teig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti recently opened in Fichtestraße in Kreuzberg",
+        "quote": "das jüngst eröffnete Monti in der Kreuzberger Fichtestraße",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Neapolitan pizzas are baked very briefly and very hot, while Roman pizzas take more time",
+        "quote": "Werden neapolitanische Pizzen sehr kurz und sehr heiß gebacken, lässt man sich in Rom mehr Zeit.",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "neapolitanische Pizzen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Roman pizzas are crispier",
+        "quote": "Römische Pizzen sind knuspriger",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "Römische Pizzen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "olive oil gives Roman pizzas a pleasant depth of flavour",
+        "quote": "Olivenöl verleiht ihrem Geschmack zudem eine angenehme Tiefe",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Olivenöl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Monti is named after a Roman neighbourhood",
+        "quote": "das seinen Namen von einem römischen Stadtviertel hat",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Renate Dengg and Max Setrak, hosts of Jolesch, came up with the idea for Monti in Rome",
+        "quote": "Dort nämlich sind Renate Dengg und Max Setrak – Gastgeber:innen im herrlich Wienerischen Jolesch – auf die Idee einer Pizzeria gekommen.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Renate Dengg and Max Setrak are the hosts of Jolesch",
+        "quote": "Renate Dengg und Max Setrak – Gastgeber:innen im herrlich Wienerischen Jolesch",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Jolesch is wonderfully Viennese",
+        "quote": "herrlich Wienerischen Jolesch",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "their daughter Clara Dengg is the host of Monti",
+        "quote": "Gastgeberin ist ihre Tochter Clara Dengg.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Clara Dengg runs Monti as a welcoming neighbourhood restaurant",
+        "quote": "Sie interpretiert das Monti als zugewandtes Nachbarschaftslokal",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "in Berlin even ambitiously started pizza projects now see themselves more as fast-food places",
+        "quote": "wo sich selbst ambitioniert gestartete Pizzaprojekte inzwischen eher als Schnellimbiss verstehen",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "a whole head of lettuce as a starter costs 12 euros at Monti",
+        "quote": "Als Vorspeise einen ganzen Kopfsalat (12 Euro)",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Kopfsalat"
+        ],
+        "amount": 12,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti serves the wonderful Landschinken from Carinthia",
+        "quote": "den herrlichen Landschinken aus Kärnten",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Landschinken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Landschinken from Carinthia is known from Jolesch",
+        "quote": "den man bereits aus dem Jolesch kennt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Landschinken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Monti is a full-fledged restaurant",
+        "quote": "Das Monti ist ein vollwertiges Restaurant",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti has a wine selection that is both considered and accessible",
+        "quote": "mit einer so bewussten wie niederschwelligen Weinauswahl",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kiezwein costs 18 euros per half litre at Monti",
+        "quote": "Der „Kiezwein“ für 18 Euro im halben Liter",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Kiezwein"
+        ],
+        "amount": 18,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kiezwein is more than just an offer to the neighbourhood",
+        "quote": "ist mehr als nur ein Angebot an die Nachbarschaft",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Kiezwein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti also offers characterful wines by the bottle, especially from Austria",
+        "quote": "flaschenweise hält man, zumal aus Österreich, auch Charakterstarkes bereit",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti's Roman pizzas fit wonderfully in Berlin",
+        "quote": "Vor allem aber passen die Pizzen aus Rom ganz wunderbar nach Berlin.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Pizzen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pizza with Burrata, Mortadella, roasted pine nuts and lemon zest costs 17 euros",
+        "quote": "Ob mit Burrata, Mortadella, gerösteten Pinienkernen und Zitronenzeste (17 Euro)",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Burrata",
+          "Mortadella",
+          "gerösteten Pinienkernen",
+          "Zitronenzeste"
+        ],
+        "amount": 17,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti has a pizza with fried rocket, Chimichurri and Tagliata of Tuscan Chianina beef",
+        "quote": "Oder frittiertem Rucola, Chimichurri und Tagliata vom toskanischen Chianina Rind.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "frittiertem Rucola",
+          "Chimichurri",
+          "Tagliata vom toskanischen Chianina Rind"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author asks whether a well-chilled Lambrusco would not also have paired nicely with the evening",
+        "quote": "Hätte nicht auch ein gut gekühlter Lambrusco diesen Abend sehr herrlich begleitet?",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Lambrusco"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "according to Clara Dengg, Monti has already considered offering Lambrusco",
+        "quote": "darüber, so Clara Dengg, habe man auch schon nachgedacht",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti is at Fichterstr. 32 in Kreuzberg",
+        "quote": "Monti Fichterstr. 32, Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monti is open Monday to Saturday from 17 to 9",
+        "quote": "Mo–Sa 17–9 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Roman pizza at Monti should be cut with scissors",
+        "quote": "Unbedingt mit Schere schneiden: die römische Pizza im Monti",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "römische Pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.233Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

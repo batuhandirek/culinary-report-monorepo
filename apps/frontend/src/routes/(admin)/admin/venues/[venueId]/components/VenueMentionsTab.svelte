@@ -11,6 +11,7 @@
 		recentMonths,
 		sentimentVariant
 	} from '#lib/culinary.js';
+	import { saidOf, sentimentOf } from '#lib/statements.js';
 	import type {
 		Column,
 		Filter,
@@ -46,12 +47,12 @@
 			href: (row) => `/admin/posts/${row.post.id}`,
 			value: (row) => `@${row.post.author ?? '—'}`
 		},
-		{ type: 'value', name: 'What they said', truncate: 70, value: (row) => row.summary },
+		{ type: 'value', name: 'What they said', truncate: 70, value: (row) => saidOf(row.statements).join(' · ') },
 		{
 			type: 'badge',
 			name: 'Sentiment',
-			value: (row) => row.sentiment,
-			variant: (row) => sentimentVariant(row.sentiment)
+			value: (row) => sentimentOf(row.statements),
+			variant: (row) => sentimentVariant(sentimentOf(row.statements))
 		},
 		{ type: 'value', name: 'Views', numeric: true, value: (row) => compact(row.post.views) },
 		{

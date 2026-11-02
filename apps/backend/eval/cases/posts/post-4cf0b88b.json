@@ -1,0 +1,198 @@
+{
+  "id": "post-4cf0b88b",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "gastrofill",
+    "locationName": "Helvam Berlin",
+    "hashtags": [
+      "berlin",
+      "berlinturkishfood",
+      "berlindessert",
+      "berlinfoodie",
+      "berlinfoodguide"
+    ],
+    "taggedHandles": [],
+    "text": "🌀Yediğim en güzel ve en hafif helvalardan biriydi Berlinde denenmesi gerken Türk tatlılarından biri 🤤🥰 \n.\n.\n🌀It was one of the best and lightest halvas I’ve ever had; definitely one of the Turkish desserts you have to try in Berlin 🤤🥰\n📍Hauptstraße 11, 10827 Berlin-Bezirk Tempelhof-Schöneberg \n#berlin #berlinturkishfood #berlindessert #berlinfoodie #berlinfoodguide",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "4cf0b88b-cc0f-48f3-bf49-2cd9de73e2c6",
+    "externalId": "ig_3987595446770200323",
+    "url": "https://www.instagram.com/p/DdWyO6As-8D/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-16T17:08:03.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:57.215Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Helvam Berlin",
+        "locationHint": "Hauptstraße 11, Tempelhof-Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "96adffab-affe-45f7-9991-aa8b7089f19e",
+          "brandName": "Helvam Berlin",
+          "venueId": "6c3712cb-0c45-4b88-bb0b-c2436ede4295",
+          "venueName": "Helvam Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the halva was one of the best and lightest the creator has ever had",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "halva"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is one of the Turkish desserts you have to try in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Turkish desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:53.833Z",
+    "usage": {
+      "inputTokens": 9949,
+      "outputTokens": 1437,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption is bilingual; the English version is the author's own words and is quoted. 'Best and lightest' is kept as one claim, though splitting off 'lightest' would be acceptable. The must-try line is read as a verdict on the halva at this place.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Helvam Berlin",
+        "locationHint": "Hauptstraße 11, 10827 Berlin-Tempelhof-Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "96adffab-affe-45f7-9991-aa8b7089f19e",
+          "brandName": "Helvam Berlin",
+          "venueId": "6c3712cb-0c45-4b88-bb0b-c2436ede4295",
+          "venueName": "Helvam Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the halva was one of the best and lightest halvas the author has ever had",
+        "quote": "It was one of the best and lightest halvas I’ve ever had",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "halvas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the halva is one of the Turkish desserts you have to try in Berlin",
+        "quote": "definitely one of the Turkish desserts you have to try in Berlin",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "halvas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Helvam Berlin is at Hauptstraße 11 in Tempelhof-Schöneberg",
+        "quote": "Hauptstraße 11, 10827 Berlin-Bezirk Tempelhof-Schöneberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.436Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.234Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.427Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

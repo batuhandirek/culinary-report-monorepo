@@ -1,0 +1,1027 @@
+{
+  "id": "post-52eb53af",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "henry.gtx",
+    "locationName": null,
+    "hashtags": [
+      "geheimtipp",
+      "berlin"
+    ],
+    "taggedHandles": [],
+    "text": "12€ Wolt!? Code: GTX 💙 #werbung Statt 18€ nur 6€ zahlen in der Wolt App Code: GTX (ab 18€ Mindestbestellwert, nur für Neukunden) 📍 Samosa Club (im Zora Supermarkt), Kottbusser Damm 93, 10967 Berlin 📍 Börk's Deli (Pastrami), Dunckerstraße 23, 10437 Berlin 📍 Ippai no Ramen, Gabriel-Max-Straße 2, 10245 Berlin 📍 Rüyam Gemüse Kebab, Hauptstraße 36, 10827 Berlin 📍 Mubis Cookies, Simon-Dach-Straße 13, 10245 Berlin Alles selbst gekauft #henrygtx #Geheimtipp #berlin",
+    "subtitles": "solange in Berlin essen bis etwas nicht schmeckt los geht's\nBerlin ist bekannter für die zweitschönste Stadt in Berlin\nzu sein\ndeswegen hab ich Mir dieses harmosa für nur 2 Euro gekauft\nich hab nicht so viel erwartet\naber es war eine der besten Sachen in meinem Leben\n10 von 10 aber dieses pastrami Sandwich hat fast\n40 Euro gekostet\naber es wird mit dieser kleinen Schale Gurken serviert\ndeswegen hab ich sehr viel erwartet\naber als ich endlich probiert habe es war nicht schlecht\naber ich würd es nicht wiederholen\n8 von 10 deswegen sind wir zum einzigen japanischen\nramenladen bei dem du\ngenau wie in Japan dein Essen an einem\nAutomaten bestellen kannst\naber es wird noch besser\nweil du kriegst dein Essen durch einen\nVorhang und musst mit niemandem reden\nund der Autistin Mir hat sich so gefreut\naber als ich probiert habe eine der besten in Deutschland\n9 von 10 also sind wir zu dem Laden was jeder Berliner sagt\nder beste Döner der Stadt ist\ner nennt sich ryam und nicht nur der Name ist wunderschön\nauch der Döner sieht riesig Aus\naber als ich ihn zusammengedrückt habe hab ich gemerkt\ner ist gar nicht riesig\nich habe trotzdem probiert\nauch wenn ich kein Fleisch rausgeschmeckt habe\nwar es lecker\n8 von 10 aber es gibt einen Laden\nüber den redet gerade ganz Deutschland\nweil sie verkaufen Softeis mit heißem Keksteig\nso eine geisteskranke Idee\naber bevor ich probiert habe\nist das ganze Softeis geschmolzen\ndeswegen nur eine6 von 10",
+    "subtitlesLanguage": "deu-DE",
+    "id": "52eb53af-a6b2-4eb2-8054-ef8d9e905a21",
+    "externalId": "7693866956599938326",
+    "url": "https://www.tiktok.com/@henry.gtx/video/7693866956599938326",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-07T10:13:29.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:24:31.025Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Samosa Club",
+        "locationHint": "im Zora Supermarkt, Kottbusser Damm 93",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "adeee97b-c30a-4101-9d6e-3282a65f40a6",
+          "brandName": "Samosa Club Berlin",
+          "venueId": "697cb384-c9e0-4a2e-9ad6-27cbcca59972",
+          "venueName": "Samosa Club Berlin"
+        }
+      },
+      {
+        "venueName": "Börk's Deli",
+        "locationHint": "Dunckerstraße 23",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ee9d7c3d-3be3-424c-a4fe-b2e6858b7d06",
+          "brandName": "Börk's Deli",
+          "venueId": "61d55837-7a81-47ca-b15b-1f07639c381f",
+          "venueName": "Börk's Deli"
+        }
+      },
+      {
+        "venueName": "Ippai no Ramen",
+        "locationHint": "Gabriel-Max-Straße 2",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f6ca4f19-61a8-43b7-ac9f-966869366d6a",
+          "brandName": "IPPAI NO RAMEN 一杯のラーメン",
+          "venueId": "9de5490d-8217-4e07-9b6a-863672db25b4",
+          "venueName": "IPPAI NO RAMEN 一杯のラーメン"
+        }
+      },
+      {
+        "venueName": "Rüyam Gemüse Kebab",
+        "locationHint": "Hauptstraße 36",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+          "venueName": "Rüyam Gemüse Kebab"
+        }
+      },
+      {
+        "venueName": "Mubis Cookies",
+        "locationHint": "Simon-Dach-Straße 13",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "71bc0dad-b847-45d8-9ce2-bc306b7f9929",
+          "brandName": "Mubis Cookies",
+          "venueId": "b0e57e82-4dd8-42db-ac39-02e4c3ce9aa8",
+          "venueName": "Mubis Cookies"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the samosa cost 2 euros",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price",
+        "foods": [
+          "Samosas"
+        ],
+        "amount": 2,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the samosa was one of the best things in the creator's life",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Samosas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pastrami sandwich cost almost 40 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "pastrami sandwich"
+        ],
+        "amount": 40,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pastrami sandwich came with a small bowl of pickles",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [
+          "pastrami sandwich",
+          "pickles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pastrami sandwich was not bad",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "pastrami sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pastrami sandwich was not worth repeating",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [
+          "pastrami sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "you order at a machine",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "you get food through a curtain",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the ramen was one of the best in Germany",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "ramen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "many Berliners say it is the best döner in the city",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the döner looked huge",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the döner was tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the place sells soft serve with hot cookie dough",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "soft serve",
+          "cookie dough"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the soft serve melted before it was tried",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [
+          "soft serve"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Wolt code GTX gives 12€ off",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 12,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "with the code GTX, 18€ becomes 6€",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 6,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Wolt offer is for new customers only",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Wolt offer has an 18€ minimum order",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 18,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:40:24.527Z",
+    "usage": {
+      "inputTokens": 23575,
+      "outputTokens": 9120,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Sponsored Wolt post (#werbung); the Wolt code is kept as an optional subject-none deal since Wolt is not a venue. Hard calls: scores 'X von 10' treated as verdicts, the transcript's misspelled 'harmosa' kept as the quoted food, and the sarcastic 'fast 40 Euro' read as a negative price judgement.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Samosa Club",
+        "locationHint": "im Zora Supermarkt, Kottbusser Damm 93, 10967",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "adeee97b-c30a-4101-9d6e-3282a65f40a6",
+          "brandName": "Samosa Club Berlin",
+          "venueId": "697cb384-c9e0-4a2e-9ad6-27cbcca59972",
+          "venueName": "Samosa Club Berlin",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Börk's Deli",
+        "locationHint": "Dunckerstraße 23, 10437",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ee9d7c3d-3be3-424c-a4fe-b2e6858b7d06",
+          "brandName": "Börk's Deli",
+          "venueId": "61d55837-7a81-47ca-b15b-1f07639c381f",
+          "venueName": "Börk's Deli",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Ippai no Ramen",
+        "locationHint": "Gabriel-Max-Straße 2, 10245",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f6ca4f19-61a8-43b7-ac9f-966869366d6a",
+          "brandName": "IPPAI NO RAMEN 一杯のラーメン",
+          "venueId": "9de5490d-8217-4e07-9b6a-863672db25b4",
+          "venueName": "IPPAI NO RAMEN 一杯のラーメン",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Rüyam Gemüse Kebab",
+        "locationHint": "Hauptstraße 36, 10827",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+          "venueName": "Rüyam Gemüse Kebab",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Mubis Cookies",
+        "locationHint": "Simon-Dach-Straße 13, 10245",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "71bc0dad-b847-45d8-9ce2-bc306b7f9929",
+          "brandName": "Mubis Cookies",
+          "venueId": "b0e57e82-4dd8-42db-ac39-02e4c3ce9aa8",
+          "venueName": "Mubis Cookies",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Wolt app code GTX: pay only 6€ instead of 18€ (minimum order 18€, new customers only)",
+        "quote": "Statt 18€ nur 6€ zahlen in der Wolt App Code: GTX",
+        "sentiment": "positive",
+        "aspect": "price",
+        "foods": [],
+        "amount": 6,
+        "unit": "money",
+        "kind": "deal",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the samosa cost only 2 euros",
+        "quote": "dieses harmosa für nur 2 Euro",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "harmosa"
+        ],
+        "amount": 2,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the samosa was one of the best things in his life",
+        "quote": "es war eine der besten Sachen in meinem Leben",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "samosa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Samosa Club rated 10 out of 10",
+        "quote": "10 von 10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pastrami Sandwich cost almost 40 euros",
+        "quote": "dieses pastrami Sandwich hat fast\n40 Euro gekostet",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [
+          "pastrami Sandwich"
+        ],
+        "amount": 40,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pastrami Sandwich is served with a small bowl of Gurken",
+        "quote": "es wird mit dieser kleinen Schale Gurken serviert",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Gurken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "portion_size"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pastrami Sandwich was not bad",
+        "quote": "es war nicht schlecht",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pastrami Sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "he would not order the pastrami Sandwich again",
+        "quote": "ich würd es nicht wiederholen",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [
+          "pastrami Sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Börk's Deli rated 8 out of 10",
+        "quote": "8 von 10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Ippai no Ramen is the only Japanese ramen shop where you order your food at a machine, just like in Japan",
+        "quote": "zum einzigen japanischen\nramenladen bei dem du\ngenau wie in Japan dein Essen an einem\nAutomaten bestellen kannst",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity",
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "at Ippai no Ramen you get your food through a curtain and don't have to talk to anyone",
+        "quote": "du kriegst dein Essen durch einen\nVorhang und musst mit niemandem reden",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the ramen is one of the best in Germany",
+        "quote": "eine der besten in Deutschland",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "ramen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Ippai no Ramen rated 9 out of 10",
+        "quote": "9 von 10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "every Berliner says Rüyam has the best Döner in the city",
+        "quote": "jeder Berliner sagt\nder beste Döner der Stadt ist",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the name Rüyam is beautiful",
+        "quote": "nicht nur der Name ist wunderschön",
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the Döner looks huge",
+        "quote": "der Döner sieht riesig Aus",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "squeezed together, the Döner is not huge at all",
+        "quote": "er ist gar nicht riesig",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "he could not taste any Fleisch in the Döner",
+        "quote": "ich kein Fleisch rausgeschmeckt habe",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the Döner was tasty",
+        "quote": "war es lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Rüyam rated 8 out of 10",
+        "quote": "8 von 10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "all of Germany is talking about Mubis Cookies right now",
+        "quote": "über den redet gerade ganz Deutschland",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Mubis Cookies sells Softeis with hot Keksteig",
+        "quote": "sie verkaufen Softeis mit heißem Keksteig",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Softeis",
+          "Keksteig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Softeis with hot Keksteig is an insane idea",
+        "quote": "so eine geisteskranke Idee",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the Softeis all melted before he could try it",
+        "quote": "ist das ganze Softeis geschmolzen",
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [
+          "Softeis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Mubis Cookies rated only 6 out of 10",
+        "quote": "nur eine6 von 10",
+        "sentiment": "mixed",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.235Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

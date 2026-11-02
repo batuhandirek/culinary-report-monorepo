@@ -1,0 +1,302 @@
+{
+  "id": "post-7853ecf5",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "annaguenther1",
+    "locationName": "Smack Burger",
+    "hashtags": [
+      "smackburger",
+      "berlinfood",
+      "burgerlove",
+      "berlinrestaurant",
+      "berlinburger"
+    ],
+    "taggedHandles": [
+      "smackburger_de"
+    ],
+    "text": "Anzeige / Ad*\nBei @smackburger_de war der Patty Melt mein absoluter Favorit - außen knusprig getoastet, innen saftig, käsig und voller Geschmack. Genau die richtige Kombi für alle, die es herzhaft lieben!\nIch kann ihn euch nur empfehlen - ein echter Geheimtipp unter den Burger-Varianten!\n\n#smackburger #berlinfood #burgerlove #berlinrestaurant #berlinburger",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "7853ecf5-7505-4c87-81dd-0563cb22fdf1",
+    "externalId": "ig_4018207159318979942",
+    "url": "https://www.instagram.com/p/DfDih89I6Vm/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-28T22:47:52.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:01:19.374Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Smack Burger",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ff5a1575-1109-4b91-a4fb-0144e15568ca",
+          "brandName": "Smack Burger",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "full of flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "crispy toasted outside, juicy inside",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cheesy and juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:41:44.977Z",
+    "usage": {
+      "inputTokens": 9710,
+      "outputTokens": 1923,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Marked 'Anzeige / Ad', so promotional. The recommendation targets a dish rather than the place as a whole, so opinion is primary with verdict also allowed; the 'Geheimtipp' line may be merged with it.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Smack Burger",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ff5a1575-1109-4b91-a4fb-0144e15568ca",
+          "brandName": "Smack Burger",
+          "venueId": null,
+          "venueName": null,
+          "note": "The tagged location just says Smack Burger and names no branch, so the branch is left open."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Patty Melt was my absolute favourite",
+        "quote": "war der Patty Melt mein absoluter Favorit",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Patty Melt is crispy toasted on the outside",
+        "quote": "außen knusprig getoastet",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Patty Melt is juicy on the inside",
+        "quote": "innen saftig",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Patty Melt is cheesy and full of flavour",
+        "quote": "käsig und voller Geschmack",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Patty Melt is the right combination for those who love hearty food",
+        "quote": "Genau die richtige Kombi für alle, die es herzhaft lieben!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author recommends the Patty Melt",
+        "quote": "Ich kann ihn euch nur empfehlen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Patty Melt is a real insider tip among the burger variants",
+        "quote": "ein echter Geheimtipp unter den Burger-Varianten",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Patty Melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.241Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.431Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

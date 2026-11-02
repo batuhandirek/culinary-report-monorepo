@@ -1,0 +1,110 @@
+{
+  "id": "review-0c8b6a9b",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "0c8b6a9b-8f1c-42af-88d9-7305aebf958d",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tkMmFFVkVlR3hOV1hKYWVuWjVNbk00U1RST2NuYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-29T17:40:09.613Z",
+    "stars": 4,
+    "text": "Immer wieder gerne, ein tolles Erlebnis.",
+    "textTranslated": "Always a pleasure, a great experience."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:04:14.094Z",
+    "claims": [
+      {
+        "text": "always a pleasure",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a great experience",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:43.727Z",
+    "usage": {
+      "inputTokens": 4931,
+      "outputTokens": 573,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Immer wieder gerne' signals returning (a verdict), not a change. 'Ein tolles Erlebnis' is an overall judgement with no specific aspect; it can be read as an opinion or as a verdict on the place as a whole.",
+    "claims": [
+      {
+        "text": "always happy to come back to Sphere Tim Raue",
+        "quote": "Immer wieder gerne",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the visit was a great experience",
+        "quote": "ein tolles Erlebnis",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.203Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.401Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

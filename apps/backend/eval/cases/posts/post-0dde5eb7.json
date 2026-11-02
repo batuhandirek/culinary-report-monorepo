@@ -1,0 +1,331 @@
+{
+  "id": "post-0dde5eb7",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "boccafelice_berlin",
+    "locationName": "Ristorante Bocca Felice",
+    "hashtags": [
+      "boccafelice",
+      "berlinfood",
+      "carne",
+      "italianrestaurant",
+      "berlinrestaurant"
+    ],
+    "taggedHandles": [
+      "boccafelice_berlin"
+    ],
+    "text": "Ein gutes Stück Fleisch, zart geschmolzener Käse und diese dunkle, aromatische Soße dazu … mehr braucht es kaum, um uns glücklich zu machen.\n\nBei Bocca Felice darf es auch mal etwas Besonderes sein. Schön angerichtet, mit Liebe zum Detail und natürlich mit ganz viel Geschmack. Ein Gericht für alle, die gutes Fleisch zu schätzen wissen und sich beim Essen gerne etwas gönnen.\n\n@boccafelice_berlin\n\n#boccafelice #berlinfood #carne #italianrestaurant #berlinrestaurant",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "0dde5eb7-7430-41c4-993b-0c9aab93ef41",
+    "externalId": "ig_4014315806148240443",
+    "url": "https://www.instagram.com/p/De1tvT5s6Q7/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Ristorante Bocca Felice Berlin-Mitte",
+    "postedAt": "2026-10-23T13:56:12.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:47.089Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Ristorante Bocca Felice",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "ee961f62-13b4-438c-aad5-3c8692f4565f",
+          "brandName": "Ristorante Bocca Felice Berlin-Mitte",
+          "venueId": "73fb7b2f-b236-454d-970c-01abec83c892",
+          "venueName": "Ristorante Bocca Felice Berlin-Mitte"
+        }
+      },
+      {
+        "venueName": "boccafelice_berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "ee961f62-13b4-438c-aad5-3c8692f4565f",
+          "brandName": "Ristorante Bocca Felice Berlin-Mitte",
+          "venueId": "73fb7b2f-b236-454d-970c-01abec83c892",
+          "venueName": "Ristorante Bocca Felice Berlin-Mitte"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the dish had meat, melted cheese, and a dark aromatic sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "meat",
+          "cheese",
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dish was special and beautifully presented",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "dish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food was made with love to detail and lots of flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meal was for people who appreciate good meat and want to treat themselves",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [
+          "meal",
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:57.084Z",
+    "usage": {
+      "inputTokens": 10002,
+      "outputTokens": 2037,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5901
+    },
+    "notes": "Own-account promotional post with no dish name; the opening line was split into meat, cheese and sauce claims, and the vague 'something special' and 'for meat lovers' lines are marked optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Ristorante Bocca Felice Berlin-Mitte",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ee961f62-13b4-438c-aad5-3c8692f4565f",
+          "brandName": "Ristorante Bocca Felice Berlin-Mitte",
+          "venueId": "73fb7b2f-b236-454d-970c-01abec83c892",
+          "venueName": "Ristorante Bocca Felice Berlin-Mitte",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the dish has a good piece of Fleisch",
+        "quote": "Ein gutes Stück Fleisch",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dish comes with tenderly melted Käse",
+        "quote": "zart geschmolzener Käse",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Käse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dish comes with a dark, aromatic Soße",
+        "quote": "diese dunkle, aromatische Soße",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Soße"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Bocca Felice the food can be something special",
+        "quote": "Bei Bocca Felice darf es auch mal etwas Besonderes sein",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dish is beautifully plated with attention to detail",
+        "quote": "Schön angerichtet, mit Liebe zum Detail",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dish has lots of flavour",
+        "quote": "mit ganz viel Geschmack",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dish is for everyone who appreciates good Fleisch and likes to treat themselves",
+        "quote": "Ein Gericht für alle, die gutes Fleisch zu schätzen wissen und sich beim Essen gerne etwas gönnen",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.224Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.420Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

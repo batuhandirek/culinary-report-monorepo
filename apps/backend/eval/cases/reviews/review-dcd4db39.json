@@ -1,0 +1,397 @@
+{
+  "id": "review-dcd4db39",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:long",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "dcd4db39-9839-4130-b6e1-9685b64676bb",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xab1MxaFdTbXRaVGs1bE9IQTRkVzFHUmpaRUxYYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Nhas City Chicken",
+    "venueId": "14f38160-dec4-438b-b067-43e7b1088587",
+    "brand": "Nhas City Chicken",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-05T23:51:37.381Z",
+    "stars": 5,
+    "text": "Wir sind mehrere Hundert Kilometer gefahren um das Chicken von Nhas zu probieren.\nDer Hype ist absolut berechtigt.\n\nGewartet haben wir ca. eine halbe Stunde in der Schlange(zu einer Stoßzeit) trotzdessen ging es eigentlich relativ schnell. Wir konnten an einem Terminal bestellen wodurch es einfacher ging.(nur für Kartenzahlung.)\n\nNachdem wir bestellt hatten war unser Menü bereits nach 5-10 Minuten fertig. Die Platzsituation ist nur ein wenig schlimm.\n\nTrotzdem kann ich sagen dass war das beste Hähnchen was ich jemals gegessen habe. Die garlic-Parmesan Pommes war der Oberkracher!!! Weiter so liebes Team;)",
+    "textTranslated": "We drove several hundred kilometers to try Nhas' chicken.\n\nThe hype is absolutely justified.\n\nWe waited about half an hour in line (during peak hours), but despite that, it actually went relatively quickly. We were able to order at a terminal, which made things easier (card payments only).\n\nAfter we ordered, our meal was ready in just 5-10 minutes. The seating situation was a bit awkward.\n\nNevertheless, I can say that it was the best chicken I've ever eaten. The garlic-parmesan fries were absolutely amazing!!! Keep up the great work, team! ;)"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:44:32.330Z",
+    "claims": [
+      {
+        "text": "we drove several hundred kilometers to try Nhas' chicken",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the hype is absolutely justified",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we waited about half an hour in line",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "it was during peak hours",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it went relatively quickly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we could order at a terminal",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "payment",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "card payments only",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "card_payment",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "our meal was ready in 5-10 minutes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 10,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the seating situation was a bit awkward",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was the best chicken I've ever eaten",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the garlic-parmesan fries were absolutely amazing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Garlic Parmesan Fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:19:16.955Z",
+    "usage": {
+      "inputTokens": 5830,
+      "outputTokens": 2780,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the half-hour queue reported matter-of-factly (neutral fact, negative allowed) vs the 'bereits' 5-10 minute food wait read as praise; the terminal ordering aspect has no exact key (service, with queue/amenities allowed).",
+    "claims": [
+      {
+        "text": "drove several hundred kilometers to try Nhas' Chicken",
+        "quote": "Wir sind mehrere Hundert Kilometer gefahren um das Chicken von Nhas zu probieren",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the hype about the place is absolutely justified",
+        "quote": "Der Hype ist absolut berechtigt.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "waited about half an hour in the queue at peak time",
+        "quote": "Gewartet haben wir ca. eine halbe Stunde in der Schlange(zu einer Stoßzeit)",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the queue nonetheless moved relatively quickly",
+        "quote": "trotzdessen ging es eigentlich relativ schnell",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "ordering at a terminal made it easier",
+        "quote": "Wir konnten an einem Terminal bestellen wodurch es einfacher ging.",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "queue",
+            "amenities"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the order terminal takes card payment only",
+        "quote": "nur für Kartenzahlung",
+        "sentiment": "neutral",
+        "aspect": "card_payment",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "payment"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the meal was ready just 5-10 minutes after ordering",
+        "quote": "Nachdem wir bestellt hatten war unser Menü bereits nach 5-10 Minuten fertig",
+        "sentiment": "positive",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 10,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the seating situation is a bit bad",
+        "quote": "Die Platzsituation ist nur ein wenig schlimm",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Hähnchen was the best chicken the reviewer has ever eaten",
+        "quote": "das beste Hähnchen was ich jemals gegessen habe",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the garlic-Parmesan Pommes were outstanding",
+        "quote": "Die garlic-Parmesan Pommes war der Oberkracher",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "garlic-Parmesan Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "keep up the good work, dear team",
+        "quote": "Weiter so liebes Team",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): The agent kept the plain fact of ordering at a terminal apart and gave the 'einfacher' part as a positive claim of its own."
+      },
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): The agent split this into a neutral fact and a separate opinion that ordering was easier, so both readings are covered."
+      },
+      {
+        "at": "2026-11-01T15:11:31.432Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.219Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

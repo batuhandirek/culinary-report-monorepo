@@ -1,0 +1,506 @@
+{
+  "id": "review-83cf47fa",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "83cf47fa-a5b2-40c5-b9ba-5041f984fc13",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25CQlJGQnJkR2hmZWxoNFRucGxiV2RXZW1wZlZXYxAB",
+    "platform": "google",
+    "language": "ko",
+    "venue": "soopoollim",
+    "venueId": "8b435154-adb1-4a82-8b86-06ebae6c3fb2",
+    "brand": "soopoollim",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-30T17:03:35.909Z",
+    "stars": 2,
+    "text": "현지화를 한 건지 한국인인 우리 입맛에는 맞지 않았음. 보쌈은 지방이 적어 퍽퍽하고 보쌈김치는 그 특유의 맛이 안 느껴지고 평범했음. 물회는… 물회인지 샐러드인지 모르겠음. 회 양이 너무 적음. 스레드에서 본 사진에는 오징어도 있던데 우리꺼에는 없었음. 제일 실망이었던 건 알밥. 언제부터 알밥이 차가운 메뉴었는지? 그냥 회덮밥에서 회 대신 알을 넣은 것 같았음. 우리가 아는 그 알밥이 아니라 포케볼 같음. 그리고 물회도 그렇고 알밥도 그렇고 묘하게 고수 비슷한 맛이 나던데.. 시소인가..? 암튼 다 못 먹고 남김.",
+    "textTranslated": "Whether it was localized or not, it didn't suit our Korean palates. The bossam was dry due to low fat content, and the bossam kimchi lacked that distinctive flavor and was just average. As for the mulhoe... I couldn't tell if it was mulhoe or a salad. The amount of raw fish was far too small. The photos I saw in the thread showed squid, but ours didn't have any. The biggest disappointment was the roe rice. Since when did roe rice become a cold dish? It seemed like they just put roe in a raw fish rice bowl instead of the fish. It wasn't the roe rice we know; it was more like a poke bowl. Also, both the mulhoe and the roe rice had a strange taste similar to cilantro... Was it shiso...? Anyway, we couldn't finish it and left some behind."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:53:36.809Z",
+    "claims": [
+      {
+        "text": "the bossam was dry",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "bossam"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bossam had low fat content",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "bossam"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bossam kimchi lacked that distinctive flavor",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "bossam kimchi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bossam kimchi was just average",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "bossam kimchi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the mulhoe was unclear",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "mulhoe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the raw fish amount was far too small",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "raw fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the photos in the thread showed squid",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "squid"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "ours didn't have any squid",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "squid"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the roe rice was the biggest disappointment",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "roe rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the roe rice was a cold dish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "temperature",
+        "foods": [
+          "roe rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they put roe in a raw fish rice bowl instead of the fish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "roe",
+          "raw fish rice bowl",
+          "fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it wasn't the roe rice we know",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "roe rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was more like a poke bowl",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the mulhoe had a strange taste similar to cilantro",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "mulhoe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the roe rice had a strange taste similar to cilantro",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "roe rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the taste was maybe shiso",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we couldn't finish it",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we left some behind",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:03.697Z",
+    "usage": {
+      "inputTokens": 5481,
+      "outputTokens": 3612,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the missing squid seen in Threads photos (treated as a missing item, not a change, since the photos are not the reviewer's earlier visit), and the many authenticity-vs-taste complaints; the 'like 회덮밥 with roe' claim may merge into the poke-bowl claim.",
+    "claims": [
+      {
+        "text": "possibly localized, the food did not suit our Korean palates",
+        "quote": "현지화를 한 건지 한국인인 우리 입맛에는 맞지 않았음",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 보쌈 was dry because it had little fat",
+        "quote": "보쌈은 지방이 적어 퍽퍽하고",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "보쌈"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 보쌈김치 lacked its distinctive flavour and was just average",
+        "quote": "보쌈김치는 그 특유의 맛이 안 느껴지고 평범했음",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "보쌈김치"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 물회 was more like a salad than 물회",
+        "quote": "물회인지 샐러드인지 모르겠음",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "물회"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 물회 had far too little 회",
+        "quote": "회 양이 너무 적음",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "물회",
+          "회"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "photos on Threads showed 오징어 in the 물회 but ours had none",
+        "quote": "스레드에서 본 사진에는 오징어도 있던데 우리꺼에는 없었음",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "오징어"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "availability"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the 알밥 was the biggest disappointment",
+        "quote": "제일 실망이었던 건 알밥",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "알밥"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 알밥 was served as a cold dish",
+        "quote": "언제부터 알밥이 차가운 메뉴었는지?",
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [
+          "알밥"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 알밥 seemed like 회덮밥 with 알 instead of 회",
+        "quote": "그냥 회덮밥에서 회 대신 알을 넣은 것 같았음",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "알밥",
+          "회덮밥",
+          "알",
+          "회"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 알밥 was not the 알밥 we know but like a 포케볼",
+        "quote": "우리가 아는 그 알밥이 아니라 포케볼 같음",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "알밥",
+          "포케볼"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the 물회 and the 알밥 had a strange 고수-like taste, maybe 시소",
+        "quote": "물회도 그렇고 알밥도 그렇고 묘하게 고수 비슷한 맛이 나던데",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "물회",
+          "알밥",
+          "고수"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "we could not finish the food and left some",
+        "quote": "다 못 먹고 남김",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

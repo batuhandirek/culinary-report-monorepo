@@ -1,0 +1,424 @@
+{
+  "id": "post-6577d6bd",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "teufelcheneiscafe",
+    "locationName": "Eiscafeteufelchen",
+    "hashtags": [
+      "eiscafeteufelchen",
+      "berlincafe",
+      "kaffeeliebe",
+      "cappuccinotime",
+      "espressolover"
+    ],
+    "taggedHandles": [],
+    "text": "☕✨ Was ist dein magischer Wachmacher heute? ✨☕\nUnsere Heiße Getränke-Karte ist da! Von einem starken Espresso-Shot bis hin zu einem cremigen Cappuccino – bei uns im Eisteufelchen wird jede Tasse mit Liebe zubereitet. 🥰\nWische nach links und entdecke unsere süße Auswahl:\n1️⃣ Tee verschiedene Sorten – Für die gemütlichen Momente 🌿\n2️⃣ Café Crema – Der goldene Klassiker ☕\n3️⃣ Americano – Stark und pur 💧\n4️⃣ Espresso – Der schnelle Energie-Kick ⚡\n5️⃣ Espresso Doppio – Doppelte Power für den Tag 🚀\n6️⃣ Espresso Macchiato – Klein, aber oho mit Milchschaum ☁️\n7️⃣ Cappuccino – Schaumig und cremig 🤎\n8️⃣ Milchkaffee – Kuschelige Kaffeeliebe in der großen Tasse 🥛\n9️⃣ Latte Macchiato – Das perfekte Dreischicht-Wunder ✨\n🔟 Heiße Schokolade – Eine süße Umarmung für die Seele 🍫\n💬 Verrate uns in den Kommentaren: Welches dieser 10 Getränke wählst du am liebsten, um in den Tag zu starten? 👇\n📍 Besuche uns und finde deinen Favoriten:\nPaulsborner Str. 94 \n\n#eiscafeteufelchen #berlincafe #kaffeeliebe #cappuccinotime #espressolover",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "6577d6bd-434c-44cd-a9d4-2b8d860caa61",
+    "externalId": "ig_4010374511220307774",
+    "url": "https://www.instagram.com/p/Dentl69kTc-/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-18T03:25:18.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:55:33.808Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Eiscafeteufelchen",
+        "locationHint": "Paulsborner Str. 94",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "d514e376-5f77-4ad7-8c9a-9afce6cee0b9",
+          "brandName": "Eisteufelchen",
+          "venueId": "183a3171-0692-41c8-af21-976cf79cf845",
+          "venueName": "Eisteufelchen"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "hot drinks menu with a wide selection",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "each cup prepared with love",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:40:57.126Z",
+    "usage": {
+      "inputTokens": 10304,
+      "outputTokens": 3941,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue's own promotional post; the caption's 'Eisteufelchen' is the tagged Eiscafeteufelchen. The hard calls were whether the hot drinks menu that 'ist da' is a new item or a plain fact, and whether each drink's marketing line is an opinion or a description; the engagement question is optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Eiscafeteufelchen",
+        "locationHint": "Paulsborner Str. 94",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "d514e376-5f77-4ad7-8c9a-9afce6cee0b9",
+          "brandName": "Eisteufelchen",
+          "venueId": "183a3171-0692-41c8-af21-976cf79cf845",
+          "venueName": "Eisteufelchen",
+          "note": "Two Eisteufelchen brands exist; the post's address Paulsborner Str. 94 matches the Charlottenburg one."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Eiscafeteufelchen's hot drinks menu is out",
+        "quote": "Unsere Heiße Getränke-Karte ist da!",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Every cup at Eiscafeteufelchen is prepared with love",
+        "quote": "jede Tasse mit Liebe zubereitet",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Eiscafeteufelchen offers various kinds of Tee, for cosy moments",
+        "quote": "Tee verschiedene Sorten",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Tee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Café Crema is the golden classic",
+        "quote": "Café Crema – Der goldene Klassiker",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Café Crema"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Americano is strong and pure",
+        "quote": "Americano – Stark und pur",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Americano"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Espresso is the quick energy kick",
+        "quote": "Espresso – Der schnelle Energie-Kick",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Espresso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Espresso Doppio gives double power for the day",
+        "quote": "Espresso Doppio – Doppelte Power für den Tag",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Espresso Doppio"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Espresso Macchiato is small but mighty, with milk foam",
+        "quote": "Espresso Macchiato – Klein, aber oho mit Milchschaum",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Espresso Macchiato",
+          "Milchschaum"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Cappuccino is foamy and creamy",
+        "quote": "Cappuccino – Schaumig und cremig",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Cappuccino"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Milchkaffee is cosy coffee love in a big cup",
+        "quote": "Milchkaffee – Kuschelige Kaffeeliebe in der großen Tasse",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Milchkaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "portion_size",
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Latte Macchiato is the perfect three-layer wonder",
+        "quote": "Latte Macchiato – Das perfekte Dreischicht-Wunder",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Latte Macchiato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Heiße Schokolade is a sweet hug for the soul",
+        "quote": "Heiße Schokolade – Eine süße Umarmung für die Seele",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Heiße Schokolade"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Eiscafeteufelchen asks followers which of its 10 drinks they prefer to start the day",
+        "quote": "Welches dieser 10 Getränke wählst du am liebsten, um in den Tag zu starten?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Eiscafeteufelchen is at Paulsborner Str. 94",
+        "quote": "Paulsborner Str. 94",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.238Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.430Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

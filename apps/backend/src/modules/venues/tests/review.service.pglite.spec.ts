@@ -2,10 +2,12 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { StatementService } from 'src/modules/statements/services/statement.service.js';
+import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReviewAnalysisAgent } from '../agents/review-analysis.agent.js';
+import { ReviewClaimsAgent } from '../agents/review-claims.agent.js';
 import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
@@ -23,8 +25,14 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 			providers: [
 				ReviewService,
 				VenueService,
+				StatementService,
 				{ provide: ApifyService, useValue: { runActor } },
-				{ provide: ReviewAnalysisAgent, useValue: { generate } },
+				{ provide: ReviewClaimsAgent, useValue: { generate } },
+				// Agent B is not under test here: the claims stay without parts
+				{
+					provide: StatementPartsService,
+					useValue: { read: async () => ({ read: 0, tokens: 0 }) },
+				},
 			],
 		});
 		service = harness.moduleRef.get(ReviewService);
@@ -37,9 +45,26 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 
 	it("saves the month's reviews and the later ones, and snapshots each venue's all-time rating from the items", async () => {
 		const em = harness.orm.em;
-		const a = em.create(Venue, { city: testCity(em), placeId: 'pa', name: 'A', rating: 4.0, reviewsCount: 100 });
-		const b = em.create(Venue, { city: testCity(em), placeId: 'pb', name: 'B', rating: 4.5, reviewsCount: 50 });
-		const quiet = em.create(Venue, { city: testCity(em), placeId: 'pq', name: 'Quiet', rating: 3.9 });
+		const a = em.create(Venue, {
+			city: testCity(em),
+			placeId: 'pa',
+			name: 'A',
+			rating: 4.0,
+			reviewsCount: 100,
+		});
+		const b = em.create(Venue, {
+			city: testCity(em),
+			placeId: 'pb',
+			name: 'B',
+			rating: 4.5,
+			reviewsCount: 50,
+		});
+		const quiet = em.create(Venue, {
+			city: testCity(em),
+			placeId: 'pq',
+			name: 'Quiet',
+			rating: 3.9,
+		});
 		await em.flush();
 
 		const item = (placeId: string, reviewId: string, date: string, totalScore: number) => ({
@@ -86,20 +111,40 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		const a = em.create(Venue, { city: testCity(em), placeId: 'pc', name: 'C' });
 		await em.flush();
 		runActor.mockResolvedValueOnce([
-			{ placeId: 'pc', reviewId: 'r-aug', publishedAtDate: '2026-08-12T10:00:00Z', totalScore: 4.2, reviewsCount: 130 },
+			{
+				placeId: 'pc',
+				reviewId: 'r-aug',
+				publishedAtDate: '2026-08-12T10:00:00Z',
+				totalScore: 4.2,
+				reviewsCount: 130,
+			},
 		]);
-		await service.scrapeMonth('2026-09', [a.id], 5, new Date('2026-10-18T09:00:00Z'), '2026-08-01');
-		expect((runActor.mock.calls.at(-1)?.[1] as { reviewsStartDate: string }).reviewsStartDate).toBe('2026-08-01');
+		await service.scrapeMonth(
+			'2026-09',
+			[a.id],
+			5,
+			new Date('2026-10-18T09:00:00Z'),
+			'2026-08-01',
+		);
+		expect(
+			(runActor.mock.calls.at(-1)?.[1] as { reviewsStartDate: string }).reviewsStartDate,
+		).toBe('2026-08-01');
 		expect(await em.count(Review, { reviewId: 'r-aug' })).toBe(1);
 	});
 
 	it('sends the places in the order given, so a capped run covers the first ones', async () => {
 		const em = harness.orm.em;
-		const venues = ['pz', 'py', 'px'].map(placeId => em.create(Venue, { city: testCity(em), placeId, name: placeId }));
+		const venues = ['pz', 'py', 'px'].map(placeId =>
+			em.create(Venue, { city: testCity(em), placeId, name: placeId }),
+		);
 		await em.flush();
 		runActor.mockResolvedValueOnce([]);
 		await service.scrapeMonth('2026-09', [venues[2].id, venues[0].id, venues[1].id], 5);
-		expect((runActor.mock.calls.at(-1)?.[1] as { placeIds: string[] }).placeIds).toEqual(['px', 'pz', 'py']);
+		expect((runActor.mock.calls.at(-1)?.[1] as { placeIds: string[] }).placeIds).toEqual([
+			'px',
+			'pz',
+			'py',
+		]);
 	});
 
 	it('tells the venues with a Google review from before the month: TripAdvisor and the month itself are no history', async () => {
@@ -107,8 +152,16 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		const [old, recent, tourist, none] = ['h-old', 'h-recent', 'h-ta', 'h-none'].map(placeId =>
 			em.create(Venue, { city: testCity(em), placeId, name: placeId }),
 		);
-		em.create(Review, { venue: old, reviewId: 'h1', publishedAt: new Date('2026-08-31T21:00:00Z') });
-		em.create(Review, { venue: recent, reviewId: 'h2', publishedAt: new Date('2026-09-01T00:00:00Z') });
+		em.create(Review, {
+			venue: old,
+			reviewId: 'h1',
+			publishedAt: new Date('2026-08-31T21:00:00Z'),
+		});
+		em.create(Review, {
+			venue: recent,
+			reviewId: 'h2',
+			publishedAt: new Date('2026-09-01T00:00:00Z'),
+		});
 		em.create(Review, {
 			venue: tourist,
 			reviewId: 'ta_h3',
@@ -125,7 +178,13 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		const em = harness.orm.em;
 		const a = await em.findOneOrFail(Venue, { placeId: 'pa' });
 		runActor.mockResolvedValueOnce([
-			{ placeId: 'pa', reviewId: 'r1', publishedAtDate: '2026-09-03T10:00:00Z', totalScore: 4.3, reviewsCount: 131 },
+			{
+				placeId: 'pa',
+				reviewId: 'r1',
+				publishedAtDate: '2026-09-03T10:00:00Z',
+				totalScore: 4.3,
+				reviewsCount: 131,
+			},
 		]);
 		await service.scrapeMonth('2026-09', [a.id], 5, new Date('2026-10-02T09:00:00Z'));
 		em.clear();
@@ -135,22 +194,31 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 
 	it('keeps the batches analysed before the LLM account ran out, and fails', async () => {
 		const em = harness.orm.em;
-		const venue = em.create(Venue, { city: testCity(em), placeId: 'p-llm', name: 'Out of credits' });
+		const venue = em.create(Venue, {
+			city: testCity(em),
+			placeId: 'p-llm',
+			name: 'Out of credits',
+		});
 		await em.flush();
 		for (let i = 0; i < 12; i++) {
-			em.create(Review, { venue, reviewId: `llm-${i}`, publishedAt: new Date('2026-07-10T10:00:00Z'), stars: 4, text: `Review ${i}` });
+			em.create(Review, {
+				venue,
+				reviewId: `llm-${i}`,
+				publishedAt: new Date('2026-07-10T10:00:00Z'),
+				stars: 4,
+				text: `Review ${i}`,
+			});
 		}
 		await em.flush();
-		const noCredits = new Error('You have no credits remaining. Add credits to continue using the API');
-		generate.mockImplementation(async prompt => {
-			const { reviews } = JSON.parse(prompt) as { reviews: { reviewId: string }[] };
-			// The first batch (10) goes through; the second hits the empty account
-			if (reviews.length !== 10) throw noCredits;
-			return {
-				object: {
-					reviews: reviews.map(r => ({ reviewId: r.reviewId, sentiment: 'positive', praise: [], complaints: [], dishes: [], changes: [] })),
-				},
-			};
+		const noCredits = new Error(
+			'You have no credits remaining. Add credits to continue using the API',
+		);
+		// One review a call: the first ten go through, the eleventh hits the empty account
+		let calls = 0;
+		generate.mockImplementation(async () => {
+			calls++;
+			if (calls > 10) throw noCredits;
+			return { object: { claims: [] } };
 		});
 
 		await expect(service.analyseMonth('2026-07')).rejects.toBe(noCredits);

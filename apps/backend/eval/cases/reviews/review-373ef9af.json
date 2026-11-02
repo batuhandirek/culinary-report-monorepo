@@ -1,0 +1,115 @@
+{
+  "id": "review-373ef9af",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "373ef9af-c92a-45ff-a6b8-7d9b192b784b",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21vMk5WVjBZV3B5ZVdSUFRWUlRNMWROYzJsZlpsRRAB",
+    "platform": "google",
+    "language": "hu",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-21T16:23:00.104Z",
+    "stars": 5,
+    "text": "Hangulatos és jó kis esti mulatság.",
+    "textTranslated": "A cozy and fun evening."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:36:17.119Z",
+    "claims": [
+      {
+        "text": "a cozy evening",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a fun evening",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:20.442Z",
+    "usage": {
+      "inputTokens": 4932,
+      "outputTokens": 667,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hungarian review with one short sentence. 'Hangulatos' (cozy) and 'jó kis esti mulatság' (a fun evening) are split into two claims. The second is optional because it may fairly stay merged with the first. The fun-evening claim reads as general vibe or a light overall verdict.",
+    "claims": [
+      {
+        "text": "the place is cozy",
+        "quote": "Hangulatos",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a nice, fun evening out",
+        "quote": "jó kis esti mulatság",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

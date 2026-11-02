@@ -1,21 +1,30 @@
 import type { FilterQuery, ObjectQuery } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, OnModuleInit } from '@nestjs/common';
 
 import _ from 'lodash';
 
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
-import { FeedbackService } from 'src/modules/feedback/services/feedback.service.js';
+import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { REVIEWS_QUOTED_AT } from 'src/modules/statements/constants/statements-shipped.constant.js';
+import type { Statement } from 'src/modules/statements/entities/statement.entity.js';
+import { StatementService } from 'src/modules/statements/services/statement.service.js';
+import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import { judgingSql } from 'src/modules/statements/util/statement-sql.js';
 import { runPool } from 'src/shared/util/pool.js';
 
-import { ReviewAnalysisAgent } from '../agents/review-analysis.agent.js';
+import { ReviewClaimsAgent } from '../agents/review-claims.agent.js';
 import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
-import type { FeedbackTopic } from '../interfaces/feedback.interface.js';
 import { ReviewAlertEvent } from '../persisted-events/review-alert.persisted-event.js';
 import { monthRange } from '../util/month.js';
+import { reviewClaimsInput } from '../util/review-claims-input.js';
+
+/** Reviews read side by side, one a call */
+const REVIEW_CONCURRENCY = 10;
 
 import { VenueService } from './venue.service.js';
 
@@ -26,8 +35,8 @@ export interface ReviewListFilters {
 	/** `YYYY-MM` */
 	month?: string;
 	stars?: number;
-	/** A topic the review praised or criticised */
-	topic?: FeedbackTopic;
+	/** An aspect root key (`food`, `service`, `wait`, …): reviews with a claim under it */
+	topic?: string;
 	/** Answered by the owner on Google, or marked answered in the portal */
 	answered?: boolean;
 	/** The review's original language, e.g. `de` */
@@ -42,11 +51,20 @@ export interface ReviewListFilters {
 export interface ReviewFacets {
 	months: { month: string; count: number }[];
 	languages: { language: string; count: number }[];
-	topics: { topic: FeedbackTopic; count: number }[];
+	/** Aspect root keys, with how many reviews make a claim under each */
+	topics: { topic: string; count: number }[];
 	/** Only the platforms the venue has reviews on */
 	platforms: { platform: ReviewPlatformEnum; count: number }[];
 	needsReply: number;
 }
+
+// A statement's aspect (`statements s`): the aspect row `a` and its parent `root` (none for a root)
+const ASPECT_JOIN_SQL = `join statement_parts p on p.statement_id = s.id and p.role = 'aspect'
+	join topics a on a.id = p.topic_id
+	left join topics root on root.id = a.parent_id`;
+const ROOT_KEY_SQL = 'coalesce(root.key, a.key)';
+// A claim that praises or complains: text, no change, no question (a dish-only statement has no text)
+const CLAIM_SQL = `s.text is not null and ${judgingSql('s')}`;
 
 // A review the owner should answer: the alert's and the portal's "needs a reply"
 export const CRITICAL_REVIEW_MAX_STARS = 3;
@@ -54,9 +72,10 @@ const NEEDS_REPLY_SQL = `(r.text is not null or r.text_translated is not null)
 	and r.stars <= ${CRITICAL_REVIEW_MAX_STARS}
 	and r.owner_response is null and r.marked_replied_at is null`;
 
-// Reviews sent to the LLM in one call: few, as a mini model reads each one less closely in a
-// long batch
-const ANALYSIS_BATCH_SIZE = 10;
+/** A review the agents can read: it has text (the original or a translation) */
+const WITH_TEXT = { $or: [{ text: { $ne: null } }, { textTranslated: { $ne: null } }] };
+// Reviews a daily-backlog batch of the re-read takes (~50 agent calls)
+const REREAD_BATCH_REVIEWS = 500;
 
 /** One item of `compass/Google-Maps-Reviews-Scraper`. */
 interface GoogleReviewItem {
@@ -76,17 +95,36 @@ interface GoogleReviewItem {
 }
 
 @Injectable()
-export class ReviewService {
+export class ReviewService implements OnModuleInit {
 	private readonly logger = new Logger(ReviewService.name);
 
 	constructor(
 		private readonly em: EntityManager,
 		private readonly apifyService: ApifyService,
-		private readonly reviewAnalysisAgent: ReviewAnalysisAgent,
+		private readonly reviewClaimsAgent: ReviewClaimsAgent,
 		private readonly venueService: VenueService,
 		private readonly pgBossService: PgBossService,
-		private readonly feedbackService: FeedbackService,
+		private readonly statementService: StatementService,
+		private readonly statementPartsService: StatementPartsService,
+		private readonly llmBacklogRegistry: LlmBacklogRegistry,
 	) {}
+
+	/** Reviews the old agents read (before statements shipped) are read again by A and B, a little each night */
+	onModuleInit() {
+		this.llmBacklogRegistry.register({
+			key: 'reread-reviews',
+			label: 'Re-read reviews as claims',
+			priority: 40,
+			remaining: () => this.countToReread(REVIEWS_QUOTED_AT),
+			runBatch: async () => {
+				const res = await this.reread({
+					before: REVIEWS_QUOTED_AT,
+					limit: REREAD_BATCH_REVIEWS,
+				});
+				return { done: res.analysed, tokens: res.tokens };
+			},
+		});
+	}
 
 	/**
 	 * Pulls one month's Google reviews of these venues. The actor only takes a start date, so
@@ -272,75 +310,96 @@ export class ReviewService {
 	/** Topics, dishes and noticed changes for the month's reviews that have none yet. */
 	async analyseMonth(month: string): Promise<number> {
 		const { start, end } = monthRange(month);
-		return this.analyse({ publishedAt: { $gte: start, $lt: end } });
+		return (await this.analyse({ analysedAt: null, publishedAt: { $gte: start, $lt: end } }))
+			.analysed;
+	}
+
+	/** Reviews with text analysed before `before`: what the `reread-reviews` backlog still has to read */
+	countToReread(before: Date): Promise<number> {
+		return this.em.count(Review, {
+			analysedAt: { $lt: before },
+			...WITH_TEXT,
+		} as FilterQuery<Review>);
+	}
+
+	/**
+	 * Reads up to `limit` reviews analysed before `before` again (newest first), replacing their
+	 * statements and restamping `analysedAt`: the `reread-reviews` backlog, after a prompt change.
+	 */
+	reread(opts: { before: Date; limit: number }): Promise<{ analysed: number; tokens: number }> {
+		return this.analyse({ analysedAt: { $lt: opts.before } }, { limit: opts.limit });
 	}
 
 	/** The same for these venues' reviews published since `since` (the weekly watch). */
 	async analyseRecent(venueIds: string[], since: Date): Promise<number> {
 		if (venueIds.length === 0) return 0;
-		return this.analyse({ venue: { $in: venueIds }, publishedAt: { $gte: since } });
+		return (
+			await this.analyse({
+				analysedAt: null,
+				venue: { $in: venueIds },
+				publishedAt: { $gte: since },
+			})
+		).analysed;
 	}
 
-	private async analyse(where: ObjectQuery<Review>): Promise<number> {
+	/**
+	 * Agent A over the reviews with text `where` picks (the callers say whether unanalysed or a
+	 * window of analysed ones; `limit` takes the newest first), their statements replaced, then
+	 * agent B over the new claims.
+	 */
+	private async analyse(
+		where: ObjectQuery<Review>,
+		opts: { limit?: number } = {},
+	): Promise<{ analysed: number; tokens: number }> {
 		const reviews = await this.em.find(
 			Review,
+			{ ...where, ...WITH_TEXT } as FilterQuery<Review>,
+			// Its statements too: re-analysing a review replaces them
 			{
-				...where,
-				analysedAt: null,
-				$or: [{ text: { $ne: null } }, { textTranslated: { $ne: null } }],
-			} as FilterQuery<Review>,
-			// Its feedback too: re-analysing a review replaces its rows
-			{ populate: ['venue', 'feedback'] },
+				populate: ['venue', 'statements'],
+				...(opts.limit && {
+					limit: opts.limit,
+					orderBy: { publishedAt: 'desc', id: 'asc' },
+				}),
+			},
 		);
-		const batches = Object.values(_.groupBy(reviews, r => r.venue.id)).flatMap(group =>
-			_.chunk(group, ANALYSIS_BATCH_SIZE),
-		);
-		const topics = reviews.length ? await this.feedbackService.dishTopics() : undefined;
-		const legend = topics?.index.aspectLegend() ?? '';
-
 		let analysed = 0;
+		let tokens = 0;
+		const created: Statement[] = [];
 		// A provider failure (no credits) stops the pool: keep what was finished before it
 		try {
+			// One review a call: a packed call drops reviews and mixes them up
 			await runPool(
-				batches,
-				5,
-				async batch => {
-					const res = await this.reviewAnalysisAgent.generate(
-						JSON.stringify({
-							venue: batch[0].venue.name,
-							reviews: batch.map(r => ({
-								reviewId: r.reviewId,
-								stars: r.stars,
-								text: r.textTranslated || r.text,
-							})),
+				reviews,
+				REVIEW_CONCURRENCY,
+				async review => {
+					const res = await this.reviewClaimsAgent.generate(
+						reviewClaimsInput(review.venue.name, {
+							reviewId: review.reviewId,
+							stars: review.stars ?? null,
+							text: review.text ?? null,
+							textTranslated: review.textTranslated ?? null,
 						}),
-						{ legend },
 					);
-					const byId = new Map(batch.map(r => [r.reviewId, r]));
-					for (const result of res.object.reviews) {
-						const review = byId.get(result.reviewId);
-						if (!review) continue;
-						review.sentiment = result.sentiment;
-						// What it says, as rows, flushed with the review
-						// Its noticed changes are rows too (`change`)
-						this.feedbackService.replaceFor(review, result, {
-							asked: true,
-							topics: topics!,
-						});
-						review.analysedAt = new Date();
-						analysed++;
-					}
+					tokens += res.usage?.totalTokens ?? 0;
+					// What it says, one claim per row, flushed with the review
+					created.push(
+						...this.statementService.replaceForReview(review, res.object.claims),
+					);
+					review.analysedAt = new Date();
+					analysed++;
 				},
-				(batch, e) =>
-					this.logger.warn(`Review batch of ${batch[0].venue.name} failed: ${e.message}`),
+				(review, e) => this.logger.warn(`Review ${review.reviewId} failed: ${e.message}`),
 			);
 		} catch (e) {
 			await this.em.flush();
 			throw e;
 		}
-		// One flush at the end: the batches run side by side on this entity manager
+		// One flush at the end: the reviews are read side by side on this entity manager
 		await this.em.flush();
-		return analysed;
+		// Agent B over the new claims in the same step; what it misses, the `statement-parts` backlog reads
+		const parts = await this.statementPartsService.read({ ids: created.map(s => s.id) });
+		return { analysed, tokens: tokens + parts.tokens };
 	}
 
 	/**
@@ -395,9 +454,10 @@ export class ReviewService {
 			params.push(filters.stars);
 		}
 		if (filters.topic) {
-			// Praised or criticised: any point of the topic
+			// Praised, criticised or noted: any claim under the root
 			where.push(
-				'exists (select 1 from feedback_points f where f.review_id = r.id and f.topic = ? and f.detail is not null and not f.change)',
+				`exists (select 1 from statements s ${ASPECT_JOIN_SQL}
+					where s.review_id = r.id and ${CLAIM_SQL} and ${ROOT_KEY_SQL} = ?)`,
 			);
 			params.push(filters.topic);
 		}
@@ -438,7 +498,7 @@ export class ReviewService {
 		const reviews = await this.em.find(
 			Review,
 			{ id: { $in: rows.map(r => r.id) } },
-			{ populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'] },
+			{ populate: [...STATEMENT_POPULATE] },
 		);
 		const byId = new Map(reviews.map(r => [r.id, r]));
 		return { items: rows.map(r => byId.get(r.id)!), total: rows[0].total };
@@ -460,10 +520,12 @@ export class ReviewService {
 				where ${venueIn} and language is not null group by 1 order by 2 desc, 1`,
 				ids,
 			),
+			// Reviews, not claims: a review with two claims under one root counts once
 			conn.execute(
-				`select f.topic, count(distinct r.id)::int as count from reviews r
-					join feedback_points f on f.review_id = r.id and f.detail is not null and not f.change
-				where r.${venueIn} and f.topic is not null
+				`select ${ROOT_KEY_SQL} as topic, count(distinct r.id)::int as count from reviews r
+					join statements s on s.review_id = r.id and ${CLAIM_SQL}
+					${ASPECT_JOIN_SQL}
+				where r.${venueIn}
 				group by 1 order by 2 desc, 1`,
 				ids,
 			),
@@ -493,7 +555,7 @@ export class ReviewService {
 		const review = await this.em.findOne(
 			Review,
 			{ id, venue: { $in: [venueIds].flat() } },
-			{ populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'] },
+			{ populate: [...STATEMENT_POPULATE] },
 		);
 		if (!review) throw new NotFoundException();
 		review.markedRepliedAt = replied ? (review.markedRepliedAt ?? new Date()) : null;

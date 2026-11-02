@@ -1,6 +1,6 @@
 import type { MonthContext } from 'src/modules/cities/util/month-context.js';
+import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
 import type { SearchDelta } from 'src/modules/trends/util/search-interest.js';
-import type { FeedbackSentiment, FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import type { ReviewsDistribution } from 'src/modules/venues/interfaces/venue-details.interface.js';
 
 import type {
@@ -19,14 +19,15 @@ import type {
 } from './report-signals.interface.js';
 
 /**
- * A praise or complaint point as a report keeps it: the report's own copy, built from the feedback
- * rows at build time, so a stored report never moves with them.
+ * A claim as a report keeps it: the report's own copy, built from the source's statements at
+ * build time, so a stored report never moves with them.
  */
-export interface ReportFeedbackPoint {
-	/** The aspect's root key */
-	topic: FeedbackTopic;
-	/** The aspect's key (`ReportData.aspects` names it); absent while unfiled */
+export interface ReportClaim {
+	/** The aspect's root key; `other` for a claim about no aspect */
+	topic: string;
+	/** The aspect's key (`ReportData.aspects` names it); absent for a claim about no aspect */
 	theme?: string;
+	/** The claim, as the statement's text */
 	detail: string;
 }
 
@@ -43,10 +44,10 @@ export interface ReportAspect {
 	root: string;
 }
 
-/** A dish a post names, with how it came across, as a report keeps it */
+/** A dish or drink a post names (a food wording, as the source spelled it), with how it came across, as a report keeps it */
 export interface ReportPostDish {
 	name: string;
-	sentiment: FeedbackSentiment;
+	sentiment: Sentiment;
 }
 
 /** One post about the venue, as the report lists it. */
@@ -63,10 +64,16 @@ export interface ReportPost {
 	engagements: number;
 	promotional: boolean;
 	visited: boolean;
-	sentiment: FeedbackSentiment;
-	summary: string;
-	praise: ReportFeedbackPoint[];
-	complaints: ReportFeedbackPoint[];
+	/** Worked out from its claims (`sentimentOf`) */
+	sentiment: Sentiment;
+	/** What it said about the brand, its own words where kept (`saidOf`) */
+	said: string[];
+	/** Its positive claims */
+	praise: ReportClaim[];
+	/** Its negative claims */
+	complaints: ReportClaim[];
+	/** Its neutral and mixed claims ("fries for 10 euros"): said, neither praise nor complaint; absent when none */
+	noted?: ReportClaim[];
 	dishes: ReportPostDish[];
 }
 
@@ -93,12 +100,12 @@ export interface ReportSocialStats {
 	creators: number;
 	promotional: number;
 	sentiment: ReportSentimentCounts;
-	/** topic → how many posts praised / criticised it */
+	/** aspect root → how many posts praised / criticised it (a claim about no aspect counts under none) */
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
 	/**
-	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
-	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the roots; absent
+	 * in reports built before themes
 	 */
 	praiseThemes?: Record<string, number>;
 	complaintThemes?: Record<string, number>;
@@ -110,21 +117,22 @@ export interface ReportReviewGroup {
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
 	/**
-	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
-	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the roots; absent
+	 * in reports built before themes
 	 */
 	praiseThemes?: Record<string, number>;
 	complaintThemes?: Record<string, number>;
-	/** What they said, the first few points of the group */
-	praiseDetails: ReportFeedbackPoint[];
-	complaintDetails: ReportFeedbackPoint[];
+	/** What they said, the first few claims of the group */
+	praiseDetails: ReportClaim[];
+	complaintDetails: ReportClaim[];
 }
 
 /** The changes guests noticed about one thing (an aspect), across the month's reviews. */
 export interface ReportChangeTheme {
-	/** The aspect's key; absent while the changes are not filed yet */
+	/** The aspect's key; absent for the changes agent B filed under no aspect (or has not read yet) */
 	theme?: string;
-	/** The aspect's label at build ("Other changes" for the unfiled) */
+
+	/** The aspect's label at build ("Other changes" for those under no aspect) */
 	label: string;
 	/** Reviews noticing it, each once */
 	reviews: number;
@@ -140,12 +148,12 @@ export interface ReportReviewStats {
 	/** Share of the month's reviews the owner answered, 0–1 */
 	replyRate?: number;
 	stars: { stars: number; count: number }[];
-	/** topic → how many reviews praised / criticised it */
+	/** aspect root → how many reviews praised / criticised it (a claim about no aspect counts under none) */
 	praise: Record<string, number>;
 	complaints: Record<string, number>;
 	/**
-	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
-	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the roots; absent
+	 * in reports built before themes
 	 */
 	praiseThemes?: Record<string, number>;
 	complaintThemes?: Record<string, number>;
@@ -476,8 +484,8 @@ export interface ReportCitySection {
 	searches?: SearchDelta[];
 	/**
 	 * The complaint themes of the brand's written reviews against the month's report venues
-	 * (`cityThemes`), the biggest gap first; absent below 5 written reviews or 5 peers, while a
-	 * point is unfiled, and in reports built before it
+	 * (`cityThemes`), the biggest gap first; absent below 5 written reviews or 5 peers, and in
+	 * reports built before it
 	 */
 	themes?: ReportCityTheme[];
 }
@@ -509,13 +517,15 @@ export type ReportMonthKind = 'story' | 'quiet';
 
 /** How the editor's read went: for the admin report page only (`toPublicOutput` strips it). */
 export interface ReportEditorTrace {
+	/** The model that answered (`openai/gpt-5.4`), or the tier asked for when the call failed */
 	model: string;
 	steps: ReportAnalysisTraceStep[];
 	/** Tool calls that ran (a refused one is in `steps` only) */
 	toolCalls: number;
 	/** The model's own steps (each tool round is one) */
 	modelSteps?: number;
-	usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
+	/** `cachedInputTokens`: the part of the input read from the provider's prompt cache */
+	usage?: { inputTokens?: number; cachedInputTokens?: number; outputTokens?: number; totalTokens?: number };
 	/** Lines the check dropped or cut */
 	problems: { where: string; problem: string }[];
 	/** The agent failed: the letter is the code-written fallback */

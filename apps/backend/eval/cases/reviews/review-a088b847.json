@@ -1,0 +1,313 @@
+{
+  "id": "review-a088b847",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "a088b847-7a8e-4a26-a1c8-cb71ff0e6340",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2t0cE5GOXRaa2swZFdrMlgyb3llbVJCV2pRNVZIYxAB",
+    "platform": "google",
+    "language": "it",
+    "venue": "Markthalle Neun",
+    "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+    "brand": "Markthalle Neun",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-07T12:15:10.889Z",
+    "stars": 4,
+    "text": "Bellissimo mercato coperto a Berlino. Pieno di micro locali e botteghe che vendono prodotti tipici di varia natura e paesi, e pieno di locali di svariate cucine, bbq, argentino, italiano, coreano, panini, dolci e molto altro. Carinissimo il signore del localino coreano, fa un ottimo “ramen” al kimchi ad un prezzo super.",
+    "textTranslated": "A beautiful covered market in Berlin. Full of tiny restaurants and shops selling typical products from various countries, and packed with places serving a variety of cuisines: BBQ, Argentinean, Italian, Korean, sandwiches, desserts, and much more. The guy at the Korean place is super nice; he makes excellent kimchi ramen at a great price."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:30.147Z",
+    "claims": [
+      {
+        "text": "a beautiful covered market in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "tiny restaurants and shops",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "typical products from various countries",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "BBQ",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "BBQ"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Argentinean",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Argentinean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Italian",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "italian"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Korean",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Korean"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "sandwiches",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "desserts",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the guy at the Korean place is super nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "excellent kimchi ramen",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kimchi ramen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a great price",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:23.227Z",
+    "usage": {
+      "inputTokens": 5150,
+      "outputTokens": 1964,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the variety lines are neutral facts or praise (read as praise, with fact allowed), and whether 'bbq' and 'dolci' count as foods while the cuisine names do not. The ramen food string keeps the reviewer's quotation marks as written.",
+    "claims": [
+      {
+        "text": "Markthalle Neun is a beautiful covered market in Berlin",
+        "quote": "Bellissimo mercato coperto a Berlino",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the market is full of tiny restaurants and shops selling typical products from various countries",
+        "quote": "Pieno di micro locali e botteghe che vendono prodotti tipici di varia natura e paesi",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the market is full of places serving a variety of cuisines: bbq, argentino, italiano, coreano, panini, dolci and much more",
+        "quote": "pieno di locali di svariate cucine, bbq, argentino, italiano, coreano, panini, dolci e molto altro",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "bbq",
+          "panini",
+          "dolci"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the man at the Korean place is very nice",
+        "quote": "Carinissimo il signore del localino coreano",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the man at the Korean place makes an excellent kimchi “ramen”",
+        "quote": "fa un ottimo “ramen” al kimchi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "“ramen” al kimchi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kimchi ramen comes at a great price",
+        "quote": "ad un prezzo super",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "kimchi ramen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

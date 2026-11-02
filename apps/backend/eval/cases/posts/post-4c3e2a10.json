@@ -1,0 +1,566 @@
+{
+  "id": "post-4c3e2a10",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "maya.bibi935999",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Streetfood aus dem Gefängnis – Streetfood in Berlin, Deutschland (7)",
+    "subtitles": "bismillahirrahmanirrahim\nand we start the day\nCaution\noh freedom freedom\nvery warm in here\nwhy\nyou have built your own jail now actually\nyes because uh the snack is called the cell\nand I wanted to stay true to the motto\nI just wanted to get out of this hatch\nGiving people food\nor stop here between people kebab give that halt\nHaftschaden I would say is just so\nright now the kebab is through\nand now I have to set the temperature like this\nthat it remains nice and juicy\nthat the juice\nremains with the kebab\nI am very proud of my kebab really because\nI uh know very many kebab stores\nwhere the spit just dries up\nbut is just also ne small science\nthis is not just kebab\nKebab is\nuh art like Did you get the idea\nso the idea Kam Olaf fact in jail\ni dreamed of a kebab he he\nand there I said\nokay i will come out\nand I will make the best kebab in Germany and\nthis is how it was created\nthe idea I just dreamed about it and\nyes since i come from a catering family\nwas that not far from me with the kebab story\nsome play guitar I play stove\nas I said I have to get exactly the temperature\nMy upper um\nGas burner has just run out now\nbecause he just does not accept that\nbecause I do it very minimally so\nso that it is beautiful\nremains juicy you know\nit should remain brown and still\nhe may he\nshould not continue cooking he should just keep warm\nyou know\nI do not know OB one understands that\nbut that's just my uh way of thinking wait so\nso remains the juicy I go up now get onions\nand come right back\nand what is it like to work with your brother\nquite good\nso somehow good\nit is fun of course always you like yourself kebab yes\nChocolate with the tomato that was flat\nand I don't want to um in the\nmix into the other tomato\notherwise the others will also become so crappy\nso liquid then\nbecause I want my customers\noperate well and do not lose them\nthey have remained faithful and also remain faithful\nwhen I put a plate in it now\nthen the whole tomato in it becomes liquid\nI mix everything together\nthen the kebab is also still with liquid\nyou know once the hard no more soft\nExample the\nalready hard",
+    "subtitlesLanguage": "eng-US",
+    "id": "4c3e2a10-abe5-4099-9d93-e55909b5807c",
+    "externalId": "7691889411813920032",
+    "url": "https://www.tiktok.com/@maya.bibi935999/video/7691889411813920032",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-02T02:20:11.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:52.004Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Haftschaden",
+        "locationHint": "none",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the snack is called Haftschaden",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "Haftschaden"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the kebab should stay juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the kebab is art",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "he dreamed of a kebab",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "he wanted to make the best kebab in Germany",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "he comes from a catering family",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "he plays stove",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the tomato should not become liquid",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "tomato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "he wants his customers to be well",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:39:08.890Z",
+    "usage": {
+      "inputTokens": 10505,
+      "outputTokens": 3525,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The stand is named only through the machine-translated transcript ('the snack is called the cell'), so the name is kept as 'The Cell'. The transcript is hard to follow, so the owner's statements about his technique (temperature, tomatoes) are kept as facts about the place.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "The Cell",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The kebab stand 'The Cell' (Die Zelle) is not among the candidates; the closest names (Cello Cafe, Castell, etc.) are different venues."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the snack stand is called the cell, built like a jail",
+        "quote": "the snack is called the cell",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is very warm inside the stand",
+        "quote": "very warm in here",
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the kebab is kept at a temperature so it stays nice and juicy",
+        "quote": "that it remains nice and juicy",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "temperature"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner is very proud of his kebab",
+        "quote": "I am very proud of my kebab",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at many kebab stores the spit just dries up",
+        "quote": "I uh know very many kebab stores\nwhere the spit just dries up",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the kebab here is not just kebab, it is art",
+        "quote": "this is not just kebab",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner got the idea in jail, dreaming of a kebab",
+        "quote": "i dreamed of a kebab",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner set out to make the best kebab in Germany",
+        "quote": "I will make the best kebab in Germany",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner comes from a catering family",
+        "quote": "since i come from a catering family",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the gas burner is kept minimal so the kebab only keeps warm and does not continue cooking",
+        "quote": "should not continue cooking he should just keep warm",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "temperature"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner fetches onions",
+        "quote": "get onions",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "onions"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner works with his brother, which goes quite well",
+        "quote": "what is it like to work with your brother",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner keeps a soft tomato apart so the other tomatoes do not turn liquid",
+        "quote": "mix into the other tomato",
+        "sentiment": "neutral",
+        "aspect": "freshness",
+        "foods": [
+          "tomato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive",
+            "negative"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the customers have remained faithful",
+        "quote": "they have remained faithful",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the kebab becomes liquid if everything is mixed together",
+        "quote": "then the kebab is also still with liquid",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "none",
+        "place": null,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The kebab turning liquid can be kept as its own claim or folded into the tomato claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): Splitting out the flat tomato as a negative judgement of the ingredient is a reasonable reading."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): The tomatoes becoming crappy can be read as an opinion in the agent's split."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): The agent's split claim judges the tomatoes, so opinion is defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): A negative sentiment fits the split claim that the tomatoes were flat or crappy."
+      },
+      {
+        "at": "2026-11-01T21:36:47.233Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

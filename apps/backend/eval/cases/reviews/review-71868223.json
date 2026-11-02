@@ -1,0 +1,346 @@
+{
+  "id": "review-71868223",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "71868223-eb88-4952-b730-6674c1df8201",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT214clduUXRaRU5pZUhOa1JFNDFiamhtTW5sNWRrRRAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-02T14:57:40.526Z",
+    "stars": 4,
+    "text": "Gemüse kebaba giderken açıkcası şüphelerim vardı,çok uzun bir yolu yürüyerek gelmiştik ve çok açtık bir de üzerine kuyrukla karşılaştık artık mecbur bekliycez dedik ama iyi ki de bekledik yediğim en iyi tavuk dönerdi.Tek sıkıntısı oturacak bir yeri olmaması ve beklemek ama onun dışında lezzeti hala damağımda kalan güzel bir dönerci ben en azından o kuyruğu bir kere beklemenizi tavsiye ederim.",
+    "textTranslated": "I honestly had my doubts about going to Gemüse Kebab. We had walked a very long way and were very hungry, and then we encountered a queue, so we decided we'd have to wait. But I'm so glad we did; it was the best chicken doner kebab I've ever had. The only downside is that there's no place to sit and the wait is great, but other than that, it's a delicious doner kebab place whose taste is still lingering in my mouth. I would recommend waiting in that queue at least once."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:48:20.703Z",
+    "claims": [
+      {
+        "text": "we walked a very long way",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we were very hungry",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was a queue",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had to wait",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was the best chicken doner kebab I've ever had",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chicken doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there's no place to sit",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the wait is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's a delicious doner kebab place",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the taste is still lingering in my mouth",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "waiting in that queue at least once",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:23.163Z",
+    "usage": {
+      "inputTokens": 5262,
+      "outputTokens": 2444,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: 'Gemüse kebaba' is the venue name, not a food, and 'dönerci' (döner shop) is a place, not a food; 'best chicken döner I've eaten' is primarily a dish opinion though verdict is defensible; the wait complaint maps to queue since the wait described is the line.",
+    "claims": [
+      {
+        "text": "had doubts about going to Gemüse Kebab",
+        "quote": "Gemüse kebaba giderken açıkcası şüphelerim vardı",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "walked a very long way and were very hungry",
+        "quote": "çok uzun bir yolu yürüyerek gelmiştik ve çok açtık",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "encountered a queue",
+        "quote": "kuyrukla karşılaştık",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "glad they waited in the queue",
+        "quote": "iyi ki de bekledik",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "wait",
+            "none"
+          ],
+          "kinds": [
+            "verdict",
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the tavuk döner was the best ever eaten",
+        "quote": "yediğim en iyi tavuk dönerdi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tavuk döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "no place to sit",
+        "quote": "oturacak bir yeri olmaması",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the waiting is a downside",
+        "quote": "ve beklemek",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a nice döner place whose taste still lingers in the mouth",
+        "quote": "lezzeti hala damağımda kalan güzel bir dönerci",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "recommends waiting in the queue at least once",
+        "quote": "ben en azından o kuyruğu bir kere beklemenizi tavsiye ederim",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): The agent's separate 'I'm so glad we did' claim is positive; the scorer paired the reference claim with a different agent claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): The agent's matching claim is a verdict, which the reference accepts; the comparison was made against the wrong agent claim."
+      },
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

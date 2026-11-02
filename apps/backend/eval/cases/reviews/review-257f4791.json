@@ -1,0 +1,195 @@
+{
+  "id": "review-257f4791",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "257f4791-d14d-4fcb-9995-f4ffb74012d2",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2taTmVFZDRiRWxhVFVzMFgzVTRkRnBYU21oNE5IYxAB",
+    "platform": "google",
+    "language": "fr",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-08T08:04:45.578Z",
+    "stars": 4,
+    "text": "Nous étions une table de français de 5 personnes. Service rapide et à l’écoute!\nParfait pour l’ambiance avec musiciens en live!",
+    "textTranslated": "We were a table of five French people. The service was quick and attentive!\nPerfect for the atmosphere with live music!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:06:34.139Z",
+    "claims": [
+      {
+        "text": "a table of five French people",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was quick",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was attentive",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "perfect for the atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "live music",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:28.193Z",
+    "usage": {
+      "inputTokens": 4992,
+      "outputTokens": 662,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The live musicians could be kept inside the atmosphere claim or split out, so the split-out claim is optional. Its kind is debatable: fact, an event (live music), or opinion as part of the praise.",
+    "claims": [
+      {
+        "text": "we were a table of five French people",
+        "quote": "Nous étions une table de français de 5 personnes.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was quick",
+        "quote": "Service rapide",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was attentive",
+        "quote": "à l’écoute!",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "perfect for the atmosphere",
+        "quote": "Parfait pour l’ambiance",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there were live musicians",
+        "quote": "avec musiciens en live!",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "opinion",
+            "event"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.205Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

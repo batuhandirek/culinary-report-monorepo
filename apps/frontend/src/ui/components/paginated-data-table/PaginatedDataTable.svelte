@@ -2,6 +2,7 @@
 	import {
 		ArrowDown,
 		ArrowUp,
+		ChevronDown,
 		ChevronLeft,
 		ChevronRight,
 		ChevronsUpDown,
@@ -11,6 +12,7 @@
 	} from '@lucide/svelte';
 
 	import { type Component, onDestroy, untrack } from 'svelte';
+	import { SvelteSet } from 'svelte/reactivity';
 
 	import { getDataTableFill } from './context';
 	import {
@@ -54,6 +56,8 @@
 		onFiltersChange = undefined,
 		onFetch = undefined,
 		rowHref = undefined,
+		expand = undefined,
+		rowKey = undefined,
 		noun = 'results',
 		emptyTitle = undefined,
 		emptyDescription = undefined,
@@ -359,6 +363,20 @@
 		goto(href);
 	}
 
+	// --- Rows that open in place (`expand`) ---
+
+	const opened = new SvelteSet<string>();
+	const keyOf = (row: T, index: number) => rowKey?.(row) ?? String(index);
+	const toggleRow = (key: string) => (opened.has(key) ? opened.delete(key) : opened.add(key));
+
+	function clickRow(event: MouseEvent, row: T, index: number) {
+		if (rowHref?.(row)) return openRow(event, row);
+		if (!expand || event.button !== 0) return;
+		if ((event.target as HTMLElement).closest(INTERACTIVE)) return;
+		if (window.getSelection()?.toString()) return;
+		toggleRow(keyOf(row, index));
+	}
+
 	// --- Cells ---
 
 	const isNumeric = (column: Column<T>) => !!column.numeric || column.type === 'count';
@@ -391,7 +409,8 @@
 	};
 
 	const visibleActions = (row: T) => actions.filter((action) => action.if?.(row) ?? true);
-	let hasTrailingCell = $derived(actions.length > 0 || !!rowHref);
+	let hasTrailingCell = $derived(actions.length > 0 || !!rowHref || !!expand);
+	let columnCount = $derived(columns.length + (hasTrailingCell ? 1 : 0));
 
 	// Skeleton bars of uneven length read as text, not as a grid of boxes.
 	const SKELETON_WIDTHS = ['w-24', 'w-16', 'w-32', 'w-20', 'w-28', 'w-12'];
@@ -518,14 +537,17 @@
 							</tr>
 						{/each}
 					{:else if !loader.error}
-						{#each rows as row, i (i)}
+						{#each rows as row, i (rowKey ? rowKey(row) : i)}
 							{@const href = rowHref?.(row)}
+							{@const rowId = keyOf(row, i)}
+							{@const isOpen = !!expand && opened.has(rowId)}
 							<tr
 								class={cn(
 									'group/row hover:bg-sand/70 transition-colors [&:last-child>td]:border-b-0',
-									href && 'cursor-pointer'
+									(href || expand) && 'cursor-pointer',
+									isOpen && 'bg-sand/70'
 								)}
-								onclick={href ? (e) => openRow(e, row) : undefined}
+								onclick={href || expand ? (e) => clickRow(e, row, i) : undefined}
 								onauxclick={href ? (e) => openRow(e, row) : undefined}>
 								{#each columns as column (column.name)}
 									{@const visible = column.if?.(row) ?? true}
@@ -650,11 +672,30 @@
 													class="text-faint group-hover/row:text-ink focus-visible:ring-ring/50 grid size-7 place-items-center rounded-md outline-none focus-visible:ring-2">
 													<ChevronRight class="size-4" />
 												</a>
+											{:else if expand}
+												<button
+													type="button"
+													aria-expanded={isOpen}
+													aria-label={isOpen ? 'Close details' : 'Show details'}
+													class="text-faint group-hover/row:text-ink focus-visible:ring-ring/50 grid size-7 place-items-center rounded-md outline-none focus-visible:ring-2"
+													onclick={() => toggleRow(rowId)}>
+													<ChevronDown
+														class={cn('size-4 transition-transform', isOpen && 'rotate-180')} />
+												</button>
 											{/if}
 										</div>
 									</td>
 								{/if}
 							</tr>
+							{#if isOpen && expand}
+								<tr>
+									<td
+										colspan={columnCount}
+										class="border-line bg-sand/40 border-b px-4 py-4 align-top text-sm whitespace-normal">
+										{@render expand(row)}
+									</td>
+								</tr>
+							{/if}
 						{/each}
 					{/if}
 				</tbody>

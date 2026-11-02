@@ -1,0 +1,515 @@
+{
+  "id": "post-5f073ec2",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "dvh.anhhh",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlin",
+      "food",
+      "berlinfood",
+      "berlinfoodspots",
+      "dhs"
+    ],
+    "taggedHandles": [],
+    "text": "Vượt lười làm tiktok 🫶🏻\n\nĂn gì ở Berlin \n#berlin #food #berlinfood #berlinfoodspots #dhs ",
+    "subtitles": "What will 2-4 hours in balance look like?\nOf course, \nit starts with eating.\nBut this first bar was\nIt doesn't fit my taste either.\nSo let's move the location.\nNext is Atomic Balance.\nEntrance tickets For each person fall around 1210\n5 A view is beautiful.\nA warning is to go up.\nThe stairs are quite narrow and quite tall.\nfear of enclosed spaces or poor climbing of stairs\nBe mentally prepared first.\nBut in general, \nit's worth it.\nYou can't ignore the brand advocate.\nthen have to run the spring field to snack a little\nWe ate in Arirang in the evening.\nI ate here about five years ago.\nyears ago and remember it was pretty delicious\nBut this time back.\nPersonally, \nI don t feel as good as I used to.\nAnd the quality is also quite substantial.\nThe next morning we went to brunch.\nmaking bean noodle soup with shrimp sauce and grilled spring rolls in Nha Trang\nAnd for me, \nthis is the most delicious and tasteless meal.\nOf course before.\nI can't help but have a cup of milk tea.\nThen the pig wandered for a while, \nand it was time to go home.\nWe also check in and take a picture.\nIt was full lunch.\nOur two-hour Valentine's Day is over.\nI'll go back and see you at the clip.\nNext Next post",
+    "subtitlesLanguage": "eng-US",
+    "id": "5f073ec2-8893-4e50-b47a-17b6ad423fde",
+    "externalId": "7696449384745110817",
+    "url": "https://www.tiktok.com/@dvh.anhhh/video/7696449384745110817",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-14T09:14:31.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:17.121Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Atomic Balance",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Arirang",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "c8c28bf4-b09d-4ade-980d-257dbf3ecee1",
+          "brandName": "Arirang Restaurant",
+          "venueId": "ccfabc4d-9587-41b6-bc53-d329ca9c9afe",
+          "venueName": "Arirang Restaurant"
+        }
+      },
+      {
+        "venueName": "Nha Trang",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "beautiful view",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "worth visiting",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "narrow, tall stairs",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "substantial quality",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "not as good as previously remembered",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "delicious meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "it starts with eating",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the first bar did not fit my taste",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Atomic Balance has a beautiful view",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the stairs are quite narrow and quite tall",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it is worth it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "we ate at Arirang in the evening",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the next morning we went to brunch",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "bean noodle soup with shrimp sauce and grilled spring rolls in Nha Trang",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bean noodle soup",
+          "shrimp sauce",
+          "grilled spring rolls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the meal was the most delicious and tasteless",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "a cup of milk tea",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "milk tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it was a full lunch",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "lunch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:22:46.648Z",
+    "usage": {
+      "inputTokens": 10482,
+      "outputTokens": 3012,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The machine-translated transcript is garbled. Arirang is the only named food place; the brunch, first bar and milk tea spots are unnamed, so they are subject none. The climb with tickets and a view (a landmark) and 'brand advocate' (Brandenburger Tor) are not places and say nothing about food, so they are left out. 'Most delicious and tasteless' likely means 'most delicious and authentic'; 'quality quite substantial' is read as a further decline.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Arirang",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Berlin has several Korean restaurants named Arirang (Arirang Restaurant, Arirang Bulgogi, Matzip Arirang), and the post gives no location to tell which one is meant."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the first bar did not fit the creator's taste",
+        "quote": "It doesn't fit my taste either.",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "ate at Arirang in the evening",
+        "quote": "We ate in Arirang in the evening.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Arirang was pretty delicious on a visit about five years ago",
+        "quote": "remember it was pretty delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "this time Arirang was not as good as it used to be",
+        "quote": "I don t feel as good as I used to.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the quality at Arirang also changed considerably",
+        "quote": "And the quality is also quite substantial.",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "had bean noodle soup with shrimp sauce and Nha Trang grilled spring rolls for brunch",
+        "quote": "making bean noodle soup with shrimp sauce and grilled spring rolls in Nha Trang",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "bean noodle soup with shrimp sauce",
+          "grilled spring rolls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the bean noodle soup with shrimp sauce and grilled spring rolls brunch was the most delicious meal for the creator",
+        "quote": "this is the most delicious and tasteless meal",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bean noodle soup with shrimp sauce",
+          "grilled spring rolls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "had a cup of milk tea",
+        "quote": "I can't help but have a cup of milk tea.",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "milk tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.438Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.237Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

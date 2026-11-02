@@ -1,0 +1,99 @@
+{
+  "id": "post-78a4ab9e",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "abugoku494",
+    "locationName": null,
+    "hashtags": [
+      "01"
+    ],
+    "taggedHandles": [],
+    "text": "AUTHENTISCHE UZBEKISCHE KÜCHE IN BERLIN! #01",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "78a4ab9e-daf0-4125-855b-200685eb1018",
+    "externalId": "7618550108648394006",
+    "url": "https://www.tiktok.com/@abugoku494/video/7618550108648394006",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-18T11:05:06.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:48:59.494Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "authentic Uzbek cuisine in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:41:51.648Z",
+    "usage": {
+      "inputTokens": 5875,
+      "outputTokens": 525,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named or tagged, so places is empty and the one claim is about the city. 'Authentische' reads as praise of authenticity, though it could be taken as a neutral fact. 'Uzbekische Küche' is treated as a general cuisine word, not a food.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "authentic Uzbek cuisine in Berlin",
+        "quote": "AUTHENTISCHE UZBEKISCHE KÜCHE IN BERLIN!",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.241Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.431Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

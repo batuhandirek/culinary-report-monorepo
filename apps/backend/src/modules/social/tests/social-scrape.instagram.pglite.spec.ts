@@ -209,9 +209,15 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 	const linksOf = async (postId: string) => {
 		const stored = await harness.orm.em
 			.fork()
-			.findOneOrFail(SocialPost, { id: postId }, { populate: ['foundBy', 'foundBy.source', 'hashtagLinks.hashtag'] });
+			.findOneOrFail(
+				SocialPost,
+				{ id: postId },
+				{ populate: ['foundBy', 'foundBy.source', 'hashtagLinks.hashtag'] },
+			);
 		return {
-			finds: stored.foundBy.getItems().map(f => `${f.kind} ${f.value}${f.source ? ` (${f.source.value})` : ''}`),
+			finds: stored.foundBy
+				.getItems()
+				.map(f => `${f.kind} ${f.value}${f.source ? ` (${f.source.value})` : ''}`),
 			tags: stored.hashtagLinks.getItems().map(link => link.hashtag.tag),
 		};
 	};
@@ -333,8 +339,14 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 			],
 			tags: [],
 		});
-		expect(await linksOf(second.id)).toEqual({ finds: ['instagram_hashtag berlinbrunch (berlinbrunch)'], tags: ['ad'] });
-		expect(await linksOf(third.id)).toEqual({ finds: ['instagram_hashtag brunchberlin (brunchberlin)'], tags: [] });
+		expect(await linksOf(second.id)).toEqual({
+			finds: ['instagram_hashtag berlinbrunch (berlinbrunch)'],
+			tags: ['ad'],
+		});
+		expect(await linksOf(third.id)).toEqual({
+			finds: ['instagram_hashtag brunchberlin (brunchberlin)'],
+			tags: [],
+		});
 		expect(second).toMatchObject({
 			author: 'brunchgirl.berlin',
 			authorFans: null,
@@ -468,7 +480,9 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 		em.clear();
 		const hashtagVideo = await em.findOneOrFail(SocialPost, { externalId: tiktokVideo.id });
 		expect(hashtagVideo).toMatchObject({ city: { id: wien.id } });
-		expect((await linksOf(hashtagVideo.id)).finds).toEqual(['tiktok_hashtag wienfood (wienfood)']);
+		expect((await linksOf(hashtagVideo.id)).finds).toEqual([
+			'tiktok_hashtag wienfood (wienfood)',
+		]);
 		// The original-language subtitles, not the machine translation
 		expect(fetchSpy).toHaveBeenCalledTimes(1);
 		expect(String(fetchSpy.mock.calls[0][0])).toBe('https://cla.example/orig.vtt');

@@ -1,0 +1,346 @@
+{
+  "id": "post-82422910",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "berlincondani",
+    "locationName": "Berlin",
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "En Berlín no todo es salchicha, hay muchos platos tradicionales que tienes que probar. Uno de ellos es el Käsespätzle, que en este restaurante está muy bien de precio y es el mejor que yo he probado en Berlín!\n\n📍Restaurant Keyser Soze / de 13:00 a 15:00 tienen muchos platos a 10,90€ y a menudo también el Käsespätzle!\n\n¿Lo has probado ya? ¿Qué otros platos alemanes recomendarías? Te leo en los comentarios 👀",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "82422910-3ecb-4592-8928-87bdb932d7f9",
+    "externalId": "7612736320053546262",
+    "url": "https://www.tiktok.com/@berlincondani/video/7612736320053546262",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-02T19:05:03.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:03.459Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Restaurant Keyser Soze",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "9010c9e8-8b55-4954-b33c-defc50ea77c6",
+          "brandName": "Restaurant Keyser Soze - Berlin",
+          "venueId": "c0af3d78-75be-4801-b7f4-5eca570b20df",
+          "venueName": "Restaurant Keyser Soze - Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Berlin has many traditional dishes besides sausage",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the Käsespätzle is very good value",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Käsespätzle is the best the creator has tried in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "many dishes cost 10,90€ from 13:00 to 15:00",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 10.9,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they often also have Käsespätzle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:20.891Z",
+    "usage": {
+      "inputTokens": 9363,
+      "outputTokens": 2324,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the 13:00–15:00 10,90€ price is a deal (price with hours) and the Käsespätzle often being included is part of it; 'best I've tried in Berlin' is about a dish, so opinion/taste with verdict as alternative. The engagement questions are kept as optional question claims.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Restaurant Keyser Soze",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "9010c9e8-8b55-4954-b33c-defc50ea77c6",
+          "brandName": "Restaurant Keyser Soze - Berlin",
+          "venueId": "c0af3d78-75be-4801-b7f4-5eca570b20df",
+          "venueName": "Restaurant Keyser Soze - Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "in Berlin not everything is sausage; there are many traditional dishes you have to try",
+        "quote": "En Berlín no todo es salchicha, hay muchos platos tradicionales que tienes que probar",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "salchicha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Käsespätzle is one of the traditional dishes to try",
+        "quote": "Uno de ellos es el Käsespätzle",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Käsespätzle at Keyser Soze is very well priced",
+        "quote": "está muy bien de precio",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Käsespätzle at Keyser Soze is the best the author has tried in Berlin",
+        "quote": "es el mejor que yo he probado en Berlín",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "from 13:00 to 15:00 many dishes cost 10,90€",
+        "quote": "de 13:00 a 15:00 tienen muchos platos a 10,90€",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 10.9,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Käsespätzle is often also among the 10,90€ lunch dishes",
+        "quote": "a menudo también el Käsespätzle",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "asks viewers whether they have tried Käsespätzle",
+        "quote": "¿Lo has probado ya?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Käsespätzle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "asks viewers which other German dishes they would recommend",
+        "quote": "¿Qué otros platos alemanes recomendarías?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.242Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

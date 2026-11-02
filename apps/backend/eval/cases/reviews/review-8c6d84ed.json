@@ -1,0 +1,152 @@
+{
+  "id": "review-8c6d84ed",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "8c6d84ed-b31f-4338-a214-bd4214fb74d9",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xsUFZrRjVOa2RMVG5OS1pucDJOVE01T0VzM2NYYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Konstanzer",
+    "venueId": "eee40163-98e1-4f14-8011-182f396e772d",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-07T14:19:41.431Z",
+    "stars": 1,
+    "text": "Worst shop, they ask for reviews to every delivery person so that they get good ratings, these reviews are not real.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:44:43.123Z",
+    "claims": [
+      {
+        "text": "Worst shop",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they ask for reviews to every delivery person",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they get good ratings",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "these reviews are not real",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:48.860Z",
+    "usage": {
+      "inputTokens": 4929,
+      "outputTokens": 771,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review accuses the shop of soliciting fake reviews from delivery staff; no aspect fits well, so other (or null) is used. It is an allegation, read as an opinion, though fact is allowed.",
+    "claims": [
+      {
+        "text": "Burgermeister Konstanzer is the worst shop",
+        "quote": "Worst shop",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the shop asks every delivery person for reviews to get good ratings",
+        "quote": "they ask for reviews to every delivery person so that they get good ratings",
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "ownership"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the shop's reviews are not real",
+        "quote": "these reviews are not real",
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

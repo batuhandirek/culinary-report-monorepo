@@ -1,0 +1,402 @@
+{
+  "id": "post-f0003e83",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "daisychr",
+    "locationName": null,
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "foodspots",
+      "pastramisandwich",
+      "halbeshähnchen"
+    ],
+    "taggedHandles": [],
+    "text": "Hat Berlin die besten Foodspots in Deutschland? 🤔\n\n📍 Börk's Deli 🥪\n📍 Ippai No Ramen 🍜\n📍 Hot Chicks 🍗\n📍 Rüyam 🥙\n📍 Zeit für Brot 🥐\n\n#berlin #berlinfood #foodspots #pastramisandwich #halbeshähnchen",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "f0003e83-1320-4622-a936-8867e98d7243",
+    "externalId": "7700197882451774753",
+    "url": "https://www.tiktok.com/@daisychr/video/7700197882451774753",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T11:40:36.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:55.210Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Börk's Deli",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ee9d7c3d-3be3-424c-a4fe-b2e6858b7d06",
+          "brandName": "Börk's Deli",
+          "venueId": "61d55837-7a81-47ca-b15b-1f07639c381f",
+          "venueName": "Börk's Deli"
+        }
+      },
+      {
+        "venueName": "Ippai No Ramen",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f6ca4f19-61a8-43b7-ac9f-966869366d6a",
+          "brandName": "IPPAI NO RAMEN 一杯のラーメン",
+          "venueId": "9de5490d-8217-4e07-9b6a-863672db25b4",
+          "venueName": "IPPAI NO RAMEN 一杯のラーメン"
+        }
+      },
+      {
+        "venueName": "Hot Chicks",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "3a3c895e-bd31-4039-b1f4-b1aa63c24a7a",
+          "brandName": "Hot Chick‘s Grill",
+          "venueId": "001c0bc2-58da-413e-923d-22f73f1a035e",
+          "venueName": "Hot Chick‘s Grill"
+        }
+      },
+      {
+        "venueName": "Rüyam",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Zeit für Brot",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f9f2a11b-75c1-4759-bc2a-7052e3190a6a",
+          "brandName": "Zeit für Brot",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Berlin has the best food spots in Germany",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:57.513Z",
+    "usage": {
+      "inputTokens": 22069,
+      "outputTokens": 3037,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption only lists venue names with emoji, so per-venue listing claims are optional. The dish hashtags are tied to Börk's Deli (🥪) and Hot Chicks (🍗) through the emoji, which is an inference.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Börk's Deli",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ee9d7c3d-3be3-424c-a4fe-b2e6858b7d06",
+          "brandName": "Börk's Deli",
+          "venueId": "61d55837-7a81-47ca-b15b-1f07639c381f",
+          "venueName": "Börk's Deli",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Ippai No Ramen",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f6ca4f19-61a8-43b7-ac9f-966869366d6a",
+          "brandName": "IPPAI NO RAMEN 一杯のラーメン",
+          "venueId": "9de5490d-8217-4e07-9b6a-863672db25b4",
+          "venueName": "IPPAI NO RAMEN 一杯のラーメン",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Hot Chicks",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "3a3c895e-bd31-4039-b1f4-b1aa63c24a7a",
+          "brandName": "Hot Chick‘s Grill",
+          "venueId": "001c0bc2-58da-413e-923d-22f73f1a035e",
+          "venueName": "Hot Chick‘s Grill",
+          "note": "'Hot Chicks' with half chicken matches Hot Chick's Grill, a single-branch chicken grill."
+        }
+      },
+      {
+        "venueName": "Rüyam",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": null,
+          "venueName": null,
+          "note": "Rüyam matches Rüyam Gemüse Kebab exactly (not Rüya Gemüse Kebap); no branch is given."
+        }
+      },
+      {
+        "venueName": "Zeit für Brot",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f9f2a11b-75c1-4759-bc2a-7052e3190a6a",
+          "brandName": "Zeit für Brot",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "asks whether Berlin has the best food spots in Germany",
+        "quote": "Hat Berlin die besten Foodspots in Deutschland?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Börk's Deli is listed as one of Berlin's food spots",
+        "quote": "📍 Börk's Deli 🥪",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Börk's Deli features a pastramisandwich",
+        "quote": "pastramisandwich",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pastramisandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ippai No Ramen is listed as one of Berlin's food spots",
+        "quote": "📍 Ippai No Ramen 🍜",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Hot Chicks is listed as one of Berlin's food spots",
+        "quote": "📍 Hot Chicks 🍗",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Hot Chicks features a halbeshähnchen",
+        "quote": "halbeshähnchen",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "halbeshähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Rüyam is listed as one of Berlin's food spots",
+        "quote": "📍 Rüyam 🥙",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Zeit für Brot is listed as one of Berlin's food spots",
+        "quote": "📍 Zeit für Brot 🥐",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.255Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.442Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

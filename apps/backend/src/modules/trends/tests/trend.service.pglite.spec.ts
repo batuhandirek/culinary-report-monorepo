@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
@@ -54,7 +54,7 @@ describe('TrendService (pglite)', () => {
 
 		// The venues' brands come with the flush; each author has an account (and a creator)
 		await em.flush();
-		// Dish rows get their food topic as the writer resolves it
+		// A dish a source names is a food part whose wording is linked to the topic it names as a whole
 		const index = await harness.moduleRef.get(TopicService).index();
 		const accounts = new Map<string, SocialAccount>([['donerx', ownAccount(em, doner.brand, city, 'donerx')]]);
 		let n = 0;
@@ -79,7 +79,8 @@ describe('TrendService (pglite)', () => {
 				views: 100,
 				postedAt: new Date(`${date}T12:00:00Z`),
 			});
-			addFeedback(
+			// Each dish the post lists, a dish-only statement of its own
+			addStatements(
 				em,
 				em.create(Mention, {
 					post,
@@ -87,10 +88,8 @@ describe('TrendService (pglite)', () => {
 					venueName: venue.name,
 					cuisine,
 					visited: true,
-					sentiment: 'positive',
-					summary: 'Good.',
 				}),
-				{ dishes: dishes.map(name => ({ name, sentiment: 'positive' as const })) },
+				dishes.map(name => ({ foods: [name], sentiment: 'positive' as const })),
 				{ index },
 			);
 		};
@@ -112,7 +111,8 @@ describe('TrendService (pglite)', () => {
 			category: 'Austrian restaurant',
 		});
 		mention(wien, '2026-09-05', 'Austrian', ['Schnitzel']);
-		addFeedback(
+		// A review naming two in one claim: a food part each
+		addStatements(
 			em,
 			em.create(Review, {
 				venue: doner,
@@ -120,12 +120,7 @@ describe('TrendService (pglite)', () => {
 				stars: 5,
 				publishedAt: new Date('2026-09-10T00:00:00Z'),
 			}),
-			{
-				dishes: [
-					{ name: 'Döner', sentiment: 'positive' },
-					{ name: 'Ayran', sentiment: 'positive' },
-				],
-			},
+			[{ text: 'Döner and Ayran, both great', sentiment: 'positive', foods: ['Döner', 'Ayran'] }],
 			{ index },
 		);
 		await em.flush();
@@ -151,9 +146,9 @@ describe('TrendService (pglite)', () => {
 		expect(trends.totals).toMatchObject({ mentions: 4, posts: 4 });
 	});
 
-	it('groups the names of one food topic, counts each row once per post or review, and every table adds up to 100', async () => {
+	it('groups the wordings of one dish topic, counts each row once per post or review, and every table adds up to 100', async () => {
 		const trends = await service.month('2026-09', city.id);
-		// "Döner", "doner kebab", "Kebabs": the kebab topic's row; "Vegetable kebab" is no alias of it
+		// "Döner", "doner kebab", "Kebabs": the kebab topic's row (their terms' links); "Vegetable kebab" links nothing yet
 		expect(trends.dishes.map(r => [r.key, r.label, r.count, r.share])).toEqual([
 			['kebab', 'Döner & kebab', 4, 57.1],
 			['ayran', 'Ayran', 1, 14.3],

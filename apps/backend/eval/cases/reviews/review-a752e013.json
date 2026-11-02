@@ -1,0 +1,192 @@
+{
+  "id": "review-a752e013",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "a752e013-9e0e-4a85-91ee-106258e3f1a1",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2twM1ptSTVXRU5xTUVwbWRFdHplVVp5Y1hCRVlVRRAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-14T06:20:12.410Z",
+    "stars": 4,
+    "text": "Comida aceptable. Servicio decente para la cantidad de gente y mesas. Y ambiente muy bueno. A pesar de serun sitio grande mantienen la esencia tradicional.",
+    "textTranslated": "The food was acceptable. The service was decent considering the number of people and tables. And the atmosphere was very good. Despite being a large place, they maintain their traditional essence."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:39:16.932Z",
+    "claims": [
+      {
+        "text": "the food was acceptable",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was decent considering the number of people and tables",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere was very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they maintain their traditional essence",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:51.447Z",
+    "usage": {
+      "inputTokens": 5444,
+      "outputTokens": 1088,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Acceptable' food and 'decent' service read as mild praise (positive), with mixed allowed. The large size can stand alone as a fact or stay inside the traditional-essence claim. That claim is about the traditional feel of the place, so atmosphere, with vibe or authenticity also allowed.",
+    "claims": [
+      {
+        "text": "the food was acceptable",
+        "quote": "Comida aceptable",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was decent considering the number of people and tables",
+        "quote": "Servicio decente para la cantidad de gente y mesas",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the atmosphere was very good",
+        "quote": "ambiente muy bueno",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is large",
+        "quote": "serun sitio grande",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "despite being a large place they maintain their traditional essence",
+        "quote": "A pesar de serun sitio grande mantienen la esencia tradicional",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.431Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

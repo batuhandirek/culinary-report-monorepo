@@ -2,8 +2,8 @@
 	import { ExternalLink, Pencil } from '@lucide/svelte';
 	import type { AdminSearchRelatedQueryOutputDto, AdminTopicInsightOutputDto } from 'client';
 
-	import TopicDishNames from './components/TopicDishNames.svelte';
 	import TopicDishSearches from './components/TopicDishSearches.svelte';
+	import TopicTerms from './components/TopicTerms.svelte';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -15,7 +15,7 @@
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api, isNotFoundError } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
-	import { themeHref } from '#lib/feedback.js';
+	import { exploreTopicHref } from '#lib/explore.js';
 	import { change, points, tone, topicHref } from '#lib/topic-format.js';
 	import { isAspectKind, kindLabel, type TopicOption, toTopicOption } from '#lib/topic-kinds.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
@@ -29,8 +29,8 @@
 
 	// One food topic in a city: its venues, how much posts talk about it and how Google searches
 	// for it move over twelve months, what it costs on the month's delivery menus, what people
-	// search alongside it, who Google Maps lists first for a dish in each district, the dish names
-	// that count for a dish or drink, and the topics under it
+	// search alongside it, who Google Maps lists first for a dish in each district, the wordings
+	// linked to it, and the topics under it
 	const key = $derived(decodeURIComponent(page.params.key ?? ''));
 
 	adminCitiesStore.load();
@@ -146,13 +146,14 @@
 				{:else}
 					<span>A root: a point about it with nothing finer to say is filed here.</span>
 				{/if}
-				<a href={themeHref(key, 'complaints', { cityId, month })}>Praise and complaints under it</a>
+				<a href={exploreTopicHref(key, { cityId, month })}>Who talked about it</a>
 			</div>
 		{:else if data}
 			<div class="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
 				{#if data.parent}
 					<span>Part of <a href={topicHref(data.parent.key)}>{data.parent.label}</a></span>
 				{/if}
+				<a href={exploreTopicHref(key, { cityId, month })}>Who talked about it</a>
 				{#if data.aliases.length}<span>Also: {data.aliases.join(', ')}</span>{/if}
 				{#if data.trendsTopicId}
 					<a class="flex items-center gap-1" href={trendsUrl(data.trendsTopicId)} target="_blank" rel="noreferrer">
@@ -192,10 +193,10 @@
 				</ul>
 			</AdminPanel>
 		{/if}
-		<AdminPanel title="Its figures" note="on the theme page">
+		<AdminPanel title="Its figures" note="on the Explore page">
 			<p class="text-muted-foreground m-0 text-sm">
-				An aspect has no venues, posts or searches of its own: what guests praised and criticised under it, by month, brand and dish, is on
-				<a href={themeHref(key, 'complaints', { cityId, month })}>its theme page</a>.
+				An aspect has no venues, posts or searches of its own: who raised it, praised or criticised it, by month, brand, branch, district and dish, and every claim under it, is
+				<a href={exploreTopicHref(key, { cityId, month })}>on the Explore page</a>.
 			</p>
 		</AdminPanel>
 	{:else if loader.error && !data}
@@ -297,9 +298,7 @@
 			<TopicDishSearches {cityId} topicKey={key} label={data.row.label} />
 		{/if}
 
-		{#if data.row.kind === 'dish' || data.row.kind === 'drink'}
-			<TopicDishNames {cityId} topicKey={key} label={data.row.label} />
-		{/if}
+		<TopicTerms {cityId} topicKey={key} label={data.row.label} />
 
 		{#if data.children.length}
 			<AdminPanel title="Under it" note={`${data.children.length}`}>

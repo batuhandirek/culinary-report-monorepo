@@ -15,7 +15,7 @@ import type {
 	ReportBranch,
 	ReportCompetitor,
 	ReportData,
-	ReportFeedbackPoint,
+	ReportClaim,
 	ReportPost,
 	ReportReviewGroup,
 } from '../interfaces/report-data.interface.js';
@@ -37,8 +37,8 @@ const OPENINGS_SHOWN = 8;
 /** Both groups of the five-stars split need this many written reviews to be worth reading apart. */
 const SPLIT_MIN_WRITTEN = 3;
 
-/** "price / price increase: prices went up", or the topic for a point without a theme. */
-const phrase = (p: ReportFeedbackPoint, aspects: PackAspects) =>
+/** "price / price increase: prices went up"; the root alone ("other") for a claim about no aspect. */
+const phrase = (p: ReportClaim, aspects: PackAspects) =>
 	`${p.theme ? aspects.promptLabel(p.theme) : p.topic}: ${p.detail}`;
 
 /** "7 of 23 written reviews" per theme, most raised first; the roots (a point "about price, nothing finer") left out. */
@@ -202,6 +202,9 @@ export const packGaps = (data: ReportData, scope: PromptScope): string[] => {
 	return gaps;
 };
 
+/** What a post said, its own words where kept (`ReportPost.said`), when it said anything */
+const saidField = (p: { said: string[] }) => (p.said.length ? { said: p.said } : {});
+
 /**
  * The editor's user message. `scope` is what the configuration's sections show
  * (`trimForSections`); `aspects` names the theme keys; `analysis` is the build's, when it ran.
@@ -270,9 +273,11 @@ export const editorPack = (data: ReportData, scope: PromptScope, aspects: PackAs
 						paidOrGifted: p.promotional,
 						visited: p.visited,
 						sentiment: p.sentiment,
-						summary: p.summary,
+						...saidField(p),
 						praise: p.praise.map(point => phrase(point, aspects)),
 						complaints: p.complaints.map(point => phrase(point, aspects)),
+						// What it stated without judging ("fries for 10 euros"): material, never a praise or a complaint
+						...(p.noted?.length && { noted: p.noted.map(point => phrase(point, aspects)) }),
 						dishes: p.dishes.map(d => `${d.name} (${d.sentiment})`),
 						...(c && {
 							commentsUnderIt: {
@@ -295,7 +300,7 @@ export const editorPack = (data: ReportData, scope: PromptScope, aspects: PackAs
 					date: p.postedAt.slice(0, 10),
 					account: creatorLabel(p),
 					views: p.views,
-					summary: p.summary,
+					...saidField(p),
 				})),
 			} : undefined,
 		ownAccounts: reach?.ownAccounts,

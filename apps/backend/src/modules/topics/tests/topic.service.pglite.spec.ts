@@ -15,6 +15,7 @@ import { TOPIC_SEED } from '../constants/topic-seed.constant.js';
 import { AdminTopicsController } from '../controllers/admin.topics.controller.js';
 import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
 import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
+import { TermService } from '../services/term.service.js';
 import { TopicService } from '../services/topic.service.js';
 import { TrendsTopicLookupService } from '../services/trends-topic-lookup.service.js';
 
@@ -40,6 +41,8 @@ describe('TopicService (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				TopicService,
+				// The aliases and the dismissed words are its terms
+				TermService,
 				TrendsTopicLookupService,
 				AdminTopicsController,
 				{ provide: PgBossService, useValue: pgBoss },
@@ -88,8 +91,6 @@ describe('TopicService (pglite)', () => {
 				venueName: venue.name,
 				cuisine,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		mention(ramen, 'Tonkotsu ramen');
 		mention(ramen, null); // the category: ramen
@@ -182,18 +183,19 @@ describe('TopicService (pglite)', () => {
 		expect(res.unmapped).toEqual([]);
 	});
 
-	it("refuses another topic's word, an unknown parent and a parent under the topic", async () => {
+	it("refuses another topic's admin word, an unknown parent and a parent under the topic", async () => {
 		const ramen = (await service.all()).find(t => t.key === 'ramen')!;
-		await expect(controller.updateTopic(ramen.id, { aliases: ['Döner'] })).rejects.toThrow(
-			'"Döner" already means "Döner & kebab"',
+		// "durum" is the seed's alias of kebab: an admin's term, and one admin's word stands
+		await expect(controller.updateTopic(ramen.id, { aliases: ['Dürüm'] })).rejects.toThrow(
+			'"Dürüm" already means "Döner & kebab"',
 		);
 		await expect(controller.updateTopic(ramen.id, { parentKey: 'nope' })).rejects.toThrow(
 			BadRequestException,
 		);
 		const japanese = (await service.all()).find(t => t.key === 'japanese')!;
-		await expect(
-			controller.updateTopic(japanese.id, { parentKey: 'ramen' }),
-		).rejects.toThrow('"Ramen" sits under "Japanese"');
+		await expect(controller.updateTopic(japanese.id, { parentKey: 'ramen' })).rejects.toThrow(
+			'"Ramen" sits under "Japanese"',
+		);
 
 		// Null clears; the key never changes
 		const cleared = await controller.updateTopic(ramen.id, {
@@ -250,7 +252,9 @@ describe('TopicService (pglite)', () => {
 			return i;
 		};
 		const added = at(', tip_prompts (a tip asked for on the card terminal)');
-		expect(added).toBeGreaterThan(at('; payment: payment (about paying, when nothing finer fits), '));
+		expect(added).toBeGreaterThan(
+			at('; payment: payment (about paying, when nothing finer fits), '),
+		);
 		expect(added).toBeLessThan(at('; wait: wait ('));
 		// Never a kind of food: the cuisine lookup doesn't know it
 		expect(index.resolve('Tip prompts')).toEqual([]);
@@ -282,14 +286,16 @@ describe('TopicService (pglite)', () => {
 		);
 		const taste = await stored('taste');
 		const sushi = await stored('sushi');
-		await refused(() => controller.updateTopic(taste.id, { parentKey: 'pizza' }), BadRequestException);
-		await refused(() => controller.updateTopic(sushi.id, { parentKey: 'food' }), BadRequestException);
-
-		// An aspect has no aliases and is not searched on Trends
 		await refused(
-			() => controller.updateTopic(taste.id, { aliases: ['flavour'] }),
-			'An aspect has no aliases',
+			() => controller.updateTopic(taste.id, { parentKey: 'pizza' }),
+			BadRequestException,
 		);
+		await refused(
+			() => controller.updateTopic(sushi.id, { parentKey: 'food' }),
+			BadRequestException,
+		);
+
+		// An aspect is not searched on Trends
 		await refused(
 			() => controller.updateTopic(taste.id, { trendsTopicId: '/m/0abc' }),
 			'not searched on Google Trends',
@@ -297,10 +303,6 @@ describe('TopicService (pglite)', () => {
 		await refused(
 			() => controller.updateTopic(taste.id, { trendsQuery: 'taste' }),
 			'not searched on Google Trends',
-		);
-		await refused(
-			() => controller.createTopic({ label: 'Dough', kind: ASPECT, parentKey: 'food', aliases: ['pizza dough'] }),
-			'An aspect has no aliases',
 		);
 
 		// A stored topic never crosses the border
@@ -310,18 +312,35 @@ describe('TopicService (pglite)', () => {
 			"can't become an aspect",
 		);
 
-		// Empty aliases pass; the hint is trimmed, and blank clears it
+		// An aspect takes other names like any topic (a Google tag's wording): an admin term, named as a
+		// whole only, never a kind of food in the cuisine lookup
+		expect((await controller.updateTopic(taste.id, { aliases: ['flavour'] })).aliases).toEqual([
+			'flavour',
+		]);
+		const withAlias = await service.index();
+		expect(withAlias.exactAll('flavour')).toEqual(['taste']);
+		expect(withAlias.resolve('taste')).toEqual([]);
+		expect(withAlias.food.some(t => t.key === 'taste')).toBe(false);
+
+		// Empty aliases drop them; the hint is trimmed, and blank clears it
 		expect(
 			await controller.updateTopic(taste.id, { aliases: [], hint: '  how it tasted  ' }),
-		).toMatchObject({ key: 'taste', kind: 'aspect', parentKey: 'food', hint: 'how it tasted' });
+		).toMatchObject({
+			key: 'taste',
+			kind: 'aspect',
+			parentKey: 'food',
+			hint: 'how it tasted',
+			aliases: [],
+		});
+		expect((await service.index()).exactAll('flavour')).toEqual([]);
 		expect((await controller.updateTopic(taste.id, { hint: '  ' })).hint).toBeUndefined();
 		expect((await service.index()).aspectLegend()).toContain(', taste, ');
 	});
 
 	it('stores nothing for a create it refuses after the key check', async () => {
-		// The three refused above: a parent on the other side of the tree, aliases on an aspect
+		// The two refused above: a parent on the other side of the tree
 		expect(
-			(await harness.orm.em.find(Topic, { key: { $in: ['crust', 'goulash', 'dough'] } })).map(
+			(await harness.orm.em.find(Topic, { key: { $in: ['crust', 'goulash'] } })).map(
 				t => t.key,
 			),
 		).toEqual([]);
@@ -329,7 +348,11 @@ describe('TopicService (pglite)', () => {
 
 	it('deletes a leaf aspect, never a kind of food, a root or a parent, and queues the re-link', async () => {
 		const tipPrompts = await stored('tip_prompts');
-		const jar = await service.create({ label: 'Tip jar', kind: ASPECT, parentKey: 'tip_prompts' });
+		const jar = await service.create({
+			label: 'Tip jar',
+			kind: ASPECT,
+			parentKey: 'tip_prompts',
+		});
 		expect((await service.index()).promptLabel('tip_jar')).toBe('payment / tip jar');
 		await expect(service.remove((await stored('pizza')).id)).rejects.toThrow(
 			'"Pizza" is a kind of food: topics are edited, never deleted',

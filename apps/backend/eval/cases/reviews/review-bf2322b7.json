@@ -1,0 +1,336 @@
+{
+  "id": "review-bf2322b7",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "bf2322b7-a838-4985-9b84-16a5ff97d359",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21GbWVGVlRWbGd6V0VaZmF6RmxTRUZNVGw5VmVtYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Nhas City Chicken",
+    "venueId": "14f38160-dec4-438b-b067-43e7b1088587",
+    "brand": "Nhas City Chicken",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-03T09:38:10.533Z",
+    "stars": 5,
+    "text": "Wir waren zu fünft und wurden vom Besitzer eingeladen 😍 Das Hühnchen war mega zart und saftig, es gab sogar verschiedene Marinaden. Fladenbrot, Hummus, Knoblauch Creme, frischen Salat, Hähnchen Sticks, alles war super lecker 😋  Vielen lieben Dank für das tolle Essen. Macht weiter so.\nUNBEDINGT EMPFEHLENSWERT!!!!",
+    "textTranslated": "There were five of us, and we were treated by the owner 😍 The chicken was incredibly tender and juicy, and there were even different marinades. The flatbread, hummus, garlic cream, fresh salad, and chicken sticks were all delicious 😋 Thank you so much for the wonderful meal. Keep up the great work!\n\nHIGHLY RECOMMENDED!!!!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:47:56.981Z",
+    "claims": [
+      {
+        "text": "five of us",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we were treated by the owner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken was incredibly tender and juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "different marinades",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "marinades"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the flatbread was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "flatbread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the hummus was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "hummus"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the garlic cream was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "garlic cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fresh salad was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken sticks were delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chicken sticks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:16.817Z",
+    "usage": {
+      "inputTokens": 5194,
+      "outputTokens": 2087,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call is the owner treating the group: it is a disclosure that the meal was free. I kept it as a fact with positive sentiment under ownership; friendliness and a neutral sentiment are also allowed. Tender and juicy chicken goes under cooking, with taste allowed; the fresh salad is optional as its own freshness claim.",
+    "claims": [
+      {
+        "text": "we were a group of five",
+        "quote": "Wir waren zu fünft",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "family_pets"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "we were treated to the meal by the owner",
+        "quote": "wurden vom Besitzer eingeladen 😍",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "friendliness",
+            "service"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the Hühnchen was incredibly tender and juicy",
+        "quote": "Das Hühnchen war mega zart und saftig",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Hühnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there were even different marinades for the chicken",
+        "quote": "es gab sogar verschiedene Marinaden",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Marinaden"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the Fladenbrot, Hummus, Knoblauch Creme, Salat and Hähnchen Sticks were all super delicious",
+        "quote": "Fladenbrot, Hummus, Knoblauch Creme, frischen Salat, Hähnchen Sticks, alles war super lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Fladenbrot",
+          "Hummus",
+          "Knoblauch Creme",
+          "Salat",
+          "Hähnchen Sticks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Salat was fresh",
+        "quote": "frischen Salat",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "thank you for the great food",
+        "quote": "Vielen lieben Dank für das tolle Essen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "keep up the great work",
+        "quote": "Macht weiter so.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "absolutely recommended",
+        "quote": "UNBEDINGT EMPFEHLENSWERT!!!!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

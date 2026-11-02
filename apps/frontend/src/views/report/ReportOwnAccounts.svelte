@@ -29,7 +29,7 @@
 			{#each ownPosts.slice(0, 4) as post (post.postId)}
 				<li class="flex items-baseline gap-3 text-[13px]">
 					<span class="w-12 shrink-0 font-semibold tabular-nums">{compact(post.views)}</span>
-					<span class="text-reading-ink min-w-0 truncate">{post.summary}</span>
+					<span class="text-reading-ink min-w-0 truncate">{post.said.join(' · ')}</span>
 				</li>
 			{/each}
 		</ul>

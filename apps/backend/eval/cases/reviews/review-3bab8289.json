@@ -1,0 +1,276 @@
+{
+  "id": "review-3bab8289",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "3bab8289-5e3e-4bf9-afe6-216078cec60c",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25sVGJGbDViRzVhWWpKWmJtNWxTRkpOUVY5T2NuYxAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-10T07:42:51.771Z",
+    "stars": 3,
+    "text": "Fuimos a comer dos personas. El sitio es enorme, por lo que si está un poco vacío, como en nuestro caso, parece un poco desangelado. El servicio por parte del personal podría haber sido algo mejor. La comida típica alemana, nada del otro mundo aunque merece la pena en caso de querer probar ese tipo de platos.",
+    "textTranslated": "Two of us went for lunch. The place is huge, so if it's a bit empty, as it was when we were there, it feels a little soulless. The service could have been better. The food was typical German, nothing extraordinary, but it's worth a visit if you want to try that kind of cuisine."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:41:35.542Z",
+    "claims": [
+      {
+        "text": "two of us went for lunch",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is huge",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it felt a little soulless when it was a bit empty",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service could have been better",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was typical German",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was nothing extraordinary",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's worth a visit if you want to try that kind of cuisine",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:42.562Z",
+    "usage": {
+      "inputTokens": 5109,
+      "outputTokens": 1620,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'typical German' is authenticity or plain food and fact or opinion, and whether the conditional 'merece la pena' is a verdict on the place or an opinion on the food (not value_for_money, since 'worth a visit' is not about money). 'A bit empty' may stay inside the 'soulless' claim.",
+    "claims": [
+      {
+        "text": "two people went for lunch",
+        "quote": "Fuimos a comer dos personas",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is huge",
+        "quote": "El sitio es enorme",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the place was a bit empty when they were there",
+        "quote": "si está un poco vacío, como en nuestro caso",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "when a bit empty, the place feels a little soulless",
+        "quote": "parece un poco desangelado",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service from the staff could have been better",
+        "quote": "El servicio por parte del personal podría haber sido algo mejor",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is typical German",
+        "quote": "La comida típica alemana",
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the food is nothing extraordinary",
+        "quote": "nada del otro mundo",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "worth it if you want to try that kind of German dishes",
+        "quote": "merece la pena en caso de querer probar ese tipo de platos",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,393 @@
+{
+  "id": "review-a753c04a",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "a753c04a-71b7-4053-a2e6-a92d629a13ee",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT20xeWJuaDNUV3AwWkVaRmFFRTFNSGhHWmpFek5sRRAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-27T21:14:24.232Z",
+    "stars": 3,
+    "text": "Típica cervecería de la zona Bavara en el centro de Berlín.  Es un local muy grande con gran terraza y música en vivo en el interior.  Se sirve cerveza de la marca Hofbrau y comida tipica Bavara, codillo,  salchichas,  etc. Los precios son similares a otros locales de la zona. A pesar de ser típica cervecería alemana,  hay mucho turista extranjero.  Por poner un pero, la música en vivo está excesivamente alta y dificulta mantener una conversación.",
+    "textTranslated": "A typical Bavarian beer hall in the center of Berlin. It's a very large establishment with a spacious terrace and live music inside. They serve Hofbrau beer and traditional Bavarian food such as pork knuckle, sausages, etc. Prices are similar to other places in the area. Despite being a typical German beer hall, it's frequented by many foreign tourists. One drawback is that the live music is excessively loud, making it difficult to have a conversation."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:54:33.925Z",
+    "claims": [
+      {
+        "text": "a typical Bavarian beer hall",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "in the center of Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a very large establishment",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a spacious terrace",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "live music inside",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Hofbrau beer",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Hofbrau beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "traditional Bavarian food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "traditional Bavarian food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "pork knuckle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pork knuckle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "sausages",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "sausage"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "prices are similar to other places in the area",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "frequented by many foreign tourists",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the live music is excessively loud",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "difficult to have a conversation",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:36.009Z",
+    "usage": {
+      "inputTokens": 5230,
+      "outputTokens": 2531,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'typical Bavarian beer hall' has an aspect (null, with authenticity/atmosphere allowed), whether regular live music is a fact or an event, and how negative the tourist remark is ('a pesar de' suggests mild criticism). The food names are kept as spelled in the Spanish quote (codillo, salchichas).",
+    "claims": [
+      {
+        "text": "a typical Bavarian beer hall",
+        "quote": "Típica cervecería de la zona Bavara",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "authenticity",
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the beer hall is in the centre of Berlin",
+        "quote": "en el centro de Berlín",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is very large",
+        "quote": "Es un local muy grande",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the place has a large terrace",
+        "quote": "gran terraza",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "there is live music inside",
+        "quote": "música en vivo en el interior",
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "noise"
+          ],
+          "kinds": [
+            "event"
+          ]
+        }
+      },
+      {
+        "text": "they serve Hofbrau beer",
+        "quote": "Se sirve cerveza de la marca Hofbrau",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "cerveza de la marca Hofbrau"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they serve typical Bavarian food such as codillo and salchichas",
+        "quote": "comida tipica Bavara, codillo,  salchichas",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "codillo",
+          "salchichas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "prices are similar to other places in the area",
+        "quote": "Los precios son similares a otros locales de la zona",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "many foreign tourists despite being a typical German beer hall",
+        "quote": "hay mucho turista extranjero",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the live music is excessively loud and makes conversation difficult",
+        "quote": "la música en vivo está excesivamente alta y dificulta mantener una conversación",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -27,14 +27,20 @@ describe('AccountScrapeService (pglite)', () => {
 	let city: City;
 	let source: CitySource;
 	let failTikTok = false;
-	const runActor = jest.fn(async (actor: string, _input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
-		if (actor === 'apify/instagram-profile-scraper') return structuredClone(INSTAGRAM_PROFILE_ITEMS);
-		if (actor === 'clockworks/tiktok-profile-scraper') {
-			if (failTikTok) throw new Error('Apify refused the run');
-			return [...structuredClone(TIKTOK_PROFILE_ITEMS), { error: 'Profile not found', input: 'gone_handle' }];
-		}
-		return [];
-	});
+	const runActor = jest.fn(
+		async (actor: string, _input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
+			if (actor === 'apify/instagram-profile-scraper')
+				return structuredClone(INSTAGRAM_PROFILE_ITEMS);
+			if (actor === 'clockworks/tiktok-profile-scraper') {
+				if (failTikTok) throw new Error('Apify refused the run');
+				return [
+					...structuredClone(TIKTOK_PROFILE_ITEMS),
+					{ error: 'Profile not found', input: 'gone_handle' },
+				];
+			}
+			return [];
+		},
+	);
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -75,7 +81,12 @@ describe('AccountScrapeService (pglite)', () => {
 
 	it("stores the week's posts found on each profile and a snapshot of each, paying TikTok only for the week", async () => {
 		const em = harness.orm.em;
-		const result = await service.scrape(city, [...targets], { since: SINCE, budgetUsd: 2, label: 'last week', now: NOW });
+		const result = await service.scrape(city, [...targets], {
+			since: SINCE,
+			budgetUsd: 2,
+			label: 'last week',
+			now: NOW,
+		});
 
 		// Two Instagram posts since the 17th (a recent pinned one counts, an old pinned one not)
 		// and one TikTok video; the refused Instagram timeline and the gone handle bring none
@@ -93,36 +104,78 @@ describe('AccountScrapeService (pglite)', () => {
 		expect(ttCall[2].maxCostUsd).toBeCloseTo(2 * (20 / 22));
 
 		em.clear();
-		const posts = await em.find(SocialPost, {}, { populate: ['account', 'foundBy'], orderBy: { postedAt: 'desc' } });
+		const posts = await em.find(
+			SocialPost,
+			{},
+			{ populate: ['account', 'foundBy'], orderBy: { postedAt: 'desc' } },
+		);
 		expect(posts.map(p => [p.externalId, p.account?.handle, p.city.id])).toEqual([
 			['7700240032950471969', 'berlingoodfood', city.id],
 			['ig_4012962569291174220', 'berlindeneyenir', city.id],
 			['ig_4012237201383600968', 'berlindeneyenir', city.id],
 		]);
 		const ig = posts.find(p => p.externalId === 'ig_4012962569291174220')!;
-		expect(ig).toMatchObject({ platform: SocialPlatformEnum.INSTAGRAM, url: 'https://www.instagram.com/p/Dew6DH3ihFM/' });
+		expect(ig).toMatchObject({
+			platform: SocialPlatformEnum.INSTAGRAM,
+			url: 'https://www.instagram.com/p/Dew6DH3ihFM/',
+		});
 		// Every post is a find of its profile; the TikTok one is the city's source
 		const finds = await em.find(PostSource, {}, { populate: ['post'] });
-		expect(finds.map(f => [f.post.externalId, f.kind, f.value, f.source?.id ?? null]).sort()).toEqual(
+		expect(
+			finds.map(f => [f.post.externalId, f.kind, f.value, f.source?.id ?? null]).sort(),
+		).toEqual(
 			[
-				['7700240032950471969', PostSourceKindEnum.TIKTOK_ACCOUNT, 'berlingoodfood', source.id],
-				['ig_4012962569291174220', PostSourceKindEnum.INSTAGRAM_ACCOUNT, 'berlindeneyenir', null],
-				['ig_4012237201383600968', PostSourceKindEnum.INSTAGRAM_ACCOUNT, 'berlindeneyenir', null],
+				[
+					'7700240032950471969',
+					PostSourceKindEnum.TIKTOK_ACCOUNT,
+					'berlingoodfood',
+					source.id,
+				],
+				[
+					'ig_4012962569291174220',
+					PostSourceKindEnum.INSTAGRAM_ACCOUNT,
+					'berlindeneyenir',
+					null,
+				],
+				[
+					'ig_4012237201383600968',
+					PostSourceKindEnum.INSTAGRAM_ACCOUNT,
+					'berlindeneyenir',
+					null,
+				],
 			].sort(),
 		);
 
 		// The accounts exist now, with the profiles' names and followers, the refused one too
 		const accounts = await em.find(SocialAccount, {}, { orderBy: { handle: 'asc' } });
 		expect(accounts.map(a => [a.platform, a.handle, a.displayName, a.followers])).toEqual([
-			[SocialPlatformEnum.INSTAGRAM, 'berlindeneyenir', 'Işınsu Agca | Berlin’de ne yenir?', 18915],
+			[
+				SocialPlatformEnum.INSTAGRAM,
+				'berlindeneyenir',
+				'Işınsu Agca | Berlin’de ne yenir?',
+				18915,
+			],
 			[SocialPlatformEnum.TIKTOK, 'berlingoodfood', 'berlingoodfood', 569],
 			[SocialPlatformEnum.INSTAGRAM, 'churrolade_berlin', 'Churrolade.official', 2708],
 		]);
 		// One snapshot a profile, though its posts carried the count again; TikTok's week of videos
 		// gives no averages, Instagram's item always has its latest posts
-		const snapshots = await em.find(SocialAccountSnapshot, {}, { populate: ['account'], orderBy: { account: { handle: 'asc' } } });
+		const snapshots = await em.find(
+			SocialAccountSnapshot,
+			{},
+			{ populate: ['account'], orderBy: { account: { handle: 'asc' } } },
+		);
 		expect(
-			snapshots.map(s => [s.account.handle, s.source, s.year, s.month, s.day, s.followers, s.following, s.avgViews != null]),
+			snapshots.map(s => [
+				s.account.handle,
+				s.source,
+				s.year,
+				s.month,
+				s.day,
+				s.followers,
+				s.following,
+				s.avgViews != null,
+			]),
 		).toEqual([
 			['berlindeneyenir', 'profile', 2026, 10, 25, 18915, 1646, true],
 			['berlingoodfood', 'profile', 2026, 10, 25, 569, null, false],
@@ -145,19 +198,30 @@ describe('AccountScrapeService (pglite)', () => {
 		em.clear();
 		// Every run adds a snapshot a profile: the weekly test's and this one's
 		expect(await em.count(SocialAccountSnapshot, {})).toBe(6);
-		const tiktok = await em.find(SocialAccountSnapshot, { account: { handle: 'berlingoodfood' } });
-		expect(tiktok.map(s => [s.month, s.followers, s.posts, s.avgViews != null]).sort()).toEqual([
-			[10, 569, 189, false],
-			[10, 569, 189, true],
-		]);
+		const tiktok = await em.find(SocialAccountSnapshot, {
+			account: { handle: 'berlingoodfood' },
+		});
+		expect(tiktok.map(s => [s.month, s.followers, s.posts, s.avgViews != null]).sort()).toEqual(
+			[
+				[10, 569, 189, false],
+				[10, 569, 189, true],
+			],
+		);
 		const byHandle = new Map(
-			(await em.find(SocialAccountSnapshot, { account: { handle: 'churrolade_berlin' } }, { populate: ['account'] })).map(s => [
-				s.account.handle,
-				s,
-			]),
+			(
+				await em.find(
+					SocialAccountSnapshot,
+					{ account: { handle: 'churrolade_berlin' } },
+					{ populate: ['account'] },
+				)
+			).map(s => [s.account.handle, s]),
 		);
 		// The refused timeline: followers known, no posts to average
-		expect(byHandle.get('churrolade_berlin')).toMatchObject({ followers: 2708, avgViews: null, postsLast30Days: 0 });
+		expect(byHandle.get('churrolade_berlin')).toMatchObject({
+			followers: 2708,
+			avgViews: null,
+			postsLast30Days: 0,
+		});
 		// Posts seen again stay one row each; October's earlier ones join them (an Instagram post
 		// of the 16th, a video of the 11th)
 		expect(await em.count(SocialPost, {})).toBe(5);
@@ -168,14 +232,21 @@ describe('AccountScrapeService (pglite)', () => {
 		await em.nativeDelete(SocialPost, {});
 		failTikTok = true;
 		await expect(
-			service.scrape(city, [...targets], { since: SINCE, budgetUsd: 2, label: 'last week', now: NOW }),
+			service.scrape(city, [...targets], {
+				since: SINCE,
+				budgetUsd: 2,
+				label: 'last week',
+				now: NOW,
+			}),
 		).rejects.toThrow('Apify refused the run');
 		failTikTok = false;
 		expect(await em.count(SocialPost, { platform: SocialPlatformEnum.INSTAGRAM })).toBe(2);
 	});
 
 	it('scrapes nothing for no targets', async () => {
-		expect(await service.scrape(city, [], { since: SINCE, budgetUsd: 2, label: 'last week' })).toEqual({
+		expect(
+			await service.scrape(city, [], { since: SINCE, budgetUsd: 2, label: 'last week' }),
+		).toEqual({
 			accounts: 0,
 			profiles: 0,
 			snapshots: 0,

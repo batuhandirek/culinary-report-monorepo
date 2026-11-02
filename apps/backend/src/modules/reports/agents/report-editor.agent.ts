@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { MastraModelConfig } from '@mastra/core/llm';
 import type { Tool } from '@mastra/core/tools';
 import { stepCountIs } from 'ai';
 import { z } from 'zod/v4';
@@ -11,6 +10,7 @@ import {
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 
 import { EDITOR_MAX_STEPS, EDITOR_MAX_TOOL_CALLS, EDITOR_MODEL } from '../constants/report-editor.constant.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 const cardSchema = z.object({
 	title: z.string().describe('At most 6 words, sentence case'),
@@ -62,10 +62,12 @@ export class ReportEditorAgent extends BaseMastraAgent<typeof reportEditorSchema
 		id: 'report-editor',
 		name: 'ReportEditorAgent',
 		outputSchema: reportEditorSchema,
+		// Tool rounds resend the steps before them
+		cacheConversation: true,
 		defaultExecutionOptions: { maxSteps: EDITOR_MAX_STEPS, stopWhen: stepCountIs(EDITOR_MAX_STEPS) },
 	};
 
-	protected getModel(): MastraModelConfig {
+	protected getModel(): LlmModelChoice {
 		return EDITOR_MODEL;
 	}
 

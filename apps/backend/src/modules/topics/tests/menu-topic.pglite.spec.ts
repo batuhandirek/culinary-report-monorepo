@@ -39,7 +39,10 @@ describe('MenuTopicService (pglite)', () => {
 		city = testCity(em);
 		const other = testCity(em, { name: 'Hamburg' });
 		const venue = (key: string, params: Partial<Venue>, inCity = city) =>
-			(venues[key] = venueFactory.build({ name: key, ...params }, { associations: { city: inCity } }));
+			(venues[key] = venueFactory.build(
+				{ name: key, ...params },
+				{ associations: { city: inCity } },
+			));
 		const listings = new Map<Venue, VenueDeliveryListing>();
 		const menu = (v: Venue, month: string, items: [string, number, string?][]) => {
 			const listing =
@@ -122,7 +125,9 @@ describe('MenuTopicService (pglite)', () => {
 
 	it('tags a venue from its menu and from Google’s review tags', async () => {
 		const tags = await tagger.tags([venues['Ramen Ya'], venues['Choc Spot']]);
-		expect(tags.get(venues['Ramen Ya'].id)!.map(t => [t.key, t.source, t.score, t.primary])).toEqual([
+		expect(
+			tags.get(venues['Ramen Ya'].id)!.map(t => [t.key, t.source, t.score, t.primary]),
+		).toEqual([
 			['japanese', 'category', 1, true],
 			['ramen', 'menu', 0.6, false],
 		]);

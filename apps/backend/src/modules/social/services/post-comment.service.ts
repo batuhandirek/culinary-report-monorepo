@@ -9,6 +9,7 @@ import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 import { runPool } from 'src/shared/util/pool.js';
 
+import { CommentDisagreementAgent } from '../agents/comment-disagreement.agent.js';
 import { CommentIntentAgent } from '../agents/comment-intent.agent.js';
 import {
 	PostComment,
@@ -20,7 +21,8 @@ import { ownPostSql } from '../util/accounts.js';
 import { type CommentFields, plainIntent } from '../util/post-comments.js';
 
 // Comments sent to the LLM in one call
-const ANALYSIS_BATCH_SIZE = 80;
+// Comments read side by side, one a call
+const CONCURRENCY = 10;
 
 /** A post about the venue whose comments were scraped, with what they say. */
 export interface PostWithComments {
@@ -49,6 +51,7 @@ export class PostCommentService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly commentIntentAgent: CommentIntentAgent,
+		private readonly commentDisagreementAgent: CommentDisagreementAgent,
 	) {}
 
 	/**
@@ -56,7 +59,12 @@ export class PostCommentService {
 	 * whose comments were never scraped: one scrape per post, a rescrape would pay again. The
 	 * brands come with their branches (own-account names).
 	 */
-	async topPosts(brands: Brand[], cityId: string, month: string, perBrand = 5): Promise<SocialPost[]> {
+	async topPosts(
+		brands: Brand[],
+		cityId: string,
+		month: string,
+		perBrand = 5,
+	): Promise<SocialPost[]> {
 		if (!brands.length) return [];
 		const { start, end } = monthRange(month);
 		const rows: { brand_id: string; post_id: string }[] = await this.em.getConnection().execute(
@@ -82,8 +90,11 @@ export class PostCommentService {
 	 */
 	async save(post: SocialPost, rows: CommentFields[]): Promise<number> {
 		const unique = _.uniqBy(rows, r => r.externalId);
-		const known = unique.length ?
-				await this.em.find(PostComment, { externalId: { $in: unique.map(r => r.externalId) } })
+		const known =
+			unique.length ?
+				await this.em.find(PostComment, {
+					externalId: { $in: unique.map(r => r.externalId) },
+				})
 			:	[];
 		const byId = new Map(known.map(c => [c.externalId, c]));
 		for (const row of unique) {
@@ -135,47 +146,70 @@ export class PostCommentService {
 			:	[];
 		const venueOf = new Map(venueRows.map(r => [r.post_id, r.name]));
 
-		const batches = Object.values(_.groupBy(rest, c => c.post.id)).flatMap(group =>
-			_.chunk(group, ANALYSIS_BATCH_SIZE),
-		);
 		let calls = 0;
-		const disagreements = new Map<SocialPost, string[]>();
+		const venueName = (post: SocialPost) =>
+			venueOf.get(post.id) ?? post.locationName ?? 'the venue';
+		const context = { cityName: city.name };
 		// A provider failure (no credits) stops the pool: keep what was finished before it
 		try {
+			// One comment a call
 			await runPool(
-				batches,
-				4,
-				async batch => {
-					const post = batch[0].post;
+				rest,
+				CONCURRENCY,
+				async comment => {
 					calls++;
 					const res = await this.commentIntentAgent.generate(
 						JSON.stringify({
-							caption: post.text?.slice(0, 500) ?? null,
-							comments: batch.map(c => ({ id: c.externalId, text: c.text.slice(0, 400), likes: c.likes })),
+							venue: venueName(comment.post),
+							caption: comment.post.text?.slice(0, 500) ?? null,
+							comment: { text: comment.text.slice(0, 400), likes: comment.likes },
 						}),
-						{ venueName: venueOf.get(post.id) ?? post.locationName ?? 'the venue', cityName: city.name },
+						context,
 					);
-					const byId = new Map(batch.map(c => [c.externalId, c]));
-					for (const result of res.object.comments) {
-						const comment = byId.get(result.id);
-						if (!comment) continue;
-						comment.intent = result.intent;
-						const isQuestion = result.intent === PostCommentIntentEnum.QUESTION;
-						comment.questionTopic = isQuestion ? (result.questionTopic ?? PostCommentQuestionTopicEnum.OTHER) : null;
-						comment.question = isQuestion ? (result.question?.trim() || null) : null;
-						comment.analysedAt = now;
-						analysed++;
-					}
-					if (res.object.disagreement?.trim())
-						disagreements.set(post, [...(disagreements.get(post) ?? []), res.object.disagreement.trim()]);
+					comment.intent = res.object.intent;
+					const isQuestion = res.object.intent === PostCommentIntentEnum.QUESTION;
+					comment.questionTopic =
+						isQuestion ?
+							(res.object.questionTopic ?? PostCommentQuestionTopicEnum.OTHER)
+						:	null;
+					comment.question = isQuestion ? res.object.question?.trim() || null : null;
+					comment.analysedAt = now;
+					analysed++;
 				},
-				(batch, e) => this.logger.warn(`Comments of post ${batch[0].post.externalId} failed: ${e.message}`),
+				(comment, e) =>
+					this.logger.warn(`Comment ${comment.externalId} failed: ${e.message}`),
+			);
+			// Then one call a post on what its disagreeing comments say
+			const disagreeing = Object.values(
+				_.groupBy(
+					rest.filter(c => c.intent === PostCommentIntentEnum.DISAGREEMENT),
+					c => c.post.id,
+				),
+			);
+			await runPool(
+				disagreeing,
+				CONCURRENCY,
+				async group => {
+					calls++;
+					const res = await this.commentDisagreementAgent.generate(
+						JSON.stringify({
+							venue: venueName(group[0].post),
+							caption: group[0].post.text?.slice(0, 500) ?? null,
+							comments: group.map(c => c.text.slice(0, 400)),
+						}),
+						context,
+					);
+					group[0].post.commentsDisagreement = res.object.summary.trim() || null;
+				},
+				(group, e) =>
+					this.logger.warn(
+						`Disagreement of post ${group[0].post.externalId} failed: ${e.message}`,
+					),
 			);
 		} catch (e) {
 			await this.em.flush();
 			throw e;
 		}
-		for (const [post, lines] of disagreements) post.commentsDisagreement = lines.join(' ');
 		// One flush at the end: the batches run side by side on this entity manager
 		await this.em.flush();
 		return { analysed, calls };

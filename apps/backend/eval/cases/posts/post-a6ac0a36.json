@@ -1,0 +1,190 @@
+{
+  "id": "post-a6ac0a36",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "join.kaya",
+    "locationName": "Kurfürstendamm",
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "We had an absolute blast hosting the first Berlin KAYA Brunch edition in Berlin. Would you like to join our KAYA November Table ? Send us a message 🤍",
+    "subtitles": "Hey. Sorry.\nWhere are you going? Hi.\nI'm going to our Kaya brunch for a women networking platform,\nand we're hosting the first edition in Berlin.\nDo you want to come with us?\nYeah, let's go.",
+    "subtitlesLanguage": "eng-US",
+    "id": "a6ac0a36-7932-4cb5-afe8-51c729a0e5c3",
+    "externalId": "7698019159405317408",
+    "url": "https://www.tiktok.com/@join.kaya/video/7698019159405317408",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-18T14:46:01.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:42:59.994Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "KAYA Brunch",
+        "locationHint": "Kurfürstendamm",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "c816efb4-055d-454a-bbbe-0a8456107b0a",
+          "brandName": "ORJIN Restaurant & Brunch Berlin",
+          "venueId": "6c63aeeb-6035-4953-a281-81d3e89283c0",
+          "venueName": "ORJIN Restaurant & Brunch Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the first Berlin KAYA Brunch edition",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "hosted in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the first edition in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "KAYA is a women networking platform",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:30.947Z",
+    "usage": {
+      "inputTokens": 5988,
+      "outputTokens": 1072,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named: Kurfürstendamm is a street and KAYA is a networking organisation running brunch events, so there are no places. The brunch claims are borderline food-scene content about an event; leaving them all out is acceptable, hence optional, and subject none would also be defensible.",
+    "isPromotional": true,
+    "places": [],
+    "claims": [
+      {
+        "text": "KAYA hosted its first Berlin KAYA Brunch edition in Berlin",
+        "quote": "hosting the first Berlin KAYA Brunch edition in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the hosts had an absolute blast at the KAYA Brunch",
+        "quote": "We had an absolute blast",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "people can join the KAYA November Table by sending a message",
+        "quote": "Would you like to join our KAYA November Table ? Send us a message",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.247Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

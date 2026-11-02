@@ -1,0 +1,44 @@
+{
+  "id": "term-7989",
+  "kind": "term",
+  "tags": [
+    "google-tag",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 7989,
+    "key": "dancing",
+    "name": "dancing",
+    "uses": 0
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": null
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:57:04.169Z",
+    "usage": {
+      "inputTokens": 169,
+      "outputTokens": 105,
+      "cachedInputTokens": 34,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "topics": [],
+    "alsoAcceptable": [
+      "nightclub"
+    ],
+    "suggestion": "Dancing",
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.472Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -183,8 +183,6 @@ describe('VenueSearchRankService (pglite)', () => {
 			venueName: me.name,
 			cuisine: 'Ramen',
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 		await em.flush();
 		await linkTopics(em);

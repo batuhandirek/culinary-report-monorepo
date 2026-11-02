@@ -1,0 +1,354 @@
+{
+  "id": "review-37016d87",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "37016d87-1ff0-4b6b-acab-435ca804f33d",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25oRFVuWjVOMUp1Y2tKWlltTjVWamxuU2xKa09WRRAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-26T20:18:16.237Z",
+    "stars": 5,
+    "text": "Ha sido todo increíble!!! Hemos ido a cenar como fin de viaje del 25 aniversario de boda y ha estado genial todo.  El trato fenomenal, la comida buenísima y el ambiente típico y muy animado. Volvería sin dudarlo y lo recomiendo si estáis por aquí de viaje. Un placer haberos visitado.",
+    "textTranslated": "It was all incredible!!! We went for dinner to celebrate the end of our 25th wedding anniversary trip, and everything was fantastic. The service was phenomenal, the food was delicious, and the atmosphere was typical and very lively. I would definitely go back, and I highly recommend it if you're traveling in the area. It was a pleasure visiting you."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:54:33.926Z",
+    "claims": [
+      {
+        "text": "it was all incredible",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "went for dinner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "to celebrate the end of our 25th wedding anniversary trip",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was fantastic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was phenomenal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere was typical and very lively",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I would definitely go back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I highly recommend it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "traveling in the area",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:21.897Z",
+    "usage": {
+      "inputTokens": 5142,
+      "outputTokens": 1966,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether overall praise ('todo increíble', 'un placer') is verdict or opinion; 'trato' as general service vs friendliness; 'animado' as crowding (lively) vs atmosphere. The anniversary is the guest's occasion, not a venue event, so it is a fact.",
+    "claims": [
+      {
+        "text": "everything was incredible",
+        "quote": "Ha sido todo increíble!!!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "went for dinner at the end of a 25th wedding anniversary trip",
+        "quote": "Hemos ido a cenar como fin de viaje del 25 aniversario de boda",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "everything was great",
+        "quote": "ha estado genial todo",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion",
+            "event"
+          ]
+        }
+      },
+      {
+        "text": "the service was phenomenal",
+        "quote": "El trato fenomenal",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was delicious",
+        "quote": "la comida buenísima",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the atmosphere was typical",
+        "quote": "el ambiente típico",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the atmosphere was very lively",
+        "quote": "muy animado",
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "would go back without hesitation",
+        "quote": "Volvería sin dudarlo",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "recommends it to those traveling in the area",
+        "quote": "lo recomiendo si estáis por aquí de viaje",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it was a pleasure visiting",
+        "quote": "Un placer haberos visitado.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): The agent has the matching claim \"everything was fantastic\" as positive; the scorer paired the wrong claims."
+      },
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): The agent's matching claim is an opinion, which the reference accepts; the scorer's pairing is wrong."
+      },
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): \"Typical atmosphere\" can be read as a neutral description, which the reference itself accepts as a neutral sentiment."
+      },
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

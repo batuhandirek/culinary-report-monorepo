@@ -1,0 +1,543 @@
+{
+  "id": "review-eaba59cf",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:4",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "eaba59cf-a804-485c-8310-eb5ec77bc5d5",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xkUlF6bHRaVVp5T1ZCNWR6RnZRV3gwTW5VelNYYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Borchardt",
+    "venueId": "c0f474be-f6bc-44b1-b4b9-018598e98753",
+    "brand": "Borchardt",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-13T15:55:53.557Z",
+    "stars": 4,
+    "text": "Booked quite last minute so was happy to still get a table later in the evening. Went around Christmas time and the place had a really cozy Christmas vibe. It was full and quite loud, but still easy enough to talk.\n\nStaff were really nice and attentive. We had the tuna tartare, steak & frites, bread and a fruit tart for dessert.\n\nFood was pretty average overall. I really liked the tuna tartare with the bread, but the steak was just okay, nothing too memorable. The fruit tart though was really good.\n\nNice place for the atmosphere and a casual dinner, especially around Christmas🎄",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:42:21.861Z",
+    "claims": [
+      {
+        "text": "booked quite last minute",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "got a table later in the evening",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "went around Christmas time",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place had a really cozy Christmas vibe",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was full",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was quite loud",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "easy enough to talk",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "staff were really nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "staff were attentive",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had the tuna tartare",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "tuna tartare"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had steak & frites",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "steak",
+          "frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had bread",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had a fruit tart for dessert",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "fruit tart"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "food was pretty average overall",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "really liked the tuna tartare with the bread",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna tartare",
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the steak was just okay",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the steak was nothing too memorable",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fruit tart was really good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fruit tart"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "nice place for the atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "nice place for a casual dinner",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "especially around Christmas",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:25.668Z",
+    "usage": {
+      "inputTokens": 5092,
+      "outputTokens": 3219,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'It was full' is a neutral fact or a mild negative, and whether 'average' food and the 'just okay' steak are negative or mixed. Frites appear only in the order list, so that list is kept as a fact claim of its own. 'Easy enough to talk' may stand alone or stay inside the loudness claim.",
+    "claims": [
+      {
+        "text": "booked quite last minute and was happy to still get a table later in the evening",
+        "quote": "Booked quite last minute so was happy to still get a table later in the evening",
+        "sentiment": "positive",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait_for_table"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "went around Christmas time",
+        "quote": "Went around Christmas time",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place had a really cozy Christmas vibe",
+        "quote": "the place had a really cozy Christmas vibe",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place was full",
+        "quote": "It was full",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the place was quite loud",
+        "quote": "quite loud",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it was still easy enough to talk despite the noise",
+        "quote": "still easy enough to talk",
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were really nice",
+        "quote": "Staff were really nice",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were attentive",
+        "quote": "attentive",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had the tuna tartare, steak & frites, bread and a fruit tart for dessert",
+        "quote": "We had the tuna tartare, steak & frites, bread and a fruit tart for dessert",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "tuna tartare",
+          "steak",
+          "frites",
+          "bread",
+          "fruit tart"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was pretty average overall",
+        "quote": "Food was pretty average overall",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "really liked the tuna tartare with the bread",
+        "quote": "I really liked the tuna tartare with the bread",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna tartare",
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the steak was just okay, nothing too memorable",
+        "quote": "the steak was just okay, nothing too memorable",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the fruit tart was really good",
+        "quote": "The fruit tart though was really good",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fruit tart"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "nice place for the atmosphere and a casual dinner, especially around Christmas",
+        "quote": "Nice place for the atmosphere and a casual dinner, especially around Christmas",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

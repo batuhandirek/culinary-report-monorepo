@@ -1,0 +1,511 @@
+{
+  "id": "review-196641fc",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:long",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "196641fc-131b-4940-9301-28eece50b77a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21KWWFVeEJTbTFZYkZkeGJuZHNVbDltYldGdmRIYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-19T15:23:56.338Z",
+    "stars": 4,
+    "text": "Der Gemüse Kebab sehr gut, vielleicht der beste überhaupt bislang. Das Warten von insgesamt 50 min zu lang, aber wohl durch Social Media und Maps Hype ein großer Mix aus fast ausnahmslos U30 Touristen oder Business(wo)men aus Asien oder Osteuropa und Homies am späten Samstagmittag. Die Bestellung bei freundlicher Dame. Die Essen Abholung: anonymes Wegziehen vor (wohl durch den Erfolg) konsequent arrogant Gästefragen ignorierenden männlichen wohl arabischen Kebabexperten und selbst Tüten etc nehmen. Coole Aufkleber aus aller (Fußball) Welt als \"Design\". Essen vor Ort möglich, aber wegen Gedränge/Schlange machen es nur wenige heute. Zu empfehlen mit leichten Einschränkungen.",
+    "textTranslated": "The vegetable kebab was very good, perhaps the best I've had so far. The 50-minute wait was too long, but likely due to the hype surrounding social media and Google Maps, it was a mixed crowd consisting almost exclusively of tourists under 30, businesswomen from Asia or Eastern Europe, and friends on a late Saturday afternoon. Ordering was done by a friendly woman. Food pickup involved anonymously slipping away from the (presumably due to its success) consistently arrogant, presumably Arab, kebab experts who ignored customer questions and even took the bags themselves. The \"design\" featured cool stickers from all over the (football) world. Eating in was possible, but due to the crowds/queue, few people did so today. Recommended with minor reservations."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:36:01.183Z",
+    "claims": [
+      {
+        "text": "the vegetable kebab was very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "vegetable kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the vegetable kebab was perhaps the best I've had so far",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "vegetable kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the wait was 50 minutes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 50,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the wait was too long",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the hype surrounding social media and Google Maps likely caused the wait",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the crowd was mixed",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the crowd consisted almost exclusively of tourists under 30",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the crowd consisted of businesswomen from Asia or Eastern Europe",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the crowd consisted of friends on a late Saturday afternoon",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "ordering was done by a friendly woman",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab experts were consistently arrogant",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab experts ignored customer questions",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab experts took the bags themselves",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the design featured cool stickers from all over the football world",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "eating in was possible",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "few people ate in today",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "recommended with minor reservations",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:36.290Z",
+    "usage": {
+      "inputTokens": 5479,
+      "outputTokens": 3614,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The translation misreads the pickup sentence: the original says guests take the bags themselves and the staff are arrogant and ignore questions, so it is split along the German. The 50-minute total wait spans queue and food, so root wait with queue/wait_for_food allowed; 'best so far' is about the dish, so opinion with verdict allowed.",
+    "claims": [
+      {
+        "text": "the Gemüse Kebab was very good",
+        "quote": "Der Gemüse Kebab sehr gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gemüse Kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Gemüse Kebab is perhaps the best so far",
+        "quote": "vielleicht der beste überhaupt bislang",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gemüse Kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the total wait of 50 minutes was too long",
+        "quote": "Das Warten von insgesamt 50 min zu lang",
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 50,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue",
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the wait is probably due to the social media and Maps hype",
+        "quote": "wohl durch Social Media und Maps Hype",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the crowd is a big mix of almost only under-30 tourists, business(wo)men from Asia or Eastern Europe and homies",
+        "quote": "ein großer Mix aus fast ausnahmslos U30 Touristen oder Business(wo)men aus Asien oder Osteuropa und Homies",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "visited on a late Saturday midday",
+        "quote": "am späten Samstagmittag",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "ordering was with a friendly lady",
+        "quote": "Die Bestellung bei freundlicher Dame.",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "food pickup is an anonymous moving along",
+        "quote": "Die Essen Abholung: anonymes Wegziehen",
+        "sentiment": "negative",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the male kebab experts at pickup are consistently arrogant, presumably due to the success",
+        "quote": "(wohl durch den Erfolg) konsequent arrogant",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab experts ignore guests' questions",
+        "quote": "Gästefragen ignorierenden",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "advice"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "guests take bags etc. themselves at pickup",
+        "quote": "selbst Tüten etc nehmen",
+        "sentiment": "negative",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "cool stickers from all over the (football) world as the design",
+        "quote": "Coole Aufkleber aus aller (Fußball) Welt als \"Design\".",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "eating on site is possible",
+        "quote": "Essen vor Ort möglich",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "few eat on site today because of the crowding and queue",
+        "quote": "wegen Gedränge/Schlange machen es nur wenige heute",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue",
+            "space"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "recommended with slight reservations",
+        "quote": "Zu empfehlen mit leichten Einschränkungen.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.204Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

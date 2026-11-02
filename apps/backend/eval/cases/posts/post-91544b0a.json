@@ -1,0 +1,826 @@
+{
+  "id": "post-91544b0a",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "forksnfinds",
+    "locationName": "Rocoto Berlin",
+    "hashtags": [
+      "forksnfinds",
+      "berlineats",
+      "peruvianfood",
+      "ceviche",
+      "berlinfoodie"
+    ],
+    "taggedHandles": [
+      "rocotoberlin"
+    ],
+    "text": "📍2️⃣9️⃣ @rocotoberlin\n​​A taste of the Inca civilization right in Berlin! 🇵🇪🏛️\n.\nOverall rating: 9.5/10 ⭐⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️\nBudget: 50€+ pP\n.\n🛖 When I visited Peru in 2024, the food culture completely blew my mind. If you’re nostalgic for those flavors or just want to try one of the best cuisines in the world, this hidden gem in Schöneberg is the answer. Tucked behind a small door and half a floor underground, it radiates pure coziness.\n.\n🍹 Started the only correct way: munching on roasted Peruvian corn kernels with a Chicha Morada and a Pisco Sour (one sip and I was instantly transported back to Ica!).\n.\n🐟 The ultimate test of any Peruvian spot is the ceviche, so we shared the mixed platter. It left me absolutely speechless, an umami flavor explosion. The Japanese-fusion tuna with a hint of wasabi was my favorite, and the avocado white fish packed an unexpected, highly appreciated spicy punch. \nTip: If you visit and don’t order this platter, you're making a grave mistake.\n.\n🌮 The appetizers didn't stop there. The Chicharron tacos perfectly balanced a fatty crunch with fresh plantain and avocado puree. The cheese empanadas? Piping hot, inflated perfection dipped in aji amarillo sauce.\n.\n🥩 For the main, we shared a classic chifa fusion I fell in love with on my trip (and now cook at home!): Lomo Saltado. Wok-sautéed beef and veggies served over a creamy aji amarillo risotto topped with parmesan. It is highly addictive, so consider yourself warned.\n.\n🥭 Sealed the deal with a maracuja mousse and an ice-cold mango passionfruit sorbet served with crumble and fresh berries. Simple, visually stunning, and so satisfying. \n.\nThe waiters are incredibly friendly and genuinely cared about our feedback. I can't wait to go back 🤤\n.\nWhat is your favorite Peruvian dish? Drop it below! 👇\n.\n.\n.\n#forksnfinds #berlineats #peruvianfood #ceviche #berlinfoodie",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "91544b0a-7f53-4eda-bb47-9e7bc27a80b9",
+    "externalId": "ig_4015021272173743096",
+    "url": "https://www.instagram.com/p/De4OJMVjYv4/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T13:17:35.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-25T04:01:33.301Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rocoto Berlin",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "cd7fbe26-9051-424d-86fa-af9555ef6250",
+          "brandName": "Rocoto - Peruvian Cuisine & Pisco Bar",
+          "venueId": "f830404c-1d96-432f-bcaf-9df05134a7b3",
+          "venueName": "Rocoto - Peruvian Cuisine & Pisco Bar"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "pure coziness",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ceviche was an umami flavor explosion",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "ceviche"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Chicharron tacos had a balanced fatty crunch and fresh filling",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Chicharron tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cheese empanadas were piping hot",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [
+          "cheese empanadas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cheese empanadas were inflated perfection",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "cheese empanadas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Chicha Morada and Pisco Sour were enjoyed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Chicha Morada"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "waiters were incredibly friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "waiters genuinely cared about their feedback",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:45:11.948Z",
+    "usage": {
+      "inputTokens": 10773,
+      "outputTokens": 7787,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the 'grave mistake' tip is about one dish, not the place as a whole, so it is an opinion with verdict allowed; the Ica line is attached to the Pisco Sour as the nearest drink. The Peru-trip remarks and the closing engagement question are kept as optional subject-none claims.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rocoto Berlin",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "cd7fbe26-9051-424d-86fa-af9555ef6250",
+          "brandName": "Rocoto - Peruvian Cuisine & Pisco Bar",
+          "venueId": "f830404c-1d96-432f-bcaf-9df05134a7b3",
+          "venueName": "Rocoto - Peruvian Cuisine & Pisco Bar",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Rocoto Berlin offers a taste of the Inca civilization right in Berlin",
+        "quote": "A taste of the Inca civilization right in Berlin!",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rocoto Berlin's overall rating is 9.5/10",
+        "quote": "Overall rating: 9.5/10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the budget at Rocoto Berlin is 50€+ per person",
+        "quote": "Budget: 50€+ pP",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 50,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food culture in Peru completely blew the author's mind",
+        "quote": "the food culture completely blew my mind",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Peruvian cuisine is one of the best cuisines in the world",
+        "quote": "one of the best cuisines in the world",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Rocoto Berlin, a hidden gem in Schöneberg, is the answer for those nostalgic for Peruvian flavors or wanting to try the cuisine",
+        "quote": "this hidden gem in Schöneberg is the answer",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rocoto Berlin is tucked behind a small door and half a floor underground",
+        "quote": "Tucked behind a small door and half a floor underground",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "accessibility",
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rocoto Berlin radiates pure coziness",
+        "quote": "it radiates pure coziness",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they started by munching on roasted Peruvian corn kernels",
+        "quote": "munching on roasted Peruvian corn kernels",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Peruvian corn kernels"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they drank a Chicha Morada and a Pisco Sour",
+        "quote": "a Chicha Morada and a Pisco Sour",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Chicha Morada",
+          "Pisco Sour"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "one sip of the Pisco Sour instantly transported the author back to Ica",
+        "quote": "one sip and I was instantly transported back to Ica!",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Pisco Sour"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ceviche is the ultimate test of any Peruvian spot",
+        "quote": "The ultimate test of any Peruvian spot is the ceviche",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "ceviche"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they shared the mixed ceviche platter",
+        "quote": "we shared the mixed platter",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "mixed platter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the mixed platter left the author absolutely speechless, an umami flavor explosion",
+        "quote": "It left me absolutely speechless, an umami flavor explosion",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "mixed platter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Japanese-fusion tuna with a hint of wasabi was the author's favorite",
+        "quote": "The Japanese-fusion tuna with a hint of wasabi was my favorite",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Japanese-fusion tuna",
+          "wasabi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the avocado white fish packed an unexpected, highly appreciated spicy punch",
+        "quote": "the avocado white fish packed an unexpected, highly appreciated spicy punch",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "avocado white fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "not ordering the platter when visiting is a grave mistake",
+        "quote": "If you visit and don’t order this platter, you're making a grave mistake.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "platter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chicharron tacos perfectly balanced a fatty crunch with fresh plantain and avocado puree",
+        "quote": "The Chicharron tacos perfectly balanced a fatty crunch with fresh plantain and avocado puree",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Chicharron tacos",
+          "plantain",
+          "avocado puree"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cheese empanadas were piping hot",
+        "quote": "The cheese empanadas? Piping hot",
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [
+          "cheese empanadas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cheese empanadas were inflated perfection dipped in aji amarillo sauce",
+        "quote": "inflated perfection dipped in aji amarillo sauce",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "aji amarillo sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they shared the Lomo Saltado, a classic chifa fusion, as the main",
+        "quote": "Lomo Saltado",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Lomo Saltado"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Lomo Saltado is wok-sautéed beef and veggies served over a creamy aji amarillo risotto topped with parmesan",
+        "quote": "Wok-sautéed beef and veggies served over a creamy aji amarillo risotto topped with parmesan",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "beef",
+          "veggies",
+          "aji amarillo risotto",
+          "parmesan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Lomo Saltado is highly addictive",
+        "quote": "It is highly addictive",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Lomo Saltado"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "for dessert they had a maracuja mousse and an ice-cold mango passionfruit sorbet served with crumble and fresh berries",
+        "quote": "a maracuja mousse and an ice-cold mango passionfruit sorbet served with crumble and fresh berries",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "maracuja mousse",
+          "mango passionfruit sorbet",
+          "crumble",
+          "berries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the desserts were visually stunning",
+        "quote": "visually stunning",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the desserts were simple and so satisfying",
+        "quote": "so satisfying",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the waiters at Rocoto Berlin are incredibly friendly",
+        "quote": "The waiters are incredibly friendly",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the waiters genuinely cared about their feedback",
+        "quote": "genuinely cared about our feedback",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author can't wait to go back to Rocoto Berlin",
+        "quote": "I can't wait to go back",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author asks followers what their favorite Peruvian dish is",
+        "quote": "What is your favorite Peruvian dish?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

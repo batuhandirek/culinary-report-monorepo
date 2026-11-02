@@ -1,16 +1,14 @@
 import { tags } from 'typia';
 
-import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
-import type {
-	FeedbackSentiment,
-} from 'src/modules/venues/interfaces/feedback.interface.js';
+import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
+import type { StatementOutputDto } from 'src/modules/statements/dto/statement.output.dto.js';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
 import { MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { PostSourceKindEnum } from '../entities/post-source.entity.js';
-import { SocialPlatformEnum } from '../entities/social-post.entity.js';
+import { PostSkipReasonEnum, SocialPlatformEnum } from '../entities/social-post.entity.js';
 
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
 
@@ -27,10 +25,8 @@ export interface AdminMentionOutputDto {
 	cuisine?: string;
 	city?: string;
 	visited: boolean;
-	sentiment: FeedbackSentiment;
-	summary: string;
-	/** What it says, as feedback rows */
-	feedback: FeedbackPointOutputDto[];
+	/** What the post says about this place, one claim per row with its parts (its sentiment is worked out from them) */
+	statements: StatementOutputDto[];
 	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
 	topics?: { source: 'cuisine' | 'category'; topic: { key: string; label: string } }[];
 	/** The brand it was matched to */
@@ -40,6 +36,8 @@ export interface AdminMentionOutputDto {
 	matchMethod?: MentionMatchMethodEnum;
 	matchScore?: number;
 	matchNote?: string;
+	/** When a re-read of the post no longer named it while it was matched: confirm (link it again) or ignore it */
+	unconfirmedAt?: Date;
 }
 
 /** One find of a post (`PostSource`). */
@@ -95,6 +93,10 @@ export interface AdminSocialPostListItemOutputDto {
 	foundBy: AdminPostFindOutputDto[];
 	text?: string;
 	analysedAt?: Date;
+	/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+	skipReason?: PostSkipReasonEnum;
+	/** When the gate last judged it */
+	gatedAt?: Date;
 	mentions: AdminMentionOutputDto[];
 }
 
@@ -125,6 +127,8 @@ export interface AdminSocialPostOutputDto extends AdminSocialPostListItemOutputD
 	subtitles?: string;
 	subtitlesLanguage?: string;
 	analysisTokens?: number;
+	/** What the post says about the city or about nothing in particular, in its order; its claims about a place are under each mention */
+	generalStatements: StatementOutputDto[];
 }
 
 type AdminListPostsSortField = 'postedAt' | 'views';
@@ -147,6 +151,10 @@ export interface AdminListPostsInputDto extends PaginationRequest {
 	matchedOnly?: boolean;
 	/** Only posts with a mention nothing matched (`none`): to link by hand. */
 	unmatchedOnly?: boolean;
+	/** Only posts with a matched mention a re-read no longer named (`Mention.unconfirmedAt`): to confirm or ignore. */
+	unconfirmedOnly?: boolean;
+	/** Only posts the gate didn't digest, for this reason */
+	skipReason?: PostSkipReasonEnum;
 	/** Only posts whose caption carries this hashtag (with or without #, any case) */
 	hashtag?: string & tags.MaxLength<200>;
 }

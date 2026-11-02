@@ -1,0 +1,1047 @@
+{
+  "id": "post-ad6a11c0",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "alesecherez",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlinguide",
+      "berlinfoodie",
+      "berlinrestaurant"
+    ],
+    "taggedHandles": [],
+    "text": "🌮Best Bites Berlin as someone who eats out A LOT 🍜  my current favs, save for later! week of eats Berlin💞\n\n #berlinguide #berlinfoodie #berlinrestaurant  ",
+    "subtitles": "I eat out a lot, so here's everywhere I ate in Berlin this past week.\nMonday I had lunch at my favourite Korean in Berlin.\nIt's located on the iconic beautiful Oderbergerstraße in Pberg.\nThe bibimbap is to die for,\nthe portions are huge. They also have japchae noodles.\n10 out of ten. On Tuesday I went to check out a Chinese tea house and restaurant.\nThey serve Chinese tapas at lunchtime with a beautiful tea ceremony.\nIt's called Dot Tea Bar and located in Gleim Kiez.\nMake sure to try their cold noodles and main dishes at night.\nAnd they also have tea based desserts like matcha tiramisu.\nIt's so, so good and authentic.\nSave this for later as well.\nOn Wednesday\nI need a little pick me up from my favourite coffee shop in Berlin at bonanza.\nThey also have the best pastries.\nThe pain au chocolat taste like it's from Paris.\nThe pastries here are actually from 📍Canal Bakery,\nthe iconic bakery in Berlin.\nAnd the coffee here is just the best in my opinion.\nOn Thursday night I had a little date night with my boyfriend\nat my favourite spot in Prenzlauer Berg,\nthe Muschelbar. I think it's the only place like this that we have in Berlin\nand I'm so obsessed with it.\nI was feeling like on a little holiday we can trip to France.\nAnd it tastes like in France.\nSo I'll make sure to save this for later.\nAnd then on Friday, I went out with my girls and I finally tried munchies.\nI was there for the cheeseburger with cheese sauce and the biryani tacos.\nI tried the veggie version of the iconic hamburger and tacos,\nand I have to say, they are amazing.\nTaste like meat. Thanks so much for watching,\nand stay tuned for more vlogs like these. Bye!",
+    "subtitlesLanguage": "eng-US",
+    "id": "ad6a11c0-8d6e-4e5d-9966-076031694817",
+    "externalId": "7666379857105931553",
+    "url": "https://www.tiktok.com/@alesecherez/video/7666379857105931553",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-25T08:29:21.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:37:50.748Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Dot Tea Bar",
+        "locationHint": "Gleim Kiez",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "288d1b68-e1f2-4545-a1e0-653531a1afb4",
+          "brandName": "Dot Tea Bar (一点茶寮)",
+          "venueId": "fb049c72-5a14-45de-b56b-cdb70425d8c4",
+          "venueName": "Dot Tea Bar (一点茶寮)"
+        }
+      },
+      {
+        "venueName": "Bonanza",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "422a9c10-8d7b-468e-bb66-8867d5c2e3f0",
+          "brandName": "Bonanza Coffee",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Muschelbar",
+        "locationHint": "Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "04a0b3c9-9e4f-438a-ac13-564d58e0a270",
+          "brandName": "MUSCHELBAR",
+          "venueId": "0798e1e4-e919-47ac-b2f6-d82cc92e5d96",
+          "venueName": "MUSCHELBAR"
+        }
+      },
+      {
+        "venueName": "Munchies",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "4ee49474-ab3e-4b69-9813-9cfec5b5b0bd",
+          "brandName": "Munchies",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Chinese tapas at lunchtime",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Chinese tapas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a beautiful tea ceremony",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cold noodles",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "cold noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "main dishes at night",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "main dishes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tea based desserts",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "tea based desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "matcha tiramisu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "matcha tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is so, so good and authentic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pastries are from Canal Bakery",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "pastries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the coffee is the best",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pain au chocolat tastes like it is from Paris",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "pain au chocolat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "it tastes like in France",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the cheeseburger with cheese sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "cheeseburger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the biryani tacos",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "biryani tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the veggie version of the iconic hamburger and tacos",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "hamburger",
+          "taco"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "they are amazing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "they taste like meat",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:48:14.880Z",
+    "usage": {
+      "inputTokens": 23043,
+      "outputTokens": 7938,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The Monday Korean restaurant is never named, so it is not a place; its claims are kept with subject none and marked optional. Canal Bakery is only mentioned as Bonanza's pastry supplier, so it is listed as not visited, with one claim about it.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Dot Tea Bar",
+        "locationHint": "Gleim Kiez",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "288d1b68-e1f2-4545-a1e0-653531a1afb4",
+          "brandName": "Dot Tea Bar (一点茶寮)",
+          "venueId": "fb049c72-5a14-45de-b56b-cdb70425d8c4",
+          "venueName": "Dot Tea Bar (一点茶寮)",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Bonanza",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "422a9c10-8d7b-468e-bb66-8867d5c2e3f0",
+          "brandName": "Bonanza Coffee",
+          "venueId": null,
+          "venueName": null,
+          "note": "Oderbergerstraße is given for the Korean restaurant, not Bonanza, so no branch is named."
+        }
+      },
+      {
+        "venueName": "Canal Bakery",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b0d09537-e132-4231-bf08-0934100ef932",
+          "brandName": "CANAL",
+          "venueId": null,
+          "venueName": null,
+          "note": "'Canal Bakery' matches the CANAL pastry shop, but the post names neither of its two Mitte branches."
+        }
+      },
+      {
+        "venueName": "Muschelbar",
+        "locationHint": "Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "04a0b3c9-9e4f-438a-ac13-564d58e0a270",
+          "brandName": "MUSCHELBAR",
+          "venueId": "0798e1e4-e919-47ac-b2f6-d82cc92e5d96",
+          "venueName": "MUSCHELBAR",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Munchies",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "4ee49474-ab3e-4b69-9813-9cfec5b5b0bd",
+          "brandName": "Munchies",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the unnamed Korean restaurant is the creator's favourite Korean in Berlin",
+        "quote": "my favourite Korean in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Korean restaurant is located on the iconic beautiful Oderbergerstraße in Pberg",
+        "quote": "located on the iconic beautiful Oderbergerstraße in Pberg",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the bibimbap at the Korean restaurant is to die for",
+        "quote": "The bibimbap is to die for",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bibimbap"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the portions at the Korean restaurant are huge",
+        "quote": "the portions are huge",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Korean restaurant also has japchae noodles",
+        "quote": "They also have japchae noodles",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "japchae noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Korean restaurant is 10 out of ten",
+        "quote": "10 out of ten",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Dot Tea Bar is a Chinese tea house and restaurant",
+        "quote": "a Chinese tea house and restaurant",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dot Tea Bar serves Chinese tapas at lunchtime",
+        "quote": "They serve Chinese tapas at lunchtime",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Chinese tapas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dot Tea Bar has a beautiful tea ceremony",
+        "quote": "with a beautiful tea ceremony",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dot Tea Bar is located in Gleim Kiez",
+        "quote": "located in Gleim Kiez",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "make sure to try the cold noodles and main dishes at night at Dot Tea Bar",
+        "quote": "Make sure to try their cold noodles and main dishes at night",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "cold noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dot Tea Bar has tea based desserts like matcha tiramisu",
+        "quote": "they also have tea based desserts like matcha tiramisu",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "tea based desserts",
+          "matcha tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food at Dot Tea Bar is so, so good",
+        "quote": "It's so, so good",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food at Dot Tea Bar is authentic",
+        "quote": "authentic",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bonanza is the creator's favourite coffee shop in Berlin",
+        "quote": "my favourite coffee shop in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Bonanza has the best pastries",
+        "quote": "They also have the best pastries",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pastries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pain au chocolat at Bonanza tastes like it's from Paris",
+        "quote": "The pain au chocolat taste like it's from Paris",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pain au chocolat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pastries at Bonanza are from Canal Bakery",
+        "quote": "The pastries here are actually from 📍Canal Bakery",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "pastries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Canal Bakery is the iconic bakery in Berlin",
+        "quote": "the iconic bakery in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the coffee at Bonanza is the best",
+        "quote": "the coffee here is just the best",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the creator had a date night with her boyfriend at Muschelbar",
+        "quote": "I had a little date night with my boyfriend",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Muschelbar is the creator's favourite spot in Prenzlauer Berg",
+        "quote": "my favourite spot in Prenzlauer Berg",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Muschelbar is the only place like this in Berlin",
+        "quote": "I think it's the only place like this that we have in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the creator is so obsessed with Muschelbar",
+        "quote": "I'm so obsessed with it",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Muschelbar felt like a little holiday trip to France",
+        "quote": "I was feeling like on a little holiday",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the food at Muschelbar tastes like in France",
+        "quote": "it tastes like in France",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the creator finally tried Munchies with her girls",
+        "quote": "I finally tried munchies",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the creator went to Munchies for the cheeseburger with cheese sauce and the biryani tacos",
+        "quote": "I was there for the cheeseburger with cheese sauce and the biryani tacos",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "cheeseburger with cheese sauce",
+          "biryani tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the creator tried the veggie version of the iconic hamburger and tacos at Munchies",
+        "quote": "I tried the veggie version of the iconic hamburger and tacos",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "hamburger",
+          "tacos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the veggie hamburger and tacos at Munchies are amazing",
+        "quote": "they are amazing",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the veggie hamburger and tacos at Munchies taste like meat",
+        "quote": "Taste like meat",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.437Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

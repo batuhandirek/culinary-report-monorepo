@@ -1,0 +1,57 @@
+---
+name: ingestion-eval
+description: The ingestion eval — ~370 stored reviews and posts and ~500 food wordings with Opus-written reference answers, a runner that scores what the DB holds and what the current agents give (claims, parts, places, venue matches, topic links), and a markdown report per run. Use before changing agent A (`ReviewClaimsAgent`, `PostClaimsAgent`), agent B (`ClaimPartsAgent`), agent C (`TermTopicAgent`), matching (`VenueMatchAgent`, `decideMatch`), their inputs or post-processing, or anything under `modules/evals` and `apps/backend/eval`.
+---
+
+# Ingestion eval
+
+What a source is read into — claims, their sentiment, aspect, foods, amount and kind, the places a post names and the venue each is matched to, a wording's topics — is scored against reference answers on a fixed set of cases. **A prompt or model change to an ingestion agent is judged by a run, never by eyeballing a handful of samples**: run the eval before and after, and read the report's misses.
+
+## Layout
+
+- `apps/backend/src/modules/evals/` — the module, booted on its own by `eval.cli.ts` (never by `AppModule`): MikroORM on the dev DB (no migrations, no pg-boss, no crons), `LLMModule`, the pipeline's agents and the eval's own.
+- `apps/backend/eval/cases/{reviews,posts,terms}/<id>.json` — one case a file, in git: the source exactly as its agent sees it, what is stored for it (`stored`), the reference (`reference`, with its `model`, `specHash`, `usage`, `notes`, `revisions`).
+- `apps/backend/eval/runs/<label>/` — `results/` (one file a case), `pairings.json` (claim pairs, cached by case and content), `scores.json`, `cases.json` (each case's tally, what `compare` reads), `issues.jsonl` (every miss, with its case's `split`), `report.md`, `adjudications.json`, `compare-<base>.md`.
+- `apps/backend/eval/climbs/<goal>/` — one goal's loop: `log.md` (the goal, its guardrails, one entry per round), `rN.patch` (each round's change). The run `stored` is the DB's data as collected. `EVAL_DIR` moves the whole folder (the suite's temp dir).
+
+## Commands (repo root, on the built backend in `dist`: dev's watcher keeps it current)
+
+- `npm run eval -- collect [--reviews 150] [--posts 150] [--terms 500] [--seed eval-1]` — a seeded, stratified sample (`pickStratified`; caps by language, stars, length, platform, places, own posts; the known hard sources first), posts only ones the gate digests (the gate is called, free on OpenAI). Tops up: cases on disk count and are kept.
+- `npm run eval -- reference [--kind …] [--ids …] [--limit n] [--force] [--max-usd n]` — Opus (paid). Only cases without a reference unless `--force`.
+- `npm run eval -- reference --kind review,post --model openai/gpt-5.4 --as-run <label> [--ids …]` — a second reader: the same reference task on another model (free-only), written as a run and scored against Opus's references, so its misses are where the two disagree: the places to check Opus by hand.
+- `npm run eval -- run --label <name> [--kind …] [--ids …] [--limit n] [--force] [--paid]` — the current agents on the free models (OpenAI on for the eval whatever the env says; a call that would fall back to Claude fails instead, unless `--paid`), then `score`. Results already on disk are kept unless `--force`.
+- `npm run eval -- compare --label <candidate> --base <run> [--noise <run>,<run>] [--goal post:claims.recall] [--split test]` — free: per metric on the held-back cases, better, worse or within the threshold.
+- `npm run eval -- score --label <name>` — free but for the claim pairing calls not cached yet. A source the run got no answer for is scored as nothing read (every claim and place missed) and counted as dropped, never left out.
+- `npm run eval -- adjudicate --label <name> [--limit n] [--apply]` — Opus (paid) rules on the run's misses, then scores again.
+- `npm run eval -- restamp --note "<why>" [--ids …]` — free: references marked as written under the rules now, for a rules change that moved no right answer (logged in `revisions`).
+- `npm run eval -- status`.
+
+## Rules
+
+- **The eval sends the agents what production sends.** Every input and every answer's post-processing is one function the service and the eval share: `postClaimsSource` and `readPostClaims` (`social/util/post-claims-read.ts`, a long post in parts by `postClaimsPlan`), `reviewClaimsInput` (`venues/util/review-claims-input.ts`, one review a call), `claimPartsInput` (`statements/util/claim-parts-input.ts`, one source a call) and `claimPartsOf` (`statements/util/claim-parts-answer.ts`), `termTopicInputTopics` and `termAnswerLinks` (`topics/util/term-topic-input.ts`), `decideMatch` and `toCandidateVenues` (`social/services/mention-matching.service.ts`). A change to how a service builds an agent's input or reads its answer goes in that function, or the eval scores something production no longer does.
+- **References come from Opus only** (`REFERENCE_MODEL`, picked per call through Mastra: `generate(…, { model })`). The roster puts gpt-5.4 behind it, so an answer `res.model` says came from anything else is discarded, never written; three in a row stop the run (the credit or the key). No Batch API: Mastra has none (the user's call, 2026-11-01: no Anthropic SDK), so references cost full price.
+- **A reference follows the agents' rules, never their coaching**: an agent's `getInstructions` is its rules (what the right answer is), `getCoaching` how the model running it is coached (emphasis, worked examples, what it gets wrong); `rulesFor(context)` is handed to the reference agent as its spec, `instructionsFor` (rules, then coaching) is what a call runs on. Tuning gpt-mini goes in the coaching; a change to the rules is a change of the right answer, done as the most careful reader, with `optional` claims and `alsoAcceptable` sentiments, aspects (`"none"` for no aspect), kinds and topic keys, so taste is not scored as error. Its `specHash` is the rules' hash: when an agent's rules change, the report counts the references written against the old ones (`staleReferences`); re-reference those cases (`--force --ids`) when the rule change is meant to change the right answer.
+- **The volume agents are judged on gpt-5.4-mini**, what production runs them on (Opus is only the judge): the `eval` script sets `LLM_DISABLE_OPENAI=false` and a run is free-only unless `--paid`. An agent on an `LLM_AGENT_MODELS` choice (`term-topic` on Opus) keeps it. Each case records the models that answered; the report lists them.
+- **Scoring is code, the pairing is the only model call**: `ClaimPairingAgent` (mini) links produced claims to reference claims by what they claim and their quotes, a split or a merge included, one case a call; everything else is `eval-score.ts`: claim recall (optional references never missed) and precision; per pair sentiment, aspect (exact and at its root), kind (the reference's kinds read through the stored rule: a fact it lets judge accepts opinion), kind, amount, foods (by `termKey`, one wording inside another counting as the same, `sameFood`; over a split or merge as a whole); a split reference claim's other parts on its best fragment, and a claim B never read not at all; change precision over every produced claim and recall over every required reference change; for posts the places (paired by name without the city's words, `PLACE_PAIR_SIMILARITY` or one name heading the other (`namesSameHead`), or as one when both matched the same brand), each found place's brand and branch, matching on the reference's own places apart (`match_isolated`), subject and place per claim, the promotional flag; for wordings exact set, precision against the reference and what it also accepts, recall, first topic, relation, none.
+- **Matching runs against the dev DB's venues now** (`EvalCitiesService`), not a frozen list, and the reference's candidates were the city's closest brands then (`MATCH_REFERENCE_CANDIDATES`, every branch's location; `venuesAtMatch` keeps the count): a venue added since can make a reference "none" wrong.
+- **Rulings forgive, they don't hide**: `adjudicate` asks Opus per case whether each miss is the agent's error, the reference's, or a reading both allow; the report's "after rulings" column counts the last two as right. `--apply` writes them into the references (a wrongly required claim becomes optional, a rightly added one joins as optional, a wrong part takes the agent's, a both-fine one is accepted too; places and matches are only noted), each change logged in `revisions`, so later runs score against the corrected reference.
+
+## Climbing a goal
+
+A goal is one metric of one kind (`post:claims.recall`) with a target, and guardrails (every other metric must not get worse). The loop is how an agent's prompt, input or split of work is changed:
+
+1. **Measure before tuning.** Two runs of the unchanged prompts (`<goal>-r0`, `<goal>-r0b`) give the base and the noise. The answer key is ruled first (`adjudicate --label <goal>-r0 --apply`), or each round chases the key's mistakes. Start `climbs/<goal>/log.md` with the goal, the guardrails and the base row of `compare`.
+2. **Read only the train side.** The cases split 70/30 by a hash of their id (`splitOf`): misses are read, and examples picked, from `issues.jsonl` rows with `split: train` only; the test side is never opened, only its scores. **Never put a case's own words in a prompt**: an example is made up, or it scores the prompt on its own answer key.
+3. **One change a round**, big enough to show above the noise: a rule, an input, a split of the work (places first, then the text in chunks), a model tier. Save it as `climbs/<goal>/rN.patch`.
+4. **Run and compare**: `run --label <goal>-rN --kind <kind>`, then `compare --label <goal>-rN --base <best so far> --noise <goal>-r0,<goal>-r0b --goal <kind>:<metric>`. Keep the change when the goal is `better` and nothing is `worse`; otherwise revert it (`git apply -R`). Log the round: the change, why, the verdict, the cost.
+5. **Stop** when three rounds in a row keep nothing, the target is reached, or the budget is spent. Then re-reference the cases whose right answer the kept changes moved (`staleReferences`; `reference --force --ids`), and say what is left.
+
+A round costs one run (free on gpt-mini, ~$1 when `term-topic` runs on Opus) plus the pairing of new claims. A subagent can do steps 2–3 when handed the goal, the log and the train misses.
+
+## Cost (measured 2026-11-01)
+
+References: a review $0.06–0.12, a post $0.14–0.31 (long multi-place articles the most), a wording ~$0.004 (50 a call): the 299 sources and 500 wordings ~$45. A run of the reviews and posts on gpt-mini: free; the wordings with `term-topic` on Opus: about $1. An adjudication: ~$0.05 a case with misses.
+
+## Tests
+
+`evals/tests/eval-score.spec.ts` (pure: recall and precision with optional claims, parts against alternatives, change over every claim, links kept inside the lists, place pairing, a post's matches, subjects and places, wordings, the report's escaping, sampling caps, cost, rulings applied, foods over a split, `compareRuns` thresholds), `evals/tests/evals.pglite.spec.ts` (collect from stored reviews and posts with their parts and matches, topping up; a reference from another model discarded and Opus's written with the table's aspects; a run through `claimPartsOf`; scoring, the report, cached pairs).

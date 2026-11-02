@@ -27,8 +27,9 @@ export interface AdminBrandTopPostOutputDto {
 	author?: string;
 	postedAt: Date;
 	views: number;
-	/** What the post said about the brand (the mention's summary) */
-	summary: string;
+	/** What the post said about the brand, its own words where kept (its first claims); absent when it has none */
+	summary?: string;
+	/** Worked out from its claims about the brand */
 	sentiment: string;
 	/** The branch it named; absent when it named only the brand */
 	branch?: { id: string; name: string };
@@ -86,7 +87,7 @@ export interface AdminBrandReviewTagOutputDto {
 	title: string;
 	count: number;
 	/**
-	 * The food topic it names, where the feedback rows of that dish point (a dish name's decided
+	 * The food topic it names, where the wording points (a term's decided
 	 * topic, else a whole-name match); absent for what is no food ("waiting time", "cash only")
 	 */
 	topic?: { key: string; label: string };

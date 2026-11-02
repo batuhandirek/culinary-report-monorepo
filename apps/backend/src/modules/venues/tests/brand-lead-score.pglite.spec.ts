@@ -1,18 +1,19 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { Review } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import type { LeadInputs } from '../interfaces/lead-score.interface.js';
-import { BrandLeadScoreService,scoreBrands } from '../services/brand-lead-score.service.js';
+import { BrandLeadScoreService, scoreBrands } from '../services/brand-lead-score.service.js';
 
 const base: LeadInputs = {
 	name: 'Somewhere',
@@ -97,7 +98,9 @@ describe('BrandLeadScoreService (pglite)', () => {
 	let service: BrandLeadScoreService;
 
 	beforeAll(async () => {
-		harness = await createPgliteTestingModule({ providers: [BrandLeadScoreService, CityService] });
+		harness = await createPgliteTestingModule({
+			providers: [BrandLeadScoreService, CityService],
+		});
 		service = harness.moduleRef.get(BrandLeadScoreService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 	});
@@ -106,14 +109,23 @@ describe('BrandLeadScoreService (pglite)', () => {
 		await harness.stop();
 	});
 
-	it("scores every brand with an open venue in the city from the two months, own posts apart, and ranks them", async () => {
+	it('scores every brand with an open venue in the city from the two months, own posts apart, and ranks them', async () => {
 		const em = harness.orm.em;
 		const city = testCity(em);
-		const hot = em.create(Venue, { city, placeId: 'p-hot', name: 'Choc-Spot', phone: '+49 30 1' });
+		const hot = em.create(Venue, {
+			city,
+			placeId: 'p-hot',
+			name: 'Choc-Spot',
+			phone: '+49 30 1',
+		});
 		const cold = em.create(Venue, { city, placeId: 'p-cold', name: 'Cold Place' });
 		const closed = em.create(Venue, { city, placeId: 'p-closed', name: 'Gone', closed: true });
 		// Another city's venue: not scored with this city's run
-		const elsewhere = em.create(Venue, { city: testCity(em, { name: 'Wien' }), placeId: 'p-wien', name: 'Wiener' });
+		const elsewhere = em.create(Venue, {
+			city: testCity(em, { name: 'Wien' }),
+			placeId: 'p-wien',
+			name: 'Wiener',
+		});
 		// The venues' brands come with the flush; Choc-Spot's own account is linked to its brand
 		await em.flush();
 		const own = ownAccount(em, hot.brand, city, 'chocspot.berlin');
@@ -130,13 +142,15 @@ describe('BrandLeadScoreService (pglite)', () => {
 				views: 1000,
 				isPromotional,
 			});
-			em.create(Mention, {
+			// A post praising and criticising at once: its sentiment (worked out from its claims) is mixed
+			const mention = em.create(Mention, {
 				post: p,
 				venueName: venue.name,
 				venue,
 				visited: true,
-				sentiment: 'mixed',
-				summary: 'Hm.',
+			});
+			addStatements(em, mention, [{ text: 'good but pricey', sentiment: 'mixed' }], {
+				index: seedIndex(),
 			});
 		};
 		post(hot, 'chocspot.berlin', '2026-09-03T00:00:00Z');
@@ -146,7 +160,8 @@ describe('BrandLeadScoreService (pglite)', () => {
 		post(cold, 'foodie', '2026-06-01T00:00:00Z');
 		post(closed, 'foodie', '2026-09-01T00:00:00Z');
 		post(elsewhere, 'foodie', '2026-09-01T00:00:00Z');
-		addFeedback(
+		// A complaint is a negative claim; a noticed change is neither, and a neutral claim no problem
+		addStatements(
 			em,
 			em.create(Review, {
 				reviewId: 'r1',
@@ -156,7 +171,25 @@ describe('BrandLeadScoreService (pglite)', () => {
 				text: 'Sold out again.',
 				analysedAt: new Date(),
 			}),
-			{ complaints: [{ topic: 'wait', detail: 'sold out' }] },
+			[
+				{ text: 'sold out', sentiment: 'negative' },
+				{ text: 'portions got smaller', sentiment: 'negative', change: true },
+				{ text: 'came on a Tuesday', sentiment: 'neutral' },
+			],
+			{ index: seedIndex() },
+		);
+		addStatements(
+			em,
+			em.create(Review, {
+				reviewId: 'r2',
+				venue: cold,
+				publishedAt: new Date('2026-09-11T00:00:00Z'),
+				stars: 4,
+				text: 'New owner, fine.',
+				analysedAt: new Date(),
+			}),
+			[{ text: 'new owner', sentiment: 'neutral', change: true }],
+			{ index: seedIndex() },
 		);
 		await em.flush();
 
@@ -179,9 +212,15 @@ describe('BrandLeadScoreService (pglite)', () => {
 			complaintShare: 1,
 			unansweredCritical: 1,
 			replyRate: 0,
+			changesNoticed: 1,
 			negativePostShare: 1,
 		});
 		expect(second.leadSignals?.buzz.value).toBe(0);
+		expect(second.leadSignals?.problem.inputs).toMatchObject({
+			reviews: 1,
+			complaintShare: 0,
+			changesNoticed: 1,
+		});
 		expect((await brandOf('p-closed')).leadScore).toBeNull();
 		// The score is the brand's
 		expect((await brandOf('p-hot')).id).toBe(first.id);
@@ -217,8 +256,6 @@ describe('BrandLeadScoreService (pglite)', () => {
 					venue: v,
 					visited: true,
 					isNewOpening: true,
-					sentiment: 'positive',
-					summary: 'Just opened.',
 				});
 			}
 		};

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { MastraModelConfig } from '@mastra/core/llm';
 import { z } from 'zod/v4';
 
 import {
@@ -9,6 +8,7 @@ import {
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 
 import { LINE_WORDS } from '../util/landing-copy.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 const landingCopySchema = z.object({
 	lede: z
@@ -115,8 +115,8 @@ export class LandingCopyAgent extends BaseMastraAgent<
 		outputSchema: landingCopySchema,
 	};
 
-	protected getModel(): MastraModelConfig {
-		return 'openai/gpt-5.4';
+	protected getModel(): LlmModelChoice {
+		return 'full';
 	}
 
 	protected getInstructions(context?: LandingCopyContext): string {

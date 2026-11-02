@@ -1,0 +1,240 @@
+{
+  "id": "post-a73d3378",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "franci26017",
+    "locationName": null,
+    "hashtags": [
+      "berlin",
+      "märz",
+      "sonnenschein",
+      "rüyamgemüsekebab"
+    ],
+    "taggedHandles": [],
+    "text": "#Berlin #März #Sonnenschein \nWieder ein paar Tage in Berlin verbracht. Bei bestem Wetter und das im März. Zum ersten Mal georgisch Essen gewesen und auch der Weltbeste Gemüsedöner bei #rüyamgemüsekebab durfte nicht fehlen. Leider war der Hunger zu groß und deswegen gibt es davon kein Foto😅\nBerlin ist immer eine Reise wert!!",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "a73d3378-306b-4a9d-a4e9-2a27dce3f8e4",
+    "externalId": "7619286243632860449",
+    "url": "https://www.tiktok.com/@franci26017/video/7619286243632860449",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-20T10:42:06.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:24.893Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rüyam Gemüse Kebab",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator ate Georgian food for the first time",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Georgian food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the vegetable döner was the best in the world",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "vegetable döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is no photo of the döner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Berlin is always worth a trip",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:39.007Z",
+    "usage": {
+      "inputTokens": 9589,
+      "outputTokens": 1860,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Only Rüyam Gemüse Kebab is named (via hashtag); the Georgian restaurant is unnamed, so that visit is a city-level fact. 'Weltbeste Gemüsedöner' is read as a verdict (like 'best kebab in Berlin'), with opinion acceptable; weather and 'Berlin ist immer eine Reise wert' are not about food and are left out.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rüyam Gemüse Kebab",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": null,
+          "venueName": null,
+          "note": "The hashtag names Rüyam Gemüse Kebab exactly, but the post gives no location to choose between the Schönhauser Allee and Hauptstraße branches."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Gemüsedöner at Rüyam Gemüse Kebab is the world's best",
+        "quote": "der Weltbeste Gemüsedöner bei #rüyamgemüsekebab",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gemüsedöner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Gemüsedöner at Rüyam Gemüse Kebab was a must on the Berlin trip",
+        "quote": "auch der Weltbeste Gemüsedöner bei #rüyamgemüsekebab durfte nicht fehlen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Gemüsedöner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is no photo of the Gemüsedöner because the hunger was too great",
+        "quote": "Leider war der Hunger zu groß und deswegen gibt es davon kein Foto",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ate Georgian food for the first time in Berlin",
+        "quote": "Zum ersten Mal georgisch Essen gewesen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.247Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "id": "review-16bdd5e0",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "16bdd5e0-c65a-4fe2-a8c3-cc2b240b895c",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT20xUFJqRXRha2QxWm10TGVXRTNla2RvVUhKbVVVRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-02T17:07:47.704Z",
+    "stars": 1,
+    "text": "They mixed up our sauces, mine was not only wrong but also only on 1/3 of the kebab, the halloumi was described as “grilled cheese”, which was misleading, the wait was around 1 hour and the vegetables werent good either. Would not recommend, definitely not worth the time.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:11:45.160Z",
+    "claims": [
+      {
+        "text": "they mixed up our sauces",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "mine was only on 1/3 of the kebab",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "mine was wrong",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the halloumi was described as 'grilled cheese'",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "Halloumi",
+          "grilled cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the description was misleading",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "advice",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the wait was around 1 hour",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the vegetables werent good either",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "would not recommend",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "definitely not worth the time",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:10.736Z",
+    "usage": {
+      "inputTokens": 4986,
+      "outputTokens": 1933,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the one-hour wait was for food or in a queue (left at the wait root), where the misleading 'grilled cheese' menu description belongs (food, with advice/other allowed), and the sauce covering only a third of the kebab (food, presentation allowed).",
+    "claims": [
+      {
+        "text": "they mixed up our sauces",
+        "quote": "They mixed up our sauces",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "my sauce was wrong",
+        "quote": "mine was not only wrong",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "my sauce was only on 1/3 of the kebab",
+        "quote": "only on 1/3 of the kebab",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation",
+            "portion_size"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the halloumi was described as \"grilled cheese\", which was misleading",
+        "quote": "the halloumi was described as “grilled cheese”, which was misleading",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "halloumi",
+          "grilled cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "advice",
+            "other"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the wait was around 1 hour",
+        "quote": "the wait was around 1 hour",
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "wait_for_food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the vegetables weren't good",
+        "quote": "the vegetables werent good either",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "would not recommend",
+        "quote": "Would not recommend",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "definitely not worth the time",
+        "quote": "definitely not worth the time",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.590Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Sauce covering only a third of the kebab can be read as too little sauce (portion_size) or as how the dish was made (food)."
+      },
+      {
+        "at": "2026-11-01T14:39:43.590Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The claim is about the reviewer's sauce, a food, so its foods should not be empty."
+      },
+      {
+        "at": "2026-11-01T21:36:47.204Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

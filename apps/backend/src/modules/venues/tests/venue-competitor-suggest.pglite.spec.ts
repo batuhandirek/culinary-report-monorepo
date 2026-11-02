@@ -11,10 +11,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { Venue } from '../entities/venue.entity.js';
-import {
-	googleAlsoSearched,
-	CompetitorService,
-} from '../services/competitor.service.js';
+import { googleAlsoSearched, CompetitorService } from '../services/competitor.service.js';
 
 describe('CompetitorService suggestions (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -39,7 +36,15 @@ describe('CompetitorService suggestions (pglite)', () => {
 			category: string,
 			district: string,
 			extra: Partial<Venue> = {},
-		) => (venues[key] = em.create(Venue, { city, placeId: key, name, category, district, ...extra }));
+		) =>
+			(venues[key] = em.create(Venue, {
+				city,
+				placeId: key,
+				name,
+				category,
+				district,
+				...extra,
+			}));
 		add('doner', 'Döner Pro', 'Doner kebab restaurant', 'Friedrichshain-Kreuzberg', {
 			categories: ['Doner kebab restaurant', 'Fast food restaurant'],
 		});
@@ -75,8 +80,6 @@ describe('CompetitorService suggestions (pglite)', () => {
 				venueName: venue.name,
 				cuisine,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		mention(venues.doner, 'Döner');
 		mention(venues.imbiss, 'Turkish/Kebab');
@@ -96,7 +99,10 @@ describe('CompetitorService suggestions (pglite)', () => {
 		// The snack bar is döner by its posts, and more talked about than Mustafa's
 		expect(suggestions.map(s => s.venue.placeId)).toEqual(['ruyam', 'imbiss', 'mustafa']);
 		expect(suggestions[0].reasons).toEqual(['same food (Döner & kebab)', 'same district']);
-		expect(suggestions[1].reasons).toEqual(['same food (Döner & kebab)', 'neighbouring district']);
+		expect(suggestions[1].reasons).toEqual([
+			'same food (Döner & kebab)',
+			'neighbouring district',
+		]);
 	});
 
 	it("follows an admin's tags: excluded food is no match, a shared diet adds", async () => {
@@ -110,7 +116,11 @@ describe('CompetitorService suggestions (pglite)', () => {
 		await linkTopics(em);
 		const suggestions = await service.suggest(venues.doner.brand.id);
 		expect(suggestions.map(s => s.venue.placeId)).toEqual(['ruyam', 'mustafa']);
-		expect(suggestions[0].reasons).toEqual(['same food (Döner & kebab)', 'both vegan', 'same district']);
+		expect(suggestions[0].reasons).toEqual([
+			'same food (Döner & kebab)',
+			'both vegan',
+			'same district',
+		]);
 		await em.nativeDelete(VenueTopic, {});
 		await linkTopics(em);
 	});
@@ -126,13 +136,13 @@ describe('CompetitorService suggestions (pglite)', () => {
 	it('fills only brands without competitors', async () => {
 		const res = await service.fill([venues.doner.brand.id, venues.mustafa.brand.id], cityId);
 		expect(res).toEqual({ filled: 1, added: 3, skipped: 1 });
-		expect((await service.list(venues.mustafa.brand.id)).map(c => c.venue!.placeId).sort()).toEqual([
-			'doner',
-			'imbiss',
+		expect(
+			(await service.list(venues.mustafa.brand.id)).map(c => c.venue!.placeId).sort(),
+		).toEqual(['doner', 'imbiss', 'ruyam']);
+		// The one that had some keeps exactly those
+		expect((await service.list(venues.doner.brand.id)).map(c => c.venue!.placeId)).toEqual([
 			'ruyam',
 		]);
-		// The one that had some keeps exactly those
-		expect((await service.list(venues.doner.brand.id)).map(c => c.venue!.placeId)).toEqual(['ruyam']);
 	});
 
 	it("adds Google's people-also-search places, even outside the district, never one with nothing in common to eat", async () => {
@@ -143,11 +153,17 @@ describe('CompetitorService suggestions (pglite)', () => {
 		await em.flush();
 		const suggestions = await service.suggest(venues.mustafa.brand.id);
 		expect(suggestions.map(s => s.venue.placeId)).toEqual(['spandau']);
-		expect(suggestions[0].reasons).toEqual(['same food (Döner & kebab)', 'Google: people also search for']);
+		expect(suggestions[0].reasons).toEqual([
+			'same food (Döner & kebab)',
+			'Google: people also search for',
+		]);
 	});
 
 	it('matches people-also-search titles by name, either way', () => {
-		const a = { name: 'Döner Pro', details: { peopleAlsoSearch: [{ title: 'Rüyam Gemüse Kebab Berlin' }] } };
+		const a = {
+			name: 'Döner Pro',
+			details: { peopleAlsoSearch: [{ title: 'Rüyam Gemüse Kebab Berlin' }] },
+		};
 		const b = { name: 'Rüyam Gemüse Kebab', details: null };
 		const words = new Set(['berlin']);
 		expect(googleAlsoSearched(a, b, words)).toBe(true);

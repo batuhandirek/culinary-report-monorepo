@@ -4,15 +4,17 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
-import { DishNameService } from 'src/modules/feedback/services/dish-name.service.js';
-import { FeedbackService } from 'src/modules/feedback/services/feedback.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
-import { MentionExtractionAgent } from 'src/modules/social/agents/mention-extraction.agent.js';
+import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
+import { PostGateAgent } from 'src/modules/social/agents/post-gate.agent.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
+import { gateAgent } from 'src/modules/social/tests/factories/post-gate.mock.js';
+import { ClaimPartsAgent } from 'src/modules/statements/agents/claim-parts.agent.js';
+import { StatementService } from 'src/modules/statements/services/statement.service.js';
+import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
 import {
 	countTopicMentions,
 	TOPIC_MENTIONS_SQL,
@@ -29,14 +31,16 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { AdminTopicsController } from '../controllers/admin.topics.controller.js';
 import { Topic } from '../entities/topic.entity.js';
 import { VenueTopic } from '../entities/venue-topic.entity.js';
 import { TopicCityRefreshJob } from '../jobs/topic-city-refresh.job.js';
 import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
-import { TopicService } from '../services/topic.service.js';
-import { TopicRelinkService } from '../services/topic-relink.service.js';
 import { MentionTopicService } from '../services/mention-topic.service.js';
 import { MenuTopicService } from '../services/menu-topic.service.js';
+import { TermService } from '../services/term.service.js';
+import { TopicService } from '../services/topic.service.js';
+import { TopicRelinkService } from '../services/topic-relink.service.js';
 import { VenueTopicService } from '../services/venue-topic.service.js';
 import { venueTopics } from '../util/venue-topics.js';
 
@@ -53,10 +57,10 @@ describe('Food topic links (pglite)', () => {
 		sendJob: jest.fn(async (..._args: unknown[]) => 'job'),
 		publish: jest.fn(async (..._args: unknown[]) => 'job'),
 	};
-	// One post naming a vegan döner place (and a pide there) and a place without a cuisine
+	// Agent A: one post naming a vegan döner place (with a claim about the pide there) and a place without a cuisine
 	const agent = mockAgent({
 		isPromotional: false,
-		mentions: [
+		places: [
 			{
 				venueName: 'Vöner',
 				locationHint: null,
@@ -64,11 +68,6 @@ describe('Food topic links (pglite)', () => {
 				city: 'Berlin',
 				visited: true,
 				isNewOpening: false,
-				sentiment: 'positive',
-				summary: 'Great vegan döner.',
-				dishes: [{ name: 'Pide', sentiment: 'positive' }],
-				praise: [],
-				complaints: [],
 			},
 			{
 				venueName: 'Mystery Spot',
@@ -77,13 +76,26 @@ describe('Food topic links (pglite)', () => {
 				city: 'Berlin',
 				visited: true,
 				isNewOpening: false,
-				sentiment: 'neutral',
-				summary: 'Went there.',
-				dishes: [],
-				praise: [],
-				complaints: [],
 			},
 		],
+		claims: [{ text: 'the pide there is great too', quote: null, subject: 'place', place: 0 }],
+	});
+	// Agent B: the claim names "Pide", a wording no topic knows yet
+	const partsAgent = mockAgent((prompt: unknown) => {
+		const sources = [JSON.parse(prompt as string)] as { claims: { id: string }[] }[];
+		return {
+			claims: sources.flatMap(s =>
+				s.claims.map(c => ({
+					id: c.id,
+					sentiment: 'positive',
+					aspect: null,
+					foods: ['Pide'],
+					amount: null,
+					unit: null,
+					kind: 'opinion',
+				})),
+			),
+		};
 	});
 	const venues: Record<string, Venue> = {};
 
@@ -117,8 +129,6 @@ describe('Food topic links (pglite)', () => {
 			venueName: venue.name,
 			cuisine,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 	const menu = (venue: Venue, names: string[]) => {
 		const listing = em.create(VenueDeliveryListing, {
@@ -140,12 +150,16 @@ describe('Food topic links (pglite)', () => {
 				MentionTopicService,
 				MenuTopicService,
 				VenueTopicService,
-				FeedbackService,
-				DishNameService,
+				StatementService,
+				StatementPartsService,
+				TermService,
+				AdminTopicsController,
 				MentionExtractionService,
 				MentionMatchingService,
 				{ provide: PgBossService, useValue: pgBoss },
-				{ provide: MentionExtractionAgent, useValue: agent },
+				{ provide: PostClaimsAgent, useValue: agent },
+				{ provide: PostGateAgent, useValue: gateAgent() },
+				{ provide: ClaimPartsAgent, useValue: partsAgent },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -153,7 +167,7 @@ describe('Food topic links (pglite)', () => {
 		// The re-linkers register as at module init
 		service(MentionTopicService).onModuleInit();
 		service(MenuTopicService).onModuleInit();
-		service(DishNameService).onModuleInit();
+		service(TermService).onModuleInit();
 		topics = seedTopics(em);
 		city = testCity(em);
 		const venue = (key: string, params: Partial<Venue>) =>
@@ -188,6 +202,7 @@ describe('Food topic links (pglite)', () => {
 		expect(await service(MentionExtractionService).extract({ limit: 10 })).toEqual({
 			analysed: 1,
 			mentions: 2,
+			skipped: 0,
 		});
 		const vegan = await mentionNamed('Vöner');
 		expect(await linksOf(vegan.id)).toEqual([
@@ -256,14 +271,14 @@ describe('Food topic links (pglite)', () => {
 		await tagger.refresh([pho.id]);
 		const stored = async () =>
 			sortRows(
-				(
-					await em.fork().find(VenueTopic, { venue: pho.id }, { populate: ['topic'] })
-				).map(r => ({
-					key: r.topic.key,
-					computed: r.computed,
-					excluded: r.excluded,
-					primary: r.primary,
-				})),
+				(await em.fork().find(VenueTopic, { venue: pho.id }, { populate: ['topic'] })).map(
+					r => ({
+						key: r.topic.key,
+						computed: r.computed,
+						excluded: r.excluded,
+						primary: r.primary,
+					}),
+				),
 			);
 		const rows = await stored();
 		expect(rows.filter(r => !r.computed)).toEqual([
@@ -298,7 +313,7 @@ describe('Food topic links (pglite)', () => {
 		expect(await stored()).toEqual(rows);
 	});
 
-	it('re-links mentions, menu items and feedback through the job when a topic gains an alias, then refreshes the tags', async () => {
+	it('re-links mentions and menu items through the job when a topic gains an alias, then refreshes the tags; a statement naming the wording follows through its term', async () => {
 		const salon = venues['Pide Salonu'];
 		const pides = [mention(salon, 'Pide'), mention(salon, 'Pide')];
 		const items = menu(salon, ['Pide mit Käse', 'Pide Sucuk', 'Pide Spinat', 'Ayran']);
@@ -316,34 +331,40 @@ describe('Food topic links (pglite)', () => {
 					items.map(i => i.id),
 				)
 			).map(r => [r.name, r.key]);
-		const pideDish = async () =>
+		// The post's claim about the pide (agent B stored the wording as a term): its food part's topics, read through the term's links
+		const pideParts = async () =>
 			(
-				await em
-					.fork()
-					.findOneOrFail(FeedbackPoint, { dish: 'Pide' }, { populate: ['foodTopic'] })
-			).foodTopic?.key ?? null;
+				await em.getConnection().execute<{ id: number; topics: string[] | null }[]>(
+					`select p.id, (select array_agg(x.key order by tt.rank) from term_topics tt join topics x on x.id = tt.topic_id where tt.term_id = t.id) as topics
+						from statement_parts p join terms t on t.id = p.term_id where p.role = 'food' and t.key = 'pide'`,
+				)
+			).map(r => [r.id, r.topics ?? []]);
 		const tagKeys = async () =>
-			((await service(VenueTopicService).tags([salon])).get(salon.id) ?? []).map(
-				t => t.key,
-			);
+			((await service(VenueTopicService).tags([salon])).get(salon.id) ?? []).map(t => t.key);
 		// "Pide" names no topic yet
 		expect(await linksOf(pides[0].id)).toEqual([]);
 		expect(await itemTopics()).toEqual([]);
-		expect(await pideDish()).toBeNull();
+		const before = await pideParts();
+		expect(before).toEqual([[expect.any(Number), []]]);
 		expect(await tagKeys()).toEqual([]);
 
+		// The admin adds "pide" to kebab's other names: an admin term of kebab, set through the topic's PATCH
 		pgBoss.sendJob.mockClear();
 		const kebab = topics.get('kebab')!;
-		await service(TopicService).update(kebab.id, { aliases: [...kebab.aliases, 'pide'] });
+		const aliases = (await service(TermService).aliasesOf([kebab.id])).get(kebab.id)!;
+		await service(AdminTopicsController).updateTopic(kebab.id, {
+			aliases: [...aliases, 'pide'],
+		});
 		expect(pgBoss.sendJob).toHaveBeenCalledWith(TopicRelinkJob.jobName, expect.anything(), {
 			singletonKey: 'all',
 		});
 
-		// What the job runs
+		// What the job runs: the terms first, so the others resolve with the new decision
 		const counts = await service(TopicRelinkService).relinkAll();
 		expect(counts['mention-topics']).toMatchObject({ changed: 2 });
 		expect(counts['menu-item-topics']).toMatchObject({ changed: 3 });
-		expect(counts['dish-names']).toMatchObject({ rows: 1 });
+		// The admin's term stands as it is; nothing to re-decide for it
+		expect(counts['terms']).toMatchObject({ matched: 0, reopened: 0 });
 		expect(counts['venue-tags'].venues).toBeGreaterThanOrEqual(5);
 
 		for (const m of pides) expect(await linksOf(m.id)).toEqual([['kebab', 'cuisine', 0]]);
@@ -352,7 +373,8 @@ describe('Food topic links (pglite)', () => {
 			['Pide Sucuk', 'kebab'],
 			['Pide mit Käse', 'kebab'],
 		]);
-		expect(await pideDish()).toBe('kebab');
+		// The same part row, now about kebab: the decision reached it through the term, no statement rewritten
+		expect(await pideParts()).toEqual([[before[0][0], ['kebab']]]);
 		expect(await tagKeys()).toEqual(['kebab']);
 	});
 });

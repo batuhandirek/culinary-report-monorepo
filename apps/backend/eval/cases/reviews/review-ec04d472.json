@@ -1,0 +1,191 @@
+{
+  "id": "review-ec04d472",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "ec04d472-7caf-4401-add9-c79b0c6f46eb",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xKd2VURjNlVkZ1U2pSVVNUaFhZakp5U21rNVZtYxAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-16T14:23:20.880Z",
+    "stars": 1,
+    "text": "Timo extremo, comida mala, solo se salva el codillo, no pidáis la tabla de entrantes nunca, ojalá poder descomerlo",
+    "textTranslated": "Extreme rip-off, terrible food, only the pork knuckle is decent. Never order the starter platter, I wish I could desiccate it."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:48.682Z",
+    "claims": [
+      {
+        "text": "the food was terrible",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the pork knuckle is decent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pork knuckle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the starter platter was terrible",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "starter platter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:16.733Z",
+    "usage": {
+      "inputTokens": 5000,
+      "outputTokens": 1252,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The quotes are in Spanish because the review is. 'Timo extremo' is taken as not worth the money; price_level is also allowed. The general 'comida mala' is aspect food, with taste allowed. 'Ojalá poder descomerlo' is optional because it only intensifies the starter-platter complaint; the translation's 'desiccate' is a mistranslation of 'un-eat'.",
+    "claims": [
+      {
+        "text": "the place is an extreme rip-off",
+        "quote": "Timo extremo",
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level",
+            "price"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the food was bad",
+        "quote": "comida mala",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "only the codillo is decent",
+        "quote": "solo se salva el codillo",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "codillo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "never order the tabla de entrantes",
+        "quote": "no pidáis la tabla de entrantes nunca",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "tabla de entrantes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer wishes they could un-eat the tabla de entrantes",
+        "quote": "ojalá poder descomerlo",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "tabla de entrantes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.417Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

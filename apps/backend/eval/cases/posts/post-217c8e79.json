@@ -1,0 +1,692 @@
+{
+  "id": "post-217c8e79",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "fastfoodboss",
+    "locationName": "Dong Xuan Center",
+    "hashtags": [
+      "berlin",
+      "vietnam",
+      "buncha",
+      "streetfood"
+    ],
+    "taggedHandles": [
+      "@El Kampinski"
+    ],
+    "text": "🇻🇳Lohnt sich das Dong Xuan Center noch? 💸 Bún chả im Test 🤤❤️ #berlin #vietnam #buncha #streetfood @El Kampinski ",
+    "subtitles": "lohnt sich der Don 20 in 2.026 noch\nund das ist tatsächlich das Restaurant\ndem ich seit Jahren schon treu bin\nund hier geh ich wirklich regelmäßig essen\nich bin mal gespannt ob's die vor hier besser ist\nan äh Stelle woanders in Berlin probieren natürlich buntcha\neinmal buntcha bitte euch das an\nund das ist wirklich Mein absolutes Lieblingsessen\nund zur Aufklärung Alex\nhaben wir jetzt hier gegrillten Schweinebauch\nund schweinebuletten\nund ne Fischsoße\nund die ist wirklich sehr sehr beliebt in Vietnam\nund man sich hier so ne schöne schweinebulette\ntunkt das ganze hier so schön in die Fischsoße rein\nMH richtig schön heiß und Hanoi Style heiß\ndas ganze wird einfach über Holzkohle gegrillt\nAlex das äh Fleisch noch nie gesehen\nwie gesagt tunkst du schön 1 in die Fischsoße\nund let's go genieß das auch die Kombi mit den Reisnudeln\nMH hm gegrillter Schweinebauch\nboah is lecker diese äh Grillaromen da drinne\nabsolut das kommt wirklich von Holzkohlegrill\nich kann einmal diesen hier probieren\ndas is Mein Lieblingssnack\ntraditionell kommt hier n bisschen Kokosmilch mit rein\nund ganz wichtig noch n bisschen Eis\nAlex denkt die ganze Zeit das is n Getränk\nne ne das isst man so das is quasi wie n Pudding\ndas verrührt man jetzt alles miteinander\njetzt hast du hier so n Gele und auch so rote Bohnen\nund das vermischt man\nMH wie geil ist das denn ja\nist halt super süß aber ich liebe es",
+    "subtitlesLanguage": "deu-DE",
+    "id": "217c8e79-6cf8-4401-85c4-c37686e5d2e9",
+    "externalId": "7696857077683146016",
+    "url": "https://www.tiktok.com/@fastfoodboss/video/7696857077683146016",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-15T11:36:32.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:28:12.169Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Dong Xuan Center",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator has been going there for years",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator eats there regularly",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they were trying Bún chả",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bún chả is the creator's absolute favorite food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the dish includes grilled pork belly",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the dish includes pork patties",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the dish includes fish sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the meat is grilled over charcoal",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the pork belly is delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pork belly"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the charcoal grill gives strong grilled aromas",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the combination with rice noodles is good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "rice noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the creator's favorite snack is very sweet",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the snack contains coconut milk",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the snack contains ice",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the snack is eaten like a pudding",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the snack has jelly and red beans mixed in",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:33:39.380Z",
+    "usage": {
+      "inputTokens": 11133,
+      "outputTokens": 4883,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The restaurant visited is unnamed; the post is tagged at Dong Xuan Center (a market hall with food shops and restaurants), so it is treated as the place and the visit claims attached to it. The dessert (likely chè) is never named, so its claims carry no dish name; 'heiß' read as temperature.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Dong Xuan Center",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post means the Dong Xuan Center market complex itself; the restaurant eaten at inside it is unnamed, so it could be Hanoi Restaurant, Dong Xuan Quan or another stall."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Is the Dong Xuan Center still worth it?",
+        "quote": "Lohnt sich das Dong Xuan Center noch?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator has been loyal to the restaurant for years",
+        "quote": "dem ich seit Jahren schon treu bin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator eats there regularly",
+        "quote": "hier geh ich wirklich regelmäßig essen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion",
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bún chả was tested",
+        "quote": "Bún chả im Test",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bún chả is the creator's absolute favourite food",
+        "quote": "das ist wirklich Mein absolutes Lieblingsessen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Bún chả"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Bún chả comes with gegrillten Schweinebauch, schweinebuletten and Fischsoße",
+        "quote": "haben wir jetzt hier gegrillten Schweinebauch\nund schweinebuletten\nund ne Fischsoße",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "gegrillten Schweinebauch",
+          "schweinebuletten",
+          "Fischsoße"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Fischsoße is very popular in Vietnam",
+        "quote": "die ist wirklich sehr sehr beliebt in Vietnam",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Fischsoße"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the schweinebulette is really nice and hot, Hanoi style",
+        "quote": "richtig schön heiß und Hanoi Style heiß",
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [
+          "schweinebulette"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meat is grilled over charcoal",
+        "quote": "das ganze wird einfach über Holzkohle gegrillt",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the combination with the Reisnudeln",
+        "quote": "die Kombi mit den Reisnudeln",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Reisnudeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the gegrillter Schweinebauch is delicious with grill aromas",
+        "quote": "boah is lecker diese äh Grillaromen da drinne",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "gegrillter Schweinebauch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the grill aromas really come from the charcoal grill",
+        "quote": "das kommt wirklich von Holzkohlegrill",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dessert is the creator's favourite snack",
+        "quote": "das is Mein Lieblingssnack",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dessert traditionally has Kokosmilch and Eis in it",
+        "quote": "traditionell kommt hier n bisschen Kokosmilch mit rein",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Kokosmilch",
+          "Eis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dessert is eaten like a pudding, with Gele and rote Bohnen mixed in",
+        "quote": "jetzt hast du hier so n Gele und auch so rote Bohnen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Gele",
+          "rote Bohnen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dessert is awesome",
+        "quote": "wie geil ist das denn",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dessert is super sweet but the creator loves it",
+        "quote": "ist halt super süß aber ich liebe es",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.227Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.422Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

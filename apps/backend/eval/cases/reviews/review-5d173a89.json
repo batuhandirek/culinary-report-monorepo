@@ -1,0 +1,535 @@
+{
+  "id": "review-5d173a89",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "5d173a89-8d85-4b47-ba67-72e2e55df8ce",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tRMVkwMURSVFpCVTI4MmRtZEpSRnBEZVVnM1VXYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-21T22:37:58.483Z",
+    "stars": 1,
+    "text": "One of the worst döner I’ve had in Berlin.\n\nHonestly, everything was disappointing; from the bread to the salad. What made the experience even worse was the incredibly slow service. I went there around midnight, with only five people ahead of me, and there were three employees working. Somehow, it still took around 30 minutes to prepare a single döner.\n\nThe staff spent a lot of time talking to customers or among themselves while orders were being prepared at an unbelievably slow pace. It felt like there was absolutely no sense of urgency.\n\nFor €7.90, this is simply not worth it. The food was poor, the service was painfully slow, and the overall experience was frustrating. Definitely not a place I would recommend.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:16.185Z",
+    "claims": [
+      {
+        "text": "one of the worst döner in Berlin",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was disappointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bread was disappointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the salad was disappointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "incredibly slow service",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "around midnight",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "only five people ahead of me",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "three employees working",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it took around 30 minutes to prepare a single döner",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [
+          "döner"
+        ],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the staff spent a lot of time talking to customers or among themselves",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "orders were being prepared at an unbelievably slow pace",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was absolutely no sense of urgency",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "for €7.90",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 7.9,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "this is simply not worth it",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was poor",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was painfully slow",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the overall experience was frustrating",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the reviewer would not recommend it",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:44.997Z",
+    "usage": {
+      "inputTokens": 5132,
+      "outputTokens": 3435,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: 'one of the worst döner in Berlin' read as a verdict in the shape of 'best kebab in Berlin', with opinion also allowed. The 30-minute döner wait is filed under wait_for_food, with speed_of_service also allowed. The closing summary ('food was poor', 'service was painfully slow') repeats earlier points, so those claims are optional. The €7.90 quote names no food, so the claim borrows 'döner' from context.",
+    "claims": [
+      {
+        "text": "one of the worst döner the reviewer has had in Berlin",
+        "quote": "One of the worst döner I’ve had in Berlin",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "everything was disappointing, from the bread to the salad",
+        "quote": "everything was disappointing; from the bread to the salad",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "bread",
+          "salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was incredibly slow",
+        "quote": "the incredibly slow service",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "went there around midnight",
+        "quote": "I went there around midnight",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "only five people were ahead in line",
+        "quote": "with only five people ahead of me",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "three employees were working",
+        "quote": "there were three employees working",
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it took around 30 minutes to prepare a single döner",
+        "quote": "it still took around 30 minutes to prepare a single döner",
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [
+          "döner"
+        ],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the staff spent a lot of time talking to customers or among themselves",
+        "quote": "The staff spent a lot of time talking to customers or among themselves",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "orders were prepared at an unbelievably slow pace",
+        "quote": "orders were being prepared at an unbelievably slow pace",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff showed absolutely no sense of urgency",
+        "quote": "there was absolutely no sense of urgency",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the döner cost €7.90",
+        "quote": "For €7.90",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "döner"
+        ],
+        "amount": 7.9,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the döner is not worth €7.90",
+        "quote": "this is simply not worth it",
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was poor",
+        "quote": "The food was poor",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was painfully slow",
+        "quote": "the service was painfully slow",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the overall experience was frustrating",
+        "quote": "the overall experience was frustrating",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "definitely not a place the reviewer would recommend",
+        "quote": "Definitely not a place I would recommend",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.210Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.408Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

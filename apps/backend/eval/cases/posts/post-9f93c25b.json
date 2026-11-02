@@ -1,0 +1,1058 @@
+{
+  "id": "post-9f93c25b",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "jan.taschlizki",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Das sind die top 10 Berliner Restaurants für Unternehmer",
+    "subtitles": "ich bin n mobilunternehmer Aus Berlin\nund rate dir meine Top 10 Restaurants\nin Berlin die ich dir empfehle\n10 Club Kitchen da wo wir jetzt gerade sind\nsuper cooler\nSpot für Lunch\nPlatz 9 ist einer meiner lieblingsfleischrestaurants\nwirklich Grill Big Window Platz 8 würd ich sagen\nda geh ich sehr gerne\nmittags hin is das mondapaz und der schütterstraße\nn Italiener\nsupergeil auch für n Abend Platz Nummer 7 is the catch\nsupergeile Sushi und guter Asiate\nauf Platz 6 nehm ich das bohrschatz\nda gehen wir by the way heute zum Circle hin\neinen der leckersten Schnitzel in ganz Berlin\nNummer 5 is n Top Italiener\nauch City West kulachino auch einer meiner Lieblings Läden\nauf Platz 4 gril Royal\nmegageiles Fleisch Platz 3 ist China Club\neiner der besten Chinesen für mich überhaupt\nleider nur für Member\naber wenn du beim Circle dabei wärst da sind wir sehr oft\nauf Nummer 2 ist einer meiner Lieblings Trainer\nüberhaupt ist das Main\nist in einem Projekt was wir\ndamals sogar gebaut haben\nin der mainicke Straße 10 in Berlin\nwirklich top top top\nund mit großem Abstand\nauf der Nummer 1 ist das Essen meiner Frau",
+    "subtitlesLanguage": "deu-DE",
+    "id": "9f93c25b-f108-44ed-bc2b-7d95474a0332",
+    "externalId": "7695792875820338464",
+    "url": "https://www.tiktok.com/@jan.taschlizki/video/7695792875820338464",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-12T14:46:54.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:29.225Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Club Kitchen",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Big Window",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "eba7ab61-0ae0-4075-a66b-05967d1199cc",
+          "brandName": "Big Window",
+          "venueId": "b0463ec4-5b06-4be8-8920-38242a842e17",
+          "venueName": "Big Window"
+        }
+      },
+      {
+        "venueName": "Mondapaz",
+        "locationHint": "Schlüterstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f6590d17-61d7-49f9-a096-ce5618abd086",
+          "brandName": "Mondo Pazzo",
+          "venueId": "9f4fb021-a3fc-4b53-ab46-bee12bbc89fe",
+          "venueName": "Mondo Pazzo"
+        }
+      },
+      {
+        "venueName": "The Catch",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e4e34ec6-5af6-46a4-9c69-0eaeed3e56a6",
+          "brandName": "The Catch",
+          "venueId": "4f92eb6c-1a57-45b4-827d-9934c8cdaa8d",
+          "venueName": "The Catch"
+        }
+      },
+      {
+        "venueName": "Borchardt",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "3f049de8-055b-427f-b608-a50d5330afef",
+          "brandName": "Borchardt",
+          "venueId": "c0f474be-f6bc-44b1-b4b9-018598e98753",
+          "venueName": "Borchardt"
+        }
+      },
+      {
+        "venueName": "Culaccino",
+        "locationHint": "City West",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "00753092-168d-434b-a9df-68704290b8ef",
+          "brandName": "Culaccino",
+          "venueId": "71dd3bbb-bacd-4d5b-8b26-c715acc0dba1",
+          "venueName": "Culaccino"
+        }
+      },
+      {
+        "venueName": "Grill Royal",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "7f6a1f32-675b-4c71-a3ff-71dad5fe5469",
+          "brandName": "Grill Royal",
+          "venueId": "2e4fd322-a768-4e49-b03a-275b5f91f54b",
+          "venueName": "Grill Royal"
+        }
+      },
+      {
+        "venueName": "China Club",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "84806e02-780a-4a8c-9dd1-3c4fdee4693a",
+          "brandName": "China Club Berlin",
+          "venueId": "475973b3-8f03-4d72-bb47-fbcacf647fb2",
+          "venueName": "China Club Berlin"
+        }
+      },
+      {
+        "venueName": "Mine",
+        "locationHint": "Meinekestraße 10",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "c6470c99-85e7-47cd-b823-65cfe19d5949",
+          "brandName": "MINE WINE Restaurant",
+          "venueId": "6a828a55-61eb-4dfb-a5ba-82a4e5aab215",
+          "venueName": "MINE WINE Restaurant"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "one of the tastiest schnitzels in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "top Italian restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "one of his favorite places",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "one of his favorite restaurants",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "strong recommendation",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Club Kitchen is a super cool spot for lunch",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "one of his favorite meat restaurants",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Mondapaz is an Italian place",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Mondapaz is nice for dinner",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "The Catch has great sushi",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sushi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "The Catch is a good Asian spot",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Grill Royal has amazing meat",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "China Club is one of the best Chinese restaurants for him",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "China Club is only for members",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:48.502Z",
+    "usage": {
+      "inputTokens": 34463,
+      "outputTokens": 8715,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Only a garbled transcript gives the names; Borchardt (bohrschatz), Grill Royal (gril Royal) and Mine (Main, Meinekestraße 10) were corrected to their known spellings, while Big Window, Mondapaz and Kulachino keep the transcript's spelling. 'Lieblings Trainer' is most likely 'Lieblings-Italiener'. The Circle is a club, not a place, and the wife's cooking at number 1 is optional, with subject none.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Club Kitchen",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "No candidate is named Club Kitchen; the similar 'club' names are different venues."
+        }
+      },
+      {
+        "venueName": "Big Window",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "eba7ab61-0ae0-4075-a66b-05967d1199cc",
+          "brandName": "Big Window",
+          "venueId": "b0463ec4-5b06-4be8-8920-38242a842e17",
+          "venueName": "Big Window",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Mondapaz",
+        "locationHint": "Schlüterstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f6590d17-61d7-49f9-a096-ce5618abd086",
+          "brandName": "Mondo Pazzo",
+          "venueId": "9f4fb021-a3fc-4b53-ab46-bee12bbc89fe",
+          "venueName": "Mondo Pazzo",
+          "note": "'Mondapaz' on 'Schütterstraße' is a transcript misspelling of Mondo Pazzo on Schlüterstraße, an Italian restaurant."
+        }
+      },
+      {
+        "venueName": "The Catch",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e4e34ec6-5af6-46a4-9c69-0eaeed3e56a6",
+          "brandName": "The Catch",
+          "venueId": "4f92eb6c-1a57-45b4-827d-9934c8cdaa8d",
+          "venueName": "The Catch",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Borchardt",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "3f049de8-055b-427f-b608-a50d5330afef",
+          "brandName": "Borchardt",
+          "venueId": "c0f474be-f6bc-44b1-b4b9-018598e98753",
+          "venueName": "Borchardt",
+          "note": "'bohrschatz' is a transcript misspelling of Borchardt, which is known for its schnitzel."
+        }
+      },
+      {
+        "venueName": "Kulachino",
+        "locationHint": "City West",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "00753092-168d-434b-a9df-68704290b8ef",
+          "brandName": "Culaccino",
+          "venueId": "71dd3bbb-bacd-4d5b-8b26-c715acc0dba1",
+          "venueName": "Culaccino",
+          "note": "'Kulachino' transcribes Culaccino; Osteria Culaccino is also in City West, but the spoken name matches plain Culaccino."
+        }
+      },
+      {
+        "venueName": "Grill Royal",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "7f6a1f32-675b-4c71-a3ff-71dad5fe5469",
+          "brandName": "Grill Royal",
+          "venueId": "2e4fd322-a768-4e49-b03a-275b5f91f54b",
+          "venueName": "Grill Royal",
+          "note": null
+        }
+      },
+      {
+        "venueName": "China Club",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "84806e02-780a-4a8c-9dd1-3c4fdee4693a",
+          "brandName": "China Club Berlin",
+          "venueId": "475973b3-8f03-4d72-bb47-fbcacf647fb2",
+          "venueName": "China Club Berlin",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Mine",
+        "locationHint": "Meinekestraße 10",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "c6470c99-85e7-47cd-b823-65cfe19d5949",
+          "brandName": "MINE WINE Restaurant",
+          "venueId": "6a828a55-61eb-4dfb-a5ba-82a4e5aab215",
+          "venueName": "MINE WINE Restaurant",
+          "note": "The address Meinekestraße 10 matches MINE WINE Restaurant."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Club Kitchen is number 10 in his top 10 Berlin restaurants",
+        "quote": "10 Club Kitchen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they are currently at Club Kitchen",
+        "quote": "da wo wir jetzt gerade sind",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Club Kitchen is a super cool spot for lunch",
+        "quote": "super cooler\nSpot für Lunch",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Big Window is number 9, one of his favourite meat restaurants",
+        "quote": "Platz 9 ist einer meiner lieblingsfleischrestaurants",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Mondapaz is number 8 and he likes going there at lunchtime",
+        "quote": "da geh ich sehr gerne\nmittags hin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Mondapaz is an Italian restaurant",
+        "quote": "n Italiener",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Mondapaz is also super great for an evening",
+        "quote": "supergeil auch für n Abend",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "The Catch is number 7 in his top 10",
+        "quote": "Platz Nummer 7 is the catch",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "The Catch has super great sushi",
+        "quote": "supergeile Sushi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Sushi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "The Catch is a good Asian restaurant",
+        "quote": "guter Asiate",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Borchardt is number 6 in his top 10",
+        "quote": "auf Platz 6 nehm ich das bohrschatz",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "they are going to Borchardt today with the Circle",
+        "quote": "da gehen wir by the way heute zum Circle hin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Borchardt has one of the most delicious Schnitzel in all of Berlin",
+        "quote": "einen der leckersten Schnitzel in ganz Berlin",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Kulachino is number 5, a top Italian restaurant",
+        "quote": "Nummer 5 is n Top Italiener",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Kulachino is in City West",
+        "quote": "auch City West",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Kulachino is one of his favourite places",
+        "quote": "auch einer meiner Lieblings Läden",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Grill Royal is number 4 in his top 10",
+        "quote": "auf Platz 4 gril Royal",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Grill Royal has mega great meat",
+        "quote": "megageiles Fleisch",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "China Club is number 3 in his top 10",
+        "quote": "Platz 3 ist China Club",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "China Club is one of the best Chinese restaurants for him",
+        "quote": "einer der besten Chinesen für mich überhaupt",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "China Club is unfortunately members only",
+        "quote": "leider nur für Member",
+        "sentiment": "negative",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "they are at China Club very often with the Circle",
+        "quote": "da sind wir sehr oft",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Mine is number 2, one of his favourite restaurants",
+        "quote": "auf Nummer 2 ist einer meiner Lieblings Trainer",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Mine is in a project they built back then",
+        "quote": "ist in einem Projekt was wir\ndamals sogar gebaut haben",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Mine is at Meinekestraße 10 in Berlin",
+        "quote": "in der mainicke Straße 10 in Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Mine is really top",
+        "quote": "wirklich top top top",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "his wife's cooking is by far his number 1",
+        "quote": "auf der Nummer 1 ist das Essen meiner Frau",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.602Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent did produce this claim; the scorer paired it with the 'number 10' claim instead."
+      },
+      {
+        "at": "2026-11-01T14:39:43.602Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): This is a mispairing: the agent's vibe claim is the 'super cool spot' claim, not the ranking."
+      },
+      {
+        "at": "2026-11-01T14:39:43.602Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): This is a mispairing: the agent's opinion claim corresponds to the 'super cool spot for lunch' claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.602Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): 'Great for an evening' plausibly fits the vibe family; the reference itself accepts atmosphere."
+      },
+      {
+        "at": "2026-11-01T15:11:31.441Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.247Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.435Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

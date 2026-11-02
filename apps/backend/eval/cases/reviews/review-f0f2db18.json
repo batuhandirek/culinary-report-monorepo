@@ -1,0 +1,87 @@
+{
+  "id": "review-f0f2db18",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "f0f2db18-226e-456f-972d-f015c34a096a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tOMllrVm5UVVIwU1VkU1NFdG1SMjl0V25WUE9IYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Fukagawa Ramen",
+    "venueId": "0c3d34d3-1640-47cf-b727-171158ca6aba",
+    "brand": "Fukagawa Ramen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-27T19:58:31.403Z",
+    "stars": 5,
+    "text": "Best place ever",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:04:48.948Z",
+    "claims": [
+      {
+        "text": "best place ever",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:19:03.556Z",
+    "usage": {
+      "inputTokens": 5319,
+      "outputTokens": 166,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "A single overall superlative about the place is a verdict ('best kebab in Berlin' pattern) with no aspect.",
+    "claims": [
+      {
+        "text": "Fukagawa Ramen is the best place ever",
+        "quote": "Best place ever",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.432Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.417Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

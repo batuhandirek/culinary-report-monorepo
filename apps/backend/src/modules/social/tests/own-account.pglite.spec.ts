@@ -17,7 +17,11 @@ import { HashtagService } from '../services/hashtag.service.js';
 import { OwnAccountService } from '../services/own-account.service.js';
 import { SocialAccountService } from '../services/social-account.service.js';
 import { SocialPostService } from '../services/social-post.service.js';
-import { instagramProfileFigures, type ProfilePlatform, tiktokProfileFigures } from '../util/accounts.js';
+import {
+	instagramProfileFigures,
+	type ProfilePlatform,
+	tiktokProfileFigures,
+} from '../util/accounts.js';
 
 import { accountSnapshot, ownAccount } from './factories/social-account.factory.js';
 
@@ -36,10 +40,35 @@ const instagramProfile = (followersCount: number, postsCount: number) => ({
 	verified: false,
 	latestPosts: [
 		// Pinned and old: left out of the averages
-		{ id: 'p0', type: 'Image', likesCount: 9000, timestamp: '2025-01-01T10:00:00.000Z', isPinned: true },
-		{ id: 'p1', type: 'Video', likesCount: 300, commentsCount: 4, videoViewCount: 9000, timestamp: '2026-09-28T17:00:00.000Z' },
-		{ id: 'p2', type: 'Image', likesCount: 100, commentsCount: 2, timestamp: '2026-09-20T17:00:00.000Z' },
-		{ id: 'p3', type: 'Video', likesCount: -1, videoViewCount: 3000, timestamp: '2026-08-01T17:00:00.000Z' },
+		{
+			id: 'p0',
+			type: 'Image',
+			likesCount: 9000,
+			timestamp: '2025-01-01T10:00:00.000Z',
+			isPinned: true,
+		},
+		{
+			id: 'p1',
+			type: 'Video',
+			likesCount: 300,
+			commentsCount: 4,
+			videoViewCount: 9000,
+			timestamp: '2026-09-28T17:00:00.000Z',
+		},
+		{
+			id: 'p2',
+			type: 'Image',
+			likesCount: 100,
+			commentsCount: 2,
+			timestamp: '2026-09-20T17:00:00.000Z',
+		},
+		{
+			id: 'p3',
+			type: 'Video',
+			likesCount: -1,
+			videoViewCount: 3000,
+			timestamp: '2026-08-01T17:00:00.000Z',
+		},
 	],
 });
 
@@ -60,16 +89,19 @@ describe('OwnAccountService (pglite)', () => {
 	let venue: Venue;
 	let brand: Brand;
 	let instagramFollowers = 4200;
-	const runActor = jest.fn(async (actor: string, _input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
-		if (actor === 'apify/instagram-profile-scraper') return [instagramProfile(instagramFollowers, 120)];
-		if (actor === 'clockworks/tiktok-profile-scraper')
-			return [
-				tiktokVideo(1, 20_000, '2026-09-25T10:00:00.000Z'),
-				tiktokVideo(2, 4_000, '2026-09-10T10:00:00.000Z'),
-				{ error: 'Profile not found', input: 'gone_handle' },
-			];
-		return [];
-	});
+	const runActor = jest.fn(
+		async (actor: string, _input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
+			if (actor === 'apify/instagram-profile-scraper')
+				return [instagramProfile(instagramFollowers, 120)];
+			if (actor === 'clockworks/tiktok-profile-scraper')
+				return [
+					tiktokVideo(1, 20_000, '2026-09-25T10:00:00.000Z'),
+					tiktokVideo(2, 4_000, '2026-09-10T10:00:00.000Z'),
+					{ error: 'Profile not found', input: 'gone_handle' },
+				];
+			return [];
+		},
+	);
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -87,7 +119,12 @@ describe('OwnAccountService (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
 		city = testCity(em);
-		venue = em.create(Venue, { city, placeId: 'p-chenche', name: 'Chén Chè', category: 'Vietnamese restaurant' });
+		venue = em.create(Venue, {
+			city,
+			placeId: 'p-chenche',
+			name: 'Chén Chè',
+			category: 'Vietnamese restaurant',
+		});
 		await em.flush();
 		brand = await em.findOneOrFail(Brand, { id: venue.brand.id }, { populate: ['branches'] });
 		ownAccount(em, brand, city, 'chenche.berlin', SocialPlatformEnum.TIKTOK);
@@ -106,8 +143,15 @@ describe('OwnAccountService (pglite)', () => {
 				{ brandId: brand.id, instagram: 'chenche.teehaus' },
 			]),
 		).toEqual({ created: 1 });
-		const account = await harness.orm.em.findOneOrFail(SocialAccount, { handle: 'chenche.teehaus' }, { populate: ['creator'] });
-		expect(account).toMatchObject({ brandSource: AccountBrandSourceEnum.PROSPECT, brand: { id: brand.id } });
+		const account = await harness.orm.em.findOneOrFail(
+			SocialAccount,
+			{ handle: 'chenche.teehaus' },
+			{ populate: ['creator'] },
+		);
+		expect(account).toMatchObject({
+			brandSource: AccountBrandSourceEnum.PROSPECT,
+			brand: { id: brand.id },
+		});
 		// A new account gets a creator of its own
 		expect(account.creator.name).toBe('chenche.teehaus');
 	});
@@ -118,9 +162,13 @@ describe('OwnAccountService (pglite)', () => {
 		const controller = harness.moduleRef.get(AdminBrandAccountsController);
 		const list = await controller.removeBrandAccount(brand.id, account.id);
 		// Still listed on the brand page, to undo
-		expect(list.find(a => a.id === account.id)).toMatchObject({ rejections: [{ brand: { id: brand.id } }] });
+		expect(list.find(a => a.id === account.id)).toMatchObject({
+			rejections: [{ brand: { id: brand.id } }],
+		});
 		expect(list.find(a => a.id === account.id)?.brand).toBeUndefined();
-		expect(await service.addProspectHandles([{ brandId: brand.id, instagram: 'chenche.teehaus' }])).toEqual({
+		expect(
+			await service.addProspectHandles([{ brandId: brand.id, instagram: 'chenche.teehaus' }]),
+		).toEqual({
 			created: 0,
 		});
 	});
@@ -131,7 +179,13 @@ describe('OwnAccountService (pglite)', () => {
 		return harness.moduleRef.get(AccountScrapeService).scrape(
 			city,
 			accounts.map(a => ({ platform: a.platform as ProfilePlatform, handle: a.handle })),
-			{ since: `${month}-01T00:00:00.000Z`, budgetUsd: 2, latestTen: true, label: month, now },
+			{
+				since: `${month}-01T00:00:00.000Z`,
+				budgetUsd: 2,
+				latestTen: true,
+				label: month,
+				now,
+			},
 		);
 	};
 
@@ -144,7 +198,11 @@ describe('OwnAccountService (pglite)', () => {
 		expect(igCall[1]).toEqual({ usernames: ['chenche_berlin'] });
 		expect(igCall[2].maxCostUsd).toBeCloseTo(2 / 11);
 		// A snapshot run takes the latest ten videos whatever their date: the averages are over them
-		expect(ttCall[1]).toMatchObject({ profiles: ['chenche.berlin'], resultsPerPage: 10, profileSorting: 'latest' });
+		expect(ttCall[1]).toMatchObject({
+			profiles: ['chenche.berlin'],
+			resultsPerPage: 10,
+			profileSorting: 'latest',
+		});
 		expect(ttCall[1]).not.toHaveProperty('oldestPostDateUnified');
 		expect(ttCall[2].maxCostUsd).toBeCloseTo(20 / 11);
 		// The accounts take the profile's name and followers
@@ -152,10 +210,9 @@ describe('OwnAccountService (pglite)', () => {
 		expect(ig).toMatchObject({ displayName: 'Chén Chè Teehaus', followers: 4200 });
 
 		// One month only: no growth yet
-		expect((await service.forReport(brand.id, city.id, '2026-08')).map(a => a.followersChange)).toEqual([
-			undefined,
-			undefined,
-		]);
+		expect(
+			(await service.forReport(brand.id, city.id, '2026-08')).map(a => a.followersChange),
+		).toEqual([undefined, undefined]);
 
 		instagramFollowers = 4440;
 		await scrapeMonth('2026-09', new Date('2026-10-02T06:00:00Z'));
@@ -167,7 +224,9 @@ describe('OwnAccountService (pglite)', () => {
 			{ account: { handle: 'chenche_berlin' } },
 			{ orderBy: { scrapedAt: 'asc' } },
 		);
-		expect(igSnapshots.map(s => [s.year, s.month, s.day, s.source, s.followers, s.following])).toEqual([
+		expect(
+			igSnapshots.map(s => [s.year, s.month, s.day, s.source, s.followers, s.following]),
+		).toEqual([
 			[2026, 9, 2, 'profile', 4200, 80],
 			[2026, 10, 2, 'profile', 4440, 80],
 			[2026, 10, 2, 'profile', 4440, 80],
@@ -218,7 +277,12 @@ describe('OwnAccountService (pglite)', () => {
 		});
 		expect(added?.latest).toBeUndefined();
 		expect(list.find(a => a.handle === 'chenche_berlin')).toMatchObject({
-			latest: { source: 'profile', followers: 4440, following: 80, scrapedAt: new Date('2026-10-02T07:00:00Z') },
+			latest: {
+				source: 'profile',
+				followers: 4440,
+				following: 80,
+				scrapedAt: new Date('2026-10-02T07:00:00Z'),
+			},
 			followersChange: 240,
 		});
 		// The admin's add brings a removed account back
@@ -226,12 +290,17 @@ describe('OwnAccountService (pglite)', () => {
 			platform: SocialPlatformEnum.INSTAGRAM,
 			handle: 'chenche.teehaus',
 		});
-		expect(relinked.find(a => a.handle === 'chenche.teehaus' && a.platform === 'instagram')).toMatchObject({
+		expect(
+			relinked.find(a => a.handle === 'chenche.teehaus' && a.platform === 'instagram'),
+		).toMatchObject({
 			brand: { id: brand.id },
 			rejections: [],
 		});
 		await expect(
-			controller.addBrandAccount(brand.id, { platform: SocialPlatformEnum.INSTAGRAM, handle: 'not a handle' }),
+			controller.addBrandAccount(brand.id, {
+				platform: SocialPlatformEnum.INSTAGRAM,
+				handle: 'not a handle',
+			}),
 		).rejects.toThrow('Not a handle');
 	});
 
@@ -257,7 +326,13 @@ describe('OwnAccountService (pglite)', () => {
 		beforeAll(async () => {
 			const em = harness.orm.em;
 			chain = em.create(Brand, { name: 'Kotti Burger', key: 'kotti burger' });
-			em.create(Venue, { city, brand: chain, placeId: 'p-kotti', name: 'Kotti Burger', category: 'Hamburger restaurant' });
+			em.create(Venue, {
+				city,
+				brand: chain,
+				placeId: 'p-kotti',
+				name: 'Kotti Burger',
+				category: 'Hamburger restaurant',
+			});
 			wedding = em.create(Venue, {
 				city,
 				brand: chain,
@@ -274,8 +349,20 @@ describe('OwnAccountService (pglite)', () => {
 				name: 'Kotti Burger Hamburg',
 				category: 'Hamburger restaurant',
 			});
-			const brandWide = ownAccount(em, chain, city, 'kottiburger', SocialPlatformEnum.INSTAGRAM);
-			const branch = ownAccount(em, chain, city, 'weddingsnack', SocialPlatformEnum.INSTAGRAM);
+			const brandWide = ownAccount(
+				em,
+				chain,
+				city,
+				'kottiburger',
+				SocialPlatformEnum.INSTAGRAM,
+			);
+			const branch = ownAccount(
+				em,
+				chain,
+				city,
+				'weddingsnack',
+				SocialPlatformEnum.INSTAGRAM,
+			);
 			branch.branch = wedding;
 			await em.flush();
 			for (const account of [brandWide, branch])
@@ -294,7 +381,12 @@ describe('OwnAccountService (pglite)', () => {
 			});
 			const hh = list.find(a => a.handle === 'kottiburger.hh')!;
 			expect(hh.branch).toMatchObject({ id: hamburg.id });
-			accountSnapshot(em, em.getReference(SocialAccount, hh.id), new Date('2026-10-02T06:00:00Z'), { followers: 50 });
+			accountSnapshot(
+				em,
+				em.getReference(SocialAccount, hh.id),
+				new Date('2026-10-02T06:00:00Z'),
+				{ followers: 50 },
+			);
 			await em.flush();
 
 			const berlin = await service.forReport(chain.id, city.id, '2026-09');
@@ -302,28 +394,34 @@ describe('OwnAccountService (pglite)', () => {
 				['kottiburger', undefined],
 				['weddingsnack', 'Wedding Snack Bar, Müllerstr. 1'],
 			]);
-			expect((await service.forReport(chain.id, hamburg.city.id, '2026-09')).map(a => a.handle)).toEqual([
-				'kottiburger',
-				'kottiburger.hh',
-			]);
-			expect((await service.snapshots(chain.id, hamburg.city.id, ['2026-09'])).map(s => s.handle).sort()).toEqual([
-				'kottiburger',
-				'kottiburger.hh',
-			]);
+			expect(
+				(await service.forReport(chain.id, hamburg.city.id, '2026-09')).map(a => a.handle),
+			).toEqual(['kottiburger', 'kottiburger.hh']);
+			expect(
+				(await service.snapshots(chain.id, hamburg.city.id, ['2026-09']))
+					.map(s => s.handle)
+					.sort(),
+			).toEqual(['kottiburger', 'kottiburger.hh']);
 
 			// Made the whole brand's, it counts everywhere
 			list = await controller.updateBrandAccount(chain.id, hh.id, { branchId: null });
 			expect(list.find(a => a.id === hh.id)?.branch).toBeUndefined();
-			expect((await service.forReport(chain.id, city.id, '2026-09')).map(a => a.handle)).toContain('kottiburger.hh');
+			expect(
+				(await service.forReport(chain.id, city.id, '2026-09')).map(a => a.handle),
+			).toContain('kottiburger.hh');
 		});
 
 		it("refuses another brand's place as the branch, and another brand's account on its routes", async () => {
-			await expect(service.add(chain.id, SocialPlatformEnum.TIKTOK, 'kottiburger', venue.id)).rejects.toThrow(
-				'not a branch',
-			);
-			const theirs = await harness.orm.em.findOneOrFail(SocialAccount, { handle: 'chenche_berlin' });
 			await expect(
-				harness.moduleRef.get(AdminBrandAccountsController).removeBrandAccount(chain.id, theirs.id),
+				service.add(chain.id, SocialPlatformEnum.TIKTOK, 'kottiburger', venue.id),
+			).rejects.toThrow('not a branch');
+			const theirs = await harness.orm.em.findOneOrFail(SocialAccount, {
+				handle: 'chenche_berlin',
+			});
+			await expect(
+				harness.moduleRef
+					.get(AdminBrandAccountsController)
+					.removeBrandAccount(chain.id, theirs.id),
 			).rejects.toThrow();
 		});
 	});

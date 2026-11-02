@@ -1,0 +1,1095 @@
+{
+  "id": "post-aa137bfa",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "qiez.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Neu in Mitte: Dry Aged Beef, DJ-Sets und Dinner-Experience im „the Main“\n\nWer das neue the Main in der Französischen Straße besucht, merkt schnell, dass hier nicht allein das Essen im Mittelpunkt steht. Während ein DJ House- und Lounge-Sounds auflegt und an der Bar Cocktails gemixt werden, sitzen Gäste noch lange nach dem letzten Gang zusammen. Das Restaurant im TITANIC Gendarmenmarkt erinnert damit weniger an klassische Berliner Hotelgastronomie als an Konzepte aus Metropolen wie London, New York oder Dubai.\nMehr als zehn Jahre lang befand sich hier der Beef Grill Club by Hasir, stadtweit bekannt für seine Fleischgerichte. Anfang des Jahres wurde das Restaurant vollständig umgebaut und konzeptionell neu ausgerichtet. Der neue Name ist dabei bewusst gewählt: Neben weiteren Standorten wie dem Beef Grill Club am Leipziger Platz oder am Adenauerplatz soll the Main künftig stärker als das Mutterschiff der Marke funktionieren – dort, wo alles begann.\nStatt rustikalem Steakhouse-Flair dominieren heute schwarze Hochglanzflächen, dunkles Holz, Spiegel, rotes Leder und ein fast futuristisch wirkendes Lichtkonzept den Raum. Über den Tischen zieht sich eine geometrische Decke mit roten Lichtfeldern, die dem Restaurant etwas von einer sehr schicken Lounge verleiht, ohne dabei kühl zu wirken.\nZum Einstieg landen cremige Burrata mit gegrillter Artischocke, Trüffel, Haselnuss und Petersilienpesto auf dem Tisch – leicht, sommerlich und deutlich feiner als erwartet. Das Tokyo-Style-Tatar mit Ponzu, Eigelbcreme und Nori bringt dagegen eine moderne, fast japanisch inspirierte Frische hinein. Und selbst Gerichte wie Aki Kaviar aux Pommes Anna mit Sauerrahm und Schnittlauch zeigen, wie unkompliziert Luxus hier wirken kann.\nDie Bar setzt den Style und die Genusskultur des Restaurants fort. Quelle/ Copyright: the Main\n©the Main\nDie Bar setzt den Style und die Genusskultur des Restaurants fort. Quelle/ Copyright: the Main\nDie französische Handschrift von Chefkoch David Creuzet zeigt sich in Gerichten wie Lobster Thermidor und den intensiven Saucen, während Sous Chef Matteo De Angelis mit Rigatoni alla Vodka italienische Einflüsse hineinbringt. Gleichzeitig bleibt die Küche zugänglich und verzichtet auf unnötiges Chichi.\nGanz verschwunden ist die alte DNA trotzdem nicht. Die Steaks bleiben der eigentliche Main Act des Abends. Große Angus Cuts werden direkt am Tisch präsentiert, erklärt und vor den Gästen tranchiert – fast wie eine kleine Inszenierung, auf die der Abend langsam hinarbeitet. Wir bestellen medium rare. Mehr braucht es hier eigentlich nicht. Ein wenig flaky salt obendrauf, dazu die Röstaromen des Fleisches.\nDas Drei-Gänge-Menü kostet 99 Euro pro Person und zeigt ziemlich gut, worum es hier geht: weniger klassisches Fine Dining, sondern ein Abend, den man gemeinsam erlebt. Vorspeisen, Hauptgänge und Desserts werden bewusst zum Teilen serviert. Zum Abschluss gibt es New York Cheesecake mit Beeren, Pistazien-Tiramisu mit Mascarpone und Amaretto sowie Baklava mit Vanilleeis – hier kommt also ordentlich viel auf den Tisch. Wer sich nicht für das Menü entscheidet, kann die Gerichte auch einzeln à la carte bestellen.\nTraditionellertürkischer Tee setzt schließlich einen kleinen Schlusspunkt und erinnert gemeinsam mit dem Baklava an die Wurzeln der Hasir-Gruppe. Wer Lust auf gute Steaks, starke Drinks und ein Restaurant hat, das nach dem Dessert nicht sofort Schluss macht, dürfte im the Main genau richtig sein.\nthe Main\nTITANIC Gendarmenmarkt Berlin\nFranzösische Straße 30\n10117 Berlin\nthe Main auf Instagram\nThe post Neu in Mitte: Dry Aged Beef, DJ-Sets und Dinner-Experience im „the Main“ appeared first on Qiez.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "aa137bfa-bb45-4ccb-8e43-ffb857171cac",
+    "externalId": "blog_494cc67424304baa584462c4",
+    "url": "https://www.qiez.de/neueroeffnung-mitte-dinner-dj-the-main/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-06-02T14:11:46.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:07:13.848Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "the Main",
+        "locationHint": "Französische Straße 30, TITANIC Gendarmenmarkt",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "llm",
+          "brandId": "39cdb270-8923-4548-8df3-3a89f2f2fe79",
+          "brandName": "the Main by Beef Grill Club",
+          "venueId": "e500082e-6494-4891-a51e-80d942408bb5",
+          "venueName": "the Main by Beef Grill Club"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "dinner feels like an experience with DJ sets and long lingering over drinks",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "stylish new design with black glossy surfaces, dark wood, mirrors and red leather",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "steaks are presented and carved at the table",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Angus steak cuts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "sauces are described as intense and the dishes as refined",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the menu is described as accessible and without unnecessary fuss",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the three-course menu is designed for sharing and comes with plenty of food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "strong drinks are highlighted",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:48:10.886Z",
+    "usage": {
+      "inputTokens": 12083,
+      "outputTokens": 12059,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: Beef Grill Club by Hasir is the former name of the same venue, so its history is kept as claims on the Main rather than a separate place, and the sister branches at Leipziger Platz and Adenauerplatz get only a fact claim since nothing else is said about them. The article reads like a press-visit feature (venue-supplied photos) but is not marked as sponsored, so it is not flagged promotional.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "the Main",
+        "locationHint": "TITANIC Gendarmenmarkt, Französische Straße 30, Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "39cdb270-8923-4548-8df3-3a89f2f2fe79",
+          "brandName": "the Main by Beef Grill Club",
+          "venueId": "e500082e-6494-4891-a51e-80d942408bb5",
+          "venueName": "the Main by Beef Grill Club",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Main is new in Mitte",
+        "quote": "Neu in Mitte",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Main serves Dry Aged Beef",
+        "quote": "Dry Aged Beef",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Dry Aged Beef"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Main is on Französische Straße",
+        "quote": "in der Französischen Straße",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at the Main the food is not the only focus",
+        "quote": "dass hier nicht allein das Essen im Mittelpunkt steht",
+        "sentiment": "neutral",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a DJ plays house and lounge sounds at the Main",
+        "quote": "ein DJ House- und Lounge-Sounds auflegt",
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "vibe",
+            "noise"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cocktails are mixed at the bar",
+        "quote": "an der Bar Cocktails gemixt werden",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Cocktails"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "guests sit together long after the last course",
+        "quote": "sitzen Gäste noch lange nach dem letzten Gang zusammen",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant is in the TITANIC Gendarmenmarkt hotel",
+        "quote": "Das Restaurant im TITANIC Gendarmenmarkt",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Main recalls concepts from London, New York or Dubai more than classic Berlin hotel dining",
+        "quote": "erinnert damit weniger an klassische Berliner Hotelgastronomie als an Konzepte aus Metropolen wie London, New York oder Dubai",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "for over ten years the Beef Grill Club by Hasir was located here",
+        "quote": "Mehr als zehn Jahre lang befand sich hier der Beef Grill Club by Hasir",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Beef Grill Club by Hasir was known citywide for its meat dishes",
+        "quote": "stadtweit bekannt für seine Fleischgerichte",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Fleischgerichte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant was completely rebuilt and reconceived at the start of the year",
+        "quote": "Anfang des Jahres wurde das Restaurant vollständig umgebaut und konzeptionell neu ausgerichtet",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant got a deliberately chosen new name",
+        "quote": "Der neue Name ist dabei bewusst gewählt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the brand has other locations: Beef Grill Club at Leipziger Platz and at Adenauerplatz",
+        "quote": "Neben weiteren Standorten wie dem Beef Grill Club am Leipziger Platz oder am Adenauerplatz",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Main is meant to be the brand's mothership, where it all began",
+        "quote": "soll the Main künftig stärker als das Mutterschiff der Marke funktionieren – dort, wo alles begann",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "instead of rustic steakhouse flair, black gloss surfaces, dark wood, mirrors, red leather and futuristic lighting now dominate",
+        "quote": "Statt rustikalem Steakhouse-Flair dominieren heute schwarze Hochglanzflächen, dunkles Holz, Spiegel, rotes Leder und ein fast futuristisch wirkendes Lichtkonzept den Raum",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a geometric ceiling with red light fields gives the restaurant a very chic lounge feel without seeming cold",
+        "quote": "eine geometrische Decke mit roten Lichtfeldern, die dem Restaurant etwas von einer sehr schicken Lounge verleiht, ohne dabei kühl zu wirken",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "creamy Burrata with grilled artichoke, truffle, hazelnut and parsley pesto is served as a starter",
+        "quote": "Zum Einstieg landen cremige Burrata mit gegrillter Artischocke, Trüffel, Haselnuss und Petersilienpesto auf dem Tisch",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Burrata",
+          "Artischocke",
+          "Trüffel",
+          "Haselnuss",
+          "Petersilienpesto"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Burrata was light, summery and much finer than expected",
+        "quote": "leicht, sommerlich und deutlich feiner als erwartet",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Burrata"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Tokyo-Style-Tatar with Ponzu, egg yolk cream and Nori brings a modern, almost Japanese-inspired freshness",
+        "quote": "Das Tokyo-Style-Tatar mit Ponzu, Eigelbcreme und Nori bringt dagegen eine moderne, fast japanisch inspirierte Frische hinein",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Tokyo-Style-Tatar",
+          "Ponzu",
+          "Eigelbcreme",
+          "Nori"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Aki Kaviar aux Pommes Anna with sour cream and chives shows how uncomplicated luxury can feel",
+        "quote": "Aki Kaviar aux Pommes Anna mit Sauerrahm und Schnittlauch zeigen, wie unkompliziert Luxus hier wirken kann",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Aki Kaviar aux Pommes Anna",
+          "Sauerrahm",
+          "Schnittlauch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the bar continues the restaurant's style and indulgence culture",
+        "quote": "Die Bar setzt den Style und die Genusskultur des Restaurants fort.",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "interior",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "head chef David Creuzet's French signature shows in dishes like Lobster Thermidor and the intense sauces",
+        "quote": "Die französische Handschrift von Chefkoch David Creuzet zeigt sich in Gerichten wie Lobster Thermidor und den intensiven Saucen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Lobster Thermidor",
+          "Saucen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "sous chef Matteo De Angelis brings Italian influences with Rigatoni alla Vodka",
+        "quote": "während Sous Chef Matteo De Angelis mit Rigatoni alla Vodka italienische Einflüsse hineinbringt",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Rigatoni alla Vodka"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the kitchen stays accessible and avoids unnecessary frills",
+        "quote": "Gleichzeitig bleibt die Küche zugänglich und verzichtet auf unnötiges Chichi",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the old DNA has not entirely disappeared",
+        "quote": "Ganz verschwunden ist die alte DNA trotzdem nicht.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steaks remain the real main act of the evening",
+        "quote": "Die Steaks bleiben der eigentliche Main Act des Abends",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Steaks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "large Angus cuts are presented, explained and carved at the table",
+        "quote": "Große Angus Cuts werden direkt am Tisch präsentiert, erklärt und vor den Gästen tranchiert",
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [
+          "Angus Cuts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "service",
+            "advice"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tableside carving is almost like a small staging the evening builds up to",
+        "quote": "fast wie eine kleine Inszenierung, auf die der Abend langsam hinarbeitet",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they ordered the steak medium rare",
+        "quote": "Wir bestellen medium rare.",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak needs nothing more",
+        "quote": "Mehr braucht es hier eigentlich nicht.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak comes with a little flaky salt on top and the meat's roast aromas",
+        "quote": "Ein wenig flaky salt obendrauf, dazu die Röstaromen des Fleisches",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "flaky salt",
+          "Fleisches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the three-course menu costs 99 euros per person",
+        "quote": "Das Drei-Gänge-Menü kostet 99 Euro pro Person",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 99,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Main is less classic fine dining than an evening experienced together",
+        "quote": "weniger klassisches Fine Dining, sondern ein Abend, den man gemeinsam erlebt",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "starters, mains and desserts are served for sharing",
+        "quote": "Vorspeisen, Hauptgänge und Desserts werden bewusst zum Teilen serviert",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "desserts are New York Cheesecake with berries, Pistazien-Tiramisu with mascarpone and amaretto, and Baklava with vanilla ice cream",
+        "quote": "Zum Abschluss gibt es New York Cheesecake mit Beeren, Pistazien-Tiramisu mit Mascarpone und Amaretto sowie Baklava mit Vanilleeis",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "New York Cheesecake",
+          "Beeren",
+          "Pistazien-Tiramisu",
+          "Mascarpone",
+          "Amaretto",
+          "Baklava",
+          "Vanilleeis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a lot of food comes to the table",
+        "quote": "hier kommt also ordentlich viel auf den Tisch",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dishes can also be ordered individually à la carte",
+        "quote": "kann die Gerichte auch einzeln à la carte bestellen",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "traditional Turkish tea ends the meal",
+        "quote": "Traditionellertürkischer Tee setzt schließlich einen kleinen Schlusspunkt",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "türkischer Tee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Turkish tea and the Baklava recall the roots of the Hasir group",
+        "quote": "erinnert gemeinsam mit dem Baklava an die Wurzeln der Hasir-Gruppe",
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "Tee",
+          "Baklava"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none",
+            "ownership"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "for good steaks, strong drinks and a restaurant that doesn't close right after dessert, the Main is just right",
+        "quote": "Wer Lust auf gute Steaks, starke Drinks und ein Restaurant hat, das nach dem Dessert nicht sofort Schluss macht, dürfte im the Main genau richtig sein.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Steaks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

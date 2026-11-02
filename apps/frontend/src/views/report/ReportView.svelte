@@ -27,7 +27,6 @@
 		compact,
 		monthLabel,
 		PLATFORM_LABELS,
-		TOPIC_LABELS,
 		viewsLabel
 	} from '#lib/culinary.js';
 	import {
@@ -354,9 +353,25 @@
 	const reviewRows = $derived(
 		compareRows.filter((row) => row.reviewsTracked && row.reviews.written >= MIN_WRITTEN)
 	);
+	// A root's label as the report's own vocabulary names it (`ReportData.aspects`, roots first);
+	// a report built before it was kept shows the keys, in the order the counts name them
+	const aspectByKey = $derived(new Map((data.aspects ?? []).map((a) => [a.key, a])));
+	const rootLabel = (key: string) => aspectByKey.get(key)?.label ?? key;
+	const rootKeys = $derived(
+		aspectByKey.size
+			? [...aspectByKey.values()].filter((a) => a.root === a.key).map((a) => a.key)
+			: [
+					...new Set(
+						reviewRows.flatMap((row) => [
+							...Object.keys(row.reviews.praise),
+							...Object.keys(row.reviews.complaints)
+						])
+					)
+				]
+	);
 	// The topics that separate them most: the highest share any of them reached
 	const topicColumns = (kind: 'praise' | 'complaints') =>
-		Object.keys(TOPIC_LABELS)
+		rootKeys
 			.filter((t) => t !== 'other')
 			.map((t) => ({
 				topic: t,
@@ -691,7 +706,7 @@
 								class="grid grid-cols-[6rem_minmax(0,1fr)_2.5rem] items-center gap-x-3 gap-y-1.5">
 								{#each top as [topic, n] (topic)}
 									{@const share = n / Math.max(1, side.group.written)}
-									<span class="text-sm">{TOPIC_LABELS[topic] ?? topic}</span>
+									<span class="text-sm">{rootLabel(topic)}</span>
 									<div class="bg-wash h-3 overflow-hidden rounded-[3px]">
 										<span
 											class="{side.bar} block h-full"
@@ -881,7 +896,7 @@
 									{#each columns as topic (topic)}
 										<span
 											class="text-muted-foreground text-center text-[11px] leading-tight">
-											{TOPIC_LABELS[topic]}
+											{rootLabel(topic)}
 										</span>
 									{/each}
 									{#each reviewRows as row (row.venueId)}
@@ -1001,7 +1016,7 @@
 							</div>
 						</div>
 						<p class="text-reading-ink m-0 line-clamp-4 text-[13px] leading-snug">
-							{post.summary}
+							{post.said.join(' · ')}
 						</p>
 						{#if post.sentiment !== 'positive' || post.promotional || !post.visited}
 							<div class="mt-auto flex flex-wrap items-center gap-1.5 pt-1">

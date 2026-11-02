@@ -1,0 +1,362 @@
+{
+  "id": "post-38707924",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "sundaymatchaclub",
+    "locationName": "Berlin",
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Sunday Matcha Walk in Berlin.  Made it to Mezame again and the Iced Matcha Latte with maple syrup & sea salt was chef’s kiss 10/10.  Couldn’t resist grabbing their Matcha Porcelain Edition as a souvenir too. Worth the trip.",
+    "subtitles": "Sunday Matcha walk in Berlin.\nAnd while I was getting ready and showing you my 0 0 T D,\nwe've had it to Mezame matcha.\nI had a delicious maple syrup iced matcha latte.\nAnd yes, I\nhighly, highly recommend.\nVery happy about the drinks.\nAnd then I even got myself a little souvenir,\nthe porcelain, um,\nversion\nto store the matcha and also their matcha.\nAnd yeah, I'm very,\nvery looking forward to use them in Barcelona.\nAnd yeah, I hope you had an amazing Sunday.\nAnd if you're in Berlin, try it out. It's super delicious.",
+    "subtitlesLanguage": "eng-US",
+    "id": "38707924-9bfb-47ba-9f93-e6ada6cba799",
+    "externalId": "7682487829447871777",
+    "url": "https://www.tiktok.com/@sundaymatchaclub/video/7682487829447871777",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-06T18:16:30.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:46:17.961Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Mezame",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "8e1b07f8-0ca7-4ac1-b57c-3fc9f794d3a3",
+          "brandName": "Mezame Matcha",
+          "venueId": "a8b2e413-fadf-4809-9407-ccdf765df34e",
+          "venueName": "Mezame Matcha"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the iced matcha latte had maple syrup and sea salt",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "iced matcha latte",
+          "maple syrup",
+          "sea salt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the iced matcha latte was 10/10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the drinks were highly recommended",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha porcelain edition was bought as a souvenir",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "try it out in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:16.540Z",
+    "usage": {
+      "inputTokens": 10029,
+      "outputTokens": 2481,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The transcript repeats the caption's latte praise, so that repeat is optional. The porcelain souvenir is merchandise rather than food, so either menu_variety or no aspect is allowed. The 'Sunday Matcha Walk' is an outing, not a place.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Mezame",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "8e1b07f8-0ca7-4ac1-b57c-3fc9f794d3a3",
+          "brandName": "Mezame Matcha",
+          "venueId": "a8b2e413-fadf-4809-9407-ccdf765df34e",
+          "venueName": "Mezame Matcha",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "The creator visited Mezame again",
+        "quote": "Made it to Mezame again",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Iced Matcha Latte with maple syrup & sea salt was excellent, 10/10",
+        "quote": "the Iced Matcha Latte with maple syrup & sea salt was chef’s kiss 10/10",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Iced Matcha Latte with maple syrup & sea salt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The maple syrup iced matcha latte was delicious",
+        "quote": "I had a delicious maple syrup iced matcha latte.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "maple syrup iced matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator bought Mezame's Matcha Porcelain Edition as a souvenir",
+        "quote": "grabbing their Matcha Porcelain Edition as a souvenir",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator also bought Mezame's matcha to take home",
+        "quote": "and also their matcha",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mezame is worth the trip",
+        "quote": "Worth the trip.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator highly recommends Mezame",
+        "quote": "highly, highly recommend",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator was very happy with Mezame's drinks",
+        "quote": "Very happy about the drinks.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "If you're in Berlin, try Mezame",
+        "quote": "if you're in Berlin, try it out",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mezame's matcha is super delicious",
+        "quote": "It's super delicious.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.435Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.230Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.424Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

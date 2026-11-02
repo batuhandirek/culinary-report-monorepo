@@ -1,0 +1,141 @@
+{
+  "id": "review-eacefe43",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "eacefe43-3df9-4d5f-ab38-054fa1248bb2",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT214Tk9XcFVYMGt3VVVodE16aHVkRzgxTjNKRVRtYxAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Burgermeister Leopoldplatz",
+    "venueId": "6e39f6fb-4c98-4d1c-b345-bac065e550dd",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-21T22:01:23.456Z",
+    "stars": 5,
+    "text": "Gece geç saatlerde gelmemize rağöen çalışanlar çok ilgili ve herşey çok lezzetliydi👍🏻👍🏻",
+    "textTranslated": "Despite arriving late at night, the staff were very attentive and everything was delicious 👍🏻👍🏻"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:56:29.034Z",
+    "claims": [
+      {
+        "text": "arriving late at night",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff were very attentive",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:08.398Z",
+    "usage": {
+      "inputTokens": 4991,
+      "outputTokens": 701,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The late-night arrival is kept as a neutral fact with no aspect; opening_hours is allowed as an alternative because it touches on the hours. 'Herşey' (everything) names no dish, so foods stays empty.",
+    "claims": [
+      {
+        "text": "came late at night",
+        "quote": "Gece geç saatlerde gelmemize",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were very attentive despite the late hour",
+        "quote": "çalışanlar çok ilgili",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "everything was very delicious",
+        "quote": "herşey çok lezzetliydi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.417Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,274 @@
+{
+  "id": "review-9a341bb6",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "9a341bb6-8274-47ba-bb9a-5ead5f8d27b5",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21kRllXeFJOVWhpWDBSMExWRkRkVkZsYzBkR2IyYxAB",
+    "platform": "google",
+    "language": "zh-Hans",
+    "venue": "NOVEMBER Brasserie",
+    "venueId": "e93d03be-3e80-4773-9815-90d46bd0f097",
+    "brand": "NOVEMBER Brasserie",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-05T21:07:53.952Z",
+    "stars": 1,
+    "text": "和邻座距离一拳，毫无隐私，很难受；东西那么贵结果就这个服务，而且也没有好吃到能让人无视这一点的程度。而且食物风格介于fusion和tradition之间让人尴尬的位置，店内装潢也是如此。不推荐。",
+    "textTranslated": "Being seated about a fist's width from your neighbor, offering absolutely no privacy, was very uncomfortable; the food was so expensive yet the service was so subpar, and it wasn't even good enough to overshadow these shortcomings. Furthermore, the food style was awkwardly somewhere between fusion and traditional, as was the interior design. Not recommended."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:51.183Z",
+    "claims": [
+      {
+        "text": "being seated about a fist's width from your neighbor was very uncomfortable",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "offering absolutely no privacy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was so expensive",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was so subpar",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was not even good enough",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food style was awkwardly somewhere between fusion and traditional",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the interior design was awkwardly somewhere between fusion and traditional",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "not recommended",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:13.471Z",
+    "usage": {
+      "inputTokens": 5112,
+      "outputTokens": 1497,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'no privacy, uncomfortable' remark may be merged into the table-distance claim. The fusion-vs-traditional style judgement fits the food root best, with authenticity as a close reading. The poor service relative to the high price could read as value_for_money.",
+    "claims": [
+      {
+        "text": "seated about a fist's width from the neighbouring table",
+        "quote": "和邻座距离一拳",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "absolutely no privacy, very uncomfortable",
+        "quote": "毫无隐私，很难受",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was so expensive",
+        "quote": "东西那么贵",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was subpar for the price",
+        "quote": "结果就这个服务",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was not good enough to overlook these shortcomings",
+        "quote": "也没有好吃到能让人无视这一点的程度",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food style was awkwardly between fusion and traditional",
+        "quote": "食物风格介于fusion和tradition之间让人尴尬的位置",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the interior design was equally awkward between fusion and traditional",
+        "quote": "店内装潢也是如此",
+        "sentiment": "negative",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "not recommended",
+        "quote": "不推荐",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

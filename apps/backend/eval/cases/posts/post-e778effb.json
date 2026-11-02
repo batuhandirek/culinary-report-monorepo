@@ -1,0 +1,122 @@
+{
+  "id": "post-e778effb",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "carolina_chapter",
+    "locationName": null,
+    "hashtags": [
+      "vegetarianfood",
+      "vegetarisch",
+      "lebenindenusa",
+      "expatlife",
+      "carolinachapter"
+    ],
+    "taggedHandles": [],
+    "text": "Ich vermisse meine Valess Schnitzel hier 😭🥲\n\n#vegetarianfood #vegetarisch #lebenindenusa #expatlife #carolinachapter ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "e778effb-e02f-4efe-8d29-7fd5b9c71d65",
+    "externalId": "7613099395726331158",
+    "url": "https://www.tiktok.com/@carolina_chapter/video/7613099395726331158",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-03T18:33:58.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:29:42.610Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Valess",
+        "locationHint": "",
+        "city": "",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "misses Valess Schnitzel",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "Valess Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:51:38.250Z",
+    "usage": {
+      "inputTokens": 5935,
+      "outputTokens": 786,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named or tagged. Valess is a supermarket brand of vegetarian schnitzel, not a place, and the creator lives in the USA (Carolina), not Berlin. The only claim is missing the product, kept with subject none. Availability fits loosely, since the product cannot be had where she lives, so a null aspect is also accepted.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "the creator misses her Valess Schnitzel where she lives now (USA)",
+        "quote": "Ich vermisse meine Valess Schnitzel hier",
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "Valess Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.253Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.441Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

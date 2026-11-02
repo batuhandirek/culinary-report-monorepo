@@ -176,6 +176,11 @@ export interface PaginatedDataTableProps<
 	// Where a row leads. The whole row becomes the link (cmd/ctrl-click opens a new tab)
 	// and a chevron at its end is the real anchor.
 	rowHref?: (row: T) => string | undefined;
+	// A row's details, drawn under it across every column when it is opened: a click on the row
+	// (when it has no `rowHref`) or on its chevron. Rendered only while open, so it may fetch.
+	expand?: Snippet<[T]>;
+	// A row's identity, so an open row stays open across a refetch; the row's index otherwise.
+	rowKey?: (row: T) => string;
 	// What the table lists, for its empty state and count: "orders", "users".
 	noun?: string;
 	emptyTitle?: string;

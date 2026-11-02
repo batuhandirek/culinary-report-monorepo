@@ -1,0 +1,184 @@
+{
+  "id": "post-5b5671fa",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "maggi_3008",
+    "locationName": "Berlin",
+    "hashtags": [
+      "foodtok",
+      "foodspot",
+      "berlin",
+      "citychicken",
+      "fyuuu"
+    ],
+    "taggedHandles": [],
+    "text": "Ich wünschte ich könnte es jeden Tag essen (vor allem das halbe Hähnchen nhas Spezial) #foodtok #foodspot #berlin #citychicken #fyuuu ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "5b5671fa-9e2d-4006-9f40-d2c2d43e6b04",
+    "externalId": "7617587010315881760",
+    "url": "https://www.tiktok.com/@maggi_3008/video/7617587010315881760",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-15T20:48:13.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:46:54.187Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "City Chicken",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "c9e84338-674d-49d7-8c14-afc7464384ee",
+          "brandName": "City Chicken",
+          "venueId": "775cd6b1-74d2-433a-bd5d-80cbba7bae57",
+          "venueName": "City Chicken"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "loves the half chicken and special",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "halbes Hähnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator wishes they could eat it every day",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the half chicken Nhas Spezial was especially good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "half chicken Nhas Spezial"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:39:55.372Z",
+    "usage": {
+      "inputTokens": 9208,
+      "outputTokens": 1381,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue is named only in the hashtag #citychicken, with a city-level tagged location; it is treated as a named place. 'nhas Spezial' looks like a typo, but it is kept as written. The every-day wish could also be read as a verdict on the place.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "City Chicken",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "3624a6e7-5183-4bdf-b63c-8b4545dd99b8",
+          "brandName": "Nhas City Chicken",
+          "venueId": null,
+          "venueName": null,
+          "note": "The 'nhas Spezial' dish points to Nhas City Chicken. I chose the main three-branch chain over the separate single Karl-Marx-Platz listing. The post gives no location, so no branch is set."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator wishes they could eat City Chicken's food every day",
+        "quote": "Ich wünschte ich könnte es jeden Tag essen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "especially the halbe Hähnchen nhas Spezial is something they wish to eat every day",
+        "quote": "vor allem das halbe Hähnchen nhas Spezial",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "halbe Hähnchen nhas Spezial"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.237Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

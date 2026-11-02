@@ -10,7 +10,8 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
-import { DishNameService } from 'src/modules/feedback/services/dish-name.service.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import { TermService } from 'src/modules/topics/services/term.service.js';
 
 import { LEAD_PROSPECT_SCORE } from '../constants/lead-score.constant.js';
 import { AdminUpdateVenueInputDto } from '../dto/admin-update-venue.input.dto.js';
@@ -42,7 +43,7 @@ export class AdminVenuesController {
 		private readonly venueBusynessService: VenueBusynessService,
 		private readonly venueReservationService: VenueReservationService,
 		private readonly venueDeliveryService: VenueDeliveryService,
-		private readonly dishNameService: DishNameService,
+		private readonly termService: TermService,
 	) {}
 
 	@TypedRoute.Get('/')
@@ -115,7 +116,7 @@ export class AdminVenuesController {
 		);
 		const [branches, topics] = await Promise.all([
 			this.em.count(Venue, { brand: venue.brand }),
-			this.dishNameService.reviewTagTopics((venue.details?.reviewsTags ?? []).map(t => t.title)),
+			this.termService.reviewTagTopics((venue.details?.reviewsTags ?? []).map(t => t.title)),
 		]);
 		const serialized = wrap(venue).serialize({
 			skipNull: true,
@@ -152,7 +153,7 @@ export class AdminVenuesController {
 			filters.publishedAt = { $gte: start, $lt: end };
 		}
 		const [items, totalItems] = await this.em.findAndCount(Review, filters, {
-			populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+			populate: [...STATEMENT_POPULATE],
 			orderBy: { publishedAt: QueryOrder.DESC },
 			offset: (query.page - 1) * query.size,
 			limit: query.size,
@@ -163,7 +164,7 @@ export class AdminVenuesController {
 					wrap(review).serialize({
 						skipNull: true,
 						forceObject: true,
-						populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+						populate: [...STATEMENT_POPULATE],
 					}) as unknown as AdminReviewOutputDto,
 			),
 			totalItems,

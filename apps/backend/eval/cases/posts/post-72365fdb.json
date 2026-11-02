@@ -1,0 +1,424 @@
+{
+  "id": "post-72365fdb",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "schmeqt",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlin",
+      "foodreview",
+      "bestfood",
+      "tapas",
+      "tacos"
+    ],
+    "taggedHandles": [
+      "@berlinfoodstories"
+    ],
+    "text": "Hallo Karlsruhe,\n\nwir waren in Berlin und haben uns durch ein paar  Empfehlungen von @berlinfoodstories durchprobiert der wahrscheinlich besten Anlaufstelle für Essen in Berlin. und wollten euch mal zeigen wie wir es fanden.\n\nFolgende waren unsere absoluten Highlights:\n\n📍Tacos El Rey \n📍stoke \n📍Gotxa  \n\nCheckt alle drei Läden aus. Sind absolute Wohlfühlorte!\n\n#berlin #foodreview #bestfood #tapas #tacos\n\n*Unbezahlte Werbung/selbst bezahlt*",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "72365fdb-4be1-467c-bbdf-4b4a5c2e8f68",
+    "externalId": "7618272484411936032",
+    "url": "https://www.tiktok.com/@schmeqt/video/7618272484411936032",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-17T17:08:11.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:28:06.473Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Tacos El Rey",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f6206f7e-8519-4505-8723-884b58c43a8d",
+          "brandName": "Tacos El Rey",
+          "venueId": "881a8861-929c-4fc0-af88-6356f3fa75a8",
+          "venueName": "Tacos El Rey"
+        }
+      },
+      {
+        "venueName": "stoke",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "37154a24-bc9c-453b-b706-b6be5acf05f3",
+          "brandName": "stoke",
+          "venueId": "07f4e9fb-ed6e-4d69-a7d6-24000811d40a",
+          "venueName": "stoke"
+        }
+      },
+      {
+        "venueName": "Gotxa",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "fe942a18-1c30-42f9-b20d-5bd7aa2587c4",
+          "brandName": "Gotxa",
+          "venueId": "a7ab468f-68c7-4519-9ba6-a7fe247dfa89",
+          "venueName": "Gotxa"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "they tried recommendations from @berlinfoodstories",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "@berlinfoodstories is probably the best food guide in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Tacos El Rey is one of their absolute highlights",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "stoke is one of their absolute highlights",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Gotxa is one of their absolute highlights",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "all three places are feel-good spots",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:41:19.963Z",
+    "usage": {
+      "inputTokens": 14173,
+      "outputTokens": 2589,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The three venues share every statement, so each statement becomes one claim per venue. 'Unbezahlte Werbung/selbst bezahlt' marks the post as self-paid, so it is not promotional. The 'check out all three' recommendations are optional because they could be folded into the highlight verdicts. The praise of @berlinfoodstories is an optional city-level aside, since an account is not a place.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Tacos El Rey",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f6206f7e-8519-4505-8723-884b58c43a8d",
+          "brandName": "Tacos El Rey",
+          "venueId": "881a8861-929c-4fc0-af88-6356f3fa75a8",
+          "venueName": "Tacos El Rey",
+          "note": null
+        }
+      },
+      {
+        "venueName": "stoke",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "37154a24-bc9c-453b-b706-b6be5acf05f3",
+          "brandName": "stoke",
+          "venueId": "07f4e9fb-ed6e-4d69-a7d6-24000811d40a",
+          "venueName": "stoke",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Gotxa",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "fe942a18-1c30-42f9-b20d-5bd7aa2587c4",
+          "brandName": "Gotxa",
+          "venueId": "a7ab468f-68c7-4519-9ba6-a7fe247dfa89",
+          "venueName": "Gotxa",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "@berlinfoodstories is probably the best resource for food in Berlin",
+        "quote": "der wahrscheinlich besten Anlaufstelle für Essen in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Tacos El Rey was one of their absolute highlights",
+        "quote": "unsere absoluten Highlights",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "stoke was one of their absolute highlights",
+        "quote": "unsere absoluten Highlights",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Gotxa was one of their absolute highlights",
+        "quote": "unsere absoluten Highlights",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Tacos El Rey is recommended to check out",
+        "quote": "Checkt alle drei Läden aus.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "stoke is recommended to check out",
+        "quote": "Checkt alle drei Läden aus.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Gotxa is recommended to check out",
+        "quote": "Checkt alle drei Läden aus.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Tacos El Rey is an absolute feel-good place",
+        "quote": "Sind absolute Wohlfühlorte!",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "stoke is an absolute feel-good place",
+        "quote": "Sind absolute Wohlfühlorte!",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Gotxa is an absolute feel-good place",
+        "quote": "Sind absolute Wohlfühlorte!",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.240Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.431Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

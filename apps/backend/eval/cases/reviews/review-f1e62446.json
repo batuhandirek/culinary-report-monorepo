@@ -1,0 +1,151 @@
+{
+  "id": "review-f1e62446",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "f1e62446-46a1-4ac5-bcb6-a992146852e4",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tRelMyZGZTbU5yWnpCNE1HWTFUa014UVVwV2VtYxAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-30T19:57:41.060Z",
+    "stars": 4,
+    "text": "Szczerze mówiąc spodziewałam się czegoś lepszego, wszyscy zachwycali, ale nie widzę tego \"wow\"..",
+    "textTranslated": "Honestly, I expected something better, everyone was raving, but I don't see the \"wow\" factor.."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:03:59.049Z",
+    "claims": [
+      {
+        "text": "expected something better",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everyone was raving",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no \"wow\" factor",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:17.984Z",
+    "usage": {
+      "inputTokens": 4986,
+      "outputTokens": 1028,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review names no dish or aspect, so the disappointment is kept with aspect null (food allowed, since it is a kebab place). The 4 stars against negative wording makes mixed an acceptable sentiment. The hype remark and the 'no wow' restatement may be merged into the main claim.",
+    "claims": [
+      {
+        "text": "the reviewer expected something better from the place",
+        "quote": "spodziewałam się czegoś lepszego",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "everyone was raving about the place",
+        "quote": "wszyscy zachwycali",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer doesn't see the \"wow\" factor of the place",
+        "quote": "nie widzę tego \"wow\"",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.221Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.417Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

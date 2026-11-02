@@ -18,7 +18,7 @@ const post = (postedAt: string, views: number, extra: Partial<ReportPost> = {}):
 	promotional: false,
 	visited: true,
 	sentiment: 'positive',
-	summary: 'Nice.',
+	said: ['Nice.'],
 	praise: [],
 	complaints: [],
 	dishes: [],
@@ -175,7 +175,7 @@ describe('runPlaybook', () => {
 					complaintThemes: { wait_for_food: 6, taste: 1 },
 					split: {} as never,
 					changes: [],
-					changeThemes: [{ theme: 'ownership_change', label: 'Ownership change', reviews: 3, details: ['new owner since summer'] }],
+					changeThemes: [{ theme: 'ownership', label: 'Ownership', reviews: 3, details: ['new owner since summer'] }],
 					critical: [],
 					list: [],
 					replyDrafts: [],
@@ -188,7 +188,7 @@ describe('runPlaybook', () => {
 		expect(checks[0]).toMatchObject({ verdict: 'supports' });
 		expect(checks[0].answer).toContain('wait for food: from 1 of 16 written reviews to 6 of 16 (+32 points)');
 		expect(checks[1]).toMatchObject({ verdict: 'supports' });
-		expect(checks[1].answer).toContain('ownership change (3 reviews: "new owner since summer")');
+		expect(checks[1].answer).toContain('ownership (3 reviews: "new owner since summer")');
 		const against = checks.find(c => c.question.startsWith('Is this complaint higher'))!;
 		expect(against.verdict).toBe('supports');
 		expect(against.answer).toBe('Yours: 38%. wait complaints at 1 tracked competitor: median 10% of written reviews; wait for food city-wide: 12% of written reviews at 40 brands.');

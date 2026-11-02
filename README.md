@@ -92,3 +92,7 @@ Creators:
 	- https://www.the-berliner.com blog
 Notes:
 	- If a brand owned instagram post talks about another brand, FLAG THAT!!
+
+
+
+- "Won't come back" -> Is this a signal?

@@ -1,0 +1,723 @@
+{
+  "id": "post-ed056718",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "DIE BESTEN TACOS IN BERLIN? TACOS EL REY — EMPFOHLEN VON KARINA GARCIA PALACIOS\n\nUnter uns Mexikaner:innen, die fernab der Heimat leben, gibt es eine Sache, in der wir uns wohl alle einig sind: Wir vermissen unser Essen. Vielleicht klingt das etwas dramatisch, aber mexikanisches Essen ist einfach ein so wichtiger Teil unserer Kultur. Also habe ich mich auf die Suche nach einem Ort gemacht, der mir genau dieses Gefühl zurückgibt — und bin so bei Tacos El Rey gelandet. Nachdem ich die letzten zwei Jahre in Europa gelebt und mich durch die unterschiedlichsten Länder und Restaurants gegessen habe, kann ich mit Sicherheit sagen: Das war die beste Taco-Erfahrung, die ich in Europa bisher hatte. Als ich das erste Mal bei Tacos El Rey war, fühlte es sich tatsächlich ein bisschen so an, als wäre ich wieder zu Hause und würde bei einem meiner liebsten Taco-Spots sitzen. Der Raum selbst ist schlicht und offen gestaltet, mit hellen Holztischen, roten Hockern und grün gefliesten Wänden. Eine Ziegeltrennwand zieht sich durch den Raum, ohne dass es abschottend wirkt.\nEs ist die Art von Ort, an dem das Essen im Mittelpunkt steht und nicht überinszeniertes Interior. Oben gibt es außerdem eine kleine Nische für den Fall, dass es voller wird, mit einer roten Akzentwand und runden Wandleuchten. Mein Lieblingsplatz ist aber im Hinterzimmer, wo ein kleines Fenster den Blick in die Küche freigibt: Man kann zusehen, wie die Tortillas von Hand gepresst werden und hört das Fleisch brutzeln. Ich wollte sofort die gesamte Karte probieren: Ribeye “El Rey” (mein Favorit), Quesabirria, Chorizo Verde, Carnitas de Pato, Quesadilla de Chicharrón, Nopales con Queso — und wirklich alles war fantastisch. Als meine Tante mich aus Mexiko besuchen kam, musste ich sie natürlich mitnehmen. Sie ist beim Essen ziemlich kritisch und war begeistert. Besonders aufgefallen ist uns beiden die Masa: Die Tortillas sind einfach genau richtig. Und ganz ehrlich, wenn die Tortilla nicht gut ist, ist es wahrscheinlich auch kein guter Taco. Sie werden aus blauem Mais nach der traditionellen Nixtamal-Methode von Hand gepresst, frisch gegrillt und dann mit langsam gegartem Fleisch und klassischen Toppings gefüllt. Bei den Drinks habe ich Margaritas, Micheladas und eine Paloma mit Patrón-Tequila probiert, und sie waren genauso gut. Ich glaube, ich habe ganz offiziell meinen Ort gefunden, wenn ich Heimweh habe — und das bedeutet mir, so weit weg von zu Hause, wirklich viel.\nText: Karina García Palacios / Fotos: Mohit Amlani\nKarina García Palacios ist in Mexiko geboren und aufgewachsen, und in den vergangenen Jahren ist Europa zu einem Ort geworden, an den sie immer wieder zurückkehrt. Zum ersten Mal kam sie 2022 nach Berlin und hat sich sofort in die Stadt verliebt.\nTacos El Rey, Graefestr.92, 10967 Berlin–Kreuzberg⁠; Stadtplan\n@tacos.el.rey.berlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "ed056718-e748-4c48-aa26-4ade33ba6d57",
+    "externalId": "blog_a94a48379936743aba8902c5",
+    "url": "https://ceecee.cc/die-besten-tacos-in-berlin-tacos-el-rey-empfohlen-von-karina-garcia-palacios/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-04-23T14:01:12.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:51.223Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Tacos El Rey",
+        "locationHint": "Graefestr. 92, Berlin-Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f6206f7e-8519-4505-8723-884b58c43a8d",
+          "brandName": "Tacos El Rey",
+          "venueId": "881a8861-929c-4fc0-af88-6356f3fa75a8",
+          "venueName": "Tacos El Rey"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "everything tasted fantastic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "felt like being back home in Mexico",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "traditional nixtamal tortillas made from blue corn",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "meat was slowly cooked and tortillas were freshly grilled",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "margaritas, micheladas and the paloma were very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "simple, open space that puts the food front and center",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:26:53.955Z",
+    "usage": {
+      "inputTokens": 12153,
+      "outputTokens": 8199,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the curated recommendation counts as promotional (treated as editorial), how to split the dense interior description (details marked optional), and the general tortilla-makes-the-taco remark, kept as an optional subject-none claim.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Tacos El Rey",
+        "locationHint": "Graefestr.92, 10967 Berlin–Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f6206f7e-8519-4505-8723-884b58c43a8d",
+          "brandName": "Tacos El Rey",
+          "venueId": "881a8861-929c-4fc0-af88-6356f3fa75a8",
+          "venueName": "Tacos El Rey",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Tacos El Rey may have the best tacos in Berlin",
+        "quote": "DIE BESTEN TACOS IN BERLIN? TACOS EL REY",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "TACOS"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mexicans living abroad miss their food",
+        "quote": "Wir vermissen unser Essen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Mexican food is an important part of Mexican culture",
+        "quote": "mexikanisches Essen ist einfach ein so wichtiger Teil unserer Kultur",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Tacos El Rey was the best taco experience the author has had in Europe",
+        "quote": "Das war die beste Taco-Erfahrung, die ich in Europa bisher hatte",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Taco"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "eating at Tacos El Rey felt like being back home at a favourite taco spot in Mexico",
+        "quote": "als wäre ich wieder zu Hause und würde bei einem meiner liebsten Taco-Spots sitzen",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the room is simple and open",
+        "quote": "Der Raum selbst ist schlicht und offen gestaltet",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the room has light wooden tables, red stools and green-tiled walls",
+        "quote": "mit hellen Holztischen, roten Hockern und grün gefliesten Wänden",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a brick partition runs through the room without feeling closed off",
+        "quote": "Eine Ziegeltrennwand zieht sich durch den Raum, ohne dass es abschottend wirkt",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "space"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Tacos El Rey the food is the focus, not an overstaged interior",
+        "quote": "Es ist die Art von Ort, an dem das Essen im Mittelpunkt steht und nicht überinszeniertes Interior",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "upstairs there is a small niche for when it gets busier, with a red accent wall and round wall lamps",
+        "quote": "Oben gibt es außerdem eine kleine Nische für den Fall, dass es voller wird, mit einer roten Akzentwand und runden Wandleuchten",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author's favourite spot is the back room with a small window into the kitchen",
+        "quote": "Mein Lieblingsplatz ist aber im Hinterzimmer, wo ein kleines Fenster den Blick in die Küche freigibt",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "from the back room you can watch the tortillas being hand-pressed and hear the meat sizzling",
+        "quote": "Man kann zusehen, wie die Tortillas von Hand gepresst werden und hört das Fleisch brutzeln",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [
+          "Tortillas",
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "interior",
+            "vibe"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author tried Ribeye “El Rey”, Quesabirria, Chorizo Verde, Carnitas de Pato, Quesadilla de Chicharrón and Nopales con Queso",
+        "quote": "Ribeye “El Rey” (mein Favorit), Quesabirria, Chorizo Verde, Carnitas de Pato, Quesadilla de Chicharrón, Nopales con Queso",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Ribeye “El Rey”",
+          "Quesabirria",
+          "Chorizo Verde",
+          "Carnitas de Pato",
+          "Quesadilla de Chicharrón",
+          "Nopales con Queso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Ribeye “El Rey” is the author's favourite",
+        "quote": "Ribeye “El Rey” (mein Favorit)",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Ribeye “El Rey”"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "all the dishes tried were fantastic",
+        "quote": "wirklich alles war fantastisch",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Ribeye “El Rey”",
+          "Quesabirria",
+          "Chorizo Verde",
+          "Carnitas de Pato",
+          "Quesadilla de Chicharrón",
+          "Nopales con Queso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author took her aunt visiting from Mexico to Tacos El Rey",
+        "quote": "Als meine Tante mich aus Mexiko besuchen kam, musste ich sie natürlich mitnehmen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author's aunt, a critical eater, was thrilled with the food",
+        "quote": "Sie ist beim Essen ziemlich kritisch und war begeistert",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the masa stood out and the tortillas are just right",
+        "quote": "Besonders aufgefallen ist uns beiden die Masa: Die Tortillas sind einfach genau richtig",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Masa",
+          "Tortillas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "if the tortilla isn't good, the taco probably isn't good either",
+        "quote": "wenn die Tortilla nicht gut ist, ist es wahrscheinlich auch kein guter Taco",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Tortilla",
+          "Taco"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the tortillas are hand-pressed from blue corn using the traditional nixtamal method",
+        "quote": "Sie werden aus blauem Mais nach der traditionellen Nixtamal-Methode von Hand gepresst",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Tortillas",
+          "blauem Mais"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "ingredient_quality",
+            "cooking"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tortillas are freshly grilled and filled with slow-cooked meat and classic toppings",
+        "quote": "frisch gegrillt und dann mit langsam gegartem Fleisch und klassischen Toppings gefüllt",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Tortillas",
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "freshness",
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author tried margaritas, micheladas and a Paloma with Patrón tequila",
+        "quote": "Bei den Drinks habe ich Margaritas, Micheladas und eine Paloma mit Patrón-Tequila probiert",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Margaritas",
+          "Micheladas",
+          "Paloma",
+          "Patrón-Tequila"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the margaritas, micheladas and Paloma were just as good as the food",
+        "quote": "sie waren genauso gut",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Margaritas",
+          "Micheladas",
+          "Paloma"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Tacos El Rey is the author's go-to place when she is homesick",
+        "quote": "Ich glaube, ich habe ganz offiziell meinen Ort gefunden, wenn ich Heimweh habe",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.442Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.254Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.442Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

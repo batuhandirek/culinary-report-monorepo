@@ -1,0 +1,156 @@
+{
+  "id": "post-2e688d3d",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "moses40327",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlincafe",
+      "berlinlifestyle",
+      "cafeberlin",
+      "mensstyle",
+      "berlinmoments"
+    ],
+    "taggedHandles": [
+      "naa.cafe.berlin"
+    ],
+    "text": "Little break in Berlin ☕📍\nA quiet moment at @naa.cafe.berlin\n\n#BerlinCafe #BerlinLifestyle #CafeBerlin #MensStyle #BerlinMoments",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "2e688d3d-7733-4a2a-a1be-b7fe5c607958",
+    "externalId": "ig_4011305852484403530",
+    "url": "https://www.instagram.com/p/DerBWuGx0FK/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-19T10:24:05.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T04:00:46.594Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "naa.cafe.berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "2fa59a23-68b0-4a16-8199-ce455190526d",
+          "brandName": "NaA Café",
+          "venueId": "7d423047-59a5-4dfc-85ef-b27f29401ada",
+          "venueName": "NaA Café"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "quiet moment",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:34:33.350Z",
+    "usage": {
+      "inputTokens": 9151,
+      "outputTokens": 967,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue is known only from its handle, so the name is taken from it. 'Quiet moment' could describe either the café's calm or simply the creator's break, so noise or atmosphere and positive or neutral are both allowed. The 'little break' visit claim is optional because it can fold into the quiet-moment claim.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Naa Cafe",
+        "locationHint": "@naa.cafe.berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "2fa59a23-68b0-4a16-8199-ce455190526d",
+          "brandName": "NaA Café",
+          "venueId": "7d423047-59a5-4dfc-85ef-b27f29401ada",
+          "venueName": "NaA Café",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator had a quiet moment at Naa Cafe",
+        "quote": "A quiet moment at @naa.cafe.berlin",
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator took a little break at Naa Cafe in Berlin",
+        "quote": "Little break in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.230Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.423Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

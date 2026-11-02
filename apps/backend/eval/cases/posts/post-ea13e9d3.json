@@ -1,0 +1,811 @@
+{
+  "id": "post-ea13e9d3",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "dupplepp",
+    "locationName": null,
+    "hashtags": [
+      "berlinbars",
+      "mitte",
+      "berlinnightlife",
+      "expatinberlin",
+      "berlintiktok"
+    ],
+    "taggedHandles": [],
+    "text": "4 Mitte bars, one for every kind of night 🍷 part 3 of my Berlin bars-by-area series — which area should I do next? #berlinbars #mitte #berlinnightlife #expatinberlin #berlintiktok bars in Berlin in mitte",
+    "subtitles": "If this is the Berlin you want\nthese are the spots you should visit\nWelcome to my new series\nwhere I recommend you\nthe bars in every neighborhood in Berlin today midday\nFirst in the list we have Binarai Forum\nIf you want something cozy\nbut it's still fancy\nthis one is for you\nIt feels like a fancy living room\nLow lights, it's match furniture\nand a really cozy, almost French kind of vibe\nThen we have Market Prince\nIf you want something\na little bit more heating and vintage\nthis one is for you. It's less polished\na little bit more rusty\nand has that old school Berlin feeling\nPlus the outside is really nice\nif you are walking around and want to just stop for a drink\nThen we have 100 G\nThis one I expected to be a little bit more mainstream\nbut actually it's not\nIt's a little bit dark\nwith low fee jazz ish vibes\nand they also have events\nso it's a great pre going out spot\nThen we have clerics I think\nIf you want something random\nand that's why I left it at the end\nthis one is for you. I literally\nI don't know how to describe it\nbecause they have summer vibes inside the club\nthe disco ball, but\nalso restaurant and cafe\nso it's pretty much everything\nSo if you don't have a plan\nto where do you wanna go\nbut you actually want to go outside\nthis One is for you. And that's it\nThat's my day\nA little bit fancy\na little bit cozy, a little bit random\nI definitely have way more recommendations in media\nbecause usually where I hang out\nbut I'm trying to diversify\nBut check it out in the other videos\nThanks for watching\nBye. Bye",
+    "subtitlesLanguage": "eng-US",
+    "id": "ea13e9d3-6e4d-4f97-9181-84f09c1e508c",
+    "externalId": "7691355954427776288",
+    "url": "https://www.tiktok.com/@dupplepp/video/7691355954427776288",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-30T15:49:21.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:31:18.855Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Bina Bar",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "5f1c5dbd-eb6a-4fbd-a305-920fa07aadd1",
+          "brandName": "Bijou Bar",
+          "venueId": "e3bd0f0a-758a-43d9-908a-c4f45ab2b4de",
+          "venueName": "Bijou Bar"
+        }
+      },
+      {
+        "venueName": "Markthalle Prinz",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "571c2934-52e1-408c-bc44-4c49e6f37540",
+          "brandName": "Arminiusmarkthalle",
+          "venueId": "14c0cdd8-b12a-47cd-8185-adc122033cf8",
+          "venueName": "Arminiusmarkthalle"
+        }
+      },
+      {
+        "venueName": "100 Gramm Bar",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "e40114c7-048b-4092-b447-663b63bed4f1",
+          "brandName": "100 GRAMM Bar",
+          "venueId": "cc7345e4-266c-4229-8c95-81de6ef4de11",
+          "venueName": "100 GRAMM Bar"
+        }
+      },
+      {
+        "venueName": "Clärchens Ballhaus",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f1c279d2-e748-488c-af94-a07394a4e4e2",
+          "brandName": "Clärchens Ballroom",
+          "venueId": "b797f51a-42d5-4b8c-90b3-90243c8775e2",
+          "venueName": "Clärchens Ballroom"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "cozy but still fancy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fancy living room feel",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "low lights and almost French vibe",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "vintage and old-school Berlin feeling",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "less polished, a little rusty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "nice outside area for a drink",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "dark with low-key jazz-ish vibes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "has events",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "great pre-going-out spot",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "summer vibes inside",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "disco ball",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "mix of club, restaurant, and café",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "hard to describe",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "this is part 3 of a Berlin bars-by-area series",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:27:26.512Z",
+    "usage": {
+      "inputTokens": 19805,
+      "outputTokens": 6608,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "All four venue names exist only in the garbled transcript (likely Clärchens Ballhaus for 'Clerics'), so transcript spellings are kept; the descriptive vibe lines are read as approving, hence positive, and the garbled 'match furniture'/'heating' phrases were taken at face value.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Binarai Forum",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "5f1c5dbd-eb6a-4fbd-a305-920fa07aadd1",
+          "brandName": "Bijou Bar",
+          "venueId": "e3bd0f0a-758a-43d9-908a-c4f45ab2b4de",
+          "venueName": "Bijou Bar",
+          "note": "The transcript 'Binarai Forum' is garbled. It best fits Bijou Bar, a cozy, fancy living-room-style bar in Mitte; the other candidates are restaurants or outside Mitte."
+        }
+      },
+      {
+        "venueName": "Market Prince",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "571c2934-52e1-408c-bc44-4c49e6f37540",
+          "brandName": "Arminiusmarkthalle",
+          "venueId": "14c0cdd8-b12a-47cd-8185-adc122033cf8",
+          "venueName": "Arminiusmarkthalle",
+          "note": "'Market Prince' is likely a mis-transcription of Arminiusmarkthalle, a historic old-school market hall in Mitte (Moabit) with drinks, though this is uncertain."
+        }
+      },
+      {
+        "venueName": "100 G",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e40114c7-048b-4092-b447-663b63bed4f1",
+          "brandName": "100 GRAMM Bar",
+          "venueId": "cc7345e4-266c-4229-8c95-81de6ef4de11",
+          "venueName": "100 GRAMM Bar",
+          "note": "'100 G' could also be 100 GRAMM Vino; the dark, jazz-ish bar with events fits the original 100 GRAMM Bar."
+        }
+      },
+      {
+        "venueName": "Clerics",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f1c279d2-e748-488c-af94-a07394a4e4e2",
+          "brandName": "Clärchens Ballroom",
+          "venueId": "b797f51a-42d5-4b8c-90b3-90243c8775e2",
+          "venueName": "Clärchens Ballroom",
+          "note": "'Clerics' is a mis-transcription of Clärchens; its disco ball and mix of restaurant, cafe and club match Clärchens Ballroom."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Binarai Forum is cozy but still fancy",
+        "quote": "If you want something cozy\nbut it's still fancy",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Binarai Forum feels like a fancy living room",
+        "quote": "It feels like a fancy living room",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Binarai Forum has low lights",
+        "quote": "Low lights",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Binarai Forum has matching furniture",
+        "quote": "it's match furniture",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Binarai Forum has a really cozy, almost French vibe",
+        "quote": "and a really cozy, almost French kind of vibe",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Market Prince is more vintage",
+        "quote": "a little bit more heating and vintage",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Market Prince is less polished and a bit more rusty",
+        "quote": "It's less polished\na little bit more rusty",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "atmosphere",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Market Prince has an old school Berlin feeling",
+        "quote": "and has that old school Berlin feeling",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the outside of Market Prince is really nice",
+        "quote": "Plus the outside is really nice",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Market Prince is good to stop for a drink when walking around",
+        "quote": "if you are walking around and want to just stop for a drink",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "outdoor_seating"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "100 G is less mainstream than expected",
+        "quote": "This one I expected to be a little bit more mainstream\nbut actually it's not",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "100 G is a little bit dark",
+        "quote": "It's a little bit dark",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "100 G has lo-fi jazz-ish vibes",
+        "quote": "with low fee jazz ish vibes",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "noise"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "100 G also has events",
+        "quote": "and they also have events",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "vibe",
+            "other"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "100 G is a great pre-going-out spot",
+        "quote": "so it's a great pre going out spot",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Clerics is a random spot",
+        "quote": "If you want something random",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Clerics has summer vibes inside the club with a disco ball",
+        "quote": "because they have summer vibes inside the club",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Clerics has a disco ball",
+        "quote": "the disco ball",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Clerics is also a restaurant and cafe",
+        "quote": "also restaurant and cafe",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Clerics is pretty much everything",
+        "quote": "so it's pretty much everything",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Clerics is recommended if you have no plan but want to go out",
+        "quote": "So if you don't have a plan",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.442Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.254Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.441Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

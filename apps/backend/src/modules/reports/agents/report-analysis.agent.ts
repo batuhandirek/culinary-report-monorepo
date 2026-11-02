@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { MastraModelConfig } from '@mastra/core/llm';
 import type { Tool } from '@mastra/core/tools';
 import { stepCountIs } from 'ai';
 import { z } from 'zod/v4';
@@ -11,6 +10,7 @@ import {
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 
 import { ANALYSIS_MAX_STEPS, ANALYSIS_MODEL, MAX_TOOL_CALLS } from '../constants/report-analysis.constant.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 const hypothesisSchema = z.object({
 	reason: z
@@ -65,10 +65,12 @@ export class ReportAnalysisAgent extends BaseMastraAgent<typeof reportAnalysisSc
 		id: 'report-analysis',
 		name: 'ReportAnalysisAgent',
 		outputSchema: reportAnalysisSchema,
+		// Tool rounds resend the steps before them
+		cacheConversation: true,
 		defaultExecutionOptions: { maxSteps: ANALYSIS_MAX_STEPS, stopWhen: stepCountIs(ANALYSIS_MAX_STEPS) },
 	};
 
-	protected getModel(): MastraModelConfig {
+	protected getModel(): LlmModelChoice {
 		return ANALYSIS_MODEL;
 	}
 

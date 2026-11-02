@@ -1,0 +1,1288 @@
+{
+  "id": "post-1d0aeaca",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "berlinlovesyou.com",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Kreuzberg’s Die Eismacher Is Berlin’s Most Exotic Ice Creamery\n\nHUNGRY\nKreuzberg’s Die Eismacher Is Berlin’s Most Exotic Ice Creamery\nBy Allison Krupp . July 25, 2026\nDie Eismacher: Kreuzberg’s adventurous ice cream shop lives on\nWe first reviewed Die Eismacher in 2017. In August 2026, we verified that the ice cream shop is still serving from Körtestraße 10. Its changing flavours may differ from those described in our original review, which is preserved below.\nCurrent status: Open · Verified 22 August 2026\nAddress: Körtestraße 10, 10967 Berlin-Kreuzberg\nOfficial website · Instagram · Google Maps\nOpening hours and menus can change. Check the official channels before visiting.\nOur original review from 2017\nDie Eismacher is ice cream made with quirky and unbridled Berlin personality in mind.\nGerman obsession with ice cream: It’s a head-scratcher. Nigh-Auslanderbehörde lines, rain or shine or frigid temps, stretching around the block—all for a kugel or two. As Germans remain strong and thin and sensible, all I can assume is ice cream is a gift from some kind of god to keep them going—or hell has, indeed, frozen over and given us this sweet, sweet reality.\nThe ice cream maker herself, Miriam, on the left.\nDie Eismacher of Kreuzberg takes a dramatic step into the ice cream light, pushing limits of consumption and flavor like never before.\nIt’s artisan ice cream, artistic and inspiring in choice, declaring that the best and strangest flavors haven’t been discovered yet. And the face of it, our ice cream ambassador—Miriam—is a sweet-toothed, bright-eyed, impassioned ice cream maker, taking inspiration from the world around her.\nTake the flavor of Ube, for example. It’s bright purple, a bestseller—and insanely weird. Miriam tells us Ube—pronounced EWE-BAH—is a Philippian sweet potato, grown from the ground. For those of you not keeping up: Miriam’s nabbed a hairy, purple root—and made it into a dynamic, creamy, thick, and sweet ice cream. And it’s one you have to try.\nOther flavors continue down this trajectory of strange.\nA Thailand herb, almost toffee-like, bright green and thick called Pandan. A near-sorbet, which mixes pineapple and mint. Beetroot and orange ginger. Once, Miriam veered too far off the path and churned together white peach and violet flowers. We’re told it was “disgusting.” We don’t believe her.\nDie Eismacher focuses on natural flavors, leaving the ice creams smooth, light, without the tart, false taste of preservatives.\nThere’s salted caramel, one of the top-selling flavors and featuring caramel that Miriam actually makes in the kitchen. There’s milk and honey, using bee pollen from a beekeeper friend of Miriam’s. We asked: he wears the netted hat and everything. Whilst there, a local vender arrives with dried grapes, giving this place the ultimate neighborhood feel. Plus, there’s a delightful vegan chocolate, using carob chips, for those of us making conscious ice cream choices.When asked what the proper “Berlin” flavor would be, Miriam isn’t stumped. She considers several. The Club Mate flavor, perhaps? Sauerkraut with lemon—actually doesn’t sound too bad. We suggest the “cold doner,” to which she scrunches her nose. “Anything with beer,” she says, knowing the hearts and minds of Berliners all too well.\nDie Eismacher is a delightful and unique Kreuzberg ice cream shop, revolutionizing the way we think about ice cream flavors, ice cream pairings, and strange, purple vegetables growing in the ground. Don’t miss it.\nDie Eismacher\nKörtestraße 10\n10967 Berlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "1d0aeaca-ca4a-4574-9485-6212d6829581",
+    "externalId": "blog_3fdcb03272082bd37ec1ced3",
+    "url": "https://berlinlovesyou.com/kreuzbergs-die-eismacher-has-the-quirkiest-ice-cream-flavors-around/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-25T10:34:01.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:50:08.455Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Die Eismacher",
+        "locationHint": "Körtestraße 10",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "80a0d80c-69ca-479c-836f-6bde47af866b",
+          "brandName": "Die Eismacher",
+          "venueId": "29a9ed0c-9671-404c-950b-fbb002c41ce0",
+          "venueName": "Die Eismacher"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Die Eismacher is still serving from Körtestraße 10",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ice cream shop has changing flavours",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "flavours"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ube is a bestseller",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ube is a Philippian sweet potato",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Pandan is bright green and thick",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [
+          "Pandan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Pandan tastes almost toffee-like",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pandan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the shop makes a near-sorbet with pineapple and mint",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pineapple",
+          "mint"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the shop makes beetroot and orange ginger ice cream",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "beetroot",
+          "orange ginger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "white peach and violet flowers ice cream was disgusting",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "white peach",
+          "violet flowers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ice creams are smooth, light, without the tart, false taste of preservatives",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "ice cream",
+          "preservatives"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "salted caramel is one of the top-selling flavors",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Salted caramel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam makes the caramel in the kitchen",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "caramel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the shop makes milk and honey ice cream",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "milk and honey ice cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the milk and honey ice cream uses bee pollen from a beekeeper friend",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "milk and honey ice cream",
+          "bee pollen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a local vender arrives with dried grapes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "dried grapes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the shop has a vegan chocolate flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "vegan chocolate"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan chocolate uses carob chips",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "vegan chocolate",
+          "carob chips"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Club Mate could be a Berlin flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "club mate"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "sauerkraut with lemon could be a Berlin flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "sauerkraut",
+          "lemon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "cold doner was suggested as a Berlin flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "anything with beer was suggested as a Berlin flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:33:41.947Z",
+    "usage": {
+      "inputTokens": 11568,
+      "outputTokens": 11339,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the hypothetical 'Berlin flavour' ideas (Club Mate, Sauerkraut with lemon, cold doner, beer) are kept as optional place claims, and the general German ice-cream queue aside is subject none. Descriptive flavour lines (Pandan, pineapple-mint near-sorbet) are treated as neutral facts, with opinion allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Die Eismacher",
+        "locationHint": "Körtestraße 10, 10967 Berlin-Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "80a0d80c-69ca-479c-836f-6bde47af866b",
+          "brandName": "Die Eismacher",
+          "venueId": "29a9ed0c-9671-404c-950b-fbb002c41ce0",
+          "venueName": "Die Eismacher",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Die Eismacher is Berlin's most exotic ice creamery",
+        "quote": "Die Eismacher Is Berlin’s Most Exotic Ice Creamery",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author first reviewed Die Eismacher in 2017",
+        "quote": "We first reviewed Die Eismacher in 2017",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher is still serving from Körtestraße 10, verified in August 2026",
+        "quote": "the ice cream shop is still serving from Körtestraße 10",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "opening_hours"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher's flavours change and may differ from the original review",
+        "quote": "Its changing flavours may differ from those described in our original review",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher is open, verified 22 August 2026",
+        "quote": "Current status: Open · Verified 22 August 2026",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher's ice cream is made with quirky, unbridled Berlin personality",
+        "quote": "ice cream made with quirky and unbridled Berlin personality in mind",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "ice cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Germans queue in long lines around the block for ice cream in any weather",
+        "quote": "Nigh-Auslanderbehörde lines, rain or shine or frigid temps, stretching around the block—all for a kugel or two",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [
+          "ice cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Miriam is Die Eismacher's ice cream maker",
+        "quote": "The ice cream maker herself, Miriam",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher pushes the limits of flavor like never before",
+        "quote": "pushing limits of consumption and flavor like never before",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher makes artisan ice cream",
+        "quote": "It’s artisan ice cream",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "ice cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher's flavour choice is artistic and inspiring",
+        "quote": "artistic and inspiring in choice",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam is a sweet-toothed, bright-eyed, impassioned ice cream maker",
+        "quote": "a sweet-toothed, bright-eyed, impassioned ice cream maker",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Ube flavor is bright purple",
+        "quote": "It’s bright purple",
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Ube flavor is a bestseller",
+        "quote": "a bestseller",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Ube flavor is insanely weird",
+        "quote": "insanely weird",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral",
+            "mixed"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ube is a Philippine sweet potato",
+        "quote": "Ube—pronounced EWE-BAH—is a Philippian sweet potato",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Ube",
+          "sweet potato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Ube ice cream is dynamic, creamy, thick and sweet",
+        "quote": "made it into a dynamic, creamy, thick, and sweet ice cream",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Ube ice cream is one you have to try",
+        "quote": "And it’s one you have to try.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Ube"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher's other flavors are also strange",
+        "quote": "Other flavors continue down this trajectory of strange.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pandan flavor, a Thai herb, is almost toffee-like, bright green and thick",
+        "quote": "A Thailand herb, almost toffee-like, bright green and thick called Pandan",
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "Pandan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher has a near-sorbet mixing pineapple and mint",
+        "quote": "A near-sorbet, which mixes pineapple and mint",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "sorbet",
+          "pineapple",
+          "mint"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher has beetroot and orange ginger flavors",
+        "quote": "Beetroot and orange ginger.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Beetroot",
+          "orange ginger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam once churned white peach and violet flowers together",
+        "quote": "churned together white peach and violet flowers",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "white peach",
+          "violet flowers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam said the white peach and violet flowers flavor was disgusting",
+        "quote": "We’re told it was “disgusting.”",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "white peach",
+          "violet flowers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author doesn't believe the white peach and violet flowers flavor was disgusting",
+        "quote": "We don’t believe her.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "white peach",
+          "violet flowers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher focuses on natural flavors",
+        "quote": "Die Eismacher focuses on natural flavors",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ice creams are smooth, light, without the tart false taste of preservatives",
+        "quote": "leaving the ice creams smooth, light, without the tart, false taste of preservatives",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "ice creams"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "salted caramel is one of the top-selling flavors",
+        "quote": "There’s salted caramel, one of the top-selling flavors",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "salted caramel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the salted caramel uses caramel Miriam makes in the kitchen",
+        "quote": "featuring caramel that Miriam actually makes in the kitchen",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "caramel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the milk and honey flavor uses bee pollen from a beekeeper friend of Miriam's",
+        "quote": "There’s milk and honey, using bee pollen from a beekeeper friend of Miriam’s",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "milk and honey",
+          "bee pollen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a local vendor arrived at Die Eismacher with dried grapes",
+        "quote": "a local vender arrives with dried grapes",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "dried grapes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher has the ultimate neighborhood feel",
+        "quote": "giving this place the ultimate neighborhood feel",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan chocolate is delightful",
+        "quote": "there’s a delightful vegan chocolate",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "vegan chocolate"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the vegan chocolate uses carob chips",
+        "quote": "using carob chips",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "vegan chocolate",
+          "carob chips"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam considers a Club Mate flavor as the Berlin flavor",
+        "quote": "The Club Mate flavor, perhaps?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Club Mate"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a sauerkraut with lemon flavor actually doesn't sound too bad",
+        "quote": "Sauerkraut with lemon—actually doesn’t sound too bad.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Sauerkraut",
+          "lemon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam scrunched her nose at a cold doner flavor",
+        "quote": "We suggest the “cold doner,” to which she scrunches her nose.",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "cold doner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Miriam says the proper Berlin flavor is anything with beer",
+        "quote": "“Anything with beer,” she says",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher is a delightful and unique Kreuzberg ice cream shop",
+        "quote": "Die Eismacher is a delightful and unique Kreuzberg ice cream shop",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Die Eismacher is revolutionizing the way we think about ice cream flavors and pairings",
+        "quote": "revolutionizing the way we think about ice cream flavors, ice cream pairings",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "ice cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "don't miss Die Eismacher",
+        "quote": "Don’t miss it.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.227Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.421Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

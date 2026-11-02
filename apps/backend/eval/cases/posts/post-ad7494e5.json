@@ -1,0 +1,258 @@
+{
+  "id": "post-ad7494e5",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "babybeems",
+    "locationName": "CALLI the coffee club",
+    "hashtags": [
+      "berlin",
+      "berlincafe",
+      "berlineats",
+      "berlinfood"
+    ],
+    "taggedHandles": [],
+    "text": "I feel like if I owned a cafe, this is how it would look 😍 Calli nailed it with the interior design, the branding inspired by their daughter, and some really great (and well priced) flavours ☕️🍵🥐🥯\n\n#berlin #berlincafe #berlineats #berlinfood ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "ad7494e5-f347-4ba3-b40f-618fbb906cc7",
+    "externalId": "7618515351998991636",
+    "url": "https://www.tiktok.com/@babybeems/video/7618515351998991636",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-18T08:50:41.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:31:09.341Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "CALLI the coffee club",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "f5d76b30-3138-4c9f-9555-7513d15ad826",
+          "brandName": "Calli. the coffee club",
+          "venueId": "3f67a027-c5ae-4403-b69b-33b27ead2a06",
+          "venueName": "Calli. the coffee club"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the interior design was nailed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the branding was inspired by their daughter",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the flavours were really great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the flavours were well priced",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:15.195Z",
+    "usage": {
+      "inputTokens": 9557,
+      "outputTokens": 1492,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The branding claim has no clean aspect; interior (the café's look) fits best, with null or ownership allowed. The emojis hint at coffee, matcha, croissants and bagels, but no food is named in words, so foods stay empty.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "CALLI the coffee club",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f5d76b30-3138-4c9f-9555-7513d15ad826",
+          "brandName": "Calli. the coffee club",
+          "venueId": "3f67a027-c5ae-4403-b69b-33b27ead2a06",
+          "venueName": "Calli. the coffee club",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "if the author owned a cafe, this is how it would look",
+        "quote": "if I owned a cafe, this is how it would look",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Calli nailed the interior design",
+        "quote": "Calli nailed it with the interior design",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Calli nailed the branding, which is inspired by the owners' daughter",
+        "quote": "the branding inspired by their daughter",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "ownership",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Calli has some really great flavours",
+        "quote": "some really great (and well priced) flavours",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Calli's flavours are well priced",
+        "quote": "well priced",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.602Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Branding is only loosely covered by interior, and the reference itself accepts no aspect, so 'other' is a defensible choice."
+      },
+      {
+        "at": "2026-11-01T15:11:31.441Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.437Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

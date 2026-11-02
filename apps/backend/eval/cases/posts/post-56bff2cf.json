@@ -1,0 +1,882 @@
+{
+  "id": "post-56bff2cf",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "blog",
+    "author": "tip-berlin.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Zwischen Lässigkeit und Kompetenz: Das georgische Lokal Dro\n\nEssen gehen\nZwischen Lässigkeit und Kompetenz: Das georgische Lokal Dro\nWeinbars in Prenzlauer Berg gibt es viele, doch das Dro ist besonders – besonders spitze. Aus dem Stand eine der nettesten und entdeckungsdurstigsten Adressen der Stadt\nText: Marianne Rennella\nVeröffentlicht am: 29.07.2026\nHome » Food » Seite 4\nWhatsApp\nFacebook\nE-Mail\nX\nBluesky\nGeorgischer Salat und sonnengeküsster Wein im Dro © Marianne Rennella\nIhr könnt euch Artikel von tipBerlin in der Google-Suche nun bevorzugt anzeigen lassen.\nJetzt aktivieren\nMehr erfahren\nWir kennen Gugushvili aus dem 8000 Vintages in Kreuzberg, dem Ableger einer georgischen Weinbar-Ikone, die er 2023 an der Yorckstraße eröffnet hatte. Dort arbeitete er unter anderem mit dem Sommelier Giorgi Silagadze zusammen, der ihm ins Dro folgte. Kein Wunder ist es also, dass hier bereits wenige Wochen nach der Eröffnung alles so eingespielt wirkt.\nWie Sonnenlicht den Geschmack beeinflusst\nDer ikonische bernsteinfarbene Wein leuchtet durch die einfallenden Sonnenstrahlen auf der Terrasse des Dro noch einmal stärker. Die Amber Weine, auch bekannt als Orange Wine, sind das Aushängeschild der georgischen Weinkultur. Sie erhalten ihre wunderschöne Farbe durch den Kontakt von Schale und Saft der Traube. Dieser „skin contact“ beeinflusst auch das Aroma des Weins – sie schmecken deutlich intensiver, komplexer und auch alkoholischer als andere Weißweine. Dadurch passen sie aber perfekt zur georgischen Küche, von der man im Dro einen besonders gelungenen Ausschnitt probieren kann.\nZum typischen Maisbrot, das ohne Triebmittel gebacken wird und somit an einen knusprigen, dichten Fladen erinnert, gibt es hausgemachten Hummus, der durch den gerösteten Sesam leicht nussig schmeckt. Überragend ist der georgische Salat aus Gurke, roter Zwiebel und reifen Fleischtomaten in einem grünen Pesto, garniert mit Jonjoli, den eingelegten Blüten der Pimpernuss – eine Würzpaste, die für Georgien sehr typisch ist.\nIm Dro gibt es natürlich auch Khachapuri\nUnd dann ist da noch Khachapuri, das hierzulande wohl bekannteste georgische Gericht. Sommelier Silagadze erklärt, in Georgien gäbe es viele Khachapuri-Varianten. Während man in Deutschland vor allem den bootförmigen Teig mit geschmolzenem Käse und Ei kennt, ist die Version im Dro dezenter: ein dünner Teigfladen, heiß und mit Käse gefüllt, ebenso einfach wie vollkommen. Die Variante mit Bohnen heißt Lobiani und ist vegan. Sogar das Dessert gelingt dieser Weinbar: ein Bread Pudding, der durch das cremige, nussige Topping süß und salzig und saftig ist.\nDro Fehrbelliner Str. 24, Prenzlauer Berg, Di–So 12–24 Uhr, bei Instagram\nMehr zum Thema\nTagescafé ins Glück: Ein neues Team hat das KW-Café Bravo übernommen. Für den Sommer zeigen wir euch Picknick-Rezepte mit Johannisbeer-Hibiskus-Spritz und himmlischer Tarte. Das feinste Fine Dining der Stadt: Wir stellen euch Berlins Sternerestaurants vor. Wir versorgen euch mit Neuigkeiten und Rezension: Essen gehen in Berlin – von Imbiss bis Restaurant. Prost: Trinken gehen in Berlin – was wir über Drinks, Bars und Kneipen schreiben, lest ihr hier. Für zuhause, die Küche oder Vorratsammer: Einkaufen – Produkte, Geschäfte und Entwicklungen. Berlins Food-Guide: Hier bestellt ihr die Speisekarte.\nThe post Zwischen Lässigkeit und Kompetenz: Das georgische Lokal Dro appeared first on tipBerlin.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "56bff2cf-e531-48ce-854d-b9edbe3e7033",
+    "externalId": "blog_6feeb8e36baf3932558e06fb",
+    "url": "https://www.tip-berlin.de/food/essen-gehen/georgisches-lokal-dro/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-29T15:00:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:33.377Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Dro",
+        "locationHint": "Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "exact",
+          "brandId": "45c0d066-bd99-4148-8ff7-3d4bb5ad52ac",
+          "brandName": "dro",
+          "venueId": "6e7255ed-b40e-4dc0-995d-fef761acd041",
+          "venueName": "dro"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "laid-back but competent vibe",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "already feels well in sync just weeks after opening",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "terrace in the sunlight",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "amber wine tastes intense and complex",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Amber wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Georgian dishes are especially successful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "typical Georgian elements like jonjoli",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "hummus tastes lightly nutty from roasted sesame",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "House-made hummus"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "khachapuri is hot",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [
+          "khachapuri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "bread pudding is sweet, salty and juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Bread pudding"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:22:18.998Z",
+    "usage": {
+      "inputTokens": 14625,
+      "outputTokens": 9347,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Dro counts as a new opening since the article says it opened only weeks ago; 8000 Vintages is included because the article states facts about it. KW-Café Bravo appears only in the related-articles teaser block, not the article itself, so it is left out; general amber-wine and Khachapuri background is subject none.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Dro",
+        "locationHint": "Fehrbelliner Str. 24, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "45c0d066-bd99-4148-8ff7-3d4bb5ad52ac",
+          "brandName": "dro",
+          "venueId": "6e7255ed-b40e-4dc0-995d-fef761acd041",
+          "venueName": "dro",
+          "note": "Address Fehrbelliner Str. 24 matches exactly, though the post's Prenzlauer Berg label differs from the listed Mitte district."
+        }
+      },
+      {
+        "venueName": "8000 Vintages",
+        "locationHint": "Yorckstraße, Kreuzberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Dro balances casualness and competence",
+        "quote": "Zwischen Lässigkeit und Kompetenz",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dro is a Georgian restaurant",
+        "quote": "Das georgische Lokal Dro",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Among Prenzlauer Berg's many wine bars, Dro is especially excellent",
+        "quote": "besonders spitze",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dro is right away one of the nicest and most adventurous addresses in the city",
+        "quote": "Aus dem Stand eine der nettesten und entdeckungsdurstigsten Adressen der Stadt",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "8000 Vintages is the offshoot of an iconic Georgian wine bar",
+        "quote": "dem Ableger einer georgischen Weinbar-Ikone",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Gugushvili opened 8000 Vintages on Yorckstraße in 2023",
+        "quote": "die er 2023 an der Yorckstraße eröffnet hatte",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Sommelier Giorgi Silagadze followed Gugushvili from 8000 Vintages to Dro",
+        "quote": "Sommelier Giorgi Silagadze zusammen, der ihm ins Dro folgte",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dro opened a few weeks ago",
+        "quote": "wenige Wochen nach der Eröffnung",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Only weeks after opening, everything at Dro already seems well-practised",
+        "quote": "alles so eingespielt wirkt",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The amber wine glows even brighter in the sun on Dro's terrace",
+        "quote": "Der ikonische bernsteinfarbene Wein leuchtet durch die einfallenden Sonnenstrahlen auf der Terrasse des Dro noch einmal stärker",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [
+          "bernsteinfarbene Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Amber wines, also known as orange wine, are the flagship of Georgian wine culture",
+        "quote": "Die Amber Weine, auch bekannt als Orange Wine, sind das Aushängeschild der georgischen Weinkultur",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Amber Weine",
+          "Orange Wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Amber wines get their beautiful colour from contact between grape skin and juice",
+        "quote": "Sie erhalten ihre wunderschöne Farbe durch den Kontakt von Schale und Saft der Traube",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Amber Weine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Amber wines taste more intense, complex and alcoholic than other white wines",
+        "quote": "sie schmecken deutlich intensiver, komplexer und auch alkoholischer als andere Weißweine",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Amber Weine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Amber wines pair perfectly with Georgian cuisine",
+        "quote": "Dadurch passen sie aber perfekt zur georgischen Küche",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Amber Weine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Dro offers a particularly successful selection of Georgian cuisine",
+        "quote": "von der man im Dro einen besonders gelungenen Ausschnitt probieren kann",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The typical Maisbrot is baked without leavening, like a crisp, dense flatbread",
+        "quote": "Zum typischen Maisbrot, das ohne Triebmittel gebacken wird und somit an einen knusprigen, dichten Fladen erinnert",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Maisbrot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The homemade hummus tastes slightly nutty from the roasted sesame",
+        "quote": "hausgemachten Hummus, der durch den gerösteten Sesam leicht nussig schmeckt",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Hummus",
+          "Sesam"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Georgian salad is outstanding",
+        "quote": "Überragend ist der georgische Salat",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "georgische Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Georgian salad is cucumber, red onion and ripe beefsteak tomatoes in green pesto, garnished with Jonjoli",
+        "quote": "aus Gurke, roter Zwiebel und reifen Fleischtomaten in einem grünen Pesto, garniert mit Jonjoli",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Gurke",
+          "roter Zwiebel",
+          "Fleischtomaten",
+          "Pesto",
+          "Jonjoli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Jonjoli are pickled bladdernut flowers, a seasoning typical of Georgia",
+        "quote": "Jonjoli, den eingelegten Blüten der Pimpernuss",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Jonjoli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Dro also serves Khachapuri",
+        "quote": "Im Dro gibt es natürlich auch Khachapuri",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Khachapuri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Khachapuri is probably the best-known Georgian dish in Germany",
+        "quote": "Khachapuri, das hierzulande wohl bekannteste georgische Gericht",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Khachapuri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Sommelier Silagadze explains there are many Khachapuri variants in Georgia",
+        "quote": "in Georgien gäbe es viele Khachapuri-Varianten",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Khachapuri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "advice"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Dro's Khachapuri is more understated than the boat-shaped version: a thin, hot flatbread filled with cheese",
+        "quote": "ein dünner Teigfladen, heiß und mit Käse gefüllt",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Khachapuri",
+          "Käse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "presentation",
+            "temperature"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Khachapuri is as simple as it is perfect",
+        "quote": "ebenso einfach wie vollkommen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Khachapuri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The bean variant, Lobiani, is vegan",
+        "quote": "Die Variante mit Bohnen heißt Lobiani und ist vegan",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Bohnen",
+          "Lobiani"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dro, a wine bar, even succeeds at dessert",
+        "quote": "Sogar das Dessert gelingt dieser Weinbar",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Bread Pudding"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Bread Pudding is sweet, salty and moist thanks to its creamy, nutty topping",
+        "quote": "ein Bread Pudding, der durch das cremige, nussige Topping süß und salzig und saftig ist",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Bread Pudding"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dro is at Fehrbelliner Str. 24 in Prenzlauer Berg",
+        "quote": "Dro Fehrbelliner Str. 24, Prenzlauer Berg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Dro is open Tuesday to Sunday, 12 to 24",
+        "quote": "Di–So 12–24 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.437Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.235Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

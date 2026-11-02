@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { ReportAspect, ReportFeedbackPoint, ReportPost } from 'client';
+	import type { ReportAspect, ReportClaim, ReportPost } from 'client';
 	import { renderSVG } from 'uqr';
 
-	import { authorLabel, TOPIC_LABELS } from '#lib/culinary.js';
+	import { authorLabel } from '#lib/culinary.js';
 
 	// Media coverage: each blog article that wrote about the brand this month, newest first, in a
-	// block of its own: the blog, the headline, what it says about the brand, its praise and
-	// complaints by theme, and a QR code of the link so the printed report leads to it.
+	// block of its own: the blog, the headline, what it says about the brand, its praise,
+	// complaints and noted facts by theme, and a QR code of the link so the printed report leads to it.
 	interface Props {
 		// The report's blog articles
 		articles: ReportPost[];
@@ -32,21 +32,22 @@
 			timeZone: 'UTC'
 		});
 
-	// What a point is about: its theme as the report's vocabulary labels it (a root's label is the
-	// topic's), the key itself in a report built before the vocabulary was kept, its topic unfiled
-	const pointLabel = (p: ReportFeedbackPoint) =>
-		p.theme ? (byKey.get(p.theme)?.label ?? p.theme) : (TOPIC_LABELS[p.topic] ?? p.topic);
+	// What a claim is about: its aspect as the report's own vocabulary labels it (its root when it
+	// has no aspect), the key itself in a report built before the vocabulary was kept
+	const claimLabel = (p: ReportClaim) => byKey.get(p.theme ?? p.topic)?.label ?? p.theme ?? p.topic;
 
-	// One row per theme and side, with how the article put it
-	const pointRows = (post: ReportPost) =>
+	// One row per theme and side, with how the article put it; "Noted" is what it said that is
+	// neither praise nor complaint (absent in reports built before it was kept)
+	const claimRows = (post: ReportPost) =>
 		(
 			[
 				['Praise', post.praise],
-				['Complaint', post.complaints]
+				['Complaint', post.complaints],
+				['Noted', post.noted ?? []]
 			] as const
-		).flatMap(([side, points]) => {
+		).flatMap(([side, claims]) => {
 			const byLabel: Record<string, string[]> = {};
-			for (const p of points) (byLabel[pointLabel(p)] ??= []).push(p.detail);
+			for (const p of claims) (byLabel[claimLabel(p)] ??= []).push(p.detail);
 			return Object.entries(byLabel).map(([label, details]) => ({ side, label, details }));
 		});
 
@@ -63,7 +64,7 @@
 
 	<div class="flex flex-col gap-3">
 		{#each shown as article (article.postId)}
-			{@const rows = pointRows(article)}
+			{@const rows = claimRows(article)}
 			<article
 				class="bg-paper border-line grid grid-cols-[minmax(0,1fr)_auto] gap-4 rounded-md border p-4 break-inside-avoid">
 				<div class="min-w-0">
@@ -87,7 +88,7 @@
 						What they say about you
 					</p>
 					<p class="text-reading-ink m-0 mt-0.5 text-[13px] leading-snug">
-						{article.summary}
+						{article.said.join(' · ')}
 					</p>
 
 					{#if rows.length}
@@ -99,7 +100,9 @@
 											'shrink-0 rounded-full px-2 py-px text-[11px] font-semibold whitespace-nowrap',
 											row.side === 'Praise'
 												? 'bg-primary-darker text-white'
-												: 'bg-beet text-white'
+												: row.side === 'Complaint'
+													? 'bg-beet text-white'
+													: 'bg-wash text-ink'
 										]}>{row.side}: {row.label}</span>
 									<span class="text-muted-foreground min-w-0"
 										>{row.details.join('; ')}</span>

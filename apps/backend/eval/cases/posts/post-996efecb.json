@@ -1,0 +1,353 @@
+{
+  "id": "post-996efecb",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "kwon.hyuksung",
+    "locationName": "Bonanza Coffee Jägerstraße",
+    "hashtags": [
+      "berlincoffee",
+      "berlinroasters",
+      "bonanzacoffee"
+    ],
+    "taggedHandles": [],
+    "text": "​\"Unnecessary rules\"라는 슬로건 아래, 불필요한 가공을 줄이고 원두 자체의 풍미와 깨끗한 산미를 끌어내는 라이트 로스팅(Light Roast)으로 유명한 Bonanza. 잠시 들러볼 수 있을까 싶었지만 머물렀던 호텔 바로 옆 건물 1층에 자리잡고 있는 행운 끝에 뮌헨으로 이동하기 전 짧게 방문.(본점은 시간상 방문이 어려웠다.) 공동 창업자가 한국인이고 이미 서울 군자에 오픈했기에 상대적으로 익숙한 브랜드이다. 핸드 브루잉 두 잔을 주문했는데 역시나 라이트 로스팅 원두를 깔끔하게 내려준다. 추출량이 너무 작아 살짝 갸우뚱했더니 부러 그랬단다. 이유가 충분히 이해된다고 했더니 엄지를 내민다.^^\n#berlincoffee #berlinroasters #bonanzacoffee",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "996efecb-6972-4cca-a873-59f8354df762",
+    "externalId": "ig_4007081656834035608",
+    "url": "https://www.instagram.com/p/DecA4lVk4-Y/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-13T14:22:59.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:55:12.729Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Bonanza Coffee Jägerstraße",
+        "locationHint": "Jägerstraße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "422a9c10-8d7b-468e-bb66-8867d5c2e3f0",
+          "brandName": "Bonanza Coffee",
+          "venueId": "46821537-c6ef-4e25-b35e-79ba96951953",
+          "venueName": "Bonanza Coffee"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "clean light-roast coffee with clear acidity",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "hand-brewed coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "intentional small brew volume was explained convincingly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:00.002Z",
+    "usage": {
+      "inputTokens": 11567,
+      "outputTokens": 3047,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The flagship (본점) and the Seoul Gunja branch are not named as distinct venues, so only the tagged Jägerstraße café is listed and the Seoul opening is kept as an optional fact about it. The small extraction volume reads as a mild criticism (puzzled), later explained by staff.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Bonanza Coffee Jägerstraße",
+        "locationHint": "Jägerstraße, ground floor of the building next to the author's hotel",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "422a9c10-8d7b-468e-bb66-8867d5c2e3f0",
+          "brandName": "Bonanza Coffee",
+          "venueId": "46821537-c6ef-4e25-b35e-79ba96951953",
+          "venueName": "Bonanza Coffee",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Bonanza's slogan is \"Unnecessary rules\"",
+        "quote": "\"Unnecessary rules\"라는 슬로건",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bonanza is famous for light roasting that brings out the beans' own flavour and clean acidity",
+        "quote": "원두 자체의 풍미와 깨끗한 산미를 끌어내는 라이트 로스팅(Light Roast)으로 유명한 Bonanza",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "원두"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café is on the ground floor of the building right next to the author's hotel",
+        "quote": "머물렀던 호텔 바로 옆 건물 1층에 자리잡고 있는",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author made a short visit before leaving for Munich",
+        "quote": "뮌헨으로 이동하기 전 짧게 방문",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bonanza's co-founder is Korean",
+        "quote": "공동 창업자가 한국인이고",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bonanza has already opened in Gunja, Seoul",
+        "quote": "이미 서울 군자에 오픈했기에",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author ordered two hand brews",
+        "quote": "핸드 브루잉 두 잔을 주문했는데",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "핸드 브루잉"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "as expected, the light roast beans were brewed cleanly",
+        "quote": "역시나 라이트 로스팅 원두를 깔끔하게 내려준다",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "라이트 로스팅 원두"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the hand brew's extraction volume was very small, which puzzled the author",
+        "quote": "추출량이 너무 작아 살짝 갸우뚱했더니",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "핸드 브루잉"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the staff explained the small volume was intentional",
+        "quote": "부러 그랬단다",
+        "sentiment": "neutral",
+        "aspect": "advice",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the barista gave a thumbs up when the author said they understood the reason",
+        "quote": "엄지를 내민다",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.440Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.246Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.435Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

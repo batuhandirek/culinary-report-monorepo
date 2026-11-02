@@ -1,0 +1,139 @@
+{
+  "id": "post-739aee03",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "learture.official",
+    "locationName": "Rüyam Gemüse Kebab",
+    "hashtags": [
+      "berlin",
+      "alemania",
+      "viaje",
+      "comida",
+      "europa"
+    ],
+    "taggedHandles": [],
+    "text": "de mis döner Kebab favoritos de Berlín #berlin #alemania #viaje #comida #europa",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "739aee03-96a7-4dfa-9083-f69d4fd0fbcc",
+    "externalId": "ig_4007407669246848065",
+    "url": "https://www.instagram.com/p/DedLAsDomxB/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-14T01:12:22.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:10.621Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rüyam Gemüse Kebab",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "one of my favorite döner kebab places in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:41:28.664Z",
+    "usage": {
+      "inputTokens": 9294,
+      "outputTokens": 667,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue is known only from the tagged location; the caption's 'one of my favourite döner Kebabs in Berlin' is read as a verdict on the place as a whole, though an opinion on the food is also allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Rüyam Gemüse Kebab",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "94658403-2af6-4fe9-b510-84bf590970c2",
+          "brandName": "Rüyam Gemüse Kebab",
+          "venueId": null,
+          "venueName": null,
+          "note": "The tagged location names the brand but not a branch, and the brand has two branches."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Rüyam Gemüse Kebab is one of the creator's favourite döner Kebab places in Berlin",
+        "quote": "de mis döner Kebab favoritos de Berlín",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "döner Kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.240Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.431Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

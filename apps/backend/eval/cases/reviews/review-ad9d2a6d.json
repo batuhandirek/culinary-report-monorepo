@@ -1,0 +1,163 @@
+{
+  "id": "review-ad9d2a6d",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "ad9d2a6d-e087-48a4-9c05-b51a7c708502",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT210WlYwZExUWEJvWWsxUlMyNTNTbE5KUWxCTU1VRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-14T19:49:52.556Z",
+    "stars": 5,
+    "text": "Super lecker der Gemüse Kebab. Cay und Lolli noch gratis dazu bekommen 😂❤️\nkomme wieder!",
+    "textTranslated": "The vegetable kebab was absolutely delicious. I even got a free tea and lollipop with it 😂❤️\nI'll be back!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:39:00.523Z",
+    "claims": [
+      {
+        "text": "the vegetable kebab was absolutely delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "vegetable kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "got a free tea",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "got a lollipop",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "lollipops"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I'll be back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:31.052Z",
+    "usage": {
+      "inputTokens": 4996,
+      "outputTokens": 833,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call was the free Cay and Lolli. Step B lists a free item under deal, but this reads as a goodwill gesture, so fact or opinion and service or friendliness aspects are also allowed. Its aspect is debatable between value_for_money, price and service.",
+    "claims": [
+      {
+        "text": "the Gemüse Kebab was super delicious",
+        "quote": "Super lecker der Gemüse Kebab",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Gemüse Kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "got Cay and Lolli for free with it",
+        "quote": "Cay und Lolli noch gratis dazu bekommen",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [
+          "Cay",
+          "Lolli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price",
+            "service",
+            "friendliness"
+          ],
+          "kinds": [
+            "fact",
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "will come back",
+        "quote": "komme wieder!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

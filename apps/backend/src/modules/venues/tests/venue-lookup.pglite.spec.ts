@@ -72,8 +72,15 @@ describe('VenueScrapeService.lookupNames (pglite)', () => {
 
 		expect(res).toEqual({ lookedUp: 2, retried: 0, saved: 1 });
 		expect(searched(0)).toEqual(['Mezame Matcha', 'Tacos Lupita']);
-		const lookups = await harness.orm.em.find(VenueLookup, { city }, { orderBy: { query: 'asc' } });
-		expect(lookups.map(l => [l.results, l.lookedUpAt])).toEqual([[1, july], [0, july]]);
+		const lookups = await harness.orm.em.find(
+			VenueLookup,
+			{ city },
+			{ orderBy: { query: 'asc' } },
+		);
+		expect(lookups.map(l => [l.results, l.lookedUpAt])).toEqual([
+			[1, july],
+			[0, july],
+		]);
 		expect(await harness.orm.em.count(Venue, { placeId: 'mezame' })).toBe(1);
 	});
 
@@ -97,10 +104,16 @@ describe('VenueScrapeService.lookupNames (pglite)', () => {
 		expect(res).toEqual({ lookedUp: 2, retried: 1, saved: 1 });
 		expect(searched(1)).toEqual(['Tacos Lupita', 'Bao Bar']);
 		harness.orm.em.clear();
-		const lookups = await harness.orm.em.find(VenueLookup, { city }, { orderBy: { query: 'asc' } });
+		const lookups = await harness.orm.em.find(
+			VenueLookup,
+			{ city },
+			{ orderBy: { query: 'asc' } },
+		);
 		// Three names, three rows: the retried one is updated, not doubled
 		expect(lookups).toHaveLength(3);
-		const lupita = lookups.find(l => l.results === 1 && l.lookedUpAt.getTime() === november.getTime());
+		const lupita = lookups.find(
+			l => l.results === 1 && l.lookedUpAt.getTime() === november.getTime(),
+		);
 		expect(lupita).toBeDefined();
 		expect(await harness.orm.em.count(Venue, { placeId: 'lupita' })).toBe(1);
 		expect(await harness.orm.em.count(VenueStatusChange, {})).toBe(0);
@@ -133,7 +146,11 @@ describe('VenueScrapeService.lookupNames (pglite)', () => {
 		const res = await service.lookupNames(city, ['Facil'], 6, new Date('2026-12-01T06:00:00Z'));
 
 		expect(res.saved).toBe(1);
-		expect(await harness.orm.em.count(Venue, { placeId: { $in: ['facil', 'facil-clean', 'facil-potsdam'] } })).toBe(1);
+		expect(
+			await harness.orm.em.count(Venue, {
+				placeId: { $in: ['facil', 'facil-clean', 'facil-potsdam'] },
+			}),
+		).toBe(1);
 		expect(await harness.orm.em.count(Venue, { placeId: 'facil' })).toBe(1);
 	});
 });

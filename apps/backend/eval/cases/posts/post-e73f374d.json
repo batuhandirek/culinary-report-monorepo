@@ -1,0 +1,151 @@
+{
+  "id": "post-e73f374d",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "boddensee_berlin_de_gallery",
+    "locationName": null,
+    "hashtags": [
+      "restaurantboddensee",
+      "brunchberlin",
+      "hochzeitberlin",
+      "kaffeeliebe",
+      "berlinevents"
+    ],
+    "taggedHandles": [],
+    "text": "Aber bitte mit 🌞 Sonne ☕️\nEin wunderschönes Wochenende 🍁☀️🍁\nBoddensee in Birkenwerder bei Berlin☕️🥂🎂\n\nKeine Werbung \n\n#restaurantboddensee #brunchberlin #hochzeitberlin #kaffeeliebe #berlinevents",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "e73f374d-b5be-4a82-b100-3e94a4355513",
+    "externalId": "ig_4009819045330742819",
+    "url": "https://www.instagram.com/p/DelvS1CiO4j/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-17T09:01:41.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:55:02.508Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Boddensee",
+        "locationHint": "Birkenwerder bei Berlin",
+        "city": "Birkenwerder",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "other_city",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "beautiful weekend atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "enjoyed coffee, sparkling wine and cake",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:50.108Z",
+    "usage": {
+      "inputTokens": 10112,
+      "outputTokens": 899,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption says almost nothing about food: the sun pun, the weekend greeting and the emojis are not claims, and only the venue's location is kept. The post explicitly says it is not an ad, so it is not marked promotional; whether a visit is described is unclear.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Restaurant Boddensee",
+        "locationHint": "Birkenwerder bei Berlin",
+        "city": "Birkenwerder",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Restaurant Boddensee is in Birkenwerder near Berlin",
+        "quote": "Boddensee in Birkenwerder bei Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.442Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.253Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.441Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

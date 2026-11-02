@@ -1,0 +1,2268 @@
+{
+  "id": "post-8901fb9b",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "calatoriisifarfurii",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "RO: În episodul 1 din “Berlin în Farfurie” îl avem invitat pe Tobias Beck, unul dintre cei mai talentați bucătari germani din noua generație, executive chef la @claerchens_ballhaus şi fondator al conceptului @ember_berlin. \n\nDe fiecare dată când ajungem în Berlin avem FOMO şi nu ştim ce locuri să încercăm mai repede, aşa că i-am invitat pe unii dintre cei mai relevanți oameni din industrie să ne povestească despre locurile lor preferate. Fiți pe fază, urmează şi alte episoade! 😁\n\nEN: In episode 1 of “Berlin on a Plate” we’re joined by Tobias Beck, one of the most talented German chefs of the new generation, executive chef at @claerchens_ballhaus and founder of the @ember_berlin concept. \n\nEvery time we’re in Berlin, we get serious FOMO and never know which places to try first, so we invited some of the most relevant people in the industry to tell us about their favorite spots.\n\nStay tuned, more episodes are coming! 😁",
+    "subtitles": "Best restaurant in Berlin?\nIn Charlottenburg. Controversial pick,\nbut it's a very old place and it's just a 10 out of 10 experience.\nAnything you would recommend there?\nSo suits is like a meat aspic\nwith pan fried potatoes and remoulade sauce. Good stuff.\nBest cocktail bar? I'm not a big cocktail guy myself,\nbut back and break in Mitte here.\nBest wine bar? Pluto for sure.\nWe're all friends. It's from the Otto and trio and Pluto.\nThey've done a really beautiful job there\non the food and also on the wine.\nBest coffee spot?\nThe best coffee roaster in Berlin is Mister Scott from Bonanza Coffee\nin the backyard in Koenigsberg.\nBest burger? The.\nThe Big Mac thing that the Goldies boys do.\nThis is a tasty burger. Best pizza?\nCommon from Max. This pizza is amazing.\nHe does a hell of a job there with baking and stuff.\nMhm. And I think you should go and uh.\nAnd try that out. Everyone.\nAll of you. Best bakery?\nIt's Sophie for me actually.\nUh. Mhm mhm.\nShout out to her team, my old colleague.\nBest sandwich? Must be Romeo's.\nHe bakes all his breads himself.\nAnd he does like a Italian BMT or meatball sandwiches.\nIt's like a grilled cheese,\nbut everything's done like perfect. Perfect.\nBest banh mi? Banh mi stable.\nBest Vietnamese restaurant\nMiss Saigon. I eat there twice a week.\nI wanna say. Actually\nash who did chunky chunky,\nhe recommended it to me back In the days,\nand I go very regularly. Best Chinese restaurant?\nThe one I go most to or the best one?\nI think Ming Dynasty on Victoria Park.\nAlthough if you know what to order there,\nfor example, I go with the Jeff from Stoke,\nand then he is a spitting bastard with the.\nWith the waiters always. And you can get\nlike a crap there if you pre order whole fish and stuff.\nSo if you know, then mngdanzki can be an absolute shout out.\nYeah, boy.\nBest Thai restaurant. A modern approach.\nBoy. Boy,\nI love papaya. Um.\nAnd I eat, like,\na classic German red curry with duck.\nBest traditional German restaurant?\nGutes Haus Soehne. And I think it's also the best value for money,\nif you ask me. Best donner.\nI'm still gonna say tacos.\nI think they're Persian, so there's a bit of,\nlike, a dried mint going on with the.\nWith the goat cheese and with the feta.\nI like it. Most underrated spot in Berlin.\nGotcha. If I'm saying it right,\nbest place in Kreuzberg. They do, like,\nfried pig ears, and they do a paella,\nlike a whole pan that you can.\nIt's a really, really cool spot,\nand I think, uh,\nit might be that one. Most overrated place in Berlin.\nMustafa's. Fucking music shop.\nLike that kind, you know,\nsame. Same curiosity.\nBest restaurant outside Berlin.\nAnd there's one called Speicher Bowenhaus in.\nIn Amaland. They do smoked eel.\nAll The smoked eels come on the table,\nand you, like,\npick one as, like,\na little price thing on it. Okay?\nAnd then you eat it with, like,\ndark rye bread and wash your hands with a schnapps after.\nAnd this butter is, like,\none of the best things I've ever had.\nAnd it's a super, super amazing place.\nIt's curry versus curry powder.\nJust had it last week. You have to go to special sauce.\nThank you so much, Toby. My pleasure.",
+    "subtitlesLanguage": "eng-US",
+    "id": "8901fb9b-a5a8-42df-bef5-479b9e88c4e1",
+    "externalId": "7659447780942892310",
+    "url": "https://www.tiktok.com/@calatoriisifarfurii/video/7659447780942892310",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-06T16:09:25.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:34:01.813Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Claerchens Ballhaus",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f1c279d2-e748-488c-af94-a07394a4e4e2",
+          "brandName": "Clärchens Ballroom",
+          "venueId": "b797f51a-42d5-4b8c-90b3-90243c8775e2",
+          "venueName": "Clärchens Ballroom"
+        }
+      },
+      {
+        "venueName": "Ember Berlin",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "4a8ec0de-9037-457c-8e90-ad6a69be5cf2",
+          "brandName": "Ember - The Rooftop",
+          "venueId": "82265832-2268-4698-9103-dcdee0bbe52a",
+          "venueName": "Ember - The Rooftop"
+        }
+      },
+      {
+        "venueName": "Pluto",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "589ca843-4557-4f89-8b1d-d7182e4c5f3c",
+          "brandName": "Pluto",
+          "venueId": "5c7257fd-7ee1-4f01-9138-1102c913a987",
+          "venueName": "Pluto"
+        }
+      },
+      {
+        "venueName": "Otto",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "8058f0a5-320e-4ba5-ac3d-512348418f7b",
+          "brandName": "otto",
+          "venueId": "aee90fe7-0fb6-4bc0-aad7-4178608ed748",
+          "venueName": "otto"
+        }
+      },
+      {
+        "venueName": "Trio",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "42b33913-fe31-47a2-9f4f-eac9e1320749",
+          "brandName": "Trio",
+          "venueId": "15e5b4c4-0793-4b98-a24e-5e2e82e24407",
+          "venueName": "Trio"
+        }
+      },
+      {
+        "venueName": "Back and Break",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f9bb9437-dab3-4320-8bc4-7f650b1f37c5",
+          "brandName": "Break Lounge Bar",
+          "venueId": "9e77727f-2537-4805-9463-c5398968e9a0",
+          "venueName": "Break Lounge Bar"
+        }
+      },
+      {
+        "venueName": "Bonanza Coffee",
+        "locationHint": "Koenigsberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "422a9c10-8d7b-468e-bb66-8867d5c2e3f0",
+          "brandName": "Bonanza Coffee",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Goldies",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "a6e7c45e-09b7-4788-b313-f3e6b550586e",
+          "brandName": "goldies",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Carmen",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Sophie",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Romeo's",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "30f53b3e-61a8-461b-9d54-dc899b6ddb41",
+          "brandName": "Romeo's Sandwiches",
+          "venueId": "d3477dee-8b7c-4677-b3d1-61695bc85c8d",
+          "venueName": "Romeo's Sandwiches"
+        }
+      },
+      {
+        "venueName": "Banh mi Stable",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "ac1b00db-7768-4fc5-b2bd-30358efeda36",
+          "brandName": "Banh mi and more",
+          "venueId": "820f0ce9-0490-4e89-9a3d-5b9554b5f5fa",
+          "venueName": "Banh mi and more"
+        }
+      },
+      {
+        "venueName": "Miss Saigon",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "fbf037a7-d129-4dc4-8c37-cd21e78109c7",
+          "brandName": "Miss Saigon Restaurant",
+          "venueId": "f329e0f6-91e5-4c2d-b6f0-4c3e5b7fed32",
+          "venueName": "Miss Saigon Restaurant"
+        }
+      },
+      {
+        "venueName": "Ming Dynasty",
+        "locationHint": "Victoria Park",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "11fa7b97-6555-423e-972d-e187b0a570cb",
+          "brandName": "Ming Dynastie",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Papaya",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "9ccc6e01-6516-4da8-bafe-74428c303fca",
+          "brandName": "Papaya",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Gutes Haus Soehne",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Tacos",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f6206f7e-8519-4505-8723-884b58c43a8d",
+          "brandName": "Tacos El Rey",
+          "venueId": "881a8861-929c-4fc0-af88-6356f3fa75a8",
+          "venueName": "Tacos El Rey"
+        }
+      },
+      {
+        "venueName": "Gotcha",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "fe942a18-1c30-42f9-b20d-5bd7aa2587c4",
+          "brandName": "Gotxa",
+          "venueId": "a7ab468f-68c7-4519-9ba6-a7fe247dfa89",
+          "venueName": "Gotxa"
+        }
+      },
+      {
+        "venueName": "Mustafa's",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "be475e76-91b0-42e5-833a-cdcf06884c67",
+          "brandName": "Mustafa's Gemüse Kebap",
+          "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+          "venueName": "Mustafa's Gemüse Kebap"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "best coffee roaster",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "amazing pizza",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "hell of a job with baking",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Tobias Beck is executive chef at Claerchens Ballhaus",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Tobias Beck founded Ember Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Back and Break is the best cocktail bar",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "cocktail"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Pluto is the best wine bar",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Pluto has beautiful food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Pluto has beautiful wine",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the Goldies boys do a Big Mac thing",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Big Mac"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "the burger was tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Sophie is the best bakery",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "Romeo's bakes all his breads himself",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Romeo's does an Italian BMT or meatball sandwiches",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Italian BMT",
+          "meatball sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Romeo's is like a grilled cheese",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "grilled cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Banh mi stable is the best banh mi",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "bánh mì"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "Miss Saigon is the best Vietnamese restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 12
+      },
+      {
+        "text": "the speaker eats at Miss Saigon twice a week",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 12
+      },
+      {
+        "text": "Ming Dynasty is the best Chinese restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "you need to know what to order at Ming Dynasty",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "advice",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "the speaker goes there with Jeff from Stoke",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "the waiters are always bad with Jeff from Stoke",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "you can get a crap there if you pre order whole fish and stuff",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "the speaker loves papaya",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "papaya"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the speaker eats a classic German red curry with duck",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "red curry",
+          "duck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Gutes Haus Soehne is the best traditional German restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 15
+      },
+      {
+        "text": "Gutes Haus Soehne is the best value for money",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 15
+      },
+      {
+        "text": "tacos are Persian",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "taco"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "the tacos have dried mint",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "taco"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "the tacos have goat cheese and feta",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "taco",
+          "goat cheese",
+          "feta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "Gotcha is the best place in Kreuzberg",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 17
+      },
+      {
+        "text": "they do fried pig ears at Gotcha",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "fried pig ears"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 17
+      },
+      {
+        "text": "they do a paella at Gotcha",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Paella"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 17
+      },
+      {
+        "text": "Mustafa's is the most overrated place in Berlin",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 18
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:13.303Z",
+    "usage": {
+      "inputTokens": 98238,
+      "outputTokens": 17622,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The transcript garbles most names; spellings are kept as transcribed (e.g. Back and Break, Gutes Haus Soehne, Speicher Bowenhaus). Several picks were left out because no venue name is recoverable: the unnamed Charlottenburg restaurant with the meat aspic, the Persian döner said as \"tacos\", and \"curry versus curry powder\". Sophie, Papaya, Gotcha and Special Sauce were read as venue names from context.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Clärchens Ballhaus",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f1c279d2-e748-488c-af94-a07394a4e4e2",
+          "brandName": "Clärchens Ballroom",
+          "venueId": "b797f51a-42d5-4b8c-90b3-90243c8775e2",
+          "venueName": "Clärchens Ballroom",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Ember",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "4a8ec0de-9037-457c-8e90-ad6a69be5cf2",
+          "brandName": "Ember - The Rooftop",
+          "venueId": "82265832-2268-4698-9103-dcdee0bbe52a",
+          "venueName": "Ember - The Rooftop",
+          "note": "The @ember_berlin concept is most plausibly the only Ember venue listed, though it is categorised as a caterer."
+        }
+      },
+      {
+        "venueName": "Back and Break",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Likely the Mitte cocktail bar Buck and Breck, which is not among the candidates; Break Lounge Bar is in Treptow."
+        }
+      },
+      {
+        "venueName": "Pluto",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "589ca843-4557-4f89-8b1d-d7182e4c5f3c",
+          "brandName": "Pluto",
+          "venueId": "5c7257fd-7ee1-4f01-9138-1102c913a987",
+          "venueName": "Pluto",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Bonanza Coffee",
+        "locationHint": "backyard in Koenigsberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "422a9c10-8d7b-468e-bb66-8867d5c2e3f0",
+          "brandName": "Bonanza Coffee",
+          "venueId": "c6ae9c4a-9c01-4551-81ce-fa7ae0767cc1",
+          "venueName": "Bonanza Coffee Roasters",
+          "note": "'Koenigsberg' reads as a transcript slip for Kreuzberg; the roastery in the Adalbertstraße backyard is the only Kreuzberg branch."
+        }
+      },
+      {
+        "venueName": "Goldies",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "a6e7c45e-09b7-4788-b313-f3e6b550586e",
+          "brandName": "goldies",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Common",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "A pizza bakery run by Max; the only 'Common' candidate is a Neukölln café, which is not clearly the same venue."
+        }
+      },
+      {
+        "venueName": "Sophie",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f2679569-78f3-4688-b236-dee9e89fea71",
+          "brandName": "SOFI",
+          "venueId": "a365f30e-d8dd-465e-a47d-31c3d7656749",
+          "venueName": "SOFI",
+          "note": "The spoken 'Sophie' for the best bakery matches SOFI, a bakery."
+        }
+      },
+      {
+        "venueName": "Romeo's",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "30f53b3e-61a8-461b-9d54-dc899b6ddb41",
+          "brandName": "Romeo's Sandwiches",
+          "venueId": "d3477dee-8b7c-4677-b3d1-61695bc85c8d",
+          "venueName": "Romeo's Sandwiches",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Banh Mi Stable",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "f1729686-4365-4cc8-8890-ea986570ef95",
+          "brandName": "Banh Mi Stable",
+          "venueId": "40270ccb-a6e3-4236-9bdf-20a263ec12bf",
+          "venueName": "Banh Mi Stable",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Miss Saigon",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "fbf037a7-d129-4dc4-8c37-cd21e78109c7",
+          "brandName": "Miss Saigon Restaurant",
+          "venueId": "f329e0f6-91e5-4c2d-b6f0-4c3e5b7fed32",
+          "venueName": "Miss Saigon Restaurant",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Ming Dynasty",
+        "locationHint": "Victoria Park",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "11fa7b97-6555-423e-972d-e187b0a570cb",
+          "brandName": "Ming Dynastie",
+          "venueId": null,
+          "venueName": null,
+          "note": "'Victoria Park' does not clearly identify either branch."
+        }
+      },
+      {
+        "venueName": "Papaya",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "9ccc6e01-6516-4da8-bafe-74428c303fca",
+          "brandName": "Papaya",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Gutes Haus Soehne",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Gotcha",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "fe942a18-1c30-42f9-b20d-5bd7aa2587c4",
+          "brandName": "Gotxa",
+          "venueId": "a7ab468f-68c7-4519-9ba6-a7fe247dfa89",
+          "venueName": "Gotxa",
+          "note": "The Kreuzberg spot with pig ears and paella is the tapas bar Gotxa, not the Vietnamese Gotcha in Friedrichshain."
+        }
+      },
+      {
+        "venueName": "Mustafa's",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "be475e76-91b0-42e5-833a-cdcf06884c67",
+          "brandName": "Mustafa's Gemüse Kebap",
+          "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+          "venueName": "Mustafa's Gemüse Kebap",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Speicher Bowenhaus",
+        "locationHint": "Amaland",
+        "city": null,
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Special Sauce",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Tobias Beck is executive chef at Clärchens Ballhaus",
+        "quote": "executive chef at @claerchens_ballhaus",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Tobias Beck founded the Ember concept",
+        "quote": "founder of the @ember_berlin concept",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "in Berlin they never know which places to try first",
+        "quote": "Every time we’re in Berlin, we get serious FOMO and never know which places to try first",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Back and Break in Mitte is the best cocktail bar",
+        "quote": "Best cocktail bar? I'm not a big cocktail guy myself,\nbut back and break in Mitte here.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Pluto is the best wine bar",
+        "quote": "Best wine bar? Pluto for sure.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Pluto is from the people behind Otto",
+        "quote": "It's from the Otto and trio and Pluto.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Pluto has done a really beautiful job on the food",
+        "quote": "They've done a really beautiful job there\non the food",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Pluto has done a really beautiful job on the wine",
+        "quote": "also on the wine",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection",
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Mister Scott from Bonanza Coffee is the best coffee roaster in Berlin",
+        "quote": "The best coffee roaster in Berlin is Mister Scott from Bonanza Coffee",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "the best burger is the Big Mac thing the Goldies boys do",
+        "quote": "The Big Mac thing that the Goldies boys do.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Big Mac"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "the Goldies burger is tasty",
+        "quote": "This is a tasty burger.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 5
+      },
+      {
+        "text": "Common from Max has the best pizza",
+        "quote": "Best pizza?\nCommon from Max.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "the pizza at Common is amazing",
+        "quote": "This pizza is amazing.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Max does a hell of a job with the baking at Common",
+        "quote": "He does a hell of a job there with baking and stuff.",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "everyone should go and try Common",
+        "quote": "And I think you should go and uh.\nAnd try that out.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 6
+      },
+      {
+        "text": "Sophie is the best bakery",
+        "quote": "Best bakery?\nIt's Sophie for me actually.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "shout out to Sophie's team",
+        "quote": "Shout out to her team, my old colleague.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service",
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 7
+      },
+      {
+        "text": "Romeo's has the best sandwich",
+        "quote": "Best sandwich? Must be Romeo's.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Romeo's bakes all its breads itself",
+        "quote": "He bakes all his breads himself.",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "breads"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Romeo's does an Italian BMT and meatball sandwiches",
+        "quote": "And he does like a Italian BMT or meatball sandwiches.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Italian BMT",
+          "meatball sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Romeo's grilled cheese style sandwich has everything done perfect",
+        "quote": "It's like a grilled cheese,\nbut everything's done like perfect.",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "grilled cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 8
+      },
+      {
+        "text": "Banh Mi Stable has the best banh mi",
+        "quote": "Best banh mi? Banh mi stable.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "banh mi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 9
+      },
+      {
+        "text": "Miss Saigon is the best Vietnamese restaurant",
+        "quote": "Best Vietnamese restaurant\nMiss Saigon.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Tobias eats at Miss Saigon twice a week",
+        "quote": "I eat there twice a week.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Ash from Chunky Chunky recommended Miss Saigon to him",
+        "quote": "he recommended it to me back In the days",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Tobias goes to Miss Saigon very regularly",
+        "quote": "and I go very regularly.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 10
+      },
+      {
+        "text": "Ming Dynasty on Victoria Park is the best Chinese restaurant",
+        "quote": "I think Ming Dynasty on Victoria Park.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "at Ming Dynasty you can get special dishes if you pre-order whole fish",
+        "quote": "you can get\nlike a crap there if you pre order whole fish and stuff.",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "whole fish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "if you know what to order, Ming Dynasty can be an absolute shout out",
+        "quote": "So if you know, then mngdanzki can be an absolute shout out.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 11
+      },
+      {
+        "text": "Tobias loves Papaya",
+        "quote": "I love papaya.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 12
+      },
+      {
+        "text": "at Papaya he eats a classic red curry with duck",
+        "quote": "a classic German red curry with duck",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "red curry with duck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 12
+      },
+      {
+        "text": "Gutes Haus Soehne is the best traditional German restaurant",
+        "quote": "Best traditional German restaurant?\nGutes Haus Soehne.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "Gutes Haus Soehne is the best value for money",
+        "quote": "I think it's also the best value for money",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 13
+      },
+      {
+        "text": "Gotcha is the most underrated spot in Berlin",
+        "quote": "Most underrated spot in Berlin.\nGotcha.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 14
+      },
+      {
+        "text": "Gotcha is the best place in Kreuzberg",
+        "quote": "best place in Kreuzberg.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 14
+      },
+      {
+        "text": "Gotcha does fried pig ears",
+        "quote": "They do, like,\nfried pig ears",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "fried pig ears"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 14
+      },
+      {
+        "text": "Gotcha does a paella served as a whole pan",
+        "quote": "they do a paella,\nlike a whole pan",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "paella"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety",
+            "portion_size"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 14
+      },
+      {
+        "text": "Gotcha is a really, really cool spot",
+        "quote": "It's a really, really cool spot",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 14
+      },
+      {
+        "text": "Mustafa's is the most overrated place in Berlin",
+        "quote": "Most overrated place in Berlin.\nMustafa's.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 15
+      },
+      {
+        "text": "Speicher Bowenhaus in Amaland is the best restaurant outside Berlin",
+        "quote": "Best restaurant outside Berlin.\nAnd there's one called Speicher Bowenhaus in.\nIn Amaland.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "Speicher Bowenhaus does smoked eel",
+        "quote": "They do smoked eel.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "smoked eel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "at Speicher Bowenhaus all the smoked eels come to the table and you pick one with a price on it",
+        "quote": "All The smoked eels come on the table,\nand you, like,\npick one",
+        "sentiment": "neutral",
+        "aspect": "presentation",
+        "foods": [
+          "smoked eels"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "service"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "at Speicher Bowenhaus the smoked eel is eaten with dark rye bread",
+        "quote": "you eat it with, like,\ndark rye bread",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "dark rye bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "at Speicher Bowenhaus you wash your hands with a schnapps afterwards",
+        "quote": "wash your hands with a schnapps after",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "schnapps"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "the butter at Speicher Bowenhaus is one of the best things he has ever had",
+        "quote": "And this butter is, like,\none of the best things I've ever had.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "butter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "Speicher Bowenhaus is a super, super amazing place",
+        "quote": "it's a super, super amazing place.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 16
+      },
+      {
+        "text": "Tobias had Special Sauce just last week",
+        "quote": "Just had it last week.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 17
+      },
+      {
+        "text": "you have to go to Special Sauce",
+        "quote": "You have to go to special sauce.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 17
+      },
+      {
+        "text": "Back and Break is in Mitte",
+        "quote": "back and break in Mitte here.",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "subject": "place",
+        "place": 2,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food at Pluto is beautiful",
+        "quote": "They've done a really beautiful job there on the food",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "place",
+        "place": 3,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the wine at Pluto is beautiful",
+        "quote": "and also on the wine.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "place",
+        "place": 3,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Big Mac thing is a tasty burger",
+        "quote": "This is a tasty burger.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Big Mac"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "place",
+        "place": 5,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Common's pizza is amazing",
+        "quote": "This pizza is amazing.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "place",
+        "place": 6,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Common does a hell of a job with baking and stuff",
+        "quote": "He does a hell of a job there with baking and stuff.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "subject": "place",
+        "place": 6,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Sophie is the best bakery",
+        "quote": "Best bakery? It's Sophie for me actually.",
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "subject": "place",
+        "place": 7,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's 'food at Pluto is beautiful' says the same thing."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's 'wine at Pluto is beautiful' says the same thing."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's 'Big Mac thing is a tasty burger' is the same claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's 'Common's pizza is amazing' matches."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's 'hell of a job with baking' claim matches."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent has the same 'Sophie is the best bakery' claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The reference folds the Mitte location into its verdict; keeping it apart is fine."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This is the same as the reference's Pluto food claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This is the same as the reference's Pluto wine claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This matches the reference's Goldies tasty claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This matches the reference's Common pizza claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This matches the reference's baking claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): This matches the reference's Sophie claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): 'Best banh mi' is about the dish, so food is defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): 'If you know what to order' touches on food, so either aspect is defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "places.missed (both_ok): The agent has the same venue under the name 'Ember Berlin'."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "match.brand (both_ok): Common is an exact name match, and the reference's caution is also defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "places.extra (both_ok): This is the same venue as the reference's Ember."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "match_isolated.brand (both_ok): Common is an exact name match, and the reference's caution is also defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.603Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): Ember and Ember Berlin are the same venue."
+      },
+      {
+        "at": "2026-11-01T21:36:47.243Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.433Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

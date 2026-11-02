@@ -142,8 +142,6 @@ describe('SearchInterestService (pglite)', () => {
 				venueName: venue.name,
 				cuisine,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		};
 		// August: 1 Vietnamese, 3 döner; September: 2 and 2. The venue's own post never counts.

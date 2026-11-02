@@ -1,0 +1,219 @@
+{
+  "id": "review-e39b92f3",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e39b92f3-4002-4bf0-8156-917abf024a93",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21aWmNEaFhaVGRDU0MxV1lrWlVaazF4Tm1ocU0yYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Wen Cheng",
+    "venueId": "39c59d16-58a4-4a69-a194-09ac4965bc58",
+    "brand": "Wen Cheng",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-15T21:41:43.180Z",
+    "stars": 1,
+    "text": "This place is not good like it used to be, not sure what happened. Dishes that were described to be milder and less oily, came out excessively drenched in too flavoursome sauce and oil. Some other dishes had no flavour aside from just oil and chilli. After a super disappointing meal here, will not be coming back again.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:03:18.580Z",
+    "claims": [
+      {
+        "text": "the place is not good like it used to be",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the dishes were described to be milder and less oily",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [
+          "dishes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the dishes came out excessively drenched in too flavoursome sauce and oil",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "dishes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "some other dishes had no flavour aside from just oil and chilli",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "dishes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "will not be coming back again",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:05.435Z",
+    "usage": {
+      "inputTokens": 4986,
+      "outputTokens": 1426,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The opening line is a change, a decline since earlier visits; its aspect is the place overall, so null, with food allowed. Sauce, oil and chilli are left out of foods as ingredients rather than named dishes. The oily dishes are seasoning and the flavourless ones are taste, with seasoning also allowed for the latter.",
+    "claims": [
+      {
+        "text": "the place is not as good as it used to be",
+        "quote": "This place is not good like it used to be",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer is not sure what happened",
+        "quote": "not sure what happened",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        }
+      },
+      {
+        "text": "dishes described as milder and less oily came out excessively drenched in too flavoursome sauce and oil",
+        "quote": "Dishes that were described to be milder and less oily, came out excessively drenched in too flavoursome sauce and oil",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "some other dishes had no flavour aside from oil and chilli",
+        "quote": "Some other dishes had no flavour aside from just oil and chilli",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the meal was super disappointing",
+        "quote": "super disappointing meal",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer will not be coming back",
+        "quote": "will not be coming back again",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

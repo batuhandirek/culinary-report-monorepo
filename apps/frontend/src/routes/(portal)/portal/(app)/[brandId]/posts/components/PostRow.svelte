@@ -3,6 +3,7 @@
 	import type { PortalPostOutputDto } from 'client';
 
 	import { authorLabel, compact, PLATFORM_LABELS } from '#lib/culinary.js';
+	import { saidOf } from '#lib/statements.js';
 
 	// One post about the venue: who, where, how far it went, what it said.
 	let { post }: { post: PortalPostOutputDto } = $props();
@@ -37,7 +38,9 @@
 		{#if post.paid}<span class="eyebrow text-muted-foreground">Paid or gifted</span>{/if}
 	</header>
 
-	<p class="text-ink m-0 max-w-[68ch] text-[0.9375rem] leading-relaxed">{post.summary}</p>
+	{#if saidOf(post.statements).length}
+		<p class="text-ink m-0 max-w-[68ch] text-[0.9375rem] leading-relaxed">{saidOf(post.statements).join(' · ')}</p>
+	{/if}
 
 	<div class="flex flex-wrap items-center gap-x-4 gap-y-1">
 		<span class="font-term text-muted-foreground text-base">

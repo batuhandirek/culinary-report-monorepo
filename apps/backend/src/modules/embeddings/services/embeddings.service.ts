@@ -29,7 +29,7 @@ export class EmbeddingsService {
 		private openAIAccounts: OpenAIAccountsService,
 	) {}
 
-	private embed(input: string) {
+	private embed(values: string[], dimensions?: number) {
 		return this.openAIAccounts.run(EMBEDDING_MODEL_ID, account => {
 			let embedder = this.embedders.get(account.apiKey);
 			if (!embedder) {
@@ -39,8 +39,32 @@ export class EmbeddingsService {
 				});
 				this.embedders.set(account.apiKey, embedder);
 			}
-			return embedder.doEmbed({ values: [input] });
+			// The router hands the call to the AI SDK's OpenAI embedding model, which reads
+			// `providerOptions.openai.dimensions` into the request body's `dimensions`
+			return embedder.doEmbed({
+				values,
+				...(dimensions && { providerOptions: { openai: { dimensions } } }),
+			});
 		});
+	}
+
+	/**
+	 * Vectors for many texts in one request, shortened by OpenAI to `dimensions` (text-embedding-3
+	 * is trained for it), without the `embeddings` cache, whose column is `halfvec(3072)`. Up to
+	 * 2,048 values a call. Throws when OpenAI returns another count of vectors or another length,
+	 * so a vector of the wrong size is never stored. `tokens` is the request's reported usage.
+	 */
+	async embedManyUncached(
+		values: string[],
+		{ dimensions }: { dimensions: number },
+	): Promise<{ embeddings: number[][]; tokens: number }> {
+		if (!values.length) return { embeddings: [], tokens: 0 };
+		const embedded = await this.embed(values, dimensions);
+		if (embedded.embeddings.length !== values.length)
+			throw new Error(`Embedding returned ${embedded.embeddings.length} vectors for ${values.length} values`);
+		const wrong = embedded.embeddings.find(e => e.length !== dimensions);
+		if (wrong) throw new Error(`Embedding returned a vector of ${wrong.length} values, asked for ${dimensions}`);
+		return { embeddings: embedded.embeddings, tokens: embedded.usage?.tokens ?? 0 };
 	}
 
 	/**
@@ -53,7 +77,7 @@ export class EmbeddingsService {
 	 */
 	async embedUncached(input: string): Promise<number[]> {
 		this.logger.debug(`Embedding (uncached) "${input}"`);
-		const embedded = await this.embed(input);
+		const embedded = await this.embed([input]);
 		return embedded.embeddings[0];
 	}
 
@@ -90,7 +114,7 @@ export class EmbeddingsService {
 
 	private async fetchAndStore(input: string): Promise<Embedding> {
 		this.logger.debug(`Cache miss - fetching embeddings from OpenAI for "${input}"`);
-		const embedded = await this.embed(input);
+		const embedded = await this.embed([input]);
 		const embedding = embedded.embeddings[0];
 		const embeddingEntity = this.embeddingRepository.create({
 			input,

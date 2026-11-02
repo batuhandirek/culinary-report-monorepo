@@ -1,0 +1,353 @@
+{
+  "id": "review-fb1415dc",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "fb1415dc-1228-479e-a7ac-76f6823eca1f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xadlJEWk5XRm8yWlc0eVExa3RiMFpXYTFndE4zYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Burgermeister Alexanderplatz",
+    "venueId": "2faa462a-2c38-4502-b446-f8bc6da7ec93",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-18T15:26:05.662Z",
+    "stars": 4,
+    "text": "Die Burger sind top....Schmecken echt lecker. Viele Kombination möglich...auch Vegetarier kommen auf ihren Genuss.....An der Sauberkeit muss gearbeitet werden.....auch der Service geht besser....weniger am  Handy sein......Ist aber nicht ganz so schlimm....sind nur Einzelpersonen....Der Laden steht immer auf meiner Liste wenn ich am Akex bin...😋Komm bald wieder vorbei 😁",
+    "textTranslated": "The burgers are great...they taste really delicious. Lots of combinations are possible...vegetarians will also find something to enjoy...The cleanliness could be improved...the service could be better too...less time on the phone...But it's not a big deal...it's just a few people...This place is always on my list when I'm in the area...😋Come back soon 😁"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:00:23.253Z",
+    "claims": [
+      {
+        "text": "the burgers are great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they taste really delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "lots of combinations are possible",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "vegetarians will also find something to enjoy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the cleanliness could be improved",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service could be better",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "less time on the phone",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's just a few people",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this place is always on my list when I'm in the area",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "come back soon",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:42.468Z",
+    "usage": {
+      "inputTokens": 5178,
+      "outputTokens": 2163,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The softening remarks ('nicht ganz so schlimm', 'nur Einzelpersonen') qualify the cleanliness and service criticism, so I scored them mixed about service. The second can be kept apart or merged into the first. 'Die Burger sind top' and 'Schmecken echt lecker' could also be read as one taste claim.",
+    "claims": [
+      {
+        "text": "the burgers are top",
+        "quote": "Die Burger sind top",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burgers taste really delicious",
+        "quote": "Schmecken echt lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "many burger combinations are possible",
+        "quote": "Viele Kombination möglich",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "vegetarians also find something to enjoy",
+        "quote": "auch Vegetarier kommen auf ihren Genuss",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the cleanliness needs work",
+        "quote": "An der Sauberkeit muss gearbeitet werden",
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service could be better",
+        "quote": "auch der Service geht besser",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "staff should spend less time on their phones",
+        "quote": "weniger am  Handy sein",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the cleanliness and service issues are not that bad",
+        "quote": "Ist aber nicht ganz so schlimm",
+        "sentiment": "mixed",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service issues are only individual staff members",
+        "quote": "sind nur Einzelpersonen",
+        "sentiment": "mixed",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is always on the reviewer's list when at Alex",
+        "quote": "Der Laden steht immer auf meiner Liste wenn ich am Akex bin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer will come back soon",
+        "quote": "Komm bald wieder vorbei",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.221Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

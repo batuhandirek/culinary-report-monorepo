@@ -1,0 +1,294 @@
+{
+  "id": "review-510fc086",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "510fc086-eca7-4a29-b914-298c3e986274",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xGUlZYbE9iRnBWWWtaVmFsUTBiM1l4TlZoMlQxRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Café YOHAKU",
+    "venueId": "e0eb7d10-db32-4f80-9af0-5df3c684fe36",
+    "brand": "Café YOHAKU",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-07T08:14:13.091Z",
+    "stars": 5,
+    "text": "おいしい　です！\nゆずLimo とてもおいしいです\n必ずまた来ます。\n\nLocale molto carino, personale super gentile e yuzu limo fenomenale. I vantaggi di vivere a Berlino sono questi, avere piccoli posti del genere dove ti senti a casa !\nCi tornerò sicuramente\n\nSehr schöner, gemütlicher Laden, super freundliches Personal und eine wirklich phänomenale Yuzu-Limo! Genau das sind die Vorteile, in Berlin zu leben: solche kleinen, besonderen Orte zu entdecken, an denen man sich sofort wie zu Hause fühlt. ❤️\n\nIch komme auf jeden Fall wieder!",
+    "textTranslated": "Thank you!\n\nYum!\n\nI love this place!\n\n\nVery cute local, super friendly staff, and a phenomenal yuzu lemonade. These are the advantages of living in Berlin: discovering these small, special places where you immediately feel at home!\n\nI'll definitely be back!\n\nVery nice, cozy shop, super friendly staff, and a truly phenomenal yuzu lemonade! These are exactly the advantages of living in Berlin: discovering these small, special places where you immediately feel at home. ❤️\n\nI'll definitely be back!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:45:36.182Z",
+    "claims": [
+      {
+        "text": "the place was loved",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the local was very cute",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff were super friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the yuzu lemonade was phenomenal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "yuzu lemonade"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is one of the advantages of living in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is small and special",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you immediately feel at home there",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the reviewer will definitely be back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the shop was very nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the shop was cozy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the yuzu lemonade was truly phenomenal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "yuzu lemonade"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:10.145Z",
+    "usage": {
+      "inputTokens": 5349,
+      "outputTokens": 1967,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review says the same thing three times, in Japanese, Italian and German. I kept each claim once, quoting the fuller German wording. The Japanese 'delicious' and 'ゆずLimo' lines are optional near-duplicates. Agents may quote the Italian or Japanese spans for the same claims.",
+    "claims": [
+      {
+        "text": "it is delicious",
+        "quote": "おいしい　です",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Yuzu-Limo is truly phenomenal",
+        "quote": "eine wirklich phänomenale Yuzu-Limo",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Yuzu-Limo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the ゆずLimo is very delicious",
+        "quote": "ゆずLimo とてもおいしいです",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "ゆずLimo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "very nice, cosy shop",
+        "quote": "Sehr schöner, gemütlicher Laden",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "super friendly staff",
+        "quote": "super freundliches Personal",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a small, special place in Berlin where you immediately feel at home",
+        "quote": "solche kleinen, besonderen Orte zu entdecken, an denen man sich sofort wie zu Hause fühlt",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "will definitely come back",
+        "quote": "Ich komme auf jeden Fall wieder!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.209Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

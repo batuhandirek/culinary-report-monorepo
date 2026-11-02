@@ -1,0 +1,442 @@
+{
+  "id": "review-b31c1e48",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "b31c1e48-002e-4f17-8b1c-827e984031df",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2s1S1MybDJRV1JCUmpONVEwcHNTREpLZUVkS2FIYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "All Seasons",
+    "venueId": "5657c44f-dca3-41db-9be9-f2fe1ec2faa5",
+    "brand": "All Seasons",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-17T20:52:49.761Z",
+    "stars": 5,
+    "text": "Super Erfahrung und liebes Personal (bis auf einer, aber jeder hat mal einen schlechten Tag)\nDas Essen war sehr gut und das Live Cooking sehr schön gemacht mit der Insel, zum Geburtstag hat die roboKatze gesungen und generell war es ein schönes Erlebnis❤️\n\nJedoch ein paar klitzekleine Mankos:\nLeider war der Boden im Buffetbereich stellenweise durch Fette etwas rutschig, aber nicht extrem🫠\nUnd die roboKatze ist nicht in den Bereich an der Stufe gekommen und ab und zu mal an anderen Stellen mit dem Essen stehen geblieben, weshalb man etwas drauf achten musste wann die Katze am Bereich ist damit das Essen vom Live Cooking nicht zurückgeht, aber das lässt sich baulich bedingt ja nicht wirklich ändern😅",
+    "textTranslated": "Great experience and lovely staff (except for one, but everyone has a bad day now and then).\n\nThe food was very good, and the live cooking station was beautifully done with the island. The robot cat even sang for my birthday, and overall it was a lovely experience. ❤️\n\nHowever, there were a few minor drawbacks:\n\nUnfortunately, the floor in the buffet area was a bit slippery in places due to grease, but not extremely so. 🫠\n\nAnd the robot cat couldn't reach the area by the steps and occasionally stopped with the food in other spots, so you had to keep an eye on when the cat was at the area to prevent the food from the live cooking station from being thrown back. But that's just a design limitation that can't really be changed. 😅"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:39:50.254Z",
+    "claims": [
+      {
+        "text": "great experience",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "lovely staff",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "one staff member had a bad day",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the live cooking station was beautifully done",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the live cooking station had the island",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the robot cat sang for my birthday",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the floor in the buffet area was a bit slippery",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the floor was slippery due to grease",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the robot cat couldn't reach the area by the steps",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the robot cat occasionally stopped with the food in other spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you had to keep an eye on when the cat was at the area",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food from the live cooking station could be thrown back",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the robot cat design limitation can't really be changed",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:59.948Z",
+    "usage": {
+      "inputTokens": 5472,
+      "outputTokens": 3475,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the robot-cat serving robot problems are filed under service; the overall 'great/lovely experience' lines are opinions with verdict allowed; live cooking is not a food, and 'Essen' is a general word, so no foods are named.",
+    "claims": [
+      {
+        "text": "great experience",
+        "quote": "Super Erfahrung",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the staff were lovely",
+        "quote": "liebes Personal",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "except for one staff member, but everyone has a bad day",
+        "quote": "bis auf einer, aber jeder hat mal einen schlechten Tag",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was very good",
+        "quote": "Das Essen war sehr gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the live cooking with the island was beautifully done",
+        "quote": "das Live Cooking sehr schön gemacht mit der Insel",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation",
+            "interior"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the robot cat sang for the birthday",
+        "quote": "zum Geburtstag hat die roboKatze gesungen",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "overall it was a lovely experience",
+        "quote": "generell war es ein schönes Erlebnis",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "a few tiny drawbacks",
+        "quote": "ein paar klitzekleine Mankos",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the floor in the buffet area was slippery in places from grease, but not extremely",
+        "quote": "der Boden im Buffetbereich stellenweise durch Fette etwas rutschig, aber nicht extrem",
+        "sentiment": "negative",
+        "aspect": "dining_area",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cleanliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the robot cat couldn't reach the area by the step",
+        "quote": "die roboKatze ist nicht in den Bereich an der Stufe gekommen",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the robot cat occasionally stopped with the food in other spots",
+        "quote": "ab und zu mal an anderen Stellen mit dem Essen stehen geblieben",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "guests had to watch when the robot cat was at their area so the live cooking food wasn't sent back",
+        "quote": "man etwas drauf achten musste wann die Katze am Bereich ist damit das Essen vom Live Cooking nicht zurückgeht",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the robot cat issue can't really be changed because of the building layout",
+        "quote": "das lässt sich baulich bedingt ja nicht wirklich ändern",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "space",
+            "interior"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

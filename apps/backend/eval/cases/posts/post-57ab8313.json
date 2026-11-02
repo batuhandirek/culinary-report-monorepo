@@ -1,0 +1,1027 @@
+{
+  "id": "post-57ab8313",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "blog",
+    "author": "qiez.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Margaritas Social Club und Birria: Mexikanische Lebensfreude im Taco & Gringo\n\nZu übersehen ist das Taco & Gringo wirklich nicht. Leuchtend pink, mit einprägsamen Logo und den beiden Luchadores ist das Lokal mitten in Mitte eine Anlaufstelle für alle, die mexikanisches Streetfood zu schätzen wissen, die neugierig sind auf neue Genüsse oder die Lust haben, eine gute Zeit zu verbringen. Nach zwei Jahren ist das Taco & Gringo jedenfalls eine feste Größe im belebten Kiez. Trotzdem arbeitet man hinter den Kulissen beständig daran, den verwöhnten Hauptstädtern Abwechslung zu bieten.\nMit gleich zwei Coups eröffnet das Lokal frische Möglichkeiten, Mexiko zu erleben. Zum einen steht nun Birria auf der Karte. Ähnlich wie die Nationalsauce Mole wird auch dieses mexikanische Gericht stundenlang geköchelt und mit einer besonderen Würze versehen. Während es geschmort wird, entwickelt das Pulled Beef einen intensiven Geschmack. Im Taco & Gringo wird der Sud mit Nelken, Koriandersamen, Pfeffer, Zimt, Oregano, Lorbeerblatt und Kreuzkümmel gewürzt. Außerdem kommen drei verschiedene Chilisorten und einige Geheimzutaten zum Einsatz. Das Ergebnis ist jedenfalls großartig.\nEntwickelt hat die Margaritas Enrico Römer aus dem The Coral. Copyright: Taco& Gringo\nAls saftige Tacos de Birria mit frischen Zutaten, Sauce und Dips (drei Stück für 11 Euro), als Quesabirrias für 12 Euro mit Käse oder als Gringa de Birria (unser Favorit für 12,90 Euro) bringt dieses zarte Fleisch uns auf den Geschmack Mexikos. Bei der veganen Variante hat sich El Maestro de la Birria mit dem Team so viel Mühe gegeben, dass bei einer Blindverkostung viele Gäste die Tacos de Birria Veganos (11,50 Euro) für die Fleisch-Originale gehalten haben. Unser Tipp: Quesabirria Vegana mit veganem Käse für 12 Euro.\nDie zweite News aus Mitte: Jeden Freitag lädt ab 20 Uhr der Margaritas Social Club im Taco & Gringo zu mehr Geselligkeit ein. Alle vier Margaritas von der Karte kosten dann nur 5 Euro. Es versteht sich von selbst, dass für die erfrischende Mischung stets nur echter Tequila wie der von 1800 die Basis bildet. Nicht in allem, wo ein Sombrero drauf ist, ist nämlich wirklich Mexiko drin. An jedem letzten Freitag des Monats wird dazu noch ein Special geboten. Letzte Woche gab es die Wasabi-Yuzu-Margarita, die Japan mit Mexiko verbindet. Ein herrlicher Drink, den man probiert haben muss. Aber auch andere Specials wie mal eine DJane oder ein DJ und ähnliches bringen Spaß. Kein Wunder, dass man in Mexiko so gut feiern kann: Dort versteht man einfach etwas von gutem Essen und Trinken. Also Berlin: Geh hin und lerne!\nThe post Margaritas Social Club und Birria: Mexikanische Lebensfreude im Taco & Gringo appeared first on Qiez.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "57ab8313-ad57-4b0b-9450-00290650cf19",
+    "externalId": "blog_5a91688d64180168469a2eac",
+    "url": "https://www.qiez.de/margaritas-birria-mexikanisch-taco-gringo/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-08-26T11:06:17.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:57.654Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Taco & Gringo",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "3e9c3f69-5d60-40b2-bd0f-50e74e19e85e",
+          "brandName": "TACO & GRINGO",
+          "venueId": "c29dc331-770e-4540-9380-fe283a07a9ce",
+          "venueName": "TACO & GRINGO"
+        }
+      },
+      {
+        "venueName": "Margaritas Social Club",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "central spot in Mitte",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "good place to have a good time",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "birria described as fantastic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "pulled beef develops an intense flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Quesabirria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fresh ingredients in the birria tacos",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "new birria dishes and vegan versions",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Wasabi-Yuzu-Margarita called a delightful drink",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Wasabi-Yuzu-Margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Friday margarita special with all four margaritas for 5 euros",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "four margaritas available for 5 euros on Fridays",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Wasabi-Yuzu-Margarita described as a great drink",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Wasabi-Yuzu-Margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "occasional DJ and themed specials add fun",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:22:47.436Z",
+    "usage": {
+      "inputTokens": 12048,
+      "outputTokens": 8981,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The Coral is named only as Enrico Römer's origin, with nothing said about it, so it is left out as a place; 1800 is a tequila brand. The article reads as promotional (venue-supplied photo, launch announcements); the general birria/mole and pulled-beef sentences are treated as about the dish in general, and the Wasabi-Yuzu special is borderline between new item and event.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Taco & Gringo",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "3e9c3f69-5d60-40b2-bd0f-50e74e19e85e",
+          "brandName": "TACO & GRINGO",
+          "venueId": "c29dc331-770e-4540-9380-fe283a07a9ce",
+          "venueName": "TACO & GRINGO",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Taco & Gringo is impossible to overlook",
+        "quote": "Zu übersehen ist das Taco & Gringo wirklich nicht.",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Taco & Gringo is bright pink with a memorable logo and two luchadores",
+        "quote": "Leuchtend pink, mit einprägsamen Logo und den beiden Luchadores",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Taco & Gringo is located in the middle of Mitte",
+        "quote": "mitten in Mitte",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Taco & Gringo is a go-to spot for lovers of Mexican street food, new tastes and a good time",
+        "quote": "eine Anlaufstelle für alle, die mexikanisches Streetfood zu schätzen wissen, die neugierig sind auf neue Genüsse oder die Lust haben, eine gute Zeit zu verbringen",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "After two years Taco & Gringo is an established fixture in the lively neighbourhood",
+        "quote": "Nach zwei Jahren ist das Taco & Gringo jedenfalls eine feste Größe im belebten Kiez.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Taco & Gringo team constantly works to offer variety to Berliners",
+        "quote": "arbeitet man hinter den Kulissen beständig daran, den verwöhnten Hauptstädtern Abwechslung zu bieten",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Birria is now on the menu at Taco & Gringo",
+        "quote": "Zum einen steht nun Birria auf der Karte.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Like mole, birria is simmered for hours and specially seasoned",
+        "quote": "Ähnlich wie die Nationalsauce Mole wird auch dieses mexikanische Gericht stundenlang geköchelt und mit einer besonderen Würze versehen.",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "Birria",
+          "Mole"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "The pulled beef develops an intense flavour while braising",
+        "quote": "Während es geschmort wird, entwickelt das Pulled Beef einen intensiven Geschmack.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pulled Beef"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "At Taco & Gringo the broth is seasoned with cloves, coriander seeds, pepper, cinnamon, oregano, bay leaf and cumin",
+        "quote": "Im Taco & Gringo wird der Sud mit Nelken, Koriandersamen, Pfeffer, Zimt, Oregano, Lorbeerblatt und Kreuzkümmel gewürzt.",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [
+          "Sud"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Three different chili varieties and some secret ingredients are used in the birria",
+        "quote": "Außerdem kommen drei verschiedene Chilisorten und einige Geheimzutaten zum Einsatz.",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [
+          "Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The birria result is great",
+        "quote": "Das Ergebnis ist jedenfalls großartig.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The margaritas were developed by Enrico Römer from The Coral",
+        "quote": "Entwickelt hat die Margaritas Enrico Römer aus dem The Coral.",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Margaritas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Tacos de Birria are juicy, with fresh ingredients, sauce and dips",
+        "quote": "saftige Tacos de Birria mit frischen Zutaten, Sauce und Dips",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Tacos de Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "freshness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Three Tacos de Birria cost 11 euros",
+        "quote": "drei Stück für 11 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Tacos de Birria"
+        ],
+        "amount": 11,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Quesabirrias with cheese cost 12 euros",
+        "quote": "Quesabirrias für 12 Euro mit Käse",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Quesabirrias"
+        ],
+        "amount": 12,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Gringa de Birria is the authors' favourite",
+        "quote": "Gringa de Birria (unser Favorit",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Gringa de Birria"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Gringa de Birria costs 12.90 euros",
+        "quote": "12,90 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Gringa de Birria"
+        ],
+        "amount": 12.9,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The tender birria meat brings the taste of Mexico",
+        "quote": "bringt dieses zarte Fleisch uns auf den Geschmack Mexikos",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "El Maestro de la Birria and the team put great effort into the vegan version",
+        "quote": "Bei der veganen Variante hat sich El Maestro de la Birria mit dem Team so viel Mühe gegeben",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "In a blind tasting many guests mistook the Tacos de Birria Veganos for the meat originals",
+        "quote": "bei einer Blindverkostung viele Gäste die Tacos de Birria Veganos (11,50 Euro) für die Fleisch-Originale gehalten haben",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Tacos de Birria Veganos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Tacos de Birria Veganos cost 11.50 euros",
+        "quote": "11,50 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Tacos de Birria Veganos"
+        ],
+        "amount": 11.5,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The authors recommend the Quesabirria Vegana with vegan cheese",
+        "quote": "Unser Tipp: Quesabirria Vegana mit veganem Käse",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Quesabirria Vegana"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Quesabirria Vegana costs 12 euros",
+        "quote": "für 12 Euro",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Quesabirria Vegana"
+        ],
+        "amount": 12,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Every Friday from 20:00 the Margaritas Social Club takes place at Taco & Gringo",
+        "quote": "Jeden Freitag lädt ab 20 Uhr der Margaritas Social Club im Taco & Gringo zu mehr Geselligkeit ein.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "During the Margaritas Social Club all four margaritas on the menu cost only 5 euros",
+        "quote": "Alle vier Margaritas von der Karte kosten dann nur 5 Euro.",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "Margaritas"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The margaritas are always made with real tequila such as 1800",
+        "quote": "stets nur echter Tequila wie der von 1800 die Basis bildet",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Tequila"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The margaritas are refreshing",
+        "quote": "die erfrischende Mischung",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Margaritas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Not everything labelled with a sombrero is really Mexican",
+        "quote": "Nicht in allem, wo ein Sombrero drauf ist, ist nämlich wirklich Mexiko drin.",
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "On the last Friday of every month there is an extra special",
+        "quote": "An jedem letzten Freitag des Monats wird dazu noch ein Special geboten.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Last week's special was the Wasabi-Yuzu-Margarita combining Japan and Mexico",
+        "quote": "Letzte Woche gab es die Wasabi-Yuzu-Margarita, die Japan mit Mexiko verbindet.",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Wasabi-Yuzu-Margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "event",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Wasabi-Yuzu-Margarita is a wonderful drink you must try",
+        "quote": "Ein herrlicher Drink, den man probiert haben muss.",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Wasabi-Yuzu-Margarita"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Other specials such as a DJane or DJ are fun",
+        "quote": "Aber auch andere Specials wie mal eine DJane oder ein DJ und ähnliches bringen Spaß.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "In Mexico people understand good food and drink",
+        "quote": "Dort versteht man einfach etwas von gutem Essen und Trinken.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Berlin should go to Taco & Gringo and learn",
+        "quote": "Also Berlin: Geh hin und lerne!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Being an established fixture fits no finer aspect, so either null or other is defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): A general remark about Mexico fits no aspect well, so null or other are both defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The remark concerns good food in general, so food is defensible alongside null."
+      },
+      {
+        "at": "2026-11-01T15:11:31.437Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.236Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

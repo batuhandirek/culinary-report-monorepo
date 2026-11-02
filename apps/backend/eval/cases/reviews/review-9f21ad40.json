@@ -1,0 +1,137 @@
+{
+  "id": "review-9f21ad40",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "9f21ad40-7971-4c58-a001-ce861801f701",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25aWFEycEJlVjgyT1dvMU1uUm1YMDlJWW05M2VFRRAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-22T17:23:28.031Z",
+    "stars": 5,
+    "text": "Doskonały stosunek jakości do ceny, szybka obsługa i niepowtarzalny berliński klimat.",
+    "textTranslated": "Excellent value for money, fast service and a unique Berlin atmosphere."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:33:44.108Z",
+    "claims": [
+      {
+        "text": "excellent value for money",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "fast service",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a unique Berlin atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:07.618Z",
+    "usage": {
+      "inputTokens": 4964,
+      "outputTokens": 422,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Straightforward three-claim review. The only open call is whether the 'unique Berlin atmosphere' claim takes the finer atmosphere key or the root vibe.",
+    "claims": [
+      {
+        "text": "excellent value for money",
+        "quote": "Doskonały stosunek jakości do ceny",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "fast service",
+        "quote": "szybka obsługa",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a unique Berlin atmosphere",
+        "quote": "niepowtarzalny berliński klimat",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

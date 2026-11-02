@@ -1,0 +1,272 @@
+{
+  "id": "post-233389f4",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "madhuhettiarachchi",
+    "locationName": "Mitte",
+    "hashtags": [
+      "durchfall",
+      "indischessen",
+      "indisch",
+      "mitte",
+      "berlin"
+    ],
+    "taggedHandles": [],
+    "text": "Durchfall nachdem Essen . Wir waren bei einem indischen Restaurant in Mitte gewesen und hatte richtig Bock etwas authentisches zu essen. Das Restaurant war leer als wir reingekommen sind , trotzdem haben wir bestellt . Optisch sah es gut aus aber Nachhinein hatten wir beide richtig Durchfall gehabt 🥴🥴🥴🤮🤮🤮. Ein Tipp : niemals rein gehen wo es überhaupt nicht läuft und wenn ihr keine Kunden seht 😩😩.#Durchfall #indischessen #indisch #mitte #berlin ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "233389f4-3116-48d3-baec-333a9b0e2f80",
+    "externalId": "7699215867552255264",
+    "url": "https://www.tiktok.com/@madhuhettiarachchi/video/7699215867552255264",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-21T20:09:50.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:53.059Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "indisches Restaurant",
+        "locationHint": "Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "bcacaa7d-bbee-4d11-80a0-ec9005e03058",
+          "brandName": "Indisches Restaurant - Yogi Jee",
+          "venueId": "f21f21d4-1b4e-442c-8127-5cf22934ed74",
+          "venueName": "Indisches Restaurant - Yogi Jee"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "they wanted authentic food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the restaurant was empty when they came in",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they ordered anyway",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant looked good visually",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they both had diarrhea afterward",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "never go in where it is not busy",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "if you do not see customers, do not go in",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:33:45.336Z",
+    "usage": {
+      "inputTokens": 6091,
+      "outputTokens": 1672,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The restaurant is never named and the tagged location Mitte is a district, so there are no places and every claim falls to subject none. The diarrhea claim was read as food_hygiene, and the closing tip as general advice rather than a verdict on a named place.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "they wanted to eat something authentic at the Indian restaurant in Mitte",
+        "quote": "hatte richtig Bock etwas authentisches zu essen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Indian restaurant in Mitte was empty when they came in",
+        "quote": "Das Restaurant war leer als wir reingekommen sind",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the food at the Indian restaurant looked good",
+        "quote": "Optisch sah es gut aus",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "both of them had bad diarrhea after eating at the Indian restaurant",
+        "quote": "Nachhinein hatten wir beide richtig Durchfall gehabt",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "tip: never go into a restaurant where business is slow and you see no customers",
+        "quote": "niemals rein gehen wo es überhaupt nicht läuft und wenn ihr keine Kunden seht",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.228Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.422Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

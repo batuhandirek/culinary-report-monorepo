@@ -26,6 +26,7 @@ import {
 	TrendSearchInterest,
 } from '../entities/trend-search-interest.entity.js';
 import { TopicInsightService } from '../services/topic-insight.service.js';
+import { TermService } from 'src/modules/topics/services/term.service.js';
 
 /* Supply (venues tagged), buzz (the month's posts) and demand (Google searches) per topic, and one
  * topic's page: children, posts by month, related searches, venues, menu prices. */
@@ -37,6 +38,8 @@ describe('TopicInsightService (pglite)', () => {
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
+				// The real one: the controller reads a topic's aliases through it (its own deps stay mocked)
+				TermService,
 				TopicInsightService,
 				TopicService,
 				VenueTopicService,
@@ -92,8 +95,6 @@ describe('TopicInsightService (pglite)', () => {
 				venueName: venue.name,
 				cuisine,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		// August: 1 Japanese of 4; September: 4 of 6
 		mention(ramen, 'Ramen', '2026-08-10');

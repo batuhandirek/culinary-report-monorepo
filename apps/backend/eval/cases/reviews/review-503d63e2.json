@@ -1,0 +1,336 @@
+{
+  "id": "review-503d63e2",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "503d63e2-d938-4391-9379-d5b2fb5d9528",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25GWlJGOWFhWHBPUVRSTFVsYzNRa0ZyZGw4elQyYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "LYFE",
+    "venueId": "c7d59929-f40b-4742-9768-f36efb65c87b",
+    "brand": "LYFE",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-05T13:12:27.668Z",
+    "stars": 3,
+    "text": "Wir waren innerhalb von 3 Tagen 2 mal dort und wollten unbedingt die Acai testen, jedoch haben wir bis zum Schluss keine Acai gegessen, da einmal die Maschine kaputt war und am anderen Tag hatte es keine Acai gegeben. Wir haben dann etwas Herzhaftes gegessen, das auch wirklich sehr lecker war. Auch der Service war nicht besonders gut, wir waren am Tisch und haben mindestens 30 Minuten gewartet, bis unsere Bestellung endlich aufgenommen wurde. Auch wenn ich die Acai sehr gerne probiert hätte, werde ich so schnell nicht wieder kommen.",
+    "textTranslated": "We went there twice within three days and were really keen to try the acai, but we didn't end up eating any because the machine was broken one day and they didn't have any acai the next. We ended up having something savory, which was actually very tasty. The service wasn't great either; we were at our table and waited at least 30 minutes before our order was finally taken. Even though I would have loved to try the acai, I won't be coming back anytime soon."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:48:03.379Z",
+    "claims": [
+      {
+        "text": "went there twice within three days",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "really keen to try the acai",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the machine was broken one day",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they didn't have any acai the next",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "ended up having something savory",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "something savory was actually very tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "something savory"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "waited at least 30 minutes before our order was finally taken",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the service wasn't great",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "won't be coming back anytime soon",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:07.933Z",
+    "usage": {
+      "inputTokens": 5270,
+      "outputTokens": 2053,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call was the 30-minute wait for the order to be taken: I chose speed_of_service, with attentiveness also allowed; it is not wait_for_food, since the food had not yet been ordered. The 'something savoury' dish names no specific food, so its foods list is left empty.",
+    "claims": [
+      {
+        "text": "visited twice within 3 days",
+        "quote": "Wir waren innerhalb von 3 Tagen 2 mal dort",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "really wanted to try the Acai",
+        "quote": "wollten unbedingt die Acai testen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "never got to eat the Acai",
+        "quote": "bis zum Schluss keine Acai gegessen",
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "Acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "one day the Acai machine was broken",
+        "quote": "einmal die Maschine kaputt war",
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the other day there was no Acai",
+        "quote": "am anderen Tag hatte es keine Acai gegeben",
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "Acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the savoury dish they ate instead was really very tasty",
+        "quote": "etwas Herzhaftes gegessen, das auch wirklich sehr lecker war",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was not particularly good",
+        "quote": "Auch der Service war nicht besonders gut",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited at the table at least 30 minutes until the order was taken",
+        "quote": "mindestens 30 Minuten gewartet, bis unsere Bestellung endlich aufgenommen wurde",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "would have loved to try the Acai",
+        "quote": "Auch wenn ich die Acai sehr gerne probiert hätte",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "won't be coming back anytime soon",
+        "quote": "werde ich so schnell nicht wieder kommen",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.209Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

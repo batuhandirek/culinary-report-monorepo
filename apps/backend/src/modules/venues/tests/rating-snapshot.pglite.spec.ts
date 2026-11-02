@@ -8,7 +8,7 @@ import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/soci
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReviewAnalysisAgent } from '../agents/review-analysis.agent.js';
+import { ReviewClaimsAgent } from '../agents/review-claims.agent.js';
 import { Brand } from '../entities/brand.entity.js';
 import { Review } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
@@ -26,13 +26,28 @@ describe('RatingSnapshotService (pglite)', () => {
 	let service: RatingSnapshotService;
 	let city: City;
 	const v: Record<string, Venue> = {};
-	const runActor = jest.fn(async (_actor: string, input: any, _opts: { maxCostUsd: number }): Promise<any[]> =>
-		(input.placeIds as string[])
-			// A place with no review at all returns nothing
-			.filter(id => id !== 'p-silent')
-			.map((placeId, i) => ({ placeId, reviewId: `r-${placeId}`, stars: 5, totalScore: 4.1 + i / 10, reviewsCount: 1000 + i }))
-			// An item for a place not asked for is ignored
-			.concat([{ placeId: 'p-stranger', reviewId: 'r-x', stars: 3, totalScore: 3, reviewsCount: 3 }]),
+	const runActor = jest.fn(
+		async (_actor: string, input: any, _opts: { maxCostUsd: number }): Promise<any[]> =>
+			(input.placeIds as string[])
+				// A place with no review at all returns nothing
+				.filter(id => id !== 'p-silent')
+				.map((placeId, i) => ({
+					placeId,
+					reviewId: `r-${placeId}`,
+					stars: 5,
+					totalScore: 4.1 + i / 10,
+					reviewsCount: 1000 + i,
+				}))
+				// An item for a place not asked for is ignored
+				.concat([
+					{
+						placeId: 'p-stranger',
+						reviewId: 'r-x',
+						stars: 3,
+						totalScore: 3,
+						reviewsCount: 3,
+					},
+				]),
 	);
 
 	beforeAll(async () => {
@@ -42,7 +57,7 @@ describe('RatingSnapshotService (pglite)', () => {
 				ReviewService,
 				VenueService,
 				{ provide: ApifyService, useValue: { runActor } },
-				{ provide: ReviewAnalysisAgent, useValue: {} },
+				{ provide: ReviewClaimsAgent, useValue: {} },
 			],
 		});
 		service = harness.moduleRef.get(RatingSnapshotService);
@@ -52,7 +67,13 @@ describe('RatingSnapshotService (pglite)', () => {
 		const elsewhere = testCity(em, { slug: 'hamburg', name: 'Hamburg' });
 		const chain = em.create(Brand, { name: 'Chain Burger', key: brandKey('Chain Burger') });
 		const venue = (key: string, params: Partial<Venue> = {}) =>
-			(v[key] = em.create(Venue, { city, placeId: `p-${key}`, name: key, category: 'Restaurant', ...params } as Venue));
+			(v[key] = em.create(Venue, {
+				city,
+				placeId: `p-${key}`,
+				name: key,
+				category: 'Restaurant',
+				...params,
+			} as Venue));
 		venue('twice', { reviewsCount: null });
 		venue('once', { reviewsCount: 40 });
 		venue('stale', { reviewsCount: 100 });
@@ -78,8 +99,6 @@ describe('RatingSnapshotService (pglite)', () => {
 				}),
 				venueName: 'x',
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 				...mention,
 			});
 		post(daysAgo(2), { venue: v.twice });
@@ -127,8 +146,14 @@ describe('RatingSnapshotService (pglite)', () => {
 		expect(opts.maxCostUsd).toBe(0.003);
 
 		em.clear();
-		const snapshots = await em.find(VenueSnapshot, {}, { populate: ['venue'], orderBy: { reviewsCount: 'asc' } });
-		expect(snapshots.map(s => [s.venue.name, s.snapshotDate, s.rating, s.reviewsCount])).toEqual([
+		const snapshots = await em.find(
+			VenueSnapshot,
+			{},
+			{ populate: ['venue'], orderBy: { reviewsCount: 'asc' } },
+		);
+		expect(
+			snapshots.map(s => [s.venue.name, s.snapshotDate, s.rating, s.reviewsCount]),
+		).toEqual([
 			['twice', '2026-10-25', 4.1, 1000],
 			['branchA', '2026-10-25', 4.2, 1001],
 			['branchB', '2026-10-25', 4.3, 1002],

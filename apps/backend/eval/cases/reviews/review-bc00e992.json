@@ -1,0 +1,221 @@
+{
+  "id": "review-bc00e992",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "bc00e992-76d5-4ce4-8c8b-fb80866b1a55",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tOTU5pMWhOV3BoUVVaTFdGRlRSMWhxWDFWNlVuYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Burgermeister Alexanderplatz",
+    "venueId": "2faa462a-2c38-4502-b446-f8bc6da7ec93",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-20T18:11:45.523Z",
+    "stars": 4,
+    "text": "Leckere Burger und Fritten, Musik etwas laut. Dennoch gutes Erlebnis auch mit Kind. Essen war super. Kommen wieder.",
+    "textTranslated": "Delicious burgers and fries, music a bit loud. Still a good experience, even with a child. Food was great. We'll be back."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:51.213Z",
+    "claims": [
+      {
+        "text": "the burgers were delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music was a bit loud",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was still a good experience",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they came with a child",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "family_pets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they'll be back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:19:01.610Z",
+    "usage": {
+      "inputTokens": 5423,
+      "outputTokens": 1112,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Burgers and fries share one span and one judgement, so they form one claim naming both. 'Essen war super' is a general food judgement (food root, taste allowed). 'Gutes Erlebnis auch mit Kind' is about the visit with a child, so family_pets.",
+    "claims": [
+      {
+        "text": "the Burger and Fritten were delicious",
+        "quote": "Leckere Burger und Fritten",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Burger",
+          "Fritten"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music was a bit loud",
+        "quote": "Musik etwas laut",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "still a good experience, even with a child",
+        "quote": "Dennoch gutes Erlebnis auch mit Kind",
+        "sentiment": "positive",
+        "aspect": "family_pets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was great",
+        "quote": "Essen war super",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they will come back",
+        "quote": "Kommen wieder",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.432Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

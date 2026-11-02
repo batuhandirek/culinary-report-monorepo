@@ -1,0 +1,557 @@
+{
+  "id": "review-beb397cd",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:2",
+    "platform:google",
+    "length:long",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "beb397cd-2d4b-4ab9-bb14-acb195a9c6a6",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xoc2RuTXlaVlYyU21sbVREY3hjV2wxTmxOcWNrRRAB",
+    "platform": "google",
+    "language": "nl",
+    "venue": "Burgermeister Potsdamer Platz",
+    "venueId": "2b2d22ae-898b-4369-83c7-fd82a867d973",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-01T21:42:37.224Z",
+    "stars": 2,
+    "text": "Meerdere keren aanbevolen, ik ben er zonder verwachtingen de experience aangegaan want ik raak wel vaker teleurgesteld. En helaas, het is geen slecht voer, maar echt niet mijn smaak, de burger was erg doorbakken en de verschillende smaken van de burger, het broodje, de kaas, uien, sla, tomaat, ketchup en mosterd combineerden slecht. Het was een platte smaakloze en bittere ervaring. Niet dat die ingrediënten slecht samen smaken, want andere burger restaurants kunnen dat prima, maar om een of andere reden heb en ze het toch nog kunnen verkloten. De friet was taai, alsof het oude aardappels waren en de mayonaise was waterig en smaakloos. Ook de milkshake kokos, wat overigens het volume had van een glaasje wijn, bevatte gedroogde stukjes kokos. Dat is niet wat ik verwacht van een milkshake, dienmoet gewoon romig, zacht en zoet zijn. En niet met stukjes. Het is niet mijn bedoeling om het restaurant af te kraken, maar als je het mij vraagt maken zij hun producten niet naar mijn smaak.",
+    "textTranslated": "Recommended multiple times, I went into the experience without expectations because I am often disappointed. And unfortunately, it is not bad food, but really not my taste. The burger was very well-done, and the various flavors of the burger, the bun, the cheese, onions, lettuce, tomato, ketchup, and mustard combined poorly. It was a flat, tasteless, and bitter experience. Not that those ingredients taste bad together, as other burger restaurants do it just fine, but for some reason, they still manage to mess it up. The fries were tough, as if they were old potatoes, and the mayonnaise was watery and tasteless. The coconut milkshake, which by the way had the volume of a small glass of wine, also contained dried coconut pieces. That is not what I expect from a milkshake; it should just be creamy, smooth, and sweet. And not with chunks. It is not my intention to trash the restaurant, but if you ask me, they do not make their products to my taste."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:35.164Z",
+    "claims": [
+      {
+        "text": "the burger was very well-done",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "cooking",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burger flavors combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bun combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "bun"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the cheese combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the onions combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the lettuce combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "lettuce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the tomato combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "tomato"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the ketchup combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "ketchup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the mustard combined poorly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "mustard"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burger was flat",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burger was tasteless",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burger was bitter",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were tough",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were like old potatoes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the mayonnaise was watery",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Mayonnaise"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the mayonnaise was tasteless",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Mayonnaise"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coconut milkshake had the volume of a small glass of wine",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "coconut milkshake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coconut milkshake contained dried coconut pieces",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "coconut milkshake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coconut milkshake should be creamy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "coconut milkshake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coconut milkshake should be smooth",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "coconut milkshake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coconut milkshake should be sweet",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "coconut milkshake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:20.040Z",
+    "usage": {
+      "inputTokens": 5636,
+      "outputTokens": 3406,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The milkshake's small size is filed under portion_size, with drinks also accepted, because no drinks aspect covers size. The closing 'not to my taste' line is kept as an opinion on taste, though verdict is also accepted since it sums up the whole place. The stated recommendations and the 'no expectations' preamble are optional neutral facts.",
+    "claims": [
+      {
+        "text": "the place was recommended to the reviewer multiple times",
+        "quote": "Meerdere keren aanbevolen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer went in without expectations because they are often disappointed",
+        "quote": "ik ben er zonder verwachtingen de experience aangegaan want ik raak wel vaker teleurgesteld",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is not bad but really not the reviewer's taste",
+        "quote": "het is geen slecht voer, maar echt niet mijn smaak",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger was very well-done",
+        "quote": "de burger was erg doorbakken",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the flavours of the burger, broodje, kaas, uien, sla, tomaat, ketchup and mosterd combined poorly",
+        "quote": "de verschillende smaken van de burger, het broodje, de kaas, uien, sla, tomaat, ketchup en mosterd combineerden slecht",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "burger",
+          "broodje",
+          "kaas",
+          "uien",
+          "sla",
+          "tomaat",
+          "ketchup",
+          "mosterd"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger was a flat, tasteless and bitter experience",
+        "quote": "Het was een platte smaakloze en bittere ervaring.",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "other burger restaurants do these ingredients fine, but this place manages to mess it up",
+        "quote": "andere burger restaurants kunnen dat prima, maar om een of andere reden heb en ze het toch nog kunnen verkloten",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the friet was tough, as if made from old potatoes",
+        "quote": "De friet was taai, alsof het oude aardappels waren",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "friet"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the mayonaise was watery and tasteless",
+        "quote": "de mayonaise was waterig en smaakloos",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "mayonaise"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the milkshake kokos had the volume of a small glass of wine",
+        "quote": "de milkshake kokos, wat overigens het volume had van een glaasje wijn",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "milkshake kokos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the milkshake kokos contained dried pieces of kokos",
+        "quote": "de milkshake kokos, wat overigens het volume had van een glaasje wijn, bevatte gedroogde stukjes kokos",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "milkshake kokos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a milkshake should be creamy, smooth and sweet, not with chunks, unlike this one",
+        "quote": "dienmoet gewoon romig, zacht en zoet zijn. En niet met stukjes.",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "milkshake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the restaurant does not make its products to the reviewer's taste",
+        "quote": "maken zij hun producten niet naar mijn smaak",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

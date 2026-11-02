@@ -17,6 +17,16 @@ export const TOPIC_LABELS: Record<string, string> = {
 
 export const PLATFORM_LABELS: Record<string, string> = { tiktok: 'TikTok', instagram: 'Instagram', blog: 'Blog' };
 
+/** Why the gate didn't digest a post (`SocialPost.skipReason`), as the admin reads it */
+export const SKIP_REASON_LABELS: Record<string, string> = {
+	no_content: 'nothing to read',
+	not_food: 'not about food',
+	home_cooking: 'cooking at home',
+	groceries: 'groceries',
+	outdoors: 'outdoors',
+	other_city: 'another city'
+};
+
 export const compact = (n: number | null | undefined) =>
 	Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(n ?? 0);
 

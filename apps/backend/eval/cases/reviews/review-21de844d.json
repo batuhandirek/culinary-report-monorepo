@@ -1,0 +1,151 @@
+{
+  "id": "review-21de844d",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "21de844d-f0db-4427-9376-7175d2c43fae",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT205dVVuWm1RMU5ITUVKaFdXSmZkMTlJVlRoblFWRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "LYFE",
+    "venueId": "c7d59929-f40b-4742-9768-f36efb65c87b",
+    "brand": "LYFE",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-15T10:20:43.132Z",
+    "stars": 2,
+    "text": "Die Acai Bowl hat leider überhaupt nicht nach Acai geschmeckt :( wir haben auch über eine halbe Stunde gewartet, bis wir bedient wurden. Da gibt es in Berlin weitaus bessere Cafés.",
+    "textTranslated": "The acai bowl unfortunately didn't taste like acai at all :( We also waited over half an hour before being served. There are far better cafes in Berlin."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:46.779Z",
+    "claims": [
+      {
+        "text": "the acai bowl didn't taste like acai at all",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "acai bowl",
+          "acai"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "waited over half an hour before being served",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "far better cafes in Berlin",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:08.742Z",
+    "usage": {
+      "inputTokens": 5449,
+      "outputTokens": 917,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 5200
+    },
+    "notes": "The half-hour wait 'bis wir bedient wurden' is ambiguous between waiting to be attended to (speed_of_service) and waiting for the food (wait_for_food). 'Far better cafés in Berlin' reads as a negative verdict on the place as a whole.",
+    "claims": [
+      {
+        "text": "the Acai Bowl didn't taste like acai at all",
+        "quote": "Die Acai Bowl hat leider überhaupt nicht nach Acai geschmeckt",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Acai Bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited over half an hour before being served",
+        "quote": "wir haben auch über eine halbe Stunde gewartet, bis wir bedient wurden",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": 30,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait_for_food",
+            "wait"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there are far better cafés in Berlin than this one",
+        "quote": "Da gibt es in Berlin weitaus bessere Cafés.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.428Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.205Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "id": "review-6355458e",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "6355458e-5bd9-4835-9009-2c306e83a197",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xSU1VrNHpSVlJhYkhWSFQxWk9SblZzTFVsVlMwRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Schloßstraße",
+    "venueId": "29f7bcfe-5728-459f-bfc3-93b2db1d2caa",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-14T02:27:47.794Z",
+    "stars": 5,
+    "text": "The burger portion was really generous,and it tasted absolutely delicious! 🍔 The shake was also super tasty and complemented the meal perfectly. Definitely enjoyed every bite",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:27.789Z",
+    "claims": [
+      {
+        "text": "the burger portion was really generous",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it tasted absolutely delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the shake was super tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "shake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the shake complemented the meal perfectly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "shake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "every bite was enjoyed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:42.542Z",
+    "usage": {
+      "inputTokens": 4957,
+      "outputTokens": 1020,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'it tasted delicious' claim names the burger, taken from context. 'Complemented the meal perfectly' is optional, since it can stay inside the shake claim. 'Enjoyed every bite' is a general judgement of the food, though it reads close to a verdict.",
+    "claims": [
+      {
+        "text": "the burger portion was really generous",
+        "quote": "The burger portion was really generous",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger tasted absolutely delicious",
+        "quote": "it tasted absolutely delicious!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the shake was super tasty",
+        "quote": "The shake was also super tasty",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "shake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the shake complemented the meal perfectly",
+        "quote": "complemented the meal perfectly",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "shake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "definitely enjoyed every bite",
+        "quote": "Definitely enjoyed every bite",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.211Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.408Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

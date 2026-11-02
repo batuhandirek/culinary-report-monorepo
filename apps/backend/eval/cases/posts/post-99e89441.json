@@ -1,0 +1,435 @@
+{
+  "id": "post-99e89441",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "berliner.wahnsinn.de",
+    "locationName": null,
+    "hashtags": [
+      "yumchaheroes",
+      "dumplingsberlin",
+      "berlinentdecken",
+      "berlinerwahnsinn",
+      "berlinfood"
+    ],
+    "taggedHandles": [
+      "yumcha_heroes",
+      "trip_berlin",
+      "amnon_szpektor",
+      "dailytogether___",
+      "dailyblogger___",
+      "bloggerunity",
+      "com.to.goal.together",
+      "favb_control"
+    ],
+    "text": "🥟 Ein Blick hinter die Kulissen bei Yumcha Heroes Manufaktur \n\nIch durfte bei Yumcha Heroes einmal dahin schauen, wo die kleinen Dumplings entstehen. Genau solche Einblicke liebe ich.\n\nIch durfte den Damen über die Schulter schauen. Man sieht sofort, wie viel Erfahrung in jedem Handgriff steckt. Jede von ihnen bringt ihr Können und auch ein Stück ihrer Heimat mit nach Berlin.\n\nWas ich besonders schön fand: Hier wird noch richtig mit den Händen gearbeitet. Teig ausrollen, füllen, falten. Und das Dumpling für Dumpling. \n\nIch fand es interessant, ihnen bei der Arbeit zuzusehen und dabei so viel über die Herstellung zu erfahren. Und auch das Essen selbst fühlt sich danach ganz anders an. Wenn man weiß, wie viel Zeit, Können und Liebe in jedem einzelnen Dumpling steckt, genießt man ihn viel bewusster und wertschätzender. Aus einer kleinen Teigtasche wird plötzlich etwas ganz Besonderes.\n\nFür mich war es deshalb nicht einfach nur ein Besuch zum Essen, sondern ein kleiner Blick in eine Welt, die man sonst als Gast gar nicht zu sehen bekommt.\n\nEure Nancy 🤗 \n\n📍 Yumcha Heroes Manufaktur\nDunckerstraße 60, Berlin Prenzlauer Berg\n\nWerbung \n#YumchaHeroes #DumplingsBerlin #BerlinEntdecken #BerlinerWahnsinn #BerlinFood\nYumcha Heroes | Yumcha Heroes Manufaktur | Dumplings | Dumplings Berlin | Berlin Food | Berlin Essen | Berliner Essen | Chinesisches Essen | Asiatische Küche | Dumplings selber machen | Handarbeit | Manufaktur | Prenzlauer Berg | Berlin Prenzlauer Berg | Berlin entdecken | Berlin Tipps | Foodie Berlin | Essen in Berlin | Hinter den Kulissen | Berliner Wahnsinn",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "99e89441-3f2a-407d-b1c8-7656a9bfc769",
+    "externalId": "ig_4001122155779709642",
+    "url": "https://www.instagram.com/p/DeG12beMdrK/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-05T09:04:38.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:30.451Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Yumcha Heroes Manufaktur",
+        "locationHint": "Dunckerstraße 60, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "73a73064-2f9c-4f01-ba33-a6ea224ce417",
+          "brandName": "Yumcha Heroes",
+          "venueId": "15388189-46b4-4e85-977a-a1f5f21d2817",
+          "venueName": "Yumcha Heroes Manufaktur"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "behind the scenes at Yumcha Heroes Manufaktur",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "small dumplings are made there",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "small dumplings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "much experience goes into every hand movement",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the women bring their skills and a piece of home to Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they still work by hand",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dough is rolled out, filled and folded by hand",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "dough"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator found it interesting to watch them work and learn about the production",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food feels different after seeing how it is made",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "each dumpling takes time, skill and love",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "dumpling"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "a small dumpling becomes something special",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "dumpling"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it was not just an eating visit but a look into a world guests do not usually see",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:45:54.902Z",
+    "usage": {
+      "inputTokens": 11216,
+      "outputTokens": 2976,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Marked 'Werbung', so promotional. Hard calls were the aspect for the praise of handcraft and the women's skill (no service or food aspect fits cleanly, so null or the food root), and treating 'rolling, filling, folding' as part of the handmade claim, not recipe steps.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Yumcha Heroes Manufaktur",
+        "locationHint": "Dunckerstraße 60, Prenzlauer Berg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "73a73064-2f9c-4f01-ba33-a6ea224ce417",
+          "brandName": "Yumcha Heroes",
+          "venueId": "15388189-46b4-4e85-977a-a1f5f21d2817",
+          "venueName": "Yumcha Heroes Manufaktur",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "The creator got a behind-the-scenes look at Yumcha Heroes Manufaktur, where the Dumplings are made",
+        "quote": "Ich durfte bei Yumcha Heroes einmal dahin schauen, wo die kleinen Dumplings entstehen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Dumplings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The women making the dumplings show a lot of experience in every move",
+        "quote": "Man sieht sofort, wie viel Erfahrung in jedem Handgriff steckt.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Each of the women brings her skill and a piece of her homeland to Berlin",
+        "quote": "Jede von ihnen bringt ihr Können und auch ein Stück ihrer Heimat mit nach Berlin.",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The dumplings are still really made by hand: rolling, filling and folding the dough, dumpling by dumpling",
+        "quote": "Hier wird noch richtig mit den Händen gearbeitet.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Watching the women work and learning so much about the production was interesting",
+        "quote": "Ich fand es interessant, ihnen bei der Arbeit zuzusehen und dabei so viel über die Herstellung zu erfahren.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Knowing how much time, skill and love goes into each Dumpling makes you enjoy it more consciously",
+        "quote": "Wenn man weiß, wie viel Zeit, Können und Liebe in jedem einzelnen Dumpling steckt, genießt man ihn viel bewusster und wertschätzender.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Dumpling"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "A small Teigtasche suddenly becomes something very special",
+        "quote": "Aus einer kleinen Teigtasche wird plötzlich etwas ganz Besonderes.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Teigtasche"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The visit was not just about eating but a glimpse into a world guests normally never see",
+        "quote": "nicht einfach nur ein Besuch zum Essen, sondern ein kleiner Blick in eine Welt, die man sonst als Gast gar nicht zu sehen bekommt",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Yumcha Heroes Manufaktur is at Dunckerstraße 60 in Prenzlauer Berg",
+        "quote": "Dunckerstraße 60, Berlin Prenzlauer Berg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.246Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.435Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

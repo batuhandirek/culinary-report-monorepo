@@ -1,0 +1,49 @@
+{
+  "id": "term-6277",
+  "kind": "term",
+  "tags": [
+    "used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 6277,
+    "key": "marshmallow cooky",
+    "name": "marshmallow cookies",
+    "uses": 1
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": null
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:56:23.333Z",
+    "usage": {
+      "inputTokens": 172,
+      "outputTokens": 89,
+      "cachedInputTokens": 34,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "topics": [
+      {
+        "key": "cookies",
+        "relation": "kind_of"
+      }
+    ],
+    "alsoAcceptable": [
+      "dessert"
+    ],
+    "suggestion": null,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.467Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

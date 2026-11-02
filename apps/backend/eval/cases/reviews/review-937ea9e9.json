@@ -1,0 +1,531 @@
+{
+  "id": "review-937ea9e9",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "937ea9e9-111a-4290-90e0-20671339636e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT205SVgycHBiVGRsU1daYWRGRTNXV0ZNVEdoWFVIYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sandos",
+    "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+    "brand": "Sandos",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-13T17:56:27.906Z",
+    "stars": 5,
+    "text": "Einfach nur überragend!  Ich war komplett begeistert – alles war unglaublich lecker, frisch und mit richtig viel Liebe gemacht. Egal was man probiert, man möchte am liebsten direkt noch mehr bestellen!\n\nAuch die Mitarbeiter sind super freundlich, aufmerksam und sympathisch. Man fühlt sich direkt wohl und wird herzlich bedient.\n\nUnd die Preise sind wirklich top! Für die Qualität und die leckeren Sachen absolut fair – meiner Meinung nach sogar viel zu günstig für das, was man bekommt. 💯\n\nDefinitiv einer der besten süßen Läden überhaupt! Wer auf leckere Desserts und eine angenehme Atmosphäre steht, muss hier unbedingt vorbeischauen. Ich komme auf jeden Fall wieder!\n\nKlare 5 von 5 Sternen – wenn ich mehr geben könnte, würde ich es machen! ⭐⭐⭐⭐⭐",
+    "textTranslated": "Simply outstanding! I was completely blown away – everything was incredibly delicious, fresh, and made with so much love. No matter what you try, you'll want to order more right away!\n\nThe staff are also incredibly friendly, attentive, and welcoming. You immediately feel at ease and receive warm service.\n\nAnd the prices are fantastic! Absolutely fair for the quality and deliciousness – in my opinion, even far too low for what you get. 💯\n\nDefinitely one of the best dessert shops ever! Anyone who loves delicious desserts and a pleasant atmosphere absolutely has to stop by. I'll definitely be back!\n\nA clear 5 out of 5 stars – if I could give more, I would! ⭐⭐⭐⭐⭐"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:41:55.308Z",
+    "claims": [
+      {
+        "text": "everything was incredibly delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was fresh",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was made with so much love",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you'll want to order more right away",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff are incredibly friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff are attentive",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff are welcoming",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "warm service",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the prices are fantastic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the prices were fair for the quality and deliciousness",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the prices were far too low for what you get",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "one of the best dessert shops ever",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "dessert shops"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "loves delicious desserts",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "pleasant atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I'll definitely be back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:15.927Z",
+    "usage": {
+      "inputTokens": 5517,
+      "outputTokens": 3545,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the generic 'Desserts' counts as a named food (kept, as it is more specific than 'food'), and splitting the price praise between price_level and value_for_money. Overlapping enthusiasm lines (begeistert, sympathisch, herzlich bedient, 5 stars) are marked optional.",
+    "claims": [
+      {
+        "text": "Sandos is simply outstanding",
+        "quote": "Einfach nur überragend!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer was completely blown away",
+        "quote": "Ich war komplett begeistert",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "everything was incredibly delicious",
+        "quote": "alles war unglaublich lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "everything was fresh",
+        "quote": "frisch",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "everything was made with a lot of love",
+        "quote": "mit richtig viel Liebe gemacht",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "whatever you try, you want to order more right away",
+        "quote": "Egal was man probiert, man möchte am liebsten direkt noch mehr bestellen!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff are super friendly",
+        "quote": "Auch die Mitarbeiter sind super freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff are attentive",
+        "quote": "aufmerksam",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff are likeable",
+        "quote": "sympathisch",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "you immediately feel at ease",
+        "quote": "Man fühlt sich direkt wohl",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "guests are served warmly",
+        "quote": "wird herzlich bedient",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are really top",
+        "quote": "die Preise sind wirklich top",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price",
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are absolutely fair for the quality and the tasty things",
+        "quote": "Für die Qualität und die leckeren Sachen absolut fair",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are even far too low for what you get",
+        "quote": "meiner Meinung nach sogar viel zu günstig für das, was man bekommt",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Sandos is definitely one of the best dessert shops ever",
+        "quote": "Definitiv einer der besten süßen Läden überhaupt!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "anyone who loves delicious Desserts absolutely has to stop by",
+        "quote": "Wer auf leckere Desserts und eine angenehme Atmosphäre steht, muss hier unbedingt vorbeischauen.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Sandos has a pleasant atmosphere",
+        "quote": "eine angenehme Atmosphäre",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer will definitely be back",
+        "quote": "Ich komme auf jeden Fall wieder!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a clear 5 out of 5 stars, would give more if possible",
+        "quote": "Klare 5 von 5 Sternen – wenn ich mehr geben könnte, würde ich es machen!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "id": "review-c513f76e",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "c513f76e-67b5-47ec-b447-c6b29224f109",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tkNldYTlpSa0pLWDA1RlNIZFJiM1J5VG5KT1YzYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-22T12:08:42.061Z",
+    "stars": 4,
+    "text": "Ambiente wegen des drehenden Turmes schon toll, aber auch irgendwie steril. Essen und Service super gut.",
+    "textTranslated": "The ambiance is great because of the revolving tower, but also somewhat sterile. Food and service are excellent."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:34:08.582Z",
+    "claims": [
+      {
+        "text": "the ambiance is great because of the revolving tower",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the ambiance is somewhat sterile",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "food was excellent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "service was excellent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:15.078Z",
+    "usage": {
+      "inputTokens": 4976,
+      "outputTokens": 587,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The ambiance sentence splits into praise (the revolving tower) and criticism (sterile). An agent could also keep it as one mixed atmosphere claim. 'Essen und Service super gut' is split into separate food and service claims. Because the two claims share one span, the food quote is only the word 'Essen'.",
+    "claims": [
+      {
+        "text": "the ambiance is great because of the revolving tower",
+        "quote": "Ambiente wegen des drehenden Turmes schon toll",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the ambiance is also somewhat sterile",
+        "quote": "aber auch irgendwie steril",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is excellent",
+        "quote": "Essen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service is excellent",
+        "quote": "Service super gut",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

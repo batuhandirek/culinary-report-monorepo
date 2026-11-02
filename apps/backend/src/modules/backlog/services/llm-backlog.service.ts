@@ -3,6 +3,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { processShutdown } from 'src/modules/apify/util/apify-run-context.js';
+import { llmFreeOnly } from 'src/modules/llm/util/llm-scope.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { isFatalProviderError } from 'src/shared/util/pool.js';
 
@@ -28,8 +29,12 @@ export interface LlmBacklogStatus {
 	lastRun?: BacklogRun;
 }
 
-/** Stops every backlog after it for the day, not only the one it happened in */
-const DAY_STOPS: BacklogStopReason[] = ['allowance', 'budget', 'shutdown'];
+/**
+ * Stops every backlog after it for the day, not only the one it happened in. Not `allowance`:
+ * backlogs can run on different models (`LLM_AGENT_MODELS`), so one with no model left says
+ * nothing about the next, and the next one's first batch fails fast if it is the same.
+ */
+const DAY_STOPS: BacklogStopReason[] = ['budget', 'shutdown'];
 
 /** YYYY-MM-DD in UTC: the allowance's day */
 export const utcDay = (date: Date): string => date.toISOString().slice(0, 10);
@@ -58,18 +63,21 @@ export class LlmBacklogService {
 	/**
 	 * Takes the backlogs by priority and runs batches of each until it is empty, the day's token
 	 * budget (over every backlog, counted from what batches report) is spent, a batch throws what
-	 * `isFatalProviderError` matches (every account out of allowance: the day stops, the job does
-	 * not fail), or the time limit is reached. A batch's other errors stop that backlog only. Each
-	 * backlog's day is one `BacklogRun`, flushed after every batch so the Data page sees progress.
+	 * `isFatalProviderError` matches (no model left for it: that backlog stops for the day, the job
+	 * does not fail; batches run `llmFreeOnly` unless `LLM_BACKLOG_ALLOW_PAID`, so the paid models
+	 * take over only when the user said so), or the time limit is reached. A backlog that waits for something (`waitsFor`) runs no batch and says why. A
+	 * batch's other errors stop that backlog only. Each backlog's day is one `BacklogRun`, flushed
+	 * after every batch so the Data page sees progress.
 	 */
 	async drain(
-		opts: { budget?: number; maxMinutes?: number; now?: () => Date } = {},
+		opts: { budget?: number; maxMinutes?: number; allowPaid?: boolean; now?: () => Date } = {},
 	): Promise<BacklogRun[]> {
 		const now = opts.now ?? (() => new Date());
 		const startedAt = now().getTime();
 		const deadline = startedAt + (opts.maxMinutes ?? LLM_BACKLOG_MAX_MINUTES) * 60_000;
 		const day = utcDay(now());
 		const budget = opts.budget ?? backlogConfig.LLM_BACKLOG_DAILY_TOKENS;
+		const allowPaid = opts.allowPaid ?? backlogConfig.LLM_BACKLOG_ALLOW_PAID;
 		let spent = await this.tokensOn(day);
 		let dayStop: BacklogStopReason | undefined;
 		const runs: BacklogRun[] = [];
@@ -79,6 +87,13 @@ export class LlmBacklogService {
 			runs.push(run);
 			run.error = null;
 			let reason = dayStop;
+			if (!reason && backlog.waitsFor) {
+				const waits = await backlog.waitsFor().catch((e: Error) => `Checking whether it may run failed: ${e.message}`);
+				if (waits) {
+					reason = 'waiting';
+					run.error = waits.slice(0, 1000);
+				}
+			}
 			while (!reason) {
 				if (processShutdown.requested) reason = 'shutdown';
 				else if (spent >= budget || now().getTime() >= deadline) reason = 'budget';
@@ -91,7 +106,8 @@ export class LlmBacklogService {
 				}
 				let batch: { done: number; tokens?: number };
 				try {
-					batch = await backlog.runBatch();
+					// The roster's free models only, unless the user let the backlogs pay for a while
+					batch = await (allowPaid ? backlog.runBatch() : llmFreeOnly(() => backlog.runBatch()));
 				} catch (e) {
 					if (isFatalProviderError(e)) reason = 'allowance';
 					else {

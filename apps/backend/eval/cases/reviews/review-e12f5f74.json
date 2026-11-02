@@ -1,0 +1,306 @@
+{
+  "id": "review-e12f5f74",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e12f5f74-83ba-497e-9f13-279b4bf7cc72",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pOVGRraFRXbXhTV2t0dFdHdDFSbVJVY2twNVkyYxAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-14T17:31:05.893Z",
+    "stars": 3,
+    "text": "Et döner opsiyonu yoktu. Sadece tavuk döner bulunuyordu. Hijyen olarak iyi bir görüntü yoktu. Çalışanlar türk değillerdi. Tavuk döner olarak iyiydi, salatası taze ve boldu. Minimum yirmi dakika sırada bekledik.",
+    "textTranslated": "There was no beef doner option. Only chicken doner was available. Hygiene wasn't ideal. The staff weren't Turkish. The chicken doner itself was good; the salad was fresh and plentiful. We waited in line for at least twenty minutes."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:12.431Z",
+    "claims": [
+      {
+        "text": "there was no beef doner option",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "beef doner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "only chicken doner was available",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "chicken döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "hygiene wasn't ideal",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff weren't Turkish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "language",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken doner itself was good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chicken döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the salad was fresh and plentiful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we waited in line for at least twenty minutes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 20,
+        "unit": "minutes",
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:02.150Z",
+    "usage": {
+      "inputTokens": 5098,
+      "outputTokens": 1938,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the missing beef doner is menu_variety or availability, and how to place 'the staff weren't Turkish' (a neutral remark about staff, possibly implying authenticity). The salad's plentiful claim borrows the shared span so the food name stays in the source's spelling.",
+    "claims": [
+      {
+        "text": "there was no Et döner (beef doner) option",
+        "quote": "Et döner opsiyonu yoktu",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "Et döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "only tavuk döner (chicken doner) was available",
+        "quote": "Sadece tavuk döner bulunuyordu",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "tavuk döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "hygiene did not look good",
+        "quote": "Hijyen olarak iyi bir görüntü yoktu",
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food_hygiene"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were not Turkish",
+        "quote": "Çalışanlar türk değillerdi",
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "none",
+            "authenticity",
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the Tavuk döner was good",
+        "quote": "Tavuk döner olarak iyiydi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Tavuk döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the salad (salatası) was fresh",
+        "quote": "salatası taze",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "salatası"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the salad (salatası) was plentiful",
+        "quote": "salatası taze ve boldu",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "salatası"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited in line for at least twenty minutes",
+        "quote": "Minimum yirmi dakika sırada bekledik",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 20,
+        "unit": "minutes",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Staff nationality fits no aspect cleanly; the reference accepts none/authenticity alongside service, and other is a reasonable catch-all."
+      },
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -8,13 +8,14 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { FeedbackModule } from '../feedback/feedback.module.js';
+import { BacklogModule } from '../backlog/backlog.module.js';
+import { StatementsModule } from '../statements/statements.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 import { ImagesModule } from '../image/images.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 
 import { PressClassificationAgent } from './agents/press-classification.agent.js';
-import { ReviewAnalysisAgent } from './agents/review-analysis.agent.js';
+import { ReviewClaimsAgent } from './agents/review-claims.agent.js';
 import { AdminBrandsController } from './controllers/admin.brands.controller.js';
 import { AdminDishSearchesController } from './controllers/admin.dish-searches.controller.js';
 import { AdminReviewsController } from './controllers/admin.reviews.controller.js';
@@ -41,6 +42,7 @@ import { OsmPlaceService } from './services/osm-place.service.js';
 import { OverpassService } from './services/overpass.service.js';
 import { RatingSnapshotService } from './services/rating-snapshot.service.js';
 import { ReviewService } from './services/review.service.js';
+import { ReviewDigestionService } from './services/review-digestion.service.js';
 import { TheForkAvailabilityService } from './services/thefork-availability.service.js';
 import { TripadvisorReviewService } from './services/tripadvisor-review.service.js';
 import { VenueService } from './services/venue.service.js';
@@ -71,7 +73,8 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		]),
 		ApifyModule,
 		AuthModule,
-		FeedbackModule,
+		StatementsModule,
+		BacklogModule,
 		CitiesModule,
 		TopicsModule,
 		ImagesModule,
@@ -111,8 +114,9 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueFaviconService,
 		VenueFaviconCron,
 		ReviewService,
+		ReviewDigestionService,
 		RatingSnapshotService,
-		ReviewAnalysisAgent,
+		ReviewClaimsAgent,
 	],
 	exports: [
 		BrandService,
@@ -131,6 +135,7 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		VenueDeliveryService,
 		VenueFaviconService,
 		ReviewService,
+		ReviewDigestionService,
 		RatingSnapshotService,
 		MikroOrmModule,
 	],

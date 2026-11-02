@@ -7,7 +7,7 @@ import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.enti
 import type { LandingEditionData } from '../interfaces/landing-edition.interface.js';
 import {
 	computeLanding,
-	type LandingFeedbackRow,
+	type LandingStatementRow,
 	type LandingInput,
 	type LandingMentionRow,
 	type LandingVenueRow,
@@ -73,31 +73,44 @@ const venue = (brandId: string, o: Partial<LandingVenueRow> = {}): LandingVenueR
 	...o,
 });
 
+/** A dish-only statement of the mention naming `dish`: an undecided wording, unless `topic` links it */
 const dishRow = (
 	m: LandingMentionRow,
 	dish: string,
-	o: Partial<LandingFeedbackRow> = {},
-): LandingFeedbackRow => ({
+	topic?: { key: string; label: string; kind: TopicKindEnum },
+): LandingStatementRow => ({
 	mentionId: m.mentionId,
 	postId: m.postId,
 	brandId: m.brandId,
 	views: m.views,
 	sentiment: 'positive',
-	theme: null,
-	detail: null,
-	dish,
-	dishKey: dish.toLowerCase(),
-	topicKey: null,
-	topicLabel: null,
-	topicKind: null,
-	...o,
+	aspect: null,
+	text: null,
+	foods: [{ name: dish, key: dish.toLowerCase(), topics: topic ? [topic] : [] }],
+});
+
+/** A claim of the mention filed under `aspect`, naming no dish */
+const claimRow = (
+	m: LandingMentionRow,
+	aspect: string,
+	text: string,
+	sentiment = 'positive',
+): LandingStatementRow => ({
+	mentionId: m.mentionId,
+	postId: m.postId,
+	brandId: m.brandId,
+	views: m.views,
+	sentiment,
+	aspect,
+	text,
+	foods: [],
 });
 
 const input = (o: Partial<LandingInput>): LandingInput => ({
 	cityName: 'Berlin',
 	end: END,
-	current: { mentions: [], feedback: [] },
-	previous: { mentions: [], feedback: [] },
+	current: { mentions: [], statements: [] },
+	previous: { mentions: [], statements: [] },
 	venues: [],
 	openingSigns: [],
 	index,
@@ -147,7 +160,7 @@ describe('computeLanding', () => {
 						...posts('Duo', 3, { creators: 2 }),
 						...posts('Fell', 2),
 					],
-					feedback: [],
+					statements: [],
 				},
 				previous: {
 					mentions: [
@@ -155,7 +168,7 @@ describe('computeLanding', () => {
 						...posts('Duo', 5, { postedAt: BEFORE }),
 						...posts('Crowd', 4, { postedAt: BEFORE }),
 					],
-					feedback: [],
+					statements: [],
 				},
 				venues: ['Loud Solo', 'Crowd', 'Duo', 'Fell'].map(b => venue(b)),
 			}),
@@ -181,7 +194,7 @@ describe('computeLanding', () => {
 			input({
 				current: {
 					mentions: [...posts('Quiet Corner', 5), ...posts('Sori', 2)],
-					feedback: [],
+					statements: [],
 				},
 				venues: [venue('Quiet Corner'), venue('Sori')],
 				doNotList: { venues: ['Quiet Corner'], creators: [] },
@@ -197,7 +210,7 @@ describe('computeLanding', () => {
 			input({
 				current: {
 					mentions: posts('Chain', 3, { venueId: 'Chain-k', district: 'Kreuzberg' }),
-					feedback: [],
+					statements: [],
 				},
 				venues: [
 					venue('Chain', { venueId: 'Chain-m', reviewsCount: 9_000 }),
@@ -222,7 +235,7 @@ describe('computeLanding', () => {
 			input({
 				current: {
 					mentions: ms,
-					feedback: [
+					statements: [
 						dishRow(ms[0], 'Tonkotsu'),
 						dishRow(ms[1], 'tonkotsu'),
 						dishRow(ms[2], 'Gyoza'),
@@ -237,16 +250,12 @@ describe('computeLanding', () => {
 	it('picks dishes by the rise of their share, a drink apart, and lists the marquee by posts', () => {
 		const now = posts('A', 20);
 		const before = posts('A', 20, { postedAt: BEFORE });
-		const topic = (key: string, label: string, kind = TopicKindEnum.DISH) => ({
-			topicKey: key,
-			topicLabel: label,
-			topicKind: kind,
-		});
+		const topic = (key: string, label: string, kind = TopicKindEnum.DISH) => ({ key, label, kind });
 		const data = computeLanding(
 			input({
 				current: {
 					mentions: now,
-					feedback: [
+					statements: [
 						// Burgers 10 of 20 posts now, 2 before: the dish of the month
 						...now
 							.slice(0, 10)
@@ -266,7 +275,7 @@ describe('computeLanding', () => {
 				},
 				previous: {
 					mentions: before,
-					feedback: [
+					statements: [
 						...before
 							.slice(0, 2)
 							.map(m => dishRow(m, 'Burger', topic('burgers', 'Burgers'))),
@@ -305,7 +314,7 @@ describe('computeLanding', () => {
 						...posts('Big Old', 2),
 						...posts('Scraped', 1),
 					],
-					feedback: [],
+					statements: [],
 				},
 				venues: [
 					venue('Fresh', { reviewsCount: 12 }),
@@ -361,25 +370,11 @@ describe('computeLanding', () => {
 			input({
 				current: {
 					mentions: ms,
-					feedback: ms.slice(0, 12).map(m =>
-						dishRow(m, 'x', {
-							dish: null,
-							dishKey: null,
-							theme: 'atmosphere',
-							detail: 'cozy',
-						}),
-					),
+					statements: ms.slice(0, 12).map(m => claimRow(m, 'atmosphere', 'cozy')),
 				},
 				previous: {
 					mentions: before,
-					feedback: before.slice(0, 12).map(m =>
-						dishRow(m, 'x', {
-							dish: null,
-							dishKey: null,
-							theme: 'taste',
-							detail: 'tasty',
-						}),
-					),
+					statements: before.slice(0, 12).map(m => claimRow(m, 'taste', 'tasty')),
 				},
 				venues: ['A', 'B', 'C'].map(b => venue(b)),
 				doNotList: { venues: [], creators: [] },
@@ -414,7 +409,7 @@ const sample = (): LandingEditionData =>
 		input({
 			current: {
 				mentions: [...posts('Sori', 4, { views: 172_516 / 4 }), ...posts('Duo', 2)],
-				feedback: [],
+				statements: [],
 			},
 			venues: [venue('Sori'), venue('Duo')],
 		}),

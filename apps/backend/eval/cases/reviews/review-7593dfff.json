@@ -1,0 +1,423 @@
+{
+  "id": "review-7593dfff",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "7593dfff-9b49-4b39-8d4e-b1ddcc41687f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xOVWVrUnhPR05YZWpoWFVWODFNRWhXTlRaR2JGRRAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-10T18:14:25.336Z",
+    "stars": 4,
+    "text": "Jesli ktoś ma czas by stać w kolejce (przy ok 12 osobach ok 1h oczekiwania) to warto. Fajnie zbalansowane sosy i ilość mięsa do warzyw, buła jednak średnia. Natomiast ogólny vibe, luźne, nieśpieszne podejście pracowników (młodych) nie każdemu podpasuje. Starszy Pan z obsługi cudowny - jak tylko się pojawił wszystko poszło szybciej. Warto mieć na uwadze, że jednak mało w tej kolejce lokalsów, głownie turyści.",
+    "textTranslated": "If you have the time to wait in line (with about 12 people, the wait was about an hour), it's worth it. The sauces and the amount of meat and vegetables were nicely balanced, but the bread was average. However, the overall vibe, the relaxed, unhurried approach of the (young) staff, won't appeal to everyone. The older gentleman serving was wonderful – once he showed up, everything went faster. It's worth noting that there weren't many locals in the line, mostly tourists."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:05:58.741Z",
+    "claims": [
+      {
+        "text": "if you have the time to wait in line, it's worth it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there were about 12 people in line",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the wait was about an hour",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the sauces were nicely balanced",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the amount of meat and vegetables were nicely balanced",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "meat",
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bread was average",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the overall vibe was relaxed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the young staff had an unhurried approach",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the older gentleman serving was wonderful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "once he showed up, everything went faster",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there weren't many locals in the line",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "mostly tourists were in the line",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:34.807Z",
+    "usage": {
+      "inputTokens": 5686,
+      "outputTokens": 2653,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the hour-long wait is a neutral fact or a complaint (neutral fact chosen, negative opinion allowed); splitting the vibe from the staff's unhurried approach, which share one predicate; and whether 'mostly tourists' is a judgement (touristy crowding) or a plain observation.",
+    "claims": [
+      {
+        "text": "with about 12 people in line, the wait was about an hour",
+        "quote": "przy ok 12 osobach ok 1h oczekiwania",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion",
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the place is worth it if you have time to wait in line",
+        "quote": "Jesli ktoś ma czas by stać w kolejce (przy ok 12 osobach ok 1h oczekiwania) to warto",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the sauces were nicely balanced",
+        "quote": "Fajnie zbalansowane sosy",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sosy"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the amount of meat to vegetables was nicely balanced",
+        "quote": "ilość mięsa do warzyw",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "mięsa",
+          "warzyw"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "portion_size"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the bread roll was average",
+        "quote": "buła jednak średnia",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "buła"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the overall vibe won't appeal to everyone",
+        "quote": "ogólny vibe",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the relaxed, unhurried approach of the young staff won't appeal to everyone",
+        "quote": "luźne, nieśpieszne podejście pracowników (młodych) nie każdemu podpasuje",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "neutral"
+          ],
+          "aspects": [
+            "service",
+            "other"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the older gentleman serving was wonderful",
+        "quote": "Starszy Pan z obsługi cudowny",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "once the older gentleman showed up, everything went faster",
+        "quote": "jak tylko się pojawił wszystko poszło szybciej",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there were few locals in the line, mostly tourists",
+        "quote": "mało w tej kolejce lokalsów, głownie turyści",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): Scorer paired the wait claim with the agent's verdict claim, which matches the reference's separate verdict; the agent has the wait as separate claims."
+      },
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Pairing artifact: the agent's verdict claim corresponds to the reference's verdict, and the queue facts appear elsewhere."
+      },
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): Pairing artifact: the agent's verdict matches the reference's verdict claim, and its wait claims are facts."
+      },
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): 'The staff were young' is a valid split-off neutral detail that the reference folded into its claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The separate claim about the staff's age is a split-off detail, and aspect other is reasonable for it."
+      },
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): Staff age stated alone is a neutral fact; the split is allowed."
+      },
+      {
+        "at": "2026-11-01T15:11:31.430Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "id": "review-39bfa8dd",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "39bfa8dd-2970-4554-a7c6-993265575e1e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tZMGJqWkxVMHBFUzBGc0xVaHdVM1ZpZFdKa2NsRRAB",
+    "platform": "google",
+    "language": "da",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-11T18:39:38.795Z",
+    "stars": 3,
+    "text": "Bliv på din plads! Ellers får du ikke noget mad. Dejligt hornorkester og mange gæster. Et rigtig godt sted til en romantisk middag for 2.",
+    "textTranslated": "Stay in your seat! Otherwise you won't get any food. Lovely brass band and lots of guests. A really good place for a romantic dinner for two."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:41:38.238Z",
+    "claims": [
+      {
+        "text": "stay in your seat",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "otherwise you won't get any food",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "lovely brass band",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "lots of guests",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a really good place for a romantic dinner for two",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:31.529Z",
+    "usage": {
+      "inputTokens": 5017,
+      "outputTokens": 1118,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The warning to stay seated is read as a complaint that staff ignore guests who leave their table (attentiveness). 'Lots of guests' sits among praise, so it may also be read as positive. The romantic-dinner line recommends the whole place (verdict), though it can also be read as an opinion about the atmosphere.",
+    "claims": [
+      {
+        "text": "you have to stay in your seat, otherwise you won't get any food",
+        "quote": "Bliv på din plads! Ellers får du ikke noget mad.",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "lovely brass band",
+        "quote": "Dejligt hornorkester",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "lots of guests",
+        "quote": "mange gæster",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "a really good place for a romantic dinner for two",
+        "quote": "Et rigtig godt sted til en romantisk middag for 2.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

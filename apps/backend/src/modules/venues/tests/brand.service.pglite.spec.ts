@@ -142,8 +142,6 @@ describe('BrandService (pglite)', () => {
 			venue,
 			brand: venue.brand,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 
 	it('gives a venue saved without a brand one of its own, named like it', async () => {
@@ -323,8 +321,14 @@ describe('BrandService (pglite)', () => {
 		expect(await em.findOneOrFail(SocialAccount, { id: suggested.id })).toMatchObject({
 			suggestedBrand: { id: keep },
 		});
-		const rejections = await em.find(AccountRejectedBrand, {}, { populate: ['account', 'brand'] });
-		expect(rejections.map(r => [r.account.handle, r.brand.id])).toEqual([['mitte.foodie', keep]]);
+		const rejections = await em.find(
+			AccountRejectedBrand,
+			{},
+			{ populate: ['account', 'brand'] },
+		);
+		expect(rejections.map(r => [r.account.handle, r.brand.id])).toEqual([
+			['mitte.foodie', keep],
+		]);
 	});
 
 	it('refuses to merge two prospects', async () => {
@@ -369,13 +373,17 @@ describe('BrandService (pglite)', () => {
 		const mitte = branch(berlin, 'Burgermeister Mitte', 300);
 		const stranger = branch(berlin, 'Burgermeister Döner', 12);
 		await em.flush();
-		const offered = async (id: string) => (await service.candidates(await service.get(id))).map(v => v.id);
+		const offered = async (id: string) =>
+			(await service.candidates(await service.get(id))).map(v => v.id);
 		expect(await offered(brand.id)).toContain(stranger.id);
 
 		// Mitte, a brand of its own, says the döner place is not its; then joins the chain
 		await controller.excludeBrandVenue(mitte.brand.id, { venueId: stranger.id });
 		await controller.excludeBrandVenue(mitte.brand.id, { venueId: stranger.id });
-		const merged = await service.merge({ name: 'Burgermeister', venueIds: [kotti.id, mitte.id] });
+		const merged = await service.merge({
+			name: 'Burgermeister',
+			venueIds: [kotti.id, mitte.id],
+		});
 		em.clear();
 		const rows = await em.find(BrandExcludedVenue, {}, { populate: ['brand', 'venue'] });
 		expect(rows.map(r => [r.brand.id, r.venue.id])).toEqual([[merged.id, stranger.id]]);
@@ -415,7 +423,9 @@ describe('BrandService (pglite)', () => {
 		expect(await em.count(Report, { brand: brand.id })).toBe(1);
 		// Taken off for good: never offered or joined again by itself
 		expect(
-			(await em.find(BrandExcludedVenue, { brand: brand.id }, { populate: ['venue'] })).map(e => e.venue.id),
+			(await em.find(BrandExcludedVenue, { brand: brand.id }, { populate: ['venue'] })).map(
+				e => e.venue.id,
+			),
 		).toEqual([mitte.id]);
 		await expect(service.removeBranch(brand.id, kotti.id)).rejects.toThrow(
 			"the brand's only branch",

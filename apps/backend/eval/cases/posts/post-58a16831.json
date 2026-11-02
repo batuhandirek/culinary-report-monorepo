@@ -1,0 +1,705 @@
+{
+  "id": "post-58a16831",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "blog",
+    "author": "tip-berlin.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Ins Nyde kommen wir für den Kaffee – und für das Interieur\n\nTrinken gehen\nIns Nyde kommen wir für den Kaffee – und für das Interieur\nWenn eine begabte Tischlerin ein Café eröffnet und die Inneneinrichtung selbst baut, kann es eigentlich nur gemütlich werden. zu Besuch im Café Nyde in Schöneberg\nText: Marianne Rennella\nVeröffentlicht am: 02.09.2026\nHome » Food » Seite 2\nWhatsApp\nFacebook\nE-Mail\nX\nBluesky\nTischlerin an der Kaffeemaschine: Antonia Wagner im Nyde © Marianne Rennella\nIhr könnt euch Artikel von tipBerlin in der Google-Suche nun bevorzugt anzeigen lassen.\nJetzt aktivieren\nMehr erfahren\nEigentlich wollten die Vermieter gar kein Café in ihrem schönen Ecklokal an der Belziger Straße haben, aber dann überzeugte sie das Konzept von Antonia Wagner doch. Wer das Nyde heute betritt, versteht warum. Ein Jahr verging zwischen dem Baubeginn und der Eröffnung Mitte Juli. Die gelernte Tischlerin baute die großzügigen Räumlichkeiten selbst aus und nutzte ihren Traum vom Café gleichzeitig für ein vorerst letztes Tischlerprojekt.\nDas Nyde Café lohnt sich auch am Abend\nDie Wandschränke aus dunklem Holz mit Glastüren sind ein absoluter Hingucker und reichen bis unter die hohe Altbaudecke. Darin stehen schöne Vasen, Gläser und Matrjoschkas, von hinten leuchtet ein warmes Licht die Schränke aus. Der halbrunde, lila geflieste Tresen fällt durch seine aus Beton gegossene Oberfläche und die Zapfsäulen aus glänzendem Edelstahl auf, die zur schicken Kaffeemaschine „sotto banco“, sprich „unterm Tresen“, gehören. Statt einer großen Siebträgermaschine wollte Wagner zwischen Gast und Barista lieber Platz haben für Interaktion. Der Kaffee ist übrigens hervorragend, genau wie die Croissants, die von der Bäckerei Johann ein paar Straßen weiter kommen.\nAuch abends lohnt es sich vorbeizukommen, denn die Weinkarte ist klein und fein und die Westsonne scheint dann auf die nette Ecke der äußerst ruhigen Fahrradstraße. Man blickt direkt auf die Sicherungsstelle der Polizei, die sich in einem dafür viel zu charmanten Backsteingebäude befindet.\nNyde Belziger Str. 53a, Schöneberg, Mi–Mo 9–21 Uhr, mehr Infos hier\nMehr zum Thema\nHier sollte man auch mit viel Hunger hin: Das Pêle-Mêle in Neukölln beendet die Ära der Avocadostulle. Wir versorgen euch mit Neuigkeiten und Rezension: Essen gehen in Berlin – von Imbiss bis Restaurant. Prost: Trinken gehen in Berlin – was wir über Drinks, Bars und Kneipen schreiben, lest ihr hier. Für zuhause, die Küche oder Vorratsammer: Einkaufen – Produkte, Geschäfte und Entwicklungen. Berlins Food-Guide: Hier bestellt ihr die Speisekarte.\nThe post Ins Nyde kommen wir für den Kaffee – und für das Interieur appeared first on tipBerlin.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "58a16831-0637-4c50-9c02-350a789249d8",
+    "externalId": "blog_374b7e33c563bda8bbd8cb31",
+    "url": "https://www.tip-berlin.de/food/trinken-gehen/nyde-cafe-tagesbar/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-02T14:52:04.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:29.846Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Nyde",
+        "locationHint": "Belziger Straße",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "exact",
+          "brandId": "07774ae5-fb6b-4257-9958-661d25df7c3f",
+          "brandName": "nyde",
+          "venueId": "2281a5c6-2512-446a-9b22-42ae3b5ddfac",
+          "venueName": "nyde"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "self-built, stylish interior with dark wood cabinets and a lilac tiled counter",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cozy and charming",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "coffee is excellent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "croissants are very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "croissant"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "small but fine wine list",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:22:53.172Z",
+    "usage": {
+      "inputTokens": 16264,
+      "outputTokens": 7496,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Nyde counts as a new opening since the article reports its mid-July opening. Bäckerei Johann is included as the named supplier of the croissants. Pêle-Mêle is included because the related-article teaser says something about it, though it is boilerplate. The interior and location details are split finely, with minor ones optional.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Nyde",
+        "locationHint": "Belziger Str. 53a, Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "07774ae5-fb6b-4257-9958-661d25df7c3f",
+          "brandName": "nyde",
+          "venueId": "2281a5c6-2512-446a-9b22-42ae3b5ddfac",
+          "venueName": "nyde",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Bäckerei Johann",
+        "locationHint": "a few streets from Nyde, Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "af9bc0c3-de79-4e81-8055-dba3e6d47454",
+          "brandName": "JOHANN Bäckerei",
+          "venueId": "2794d8a3-43fa-4b40-b669-e250b52178bc",
+          "venueName": "JOHANN Bäckerei",
+          "note": "'Bäckerei Johann' matches JOHANN Bäckerei in Schöneberg, a few streets from Nyde, rather than Johann Mayer."
+        }
+      },
+      {
+        "venueName": "Pêle-Mêle",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "aec41408-204c-4b24-a9d1-b7d57fa43eed",
+          "brandName": "Pêle-Mêle",
+          "venueId": "7dd98b3f-47bc-4c4d-bcbb-c0d3b1939846",
+          "venueName": "Pêle-Mêle",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Nyde opened in mid July",
+        "quote": "der Eröffnung Mitte Juli",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a year passed between the start of construction and Nyde's opening",
+        "quote": "Ein Jahr verging zwischen dem Baubeginn und der Eröffnung",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the landlords did not want a café but were convinced by Antonia Wagner's concept for Nyde",
+        "quote": "Eigentlich wollten die Vermieter gar kein Café in ihrem schönen Ecklokal an der Belziger Straße haben, aber dann überzeugte sie das Konzept von Antonia Wagner doch",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde is run by carpenter Antonia Wagner",
+        "quote": "Tischlerin an der Kaffeemaschine: Antonia Wagner im Nyde",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde is in a beautiful corner space on Belziger Straße",
+        "quote": "schönen Ecklokal an der Belziger Straße",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the trained carpenter built out Nyde's spacious rooms herself",
+        "quote": "Die gelernte Tischlerin baute die großzügigen Räumlichkeiten selbst aus",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "space"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde, with its self-built interior, is cosy",
+        "quote": "kann es eigentlich nur gemütlich werden",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "people come to Nyde for the coffee and the interior",
+        "quote": "Ins Nyde kommen wir für den Kaffee – und für das Interieur",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "drink_quality"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde's dark wood wall cabinets with glass doors reaching the high ceiling are an absolute eye-catcher",
+        "quote": "Die Wandschränke aus dunklem Holz mit Glastüren sind ein absoluter Hingucker",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde's cabinets hold beautiful vases, glasses and matryoshkas, lit with warm light",
+        "quote": "Darin stehen schöne Vasen, Gläser und Matrjoschkas, von hinten leuchtet ein warmes Licht die Schränke aus",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde's semicircular purple-tiled counter with a cast concrete top and shiny stainless steel taps stands out",
+        "quote": "Der halbrunde, lila geflieste Tresen fällt durch seine aus Beton gegossene Oberfläche und die Zapfsäulen aus glänzendem Edelstahl auf",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde has a chic under-counter coffee machine",
+        "quote": "schicken Kaffeemaschine „sotto banco“",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "instead of a big espresso machine, Wagner wanted room for interaction between guest and barista",
+        "quote": "Statt einer großen Siebträgermaschine wollte Wagner zwischen Gast und Barista lieber Platz haben für Interaktion",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "service"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kaffee at Nyde is excellent",
+        "quote": "Der Kaffee ist übrigens hervorragend",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Croissants at Nyde are excellent",
+        "quote": "genau wie die Croissants",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Croissants"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bäckerei Johann, a few streets away, supplies Nyde's Croissants",
+        "quote": "die von der Bäckerei Johann ein paar Straßen weiter kommen",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Croissants"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Nyde is also worth visiting in the evening",
+        "quote": "Auch abends lohnt es sich vorbeizukommen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde's wine list is small but fine",
+        "quote": "die Weinkarte ist klein und fein",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "in the evening the western sun shines on Nyde's nice corner",
+        "quote": "die Westsonne scheint dann auf die nette Ecke",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "outdoor_seating"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde is on an extremely quiet bicycle street",
+        "quote": "der äußerst ruhigen Fahrradstraße",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "noise"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde looks onto a police station in a charming brick building",
+        "quote": "Man blickt direkt auf die Sicherungsstelle der Polizei, die sich in einem dafür viel zu charmanten Backsteingebäude befindet",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde is at Belziger Str. 53a in Schöneberg",
+        "quote": "Nyde Belziger Str. 53a, Schöneberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nyde is open Wednesday to Monday, 9 to 21",
+        "quote": "Mi–Mo 9–21 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you should come to Pêle-Mêle very hungry",
+        "quote": "Hier sollte man auch mit viel Hunger hin",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Pêle-Mêle ends the era of the Avocadostulle",
+        "quote": "beendet die Ära der Avocadostulle",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Avocadostulle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): The supply claim concerns both Nyde's croissants and Bäckerei Johann, so either place fits."
+      },
+      {
+        "at": "2026-11-01T15:11:31.438Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.236Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -101,8 +101,6 @@ describe('ReportService.build for a brand (pglite)', () => {
 					venue: brandOnly ? null : venue,
 					matchMethod: MentionMatchMethodEnum.EXACT,
 					visited: true,
-					sentiment: 'positive',
-					summary: 'Good.',
 				});
 		};
 		post([{ venue: main, brandOnly: true }], 'a');

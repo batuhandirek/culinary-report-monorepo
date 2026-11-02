@@ -218,8 +218,12 @@ describe('VenueFaviconService (pglite)', () => {
 		sites['https://eatmunchies.de/i.png'] = PNG(30);
 		// Nothing on the home page: its Kontakt page is read
 		const contact = await venue({ website: 'https://pinoli.de/' });
-		sites['https://pinoli.de/'] = HTML('</head><body><a href="/kontakt">Kontakt</a><a href="https://other.de/impressum">x</a>');
-		sites['https://pinoli.de/kontakt'] = HTML('</head><body>Folgt uns: instagram.com/pinoli.berlin');
+		sites['https://pinoli.de/'] = HTML(
+			'</head><body><a href="/kontakt">Kontakt</a><a href="https://other.de/impressum">x</a>',
+		);
+		sites['https://pinoli.de/kontakt'] = HTML(
+			'</head><body>Folgt uns: instagram.com/pinoli.berlin',
+		);
 		// Nothing anywhere: read, found none
 		const none = await venue({ website: 'https://quiet.de/' });
 		sites['https://quiet.de/'] = HTML('<title>Quiet</title>');
@@ -229,8 +233,13 @@ describe('VenueFaviconService (pglite)', () => {
 			{ platform: 'instagram', handle: 'munchiesde' },
 			{ platform: 'tiktok', handle: 'munchiesde' },
 		]);
-		expect((await reload(contact.id)).siteProfiles).toEqual([{ platform: 'instagram', handle: 'pinoli.berlin' }]);
-		expect(fetcher.get).not.toHaveBeenCalledWith('https://other.de/impressum', expect.anything());
+		expect((await reload(contact.id)).siteProfiles).toEqual([
+			{ platform: 'instagram', handle: 'pinoli.berlin' },
+		]);
+		expect(fetcher.get).not.toHaveBeenCalledWith(
+			'https://other.de/impressum',
+			expect.anything(),
+		);
 		const quiet = await reload(none.id);
 		expect(quiet.siteProfiles).toEqual([]);
 		expect(quiet.siteProfilesAt).toEqual(at);

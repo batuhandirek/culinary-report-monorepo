@@ -1,0 +1,592 @@
+{
+  "id": "review-c9cea664",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "c9cea664-8db1-4f44-8f6f-58351d07153d",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21rd2FtcHdlbTFHWm1nM1oxbGpVMWhEWkhGYVduYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Ormos by Milchhäuschen",
+    "venueId": "2dc24f47-907f-4355-bf9a-4b7745749833",
+    "brand": "Ormos by Milchhäuschen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-29T20:52:59.875Z",
+    "stars": 2,
+    "text": "Kinderportionen, Fleisch (egal welches Gericht) war nicht durch. Hühnchen noch roh, Bifteki vom Grill sah aus als wenn es noch lebt, Knoblauchbrot labberig, mit Zasziki wurde sehr sparsam umgegangen. Mein Mann wurde nicht satt. Unsere Oma (Leber mit Kartoffelpüree) hat sich über die Miniportion Kartoffelbrei beschwert. Bei den eingepackten „Resten“ fehlte eine komplette Portion. Ups….. scheinbar vergessen. Das Geschirr angeschlagen, egal ob Teller oder Gläser. Hauptsache man fragt 1000 mal nach, ob alles in Ordnung ist. Sehr aufdringlich!!!! Preise sind völlig überteuert. Die Speisekarte sehr schweinelastig, kein Rind, bis auf die Leber. Nicht empfehlenswert und für uns kein weiteren Besuch wert. Dann lieber ins Restaurant am Orankesee.",
+    "textTranslated": "Children's portions were inadequate, and the meat (regardless of the dish) was undercooked. The chicken was still raw, the bifteki from the grill looked like it was still alive, the garlic bread was soggy, and they were very stingy with the tzatziki. My husband didn't get enough to eat. Our grandmother (who ordered liver with mashed potatoes) complained about the tiny portion of mashed potatoes. A whole portion was missing from the packed-up \"leftovers.\" Oops... apparently forgotten. The dishes were chipped, both plates and glasses. The main thing was that they asked a thousand times if everything was alright. Very pushy! Prices are completely overpriced. The menu is very pork-heavy, with no beef except for the liver. Not recommended and not worth another visit for us. We'd rather go to the restaurant at Orankesee."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:32.332Z",
+    "claims": [
+      {
+        "text": "children's portions were inadequate",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the meat was undercooked",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken was still raw",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bifteki from the grill looked like it was still alive",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "bifteki"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the garlic bread was soggy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "garlic bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they were very stingy with the tzatziki",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "tzatziki"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "my husband didn't get enough to eat",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "our grandmother ordered liver with mashed potatoes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "liver",
+          "mashed potatoes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the mashed potatoes portion was tiny",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "mashed potatoes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a whole portion was missing from the packed-up leftovers",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the dishes were chipped",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the plates were chipped",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the glasses were chipped",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they asked a thousand times if everything was alright",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff was very pushy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "prices are completely overpriced",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the menu is very pork-heavy",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there is no beef except for the liver",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "beef",
+          "liver"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "not worth another visit for us",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we'd rather go to the restaurant at Orankesee",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:53.496Z",
+    "usage": {
+      "inputTokens": 5557,
+      "outputTokens": 4387,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "\"Kinderportionen\" means child-sized (small) portions, not a judgement of the kids' menu as the translation suggests. Chipped plates and glasses have no exact aspect; dining_area is closest. The missing portion in the packed leftovers fits takeaway_handling or order_accuracy. The grandmother's dish is kept as an optional fact, since the complaint claim may carry it.",
+    "claims": [
+      {
+        "text": "the portions were children's portions",
+        "quote": "Kinderportionen",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Fleisch was not cooked through, whatever the dish",
+        "quote": "Fleisch (egal welches Gericht) war nicht durch",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Hühnchen was still raw",
+        "quote": "Hühnchen noch roh",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "Hühnchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the grilled Bifteki looked like it was still alive",
+        "quote": "Bifteki vom Grill sah aus als wenn es noch lebt",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "Bifteki"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Knoblauchbrot was soggy",
+        "quote": "Knoblauchbrot labberig",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "Knoblauchbrot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they were very stingy with the Zasziki",
+        "quote": "mit Zasziki wurde sehr sparsam umgegangen",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "Zasziki"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer's husband did not get full",
+        "quote": "Mein Mann wurde nicht satt",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the grandmother had the Leber mit Kartoffelpüree",
+        "quote": "Unsere Oma (Leber mit Kartoffelpüree)",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Leber mit Kartoffelpüree"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the grandmother complained about the tiny portion of Kartoffelbrei",
+        "quote": "hat sich über die Miniportion Kartoffelbrei beschwert",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "Kartoffelbrei"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "a whole portion was missing from the packed-up leftovers, apparently forgotten",
+        "quote": "Bei den eingepackten „Resten“ fehlte eine komplette Portion",
+        "sentiment": "negative",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "order_accuracy"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the dishes were chipped, both plates and glasses",
+        "quote": "Das Geschirr angeschlagen, egal ob Teller oder Gläser",
+        "sentiment": "negative",
+        "aspect": "dining_area",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "cleanliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "staff asked a thousand times whether everything was fine",
+        "quote": "Hauptsache man fragt 1000 mal nach, ob alles in Ordnung ist",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were very pushy",
+        "quote": "Sehr aufdringlich",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are completely overpriced",
+        "quote": "Preise sind völlig überteuert",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the menu is very pork-heavy, no Rind except the Leber",
+        "quote": "Die Speisekarte sehr schweinelastig, kein Rind, bis auf die Leber",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "Rind",
+          "Leber"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "not recommended",
+        "quote": "Nicht empfehlenswert",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "not worth another visit for the reviewers",
+        "quote": "für uns kein weiteren Besuch wert",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they would rather go to the restaurant at Orankesee",
+        "quote": "Dann lieber ins Restaurant am Orankesee",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.219Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

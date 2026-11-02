@@ -1,0 +1,726 @@
+{
+  "id": "post-0a8f804b",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "A FAMILY AFFAIR: COUSINS BRINGT NEUE GESCHMÄCKER UND HERZLICHKEIT IN BERLINS EISSZENE\n\nEs gibt wohl kaum etwas auf dieser Welt, das die Stimmung so sehr hebt wie Eis – umso tragischer ist es, mit anzusehen, wie Menschen schon vor Öffnungszeit bei Cousins vorbeischauen. Während Kavita und Marieke noch aufbauen, versammeln sich Berlins Lebenskünstler:innen vor der Terrasse, bereit für großzügige Kugeln, als hätte jemand eine Art Eis-Bat-Signal ausgesendet. Eine Kreidetafel, strategisch platziert, um den Eingang zu blockieren, und mit den Sorten der Woche beschriftet, signalisiert, dass noch geschlossen ist – doch sie weckt die Neugier eher, als sie zu bremsen. Wer es kaum erwarten kann, seinen Gaumen zu verwöhnen, nimmt diese Nachricht zunächst betrübt zur Kenntnis, hellt sich aber schnell wieder auf, sobald man hört, man solle in einer Stunde wiederkommen.\nGeduld ist eine Tugend, und die Torheit derjenigen, die sich woanders einen Eis-Ersatz suchen, kann nicht genug betont werden. Warum? Weil das Eis bei Cousins so gut ist, dass sogar Vanille sich mal wieder schlecht fühlen darf. Andererseits handelt Cousins gar nicht mit schlechten Gefühlen – der ganze Geist des Ladens dreht sich darum, den Raum mit Freund:innen, Familie und Neuankömmlingen gleichermaßen zu teilen.\nKavita und Marieke haben Cousins eröffnet, um die Vielfalt der Freund:innen in ihrem Umfeld zu feiern – ihre Leben, Erfahrungen und Geschichten. Jede Sorte ist eine Hommage an die Menschen, die sie lieben, und an die Communities, denen sie angehören, und bringt Gerichte und Zutaten aus aller Welt auf einzigartige Weise zusammen. Deshalb weckt ein Besuch bei Cousins bei manchen Kindheitserinnerungen, während er bei anderen ganz neue schafft. “Wir haben keine langweiligen Freund:innen”, sagt Kavita lachend. “Deshalb ist auch keine unserer Sorten langweilig.”\nSlushies aus echter Frucht kitzeln die Geschmacksknospen, und Sorten, die von Gochujang-Karamell bis hin zu seidigem Tofu mit Erdnusskrokant und frischem Koriander reichen, entfachen ein Gefühl irgendwo zwischen Tagtraum und Halluzination. Ein besonderer Publikumsliebling ist der “Kaylin”, ein Tamarinden-Slushie mit Zeder-Limettenblatt-Eis, der eine belebende und paradoxe Kombination aus Säure und samtiger Süße liefert, die zugleich kräftig und subtil wirkt.\nKavita und Marieke kreieren außerdem jede Woche eine Geheimsorte, bei der Besucher:innen sowohl die Zutaten als auch das Gericht erraten können, das sie inspiriert hat. Und wie bereits erwähnt: Bei Cousins ist Platz für alle. Hier weicht die Skepsis von Nörgler:innen und sogenannten Purist:innen der Freude, sodass selbst die mürrischsten Kund:innen zufrieden von dannen ziehen. “Wenn ich die Griesgräme lächeln sehe, gibt mir das eine hellere Sicht auf die Welt”, sagt Marieke – und ich merke, dass sie nicht übertreibt. Ich weiß jedenfalls, dass ich meinen eigenen Cousin, der diese Woche zu Besuch ist, später noch dorthin mitnehmen werde!\nText: Michael Kugler / Fotos: Robyn Steffen\nCousins, Paul-Lincke-Ufer 40, 10999 Berlin–Kreuzberg; Stadtplan\n@cousins.icecream",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "0a8f804b-0091-4a23-ac18-c113785f90e7",
+    "externalId": "blog_f76283236563052a413688db",
+    "url": "https://ceecee.cc/a-family-affair-cousins-bringt-neue-geschmaecker-und-herzlichkeit-in-berlins-eisszene/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-08-20T12:54:49.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:44.515Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Cousins",
+        "locationHint": "Paul-Lincke-Ufer 40, 10999 Berlin–Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "04e15e10-890e-49d7-8b67-ae6355f45e0b",
+          "brandName": "Cousins",
+          "venueId": "a1eb2115-43f7-4a6d-8ab8-ad9821e1e127",
+          "venueName": "Cousins"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Cousins opened",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the shop celebrates the diversity of friends and communities around them",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the flavors bring dishes and ingredients from around the world together",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ice cream is so good that even vanilla can feel bad",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "ice cream",
+          "Vanilla"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "slushies are made from real fruit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "slushies"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are flavors from gochujang caramel to silken tofu with peanut brittle and fresh coriander",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kaylin is a tamarind slushie with cedar-lime leaf ice cream",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Kaylin",
+          "tamarind slushie",
+          "cedar-lime leaf ice cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kaylin has a lively mix of acidity and velvety sweetness",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kaylin"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the shop creates a weekly secret flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "visitors can guess the ingredients and the dish that inspired the secret flavor",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "even the grumpiest customers leave satisfied",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:32:15.169Z",
+    "usage": {
+      "inputTokens": 11945,
+      "outputTokens": 6430,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the 'come back in an hour' line (kept optional, read as opening hours with 60 minutes), the weekly secret flavour (a fact about a recurring feature, though new_item is defensible), and splitting the slushie and Kaylin descriptions into fact versus taste claims. Cousins is not called new, so it is not marked as an opening.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Cousins",
+        "locationHint": "Paul-Lincke-Ufer 40, 10999 Berlin–Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "04e15e10-890e-49d7-8b67-ae6355f45e0b",
+          "brandName": "Cousins",
+          "venueId": "a1eb2115-43f7-4a6d-8ab8-ad9821e1e127",
+          "venueName": "Cousins",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "People come by Cousins even before opening time",
+        "quote": "wie Menschen schon vor Öffnungszeit bei Cousins vorbeischauen",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "People gather in front of Cousins' terrace",
+        "quote": "versammeln sich Berlins Lebenskünstler:innen vor der Terrasse",
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cousins serves generous scoops",
+        "quote": "großzügige Kugeln",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "Kugeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "A chalkboard at the entrance lists the flavours of the week",
+        "quote": "mit den Sorten der Woche beschriftet",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Early visitors are told to come back in an hour",
+        "quote": "man solle in einer Stunde wiederkommen",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait",
+            "queue"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Going elsewhere instead of waiting for Cousins is foolish",
+        "quote": "die Torheit derjenigen, die sich woanders einen Eis-Ersatz suchen, kann nicht genug betont werden",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The ice cream at Cousins is so good even vanilla can feel bad",
+        "quote": "das Eis bei Cousins so gut ist, dass sogar Vanille sich mal wieder schlecht fühlen darf",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Eis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cousins' spirit is about sharing the space with friends, family and newcomers",
+        "quote": "der ganze Geist des Ladens dreht sich darum, den Raum mit Freund:innen, Familie und Neuankömmlingen gleichermaßen zu teilen",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kavita and Marieke opened Cousins",
+        "quote": "Kavita und Marieke haben Cousins eröffnet",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Each flavour brings together dishes and ingredients from around the world in a unique way",
+        "quote": "bringt Gerichte und Zutaten aus aller Welt auf einzigartige Weise zusammen",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "A visit to Cousins evokes childhood memories for some",
+        "quote": "weckt ein Besuch bei Cousins bei manchen Kindheitserinnerungen",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "None of Cousins' flavours is boring",
+        "quote": "Deshalb ist auch keine unserer Sorten langweilig.",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The slushies are made from real fruit",
+        "quote": "Slushies aus echter Frucht",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Slushies"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The slushies tickle the taste buds",
+        "quote": "Slushies aus echter Frucht kitzeln die Geschmacksknospen",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Slushies"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Flavours range from Gochujang-Karamell to silky tofu with peanut brittle and fresh coriander",
+        "quote": "Sorten, die von Gochujang-Karamell bis hin zu seidigem Tofu mit Erdnusskrokant und frischem Koriander reichen",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Gochujang-Karamell",
+          "seidigem Tofu mit Erdnusskrokant und frischem Koriander"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The flavours spark a feeling somewhere between daydream and hallucination",
+        "quote": "entfachen ein Gefühl irgendwo zwischen Tagtraum und Halluzination",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Kaylin is a particular crowd favourite",
+        "quote": "Ein besonderer Publikumsliebling ist der “Kaylin”",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kaylin"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Kaylin is a tamarind slushie with cedar-lime-leaf ice cream",
+        "quote": "ein Tamarinden-Slushie mit Zeder-Limettenblatt-Eis",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Kaylin",
+          "Tamarinden-Slushie",
+          "Zeder-Limettenblatt-Eis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Kaylin delivers an invigorating, paradoxical combination of acidity and velvety sweetness, bold and subtle at once",
+        "quote": "eine belebende und paradoxe Kombination aus Säure und samtiger Süße liefert, die zugleich kräftig und subtil wirkt",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kaylin"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Every week Kavita and Marieke create a secret flavour whose ingredients and inspiring dish visitors can guess",
+        "quote": "Kavita und Marieke kreieren außerdem jede Woche eine Geheimsorte",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Geheimsorte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "new_item"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "At Cousins there is room for everyone",
+        "quote": "Bei Cousins ist Platz für alle.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Even the grumpiest customers leave Cousins satisfied",
+        "quote": "sodass selbst die mürrischsten Kund:innen zufrieden von dannen ziehen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The author will take his own cousin to Cousins",
+        "quote": "ich meinen eigenen Cousin, der diese Woche zu Besuch ist, später noch dorthin mitnehmen werde",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cousins is at Paul-Lincke-Ufer 40 in Kreuzberg",
+        "quote": "Cousins, Paul-Lincke-Ufer 40, 10999 Berlin–Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.224Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

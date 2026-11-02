@@ -1,0 +1,350 @@
+{
+  "id": "post-088e18e6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "neotaste.app",
+    "locationName": null,
+    "hashtags": [
+      "döner",
+      "kebab",
+      "steakdöner",
+      "berlindöner",
+      "flashdeal"
+    ],
+    "taggedHandles": [
+      "@fatihservet.de"
+    ],
+    "text": "1€ Döner - 4x in Berlin! 🥙⭐\n📍@fatihservet.de\n🗺️ Warschauer Str., Mall of Berlin, Berlin Hauptbahnhof, Treskowallee 114\n💚 Den Flash Deal findet ihr in der NeoTaste App - Link in Bio!\n#döner #kebab #steakdöner #berlindöner #flashdeal\n/Anzeige",
+    "subtitles": "1 Euro Steak Döner und das viermal in Berlin!\ndas ist 1 limitiertes Angebot nur für eine Woche.\nAB heute bis zum 6. 10..\ngibt es bei 4 Fati Savage Standorten in Berlin\neinen Steak Döner für nur einen Euro,\nwarschauerstraße,\nMall of Berlin, Karlshorst und am Hauptbahnhof.\neinfach den flashdew in der neotaste App einlösen\nund beim bestellen vorzeigen.\naber Achtung,\nes sind nur begrenzte Deals pro Tag und Standort verfügbar.\nalso beeilt euch\nguten Appetit!",
+    "subtitlesLanguage": "deu-DE",
+    "id": "088e18e6-851a-4cbc-bbf0-4f3f5501b947",
+    "externalId": "7691268645607017760",
+    "url": "https://www.tiktok.com/@neotaste.app/video/7691268645607017760",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-30T10:10:13.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:28:16.427Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Fatih Servet",
+        "locationHint": "Warschauer Straße",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "528cd740-6560-4d4f-a178-892c08820dc5",
+          "brandName": "Fatih Servet",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Fatih Servet",
+        "locationHint": "Mall of Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "528cd740-6560-4d4f-a178-892c08820dc5",
+          "brandName": "Fatih Servet",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Fatih Servet",
+        "locationHint": "Berlin Hauptbahnhof",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "528cd740-6560-4d4f-a178-892c08820dc5",
+          "brandName": "Fatih Servet",
+          "venueId": "a9410fe6-5904-4ba4-b008-756913d09048",
+          "venueName": "Fatih Servet Döner"
+        }
+      },
+      {
+        "venueName": "Fatih Servet",
+        "locationHint": "Treskowallee 114 (Karlshorst)",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "528cd740-6560-4d4f-a178-892c08820dc5",
+          "brandName": "Fatih Servet",
+          "venueId": "8f533657-3247-4c9a-b36e-067e793827df",
+          "venueName": "Fatih Servet"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "1€ steak döner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "steak döner"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "four locations in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the flash deal is only for one week",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the deal runs from today until 6.10.",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the steak döner costs only one euro",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "steak döner"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the branches are in Warschauer Straße, Mall of Berlin, Karlshorst and at the Hauptbahnhof",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the flash deal is redeemed in the NeoTaste app",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "payment",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "there are only limited deals per day and location",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:38.421Z",
+    "usage": {
+      "inputTokens": 10465,
+      "outputTokens": 1844,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Paid ad (/Anzeige) for a NeoTaste flash deal; the four branches of Fatih Servet are treated as one venue (transcript's 'Fati Savage' corrected from the tagged account). The deal's duration, redemption and per-day limit are split as deal claims, with the duration and redemption conditions optional since they could stay inside the main deal claim.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Fatih Servet",
+        "locationHint": "Warschauer Str., Mall of Berlin, Berlin Hauptbahnhof, Treskowallee 114 (Karlshorst)",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "528cd740-6560-4d4f-a178-892c08820dc5",
+          "brandName": "Fatih Servet",
+          "venueId": null,
+          "venueName": null,
+          "note": "The post names four Fatih Servet locations (Warschauer Str., Mall of Berlin, Hauptbahnhof, Treskowallee 114), so no single branch can be picked."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Fatih Servet offers a Steak Döner for 1 euro at four Berlin locations",
+        "quote": "1 Euro Steak Döner und das viermal in Berlin!",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Steak Döner"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The 1 euro Steak Döner is a limited offer for one week only, from today until 6 October",
+        "quote": "das ist 1 limitiertes Angebot nur für eine Woche.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability",
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The flash deal is redeemed in the NeoTaste app and shown when ordering",
+        "quote": "einfach den flashdew in der neotaste App einlösen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price",
+            "payment"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Only a limited number of deals are available per day and location",
+        "quote": "es sind nur begrenzte Deals pro Tag und Standort verfügbar.",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Fatih Servet has locations at Warschauer Str., Mall of Berlin, Berlin Hauptbahnhof and Treskowallee 114",
+        "quote": "Warschauer Str., Mall of Berlin, Berlin Hauptbahnhof, Treskowallee 114",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.223Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

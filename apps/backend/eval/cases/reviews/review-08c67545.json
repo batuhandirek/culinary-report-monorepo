@@ -1,0 +1,285 @@
+{
+  "id": "review-08c67545",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "08c67545-194b-4948-a167-3dc4b7274933",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25kMlVqUm1TWGxsYW05bVlVSTBOazlUV2t4UFprRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-13T19:00:19.111Z",
+    "stars": 4,
+    "text": "Das Ambiente war sehr schön und einzigartig.\n\nDas Essen war lecker, mich hat von den vor- und Nachspeisen nichts angesprochen. Daher fand ich die Portion für fast 30€ recht klein. Dazu kommt noch die teure Fahrt mit dem Aufzug.\n\nEs war schön aber für den Preis würde ich es nicht nochmal machen.",
+    "textTranslated": "The ambiance was very nice and unique.\n\nThe food was tasty, but none of the appetizers or desserts appealed to me. Therefore, I found the portion quite small for almost €30. On top of that, the elevator ride was expensive.\n\nIt was nice, but I wouldn't do it again for that price."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:03:02.874Z",
+    "claims": [
+      {
+        "text": "the ambiance was very nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the ambiance was unique",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food was tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "none of the appetizers appealed to me",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "appetizers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "none of the desserts appealed to me",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portion was quite small",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "almost €30",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 30,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "the elevator ride was expensive",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I wouldn't do it again for that price",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:48.026Z",
+    "usage": {
+      "inputTokens": 5137,
+      "outputTokens": 1682,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the small portion for almost 30€ is read as value_for_money (portion_size also allowed); the expensive elevator ride is an added cost (extra_charges, or price_level); 'none of the starters or desserts appealed' is read as menu choice, and course categories are not counted as foods.",
+    "claims": [
+      {
+        "text": "the ambiance was very nice and unique",
+        "quote": "Das Ambiente war sehr schön und einzigartig.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food was tasty",
+        "quote": "Das Essen war lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "none of the starters or desserts appealed to the reviewer",
+        "quote": "mich hat von den vor- und Nachspeisen nichts angesprochen",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the portion was quite small for almost 30€",
+        "quote": "fand ich die Portion für fast 30€ recht klein",
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": 30,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "portion_size"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the elevator ride was expensive on top",
+        "quote": "Dazu kommt noch die teure Fahrt mit dem Aufzug.",
+        "sentiment": "negative",
+        "aspect": "extra_charges",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it was nice",
+        "quote": "Es war schön",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer would not do it again for the price",
+        "quote": "für den Preis würde ich es nicht nochmal machen",
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "price_level"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.202Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.401Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

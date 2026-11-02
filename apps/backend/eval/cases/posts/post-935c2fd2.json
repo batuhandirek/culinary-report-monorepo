@@ -1,0 +1,140 @@
+{
+  "id": "post-935c2fd2",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "kyhvf6",
+    "locationName": null,
+    "hashtags": [
+      "gastronomie",
+      "restaurant",
+      "essengehen",
+      "essen",
+      "inflation"
+    ],
+    "taggedHandles": [],
+    "text": "Laut aktuellen Zahlen ist der Umsatz in der Gastronomie in Deutschland um 4 Prozent zurückgegangen. Restaurant Besuche sind den Deutschen zu teuer geworden. #Gastronomie #restaurant #essengehen #essen #inflation @Kemal Üres | Gastro-Flüsterer @ReDo - Gastro Coach @Gastronomicus 3.0",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "935c2fd2-f658-4c26-9aee-7183242163e1",
+    "externalId": "7615538139876166926",
+    "url": "https://www.tiktok.com/@kyhvf6/video/7615538139876166926",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-10T08:19:13.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:27:08.896Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "restaurant revenue in Germany fell by 4 percent",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price",
+        "foods": [],
+        "amount": 4,
+        "unit": "money",
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "restaurant visits have become too expensive for Germans",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:45:20.783Z",
+    "usage": {
+      "inputTokens": 6006,
+      "outputTokens": 936,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named, and the claims concern Germany's restaurant industry, not Berlin, so they take subject none. The 4 percent figure is neither minutes nor money, so it has no amount. The fall in revenue is treated as a fact, not a change, because change applies only to a single place.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "restaurant revenue in Germany fell by 4 percent according to current figures",
+        "quote": "der Umsatz in der Gastronomie in Deutschland um 4 Prozent zurückgegangen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "restaurant visits have become too expensive for Germans",
+        "quote": "Restaurant Besuche sind den Deutschen zu teuer geworden",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): A national revenue statistic fits no specific aspect, so null and the catch-all 'other' are both defensible."
+      },
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

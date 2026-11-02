@@ -1,0 +1,464 @@
+{
+  "id": "post-73286ffe",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "heitlinger_official",
+    "locationName": null,
+    "hashtags": [
+      "heitlinger",
+      "brasserie",
+      "food",
+      "kraichgau",
+      "fyp"
+    ],
+    "taggedHandles": [],
+    "text": "AB DEM 1. NOVEMBER: HEITLINGER BRASSERIE ✨\n\nAus unserem Restaurant im Weingut Heitlinger wird die Heitlinger Brasserie – modernisiert, mit neuem Konzept und vertrauten Klassikern vom Hotel Kreuzberghof und Restaurant Albatros.\n\nFreut euch auf regionale Küche, saisonale Gerichte und besondere Abende in neuer Atmosphäre.\n\nAm 1. November geht‘s ab 12 Uhr los. Wir freuen uns auf euren Besuch!\\ud83d\\ude0a\n\n\\ud83d\\udccdHeitlinger Brasserie • Am Mühlberg 3, 76684 Tiefenbach\n\nÖffnungszeiten von November bis Februar:\nMo–Sa · 17–22 Uhr\nSo · 12–20 Uhr\n\n#heitlinger #brasserie #food #kraichgau #fyp ",
+    "subtitles": "ihr habt danach gefragt\ndann bekommt ihrs natürlich auch wieder\nunser Restaurant im Weingut heidlinger\nmodernisiert jetzt als heidlinger brasserie\nAB November bis Februar haben wir wieder für euch\njedes Jahr geöffnet\nnatürlich findet ihr auf unserer Karte auch Klassiker\nAus dem Hotel kreuzberghof und dem\nRestaurant Albatros\nwir freuen uns auf euch",
+    "subtitlesLanguage": "de",
+    "id": "73286ffe-f19f-4961-94d8-f4c225250167",
+    "externalId": "7696536037136370977",
+    "url": "https://www.tiktok.com/@heitlinger_official/video/7696536037136370977",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-14T14:50:43.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:42:59.590Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Heitlinger Brasserie",
+        "locationHint": "Am Mühlberg 3, 76684 Tiefenbach; Weingut Heitlinger",
+        "city": "",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the restaurant is being modernized as Heitlinger Brasserie",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place has a new concept",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it serves regional cuisine",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it serves seasonal dishes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it has classics from Hotel Kreuzberghof and Restaurant Albatros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it opens on 1 November at 12:00",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is open from November to February",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the opening hours are Monday to Saturday 17:00-22:00",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the opening hours are Sunday 12:00-20:00",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:23:57.213Z",
+    "usage": {
+      "inputTokens": 10596,
+      "outputTokens": 3775,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Promotional post by the venue itself, outside Berlin (Tiefenbach, Kraichgau). The hard call is the opening flag: this is the existing winery restaurant renamed and modernised for its seasonal reopening, so I treated it as a change rather than a new opening. Hotel Kreuzberghof and Restaurant Albatros are only named as the source of the brasserie's classics, so I did not list them as places.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Heitlinger Brasserie",
+        "locationHint": "Weingut Heitlinger, Am Mühlberg 3, 76684 Tiefenbach (Kraichgau)",
+        "city": "Tiefenbach",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the restaurant at Weingut Heitlinger becomes the Heitlinger Brasserie from 1 November",
+        "quote": "Aus unserem Restaurant im Weingut Heitlinger wird die Heitlinger Brasserie",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie has been modernised",
+        "quote": "modernisiert",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie has a new concept",
+        "quote": "mit neuem Konzept",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie menu keeps familiar classics from Hotel Kreuzberghof and Restaurant Albatros",
+        "quote": "vertrauten Klassikern vom Hotel Kreuzberghof und Restaurant Albatros",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie offers regional cuisine and seasonal dishes",
+        "quote": "regionale Küche, saisonale Gerichte",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie promises special evenings in a new atmosphere",
+        "quote": "besondere Abende in neuer Atmosphäre",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie opens on 1 November from 12:00",
+        "quote": "Am 1. November geht‘s ab 12 Uhr los",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "from November to February the Heitlinger Brasserie is open Monday to Saturday 17:00–22:00",
+        "quote": "Mo–Sa · 17–22 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "from November to February the Heitlinger Brasserie is open Sunday 12:00–20:00",
+        "quote": "So · 12–20 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Heitlinger Brasserie is at Am Mühlberg 3, 76684 Tiefenbach",
+        "quote": "Am Mühlberg 3, 76684 Tiefenbach",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant is open again every year from November to February",
+        "quote": "AB November bis Februar haben wir wieder für euch\njedes Jahr geöffnet",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "guests asked for the restaurant to reopen",
+        "quote": "ihr habt danach gefragt",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): A new concept fits no finer aspect, so null and 'other' are both defensible."
+      },
+      {
+        "at": "2026-11-01T15:11:31.439Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.240Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.431Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

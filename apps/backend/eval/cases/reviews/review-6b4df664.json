@@ -1,0 +1,394 @@
+{
+  "id": "review-6b4df664",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "6b4df664-bd8f-4049-a43c-c26c907e6dc4",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tvMk1IVkRaVnBVZDB4V1NXWldlRFpmV2tWcVdHYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-09T09:07:44.414Z",
+    "stars": 4,
+    "text": "Das Essen war insgesamt sehr gut und besonders die Aussicht ist natürlich ein echtes Highlight. Ich hatte die Königsberger Klopse vom Kalb mit Roter Bete und Kartoffelpüree – geschmacklich wirklich gelungen und schön präsentiert. Auch das Ambiente und das gesamte Erlebnis haben einen positiven Eindruck hinterlassen.\n\nEinen kleinen Abzug gibt es allerdings beim Service: Das Personal könnte meiner Meinung nach etwas freundlicher und aufmerksamer sein. Insgesamt trotzdem ein schöner Besuch und definitiv eine Erfahrung wert.",
+    "textTranslated": "The food was very good overall, and the view was definitely a highlight. I had the Königsberger Klopse (veal meatballs) with beetroot and mashed potatoes – they were delicious and beautifully presented. The ambiance and the entire experience also left a positive impression.\n\nHowever, there is one small drawback: the staff could have been a bit friendlier and more attentive. Nevertheless, it was a lovely visit and definitely worth experiencing."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:44:47.734Z",
+    "claims": [
+      {
+        "text": "the food was very good overall",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the view was a highlight",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had the Königsberger Klopse",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Königsberger Klopse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Königsberger Klopse were with beetroot and mashed potatoes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Königsberger Klopse",
+          "beetroot",
+          "mashed potatoes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Königsberger Klopse were delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Königsberger Klopse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the Königsberger Klopse were beautifully presented",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Königsberger Klopse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the ambiance left a positive impression",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the entire experience left a positive impression",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff could have been a bit friendlier",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff could have been more attentive",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was a lovely visit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was definitely worth experiencing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:09.859Z",
+    "usage": {
+      "inputTokens": 5290,
+      "outputTokens": 2799,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the general 'small deduction for the service' line is optional because the two staff claims (friendliness, attentiveness) carry it. Ambience and whole experience share one sentence and are split into atmosphere and a verdict-like overall impression. The dish claim is kept as a neutral fact with the Klopse, Roter Bete and Kartoffelpüree named as written.",
+    "claims": [
+      {
+        "text": "the food was very good overall",
+        "quote": "Das Essen war insgesamt sehr gut",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the view is a real highlight",
+        "quote": "besonders die Aussicht ist natürlich ein echtes Highlight",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had the Königsberger Klopse vom Kalb with Roter Bete and Kartoffelpüree",
+        "quote": "Ich hatte die Königsberger Klopse vom Kalb mit Roter Bete und Kartoffelpüree",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Königsberger Klopse vom Kalb",
+          "Roter Bete",
+          "Kartoffelpüree"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Königsberger Klopse were really successful in taste",
+        "quote": "geschmacklich wirklich gelungen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Königsberger Klopse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Königsberger Klopse were nicely presented",
+        "quote": "schön präsentiert",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Königsberger Klopse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the ambience left a positive impression",
+        "quote": "Auch das Ambiente und das gesamte Erlebnis haben einen positiven Eindruck hinterlassen",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the whole experience left a positive impression",
+        "quote": "das gesamte Erlebnis haben einen positiven Eindruck hinterlassen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "a small deduction for the service",
+        "quote": "Einen kleinen Abzug gibt es allerdings beim Service",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff could be somewhat friendlier",
+        "quote": "Das Personal könnte meiner Meinung nach etwas freundlicher",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff could be more attentive",
+        "quote": "Das Personal könnte meiner Meinung nach etwas freundlicher und aufmerksamer sein",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "overall still a lovely visit",
+        "quote": "Insgesamt trotzdem ein schöner Besuch",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "definitely worth the experience",
+        "quote": "definitiv eine Erfahrung wert",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.211Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

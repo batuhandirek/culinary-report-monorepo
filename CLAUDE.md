@@ -14,7 +14,7 @@ Monorepo (npm workspaces + Turborepo):
 
 The CLAUDE.md files hold only cross-cutting conventions. Everything about a domain — its entities, invariants, flows, quirks, which service is the one entry point — is in a skill. **Load the skill before working in its area**, and when a change alters one of its statements, fix the skill in the same change. A new domain gets its own `domain-*` skill.
 
-- Procedures: `backend-endpoint`, `backend-entity`, `pglite-test`, `integration-test`, `fsm-machine`, `run-app`, `task-workflow`.
+- Procedures: `backend-endpoint`, `backend-entity`, `pglite-test`, `integration-test`, `fsm-machine`, `run-app`, `task-workflow`, `ingestion-eval` (scoring the ingestion agents against Opus-written references: run it before and after changing one).
 - Domains (backend + frontend together): `domain-venues-and-reports` (the product: scraping, matching, reports, the pipeline), `domain-outreach` (selling the report: prospects, the outreach log, follow-ups, email templates), `domain-identity-and-auth`, `domain-users-and-profile`, `domain-notifications-and-email`, `domain-blog` (the public blog and its admin editor).
 - Brand: `brand` (name, voice, series names, title patterns, public guardrails), before writing any copy the public, a creator or a venue reads.
 - Frontend cross-cutting: `design-system`, `seo-and-ssr`, `admin-ui`.

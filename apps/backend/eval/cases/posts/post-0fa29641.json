@@ -1,0 +1,380 @@
+{
+  "id": "post-0fa29641",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "cannoliamoci",
+    "locationName": "Kreuzberg, Berlin, Germany",
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "berlinguide",
+      "kreuzbergfood",
+      "kreuzberg"
+    ],
+    "taggedHandles": [
+      "magma.berlin",
+      "lamaisonberlin.",
+      "fiveelephant",
+      "voostore",
+      "antonialingemann",
+      "koeniggalerie",
+      "westberlin_de",
+      "barravalberlin",
+      "yummyvintageofficial",
+      "__ingwer",
+      "anneliesberlin",
+      "lamaisonberlin",
+      "originalfeelingsstudio"
+    ],
+    "text": "welcome to my berlin guide, kreuzberg edition!! ☕️\n\nsoo, since you loved the first part, i’m sharing some spots in my neighborhood that i genuinely love and keep coming back to. hope you’ll love them as much as i do. \nlet me know if there’s anything you would add! \neverything is tagged, so you can save this post for later \n\np.s. first photo is from @magma.berlin, last one from @lamaisonberlin. i already mentioned them last time, but they def deserve a spot in my kreuzberg tops.  \n#berlin #berlinfood #berlinguide #kreuzbergfood #kreuzberg",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "0fa29641-9b9f-44ef-b433-a75860f4709c",
+    "externalId": "ig_4011319667813383446",
+    "url": "https://www.instagram.com/p/DerEfwojf0W/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-19T10:43:09.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:52.019Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Magma Berlin",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "476ddaf3-e529-44e2-80bf-17e10c7946c0",
+          "brandName": "Magma",
+          "venueId": "26af2bba-5b99-494f-9b20-a2a55bbf2477",
+          "venueName": "Magma"
+        }
+      },
+      {
+        "venueName": "La Maison Berlin",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "dcb39aeb-f7b0-4952-a773-dbb7d8d0c6db",
+          "brandName": "La Maison Berlin",
+          "venueId": "6814d4e9-8c77-4758-af7c-c990262ede8c",
+          "venueName": "La Maison Berlin"
+        }
+      },
+      {
+        "venueName": "Five Elephant",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "f8227b89-569e-4c5d-81a3-b0f0c5af6f27",
+          "brandName": "Five Elephant",
+          "venueId": "a246b8cb-1fc7-4c58-92ac-636e3b53fa8d",
+          "venueName": "Five Elephant Kreuzberg"
+        }
+      },
+      {
+        "venueName": "Voo Store",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Barraval Berlin",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "fc4c1d41-2852-436c-beac-2ad1bafec1b0",
+          "brandName": "Bar Raval",
+          "venueId": "515efea6-09d2-47b2-889c-db336127b16c",
+          "venueName": "Bar Raval"
+        }
+      },
+      {
+        "venueName": "Annelies Berlin",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "3fbcc763-e313-439e-acee-241c3a995c3d",
+          "brandName": "annelies",
+          "venueId": "83439320-5265-4fc2-bb8a-6f9408380a9d",
+          "venueName": "annelies"
+        }
+      },
+      {
+        "venueName": "Westberlin",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "2d79ee24-77a4-4fd9-aef1-2d24d8885ab8",
+          "brandName": "westberlin",
+          "venueId": "5cb58d74-e541-4585-aad9-8ae4730afb14",
+          "venueName": "westberlin"
+        }
+      },
+      {
+        "venueName": "Original Feelings Studio",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Yummy Vintage Official",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Antonia Lingemann",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Koenig Galerie",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "__ingwer",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "7b385c6c-0a45-44ae-804d-1e440738877f",
+          "brandName": "Ingwer",
+          "venueId": "13476480-9d55-413b-92e5-685ea5472442",
+          "venueName": "Ingwer"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "this is a Berlin guide, Kreuzberg edition",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "these are spots in the creator's neighborhood that they genuinely love and keep coming back to",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the post has everything tagged so it can be saved for later",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:19:50.198Z",
+    "usage": {
+      "inputTokens": 13803,
+      "outputTokens": 2117,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Only Magma and La Maison are named in the caption with something said about them; the other mentioned accounts (Five Elephant, Westberlin, Annelies, etc.) are only tagged with no specific claim, and several are shops, galleries or people, so they are left out. The general 'spots I love' line is kept as an optional city-level claim.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Magma",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "476ddaf3-e529-44e2-80bf-17e10c7946c0",
+          "brandName": "Magma",
+          "venueId": "26af2bba-5b99-494f-9b20-a2a55bbf2477",
+          "venueName": "Magma",
+          "note": null
+        }
+      },
+      {
+        "venueName": "La Maison",
+        "locationHint": "Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "dcb39aeb-f7b0-4952-a773-dbb7d8d0c6db",
+          "brandName": "La Maison Berlin",
+          "venueId": "6814d4e9-8c77-4758-af7c-c990262ede8c",
+          "venueName": "La Maison Berlin",
+          "note": "The handle @lamaisonberlin and the Kreuzberg context fit La Maison Berlin on Paul-Lincke-Ufer, not the Neukölln bakery or the Urbanstraße boutique."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Magma deserves a spot in the author's Kreuzberg top places",
+        "quote": "they def deserve a spot in my kreuzberg tops",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "La Maison deserves a spot in the author's Kreuzberg top places",
+        "quote": "they def deserve a spot in my kreuzberg tops",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the author genuinely loves and keeps coming back to these spots in Kreuzberg",
+        "quote": "spots in my neighborhood that i genuinely love and keep coming back to",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.434Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.224Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.420Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

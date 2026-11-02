@@ -1,0 +1,617 @@
+{
+  "id": "post-d220e97c",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "_justjaime_",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlin"
+    ],
+    "taggedHandles": [
+      "akkurat.cafe",
+      "dave_doppio",
+      "goldies.bar",
+      "goldies______",
+      "vladi_ga_ching",
+      "gazzopizza.",
+      "_tarasky",
+      "linuskoester",
+      "phoenixcoffeeroasters",
+      "slowpoursupply",
+      "_bettina.mc_",
+      "gazzopizza"
+    ],
+    "text": "[Unpaid advertisement] - Another delicious day in Berlin… \n\n- Started the day at @akkurat.cafe and visiting @dave_doppio behind the bar. Beautiful breakfast & coffee…and even more beautiful people! What a treat 🙏🏻♥️.\n- Somehow we ended up shopping at KaDeWe and visited @goldies.bar (from the same guys behind @goldies______). To my surprise @vladi_ga_ching was there and I asked him if they still had their steakhouse burger today or if it was sold out…and guess what, only one was left…and it was mine hehe. That burger is lit 🔥😮‍💨 and if you haven’t tried it yet…you should!\n- And ending the day in \"Kreuzkölln“ at one of my favorite pizza places @gazzopizza. That pumpkin pizza was also on point! Mouth watering… And the house lemonade. Give me 5 liters of it please! \n\n🫶🏻🫰🏻 // #berlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "d220e97c-5678-4c14-976d-01576419d1eb",
+    "externalId": "ig_4013772423207974814",
+    "url": "https://www.instagram.com/p/DezyMDGkfee/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-22T19:56:20.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-23T04:00:50.828Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Akkurat Café",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "89398a23-77e1-4c64-b7b7-38caa38e0113",
+          "brandName": "AKKURAT Café",
+          "venueId": "088f8c5a-f14e-4e35-844e-70821fa587c4",
+          "venueName": "AKKURAT Café"
+        }
+      },
+      {
+        "venueName": "Goldies",
+        "locationHint": "KaDeWe",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "a6e7c45e-09b7-4788-b313-f3e6b550586e",
+          "brandName": "goldies",
+          "venueId": "94940837-240a-402a-abb7-69ef2d781d7e",
+          "venueName": "goldies"
+        }
+      },
+      {
+        "venueName": "Gazzo Pizza",
+        "locationHint": "Kreuzkölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "a91219f4-06b9-47a2-a1de-43202c26f706",
+          "brandName": "Gazzo",
+          "venueId": "b36ef7d4-33c5-4171-8726-06235647603f",
+          "venueName": "Gazzo"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "delicious breakfast",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "breakfast"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "coffee was beautiful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "even more beautiful people",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "burger is lit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "steakhouse burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "only one was left",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "steakhouse burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "pumpkin pizza was on point",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pumpkin pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "house lemonade was great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "house lemonade"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:51:11.831Z",
+    "usage": {
+      "inputTokens": 15100,
+      "outputTokens": 4776,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Labelled 'Unpaid advertisement' (German disclosure for tagging), so not treated as promotional. KaDeWe is used only as Goldies Bar's location and @goldies______ is mentioned only as the owners' other venue, so neither is listed as a place; the 'beautiful people' praise was read as staff friendliness.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Akkurat Café",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "89398a23-77e1-4c64-b7b7-38caa38e0113",
+          "brandName": "AKKURAT Café",
+          "venueId": "088f8c5a-f14e-4e35-844e-70821fa587c4",
+          "venueName": "AKKURAT Café",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Goldies Bar",
+        "locationHint": "KaDeWe",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Goldies Bar is a separate venue at KaDeWe from the team behind goldies, and none of the goldies branches is at KaDeWe."
+        }
+      },
+      {
+        "venueName": "Gazzo Pizza",
+        "locationHint": "Kreuzkölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "a91219f4-06b9-47a2-a1de-43202c26f706",
+          "brandName": "Gazzo",
+          "venueId": "b36ef7d4-33c5-4171-8726-06235647603f",
+          "venueName": "Gazzo",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "another delicious day in Berlin",
+        "quote": "Another delicious day in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "started the day at Akkurat Café",
+        "quote": "Started the day at @akkurat.cafe",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "@dave_doppio was behind the bar at Akkurat Café",
+        "quote": "visiting @dave_doppio behind the bar",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the breakfast at Akkurat Café was beautiful",
+        "quote": "Beautiful breakfast",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the coffee at Akkurat Café was beautiful",
+        "quote": "Beautiful breakfast & coffee",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the people at Akkurat Café are even more beautiful",
+        "quote": "even more beautiful people",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the visit to Akkurat Café was a treat",
+        "quote": "What a treat",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Goldies Bar is from the same guys behind Goldies",
+        "quote": "from the same guys behind @goldies______",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "@vladi_ga_ching was at Goldies Bar",
+        "quote": "@vladi_ga_ching was there",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "only one steakhouse burger was left at Goldies Bar and the creator got it",
+        "quote": "only one was left…and it was mine",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "steakhouse burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the steakhouse burger at Goldies Bar is lit",
+        "quote": "That burger is lit 🔥",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "steakhouse burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "you should try the steakhouse burger at Goldies Bar if you haven't yet",
+        "quote": "if you haven’t tried it yet…you should!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "steakhouse burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Gazzo Pizza is in Kreuzkölln",
+        "quote": "in \"Kreuzkölln“ at one of my favorite pizza places @gazzopizza",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Gazzo Pizza is one of the creator's favorite pizza places",
+        "quote": "one of my favorite pizza places",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the pumpkin pizza at Gazzo Pizza was on point",
+        "quote": "That pumpkin pizza was also on point!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pumpkin pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the pumpkin pizza at Gazzo Pizza was mouth watering",
+        "quote": "Mouth watering",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pumpkin pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the creator wants 5 liters of the house lemonade at Gazzo Pizza",
+        "quote": "And the house lemonade. Give me 5 liters of it please!",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "house lemonade"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

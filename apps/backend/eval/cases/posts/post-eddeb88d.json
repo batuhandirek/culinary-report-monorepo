@@ -1,0 +1,333 @@
+{
+  "id": "post-eddeb88d",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "mikuna.paraelalma",
+    "locationName": "Tupac Berlin",
+    "hashtags": [
+      "brunchberlin",
+      "latinosenberlin",
+      "popupberlin",
+      "ecuatorianosenalemania",
+      "berlinfoodie"
+    ],
+    "taggedHandles": [
+      "tupacberlin"
+    ],
+    "text": "🐆TUPAC invites MIKUNA - BRUNCH POP UP 🐆\nWe’re so excited to invite you to our very first brunch!\n A big thank you to our friends at @tupacberlin for giving us the chance to bring Ecuadorian flavors to your table.\n\n🗓️ Sunday 25.10 | 11am till 4pm\n📍 Tupac, Oranienstraße 170, 10999 Berlin\n❗ Reservations recommended*\n💳 Cash only \n💌 DM us for any questions\n\n*Quantities are limited, so we highly suggest booking through Tupac’s reservation system @tupacberlin  \n\nWe will be sharing the menu in the following days... Stay Tuned!\n\nWith Love,\n🌺MIKUNA para EL ALMA🌺\n\n__\n\n🐆TUPAC invita a MIKUNA - BRUNCH POP UP🐆 \n¡Estamos felices de invitarlxs a nuestro primer brunch!\nUn gracias enorme a nuestrxs amigxs de Tupac por darnos la oportunidad de traer sabores ecuatorianos a su mesa ❤️‍🔥\n\n🗓️ Domingo 25.10 | 11am a 4pm\n📍 Tupac, Oranienstraße 170, 10999 Berlin\n❗ Se recomienda reservar*\n💌 Escríbannos por DM si tienen alguna pregunta\n💳 Solo efectivo\n\n*Las cantidades son limitadas, así que les sugerimos reservar a través del sistema de reservas de Tupac @tupacberlin\n\n¡Compartiremos el menú en los próximos días... estén atentxs! 👀\n\nCon cariño,\n🌺MIKUNA para EL ALMA🌺\n\n#brunchberlin #latinosenberlin #popupberlin #ecuatorianosenalemania #berlinfoodie",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "eddeb88d-1dd9-48b5-b4d7-32984d86e1cf",
+    "externalId": "ig_4009200628704806235",
+    "url": "https://www.instagram.com/p/DejirrrOQVb/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-16T12:33:03.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:55:02.115Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Tupac Berlin",
+        "locationHint": "Oranienstraße 170, 10999 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "103e8ea5-bc3f-416a-9e1d-29a9e5fbe7a9",
+          "brandName": "Tupac Berlin",
+          "venueId": "c593adea-d3ee-4b0a-862d-044f839540ed",
+          "venueName": "Tupac Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "hosting the brunch pop-up",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "reservations recommended and cash only",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:34.767Z",
+    "usage": {
+      "inputTokens": 10428,
+      "outputTokens": 2527,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Promotional pop-up announcement by MIKUNA at Tupac; MIKUNA is a pop-up concept with no venue of its own, so it is not listed as a place and the event details are attributed to the host Tupac. The bilingual caption repeats itself, so quotes come from the English half.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Tupac",
+        "locationHint": "Oranienstraße 170, 10999 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "103e8ea5-bc3f-416a-9e1d-29a9e5fbe7a9",
+          "brandName": "Tupac Berlin",
+          "venueId": "c593adea-d3ee-4b0a-862d-044f839540ed",
+          "venueName": "Tupac Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Tupac hosts the MIKUNA brunch pop-up",
+        "quote": "TUPAC invites MIKUNA - BRUNCH POP UP",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The pop-up is MIKUNA's very first brunch",
+        "quote": "our very first brunch",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The pop-up brings Ecuadorian flavors to the table at Tupac",
+        "quote": "bring Ecuadorian flavors to your table",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety",
+            "authenticity"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The brunch pop-up takes place Sunday 25.10 from 11am till 4pm",
+        "quote": "Sunday 25.10 | 11am till 4pm",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Tupac is at Oranienstraße 170, 10999 Berlin",
+        "quote": "Tupac, Oranienstraße 170, 10999 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Reservations are recommended for the brunch",
+        "quote": "Reservations recommended",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The brunch is cash only",
+        "quote": "Cash only",
+        "sentiment": "neutral",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Quantities at the brunch are limited",
+        "quote": "Quantities are limited",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Booking is through Tupac's reservation system",
+        "quote": "booking through Tupac’s reservation system",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The brunch menu will be shared in the following days",
+        "quote": "We will be sharing the menu in the following days",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): Brunch is a general meal word like \"meal\", which the instructions say is never a food."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): Brunch names a meal occasion, not a specific food, so foods should be empty."
+      },
+      {
+        "at": "2026-11-01T21:36:47.254Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.442Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

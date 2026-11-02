@@ -1,0 +1,44 @@
+{
+  "id": "term-5099",
+  "kind": "term",
+  "tags": [
+    "used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 5099,
+    "key": "black sticky rice",
+    "name": "black sticky rice",
+    "uses": 2
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": "Rice"
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:56:26.121Z",
+    "usage": {
+      "inputTokens": 172,
+      "outputTokens": 98,
+      "cachedInputTokens": 34,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "topics": [],
+    "alsoAcceptable": [
+      "dessert"
+    ],
+    "suggestion": "Sticky rice",
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.465Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

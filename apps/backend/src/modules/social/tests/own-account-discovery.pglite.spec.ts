@@ -238,8 +238,6 @@ describe('finding brands’ own accounts (pglite)', () => {
 				brand: venue.brand,
 				matchMethod: MentionMatchMethodEnum.EXACT,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Nice.',
 			});
 			await em.flush();
 		};

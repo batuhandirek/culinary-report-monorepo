@@ -1,0 +1,738 @@
+{
+  "id": "post-524765b0",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "EIN GRIECHISCHER SONNTAG IM GRAEFEKIEZ: KÍRKĒ DELI IN DER BÖCKHSTRASSE\n\nWer immer wieder auf der Suche nach neuen Restaurants, Cafés und Bäckereien ist, wird meist im Graefekiez fündig. Diesmal in Deli-Form: Kírkē auf der Böckhstraße ist ein wahr gewordener Traum für alle, die es herzhaft mögen. Hinter Kírkē stecken Tenia Dimakopoulou und Jannis Avramidis, zwei langjährige Freund:innen, die beschlossen, mit dem Deli ein gemeinsames Projekt zu starten. Sie stand als Bar-Chefin hinter dem Tresen im Primitiv, er als Grillmeister in der Torbar. Tenia wuchs in Piräus auf, Jannis in Thessaloniki, beide nennen Berlin seit über zehn Jahren ihr Zuhause. Gemeinsam haben sie ein intimes Nachbarschafts-Deli mit Weinbar geschaffen: ein Ort zum Verweilen bei gutem Essen und ein paar Gläsern griechischem Wein. Und genau beim Wein setzen wir an.\nKírkē ist der passende Ort, wenn Du Dich nach griechischem Wein sehnst. Wir haben uns für den Vorias & Helios Orange Assyrtiko entschieden, den wir zunächst als einzelnes Glas bestellen – woraus später eine ganze Flasche wurde. Wir sitzen draußen, während die letzten Sonnenstrahlen des Tages auf uns scheinen. Beim Essen starten wir, wie es sich für ein Deli gehört, mit einem der Sandwiches. Wir empfehlen das mit Pilzen und Trüffeln.\nWer wie ich eine Vorliebe für Herzhaftes hat, findet in den Sardinen mit griechischem Safran und der Käseplatte die perfekte Begleitung zum Orange Wein. Die Platte kommt mit griechischem Honig, verschiedenen Nüssen und einer hausgemachten Pilzkonfitüre. Ein Großteil der Karte orientiert sich an den Produkten selbst: Käse, Wurstwaren sowie Konserven stammen aus Griechenland, und die Gerichte entstehen um das herum, was gerade im Laden vorrätig ist. Im Herzen stehen die Deli-Sandwiches, begleitet von Meze mit Meeresfrüchten und Gemüse, die je nach Thekenangebot wechseln.\nDer Sonntag hat sein eigenes Ritual: fünf Meze zum Tsipouro, eine kleine griechische Sonntagstradition, die man sich im Graefekiez teilt. Drinnen wurde der Raum von Freund und Architekt Johann Muehlthaler gestaltet – reduziert und dennoch wohnlich. Die Plätze draußen sind perfekt für laue Sommerabende, während es drinnen genauso warm und einladend zugeht. Also auch bei Berliner Kälte ein gemütlicher Rückzugsort. Mittlerweile lädt Kírkē außerdem Sommeliers und Winzer:innen zu Gastauftritten rund um griechischen Wein ein, dazu Pop-ups mit anderen Berliner Köch:innen. Am besten kommst Du hungrig, bestellst mehr, als Du vorhattest, und überlässt die Weinwahl mal jemand anderem!\nText: Stefania Basano / Fotos: Aditya Christian\nKírkē Deli, Böckhstr.50, 10967 Berlin–Kreuzberg; Stadtplan\n@kirke.deli.berlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "524765b0-449f-4791-807d-717142a2c6b9",
+    "externalId": "blog_c82870e22e76bcea811976b4",
+    "url": "https://ceecee.cc/ein-griechischer-sonntag-im-graefekiez-kirke-deli-in-der-boeckhstrasse/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-08-27T14:05:05.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:48.645Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Kírkē Deli",
+        "locationHint": "Böckhstraße 50, Graefekiez",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "d3adcc17-9b60-45a0-92ad-66f1b53cb5fe",
+          "brandName": "Kírkē",
+          "venueId": "742390e8-68f2-462d-a156-2612451e26ff",
+          "venueName": "Kírkē"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "hearty food and good Greek wine",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "nice place to sit outside on warm evenings",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "intimate, cozy and welcoming inside",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "reduced but still homely design",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "menu built around whatever products are currently in stock",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "good Greek wine focus",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:39:45.355Z",
+    "usage": {
+      "inputTokens": 11781,
+      "outputTokens": 7153,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Opening status is borderline: the article frames Kírkē as one of the Graefekiez's new places without saying 'opened' outright, so I marked it new. Primitiv and Torbar are named only as the founders' former workplaces, so they are not listed as places and that sentence is kept as an ownership fact about Kírkē.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Kírkē Deli",
+        "locationHint": "Böckhstr. 50, 10967 Berlin-Kreuzberg (Graefekiez)",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "d3adcc17-9b60-45a0-92ad-66f1b53cb5fe",
+          "brandName": "Kírkē",
+          "venueId": "742390e8-68f2-462d-a156-2612451e26ff",
+          "venueName": "Kírkē",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "People looking for new restaurants, cafés and bakeries usually find them in the Graefekiez",
+        "quote": "Wer immer wieder auf der Suche nach neuen Restaurants, Cafés und Bäckereien ist, wird meist im Graefekiez fündig",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Kírkē is a dream come true for everyone who likes savoury food",
+        "quote": "ein wahr gewordener Traum für alle, die es herzhaft mögen",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē is run by Tenia Dimakopoulou and Jannis Avramidis, two longtime friends who started the deli as a joint project",
+        "quote": "Hinter Kírkē stecken Tenia Dimakopoulou und Jannis Avramidis, zwei langjährige Freund:innen, die beschlossen, mit dem Deli ein gemeinsames Projekt zu starten.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Tenia was bar chief at Primitiv and Jannis grill master at Torbar",
+        "quote": "Sie stand als Bar-Chefin hinter dem Tresen im Primitiv, er als Grillmeister in der Torbar.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Tenia grew up in Piraeus and Jannis in Thessaloniki; both have lived in Berlin for over ten years",
+        "quote": "Tenia wuchs in Piräus auf, Jannis in Thessaloniki, beide nennen Berlin seit über zehn Jahren ihr Zuhause.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē is an intimate neighbourhood deli with a wine bar",
+        "quote": "ein intimes Nachbarschafts-Deli mit Weinbar",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē is a place to linger over good food and a few glasses of Greek wine",
+        "quote": "ein Ort zum Verweilen bei gutem Essen und ein paar Gläsern griechischem Wein",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [
+          "griechischem Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē is the right place if you crave Greek wine",
+        "quote": "Kírkē ist der passende Ort, wenn Du Dich nach griechischem Wein sehnst.",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "griechischem Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "They ordered the Vorias & Helios Orange Assyrtiko, first a single glass, which later became a whole bottle",
+        "quote": "Wir haben uns für den Vorias & Helios Orange Assyrtiko entschieden, den wir zunächst als einzelnes Glas bestellen – woraus später eine ganze Flasche wurde.",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Vorias & Helios Orange Assyrtiko"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "They sat outside in the last rays of sun",
+        "quote": "Wir sitzen draußen, während die letzten Sonnenstrahlen des Tages auf uns scheinen.",
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "They started the meal with one of the sandwiches",
+        "quote": "Beim Essen starten wir, wie es sich für ein Deli gehört, mit einem der Sandwiches.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "They recommend the sandwich with mushrooms and truffles",
+        "quote": "Wir empfehlen das mit Pilzen und Trüffeln.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pilzen",
+          "Trüffeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The sardines with Greek saffron and the cheese platter are the perfect accompaniment to the orange wine",
+        "quote": "findet in den Sardinen mit griechischem Safran und der Käseplatte die perfekte Begleitung zum Orange Wein",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Sardinen mit griechischem Safran",
+          "Käseplatte",
+          "Orange Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The cheese platter comes with Greek honey, various nuts and a homemade mushroom jam",
+        "quote": "Die Platte kommt mit griechischem Honig, verschiedenen Nüssen und einer hausgemachten Pilzkonfitüre.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "griechischem Honig",
+          "Nüssen",
+          "Pilzkonfitüre"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Cheese, cured meats and preserves come from Greece",
+        "quote": "Käse, Wurstwaren sowie Konserven stammen aus Griechenland",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Käse",
+          "Wurstwaren",
+          "Konserven"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The dishes are built around what is currently in stock in the shop",
+        "quote": "die Gerichte entstehen um das herum, was gerade im Laden vorrätig ist",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The deli sandwiches are at the heart of the menu, with seafood and vegetable meze that change with the counter offer",
+        "quote": "Im Herzen stehen die Deli-Sandwiches, begleitet von Meze mit Meeresfrüchten und Gemüse, die je nach Thekenangebot wechseln.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Deli-Sandwiches",
+          "Meze mit Meeresfrüchten und Gemüse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "On Sundays there are five meze with tsipouro, a small Greek Sunday tradition",
+        "quote": "Der Sonntag hat sein eigenes Ritual: fünf Meze zum Tsipouro",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Meze",
+          "Tsipouro"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The interior was designed by friend and architect Johann Muehlthaler",
+        "quote": "Drinnen wurde der Raum von Freund und Architekt Johann Muehlthaler gestaltet",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The interior is reduced yet homely",
+        "quote": "reduziert und dennoch wohnlich",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The seats outside are perfect for mild summer evenings",
+        "quote": "Die Plätze draußen sind perfekt für laue Sommerabende",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Inside it is just as warm and inviting",
+        "quote": "drinnen genauso warm und einladend zugeht",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē is a cosy retreat even in the Berlin cold",
+        "quote": "Also auch bei Berliner Kälte ein gemütlicher Rückzugsort.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē now invites sommeliers and winemakers for guest appearances around Greek wine",
+        "quote": "Mittlerweile lädt Kírkē außerdem Sommeliers und Winzer:innen zu Gastauftritten rund um griechischen Wein ein",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "griechischen Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_selection",
+            "drinks",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kírkē hosts pop-ups with other Berlin chefs",
+        "quote": "dazu Pop-ups mit anderen Berliner Köch:innen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Best come hungry, order more than planned and let someone else choose the wine",
+        "quote": "Am besten kommst Du hungrig, bestellst mehr, als Du vorhattest, und überlässt die Weinwahl mal jemand anderem!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "advice"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's claim 0, 'a Deli with a wine bar', says the same thing; the scorer did not pair them."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): For a guest-appearance event, null and 'other' are both defensible aspects."
+      },
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): For a pop-up event, null and 'other' are both defensible aspects."
+      },
+      {
+        "at": "2026-11-01T21:36:47.235Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.427Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "id": "review-e3f7e472",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e3f7e472-c382-48a6-b186-f0adbbd31079",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT204eU1XUnFibmgwWmxkbVMyOUdObVZFVUUxMWIwRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Akazienstraße",
+    "venueId": "db4a6000-46b4-428b-b256-423fe8120782",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-22T19:16:47.070Z",
+    "stars": 1,
+    "text": "No extra sauce:(",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:34:26.013Z",
+    "claims": [
+      {
+        "text": "no extra sauce",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "extra_charges",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:00.870Z",
+    "usage": {
+      "inputTokens": 4900,
+      "outputTokens": 591,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review doesn't say whether the extra sauce was ordered and left out (order_accuracy) or simply not offered (availability). The takeaway reading is also plausible. The sad face makes it a negative opinion rather than a neutral fact.",
+    "claims": [
+      {
+        "text": "there was no extra sauce",
+        "quote": "No extra sauce:(",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability",
+            "takeaway_handling"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

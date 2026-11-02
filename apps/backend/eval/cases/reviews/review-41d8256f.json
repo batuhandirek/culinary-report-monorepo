@@ -1,0 +1,201 @@
+{
+  "id": "review-41d8256f",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "41d8256f-6cb9-4890-be27-7913b19975e9",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2sxU2NHcHdWSFpQTmtOWFNGUnlUblI0UjNSUmNrRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "goldies",
+    "venueId": "6340c945-020d-48c9-8697-1cecd8b7d459",
+    "brand": "goldies",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-30T18:42:07.038Z",
+    "stars": 2,
+    "text": "Ich verstehe den Hype nicht.\nDer Burger schmeckt nicht sonderlich besser als bei Burger King, völlig überzogener Preis.\nDie Pommes waren\nreichlich und so ganz ok.",
+    "textTranslated": "I don't understand the hype.\n\nThe burger doesn't taste significantly better than at Burger King, and the price is completely outrageous.\n\nThe fries were plentiful and alright."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:45.891Z",
+    "claims": [
+      {
+        "text": "the burger doesn't taste significantly better than at Burger King",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the price is completely outrageous",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were plentiful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were alright",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:41.119Z",
+    "usage": {
+      "inputTokens": 5032,
+      "outputTokens": 735,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The price complaint follows the burger sentence, so it is read as about the Burger. 'So ganz ok' is lukewarm praise, mixed or mildly positive. 'I don't understand the hype' is a verdict on the place as a whole.",
+    "claims": [
+      {
+        "text": "the reviewer does not understand the hype",
+        "quote": "Ich verstehe den Hype nicht.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the Burger does not taste much better than at Burger King",
+        "quote": "Der Burger schmeckt nicht sonderlich besser als bei Burger King",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Burger's price is completely excessive",
+        "quote": "völlig überzogener Preis",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [
+          "Burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes were plentiful",
+        "quote": "Die Pommes waren\nreichlich",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes were sort of okay",
+        "quote": "so ganz ok",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

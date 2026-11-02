@@ -1,0 +1,833 @@
+{
+  "id": "post-7e6e2acc",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "taschaeats",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlin",
+      "foodtok",
+      "foodreview",
+      "berlinfood",
+      "berlinfoodguide"
+    ],
+    "taggedHandles": [],
+    "text": "Everything I ate in Berlin Part 2!! I will also be doing video on matcha spots soon so stay tuned for that!! Places mentioned: \n- trio\n- wen cheng\n- romeo’s sandwiches \n- markthalle food hall\n- khinkali station \n#berlin #foodtok #foodreview #berlinfood #berlinfoodguide ",
+    "subtitles": "Here's everything I ate in Berlin part 2.\nAs a half German girl\nwho didn't really eat much German food growing up,\ntrio was such a fantastic meal.\nThey do modern takes on traditional German dishes.\nAs soon as I saw Ella eat said this was their favourite meal in Berlin,\nI really wanted to try it and it was so worth it.\nWe were really craving Asian food so we thought we try Wen Cheng.\nWe had the lamb and cumin bian bian noodles.\nFlavour and portioning were great,\nbut when I had the dumplings in the bowl\nI did think I've had better back home.\nOverall though, this definitely did satisfy that craving.\nI loved the tuna melt and the chicken Caesar from Romeo's.\nThey were packed with flavour and really filling.\nThey had the most incredible kesserschmettla at Magdalena.\nI thought this market had some really unique cuisines and options.\nIt's worth checking out for sure.\nLast meal before flying were these\nJordan dumplings and acharuli at King Kelly Station.\nNever had either of these before\nbut I'm already desperate to have them again.\nA whole video on matcha spots is coming soon\nand I'm gonna be making a more in depth video for YouTube\nif you'd like to see more food I tried in Berlin.",
+    "subtitlesLanguage": "eng-US",
+    "id": "7e6e2acc-76f5-4238-8867-c54505d7c85c",
+    "externalId": "7689459753776336150",
+    "url": "https://www.tiktok.com/@taschaeats/video/7689459753776336150",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-25T13:11:11.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:39:12.866Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "trio",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "42b33913-fe31-47a2-9f4f-eac9e1320749",
+          "brandName": "Trio",
+          "venueId": "15e5b4c4-0793-4b98-a24e-5e2e82e24407",
+          "venueName": "Trio"
+        }
+      },
+      {
+        "venueName": "Wen Cheng",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "0a07d794-f024-41b4-a9b0-fab9e4347ded",
+          "brandName": "Wen Cheng",
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Romeo’s Sandwiches",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "30f53b3e-61a8-461b-9d54-dc899b6ddb41",
+          "brandName": "Romeo's Sandwiches",
+          "venueId": "d3477dee-8b7c-4677-b3d1-61695bc85c8d",
+          "venueName": "Romeo's Sandwiches"
+        }
+      },
+      {
+        "venueName": "Markthalle",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun"
+        }
+      },
+      {
+        "venueName": "Khinkali Station",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "26ac0a15-f417-4ef1-a050-13c531568d99",
+          "brandName": "Khinkali Station",
+          "venueId": "26f7b682-a0f7-4a1b-bd80-f62ab614aa72",
+          "venueName": "Khinkali Station"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Trio was a fantastic meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Trio does modern takes on traditional German dishes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meal at Trio was one of their favorite meals in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Wen Cheng serves Asian food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "they had lamb and cumin bian bian noodles",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "lamb",
+          "cumin bian bian noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the flavor and portioning were great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the dumplings in the bowl were not as good as back home",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "authenticity",
+        "foods": [
+          "dumpling"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Romeo’s Sandwiches had a tuna melt",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "tuna melt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Romeo’s Sandwiches had a chicken Caesar",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "chicken Caesar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the tuna melt and chicken Caesar were packed with flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna melt",
+          "chicken Caesar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the tuna melt and chicken Caesar were really filling",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "tuna melt",
+          "chicken Caesar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the market had some really unique cuisines and options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the market was worth checking out",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "they had Jordan dumplings and acharuli at Khinkali Station",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Jordan dumplings",
+          "acharuli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "they had never had either of these before",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "they were already desperate to have them again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Jordan dumplings",
+          "acharuli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:01.076Z",
+    "usage": {
+      "inputTokens": 22979,
+      "outputTokens": 5682,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "\"Magdalena\" and \"King Kelly Station\" are transcript misspellings of the captioned Markthalle food hall and Khinkali Station; foods keep the transcript spellings (kesserschmettla, Jordan dumplings, acharuli). \"So worth it\" for Trio reads as a recommendation rather than a money judgement, so value_for_money is only an alternative.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Trio",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "42b33913-fe31-47a2-9f4f-eac9e1320749",
+          "brandName": "Trio",
+          "venueId": "15e5b4c4-0793-4b98-a24e-5e2e82e24407",
+          "venueName": "Trio",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Wen Cheng",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "0a07d794-f024-41b4-a9b0-fab9e4347ded",
+          "brandName": "Wen Cheng",
+          "venueId": null,
+          "venueName": null,
+          "note": "Wen Cheng is a chain with six branches and the post names no location, so no branch is set."
+        }
+      },
+      {
+        "venueName": "Romeo's Sandwiches",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "30f53b3e-61a8-461b-9d54-dc899b6ddb41",
+          "brandName": "Romeo's Sandwiches",
+          "venueId": "d3477dee-8b7c-4677-b3d1-61695bc85c8d",
+          "venueName": "Romeo's Sandwiches",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Markthalle food hall",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun",
+          "note": "The caption says only 'markthalle food hall', and the transcript's 'Magdalena' is most plausibly a mishearing of 'Markthalle Neun', the best-known Berlin food market hall."
+        }
+      },
+      {
+        "venueName": "Khinkali Station",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "26ac0a15-f417-4ef1-a050-13c531568d99",
+          "brandName": "Khinkali Station",
+          "venueId": "26f7b682-a0f7-4a1b-bd80-f62ab614aa72",
+          "venueName": "Khinkali Station",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Trio was such a fantastic meal",
+        "quote": "trio was such a fantastic meal",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Trio does modern takes on traditional German dishes",
+        "quote": "They do modern takes on traditional German dishes.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Ella eat said Trio was their favourite meal in Berlin",
+        "quote": "Ella eat said this was their favourite meal in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Trio was so worth it",
+        "quote": "it was so worth it",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they tried Wen Cheng because they were craving Asian food",
+        "quote": "We were really craving Asian food so we thought we try Wen Cheng.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "they had the lamb and cumin bian bian noodles at Wen Cheng",
+        "quote": "We had the lamb and cumin bian bian noodles.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "lamb and cumin bian bian noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the flavour of the lamb and cumin bian bian noodles was great",
+        "quote": "Flavour and portioning were great",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "lamb and cumin bian bian noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the portioning of the lamb and cumin bian bian noodles was great",
+        "quote": "Flavour and portioning were great",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "lamb and cumin bian bian noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "she has had better dumplings in the bowl back home than at Wen Cheng",
+        "quote": "I did think I've had better back home",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "dumplings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Wen Cheng definitely satisfied the Asian food craving",
+        "quote": "this definitely did satisfy that craving",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "she loved the tuna melt and the chicken Caesar from Romeo's",
+        "quote": "I loved the tuna melt and the chicken Caesar from Romeo's.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna melt",
+          "chicken Caesar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the tuna melt and the chicken Caesar were packed with flavour",
+        "quote": "They were packed with flavour",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tuna melt",
+          "chicken Caesar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the tuna melt and the chicken Caesar were really filling",
+        "quote": "really filling",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "tuna melt",
+          "chicken Caesar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the Markthalle had the most incredible kesserschmettla",
+        "quote": "They had the most incredible kesserschmettla",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kesserschmettla"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the Markthalle had really unique cuisines and options",
+        "quote": "this market had some really unique cuisines and options",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the Markthalle is worth checking out for sure",
+        "quote": "It's worth checking out for sure.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the last meal before flying was Jordan dumplings and acharuli at Khinkali Station",
+        "quote": "Jordan dumplings and acharuli at King Kelly Station",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Jordan dumplings",
+          "acharuli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "she had never had Jordan dumplings or acharuli before",
+        "quote": "Never had either of these before",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Jordan dumplings",
+          "acharuli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "she is already desperate to have the Jordan dumplings and acharuli again",
+        "quote": "I'm already desperate to have them again",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Jordan dumplings",
+          "acharuli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.242Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

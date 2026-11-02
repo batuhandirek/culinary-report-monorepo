@@ -162,7 +162,7 @@ export class PortalController {
 	}
 	/**
 	 * The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it
-	 * says (`feedback`); reply drafts under unanswered ones. The topic filter is any point of the topic.
+	 * says (`statements`); reply drafts under unanswered ones. The topic filter is any claim under the aspect root.
 	 */
 	@TypedRoute.Get('/brands/:brandId/reviews')
 	@UseGuards(BrandAccessGuard)
@@ -193,7 +193,7 @@ export class PortalController {
 		return this.portalService.markReviewReplied(brandId, reviewId, body.replied);
 	}
 
-	/** Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`feedback`). */
+	/** Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`statements`). */
 	@TypedRoute.Get('/brands/:brandId/posts')
 	@UseGuards(BrandAccessGuard)
 	async listPortalPosts(

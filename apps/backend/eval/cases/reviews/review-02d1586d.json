@@ -1,0 +1,337 @@
+{
+  "id": "review-02d1586d",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "02d1586d-0d4e-4ec1-9d7b-559d3859fd51",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tSdFIyeG9WMTk0Y0dSaVQxRTJjRGR3Tmw5b1psRRAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-09T20:11:17.718Z",
+    "stars": 5,
+    "text": "Berlin’de İlk günümüzde tercihimiz burası oldu iyi ki buraya gelmişiz her şey çok güzeldi çalışanlar atmosfer ortam özellikle döneri Çok güzeldi Çok memnun ayrıldık bizimle ilgilenen garson çok ilgili ve güler yüzlüydü ayrıca onada teşekkür ederiz 🙏🏻",
+    "textTranslated": "This was our first choice for our first day in Berlin, and we're so glad we came! Everything was wonderful; the staff, the atmosphere, the environment, and especially the döner kebab were delicious. We left very satisfied. The waiter who served us was very attentive and friendly; we thank him as well. 🙏🏻"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:41:45.285Z",
+    "claims": [
+      {
+        "text": "our first choice for our first day in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was wonderful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff were wonderful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere was wonderful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the environment was wonderful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the döner kebab was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we left very satisfied",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the waiter was very attentive and friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:28.766Z",
+    "usage": {
+      "inputTokens": 5148,
+      "outputTokens": 2272,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 4778
+    },
+    "notes": "The list 'çalışanlar atmosfer ortam' shares one predicate, so staff, atmosphere and surroundings are split with one-word quotes; 'ortam' overlaps atmosphere and is optional. The food is kept as the source writes it, 'döneri' (possessive form), and the thanks to the waiter is optional.",
+    "claims": [
+      {
+        "text": "Rüyam Gemüse Kebab was their choice on their first day in Berlin",
+        "quote": "Berlin’de İlk günümüzde tercihimiz burası oldu",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "glad they came to Rüyam Gemüse Kebab",
+        "quote": "iyi ki buraya gelmişiz",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "everything was very good",
+        "quote": "her şey çok güzeldi",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the staff were very good",
+        "quote": "çalışanlar",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the atmosphere was very good",
+        "quote": "atmosfer",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the surroundings were very good",
+        "quote": "ortam",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "interior"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "especially the döner was very good",
+        "quote": "özellikle döneri Çok güzeldi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "döneri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they left very satisfied",
+        "quote": "Çok memnun ayrıldık",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the waiter who served them was very attentive",
+        "quote": "bizimle ilgilenen garson çok ilgili",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the waiter was friendly",
+        "quote": "güler yüzlüydü",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they thank the waiter as well",
+        "quote": "ayrıca onada teşekkür ederiz",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness",
+            "attentiveness"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.201Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.400Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

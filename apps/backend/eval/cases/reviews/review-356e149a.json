@@ -1,0 +1,475 @@
+{
+  "id": "review-356e149a",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:1",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "356e149a-88f5-4065-bf1d-ca5c98901bba",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xWbVNFbHNja05pT1dsdGVqWlZhSEIwTlVaNVJsRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Kaiser's – Kaiser'schmarrn",
+    "venueId": "5d781be9-217a-4052-b852-ea88cd2c1485",
+    "brand": "Kaiser's – Kaiser'schmarrn",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-01T14:33:20.952Z",
+    "stars": 1,
+    "text": "Normalerweise essen wir sehr gerne hier und waren bisher immer zufrieden. Solange diese Mitarbeiterin dort arbeitet, werde ich allerdings keinen Cent mehr in diesem Laden ausgeben.\n\nAls ich ankam, stand ich zunächst etwa fünf Minuten am Tresen, ohne begrüßt oder beachtet zu werden. Das Erste, was ich dann zu hören bekam, war: „Bist du der Lieferant?“ Ich antwortete: „Nein.“ Danach ließ sie mich erneut mehrere Minuten warten, bevor sie überhaupt meine Bestellung aufnahm.\n\nEigentlich wollte ich vier Gerichte bestellen, habe aber nur meiner Tochter zuliebe ein Gericht bestellt.\n\nWährend ich wartete, lehnte ich mich kurz an den Tresen. Daraufhin fragte mich die Mitarbeiterin plötzlich: „Woher kommst du?“ Ich antwortete: „Ich bin Araber. Wieso?“ Ihre Antwort war: „Weil ich noch nie jemanden gesehen habe, der sich so anlehnt.“\n\nIch empfand diese Aussage als respektlos und unangebracht. So sollte man mit Gästen nicht umgehen. Schade, denn das Essen ist eigentlich gut – aber ein freundlicher und respektvoller Umgang mit Kunden gehört für mich genauso dazu.",
+    "textTranslated": "We usually love eating here and have always been satisfied. However, as long as this employee works there, I won't spend another cent in this establishment.\n\nWhen I arrived, I stood at the counter for about five minutes without being greeted or even acknowledged. The first thing I heard was, \"Are you the delivery person?\" I replied, \"No.\" Then she made me wait several more minutes before even taking my order.\n\nI had actually wanted to order four dishes, but only ordered one for my daughter's sake.\n\nWhile I was waiting, I leaned against the counter for a moment. The employee then suddenly asked me, \"Where are you from?\" I replied, \"I'm Arab. Why?\" Her response was, \"Because I've never seen anyone lean like that before.\"\n\nI found this comment disrespectful and inappropriate. That's no way to treat customers. It's a shame, because the food is actually good—but for me, friendly and respectful customer service is just as important."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:42.269Z",
+    "claims": [
+      {
+        "text": "we usually love eating here",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "have always been satisfied",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this employee works there",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact"
+      },
+      {
+        "text": "won't spend another cent in this establishment",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "payment",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "stood at the counter for about five minutes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 5,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "was not greeted",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "was not acknowledged",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "first thing she heard was \"Are you the delivery person?\"",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "she made me wait several more minutes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "only ordered one",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "wanted to order four dishes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "leaned against the counter for a moment",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "employee asked \"Where are you from?\"",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I'm Arab",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "she said \"Because I've never seen anyone lean like that before\"",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "found this comment disrespectful and inappropriate",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food is actually good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "friendly and respectful customer service is just as important",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:16.123Z",
+    "usage": {
+      "inputTokens": 5753,
+      "outputTokens": 2932,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the boycott statement is a verdict about the service (the employee) or the place, and whether the five-minute ignored wait at the counter is attentiveness or queue; the employee's remarks are split into separate friendliness claims, with the reply quote optional.",
+    "claims": [
+      {
+        "text": "we usually love eating here",
+        "quote": "Normalerweise essen wir sehr gerne hier",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "we have always been satisfied until now",
+        "quote": "waren bisher immer zufrieden",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "won't spend another cent at this place as long as this employee works there",
+        "quote": "Solange diese Mitarbeiterin dort arbeitet, werde ich allerdings keinen Cent mehr in diesem Laden ausgeben.",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "stood at the counter for about five minutes without being greeted or acknowledged",
+        "quote": "stand ich zunächst etwa fünf Minuten am Tresen, ohne begrüßt oder beachtet zu werden",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": 5,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the first thing the employee said was asking if I was the delivery person",
+        "quote": "Das Erste, was ich dann zu hören bekam, war: „Bist du der Lieferant?“",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the employee made me wait several more minutes before taking my order",
+        "quote": "ließ sie mich erneut mehrere Minuten warten, bevor sie überhaupt meine Bestellung aufnahm",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service",
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "wanted to order four dishes but only ordered one for my daughter's sake",
+        "quote": "Eigentlich wollte ich vier Gerichte bestellen, habe aber nur meiner Tochter zuliebe ein Gericht bestellt.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the employee suddenly asked where I'm from when I leaned on the counter",
+        "quote": "fragte mich die Mitarbeiterin plötzlich: „Woher kommst du?“",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the employee said she had never seen anyone lean like that",
+        "quote": "„Weil ich noch nie jemanden gesehen habe, der sich so anlehnt.“",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the employee's comment was disrespectful and inappropriate",
+        "quote": "Ich empfand diese Aussage als respektlos und unangebracht.",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "that is no way to treat guests",
+        "quote": "So sollte man mit Gästen nicht umgehen.",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is actually good",
+        "quote": "das Essen ist eigentlich gut",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "friendly and respectful treatment of customers matters just as much",
+        "quote": "ein freundlicher und respektvoller Umgang mit Kunden gehört für mich genauso dazu",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

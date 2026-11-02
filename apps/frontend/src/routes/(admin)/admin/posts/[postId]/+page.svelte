@@ -10,11 +10,12 @@
 	import AdminFacts, { type AdminFact } from '#components/admin/AdminFacts.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import AdminRawJson from '#components/admin/AdminRawJson.svelte';
-	import FeedbackNotes from '#components/admin/feedback/FeedbackNotes.svelte';
+	import StatementNotes from '#components/admin/statements/StatementNotes.svelte';
 	import ChangeMentionVenueDialog from '#dialogs/admin/ChangeMentionVenueDialog.svelte';
 	import { captionParts } from '#lib/caption-links.js';
-	import { compact, PLATFORM_LABELS, sentimentVariant } from '#lib/culinary.js';
+	import { compact, PLATFORM_LABELS, sentimentVariant, SKIP_REASON_LABELS } from '#lib/culinary.js';
 	import { findHref, findLabel } from '#lib/post-sources.js';
+	import { sentimentOf } from '#lib/statements.js';
 	import { topicHref } from '#lib/topic-format.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
@@ -24,6 +25,10 @@
 	let post: AdminSocialPostOutputDto = $derived(data.post);
 	// The month a note's theme link opens the theme's page on
 	const postMonth = $derived(new Date(post.postedAt).toISOString().slice(0, 7));
+	const GENERAL_SUBJECTS = [
+		{ subject: 'city', title: 'About the city' },
+		{ subject: 'none', title: 'In general' }
+	] as const;
 
 	// The mention whose venue is being corrected
 	let editing = $state<AdminMentionOutputDto | null>(null);
@@ -189,6 +194,14 @@
 		</div>
 
 		<AdminPanel title="Brands mentioned" note={post.mentions.length}>
+			{#if post.skipReason}
+				<p class="ink-strip m-0 mb-2 text-sm">
+					Not digested: {SKIP_REASON_LABELS[post.skipReason] ?? post.skipReason}. The gate judged it is not about eating or
+					drinking out in {post.city.name}, so it has no places and no claims{post.mentions.length
+						? ' (the places an admin decided stay)'
+						: ''}.
+				</p>
+			{/if}
 			{#if post.mentions.length}
 				<ul class="divide-line m-0 flex list-none flex-col divide-y p-0">
 					{#each post.mentions as mention (mention.id)}
@@ -210,10 +223,17 @@
 								{:else}
 									<span class="font-semibold">{mention.venueName}</span>
 								{/if}
-								<Badge variant={sentimentVariant(mention.sentiment)}>{mention.sentiment}</Badge>
+								<Badge variant={sentimentVariant(sentimentOf(mention.statements))}>{sentimentOf(mention.statements)}</Badge>
 								<span class="text-muted-foreground text-xs" title={mention.matchNote}>
 									{matchLabel(mention)}
 								</span>
+								{#if mention.unconfirmedAt}
+									<Badge
+										variant="warning"
+										title="A new read of this post no longer names this place: link it again to confirm, or mark it as not a venue">
+										unconfirmed
+									</Badge>
+								{/if}
 								<IconButton
 									icon={Pencil}
 									label={`Change the venue of ${mention.venueName}`}
@@ -224,9 +244,8 @@
 										editOpen = true;
 									}} />
 							</div>
-							<p class="m-0">{mention.summary}</p>
-							<FeedbackNotes feedback={mention.feedback} cityId={post.city.id} month={postMonth} />
-							{#if mention.feedback?.some((row) => row.detail) && (!mention.brand || post.account?.brand?.id === mention.brand.id)}
+							<StatementNotes statements={mention.statements} cityId={post.city.id} month={postMonth} />
+							{#if mention.statements.some((s) => s.text) && (!mention.brand || post.account?.brand?.id === mention.brand.id)}
 								<p class="text-muted-foreground m-0 text-xs">
 									{mention.brand
 										? "The brand's own post: theme pages leave these notes out."
@@ -249,12 +268,29 @@
 						</li>
 					{/each}
 				</ul>
-			{:else}
+			{:else if !post.skipReason}
 				<p class="text-muted-foreground m-0 text-sm">
 					{post.analysedAt ? 'No venue named in this post.' : 'Not analysed yet.'}
 				</p>
 			{/if}
 		</AdminPanel>
+
+		{#if post.generalStatements.length}
+			<!-- What the post says that is about no place it names: the city, or food in general -->
+			<AdminPanel title="About the city and in general" note={post.generalStatements.length}>
+				<div class="divide-line flex flex-col divide-y">
+					{#each GENERAL_SUBJECTS as group (group.subject)}
+						{@const claims = post.generalStatements.filter((s) => s.subject === group.subject)}
+						{#if claims.length}
+							<div class="flex flex-col gap-1.5 py-3 text-sm">
+								<span class="font-semibold">{group.title}</span>
+								<StatementNotes statements={claims} cityId={post.city.id} month={postMonth} />
+							</div>
+						{/if}
+					{/each}
+				</div>
+			</AdminPanel>
+		{/if}
 
 		{#if post.platform === 'tiktok'}
 			<PostCommentsPanel postId={post.id} />

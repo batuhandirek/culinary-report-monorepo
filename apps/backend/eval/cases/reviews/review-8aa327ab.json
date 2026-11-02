@@ -1,0 +1,234 @@
+{
+  "id": "review-8aa327ab",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "8aa327ab-8bd7-4a79-8133-9127254122fc",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT204eVRYYzNlRmhPZGw4eFExbENaVWxsYkc5eVVsRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "REWE voll pflanzlich",
+    "venueId": "a6709425-a6b6-48d6-8203-4fdd76183446",
+    "brand": "REWE voll pflanzlich",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-13T15:32:55.444Z",
+    "stars": 1,
+    "text": "Hygiene gleich null. Morgens um acht, die Brötchen Auslage voll mot Haaren. Der Mülleimer neben dem Ausgang ist voll. Der Boden verklebt. Es gibt keinen Rewe den ich kenne, der so eklig, versifft und schmutzig ist. Geht selbst hin und schaut es selbst an.",
+    "textTranslated": "Hygiene is nonexistent. At eight in the morning, the bread display was full of hair. The trash can by the exit was overflowing. The floor was sticky. I don't know of any other Rewe supermarket that's so disgusting, filthy, and disgusting. Go and see for yourselves."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:42:24.613Z",
+    "claims": [
+      {
+        "text": "hygiene is nonexistent",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "at eight in the morning",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bread display was full of hair",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the trash can by the exit was overflowing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the floor was sticky",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "other Rewe supermarkets are not so disgusting",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:42.551Z",
+    "usage": {
+      "inputTokens": 5536,
+      "outputTokens": 1450,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue is a supermarket; the hair on the Brötchen display is food_hygiene, while the bin and floor are general cleanliness / dining_area. The 'worst Rewe I know' comparison reads as a cleanliness opinion but could be a verdict; the closing 'see for yourselves' is a sarcastic warning, taken as a negative verdict.",
+    "claims": [
+      {
+        "text": "hygiene is nonexistent",
+        "quote": "Hygiene gleich null.",
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food_hygiene"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "at eight in the morning the Brötchen display was full of hair",
+        "quote": "Morgens um acht, die Brötchen Auslage voll mot Haaren.",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "Brötchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the trash can next to the exit is full",
+        "quote": "Der Mülleimer neben dem Ausgang ist voll.",
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "dining_area"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the floor is sticky",
+        "quote": "Der Boden verklebt.",
+        "sentiment": "negative",
+        "aspect": "dining_area",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cleanliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "no other Rewe the reviewer knows is as disgusting, filthy and dirty as this one",
+        "quote": "Es gibt keinen Rewe den ich kenne, der so eklig, versifft und schmutzig ist.",
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "readers should go and see the store's state for themselves",
+        "quote": "Geht selbst hin und schaut es selbst an.",
+        "sentiment": "negative",
+        "aspect": "cleanliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.430Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.411Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

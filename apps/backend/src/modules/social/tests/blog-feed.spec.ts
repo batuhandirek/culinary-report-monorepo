@@ -62,10 +62,20 @@ describe('parseFeed', () => {
 		const feed = parseFeed(RSS, 'https://mitvergnuegen.com/feed/')!;
 		expect(feed.title).toBe('Restaurants – Cee Cee');
 		expect(feed.items.map(i => [i.url, i.title, i.publishedAt?.toISOString()])).toEqual([
-			['https://ceecee.cc/kroque-berlin/', 'KROQUE BERLIN: GETOASTET & HAUSGEMACHT', '2026-10-22T14:25:23.000Z'],
-			['https://mitvergnuegen.com/2026/beste-restaurants-friedrichshain/', '11 wirklich gute Restaurants in Friedrichshain', '2026-10-21T10:31:18.000Z'],
+			[
+				'https://ceecee.cc/kroque-berlin/',
+				'KROQUE BERLIN: GETOASTET & HAUSGEMACHT',
+				'2026-10-22T14:25:23.000Z',
+			],
+			[
+				'https://mitvergnuegen.com/2026/beste-restaurants-friedrichshain/',
+				'11 wirklich gute Restaurants in Friedrichshain',
+				'2026-10-21T10:31:18.000Z',
+			],
 		]);
-		expect(htmlToText(feed.items[0].html)).toBe('Bei Kroque in Neukölln gibt es Toasts.\nZweiter Absatz.');
+		expect(htmlToText(feed.items[0].html)).toBe(
+			'Bei Kroque in Neukölln gibt es Toasts.\nZweiter Absatz.',
+		);
 		expect(htmlToText(feed.items[1].html)).toBe(
 			"The whole article sits in the description, as Mit Vergnügen's does: Lokal und mehr.",
 		);
@@ -80,11 +90,19 @@ describe('parseFeed', () => {
 			publishedAt: new Date('2026-09-02T06:00:00Z'),
 		});
 		expect(htmlToText(feed.items[0].html)).toBe('The pho at Pho Sen in Mitte is great.');
-		expect(feed.items[1]).toMatchObject({ url: 'https://food.example.com/undated/', publishedAt: null });
+		expect(feed.items[1]).toMatchObject({
+			url: 'https://food.example.com/undated/',
+			publishedAt: null,
+		});
 	});
 
 	it('is null for a page that is no feed, such as a bot challenge', () => {
-		expect(parseFeed('<!DOCTYPE html><html><body><script>challenge()</script></body></html>', 'https://x.de/feed/')).toBeNull();
+		expect(
+			parseFeed(
+				'<!DOCTYPE html><html><body><script>challenge()</script></body></html>',
+				'https://x.de/feed/',
+			),
+		).toBeNull();
 	});
 });
 
@@ -122,8 +140,12 @@ describe('finding a feed', () => {
 
 describe('articles', () => {
 	it('is one post per URL whatever its tracking parameters or fragment', () => {
-		expect(canonicalArticleUrl('https://x.de/a/?utm_source=rss&id=2#more')).toBe('https://x.de/a/?id=2');
-		expect(blogExternalId('https://x.de/a/?utm_medium=feed')).toBe(blogExternalId('https://x.de/a/'));
+		expect(canonicalArticleUrl('https://x.de/a/?utm_source=rss&id=2#more')).toBe(
+			'https://x.de/a/?id=2',
+		);
+		expect(blogExternalId('https://x.de/a/?utm_medium=feed')).toBe(
+			blogExternalId('https://x.de/a/'),
+		);
 		expect(blogExternalId('https://x.de/a/')).toMatch(/^blog_[0-9a-f]{24}$/);
 	});
 
@@ -147,9 +169,11 @@ describe('articles', () => {
 	});
 
 	it('falls back to main when no article holds the text', () => {
-		expect(articleText('<html><body><nav>Menu</nav><main><h1>Title</h1><p>Text here</p></main></body></html>')).toBe(
-			'Title\nText here',
-		);
+		expect(
+			articleText(
+				'<html><body><nav>Menu</nav><main><h1>Title</h1><p>Text here</p></main></body></html>',
+			),
+		).toBe('Title\nText here');
 	});
 
 	it('keeps where a link to a social profile points, after its text', () => {
@@ -165,7 +189,9 @@ describe('articles', () => {
 	});
 
 	it('reads only profiles from links', () => {
-		expect(profileLinkText('https://m.instagram.com/Cafe.Paula')).toBe('instagram.com/cafe.paula');
+		expect(profileLinkText('https://m.instagram.com/Cafe.Paula')).toBe(
+			'instagram.com/cafe.paula',
+		);
 		expect(profileLinkText('https://www.instagram.com/reel/abc/')).toBeNull();
 		expect(profileLinkText('https://www.tiktok.com/discover/berlin')).toBeNull();
 		expect(profileLinkText('https://x.com/intent/tweet?text=hi')).toBeNull();

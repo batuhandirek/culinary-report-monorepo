@@ -1,0 +1,438 @@
+{
+  "id": "post-4d0d5ac0",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "mohamadalksour",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlinfoodie",
+      "japanischeküche",
+      "shinjuberlinmitte",
+      "sushi",
+      "takoyaki"
+    ],
+    "taggedHandles": [
+      "shinju.berlin"
+    ],
+    "text": "Frisches Sushi, würzige Wok-Gerichte und liebevoll zubereitete Spezialitäten – halal, authentisch und voller Geschmack.\n\nIm modernen Ambiente von Shinju wird jedes Essen zum Erlebnis.\nPerfekt für romantische Abende, Treffen mit Freunden oder ein entspanntes Dinner mit der Familie.\n\nJetzt entdecken und den echten Geschmack Asiens erleben. ♥️🍣🍱\n\n@shinju.berlin \n\nAdresse:  Torstraße 210, \n  10115 Berlin\n\n#berlinfoodie #japanischeküche #shinjuberlinmitte #sushi #takoyaki",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "4d0d5ac0-e4f4-4aa8-b014-de20a2c4d904",
+    "externalId": "ig_4015235885859274166",
+    "url": "https://www.instagram.com/p/De4-8O6Cv22/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T20:23:59.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-25T04:01:32.166Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Shinju",
+        "locationHint": "Torstraße 210",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "c055cbe9-8de9-4253-884c-3a6984471fcb",
+          "brandName": "SHINJU Restaurant",
+          "venueId": "73fdff99-b591-4ea5-86b2-5180e5147ff6",
+          "venueName": "SHINJU Restaurant"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "fresh sushi",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "sushi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "spicy wok dishes with full flavour",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Wok-Gerichte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "described as authentic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "modern ambiance",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "good for romantic evenings, friends, and family dinners",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "family_pets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:21:05.782Z",
+    "usage": {
+      "inputTokens": 10147,
+      "outputTokens": 2891,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Promotional caption from or for the venue with no described visit, so visited is false. The hard calls were whether 'halal' is a neutral fact or praise, and whether the hashtag-only takoyaki and Japanese cuisine count as claims (kept as optional).",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Shinju",
+        "locationHint": "Torstraße 210, 10115 Berlin (Mitte)",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "c055cbe9-8de9-4253-884c-3a6984471fcb",
+          "brandName": "SHINJU Restaurant",
+          "venueId": "73fdff99-b591-4ea5-86b2-5180e5147ff6",
+          "venueName": "SHINJU Restaurant",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Shinju serves fresh sushi",
+        "quote": "Frisches Sushi",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Sushi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju's wok dishes are spicy",
+        "quote": "würzige Wok-Gerichte",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Wok-Gerichte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju's specialties are lovingly prepared",
+        "quote": "liebevoll zubereitete Spezialitäten",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju's food is halal",
+        "quote": "halal",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ingredient_quality",
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju's food is authentic",
+        "quote": "authentisch",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju's food is full of flavour",
+        "quote": "voller Geschmack",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju has a modern ambience",
+        "quote": "modernen Ambiente",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "every meal at Shinju becomes an experience",
+        "quote": "wird jedes Essen zum Erlebnis",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju is perfect for romantic evenings, meeting friends or a relaxed family dinner",
+        "quote": "Perfekt für romantische Abende, Treffen mit Freunden oder ein entspanntes Dinner mit der Familie",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "family_pets",
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Shinju you experience the real taste of Asia",
+        "quote": "den echten Geschmack Asiens erleben",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju is at Torstraße 210, 10115 Berlin",
+        "quote": "Torstraße 210",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju serves Japanese cuisine",
+        "quote": "japanischeküche",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shinju serves takoyaki",
+        "quote": "takoyaki",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "takoyaki"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.436Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.234Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.427Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

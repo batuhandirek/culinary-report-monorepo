@@ -1,0 +1,139 @@
+{
+  "id": "review-1104925b",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "1104925b-5298-4946-b1d3-c19af9dad200",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25veWRYaG1Rek51TUVkcGJHaHdRVXhqT0dWUWJYYxAB",
+    "platform": "google",
+    "language": "ko",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-13T10:14:39.541Z",
+    "stars": 5,
+    "text": "너무너무 맛있음 직원들도 친절함 1번 케밥 짱 맛있어요",
+    "textTranslated": "It is so, so delicious, and the staff are friendly. Kebab No. 1 is super tasty."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:42:11.986Z",
+    "claims": [
+      {
+        "text": "it is so, so delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff are friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Kebab No. 1 is super tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kebab No. 1"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:50.466Z",
+    "usage": {
+      "inputTokens": 4966,
+      "outputTokens": 692,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The opening '너무너무 맛있음' has no stated subject, so it is read as praise of the food in general with no named food. 'Kebab No. 1' is kept in the review's own spelling, '1번 케밥', in foods.",
+    "claims": [
+      {
+        "text": "the food is so, so delicious",
+        "quote": "너무너무 맛있음",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff are friendly",
+        "quote": "직원들도 친절함",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Kebab No. 1 is super tasty",
+        "quote": "1번 케밥 짱 맛있어요",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "1번 케밥"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.203Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

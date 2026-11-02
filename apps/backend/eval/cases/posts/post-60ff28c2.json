@@ -1,0 +1,571 @@
+{
+  "id": "post-60ff28c2",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "sandosberlin",
+    "locationName": "Berlin Pensionsaufenthalt",
+    "hashtags": [
+      "berlinfood",
+      "vlog",
+      "foodspotsberlin",
+      "sando",
+      "japanesefood"
+    ],
+    "taggedHandles": [],
+    "text": "VLOG: Sandos Berlin Neueröffnung #berlinfood #vlog #foodspotsberlin #sando #japanesefood",
+    "subtitles": "heute öffnet 1 Neuer japanischer Sandwich und Matcha Spot hier in Berlin\nund ich würd sagen\nwir schauen uns den mal gemeinsam an.\nlet's go! und ja\nich bin jetzt in der Scharnweber  26.\nhinter Mir ist Sandos Berlin\nund ich würd sagen wir schauen mal was die so auf der Karte haben.\nich hab schon gesehen,\ndie haben auf jeden Fall auch vegane Optionen, ganz viel Matcha\nund auch Halal Fleisch. deswegen für jeden ist was dabei.\nich hätt gern einmal das Chili sin\nCarne und den Cherry Matcha mit Kokosmilch.\nwir haben jetzt einmal den Cherry Matcha und Chili sin carne\nboah\nschmeckt krass.\nMH hm\nBoa ist richtig geil gewürzt\nund auch ich weiß nicht ob's auf Soja Basis ist was genau es ist,\naber es schmeckt krass. jetzt der Matcha,\nboah willst du?\nich sag mit Kokosmilch. also vertraut, ihr müsst mit Kokosmilch bestellen.\ngenerell Matcha mit Kokosmilch.\nalso Leute merkt euch Scharnweber Straße 26,\nSandos Berlin jetzt immer Mittwoch bis Sonntag 14 bis 20 Uhr. kommt vorbei!",
+    "subtitlesLanguage": "deu-DE",
+    "id": "60ff28c2-9718-45a9-8425-2c136844fb30",
+    "externalId": "7682825029792402721",
+    "url": "https://www.tiktok.com/@sandosberlin/video/7682825029792402721",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Sandos",
+    "postedAt": "2026-09-07T16:05:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:34:51.043Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Sandos Berlin",
+        "locationHint": "Scharnweber Straße 26",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "exact",
+          "brandId": "9c082f9b-5f8b-44ea-b774-e916110bddc0",
+          "brandName": "Sandos",
+          "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+          "venueName": "Sandos"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "a new Japanese sandwich and matcha spot opened in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the venue is on Scharnweber Straße 26",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the venue has vegan options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the venue has lots of matcha",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the venue has halal meat",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chili sin carne was very well seasoned",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Chili sin Carne"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cherry matcha with coconut milk tasted very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "cherry matcha",
+          "coconut milk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha should be ordered with coconut milk",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "advice",
+        "foods": [
+          "matcha",
+          "coconut milk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the venue is open Wednesday to Sunday from 14 to 20",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:23:25.253Z",
+    "usage": {
+      "inputTokens": 10543,
+      "outputTokens": 4547,
+      "cachedInputTokens": 7454,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The opening is stated as news, so it is a new opening; the opening-day claim is a fact with event allowed. The tagged location 'Pensionsaufenthalt' is ignored, and the bare 'boah' about the matcha is folded into the coconut-milk recommendation.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Sandos",
+        "locationHint": "Scharnweberstraße 26",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "9c082f9b-5f8b-44ea-b774-e916110bddc0",
+          "brandName": "Sandos",
+          "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+          "venueName": "Sandos",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Sandos opens today in Berlin",
+        "quote": "heute öffnet 1 Neuer japanischer Sandwich und Matcha Spot hier in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos is a Japanese sandwich and matcha spot",
+        "quote": "japanischer Sandwich und Matcha Spot",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Sandwich",
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos is at Scharnweber 26",
+        "quote": "ich bin jetzt in der Scharnweber  26.",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos has vegan options",
+        "quote": "die haben auf jeden Fall auch vegane Optionen",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos has lots of Matcha",
+        "quote": "ganz viel Matcha",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos also has Halal Fleisch",
+        "quote": "auch Halal Fleisch",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Halal Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is something for everyone at Sandos",
+        "quote": "für jeden ist was dabei",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they ordered the Cherry Matcha with Kokosmilch and the Chili sin carne",
+        "quote": "wir haben jetzt einmal den Cherry Matcha und Chili sin carne",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Cherry Matcha",
+          "Chili sin carne"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chili sin carne tastes amazing",
+        "quote": "schmeckt krass",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Chili sin carne"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Chili sin carne is really well seasoned",
+        "quote": "ist richtig geil gewürzt",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Chili sin carne"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "unsure whether the Chili sin carne is soy-based",
+        "quote": "ich weiß nicht ob's auf Soja Basis ist",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Chili sin carne",
+          "Soja"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you must order the Matcha with Kokosmilch",
+        "quote": "ihr müsst mit Kokosmilch bestellen",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "Matcha",
+          "Kokosmilch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Matcha is generally best with Kokosmilch",
+        "quote": "generell Matcha mit Kokosmilch.",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [
+          "Matcha",
+          "Kokosmilch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Sandos is open Wednesday to Sunday 14 to 20",
+        "quote": "jetzt immer Mittwoch bis Sonntag 14 bis 20 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "come visit Sandos",
+        "quote": "kommt vorbei!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.598Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): The claim is attached to the same single venue; only the venue's naming differs, which is already ruled on separately."
+      },
+      {
+        "at": "2026-11-01T14:39:43.598Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): The claim is attached to the same single venue; only the venue's naming differs, which is already ruled on separately."
+      },
+      {
+        "at": "2026-11-01T14:39:43.598Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): The claim is attached to the same single venue; only the venue's naming differs, which is already ruled on separately."
+      },
+      {
+        "at": "2026-11-01T14:39:43.598Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): The claim is attached to the same single venue; only the venue's naming differs, which is already ruled on separately."
+      },
+      {
+        "at": "2026-11-01T14:39:43.598Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): The claim is attached to the same single venue; only the venue's naming differs, which is already ruled on separately."
+      },
+      {
+        "at": "2026-11-01T15:11:31.438Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.238Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

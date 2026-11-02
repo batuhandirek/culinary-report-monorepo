@@ -1,0 +1,563 @@
+{
+  "id": "post-41f16ad4",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "cxt.st",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "berlinguide",
+      "berlinfoodie",
+      "cheapeats"
+    ],
+    "taggedHandles": [
+      "@miotravelapp"
+    ],
+    "text": "📍Aroma Warschauer Str.\n\nSave this place and other recommendations I post on the @miotravelapp so they are all in the same place!!\n\n#berlin #berlinfood #berlinguide #berlinfoodie #cheapeats ",
+    "subtitles": "This is one of my new favourite restaurants in Berlin.\nIt's Cantonese Chinese food.\nIt is so nostalgic to me. Growing up in Sydney,\nI had that soup so much as a child.\nI'm obsessed with these rice noodle dim sum.\nThey have a range of small dishes,\nincluding Peking duck,\nwhich I will be getting next time, that you can share with a partner.\nThey have a bunch of really amazing mains.\nThe prices are great. But do get in early if you go on a weekend\nor I think you can make a phone reservation.\nIt gets super busy on a Saturday.\nWe waited a while, but luckily we got in and I will be going back!!",
+    "subtitlesLanguage": "eng-US",
+    "id": "41f16ad4-e82f-4543-92d0-b06e630bb977",
+    "externalId": "7693558312167623943",
+    "url": "https://www.tiktok.com/@cxt.st/video/7693558312167623943",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-06T14:15:42.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:27:16.253Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Aroma",
+        "locationHint": "Warschauer Str.",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "c4cf915a-d59e-47c1-a0bf-379866243150",
+          "brandName": "Café Aroma Berlin",
+          "venueId": "f57d66aa-294b-41bb-95c0-4df9298ca403",
+          "venueName": "Café Aroma Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "it is one of the creator's new favourite restaurants in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it serves Cantonese Chinese food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is nostalgic to the creator",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they had the soup a lot as a child in Sydney",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the creator is obsessed with the rice noodle dim sum",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "rice noodle dim sum"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they serve Peking duck",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Peking duck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can share the small dishes with a partner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they have a bunch of really amazing mains",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the prices are great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you should get there early on weekends",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can make a phone reservation",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it gets super busy on a Saturday",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they waited a while",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator will go back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:43.102Z",
+    "usage": {
+      "inputTokens": 10052,
+      "outputTokens": 3245,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The @miotravelapp plug promotes an app, not the venue, so the post is not promotional for Aroma. The hard calls were whether the weekend tip and 'super busy' are neutral facts or negatives, and which aspect fits the 'amazing mains' (taste or variety).",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Aroma",
+        "locationHint": "Warschauer Str.",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post places this Cantonese Aroma on Warschauer Str., but the only Aroma Chinese restaurant listed is at Kantstraße 35, so it is another venue."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Aroma is one of the creator's new favourite restaurants in Berlin",
+        "quote": "This is one of my new favourite restaurants in Berlin.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Aroma serves Cantonese Chinese food",
+        "quote": "It's Cantonese Chinese food.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the soup is nostalgic for the creator, who had it a lot as a child growing up in Sydney",
+        "quote": "I had that soup so much as a child.",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "soup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator is obsessed with the rice noodle dim sum",
+        "quote": "I'm obsessed with these rice noodle dim sum.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "rice noodle dim sum"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Aroma has a range of small dishes to share, including Peking duck",
+        "quote": "They have a range of small dishes,\nincluding Peking duck,",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Peking duck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator will get the Peking duck next time",
+        "quote": "which I will be getting next time",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Peking duck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Aroma has a bunch of really amazing mains",
+        "quote": "They have a bunch of really amazing mains.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the prices at Aroma are great",
+        "quote": "The prices are great.",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money",
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "get to Aroma early on a weekend",
+        "quote": "do get in early if you go on a weekend",
+        "sentiment": "neutral",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "crowding",
+            "wait"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can probably make a phone reservation at Aroma",
+        "quote": "I think you can make a phone reservation.",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Aroma gets super busy on a Saturday",
+        "quote": "It gets super busy on a Saturday.",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they waited a while for a table but luckily got in",
+        "quote": "We waited a while, but luckily we got in",
+        "sentiment": "mixed",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "neutral"
+          ],
+          "aspects": [
+            "wait",
+            "queue"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator will be going back to Aroma",
+        "quote": "I will be going back!!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.435Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.232Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.425Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

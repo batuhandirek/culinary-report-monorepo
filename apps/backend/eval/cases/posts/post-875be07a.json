@@ -1,0 +1,405 @@
+{
+  "id": "post-875be07a",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "topspots_in_berlin",
+    "locationName": "Berlin",
+    "hashtags": [
+      "topspots_in_berlin",
+      "topspotsbln",
+      "berlintoday",
+      "thingstodoinberlin",
+      "berlin2026"
+    ],
+    "taggedHandles": [],
+    "text": "🌷Interessante Veranstaltungen in Berlin am Wochenende 20.–22. März🔻\n\n🍫 Berlin Chocolate Festival\n📍 KOMPLEX Berlin, Modersohnstraße 35–45\n📅 21.–22. März, 11:00–21:00\nWas erwartet euch: Schokolade, Desserts, Verkostungen, viele Workshops für Erwachsene und Kinder, Kinderzone. Man kann 100 € von den Partnern des Festivals gewinnen.\nPreis: 5 € / kostenlos bis 16 Jahre\n\nMehr Infos: berlin.de/chocolate-festival\n\n🎉 Spring Festival (Nouruz / Newroz)\n📍 Humboldt Forum, Schloßplatz\n📅 21. März ab 11:00\nWas erwartet euch: Familienfestival – Musik, Tanz, Essen, Aktivitäten für Kinder\nPreis: kostenlos\n\nMehr Infos: visitberlin.de/nouruz-festival\n\n🧸 FEZ-Berlin (Familienwochenende)\n📍 Straße zum FEZ 2\n📅 21.–22. März, 10:00–18:00\nWas erwartet euch: Schatzsuchen, Spiele, Kreativangebote für Kinder\nPreis: 5 € Erwachsene / 3 € Kinder\n\nMehr Infos: fez-berlin.de\n\n🍔 Street Food Market\n📍 Markthalle Neun, Eisenbahnstraße 42/43\n📅 22. März, 12:00–18:00\nWas erwartet euch: Street Food aus aller Welt\nPreis: Eintritt kostenlos / Essen 5–12 €\n\nMehr Infos: markthalleneun.de\n\n🛍️ Flohmarkt\n📍 Arena Berlin, Eichenstraße 4\n📅 22. März, 10:00–18:00\nWas erwartet euch: Vintage + Essen\nPreis: kostenlos\n\nMehr Infos: arena.berlin\n\n🎨 Bröhan Museum (Family Sunday)\n📍 Schlossstraße 1A\n📅 22. März, 11:00–18:00\nWas erwartet euch: Museum + Familienworkshops\nPreis: 8 € Erwachsene / Kinder kostenlos\n\nMehr Infos: broehan-museum.de\n\n🎶 MaerzMusik Festival\n📍 Berliner Festspiele\n📅 21.–22. März\nWas erwartet euch: Konzerte und Performances\nPreis: ab 12 €\n\nMehr Infos: berlinerfestspiele.de\n\n🎬 Babylon Berlin\n📍 Rosa-Luxemburg-Straße 30\n📅 21.–22. März\nWas erwartet euch: Arthouse-Kino\nPreis: ca. 10 €\n\nMehr Infos: babylonberlin.de #topspots_in_berlin \n#topspotsbln #berlintoday #thingstodoinberlin #berlin2026",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "875be07a-790f-4a7d-8893-6484dbcf0fb8",
+    "externalId": "7619307840284413216",
+    "url": "https://www.tiktok.com/@topspots_in_berlin/video/7619307840284413216",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-20T12:05:54.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:19.554Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "KOMPLEX Berlin",
+        "locationHint": "Modersohnstraße 35–45",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Markthalle Neun",
+        "locationHint": "Eisenbahnstraße 42/43",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun"
+        }
+      },
+      {
+        "venueName": "Arena Berlin",
+        "locationHint": "Eichenstraße 4",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Berlin Chocolate Festival is at KOMPLEX Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the festival has chocolate, desserts, tastings, workshops for adults and children, and a children's area",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "chocolate",
+          "desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "entry costs 5 euros, free for children up to 16",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 5,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Street Food Market is at Markthalle Neun",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "it has street food from all over the world",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "street food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "entry is free",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "food costs 5–12 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 12,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the flea market is at Arena Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "it has vintage items and food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:58.880Z",
+    "usage": {
+      "inputTokens": 11368,
+      "outputTokens": 2810,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "An events roundup: only Markthalle Neun is a food place (a food hall); festivals, KOMPLEX, Humboldt Forum and Arena Berlin are venues or events, so their food mentions go to the city. Non-food listings (FEZ, museum, MaerzMusik, cinema) give no claims; the food price range 5–12 € is recorded with its upper bound.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Markthalle Neun",
+        "locationHint": "Eisenbahnstraße 42/43",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Markthalle Neun hosts a Street Food Market on 22 March, 12:00–18:00",
+        "quote": "📅 22. März, 12:00–18:00",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Street Food Market at Markthalle Neun offers street food from all over the world",
+        "quote": "Street Food aus aller Welt",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Street Food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "entry to the Street Food Market at Markthalle Neun is free",
+        "quote": "Eintritt kostenlos",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "food at the Street Food Market at Markthalle Neun costs 5–12 €",
+        "quote": "Essen 5–12 €",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 12,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Berlin Chocolate Festival on 21–22 March at KOMPLEX Berlin offers chocolate, desserts and tastings",
+        "quote": "Schokolade, Desserts, Verkostungen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Schokolade",
+          "Desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "entry to the Berlin Chocolate Festival costs 5 €, free up to 16 years",
+        "quote": "Preis: 5 € / kostenlos bis 16 Jahre",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 5,
+        "unit": "money",
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level",
+            "none"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the Spring Festival (Nouruz / Newroz) at the Humboldt Forum on 21 March offers food among music and dance, free entry",
+        "quote": "Familienfestival – Musik, Tanz, Essen, Aktivitäten für Kinder",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the flea market at Arena Berlin on 22 March offers vintage and food",
+        "quote": "Vintage + Essen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.243Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.433Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "id": "review-e8770468",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e8770468-3762-413c-9aa5-07e88eda7820",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2w4d05XdFVRMjR3VHpnMU9XSTFkMFJmUzFoZldVRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Burgermeister Zehlendorf",
+    "venueId": "9fe8ec87-7b26-427f-85c6-8e8ad682e787",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-18T08:58:35.246Z",
+    "stars": 5,
+    "text": "Ein guter Burgermeister nun auch endlich in Zehlendorf",
+    "textTranslated": "A good mayor has finally arrived in Zehlendorf!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:00:19.708Z",
+    "claims": [
+      {
+        "text": "a good mayor has finally arrived in Zehlendorf",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:05.770Z",
+    "usage": {
+      "inputTokens": 4946,
+      "outputTokens": 881,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The translation wrongly gives 'mayor'; Burgermeister is the venue chain, not a food. A newly opened branch is not a change. With no 'opening' kind, I read it as a fact (event is allowed), and 'endlich' makes it positive.",
+    "claims": [
+      {
+        "text": "the Burgermeister in Zehlendorf is good",
+        "quote": "Ein guter Burgermeister",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "Burgermeister has now finally opened in Zehlendorf",
+        "quote": "nun auch endlich in Zehlendorf",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "location"
+          ],
+          "kinds": [
+            "event"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

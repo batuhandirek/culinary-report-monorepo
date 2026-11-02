@@ -1,0 +1,746 @@
+{
+  "id": "post-816a40e7",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "berlin.syrien",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Neue Eröffnung in Berlin  Döner in Schawarma zusammen  1€  am 2.10.2026",
+    "subtitles": "Döner und Shawarma dieses mal nur für 1 Euro in Berlin\nneue Eröffnung komm alle vorbei\nsurich kurdische Restaurant in charlotteenburg\nbesser geht nicht das Jamin ich freue mich so sehr\nin diese Gegend braucht man sowas nicht\ngibt es\ngibt es nicht so viele Shawarma Laden und Döner hier\nund kannst du uns erzählen für 1 Euro\nwir sind hier willmasdorfstraße\ndie willmasdorfstraße 104 das ist 1 sorianische Art essen\ndie neue Öffnung Freitag\nwir haben richtig viele leckere Sachen\nalles surianische Art essen\nbitte einfach zu uns hinkommen zu probieren\ndas wäre richtig voll lecker mit viel Liebe tob\nalso besser geht nicht und sie haben auch krüde\nihr kennt das äh die krüde machen so\nFladenbrot selber gemacht ja\nkurmanche Restaurant wilmershofstraße 104\nzum Eröffnung gibt's Shawarma für 1 Euro\nam Freitag und dann für 2 Euro am 2.\nTag und dann für 3 Euro\nund 50 Prozent äh 3 Tage lang Rabatt auf alles\ndeswegen kommt ihr alle vorbei\nwir warten auf euch um 13 Uhr am Freitag\nund nicht nur Shawarma und Döner\nsondern Crispy brostet\nChicken und äh manakisch und Pizza äh Lahmacun\nes gibt einfach alles Salat\nund alles was gesundes und schönes und mit Liebe gemacht\näh und auch Schawarma und Dönerbrot äh wird selber gebackt\ndeswegen wir warten auf euch komm einfach vorbei\nbring 1 Euro mit\nund ich lade euch 1",
+    "subtitlesLanguage": "deu-DE",
+    "id": "816a40e7-9633-41fe-98ee-8b0dae16f12b",
+    "externalId": "7691006703365672225",
+    "url": "https://www.tiktok.com/@berlin.syrien/video/7691006703365672225",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-29T17:14:08.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:28:02.229Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Kurmanci Restaurant",
+        "locationHint": "Wilmersdorfer Straße 104, Charlottenburg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": true,
+        "match": {
+          "method": "llm",
+          "brandId": "30466781-6b71-4f07-933e-f9dfae4b270a",
+          "brandName": "KURMANJI Restaurant",
+          "venueId": "e5a5db57-2c2f-46e1-85b1-209624e0571a",
+          "venueName": "KURMANJI Restaurant"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "döner and shawarma for 1 euro",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "döner",
+          "shawarma"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "new opening",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant is in Charlottenburg",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the address is Wilmersdorfstraße 104",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a Syrian-style restaurant",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it has many tasty dishes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it serves Kurdish food too",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Kurdish food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the flatbread is homemade",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "flatbread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "shawarma costs 1 euro on opening day, 2 euros on the second day, and 3 euros on the third day",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "shawarma"
+        ],
+        "amount": 3,
+        "unit": "money",
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is 50 percent discount on everything for 3 days",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 50,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they are waiting for people at 13:00 on Friday",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 13,
+        "unit": "minutes",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they also serve crispy roasted chicken, manakish, pizza, lahmacun, salad, and shawarma and döner bread",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "crispy roasted chicken",
+          "manakish",
+          "pizza",
+          "lahmacun",
+          "salad",
+          "shawarma",
+          "doner bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "everything is made with love",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:43:44.686Z",
+    "usage": {
+      "inputTokens": 10636,
+      "outputTokens": 6756,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue is never clearly named: I took the transcript's 'kurmanche Restaurant' at Wilmersdorfer Straße 104 as its name, since the address pins it down and the report is useless without it. I left out garbled lines ('in diese Gegend braucht man sowas nicht', the krüde aside is kept only as optional) and the repeated 1-euro announcement already covered by the caption deal.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Kurmanche Restaurant",
+        "locationHint": "Wilmersdorfer Straße 104, Charlottenburg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "30466781-6b71-4f07-933e-f9dfae4b270a",
+          "brandName": "KURMANJI Restaurant",
+          "venueId": "e5a5db57-2c2f-46e1-85b1-209624e0571a",
+          "venueName": "KURMANJI Restaurant",
+          "note": "The transcript's 'Kurmanche' is a misspelling of Kurmanji, and the address Wilmersdorfer Straße 104 matches this branch exactly."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the restaurant is a new opening in Berlin",
+        "quote": "Neue Eröffnung in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Döner and Schawarma for 1€ on 2.10.2026",
+        "quote": "Döner in Schawarma zusammen  1€  am 2.10.2026",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Döner",
+          "Schawarma"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a Syrian-Kurdish restaurant in Charlottenburg",
+        "quote": "surich kurdische Restaurant in charlotteenburg",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "authenticity",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant can't get any better",
+        "quote": "besser geht nicht",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are not many shawarma and döner shops in this area",
+        "quote": "gibt es nicht so viele Shawarma Laden und Döner hier",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant is at Wilmersdorfer Straße 104",
+        "quote": "die willmasdorfstraße 104",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant serves Syrian-style food",
+        "quote": "das ist 1 sorianische Art essen",
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the opening is on Friday",
+        "quote": "die neue Öffnung Freitag",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "opening_hours"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant has lots of delicious things",
+        "quote": "wir haben richtig viele leckere Sachen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is really delicious and made with a lot of love",
+        "quote": "das wäre richtig voll lecker mit viel Liebe",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant also has krüde",
+        "quote": "sie haben auch krüde",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "krüde"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Fladenbrot is homemade",
+        "quote": "Fladenbrot selber gemacht",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Fladenbrot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "for the opening, Shawarma costs 1 Euro on Friday",
+        "quote": "zum Eröffnung gibt's Shawarma für 1 Euro",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Shawarma"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shawarma costs 2 Euro on the second opening day",
+        "quote": "für 2 Euro am 2.",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Shawarma"
+        ],
+        "amount": 2,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Shawarma then costs 3 Euro on the third opening day",
+        "quote": "und dann für 3 Euro",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Shawarma"
+        ],
+        "amount": 3,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "50 percent discount on everything for 3 days",
+        "quote": "50 Prozent äh 3 Tage lang Rabatt auf alles",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the restaurant opens at 13:00 on Friday",
+        "quote": "wir warten auf euch um 13 Uhr am Freitag",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "besides Shawarma and Döner they serve Crispy brostet Chicken, manakisch, Pizza and Lahmacun",
+        "quote": "Crispy brostet\nChicken und äh manakisch und Pizza äh Lahmacun",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Crispy brostet Chicken",
+          "manakisch",
+          "Pizza",
+          "Lahmacun"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there is simply everything, including Salat",
+        "quote": "es gibt einfach alles Salat",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "everything is healthy, nice and made with love",
+        "quote": "alles was gesundes und schönes und mit Liebe gemacht",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Schawarma and Dönerbrot bread is baked in-house",
+        "quote": "Schawarma und Dönerbrot äh wird selber gebackt",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Schawarma",
+          "Dönerbrot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): No finer aspect fits an opening, so null and the catch-all other are both defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Describing the restaurant type fits no finer aspect, so null or other are both reasonable."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): An opening date is not really hours, but labelling it opening_hours or null are both defensible."
+      },
+      {
+        "at": "2026-11-01T21:36:47.242Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

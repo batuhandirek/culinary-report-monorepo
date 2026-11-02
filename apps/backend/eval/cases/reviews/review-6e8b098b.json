@@ -1,0 +1,210 @@
+{
+  "id": "review-6e8b098b",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "6e8b098b-6c23-4c5c-bf49-a5c846c07486",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25oNWVrUTVOVTFNZDJKTU5FeDRUMWd4WHpkQlltYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sphere Tim Raue",
+    "venueId": "a02ef957-885a-4af9-b5e2-7a5090f4e1fa",
+    "brand": "Sphere Tim Raue",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-22T08:38:59.280Z",
+    "stars": 3,
+    "text": "Für mich war es zu laut wie in einer Bahnhofshalle. Die Lüftung ist so kalt ich musste mir eine Jacke überziehen. Ich liebe wenn der Teller vorgewärmt ist, sie waren eiskalt. Aber sonst war alles einfach toll kann ich nur empfehlen.",
+    "textTranslated": "It was too loud for me, like a train station. The ventilation was so cold I had to put on a jacket. I love it when the plate is pre-warmed, but mine were ice cold. Otherwise, everything was simply great, I can highly recommend it."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:36:27.508Z",
+    "claims": [
+      {
+        "text": "too loud",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "like a train station",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "ventilation was so cold",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had to put on a jacket",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "temperature",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "plate is pre-warmed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "temperature",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "mine were ice cold",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was simply great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:06.351Z",
+    "usage": {
+      "inputTokens": 5088,
+      "outputTokens": 1200,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The cold ventilation is a room that is too cold, so it is atmosphere, though amenities (air conditioning) is also allowed. The cold plates are read as temperature. 'Everything was great' is a general opinion with no aspect; verdict is also allowed for it.",
+    "claims": [
+      {
+        "text": "it was too loud, like a train station hall",
+        "quote": "Für mich war es zu laut wie in einer Bahnhofshalle",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the ventilation was so cold the reviewer had to put on a jacket",
+        "quote": "Die Lüftung ist so kalt ich musste mir eine Jacke überziehen",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "amenities"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the plates were ice cold instead of pre-warmed",
+        "quote": "Ich liebe wenn der Teller vorgewärmt ist, sie waren eiskalt",
+        "sentiment": "negative",
+        "aspect": "temperature",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "otherwise everything was simply great",
+        "quote": "Aber sonst war alles einfach toll",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer can highly recommend it",
+        "quote": "kann ich nur empfehlen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.211Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

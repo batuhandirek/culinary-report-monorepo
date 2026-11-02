@@ -13,10 +13,11 @@ import { CityDay } from 'src/modules/cities/entities/city-day.entity.js';
 import { CityEvent } from 'src/modules/cities/entities/city-event.entity.js';
 import { CitySource } from 'src/modules/cities/entities/city-source.entity.js';
 import { Embedding } from 'src/modules/embeddings/entities/embedding.entity.js';
-import { DishName } from 'src/modules/feedback/entities/dish-name.entity.js';
-import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
+import { Statement } from 'src/modules/statements/entities/statement.entity.js';
+import { StatementPart } from 'src/modules/statements/entities/statement-part.entity.js';
 import { Topic } from 'src/modules/topics/entities/topic.entity.js';
-import { TopicIgnoredWord } from 'src/modules/topics/entities/topic-ignored-word.entity.js';
+import { Term } from 'src/modules/topics/entities/term.entity.js';
+import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
 import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
 import { MenuItemTopic } from 'src/modules/topics/entities/menu-item-topic.entity.js';
 import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
@@ -95,7 +96,8 @@ export default defineConfig({
 		TrendSearchInterest,
 		Topic,
 		VenueTopic,
-		TopicIgnoredWord,
+		Term,
+		TermTopic,
 		TrendRelatedQuery,
 		Venue,
 		VenueSnapshot,
@@ -135,8 +137,8 @@ export default defineConfig({
 		ApifyRun,
 		PipelineRun,
 		BacklogRun,
-		FeedbackPoint,
-		DishName,
+		Statement,
+		StatementPart,
 		MentionTopic,
 		MenuItemTopic,
 		Prospect,

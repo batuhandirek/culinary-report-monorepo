@@ -1,0 +1,582 @@
+{
+  "id": "review-5582d6b8",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "5582d6b8-a5dc-4884-a710-0b07c1d9e06e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xVeU5UaHJSR1V5VlVOeVdHMUhXRFpVT0RCT1FrRRAB",
+    "platform": "google",
+    "language": "ru",
+    "venue": "Fukagawa Ramen",
+    "venueId": "0c3d34d3-1640-47cf-b727-171158ca6aba",
+    "brand": "Fukagawa Ramen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-03T12:30:13.175Z",
+    "stars": 3,
+    "text": "Рамен вкусный, мы брали shoyu и asari,  оба безумно вкусные ! Но и проблемы тоже были.. по приходу нас приятно встретили, дали меню. Позже когда мы заказали, нам положили ложки на край стола, а стол ужасно шатается, мой друг лишь коснулся стола и ложки тут же упали. В общем-то, не ешьте снаружи!!! на улице очень шаткие столы. а также не берите матчу, это невозможно пить! я брала iced matcha latte аж за 8€ и в итоге я сделала лишь пару глотков.\n\nвыводы: не берите матчу латте и садитесь внутри, место правда классное :)",
+    "textTranslated": "The ramen was delicious. We had shoyu and asari, both incredibly delicious! But there were some issues, too. We were greeted pleasantly upon arrival and given menus. Later, when we ordered, they placed our spoons on the edge of the table, which was terribly wobbly. My friend barely touched the table and the spoons fell over. Basically, don't eat outside!!! The tables outside are very wobbly. Also, don't get matcha, it's undrinkable! I ordered an iced matcha latte for a whopping €8 and only managed a couple of sips.\n\nConclusion: skip the matcha latte and sit inside, the place is really great :)"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:06.236Z",
+    "claims": [
+      {
+        "text": "the ramen was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "ramen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had shoyu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "shoyu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had asari",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "asari"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "were greeted pleasantly upon arrival",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "given menus",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the spoons were placed on the edge of the table",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the table was very wobbly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the spoons fell over",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the tables outside are very wobbly",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "matcha is undrinkable",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "ordered an iced matcha latte",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the iced matcha latte cost €8",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": 8,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "only managed a couple of sips",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "skip the matcha latte",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "sit inside",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is really great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:35.870Z",
+    "usage": {
+      "inputTokens": 5348,
+      "outputTokens": 3666,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the wobbly-table complaints are tied to outside seating, so outdoor_seating is preferred over interior (furniture). The 'аж за 8€' matcha price reads as a complaint about price, so it is negative price_level, with neutral fact also allowed. The 'don't eat outside' and 'sit inside' advice concerns seating rather than the venue as a whole, so it is an opinion, with verdict allowed.",
+    "claims": [
+      {
+        "text": "the ramen was delicious",
+        "quote": "Рамен вкусный",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Рамен"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had the shoyu and asari",
+        "quote": "мы брали shoyu и asari",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "shoyu",
+          "asari"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the shoyu and asari were both incredibly delicious",
+        "quote": "оба безумно вкусные",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "shoyu",
+          "asari"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there were some issues too",
+        "quote": "Но и проблемы тоже были",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they were greeted pleasantly on arrival",
+        "quote": "по приходу нас приятно встретили",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they were given menus",
+        "quote": "дали меню",
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "attentiveness",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "staff placed the spoons on the edge of the table",
+        "quote": "нам положили ложки на край стола",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "dining_area"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the table was terribly wobbly",
+        "quote": "стол ужасно шатается",
+        "sentiment": "negative",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the friend barely touched the table and the spoons fell",
+        "quote": "мой друг лишь коснулся стола и ложки тут же упали",
+        "sentiment": "negative",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "don't eat outside",
+        "quote": "не ешьте снаружи",
+        "sentiment": "negative",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the tables outside are very wobbly",
+        "quote": "на улице очень шаткие столы",
+        "sentiment": "negative",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "don't get the matcha, it is undrinkable",
+        "quote": "не берите матчу, это невозможно пить",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "матчу"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the iced matcha latte cost a whopping €8",
+        "quote": "я брала iced matcha latte аж за 8€",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": 8,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "only managed a couple of sips of the iced matcha latte",
+        "quote": "в итоге я сделала лишь пару глотков",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "skip the matcha latte",
+        "quote": "не берите матчу латте",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "матчу латте"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "sit inside",
+        "quote": "садитесь внутри",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "outdoor_seating",
+            "space"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the place is really great",
+        "quote": "место правда классное",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had iced matcha latte",
+        "quote": "я брала iced matcha latte",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "iced matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent does have \"the place is really great\" (its claim 15); the scorer paired that claim with \"sit inside\" instead."
+      },
+      {
+        "at": "2026-11-01T14:39:43.592Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): \"я брала iced matcha latte\" is a stated fact, so a separate \"had\" claim is a harmless split."
+      },
+      {
+        "at": "2026-11-01T21:36:47.210Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

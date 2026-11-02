@@ -1,0 +1,322 @@
+{
+  "id": "review-0541b749",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:2",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "0541b749-dbb8-4c18-b47c-4f364b429a11",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xSamIwOXZTamxtWVRGSVJrVjVTM1JxY0hBNGVFRRAB",
+    "platform": "google",
+    "language": "fr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-21T18:45:56.298Z",
+    "stars": 2,
+    "text": "Pour faire simple, frites surgelées trop salées, cash only, viande poulet uniquement et sans saveur dans le sandwich, pain croustillant mais vite fait (rien de spécial). Les légumes frais sont bons et difficile à digérer.",
+    "textTranslated": "To put it simply, the frozen fries were too salty, it was cash only, the sandwich consisted solely of bland chicken, and the bread was crispy but quickly made (nothing special). The fresh vegetables were tasty but difficult to digest."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:35:58.377Z",
+    "claims": [
+      {
+        "text": "the frozen fries were too salty",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was cash only",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the sandwich consisted solely of bland chicken",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bread was crispy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bread was quickly made",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fresh vegetables were tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fresh vegetables were difficult to digest",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:38.392Z",
+    "usage": {
+      "inputTokens": 5065,
+      "outputTokens": 2678,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'cash only' in a 2-star complaint list is negative or neutral fact, and how to aspect 'chicken only' (menu_variety vs food). The bread's 'quickly made, nothing special' fits no finer food aspect, so food root.",
+    "claims": [
+      {
+        "text": "the frites were frozen",
+        "quote": "frites surgelées",
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the frites were too salty",
+        "quote": "frites surgelées trop salées",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is cash only",
+        "quote": "cash only",
+        "sentiment": "negative",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the meat in the sandwich was chicken only",
+        "quote": "viande poulet uniquement",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "poulet"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the poulet in the sandwich was flavourless",
+        "quote": "viande poulet uniquement et sans saveur dans le sandwich",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "poulet",
+          "sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the pain was crispy",
+        "quote": "pain croustillant",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "pain"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "freshness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the pain was quickly made, nothing special",
+        "quote": "pain croustillant mais vite fait (rien de spécial)",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "pain"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste",
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the fresh légumes were good",
+        "quote": "Les légumes frais sont bons",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "légumes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the légumes were hard to digest",
+        "quote": "Les légumes frais sont bons et difficile à digérer",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "légumes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.202Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.400Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

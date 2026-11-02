@@ -8,6 +8,7 @@ import {
 	nameSimilarity,
 	normalizeVenueName,
 	venueAliases,
+	namesSameHead,
 } from '../util/venue-names.js';
 
 describe('venue names', () => {
@@ -15,7 +16,9 @@ describe('venue names', () => {
 		const berlin = cityStopwords(['Berlin']);
 		expect(normalizeVenueName('Café Ölmühle – Bar & Grill Berlin', berlin)).toBe('olmuhle');
 		expect(normalizeVenueName('Café Ölmühle – Bar & Grill Berlin')).toBe('olmuhle berlin');
-		expect(normalizeVenueName('Lokanta Çiya İstanbul', cityStopwords(['istanbul', 'lokanta']))).toBe('ciya');
+		expect(
+			normalizeVenueName('Lokanta Çiya İstanbul', cityStopwords(['istanbul', 'lokanta'])),
+		).toBe('ciya');
 		expect(normalizeVenueName('Hühnerhaus36')).toBe('huhnerhaus36');
 	});
 
@@ -41,9 +44,24 @@ describe('venue names', () => {
 		expect(isFoodVenue('Cocktail bar')).toBe(true);
 		expect(isFoodVenue('Typing service')).toBe(false);
 		// Food Google names without a food word we had: "pub" inside a word, shops you eat at
-		for (const category of ['Gastropub', 'Brasserie', 'Sandwich shop', 'Açaí shop', 'Creperie', 'Indian takeaway', 'Meyhane'])
+		for (const category of [
+			'Gastropub',
+			'Brasserie',
+			'Sandwich shop',
+			'Açaí shop',
+			'Creperie',
+			'Indian takeaway',
+			'Meyhane',
+		])
 			expect(isFoodVenue(category)).toBe(true);
-		for (const category of ['Hotel', 'Event venue', 'Grocery store', 'Night club', 'Public bathroom', 'Hair salon'])
+		for (const category of [
+			'Hotel',
+			'Event venue',
+			'Grocery store',
+			'Night club',
+			'Public bathroom',
+			'Hair salon',
+		])
 			expect(isFoodVenue(category)).toBe(false);
 		expect(isFoodVenue(null)).toBe(true);
 	});
@@ -52,5 +70,12 @@ describe('venue names', () => {
 		expect(isSameVenue('Olympische Brücke', 'Imbiss Olympische Brücke')).toBe(true);
 		expect(isSameVenue('Berlin Döner Montes Claros', 'Döner Pro')).toBe(false);
 		expect(isSameVenue('Berlin', 'Steakhouse Hazienda')).toBe(false);
+	});
+
+	it('tells one name heading another, word for word, from a short common word', () => {
+		expect(namesSameHead('bahadur', 'bahadur tandoori grill currys')).toBe(true);
+		expect(namesSameHead('kadewe kaufhaus des westens', 'kadewe')).toBe(true);
+		expect(namesSameHead('five', 'five elephant')).toBe(false);
+		expect(namesSameHead('bahadu', 'bahadur grill')).toBe(false);
 	});
 });

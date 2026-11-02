@@ -1,0 +1,212 @@
+{
+  "id": "review-279b23c3",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "279b23c3-f43b-49fa-bf4e-766caff0cba2",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pWd0xXaFpUa3RvTkdsU00wbFRMWHBMV1RaRk1uYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "810e0c36-25e3-45e8-a3c7-c0390470676e",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-27T19:52:26.335Z",
+    "stars": 5,
+    "text": "Geilster Döner in Berlin!!!!\nEssen 12/10\nService 12/10\nAlles über 10.\nDas aller wichtigste ist Justin! Er kriegt eine 13/10!!!!!",
+    "textTranslated": "Best doner kebab in Berlin!!!!\n\nFood 12/10\nService 12/10\nEverything else over 10.\n\nMost importantly, Justin! He gets a 13/10!!!!!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:53:24.768Z",
+    "claims": [
+      {
+        "text": "the doner kebab was the best in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "food was 12/10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "service was 12/10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything else was over 10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Justin was the most importantly",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Justin got 13/10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:41.315Z",
+    "usage": {
+      "inputTokens": 5047,
+      "outputTokens": 1149,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: 'Geilster Döner in Berlin' matches the 'best kebab in Berlin' verdict example, with aspect taste (food or null also fine); 'Alles über 10' is a whole-place rating, so verdict or opinion; the 12/10 and 13/10 scores are ratings, not minutes or money, so no amount. Justin is a staff member praised without specifics, so service, with friendliness as an alternative.",
+    "claims": [
+      {
+        "text": "the best Döner in Berlin",
+        "quote": "Geilster Döner in Berlin",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food rated 12/10",
+        "quote": "Essen 12/10",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service rated 12/10",
+        "quote": "Service 12/10",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "everything rated over 10",
+        "quote": "Alles über 10",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "Justin is the most important and gets a 13/10",
+        "quote": "Das aller wichtigste ist Justin! Er kriegt eine 13/10",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

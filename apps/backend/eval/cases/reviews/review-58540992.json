@@ -1,0 +1,374 @@
+{
+  "id": "review-58540992",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "58540992-01a9-4b87-bf79-be83fda4ac71",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25GM2FqaEdXVXBKYTNJd05IUTNVRWRvYlVOamExRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Chén Chè",
+    "venueId": "61541635-ec21-4a90-8496-5f3f9358dbc3",
+    "brand": "Chén Chè",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-03-07T20:20:07.675Z",
+    "stars": 3,
+    "text": "Eigentlich ein sehr schönes und gutes Restaurant mit tollem Ambiente. Aber wir wurden bei der Ankunft sehr unfreundlich zurechtgewiesen, weil wir mit weniger Personen kamen als reserviert (4 statt 6) und angeblich zu spät (eine telefonische Änderung der Reservierung war nicht notiert worden -  nicht unser Fehler!). Ich möchte mich nicht abkanzeln lassen, weil jemand anders nicht erscheint. Der Service am Tisch war aufmerksam und freundlich (deshalb überhaupt Sterne), aber der Chef hat sich unmöglich verhalten. Daher werde ich das Chen Che sicher nicht wieder besuchen.",
+    "textTranslated": "It's actually a very nice and good restaurant with a great atmosphere. However, we were very rudely reprimanded upon arrival because we came with fewer people than booked (4 instead of 6) and were supposedly late (a telephone change to the reservation hadn't been noted – not our fault!). I don't want to be dismissed because someone else didn't show up. The service at the table was attentive and friendly (hence the stars), but the owner behaved unacceptably. Therefore, I certainly won't be visiting Chen Che again."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:47.174Z",
+    "claims": [
+      {
+        "text": "it's actually a very nice and good restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we were very rudely reprimanded upon arrival",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we came with fewer people than booked",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "4 instead of 6",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we were supposedly late",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a telephone change to the reservation hadn't been noted",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "that wasn't our fault",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service at the table was attentive and friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the owner behaved unacceptably",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "won't be visiting Chen Che again",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:33.666Z",
+    "usage": {
+      "inputTokens": 5322,
+      "outputTokens": 2982,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the owner's unacceptable behaviour is friendliness or ownership (friendliness chosen, since it is about how he treated the guests), and whether 'a very nice and good restaurant' is an opinion or a verdict. The '4 instead of 6' is a party size, not minutes or money, so no amount is given.",
+    "claims": [
+      {
+        "text": "Chén Chè is actually a very nice and good restaurant",
+        "quote": "Eigentlich ein sehr schönes und gutes Restaurant",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the restaurant has a great atmosphere",
+        "quote": "mit tollem Ambiente",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they were very rudely reprimanded on arrival",
+        "quote": "wir wurden bei der Ankunft sehr unfreundlich zurechtgewiesen",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they came with fewer people than reserved, 4 instead of 6",
+        "quote": "weil wir mit weniger Personen kamen als reserviert (4 statt 6)",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they were told they were supposedly late",
+        "quote": "angeblich zu spät",
+        "sentiment": "negative",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "a phone change to the reservation had not been noted, not the guests' fault",
+        "quote": "eine telefonische Änderung der Reservierung war nicht notiert worden -  nicht unser Fehler!",
+        "sentiment": "negative",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer does not want to be told off because someone else did not show up",
+        "quote": "Ich möchte mich nicht abkanzeln lassen, weil jemand anders nicht erscheint.",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "complaint_handling",
+            "reservation_handling"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service at the table was attentive",
+        "quote": "Der Service am Tisch war aufmerksam",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service at the table was friendly",
+        "quote": "aufmerksam und freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the table service is the reason for giving any stars at all",
+        "quote": "deshalb überhaupt Sterne",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the owner behaved unacceptably",
+        "quote": "der Chef hat sich unmöglich verhalten",
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership",
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer will certainly not visit Chen Che again",
+        "quote": "Daher werde ich das Chen Che sicher nicht wieder besuchen.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.210Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

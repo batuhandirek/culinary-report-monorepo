@@ -1,0 +1,322 @@
+{
+  "id": "review-b9d9100a",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "b9d9100a-ed8d-4cdd-9c7a-b9b0c048cf74",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21oTU56WmlibVZaU1RKbmQwaEJPSGhJV1VGSVpFRRAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-01T16:59:06.516Z",
+    "stars": 3,
+    "text": "Lezzeti müthiş sebze ayrı bir tat katıyor fiyatlar da aşırı iyi çok uygun soslar çok güzel\nAma\nHiçbir yemeğe 90 dk sıra beklememeniz gerekir\nEğer bir yerde bir sıra varsa ve o sıra ilerliyorsa tabii ki orada beklenebilir çünkü müessesenin bu konu ile ilgili yapabilrceği bir şey yoktur\nAma çok uzun olmayan bir sıra toplasan 20 kişi için neredeyse 90 dk bekledik ve bu kadar ünlü bir işletmede içeride hesap alma döner kesme dahil toplam her işleri yapacak sadece 2 kişi var\nBirazcık personel alımı ile her şey müthiş işleyebilir.",
+    "textTranslated": "The vegetables add a fantastic flavor, the prices are extremely good and very reasonable, the sauces are great.\nBut\nYou shouldn't have to wait in line for 90 minutes for any dish.\nIf there's a line somewhere and it's moving, of course you can wait there because the establishment can't do anything about it.\nBut we waited almost 90 minutes for a line that wasn't very long, maybe 20 people in total, and in such a famous establishment, there are only 2 people doing all the work inside, including taking payments and cutting the döner.\nWith a little more staff, everything could run wonderfully."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:12:00.865Z",
+    "claims": [
+      {
+        "text": "the vegetables add a fantastic flavor",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the prices are extremely good and very reasonable",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the sauces are great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "wait in line for 90 minutes for any dish",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "we waited almost 90 minutes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "the line wasn't very long",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "maybe 20 people in total",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": 20,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "only 2 people doing all the work inside",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": 2,
+        "unit": "money",
+        "kind": "change"
+      },
+      {
+        "text": "taking payments and cutting the döner",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "with a little more staff, everything could run wonderfully",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:55.637Z",
+    "usage": {
+      "inputTokens": 5390,
+      "outputTokens": 2342,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the staffing complaint is about service in general (alt speed_of_service), and the 90-minute waits are queue since it is the line to order. The general remark that a moving line is acceptable is an optional aside.",
+    "claims": [
+      {
+        "text": "the taste is fantastic",
+        "quote": "Lezzeti müthiş",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the vegetables add a distinct flavour",
+        "quote": "sebze ayrı bir tat katıyor",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sebze"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are extremely good and very reasonable",
+        "quote": "fiyatlar da aşırı iyi çok uygun",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the sauces are very good",
+        "quote": "soslar çok güzel",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "soslar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "you shouldn't have to wait 90 minutes in line for any dish",
+        "quote": "Hiçbir yemeğe 90 dk sıra beklememeniz gerekir",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waiting in a line that moves is acceptable, as the establishment can't help it",
+        "quote": "Eğer bir yerde bir sıra varsa ve o sıra ilerliyorsa tabii ki orada beklenebilir",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited almost 90 minutes in a not very long line of about 20 people",
+        "quote": "çok uzun olmayan bir sıra toplasan 20 kişi için neredeyse 90 dk bekledik",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "in such a famous place only 2 people do all the work, including taking payment and cutting the döner",
+        "quote": "bu kadar ünlü bir işletmede içeride hesap alma döner kesme dahil toplam her işleri yapacak sadece 2 kişi var",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "with a little more staff everything could run wonderfully",
+        "quote": "Birazcık personel alımı ile her şey müthiş işleyebilir.",
+        "sentiment": "mixed",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

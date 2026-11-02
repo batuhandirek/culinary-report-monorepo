@@ -1,0 +1,273 @@
+{
+  "id": "post-165a9370",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "mero.pov",
+    "locationName": null,
+    "hashtags": [
+      "trendingaudio",
+      "tiktoktrends",
+      "fyp",
+      "foryoupage",
+      "berlin"
+    ],
+    "taggedHandles": [],
+    "text": "Discovering this gem of a spot!\n\n\\ud83e\\udd29 Look at those colorful lights - it's such a cozy and aesthetic place to hang out.\nThe perfect place for your next date night or dinner with friends! \\ud83c\\udf89\nCan you believe the ambience of this Indian Restaurant in the heart of Berlin? Let me know in the comments if you'd love to visit!\n\n#trendingaudio #TikTokTrends #fyp #foryoupage #berlin ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "165a9370-b71b-47f5-a3a3-4d8a0968656e",
+    "externalId": "7696083486456761633",
+    "url": "https://www.tiktok.com/@mero.pov/video/7696083486456761633",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-13T09:34:40.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:48:49.110Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "unnamed Indian Restaurant",
+        "locationHint": "heart of Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the spot has colorful lights",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place is cozy and aesthetic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a perfect place for date night or dinner with friends",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the ambience is impressive",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is an Indian restaurant in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:32:09.881Z",
+    "usage": {
+      "inputTokens": 6024,
+      "outputTokens": 1555,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The Indian restaurant is never named or tagged, so no place is listed. Its claims are kept with subject none rather than dropped. The ambience question is rhetorical praise, so it is an opinion, not a question. The comment call-to-action is narration and is left out.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "the Indian restaurant is a gem of a spot",
+        "quote": "Discovering this gem of a spot!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Indian restaurant has colorful lights",
+        "quote": "Look at those colorful lights",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Indian restaurant is a cozy and aesthetic place to hang out",
+        "quote": "it's such a cozy and aesthetic place to hang out",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Indian restaurant is the perfect place for a date night or dinner with friends",
+        "quote": "The perfect place for your next date night or dinner with friends!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Indian restaurant has an impressive ambience",
+        "quote": "Can you believe the ambience of this Indian Restaurant",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Indian restaurant is in the heart of Berlin",
+        "quote": "Indian Restaurant in the heart of Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.225Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.421Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

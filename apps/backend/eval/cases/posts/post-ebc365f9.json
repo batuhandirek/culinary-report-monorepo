@@ -1,0 +1,97 @@
+{
+  "id": "post-ebc365f9",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "mallliikaa_",
+    "locationName": null,
+    "hashtags": [
+      "fashiontok",
+      "ootd",
+      "fitcheck"
+    ],
+    "taggedHandles": [],
+    "text": "Recommendations for new dinner spots in Berlin please??\n\n#fashiontok #ootd #fitcheck ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "ebc365f9-75d4-4017-adb9-d0e5bd6bc665",
+    "externalId": "7617158639048101153",
+    "url": "https://www.tiktok.com/@mallliikaa_/video/7617158639048101153",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-14T17:05:54.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:43:53.953Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "asks for recommendations for new dinner spots in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:13.176Z",
+    "usage": {
+      "inputTokens": 5890,
+      "outputTokens": 448,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named, so there are no places. The only content is a request for Berlin dinner recommendations. It says nothing about any food, place or price, so it is kept as an optional city question.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "the creator asks for recommendations for new dinner spots in Berlin",
+        "quote": "Recommendations for new dinner spots in Berlin please??",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.254Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.442Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

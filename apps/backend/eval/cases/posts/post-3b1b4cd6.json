@@ -1,0 +1,198 @@
+{
+  "id": "post-3b1b4cd6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "crispys.chicken",
+    "locationName": null,
+    "hashtags": [
+      "crispyschicken",
+      "fyp",
+      "halalchicken",
+      "foodlove",
+      "berlinfoodspot"
+    ],
+    "taggedHandles": [],
+    "text": "Iss mich, ich bin unfassbar knusprig..🤤\n🍗 #CrispysChicken Berlin\n📍 Schöneberg\n📍 Friedrichshain\n📍 Prenzlauer Berg\n📍 Moabit\n#fyp #crispyschicken #halalchicken #foodlove #berlinfoodspot",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "3b1b4cd6-563c-454a-b71e-6d7a2f9e6ae7",
+    "externalId": "7619361047668952352",
+    "url": "https://www.tiktok.com/@crispys.chicken/video/7619361047668952352",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Crispy's Chicken Berlin (Schöneberg)",
+    "postedAt": "2026-03-20T15:32:03.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:43:27.487Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Crispys Chicken",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "a9ee357f-3ad6-4242-9815-7d9f16ee7183",
+          "brandName": "Crispy's Chicken Berlin (Schöneberg)",
+          "venueId": "3523ff7d-cbc5-4497-b259-996cd442ac14",
+          "venueName": "Crispy's Chicken Berlin (Schöneberg)"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the chicken is incredibly crispy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Crispys Chicken has locations in Schöneberg, Friedrichshain, Prenzlauer Berg, and Moabit",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:20:14.248Z",
+    "usage": {
+      "inputTokens": 10137,
+      "outputTokens": 1355,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 6322
+    },
+    "notes": "Own-account promo with no transcript; the other districts are branches of the same chain, so they are a location fact rather than separate places. The halal claim comes only from a hashtag and is optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Crispy's Chicken Berlin (Schöneberg)",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "a9ee357f-3ad6-4242-9815-7d9f16ee7183",
+          "brandName": "Crispy's Chicken Berlin (Schöneberg)",
+          "venueId": "3523ff7d-cbc5-4497-b259-996cd442ac14",
+          "venueName": "Crispy's Chicken Berlin (Schöneberg)",
+          "note": "The post lists four locations, but the place is the Schöneberg one, posted by the Schöneberg account; that brand has a single branch."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the chicken is incredibly crispy",
+        "quote": "ich bin unfassbar knusprig",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Crispy's Chicken has locations in Schöneberg, Friedrichshain, Prenzlauer Berg and Moabit",
+        "quote": "📍 Schöneberg\n📍 Friedrichshain\n📍 Prenzlauer Berg\n📍 Moabit",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chicken is halal",
+        "quote": "#halalchicken",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.435Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.231Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.425Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

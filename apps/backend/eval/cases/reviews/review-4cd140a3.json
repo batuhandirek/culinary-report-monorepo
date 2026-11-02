@@ -1,0 +1,422 @@
+{
+  "id": "review-4cd140a3",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "4cd140a3-88a9-4741-b140-3cd6615fcc83",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tVMVNraHpTMVpqZDBrd1oyeFpTMHAzTFhwUmMxRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Borchardt",
+    "venueId": "c0f474be-f6bc-44b1-b4b9-018598e98753",
+    "brand": "Borchardt",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-21T18:14:12.836Z",
+    "stars": 2,
+    "text": "Wir waren zu Besuch im Berlin und hatten einen Tisch reserviert. 2 Personen.\nAm Beginn wurden wir am einen Tisch geführt wo der Nachbarstisch nur einen Windhauch entfernt war. Die Gäste an diesem Tisch fanden es korrekt, ihren Hund an unserem zukünftigen Platz zu setzen. Dies war nicht akzeptabel. Der zweite Platz für 2 Personen war ebenfalls ohne jegliche Privatsphäre.\nAls wir gesessen sind, bekamen wir schnell die Karten sowie das Essen. Mit dem Verlauf des Abends wurde der Service immer schlechter & das Restaurant brechend voll. Es herrschte kein Wohlfühlen. Wir hatten uns eigentlich ein nettes Date und einen schönen Abend erhofft. Als es immer voller und dementsprechend lauter wurde, mussten wir leider gehen da es nicht mehr auszuhalten war. Preis / Leistung ist okay.",
+    "textTranslated": "We visited Berlin and had reserved a table for two.\n\nUpon arrival, we were shown to a table where the next table was practically a gust of wind away. The guests at that table thought it perfectly acceptable to put their dog where we would be sitting. This was unacceptable. The second table for two also offered no privacy whatsoever.\n\nOnce seated, we received the menus and our food quickly. As the evening progressed, the service deteriorated, and the restaurant became increasingly crowded. It was anything but pleasant. We had hoped for a nice date and a pleasant evening. As it became increasingly crowded and consequently noisy, we unfortunately had to leave because it was unbearable. The price/performance ratio is okay."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:36:42.513Z",
+    "claims": [
+      {
+        "text": "we visited Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had reserved a table for two",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the next table was practically a gust of wind away",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the guests at that table put their dog where we would be sitting",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "family_pets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the second table for two offered no privacy whatsoever",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we received the menus quickly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we received our food quickly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service deteriorated as the evening progressed",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      },
+      {
+        "text": "the restaurant became increasingly crowded",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      },
+      {
+        "text": "the restaurant became noisy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      },
+      {
+        "text": "we had to leave because it was unbearable",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the price/performance ratio is okay",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:11.376Z",
+    "usage": {
+      "inputTokens": 5498,
+      "outputTokens": 2827,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Service worsening during one visit is an opinion, not a change. 'Okay' value is mildly positive (neutral allowed); the hoped-for date is an aside that may merge or stand.",
+    "claims": [
+      {
+        "text": "they were visiting Berlin",
+        "quote": "Wir waren zu Besuch im Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had reserved a table for 2 people",
+        "quote": "hatten einen Tisch reserviert. 2 Personen.",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "at the first table the neighbouring table was only a breath away",
+        "quote": "der Nachbarstisch nur einen Windhauch entfernt war",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the guests at the neighbouring table put their dog in the reviewers' seat",
+        "quote": "Die Gäste an diesem Tisch fanden es korrekt, ihren Hund an unserem zukünftigen Platz zu setzen.",
+        "sentiment": "negative",
+        "aspect": "family_pets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the dog in their seat was not acceptable",
+        "quote": "Dies war nicht akzeptabel.",
+        "sentiment": "negative",
+        "aspect": "family_pets",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the second table for 2 also had no privacy at all",
+        "quote": "Der zweite Platz für 2 Personen war ebenfalls ohne jegliche Privatsphäre.",
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "once seated they got the menus and the food quickly",
+        "quote": "bekamen wir schnell die Karten sowie das Essen",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service got worse and worse as the evening went on",
+        "quote": "Mit dem Verlauf des Abends wurde der Service immer schlechter",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "attentiveness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the restaurant became packed",
+        "quote": "das Restaurant brechend voll",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there was no feeling of comfort",
+        "quote": "Es herrschte kein Wohlfühlen.",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had hoped for a nice date and a pleasant evening",
+        "quote": "Wir hatten uns eigentlich ein nettes Date und einen schönen Abend erhofft.",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "it got fuller and therefore louder",
+        "quote": "immer voller und dementsprechend lauter wurde",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had to leave because it was unbearable",
+        "quote": "mussten wir leider gehen da es nicht mehr auszuhalten war",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the price/performance ratio is okay",
+        "quote": "Preis / Leistung ist okay.",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.209Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

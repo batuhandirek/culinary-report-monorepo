@@ -1,0 +1,746 @@
+{
+  "id": "post-d1ab7367",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "VINOS (NATURALES): WO OSTEUROPA AUF SÜDAMERIKA TRIFFT — EMPFOHLEN VON BEN CORNWELL\n\nMitten im Wrangelkiez bringt ein beliebter Naturweinladen zwei ganz unterschiedliche Ecken der Weinwelt zusammen. Seit 2022 hat der australische Inhaber Andy King den Natural Selection geführt, nun kehrt er in die Heimat zurück, um dort ein neues Kapitel anzufangen, und übergibt die Kreuzberger Räume an Santiago Cornejo und Josepha Niebelschütz. Unter dem neuen Namen Vinos (Naturales) behalten die beiden den osteuropäischen Schwerpunkt des Ladens bei und ergänzen ihn um Weine, die ihre tiefe Verbundenheit mit Südamerika widerspiegeln.\nDie beiden Freund:innen lernten sich vor zehn Jahren zufällig in Argentinien kennen, wo Santiago im Herzen der Weinregion Salta aufwuchs. Für Josepha wurde aus einer kurzen Studienreise eine bleibende Verbindung zu Argentinien. Ihre gemeinsame Liebe dafür, Menschen bei Essen, Wein und Musik zusammenzubringen, begann mit sonntäglichen Asados auf Josephas Terrasse in Buenos Aires. Ein Jahrzehnt später kreuzten sich ihre Wege in Berlin erneut, wo Santiago einen Master in Architektur absolvierte. Als sich die Gelegenheit bot, die Räume in Kreuzberg zu übernehmen, beschlossen die Freund:innen, gemeinsam etwas aufzubauen: einen Weinladen für die Nachbarschaft, der sich eher wie ein zweites Wohnzimmer anfühlt.\nNatural Selection setzt seit jeher auf kleine Naturweinproduzent:innen aus Osteuropa und vom Balkan, mit Flaschen unter anderem aus Polen, Slowenien und Tschechien. Santiago und Josepha wollen diese Identität nicht ersetzen, sondern um Weine aus Argentinien und Chile ergänzen. Für Santiago liegt ein Teil des Reizes im Kontrast: zwei grundverschiedene Weinkulturen, geprägt von unterschiedlichen Klimazonen und Traditionen, unter einem Dach vereint.\nDer wandelbare Raum bietet eine sonnige Terrasse, die sich zu den Straßen des Wrangelkiez öffnet und auf der man Wein im Glas zu kleinen Snacks genießen kann. Drinnen und im Untergeschoss beherbergt ein intimer Keller, von Santiago als eine Art Winterrefugium beschrieben, eine lange gemeinsame Tafel für private Anlässe, Geburtstage und Dinner. Statt dem Raum eine neue Identität zu geben, wollen Santiago und Josepha in ihn hineinwachsen und von Stammgäst:innen lernen, während sie ihre eigene Richtung finden. Sie hoffen, dass der Raum im Gegenzug mit ihnen wächst. Das minimalistische Interieur ist für Santiago eine „leere Leinwand“, ein Ort, der je nach Mensch und Projekt eine ganz andere Energie bekommt.\nDank der bestehenden Verbindungen zu osteuropäischen Weinproduzent:innen bleibt der Laden ein Treffpunkt für Weinverkostungen. Josepha möchte mehr Winzerinnen ins Sortiment holen und die Perspektiven sichtbar machen, die Frauen* in die Branche einbringen. Auch Musik ist Teil des Konzepts: Ein DJ-Pult in verschiedenen Formaten bietet donnerstags und am Wochenende lokalen DJs eine Bühne, kuratiert von Sagan, DJ, Radiomoderator und Selector aus Berlin. Vinos soll kein Club werden, sondern ein Ort, an dem man etwas trinkt, Musik hört und Zeit mit Freund:innen verbringt, bevor man weiterzieht – oder einfach bleibt.\nAm 22. August 2026 feierte Vinos seine offizielle Eröffnung mit einer ausgelassenen Party, die sich bis auf die Straßen des Wrangelkiez zog. Unterstützer:innen, Nachbar:innen und neue Freund:innen kamen bei Naturwein, frisch eingetroffenen argentinischen Flaschen, Empanadas und Live-DJ-Musik zusammen. Schon vor der Eröffnung wirkte der Raum bewohnt, doch am Ende des Abends war klar: Vinos hat nicht nur eine bestehende Community geerbt, sondern längst begonnen, sich eine eigene zu finden.\nText: Ben Cornwell / Fotos: Ben Cornwell, Enrique Vasquez, Eric Pintos\nBen Cornwell lebt seit 2024 in Berlin, wohin es ihn aus Australien gezogen hat. Ursprünglich aus dem Backhandwerk und der Gastronomie, arbeitet er heute zwischen Food, Editorial, Fotografie und kreativen Projekten. Er mag an der Berliner Foodszene, dass sie sich ständig neu erfindet, und er lernt gern die Menschen hinter den unabhängigen Läden und neuen Konzepten kennen, die überall in der Stadt entstehen.\nVinos (Naturales), Wrangelstr.54, 10997 Berlin–Kreuzberg; Stadtplan\n@vinos.berlin\n@benj.eats",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "d1ab7367-7e57-4597-81b0-59eaa265bd62",
+    "externalId": "blog_9d8524d81b6317426dfad949",
+    "url": "https://ceecee.cc/vinos-naturales-wo-osteuropa-auf-suedamerika-trifft-empfohlen-von-ben-cornwell/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-08T13:42:57.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:16.838Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Vinos (Naturales)",
+        "locationHint": "Wrangelkiez, Wrangelstr. 54",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "exact",
+          "brandId": "adf657de-fa60-49ac-942b-91ecebfbf8de",
+          "brandName": "Vinos (Naturales) Berlin",
+          "venueId": "582dbb19-833b-4ca9-960e-8f65ffa65d5d",
+          "venueName": "Vinos (Naturales) Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "in the Wrangelkiez",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "sunny terrace opening onto the street",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "feels like a second living room",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "minimalist space described as a blank canvas",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "keeps Eastern European wines and adds Argentina and Chile",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "place for wine, music and time with friends",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "official opening party described",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:51:14.085Z",
+    "usage": {
+      "inputTokens": 12712,
+      "outputTokens": 9206,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Natural Selection is the same premises under its former name, so it is treated as one place (Vinos) rather than a second venue; the takeover and renaming are changes, while the article's official opening also marks it as a new opening. The owners' personal backstory (meeting in Argentina, asados, architecture degree) is left out as personal life.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Vinos (Naturales)",
+        "locationHint": "Wrangelstr. 54, Wrangelkiez, Kreuzberg (formerly Natural Selection)",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "adf657de-fa60-49ac-942b-91ecebfbf8de",
+          "brandName": "Vinos (Naturales) Berlin",
+          "venueId": "582dbb19-833b-4ca9-960e-8f65ffa65d5d",
+          "venueName": "Vinos (Naturales) Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Vinos (Naturales) is recommended by Ben Cornwell",
+        "quote": "EMPFOHLEN VON BEN CORNWELL",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos (Naturales) is a popular natural wine shop in the Wrangelkiez",
+        "quote": "Mitten im Wrangelkiez bringt ein beliebter Naturweinladen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos (Naturales) brings together two very different corners of the wine world",
+        "quote": "zwei ganz unterschiedliche Ecken der Weinwelt zusammen",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Australian owner Andy King ran the shop as Natural Selection since 2022",
+        "quote": "Seit 2022 hat der australische Inhaber Andy King den Natural Selection geführt",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Andy King hands the Kreuzberg premises over to new owners Santiago Cornejo and Josepha Niebelschütz",
+        "quote": "übergibt die Kreuzberger Räume an Santiago Cornejo und Josepha Niebelschütz",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The shop has been renamed Vinos (Naturales)",
+        "quote": "Unter dem neuen Namen Vinos (Naturales)",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The new owners keep the shop's Eastern European focus",
+        "quote": "behalten die beiden den osteuropäischen Schwerpunkt des Ladens bei",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Natural Selection has always focused on small natural wine producers from Eastern Europe and the Balkans, with bottles from Poland, Slovenia and Czechia",
+        "quote": "Natural Selection setzt seit jeher auf kleine Naturweinproduzent:innen aus Osteuropa und vom Balkan, mit Flaschen unter anderem aus Polen, Slowenien und Tschechien",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The owners are adding Weine from Argentina and Chile to the range",
+        "quote": "um Weine aus Argentinien und Chile ergänzen",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Weine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Two very different wine cultures are united under one roof",
+        "quote": "zwei grundverschiedene Weinkulturen, geprägt von unterschiedlichen Klimazonen und Traditionen, unter einem Dach vereint",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos is a neighbourhood wine shop that feels more like a second living room",
+        "quote": "einen Weinladen für die Nachbarschaft, der sich eher wie ein zweites Wohnzimmer anfühlt",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos has a sunny terrace opening onto the Wrangelkiez streets",
+        "quote": "eine sonnige Terrasse, die sich zu den Straßen des Wrangelkiez öffnet",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "On the terrace you can enjoy Wein by the glass with small snacks",
+        "quote": "Wein im Glas zu kleinen Snacks genießen kann",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos has an intimate basement cellar described as a winter refuge",
+        "quote": "ein intimer Keller, von Santiago als eine Art Winterrefugium beschrieben",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The cellar has a long shared table for private occasions, birthdays and dinners",
+        "quote": "eine lange gemeinsame Tafel für private Anlässe, Geburtstage und Dinner",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The new owners want to grow into the space and learn from regulars",
+        "quote": "wollen Santiago und Josepha in ihn hineinwachsen und von Stammgäst:innen lernen",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos has a minimalist interior, a 'blank canvas'",
+        "quote": "Das minimalistische Interieur ist für Santiago eine „leere Leinwand“",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos remains a meeting point for wine tastings",
+        "quote": "bleibt der Laden ein Treffpunkt für Weinverkostungen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Josepha wants to bring more women winemakers into the range",
+        "quote": "Josepha möchte mehr Winzerinnen ins Sortiment holen",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Local DJs play at Vinos on Thursdays and weekends, curated by Sagan",
+        "quote": "bietet donnerstags und am Wochenende lokalen DJs eine Bühne, kuratiert von Sagan",
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos is not meant to be a club but a place to drink, listen to music and spend time with friends",
+        "quote": "Vinos soll kein Club werden, sondern ein Ort, an dem man etwas trinkt, Musik hört und Zeit mit Freund:innen verbringt",
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos celebrated its official opening on 22 August 2026 with an exuberant party spilling into the Wrangelkiez streets",
+        "quote": "Am 22. August 2026 feierte Vinos seine offizielle Eröffnung mit einer ausgelassenen Party",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The opening party had Naturwein, freshly arrived Argentine bottles, Empanadas and live DJ music",
+        "quote": "bei Naturwein, frisch eingetroffenen argentinischen Flaschen, Empanadas und Live-DJ-Musik",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Naturwein",
+          "Empanadas"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Even before the opening the space felt lived-in",
+        "quote": "Schon vor der Eröffnung wirkte der Raum bewohnt",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos has inherited an existing community and already begun to find its own",
+        "quote": "Vinos hat nicht nur eine bestehende Community geerbt, sondern längst begonnen, sich eine eigene zu finden",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Vinos is at Wrangelstr. 54, 10997 Berlin-Kreuzberg",
+        "quote": "Wrangelstr.54, 10997 Berlin–Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Berlin food scene constantly reinvents itself",
+        "quote": "Er mag an der Berliner Foodszene, dass sie sich ständig neu erfindet",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Independent shops and new concepts are emerging all over Berlin",
+        "quote": "unabhängigen Läden und neuen Konzepten kennen, die überall in der Stadt entstehen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.251Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

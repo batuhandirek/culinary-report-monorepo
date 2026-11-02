@@ -8,8 +8,10 @@
 
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminDetailTabs, { type AdminDetailTab } from '#components/admin/AdminDetailTabs.svelte';
+	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
 	import VenueFavicon from '#components/admin/venues/VenueFavicon.svelte';
 	import { leadScoreVariant } from '#lib/culinary.js';
+	import { exploreHref } from '#lib/explore.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
 
@@ -22,7 +24,8 @@
 	const tabs: AdminDetailTab[] = $derived([
 		{ value: 'overview', label: 'Place' },
 		{ value: 'mentions', label: 'Posts', count: venue.mentionCount },
-		{ value: 'reviews', label: 'Reviews' }
+		{ value: 'reviews', label: 'Reviews' },
+		{ value: 'claims', label: 'Claims' }
 	]);
 	let tab = $state('overview');
 </script>
@@ -79,6 +82,15 @@
 			<VenueMentionsTab {venue} />
 		{:else if tab === 'reviews'}
 			<VenueReviewsTab {venue} />
+		{:else if tab === 'claims'}
+			<p class="m-0 -mb-2 text-sm">
+				<a class="text-beet" href={exploreHref({ cityId: venue.city.id, brandId: venue.brand.id, venueId: venue.id })}>Explore what is said about it</a>
+				<span class="text-muted-foreground">: any topic, broken down by month and source</span>
+			</p>
+			<ClaimsTable
+				scope={{ venueId: venue.id }}
+				topicsCityId={venue.city.id}
+				scopeLabel="What its reviews and the posts naming this branch say, every month" />
 		{/if}
 	{/key}
 </div>

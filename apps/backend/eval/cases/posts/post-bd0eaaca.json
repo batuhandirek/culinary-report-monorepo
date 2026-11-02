@@ -1,0 +1,561 @@
+{
+  "id": "post-bd0eaaca",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "sandosberlin",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlinfood",
+      "matcha",
+      "sandosberlin",
+      "foodspotsberlin",
+      "lunchinmycity"
+    ],
+    "taggedHandles": [],
+    "text": "Wie alles begann 🤫 🍵 🍞 #berlinfood #matcha #sandosberlin #foodspotsberlin #lunchinmycity ",
+    "subtitles": "seit wann gibt es die Idee von sandos ? äh zum 1. mal\nim Frühling 2025, also schon über ein Jahr her.\nwas war bis zur ladeneröffnung die größte Schwierigkeit die ihr hattet?\nDie größte Schwierigkeit war der Laden selber.\nalso wir mussten die äh den Laden komplett umbauen.\ndas Fenster, die Fliesen\nalles haben wir neu gemacht und das hat schon viel Kraft gekostet.\nwas macht dir an der Arbeit am meisten Spaß?\nDie Interaktion mit Kunden,\ndas Feedback zu hören und Kunden immer wiederzusehen wenn sie wiederkommen.\nwie Kamt ihr auf die Idee von Sandos?\nähm die Idee, dass wir was zusammen machen wollten war schon länger da. \nMomo hat mit den Laden Aus Japan gezeigt und äh\ndann haben wir nicht lang gefackelt und direkt angefangen. Tschüss Bruder !",
+    "subtitlesLanguage": "deu-DE",
+    "id": "bd0eaaca-cd02-4fc7-be91-91e09de529ad",
+    "externalId": "7690277797524245792",
+    "url": "https://www.tiktok.com/@sandosberlin/video/7690277797524245792",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Sandos",
+    "postedAt": "2026-09-27T18:05:32.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:37.443Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Sandos",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "9c082f9b-5f8b-44ea-b774-e916110bddc0",
+          "brandName": "Sandos",
+          "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+          "venueName": "Sandos"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the idea for Sandos started in spring 2025",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place was being opened",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the biggest difficulty was the shop itself",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they completely rebuilt the shop",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they redid the windows",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they redid the tiles",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "everything was made new",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the renovation cost a lot of energy",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the most fun part of the work is interacting with customers",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they like hearing customer feedback",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they like seeing customers again when they come back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the idea of doing something together had been there for a long time",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Momo showed them a place from Japan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they started right away",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the idea for Sandos started in spring 2025",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the biggest difficulty before the shop opening was the shop itself",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they completely rebuilt the shop",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the windows were redone",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the tiles were redone",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the work took a lot of energy",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the most fun at work is interacting with customers",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they like hearing customer feedback",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they like seeing customers again when they return",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they wanted to do something together for a long time",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Momo showed them the shop in Japan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they started right away",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:49:33.731Z",
+    "usage": {
+      "inputTokens": 9849,
+      "outputTokens": 2290,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5850
+    },
+    "notes": "An own-account interview about founding; Sandos is not marked as a new opening because the post never says it has just opened. The pre-opening renovation is a fact rather than a change, since nothing at Sandos changed from an earlier state. Matcha appears only as a hashtag, so it is optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Sandos",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "9c082f9b-5f8b-44ea-b774-e916110bddc0",
+          "brandName": "Sandos",
+          "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+          "venueName": "Sandos",
+          "note": "The author is the venue itself (sandosberlin), and the Sandos brand has a single branch."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the idea for Sandos dates from spring 2025, over a year ago",
+        "quote": "im Frühling 2025, also schon über ein Jahr her.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "before opening, the Sandos shop had to be completely renovated",
+        "quote": "wir mussten die äh den Laden komplett umbauen.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the window and tiles at Sandos were all redone, which took a lot of effort",
+        "quote": "das Fenster, die Fliesen\nalles haben wir neu gemacht und das hat schon viel Kraft gekostet.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Sandos team enjoys interacting with customers and seeing them come back",
+        "quote": "Die Interaktion mit Kunden,\ndas Feedback zu hören und Kunden immer wiederzusehen wenn sie wiederkommen.",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "friendliness",
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Sandos founders had long wanted to do something together",
+        "quote": "die Idee, dass wir was zusammen machen wollten war schon länger da.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos was inspired by a shop from Japan that Momo showed",
+        "quote": "Momo hat mit den Laden Aus Japan gezeigt",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sandos features matcha",
+        "quote": "#matcha",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.250Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.438Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

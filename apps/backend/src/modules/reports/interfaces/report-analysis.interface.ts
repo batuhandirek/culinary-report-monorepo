@@ -121,6 +121,7 @@ export interface ReportAnalysisTraceStep {
 
 /** How the analysis went: for the admin report page. */
 export interface ReportAnalysisTrace {
+	/** The model that answered (`openai/gpt-5.4`), or the tier asked for when the call failed */
 	model: string;
 	steps: ReportAnalysisTraceStep[];
 	/** Tool calls that ran (a refused one is in `steps` only) */
@@ -131,7 +132,8 @@ export interface ReportAnalysisTrace {
 	notes?: string;
 	/** The model's reasoning text, cut */
 	reasoning?: string;
-	usage?: { inputTokens?: number; outputTokens?: number; totalTokens?: number };
+	/** `cachedInputTokens`: the part of the input read from the provider's prompt cache */
+	usage?: { inputTokens?: number; cachedInputTokens?: number; outputTokens?: number; totalTokens?: number };
 	/** Lines the check dropped or replaced */
 	problems: { where: string; problem: string }[];
 	/** The agent failed: the investigations are fallbacks */

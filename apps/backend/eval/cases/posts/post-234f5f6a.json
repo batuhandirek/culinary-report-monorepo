@@ -1,0 +1,100 @@
+{
+  "id": "post-234f5f6a",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "bigzy88",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "vietnamese food in berlin ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "234f5f6a-aae0-4035-8180-2193a4a527c6",
+    "externalId": "7617921859841035542",
+    "url": "https://www.tiktok.com/@bigzy88/video/7617921859841035542",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-16T18:27:33.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:48:46.615Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "Vietnamese food in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:19:55.702Z",
+    "usage": {
+      "inputTokens": 6272,
+      "outputTokens": 484,
+      "cachedInputTokens": 6206,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption names no venue and states nothing beyond a topic, so there are no places. The topic line is kept only as an optional city fact, since leaving it out loses nothing.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "the post is about Vietnamese food in Berlin",
+        "quote": "vietnamese food in berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.434Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.228Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.422Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

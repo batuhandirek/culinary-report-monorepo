@@ -1,0 +1,95 @@
+{
+  "id": "post-1c25f2d1",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "tobiasbeck__",
+    "locationName": "Wochenmarkt Karl-August-Platz seit 1894",
+    "hashtags": [
+      "explorepage",
+      "humbleplates",
+      "classicfood",
+      "berlinfood",
+      "cheflife"
+    ],
+    "taggedHandles": [],
+    "text": "Say hi from me when you go!\n\n#explorepage #humbleplates #classicfood #berlinfood #cheflife",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "1c25f2d1-cbde-4432-820f-ec73d10a54b8",
+    "externalId": "ig_4010482867753395789",
+    "url": "https://www.instagram.com/p/DeoGOt2OyZN/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-18T07:00:06.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:29:46.392Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Wochenmarkt Karl-August-Platz",
+        "locationHint": "Karl-August-Platz",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "86680daa-1e0d-46b0-a2e0-0660d5630389",
+          "brandName": "Wochenmarkt Karl-August-Platz",
+          "venueId": "d18a4a55-5bba-4adb-baff-e249be246245",
+          "venueName": "Wochenmarkt Karl-August-Platz"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "say hi from me when you go",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:32:14.287Z",
+    "usage": {
+      "inputTokens": 5922,
+      "outputTokens": 265,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The tagged location is a weekly market (Wochenmarkt), a market day rather than a named stall, so it is not a place. The caption says nothing about food, drink or the city, so there are no claims.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.226Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.421Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

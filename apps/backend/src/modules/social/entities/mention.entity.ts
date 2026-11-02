@@ -1,11 +1,10 @@
 import { Collection, type Rel } from '@mikro-orm/core';
 import { Entity, Enum, Index, ManyToOne, OneToMany, Property } from '@mikro-orm/decorators/legacy';
 
-import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
+import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
-import type { FeedbackSentiment } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
 
 import { MentionRepository } from '../repositories/mention.repository.js';
@@ -57,11 +56,6 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 
 	@Property({ type: 'boolean', default: false })
 	isNewOpening: boolean = false;
 
-	@Property({ type: 'text' })
-	sentiment: FeedbackSentiment;
-
-	@Property({ type: 'text' })
-	summary: string;
 
 	// The business it talks about; set whenever it is matched
 	@Index()
@@ -90,9 +84,17 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 
 	@Property({ type: 'text', nullable: true })
 	matchNote?: string | null;
 
-	/** What it says, one row per point and per dish no point names (`FeedbackService`) */
-	@OneToMany(() => FeedbackPoint, point => point.mention, { orderBy: { id: 'asc' }, orphanRemoval: true })
-	feedback = new Collection<FeedbackPoint>(this);
+	/**
+	 * When a re-read of its post no longer named it while it was matched: kept (a match may be an
+	 * admin's or worth one) and listed for an admin to confirm or ignore; cleared by a re-read that
+	 * names it or an admin's correction
+	 */
+	@Property({ type: 'datetime', nullable: true })
+	unconfirmedAt?: Date | null;
+
+	/** The claims about this place (`StatementService`, written with the post's); the post owns them */
+	@OneToMany(() => Statement, statement => statement.mention, { orderBy: { id: 'asc' } })
+	statements = new Collection<Statement>(this);
 
 	// The food topics it is about (`MentionTopic`, written by `MentionTopicService` only), in its text's order
 	@OneToMany(() => MentionTopic, link => link.mention, { orderBy: { rank: 'asc' } })

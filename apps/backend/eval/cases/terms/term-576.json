@@ -1,0 +1,42 @@
+{
+  "id": "term-576",
+  "kind": "term",
+  "tags": [
+    "most-used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 576,
+    "key": "beef",
+    "name": "beef",
+    "uses": 100
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": "Beef"
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:56:26.124Z",
+    "usage": {
+      "inputTokens": 172,
+      "outputTokens": 98,
+      "cachedInputTokens": 34,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "topics": [],
+    "alsoAcceptable": [],
+    "suggestion": "Beef",
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.466Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

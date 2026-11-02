@@ -1,0 +1,144 @@
+{
+  "id": "review-13f72d12",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "13f72d12-998e-48ad-93ea-220f20e11d7f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2paU1ZVbFFUbWRLWW1ObVYwaGFWVWRyVnpOUlowRRAB",
+    "platform": "google",
+    "language": "pl",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-04T09:52:31.367Z",
+    "stars": 2,
+    "text": "Nie rozumiem fenomenu tego miejsca. Smak kebsa przeciętny jadłem lepsze w Berlinie.",
+    "textTranslated": "I don't understand the hype about this place. The kebab is mediocre, I've had better in Berlin."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:08:51.488Z",
+    "claims": [
+      {
+        "text": "do not understand the hype about this place",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab is mediocre",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I've had better in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:59.596Z",
+    "usage": {
+      "inputTokens": 4981,
+      "outputTokens": 1177,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'don't understand the hype' line judges the place as a whole without recommending either way, so it is an opinion with no aspect; verdict is also allowed. 'Had better in Berlin' can be kept apart or folded into the mediocre-taste claim. The kebab keeps the reviewer's spelling 'kebsa'.",
+    "claims": [
+      {
+        "text": "doesn't understand the hype about this place",
+        "quote": "Nie rozumiem fenomenu tego miejsca.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the taste of the kebsa was mediocre",
+        "quote": "Smak kebsa przeciętny",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebsa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "has had better kebsa elsewhere in Berlin",
+        "quote": "jadłem lepsze w Berlinie",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebsa"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.203Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

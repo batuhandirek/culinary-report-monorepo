@@ -1,0 +1,257 @@
+{
+  "id": "review-6752188e",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "6752188e-d4be-4e97-a55e-00f3e612c7d2",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pCV1ZIRlVORFJxVTNVMFRVUnpOSFpIY1dwUVJHYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Markthalle Neun",
+    "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+    "brand": "Markthalle Neun",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-31T00:31:34.441Z",
+    "stars": 5,
+    "text": "Excellent food market! So good a made an effort to go back for a 2nd time on my trip to Berlin!\nSo many food options and there’s truly something great for everyone! Prices are amazing as well!!\nLoved the cute Photo Booth they had too!! Can’t wait to go back\n10000/10!!✨",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:50:58.643Z",
+    "claims": [
+      {
+        "text": "excellent food market",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "went back for a 2nd time on the trip to Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "so many food options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there’s truly something great for everyone",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "prices are amazing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the cute Photo Booth",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:49.569Z",
+    "usage": {
+      "inputTokens": 4995,
+      "outputTokens": 1671,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'Excellent food market' and the second-visit line are verdicts or opinions about the place (verdict chosen, opinion allowed); the return visit is not a change. The Photo Booth fits no aspect cleanly, so amenities was chosen, with interior, other or vibe also allowed. 'Something great for everyone' can be kept apart or folded into the food-options claim.",
+    "claims": [
+      {
+        "text": "Markthalle Neun is an excellent food market",
+        "quote": "Excellent food market!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the market was so good the reviewer went back a 2nd time on their trip to Berlin",
+        "quote": "So good a made an effort to go back for a 2nd time on my trip to Berlin!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "there are so many food options",
+        "quote": "So many food options",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there is truly something great for everyone",
+        "quote": "there’s truly something great for everyone!",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the prices are amazing",
+        "quote": "Prices are amazing as well!!",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money",
+            "price"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer loved the cute Photo Booth",
+        "quote": "Loved the cute Photo Booth they had too!!",
+        "sentiment": "positive",
+        "aspect": "amenities",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "other",
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer can't wait to go back",
+        "quote": "Can’t wait to go back",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer rates the market 10000/10",
+        "quote": "10000/10!!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.211Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.408Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

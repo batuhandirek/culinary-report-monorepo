@@ -1,0 +1,123 @@
+{
+  "id": "review-ffc5c8e8",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "ffc5c8e8-d4f2-4a0a-b710-20115af4ed5e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2s5RWNHZFlZVkkyTkVodFpsVlpjbE55TVZSQ2IxRRAB",
+    "platform": "google",
+    "language": "da",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-11T18:44:04.400Z",
+    "stars": 3,
+    "text": "Kød med kød med kød med kød med kød.\nTjeneren var meget stærkt aka store muskler",
+    "textTranslated": "Meat with meat with meat with meat with meat.\nThe waiter was very strong aka big muscles"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:41:38.238Z",
+    "claims": [
+      {
+        "text": "meat with meat with meat with meat with meat",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the waiter was very strong aka big muscles",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:45.219Z",
+    "usage": {
+      "inputTokens": 4974,
+      "outputTokens": 408,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'meat with meat' line is ambiguous: it could be a joke about the meat-heavy menu or a mild complaint about it. I read it as being about the menu's choice, with neutral sentiment, and allowed mixed or negative. The remark about the waiter's muscles describes how he looked, not how he served, so its aspect and sentiment are loose.",
+    "claims": [
+      {
+        "text": "the food is meat with meat with meat with meat with meat",
+        "quote": "Kød med kød med kød med kød med kød.",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Kød"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "negative"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the waiter was very strong, with big muscles",
+        "quote": "Tjeneren var meget stærkt aka store muskler",
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.222Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

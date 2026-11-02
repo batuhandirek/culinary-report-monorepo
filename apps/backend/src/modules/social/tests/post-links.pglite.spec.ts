@@ -7,9 +7,10 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -56,7 +57,11 @@ describe('Post sources and hashtags (pglite)', () => {
 	const stored = async (externalId: string) => {
 		const post = await em
 			.fork()
-			.findOneOrFail(SocialPost, { externalId }, { populate: ['foundBy', 'foundBy.source', 'hashtagLinks.hashtag'] });
+			.findOneOrFail(
+				SocialPost,
+				{ externalId },
+				{ populate: ['foundBy', 'foundBy.source', 'hashtagLinks.hashtag'] },
+			);
 		return {
 			post,
 			finds: post.foundBy.getItems().map(f => [f.kind, f.value, f.source?.value ?? null]),
@@ -74,8 +79,6 @@ describe('Post sources and hashtags (pglite)', () => {
 			venueName: venue.name,
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 		await em.flush();
 	};
@@ -96,14 +99,20 @@ describe('Post sources and hashtags (pglite)', () => {
 		em = harness.orm.em as EntityManager;
 		posts = harness.moduleRef.get(SocialPostService);
 		cities = harness.moduleRef.get(AdminCitiesController);
-		seedTopics(em, ['burgers']);
+		seedTopics(em, ['burgers', 'pasta']);
 		city = testCity(em, { name: 'Berlin', aliases: [] });
 		for (const name of ['Burger Bros', 'Kiez Kebab', 'Pho Ga', 'Lucky Noodle'])
 			venues[name] = em.create(Venue, { city, placeId: `pl-${name}`, name });
 		await em.flush();
 		const service = harness.moduleRef.get(CityService);
-		await service.addSource(city.id, { kind: CitySourceKindEnum.TIKTOK_HASHTAG, value: 'berlinfood' });
-		await service.addSource(city.id, { kind: CitySourceKindEnum.TIKTOK_HASHTAG, value: '#BerlinEats' });
+		await service.addSource(city.id, {
+			kind: CitySourceKindEnum.TIKTOK_HASHTAG,
+			value: 'berlinfood',
+		});
+		await service.addSource(city.id, {
+			kind: CitySourceKindEnum.TIKTOK_HASHTAG,
+			value: '#BerlinEats',
+		});
 	});
 
 	afterAll(async () => {
@@ -143,11 +152,21 @@ describe('Post sources and hashtags (pglite)', () => {
 	});
 
 	it('keeps one Hashtag per tag, and links a tag to the food topic or the brand it names', async () => {
-		const second = fields({ hashtags: ['berlinfood', 'Berlin', 'burgerbros', 'kiezkebab'], finds: [tag('berlinfood')] });
+		const second = fields({
+			hashtags: ['berlinfood', 'Berlin', 'burgerbros', 'kiezkebab'],
+			finds: [tag('berlinfood')],
+		});
 		await save([second]);
-		const tagRows = await em.fork().find(Hashtag, { tag: { $in: ['berlinfood', 'BerlinFood'] } });
+		const tagRows = await em
+			.fork()
+			.find(Hashtag, { tag: { $in: ['berlinfood', 'BerlinFood'] } });
 		expect(tagRows.map(t => t.tag)).toEqual(['berlinfood']);
-		expect((await stored(second.externalId)).tags).toEqual(['berlinfood', 'berlin', 'burgerbros', 'kiezkebab']);
+		expect((await stored(second.externalId)).tags).toEqual([
+			'berlinfood',
+			'berlin',
+			'burgerbros',
+			'kiezkebab',
+		]);
 
 		expect((await hashtag('smashburger')).topic?.key).toBe('burgers');
 		// The city's own name names no food and no brand
@@ -168,7 +187,13 @@ describe('Post sources and hashtags (pglite)', () => {
 		const brands = ['Kiez Kebab', 'Pho Ga', 'Lucky Noodle', 'Kiez Kebab', 'Pho Ga'];
 		const rows = brands.map(brand =>
 			fields({
-				hashtags: ['kiezfood', 'berlinfood', 'fyp', 'berlin', ...(brand === 'Pho Ga' ? ['pholove'] : [])],
+				hashtags: [
+					'kiezfood',
+					'berlinfood',
+					'fyp',
+					'berlin',
+					...(brand === 'Pho Ga' ? ['pholove'] : []),
+				],
 				finds: [tag('berlinfood')],
 			}),
 		);
@@ -180,18 +205,30 @@ describe('Post sources and hashtags (pglite)', () => {
 			['fyp', CitySourceKindEnum.TIKTOK_HASHTAG, 5, 3],
 			['kiezfood', CitySourceKindEnum.TIKTOK_HASHTAG, 5, 3],
 		]);
-		expect((await suggested())[1].sampleBrands).toEqual(['Kiez Kebab', 'Lucky Noodle', 'Pho Ga']);
+		expect((await suggested())[1].sampleBrands).toEqual([
+			'Kiez Kebab',
+			'Lucky Noodle',
+			'Pho Ga',
+		]);
 
 		// Ignored, it is never suggested again
 		const fyp = (await suggested())[0];
-		expect(await harness.moduleRef.get(AdminHashtagsController).updateHashtag(fyp.hashtagId, { ignored: true })).toMatchObject({
+		expect(
+			await harness.moduleRef
+				.get(AdminHashtagsController)
+				.updateHashtag(fyp.hashtagId, { ignored: true }),
+		).toMatchObject({
 			tag: 'fyp',
 			ignored: true,
 		});
 		expect((await suggested()).map(s => s.tag)).toEqual(['kiezfood']);
 
 		// Added (off, for review like the LLM's), it is a source and no suggestion
-		await cities.addCitySource(city.id, { kind: CitySourceKindEnum.TIKTOK_HASHTAG, value: 'kiezfood', enabled: false });
+		await cities.addCitySource(city.id, {
+			kind: CitySourceKindEnum.TIKTOK_HASHTAG,
+			value: 'kiezfood',
+			enabled: false,
+		});
 		expect(await suggested()).toEqual([]);
 	});
 
@@ -211,19 +248,55 @@ describe('Post sources and hashtags (pglite)', () => {
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			cuisine: 'Burgers',
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 		});
 		await em.flush();
-		em.create(MentionTopic, { mention, topic: (await em.findOneOrFail(Topic, { key: 'burgers' })), source: 'cuisine', rank: 0 });
+		em.create(MentionTopic, {
+			mention,
+			topic: await em.findOneOrFail(Topic, { key: 'burgers' }),
+			source: 'cuisine',
+			rank: 0,
+		});
+		// A claim naming a dish: the wording's topic comes with its parent, which the DTO types
+		// and a claim about the city, which no mention holds: the page lists it on its own
+		addStatements(
+			em,
+			mention,
+			[
+				{ text: 'the pasta was great', sentiment: 'positive', foods: ['Pasta'] },
+				{
+					text: 'Berlin has an underrated food scene',
+					sentiment: 'positive',
+					subject: 'city',
+				},
+			],
+			{ index: await harness.moduleRef.get(TopicService).index() },
+		);
 		await em.flush();
 		em.clear();
 		const page = await social.getPost(post.id);
 		expect(page.mentions[0].topics).toEqual([
-			expect.objectContaining({ source: 'cuisine', topic: expect.objectContaining({ key: 'burgers', label: 'Burgers' }) }),
+			expect.objectContaining({
+				source: 'cuisine',
+				topic: expect.objectContaining({ key: 'burgers', label: 'Burgers' }),
+			}),
 		]);
-		expect(page.foundBy[0]).toMatchObject({ kind: 'tiktok_hashtag', value: 'berlinfood', source: { enabled: true } });
+		expect(page.mentions[0].statements[0].parts[0].term?.topics[0].topic).toMatchObject({
+			key: 'pasta',
+			parent: { key: 'italian', label: 'Italian' },
+		});
+		expect(page.mentions[0].statements.map(s => s.text)).toEqual(['the pasta was great']);
+		expect(page.generalStatements).toEqual([
+			expect.objectContaining({
+				text: 'Berlin has an underrated food scene',
+				subject: 'city',
+				parts: [],
+			}),
+		]);
+		expect(page.foundBy[0]).toMatchObject({
+			kind: 'tiktok_hashtag',
+			value: 'berlinfood',
+			source: { enabled: true },
+		});
 		expect(page.hashtagLinks.map(l => l.hashtag.tag)).toEqual(['linktest']);
 	});
 });
-

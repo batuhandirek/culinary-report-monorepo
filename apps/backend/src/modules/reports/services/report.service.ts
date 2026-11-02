@@ -10,6 +10,7 @@ import { CityDayService } from 'src/modules/cities/services/city-day.service.js'
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
@@ -365,9 +366,10 @@ export class ReportService {
 				{ abortSignal: AbortSignal.timeout(EDITOR_TIMEOUT_MS) },
 			);
 			answer = (res.object as EditorAnswer | undefined) ?? null;
+			trace.model = res.model;
 			const full = res as FullGenerate;
 			const usage = full.totalUsage ?? full.usage;
-			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'outputTokens', 'totalTokens']);
+			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'cachedInputTokens', 'outputTokens', 'totalTokens']);
 			if (full.steps?.length) trace.modelSteps = full.steps.length;
 		} catch (e) {
 			trace.error = (e as Error).message;
@@ -444,9 +446,10 @@ export class ReportService {
 				{ abortSignal: AbortSignal.timeout(ANALYSIS_TIMEOUT_MS) },
 			);
 			answer = res.object ?? null;
+			trace.model = res.model;
 			const full = res as FullGenerate;
 			const usage = full.totalUsage ?? full.usage;
-			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'outputTokens', 'totalTokens']);
+			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'cachedInputTokens', 'outputTokens', 'totalTokens']);
 			if (full.reasoningText) trace.reasoning = full.reasoningText.slice(0, 4_000);
 			if (full.steps?.length) trace.modelSteps = full.steps.length;
 			if (answer?.notes) trace.notes = answer.notes;
@@ -722,13 +725,13 @@ export class ReportService {
 						post: { city: { $in: _.uniq(branches.map(b => b.city.id)) }, postedAt: { $gte: start, $lt: end } },
 					}
 			:	{ venue: { $in: ids }, post: { postedAt: { $gte: start, $lt: end } } },
-			{ populate: ['post', 'post.account', 'feedback'] },
+			{ populate: ['post', 'post.account', ...STATEMENT_POPULATE] },
 		);
 		// Newest first, so the details a review group quotes first are always the same ones
 		const reviews = await this.em.find(
 			Review,
 			{ venue: { $in: ids }, publishedAt: { $gte: start, $lt: end } },
-			{ populate: ['feedback'], orderBy: { publishedAt: 'desc', id: 'asc' } },
+			{ populate: [...STATEMENT_POPULATE], orderBy: { publishedAt: 'desc', id: 'asc' } },
 		);
 		// A chain's reviews say which branch (its street, else its name), as the view labels places
 		const branchLabels = new Map(branches.length > 1 ? branches.map(b => [b.id, b.street ?? b.name]) : []);
@@ -760,9 +763,7 @@ export class ReportService {
 				isAd: m.post.isAd,
 				isPromotional: m.post.isPromotional,
 				visited: m.visited,
-				sentiment: m.sentiment,
-				summary: m.summary,
-				feedback: m.feedback.getItems(),
+				statements: m.statements.getItems(),
 				brandOnly: !m.venue,
 			})),
 			reviews: reviews.map(
@@ -774,7 +775,7 @@ export class ReportService {
 					text: r.text,
 					textTranslated: r.textTranslated,
 					ownerResponse: r.ownerResponse,
-					feedback: r.feedback.getItems(),
+					statements: r.statements.getItems(),
 					...(branchLabels.has(r.venue.id) && { branch: branchLabels.get(r.venue.id) }),
 				}),
 			),

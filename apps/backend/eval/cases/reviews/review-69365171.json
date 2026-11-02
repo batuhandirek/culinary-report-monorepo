@@ -1,0 +1,249 @@
+{
+  "id": "review-69365171",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "69365171-9f8a-448c-bf1d-bc6b98aa965f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21oVlRHbFZhSFI0Y25Ka2VEUk5iRzFHY1VaVlZFRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "All Seasons",
+    "venueId": "5657c44f-dca3-41db-9be9-f2fe1ec2faa5",
+    "brand": "All Seasons",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-20T08:51:56.220Z",
+    "stars": 4,
+    "text": "Waren in der Woche da und haben das Büffet von 12-15 Uhr für 16,50€ genommen! Sehr gute Auswahl an Essen und Nachspeisen! Preis/Leistung ist ok! Mitarbeiter sehr freundlich. Wir kommen wieder!",
+    "textTranslated": "We were there during the week and had the buffet from 12-3 pm for €16.50! Very good selection of food and desserts! Good value for money! Very friendly staff. We'll be back!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:59:53.988Z",
+    "claims": [
+      {
+        "text": "we were there during the week",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "had the buffet from 12-3 pm",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "buffet"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the buffet cost €16.50",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "buffet"
+        ],
+        "amount": 16.5,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "very good selection of food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "very good selection of desserts",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "desserts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "good value for money",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "very friendly staff",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we'll be back",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:56.943Z",
+    "usage": {
+      "inputTokens": 5053,
+      "outputTokens": 1551,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The buffet price comes with hours (12-15 Uhr), which step B's deal definition could cover, but a weekday lunch buffet reads as a standing price, so fact is the answer with deal allowed. 'Preis/Leistung ist ok' is read as mildly positive, with mixed or neutral allowed. 'Nachspeisen' is treated as a general word, not a food.",
+    "claims": [
+      {
+        "text": "came during the week",
+        "quote": "Waren in der Woche da",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had the Büffet from 12-15 Uhr for 16,50€",
+        "quote": "haben das Büffet von 12-15 Uhr für 16,50€ genommen",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Büffet"
+        ],
+        "amount": 16.5,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        }
+      },
+      {
+        "text": "very good selection of food and desserts",
+        "quote": "Sehr gute Auswahl an Essen und Nachspeisen",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "value for money is ok",
+        "quote": "Preis/Leistung ist ok",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "staff very friendly",
+        "quote": "Mitarbeiter sehr freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "we will come back",
+        "quote": "Wir kommen wieder!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.211Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.408Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -9,6 +9,7 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
 
 import {
 	AdminBranchReviewOutputDto,
@@ -48,7 +49,7 @@ export class AdminReviewsController {
 			});
 		}
 		const [items, totalItems] = await this.em.findAndCount(Review, filters, {
-			populate: ['venue', 'feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+			populate: ['venue', ...STATEMENT_POPULATE],
 			orderBy: query.needsReply ? { stars: QueryOrder.ASC, publishedAt: QueryOrder.DESC } : { publishedAt: QueryOrder.DESC },
 			offset: (query.page - 1) * query.size,
 			limit: query.size,
@@ -58,7 +59,7 @@ export class AdminReviewsController {
 				const plain = wrap(review).serialize({
 					skipNull: true,
 					forceObject: true,
-					populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+					populate: [...STATEMENT_POPULATE],
 				}) as unknown as Omit<
 					AdminBranchReviewOutputDto,
 					'branch'

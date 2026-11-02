@@ -1,0 +1,214 @@
+{
+  "id": "post-9ea777e8",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "loreen.xo.xo",
+    "locationName": null,
+    "hashtags": [
+      "berlinburger",
+      "berlinfood",
+      "berlinrestaurant",
+      "burgerlove",
+      "smackburger"
+    ],
+    "taggedHandles": [
+      "smackburger_de"
+    ],
+    "text": "@smackburger_de 🍔🔥\n\nJuicy burgers, perfectly melted cheese, and incredible flavors in every single bite! 🤤 If you’re craving a seriously good burger in Berlin, Smack Burger is the place to be! 🍟❤️\n\n#berlinburger #berlinfood #berlinrestaurant #burgerlove #smackburger",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "9ea777e8-2881-456e-934f-09cc4fef4f5c",
+    "externalId": "ig_4014877535631841543",
+    "url": "https://www.instagram.com/p/De3tdjQCBkH/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T08:32:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-25T04:01:41.817Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Smack Burger",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "ff5a1575-1109-4b91-a4fb-0144e15568ca",
+          "brandName": "Smack Burger",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "incredible flavors in every bite",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "juicy burgers and perfectly melted cheese",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:20.694Z",
+    "usage": {
+      "inputTokens": 9584,
+      "outputTokens": 1207,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Generic praise with the venue's account tagged reads like influencer content, but nothing says it is an ad, so it is not marked promotional. 'Juicy' and 'perfectly melted' are put under cooking, with taste or presentation also allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Smack Burger",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "ff5a1575-1109-4b91-a4fb-0144e15568ca",
+          "brandName": "Smack Burger",
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the burgers at Smack Burger are juicy",
+        "quote": "Juicy burgers",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cheese is perfectly melted",
+        "quote": "perfectly melted cheese",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "incredible flavors in every single bite",
+        "quote": "incredible flavors in every single bite",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Smack Burger is the place to be for a seriously good burger in Berlin",
+        "quote": "If you’re craving a seriously good burger in Berlin, Smack Burger is the place to be!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.246Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.435Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

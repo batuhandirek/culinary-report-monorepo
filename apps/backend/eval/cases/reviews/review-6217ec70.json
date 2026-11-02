@@ -1,0 +1,340 @@
+{
+  "id": "review-6217ec70",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "6217ec70-6b58-4002-b328-21540f84b86c",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2t4T1VXOVhOVGd3TUROelgzbGtjRFp2UTFwb1VIYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-25T03:38:36.078Z",
+    "stars": 5,
+    "text": "The kebab was really tasty, with plenty of meat and vegetables. It wasn’t dry at all thanks to the generous amount of sauce, and the portion was big. However, we waited in line for about an hour on a Thursday evening. I’m not sure I’d repeat that experience. If I were passing by and the line was short, I’d definitely get it again, but I probably wouldn’t wait another hour for it.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:33:57.329Z",
+    "claims": [
+      {
+        "text": "the kebab was really tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "plenty of meat",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "plenty of vegetables",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it wasn’t dry at all",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "generous amount of sauce",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portion was big",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "waited in line for about an hour",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "Thursday evening",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:48.347Z",
+    "usage": {
+      "inputTokens": 5027,
+      "outputTokens": 2426,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the hour-long line is a negative opinion or a neutral fact (the 'However' frames it as criticism), and whether the conditional return statements are verdicts about the place or about the queue; 'plenty of meat and vegetables' and 'generous sauce' read as portion_size.",
+    "claims": [
+      {
+        "text": "the kebab was really tasty",
+        "quote": "The kebab was really tasty",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab had plenty of meat and vegetables",
+        "quote": "with plenty of meat and vegetables",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "kebab",
+          "meat",
+          "vegetables"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab wasn't dry at all",
+        "quote": "It wasn’t dry at all",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab had a generous amount of sauce",
+        "quote": "the generous amount of sauce",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the kebab portion was big",
+        "quote": "the portion was big",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited in line for about an hour",
+        "quote": "we waited in line for about an hour",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "came on a Thursday evening",
+        "quote": "on a Thursday evening",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "not sure they would repeat the experience",
+        "quote": "I’m not sure I’d repeat that experience",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "would definitely get the kebab again if passing by and the line was short",
+        "quote": "If I were passing by and the line was short, I’d definitely get it again",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "probably wouldn't wait another hour in line for the kebab",
+        "quote": "I probably wouldn’t wait another hour for it",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [
+          "kebab"
+        ],
+        "amount": 60,
+        "unit": "minutes",
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.210Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.408Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

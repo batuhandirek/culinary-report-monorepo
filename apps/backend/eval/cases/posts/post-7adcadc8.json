@@ -1,0 +1,314 @@
+{
+  "id": "post-7adcadc8",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "zeitlos_cocktailbars",
+    "locationName": null,
+    "hashtags": [
+      "zeitlosberlin",
+      "caesarsalat",
+      "berlinfoodies",
+      "kurfürstendamm",
+      "berlinrestaurants"
+    ],
+    "taggedHandles": [
+      "zeitlos.com"
+    ],
+    "text": "🥗 ✨ Frisch, knackig und einfach köstlich! 💚\n\nUnser Caesar-Salat bringt frischen Genuss auf deinen Teller! 😍🥬\n\nKnackiger Salat, zartes Hähnchen, knusprige Croûtons, feiner Parmesan und cremiges Dressing: diese Kombination schmeckt einfach immer! 🤤 ☀️\n\nOb zum Lunch, als leichte Mahlzeit oder beim entspannten Treffen mit Freunden, genieße deinen Lieblingssalat in der gemütlichen Atmosphäre von ZEITLOS Berlin! 🍹💛\n\n📍Kurfürstendamm 100, 10709 Berlin\n📞030 889 220 35\n📧info@zeitlos.com\n\n#ZeitlosBerlin #CaesarSalat #BerlinFoodies #Kurfürstendamm #BerlinRestaurants\nCaesar Salat | Chicken Caesar Salad | Frisch & Knackig | ZEITLOS Berlin | Kurfürstendamm | Berlin Food | Lunch in Berlin | Restaurant Berlin | Healthy Food | Food Lovers",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "7adcadc8-2e54-4ff0-aafe-b081d27b34f4",
+    "externalId": "ig_4016703595806021158",
+    "url": "https://www.instagram.com/p/De-MqOUDVYm/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-26T21:00:08.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:00:50.143Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "ZEITLOS Berlin",
+        "locationHint": "Kurfürstendamm 100",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "simply delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Caesar salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fresh and crunchy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Caesar salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "cozy atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:24:20.147Z",
+    "usage": {
+      "inputTokens": 10698,
+      "outputTokens": 2671,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue's own promotional post, so visited is false and its approving descriptions count as positive opinions. The hard calls were splitting the opening exclamation into freshness and taste, and keeping the ingredient list as one claim. The phone, email and SEO keyword line were left out.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "ZEITLOS Berlin",
+        "locationHint": "Kurfürstendamm 100, 10709 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "ZEITLOS at Kurfürstendamm 100 is not among the candidates, and none of them is on that street."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Caesar-Salat is fresh and crisp",
+        "quote": "Frisch, knackig",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Caesar-Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Caesar-Salat is simply delicious",
+        "quote": "einfach köstlich",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Caesar-Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Caesar-Salat brings fresh enjoyment to your plate",
+        "quote": "Unser Caesar-Salat bringt frischen Genuss auf deinen Teller!",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Caesar-Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Caesar-Salat has crisp lettuce, tender chicken, crunchy croûtons, fine Parmesan and creamy dressing",
+        "quote": "Knackiger Salat, zartes Hähnchen, knusprige Croûtons, feiner Parmesan und cremiges Dressing",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Salat",
+          "Hähnchen",
+          "Croûtons",
+          "Parmesan",
+          "Dressing"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality",
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Caesar-Salat combination always tastes good",
+        "quote": "diese Kombination schmeckt einfach immer!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Caesar-Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Caesar-Salat suits lunch, a light meal or a relaxed meet-up with friends",
+        "quote": "Ob zum Lunch, als leichte Mahlzeit oder beim entspannten Treffen mit Freunden",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Caesar-Salat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ZEITLOS Berlin has a cosy atmosphere",
+        "quote": "gemütlichen Atmosphäre von ZEITLOS Berlin",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ZEITLOS Berlin is at Kurfürstendamm 100",
+        "quote": "Kurfürstendamm 100, 10709 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.439Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.242Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,323 @@
+{
+  "id": "review-a6b69e2b",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "a6b69e2b-1c5d-4894-80d7-2643269dbe47",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xKV09FMXllSEU1V1VaNlRGaFNjR1ZtYmxSc1drRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Hermannplatz",
+    "venueId": "01fac3d4-e94a-42ec-a4d9-721a06f0a39d",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-29T09:52:34.005Z",
+    "stars": 1,
+    "text": "We ordered 4 burgers online. I correctly provided my address and my phone number in case of trouble delivering.\nThe delibery guy never came, he lied about trying to call me (I have proof) and Burgermaister took the money and did not refund the order. I basically got scammed. No food, no money. I tried contacting them but still got no respose.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:20.169Z",
+    "claims": [
+      {
+        "text": "ordered 4 burgers online",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "provided my address",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "provided my phone number",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the delibery guy never came",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "he lied about trying to call me",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Burgermaister took the money",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "billing",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "did not refund the order",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "billing",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I basically got scammed",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no food",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no money",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no respose",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:28.042Z",
+    "usage": {
+      "inputTokens": 5002,
+      "outputTokens": 1871,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the failed delivery belongs to delivery_platform or takeaway_handling (the courier is the problem, so delivery_platform first), and whether the missing refund is billing or complaint_handling. 'Got scammed' is a judgement of the whole experience with no clear aspect, so its aspect is null, with billing and delivery_platform also allowed.",
+    "claims": [
+      {
+        "text": "ordered 4 burgers online",
+        "quote": "We ordered 4 burgers online.",
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer correctly provided address and phone number for the delivery",
+        "quote": "I correctly provided my address and my phone number in case of trouble delivering.",
+        "sentiment": "neutral",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the delivery guy never came",
+        "quote": "The delibery guy never came",
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the delivery guy lied about trying to call the reviewer",
+        "quote": "he lied about trying to call me",
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "Burgermaister took the money and did not refund the order",
+        "quote": "Burgermaister took the money and did not refund the order",
+        "sentiment": "negative",
+        "aspect": "billing",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "complaint_handling",
+            "payment"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer got scammed by Burgermaister",
+        "quote": "I basically got scammed.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "billing",
+            "delivery_platform"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "got no food and no money back",
+        "quote": "No food, no money.",
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "billing",
+            "order_accuracy",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer tried contacting Burgermaister but got no response",
+        "quote": "I tried contacting them but still got no respose.",
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

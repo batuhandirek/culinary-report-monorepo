@@ -1,0 +1,546 @@
+{
+  "id": "post-812c90d9",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "swanzvlogs",
+    "locationName": "Berlin",
+    "hashtags": [
+      "koreanfood",
+      "리뷰",
+      "livingabroad",
+      "abroadlife",
+      "expatlife"
+    ],
+    "taggedHandles": [],
+    "text": "RUN DONT WALK! hands down the best jjm I’ve had in Berlin 완전 맛있어 진짜 맛있어 대박 맛있음(요)\n\n📍 hängbok (in Charlottenburg)\n- there are 2 jjm types, the regular & seafood version (seafood version is 3€ more I think)\n- jjm jajangmyun 짜장면 is black bean noodles, with pork\n- tangsuyuk 탕수육 is fried pork with sweet and sour sauce\n- jjm cost 15€\n- tangsusyuk cost 25€ (good for sharing)\n- incredible service, delicious taste, and PACKED with Koreans (so it’s the real deal)\n\n#koreanfood #리뷰 #livingabroad #abroadlife #expatlife\n\nkorean food in berlin, korean food in germany, korean restaurant reviews, living in germany, living in berlin, 한국 음식점 독일, 한국 음식점 벨를린, 한국 음식점 리뷰",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "812c90d9-0562-4053-b36b-ffc2fa4a919f",
+    "externalId": "7619020898510605598",
+    "url": "https://www.tiktok.com/@swanzvlogs/video/7619020898510605598",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-19T17:32:33.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:32:43.385Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "hängbok",
+        "locationHint": "Charlottenburg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e0ad2a44-6b1c-4b05-9b09-ffe270737954",
+          "brandName": "hängbok restaurant",
+          "venueId": "68d49e45-8ac0-4765-a7bc-9306269e2f98",
+          "venueName": "hängbok restaurant"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the best jjm in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "jjm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are 2 jjm types, regular and seafood",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "jjm",
+          "regular",
+          "seafood"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the seafood version costs 3€ more",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "seafood version"
+        ],
+        "amount": 3,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "jjm is black bean noodles with pork",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "jjm",
+          "black bean noodles",
+          "pork"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "tangsuyuk is fried pork with sweet and sour sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "tangsuyuk",
+          "fried pork",
+          "sweet and sour sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "jjm costs 15€",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "jjm"
+        ],
+        "amount": 15,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tangsuyuk costs 25€",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "tangsuyuk"
+        ],
+        "amount": 25,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tangsuyuk is good for sharing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "tangsuyuk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the service was incredible",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the taste was delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place was packed with Koreans",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:42:46.890Z",
+    "usage": {
+      "inputTokens": 9735,
+      "outputTokens": 3723,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the dish descriptions (what jajangmyun and tangsuyuk are) are treated as general food facts (subject none), and 'best jjm I've had in Berlin' as a verdict, with an opinion about taste also acceptable. 'PACKED with Koreans' is crowding said approvingly, and the Korean exclamations overlap the 'best jjm' claim, so they are optional.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "hängbok",
+        "locationHint": "Charlottenburg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e0ad2a44-6b1c-4b05-9b09-ffe270737954",
+          "brandName": "hängbok restaurant",
+          "venueId": "68d49e45-8ac0-4765-a7bc-9306269e2f98",
+          "venueName": "hängbok restaurant",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "RUN DONT WALK to hängbok",
+        "quote": "RUN DONT WALK!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the jjm at hängbok is hands down the best jjm the author has had in Berlin",
+        "quote": "hands down the best jjm I’ve had in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "jjm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the jjm is totally, really delicious",
+        "quote": "완전 맛있어 진짜 맛있어 대박 맛있음(요)",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "jjm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are 2 jjm types, the regular and the seafood version",
+        "quote": "there are 2 jjm types, the regular & seafood version",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "jjm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the seafood jjm is 3€ more, the author thinks",
+        "quote": "seafood version is 3€ more I think",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "seafood version"
+        ],
+        "amount": 3,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "jjm jajangmyun is black bean noodles with pork",
+        "quote": "jjm jajangmyun 짜장면 is black bean noodles, with pork",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "jjm jajangmyun",
+          "black bean noodles",
+          "pork"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "tangsuyuk is fried pork with sweet and sour sauce",
+        "quote": "tangsuyuk 탕수육 is fried pork with sweet and sour sauce",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "tangsuyuk",
+          "fried pork",
+          "sweet and sour sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the jjm costs 15€",
+        "quote": "jjm cost 15€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "jjm"
+        ],
+        "amount": 15,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tangsusyuk costs 25€",
+        "quote": "tangsusyuk cost 25€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "tangsusyuk"
+        ],
+        "amount": 25,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the tangsusyuk is good for sharing",
+        "quote": "good for sharing",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "tangsusyuk"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "hängbok has incredible service",
+        "quote": "incredible service",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food at hängbok has a delicious taste",
+        "quote": "delicious taste",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "hängbok is packed with Koreans",
+        "quote": "PACKED with Koreans",
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "hängbok is the real deal",
+        "quote": "so it’s the real deal",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.242Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

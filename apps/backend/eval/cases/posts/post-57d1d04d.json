@@ -1,0 +1,288 @@
+{
+  "id": "post-57d1d04d",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "isaaclikes_",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlin",
+      "cityguide"
+    ],
+    "taggedHandles": [],
+    "text": "Best of #berlin with @kurdischekween !!!\n\nBerfin’s Berlin Picks:\n\nNeighborhood: Schöneberg.\n\nRestaurant: Kanaan.\n\nKurdish Cafe: Hewrî.\n\nBar: Café Dachkammer in Friedrichshain.\n\nClub: SO36, make sure to go to Gayhane nights.\n\nMosque: Ibn Rushd-Goethe Moschee; they provide amazing social services!\n\nSalon: By Mervearslan.\n\n#cityguide ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "57d1d04d-ad66-4c00-a9ea-509ec7e59539",
+    "externalId": "7613772162368802079",
+    "url": "https://www.tiktok.com/@isaaclikes_/video/7613772162368802079",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-05T14:05:18.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:24.112Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Kanaan",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      },
+      {
+        "venueName": "Hewrî",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "86941cb0-83f1-4801-8086-cef4e148fa2e",
+          "brandName": "Hewrî Café & Restaurant",
+          "venueId": "d56a196f-d5d2-47ed-9621-52d7e904e6db",
+          "venueName": "Hewrî Café & Restaurant"
+        }
+      },
+      {
+        "venueName": "Café Dachkammer",
+        "locationHint": "Friedrichshain",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "37a3739c-45ba-463f-a250-4ddec414b881",
+          "brandName": "Café Dachkammer",
+          "venueId": "8799b81e-b1ad-432c-89fc-1b90535e3148",
+          "venueName": "Café Dachkammer"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Kanaan is one of Berfin’s Berlin picks",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hewrî is a Kurdish cafe",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Café Dachkammer is in Friedrichshain",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:21:52.711Z",
+    "usage": {
+      "inputTokens": 14089,
+      "outputTokens": 1902,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "SO36 (club), the mosque, the salon and the Schöneberg neighbourhood are not food places and say nothing about food, so they are left out. Being listed as a pick in a 'Best of Berlin' guide is read as a positive verdict; the Kurdish café label and the Friedrichshain location are minor facts kept as optional claims.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Kanaan",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "No candidate is named Kanaan; Kanal61 and the other candidates are different venues."
+        }
+      },
+      {
+        "venueName": "Hewrî",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "86941cb0-83f1-4801-8086-cef4e148fa2e",
+          "brandName": "Hewrî Café & Restaurant",
+          "venueId": "d56a196f-d5d2-47ed-9621-52d7e904e6db",
+          "venueName": "Hewrî Café & Restaurant",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Café Dachkammer",
+        "locationHint": "Friedrichshain",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "37a3739c-45ba-463f-a250-4ddec414b881",
+          "brandName": "Café Dachkammer",
+          "venueId": "8799b81e-b1ad-432c-89fc-1b90535e3148",
+          "venueName": "Café Dachkammer",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Kanaan is Berfin's restaurant pick in Berlin",
+        "quote": "Restaurant: Kanaan.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Hewrî is Berfin's Kurdish café pick in Berlin",
+        "quote": "Kurdish Cafe: Hewrî.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Hewrî is a Kurdish café",
+        "quote": "Kurdish Cafe",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Café Dachkammer is Berfin's bar pick in Berlin",
+        "quote": "Bar: Café Dachkammer",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Café Dachkammer is in Friedrichshain",
+        "quote": "Café Dachkammer in Friedrichshain",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.437Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.236Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -2,12 +2,26 @@ import { describe, expect, it } from '@jest/globals';
 
 import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 
-import { captionHashtags, hashtagBrandIndex, hashtagLinks, normalizeHashtag } from '../util/hashtags.js';
+import {
+	captionHashtags,
+	hashtagBrandIndex,
+	hashtagLinks,
+	normalizeHashtag,
+} from '../util/hashtags.js';
 
 describe('hashtags', () => {
 	it('normalizes a tag and reads a caption’s tags in order, once each', () => {
-		expect(['#BerlinFood', ' berlinfood ', '##Döner', '#'].map(normalizeHashtag)).toEqual(['berlinfood', 'berlinfood', 'döner', '']);
-		expect(captionHashtags('Best #döner in town #BerlinFood #döner #fyp')).toEqual(['döner', 'BerlinFood', 'fyp']);
+		expect(['#BerlinFood', ' berlinfood ', '##Döner', '#'].map(normalizeHashtag)).toEqual([
+			'berlinfood',
+			'berlinfood',
+			'döner',
+			'',
+		]);
+		expect(captionHashtags('Best #döner in town #BerlinFood #döner #fyp')).toEqual([
+			'döner',
+			'BerlinFood',
+			'fyp',
+		]);
 	});
 
 	it('maps a brand’s name and handles to it, never a short or shared one', () => {
@@ -38,9 +52,21 @@ describe('hashtags', () => {
 			seenWith: new Set(['1 b1', '2 b2']),
 		};
 		// seedIndex has no ids: the topic is found, its id is not
-		expect(hashtagLinks({ id: 2, tag: 'smashburger' }, ctx)).toEqual({ topicId: null, brandId: null });
-		expect(hashtagLinks({ id: 1, tag: 'dönerpro' }, ctx)).toEqual({ topicId: null, brandId: 'b1' });
-		expect(hashtagLinks({ id: 3, tag: 'dönerpro' }, ctx)).toEqual({ topicId: null, brandId: null });
-		expect(hashtagLinks({ id: 4, tag: 'berlin' }, ctx)).toEqual({ topicId: null, brandId: null });
+		expect(hashtagLinks({ id: 2, tag: 'smashburger' }, ctx)).toEqual({
+			topicId: null,
+			brandId: null,
+		});
+		expect(hashtagLinks({ id: 1, tag: 'dönerpro' }, ctx)).toEqual({
+			topicId: null,
+			brandId: 'b1',
+		});
+		expect(hashtagLinks({ id: 3, tag: 'dönerpro' }, ctx)).toEqual({
+			topicId: null,
+			brandId: null,
+		});
+		expect(hashtagLinks({ id: 4, tag: 'berlin' }, ctx)).toEqual({
+			topicId: null,
+			brandId: null,
+		});
 	});
 });

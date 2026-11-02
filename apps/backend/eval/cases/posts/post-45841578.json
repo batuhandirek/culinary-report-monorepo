@@ -1,0 +1,950 @@
+{
+  "id": "post-45841578",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "totallytotoo",
+    "locationName": null,
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "berlinfoodspots",
+      "lowbudget",
+      "foodtok"
+    ],
+    "taggedHandles": [],
+    "text": "Unter 10€ durch Berlin 🍜🍵 – das sind meine Go-To Spots!\n\nAroma: Dumplings ab 3€ 🥟\n\nMezame Matcha: Matcha ~7,50€ 🍵\n\nDrei: Acai ab 9,90€ / Frozen Yogurt ab 6€ 🍓\n\nMr. Noodle Chen: Nudelsuppe ab 9,90€ 🍜\n\n#berlin #berlinfood #berlinfoodspots #lowbudget #foodtok",
+    "subtitles": "für unter 10 Euro in Berlin essen\ndas sind meine Top 4 Food Spots\ndie ihr unbedingt probieren müsst\nwenn ihr günstig und lecker essen wollt\nalso folgt Mir gerne für mehr Food Spots\nals 1. geht's zu einem meiner absoluten Favorites\nund zwar sind wir bei Aroma\nfür mich einer der\nauthentischsten und gleichzeitig günstigsten\nDumpling Läden Berlin\nDumplings gibt's hier schon AB 3 Euro\nzum Beispiel die soup Dumplings\ndie kosten gerade mal 1 Euro pro Stück\naber Mein persönlicher Favorite\ndie der Barbecue\nPopcorn mit süßwürzigen\nBarbecue Fleisch und ultra zartem Schweinebauch\ndanach gibt's natürlich Matcha\nja ich weiß\nBerlin hat mittlerweile gefühlt 1.000 Matcha Spots\naber dieser hier hat mich wirklich überrascht\n1 großer Becher kostet 7 Euro 50\nich habe Mir eine Matcha einspanner\ngeholt und es hat mich wirklich an Japan erinnert\nbei 3 bekommt ihr Aussie Boots AB 9 Euro 90 oder\nFrozen Joghurt AB 6 Euro\ndazu gibt es unlimited Toppings\nich hab natürlich komplett übertrieben frische Früchte\nGranola Nuss\nmuss einfach alles drauf\nund zum Schluss geht's zu meinem lieblingsnudelladen\ndas ist übrigens eine Kette Aus China\nund hier bekommt ihr eine richtig gute\nrindfleischnudelsuppe\nAB 9 Euro 90 und das beste\nnudelnachschlag gibt's sogar for free\nihr könnt außerdem sehen\nwie dick eure Nudeln sein sollen\nund das Fleisch ist einfach unfassbar\nzart speichert euch das Video\nAB und folgt Mir für mehr Food Tipps",
+    "subtitlesLanguage": "deu-DE",
+    "id": "45841578-d041-4bb8-987b-521b8b5a076a",
+    "externalId": "7686177592084417810",
+    "url": "https://www.tiktok.com/@totallytotoo/video/7686177592084417810",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-16T16:54:52.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:28.747Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Aroma",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "c4cf915a-d59e-47c1-a0bf-379866243150",
+          "brandName": "Café Aroma Berlin",
+          "venueId": "f57d66aa-294b-41bb-95c0-4df9298ca403",
+          "venueName": "Café Aroma Berlin"
+        }
+      },
+      {
+        "venueName": "Mezame Matcha",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "8e1b07f8-0ca7-4ac1-b57c-3fc9f794d3a3",
+          "brandName": "Mezame Matcha",
+          "venueId": "a8b2e413-fadf-4809-9407-ccdf765df34e",
+          "venueName": "Mezame Matcha"
+        }
+      },
+      {
+        "venueName": "Drei",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "408e4755-7210-4166-8e56-564143ce934d",
+          "brandName": "DREI.",
+          "venueId": "22eb4aa5-0587-49e0-bd55-f70f9ae60ee6",
+          "venueName": "DREI."
+        }
+      },
+      {
+        "venueName": "Mr. Noodle Chen",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "b5d87952-a976-44ef-b26e-4218a58dfe64",
+          "brandName": "Mr. Noodle Chen",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the video features four food spots under 10 euros in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 10,
+        "unit": "money",
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Aroma has dumplings from 3 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "dumpling"
+        ],
+        "amount": 3,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "soup dumplings cost 1 euro each",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "soup dumplings"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the barbecue pork dumpling is the creator's personal favorite",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "barbecue pork dumpling"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mezame Matcha has a large matcha for 7.50 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "matcha"
+        ],
+        "amount": 7.5,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the matcha reminded the creator of Japan",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Drei has açaí from 9.90 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "acai"
+        ],
+        "amount": 9.9,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Drei has frozen yogurt from 6 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "frozen yogurt"
+        ],
+        "amount": 6,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Drei offers unlimited toppings",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the creator topped the bowl with fresh fruit, granola and nuts",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "fresh fruits",
+          "granola",
+          "nuts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Mr. Noodle Chen is a chain from China",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Mr. Noodle Chen has beef noodle soup from 9.90 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "beef noodle soup"
+        ],
+        "amount": 9.9,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "noodle refills are free",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "noodle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "you can choose how thick the noodles should be",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "noodle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the meat is very tender",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:21:22.229Z",
+    "usage": {
+      "inputTokens": 19422,
+      "outputTokens": 7902,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Transcript misspells names ('3' for Drei, 'Aussie Boots' for Acai, 'Barbecue Popcorn' likely a pork bun), so caption spellings were preferred where available; the intro claim about all four spots has no single place, so it is filed under the city as optional. Price-from facts are neutral, while 'gerade mal 1 Euro' and the free noodle refill carry approval.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Aroma",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "5c2eea49-5631-4bbb-92de-494717d04ce8",
+          "brandName": "Aroma",
+          "venueId": "8ece9567-8166-420e-b546-5f19d2e0ac84",
+          "venueName": "Aroma",
+          "note": "Exact name match for the Chinese dumpling restaurant; single branch."
+        }
+      },
+      {
+        "venueName": "Mezame Matcha",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "8e1b07f8-0ca7-4ac1-b57c-3fc9f794d3a3",
+          "brandName": "Mezame Matcha",
+          "venueId": "a8b2e413-fadf-4809-9407-ccdf765df34e",
+          "venueName": "Mezame Matcha",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Drei",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "408e4755-7210-4166-8e56-564143ce934d",
+          "brandName": "DREI.",
+          "venueId": "22eb4aa5-0587-49e0-bd55-f70f9ae60ee6",
+          "venueName": "DREI.",
+          "note": "DREI. is a cafe matching the acai/frozen yogurt description; single branch."
+        }
+      },
+      {
+        "venueName": "Mr. Noodle Chen",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b5d87952-a976-44ef-b26e-4218a58dfe64",
+          "brandName": "Mr. Noodle Chen",
+          "venueId": null,
+          "venueName": null,
+          "note": "The chain is named but no location is given, so no branch is picked."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the four spots are must-tries for eating cheap and tasty in Berlin under 10 euros",
+        "quote": "die ihr unbedingt probieren müsst",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 10,
+        "unit": "money",
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "value_for_money"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Aroma is one of the creator's absolute favourites",
+        "quote": "einem meiner absoluten Favorites",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Aroma is one of the most authentic dumpling shops in Berlin",
+        "quote": "authentischsten",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Aroma is one of the cheapest dumpling shops in Berlin",
+        "quote": "günstigsten",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "dumplings at Aroma start from 3 euros",
+        "quote": "Dumplings ab 3€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Dumplings"
+        ],
+        "amount": 3,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the soup dumplings cost just 1 euro each",
+        "quote": "die kosten gerade mal 1 Euro pro Stück",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "soup Dumplings"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Barbecue Popcorn is the creator's personal favourite",
+        "quote": "aber Mein persönlicher Favorite",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Barbecue Popcorn"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Barbecue Popcorn has sweet-savoury barbecue meat",
+        "quote": "süßwürzigen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Barbecue Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pork belly is ultra tender",
+        "quote": "ultra zartem Schweinebauch",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Schweinebauch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Berlin now has seemingly 1,000 matcha spots",
+        "quote": "Berlin hat mittlerweile gefühlt 1.000 Matcha Spots",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Mezame Matcha really surprised the creator",
+        "quote": "aber dieser hier hat mich wirklich überrascht",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "a large matcha at Mezame Matcha costs about 7.50 euros",
+        "quote": "Matcha ~7,50€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Matcha"
+        ],
+        "amount": 7.5,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the creator ordered a Matcha einspanner",
+        "quote": "ich habe Mir eine Matcha einspanner",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Matcha einspanner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the Matcha einspanner really reminded the creator of Japan",
+        "quote": "es hat mich wirklich an Japan erinnert",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Matcha einspanner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "acai at Drei starts from 9.90 euros",
+        "quote": "Acai ab 9,90€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Acai"
+        ],
+        "amount": 9.9,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "frozen yogurt at Drei starts from 6 euros",
+        "quote": "Frozen Yogurt ab 6€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Frozen Yogurt"
+        ],
+        "amount": 6,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Drei offers unlimited toppings",
+        "quote": "dazu gibt es unlimited Toppings",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the creator piled on fresh fruits, granola and nuts",
+        "quote": "ich hab natürlich komplett übertrieben frische Früchte",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Früchte",
+          "Granola",
+          "Nuss"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "freshness",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Mr. Noodle Chen is the creator's favourite noodle shop",
+        "quote": "meinem lieblingsnudelladen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Mr. Noodle Chen is a chain from China",
+        "quote": "das ist übrigens eine Kette Aus China",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the beef noodle soup is really good",
+        "quote": "richtig gute\nrindfleischnudelsuppe",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "rindfleischnudelsuppe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the noodle soup starts from 9.90 euros",
+        "quote": "Nudelsuppe ab 9,90€",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Nudelsuppe"
+        ],
+        "amount": 9.9,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "noodle refills are even free, the best part",
+        "quote": "nudelnachschlag gibt's sogar for free",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [
+          "nudelnachschlag"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "portion_size"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "guests can choose how thick their noodles are",
+        "quote": "wie dick eure Nudeln sein sollen",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Nudeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the meat in the noodle soup is incredibly tender",
+        "quote": "das Fleisch ist einfach unfassbar\nzart",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.436Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.232Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

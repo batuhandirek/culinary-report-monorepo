@@ -1,0 +1,856 @@
+{
+  "id": "post-b8d2bcf3",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "CAFÉ BRAVO — DAS TEAM HINTER OTTO, TRIO UND PLUTO ÜBERNIMMT DAN GRAHAMS IKONISCHEN GLASPAVILLON\n\nEs gibt kaum einen Berliner Innenhof, der so bekannt ist und den ich so oft besucht habe, wie den der KW Institute for Contemporary Art. In Mitte auf der Auguststraße, in einer ehemaligen Margarinefabrik, sind die KW die Geburtsstätte der Berlin Biennale und bis heute eine der wichtigsten Adressen für zeitgenössische Kunst. Im spiegelnden Glaswürfel des amerikanischen Künstlers Dan Graham hat das Bravo mit neuem Betreiberteam nun gerade wieder eröffnet. Die Geschichte des Pavillons begann im Winter 1994. Nach einem Vortrag an der damaligen Hochschule der Künste entwickelte Graham die Idee für einen Ort, an dem Kunst und Alltag ineinander übergehen – eine funktionale Architektur aus poliertem Edelstahl und zweiseitigem Spiegelglas, irgendwo zwischen Pavillon und öffentlichem Wohnzimmer. Gemeinsam mit der Berliner Architektin Johanne Nalbach entstand das Café Bravo – seine erste Skulptur, die ausdrücklich zum Sitzen, Warten und Kaffeetrinken gedacht war. Zur ersten Berlin Biennale 1998 wurde diese Idee Realität. Nun beginnt eine neue Ära: das Café Bravo ist die neuste und vierte Institution des Teams hinter den bekannten und allseits beliebten Spots Otto, Trio und Pluto.\nIm Juli 2026 übernahm die neue Generation: Clemens Roesch, Eva Alken, Sören Zuppke und Vadim Otto Ursus. Einer von ihnen ist auch hier in Mitte verwurzelt – Vadim ist nur wenige Schritte entfernt aufgewachsen. Gemeinsam mit den Berliner Architekten von Studio Affin wurde der Pavillon neu eingerichtet, ohne seine Offenheit zu verändern. Maßgefertigte Sitzbänke und Fensterborde aus Kirschholz von Hanna Rothhaus, ein geschwungener Edelstahltresen von Luca Lombardini entlang der offenen Küche, Regale in sattem Grün und warme Holztöne nehmen die Farbigkeit des Innenhofs auf. Statt mit der Architektur zu konkurrieren, verstärken sie ihre Wirkung. Die wöchentlich frischen Blumensträuße aus dem Brandenburgischen Buchholz von Meggie Schneider lassen das Innere des Cafés mit dem Garten “Archipel” der französischen Landschaftsarchitekten Le balto, verschmelzen. Bravo versteht sich als Museumscafé im besten Sinne. Ein Ort, an dem die Welt und die Nachbarschaft aufeinandertreffen. Beide verstehen die Stadt nicht als Publikum und Kundschaft, sondern als Teil eines fortlaufenden Werks aus Kunst und Fürsorge. Das Bravo begleitet den Tag vom Morgen bis in den Abend hinein – mit einem ruhigen Rhythmus und einer Küche, die auf Saisonalität und Sorgfalt setzt: vom ersten Kaffee und einem kleinen Frühstück (z.B. gekeimtes Hafermüsli mit Haselnussmus & Kompott oder Stulle mit Heggelbachkäse und Tomate) über einen wöchentlich wechselnden Mittagstisch bis hin zu einem Glas Wein am Abend. Ein paar feste Snacks bleiben den ganzen Tag über auf der Karte, dazu gibt es selbstgebackene Kuchen und Gebäck. Hausgemachte Limonaden, “Bravo Eistee”, Wasserkefir, Kaffee und wild gesammelte Tees sowie eine kleine Wein- und Cocktailkarte erfrischen im heißen Sommer. Für mich fühlt es sich an wie die Wiederentdeckung meines persönlichen Berliner Klassikers. Oder, einfacher gesagt: einer dieser seltenen Berliner Orte, die sich anfühlen, als wären sie schon immer da gewesen. Bravo, Bravo!\nText: Milena Kalojanov / Fotos: Robert Rieger\nBravo, Auguststr.69, 10117 Berlin–Mitte; Stadtplan\n@bravoberlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "b8d2bcf3-4c1a-4b26-b6f4-8e3279fb5908",
+    "externalId": "blog_9adf71c19546ad4d642a6a6a",
+    "url": "https://ceecee.cc/cafe-bravo-das-team-hinter-otto-trio-und-pluto-uebernimmt-dan-grahams-ikonischen-glaspavillon/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-30T12:51:14.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:09.187Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café Bravo",
+        "locationHint": "Auguststr. 69, KW Institute for Contemporary Art",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "a12c0ca5-1f89-41b4-b723-b42f3a01bf64",
+          "brandName": "Bravo",
+          "venueId": "e373e859-bcd9-4329-aeff-97350c078493",
+          "venueName": "Bravo"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "open from morning into the evening",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "calm rhythm and museum-café feel",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "newly furnished with warm wood and green accents",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "seasonal and carefully prepared kitchen",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "breakfast, lunch, snacks, cakes and drinks across the day",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:49:31.806Z",
+    "usage": {
+      "inputTokens": 18033,
+      "outputTokens": 10434,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Bravo 'gerade wieder eröffnet' under a new team is marked a new opening, while the takeover itself is a change of ownership. Otto, Trio and Pluto are included as places because the article calls them well known and beloved. KW and the Archipel garden are not places, and the courtyard and history passages are left out or kept as optional facts.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café Bravo",
+        "locationHint": "Auguststr. 69, courtyard of KW Institute for Contemporary Art, Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "a12c0ca5-1f89-41b4-b723-b42f3a01bf64",
+          "brandName": "Bravo",
+          "venueId": "e373e859-bcd9-4329-aeff-97350c078493",
+          "venueName": "Bravo",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Otto",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "8058f0a5-320e-4ba5-ac3d-512348418f7b",
+          "brandName": "otto",
+          "venueId": "aee90fe7-0fb6-4bc0-aad7-4178608ed748",
+          "venueName": "otto",
+          "note": "Otto is named as part of the same group as Trio and Pluto; the Oderberger Str. small plates restaurant is the well-known Otto."
+        }
+      },
+      {
+        "venueName": "Trio",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "42b33913-fe31-47a2-9f4f-eac9e1320749",
+          "brandName": "Trio",
+          "venueId": "15e5b4c4-0793-4b98-a24e-5e2e82e24407",
+          "venueName": "Trio",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Pluto",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "589ca843-4557-4f89-8b1d-d7182e4c5f3c",
+          "brandName": "Pluto",
+          "venueId": "5c7257fd-7ee1-4f01-9138-1102c913a987",
+          "venueName": "Pluto",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Bravo has just reopened with a new operator team",
+        "quote": "hat das Bravo mit neuem Betreiberteam nun gerade wieder eröffnet",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo is in the mirrored glass cube of American artist Dan Graham",
+        "quote": "Im spiegelnden Glaswürfel des amerikanischen Künstlers Dan Graham",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Bravo was created with architect Johanne Nalbach and realised for the first Berlin Biennale in 1998, a sculpture meant for sitting, waiting and drinking coffee",
+        "quote": "Zur ersten Berlin Biennale 1998 wurde diese Idee Realität.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Bravo is the newest and fourth venue of the team behind Otto, Trio and Pluto",
+        "quote": "das Café Bravo ist die neuste und vierte Institution des Teams hinter den bekannten und allseits beliebten Spots Otto, Trio und Pluto",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Otto is a well-known and widely beloved spot",
+        "quote": "bekannten und allseits beliebten Spots Otto, Trio und Pluto",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Trio is a well-known and widely beloved spot",
+        "quote": "bekannten und allseits beliebten Spots Otto, Trio und Pluto",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Pluto is a well-known and widely beloved spot",
+        "quote": "bekannten und allseits beliebten Spots Otto, Trio und Pluto",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "in July 2026 a new generation took over Bravo: Clemens Roesch, Eva Alken, Sören Zuppke and Vadim Otto Ursus",
+        "quote": "Im Juli 2026 übernahm die neue Generation: Clemens Roesch, Eva Alken, Sören Zuppke und Vadim Otto Ursus.",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "co-owner Vadim grew up a few steps from Bravo",
+        "quote": "Vadim ist nur wenige Schritte entfernt aufgewachsen",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the pavilion was refurnished with architects Studio Affin without changing its openness",
+        "quote": "Gemeinsam mit den Berliner Architekten von Studio Affin wurde der Pavillon neu eingerichtet, ohne seine Offenheit zu verändern.",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "custom cherry wood benches and window shelves, a curved stainless steel counter along the open kitchen, rich green shelves and warm wood tones pick up the courtyard's colours",
+        "quote": "Maßgefertigte Sitzbänke und Fensterborde aus Kirschholz von Hanna Rothhaus, ein geschwungener Edelstahltresen von Luca Lombardini entlang der offenen Küche, Regale in sattem Grün und warme Holztöne nehmen die Farbigkeit des Innenhofs auf",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the furnishings enhance the architecture instead of competing with it",
+        "quote": "Statt mit der Architektur zu konkurrieren, verstärken sie ihre Wirkung.",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "weekly fresh flower bouquets from Buchholz by Meggie Schneider blend the café's interior with the garden",
+        "quote": "Die wöchentlich frischen Blumensträuße aus dem Brandenburgischen Buchholz von Meggie Schneider lassen das Innere des Cafés mit dem Garten “Archipel” der französischen Landschaftsarchitekten Le balto, verschmelzen.",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo is a museum café in the best sense",
+        "quote": "Bravo versteht sich als Museumscafé im besten Sinne.",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo is a place where the world and the neighbourhood meet",
+        "quote": "Ein Ort, an dem die Welt und die Nachbarschaft aufeinandertreffen.",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "crowding"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo is open from morning into the evening",
+        "quote": "Das Bravo begleitet den Tag vom Morgen bis in den Abend hinein",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo has a calm rhythm",
+        "quote": "mit einem ruhigen Rhythmus",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the kitchen focuses on seasonality and care",
+        "quote": "einer Küche, die auf Saisonalität und Sorgfalt setzt",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo serves coffee and a small breakfast",
+        "quote": "vom ersten Kaffee und einem kleinen Frühstück",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "breakfast includes sprouted oat muesli with hazelnut butter and compote",
+        "quote": "gekeimtes Hafermüsli mit Haselnussmus & Kompott",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "gekeimtes Hafermüsli",
+          "Haselnussmus",
+          "Kompott"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "breakfast includes a Stulle with Heggelbach cheese and tomato",
+        "quote": "Stulle mit Heggelbachkäse und Tomate",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Stulle",
+          "Heggelbachkäse",
+          "Tomate"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo has a weekly changing lunch menu",
+        "quote": "einen wöchentlich wechselnden Mittagstisch",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo serves a glass of wine in the evening",
+        "quote": "einem Glas Wein am Abend",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a few fixed snacks stay on the menu all day",
+        "quote": "Ein paar feste Snacks bleiben den ganzen Tag über auf der Karte",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo has homemade cakes and pastries",
+        "quote": "selbstgebackene Kuchen und Gebäck",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Kuchen",
+          "Gebäck"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo serves homemade lemonades, Bravo Eistee, water kefir, coffee and wild-foraged teas",
+        "quote": "Hausgemachte Limonaden, “Bravo Eistee”, Wasserkefir, Kaffee und wild gesammelte Tees",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Limonaden",
+          "Bravo Eistee",
+          "Wasserkefir",
+          "Kaffee",
+          "Tees"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo has a small wine and cocktail list",
+        "quote": "eine kleine Wein- und Cocktailkarte",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Wein",
+          "Cocktail"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the drinks are refreshing in the hot summer",
+        "quote": "erfrischen im heißen Sommer",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "for the author Bravo feels like rediscovering her personal Berlin classic",
+        "quote": "Für mich fühlt es sich an wie die Wiederentdeckung meines persönlichen Berliner Klassikers.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo is one of those rare Berlin places that feel as if they had always been there",
+        "quote": "einer dieser seltenen Berliner Orte, die sich anfühlen, als wären sie schon immer da gewesen",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo, Bravo!",
+        "quote": "Bravo, Bravo!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bravo is at Auguststr. 69 in Berlin-Mitte",
+        "quote": "Bravo, Auguststr.69, 10117 Berlin–Mitte",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.249Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.438Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

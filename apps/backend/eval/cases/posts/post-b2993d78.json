@@ -1,0 +1,421 @@
+{
+  "id": "post-b2993d78",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "hamoni_germanay",
+    "locationName": "Markthalle Neun",
+    "hashtags": [
+      "berlinfood",
+      "pasta",
+      "italien",
+      "markthalleneun",
+      "instafood"
+    ],
+    "taggedHandles": [],
+    "text": "Echte italienische Pasta-Kunst mitten in Berlin! 🥟🇮🇹✨\n\n【Mani in Pasta】\n📎 https://hamoni.com/en/shop/cRGrmJlduyOfstMpNla1ZG9FEfM2d8Kq\n\nLust auf frische, authentische Ravioli auf einem Berliner Markt? 🥟🇮🇹✨\nHier kannst du den Köchen direkt dabei zusehen, wie sie die Teigtaschen frisch vor deinen Augen zubereiten!\nHauchdünner Teig, leckere Füllungen und feines Parmigiano – perfekt für einen leckeren Happen zwischendurch. Ein echter Geheimtipp für Pasta-Liebhaber in Berlin! 😍🔥\n——————————\n🏠️ Mani in Pasta (Markthalle Neun)\n📍 Eisenbahnstraße 42-43, 10997 Berlin, Deutschland\n⏰️ Mo: 10–17 Uhr | Di–Mi, Fr–Sa: 10–18 Uhr | Do: 10–22 Uhr | 💤 So: Ruhetag\n——————————\nAuthentic Italian Pasta Art in Berlin! 🥟🇮🇹✨\n\n【Mani in Pasta】\n📎 https://hamoni.com/en/shop/cRGrmJlduyOfstMpNla1ZG9FEfM2d8Kq\n\nCraving fresh authentic ravioli at a lively Berlin market? 🥟🇮🇹✨\nWatch the chefs prepare these delicate stuffed parcels fresh right before your eyes!\nSilky dough, savory fillings, and fresh Parmigiano – the perfect casual bite on the go. A must-visit for pasta lovers in Berlin! 😍🔥\n——————————\n🏠️️ Mani in Pasta (Markthalle Neun)\n📍 Eisenbahnstraße 42-43, 10997 Berlin, Germany\n⏰️ Mon: 10am–5pm | Tue–Wed, Fri–Sat: 10am–6pm | Thu: 10am–10pm | 💤 Sun: Closed\n——————————\n\n#berlinfood #pasta #italien #markthalleneun #instafood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "b2993d78-2d00-4f86-a7ec-378130eb038a",
+    "externalId": "ig_4002092839620285865",
+    "url": "https://www.instagram.com/p/DeKSjvPs5Wp/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-06T17:14:27.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:28:03.907Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Mani in Pasta",
+        "locationHint": "Markthalle Neun, Eisenbahnstraße 42-43",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "db312098-a0c4-4600-b094-4bfa5c9c338b",
+          "brandName": "Mani in Pasta",
+          "venueId": "ef31df27-e725-4a80-8f2a-8252789c854d",
+          "venueName": "Mani in Pasta - Markthalle"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "authentic Italian pasta art in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Italian pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fresh authentic ravioli",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "ravioli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chefs prepare the stuffed parcels fresh before your eyes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "stuffed parcels"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dough is silky",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "dough"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the fillings are savory",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fillings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Parmigiano is fresh",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Parmigiano"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the bite is perfect for on the go",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a must-visit for pasta lovers in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [
+          "pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:47:57.975Z",
+    "usage": {
+      "inputTokens": 10723,
+      "outputTokens": 3255,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Markthalle Neun is a food hall but the post says nothing about it beyond hosting the stall, so only Mani in Pasta is listed, with the hall as its location hint. The caption repeats in English, so quotes come from the German half. The 'watch the chefs' line is a fact with a positive slant, and its aspect is a soft call. The shop link makes the post promotional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Mani in Pasta",
+        "locationHint": "Markthalle Neun, Eisenbahnstraße 42-43, 10997 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "db312098-a0c4-4600-b094-4bfa5c9c338b",
+          "brandName": "Mani in Pasta",
+          "venueId": "ef31df27-e725-4a80-8f2a-8252789c854d",
+          "venueName": "Mani in Pasta - Markthalle",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Mani in Pasta offers real Italian pasta art",
+        "quote": "Echte italienische Pasta-Kunst",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Ravioli are fresh and authentic",
+        "quote": "frische, authentische Ravioli",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Ravioli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can watch the chefs make the Teigtaschen fresh in front of you",
+        "quote": "den Köchen direkt dabei zusehen, wie sie die Teigtaschen frisch vor deinen Augen zubereiten",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Teigtaschen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Teig is wafer-thin",
+        "quote": "Hauchdünner Teig",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Teig"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Füllungen are tasty",
+        "quote": "leckere Füllungen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Füllungen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Parmigiano is fine",
+        "quote": "feines Parmigiano",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Parmigiano"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mani in Pasta is perfect for a tasty snack in between",
+        "quote": "perfekt für einen leckeren Happen zwischendurch",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mani in Pasta is a real insider tip for pasta lovers in Berlin",
+        "quote": "Ein echter Geheimtipp für Pasta-Liebhaber in Berlin!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mani in Pasta is in Markthalle Neun at Eisenbahnstraße 42-43",
+        "quote": "Eisenbahnstraße 42-43, 10997 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Mani in Pasta is open Mon 10–17, Tue–Wed and Fri–Sat 10–18, Thu 10–22, closed Sunday",
+        "quote": "Mo: 10–17 Uhr | Di–Mi, Fr–Sa: 10–18 Uhr | Do: 10–22 Uhr | 💤 So: Ruhetag",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.249Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.437Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

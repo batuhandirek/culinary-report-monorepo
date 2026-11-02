@@ -1,0 +1,371 @@
+{
+  "id": "post-bca0fe02",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "joanne.cronin",
+    "locationName": "stoke berlin",
+    "hashtags": [
+      "berlin",
+      "berlinfood"
+    ],
+    "taggedHandles": [
+      "kevinomdonnell",
+      "stoke.berlin"
+    ],
+    "text": "I asked recently for restaurant recommendations in Berlin and I got some great suggestions. Ultimately I went with @kevinomdonnell’s shout for @stoke.berlin - a super cool yakitori / Japanese style spot. \n\nAs I was eating solo, I went à la carte, enjoying sashimi, negimi, incredibly tender duck hearts, potato and Ibérico pork. And of course I got primal with a wood-oven cooked hamachi collar. An excellent Negroni and wine suggestions rounded it all out. Love this kind of eating.\n\n#berlin #berlinfood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "bca0fe02-a832-4ed4-be7b-764ad55b9508",
+    "externalId": "ig_4018163442313087307",
+    "url": "https://www.instagram.com/p/DfDYlyUiElL/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-28T21:20:30.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:01:25.878Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Stoke Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "37154a24-bc9c-453b-b706-b6be5acf05f3",
+          "brandName": "stoke",
+          "venueId": "07f4e9fb-ed6e-4d69-a7d6-24000811d40a",
+          "venueName": "stoke"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "excellent food overall",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "wood-oven cooked hamachi collar",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "hamachi collar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "incredibly tender duck hearts",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "duck hearts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "excellent Negroni",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Negroni"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "wine suggestions rounded out the meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "advice",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:49:25.847Z",
+    "usage": {
+      "inputTokens": 9385,
+      "outputTokens": 2486,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Whether 'enjoying' makes the list of dishes an opinion or a plain fact, and whether the closing 'Love this kind of eating' is a verdict on Stoke; the kevinomdonnell recommendation is kept as an optional fact.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Stoke",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "37154a24-bc9c-453b-b706-b6be5acf05f3",
+          "brandName": "stoke",
+          "venueId": "07f4e9fb-ed6e-4d69-a7d6-24000811d40a",
+          "venueName": "stoke",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Stoke was recommended by kevinomdonnell",
+        "quote": "I went with @kevinomdonnell’s shout for @stoke.berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Stoke is a super cool yakitori / Japanese style spot",
+        "quote": "a super cool yakitori / Japanese style spot",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [
+          "yakitori"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author ate solo and ordered à la carte at Stoke",
+        "quote": "As I was eating solo, I went à la carte",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author enjoyed sashimi, negimi, potato and Ibérico pork at Stoke",
+        "quote": "enjoying sashimi, negimi, incredibly tender duck hearts, potato and Ibérico pork",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "sashimi",
+          "negimi",
+          "potato",
+          "Ibérico pork"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the duck hearts at Stoke were incredibly tender",
+        "quote": "incredibly tender duck hearts",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "duck hearts"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author had a wood-oven cooked hamachi collar at Stoke",
+        "quote": "wood-oven cooked hamachi collar",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "hamachi collar"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Negroni at Stoke was excellent",
+        "quote": "An excellent Negroni",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Negroni"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the wine suggestions at Stoke rounded out the meal",
+        "quote": "wine suggestions rounded it all out",
+        "sentiment": "positive",
+        "aspect": "advice",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author loves this kind of eating at Stoke",
+        "quote": "Love this kind of eating.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.250Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.438Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

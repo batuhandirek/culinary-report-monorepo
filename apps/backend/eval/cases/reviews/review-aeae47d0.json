@@ -1,0 +1,96 @@
+{
+  "id": "review-aeae47d0",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "aeae47d0-5f57-4eee-a419-342150999be4",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21OSlJIWlNUR3QyZEdreVNuVTVaSEZ1YTBKMVNtYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Yangguofu Malatang (杨国福柏林Stegliz店)",
+    "venueId": "22f38462-c073-4d60-ac99-c9c550be318f",
+    "brand": "Yangguofu Malatang (杨国福柏林Stegliz店)",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-17T11:35:13.384Z",
+    "stars": 5,
+    "text": "Seit Öffnung sind wir einmal die Woche hier ☀️",
+    "textTranslated": "We've been coming here once a week since it opened ☀️"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:00:31.362Z",
+    "claims": [
+      {
+        "text": "we've been coming here once a week",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "since it opened",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:32.361Z",
+    "usage": {
+      "inputTokens": 4955,
+      "outputTokens": 389,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review is one statement of loyal weekly visits. It states a habit rather than judging anything, so it is a fact with no aspect. It still clearly signals approval: positive, or neutral read strictly. It can also be read as an implicit verdict on the place as a whole.",
+    "claims": [
+      {
+        "text": "we have been coming here once a week since it opened",
+        "quote": "Seit Öffnung sind wir einmal die Woche hier",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

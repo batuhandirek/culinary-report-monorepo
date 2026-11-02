@@ -10,6 +10,7 @@
 	import FoundationsSection from './components/FoundationsSection.svelte';
 	import NavigationSection from './components/NavigationSection.svelte';
 	import OverlaysSection from './components/OverlaysSection.svelte';
+	import StatementsSection from './components/StatementsSection.svelte';
 
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import { scrollEdges } from '#ui/lib/scroll-edges.js';
@@ -29,7 +30,8 @@
 		{ id: 'navigation', name: 'Tabs' },
 		{ id: 'feedback', name: 'Feedback' },
 		{ id: 'overlays', name: 'Overlays' },
-		{ id: 'blocks', name: 'Blocks' }
+		{ id: 'blocks', name: 'Blocks' },
+		{ id: 'statements', name: 'Statements' }
 	];
 
 	let active = $state(SECTIONS[0].id);
@@ -103,5 +105,6 @@
 		<FeedbackSection />
 		<OverlaysSection />
 		<BlocksSection />
+		<StatementsSection />
 	</div>
 </div>

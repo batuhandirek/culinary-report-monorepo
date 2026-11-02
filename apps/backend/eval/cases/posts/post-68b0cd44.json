@@ -1,0 +1,814 @@
+{
+  "id": "post-68b0cd44",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "ani.viro",
+    "locationName": "Panda Meister Berlin Kurfürstendamm",
+    "hashtags": [
+      "berlinfood"
+    ],
+    "taggedHandles": [
+      "@Panda Meister Dumpling"
+    ],
+    "text": "📍Panda Meister Westfälischestr 46, Charlottenburg: alright this was a bit of a trek for my east Berlin ass but that yu-xiang aubergine was honestly well worth it. And no matter what you do, don’t skip the dumplings. Never skip the dumplings 🥟 \n\nThanks a lot for the feast @Panda Meister Dumpling 🥰🥰 \n\n#berlinfood berlin vegan ",
+    "subtitles": "I found a Chinese place in South London\nthat is both budget and veggie friendly.\nBut first, this is sunny.\nI have many hobbies and I am obsessed with food,\nso this is what I tried.\nI started with a dumpling in homemade chili oil.\nAnd did you see that price?\nWell, the taste was even better.\nI follow with this spicy bian bian hand pulled noodles.\nAnd look at the texture! How is this 8 90?\nI also tried this vegetable and glass noodle\nsteamed buns. It's a cross section for you.\nBut then I saw that they also offer vegan Mapo tofu.\nSo of course I had to try it.\nA tingling sensation. But the most unexpected was this overgrown dish.\nI wasn't planning to order it at first,\nbut the chef encouraged me to do it\nand it's all I've been thinking ever since.\nAfter that feast, I made use of my free will,\nordering Boba for dessert.\nAnyway, the place is called Panda Mia,\nand besides this venue in Charlottenburg,\nthey also have a kioski Osborne. Hope you like it.",
+    "subtitlesLanguage": "eng-US",
+    "id": "68b0cd44-2d03-4470-a4f3-1bffd4a7a7bb",
+    "externalId": "7688985677249269024",
+    "url": "https://www.tiktok.com/@ani.viro/video/7688985677249269024",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-24T06:31:36.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:44:23.541Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Panda Meister",
+        "locationHint": "Westfälischestr 46, Charlottenburg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "98c003cd-48de-489f-a6f9-e2dd0dfc2076",
+          "brandName": "Panda Meister Berlin",
+          "venueId": "907bf1b4-1351-4e65-bf9c-810a891219b7",
+          "venueName": "Panda Meister Berlin Kurfürstendamm"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the yu-xiang aubergine was well worth it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [
+          "yu-xiang aubergine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "don't skip the dumplings",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "dumpling"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "thanks for the feast",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator found a Chinese place in South London",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the place is budget and veggie friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the dumpling in homemade chili oil was tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "dumpling",
+          "homemade chili oil"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the dumpling cost 8.90",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "dumpling"
+        ],
+        "amount": 8.9,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the spicy bian bian hand pulled noodles had great texture",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "bian bian hand pulled noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the hand pulled noodles cost 8.90",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "hand-pulled noodles"
+        ],
+        "amount": 8.9,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the place offers vegetable and glass noodle steamed buns",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the place offers vegan Mapo tofu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Mapo tofu had a tingling sensation",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "mapo tofu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the chef encouraged ordering the overgrown dish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the creator ordered boba for dessert",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "boba"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the place is called Panda Mia",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "it also has a kiosk in Osborne",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:41:27.153Z",
+    "usage": {
+      "inputTokens": 11880,
+      "outputTokens": 5174,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The transcript garbles names (\"Panda Mia\", \"South London\", \"overgrown dish\" for the yu-xiang aubergine, \"kioski Osborne\" for an unnamed second location), so caption spellings were used and the kiosk was not listed as a place. The thanks for the feast marks the post as promotional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Panda Meister",
+        "locationHint": "Westfälische Str. 46, Charlottenburg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "98c003cd-48de-489f-a6f9-e2dd0dfc2076",
+          "brandName": "Panda Meister Berlin",
+          "venueId": "907bf1b4-1351-4e65-bf9c-810a891219b7",
+          "venueName": "Panda Meister Berlin Kurfürstendamm",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Panda Meister was a bit of a trek for an east Berliner",
+        "quote": "this was a bit of a trek for my east Berlin ass",
+        "sentiment": "negative",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral",
+            "mixed"
+          ],
+          "aspects": [
+            "accessibility"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the yu-xiang aubergine was well worth the trek",
+        "quote": "that yu-xiang aubergine was honestly well worth it",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "yu-xiang aubergine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "never skip the dumplings at Panda Meister",
+        "quote": "don’t skip the dumplings. Never skip the dumplings",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "dumplings"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Panda Meister is a Chinese place",
+        "quote": "I found a Chinese place",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Panda Meister is budget friendly",
+        "quote": "budget",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Panda Meister is veggie friendly",
+        "quote": "veggie friendly",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator started with a dumpling in homemade chili oil",
+        "quote": "I started with a dumpling in homemade chili oil.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "dumpling",
+          "homemade chili oil"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dumpling in chili oil had a remarkable price",
+        "quote": "did you see that price?",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the dumpling tasted even better than its price",
+        "quote": "the taste was even better",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator had spicy bian bian hand pulled noodles",
+        "quote": "this spicy bian bian hand pulled noodles",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "spicy bian bian hand pulled noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "seasoning"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the bian bian noodles had an impressive texture",
+        "quote": "look at the texture!",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "hand pulled noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the bian bian noodles cost only 8.90",
+        "quote": "How is this 8 90?",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [
+          "hand pulled noodles"
+        ],
+        "amount": 8.9,
+        "unit": "money",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator tried vegetable and glass noodle steamed buns",
+        "quote": "this vegetable and glass noodle",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "vegetable and glass noodle steamed buns"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Panda Meister also offers vegan Mapo tofu",
+        "quote": "they also offer vegan Mapo tofu",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "vegan Mapo tofu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Mapo tofu gave a tingling sensation",
+        "quote": "A tingling sensation.",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Mapo tofu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the yu-xiang aubergine was the most unexpected dish",
+        "quote": "the most unexpected was this overgrown dish",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "yu-xiang aubergine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the chef encouraged the creator to order the aubergine dish",
+        "quote": "the chef encouraged me to do it",
+        "sentiment": "positive",
+        "aspect": "advice",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator has thought of nothing but the aubergine dish since",
+        "quote": "it's all I've been thinking ever since",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "overgrown dish"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator ordered Boba for dessert",
+        "quote": "ordering Boba for dessert",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Boba"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Panda Meister is at Westfälischestr 46, Charlottenburg",
+        "quote": "Westfälischestr 46, Charlottenburg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "besides Charlottenburg, Panda Meister also has a kiosk elsewhere",
+        "quote": "they also have a kioski Osborne",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's claim that the dumpling in chili oil was tasty covers this taste claim; the scorer paired it with the neutral fact instead."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): Pairing artifact: the agent's claim is the taste claim, which is positive, while the reference's is a neutral fact."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Pairing artifact: taste fits the agent's taste claim and null fits the reference's fact claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.kind (both_ok): Pairing artifact: the agent's taste claim is an opinion and the reference's 'started with' claim is a fact."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Seasoning fits the agent's spiciness claim and null fits the reference's 'had the noodles' fact."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The texture claim is about the noodles, which should be listed as its food."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The price claim is about the noodles, which should be listed as its food."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The tingling claim is about the Mapo tofu, which should be listed as its food."
+      },
+      {
+        "at": "2026-11-01T14:39:43.599Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The claim is about a specific dish, so its food list should not be empty."
+      },
+      {
+        "at": "2026-11-01T21:36:47.239Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.430Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

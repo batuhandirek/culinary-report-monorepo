@@ -1,0 +1,147 @@
+{
+  "id": "review-b684833c",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "b684833c-f343-413e-b723-8e4e71622ad7",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2sxVWR6TkVaa2xsYlVrelJEZFlRbVJ2VmtGV1UyYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Wen Cheng",
+    "venueId": "39c59d16-58a4-4a69-a194-09ac4965bc58",
+    "brand": "Wen Cheng",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-23T10:30:26.161Z",
+    "stars": 3,
+    "text": "Biang Biang sehr mittelmässig leider. Musik ist sehr random, aber Service sehr symphatisch!",
+    "textTranslated": "Biang Biang is unfortunately very mediocre. The music is very random, but the service is very friendly!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:07.667Z",
+    "claims": [
+      {
+        "text": "Biang Biang is unfortunately very mediocre",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Biang Biang"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music is very random",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service is very friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:37.915Z",
+    "usage": {
+      "inputTokens": 4970,
+      "outputTokens": 460,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: \"very random\" music is a mild criticism of the atmosphere rather than of loudness. \"Mittelmässig\" for the Biang Biang reads as taste, with general food also allowed.",
+    "claims": [
+      {
+        "text": "the Biang Biang was unfortunately very mediocre",
+        "quote": "Biang Biang sehr mittelmässig leider",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "Biang Biang"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music is very random",
+        "quote": "Musik ist sehr random",
+        "sentiment": "negative",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "neutral"
+          ],
+          "aspects": [
+            "noise",
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service is very friendly",
+        "quote": "Service sehr symphatisch",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,612 @@
+{
+  "id": "post-1ca1ffee",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "elkampinski",
+    "locationName": null,
+    "hashtags": [
+      "berlinfood",
+      "whattoeat",
+      "steak",
+      "food"
+    ],
+    "taggedHandles": [
+      "@steakhaus Doree 65"
+    ],
+    "text": "🥩 Wie schmecken die Steaks bei Doree 65 in Berlin? \n\n📍 @steakhaus Doree 65 Torfstraße 9, Berlin \n\n#berlinfood #whattoeat #steak #food ",
+    "subtitles": "I think it's finally time for duree 65 in Berlin\nhow awesome is that\ncome at duree 65 you get a Achoschare mother\ngrills\nwhen you shoot Europe and Berlin his mother for 30 euros\ndo you want to find something like that\nwallah if you find I close tomorrow\nyou already say from the beginning\ni love characters like him\ndoes not understand each other and is the way he is give him\nbest man\nI have never had such a warm welcome\nget in my life brother\nwallah brother i kiss your heart thank you for mars\nhow are you\nBrother I'm very well it's awesome weather 65\nwallah we will make Bundesliga\nthe prices are not only Bundesliga\nbut Champions League\nI I like so right so\nso Medium just\nyou know we are happy to do Medium in any case\nand to all the people who have a little no idea\nbistek from the 1st time not\nMedium gets there or through or almost through or bloody\nor anything\nand that again additional money\nthen you can forget\nGoals 65 MG IG where\nGastro is horny\nbest Achos charmutas text in all of Germany\nif you Berlin his mother\nand Europe turns its mother\nyou will not find these prices and this quality\nwallah look how beautiful oh\npeople can say what they want about him\nsuchs in such ner price category really quite quite\nvery very rarely in Germany\nI would not have thought it\nbut the medium was really good\nespecially with the Chimichurri and Top really juicy\nI do not have so much plan from Steak\nI do not go so on the houses here\nI swear to you I would\ndefinitely come back again\nSteak that really anyone can afford and\nif you come in pairs then treat yourself to this one\nAchoschare mother grill plates\ni love you for being like this\nthat's how you are that's how you don't get it you know\nno brother no\nhe is the cool thing you stay as you are\nalways stay as you are\ndo you know why\nbecause that brings you nothing anyway\nif you are 1 actor\nand all at once\nwhen people come and see how you are real\nI tell you I personally celebrate the store more\nlike any deckhouse important\nWant to experience Wedding\nthen look over\nwas my whole beast\nwallah on real wallah he is the\nright wallah as he is in the video\nthank you very much\nwallah another I thank you very much\nwallah thank you\nHabibi how awesome is that\nthat was cool how cool is that then G I\nG",
+    "subtitlesLanguage": "eng-US",
+    "id": "1ca1ffee-b1fd-41a1-8143-e91d9d2cf552",
+    "externalId": "7668624919353249056",
+    "url": "https://www.tiktok.com/@elkampinski/video/7668624919353249056",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-31T09:41:21.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:25:31.294Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Doree 65",
+        "locationHint": "Torfstraße 9, Wedding",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "07f6c11c-9e3d-490f-ba00-3c51395c7192",
+          "brandName": "DOREE 65",
+          "venueId": "8d2014a7-6f81-47cc-aba1-26246b621d6a",
+          "venueName": "DOREE 65"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "steaks for 30 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "steak"
+        ],
+        "amount": 30,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the prices are Bundesliga and Champions League",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the medium steak was really good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak was juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak came with chimichurri",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "steak",
+          "Chimichurri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steaks are affordable",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator would come back again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:32:58.228Z",
+    "usage": {
+      "inputTokens": 10724,
+      "outputTokens": 5235,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The machine transcript is badly garbled (\"Achoschare mother grills\" is the grill plate's name as heard), so the claims follow its meaning cautiously, and some quotes are short spans within broken lines. The aside on other steakhouses' doneness and the remarks on the owner's character were the hard calls; the doneness aside is optional.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Doree 65",
+        "locationHint": "Torfstraße 9, Wedding",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "07f6c11c-9e3d-490f-ba00-3c51395c7192",
+          "brandName": "DOREE 65",
+          "venueId": "8d2014a7-6f81-47cc-aba1-26246b621d6a",
+          "venueName": "DOREE 65",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "asks how the steaks at Doree 65 taste",
+        "quote": "Wie schmecken die Steaks bei Doree 65 in Berlin?",
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "Steaks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Doree 65 is at Torfstraße 9, Berlin",
+        "quote": "Torfstraße 9, Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Achoschare mother grill costs 30 euros",
+        "quote": "his mother for 30 euros",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Achoschare mother grills"
+        ],
+        "amount": 30,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you will not find a grill like that for that price elsewhere",
+        "quote": "wallah if you find I close tomorrow",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator loves the owner's character",
+        "quote": "i love characters like him",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator never had such a warm welcome",
+        "quote": "I have never had such a warm welcome",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the prices are not just Bundesliga but Champions League",
+        "quote": "the prices are not only Bundesliga",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Doree 65 is happy to cook steaks medium",
+        "quote": "you know we are happy to do Medium in any case",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "elsewhere a steak ordered medium comes through or bloody and costs extra",
+        "quote": "Medium gets there or through or almost through or bloody",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the best Achos charmutas in all of Germany",
+        "quote": "best Achos charmutas text in all of Germany",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you will not find these prices and this quality anywhere else",
+        "quote": "you will not find these prices and this quality",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the grill plate looks beautiful",
+        "quote": "wallah look how beautiful oh",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "food like this in such a price category is very rare in Germany",
+        "quote": "very very rarely in Germany",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the medium steak was really good",
+        "quote": "but the medium was really good",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak was especially good with the Chimichurri",
+        "quote": "especially with the Chimichurri",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Chimichurri"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak was top and really juicy",
+        "quote": "Top really juicy",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator would definitely come back",
+        "quote": "definitely come back again",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "steak that really anyone can afford",
+        "quote": "Steak that really anyone can afford",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "Steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "if you come as a pair, treat yourself to the Achoschare mother grill plate",
+        "quote": "if you come in pairs then treat yourself to this one",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "portion_size"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator celebrates Doree 65 more than any steakhouse",
+        "quote": "I tell you I personally celebrate the store more",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "if you want to experience Wedding, drop by Doree 65",
+        "quote": "Want to experience Wedding",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.227Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.421Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

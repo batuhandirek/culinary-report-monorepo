@@ -1,0 +1,271 @@
+{
+  "id": "review-78c08c78",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "78c08c78-d0e4-4b6e-9e36-e6361d2e326e",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2kxb2IwZHplbFp0VWt0QmVrOHRTRFpUY0hOdVQzYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-04T15:21:01.441Z",
+    "stars": 4,
+    "text": "Great selection of beers and good food. The potato salad is definitely a highlight and worth trying. However, the real star of this place is the atmosphere, although it can get quite noisy. The food itself can be found in many places, but the vibe and experience are what make this restaurant special.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:27.939Z",
+    "claims": [
+      {
+        "text": "great selection of beers",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "good food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the potato salad is definitely a highlight",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "potato salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the potato salad is worth trying",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "potato salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the atmosphere",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it can get quite noisy",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food itself can be found in many places",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the vibe and experience make this restaurant special",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:17.575Z",
+    "usage": {
+      "inputTokens": 4984,
+      "outputTokens": 959,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: 'food can be found in many places' is a mild criticism of unoriginality (negative/neutral, aspect food). The closing line praises the vibe; it could also read as a whole-place verdict. 'Worth trying' for the potato salad is a dish recommendation, so it stays an opinion.",
+    "claims": [
+      {
+        "text": "great selection of beers",
+        "quote": "Great selection of beers",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "beers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "good food",
+        "quote": "good food",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the potato salad is definitely a highlight and worth trying",
+        "quote": "The potato salad is definitely a highlight and worth trying",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "potato salad"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the atmosphere is the real star of the place",
+        "quote": "the real star of this place is the atmosphere",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it can get quite noisy",
+        "quote": "it can get quite noisy",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food itself can be found in many places",
+        "quote": "The food itself can be found in many places",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral",
+            "mixed"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the vibe and experience make this restaurant special",
+        "quote": "the vibe and experience are what make this restaurant special",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

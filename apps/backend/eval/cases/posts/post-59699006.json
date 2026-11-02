@@ -1,0 +1,426 @@
+{
+  "id": "post-59699006",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "tip-berlin.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Café Amano: Fenster zum Kaffee\n\nFood\nCafé Amano: Fenster zum Kaffee\nDas Hotel Amano in Mitte öffnet jetzt sein grünes Fenster, um Vorbeigehende mit Kaffee und Aperol Spritz zu versorgen\nText: Clemens Niedenthal\nVeröffentlicht am: 30.04.2026\nHome » Food » Seite 7\nWhatsApp\nFacebook\nE-Mail\nX\nBluesky\nIhr könnt euch Artikel von tipBerlin in der Google-Suche nun bevorzugt anzeigen lassen.\nJetzt aktivieren\nMehr erfahren\nWir erzählen in dieser Ausgabe viel über die Renaissance der Kaffeehäuser und die vielen guten Gründe, einen Tag gemeinsam zu vertrödeln. Verwiesen sei hier kurz auf das genaue Gegenteil: Das Hotel Amano in Mitte öffnet jetzt dieses grüne Fenster, um die Stadt mindestens über den Sommer unkompliziert mit Espresso und einem unschlagbar günstigen Aperol Spritz (5 Euro) zu versorgen. Wem das nun zu flüchtig und beiläufig erscheint: Im Hotelfoyer und im Innenhof darf man auch entspannt sitzen.\nCafé Amano Auguststr. 43, Mitte, Mo–Sa 8–17 Uhr, So 10–17 Uhr, www.amanogroup.com ●●●●○\nMehr zum Thema\nBerlin oder Paris? Wir sind begeistert vom lässigen Schöneberger Nachbarschaftslokal Barlevain. Ein Hoch auf die Cafés und die neue Nähe – unsere Titelgeschichte darüber, wie Berlin im Kaffeehaus zu sich findet, lest ihr hier. Gastgeber:innen erzählen uns, warum die Kaffeehauskultur so lässig ist – herzlich willkommen! Gute Gründe, um beisammen zu sein: Berlins beste Cafés und Kaffeehäuser stellen wir hier vor. Wir versorgen euch mit Neuigkeiten und Rezension: Essen gehen in Berlin – von Imbiss bis Restaurant. Prost: Trinken gehen in Berlin – was wir über Drinks, Bars und Kneipen schreiben, lest ihr hier. Für zuhause, die Küche oder Vorratsammer: Einkaufen – Produkte, Geschäfte und Entwicklungen. Berlins Food-Guide: Hier bestellt ihr die Speisekarte.\nThe post Café Amano: Fenster zum Kaffee appeared first on tipBerlin.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "59699006-0589-4f17-81e7-3994ea9397d3",
+    "externalId": "blog_d879da8c165d1fe90dc62fe6",
+    "url": "https://www.tip-berlin.de/cafe-amano-fenster-zum-kaffee/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-04-30T11:29:31.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:41.497Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café Amano",
+        "locationHint": "Auguststr. 43, Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "26346f9a-07e7-4b4b-82f3-c1660b9826c6",
+          "brandName": "AMANO Bar",
+          "venueId": "5d88de70-98c9-4b4c-be62-ef22624c4c80",
+          "venueName": "AMANO Bar"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Aperol Spritz costs only 5 euros",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "Aperol Spritz"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "guests can sit in the courtyard",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "relaxed seating in the hotel foyer and courtyard",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:39:59.228Z",
+    "usage": {
+      "inputTokens": 12834,
+      "outputTokens": 4641,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the newly opened green window makes Café Amano a new opening (the text says it opens now, so marked yes), and whether Barlevain from the related-articles teaser counts as a place (it is named and judged, so included). The 5-euro Spritz is treated as a permanent price, not a deal.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café Amano",
+        "locationHint": "Hotel Amano, Auguststr. 43, Mitte",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "26346f9a-07e7-4b4b-82f3-c1660b9826c6",
+          "brandName": "AMANO Bar",
+          "venueId": "5d88de70-98c9-4b4c-be62-ef22624c4c80",
+          "venueName": "AMANO Bar",
+          "note": "Café Amano is Hotel Amano's coffee window at Auguststr. 43, the exact address of the AMANO Bar listing, so it is taken as the same Amano venue despite the café/bar naming."
+        }
+      },
+      {
+        "venueName": "Barlevain",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "eea8618a-8a07-4947-90ba-a6daafa34315",
+          "brandName": "barlevain",
+          "venueId": "7df0c68f-6133-4299-a817-11d2bdbc39b2",
+          "venueName": "barlevain",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Café Amano at Hotel Amano now opens its green window to serve passers-by",
+        "quote": "Das Hotel Amano in Mitte öffnet jetzt dieses grüne Fenster",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ownership",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano serves passers-by Kaffee and Aperol Spritz",
+        "quote": "um Vorbeigehende mit Kaffee und Aperol Spritz zu versorgen",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Kaffee",
+          "Aperol Spritz"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano serves Espresso uncomplicatedly through the window",
+        "quote": "unkompliziert mit Espresso",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "Espresso"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none",
+            "service"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano's window is open at least over the summer",
+        "quote": "mindestens über den Sommer",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano's Aperol Spritz is unbeatably cheap",
+        "quote": "unschlagbar günstigen Aperol Spritz",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [
+          "Aperol Spritz"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano's Aperol Spritz costs 5 euros",
+        "quote": "Aperol Spritz (5 Euro)",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Aperol Spritz"
+        ],
+        "amount": 5,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "At Café Amano one can also sit relaxed in the hotel foyer and the courtyard",
+        "quote": "Im Hotelfoyer und im Innenhof darf man auch entspannt sitzen",
+        "sentiment": "positive",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere",
+            "space"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano is at Auguststr. 43 in Mitte",
+        "quote": "Auguststr. 43, Mitte",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Amano is open Mon–Sat 8–17 and Sun 10–17",
+        "quote": "Mo–Sa 8–17 Uhr, So 10–17 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tipBerlin rates Café Amano four out of five",
+        "quote": "●●●●○",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "tipBerlin is enthusiastic about Barlevain",
+        "quote": "Wir sind begeistert vom lässigen Schöneberger Nachbarschaftslokal Barlevain",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Barlevain is a laid-back neighbourhood spot in Schöneberg",
+        "quote": "lässigen Schöneberger Nachbarschaftslokal",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "vibe"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Coffee houses are having a renaissance in Berlin",
+        "quote": "die Renaissance der Kaffeehäuser",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.597Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Opening a window to serve passers-by fits no finer aspect, so null and 'other' are both defensible."
+      },
+      {
+        "at": "2026-11-01T21:36:47.236Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

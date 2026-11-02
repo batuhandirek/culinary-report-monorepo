@@ -15,7 +15,9 @@ describe('BrandLeadScoreService: the district rating without reviews (pglite)', 
 	let service: BrandLeadScoreService;
 
 	beforeAll(async () => {
-		harness = await createPgliteTestingModule({ providers: [BrandLeadScoreService, CityService] });
+		harness = await createPgliteTestingModule({
+			providers: [BrandLeadScoreService, CityService],
+		});
 		service = harness.moduleRef.get(BrandLeadScoreService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 	});
@@ -29,7 +31,15 @@ describe('BrandLeadScoreService: the district rating without reviews (pglite)', 
 		const city = testCity(em);
 		let n = 0;
 		const venue = (name: string, rating: number, district = 'Mitte', reviewsCount = 40) =>
-			em.create(Venue, { city, placeId: `p${n++}`, name, category: 'Restaurant', district, rating, reviewsCount });
+			em.create(Venue, {
+				city,
+				placeId: `p${n++}`,
+				name,
+				category: 'Restaurant',
+				district,
+				rating,
+				reviewsCount,
+			});
 		const low = venue('Low Place', 3.6);
 		const high = venue('High Place', 4.9);
 		for (const rating of [4.2, 4.3, 4.4, 4.5]) venue(`Peer ${rating}`, rating);
@@ -37,7 +47,12 @@ describe('BrandLeadScoreService: the district rating without reviews (pglite)', 
 		const lone = venue('Lone Place', 3.0, 'Pankow');
 		// Reviews scraped: the reviews decide, not the rating
 		const reviewed = venue('Reviewed Place', 3.5, 'Wedding');
-		em.create(Review, { venue: reviewed, reviewId: 'r1', stars: 5, publishedAt: new Date('2026-09-10T00:00:00Z') });
+		em.create(Review, {
+			venue: reviewed,
+			reviewId: 'r1',
+			stars: 5,
+			publishedAt: new Date('2026-09-10T00:00:00Z'),
+		});
 		await em.flush();
 
 		await service.scoreAll('2026-09', city.id);

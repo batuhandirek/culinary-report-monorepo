@@ -1,0 +1,544 @@
+{
+  "id": "post-e2a421e9",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "tip-berlin.de",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Bei Lindner ist wieder alles in Butter\n\nEinkaufen\nBei Lindner ist wieder alles in Butter\nDass das Unternehmen eigentlich nur Lindner heißt, ohne Butter, haben in Berlin die wenigsten mitbekommen. Dem trägt die Feinkostkette nun Rechnung – und kehrt zum alten Namen zurück\nText: Christopher Wasmuth\nVeröffentlicht am: 23.10.2026\nHome » Food\nWhatsApp\nFacebook\nE-Mail\nX\nBluesky\nLogo von Lindner in der Wilmersdorfer Straße © Imago/STPP\nIhr könnt euch Artikel von tipBerlin in der Google-Suche nun bevorzugt anzeigen lassen.\nJetzt aktivieren\nMehr erfahren\nButter Lindner ist aus Berlin nicht wegzudenken. Die Feinkostgeschäfte sind für viele Menschen in der Stadt ein wesentlicher Anlaufpunkt, wenn es darum geht, das zu kaufen, was zum klassischen Abendbrot dazu gehört: Brot, Wurstwaren, Käse, Aufstriche und, na klar, Butter. So heißt das Unternehmen ja auch seit eh und je, kein Mensch würde auf den Gedanken kommen, von etwas anderem als Butter Lindner zu reden. Dabei hat der 1950 in Schmargendorf gegründete Feinkosthändler ja eigentlich eine gewisse Frischekur hinter sich: In den 1990er-Jahren – da war aus dem vornehmlich auf Wochenmärkten aufgestellten Unternehmen längst eine beachtliche Kette mit Hamburger Expansionsplänen geworden – wechselten erst die Farben von Rot und Blau zum heute so vertrauten Blau und Gold. Und dann nahm man sich einfach selbst die Butter vom Brot: Aus Butter Lindner wurde schlicht Lindner. Nur sagt das in Berlin so niemand, die Menschen in der Hauptstadt bleiben hartnäckig, wenn es um Traditionsgeschäfte geht.\nSelbst frisch Zugezogene sprechen von Butter Lindner\nDem trägt das inhabergeführte Unternehmen nun also Rechnung. In einer Pressemitteilung heißt es, dass sogar frisch Zugezogene von Butter Lindner sprächen und sich damit die kulinarische Beharrlichkeit der Berliner:innen zu eigen machen. Und so geht es nach rund 20 Jahren wieder zurück zu den Anfängen: „Das ist keine Rolle rückwärts und auch kein Retro-Gehabe“, wie Benjamin Strutz aus der Geschäftsführung sagt. Für ihn sei die Rückkehr eine Verbeugung vor der langjährigen Kundschaft, die den Namen „all die Jahre geduldig für uns aufbewahrt und uns gewissermaßen nachgetragen haben“.\nDabei geht nichts von heute auf morgen, so eine Umstellung braucht Zeit. Bis das (dann auch wieder leicht modifizierte) Logo mit einem noch schwungvolleren L und dem Butter-Zusatz auf allen Produkten und in allen Filialen auftaucht, kann es also noch eine Weile dauern – aber dann ist wieder alles beim Alten.\nBilder aus Butter-Lindner-Zeiten\nButter Lindner am Ökomarkt am Hackeschen Markt, um 2004. Foto: Imago/PEMAX\nEine Butter-Lindner-Falle, um 2000. Foto: Imago/Lem\nFoto: Henry H. So sah das Logo von Butter Lindner vor der Umstellung auf Gold und Blau aus. Foto: Imago/Eventpress/Henry Herrmann\nSo sah das Logo früher aus: Butter Lindner in der Friedrichstraße, 2002. Foto: Imago/Steinach\nMehr zum Thema\nButter Lindner ist nicht das einzige Feinkostgeschäft, das von sich reden macht: Rogacki ist zurück – als Markthallen-Stand und mit ikonischen Rezepten im Kochbuch. Wir erinnern uns daran, wie es früher war: Unser Essay fängt die Stimmung bei Rogacki ein. Er ist der The Duc Ngo seiner Generation: Don Santanaviboon begeistert im Rram auf der Torstraße. Wir versorgen euch mit Neuigkeiten und Rezension: Essen gehen in Berlin – von Imbiss bis Restaurant. Prost: Trinken gehen in Berlin – was wir über Drinks, Bars und Kneipen schreiben, lest ihr hier.\nThe post Bei Lindner ist wieder alles in Butter appeared first on tipBerlin.",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "e2a421e9-a4a0-4236-bb87-0be730dacb00",
+    "externalId": "blog_c0ff912ca2b1da998971f3f3",
+    "url": "https://www.tip-berlin.de/food/einkaufen/butter-lindner-neuer-alter-name/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-23T15:19:50.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-24T17:48:12.106Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Butter Lindner",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "name change back to Butter Lindner after years as Lindner",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:25.438Z",
+    "usage": {
+      "inputTokens": 16069,
+      "outputTokens": 7405,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Main calls: the Lindner branding history (colours, name, logo) read as change claims about the place, with fact also allowed; Rogacki 'ist zurück' as a market hall stall was marked a new opening, its kind left as fact. Image-caption branches (Friedrichstraße 2002, Ökomarkt am Hackeschen Markt) were treated as historical captions; only the current Wilmersdorfer Straße branch is kept, as optional.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Butter Lindner",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b86b1eda-5845-411f-99ab-a32f326065d4",
+          "brandName": "LINDNER Esskultur",
+          "venueId": null,
+          "venueName": null,
+          "note": "Butter Lindner is the Lindner deli chain, which trades as LINDNER Esskultur. The streets in the post (Wilmersdorfer Straße, Friedrichstraße, Hackescher Markt) are not on any listed branch, so no branch is picked."
+        }
+      },
+      {
+        "venueName": "Rogacki",
+        "locationHint": "Markthalle stall",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": null
+        }
+      },
+      {
+        "venueName": "Rram",
+        "locationHint": "Torstraße",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b2894de2-784e-43e5-9843-b55f7d988b2f",
+          "brandName": "Rram",
+          "venueId": "57460668-a7b9-4d6d-805d-442c2afad884",
+          "venueName": "Rram",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Butter Lindner is an indispensable part of Berlin",
+        "quote": "Butter Lindner ist aus Berlin nicht wegzudenken",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lindner's delicatessen shops are an essential stop for many people in Berlin",
+        "quote": "Die Feinkostgeschäfte sind für viele Menschen in der Stadt ein wesentlicher Anlaufpunkt",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lindner sells Brot, Wurstwaren, Käse, Aufstriche and Butter for the classic Abendbrot",
+        "quote": "das zu kaufen, was zum klassischen Abendbrot dazu gehört: Brot, Wurstwaren, Käse, Aufstriche und, na klar, Butter",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Brot",
+          "Wurstwaren",
+          "Käse",
+          "Aufstriche",
+          "Butter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lindner was founded in 1950 in Schmargendorf",
+        "quote": "der 1950 in Schmargendorf gegründete Feinkosthändler",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "By the 1990s Lindner had grown from a business mainly at weekly markets into a sizeable chain with expansion plans in Hamburg",
+        "quote": "aus dem vornehmlich auf Wochenmärkten aufgestellten Unternehmen längst eine beachtliche Kette mit Hamburger Expansionsplänen geworden",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "In the 1990s Lindner changed its colours from red and blue to blue and gold",
+        "quote": "wechselten erst die Farben von Rot und Blau zum heute so vertrauten Blau und Gold",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Butter Lindner was renamed to just Lindner",
+        "quote": "Aus Butter Lindner wurde schlicht Lindner",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Nobody in Berlin calls it Lindner; even newcomers say Butter Lindner",
+        "quote": "Nur sagt das in Berlin so niemand",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Berliners stay stubborn when it comes to traditional shops",
+        "quote": "die Menschen in der Hauptstadt bleiben hartnäckig, wenn es um Traditionsgeschäfte geht",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Lindner is an owner-managed company",
+        "quote": "das inhabergeführte Unternehmen",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "After about 20 years Lindner is returning to its old name Butter Lindner",
+        "quote": "nach rund 20 Jahren wieder zurück zu den Anfängen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Benjamin Strutz from Lindner's management calls the return a bow to longtime customers",
+        "quote": "Für ihn sei die Rückkehr eine Verbeugung vor der langjährigen Kundschaft",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The slightly modified logo with Butter on all products and in all branches may take a while to appear",
+        "quote": "Bis das (dann auch wieder leicht modifizierte) Logo mit einem noch schwungvolleren L und dem Butter-Zusatz auf allen Produkten und in allen Filialen auftaucht, kann es also noch eine Weile dauern",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Lindner has a branch in the Wilmersdorfer Straße",
+        "quote": "Lindner in der Wilmersdorfer Straße",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rogacki is back as a market hall stall",
+        "quote": "Rogacki ist zurück – als Markthallen-Stand",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "change"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Rogacki's iconic recipes are in a cookbook",
+        "quote": "mit ikonischen Rezepten im Kochbuch",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Don Santanaviboon impresses at Rram on Torstraße",
+        "quote": "Don Santanaviboon begeistert im Rram auf der Torstraße",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Rram's Don Santanaviboon is the The Duc Ngo of his generation",
+        "quote": "Er ist der The Duc Ngo seiner Generation",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "places.missed (both_ok): Lindner and Butter Lindner are the same venue, and both names are used in the article."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "places.extra (both_ok): \"Lindner\" is the same venue as the reference's Butter Lindner, under a valid name."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "match_isolated.brand (both_ok): The agent matched the same LINDNER Esskultur candidate; the gap comes only from the name mismatch."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): Lindner and Butter Lindner are the same place."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): Lindner and Butter Lindner are the same place."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): Lindner and Butter Lindner are the same place."
+      },
+      {
+        "at": "2026-11-01T14:39:43.605Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.place (both_ok): Lindner and Butter Lindner are the same place."
+      },
+      {
+        "at": "2026-11-01T21:36:47.253Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.441Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

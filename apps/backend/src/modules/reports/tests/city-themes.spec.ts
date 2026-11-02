@@ -8,21 +8,21 @@ import { type CityThemeComplaint, cityThemes } from '../util/city-themes.js';
    once per theme, against the median of peers with five written reviews; the aspects named by the index. */
 describe('cityThemes', () => {
 	const aspects = seedIndex();
-	const complaint = (brandId: string, reviewId: string, theme: string | null): CityThemeComplaint => ({
+	const complaint = (brandId: string, reviewId: string, aspect: string): CityThemeComplaint => ({
 		brandId,
 		reviewId,
-		theme,
+		aspect,
 	});
-	// Five peers with 10 written reviews each; one of them criticised a price increase once
+	// Five peers with 10 written reviews each; one of them criticised the price level once
 	const peers = ['p1', 'p2', 'p3', 'p4', 'p5'];
 	const written = new Map([['me', 10], ...peers.map(p => [p, 10] as [string, number]), ['small', 2]]);
 	const base = [
-		complaint('p1', 'p1-a', 'price_increase'),
+		complaint('p1', 'p1-a', 'price_level'),
 		complaint('p2', 'p2-a', 'queue'),
 		complaint('p3', 'p3-a', 'queue'),
 		complaint('p4', 'p4-a', 'queue'),
 		// Too few written reviews to count in a median
-		complaint('small', 's-a', 'price_increase'),
+		complaint('small', 's-a', 'price_level'),
 	];
 
 	it('gives the brand\'s share per theme against the peers\' median, the biggest gap first', () => {
@@ -33,25 +33,24 @@ describe('cityThemes', () => {
 			complaints: [
 				...base,
 				// Two points of one review: one review
-				complaint('me', 'm-1', 'price_increase'),
-				complaint('me', 'm-1', 'price_increase'),
-				complaint('me', 'm-2', 'price_increase'),
+				complaint('me', 'm-1', 'price_level'),
+				complaint('me', 'm-1', 'price_level'),
+				complaint('me', 'm-2', 'price_level'),
 				complaint('me', 'm-3', 'queue'),
 				// A root ("about food, nothing finer") is no finding
 				complaint('me', 'm-4', 'food'),
 			],
 		});
 		expect(themes).toEqual([
-			{ key: 'price_increase', label: 'Price increase', topic: 'price', reviews: 2, venueShare: 0.2, median: 0, venues: 5 },
+			{ key: 'price_level', label: 'Price level', topic: 'price', reviews: 2, venueShare: 0.2, median: 0, venues: 5 },
 			{ key: 'queue', label: 'Queue', topic: 'wait', reviews: 1, venueShare: 0.1, median: 0.1, venues: 5 },
 		]);
 	});
 
-	it('is absent below the floors and while a point of the brand is unfiled', () => {
-		const mine = [complaint('me', 'm-1', 'price_increase')];
+	it('is absent below the floors: five written reviews of the brand, five peers with as many', () => {
+		const mine = [complaint('me', 'm-1', 'price_level')];
 		expect(cityThemes({ brandId: 'me', aspects, written: new Map([...written, ['me', 4]]), complaints: [...base, ...mine] })).toBeUndefined();
-		expect(cityThemes({ brandId: 'me', aspects, written, complaints: [...base, ...mine, complaint('me', 'm-2', null)] })).toBeUndefined();
-		// Four peers left once one has an unfiled point
-		expect(cityThemes({ brandId: 'me', aspects, written, complaints: [...base, ...mine, complaint('p5', 'p5-a', null)] })).toBeUndefined();
+		// Four peers left once one falls below five written reviews
+		expect(cityThemes({ brandId: 'me', aspects, written: new Map([...written, ['p5', 4]]), complaints: [...base, ...mine] })).toBeUndefined();
 	});
 });

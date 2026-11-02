@@ -1,0 +1,42 @@
+{
+  "id": "term-890",
+  "kind": "term",
+  "tags": [
+    "most-used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 890,
+    "key": "vegetable",
+    "name": "vegetables",
+    "uses": 154
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": null
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:56:46.987Z",
+    "usage": {
+      "inputTokens": 270,
+      "outputTokens": 99,
+      "cachedInputTokens": 57,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "topics": [],
+    "alsoAcceptable": [],
+    "suggestion": "Vegetables",
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.474Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

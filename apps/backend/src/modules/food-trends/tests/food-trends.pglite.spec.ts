@@ -290,8 +290,6 @@ describe('FoodTrendsReportService (pglite)', () => {
 				venueName: venue.name,
 				cuisine,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 				isNewOpening: opts.isNewOpening ?? false,
 			});
 		};

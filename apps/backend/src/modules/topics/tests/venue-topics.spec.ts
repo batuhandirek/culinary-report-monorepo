@@ -17,12 +17,16 @@ const tags = ({ mentionCuisines = [], menuItems, ...input }: TextInput) =>
 			category: null,
 			manual: [],
 			...input,
-			mentionTopics: mentionCuisines.map(({ cuisine, n }) => ({ keys: index.resolve(cuisine), n })),
+			mentionTopics: mentionCuisines.map(({ cuisine, n }) => ({
+				keys: index.resolve(cuisine),
+				n,
+			})),
 			menuItems: menuItems?.map(item => ({ keys: index.resolveMenuItem(item) })),
 		},
 		index,
 	);
-const brief = (input: TextInput) => tags(input).map(t => `${t.primary ? '*' : ''}${t.key} ${t.source} ${t.score}`);
+const brief = (input: TextInput) =>
+	tags(input).map(t => `${t.primary ? '*' : ''}${t.key} ${t.source} ${t.score}`);
 
 describe('venueTopics', () => {
 	it('takes its main category, its other categories at half, and its primary food', () => {

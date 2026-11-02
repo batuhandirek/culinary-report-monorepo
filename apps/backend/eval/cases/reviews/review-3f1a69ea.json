@@ -1,0 +1,88 @@
+{
+  "id": "review-3f1a69ea",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "3f1a69ea-aab6-4e54-befb-823d71383ba3",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2taeFMwaDBVa1ExYjNGNFoyRklSVTlVT1ZSTlJtYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-19T18:43:18.862Z",
+    "stars": 5,
+    "text": "everything was splendid",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:59:05.630Z",
+    "claims": [
+      {
+        "text": "everything was splendid",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:35.135Z",
+    "usage": {
+      "inputTokens": 4903,
+      "outputTokens": 188,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The only call is whether 'everything was splendid' is a verdict on the place as a whole or a general opinion; it names no specific aspect, so the aspect is null, with food or other also allowed.",
+    "claims": [
+      {
+        "text": "everything was splendid",
+        "quote": "everything was splendid",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

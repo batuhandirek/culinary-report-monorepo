@@ -12,7 +12,7 @@
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel, TOPIC_LABELS } from '#lib/culinary.js';
-	import { themeHref } from '#lib/feedback.js';
+	import { aspectHref } from '#lib/statements.js';
 	import { topicHref } from '#lib/topic-format.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
@@ -20,7 +20,7 @@
 	import ResponsiveCombobox from '#ui/wrapped/ResponsiveCombobox.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// What the city's guests praise and criticise, across every venue: per feedback theme ("price
+	// What the city's guests praise and criticise, across every venue: per aspect ("price
 	// increase", "cash only"), the month's written reviews and posts by others raising it, each
 	// counted once however often it says so. A row opens its sample details, the brands it came up
 	// at most, the dishes its points were about (a food topic's dishes as one) and the kinds of food
@@ -228,8 +228,8 @@
 										</ul>
 										<a
 											class="text-beet mt-1.5 inline-block text-xs underline-offset-2 hover:underline"
-											href={themeHref(row.key, polarity, { cityId, month, food })}>
-											Every sentence, by brand and dish →
+											href={aspectHref(row.key, polarity, { cityId, month, place: food, placesOnly: true })}>
+											Explore it: every claim, by brand, dish and month →
 										</a>
 									</div>
 									<div>

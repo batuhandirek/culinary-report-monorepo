@@ -1,0 +1,144 @@
+{
+  "id": "review-164fbfea",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "164fbfea-cf1c-482f-9997-f8c9a1474b9a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25SVGVXWTBaMWQzTjA1RVVIcE5hV3h1V1dOZlRuYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Schlesisches Tor",
+    "venueId": "48b5f20c-f46a-4c8f-96e8-ed807d53bb0e",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-23T14:22:27.927Z",
+    "stars": 5,
+    "text": "Ordered by app, very good burgers and nice location 🚂",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:56:58.708Z",
+    "claims": [
+      {
+        "text": "Ordered by app",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "very good burgers",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "nice location",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:23:54.814Z",
+    "usage": {
+      "inputTokens": 4918,
+      "outputTokens": 454,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call is the aspect for 'Ordered by app'. It could be read as the venue's own ordering (takeaway_handling) or as a delivery app (delivery_platform), and with no judgement attached, null is also defensible. 'Very good burgers' is general praise, so taste fits best and food is an acceptable alternative.",
+    "claims": [
+      {
+        "text": "ordered by app",
+        "quote": "Ordered by app",
+        "sentiment": "neutral",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "delivery_platform",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burgers were very good",
+        "quote": "very good burgers",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "nice location",
+        "quote": "nice location 🚂",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.204Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "id": "review-52ef0f64",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "52ef0f64-8c16-4518-a956-447005603e00",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tabVF6bE5PVTkwY1VWa1EyWlJURFZMZVRVeE1GRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Vöner",
+    "venueId": "81683d2c-9d6f-43a0-bb96-b3b93a1c19dd",
+    "brand": "Vöner",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-26T15:36:24.297Z",
+    "stars": 5,
+    "text": "Vöner Döner war ganz gut :) nichts herausragendes, aber der Mitarbeiter war sehr nett und der vegane Ayran schmeckt (Österreicher checken) nach Kärntner Kaßnudeln.",
+    "textTranslated": "The Vöner Döner was quite good :) nothing outstanding, but the employee was very nice and the vegan Ayran tastes (Austrians check) like Carinthian cheese noodles."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:54:45.839Z",
+    "claims": [
+      {
+        "text": "the Vöner Döner was quite good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Vöner Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "nothing outstanding",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the employee was very nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the vegan Ayran tastes like Carinthian cheese noodles",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "vegan ayran",
+          "Carinthian cheese noodles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:21.075Z",
+    "usage": {
+      "inputTokens": 5454,
+      "outputTokens": 1342,
+      "cachedInputTokens": 5200,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'nichts herausragendes' stands apart from 'ganz gut' (kept separate but optional), and the sentiment of the jokey Ayran-tastes-like-Kaßnudeln comparison in a 5-star review (read as affectionate, mixed allowed). The Kaßnudeln are only a comparison, so they are not listed as a food.",
+    "claims": [
+      {
+        "text": "the Vöner Döner was quite good",
+        "quote": "Vöner Döner war ganz gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Vöner Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Vöner Döner was nothing outstanding",
+        "quote": "nichts herausragendes",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [
+          "Vöner Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the employee was very nice",
+        "quote": "der Mitarbeiter war sehr nett",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the vegan Ayran tastes like Carinthian cheese noodles (Kärntner Kaßnudeln)",
+        "quote": "der vegane Ayran schmeckt (Österreicher checken) nach Kärntner Kaßnudeln",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Ayran"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.429Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.210Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.407Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

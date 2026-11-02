@@ -1,0 +1,164 @@
+{
+  "id": "post-106450e8",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "lil3lletson",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [
+      "@amatoberlin"
+    ],
+    "text": "Fun drinks at @amatoberlin 🍵 The Coconut Pandan Cloud is so good. \n\n#berlincafes #whattodoinberlin #berlinfoodspot #berlinhiddengems #berlinlebt",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "106450e8-618d-4092-9c2c-00670539ae6e",
+    "externalId": "7616323521676872982",
+    "url": "https://www.tiktok.com/@lil3lletson/video/7616323521676872982",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-13T12:00:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:47:50.180Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Amato Berlin",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "b2cf8b05-a80f-4087-9882-14ca32f6dfa4",
+          "brandName": "amatō",
+          "venueId": "2097f679-78ef-4ea4-af92-b5431eb6d481",
+          "venueName": "amatō"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the drinks were fun",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Coconut Pandan Cloud is so good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Coconut Pandan Cloud"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:52.633Z",
+    "usage": {
+      "inputTokens": 9141,
+      "outputTokens": 1014,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue name 'Amato' comes from the handle @amatoberlin, and Berlin is inferred from the handle and the Berlin hashtags. 'Fun drinks' is a general remark about the drinks, so drink_selection is also acceptable as its aspect.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Amato",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b2cf8b05-a80f-4087-9882-14ca32f6dfa4",
+          "brandName": "amatō",
+          "venueId": "2097f679-78ef-4ea4-af92-b5431eb6d481",
+          "venueName": "amatō",
+          "note": "The @amatoberlin handle matches both amatō and Amato Café, but the Asian-style Coconut Pandan Cloud drink fits the amatō dessert shop rather than the Steglitz coffee shop."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Amato has fun drinks",
+        "quote": "Fun drinks at @amatoberlin",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Coconut Pandan Cloud is so good",
+        "quote": "The Coconut Pandan Cloud is so good",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Coconut Pandan Cloud"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.225Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.420Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

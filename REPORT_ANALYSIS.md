@@ -32,6 +32,8 @@ The "Raw Data" we are presenting is NOT interesting at all. We need to keep givi
 I know there is not a section for this stuff. BUT, I think maybe a section ID 'INTERESTING BITS' could do a lot of predetermined, VERY NARROW, but very senseful research, and put if it exists. These are the only ones that I can think of, but we can get super creative with the data we have. For example:
 - Has any of <my competitors or restaurants in my district, or same cuisine restaurants in the city = INTERESTING_PARTIES>
 - Has any of <INTERESTING_PARTIES> done invited/sponsored posts? What did they say? Should I do one too?
+- Has any of <INTERESTING_PARTIES> done any 'PROMOTIONS/CAMPAIGNS'? Did it increase posts/views/review counts?
+- Did my 'PROMOTIONS/CAMPAIGNS' raise increase posts/views/review counts?
 - Has any of <INTERESTING_PARTIES - maybe not district but only cuisine> posted, on their own accounts, about something specific together, and I'm missing out
 - Is there any 'SUSHI DAYS BERLIN / MEXICAN FOOD EXPO BERLIN' that I need to know about
 	-	This could surface from what's above

@@ -1,0 +1,1000 @@
+{
+  "id": "post-909ca5ee",
+  "kind": "post",
+  "tags": [
+    "platform:blog",
+    "places:few"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "blog",
+    "author": "ceecee.cc",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "FRANZÖSISCHE KÜCHE MIT WIRTSHAUS-FLAIR BEI BARLEVAIN\n\nIst das noch Berlin oder schon Frankreich? Wenn Du Dir diese Frage beim Hochschlendern der Schöneberger Vorbergstraße stellst, bist Du nicht allein. Passenderweise hat im Frühling an dieser schönen Ecke das Barlevain eröffnet. Mit zugänglicher Bistroküche steht es nicht nur in der Nachbarschaft, sondern stadtweit bei Foodbegeisterten hoch im Kurs.\nIm März 2026 erfüllten sich Anna Hernández Götz – früher Sommelière und stellvertretende Restaurantmanagerin im Tulus Lotrek – und ihr Partner Max Hühnergarth – ehemals Sous-Chef im Barra – ihren lang gehegten Traum: ein eigenes Lokal in der geliebten Nachbarschaft. Sie verstehen das Barlevain als modernes Wirtshaus, in dem hochqualitative und trotzdem erschwingliche Gerichte gekocht werden.\nDie hohe Kunst des Gastgebens wird nonchalant beherrscht. Herzlich der Empfang, warm die Holzmöbel, charmant das mit Schleifen gebundene Besteck – das Gefühl, willkommen zu sein. Spontane und allein Essende finden an der Bar Platz, wenn Du gerne planst, reservierst Du einen der neun Tische vorab. Selbstverständlich wechselt das Menü saisonal, doch der rote Faden ist ein Fokus auf das Wesentliche, auf Handwerk und Qualität.\nAuf der Speisekarte findest Du französisch geprägte Gerichte und Snacks, die mit deftigen Aromen und Zutaten der deutschen Küche gepaart werden – oder auch andersherum. Immer wieder kannst Du auch Zutaten und Gerichte aus der thüringischen Heimat der Gastgeber:innen, wie beispielsweise selbstgemachte Bratwurst, probieren. Alle Gerichte sind zum Teilen gedacht und am besten startest Du mit Sauerteigbrot aus der unweit gelegenen Johann Bäckerei, den weißen Riesenbohnen mit Chili Crunch sowie dem französischen Klassiker Oeuf Mayo, aktuell mit einer Bärlauchmayonnaise serviert.\nBei den Hauptgerichten findest Du stets eine Variante der fantastischen hausgemachten Cavatelli, aktuell als Pasta alla Norma, ein Fleisch- sowie ein Fischgericht. Das kann Gulasch im Winter oder auch ein Perlhuhn im Sommer sein. Saisonales Gemüse wie Kürbis und Mangold gibt es als vollwertigen Hauptgang oder als Beilage zum Kabeljau. Dass die Weinkarte perfekt kuratiert ist, wundert bei Hernández Vorgeschichte wenig – die alkoholfreien Varianten lassen ebenfalls keine Wünsche offen. Und spätestens beim Dessert fühlt sich der Weg nach Schöneberg ohnehin ziemlich kurz an.\nText: Marie Berkmann / Fotos: Sebastian Navarro\nBarlevain, Vorbergstr.10a, 10823 Berlin–Schöneberg; Stadtplan\n@barlevain\n@mariemunchesandmoves",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "909ca5ee-4144-45d0-908e-02d7c695e30f",
+    "externalId": "blog_530c87d2181d0496fa952246",
+    "url": "https://ceecee.cc/franzoesische-kueche-mit-wirtshaus-flair-bei-barlevain/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-08T13:49:42.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T20:06:48.571Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Barlevain",
+        "locationHint": "Vorbergstr. 10a, Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": "exact",
+          "brandId": "eea8618a-8a07-4947-90ba-a6daafa34315",
+          "brandName": "barlevain",
+          "venueId": "7df0c68f-6133-4299-a817-11d2bdbc39b2",
+          "venueName": "barlevain"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "warm welcome",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "warm wooden furniture and welcoming feel",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "seasonal menu with French and German influences",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "focus on quality ingredients and craftsmanship",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "high-quality but affordable dishes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "sharing-style menu",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "perfectly curated wine list",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "good alcohol-free options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "reservations possible for the tables",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "bar seating for spontaneous or solo diners",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:45:19.687Z",
+    "usage": {
+      "inputTokens": 13746,
+      "outputTokens": 10482,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Tulus Lotrek and Barra are named only as the owners' former workplaces, so they are not listed as places and appear inside the ownership claim. Johann Bäckerei is listed because the text says the bread comes from it. The 'best start with' recommendations are split per dish.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Barlevain",
+        "locationHint": "Vorbergstr.10a, Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": true,
+        "match": {
+          "method": null,
+          "brandId": "eea8618a-8a07-4947-90ba-a6daafa34315",
+          "brandName": "barlevain",
+          "venueId": "7df0c68f-6133-4299-a817-11d2bdbc39b2",
+          "venueName": "barlevain",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Johann Bäckerei",
+        "locationHint": "near Barlevain, Schöneberg",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "af9bc0c3-de79-4e81-8055-dba3e6d47454",
+          "brandName": "JOHANN Bäckerei",
+          "venueId": "2794d8a3-43fa-4b40-b669-e250b52178bc",
+          "venueName": "JOHANN Bäckerei",
+          "note": "JOHANN Bäckerei on Gleditschstraße in Schöneberg is near Vorbergstraße, which fits the post saying the bakery is nearby; its only branch is that one."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Strolling up Vorbergstraße in Schöneberg feels like being in France",
+        "quote": "Ist das noch Berlin oder schon Frankreich?",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Barlevain opened in spring",
+        "quote": "hat im Frühling an dieser schönen Ecke das Barlevain eröffnet",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain is on a beautiful corner",
+        "quote": "an dieser schönen Ecke",
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain serves accessible bistro cuisine",
+        "quote": "Mit zugänglicher Bistroküche",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain is highly regarded by food lovers in the neighbourhood and citywide",
+        "quote": "steht es nicht nur in der Nachbarschaft, sondern stadtweit bei Foodbegeisterten hoch im Kurs",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain was opened in March 2026 by Anna Hernández Götz, former sommelière and deputy restaurant manager at Tulus Lotrek, and her partner Max Hühnergarth, former sous-chef at Barra",
+        "quote": "Im März 2026 erfüllten sich Anna Hernández Götz – früher Sommelière und stellvertretende Restaurantmanagerin im Tulus Lotrek – und ihr Partner Max Hühnergarth – ehemals Sous-Chef im Barra – ihren lang gehegten Traum",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The owners see Barlevain as a modern Wirtshaus",
+        "quote": "Sie verstehen das Barlevain als modernes Wirtshaus",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain cooks high-quality dishes",
+        "quote": "hochqualitative",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain's dishes are nevertheless affordable",
+        "quote": "trotzdem erschwingliche Gerichte",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The art of hosting is nonchalantly mastered at Barlevain",
+        "quote": "Die hohe Kunst des Gastgebens wird nonchalant beherrscht.",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The welcome at Barlevain is warm",
+        "quote": "Herzlich der Empfang",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain's wooden furniture is warm",
+        "quote": "warm die Holzmöbel",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The cutlery tied with ribbons is charming",
+        "quote": "charmant das mit Schleifen gebundene Besteck",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Guests at Barlevain feel welcome",
+        "quote": "das Gefühl, willkommen zu sein",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Walk-ins and solo diners find a seat at the bar",
+        "quote": "Spontane und allein Essende finden an der Bar Platz",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "reservation_handling"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain has nine tables that can be reserved in advance",
+        "quote": "reservierst Du einen der neun Tische vorab",
+        "sentiment": "neutral",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "reservation_handling"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain's menu changes seasonally",
+        "quote": "wechselt das Menü saisonal",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain's cooking focuses on the essentials, craft and quality",
+        "quote": "ein Fokus auf das Wesentliche, auf Handwerk und Qualität",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The menu has French-influenced dishes and snacks paired with hearty flavours and ingredients of German cuisine",
+        "quote": "französisch geprägte Gerichte und Snacks, die mit deftigen Aromen und Zutaten der deutschen Küche gepaart werden",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The menu repeatedly features ingredients and dishes from the hosts' Thuringian home, such as homemade Bratwurst",
+        "quote": "Zutaten und Gerichte aus der thüringischen Heimat der Gastgeber:innen, wie beispielsweise selbstgemachte Bratwurst",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Bratwurst"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "authenticity",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "All dishes at Barlevain are meant for sharing",
+        "quote": "Alle Gerichte sind zum Teilen gedacht",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "portion_size"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "It is best to start with the Sauerteigbrot",
+        "quote": "am besten startest Du mit Sauerteigbrot",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Sauerteigbrot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Sauerteigbrot comes from the nearby Johann Bäckerei",
+        "quote": "Sauerteigbrot aus der unweit gelegenen Johann Bäckerei",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Sauerteigbrot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "The white giant beans with Chili Crunch are a recommended starter",
+        "quote": "den weißen Riesenbohnen mit Chili Crunch",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "weißen Riesenbohnen",
+          "Chili Crunch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The French classic Oeuf Mayo is a recommended starter",
+        "quote": "dem französischen Klassiker Oeuf Mayo",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Oeuf Mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Oeuf Mayo is currently served with a Bärlauchmayonnaise",
+        "quote": "aktuell mit einer Bärlauchmayonnaise serviert",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Oeuf Mayo",
+          "Bärlauchmayonnaise"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The mains always include a variant of the fantastic homemade Cavatelli",
+        "quote": "stets eine Variante der fantastischen hausgemachten Cavatelli",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Cavatelli"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Cavatelli are currently served as Pasta alla Norma",
+        "quote": "aktuell als Pasta alla Norma",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Cavatelli",
+          "Pasta alla Norma"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The mains always include a meat dish and a fish dish",
+        "quote": "ein Fleisch- sowie ein Fischgericht",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The meat dish can be Gulasch in winter or Perlhuhn in summer",
+        "quote": "Gulasch im Winter oder auch ein Perlhuhn im Sommer",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Gulasch",
+          "Perlhuhn"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Seasonal vegetables like Kürbis and Mangold are served as a full main or as a side to the Kabeljau",
+        "quote": "Saisonales Gemüse wie Kürbis und Mangold gibt es als vollwertigen Hauptgang oder als Beilage zum Kabeljau",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Kürbis",
+          "Mangold",
+          "Kabeljau"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain's wine list is perfectly curated",
+        "quote": "Dass die Weinkarte perfekt kuratiert ist",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain's non-alcoholic options leave nothing to be desired",
+        "quote": "die alkoholfreien Varianten lassen ebenfalls keine Wünsche offen",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "By dessert at the latest, the trip to Barlevain in Schöneberg feels short",
+        "quote": "spätestens beim Dessert fühlt sich der Weg nach Schöneberg ohnehin ziemlich kurz an",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Barlevain is at Vorbergstr.10a, 10823 Berlin-Schöneberg",
+        "quote": "Barlevain, Vorbergstr.10a, 10823 Berlin–Schöneberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the main courses include a fish dish",
+        "quote": "ein Fleisch- sowie ein Fischgericht",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "subject": "place",
+        "place": 0,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent did extract the spring opening; the scorer paired it with a different reference claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.600Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's claim 9 states the same thing; the scorer mispaired it."
+      },
+      {
+        "at": "2026-11-01T14:39:43.601Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): Splitting the meat dish and the fish dish into separate claims is a valid granularity choice."
+      },
+      {
+        "at": "2026-11-01T14:39:43.601Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): This is a mispairing, and for an opening fact either null or other is defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.601Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): The self-description fits no aspect well, so null or other are both acceptable."
+      },
+      {
+        "at": "2026-11-01T14:39:43.601Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): Food is a reasonable aspect for the homemade Bratwurst claim."
+      },
+      {
+        "at": "2026-11-01T14:39:43.601Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.subject (both_ok): This is a mispairing; the agent's opening claim is correctly about the place."
+      },
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "id": "review-2d6d3829",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "2d6d3829-1e7f-4867-aff4-eee3b38b469a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25FM2RsRktXRm8yUTJkSWVsTjZTMUZNZDNrNFdVRRAB",
+    "platform": "google",
+    "language": "it",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-02T20:26:35.071Z",
+    "stars": 4,
+    "text": "Opzioni con la carne davvero ottime, mentre speravo che le opzioni vegetariane prevedessero un sostituto della carne oltre alle opzioni con falafel / formaggio. Però comunque super consigliato!! E ottima musica all’interno ;)",
+    "textTranslated": "The meat options are really excellent, though I was hoping the vegetarian options included a meat substitute in addition to the falafel/cheese options. Still, highly recommended! And the music inside is great ;)"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:11:45.160Z",
+    "claims": [
+      {
+        "text": "the meat options are really excellent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the vegetarian options included falafel/cheese options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "falafel",
+          "cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "hoping the vegetarian options included a meat substitute",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music inside is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:54.534Z",
+    "usage": {
+      "inputTokens": 5054,
+      "outputTokens": 1147,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The vegetarian wish is read as a criticism of menu choice (negative, mixed allowed); foods keep the Italian wording from the quote (carne, falafel, formaggio, sostituto della carne). Music praise fits atmosphere, with noise or vibe also defensible.",
+    "claims": [
+      {
+        "text": "the meat options are really excellent",
+        "quote": "Opzioni con la carne davvero ottime",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "carne"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "hoped the vegetarian options included a meat substitute besides the falafel / cheese options",
+        "quote": "speravo che le opzioni vegetariane prevedessero un sostituto della carne oltre alle opzioni con falafel / formaggio",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "sostituto della carne",
+          "falafel",
+          "formaggio"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "still highly recommended",
+        "quote": "super consigliato!!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music inside is great",
+        "quote": "ottima musica all’interno",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "noise",
+            "vibe"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

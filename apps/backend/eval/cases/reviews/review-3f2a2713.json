@@ -1,0 +1,231 @@
+{
+  "id": "review-3f2a2713",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "3f2a2713-5511-4ef2-9cfe-47ee0ac9862c",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT201c1VUQkhNbTlUYzFFME1DMVlZelUxYjNBM2NXYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Leopoldplatz",
+    "venueId": "6e39f6fb-4c98-4d1c-b345-bac065e550dd",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-21T19:51:15.640Z",
+    "stars": 3,
+    "text": "come on, just offer a vegan burger already, it's 2026 :) nice employees and you can (presumably) make your burger vegan by asking for no cheese and no mayo and use the ketchup provided but it's not confirmed vegan",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:36:55.927Z",
+    "claims": [
+      {
+        "text": "there is no vegan burger",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [
+          "vegan burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the reviewer wants a vegan burger",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "vegan burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the employees were nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the burger can presumably be made vegan by asking for no cheese and no mayo",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "burgers",
+          "cheese",
+          "mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the ketchup provided can be used",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "ketchup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it is not confirmed vegan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:43.369Z",
+    "usage": {
+      "inputTokens": 4968,
+      "outputTokens": 1314,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard calls were whether the workaround (no cheese, no mayo, ketchup) is a neutral fact or mild praise, and whether the ketchup detail is a claim of its own; I kept it apart but marked it optional. 'Not confirmed vegan' could also be read as a neutral fact, or as a matter of staff advice about allergens and diets.",
+    "claims": [
+      {
+        "text": "the venue should offer a vegan burger already",
+        "quote": "just offer a vegan burger already",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "vegan burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the employees are nice",
+        "quote": "nice employees",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "you can presumably make your burger vegan by asking for no cheese and no mayo",
+        "quote": "you can (presumably) make your burger vegan by asking for no cheese and no mayo",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "burger",
+          "cheese",
+          "mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "you can use the ketchup provided for a vegan burger",
+        "quote": "use the ketchup provided",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "ketchup"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the burger made this way is not confirmed vegan",
+        "quote": "it's not confirmed vegan",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "advice"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

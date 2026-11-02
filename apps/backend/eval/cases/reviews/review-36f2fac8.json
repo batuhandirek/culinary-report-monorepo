@@ -1,0 +1,295 @@
+{
+  "id": "review-36f2fac8",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "36f2fac8-1510-4536-a3d8-71851599cc4f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tkT2NucG9aSGR5Um1veWNsSktlV2R1U1hwWGVtYxAB",
+    "platform": "google",
+    "language": "nl",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-29T15:21:45.794Z",
+    "stars": 2,
+    "text": "Het duurt echt heel erg lang. Eten is wel lekker maar echt niet het wachten waard. Rij lijkt nog oké maar je staat voor een 8 meter rij 1,5 uur te wachten op je eten. Ga naar een ander authentiek tentje want dit is meer een toeristen hype/trend dan een plek waar je een goede döner ervaring zal opdoen",
+    "textTranslated": "It takes a really, really long time. The food is tasty, but definitely not worth the wait. The line looks okay, but you end up standing in an 8-meter queue for 1.5 hours waiting for your food. Go to another authentic spot, because this is more of a tourist hype/trend than a place where you will have a good döner experience."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:13.177Z",
+    "claims": [
+      {
+        "text": "it takes a really, really long time",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food is tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "definitely not worth the wait",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "standing in an 8-meter queue for 1.5 hours",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "go to another authentic spot",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this is more of a tourist hype/trend than a place where you will have a good döner experience",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:16.559Z",
+    "usage": {
+      "inputTokens": 5135,
+      "outputTokens": 1899,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the 1.5-hour wait is queue or wait_for_food (it is spent standing in line, so queue first); 'not worth the wait' is about waiting, not money; the döner-experience claim is a negated comparison whose quote cannot carry the negation.",
+    "claims": [
+      {
+        "text": "it takes a really, really long time",
+        "quote": "Het duurt echt heel erg lang.",
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue",
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is tasty",
+        "quote": "Eten is wel lekker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is definitely not worth the wait",
+        "quote": "echt niet het wachten waard",
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue",
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the line looks okay",
+        "quote": "Rij lijkt nog oké",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral",
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the queue is 8 meters long",
+        "quote": "je staat voor een 8 meter rij",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "you wait 1.5 hours in the queue for your food",
+        "quote": "1,5 uur te wachten op je eten",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "wait_for_food",
+            "wait"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "go to another authentic spot instead",
+        "quote": "Ga naar een ander authentiek tentje",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place is more of a tourist hype/trend",
+        "quote": "dit is meer een toeristen hype/trend",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity",
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "not a place where you will have a good döner experience",
+        "quote": "een plek waar je een goede döner ervaring zal opdoen",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

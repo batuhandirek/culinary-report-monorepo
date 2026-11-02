@@ -1,0 +1,161 @@
+{
+  "id": "review-7f440916",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:2",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "7f440916-2eb7-4444-9987-1e14be2dc597",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT205SGIyRk9lVmRsTlZBM01HRmFkbEJ6TVZsVVdIYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Mr. Noodle Chen",
+    "venueId": "0282cc21-d340-4357-bdf0-ec8b9de4d9d1",
+    "brand": "Mr. Noodle Chen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-14T08:38:27.614Z",
+    "stars": 2,
+    "text": "This place is over hyped. While not terrible, it is not particularly good either. Food is pretty bland and basic.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:03:34.891Z",
+    "claims": [
+      {
+        "text": "this place is over hyped",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it is not particularly good either",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "food is pretty bland and basic",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:31.435Z",
+    "usage": {
+      "inputTokens": 4927,
+      "outputTokens": 542,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The first two sentences judge the whole place without naming an aspect, so I read them as verdicts with aspect null; opinion is also allowed. 'Basic' can be its own claim or stay inside 'bland', so it is optional.",
+    "claims": [
+      {
+        "text": "the place is over hyped",
+        "quote": "This place is over hyped.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the place is not terrible but not particularly good either",
+        "quote": "While not terrible, it is not particularly good either.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the food is pretty bland",
+        "quote": "Food is pretty bland",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food is basic",
+        "quote": "basic",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.213Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.410Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

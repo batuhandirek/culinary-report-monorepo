@@ -8,7 +8,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { MentionExtractionAgent } from '../agents/mention-extraction.agent.js';
+import { PostClaimsAgent } from '../agents/post-claims.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { MentionExtractionService } from '../services/mention-extraction.service.js';
@@ -22,9 +22,6 @@ const answer = (venueName: string, isNewOpening: boolean) => ({
 	isNewOpening,
 	sentiment: 'positive',
 	summary: 'Liked it.',
-	dishes: [],
-	praise: [],
-	complaints: [],
 });
 
 // The agent's answer per post, found by the caption's marker
@@ -42,7 +39,7 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 	const agent = mockAgent((input: unknown) => {
 		const marker = Object.keys(ANSWERS).find(k => String(input).includes(k));
 		if (!marker) throw new Error(`unexpected post: ${String(input).slice(0, 80)}`);
-		return { isPromotional: true, mentions: ANSWERS[marker] };
+		return { isPromotional: true, places: ANSWERS[marker], claims: [] };
 	});
 	const cutoff = new Date('2026-10-21T23:00:00Z');
 	let pho: Venue;
@@ -53,7 +50,7 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 			providers: [
 				MentionExtractionService,
 				TopicService,
-				{ provide: MentionExtractionAgent, useValue: agent },
+				{ provide: PostClaimsAgent, useValue: agent },
 			],
 		});
 		service = harness.moduleRef.get(MentionExtractionService);
@@ -82,8 +79,6 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 				post: p,
 				venueName,
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Stored.',
 				...extra,
 			});
 		const p1 = post(1, 300, '2026-10-05T12:00:00Z');

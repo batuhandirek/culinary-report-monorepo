@@ -1,0 +1,418 @@
+{
+  "id": "post-020c68fb",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "berlinocaputmundi",
+    "locationName": "Markthalle Neun",
+    "hashtags": [
+      "berlino",
+      "igersberlin",
+      "italianiaberlino",
+      "secretberlin",
+      "visitberlin"
+    ],
+    "taggedHandles": [],
+    "text": "Se non sei mai stato alla Markthalle Neun, non puoi dire di conoscere davvero la Berlino di oggi! 🍕🍺\n\nQuesto mercato coperto di Kreuzberg è un vero tempio dello street food, dove puoi fare il giro del mondo a colpi di forchetta. E da italiano, inutile negarlo, io ho un debole per gli stand di pasta fresca, pizza e dolci nostrani. Ma c'è anche un ottimo birrificio artigianale che produce le sue birre proprio nelle cantine del mercato: una decina di birre diverse da assaggiare, mica male!\n\n📍 Markthalle Neun\nEisenbahnstraße 42–43, 10997 Berlin-Kreuzberg\n\n🕒 Da lunedì a sabato, 9:00–20:00. Il giovedì si tira fino alle 22:00!\n\n(Gli orari dei singoli stand possono variare!)\n\n#berlino #igersberlin #italianiaberlino #secretberlin #visitberlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "020c68fb-21d8-49e8-a9bd-56d05c507348",
+    "externalId": "ig_4010817629456617811",
+    "url": "https://www.instagram.com/p/DepSWI-otFT/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-18T18:06:59.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:15.273Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Markthalle Neun",
+        "locationHint": "Kreuzberg, Eisenbahnstraße 42–43",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Markthalle Neun is a covered market in Kreuzberg",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it is a true temple of street food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it has fresh pasta stands, pizza stands and local sweets stands",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "pasta",
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it has an excellent craft brewery in the market cellar",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the brewery makes its beers in the market cellar",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "there are about ten different beers to try",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": 10,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Markthalle Neun is in Berlin-Kreuzberg",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:24.256Z",
+    "usage": {
+      "inputTokens": 9965,
+      "outputTokens": 3008,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 6966
+    },
+    "notes": "Markthalle Neun is a food hall, so it is a place; the craft brewery and the pasta/pizza stands are unnamed, so their claims go to the hall. 'Street food' was treated as a general word, not a food; the Thursday hours and address are optional details.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Markthalle Neun",
+        "locationHint": "Eisenbahnstraße 42–43, Kreuzberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "if you have never been to Markthalle Neun you cannot say you really know today's Berlin",
+        "quote": "Se non sei mai stato alla Markthalle Neun, non puoi dire di conoscere davvero la Berlino di oggi!",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Markthalle Neun is a covered market in Kreuzberg",
+        "quote": "Questo mercato coperto di Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Markthalle Neun is a true temple of street food",
+        "quote": "un vero tempio dello street food",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "at Markthalle Neun you can travel around the world with your fork",
+        "quote": "dove puoi fare il giro del mondo a colpi di forchetta",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "as an Italian, the author has a soft spot for the stands of pasta fresca, pizza and Italian dolci",
+        "quote": "io ho un debole per gli stand di pasta fresca, pizza e dolci nostrani",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "pasta fresca",
+          "pizza",
+          "dolci"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety",
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Markthalle Neun has an excellent craft brewery",
+        "quote": "c'è anche un ottimo birrificio artigianale",
+        "sentiment": "positive",
+        "aspect": "drinks",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the brewery brews its birre in the market's cellars",
+        "quote": "produce le sue birre proprio nelle cantine del mercato",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "birre"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "about ten different birre to taste, not bad",
+        "quote": "una decina di birre diverse da assaggiare, mica male!",
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "birre"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Markthalle Neun is at Eisenbahnstraße 42–43, 10997 Berlin-Kreuzberg",
+        "quote": "Eisenbahnstraße 42–43, 10997 Berlin-Kreuzberg",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Markthalle Neun is open Monday to Saturday 9:00–20:00",
+        "quote": "Da lunedì a sabato, 9:00–20:00",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "on Thursdays Markthalle Neun is open until 22:00",
+        "quote": "Il giovedì si tira fino alle 22:00",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "opening hours of individual stands at Markthalle Neun may vary",
+        "quote": "Gli orari dei singoli stand possono variare!",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.223Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

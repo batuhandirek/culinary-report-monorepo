@@ -1,0 +1,431 @@
+{
+  "id": "post-483d6cc6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "darlinh.gif",
+    "locationName": "Berlin",
+    "hashtags": [
+      "brunch",
+      "foodie",
+      "berlin",
+      "pancakes"
+    ],
+    "taggedHandles": [
+      "@LoveatfirstbiteBerlin"
+    ],
+    "text": "@LoveatfirstbiteBerlin 🫶 one of the best brunch spots in Berlin and hands down they have the best pancakes !!! 🥞 \n\n#brunch #foodie #berlin #pancakes ",
+    "subtitles": "If you are a brunch lover like me,\ngo to love at first bite and try the chicken and waffle or the famous pancakes.\nI met Rabih about three years ago,\nwhen he opened his first cafe in Prenzlauer Berg.\nAnd ever since, I've seen the cafe growing\nbecause he pays attention to all the details of the food,\nthe quality and the love. They prepare the food,\nyou can really taste it. They just opened a second location in Mitte.",
+    "subtitlesLanguage": "eng-US",
+    "id": "483d6cc6-c39b-45c1-84a3-c9c718b54a53",
+    "externalId": "7682830382621920545",
+    "url": "https://www.tiktok.com/@darlinh.gif/video/7682830382621920545",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-07T16:25:47.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:54.916Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "LoveatfirstbiteBerlin",
+        "locationHint": "/ Prenzlauer Berg & Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "c7539e90-acfa-4e52-b727-7bdb29305a9d",
+          "brandName": "Love at first bite",
+          "venueId": "c3842fe5-35fa-4069-92b4-05ea0b9d56cf",
+          "venueName": "Love at first bite - Breakfast & Brunch (In Circus Hotel)"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "one of the best brunch spots in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they have the best pancakes",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "pancake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "try the chicken and waffle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "chicken",
+          "waffles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the famous pancakes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pancake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "he opened his first cafe in Prenzlauer Berg",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cafe was growing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "he pays attention to all the details of the food, the quality and the love",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can really taste it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they just opened a second location in Mitte",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:37:57.272Z",
+    "usage": {
+      "inputTokens": 9988,
+      "outputTokens": 3061,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The newly opened Mitte branch is a second location of a café running for about three years, so the venue is not marked as a new opening and the branch claim is a fact, not a change. Dish recommendations ('try the chicken and waffle') are opinions about dishes rather than verdicts on the place, though verdict is allowed.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Love at First Bite",
+        "locationHint": "first café in Prenzlauer Berg; second location just opened in Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "c7539e90-acfa-4e52-b727-7bdb29305a9d",
+          "brandName": "Love at first bite",
+          "venueId": null,
+          "venueName": null,
+          "note": "The post names both locations (Prenzlauer Berg and Mitte) without singling one out, so no branch is picked."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Love at First Bite is one of the best brunch spots in Berlin",
+        "quote": "one of the best brunch spots in Berlin",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Love at First Bite hands down has the best pancakes",
+        "quote": "hands down they have the best pancakes",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pancakes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "brunch lovers should go to Love at First Bite",
+        "quote": "go to love at first bite",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "try the chicken and waffle at Love at First Bite",
+        "quote": "try the chicken and waffle",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "chicken and waffle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "try the famous pancakes at Love at First Bite",
+        "quote": "the famous pancakes",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "pancakes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rabih opened his first café, Love at First Bite, in Prenzlauer Berg about three years ago",
+        "quote": "when he opened his first cafe in Prenzlauer Berg",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Love at First Bite has been growing ever since",
+        "quote": "I've seen the cafe growing",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "change",
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Rabih pays attention to all the details of the food, the quality and the love",
+        "quote": "he pays attention to all the details of the food,\nthe quality and the love",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can really taste the care they put into preparing the food",
+        "quote": "you can really taste it",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Love at First Bite just opened a second location in Mitte",
+        "quote": "They just opened a second location in Mitte",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.233Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.426Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

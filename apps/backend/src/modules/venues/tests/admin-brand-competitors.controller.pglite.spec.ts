@@ -32,12 +32,19 @@ describe('AdminBrandsController competitors (pglite)', () => {
 
 		const em = harness.orm.em;
 		const city = testCity(em);
-		[venue, byAdmin, byOwner] = ['Döner Pro', 'Rüyam Gemüse Kebab', 'Imren Grill'].map((name, i) =>
-			em.create(Venue, { city, placeId: `place-${i}`, name, category: 'Restaurant' }),
+		[venue, byAdmin, byOwner] = ['Döner Pro', 'Rüyam Gemüse Kebab', 'Imren Grill'].map(
+			(name, i) =>
+				em.create(Venue, { city, placeId: `place-${i}`, name, category: 'Restaurant' }),
 		);
 		chain = await brandFactory.create({ name: 'Burgermeister' });
-		venueFactory.build({ name: 'Burgermeister Kotti' }, { associations: { city, brand: chain } });
-		venueFactory.build({ name: 'Burgermeister Mitte' }, { associations: { city, brand: chain } });
+		venueFactory.build(
+			{ name: 'Burgermeister Kotti' },
+			{ associations: { city, brand: chain } },
+		);
+		venueFactory.build(
+			{ name: 'Burgermeister Mitte' },
+			{ associations: { city, brand: chain } },
+		);
 		await em.flush();
 	});
 
@@ -55,13 +62,24 @@ describe('AdminBrandsController competitors (pglite)', () => {
 			['Imren Grill', CompetitorPickedByEnum.OWNER],
 			['Rüyam Gemüse Kebab', CompetitorPickedByEnum.ADMIN],
 		]);
-		expect(list[0].rival).toMatchObject({ id: chain.id, branches: 2, cities: [{ name: 'Berlin' }] });
-		expect(list[1].venue).toMatchObject({ id: byOwner.id, city: { name: 'Berlin' }, brand: { id: byOwner.brand.id } });
+		expect(list[0].rival).toMatchObject({
+			id: chain.id,
+			branches: 2,
+			cities: [{ name: 'Berlin' }],
+		});
+		expect(list[1].venue).toMatchObject({
+			id: byOwner.id,
+			city: { name: 'Berlin' },
+			brand: { id: byOwner.brand.id },
+		});
 	});
 
 	it('refuses both a venue and a brand at once, and takes one off by its id', async () => {
 		await expect(
-			controller.addBrandCompetitor(venue.brand.id, { venueId: byAdmin.id, brandId: chain.id }),
+			controller.addBrandCompetitor(venue.brand.id, {
+				venueId: byAdmin.id,
+				brandId: chain.id,
+			}),
 		).rejects.toThrow('Give a venue or a brand');
 		const [first] = await controller.listBrandCompetitors(venue.brand.id);
 		const left = await controller.removeBrandCompetitor(venue.brand.id, first.id);
@@ -71,8 +89,13 @@ describe('AdminBrandsController competitors (pglite)', () => {
 	it('adds a competitor for one branch, says which, and refuses another brand’s branch', async () => {
 		const em = harness.orm.em;
 		const [kotti] = await em.find(Venue, { brand: chain.id, name: 'Burgermeister Kotti' });
-		const list = await controller.addBrandCompetitor(chain.id, { venueId: byAdmin.id, branchId: kotti.id });
-		expect(list.map(c => [c.venue?.name, c.branch?.id])).toEqual([['Rüyam Gemüse Kebab', kotti.id]]);
+		const list = await controller.addBrandCompetitor(chain.id, {
+			venueId: byAdmin.id,
+			branchId: kotti.id,
+		});
+		expect(list.map(c => [c.venue?.name, c.branch?.id])).toEqual([
+			['Rüyam Gemüse Kebab', kotti.id],
+		]);
 		await expect(
 			controller.addBrandCompetitor(chain.id, { venueId: byOwner.id, branchId: venue.id }),
 		).rejects.toThrow('not a branch of Burgermeister');

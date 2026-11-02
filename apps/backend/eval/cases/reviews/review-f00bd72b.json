@@ -1,0 +1,177 @@
+{
+  "id": "review-f00bd72b",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "f00bd72b-545a-41b4-b05d-b024f1bbc4f7",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xOZk5reEpkREZIUldKTVIzWldNVWRRYUROT04zYxAB",
+    "platform": "google",
+    "language": "es",
+    "venue": "Hofbräu Wirtshaus Berlin",
+    "venueId": "91eb5a89-2609-4fe7-bf1d-3a58be86b2bd",
+    "brand": "Hofbräu Wirtshaus Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-22T12:44:07.927Z",
+    "stars": 3,
+    "text": "Una calidad correcta\nCantidades excesivas, de cerveza, de Cola de comida\nLo típico es el codillo",
+    "textTranslated": "Decent quality\nExcessive quantities of beer, cola, and food\nThe typical dish is pork knuckle"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:03.185Z",
+    "claims": [
+      {
+        "text": "decent quality",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "excessive quantities of beer",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "excessive quantities of cola",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "Cola"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "excessive quantities of food",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the typical dish is pork knuckle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pork knuckle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:16.776Z",
+    "usage": {
+      "inputTokens": 4981,
+      "outputTokens": 1123,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Cantidades excesivas' can read as too much or as generous, so the sentiment is open. The quantities of beer, cola and food stay together as one claim. 'Lo típico es el codillo' is kept as a neutral fact naming the dish.",
+    "claims": [
+      {
+        "text": "the quality was decent",
+        "quote": "Una calidad correcta",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the quantities of cerveza, Cola and food were excessive",
+        "quote": "Cantidades excesivas, de cerveza, de Cola de comida",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "cerveza",
+          "Cola"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive",
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the typical dish is the codillo",
+        "quote": "Lo típico es el codillo",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "codillo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none",
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.417Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

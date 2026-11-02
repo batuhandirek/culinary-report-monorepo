@@ -1,0 +1,330 @@
+{
+  "id": "review-2c7253a2",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "2c7253a2-4e92-4680-beb2-c0beba65c92d",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21kM1dUZzFlVFpqVnpabU1FZHRUbXhLTlVGMFJWRRAB",
+    "platform": "google",
+    "language": "zh-Hant",
+    "venue": "Burgermeister Schlesisches Tor",
+    "venueId": "48b5f20c-f46a-4c8f-96e8-ed807d53bb0e",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-14T12:28:15.299Z",
+    "stars": 4,
+    "text": "第一次品嚐這家聲名遠播的柏林漢堡店。整體表現中規中矩，雖然個人覺得沒有想像中那麼令人驚艷，但作為柏林獨特的在地體驗，畢竟是公廁改建而成的特色漢堡店，還是相當值得來嚐鮮。下午五點左右抵達剛好不用排隊，相當順利！",
+    "textTranslated": "This was my first time trying this renowned Berlin burger joint. Overall, it was decent, nothing particularly amazing. While I personally found it less than I'd hoped, as a unique Berlin experience—a burger joint converted from a public restroom—it's still definitely worth a try. Arriving around 5 PM was perfect; no queues, very smooth!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:39:50.249Z",
+    "claims": [
+      {
+        "text": "first time trying this renowned Berlin burger joint",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was decent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "nothing particularly amazing",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "less than I'd hoped",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a unique Berlin experience",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a burger joint converted from a public restroom",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "worth a try",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "arriving around 5 PM was perfect",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no queues",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "very smooth",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:01.186Z",
+    "usage": {
+      "inputTokens": 5149,
+      "outputTokens": 2045,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: '中規中矩' read as mixed (decent, nothing special) and whether the overall judgements are about the food or the place; the restroom conversion split into a neutral fact (interior) and the 'unique Berlin experience' praise (atmosphere). No burger is named as a food, only the shop.",
+    "claims": [
+      {
+        "text": "first time trying this renowned Berlin burger joint",
+        "quote": "第一次品嚐這家聲名遠播的柏林漢堡店",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "overall the burger joint was decent",
+        "quote": "整體表現中規中矩",
+        "sentiment": "mixed",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the burger joint was less amazing than expected",
+        "quote": "沒有想像中那麼令人驚艷",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger joint is a unique local Berlin experience",
+        "quote": "作為柏林獨特的在地體驗",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger joint is converted from a public restroom",
+        "quote": "公廁改建而成的特色漢堡店",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "location",
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger joint is definitely worth a try",
+        "quote": "還是相當值得來嚐鮮",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "arrived around 5 PM",
+        "quote": "下午五點左右抵達",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "no queue when arriving around 5 PM",
+        "quote": "剛好不用排隊",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the visit went very smoothly",
+        "quote": "相當順利",
+        "sentiment": "positive",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait",
+            "none"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

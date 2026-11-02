@@ -1,0 +1,49 @@
+{
+  "id": "term-20627",
+  "kind": "term",
+  "tags": [
+    "google-tag",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 20627,
+    "key": "frozen fish",
+    "name": "frozen fish",
+    "uses": 0
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": null
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:55:45.541Z",
+    "usage": {
+      "inputTokens": 171,
+      "outputTokens": 94,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 34
+    },
+    "notes": null,
+    "topics": [
+      {
+        "key": "seafood",
+        "relation": "kind_of"
+      }
+    ],
+    "alsoAcceptable": [
+      "freshness"
+    ],
+    "suggestion": null,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.451Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

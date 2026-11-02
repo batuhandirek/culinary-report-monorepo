@@ -1,0 +1,116 @@
+{
+  "id": "post-079d7302",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "kemet.oriental.lounge",
+    "locationName": null,
+    "hashtags": [
+      "egyptfood",
+      "berlineats",
+      "berlinfood"
+    ],
+    "taggedHandles": [],
+    "text": "اكل مصري في برلين Ägyptisches Essen in Berlin #egyptfood #berlineats #berlinfood",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "079d7302-bf63-4505-9554-67b287b056df",
+    "externalId": "ig_4014612777599296426",
+    "url": "https://www.instagram.com/p/De2xQ0HjOOq/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-23T23:45:58.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:39.128Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Ägyptisches Essen in Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Egyptian food in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Egyptian food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:22.394Z",
+    "usage": {
+      "inputTokens": 5895,
+      "outputTokens": 557,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named or tagged, so there are no places. The caption's only content, 'Egyptian food in Berlin', is a bare label about the city's food scene; it is kept as an optional neutral city fact. The quote could equally be the Arabic 'اكل مصري في برلين'.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "Egyptian food in Berlin",
+        "quote": "Ägyptisches Essen in Berlin",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.223Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

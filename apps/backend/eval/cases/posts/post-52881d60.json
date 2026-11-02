@@ -1,0 +1,235 @@
+{
+  "id": "post-52881d60",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "anneczka_kalash",
+    "locationName": "Berlin, Germany",
+    "hashtags": [
+      "berlin",
+      "berlinfoodie",
+      "meatlovers",
+      "scheersschnitzel",
+      "schnitzel"
+    ],
+    "taggedHandles": [
+      "scheersschnitzel"
+    ],
+    "text": "Schnitzel-Date mit Fluffy 🐶🥩❤️\n\nWir haben das Schnitzel bei @scheersschnitzel getestet 🤤🔥 Richtig lecker und definitiv einen Besuch wert \n\nFluffy hätte am liebsten direkt mitbestellt 😂🐾\n\nKleine Empfehlung von mir 🫶🏼#berlin #berlinfoodie #meatlovers #scheersschnitzel #schnitzel",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "52881d60-9c74-45ae-80ad-18df2fd4e974",
+    "externalId": "ig_4012792549160257217",
+    "url": "https://www.instagram.com/p/DewTZASCAbB/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-21T11:29:30.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T04:01:08.212Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Scheers Schnitzel",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "621e90fb-f28b-487f-b909-09a84d24a0f6",
+          "brandName": "Scheers Schnitzel",
+          "venueId": "97ca57ae-57cd-44cc-b510-fc51e90983f8",
+          "venueName": "Scheers Schnitzel"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "really delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "worth a visit",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:39:19.148Z",
+    "usage": {
+      "inputTokens": 10149,
+      "outputTokens": 1583,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue name is taken from the @scheersschnitzel handle and written as Scheers Schnitzel. The dog date is kept as an optional claim (family_pets or no aspect), since the post does not say dogs are welcome. The joke that Fluffy wanted to order is left out as an aside.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Scheers Schnitzel",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "621e90fb-f28b-487f-b909-09a84d24a0f6",
+          "brandName": "Scheers Schnitzel",
+          "venueId": "97ca57ae-57cd-44cc-b510-fc51e90983f8",
+          "venueName": "Scheers Schnitzel",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "had a Schnitzel date with dog Fluffy",
+        "quote": "Schnitzel-Date mit Fluffy",
+        "sentiment": "neutral",
+        "aspect": "family_pets",
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they tested the Schnitzel at Scheers Schnitzel",
+        "quote": "Wir haben das Schnitzel bei @scheersschnitzel getestet",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Schnitzel was really tasty",
+        "quote": "Richtig lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Schnitzel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Scheers Schnitzel is definitely worth a visit",
+        "quote": "definitiv einen Besuch wert",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a small recommendation from the author for Scheers Schnitzel",
+        "quote": "Kleine Empfehlung von mir",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.596Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): A neutral note that they tried the Schnitzel can be read as about the food in general or as a visit fact with no aspect, so either fits."
+      },
+      {
+        "at": "2026-11-01T21:36:47.235Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.428Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

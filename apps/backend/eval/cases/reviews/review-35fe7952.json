@@ -1,0 +1,279 @@
+{
+  "id": "review-35fe7952",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "35fe7952-f8e4-42a7-a86b-5f5d46f88bcf",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21SQ1VFTm1aa0ZxU0habWFtOWxORVJDY1MxMFVVRRAB",
+    "platform": "google",
+    "language": "fr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-06T20:46:49.698Z",
+    "stars": 4,
+    "text": "Un kebab très populaire, avec une file d’attente presque permanente. Heureusement, le service est rapide et les commandes sont préparées en peu de temps.\n\nLe dürüm est bien garni et de bonne taille, largement suffisant pour un repas. En revanche, le thé noir turc gratuit n’est malheureusement plus offert.",
+    "textTranslated": "A very popular kebab shop, with an almost constant queue. Fortunately, the service is quick and orders are prepared in no time.\n\nThe dürüm is generously filled and a good size, more than enough for a meal. However, the complimentary Turkish black tea is unfortunately no longer offered."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:08:31.425Z",
+    "claims": [
+      {
+        "text": "the kebab shop was very popular",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was an almost constant queue",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service is quick",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "orders are prepared in no time",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the dürüm is generously filled",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "durum"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the dürüm is a good size",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "durum"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the dürüm is more than enough for a meal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "durum"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the complimentary Turkish black tea is no longer offered",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_selection",
+        "foods": [
+          "Turkish black tea"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:13.410Z",
+    "usage": {
+      "inputTokens": 5535,
+      "outputTokens": 1564,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 5200
+    },
+    "notes": "Hard calls: the queue as a negative opinion versus a neutral fact, and the aspect for the discontinued free tea (drinks, with availability or drink_selection also defensible); its kind is clearly a change. 'Orders prepared quickly' and 'good size' may be kept apart or merged into the neighbouring speed and filling claims.",
+    "claims": [
+      {
+        "text": "the kebab shop is very popular",
+        "quote": "Un kebab très populaire",
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there is an almost constant queue",
+        "quote": "avec une file d’attente presque permanente",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the service is quick",
+        "quote": "le service est rapide",
+        "sentiment": "positive",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "orders are prepared in no time",
+        "quote": "les commandes sont préparées en peu de temps",
+        "sentiment": "positive",
+        "aspect": "wait_for_food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the dürüm is generously filled",
+        "quote": "Le dürüm est bien garni",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "dürüm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the dürüm is a good size, more than enough for a meal",
+        "quote": "de bonne taille, largement suffisant pour un repas",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "dürüm"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the free Turkish black tea is no longer offered",
+        "quote": "le thé noir turc gratuit n’est malheureusement plus offert",
+        "sentiment": "negative",
+        "aspect": "drinks",
+        "foods": [
+          "thé noir turc"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "availability",
+            "drink_selection"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.428Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

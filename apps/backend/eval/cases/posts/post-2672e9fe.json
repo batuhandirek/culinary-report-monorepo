@@ -1,0 +1,263 @@
+{
+  "id": "post-2672e9fe",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "deliciaberlin",
+    "locationName": "Delicia",
+    "hashtags": [
+      "mokka",
+      "coffeeberlin",
+      "türkkahvesi",
+      "meze",
+      "foodberlin"
+    ],
+    "taggedHandles": [],
+    "text": "☕️🍂Kleine Auszeit, großer Genuss. ☕️✨\nTürkischer Mokka bei Delicia – traditionell, aromatisch & mit Liebe serviert. 🤎 🍂 #mokka #coffeeberlin #türkkahvesi #meze #foodberlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "2672e9fe-31cc-45e0-a15e-4971dc5af83a",
+    "externalId": "ig_4002860396629311248",
+    "url": "https://www.instagram.com/p/DeNBFKakb8Q/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-07T18:36:05.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:50:18.598Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Delicia",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "b2eddb2d-a2f9-410d-bfe5-0d6acd70170f",
+          "brandName": "Cafe Delicias",
+          "venueId": "30edee60-0505-4adc-92b8-069e445a4970",
+          "venueName": "Cafe Delicias"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Turkish mocha at Delicia",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Turkish mocha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Turkish mocha is traditional",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Turkish mocha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Turkish mocha is aromatic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Turkish mocha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Turkish mocha is served with love",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [
+          "Turkish mocha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:33:59.049Z",
+    "usage": {
+      "inputTokens": 9214,
+      "outputTokens": 1775,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption reads like the venue's own marketing, so it is marked promotional, though that is uncertain. The city Berlin is inferred from the #coffeeberlin and #foodberlin hashtags. 'Traditionell' could be read as authenticity or as drink_quality.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Delicia",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post comes from the venue's own account (deliciaberlin), so 'Delicia' is spelled correctly. The closest candidate, 'Cafe Delicias', has a different name, and Delicia's Turkish mokka/meze profile doesn't suggest it is the same place."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Delicia serves Türkischer Mokka",
+        "quote": "Türkischer Mokka bei Delicia",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "Türkischer Mokka"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Türkischer Mokka is traditional",
+        "quote": "traditionell",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Türkischer Mokka"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Türkischer Mokka is aromatic",
+        "quote": "aromatisch",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Türkischer Mokka"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Türkischer Mokka is served with love",
+        "quote": "mit Liebe serviert",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [
+          "Türkischer Mokka"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a small break with great enjoyment at Delicia",
+        "quote": "Kleine Auszeit, großer Genuss.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality",
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.228Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.422Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,678 @@
+{
+  "id": "post-92d82657",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "dandycosmo_",
+    "locationName": "Berlin",
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Three Berlin restaurants I discovered this year that I MUST visit again 🌍🤤\n\nThese are 3 completely different cuisines, and three spots that immediately made it onto my return list. If you’re looking for something beyond the usual Berlin restaurant recommendations, save these 👀\n\n📍 Sweet Jamaica / Hasenheide 117, 10967 Berlin (Neukölln)\n📍 Burma Bliss / Grolmanstraße 15, 10623 Berlin (Charlottenburg)\n📍 Kin Za / Linienstraße 93, 10115 Berlin (Mitte)\n\nBerlin restaurants | Berlin food guide | Jamaican food Berlin | Burmese food Berlin | Georgian food Berlin | where to eat in Berlin | restaurants Berlin",
+    "subtitles": "Three Berlin restaurants at Fried Up this year that deserve more hype.\nFirst up, there's this Jamaican place in neukolln,\nwhich makes one of the best jerk chicken\nand fried plantains you'll eat in Berlin.\nAs usual, you can find every place's location in the description.\nNext up, a restaurant that makes Burmese cuisine,\nand honestly,\nit was the first time in my life I tried food from me and Mar.\nIt was super interesting\nand reminded me a bit of a fusion between Indian and Vietnamese.\nEspecially the tea leaf rice was super interesting.\nBy the way,\nmake sure to follow me to discover all of Berlin's best food spots.\nLastly, I have a place that's very special to me.\nIt makes delicious Georgian food,\nbut not just that,\nthe colorful decor makes it look more like a party place\nthan a classic restaurant.\nJust try it out and you'll be in for a treat, because these are",
+    "subtitlesLanguage": "eng-US",
+    "id": "92d82657-c386-41b8-a820-b4a73c7a7fe9",
+    "externalId": "7696526494264266017",
+    "url": "https://www.tiktok.com/@dandycosmo_/video/7696526494264266017",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-14T14:13:41.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:39:33.800Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Sweet Jamaica",
+        "locationHint": "Hasenheide 117, Neukölln",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "fuzzy",
+          "brandId": "31b6ef6b-53df-423f-b338-66edee894a46",
+          "brandName": "Sweet Jamaica",
+          "venueId": "0841e82b-adc3-46dd-a758-3a49261c23ef",
+          "venueName": "Sweet Jamaica Food"
+        }
+      },
+      {
+        "venueName": "Burma Bliss",
+        "locationHint": "Grolmanstraße 15, Charlottenburg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "15480534-f076-4071-b03e-bd706cec8ca0",
+          "brandName": "Burma Restaurant",
+          "venueId": "9ace29b9-04ce-43bd-b4d2-d2b3fdf1eaba",
+          "venueName": "Burma Restaurant"
+        }
+      },
+      {
+        "venueName": "Kin Za",
+        "locationHint": "Linienstraße 93, Mitte",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "fd92c566-5c4b-4900-8a49-7740f10d5b88",
+          "brandName": "Kin Za Georgian Restaurant Bar",
+          "venueId": "6bb128c5-80e6-4263-b5ee-e8810e18016e",
+          "venueName": "Kin Za Georgian Restaurant Bar Karaoke Show"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "these three restaurants deserve more hype",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they are three completely different cuisines",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Sweet Jamaica serves jerk chicken",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "jerk chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sweet Jamaica serves fried plantains",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "fried plantains"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the jerk chicken is one of the best in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "jerk chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the fried plantains are one of the best in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fried plantains"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Burma Bliss makes Burmese cuisine",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "it was the first time they tried food from Burma Bliss's cuisine",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the food reminded them of a fusion between Indian and Vietnamese",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the tea leaf rice was super interesting",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "tea leaf rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Kin Za makes Georgian food",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the Georgian food is delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the colorful decor makes it look more like a party place than a classic restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:45:04.279Z",
+    "usage": {
+      "inputTokens": 16073,
+      "outputTokens": 4722,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption's 'MUST visit again' and the transcript's 'deserve more hype' cover all three venues, so each became a per-place verdict, with the hype claims optional as near-duplicates. 'Georgian food' is a cuisine, not a dish, so it is left out of foods; 'me and Mar' is the transcript's misspelling of Myanmar, kept verbatim in the quote.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Sweet Jamaica",
+        "locationHint": "Hasenheide 117, 10967 Berlin (Neukölln)",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "31b6ef6b-53df-423f-b338-66edee894a46",
+          "brandName": "Sweet Jamaica",
+          "venueId": "0841e82b-adc3-46dd-a758-3a49261c23ef",
+          "venueName": "Sweet Jamaica Food",
+          "note": "The post gives Hasenheide 117, which matches the Sweet Jamaica Food branch even though the post calls the area Neukölln."
+        }
+      },
+      {
+        "venueName": "Burma Bliss",
+        "locationHint": "Grolmanstraße 15, 10623 Berlin (Charlottenburg)",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "15480534-f076-4071-b03e-bd706cec8ca0",
+          "brandName": "Burma Restaurant",
+          "venueId": "9ace29b9-04ce-43bd-b4d2-d2b3fdf1eaba",
+          "venueName": "Burma Restaurant",
+          "note": "The name differs (Burma Bliss vs Burma Restaurant), but the exact address Grolmanstraße 15 and the Burmese cuisine match the only Burmese candidate."
+        }
+      },
+      {
+        "venueName": "Kin Za",
+        "locationHint": "Linienstraße 93, 10115 Berlin (Mitte)",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "fd92c566-5c4b-4900-8a49-7740f10d5b88",
+          "brandName": "Kin Za Georgian Restaurant Bar",
+          "venueId": "6bb128c5-80e6-4263-b5ee-e8810e18016e",
+          "venueName": "Kin Za Georgian Restaurant Bar Karaoke Show",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the creator must visit Sweet Jamaica again",
+        "quote": "I MUST visit again",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator must visit Burma Bliss again",
+        "quote": "I MUST visit again",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the creator must visit Kin Za again",
+        "quote": "I MUST visit again",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Sweet Jamaica deserves more hype",
+        "quote": "deserve more hype",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Burma Bliss deserves more hype",
+        "quote": "deserve more hype",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Kin Za deserves more hype",
+        "quote": "deserve more hype",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Sweet Jamaica is a Jamaican place in Neukölln",
+        "quote": "there's this Jamaican place in neukolln",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sweet Jamaica makes one of the best jerk chicken in Berlin",
+        "quote": "makes one of the best jerk chicken",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "jerk chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Sweet Jamaica makes one of the best fried plantains in Berlin",
+        "quote": "fried plantains you'll eat in Berlin",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "fried plantains"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Burma Bliss makes Burmese cuisine",
+        "quote": "a restaurant that makes Burmese cuisine",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "it was the creator's first time trying Burmese food at Burma Bliss",
+        "quote": "it was the first time in my life I tried food from me and Mar",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the food at Burma Bliss was super interesting",
+        "quote": "It was super interesting",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the food at Burma Bliss reminded the creator of a fusion between Indian and Vietnamese",
+        "quote": "reminded me a bit of a fusion between Indian and Vietnamese",
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the tea leaf rice at Burma Bliss was especially super interesting",
+        "quote": "Especially the tea leaf rice was super interesting",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tea leaf rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Kin Za is very special to the creator",
+        "quote": "a place that's very special to me",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Kin Za makes delicious Georgian food",
+        "quote": "It makes delicious Georgian food",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Kin Za's colorful decor makes it look more like a party place than a classic restaurant",
+        "quote": "the colorful decor makes it look more like a party place\nthan a classic restaurant",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "try Kin Za and you'll be in for a treat",
+        "quote": "Just try it out and you'll be in for a treat",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

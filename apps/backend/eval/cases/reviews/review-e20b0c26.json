@@ -1,0 +1,91 @@
+{
+  "id": "review-e20b0c26",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:short",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "e20b0c26-77cc-4ff8-ae82-9f7e9e09954a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xoQ05IWmhSME5oYTFWRk0zRlFja0k0Ym1vMU5HYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-14T17:41:19.005Z",
+    "stars": 5,
+    "text": "Bester Döner den ich jemals gegessen habe",
+    "textTranslated": "Best doner kebab I've ever eaten"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:12.431Z",
+    "claims": [
+      {
+        "text": "the doner kebab was the best I've ever eaten",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:53.124Z",
+    "usage": {
+      "inputTokens": 4934,
+      "outputTokens": 213,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The one claim is a superlative about the Döner. It reads as a 'best kebab' verdict, with opinion also fair. Its aspect is taste, or the food root, since no finer quality is named.",
+    "claims": [
+      {
+        "text": "the Döner is the best they have ever eaten",
+        "quote": "Bester Döner den ich jemals gegessen habe",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.220Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,352 @@
+{
+  "id": "post-7b019ed4",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "zeitlos_cocktailbars",
+    "locationName": null,
+    "hashtags": [
+      "zeitlosberlin",
+      "pommesfrites",
+      "berlinfoodies",
+      "kurfürstendamm",
+      "berlinrestaurants"
+    ],
+    "taggedHandles": [
+      "zeitlos.com"
+    ],
+    "text": "🍟🔥 Goldgelb, knusprig und einfach unwiderstehlich! 😍 ✨\n\nManchmal braucht es nicht viel zum Glück, nur eine Portion frisch zubereitete, herrlich knusprige Pommes Frites! 🤤💛\n\nAußen goldbraun, innen wunderbar weich und mit leckeren Dips serviert: Das ist der perfekte Snack für jede Gelegenheit! 🍟❤️\n\nOb als Beilage, für den kleinen Hunger zwischendurch oder zum Teilen mit Freunden: bei ZEITLOS Berlin schmecken Pommes einfach immer! 🍹✨\n\nKnusprig. Lecker. ZEITLOS.\n\n📍Kurfürstendamm 100, 10709 Berlin\n📞030 889 220 35\n📧info@zeitlos.com\n\n#ZeitlosBerlin #PommesFrites #BerlinFoodies #Kurfürstendamm #BerlinRestaurants\nPommes Berlin, ZEITLOS Berlin, Knusprige Pommes Frites, Goldbraune Pommes, Pommes mit Ketchup und Mayo, French Fries Berlin, Restaurant Kurfürstendamm, Essen am Ku'damm, Snacks Berlin, Fingerfood Berlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "7b019ed4-d2d0-47d0-98af-dfdd8281c4ee",
+    "externalId": "ig_4017428381553220980",
+    "url": "https://www.instagram.com/p/DfAxdPpDV10/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-27T21:00:15.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:00:47.986Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "ZEITLOS Berlin",
+        "locationHint": "Kurfürstendamm 100, 10709 Berlin",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "fries are described as delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pommes frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "freshly prepared fries",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "pommes frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "outside crispy and inside soft",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "pommes frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "golden brown fries served with dips",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "pommes frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:42:15.050Z",
+    "usage": {
+      "inputTokens": 10380,
+      "outputTokens": 2625,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The post is the venue's own advertising (address, phone, own hashtag), so it is promotional and not a visit. The slogan line, the SEO keyword 'Pommes mit Ketchup und Mayo' and the address are kept as optional claims.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "ZEITLOS Berlin",
+        "locationHint": "Kurfürstendamm 100, 10709 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "ZEITLOS at Kurfürstendamm 100 is not among the candidates; the author spells the name, and the similar names (Café Zeit, Zeit für Brot) are different venues at other addresses."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Pommes Frites at ZEITLOS Berlin are golden yellow, crispy and simply irresistible",
+        "quote": "Goldgelb, knusprig und einfach unwiderstehlich!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pommes Frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pommes Frites are freshly prepared and wonderfully crispy",
+        "quote": "frisch zubereitete, herrlich knusprige Pommes Frites",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Pommes Frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pommes Frites are golden brown outside and wonderfully soft inside",
+        "quote": "Außen goldbraun, innen wunderbar weich",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Pommes Frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pommes Frites are served with tasty Dips",
+        "quote": "mit leckeren Dips serviert",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Dips"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pommes Frites are the perfect snack for any occasion",
+        "quote": "Das ist der perfekte Snack für jede Gelegenheit!",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Pommes Frites"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Pommes at ZEITLOS Berlin always taste good",
+        "quote": "bei ZEITLOS Berlin schmecken Pommes einfach immer!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ZEITLOS Berlin's food is crispy and tasty",
+        "quote": "Knusprig. Lecker. ZEITLOS.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ZEITLOS Berlin serves Pommes with Ketchup and Mayo",
+        "quote": "Pommes mit Ketchup und Mayo",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Pommes",
+          "Ketchup",
+          "Mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ZEITLOS Berlin is at Kurfürstendamm 100",
+        "quote": "Kurfürstendamm 100, 10709 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.242Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.432Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

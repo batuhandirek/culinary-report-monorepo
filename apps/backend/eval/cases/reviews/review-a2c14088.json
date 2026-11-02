@@ -1,0 +1,283 @@
+{
+  "id": "review-a2c14088",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:3",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "a2c14088-78b6-411b-b9f9-f7b4f507fd95",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tVMVNYaHlaWG90VG1wQ1VqVjJZWGRwYjBwakxVRRAB",
+    "platform": "google",
+    "language": "zh-Hans",
+    "venue": "WeiDaoJia",
+    "venueId": "10912315-8a40-43b5-99ab-314315e0ea4b",
+    "brand": "WeiDaoJia",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-04T19:22:32.455Z",
+    "stars": 3,
+    "text": "去了好几次，有时很好吃，有时不好吃，不知道是不是有2波厨子。饭点有些吵闹。有一次点了一杯0.4L的水，服务员直接裸着上了一杯水，不是那种密封的塑料瓶或者玻璃瓶，后来就再也没去过。",
+    "textTranslated": "I've been there several times; sometimes the food is great, sometimes it's not. I wonder if they have two teams of chefs. It gets a bit noisy during mealtimes. Once, I ordered a 0.4L glass of water, and the server brought it to me completely naked—not in a sealed plastic or glass bottle. I haven't been back since."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:09:58.763Z",
+    "claims": [
+      {
+        "text": "sometimes the food is great",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "sometimes it's not",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "they have two teams of chefs",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it gets a bit noisy during mealtimes",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "ordered a 0.4L glass of water",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "extra_charges",
+        "foods": [
+          "water"
+        ],
+        "amount": 0.4,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "the server brought the water completely naked",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [
+          "water"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the water was not in a sealed plastic or glass bottle",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "delivery_platform",
+        "foods": [
+          "water"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I haven't been back since",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:29.621Z",
+    "usage": {
+      "inputTokens": 5110,
+      "outputTokens": 1909,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the aspect of the open-glass water complaint (expected a sealed bottle: order accuracy, with drinks or hygiene as allowed readings), and treating the 'two teams of chefs' speculation as an optional aside to the inconsistency claim; 0.4L gets no amount since only minutes and money are units.",
+    "claims": [
+      {
+        "text": "visited several times",
+        "quote": "去了好几次",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "sometimes the food is delicious, sometimes not",
+        "quote": "有时很好吃，有时不好吃",
+        "sentiment": "mixed",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "wonders whether there are two teams of chefs",
+        "quote": "不知道是不是有2波厨子",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "question"
+          ]
+        }
+      },
+      {
+        "text": "it is somewhat noisy at mealtimes",
+        "quote": "饭点有些吵闹",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "once ordered a 0.4L water",
+        "quote": "点了一杯0.4L的水",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "水"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the server brought the water as an open glass, not a sealed plastic or glass bottle",
+        "quote": "服务员直接裸着上了一杯水，不是那种密封的塑料瓶或者玻璃瓶",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "水"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "food_hygiene"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "has not gone back since",
+        "quote": "后来就再也没去过",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.sentiment (both_ok): The agent split the mixed statement into two claims; 'sometimes delicious' on its own is correctly positive."
+      },
+      {
+        "at": "2026-11-01T21:36:47.216Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,39 +1,24 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
-import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
 import {
 	brandFoods,
 	countThemes,
-	THEME_POST_POINTS_SQL,
-	THEME_REVIEW_POINTS_SQL,
+	THEME_POST_CLAIMS_SQL,
+	THEME_REVIEW_CLAIMS_SQL,
+	ThemeClaimRow,
 	ThemeCounts,
 	ThemeFood,
 	ThemeFoodCoverage,
 	themeFoods,
-	ThemePointRow,
 } from '../util/theme-counts.js';
-import {
-	monthsUpTo,
-	THEME_BASE_SOURCES_SQL,
-	THEME_BASE_SQL,
-	THEME_MONTHS,
-	THEME_POST_DETAIL_SQL,
-	THEME_REVIEW_DETAIL_SQL,
-	type ThemeBaseMonth,
-	type ThemeBaseSource,
-	type ThemeDetail,
-	themeDetail,
-	type ThemeDetailFilters,
-	type ThemeDetailRow,
-} from '../util/theme-detail.js';
 
 export interface ThemeInsights extends ThemeCounts {
 	month: string;
@@ -45,25 +30,13 @@ export interface ThemeInsights extends ThemeCounts {
 	foods: ThemeFoodCoverage[];
 }
 
-export interface ThemeInsight extends ThemeDetail {
-	/** The aspect's key */
-	key: string;
-	/** Its root's key */
-	topic: FeedbackTopic;
-	label: string;
-	/** What the theme covers, as the agents are told (`Topic.hint`); empty when it has none */
-	hint: string;
-	month: string;
-	previous: string;
-	side: ThemeDetailFilters['side'];
-}
-
 /**
- * What a city's guests praise and criticise, per feedback theme, across every venue: the month's
- * written reviews and posts by others raising each theme, their shares and the change against the
- * month before, broken down by kind of food (a brand's is the main food of most of its places in
- * the city) and, with `food`, narrowed to the brands of that food. Reads stored rows only; the one
- * reader behind `/admin/theme-insights`.
+ * What a city's guests praise and criticise, per theme (an aspect), across every venue: the
+ * month's written reviews and posts by others with a claim filed under each theme (its aspect
+ * part), their shares and the change against the month before, broken down by kind of food (a
+ * brand's is the main food of most of its places in the city) and, with `food`, narrowed to the
+ * brands of that food. Reads stored statements only; the one reader behind `/admin/theme-insights`.
+ * One aspect's own figures, sentences and breakdowns are the Explore page's (`StatementInsightService`).
  */
 @Injectable()
 export class ThemeInsightService {
@@ -77,8 +50,8 @@ export class ThemeInsightService {
 		const previous = previousMonth(monthRange(month).start);
 		const params = [cityId, monthRange(previous).start, monthRange(month).end];
 		const connection = this.em.getConnection();
-		const reviews = await connection.execute<ThemePointRow[]>(THEME_REVIEW_POINTS_SQL, params);
-		const posts = await connection.execute<ThemePointRow[]>(THEME_POST_POINTS_SQL, params);
+		const reviews = await connection.execute<ThemeClaimRow[]>(THEME_REVIEW_CLAIMS_SQL, params);
+		const posts = await connection.execute<ThemeClaimRow[]>(THEME_POST_CLAIMS_SQL, params);
 		const rows = [...reviews, ...posts];
 		const index = await this.topicService.index();
 		const foods = await this.brandFoods(cityId, rows.map(r => r.brand_id), index);
@@ -91,60 +64,6 @@ export class ThemeInsightService {
 			food: food ? { key: food, label: picked?.label ?? food } : null,
 			foods: covered,
 			...countThemes(narrowed, month, previous, index, foods),
-		};
-	}
-
-	/**
-	 * One theme in a city's month: its complaints, praise and noticed changes, the picked side over
-	 * six months, where it came up, the numbers its points state and the month's sentences filed
-	 * under it, narrowed by `filters`. Reads stored rows only. 404 for a key that is no aspect.
-	 */
-	async theme(
-		cityId: string,
-		month: string,
-		theme: string,
-		filters: ThemeDetailFilters,
-	): Promise<ThemeInsight> {
-		const index = await this.topicService.index();
-		if (!index.isAspect(theme)) throw new NotFoundException(`No feedback theme ${theme}`);
-		const start = monthRange(monthsUpTo(month, THEME_MONTHS)[0]).start;
-		const { start: monthStart, end } = monthRange(month);
-		const connection = this.em.getConnection();
-		const window = [cityId, start, end];
-		const reviews = await connection.execute<ThemeDetailRow[]>(THEME_REVIEW_DETAIL_SQL, [
-			theme,
-			...window,
-		]);
-		const posts = await connection.execute<ThemeDetailRow[]>(THEME_POST_DETAIL_SQL, [
-			theme,
-			...window,
-		]);
-		const bases = await connection.execute<ThemeBaseMonth[]>(THEME_BASE_SQL, [
-			...window,
-			...window,
-		]);
-		const ofMonth = [cityId, monthStart, end];
-		const baseSources = await connection.execute<ThemeBaseSource[]>(THEME_BASE_SOURCES_SQL, [
-			...ofMonth,
-			...ofMonth,
-		]);
-		const foods = await this.brandFoods(cityId, baseSources.map(s => s.brand_id), index);
-		return {
-			key: theme,
-			topic: (index.rootOf(theme) ?? theme) as FeedbackTopic,
-			label: index.label(theme),
-			hint: index.get(theme)?.hint ?? '',
-			month,
-			previous: previousMonth(monthStart),
-			side: filters.side,
-			...themeDetail({
-				rows: [...reviews, ...posts],
-				bases,
-				baseSources,
-				month,
-				foods,
-				filters,
-			}),
 		};
 	}
 

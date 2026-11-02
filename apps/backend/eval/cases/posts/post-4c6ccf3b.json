@@ -1,0 +1,108 @@
+{
+  "id": "post-4c6ccf3b",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "maya.bibi935999",
+    "locationName": null,
+    "hashtags": [],
+    "taggedHandles": [],
+    "text": "Streetfood aus dem Gefängnis – Streetfood in Berlin, Deutschland (9)",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "4c6ccf3b-714a-4668-aef1-dfe97b2cfe79",
+    "externalId": "7700223760791604513",
+    "url": "https://www.tiktok.com/@maya.bibi935999/video/7700223760791604513",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-24T13:21:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:14.500Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Streetfood aus dem Gefängnis",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "streetfood in Berlin, Deutschland",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:38:51.290Z",
+    "usage": {
+      "inputTokens": 5874,
+      "outputTokens": 528,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption names no venue, so there are no places. The only content is a series title about street food from a prison in Berlin. It is kept as an optional neutral city fact, since leaving it out misses nothing a venue owner needs. 'Streetfood' is treated as a general word, not a food.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "street food from a prison in Berlin",
+        "quote": "Streetfood aus dem Gefängnis",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.234Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.427Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

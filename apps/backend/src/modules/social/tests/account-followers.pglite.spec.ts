@@ -109,11 +109,23 @@ describe('AccountScrapeService.fillFollowers (pglite)', () => {
 	const brandIn = async (name: string, where: City, leadScore?: number, closed = false) => {
 		const em = harness.orm.em;
 		const brand = em.create(Brand, { name, key: `${name.toLowerCase()}${++n}`, leadScore });
-		em.create(Venue, { city: where, brand, placeId: `fill-${n}`, name, category: 'Restaurant', closed });
+		em.create(Venue, {
+			city: where,
+			brand,
+			placeId: `fill-${n}`,
+			name,
+			category: 'Restaurant',
+			closed,
+		});
 		await em.flush();
 		return brand;
 	};
-	const accountOf = async (brand: Brand | null, platform: SocialPlatformEnum, handle: string, fields: Partial<SocialAccount> = {}) => {
+	const accountOf = async (
+		brand: Brand | null,
+		platform: SocialPlatformEnum,
+		handle: string,
+		fields: Partial<SocialAccount> = {},
+	) => {
 		const em = harness.orm.em;
 		const account = em.create(SocialAccount, {
 			platform,
@@ -125,7 +137,8 @@ describe('AccountScrapeService.fillFollowers (pglite)', () => {
 		await em.flush();
 		return account;
 	};
-	const reload = (handle: string) => harness.orm.em.findOneOrFail(SocialAccount, { handle }, { refresh: true });
+	const reload = (handle: string) =>
+		harness.orm.em.findOneOrFail(SocialAccount, { handle }, { refresh: true });
 
 	it("scrapes the profiles of the city's brand accounts with no follower count, and stores no posts", async () => {
 		const em = harness.orm.em;
@@ -162,9 +175,22 @@ describe('AccountScrapeService.fillFollowers (pglite)', () => {
 
 		em.clear();
 		expect((await reload('soriramen')).followers).toBe(16740);
-		expect((await em.findOneOrFail(SocialAccount, { platform: TT, handle: 'soriramen' })).followers).toBe(18500);
+		expect(
+			(await em.findOneOrFail(SocialAccount, { platform: TT, handle: 'soriramen' }))
+				.followers,
+		).toBe(18500);
 		const snapshots = await em.find(SocialAccountSnapshot, {}, { populate: ['account'] });
-		expect(snapshots.map(s => [s.account.platform, s.account.handle, s.source, s.followers, s.following]).sort()).toEqual(
+		expect(
+			snapshots
+				.map(s => [
+					s.account.platform,
+					s.account.handle,
+					s.source,
+					s.followers,
+					s.following,
+				])
+				.sort(),
+		).toEqual(
 			[
 				[IG, 'munchiesde', 'profile', 16740, 279],
 				[IG, 'soriramen', 'profile', 16740, 279],
@@ -186,13 +212,19 @@ describe('AccountScrapeService.fillFollowers (pglite)', () => {
 		await accountOf(low, IG, 'lowplace');
 		await accountOf(high, TT, 'highplace');
 		await accountOf(none, IG, 'unscored');
-		profiles = { [`${TT}:highplace`]: tiktokItem('highplace'), [`${IG}:lowplace`]: instagramItem('lowplace') };
+		profiles = {
+			[`${TT}:highplace`]: tiktokItem('highplace'),
+			[`${IG}:lowplace`]: instagramItem('lowplace'),
+		};
 
 		// $0.004 for the TikTok profile and $0.003 for one Instagram one: the unscored waits
 		const result = await service.fillFollowers(city, 0.0075, NOW);
 
 		expect(result).toEqual({ missing: 3, asked: 2, filled: 2, profiles: 2 });
-		expect(runActor.mock.calls.map(c => c[1].usernames ?? c[1].profiles)).toEqual([['lowplace'], ['highplace']]);
+		expect(runActor.mock.calls.map(c => c[1].usernames ?? c[1].profiles)).toEqual([
+			['lowplace'],
+			['highplace'],
+		]);
 		expect((await reload('unscored')).followersAskedAt).toBeNull();
 	});
 
@@ -200,18 +232,33 @@ describe('AccountScrapeService.fillFollowers (pglite)', () => {
 		const brand = await brandIn('Private', city, 50);
 		await accountOf(brand, IG, 'privateplace');
 
-		expect(await service.fillFollowers(city, 1, NOW)).toEqual({ missing: 1, asked: 1, filled: 0, profiles: 0 });
+		expect(await service.fillFollowers(city, 1, NOW)).toEqual({
+			missing: 1,
+			asked: 1,
+			filled: 0,
+			profiles: 0,
+		});
 		expect((await reload('privateplace')).followersAskedAt).toEqual(NOW);
 
 		// The next days skip it, free
 		runActor.mockClear();
 		const tomorrow = new Date(NOW.getTime() + DAY);
-		expect(await service.fillFollowers(city, 1, tomorrow)).toEqual({ missing: 0, asked: 0, filled: 0, profiles: 0 });
+		expect(await service.fillFollowers(city, 1, tomorrow)).toEqual({
+			missing: 0,
+			asked: 0,
+			filled: 0,
+			profiles: 0,
+		});
 		expect(runActor).not.toHaveBeenCalled();
 
 		profiles = { [`${IG}:privateplace`]: instagramItem('privateplace') };
 		const monthOn = new Date(NOW.getTime() + 31 * DAY);
-		expect(await service.fillFollowers(city, 1, monthOn)).toEqual({ missing: 1, asked: 1, filled: 1, profiles: 1 });
+		expect(await service.fillFollowers(city, 1, monthOn)).toEqual({
+			missing: 1,
+			asked: 1,
+			filled: 1,
+			profiles: 1,
+		});
 		expect((await reload('privateplace')).followers).toBe(16740);
 	});
 
@@ -227,7 +274,9 @@ describe('AccountScrapeService.fillFollowers (pglite)', () => {
 		const em = harness.orm.em;
 		em.clear();
 		const accounts = await em.find(SocialAccount, { handle: 'bothplace' });
-		expect(accounts.map(a => [a.platform, a.followers ?? null, a.followersAskedAt ?? null]).sort()).toEqual([
+		expect(
+			accounts.map(a => [a.platform, a.followers ?? null, a.followersAskedAt ?? null]).sort(),
+		).toEqual([
 			[IG, 16740, null],
 			[TT, null, null],
 		]);

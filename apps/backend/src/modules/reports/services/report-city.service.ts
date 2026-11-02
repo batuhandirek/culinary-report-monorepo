@@ -27,6 +27,7 @@ import { BaselineReview, baselineVenues, citySection } from '../util/city-sectio
 import { ratingBenchmark } from '../util/rating-benchmark.js';
 import { neighbourhoodChanges } from '../util/neighbourhood.js';
 import { reportSearchRanks } from '../util/search-ranks.js';
+import { judgingSql } from 'src/modules/statements/util/statement-sql.js';
 
 /**
  * The report's city context: the city's rising cuisines and dishes (`TrendService`), the brand's
@@ -119,8 +120,9 @@ export class ReportCityService {
 	}
 
 	/**
-	 * The month's complaint points of these brands' written reviews in the city, and their written
-	 * reviews per brand: what `cityThemes` compares.
+	 * The month's complaints (negative claims, each with the aspect agent B filed it under) of these
+	 * brands' written reviews in the city, and their written reviews per brand: what `cityThemes`
+	 * compares. A claim under no aspect raises none; a noticed change is no complaint.
 	 */
 	private async complaintThemes(
 		brandIds: string[],
@@ -133,10 +135,12 @@ export class ReportCityService {
 		const params = [...brandIds, cityId, start, end];
 		const where = `v.brand_id in (${marks}) and v.city_id = ? and r.published_at >= ? and r.published_at < ?
 			and coalesce(r.text_translated, r.text, '') <> ''`;
-		const complaints: { brand_id: string; review_id: string; theme: string | null }[] = await conn.execute(
-			`select v.brand_id, r.id as review_id, f.theme
+		const complaints: { brand_id: string; review_id: string; aspect: string }[] = await conn.execute(
+			`select v.brand_id, r.id as review_id, a.key as aspect
 			from reviews r join venues v on v.id = r.venue_id
-			join feedback_points f on f.review_id = r.id and f.sentiment = 'negative' and f.detail is not null
+			join statements s on s.review_id = r.id and s.sentiment = 'negative' and s.text is not null and ${judgingSql('s')}
+			join statement_parts p on p.statement_id = s.id and p.role = 'aspect'
+			join topics a on a.id = p.topic_id
 			where ${where}`,
 			params,
 		);
@@ -145,7 +149,7 @@ export class ReportCityService {
 			params,
 		);
 		return {
-			complaints: complaints.map(c => ({ brandId: c.brand_id, reviewId: c.review_id, theme: c.theme })),
+			complaints: complaints.map(c => ({ brandId: c.brand_id, reviewId: c.review_id, aspect: c.aspect })),
 			written: new Map(written.map(w => [w.brand_id, w.n])),
 		};
 	}

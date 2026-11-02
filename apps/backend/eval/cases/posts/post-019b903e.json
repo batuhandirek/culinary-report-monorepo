@@ -1,0 +1,159 @@
+{
+  "id": "post-019b903e",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "boddensee_berlin_de_gallery",
+    "locationName": null,
+    "hashtags": [
+      "restaurantboddensee",
+      "berlinbrunch",
+      "brunchberlin",
+      "hochzeitslocation",
+      "berlinhochzeit"
+    ],
+    "taggedHandles": [],
+    "text": "We don’t say: „let’s stay inside, the weather ist bad!“ \nWe say: „es gibt kein schlechtes Wetter, nur falsche Kleidung!“\nGuten Morgen und einen schönen, erfolgreichen Tag ☕️❤️\nBoddensee in Birkenwerder bei Berlin🎂🥂\n\nKeine Werbung\n\n#restaurantboddensee #berlinbrunch #brunchberlin #hochzeitslocation #berlinhochzeit",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "019b903e-a369-451b-9e32-2df0817aec7a",
+    "externalId": "ig_4003950565320200046",
+    "url": "https://www.instagram.com/p/DeQ49NIIo9u/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-09T06:43:39.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:10.074Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Boddensee",
+        "locationHint": "Birkenwerder near Berlin",
+        "city": "Birkenwerder",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "other_city",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the weather is bad",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "there is no bad weather, only wrong clothing",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "good morning and have a nice, successful day",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:19:36.430Z",
+    "usage": {
+      "inputTokens": 10193,
+      "outputTokens": 1093,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 7388
+    },
+    "notes": "The post reads like the venue's own greeting with brunch and wedding-venue hashtags despite 'Keine Werbung', so it is marked promotional. The weather saying and good-morning wishes are not about food, drink or the place. The only claim is the venue's location in Birkenwerder, outside Berlin.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Boddensee",
+        "locationHint": "Birkenwerder bei Berlin",
+        "city": "Birkenwerder",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Boddensee is in Birkenwerder, outside Berlin, and no candidate has that name."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Boddensee is in Birkenwerder near Berlin",
+        "quote": "Boddensee in Birkenwerder bei Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.433Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.222Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

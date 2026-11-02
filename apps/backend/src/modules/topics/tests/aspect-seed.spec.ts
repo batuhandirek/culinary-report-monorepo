@@ -31,7 +31,7 @@ describe('ASPECT_SEED', () => {
 			expect([s.key, s.kind]).toEqual([s.key, TopicKindEnum.ASPECT]);
 			expect([s.key, s.hint?.trim() || null]).toEqual([s.key, expect.any(String)]);
 			if (s.parent) expect([s.key, roots.includes(s.parent)]).toEqual([s.key, true]);
-			expect([s.key, s.aliases ?? [], s.mid ?? null]).toEqual([s.key, [], null]);
+			expect([s.key, s.mid ?? null]).toEqual([s.key, null]);
 		}
 		expect(ASPECT_SEED.filter(s => s.parent).length).toBeGreaterThan(40);
 	});
@@ -43,7 +43,7 @@ describe('TopicIndex aspects', () => {
 		expect(wait[0]).toBe('wait');
 		expect([...wait].sort()).toEqual(['queue', 'wait', 'wait_for_food', 'wait_for_table']);
 		expect(index.descendants('nope')).toEqual([]);
-		expect(index.rootOf('price_increase')).toBe('price');
+		expect(index.rootOf('price_level')).toBe('price');
 		expect(index.rootOf('price')).toBe('price');
 		expect(index.rootOf('nope')).toBeUndefined();
 		expect([index.isRoot('other'), index.isRoot('taste'), index.isRoot('nope')]).toEqual([
@@ -56,7 +56,7 @@ describe('TopicIndex aspects', () => {
 			false,
 			false,
 		]);
-		expect(index.promptLabel('price_increase')).toBe('price / price increase');
+		expect(index.promptLabel('price_level')).toBe('price / price level');
 		expect(index.promptLabel('price')).toBe('price');
 		expect(index.label('wait_for_food')).toBe('Wait for food');
 		expect(index.label('nope')).toBe('nope');
@@ -96,7 +96,9 @@ describe('TopicIndex aspects', () => {
 
 	it('writes the legend by root, each key with its hint', () => {
 		const legend = index.aspectLegend();
-		expect(legend.startsWith('food: food (about the food, when nothing finer fits), ')).toBe(true);
+		expect(legend.startsWith('food: food (about the food, when nothing finer fits), ')).toBe(
+			true,
+		);
 		expect(legend).toContain('wait_for_food (the time between ordering and the food arriving)');
 		expect(legend).toContain('; drinks: drinks (about the drinks, when nothing finer fits), ');
 		// Each root heads its own part, in order (a hint may hold "; " itself, so no split)

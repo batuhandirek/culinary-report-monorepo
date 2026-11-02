@@ -1,0 +1,122 @@
+{
+  "id": "post-67af1ad6",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "vvecafe",
+    "locationName": null,
+    "hashtags": [
+      "fyp",
+      "trend",
+      "berlinfoodies",
+      "waffleloversclub",
+      "berlinevent2026"
+    ],
+    "taggedHandles": [],
+    "text": "Join us this week Friday and Saturday for 1€\nWaffle with fruits\nfrom 12:00 to\n8pm#fyp #trend #berlinfoodies #waffleloversclub #berlinevent2026",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "67af1ad6-e884-46dc-bc19-24a37b07ba20",
+    "externalId": "7618488209823010081",
+    "url": "https://www.tiktok.com/@vvecafe/video/7618488209823010081",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-18T07:05:22.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:07.209Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "1€ waffle with fruits",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "waffles",
+          "fruit"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the event runs Friday and Saturday from 12:00 to 8pm",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": 12,
+        "unit": "minutes",
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:40:43.758Z",
+    "usage": {
+      "inputTokens": 5937,
+      "outputTokens": 781,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The post never names or tags the venue making the offer, so no place is listed and the 1€ waffle offer has subject none. It is a deal (a price limited to set days and hours); event is allowed because of 'Join us' and the event hashtag.",
+    "isPromotional": true,
+    "places": [],
+    "claims": [
+      {
+        "text": "Waffle with fruits for 1€ this week Friday and Saturday from 12:00 to 8pm",
+        "quote": "this week Friday and Saturday for 1€\nWaffle with fruits\nfrom 12:00 to\n8pm",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [
+          "Waffle with fruits"
+        ],
+        "amount": 1,
+        "unit": "money",
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.239Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.430Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

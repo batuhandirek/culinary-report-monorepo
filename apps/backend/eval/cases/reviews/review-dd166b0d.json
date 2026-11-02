@@ -1,0 +1,390 @@
+{
+  "id": "review-dd166b0d",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "dd166b0d-6fcd-4716-b0f1-7c2c3a3cc3b2",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25kaGNsZEVlVTVSY1VvM1EwOW9hM2cyYjA1T1RYYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "DREI.",
+    "venueId": "22eb4aa5-0587-49e0-bd55-f70f9ae60ee6",
+    "brand": "DREI.",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-16T10:57:40.484Z",
+    "stars": 3,
+    "text": "Sehr schönes und stilvoll eingerichtetes Café, die Inneneinrichtung hat uns wirklich gut gefallen und man fühlt sich direkt wohl. Auch der Service war super freundlich und aufmerksam. ☺️\n\nDer Kaffee war für meinen Geschmack leider etwas zu stark und konnte mich geschmacklich nicht ganz überzeugen. Dafür sahen die Shakes und die Açaí Bowls am Nebentisch richtig lecker und frisch aus – die werden beim nächsten Besuch definitiv probiert! Insgesamt ein schönes Café mit toller Atmosphäre und sehr gutem Service.",
+    "textTranslated": "A very beautiful and stylishly furnished café; we really loved the interior design and felt right at home. The service was also incredibly friendly and attentive. ☺️\n\nUnfortunately, the coffee was a bit too strong for my taste and didn't quite win me over. However, the shakes and açaí bowls at the next table looked absolutely delicious and fresh – I'll definitely try them next time! Overall, a lovely café with a great atmosphere and excellent service."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:02:57.684Z",
+    "claims": [
+      {
+        "text": "a very beautiful and stylishly furnished café",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "loved the interior design",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "felt right at home",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was incredibly friendly and attentive",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coffee was a bit too strong",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the coffee didn't quite win me over",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "coffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the shakes looked absolutely delicious and fresh",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "shake"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the açaí bowls looked absolutely delicious and fresh",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "acai bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "will definitely try them next time",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a lovely café",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a great atmosphere",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "excellent service",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:55.282Z",
+    "usage": {
+      "inputTokens": 5280,
+      "outputTokens": 2770,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the Shakes/Açaí Bowls only looked good (presentation, freshness also fine) and the reviewer didn't eat them; 'will try them next visit' read as a will-be-back verdict. The interior-liked and coffee-not-convincing claims overlap their neighbours, so they are optional.",
+    "claims": [
+      {
+        "text": "the café is very beautiful and stylishly furnished",
+        "quote": "Sehr schönes und stilvoll eingerichtetes Café",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they really liked the interior design",
+        "quote": "die Inneneinrichtung hat uns wirklich gut gefallen",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "you feel right at home immediately",
+        "quote": "man fühlt sich direkt wohl",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was super friendly",
+        "quote": "der Service war super freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was attentive",
+        "quote": "aufmerksam",
+        "sentiment": "positive",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Kaffee was a bit too strong for their taste",
+        "quote": "Der Kaffee war für meinen Geschmack leider etwas zu stark",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Kaffee's taste didn't quite convince them",
+        "quote": "konnte mich geschmacklich nicht ganz überzeugen",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "Kaffee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Shakes and Açaí Bowls at the next table looked really delicious and fresh",
+        "quote": "sahen die Shakes und die Açaí Bowls am Nebentisch richtig lecker und frisch aus",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Shakes",
+          "Açaí Bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they will definitely try the Shakes and Açaí Bowls on their next visit",
+        "quote": "die werden beim nächsten Besuch definitiv probiert",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Shakes",
+          "Açaí Bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "overall a lovely café",
+        "quote": "Insgesamt ein schönes Café",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the café has a great atmosphere",
+        "quote": "mit toller Atmosphäre",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the café has very good service",
+        "quote": "sehr gutem Service",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.219Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.416Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

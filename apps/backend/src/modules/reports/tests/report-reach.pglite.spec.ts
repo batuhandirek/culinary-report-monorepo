@@ -13,6 +13,7 @@ import { accountSnapshot } from 'src/modules/social/tests/factories/social-accou
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
 import { SocialAccountService } from 'src/modules/social/services/social-account.service.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Review, ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import {
@@ -27,6 +28,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import type { ReportData } from '../interfaces/report-data.interface.js';
 import { ReportReachService } from '../services/report-reach.service.js';
 import { reachPromptInput, reviewPlatforms, summarizeComments } from '../util/reach.js';
+import { said } from './factories/statement-like.factory.js';
 
 describe('Report reach sections (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -95,8 +97,6 @@ describe('Report reach sections (pglite)', () => {
 			venue,
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Nice.',
 		});
 		const comment = (n: number, intent: PostCommentIntentEnum, question?: string, likes = 0) =>
 			em.create(PostComment, {
@@ -239,14 +239,16 @@ describe('Report reach sections (pglite)', () => {
 	});
 
 	it('names where locals and visitors disagree, from five written reviews on each side', () => {
+		const index = seedIndex();
+		// Claims filed at the roots themselves
 		const review = (platform: 'google' | 'tripadvisor', praise: string[], complaints: string[]) => ({
 			platform,
 			stars: 4,
 			text: 'text',
-			feedback: [
-				...praise.map(topic => ({ sentiment: 'positive', topic, detail: topic })),
-				...complaints.map(topic => ({ sentiment: 'negative', topic, detail: topic })),
-			],
+			statements: said(index, [
+				...praise.map(aspect => ({ text: aspect, sentiment: 'positive' as const, aspect })),
+				...complaints.map(aspect => ({ text: aspect, sentiment: 'negative' as const, aspect })),
+			]),
 		});
 		const reviews = [
 			...Array.from({ length: 5 }, (_, i) => review('google', ['food'], i < 3 ? ['price'] : [])),

@@ -251,6 +251,7 @@ export enum AdminBacklogRunOutputDtoStopReasonEnum {
 	Budget = 'budget',
 	Allowance = 'allowance',
 	Shutdown = 'shutdown',
+	Waiting = 'waiting',
 }
 
 export interface AdminBlogEntryAuthorOutputDto {
@@ -319,8 +320,6 @@ export interface AdminBranchReviewOutputDto {
 		name: string;
 		street?: string;
 	};
-	/** What it says, as feedback rows (none before it is analysed) */
-	feedback: FeedbackPointOutputDto[];
 	id: string;
 	language?: string;
 	likes: number;
@@ -334,8 +333,9 @@ export interface AdminBranchReviewOutputDto {
 	publishedAt: string;
 	replyDraft?: string;
 	reviewId: string;
-	sentiment?: AdminBranchReviewOutputDtoSentimentEnum;
 	stars?: number;
+	/** What it says, one claim per row with its parts (none before it is analysed) */
+	statements: StatementOutputDto[];
 	text?: string;
 	textTranslated?: string;
 }
@@ -343,13 +343,6 @@ export interface AdminBranchReviewOutputDto {
 export enum AdminBranchReviewOutputDtoPlatformEnum {
 	Google = 'google',
 	Tripadvisor = 'tripadvisor',
-}
-
-export enum AdminBranchReviewOutputDtoSentimentEnum {
-	Mixed = 'mixed',
-	Positive = 'positive',
-	Negative = 'negative',
-	Neutral = 'neutral',
 }
 
 export interface AdminBrandAccountsInputDto {
@@ -440,7 +433,7 @@ export interface AdminBrandReviewTagOutputDto {
 	count: number;
 	title: string;
 	/**
-	 * The food topic it names, where the feedback rows of that dish point (a dish name's decided
+	 * The food topic it names, where the wording points (a term's decided
 	 * topic, else a whole-name match); absent for what is no food ("waiting time", "cash only")
 	 */
 	topic?: {
@@ -599,11 +592,11 @@ export enum AdminBrandTodoOutputDtoTabEnum {
 	Posts = 'posts',
 	Reports = 'reports',
 	Branches = 'branches',
+	Signals = 'signals',
 	Reviews = 'reviews',
 	Settings = 'settings',
 	Competitors = 'competitors',
 	Overview = 'overview',
-	Signals = 'signals',
 	Sales = 'sales',
 }
 
@@ -625,9 +618,10 @@ export interface AdminBrandTopPostOutputDto {
 	platform: AdminBrandTopPostOutputDtoPlatformEnum;
 	/** @format date-time */
 	postedAt: string;
+	/** Worked out from its claims about the brand */
 	sentiment: string;
-	/** What the post said about the brand (the mention's summary) */
-	summary: string;
+	/** What the post said about the brand, its own words where kept (its first claims); absent when it has none */
+	summary?: string;
 	url: string;
 	views: number;
 }
@@ -675,6 +669,13 @@ export interface AdminBuildReportInputDto {
 	configId?: string;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month: string;
+}
+
+/** An admin's decision: the topics the wording is (`topicKeys`, empty = none), or `auto` for the name match and the agent */
+export interface AdminChangeTermInputDto {
+	auto?: boolean;
+	/** @maxItems 10 */
+	topicKeys?: string[];
 }
 
 export interface AdminChangeVenueTopicInputDto {
@@ -921,6 +922,29 @@ export enum AdminCitySourceYieldOutputDtoKindEnum {
 	InstagramAccount = 'instagram_account',
 }
 
+export interface AdminClusterClaimOutputDto {
+	brandName?: string;
+	id: number;
+	sentiment?: AdminClusterClaimOutputDtoSentimentEnum;
+	sourceKind: AdminClusterClaimOutputDtoSourceKindEnum;
+	text: string;
+}
+
+export enum AdminClusterClaimOutputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
+export enum AdminClusterClaimOutputDtoSourceKindEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+}
+
 /** A whole brand on the competition list. */
 export interface AdminCompetitorBrandOutputDto {
 	/** Its open branches */
@@ -1142,6 +1166,7 @@ export enum AdminCreateTopicInputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -1394,8 +1419,8 @@ export interface AdminDataStepOutputDto {
 export enum AdminDataStepOutputDtoStateEnum {
 	Failed = 'failed',
 	Queued = 'queued',
-	Running = 'running',
 	Skipped = 'skipped',
+	Running = 'running',
 	Succeeded = 'succeeded',
 }
 
@@ -1439,47 +1464,348 @@ export enum AdminDataStepOutputDtoStepEnum {
 	MONTHLY = 'MONTHLY',
 }
 
-export interface AdminDishNameOutputDto {
-	/** Who decided: `match` (the name is the topic or one of its other names), `ai`, `admin`; absent while undecided */
-	decidedBy?: AdminDishNameOutputDtoDecidedByEnum;
-	foodTopic?: {
-		key: string;
-		label: string;
+/** A post and every step of the pipeline over it: the gate, agent A's places and claims, agent B's parts */
+export interface AdminDigestedPostOutputDto {
+	/** Who posted it: the account, its creator, and the brand when it is a brand's own. */
+	account?: AdminPostAccountOutputDto;
+	/** @format date-time */
+	analysedAt?: string;
+	analysisTokens?: number;
+	author?: string;
+	authorFans?: number;
+	/** A city as a filter or a select offers it. */
+	city: AdminCityRefOutputDto;
+	comments: number;
+	externalId: string;
+	/** @format date-time */
+	gatedAt?: string;
+	hashtagLinks: AdminPostHashtagOutputDto[];
+	id: string;
+	isAd: boolean;
+	/** Paid, gifted or invited, as agent A read it */
+	isPromotional?: boolean;
+	likes: number;
+	locationName?: string;
+	mentions: AdminDigestionMentionOutputDto[];
+	platform: AdminDigestedPostOutputDtoPlatformEnum;
+	/** @format date-time */
+	postedAt: string;
+	saves: number;
+	shares: number;
+	skipReason?: AdminDigestedPostOutputDtoSkipReasonEnum;
+	/** Every claim it makes, in order: about one of its places (`mention`), the city or nothing */
+	statements: AdminDigestionStatementOutputDto[];
+	subtitles?: string;
+	subtitlesLanguage?: string;
+	taggedHandles?: string[];
+	/** The caption; a blog article's title and text */
+	text?: string;
+	url: string;
+	views: number;
+}
+
+export enum AdminDigestedPostOutputDtoPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
+export enum AdminDigestedPostOutputDtoSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
+}
+
+/** A review and what agent A and B made of it; its place is its venue */
+export interface AdminDigestedReviewOutputDto {
+	/** @format date-time */
+	analysedAt?: string;
+	id: string;
+	language?: string;
+	likes: number;
+	ownerResponse?: string;
+	platform: AdminDigestedReviewOutputDtoPlatformEnum;
+	/** @format date-time */
+	publishedAt: string;
+	reviewId: string;
+	stars?: number;
+	statements: AdminDigestionStatementOutputDto[];
+	text?: string;
+	textTranslated?: string;
+	venue: AdminDigestionVenueOutputDto;
+}
+
+export enum AdminDigestedReviewOutputDtoPlatformEnum {
+	Google = 'google',
+	Tripadvisor = 'tripadvisor',
+}
+
+export interface AdminDigestionInputDto {
+	/**
+	 * A post's city, a review's venue's
+	 * @format uuid
+	 */
+	cityId?: string;
+	/** Reviews or posts; both when absent */
+	kind?: AdminDigestionInputDtoKindEnum;
+	/** @min 1 */
+	page: number;
+	platform?: AdminDigestionInputDtoPlatformEnum;
+	/**
+	 * Words in the source: a caption, transcript or article; a review's text or translation
+	 * @maxLength 200
+	 */
+	q?: string;
+	/** @min 1 */
+	size: number;
+	/** Posts the gate skipped for this reason (implies `skipped`) */
+	skipReason?: AdminDigestionInputDtoSkipReasonEnum;
+	status?: AdminDigestionInputDtoStatusEnum;
+}
+
+/** Reviews or posts; both when absent */
+export enum AdminDigestionInputDtoKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+export enum AdminDigestionInputDtoPlatformEnum {
+	Blog = 'blog',
+	Google = 'google',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Tripadvisor = 'tripadvisor',
+}
+
+/** Posts the gate skipped for this reason (implies `skipped`) */
+export enum AdminDigestionInputDtoSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
+}
+
+export enum AdminDigestionInputDtoStatusEnum {
+	Skipped = 'skipped',
+	Unread = 'unread',
+	Digested = 'digested',
+}
+
+/** A place agent A took from a post, and what matching made of it */
+export interface AdminDigestionMentionOutputDto {
+	/** The brand it was matched to */
+	brand?: {
+		id: string;
+		name: string;
 	};
+	city?: string;
+	cuisine?: string;
 	id: number;
-	key: string;
-	name: string;
-	/** The city's feedback rows naming it */
-	notes: number;
-	/** The agent's label for a topic that would fit, when none does */
-	suggestion?: string;
+	isNewOpening: boolean;
+	locationHint?: string;
+	matchMethod?: AdminDigestionMentionOutputDtoMatchMethodEnum;
+	matchNote?: string;
+	matchScore?: number;
+	/** @format date-time */
+	matchedAt?: string;
+	/**
+	 * When a re-read of the post no longer named it while it was matched: confirm (link it again) or ignore it
+	 * @format date-time
+	 */
+	unconfirmedAt?: string;
+	/** The branch, when the post says which; a chain's mention may have the brand only */
+	venue?: AdminVenueRefOutputDto;
+	venueName: string;
+	visited: boolean;
 }
 
-/** Who decided: `match` (the name is the topic or one of its other names), `ai`, `admin`; absent while undecided */
-export enum AdminDishNameOutputDtoDecidedByEnum {
-	Match = 'match',
-	Admin = 'admin',
-	Ai = 'ai',
+export enum AdminDigestionMentionOutputDtoMatchMethodEnum {
+	Exact = 'exact',
+	Fuzzy = 'fuzzy',
+	Llm = 'llm',
+	None = 'none',
+	OtherCity = 'other_city',
+	Manual = 'manual',
+	Ignored = 'ignored',
 }
 
-export interface AdminDishNameSuggestionOutputDto {
-	examples: string[];
-	label: string;
-	names: number;
-	notes: number;
+export interface AdminDigestionOutputDto {
+	items: AdminDigestionRowOutputDto[];
+	page: number;
+	pageSize: number;
+	totalItems: number;
 }
 
-export interface AdminDishNamesOutputDto {
-	names: AdminDishNameOutputDto[];
-	suggestions: AdminDishNameSuggestionOutputDto[];
-	summary: {
-		linkedNames: number;
-		linkedNotes: number;
-		names: number;
-		notes: number;
-		pendingNames: number;
+/** A post as a Digestion row shows it */
+export interface AdminDigestionPostRowOutputDto {
+	account?: {
+		creator: {
+			id: string;
+			name: string;
+		};
+		handle: string;
+		id: string;
 	};
-	total: number;
+	/** @format date-time */
+	analysedAt?: string;
+	author?: string;
+	/** A city as a filter or a select offers it. */
+	city: AdminCityRefOutputDto;
+	/** @format date-time */
+	gatedAt?: string;
+	id: string;
+	isPromotional?: boolean;
+	platform: AdminDigestionPostRowOutputDtoPlatformEnum;
+	/** @format date-time */
+	postedAt: string;
+	skipReason?: AdminDigestionPostRowOutputDtoSkipReasonEnum;
+	url: string;
+}
+
+export enum AdminDigestionPostRowOutputDtoPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
+export enum AdminDigestionPostRowOutputDtoSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
+}
+
+/** A review as a Digestion row shows it */
+export interface AdminDigestionReviewRowOutputDto {
+	/** @format date-time */
+	analysedAt?: string;
+	id: string;
+	platform: AdminDigestionReviewRowOutputDtoPlatformEnum;
+	/** @format date-time */
+	publishedAt: string;
+	stars?: number;
+	venue: AdminDigestionVenueOutputDto;
+}
+
+export enum AdminDigestionReviewRowOutputDtoPlatformEnum {
+	Google = 'google',
+	Tripadvisor = 'tripadvisor',
+}
+
+/** One digested source, collapsed: exactly one of `review` / `post` */
+export interface AdminDigestionRowOutputDto {
+	/** Its statements, dish-only ones included */
+	claims: number;
+	/** The start of its text (a post's caption, else its transcript), whitespace folded */
+	excerpt?: string;
+	kind: AdminDigestionRowOutputDtoKindEnum;
+	/** The places agent A took from it (a post's mentions); 0 for a review, whose place is its venue */
+	places: number;
+	/** A post as a Digestion row shows it */
+	post?: AdminDigestionPostRowOutputDto;
+	/** A review as a Digestion row shows it */
+	review?: AdminDigestionReviewRowOutputDto;
+	/** A source's claims by sentiment; `unread` is those agent B has not read yet */
+	sentiments: AdminDigestionTallyOutputDto;
+	status: AdminDigestionRowOutputDtoStatusEnum;
+}
+
+export enum AdminDigestionRowOutputDtoKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+export enum AdminDigestionRowOutputDtoStatusEnum {
+	Skipped = 'skipped',
+	Unread = 'unread',
+	Digested = 'digested',
+}
+
+/** A claim as the Digestion page shows it: with when agent B read it and the place it is about */
+export interface AdminDigestionStatementOutputDto {
+	/** The number it states: minutes for a wait, the price for a price */
+	amount?: number;
+	id: number;
+	/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
+	kind?: AdminDigestionStatementOutputDtoKindEnum;
+	/** The post's place it is about (`subject` place on a post); absent on a review's claim */
+	mention?: {
+		id: number;
+	};
+	parts: StatementPartOutputDto[];
+	/**
+	 * When agent B read it; absent = not read by agent B yet
+	 * @format date-time
+	 */
+	partsAt?: string;
+	/** The source's own words for it, in its language; absent when agent A gave none that is verbatim */
+	quote?: string;
+	/** Absent until agent B read it, and on a Google tag */
+	sentiment?: AdminDigestionStatementOutputDtoSentimentEnum;
+	subject: AdminDigestionStatementOutputDtoSubjectEnum;
+	/** The claim, in English; absent on a dish-only statement */
+	text?: string;
+	unit?: AdminDigestionStatementOutputDtoUnitEnum;
+}
+
+/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
+export enum AdminDigestionStatementOutputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+}
+
+/** Absent until agent B read it, and on a Google tag */
+export enum AdminDigestionStatementOutputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
+export enum AdminDigestionStatementOutputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export enum AdminDigestionStatementOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
+/** A source's claims by sentiment; `unread` is those agent B has not read yet */
+export interface AdminDigestionTallyOutputDto {
+	mixed: number;
+	negative: number;
+	neutral: number;
+	positive: number;
+	unread: number;
+}
+
+export interface AdminDigestionVenueOutputDto {
+	brand: {
+		id: string;
+		name: string;
+	};
+	/** A city as a filter or a select offers it. */
+	city: AdminCityRefOutputDto;
+	district?: string;
+	id: string;
+	name: string;
+	street?: string;
 }
 
 /** One dish's search in one district ("pasta Mitte Berlin"). */
@@ -1530,6 +1856,454 @@ export interface AdminDismissBrandInputDto {
 	name: string;
 }
 
+export interface AdminExploreBreakdownInputDto {
+	/** @format uuid */
+	brandId?: string;
+	by: AdminExploreBreakdownInputDtoByEnum;
+	/** @format uuid */
+	cityId: string;
+	/** @maxLength 120 */
+	district?: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	from?: string;
+	/** One kind, or `unread`: agent B gave none yet */
+	kind?: AdminExploreBreakdownInputDtoKindEnum;
+	/** @maxLength 200 */
+	node?: string;
+	/**
+	 * The brands of one kind of place (their main food in the city), a topic's key
+	 * @maxLength 80
+	 */
+	place?: string;
+	side?: AdminExploreBreakdownInputDtoSideEnum;
+	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	source?: AdminExploreBreakdownInputDtoSourceEnum;
+	subject?: AdminExploreBreakdownInputDtoSubjectEnum;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	to?: string;
+	/** @format uuid */
+	venueId?: string;
+	/** @maxLength 1000 */
+	with?: string;
+}
+
+export enum AdminExploreBreakdownInputDtoByEnum {
+	Brand = 'brand',
+	Kind = 'kind',
+	Source = 'source',
+	Subject = 'subject',
+	Month = 'month',
+	District = 'district',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+	Food = 'food',
+	Place = 'place',
+	Side = 'side',
+}
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum AdminExploreBreakdownInputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum AdminExploreBreakdownInputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum AdminExploreBreakdownInputDtoSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum AdminExploreBreakdownInputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export interface AdminExploreBreakdownOutputDto {
+	by: AdminExploreBreakdownOutputDtoByEnum;
+	more: number;
+	rows: AdminExploreBreakdownRowOutputDto[];
+	under?: AdminExploreRefOutputDto;
+}
+
+export enum AdminExploreBreakdownOutputDtoByEnum {
+	Brand = 'brand',
+	Kind = 'kind',
+	Source = 'source',
+	Subject = 'subject',
+	Month = 'month',
+	District = 'district',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+	Food = 'food',
+	Place = 'place',
+	Side = 'side',
+}
+
+export interface AdminExploreBreakdownRowOutputDto {
+	complaints: number;
+	detail?: string;
+	key?: string;
+	label: string;
+	praise: number;
+	/** Reviews, posts and other dated sources raising it, each once */
+	sources: number;
+	/** Google's counts of those tags, summed */
+	tagMentions: number;
+	/** Places whose Google tags name it (all-time) */
+	tagVenues: number;
+}
+
+export interface AdminExploreClaimsInputDto {
+	/** @format uuid */
+	brandId?: string;
+	/** @format uuid */
+	cityId: string;
+	/** @maxLength 120 */
+	district?: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	from?: string;
+	/** One kind, or `unread`: agent B gave none yet */
+	kind?: AdminExploreClaimsInputDtoKindEnum;
+	/**
+	 * A phrase: closest in meaning first; claims without a vector are left out
+	 * @maxLength 200
+	 */
+	like?: string;
+	/** @maxLength 200 */
+	node?: string;
+	/** @min 1 */
+	page: number;
+	/**
+	 * The brands of one kind of place (their main food in the city), a topic's key
+	 * @maxLength 80
+	 */
+	place?: string;
+	/**
+	 * Words in the claim
+	 * @maxLength 200
+	 */
+	q?: string;
+	side?: AdminExploreClaimsInputDtoSideEnum;
+	/** @min 1 */
+	size: number;
+	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	source?: AdminExploreClaimsInputDtoSourceEnum;
+	subject?: AdminExploreClaimsInputDtoSubjectEnum;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	to?: string;
+	/** @format uuid */
+	venueId?: string;
+	/** @maxLength 1000 */
+	with?: string;
+}
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum AdminExploreClaimsInputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum AdminExploreClaimsInputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum AdminExploreClaimsInputDtoSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum AdminExploreClaimsInputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export interface AdminExploreGroupOutputDto {
+	claims: number;
+	complaints: number;
+	like: string;
+	praise: number;
+	samples: {
+		brandName?: string;
+		id: number;
+		sentiment?: AdminExploreGroupOutputDtoSentimentEnum;
+		text: string;
+	}[];
+	sources: number;
+}
+
+export enum AdminExploreGroupOutputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
+export interface AdminExploreGroupsOutputDto {
+	considered: number;
+	embedded: number;
+	groups: AdminExploreGroupOutputDto[];
+	more: number;
+	notEmbedded: number;
+}
+
+export interface AdminExploreHeadOutputDto {
+	amounts: {
+		max: number;
+		median: number;
+		min: number;
+		sources: number;
+		unit: AdminExploreHeadOutputDtoUnitEnum;
+	}[];
+	base: {
+		posts: number;
+		reviews: number;
+		sources: number;
+	};
+	/** The brand and branch the scope is narrowed to, by name */
+	brand?: {
+		id: string;
+		name: string;
+	};
+	brands: number;
+	change: {
+		postShare: number | null;
+		reviewShare: number | null;
+		share: number | null;
+	};
+	claims: number;
+	from: string;
+	months: AdminExploreMonthOutputDto[];
+	node?: AdminExploreNodeOutputDto;
+	others: number;
+	place?: {
+		key: string;
+		label: string;
+	};
+	postShare: number | null;
+	posts: number;
+	reviewShare: number | null;
+	reviews: number;
+	share: number | null;
+	sides: {
+		side: AdminExploreHeadOutputDtoSideEnum;
+		sources: number;
+	}[];
+	sources: number;
+	tagMentions: number;
+	tagVenues: number;
+	to: string;
+	venue?: {
+		id: string;
+		name: string;
+	};
+	with: AdminExploreNodeOutputDto[];
+}
+
+export enum AdminExploreHeadOutputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+export enum AdminExploreHeadOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
+/**
+ * One Explore view, all of it in the URL: a city's claims, narrowed to a brand, a branch or a
+ * district or the brands of one kind of place, in the months `from`..`to` (default the six up to the last whole month); about `node`
+ * (a topic's key, its descendants included, or `term:<key>` for a wording) and every node of
+ * `with` (comma-separated, the same forms); and by side, kind, source and subject
+ */
+export interface AdminExploreInputDto {
+	/** @format uuid */
+	brandId?: string;
+	/** @format uuid */
+	cityId: string;
+	/** @maxLength 120 */
+	district?: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	from?: string;
+	/** One kind, or `unread`: agent B gave none yet */
+	kind?: AdminExploreInputDtoKindEnum;
+	/** @maxLength 200 */
+	node?: string;
+	/**
+	 * The brands of one kind of place (their main food in the city), a topic's key
+	 * @maxLength 80
+	 */
+	place?: string;
+	side?: AdminExploreInputDtoSideEnum;
+	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	source?: AdminExploreInputDtoSourceEnum;
+	subject?: AdminExploreInputDtoSubjectEnum;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	to?: string;
+	/** @format uuid */
+	venueId?: string;
+	/** @maxLength 1000 */
+	with?: string;
+}
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum AdminExploreInputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum AdminExploreInputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum AdminExploreInputDtoSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum AdminExploreInputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export interface AdminExploreMonthOutputDto {
+	month: string;
+	postShare: number | null;
+	posts: number;
+	reviewShare: number | null;
+	reviews: number;
+	share: number | null;
+	sources: number;
+}
+
+export interface AdminExploreNodeOutputDto {
+	children: AdminExploreRefOutputDto[];
+	hint?: string;
+	/** A topic's kind (aspect, dish, cuisine, …), or `term` */
+	kind: string;
+	label: string;
+	path: AdminExploreRefOutputDto[];
+	/** A topic's key or `term:<key>` */
+	ref: string;
+	/** A wording's topics */
+	topics: AdminExploreRefOutputDto[];
+}
+
+export interface AdminExploreRefOutputDto {
+	label: string;
+	/** A topic's key or `term:<key>` */
+	ref: string;
+}
+
+export interface AdminExploreTermOutputDto {
+	label: string;
+	/** A topic's key or `term:<key>` */
+	ref: string;
+	topics: string[];
+	uses: number;
+}
+
+export interface AdminExploreTermsInputDto {
+	/**
+	 * @minLength 1
+	 * @maxLength 100
+	 */
+	q: string;
+}
+
+export interface AdminExploreTermsOutputDto {
+	terms: AdminExploreTermOutputDto[];
+}
+
+export interface AdminExploreTreeNodeOutputDto {
+	complaints: number;
+	key: string;
+	kind: string;
+	label: string;
+	parentKey?: string;
+	praise: number;
+	/** Reviews, posts and other dated sources raising it, each once */
+	sources: number;
+	/** Google's counts of those tags, summed */
+	tagMentions: number;
+	/** Places whose Google tags name it (all-time) */
+	tagVenues: number;
+}
+
+export interface AdminExploreTreeOutputDto {
+	nodes: AdminExploreTreeNodeOutputDto[];
+}
+
 export interface AdminExportUsersCsvInputDto {
 	roles?: AdminExportUsersCsvInputDtoRolesEnum[];
 }
@@ -1540,33 +2314,6 @@ export enum AdminExportUsersCsvInputDtoRolesEnum {
 	Promoter = 'promoter',
 	User = 'user',
 	VenueOwner = 'venue_owner',
-}
-
-export interface AdminFileFeedbackThemesInputDto {
-	/**
-	 * Only this city's points
-	 * @format uuid
-	 */
-	cityId?: string;
-	/**
-	 * Points filed this call (newest month first), default 600
-	 * @min 1
-	 * @max 5000
-	 */
-	limit?: number;
-}
-
-export interface AdminFileFeedbackThemesOutputDto {
-	/** Points filed this call */
-	points: number;
-	/** What `realign` changed first: points linked to their aspect row, points of a gone aspect filed at its root, topics moved to the aspect's root */
-	realigned: {
-		linked: number;
-		movedToRoot: number;
-		topicsMoved: number;
-	};
-	/** Points still without a theme (of the city, when given) */
-	remaining: number;
 }
 
 export interface AdminFillCityDaysInputDto {
@@ -1681,43 +2428,6 @@ export interface AdminGetDataCoverageInputDto {
 	months?: number;
 }
 
-export interface AdminGetDishNamesInputDto {
-	/** @format uuid */
-	cityId: string;
-	/**
-	 * @min 1
-	 * @max 200
-	 */
-	limit?: number;
-	/** @min 0 */
-	offset?: number;
-	/**
-	 * Part of the name
-	 * @maxLength 100
-	 */
-	q?: string;
-	/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
-	status?: AdminGetDishNamesInputDtoStatusEnum;
-	/**
-	 * Only the names the agent suggested this topic for
-	 * @maxLength 100
-	 */
-	suggestion?: string;
-	/**
-	 * Only the names of this topic
-	 * @maxLength 64
-	 */
-	topicKey?: string;
-}
-
-/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
-export enum AdminGetDishNamesInputDtoStatusEnum {
-	All = 'all',
-	Pending = 'pending',
-	Unlinked = 'unlinked',
-	Linked = 'linked',
-}
-
 export interface AdminGetDishSearchesInputDto {
 	/** @format uuid */
 	cityId: string;
@@ -1747,51 +2457,39 @@ export interface AdminGetSearchInterestInputDto {
 	month: string;
 }
 
-export interface AdminGetThemeInsightInputDto {
-	/**
-	 * Only this brand's sentences
-	 * @format uuid
-	 */
-	brandId?: string;
+export interface AdminGetTermsInputDto {
 	/** @format uuid */
 	cityId: string;
 	/**
-	 * Only the sentences about one dish: a `dishes` row's key (`topic:<key>` or `dish:<key>`)
-	 * @maxLength 200
-	 */
-	dish?: string;
-	/**
-	 * Only the brands of one kind of food: a food topic's key
-	 * @maxLength 64
-	 */
-	food?: string;
-	/** Only reviews, or only posts */
-	kind?: AdminGetThemeInsightInputDtoKindEnum;
-	/**
-	 * 50 when absent
 	 * @min 1
 	 * @max 200
 	 */
 	limit?: number;
-	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
-	month: string;
 	/** @min 0 */
 	offset?: number;
-	/** Complaints when absent */
-	side?: AdminGetThemeInsightInputDtoSideEnum;
+	/**
+	 * A search in the wording or its key
+	 * @maxLength 80
+	 */
+	q?: string;
+	status?: AdminGetTermsInputDtoStatusEnum;
+	/**
+	 * Only terms the agent suggested this label for
+	 * @maxLength 80
+	 */
+	suggestion?: string;
+	/**
+	 * Only terms linked to this topic
+	 * @maxLength 80
+	 */
+	topicKey?: string;
 }
 
-/** Only reviews, or only posts */
-export enum AdminGetThemeInsightInputDtoKindEnum {
-	Post = 'post',
-	Review = 'review',
-}
-
-/** Complaints when absent */
-export enum AdminGetThemeInsightInputDtoSideEnum {
-	Praise = 'praise',
-	Complaints = 'complaints',
-	Changes = 'changes',
+export enum AdminGetTermsInputDtoStatusEnum {
+	All = 'all',
+	Pending = 'pending',
+	Unlinked = 'unlinked',
+	Linked = 'linked',
 }
 
 export interface AdminGetThemeInsightsInputDto {
@@ -2285,7 +2983,11 @@ export interface AdminListPostsInputDto {
 	q?: string;
 	/** @min 1 */
 	size: number;
+	/** Only posts the gate didn't digest, for this reason */
+	skipReason?: AdminListPostsInputDtoSkipReasonEnum;
 	sort?: AdminListPostsInputDtoSortEnum;
+	/** Only posts with a matched mention a re-read no longer named (`Mention.unconfirmedAt`): to confirm or ignore. */
+	unconfirmedOnly?: boolean;
 	/** Only posts with a mention nothing matched (`none`): to link by hand. */
 	unmatchedOnly?: boolean;
 	/**
@@ -2299,6 +3001,16 @@ export enum AdminListPostsInputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
 	Blog = 'blog',
+}
+
+/** Only posts the gate didn't digest, for this reason */
+export enum AdminListPostsInputDtoSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
 }
 
 export enum AdminListPostsInputDtoSortEnum {
@@ -2597,6 +3309,8 @@ export interface AdminLlmBacklogOutputDto {
 }
 
 export interface AdminLlmBacklogsOutputDto {
+	/** `LLM_BACKLOG_ALLOW_PAID`: the backlogs may use Claude, not only the free allowance */
+	allowsPaid: boolean;
 	/** `LLM_BACKLOG_DAILY_TOKENS`: what a day's runs may spend over every backlog */
 	dailyTokens: number;
 	items: AdminLlmBacklogOutputDto[];
@@ -2696,15 +3410,13 @@ export interface AdminMentionOutputDto {
 	};
 	city?: string;
 	cuisine?: string;
-	/** What it says, as feedback rows */
-	feedback: FeedbackPointOutputDto[];
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionOutputDtoMatchMethodEnum;
 	matchNote?: string;
 	matchScore?: number;
-	sentiment: AdminMentionOutputDtoSentimentEnum;
-	summary: string;
+	/** What the post says about this place, one claim per row with its parts (its sentiment is worked out from them) */
+	statements: StatementOutputDto[];
 	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
 	topics?: {
 		source: AdminMentionOutputDtoSourceEnum;
@@ -2713,6 +3425,11 @@ export interface AdminMentionOutputDto {
 			label: string;
 		};
 	}[];
+	/**
+	 * When a re-read of the post no longer named it while it was matched: confirm (link it again) or ignore it
+	 * @format date-time
+	 */
+	unconfirmedAt?: string;
 	/** The branch, when the post says which; a chain's mention may have the brand only */
 	venue?: AdminVenueRefOutputDto;
 	venueName: string;
@@ -2729,13 +3446,6 @@ export enum AdminMentionOutputDtoMatchMethodEnum {
 	Ignored = 'ignored',
 }
 
-export enum AdminMentionOutputDtoSentimentEnum {
-	Mixed = 'mixed',
-	Positive = 'positive',
-	Negative = 'negative',
-	Neutral = 'neutral',
-}
-
 export enum AdminMentionOutputDtoSourceEnum {
 	Category = 'category',
 	Cuisine = 'cuisine',
@@ -2749,8 +3459,6 @@ export interface AdminMentionWithPostOutputDto {
 	};
 	city?: string;
 	cuisine?: string;
-	/** What it says, as feedback rows */
-	feedback: FeedbackPointOutputDto[];
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionWithPostOutputDtoMatchMethodEnum;
@@ -2758,8 +3466,8 @@ export interface AdminMentionWithPostOutputDto {
 	matchScore?: number;
 	/** Construct a type with the properties of T except for those in type K. */
 	post: OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount;
-	sentiment: AdminMentionWithPostOutputDtoSentimentEnum;
-	summary: string;
+	/** What the post says about this place, one claim per row with its parts (its sentiment is worked out from them) */
+	statements: StatementOutputDto[];
 	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
 	topics?: {
 		source: AdminMentionWithPostOutputDtoSourceEnum;
@@ -2768,6 +3476,11 @@ export interface AdminMentionWithPostOutputDto {
 			label: string;
 		};
 	}[];
+	/**
+	 * When a re-read of the post no longer named it while it was matched: confirm (link it again) or ignore it
+	 * @format date-time
+	 */
+	unconfirmedAt?: string;
 	/** The branch, when the post says which; a chain's mention may have the brand only */
 	venue?: AdminVenueRefOutputDto;
 	venueName: string;
@@ -2784,13 +3497,6 @@ export enum AdminMentionWithPostOutputDtoMatchMethodEnum {
 	Ignored = 'ignored',
 }
 
-export enum AdminMentionWithPostOutputDtoSentimentEnum {
-	Mixed = 'mixed',
-	Positive = 'positive',
-	Negative = 'negative',
-	Neutral = 'neutral',
-}
-
 export enum AdminMentionWithPostOutputDtoSourceEnum {
 	Category = 'category',
 	Cuisine = 'cuisine',
@@ -2803,6 +3509,37 @@ export interface AdminMergeCreatorAccountsInputDto {
 	 * @minItems 1
 	 */
 	accountIds: string[];
+}
+
+/** One group of claims and the suggested aspect for it; nothing of it is stored */
+export interface AdminMissingAspectOutputDto {
+	/** Most claims first; the city has no id */
+	brands: {
+		claims: number;
+		id?: string;
+		name: string;
+	}[];
+	claims: number;
+	/** Where its claims are filed now; no `aspect` = under none */
+	filedAt: {
+		aspect?: string;
+		claims: number;
+		label: string;
+	}[];
+	/** An existing aspect that already covers it (its claims should have been filed there) */
+	fits?: {
+		key: string;
+		label: string;
+	};
+	hint?: string;
+	/** At most four words; absent when naming it failed */
+	label?: string;
+	/** The phrase "See claims" searches by */
+	like: string;
+	/** The root aspect it belongs under */
+	root?: string;
+	samples: AdminClusterClaimOutputDto[];
+	sources: number;
 }
 
 export interface AdminNewsletterCountsInputDto {
@@ -3370,15 +4107,6 @@ export interface AdminProspectVenueOutputDto {
 	website?: string;
 }
 
-export interface AdminRecheckDishLinksOutputDto {
-	/** Dish-only rows the links had dropped, back */
-	dishOnlyRows: number;
-	/** Points sent back to the `feedback-dish-links` backlog */
-	points: number;
-	/** Points the backlog now has to look at */
-	remaining: number;
-}
-
 export interface AdminReflagOpeningsInputDto {
 	/**
 	 * Only posts extracted before this moment (before the flag existed)
@@ -3600,8 +4328,6 @@ export interface AdminReportTemplateOutputDto {
 export interface AdminReviewOutputDto {
 	/** @format date-time */
 	analysedAt?: string;
-	/** What it says, as feedback rows (none before it is analysed) */
-	feedback: FeedbackPointOutputDto[];
 	id: string;
 	language?: string;
 	likes: number;
@@ -3611,17 +4337,11 @@ export interface AdminReviewOutputDto {
 	/** @format date-time */
 	publishedAt: string;
 	reviewId: string;
-	sentiment?: AdminReviewOutputDtoSentimentEnum;
 	stars?: number;
+	/** What it says, one claim per row with its parts (none before it is analysed) */
+	statements: StatementOutputDto[];
 	text?: string;
 	textTranslated?: string;
-}
-
-export enum AdminReviewOutputDtoSentimentEnum {
-	Mixed = 'mixed',
-	Positive = 'positive',
-	Negative = 'negative',
-	Neutral = 'neutral',
 }
 
 export interface AdminRunLlmBacklogsOutputDto {
@@ -3673,6 +4393,7 @@ export enum AdminSearchInterestRowOutputDtoTopicKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -3765,6 +4486,11 @@ export interface AdminSocialPostListItemOutputDto {
 	externalId: string;
 	/** Every source that found it, the first find first */
 	foundBy: AdminPostFindOutputDto[];
+	/**
+	 * When the gate last judged it
+	 * @format date-time
+	 */
+	gatedAt?: string;
 	id: string;
 	isAd: boolean;
 	isPromotional?: boolean;
@@ -3776,6 +4502,8 @@ export interface AdminSocialPostListItemOutputDto {
 	postedAt: string;
 	saves: number;
 	shares: number;
+	/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+	skipReason?: AdminSocialPostListItemOutputDtoSkipReasonEnum;
 	text?: string;
 	url: string;
 	views: number;
@@ -3785,6 +4513,16 @@ export enum AdminSocialPostListItemOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
 	Blog = 'blog',
+}
+
+/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+export enum AdminSocialPostListItemOutputDtoSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
 }
 
 export interface AdminSocialPostOutputDto {
@@ -3813,6 +4551,13 @@ export interface AdminSocialPostOutputDto {
 	externalId: string;
 	/** Every source that found it, the first find first */
 	foundBy: AdminPostFindOutputDto[];
+	/**
+	 * When the gate last judged it
+	 * @format date-time
+	 */
+	gatedAt?: string;
+	/** What the post says about the city or about nothing in particular, in its order; its claims about a place are under each mention */
+	generalStatements: StatementOutputDto[];
 	/** The caption's hashtags, in its order, with the food topic or brand each names */
 	hashtagLinks: AdminPostHashtagOutputDto[];
 	id: string;
@@ -3826,6 +4571,8 @@ export interface AdminSocialPostOutputDto {
 	postedAt: string;
 	saves: number;
 	shares: number;
+	/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+	skipReason?: AdminSocialPostOutputDtoSkipReasonEnum;
 	/** Every read of its counts, oldest first, also those after they became final */
 	snapshots: AdminPostSnapshotOutputDto[];
 	subtitles?: string;
@@ -3840,6 +4587,16 @@ export enum AdminSocialPostOutputDtoPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
 	Blog = 'blog',
+}
+
+/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+export enum AdminSocialPostOutputDtoSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
 }
 
 /** The creator an account was split into. */
@@ -3914,6 +4671,274 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	MONTHLY = 'MONTHLY',
 }
 
+/** A city's month or quarter of claims no aspect fits, grouped by meaning ("Missing aspects") */
+export interface AdminStatementClustersInputDto {
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * One of `month` and `quarter`
+	 * @pattern ^[0-9]{4}-[0-9]{2}$
+	 */
+	month?: string;
+	/** @pattern ^[0-9]{4}-q[1-4]$ */
+	quarter?: string;
+	/**
+	 * A root aspect's key: only the claims filed at it; `none`: only those under no aspect
+	 * @maxLength 80
+	 */
+	root?: string;
+}
+
+export interface AdminStatementClustersOutputDto {
+	/** Claims with no aspect or only a root, with a vector */
+	claims: number;
+	clusters: AdminMissingAspectOutputDto[];
+	/** @format date-time */
+	computedAt: string;
+	/** Of them, the ones clustered */
+	considered: number;
+	months: string[];
+	/** Clusters past the floors beyond the ones listed */
+	more: number;
+	/** Claims with no aspect or only a root that have no vector yet */
+	notEmbedded: number;
+	root?: string;
+}
+
+/** One claim with where it was said: the review and its venue, or the post and the mention it is about */
+export interface AdminStatementRowOutputDto {
+	/** The number it states: minutes for a wait, the price for a price */
+	amount?: number;
+	/** Google's count for a tag; 1 otherwise */
+	count: number;
+	id: number;
+	/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
+	kind?: AdminStatementRowOutputDtoKindEnum;
+	/** The place a post's claim is about; absent for a claim about the city or nothing */
+	mention?: {
+		brand?: {
+			id: string;
+			name: string;
+		};
+		id: number;
+		venue?: {
+			id: string;
+			name: string;
+		};
+		venueName: string;
+	};
+	parts: StatementPartOutputDto[];
+	/** The post and its author's own brand, when the author is a brand's own account (a claim about that brand is its own post) */
+	post?: {
+		account?: {
+			brand?: {
+				id: string;
+			};
+		};
+		author?: string;
+		id: string;
+		platform: AdminStatementRowOutputDtoPlatformEnum1;
+		url: string;
+	};
+	/** The source's own words for it, in its language; absent when agent A gave none that is verbatim */
+	quote?: string;
+	review?: {
+		id: string;
+		platform: AdminStatementRowOutputDtoPlatformEnum;
+		stars?: number;
+		venue: {
+			id: string;
+			name: string;
+		};
+	};
+	/** @format date-time */
+	saidAt: string;
+	/** Absent until agent B read it, and on a Google tag */
+	sentiment?: AdminStatementRowOutputDtoSentimentEnum;
+	sourceKind: AdminStatementRowOutputDtoSourceKindEnum;
+	subject: AdminStatementRowOutputDtoSubjectEnum;
+	/** The claim, in English; absent on a dish-only statement */
+	text?: string;
+	unit?: AdminStatementRowOutputDtoUnitEnum;
+	/** A Google tag's place (served by Explore's claims only) */
+	venue?: {
+		id: string;
+		name: string;
+	};
+}
+
+/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
+export enum AdminStatementRowOutputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+}
+
+export enum AdminStatementRowOutputDtoPlatformEnum {
+	Google = 'google',
+	Tripadvisor = 'tripadvisor',
+}
+
+export enum AdminStatementRowOutputDtoPlatformEnum1 {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
+/** Absent until agent B read it, and on a Google tag */
+export enum AdminStatementRowOutputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
+export enum AdminStatementRowOutputDtoSourceKindEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+}
+
+export enum AdminStatementRowOutputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export enum AdminStatementRowOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
+/** The Claims tables (Trends, a brand, a branch): the scope, narrowed by any of the rest, a page at a time */
+export interface AdminStatementsInputDto {
+	/**
+	 * An aspect's key: the claims under it or any aspect below it
+	 * @maxLength 80
+	 */
+	aspect?: string;
+	/** @format uuid */
+	brandId?: string;
+	/** @format uuid */
+	cityId?: string;
+	/** One kind (`STATEMENT_KINDS`), or `unread`: not read by agent B yet */
+	kind?: AdminStatementsInputDtoKindEnum;
+	/**
+	 * A phrase: the page ordered by meaning, closest first; claims without a vector yet are left out
+	 * @maxLength 200
+	 */
+	like?: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	month?: string;
+	/** @min 1 */
+	page: number;
+	parts?: AdminStatementsInputDtoPartsEnum;
+	/**
+	 * Words in the claim's text
+	 * @maxLength 200
+	 */
+	q?: string;
+	sentiment?: AdminStatementsInputDtoSentimentEnum;
+	/** @min 1 */
+	size: number;
+	sourceKind?: AdminStatementsInputDtoSourceKindEnum;
+	subject?: AdminStatementsInputDtoSubjectEnum;
+	/** @format uuid */
+	venueId?: string;
+}
+
+/** One kind (`STATEMENT_KINDS`), or `unread`: not read by agent B yet */
+export enum AdminStatementsInputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum AdminStatementsInputDtoPartsEnum {
+	None = 'none',
+	Food = 'food',
+	NoAspect = 'no_aspect',
+}
+
+export enum AdminStatementsInputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+	Unread = 'unread',
+}
+
+export enum AdminStatementsInputDtoSourceKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+export enum AdminStatementsInputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+/** A page of the claims the filters match, newest first (closest in meaning first with `like`) */
+export interface AdminStatementsOutputDto {
+	items: AdminStatementRowOutputDto[];
+	/** With `like`: the claims the filters match that have no vector yet, so the search can't see them */
+	notEmbedded?: number;
+	page: number;
+	pageSize: number;
+	totalItems: number;
+}
+
+/**
+ * Whose claims: a city's, a brand's (its branches' reviews and the posts' claims about it) or a
+ * branch's (its reviews and the posts' claims about it), at least one of the three; all months
+ * unless `month` is given
+ */
+export interface AdminStatementsScopeInputDto {
+	/** @format uuid */
+	brandId?: string;
+	/** @format uuid */
+	cityId?: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	month?: string;
+	/** @format uuid */
+	venueId?: string;
+}
+
+/** The scope as a whole, whatever a table filters: how its claims were split and read */
+export interface AdminStatementsSummaryOutputDto {
+	city: number;
+	/** Claims per kind; those not read by agent B yet are in none */
+	kinds: RecordopinionfactchangenewItemdealeventquestionverdictnumber;
+	mixed: number;
+	negative: number;
+	neutral: number;
+	noAspect: number;
+	/** No part at all: neither an aspect nor a food wording */
+	noParts: number;
+	none: number;
+	place: number;
+	positive: number;
+	posts: number;
+	reviews: number;
+	statements: number;
+	unread: number;
+	withFood: number;
+}
+
 export interface AdminSuggestCitySourcesInputDto {
 	/**
 	 * What the city eats, for the searches, e.g. "known for döner, Vietnamese, brunch"
@@ -3956,20 +4981,54 @@ export interface AdminSuggestedProspectOutputDto {
 	website?: string;
 }
 
-export interface AdminThemeAmountOutputDto {
-	max: number;
-	median: number;
-	min: number;
-	/** Reviews and posts stating one; a source stating two keeps its largest */
-	sources: number;
-	/** Minutes for a wait, euro for a price */
-	unit: AdminThemeAmountOutputDtoUnitEnum;
+/** One wording, with its links and how many of the city's statements and venues' Google tags carry it */
+export interface AdminTermOutputDto {
+	decidedBy?: AdminTermOutputDtoDecidedByEnum;
+	id: number;
+	key: string;
+	name: string;
+	/** The city's statements naming it (food parts) */
+	notes: number;
+	suggestion?: string;
+	/** The city's venues whose Google "people often mention" tags carry it */
+	tagVenues: number;
+	topics: AdminTermTopicOutputDto[];
 }
 
-/** Minutes for a wait, euro for a price */
-export enum AdminThemeAmountOutputDtoUnitEnum {
-	Minutes = 'minutes',
-	Money = 'money',
+export enum AdminTermOutputDtoDecidedByEnum {
+	Match = 'match',
+	Admin = 'admin',
+	Ai = 'ai',
+}
+
+export interface AdminTermSuggestionOutputDto {
+	examples: string[];
+	label: string;
+	/** Wordings the agent suggested it for */
+	terms: number;
+	/** Their statements and tag venues together */
+	uses: number;
+}
+
+export interface AdminTermTopicOutputDto {
+	key: string;
+	kind: string;
+	label: string;
+}
+
+export interface AdminTermsOutputDto {
+	/** The agent's suggested topics for the city's wordings without one, most used first */
+	suggestions: AdminTermSuggestionOutputDto[];
+	/** The city's wordings and their uses, and how many point at a topic */
+	summary: {
+		linkedTerms: number;
+		linkedUses: number;
+		pendingTerms: number;
+		terms: number;
+		uses: number;
+	};
+	terms: AdminTermOutputDto[];
+	total: number;
 }
 
 export interface AdminThemeBrandOutputDto {
@@ -3981,41 +5040,25 @@ export interface AdminThemeBrandOutputDto {
 
 export interface AdminThemeCoverageOutputDto {
 	postBrands: number;
-	/** Posts by others with any point about a matched venue */
+	/** Posts by others with any praise or complaint claim about a matched venue */
 	posts: number;
 	/** The brands those reviews are of (reviews are scraped for report venues and their competitors) */
 	reviewBrands: number;
-	/** Written reviews of the month with any praise or complaint point */
+	/** Written reviews of the month with any praise or complaint claim */
 	reviews: number;
 	unfiledPosts: number;
-	/** Of those, the ones with a point not filed under a theme yet: counted under no theme */
+	/** Of those, the ones with a claim under no aspect yet: counted under no theme */
 	unfiledReviews: number;
 }
 
-export interface AdminThemeCurrentOutputDto {
-	/** Brands it came up at */
-	brands: number;
-	/** YYYY-MM */
-	month: string;
-	/** Of the month's posts by others with any point, percent */
-	postShare: number | null;
-	postShareChange: number | null;
-	posts: number;
-	/** Of the month's written reviews with any point (any row, changes included, for `changes`), percent */
-	reviewShare: number | null;
-	/** Against the month before, in percentage points */
-	reviewShareChange: number | null;
-	reviews: number;
-}
-
-/** One theme, praised or criticised, in the city and month. */
+/** One dish a theme's claims named: a dish or drink topic's wordings as one, else the wording itself. */
 export interface AdminThemeDishOutputDto {
-	/** The food topic's key, for its page */
+	/** The dish or drink topic's key, for its page */
 	foodTopic?: string;
 	/** `topic:<key>` or `dish:<key>` */
 	key: string;
 	label: string;
-	/** Of the reviews and posts with a point of this side about it, percent */
+	/** Of the reviews and posts with a claim of this side about it, percent */
 	share: number;
 	/** Reviews and posts raising the theme about it */
 	sources: number;
@@ -4026,9 +5069,9 @@ export interface AdminThemeFoodCoverageOutputDto {
 	brands: number;
 	key: string;
 	label: string;
-	/** Posts by others about its brands with any point */
+	/** Posts by others about its brands with any claim */
 	posts: number;
-	/** Its brands' written reviews with any point */
+	/** Its brands' written reviews with any claim */
 	reviews: number;
 }
 
@@ -4036,68 +5079,15 @@ export interface AdminThemeFoodOutputDto {
 	key: string;
 	/** "Döner & kebab" */
 	label: string;
-	/** Of its brands' reviews and posts with any point this month, percent */
+	/** Of its brands' reviews and posts with any claim this month, percent */
 	share: number;
 	/** Reviews and posts of its brands raising the theme */
 	sources: number;
 }
 
-export interface AdminThemeInsightOutputDto {
-	/** The numbers its points state, per unit */
-	amounts: AdminThemeAmountOutputDto[];
-	/** The ten brands it came up at most */
-	brands: AdminThemeBrandOutputDto[];
-	/** The side this month: the whole month's, whatever the filters */
-	current: AdminThemeCurrentOutputDto;
-	/** The ten dishes its points were about most: a food topic's dishes as one */
-	dishes: AdminThemePageDishOutputDto[];
-	/** The five kinds of food it came up at most, each a share of its brands' sources with any point */
-	foods: AdminThemeFoodOutputDto[];
-	/** What the theme covers, as the agents are told */
-	hint: string;
-	/** The aspect's key (`Topic.key`) */
-	key: string;
-	/** "Price increase" */
-	label: string;
-	month: string;
-	/** The side over the six months up to the month, oldest first */
-	months: AdminThemeMonthOutputDto[];
-	/** The month's sentences of the side, filtered, newest first, one page */
-	points: AdminThemePointOutputDto[];
-	/** The month the changes are against */
-	previous: string;
-	side: AdminThemeInsightOutputDtoSideEnum;
-	/** Each side's reviews and posts this month */
-	sides: AdminThemeSideCountOutputDto[];
-	/** Its root's key */
-	topic: AdminThemeInsightOutputDtoTopicEnum;
-	/** Sentences matching the filters */
-	total: number;
-	/** The reviews and posts they come from */
-	totalSources: number;
-}
-
-export enum AdminThemeInsightOutputDtoSideEnum {
-	Praise = 'praise',
-	Complaints = 'complaints',
-	Changes = 'changes',
-}
-
-/** Its root's key */
-export enum AdminThemeInsightOutputDtoTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
-}
-
+/** One theme, praised or criticised, in the city and month. */
 export interface AdminThemeInsightRowOutputDto {
-	/** The five dishes its points were about most: a food topic's dishes as one */
+	/** The five dishes its claims named most: a dish or drink topic's wordings as one */
 	dishes: AdminThemeDishOutputDto[];
 	/** The three kinds of food it came up at most */
 	foods: AdminThemeFoodOutputDto[];
@@ -4105,38 +5095,25 @@ export interface AdminThemeInsightRowOutputDto {
 	key: string;
 	/** "Price increase" */
 	label: string;
-	/** Of the month's posts by others with any point, percent */
+	/** Of the month's posts by others with any claim, percent */
 	postShare: number | null;
 	postShareChange: number | null;
 	/** Posts by others raising it */
 	posts: number;
-	/** Of the month's written reviews with any point, percent */
+	/** Of the month's written reviews with any claim, percent */
 	reviewShare: number | null;
 	/** Against the month before, in percentage points */
 	reviewShareChange: number | null;
 	/** Written reviews raising it */
 	reviews: number;
-	/** Up to five distinct details, newest first */
+	/** Up to five distinct claims, newest first */
 	samples: string[];
 	/** The three it came up at most */
 	topBrands: AdminThemeBrandOutputDto[];
 	/** Its root's key */
-	topic: AdminThemeInsightRowOutputDtoTopicEnum;
+	topic: string;
 	/** Brands it came up at */
 	venues: number;
-}
-
-/** Its root's key */
-export enum AdminThemeInsightRowOutputDtoTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
 }
 
 export interface AdminThemeInsightsOutputDto {
@@ -4153,114 +5130,6 @@ export interface AdminThemeInsightsOutputDto {
 	praise: AdminThemeInsightRowOutputDto[];
 	/** The month the changes are against */
 	previous: string;
-}
-
-export interface AdminThemeMonthOutputDto {
-	/** YYYY-MM */
-	month: string;
-	/** Of the month's posts by others with any point, percent */
-	postShare: number | null;
-	posts: number;
-	/** Of the month's written reviews with any point (any row, changes included, for `changes`), percent */
-	reviewShare: number | null;
-	reviews: number;
-}
-
-export interface AdminThemePageDishOutputDto {
-	/** The food topic's key, for its page */
-	foodTopic?: string;
-	/** `topic:<key>` or `dish:<key>`: what `dish=` takes */
-	key: string;
-	label: string;
-	/** Reviews and posts of the side about it */
-	sources: number;
-}
-
-/** One sentence filed under the theme, with the review or post it came from. */
-export interface AdminThemePointOutputDto {
-	/** The number it states */
-	amount?: number;
-	/**
-	 * When the review was published or the post posted
-	 * @format date-time
-	 */
-	at: string;
-	/** A post's author handle */
-	author?: string;
-	brand: {
-		id: string;
-		name: string;
-	};
-	/** The phrase, in English */
-	detail: string;
-	/** The dish or drink it is about, as the source names it */
-	dish?: string;
-	foodTopic?: {
-		key: string;
-		label: string;
-	};
-	/** The feedback row's id */
-	id: string;
-	kind: AdminThemePointOutputDtoKindEnum;
-	postPlatform?: AdminThemePointOutputDtoPostPlatformEnum;
-	reviewPlatform?: AdminThemePointOutputDtoReviewPlatformEnum;
-	sentiment: AdminThemePointOutputDtoSentimentEnum;
-	/** The review's or the post's id (a post's page is `/admin/posts/<id>`) */
-	sourceId: string;
-	/** A review's stars */
-	stars?: number;
-	/** What the post says about the brand */
-	summary?: string;
-	/** A review's text (translated when it was), cut at 400 characters */
-	text?: string;
-	unit?: AdminThemePointOutputDtoUnitEnum;
-	/** The branch: a review's place, a post's when it named one */
-	venue?: {
-		id: string;
-		name: string;
-	};
-}
-
-export enum AdminThemePointOutputDtoKindEnum {
-	Post = 'post',
-	Review = 'review',
-}
-
-export enum AdminThemePointOutputDtoPostPlatformEnum {
-	Tiktok = 'tiktok',
-	Instagram = 'instagram',
-	Blog = 'blog',
-}
-
-export enum AdminThemePointOutputDtoReviewPlatformEnum {
-	Google = 'google',
-	Tripadvisor = 'tripadvisor',
-}
-
-export enum AdminThemePointOutputDtoSentimentEnum {
-	Mixed = 'mixed',
-	Positive = 'positive',
-	Negative = 'negative',
-	Neutral = 'neutral',
-}
-
-export enum AdminThemePointOutputDtoUnitEnum {
-	Minutes = 'minutes',
-	Money = 'money',
-}
-
-export interface AdminThemeSideCountOutputDto {
-	/** Posts by others likewise */
-	posts: number;
-	/** Written reviews of the month with a point of this side filed under the theme */
-	reviews: number;
-	side: AdminThemeSideCountOutputDtoSideEnum;
-}
-
-export enum AdminThemeSideCountOutputDtoSideEnum {
-	Praise = 'praise',
-	Complaints = 'complaints',
-	Changes = 'changes',
 }
 
 export interface AdminTodayOutputDto {
@@ -4312,6 +5181,7 @@ export enum AdminTopicBaseOutputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -4369,6 +5239,7 @@ export enum AdminTopicInsightRowOutputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -4422,6 +5293,7 @@ export enum AdminTopicOutputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -4664,13 +5536,6 @@ export interface AdminUpdateCreatorInputDto {
 	name: string;
 }
 
-/** A topic key, null for "no topic", or `auto: true` to hand the name back to the name match and the agent */
-export interface AdminUpdateDishNameInputDto {
-	auto?: boolean;
-	/** @maxLength 64 */
-	topicKey?: string | null;
-}
-
 export interface AdminUpdateHashtagInputDto {
 	/** Noise (#fyp, #viral): never suggested as a source */
 	ignored: boolean;
@@ -4797,6 +5662,7 @@ export enum AdminUpdateTopicInputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -4820,19 +5686,17 @@ export interface AdminUpdateVenueInputDto {
 	bookingUrl?: string | null;
 }
 
-export interface AdminUpdatedDishNameOutputDto {
-	decidedBy?: AdminUpdatedDishNameOutputDtoDecidedByEnum;
-	foodTopic?: {
-		key: string;
-		label: string;
-	};
+/** A term after an admin's decision: the list carries the counts, this answer doesn't */
+export interface AdminUpdatedTermOutputDto {
+	decidedBy?: AdminUpdatedTermOutputDtoDecidedByEnum;
 	id: number;
 	key: string;
 	name: string;
 	suggestion?: string;
+	topics: AdminTermTopicOutputDto[];
 }
 
-export enum AdminUpdatedDishNameOutputDtoDecidedByEnum {
+export enum AdminUpdatedTermOutputDtoDecidedByEnum {
 	Match = 'match',
 	Admin = 'admin',
 	Ai = 'ai',
@@ -5010,7 +5874,7 @@ export interface AdminVenueOutputDto {
 	reservationPartner?: string;
 	/**
 	 * The food topic each of its review tags (`details.reviewsTags`) names, by the tag's title;
-	 * tags that name no food are left out (`DishNameService.reviewTagTopics`)
+	 * tags that name no food are left out (`TermService.reviewTagTopics`)
 	 */
 	reviewTagTopics: {
 		key: string;
@@ -5100,6 +5964,7 @@ export enum AdminVenueTopicOutputDtoKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -5356,6 +6221,8 @@ export interface ChangePasswordInputDto {
 	newPassword: string;
 	oldPassword?: string;
 }
+
+export type ChangeTermData = AdminUpdatedTermOutputDto;
 
 export type ChangeVenueTopicData = AdminVenueTopicsOutputDto;
 
@@ -5698,75 +6565,6 @@ export enum ExportUsersCsvParamsRolesEnum {
 	VenueOwner = 'venue_owner',
 }
 
-/** The aspect a point is filed under, with its parent when it has one: what a page shows and links */
-export interface FeedbackAspectOutputDto {
-	/** The aspect's key (`Topic.key`): the same as `theme` */
-	key: string;
-	/** "Price increase" */
-	label: string;
-	/** The aspect above it; absent for a root (a point "about price, nothing finer") */
-	parent?: {
-		key: string;
-		label: string;
-	};
-}
-
-/**
- * One thing a review or a mention says (a `FeedbackPoint` row). A point has a `detail`, praise
- * `positive` and a complaint `negative`; a dish-only row has a `dish`, the dish's sentiment and no
- * topic or detail; a noticed change (`change`) is `neutral`, its phrase the detail. Pages group
- * them by sentiment themselves.
- */
-export interface FeedbackPointOutputDto {
-	/** The number it states: minutes for a wait, the price for a price */
-	amount?: number;
-	/** The aspect of `theme`, with its label; absent with it. Every route serving rows populates it (`aspect`, `aspect.parent`) */
-	aspect?: FeedbackAspectOutputDto;
-	/** A change the reviewer noticed since before ("new owner"), not a praise or complaint */
-	change: boolean;
-	detail?: string;
-	/** The dish or drink it is about */
-	dish?: string;
-	/** The food topic the dish is (`FeedbackPoint.foodTopic`): its page is `/admin/trends/<key>` */
-	foodTopic?: {
-		key: string;
-		label: string;
-	};
-	sentiment: FeedbackPointOutputDtoSentimentEnum;
-	/** The aspect's key; absent until the point is filed, and on a dish-only row */
-	theme?: string;
-	/** The aspect's root key */
-	topic?: FeedbackPointOutputDtoTopicEnum;
-	unit?: FeedbackPointOutputDtoUnitEnum;
-}
-
-export enum FeedbackPointOutputDtoSentimentEnum {
-	Mixed = 'mixed',
-	Positive = 'positive',
-	Negative = 'negative',
-	Neutral = 'neutral',
-}
-
-/** The aspect's root key */
-export enum FeedbackPointOutputDtoTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
-}
-
-export enum FeedbackPointOutputDtoUnitEnum {
-	Minutes = 'minutes',
-	Money = 'money',
-}
-
-export type FileFeedbackThemesData = AdminFileFeedbackThemesOutputDto;
-
 export type FillCityDaysData = AdminFillCityDaysOutputDto;
 
 export type FillCompetitorsData = AdminFillCompetitorsOutputDto;
@@ -5890,6 +6688,7 @@ export enum FoodTrendsSearchTopicKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -5934,6 +6733,7 @@ export enum FoodTrendsTalkedTopicKindEnum {
 	Diet = 'diet',
 	Format = 'format',
 	Meal = 'meal',
+	Ingredient = 'ingredient',
 	Aspect = 'aspect',
 }
 
@@ -5967,15 +6767,9 @@ export type GetCreatorWatchData = AdminCreatorWatchOutputDto;
 
 export type GetDataCoverageData = AdminDataCoverageOutputDto;
 
-export type GetDishNamesData = AdminDishNamesOutputDto;
+export type GetDigestedPostData = AdminDigestedPostOutputDto;
 
-/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
-export enum GetDishNamesParamsStatusEnum {
-	All = 'all',
-	Pending = 'pending',
-	Unlinked = 'unlinked',
-	Linked = 'linked',
-}
+export type GetDigestedReviewData = AdminDigestedReviewOutputDto;
 
 export type GetDishSearchesData = AdminDishSearchesOutputDto;
 
@@ -5984,6 +6778,193 @@ export type GetEntriesData = SitemapEntriesOutputDto;
 export type GetEntryData = BlogEntryOutputDto;
 
 export type GetEntryResult = AdminBlogEntryOutputDto;
+
+export type GetExploreBreakdownData = AdminExploreBreakdownOutputDto;
+
+export enum GetExploreBreakdownParamsByEnum {
+	Brand = 'brand',
+	Kind = 'kind',
+	Source = 'source',
+	Subject = 'subject',
+	Month = 'month',
+	District = 'district',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+	Food = 'food',
+	Place = 'place',
+	Side = 'side',
+}
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum GetExploreBreakdownParamsKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum GetExploreBreakdownParamsSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum GetExploreBreakdownParamsSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum GetExploreBreakdownParamsSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export type GetExploreGroupsData = AdminExploreGroupsOutputDto;
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum GetExploreGroupsParamsKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum GetExploreGroupsParamsSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum GetExploreGroupsParamsSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum GetExploreGroupsParamsSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export type GetExploreHeadData = AdminExploreHeadOutputDto;
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum GetExploreHeadParamsKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum GetExploreHeadParamsSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum GetExploreHeadParamsSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum GetExploreHeadParamsSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export type GetExploreTreeData = AdminExploreTreeOutputDto;
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum GetExploreTreeParamsKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum GetExploreTreeParamsSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum GetExploreTreeParamsSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum GetExploreTreeParamsSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
 
 export type GetFoodTrendsData = AdminFoodTrendsOutputDto;
 
@@ -6077,21 +7058,19 @@ export type GetSharedReportData = SharedReportOutputDto;
 
 export type GetSharedReportPdfData = any;
 
+export type GetStatementClustersData = AdminStatementClustersOutputDto;
+
+export type GetStatementsSummaryData = AdminStatementsSummaryOutputDto;
+
 export type GetTagData = BlogTagOutputDto;
 
-export type GetThemeInsightData = AdminThemeInsightOutputDto;
+export type GetTermsData = AdminTermsOutputDto;
 
-/** Only reviews, or only posts */
-export enum GetThemeInsightParamsKindEnum {
-	Post = 'post',
-	Review = 'review',
-}
-
-/** Complaints when absent */
-export enum GetThemeInsightParamsSideEnum {
-	Praise = 'praise',
-	Complaints = 'complaints',
-	Changes = 'changes',
+export enum GetTermsParamsStatusEnum {
+	All = 'all',
+	Pending = 'pending',
+	Unlinked = 'unlinked',
+	Linked = 'linked',
 }
 
 export type GetThemeInsightsData = AdminThemeInsightsOutputDto;
@@ -6349,9 +7328,9 @@ export enum LandingStoryKindEnum {
 	Street = 'street',
 	Cuisine = 'cuisine',
 	Dish = 'dish',
+	Place = 'place',
 	Praise = 'praise',
 	Openings = 'openings',
-	Place = 'place',
 	Crowd = 'crowd',
 	TopPost = 'top_post',
 	Climber = 'climber',
@@ -6561,6 +7540,38 @@ export enum ListCreatorsParamsSortEnum {
 	BrandsDesc = 'brands:desc',
 }
 
+export type ListDigestionData = AdminDigestionOutputDto;
+
+/** Reviews or posts; both when absent */
+export enum ListDigestionParamsKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+export enum ListDigestionParamsPlatformEnum {
+	Blog = 'blog',
+	Google = 'google',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Tripadvisor = 'tripadvisor',
+}
+
+/** Posts the gate skipped for this reason (implies `skipped`) */
+export enum ListDigestionParamsSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
+}
+
+export enum ListDigestionParamsStatusEnum {
+	Skipped = 'skipped',
+	Unread = 'unread',
+	Digested = 'digested',
+}
+
 export type ListEntriesData = ListBlogEntriesOutputDto;
 
 export enum ListEntriesParams1SortEnum {
@@ -6588,6 +7599,49 @@ export enum ListEntriesParamsSortEnum {
 }
 
 export type ListEntriesResult = AdminListBlogEntriesOutputDto;
+
+export type ListExploreClaimsData = AdminStatementsOutputDto;
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum ListExploreClaimsParamsKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum ListExploreClaimsParamsSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Noted = 'noted',
+	Changes = 'changes',
+	Unread = 'unread',
+}
+
+/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+export enum ListExploreClaimsParamsSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Instagram = 'instagram',
+	Tiktok = 'tiktok',
+	Review = 'review',
+	GoogleTag = 'google_tag',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum ListExploreClaimsParamsSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
 
 export type ListLlmBacklogsData = AdminLlmBacklogsOutputDto;
 
@@ -6670,19 +7724,6 @@ export enum ListPortalReviewsParamsPlatformEnum {
 	Tripadvisor = 'tripadvisor',
 }
 
-/** A topic the review praised or criticised */
-export enum ListPortalReviewsParamsTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
-}
-
 export type ListPostCommentsData = AdminPostCommentsOutputDto;
 
 export type ListPostsData = AdminListPostsOutputDto;
@@ -6691,6 +7732,16 @@ export enum ListPostsParamsPlatformEnum {
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
 	Blog = 'blog',
+}
+
+/** Only posts the gate didn't digest, for this reason */
+export enum ListPostsParamsSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
 }
 
 export enum ListPostsParamsSortEnum {
@@ -6785,6 +7836,46 @@ export interface ListSessionsOutputDto {
 	page: number;
 	pageSize: number;
 	totalItems: number;
+}
+
+export type ListStatementsData = AdminStatementsOutputDto;
+
+/** One kind (`STATEMENT_KINDS`), or `unread`: not read by agent B yet */
+export enum ListStatementsParamsKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum ListStatementsParamsPartsEnum {
+	None = 'none',
+	Food = 'food',
+	NoAspect = 'no_aspect',
+}
+
+export enum ListStatementsParamsSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+	Unread = 'unread',
+}
+
+export enum ListStatementsParamsSourceKindEnum {
+	Post = 'post',
+	Review = 'review',
+}
+
+export enum ListStatementsParamsSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
 }
 
 export type ListSuggestedProspectsData = AdminSuggestedProspectOutputDto[];
@@ -6979,6 +8070,11 @@ export interface OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount {
 	authorFans?: number;
 	comments: number;
 	externalId: string;
+	/**
+	 * When the gate last judged it
+	 * @format date-time
+	 */
+	gatedAt?: string;
 	id: string;
 	isAd: boolean;
 	isPromotional?: boolean;
@@ -6989,6 +8085,8 @@ export interface OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount {
 	postedAt: string;
 	saves: number;
 	shares: number;
+	/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+	skipReason?: OmitAdminSocialPostListItemOutputDtomentionsfoundByaccountSkipReasonEnum;
 	text?: string;
 	url: string;
 	views: number;
@@ -6998,6 +8096,16 @@ export enum OmitAdminSocialPostListItemOutputDtomentionsfoundByaccountPlatformEn
 	Tiktok = 'tiktok',
 	Instagram = 'instagram',
 	Blog = 'blog',
+}
+
+/** Why it was not digested (no places, no claims); absent when it was, or before the gate judged it */
+export enum OmitAdminSocialPostListItemOutputDtomentionsfoundByaccountSkipReasonEnum {
+	NoContent = 'no_content',
+	NotFood = 'not_food',
+	HomeCooking = 'home_cooking',
+	Groceries = 'groceries',
+	Outdoors = 'outdoors',
+	OtherCity = 'other_city',
 }
 
 /** One day's opening hours as Google words them: `{ day: 'Monday', hours: '5 to 11 PM' }`. */
@@ -7022,7 +8130,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1128'?: PartialOmitCredentialVerificationRequestuserOptionalProps1128Enum;
+	'__@OptionalProps@1205'?: PartialOmitCredentialVerificationRequestuserOptionalProps1205Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -7048,7 +8156,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1128Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1205Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -7325,7 +8433,7 @@ export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgSt
 	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
 	count: number;
-	/** topic → how many reviews praised / criticised it */
+	/** aspect root → how many reviews praised / criticised it (a claim about no aspect counts under none) */
 	praise: Recordstringnumber;
 	/** Share of the month's reviews the owner answered, 0–1 */
 	replyRate?: number;
@@ -7580,27 +8688,17 @@ export interface PortalListReviewsInputDto {
 	 * @max 5
 	 */
 	stars?: number;
-	/** A topic the review praised or criticised */
-	topic?: PortalListReviewsInputDtoTopicEnum;
+	/**
+	 * An aspect root key (`food`, `service`, `wait`, …): reviews with a claim under it
+	 * @maxLength 64
+	 */
+	topic?: string;
 }
 
 /** Google or TripAdvisor */
 export enum PortalListReviewsInputDtoPlatformEnum {
 	Google = 'google',
 	Tripadvisor = 'tripadvisor',
-}
-
-/** A topic the review praised or criticised */
-export enum PortalListReviewsInputDtoTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
 }
 
 export interface PortalMarkReviewRepliedInputDto {
@@ -7699,8 +8797,6 @@ export interface PortalPostOutputDto {
 	author?: string;
 	authorFans?: number;
 	comments: number;
-	/** What it says about the brand, as feedback rows */
-	feedback: FeedbackPointOutputDto[];
 	id: string;
 	likes: number;
 	/** Posted by the brand's own account */
@@ -7711,10 +8807,11 @@ export interface PortalPostOutputDto {
 	/** @format date-time */
 	postedAt: string;
 	saves: number;
+	/** How the post came across about the brand, worked out from its claims */
 	sentiment: PortalPostOutputDtoSentimentEnum;
 	shares: number;
-	/** What the post said about the brand, one or two sentences */
-	summary: string;
+	/** What it says about the brand, one claim per row with its parts */
+	statements: StatementOutputDto[];
 	url: string;
 	views: number;
 	/** False when the creator says they have not been there */
@@ -7727,9 +8824,10 @@ export enum PortalPostOutputDtoPlatformEnum {
 	Blog = 'blog',
 }
 
+/** How the post came across about the brand, worked out from its claims */
 export enum PortalPostOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -7831,9 +8929,10 @@ export interface PortalReviewFiltersOutputDto {
 		count: number;
 		platform: PortalReviewFiltersOutputDtoPlatformEnum;
 	}[];
+	/** Aspect root keys (`food`, `service`, `wait`, …), with how many reviews make a claim under each */
 	topics: {
 		count: number;
-		topic: PortalReviewFiltersOutputDtoTopicEnum;
+		topic: string;
 	}[];
 }
 
@@ -7842,26 +8941,12 @@ export enum PortalReviewFiltersOutputDtoPlatformEnum {
 	Tripadvisor = 'tripadvisor',
 }
 
-export enum PortalReviewFiltersOutputDtoTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
-}
-
 /** A Google or TripAdvisor review as the portal lists it. The entity stores no reviewer names. */
 export interface PortalReviewOutputDto {
 	/** Answered on Google, or marked answered here */
 	answered: boolean;
 	/** The branch it is about, for a chain's portal (which shows every branch's reviews) */
 	branch?: string;
-	/** What it says, as feedback rows (none before it is analysed) */
-	feedback: FeedbackPointOutputDto[];
 	id: string;
 	language?: string;
 	/**
@@ -7879,6 +8964,8 @@ export interface PortalReviewOutputDto {
 	replyDraft?: string;
 	sentiment?: PortalReviewOutputDtoSentimentEnum;
 	stars?: number;
+	/** What it says, one claim per row with its parts (none before it is analysed) */
+	statements: StatementOutputDto[];
 	text?: string;
 	/** Google's English translation */
 	textTranslated?: string;
@@ -7890,8 +8977,8 @@ export enum PortalReviewOutputDtoPlatformEnum {
 }
 
 export enum PortalReviewOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -8163,8 +9250,6 @@ export type ReadAllNotificationsData = OkResponse;
 
 export type ReadNotificationData = OkResponse;
 
-export type RecheckDishLinksData = AdminRecheckDishLinksOutputDto;
-
 /** Construct a type with a set of properties K of type T */
 export interface RecordAdminBrandSegmentnumber {
 	all: number;
@@ -8175,6 +9260,18 @@ export interface RecordAdminBrandSegmentnumber {
 }
 
 export type RecordSharedReportOpenData = any;
+
+/** Construct a type with a set of properties K of type T */
+export interface RecordopinionfactchangenewItemdealeventquestionverdictnumber {
+	change: number;
+	deal: number;
+	event: number;
+	fact: number;
+	new_item: number;
+	opinion: number;
+	question: number;
+	verdict: number;
+}
 
 /** Construct a type with a set of properties K of type T */
 export type RecordstringRecordstringboolean = Record<string, Recordstringboolean>;
@@ -8259,6 +9356,7 @@ export interface ReportAnalysisTrace {
 	durationMs: number;
 	/** The agent failed: the investigations are fallbacks */
 	error?: string;
+	/** The model that answered (`openai/gpt-5.4`), or the tier asked for when the call failed */
 	model: string;
 	/** The model's own steps (each tool round is one) */
 	modelSteps?: number;
@@ -8276,7 +9374,9 @@ export interface ReportAnalysisTrace {
 	steps: ReportAnalysisTraceStep[];
 	/** Tool calls that ran (a refused one is in `steps` only) */
 	toolCalls: number;
+	/** `cachedInputTokens`: the part of the input read from the provider's prompt cache */
 	usage?: {
+		cachedInputTokens?: number;
 		inputTokens?: number;
 		outputTokens?: number;
 		totalTokens?: number;
@@ -8417,11 +9517,11 @@ export interface ReportBusynessWeek {
 export interface ReportChangeTheme {
 	/** How they put it, each spelling once */
 	details: string[];
-	/** The aspect's label at build ("Other changes" for the unfiled) */
+	/** The aspect's label at build ("Other changes" for those under no aspect) */
 	label: string;
 	/** Reviews noticing it, each once */
 	reviews: number;
-	/** The aspect's key; absent while the changes are not filed yet */
+	/** The aspect's key; absent for the changes agent B filed under no aspect (or has not read yet) */
 	theme?: string;
 }
 
@@ -8475,8 +9575,8 @@ export interface ReportCitySection {
 	searches?: SearchDelta[];
 	/**
 	 * The complaint themes of the brand's written reviews against the month's report venues
-	 * (`cityThemes`), the biggest gap first; absent below 5 written reviews or 5 peers, while a
-	 * point is unfiled, and in reports built before it
+	 * (`cityThemes`), the biggest gap first; absent below 5 written reviews or 5 peers, and in
+	 * reports built before it
 	 */
 	themes?: ReportCityTheme[];
 }
@@ -8494,6 +9594,19 @@ export interface ReportCityTheme {
 	venueShare: number;
 	/** How many report venues the median is over */
 	venues: number;
+}
+
+/**
+ * A claim as a report keeps it: the report's own copy, built from the source's statements at
+ * build time, so a stored report never moves with them.
+ */
+export interface ReportClaim {
+	/** The claim, as the statement's text */
+	detail: string;
+	/** The aspect's key (`ReportData.aspects` names it); absent for a claim about no aspect */
+	theme?: string;
+	/** The aspect's root key; `other` for a claim about no aspect */
+	topic: string;
 }
 
 /** One post's comments by what they say. */
@@ -8729,6 +9842,7 @@ export interface ReportEditorTrace {
 	durationMs: number;
 	/** The agent failed: the letter is the code-written fallback */
 	error?: string;
+	/** The model that answered (`openai/gpt-5.4`), or the tier asked for when the call failed */
 	model: string;
 	/** The model's own steps (each tool round is one) */
 	modelSteps?: number;
@@ -8740,36 +9854,13 @@ export interface ReportEditorTrace {
 	steps: ReportAnalysisTraceStep[];
 	/** Tool calls that ran (a refused one is in `steps` only) */
 	toolCalls: number;
+	/** `cachedInputTokens`: the part of the input read from the provider's prompt cache */
 	usage?: {
+		cachedInputTokens?: number;
 		inputTokens?: number;
 		outputTokens?: number;
 		totalTokens?: number;
 	};
-}
-
-/**
- * A praise or complaint point as a report keeps it: the report's own copy, built from the feedback
- * rows at build time, so a stored report never moves with them.
- */
-export interface ReportFeedbackPoint {
-	detail: string;
-	/** The aspect's key (`ReportData.aspects` names it); absent while unfiled */
-	theme?: string;
-	/** The aspect's root key */
-	topic: ReportFeedbackPointTopicEnum;
-}
-
-/** The aspect's root key */
-export enum ReportFeedbackPointTopicEnum {
-	Other = 'other',
-	Food = 'food',
-	Drinks = 'drinks',
-	Service = 'service',
-	Vibe = 'vibe',
-	Price = 'price',
-	Payment = 'payment',
-	Wait = 'wait',
-	Cleanliness = 'cleanliness',
 }
 
 /**
@@ -8987,13 +10078,13 @@ export enum ReportObservationResolutionEnum {
 
 export enum ReportObservationUnitEnum {
 	Views = 'views',
-	Index = 'index',
 	Count = 'count',
-	Points = 'points',
+	Index = 'index',
+	Rank = 'rank',
 	Share = 'share',
 	Followers = 'followers',
-	Rank = 'rank',
 	Stars = 'stars',
+	Points = 'points',
 }
 
 /** One of the brand's own accounts at the close of the month (the brand's, or a branch's in the report's city). */
@@ -9067,16 +10158,22 @@ export interface ReportPoint {
 export interface ReportPost {
 	author?: string;
 	authorFans?: number;
-	complaints: ReportFeedbackPoint[];
+	/** Its negative claims */
+	complaints: ReportClaim[];
 	dishes: ReportPostDish[];
 	engagements: number;
+	/** Its neutral and mixed claims ("fries for 10 euros"): said, neither praise nor complaint; absent when none */
+	noted?: ReportClaim[];
 	platform: ReportPostPlatformEnum;
 	postId: string;
 	postedAt: string;
-	praise: ReportFeedbackPoint[];
+	/** Its positive claims */
+	praise: ReportClaim[];
 	promotional: boolean;
+	/** What it said about the brand, its own words where kept (`saidOf`) */
+	said: string[];
+	/** Worked out from its claims (`sentimentOf`) */
 	sentiment: ReportPostSentimentEnum;
-	summary: string;
 	/** A blog article's headline; absent for TikTok and Instagram, and in reports built before it was kept */
 	title?: string;
 	url: string;
@@ -9084,15 +10181,15 @@ export interface ReportPost {
 	visited: boolean;
 }
 
-/** A dish a post names, with how it came across, as a report keeps it */
+/** A dish or drink a post names (a food wording, as the source spelled it), with how it came across, as a report keeps it */
 export interface ReportPostDish {
 	name: string;
 	sentiment: ReportPostDishSentimentEnum;
 }
 
 export enum ReportPostDishSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -9103,9 +10200,10 @@ export enum ReportPostPlatformEnum {
 	Tiktok = 'tiktok',
 }
 
+/** Worked out from its claims (`sentimentOf`) */
 export enum ReportPostSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -9255,7 +10353,7 @@ export interface ReportReplyDraft {
 }
 
 export interface ReportReviewGroup {
-	complaintDetails: ReportFeedbackPoint[];
+	complaintDetails: ReportClaim[];
 	/** Construct a type with a set of properties K of type T */
 	complaintThemes?: Recordstringnumber;
 	/** Construct a type with a set of properties K of type T */
@@ -9263,11 +10361,11 @@ export interface ReportReviewGroup {
 	count: number;
 	/** Construct a type with a set of properties K of type T */
 	praise: Recordstringnumber;
-	/** What they said, the first few points of the group */
-	praiseDetails: ReportFeedbackPoint[];
+	/** What they said, the first few claims of the group */
+	praiseDetails: ReportClaim[];
 	/**
-	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
-	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the roots; absent
+	 * in reports built before themes
 	 */
 	praiseThemes?: Recordstringnumber;
 	written: number;
@@ -9347,11 +10445,11 @@ export interface ReportReviewStats {
 	list: ReportReviewItem[];
 	/** Topics locals (Google) and visitors (TripAdvisor) see differently, biggest gap first */
 	platformGaps?: ReportPlatformGap[];
-	/** topic → how many reviews praised / criticised it */
+	/** aspect root → how many reviews praised / criticised it (a claim about no aspect counts under none) */
 	praise: Recordstringnumber;
 	/**
-	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
-	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the roots; absent
+	 * in reports built before themes
 	 */
 	praiseThemes?: Recordstringnumber;
 	/** Ready-to-post replies to unanswered written reviews, critical first; filled at build */
@@ -9470,11 +10568,11 @@ export interface ReportSocialStats {
 	engagements: number;
 	instagramCount: number;
 	postCount: number;
-	/** topic → how many posts praised / criticised it */
+	/** aspect root → how many posts praised / criticised it (a claim about no aspect counts under none) */
 	praise: Recordstringnumber;
 	/**
-	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the topics; absent when
-	 * a point has no theme yet (stored before themes, not backfilled) and in reports built before
+	 * aspect key (`ReportData.aspects`) → how many raised it, once per source like the roots; absent
+	 * in reports built before themes
 	 */
 	praiseThemes?: Recordstringnumber;
 	promotional: number;
@@ -9536,6 +10634,8 @@ export interface SearchDelta {
 	/** Its share of the city's mentions with a topic, percent (children counted) */
 	share?: number;
 }
+
+export type SearchExploreTermsData = AdminExploreTermsOutputDto;
 
 export type SearchPortalCompetitorsData = PortalCompetitorSearchOutputDto;
 
@@ -9662,6 +10762,98 @@ export type SplitAccountData = AdminSplitAccountOutputDto;
 export type SplitBrandData = AdminBrandOutputDto;
 
 export type StartPipelineRunData = AdminPipelineRunOutputDto;
+
+/**
+ * One claim a source makes (a `Statement` row). Praise is `positive`, a complaint `negative`, a
+ * noted fact `neutral` or `mixed`; a claim of kind `change` is no praise or complaint whatever its
+ * sentiment; a dish-only statement has no `text`. Pages group them by sentiment and kind themselves.
+ */
+export interface StatementOutputDto {
+	/** The number it states: minutes for a wait, the price for a price */
+	amount?: number;
+	id: number;
+	/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
+	kind?: StatementOutputDtoKindEnum;
+	parts: StatementPartOutputDto[];
+	/** The source's own words for it, in its language; absent when agent A gave none that is verbatim */
+	quote?: string;
+	/** Absent until agent B read it, and on a Google tag */
+	sentiment?: StatementOutputDtoSentimentEnum;
+	subject: StatementOutputDtoSubjectEnum;
+	/** The claim, in English; absent on a dish-only statement */
+	text?: string;
+	unit?: StatementOutputDtoUnitEnum;
+}
+
+/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
+export enum StatementOutputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+}
+
+/** Absent until agent B read it, and on a Google tag */
+export enum StatementOutputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+}
+
+export enum StatementOutputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
+export enum StatementOutputDtoUnitEnum {
+	Minutes = 'minutes',
+	Money = 'money',
+}
+
+/**
+ * One thing a statement is about (a `StatementPart` row): an `aspect` part has `topic`; a `food`
+ * part has `term` (the wording as the source spelled it) whose `topics` are the wording's links,
+ * empty until decided. Every route serving statements populates `STATEMENT_POPULATE` (`parts.topic.parent` and
+ * `parts.term.topics.topic.parent`): a topic serialized without its parent loaded fails the DTO.
+ */
+export interface StatementPartOutputDto {
+	role: StatementPartOutputDtoRoleEnum;
+	term?: {
+		key: string;
+		name: string;
+		topics: {
+			rank: number;
+			/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+			topic: StatementTopicOutputDto;
+		}[];
+	};
+	/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+	topic?: StatementTopicOutputDto;
+}
+
+export enum StatementPartOutputDtoRoleEnum {
+	Aspect = 'aspect',
+	Food = 'food',
+}
+
+/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+export interface StatementTopicOutputDto {
+	key: string;
+	/** `Topic.kind`: aspect, dish, cuisine, … */
+	kind: string;
+	label: string;
+	/** The topic above it, when loaded (an aspect's root); absent for a root */
+	parent?: {
+		key: string;
+		label: string;
+	};
+}
 
 export type SubscribeToNewsletterData = any;
 
@@ -9856,8 +11048,6 @@ export type UpdateCityEventData = AdminCityEventOutputDto;
 export type UpdateCitySourceData = AdminCitySourceOutputDto;
 
 export type UpdateCreatorData = AdminCreatorOutputDto;
-
-export type UpdateDishNameData = AdminUpdatedDishNameOutputDto;
 
 export type UpdateEntryData = AdminBlogEntryOutputDto;
 
@@ -11704,33 +12894,116 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description After the dish pass's instruction changed: its links whose phrase doesn't name the dish go back to the `feedback-dish-links` backlog, which looks at them again within the day's allowance.
+		 * @description A page of a scope's claims (a city's month, a brand's, a branch's), filtered, newest first or closest to `like`: the Claims tables
 		 *
-		 * @name RecheckDishLinks
-		 * @request POST:/admin/feedback/dish-links/recheck
-		 * @response `201` `RecheckDishLinksData`
+		 * @name ListStatements
+		 * @request GET:/admin/statements
+		 * @response `200` `ListStatementsData`
 		 */
-		recheckDishLinks: (params: RequestParams = {}) =>
-			this.request<RecheckDishLinksData, any>({
-				path: `/admin/feedback/dish-links/recheck`,
-				method: 'POST',
+		listStatements: (
+			query: {
+				/**
+				 * An aspect's key: the claims under it or any aspect below it
+				 * @maxLength 80
+				 */
+				aspect?: string;
+				/** @format uuid */
+				brandId?: string;
+				/** @format uuid */
+				cityId?: string;
+				/** One kind (`STATEMENT_KINDS`), or `unread`: not read by agent B yet */
+				kind?: ListStatementsParamsKindEnum;
+				/**
+				 * A phrase: the page ordered by meaning, closest first; claims without a vector yet are left out
+				 * @maxLength 200
+				 */
+				like?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				month?: string;
+				/** @min 1 */
+				page: number;
+				parts?: ListStatementsParamsPartsEnum;
+				/**
+				 * Words in the claim's text
+				 * @maxLength 200
+				 */
+				q?: string;
+				sentiment?: ListStatementsParamsSentimentEnum;
+				/** @min 1 */
+				size: number;
+				sourceKind?: ListStatementsParamsSourceKindEnum;
+				subject?: ListStatementsParamsSubjectEnum;
+				/** @format uuid */
+				venueId?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListStatementsData, any>({
+				path: `/admin/statements`,
+				method: 'GET',
+				query: query,
 				format: 'json',
 				...params,
 			}),
 
 		/**
-		 * @description After editing the vocabulary: `realign` (topics follow their theme, points of a removed theme go back to filing), then files up to `limit` unfiled points. Free (the LLM allowance). The daily LLM backlog `feedback-themes` files the rest on its own; this is for a city that can't wait.
+		 * @description How a scope's claims (a city's, a brand's, a branch's; a month or all) were split and read: the Claims tables' figures
 		 *
-		 * @name FileFeedbackThemes
-		 * @request POST:/admin/feedback-themes/backfill
-		 * @response `201` `FileFeedbackThemesData`
+		 * @name GetStatementsSummary
+		 * @request GET:/admin/statements/summary
+		 * @response `200` `GetStatementsSummaryData`
 		 */
-		fileFeedbackThemes: (data: AdminFileFeedbackThemesInputDto, params: RequestParams = {}) =>
-			this.request<FileFeedbackThemesData, any>({
-				path: `/admin/feedback-themes/backfill`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
+		getStatementsSummary: (
+			query?: {
+				/** @format uuid */
+				brandId?: string;
+				/** @format uuid */
+				cityId?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				month?: string;
+				/** @format uuid */
+				venueId?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetStatementsSummaryData, any>({
+				path: `/admin/statements/summary`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description "Missing aspects": a city's month or quarter of claims no aspect fits, grouped by meaning, each with a suggested aspect. Worked out on request (kept in memory for hours), never stored
+		 *
+		 * @name GetStatementClusters
+		 * @request GET:/admin/statements/clusters
+		 * @response `200` `GetStatementClustersData`
+		 */
+		getStatementClusters: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * One of `month` and `quarter`
+				 * @pattern ^[0-9]{4}-[0-9]{2}$
+				 */
+				month?: string;
+				/** @pattern ^[0-9]{4}-q[1-4]$ */
+				quarter?: string;
+				/**
+				 * A root aspect's key: only the claims filed at it; `none`: only those under no aspect
+				 * @maxLength 80
+				 */
+				root?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetStatementClustersData, any>({
+				path: `/admin/statements/clusters`,
+				method: 'GET',
+				query: query,
 				format: 'json',
 				...params,
 			}),
@@ -11739,7 +13012,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 * @description How many venues had a waiting complaint in the city's month, and how long the stated waits were
 		 *
 		 * @name GetWaitComplaints
-		 * @request GET:/admin/feedback/wait-complaints
+		 * @request GET:/admin/statements/wait-complaints
 		 * @response `200` `GetWaitComplaintsData`
 		 */
 		getWaitComplaints: (
@@ -11752,7 +13025,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			params: RequestParams = {},
 		) =>
 			this.request<GetWaitComplaintsData, any>({
-				path: `/admin/feedback/wait-complaints`,
+				path: `/admin/statements/wait-complaints`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -11760,45 +13033,46 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description The city's dish names with the food topic each points at, who decided it, and the agent's suggested topics for those without one (the Trends "Dish names" tab)
+		 * @description Every topic the view's claims are about, each with what is under it counted in
 		 *
-		 * @name GetDishNames
-		 * @request GET:/admin/dish-names
-		 * @response `200` `GetDishNamesData`
+		 * @name GetExploreTree
+		 * @request GET:/admin/explore/tree
+		 * @response `200` `GetExploreTreeData`
 		 */
-		getDishNames: (
+		getExploreTree: (
 			query: {
 				/** @format uuid */
+				brandId?: string;
+				/** @format uuid */
 				cityId: string;
+				/** @maxLength 120 */
+				district?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				from?: string;
+				/** One kind, or `unread`: agent B gave none yet */
+				kind?: GetExploreTreeParamsKindEnum;
+				/** @maxLength 200 */
+				node?: string;
 				/**
-				 * @min 1
-				 * @max 200
+				 * The brands of one kind of place (their main food in the city), a topic's key
+				 * @maxLength 80
 				 */
-				limit?: number;
-				/** @min 0 */
-				offset?: number;
-				/**
-				 * Part of the name
-				 * @maxLength 100
-				 */
-				q?: string;
-				/** `unlinked` (decided, no topic; the default), `linked`, `pending` (not decided yet) or `all` */
-				status?: GetDishNamesParamsStatusEnum;
-				/**
-				 * Only the names the agent suggested this topic for
-				 * @maxLength 100
-				 */
-				suggestion?: string;
-				/**
-				 * Only the names of this topic
-				 * @maxLength 64
-				 */
-				topicKey?: string;
+				place?: string;
+				side?: GetExploreTreeParamsSideEnum;
+				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				source?: GetExploreTreeParamsSourceEnum;
+				subject?: GetExploreTreeParamsSubjectEnum;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				to?: string;
+				/** @format uuid */
+				venueId?: string;
+				/** @maxLength 1000 */
+				with?: string;
 			},
 			params: RequestParams = {},
 		) =>
-			this.request<GetDishNamesData, any>({
-				path: `/admin/dish-names`,
+			this.request<GetExploreTreeData, any>({
+				path: `/admin/explore/tree`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -11806,22 +13080,229 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description An admin's topic for a name (or none, or back to automatic); its feedback rows follow at once
+		 * @description The node's figures: sources, shares, sides, months, stated numbers
 		 *
-		 * @name UpdateDishName
-		 * @request PATCH:/admin/dish-names/{id}
-		 * @response `200` `UpdateDishNameData`
+		 * @name GetExploreHead
+		 * @request GET:/admin/explore/head
+		 * @response `200` `GetExploreHeadData`
 		 */
-		updateDishName: (
-			id: number,
-			data: AdminUpdateDishNameInputDto,
+		getExploreHead: (
+			query: {
+				/** @format uuid */
+				brandId?: string;
+				/** @format uuid */
+				cityId: string;
+				/** @maxLength 120 */
+				district?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				from?: string;
+				/** One kind, or `unread`: agent B gave none yet */
+				kind?: GetExploreHeadParamsKindEnum;
+				/** @maxLength 200 */
+				node?: string;
+				/**
+				 * The brands of one kind of place (their main food in the city), a topic's key
+				 * @maxLength 80
+				 */
+				place?: string;
+				side?: GetExploreHeadParamsSideEnum;
+				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				source?: GetExploreHeadParamsSourceEnum;
+				subject?: GetExploreHeadParamsSubjectEnum;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				to?: string;
+				/** @format uuid */
+				venueId?: string;
+				/** @maxLength 1000 */
+				with?: string;
+			},
 			params: RequestParams = {},
 		) =>
-			this.request<UpdateDishNameData, any>({
-				path: `/admin/dish-names/${id}`,
-				method: 'PATCH',
-				body: data,
-				type: ContentType.Json,
+			this.request<GetExploreHeadData, any>({
+				path: `/admin/explore/head`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The node broken down by one dimension
+		 *
+		 * @name GetExploreBreakdown
+		 * @request GET:/admin/explore/breakdown
+		 * @response `200` `GetExploreBreakdownData`
+		 */
+		getExploreBreakdown: (
+			query: {
+				/** @format uuid */
+				brandId?: string;
+				by: GetExploreBreakdownParamsByEnum;
+				/** @format uuid */
+				cityId: string;
+				/** @maxLength 120 */
+				district?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				from?: string;
+				/** One kind, or `unread`: agent B gave none yet */
+				kind?: GetExploreBreakdownParamsKindEnum;
+				/** @maxLength 200 */
+				node?: string;
+				/**
+				 * The brands of one kind of place (their main food in the city), a topic's key
+				 * @maxLength 80
+				 */
+				place?: string;
+				side?: GetExploreBreakdownParamsSideEnum;
+				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				source?: GetExploreBreakdownParamsSourceEnum;
+				subject?: GetExploreBreakdownParamsSubjectEnum;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				to?: string;
+				/** @format uuid */
+				venueId?: string;
+				/** @maxLength 1000 */
+				with?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetExploreBreakdownData, any>({
+				path: `/admin/explore/breakdown`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A page of the node's claims, newest first or closest to `like`, each with its source
+		 *
+		 * @name ListExploreClaims
+		 * @request GET:/admin/explore/claims
+		 * @response `200` `ListExploreClaimsData`
+		 */
+		listExploreClaims: (
+			query: {
+				/** @format uuid */
+				brandId?: string;
+				/** @format uuid */
+				cityId: string;
+				/** @maxLength 120 */
+				district?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				from?: string;
+				/** One kind, or `unread`: agent B gave none yet */
+				kind?: ListExploreClaimsParamsKindEnum;
+				/**
+				 * A phrase: closest in meaning first; claims without a vector are left out
+				 * @maxLength 200
+				 */
+				like?: string;
+				/** @maxLength 200 */
+				node?: string;
+				/** @min 1 */
+				page: number;
+				/**
+				 * The brands of one kind of place (their main food in the city), a topic's key
+				 * @maxLength 80
+				 */
+				place?: string;
+				/**
+				 * Words in the claim
+				 * @maxLength 200
+				 */
+				q?: string;
+				side?: ListExploreClaimsParamsSideEnum;
+				/** @min 1 */
+				size: number;
+				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				source?: ListExploreClaimsParamsSourceEnum;
+				subject?: ListExploreClaimsParamsSubjectEnum;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				to?: string;
+				/** @format uuid */
+				venueId?: string;
+				/** @maxLength 1000 */
+				with?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListExploreClaimsData, any>({
+				path: `/admin/explore/claims`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The node's claims grouped by meaning, once they have vectors
+		 *
+		 * @name GetExploreGroups
+		 * @request GET:/admin/explore/groups
+		 * @response `200` `GetExploreGroupsData`
+		 */
+		getExploreGroups: (
+			query: {
+				/** @format uuid */
+				brandId?: string;
+				/** @format uuid */
+				cityId: string;
+				/** @maxLength 120 */
+				district?: string;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				from?: string;
+				/** One kind, or `unread`: agent B gave none yet */
+				kind?: GetExploreGroupsParamsKindEnum;
+				/** @maxLength 200 */
+				node?: string;
+				/**
+				 * The brands of one kind of place (their main food in the city), a topic's key
+				 * @maxLength 80
+				 */
+				place?: string;
+				side?: GetExploreGroupsParamsSideEnum;
+				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				source?: GetExploreGroupsParamsSourceEnum;
+				subject?: GetExploreGroupsParamsSubjectEnum;
+				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+				to?: string;
+				/** @format uuid */
+				venueId?: string;
+				/** @maxLength 1000 */
+				with?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetExploreGroupsData, any>({
+				path: `/admin/explore/groups`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Wordings to explore, by a part of their name
+		 *
+		 * @name SearchExploreTerms
+		 * @request GET:/admin/explore/terms
+		 * @response `200` `SearchExploreTermsData`
+		 */
+		searchExploreTerms: (
+			query: {
+				/**
+				 * @minLength 1
+				 * @maxLength 100
+				 */
+				q: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<SearchExploreTermsData, any>({
+				path: `/admin/explore/terms`,
+				method: 'GET',
+				query: query,
 				format: 'json',
 				...params,
 			}),
@@ -11880,10 +13361,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description A new topic; 409 when its key exists.
+		 * @description A new topic; 409 when its key exists. Its `aliases` become admin terms linked to it.
 		 *
 		 * @name CreateTopic
-		 * @summary A new topic; 409 when its key exists
+		 * @summary A new topic; 409 when its key exists. Its `aliases` become admin terms linked to it
 		 * @request POST:/admin/topics
 		 * @response `201` `CreateTopicData`
 		 */
@@ -11898,7 +13379,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions, menu items, feedback dishes, then every city's venue tags). A topic or alias change queues it on its own; this is for a first fill or after a change made outside the admin.
+		 * @description Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions, menu items, then every city's venue tags). A topic or alias change queues it on its own; this is for a first fill or after a change made outside the admin.
 		 *
 		 * @name RelinkTopics
 		 * @request POST:/admin/topics/relink
@@ -11956,10 +13437,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Changes the fields given; an unmapped key is mapped by adding it to `aliases`.
+		 * @description Changes the fields given; an unmapped key is mapped by adding it to `aliases` (admin terms of the topic).
 		 *
 		 * @name UpdateTopic
-		 * @summary Changes the fields given; an unmapped key is mapped by adding it to `aliases`
+		 * @summary Changes the fields given; an unmapped key is mapped by adding it to `aliases` (admin terms of the topic)
 		 * @request PATCH:/admin/topics/{id}
 		 * @response `200` `UpdateTopicData`
 		 */
@@ -11985,6 +13466,70 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<DeleteTopicData, any>({
 				path: `/admin/topics/${id}`,
 				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The city's wordings with their topics and uses; `status` defaults to `unlinked`.
+		 *
+		 * @name GetTerms
+		 * @summary The city's wordings with their topics and uses; `status` defaults to `unlinked`
+		 * @request GET:/admin/terms
+		 * @response `200` `GetTermsData`
+		 */
+		getTerms: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * @min 1
+				 * @max 200
+				 */
+				limit?: number;
+				/** @min 0 */
+				offset?: number;
+				/**
+				 * A search in the wording or its key
+				 * @maxLength 80
+				 */
+				q?: string;
+				status?: GetTermsParamsStatusEnum;
+				/**
+				 * Only terms the agent suggested this label for
+				 * @maxLength 80
+				 */
+				suggestion?: string;
+				/**
+				 * Only terms linked to this topic
+				 * @maxLength 80
+				 */
+				topicKey?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetTermsData, any>({
+				path: `/admin/terms`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description An admin's decision on a wording: its topics (empty for none), or back to the match and the agent.
+		 *
+		 * @name ChangeTerm
+		 * @summary An admin's decision on a wording: its topics (empty for none), or back to the match and the agent
+		 * @request PATCH:/admin/terms/{id}
+		 * @response `200` `ChangeTermData`
+		 */
+		changeTerm: (id: number, data: AdminChangeTermInputDto, params: RequestParams = {}) =>
+			this.request<ChangeTermData, any>({
+				path: `/admin/terms/${id}`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
 				format: 'json',
 				...params,
 			}),
@@ -12069,7 +13614,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				q?: string;
 				/** @min 1 */
 				size: number;
+				/** Only posts the gate didn't digest, for this reason */
+				skipReason?: ListPostsParamsSkipReasonEnum;
 				sort?: ListPostsParamsSortEnum;
+				/** Only posts with a matched mention a re-read no longer named (`Mention.unconfirmedAt`): to confirm or ignore. */
+				unconfirmedOnly?: boolean;
 				/** Only posts with a mention nothing matched (`none`): to link by hand. */
 				unmatchedOnly?: boolean;
 				/**
@@ -12970,7 +14519,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description What the city's reviews and posts praise and criticise this month, per feedback theme, across every venue, by kind of food; `food` narrows it to the brands of one.
+		 * @description What the city's reviews and posts praise and criticise this month, per theme (an aspect), across every venue, by kind of food; `food` narrows it to the brands of one.
 		 *
 		 * @name GetThemeInsights
 		 * @request GET:/admin/theme-insights
@@ -12992,58 +14541,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<GetThemeInsightsData, any>({
 				path: `/admin/theme-insights`,
-				method: 'GET',
-				query: query,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * @description One feedback theme in the city's month: its complaints, praise and noticed changes, the picked side over six months, where it came up, by dish and by kind of food, the numbers its points state, and the sentences filed under it with their review or post, narrowed by the filters.
-		 *
-		 * @name GetThemeInsight
-		 * @request GET:/admin/theme-insights/{theme}
-		 * @response `200` `GetThemeInsightData`
-		 */
-		getThemeInsight: (
-			theme: string,
-			query: {
-				/**
-				 * Only this brand's sentences
-				 * @format uuid
-				 */
-				brandId?: string;
-				/** @format uuid */
-				cityId: string;
-				/**
-				 * Only the sentences about one dish: a `dishes` row's key (`topic:<key>` or `dish:<key>`)
-				 * @maxLength 200
-				 */
-				dish?: string;
-				/**
-				 * Only the brands of one kind of food: a food topic's key
-				 * @maxLength 64
-				 */
-				food?: string;
-				/** Only reviews, or only posts */
-				kind?: GetThemeInsightParamsKindEnum;
-				/**
-				 * 50 when absent
-				 * @min 1
-				 * @max 200
-				 */
-				limit?: number;
-				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
-				month: string;
-				/** @min 0 */
-				offset?: number;
-				/** Complaints when absent */
-				side?: GetThemeInsightParamsSideEnum;
-			},
-			params: RequestParams = {},
-		) =>
-			this.request<GetThemeInsightData, any>({
-				path: `/admin/theme-insights/${theme}`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -13506,6 +15003,76 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				path: `/admin/data-coverage`,
 				method: 'GET',
 				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Reviews and posts newest first, filtered, each with its status and counts
+		 *
+		 * @name ListDigestion
+		 * @request GET:/admin/digestion
+		 * @response `200` `ListDigestionData`
+		 */
+		listDigestion: (
+			query: {
+				/**
+				 * A post's city, a review's venue's
+				 * @format uuid
+				 */
+				cityId?: string;
+				/** Reviews or posts; both when absent */
+				kind?: ListDigestionParamsKindEnum;
+				/** @min 1 */
+				page: number;
+				platform?: ListDigestionParamsPlatformEnum;
+				/**
+				 * Words in the source: a caption, transcript or article; a review's text or translation
+				 * @maxLength 200
+				 */
+				q?: string;
+				/** @min 1 */
+				size: number;
+				/** Posts the gate skipped for this reason (implies `skipped`) */
+				skipReason?: ListDigestionParamsSkipReasonEnum;
+				status?: ListDigestionParamsStatusEnum;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListDigestionData, any>({
+				path: `/admin/digestion`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A post and every step over it: the gate, agent A's places (with their matches) and claims, agent B's parts
+		 *
+		 * @name GetDigestedPost
+		 * @request GET:/admin/digestion/posts/{id}
+		 * @response `200` `GetDigestedPostData`
+		 */
+		getDigestedPost: (id: string, params: RequestParams = {}) =>
+			this.request<GetDigestedPostData, any>({
+				path: `/admin/digestion/posts/${id}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A review and what agents A and B made of it
+		 *
+		 * @name GetDigestedReview
+		 * @request GET:/admin/digestion/reviews/{id}
+		 * @response `200` `GetDigestedReviewData`
+		 */
+		getDigestedReview: (id: string, params: RequestParams = {}) =>
+			this.request<GetDigestedReviewData, any>({
+				path: `/admin/digestion/reviews/${id}`,
+				method: 'GET',
 				format: 'json',
 				...params,
 			}),
@@ -14326,7 +15893,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it says (`feedback`); reply drafts under unanswered ones. The topic filter is any point of the topic.
+		 * @description The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it says (`statements`); reply drafts under unanswered ones. The topic filter is any claim under the aspect root.
 		 *
 		 * @name ListPortalReviews
 		 * @request GET:/portal/brands/{brandId}/reviews
@@ -14360,8 +15927,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @max 5
 				 */
 				stars?: number;
-				/** A topic the review praised or criticised */
-				topic?: ListPortalReviewsParamsTopicEnum;
+				/**
+				 * An aspect root key (`food`, `service`, `wait`, …): reviews with a claim under it
+				 * @maxLength 64
+				 */
+				topic?: string;
 			},
 			params: RequestParams = {},
 		) =>
@@ -14413,10 +15983,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`feedback`).
+		 * @description Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`statements`).
 		 *
 		 * @name ListPortalPosts
-		 * @summary Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`feedback`)
+		 * @summary Every post about the brand (any branch, or the brand alone), newest first, with what it says about the brand (`statements`)
 		 * @request GET:/portal/brands/{brandId}/posts
 		 * @response `200` `ListPortalPostsData`
 		 */

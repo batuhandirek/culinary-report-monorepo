@@ -39,7 +39,7 @@
 	const STOPS: Record<string, { label: string; variant: BadgeVariant }> = {
 		empty: { label: 'Done', variant: 'success' },
 		budget: { label: 'Day’s budget spent', variant: 'secondary' },
-		allowance: { label: 'Allowance used up', variant: 'warning' },
+		allowance: { label: 'No model left', variant: 'warning' },
 		error: { label: 'Error', variant: 'destructive' },
 		shutdown: { label: 'Restarted', variant: 'secondary' }
 	};
@@ -96,8 +96,10 @@
 		</div>
 	{/if}
 	<p class="text-muted-foreground m-0 mt-3 text-sm">
-		Backfills that need the LLM run every night at 22:00 UTC, in this order, on the free allowance only
-		{#if status}(today {millions(status.spentToday)} of {millions(status.dailyTokens)} tokens){/if}. A run stops when a backlog is
-		done, the day's budget is spent or the allowance runs out, and goes on the next night. Run now goes on within today's budget.
+		Backfills that need the LLM run every night at 22:00 UTC, in this order,
+		{#if status?.allowsPaid}<strong>on Claude too</strong> (paid, <code>LLM_BACKLOG_ALLOW_PAID</code>){:else}on the free allowance only{/if}
+		{#if status}(today {millions(status.spentToday)} of {millions(status.dailyTokens)} tokens){/if}. A backlog stops when it is
+		done or no model is left for it; the run stops when the day's budget is spent, and goes on the next night. Run now goes on within
+		today's budget.
 	</p>
 </AdminPanel>

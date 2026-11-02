@@ -1,0 +1,811 @@
+{
+  "id": "post-e1c05dce",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript",
+    "hard"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "hungrytoto",
+    "locationName": null,
+    "hashtags": [
+      "berlincafe",
+      "berlinfood",
+      "japanesecafe",
+      "japanisch",
+      "berlinfoodguide"
+    ],
+    "taggedHandles": [],
+    "text": "Die viralen Japanese Sandos gibt es endlich in Berlin?!😍🍦\n\n📍Café Yohaku\n\n#berlincafe #berlinfood #japanesecafe #japanisch #berlinfoodguide ",
+    "subtitles": "these are the most popular desserts in Japan\nthey are now simply available in Berlin and OB that tastes\nwe now test today\nthe coffee is called coffee yohaku\nthey have here because these Japanese sandos\nand look how many varieties there are\nand then here's Japanese Breakfast Melon Pan\nin any case very very much to choose from\nwith matcha and once with cream brulee\nso guys we have the sandwiches now\nonce with matcha and once with cream brulee\nand that looks so good\nwe try now first the Strawberry Matcha\nso I must say the matcha latte is n bit liquid\nso does not taste so strong like matcha\nyou can see the crust is really beautiful Crispy\nall my hands are full of oil this is so delicious\nToast is definitely very beautiful Crispy\nand uh the cream is also not too sweet\nMH they do not save in any case with the cream\nso that is for me ne 10 out of 10\nnow we have 1 with cream brulee\nit's just crunchy here\noh this is definitely much sweeter than the one from Matcha\nthat's why it gets a8 out of 10 from me\nthe whole thing cost about 24 euros\nthe cafe gets a9 out of 10 from me\nso save the place",
+    "subtitlesLanguage": "eng-US",
+    "id": "e1c05dce-37c4-473d-9347-8cbec7b58430",
+    "externalId": "7662316694056045856",
+    "url": "https://www.tiktok.com/@hungrytoto/video/7662316694056045856",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-14T09:42:15.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:24:47.274Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café Yohaku",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "eba3227d-3477-45db-bc91-7b240427d04b",
+          "brandName": "Café YOHAKU",
+          "venueId": "e0eb7d10-db32-4f80-9af0-5df3c684fe36",
+          "venueName": "Café YOHAKU"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Japanese sandos are now available in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [
+          "Japanese sandos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the place is called Café Yohaku",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Café Yohaku"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café has many varieties",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they also have Japanese breakfast melon pan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Japanese Breakfast Melon Pan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they have matcha and crème brûlée versions",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "matcha",
+          "Creme Brulee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Strawberry Matcha sando was very delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Strawberry Matcha sando"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha latte was a bit liquid",
+        "quote": null,
+        "sentiment": "mixed",
+        "aspect": "drink_quality",
+        "foods": [
+          "matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha did not taste very strong",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the crust was really beautiful and crispy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "crust"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cream was not too sweet",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they did not save on the cream",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the strawberry matcha one got 10 out of 10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "strawberry matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the crème brûlée one was much sweeter than the matcha one",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "Creme Brulee",
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the crème brûlée one got 8 out of 10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Creme Brulee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the whole thing cost about 24 euros",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 24,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the café got 9 out of 10",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Café Yohaku"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:07.694Z",
+    "usage": {
+      "inputTokens": 10026,
+      "outputTokens": 6009,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Endlich in Berlin' says the sandos are newly available in Berlin, not that the café just opened, so it is not marked as a new opening. The transcript's 'matcha latte is a bit liquid' may really be about the sando filling, but it is taken as written, as a drink.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café Yohaku",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "eba3227d-3477-45db-bc91-7b240427d04b",
+          "brandName": "Café YOHAKU",
+          "venueId": "e0eb7d10-db32-4f80-9af0-5df3c684fe36",
+          "venueName": "Café YOHAKU",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the viral Japanese Sandos are finally available in Berlin at Café Yohaku",
+        "quote": "Die viralen Japanese Sandos gibt es endlich in Berlin?!",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Japanese Sandos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "availability",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Japanese sandos are the most popular desserts in Japan",
+        "quote": "these are the most popular desserts in Japan",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Café Yohaku has many varieties of Japanese sandos",
+        "quote": "look how many varieties there are",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "Japanese sandos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Yohaku also has Japanese Breakfast and Melon Pan",
+        "quote": "here's Japanese Breakfast Melon Pan",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Japanese Breakfast",
+          "Melon Pan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Yohaku has very much to choose from",
+        "quote": "in any case very very much to choose from",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they got sandos with matcha and with cream brulee",
+        "quote": "once with matcha and once with cream brulee",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "matcha",
+          "cream brulee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha and cream brulee sandwiches look so good",
+        "quote": "that looks so good",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they first tried the Strawberry Matcha",
+        "quote": "we try now first the Strawberry Matcha",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Strawberry Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha latte is a bit liquid",
+        "quote": "the matcha latte is n bit liquid",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "matcha latte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the matcha latte does not taste strongly of matcha",
+        "quote": "does not taste so strong like matcha",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Strawberry Matcha sando crust is really beautifully crispy",
+        "quote": "the crust is really beautiful Crispy",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "crust"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the hands are full of oil from the Strawberry Matcha sando",
+        "quote": "all my hands are full of oil",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Strawberry Matcha sando is so delicious",
+        "quote": "this is so delicious",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Strawberry Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Toast is very beautifully crispy",
+        "quote": "Toast is definitely very beautiful Crispy",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Toast"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cream is not too sweet",
+        "quote": "the cream is also not too sweet",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they do not skimp on the cream",
+        "quote": "they do not save in any case with the cream",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "cream"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Strawberry Matcha sando gets 10 out of 10",
+        "quote": "that is for me ne 10 out of 10",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Strawberry Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cream brulee sando is crunchy",
+        "quote": "it's just crunchy here",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "cream brulee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cream brulee sando is much sweeter than the Matcha one",
+        "quote": "this is definitely much sweeter than the one from Matcha",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [
+          "cream brulee",
+          "Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed",
+            "neutral"
+          ],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the cream brulee sando gets 8 out of 10",
+        "quote": "it gets a8 out of 10 from me",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "cream brulee"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the whole thing cost about 24 euros",
+        "quote": "the whole thing cost about 24 euros",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 24,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café Yohaku gets 9 out of 10",
+        "quote": "the cafe gets a9 out of 10 from me",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "save Café Yohaku",
+        "quote": "so save the place",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.253Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.441Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,15 +1,12 @@
-import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { BrandMemberRoleEnum } from 'src/modules/auth/constants/brand-member-role.enum.constant.js';
 import type { ProspectLanguage } from 'src/modules/outreach/constants/outreach.constant.js';
 import type { SharedReportOutputDto } from 'src/modules/reports/dto/report-share.output.dto.js';
 import type { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
+import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
+import type { StatementOutputDto } from 'src/modules/statements/dto/statement.output.dto.js';
 import type { ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import type { BrandReportScopeEnum } from 'src/modules/venues/entities/brand.entity.js';
 import type { CompetitorPickedByEnum } from 'src/modules/venues/entities/brand-competitor.entity.js';
-import type {
-	FeedbackSentiment,
-	FeedbackTopic,
-} from 'src/modules/venues/interfaces/feedback.interface.js';
 import type { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 
 /** One of a brand's places, as its portal shows it. */
@@ -102,9 +99,9 @@ export interface PortalReviewOutputDto {
 	ownerResponseAt?: Date;
 	/** When the owner marked it answered here */
 	markedRepliedAt?: Date;
-	sentiment?: FeedbackSentiment;
-	/** What it says, as feedback rows (none before it is analysed) */
-	feedback: FeedbackPointOutputDto[];
+	sentiment?: Sentiment;
+	/** What it says, one claim per row with its parts (none before it is analysed) */
+	statements: StatementOutputDto[];
 	/** Answered on Google, or marked answered here */
 	answered: boolean;
 	/** A reply ready to post, in the review's language: unanswered written reviews only, when drafted */
@@ -120,7 +117,8 @@ export interface PortalReviewFiltersOutputDto {
 	/** Newest first */
 	months: { month: string; count: number }[];
 	languages: { language: string; count: number }[];
-	topics: { topic: FeedbackTopic; count: number }[];
+	/** Aspect root keys (`food`, `service`, `wait`, …), with how many reviews make a claim under each */
+	topics: { topic: string; count: number }[];
 	/** The platforms the brand has reviews on */
 	platforms: { platform: ReviewPlatformEnum; count: number }[];
 	/** Written, three stars or fewer, unanswered */
@@ -144,13 +142,12 @@ export interface PortalPostOutputDto {
 	paid: boolean;
 	/** Posted by the brand's own account */
 	own: boolean;
-	sentiment: FeedbackSentiment;
-	/** What the post said about the brand, one or two sentences */
-	summary: string;
+	/** How the post came across about the brand, worked out from its claims */
+	sentiment: Sentiment;
 	/** False when the creator says they have not been there */
 	visited: boolean;
-	/** What it says about the brand, as feedback rows */
-	feedback: FeedbackPointOutputDto[];
+	/** What it says about the brand, one claim per row with its parts */
+	statements: StatementOutputDto[];
 }
 
 export interface PortalPostsOutputDto extends PaginatedResult<PortalPostOutputDto> {}

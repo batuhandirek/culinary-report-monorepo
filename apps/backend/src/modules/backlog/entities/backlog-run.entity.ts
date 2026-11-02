@@ -5,9 +5,10 @@ import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-e
 /**
  * Why a backlog's run ended: nothing left (`empty`), the day's token budget spent (`budget`),
  * every account out of the free allowance (`allowance`), a batch failed or did nothing (`error`),
- * the backend shutting down (`shutdown`).
+ * the backend shutting down (`shutdown`), or the backlog waiting for something before it may run
+ * (`waiting`, `LlmBacklog.waitsFor`, what it waits for in `error`).
  */
-export type BacklogStopReason = 'empty' | 'budget' | 'allowance' | 'error' | 'shutdown';
+export type BacklogStopReason = 'empty' | 'budget' | 'allowance' | 'error' | 'shutdown' | 'waiting';
 
 /**
  * One LLM backlog's work on one UTC day (`LlmBacklogService.drain`). A second run the same day
@@ -38,6 +39,7 @@ export class BacklogRun extends MikroOrmEntityAbstractClass<'batches' | 'done'> 
 	@Property({ type: 'text', nullable: true })
 	stopReason?: BacklogStopReason | null;
 
+	/** The failure's message, or what a `waiting` backlog waits for */
 	@Property({ type: 'text', nullable: true })
 	error?: string | null;
 

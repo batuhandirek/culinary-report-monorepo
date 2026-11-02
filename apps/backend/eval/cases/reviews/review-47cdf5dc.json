@@ -1,0 +1,199 @@
+{
+  "id": "review-47cdf5dc",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "47cdf5dc-bbb4-4b87-ad34-f74a988b461c",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pWSGQyc3RjWFJaUVc1bFlrUjRRV3d3YWsxM1ZIYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "LYFE",
+    "venueId": "c7d59929-f40b-4742-9768-f36efb65c87b",
+    "brand": "LYFE",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-30T13:52:54.930Z",
+    "stars": 2,
+    "text": "Unfortunately the food wasn’t that good and the drinks aswell. It’s as if everything is watered down. No real flavor. It looks aesthetic tho.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:51:41.136Z",
+    "claims": [
+      {
+        "text": "the food wasn’t that good",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the drinks were not that good",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "drinks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "everything was watered down",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was no real flavor",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place looks aesthetic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:52.043Z",
+    "usage": {
+      "inputTokens": 4941,
+      "outputTokens": 1023,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'It looks aesthetic' is ambiguous between the venue's look and the food's presentation; interior taken as most likely, with presentation allowed. 'Watered down' covers both food and drinks, so taste with drink_quality/food as alternatives.",
+    "claims": [
+      {
+        "text": "the food wasn't that good",
+        "quote": "the food wasn’t that good",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the drinks weren't that good either",
+        "quote": "the drinks aswell",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "everything seems watered down",
+        "quote": "It’s as if everything is watered down",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_quality",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "no real flavor",
+        "quote": "No real flavor",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place looks aesthetic",
+        "quote": "It looks aesthetic tho",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "vibe",
+            "presentation"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.209Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

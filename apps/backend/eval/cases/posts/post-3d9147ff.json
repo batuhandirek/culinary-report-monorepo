@@ -1,0 +1,465 @@
+{
+  "id": "post-3d9147ff",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "verityvalerie",
+    "locationName": "Berlin, Deutschland",
+    "hashtags": [
+      "berlineats",
+      "berlinfoodspots",
+      "bowls",
+      "runningfood",
+      "berlinfoodie"
+    ],
+    "taggedHandles": [
+      "schuesseldienstberlin",
+      "kitcharikitchenberlin",
+      "fatoushberlin"
+    ],
+    "text": "Fueling is just as important as running, right? 🏃‍♀️🥣\n\nBowls might be THE ultimate trendy food, but honestly, they’re also one of my favorite things to eat. And while I love a good bowl, they can get a little boring sometimes.\n\nSo here are 3 spots in Berlin that do bowls a little differently and are definitely worth trying 👀🫶\n\n📍 @schuesseldienstberlin \n📍 @kitcharikitchenberlin \n📍 @fatoushberlin \n\nSave this for your next Berlin food trip! 💌\n\n#berlineats #berlinfoodspots #bowls #runningfood #berlinfoodie",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "3d9147ff-7ef7-4c37-af32-4da97944d978",
+    "externalId": "ig_4010215196034891267",
+    "url": "https://www.instagram.com/p/DenJXlIiH4D/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-17T22:08:46.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T06:38:25.790Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Schüsseldienst Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "6a715997-d93a-4aa5-b778-9e3249a3700a",
+          "brandName": "Schüsseldienst - iss keine gewöhnliche Bowl!",
+          "venueId": "b299c961-abbc-44d6-b548-bb8b57df3023",
+          "venueName": "Schüsseldienst - iss keine gewöhnliche Bowl!"
+        }
+      },
+      {
+        "venueName": "Kitchari Kitchen Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "9110d43d-633c-4924-a813-fa66912fa75c",
+          "brandName": "KITCHARI KITCHEN",
+          "venueId": "1783c1cb-eb46-48f7-a695-4d9ae5e6e94f",
+          "venueName": "KITCHARI KITCHEN"
+        }
+      },
+      {
+        "venueName": "Fatoush Berlin",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "e6e85029-50be-4213-8887-4dd45fb7b7e3",
+          "brandName": "Fattoush - Lebanese Fresh Food",
+          "venueId": "c45741a1-f2c3-4399-914b-7fdba485f912",
+          "venueName": "Fattoush - Lebanese Fresh Food"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "bowls done differently",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "worth trying",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "bowls done differently",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "worth trying",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "bowls done differently",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "worth trying",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:36:46.981Z",
+    "usage": {
+      "inputTokens": 14510,
+      "outputTokens": 2472,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The three venues are named only by their handles, so the shared praise ('do bowls a little differently', 'definitely worth trying') is split per venue. It is unclear whether the creator visited, so visited is false. The 'fueling vs running' line and 'save this' are left out as narration.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Schüsseldienst",
+        "locationHint": "@schuesseldienstberlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "6a715997-d93a-4aa5-b778-9e3249a3700a",
+          "brandName": "Schüsseldienst - iss keine gewöhnliche Bowl!",
+          "venueId": "b299c961-abbc-44d6-b548-bb8b57df3023",
+          "venueName": "Schüsseldienst - iss keine gewöhnliche Bowl!",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Kitchari Kitchen",
+        "locationHint": "@kitcharikitchenberlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "9110d43d-633c-4924-a813-fa66912fa75c",
+          "brandName": "KITCHARI KITCHEN",
+          "venueId": "1783c1cb-eb46-48f7-a695-4d9ae5e6e94f",
+          "venueName": "KITCHARI KITCHEN",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Fatoush",
+        "locationHint": "@fatoushberlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "7f96ecdb-1194-477a-b2de-6aa6bf4ab9d9",
+          "brandName": "Fatoush",
+          "venueId": null,
+          "venueName": null,
+          "note": "@fatoushberlin matches the Fatoush chain, but the post does not say which of its three branches is meant."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "bowls might be the ultimate trendy food",
+        "quote": "Bowls might be THE ultimate trendy food",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "bowls are one of the creator's favorite things to eat",
+        "quote": "they’re also one of my favorite things to eat",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "bowls can get a little boring sometimes",
+        "quote": "they can get a little boring sometimes",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [
+          "bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Schüsseldienst does bowls a little differently",
+        "quote": "do bowls a little differently",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Schüsseldienst is definitely worth trying",
+        "quote": "definitely worth trying",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Kitchari Kitchen does bowls a little differently",
+        "quote": "do bowls a little differently",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Kitchari Kitchen is definitely worth trying",
+        "quote": "definitely worth trying",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Fatoush does bowls a little differently",
+        "quote": "do bowls a little differently",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "bowls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Fatoush is definitely worth trying",
+        "quote": "definitely worth trying",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "fueling is as important as running",
+        "quote": "Fueling is just as important as running, right?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "subject": "none",
+        "place": null,
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.596Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.extra (both_ok): The rhetorical line about fueling is borderline general food talk, so including or omitting it are both defensible."
+      },
+      {
+        "at": "2026-11-01T14:39:43.596Z",
+        "by": "adjudication:mini-base",
+        "note": "places.missed (both_ok): Fatoush Berlin is the same venue with the same match; the city suffix comes from the handle."
+      },
+      {
+        "at": "2026-11-01T14:39:43.596Z",
+        "by": "adjudication:mini-base",
+        "note": "places.extra (both_ok): Same venue and same match as the reference, differing only by a city suffix."
+      },
+      {
+        "at": "2026-11-01T21:36:47.231Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.425Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

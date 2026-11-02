@@ -24,10 +24,12 @@
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminDetailTabs, { type AdminDetailTab } from '#components/admin/AdminDetailTabs.svelte';
 	import BrandCompetitors from '#components/admin/BrandCompetitors.svelte';
+	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
 	import VenueFavicon from '#components/admin/venues/VenueFavicon.svelte';
 	import { api } from '#lib/api.js';
 	import { branchesByCity } from '#lib/brands.js';
 	import { lastMonth, leadScoreVariant, monthLabel, recentMonths } from '#lib/culinary.js';
+	import { exploreHref } from '#lib/explore.js';
 	import { stageLabel } from '#lib/outreach-status.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
@@ -106,6 +108,7 @@
 		{ value: 'overview', label: 'Overview' },
 		{ value: 'posts', label: 'Posts', count: summary ? summary.figures.posts + summary.figures.ownPosts : undefined },
 		{ value: 'reviews', label: 'Reviews', count: summary?.figures.reviews },
+		{ value: 'claims', label: 'Claims' },
 		{
 			value: 'branches',
 			label: chain ? 'Branches' : 'Place',
@@ -306,6 +309,19 @@
 			<BrandPostsTab {brand} {month} />
 		{:else if tab === 'reviews'}
 			<BrandReviewsTab {brand} {month} {cityId} />
+		{:else if tab === 'claims'}
+			{#if cityId}
+				{#key `${cityId}:${month}`}
+					<p class="m-0 -mb-2 text-sm">
+						<a class="text-beet" href={exploreHref({ cityId, brandId: brand.id })}>Explore what is said about it</a>
+						<span class="text-muted-foreground">: any topic, broken down by branch, month and source</span>
+					</p>
+					<ClaimsTable
+						scope={{ brandId: brand.id, cityId, month }}
+						topicsCityId={cityId}
+						scopeLabel={`What its branches' reviews and the posts about it said in ${city?.cityName ?? 'the city'} that month`} />
+				{/key}
+			{/if}
 		{:else if tab === 'branches'}
 			<BrandBranchesTab {brand} onChange={set} />
 		{:else if tab === 'competitors'}

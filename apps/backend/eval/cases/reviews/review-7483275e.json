@@ -1,0 +1,512 @@
+{
+  "id": "review-7483275e",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "7483275e-47a4-4ca7-acf6-53df1800586f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tNelExVjJTbmxpUjBSemRIRmhla1ZrTkdWblEzYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-14T21:33:28.393Z",
+    "stars": 3,
+    "text": "I rarely write reviews, but since this place has been so highly recommended by friends and strangers, I feel compelled to share my experience.\nWe started queing at 20:10 and waited in line for over two hours. Why? Not for the queue itsself but for the service. There were only two people working inside the shop, with little to no organization.\n\nMoreover, and this is the most depresssing part, the doner was overall mid: the ingredients you can choose are very few (the best one was the grated cheese), the sauces are mild and a bit tasteless (except for the spicy one, which was actually pretty good) and the meat is a classic, basic, chicken kebap. In conclusion, if this is your first time trying a kebap, you can find a much better one; if you are used to eating kebap… you also can find a better one.\n\nNota per i romani: se avete mai preso un kebab senza pretese a Roma, avete mangiato questo. La prossima volta che vi nominano Mustafa ricordategli Alibabà.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:05:58.738Z",
+    "claims": [
+      {
+        "text": "waited over two hours in line",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 120,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "there were only two people working inside the shop",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "little to no organization",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the doner was overall mid",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the ingredients you can choose are very few",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the grated cheese was the best ingredient",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "grated cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the sauces are mild and a bit tasteless",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the spicy sauce was pretty good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "spicy sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the meat is a basic chicken kebap",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "meat",
+          "chicken kebap"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the kebab in Rome was like this one",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "Mustafa is like Alibabà",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:35.377Z",
+    "usage": {
+      "inputTokens": 5215,
+      "outputTokens": 3782,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the 'over two hours' line wait (queue, 120 min) versus the reviewer blaming the slow service (speed_of_service); whether 'classic, basic chicken kebap' is neutral or negative (negative in the 'mid' context); the two 'find a better one' clauses kept as separate verdicts, the second optional; the Italian note's foods kept as written ('kebab').",
+    "claims": [
+      {
+        "text": "the reviewer rarely writes reviews",
+        "quote": "I rarely write reviews",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the place was highly recommended by friends and strangers",
+        "quote": "this place has been so highly recommended by friends and strangers",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "started queuing at 20:10",
+        "quote": "We started queing at 20:10",
+        "sentiment": "neutral",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "waited in line for over two hours",
+        "quote": "waited in line for over two hours",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 120,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the long wait was due to the service, not the queue itself",
+        "quote": "Not for the queue itsself but for the service",
+        "sentiment": "negative",
+        "aspect": "speed_of_service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "queue",
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "only two people were working inside the shop",
+        "quote": "There were only two people working inside the shop",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the staff had little to no organization",
+        "quote": "with little to no organization",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the doner was overall mid",
+        "quote": "the doner was overall mid",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "doner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the ingredients you can choose for the doner are very few",
+        "quote": "the ingredients you can choose are very few",
+        "sentiment": "negative",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the grated cheese was the best ingredient",
+        "quote": "the best one was the grated cheese",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "grated cheese"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the sauces are mild and a bit tasteless",
+        "quote": "the sauces are mild and a bit tasteless",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "sauces"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the spicy sauce was actually pretty good",
+        "quote": "the spicy one, which was actually pretty good",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "spicy one"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the meat is a classic, basic chicken kebap",
+        "quote": "the meat is a classic, basic, chicken kebap",
+        "sentiment": "negative",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "chicken kebap"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral",
+            "mixed"
+          ],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "first-time kebap eaters can find a much better kebap elsewhere",
+        "quote": "if this is your first time trying a kebap, you can find a much better one",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [
+          "kebap"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "experienced kebap eaters can also find a better kebap elsewhere",
+        "quote": "if you are used to eating kebap… you also can find a better one",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [
+          "kebap"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "for Romans: the kebab is like any unpretentious kebab in Rome",
+        "quote": "se avete mai preso un kebab senza pretese a Roma, avete mangiato questo",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "next time someone mentions Mustafa, remind them of Alibabà",
+        "quote": "La prossima volta che vi nominano Mustafa ricordategli Alibabà",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -2,10 +2,10 @@
 	import type { AdminBranchReviewOutputDto, AdminBrandOutputDto } from 'client';
 
 	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
-	import TalksAbout from '#components/admin/feedback/TalksAbout.svelte';
+	import TalksAbout from '#components/admin/statements/TalksAbout.svelte';
 	import { api } from '#lib/api.js';
-	import { monthLabel, sentimentVariant } from '#lib/culinary.js';
-	import { changesOf } from '#lib/feedback.js';
+	import { monthLabel } from '#lib/culinary.js';
+	import { changeLabel, changesOf } from '#lib/statements.js';
 	import type { Column } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
 
@@ -48,22 +48,16 @@
 			value: (row) => row.textTranslated || row.text || ''
 		},
 		{
-			type: 'badge',
-			name: 'Sentiment',
-			value: (row) => row.sentiment,
-			variant: (row) => sentimentVariant(row.sentiment)
-		},
-		{
 			type: 'component',
 			name: 'Talks about',
 			component: TalksAbout as never,
-			props: (row) => ({ feedback: row.feedback, cityId, month: new Date(row.publishedAt).toISOString().slice(0, 7), compact: true })
+			props: (row) => ({ statements: row.statements, cityId, month: new Date(row.publishedAt).toISOString().slice(0, 7), compact: true })
 		},
 		{
 			type: 'value',
 			name: 'Changes noticed',
 			truncate: 40,
-			value: (row) => changesOf(row.feedback).join(' · ')
+			value: (row) => changesOf(row.statements).map(changeLabel).join(' · ')
 		},
 		{
 			type: 'value',

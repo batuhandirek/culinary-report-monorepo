@@ -1,8 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { FeedbackPoint } from 'src/modules/feedback/entities/feedback-point.entity.js';
-import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
@@ -49,7 +48,7 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
-		// The aspects the points are filed under: the readers take the vocabulary from the table
+		// The aspects the claims are filed under: the readers take the vocabulary from the table
 		seedTopics(harness.orm.em, ASPECT_SEED.map(a => a.key));
 		await harness.orm.em.flush();
 	});
@@ -85,8 +84,6 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 				brand: (id === 'c' ? other : venue).brand,
 				venueName: 'Hisar',
 				visited: true,
-				sentiment: 'positive',
-				summary: 'Good.',
 			});
 		});
 		await em.flush();
@@ -99,8 +96,8 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 		// a (automatic) and c (manual); b is not a venue
 		expect(report.postCount).toBe(2);
 	});
-	// Rows never copy brand or venue: a re-match moves a mention's feedback in every reader at once
-	it('moves a re-matched mention\'s feedback to its new brand in every reader, no row rewritten', async () => {
+	// Statements never copy brand or venue: a re-match moves a mention's statements in every reader at once
+	it('moves a re-matched mention\'s statements to its new brand in every reader, no row rewritten', async () => {
 		const em = harness.orm.em;
 		const city = testCity(em, { name: 'Rematchburg' });
 		const right = em.create(Venue, { city, placeId: 'rm-1', name: 'Cash Corner', category: 'Kebab shop' });
@@ -121,17 +118,23 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 			brand: wrong.brand,
 			venueName: 'Cash Corner',
 			visited: true,
-			sentiment: 'negative',
-			summary: 'Cash only.',
 		});
-		addFeedback(em, mention, {
-			complaints: [{ theme: 'cash_only', detail: 'cash only' }],
-			dishes: [{ name: 'Dürüm', sentiment: 'positive' }],
-		});
+		const index = await harness.moduleRef.get(TopicService).index();
+		addStatements(
+			em,
+			mention,
+			[
+				{ text: 'cash only', sentiment: 'negative', aspect: 'cash_only' },
+				// A dish the post listed that no claim names
+				{ foods: ['Dürüm'], sentiment: 'positive' },
+			],
+			{ index },
+		);
 		await em.flush();
-		const rows = async () =>
-			(await em.fork().find(FeedbackPoint, { mention: mention.id }, { orderBy: { id: 'asc' } })).map(r => ({ ...r }));
+		const rows = async (): Promise<Record<string, unknown>[]> =>
+			em.getConnection().execute('select * from statements where mention_id = ? order by id', [mention.id]);
 		const before = await rows();
+		expect(before).toHaveLength(2);
 
 		await harness.moduleRef.get(MentionMatchingService).correct(mention.id, { venueId: right.id });
 
@@ -142,7 +145,11 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 		expect(data.social.complaints).toEqual({ payment: 1 });
 		expect(data.dishes.map(d => d.name)).toEqual(['Dürüm']);
 		const posts = await harness.moduleRef.get(BrandPostsService).list(right.brand.id, {}, 1, 10);
-		expect(posts.items.map(p => p.mention.feedback.getItems().map(r => r.detail ?? r.dish))).toEqual([['cash only', 'Dürüm']]);
+		expect(
+			posts.items.map(p =>
+				p.mention.statements.getItems().map(s => s.text ?? s.parts.getItems().find(part => part.role === 'food')?.term?.name),
+			),
+		).toEqual([['cash only', 'Dürüm']]);
 		const wrongData = (await harness.moduleRef.get(ReportService).compute(wrong.brand.id, city.id, '2026-09')).data;
 		expect(wrongData.social.complaints).toEqual({});
 		expect(await rows()).toEqual(before);

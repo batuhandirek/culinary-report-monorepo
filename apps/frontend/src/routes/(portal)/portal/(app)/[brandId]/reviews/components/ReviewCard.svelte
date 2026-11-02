@@ -3,7 +3,7 @@
 	import type { PortalReviewOutputDto } from 'client';
 
 	import { api } from '#lib/api.js';
-	import { topicsOf } from '#lib/feedback.js';
+	import { rootsOf } from '#lib/statements.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { notificationManager } from '#ui/lib/notification-manager.js';
 	import Button from '#ui/wrapped/Button.svelte';
@@ -39,10 +39,12 @@
 			timeZone: 'UTC'
 		})
 	);
-	// The roots its points raise, labelled as the aspect vocabulary names them
+	// The roots its claims raise, labelled as its aspects name them: praised, criticised, and the
+	// facts it noted ("fries for 10 euros"), which are neither
 	const topics = $derived([
-		...topicsOf(review.feedback, 'praise').map((t) => ({ topic: t.key, label: t.label, good: true })),
-		...topicsOf(review.feedback, 'complaints').map((t) => ({ topic: t.key, label: t.label, good: false }))
+		...rootsOf(review.statements, 'praise').map((t) => ({ topic: t.key, label: t.label, tone: 'good' as const })),
+		...rootsOf(review.statements, 'complaints').map((t) => ({ topic: t.key, label: t.label, tone: 'bad' as const })),
+		...rootsOf(review.statements, 'noted').map((t) => ({ topic: t.key, label: t.label, tone: 'noted' as const }))
 	]);
 
 	const markAction = createAction(
@@ -131,13 +133,13 @@
 
 	{#if topics.length}
 		<ul class="m-0 flex list-none flex-wrap gap-1.5 p-0" aria-label="Topics">
-			{#each topics as t (`${t.topic}-${t.good}`)}
+			{#each topics as t (`${t.topic}-${t.tone}`)}
 				<li
 					class={[
 						'border-line rounded-full border px-2.5 py-0.5 text-xs font-medium',
-						t.good ? 'text-primary-darker' : 'text-beet'
+						t.tone === 'good' ? 'text-primary-darker' : t.tone === 'bad' ? 'text-beet' : 'text-muted-foreground'
 					]}>
-					{t.good ? '+' : '−'}
+					{#if t.tone === 'good'}+{:else if t.tone === 'bad'}−{/if}
 					{t.label}
 				</li>
 			{/each}

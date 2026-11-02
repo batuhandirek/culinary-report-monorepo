@@ -157,7 +157,7 @@ export const platformsLabel = (platforms: Platform[] | undefined) => {
 
 /**
  * The social counts a list of posts gives, as `ReportSocialStats` has them: sentiment per post,
- * topics once per post, themes once per post and absent when a point has no theme. What the
+ * roots once per post, themes once per post (a claim about no aspect counts under none). What the
  * posts section shows when it keeps some platforms only.
  */
 export const postsSummary = (posts: ReportPost[]) => {
@@ -167,9 +167,7 @@ export const postsSummary = (posts: ReportPost[]) => {
 		return out;
 	};
 	const themes = (side: 'praise' | 'complaints') =>
-		posts.some((p) => p[side].some((point) => !point.theme))
-			? undefined
-			: count(posts.map((p) => p[side].map((point) => point.theme!)));
+		count(posts.map((p) => p[side].flatMap((claim) => (claim.theme ? [claim.theme] : []))));
 	const sentiment = { positive: 0, mixed: 0, neutral: 0, negative: 0 };
 	for (const p of posts) sentiment[p.sentiment as keyof typeof sentiment] += 1;
 	return {

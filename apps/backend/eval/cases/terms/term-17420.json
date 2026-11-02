@@ -1,0 +1,47 @@
+{
+  "id": "term-17420",
+  "kind": "term",
+  "tags": [
+    "used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 17420,
+    "key": "big red robe oolong",
+    "name": "Big Red Robe oolong",
+    "uses": 1
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": null
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:55:47.343Z",
+    "usage": {
+      "inputTokens": 170,
+      "outputTokens": 99,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 34
+    },
+    "notes": null,
+    "topics": [
+      {
+        "key": "tea",
+        "relation": "kind_of"
+      }
+    ],
+    "alsoAcceptable": [],
+    "suggestion": null,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.448Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

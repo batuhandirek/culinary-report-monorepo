@@ -10,6 +10,8 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
+import { Statement } from 'src/modules/statements/entities/statement.entity.js';
+import { STATEMENT_PARTS_POPULATE, STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 
 import { AdminUpdateMentionInputDto } from '../dto/admin-mention.input.dto.js';
@@ -28,14 +30,13 @@ import { SocialPost } from '../entities/social-post.entity.js';
 import { MentionMatchingService } from '../services/mention-matching.service.js';
 import { normalizeHashtag } from '../util/hashtags.js';
 
+// A mention's statements with their parts (`STATEMENT_POPULATE`, under `mentions.`)
 const MENTION_POPULATE = [
 	'mentions',
 	'mentions.venue',
 	'mentions.brand',
-	'mentions.feedback',
-	'mentions.feedback.foodTopic',
-	'mentions.feedback.aspect',
-	'mentions.feedback.aspect.parent',
+	'mentions.statements.parts.topic.parent',
+	'mentions.statements.parts.term.topics.topic.parent',
 	'account',
 	'account.creator',
 	'account.brand',
@@ -96,6 +97,8 @@ export class AdminSocialController {
 		if (query.venueId) filters.mentions = { venue: query.venueId };
 		else if (query.brandId) filters.mentions = { brand: query.brandId };
 		else if (query.unmatchedOnly) filters.mentions = { matchMethod: MentionMatchMethodEnum.NONE };
+		else if (query.unconfirmedOnly) filters.mentions = { unconfirmedAt: { $ne: null } };
+		if (query.skipReason) filters.skipReason = query.skipReason;
 		else if (query.matchedOnly) filters.mentions = { brand: { $ne: null } };
 
 		const [field, order] = (query.sort ?? 'postedAt:desc').split(':') as ['postedAt' | 'views', 'asc' | 'desc'];
@@ -124,12 +127,22 @@ export class AdminSocialController {
 	@TypedRoute.Get('/posts/:id')
 	async getPost(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminSocialPostOutputDto> {
 		const post = await this.em.findOneOrFail(SocialPost, { id }, { populate: [...POST_POPULATE, 'snapshots'] });
-		return wrap(post).serialize({
-			skipNull: true,
-			forceObject: true,
-			populate: [...POST_POPULATE, 'snapshots'],
-			exclude: [...EXCLUDE, 'snapshots.post'],
-		}) as unknown as AdminSocialPostOutputDto;
+		const general = await this.em.find(
+			Statement,
+			{ post: post.id, mention: null },
+			{ populate: [...STATEMENT_PARTS_POPULATE], orderBy: { id: QueryOrder.ASC } },
+		);
+		return {
+			...wrap(post).serialize({
+				skipNull: true,
+				forceObject: true,
+				populate: [...POST_POPULATE, 'snapshots'],
+				exclude: [...EXCLUDE, 'snapshots.post'],
+			}),
+			generalStatements: general.map(statement =>
+				wrap(statement).serialize({ skipNull: true, forceObject: true, populate: [...STATEMENT_PARTS_POPULATE] }),
+			),
+		} as unknown as AdminSocialPostOutputDto;
 	}
 
 	@TypedRoute.Get('/mentions')
@@ -142,7 +155,7 @@ export class AdminSocialController {
 			const { start, end } = monthRange(query.month);
 			filters.post = { postedAt: { $gte: start, $lt: end } };
 		}
-		const populate = ['post', 'venue', 'brand', 'feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'] as const;
+		const populate = ['post', 'venue', 'brand', ...STATEMENT_POPULATE] as const;
 		const [items, totalItems] = await this.em.findAndCount(Mention, filters, {
 			populate: [...populate],
 			orderBy: { post: { postedAt: QueryOrder.DESC } },
@@ -171,11 +184,11 @@ export class AdminSocialController {
 		@TypedBody() body: AdminUpdateMentionInputDto,
 	): Promise<AdminMentionOutputDto> {
 		const mention = await this.mentionMatchingService.correct(id, body);
-		await this.em.populate(mention, ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent']);
+		await this.em.populate(mention, [...STATEMENT_POPULATE]);
 		return wrap(mention).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: ['venue', 'brand', 'feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+			populate: ['venue', 'brand', ...STATEMENT_POPULATE],
 		}) as unknown as AdminMentionOutputDto;
 	}
 }

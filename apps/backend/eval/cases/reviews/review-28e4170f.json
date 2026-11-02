@@ -1,0 +1,175 @@
+{
+  "id": "review-28e4170f",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "28e4170f-f145-49cc-b33f-3195ae1494c2",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2poSGIwOHdlVWhZYjA5TFpGRjNWR0pOTWtoaU9VRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Markthalle Neun",
+    "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+    "brand": "Markthalle Neun",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-06T01:41:24.920Z",
+    "stars": 4,
+    "text": "This was a great indoor markethall. It can get busy and if you're biking the bike racks can fill up but it was really fun to look around.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:45:13.552Z",
+    "claims": [
+      {
+        "text": "a great indoor markethall",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it can get busy",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bike racks can fill up",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was really fun to look around",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:43.892Z",
+    "usage": {
+      "inputTokens": 4931,
+      "outputTokens": 836,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether 'great indoor markethall' is an opinion about the vibe or a verdict on the place as a whole (both allowed), and filing full bike racks under accessibility (parking).",
+    "claims": [
+      {
+        "text": "Markthalle Neun was a great indoor market hall",
+        "quote": "This was a great indoor markethall.",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the market hall can get busy",
+        "quote": "It can get busy",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the bike racks can fill up when biking there",
+        "quote": "if you're biking the bike racks can fill up",
+        "sentiment": "negative",
+        "aspect": "accessibility",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the market hall was really fun to look around",
+        "quote": "it was really fun to look around",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

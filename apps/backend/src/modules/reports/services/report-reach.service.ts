@@ -7,6 +7,7 @@ import _ from 'lodash';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
 import { Review, ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { WebMentionService } from 'src/modules/venues/services/web-mention.service.js';
@@ -54,7 +55,7 @@ export class ReportReachService {
 		const reviews = await this.em.find(
 			Review,
 			{ venue: { $in: branches.map(b => b.id) }, publishedAt: { $gte: start, $lt: end } },
-			{ populate: ['feedback'] },
+			{ populate: [...STATEMENT_POPULATE] },
 		);
 		const platforms = reviewPlatforms(
 			reviews.map(r => ({
@@ -63,7 +64,7 @@ export class ReportReachService {
 				text: r.text,
 				textTranslated: r.textTranslated,
 				ownerResponse: r.ownerResponse,
-				feedback: r.feedback.getItems(),
+				statements: r.statements.getItems(),
 			})),
 			brandRatings(branches),
 		);

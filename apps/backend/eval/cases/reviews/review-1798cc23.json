@@ -1,0 +1,545 @@
+{
+  "id": "review-1798cc23",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:2",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "1798cc23-e700-45a4-8484-558e23f7b054",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pWSVJsTm5NM2xJUjNCSFdsTjJlV2RQVDFrdFFYYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Khatoon Restaurant",
+    "venueId": "93059d24-3f0a-4583-b8b9-7436222e28b4",
+    "brand": "Khatoon Restaurant",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-18T19:39:23.239Z",
+    "stars": 2,
+    "text": "Das Essen war sehr gut, aber zwei Dinge haben gestört.\n\nDer Google-Eintrag passt nicht mehr: Offenbar wurde das Restaurant übernommen, Karte, Preise und Küche sind andere als hier angegeben, statt persisch inzwischen afghanisch. Der alte Eintrag samt Bewertungen wurde einfach weitergeführt.\n\nUnd der Service passte nicht zum Preis (ca. 20 € pro Gericht): Bedienung mit Kaugummi, keine Getränkekarte, Bier nur aus der Flasche und von dreien sah eines anders aus, Pommes vergessen, keine gedruckte Rechnung möglich, keine Auskunft zu den Weinen, Musik zwischendurch viel zu laut.",
+    "textTranslated": "The food was very good, but two things were disappointing.\n\nThe Google listing is no longer accurate: Apparently, the restaurant has been taken over; the menu, prices, and cuisine are different from what's listed here, and it's now Afghan instead of Persian. The old listing, including the reviews, has simply been continued.\n\nAnd the service didn't match the price (around €20 per dish): The server was chewing gum, there was no drinks menu, beer was only available by the bottle, and one of the three bottles looked different, the fries were forgotten, a printed bill wasn't available, no information was given about the wines, and the music was much too loud at times."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:37:35.965Z",
+    "claims": [
+      {
+        "text": "the food was very good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the restaurant has been taken over",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the menu is different from what's listed here",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the prices are different from what's listed here",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the cuisine is different from what's listed here",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "it's now Afghan instead of Persian",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "Afghan",
+          "Persian"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "the old listing including the reviews has simply been continued",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact"
+      },
+      {
+        "text": "around €20 per dish",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 20,
+        "unit": "money",
+        "kind": null
+      },
+      {
+        "text": "the server was chewing gum",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there was no drinks menu",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "beer was only available by the bottle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "beer"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "one of the three bottles looked different",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drink_quality",
+        "foods": [
+          "bottles"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the fries were forgotten",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "a printed bill wasn't available",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "billing",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no information was given about the wines",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "advice",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the music was much too loud at times",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:31.444Z",
+    "usage": {
+      "inputTokens": 5385,
+      "outputTokens": 3362,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the takeover and the menu/price/cuisine changes count as changes (ownership, menu_variety/food), while the listing complaints go under other. The beer that looked different could be drink_quality or order_accuracy, and 'service didn't match the price' is value_for_money.",
+    "claims": [
+      {
+        "text": "the food was very good",
+        "quote": "Das Essen war sehr gut",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "two things were disappointing",
+        "quote": "zwei Dinge haben gestört",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Google listing is no longer accurate",
+        "quote": "Der Google-Eintrag passt nicht mehr",
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the restaurant has apparently been taken over",
+        "quote": "Offenbar wurde das Restaurant übernommen",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the menu, prices and cuisine differ from those in the listing",
+        "quote": "Karte, Preise und Küche sind andere als hier angegeben",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "other",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the cuisine is now Afghan instead of Persian",
+        "quote": "statt persisch inzwischen afghanisch",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the old listing including its reviews was simply continued",
+        "quote": "Der alte Eintrag samt Bewertungen wurde einfach weitergeführt.",
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the service did not match the price",
+        "quote": "der Service passte nicht zum Preis",
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "dishes cost around 20 € each",
+        "quote": "ca. 20 € pro Gericht",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 20,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the server was chewing gum",
+        "quote": "Bedienung mit Kaugummi",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "there was no drinks menu",
+        "quote": "keine Getränkekarte",
+        "sentiment": "negative",
+        "aspect": "drink_selection",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "Bier was only available by the bottle",
+        "quote": "Bier nur aus der Flasche",
+        "sentiment": "negative",
+        "aspect": "drink_selection",
+        "foods": [
+          "Bier"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "one of the three Bier bottles looked different",
+        "quote": "von dreien sah eines anders aus",
+        "sentiment": "negative",
+        "aspect": "drink_quality",
+        "foods": [
+          "Bier"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "order_accuracy",
+            "drinks"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Pommes were forgotten",
+        "quote": "Pommes vergessen",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "Pommes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "no printed bill was possible",
+        "quote": "keine gedruckte Rechnung möglich",
+        "sentiment": "negative",
+        "aspect": "billing",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "payment"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "no information was given about the Weinen",
+        "quote": "keine Auskunft zu den Weinen",
+        "sentiment": "negative",
+        "aspect": "advice",
+        "foods": [
+          "Weinen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the music was at times much too loud",
+        "quote": "Musik zwischendurch viel zu laut",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.204Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.402Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

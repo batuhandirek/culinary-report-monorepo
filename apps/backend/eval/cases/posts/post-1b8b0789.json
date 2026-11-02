@@ -1,0 +1,609 @@
+{
+  "id": "post-1b8b0789",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "360.blogger",
+    "locationName": "DOREE 65 Argentinian Restaurant",
+    "hashtags": [
+      "berlin",
+      "berlinfood",
+      "steaktiktok",
+      "doree65vonseite",
+      "vonseite"
+    ],
+    "taggedHandles": [
+      "@steakhaus Doree 65",
+      "@Doree65"
+    ],
+    "text": "Berlins Hyped Steak Spot 🥩😋\n\n@steakhaus Doree 65 @Doree65 \n\n#berlin #berlinfood #steaktiktok #doree65vonseite #vonseite ",
+    "subtitles": "eine achlaschermuterplatte bitte zum mitnehmen\nheute gab es ganz wildes essen sondern bei duree 65\nder Laden ist ja momentan total im Hype\nund wir dachten wir probieren das Ganze Aus\nbevor wir nach New York fliegen\nda wir NRW da sind mussten wir das auch ankündigen\nund wir wurden herzlich aufgenommen\nund ich muss schon sagen\nder Besitzer is schon n bisschen crazy drauf\naber so wie er im Internet is is er auch 1:1 vor Ort\nalso das is wirklich kein Filter\nalso wir fanden ihn korrekt\negal wie kontrovers er is\naber Leute wir sind wegen dem Essen da\nlet's go wir hatten 2 Grillplatte\nwaren jeweils für 2 Personen gedacht\nund ich muss schon sagen es sah wirklich sehr saftig Aus\nund es hat auch sehr saftig geschmeckt\nzu dem steakfleisch haben wir noch\nBratkartoffeln und Gemüse bekommen\ndann auch super gewürzt\nalso ich fand das Fleisch persönlich sehr lecker\n2 meiner Kollegen auch\nnur einer meinte dass er zu viel rumkauen musste\naber zum Ende hin wurden wir uns einig\ndass wir auf jeden Fall noch mal hier\nwieder das ganze auf jeden Fall noch mal verputzen würden\ndeswegen Leute\nschreibts mal in den Kommentaren wie ihr den Laden findet\nvor allem das Essen dort\nund wir sehen uns beim nächsten Video Peace",
+    "subtitlesLanguage": "deu-DE",
+    "id": "1b8b0789-0f81-46b3-bb6e-cb54b82419bd",
+    "externalId": "7694943428961930529",
+    "url": "https://www.tiktok.com/@360.blogger/video/7694943428961930529",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-10T07:50:39.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:35:15.174Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "DOREE 65 Argentinian Restaurant",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "07f6c11c-9e3d-490f-ba00-3c51395c7192",
+          "brandName": "DOREE 65",
+          "venueId": "8d2014a7-6f81-47cc-aba1-26246b621d6a",
+          "venueName": "DOREE 65"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the place is currently very hyped",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they went there before flying to New York",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they were warmly welcomed",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner is a bit crazy but the same online and in person",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they had 2 grill platters for 2 people each",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the grill platters looked very juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "grill platter"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak meat tasted very juicy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "steak meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they also got fried potatoes and vegetables with the steak meat",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "fried potatoes",
+          "vegetables",
+          "steak meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the side dishes were super seasoned",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "side dishes"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meat was very tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "one person thought the meat required too much chewing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "meat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they would definitely eat there again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:00:10.182Z",
+    "usage": {
+      "inputTokens": 10342,
+      "outputTokens": 4373,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 6966
+    },
+    "notes": "The garbled first transcript line (a takeaway order) and the NRW announcement are too unclear to keep. The comments about the owner are under ownership, and 'super gewürzt' is read as being about the sides named just before it.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Doree 65",
+        "locationHint": "tagged location DOREE 65 Argentinian Restaurant",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "07f6c11c-9e3d-490f-ba00-3c51395c7192",
+          "brandName": "DOREE 65",
+          "venueId": "8d2014a7-6f81-47cc-aba1-26246b621d6a",
+          "venueName": "DOREE 65",
+          "note": "The post names 'Doree 65', which matches DOREE 65, a single-branch brand. 'Doree' (Argentinian) lacks the 65."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Doree 65 is Berlin's hyped steak spot",
+        "quote": "Berlins Hyped Steak Spot",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": [
+            "fact",
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creators ate at Doree 65 today",
+        "quote": "heute gab es ganz wildes essen sondern bei duree 65",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Doree 65 is currently very hyped",
+        "quote": "der Laden ist ja momentan total im Hype",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creators were warmly received at Doree 65",
+        "quote": "wir wurden herzlich aufgenommen",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner of Doree 65 is a bit crazy",
+        "quote": "der Besitzer is schon n bisschen crazy drauf",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the owner is the same in person as on the internet, no filter",
+        "quote": "so wie er im Internet is is er auch 1:1 vor Ort",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creators found the owner decent, however controversial he is",
+        "quote": "also wir fanden ihn korrekt",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they had 2 Grillplatte",
+        "quote": "wir hatten 2 Grillplatte",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Grillplatte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "each Grillplatte was meant for 2 people",
+        "quote": "waren jeweils für 2 Personen gedacht",
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [
+          "Grillplatte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Grillplatte looked very juicy",
+        "quote": "es sah wirklich sehr saftig Aus",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Grillplatte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Grillplatte tasted very juicy",
+        "quote": "es hat auch sehr saftig geschmeckt",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Grillplatte"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak meat came with Bratkartoffeln and Gemüse",
+        "quote": "Bratkartoffeln und Gemüse bekommen",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "steakfleisch",
+          "Bratkartoffeln",
+          "Gemüse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Bratkartoffeln and Gemüse were super well seasoned",
+        "quote": "dann auch super gewürzt",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Bratkartoffeln",
+          "Gemüse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the creator and two colleagues found the Fleisch very tasty",
+        "quote": "ich fand das Fleisch persönlich sehr lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "one colleague found he had to chew the Fleisch too much",
+        "quote": "nur einer meinte dass er zu viel rumkauen musste",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they all agreed they would definitely come back and eat it all again",
+        "quote": "wieder das ganze auf jeden Fall noch mal verputzen würden",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.594Z",
+        "by": "adjudication:mini-base",
+        "note": "claims.missed (both_ok): The agent's 'hyped steak spot' claim already states the same hype point as the transcript line, so folding them is acceptable."
+      },
+      {
+        "at": "2026-11-01T14:39:43.594Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The quote names steakfleisch as part of what was served, so it belongs in foods."
+      },
+      {
+        "at": "2026-11-01T21:36:47.225Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.421Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

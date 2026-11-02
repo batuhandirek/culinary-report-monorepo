@@ -11,16 +11,10 @@ import {
 	computeTrends,
 	TrendMention,
 	TrendMonthInput,
-	TrendDish,
 	TrendReview,
 } from '../util/compute-trends.js';
+import { FOODS_SQL, type StatementFood } from 'src/modules/statements/util/statement-foods.js';
 import { mentionTopicsSql } from '../util/topic-mentions.js';
-
-/** SQL: the dishes a source's feedback rows name (`where` picks the source), in their order */
-const DISHES_OF = (where: string) =>
-	`(select coalesce(json_agg(json_build_object('name', f.dish, 'key', f.dish_key, 'topic', t.key) order by f.id), '[]'::json)
-		from feedback_points f left join topics t on t.id = f.food_topic_id
-		where ${where} and f.dish is not null)`;
 
 /**
  * What is getting popular in the city: cuisines, dishes, districts, creators and rising brands,
@@ -74,7 +68,7 @@ export class TrendService {
 			district: string | null;
 			category: string | null;
 			topics: string[];
-			dishes: TrendDish[] | null;
+			dishes: StatementFood[] | null;
 			post_id: string;
 			creator: string | null;
 			views: string | number;
@@ -84,7 +78,7 @@ export class TrendService {
 					select o.category from venues o where o.brand_id = m.brand_id and o.city_id = p.city_id
 					order by o.reviews_count desc nulls last, o.id limit 1
 				)) as category,
-				${mentionTopicsSql('m')} as topics, ${DISHES_OF('f.mention_id = m.id')} as dishes, p.id as post_id,
+				${mentionTopicsSql('m')} as topics, ${FOODS_SQL('st.mention_id = m.id')} as dishes, p.id as post_id,
 				c.name as creator, p.views
 			from mentions m
 			join social_posts p on p.id = m.post_id
@@ -96,15 +90,17 @@ export class TrendService {
 				and not ${ownPostSql('p', 'm.brand_id')}`,
 			[cityId, start, end],
 		);
+		// Reviews naming a food or drink (a food part of any of their statements)
 		const reviewRows: {
 			brand_id: string;
 			brand_name: string;
-			dishes: TrendDish[] | null;
+			dishes: StatementFood[] | null;
 		}[] = await this.em.getConnection().execute(
-			`select v.brand_id, b.name as brand_name, ${DISHES_OF('f.review_id = r.id')} as dishes
+			`select v.brand_id, b.name as brand_name, ${FOODS_SQL('st.review_id = r.id')} as dishes
 				from reviews r join venues v on v.id = r.venue_id join brands b on b.id = v.brand_id
 				where v.city_id = ? and r.published_at >= ? and r.published_at < ?
-					and exists (select 1 from feedback_points f where f.review_id = r.id and f.dish is not null)`,
+					and exists (select 1 from statements st join statement_parts p on p.statement_id = st.id and p.role = 'food'
+						where st.review_id = r.id)`,
 			[cityId, start, end],
 		);
 

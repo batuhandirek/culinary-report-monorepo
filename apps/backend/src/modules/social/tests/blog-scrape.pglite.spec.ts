@@ -18,7 +18,12 @@ import { blogExternalId } from '../util/blog-feed.js';
 const NOW = new Date('2026-10-22T12:00:00Z');
 const ARTICLE = 'Bei Kroque in der Weserstraße gibt es die besten Toasts in Neukölln. '.repeat(15);
 
-const item = (url: string, date: string, html: string, title = url.split('/').filter(Boolean).at(-1)!) => `
+const item = (
+	url: string,
+	date: string,
+	html: string,
+	title = url.split('/').filter(Boolean).at(-1)!,
+) => `
 	<item>
 		<title>${title}</title>
 		<link>${url}</link>
@@ -36,7 +41,12 @@ const WEB: Record<string, string> = {
 	[A]: `<html><head><link rel="alternate" type="application/rss+xml" href="/feed/"></head><body>Home</body></html>`,
 	[`${A}/feed/`]: rss('Blog A', [
 		item(`${A}/kroque/`, '2026-10-10T10:00:00Z', `<p>${ARTICLE}</p>`, 'Kroque'),
-		item(`${A}/brunch-list/?utm_source=rss`, '2026-09-02T10:00:00Z', '<p>Five brunch spots…</p>', 'Five brunch spots'),
+		item(
+			`${A}/brunch-list/?utm_source=rss`,
+			'2026-09-02T10:00:00Z',
+			'<p>Five brunch spots…</p>',
+			'Five brunch spots',
+		),
 		item(`${A}/old/`, '2026-03-01T10:00:00Z', `<p>${ARTICLE}</p>`),
 	]),
 	[`${A}/brunch-list/?utm_source=rss`]: `<html><body><nav>Menu</nav><article><h1>Five brunch spots</h1><p>${ARTICLE}</p></article></body></html>`,
@@ -80,7 +90,9 @@ describe('BlogScrapeService', () => {
 		testCitySource(em, berlin, CitySourceKindEnum.BLOG, 'https://blog-c.example.org');
 		testCitySource(em, berlin, CitySourceKindEnum.BLOG, 'https://off.example.com', false);
 		// The same people on Instagram: the blog joins their creator
-		await harness.moduleRef.get(SocialAccountService).ensure(SocialPlatformEnum.INSTAGRAM, 'blog_a.example', berlin);
+		await harness.moduleRef
+			.get(SocialAccountService)
+			.ensure(SocialPlatformEnum.INSTAGRAM, 'blog_a.example', berlin);
 		await em.flush();
 	});
 
@@ -98,7 +110,9 @@ describe('BlogScrapeService', () => {
 		expect(result).toMatchObject({ blogs: 3, saved: 6, failed: 1 });
 		// Sources added in one flush share their createdAt, so their order is not fixed
 		expect(
-			result.details.map(d => [d.source, d.feedUrl, d.pages, d.saved, d.fromPages, d.error]).sort((a, b) => `${a[0]}`.localeCompare(`${b[0]}`)),
+			result.details
+				.map(d => [d.source, d.feedUrl, d.pages, d.saved, d.fromPages, d.error])
+				.sort((a, b) => `${a[0]}`.localeCompare(`${b[0]}`)),
 		).toEqual([
 			[B, B, 3, 4, 0, null],
 			['https://blog-c.example.org', null, 0, 0, 0, 'No RSS or Atom feed found'],
@@ -114,7 +128,8 @@ describe('BlogScrapeService', () => {
 			{ orderBy: { postedAt: 'desc' }, populate: ['account', 'foundBy', 'foundBy.source'] },
 		);
 		// Found by the blog, which is the city's source
-		const foundBy = (p: SocialPost) => p.foundBy.getItems().map(f => `${f.kind} ${f.value} ${f.source?.value === f.value}`);
+		const foundBy = (p: SocialPost) =>
+			p.foundBy.getItems().map(f => `${f.kind} ${f.value} ${f.source?.value === f.value}`);
 		expect(posts.map(p => [p.url, p.author, foundBy(p)])).toEqual([
 			[`${A}/kroque/`, 'blog-a.example.de', [`blog ${A} true`]],
 			['https://blog-b.example.com/food/one/', 'blog-b.example.com', [`blog ${B} true`]],
@@ -127,17 +142,29 @@ describe('BlogScrapeService', () => {
 		expect(posts[0].text).toBe(`Kroque\n\n${ARTICLE.trim()}`);
 		expect(posts[2].text).toBe(`Five brunch spots\n\nFive brunch spots\n${ARTICLE.trim()}`);
 		expect(posts[2].externalId).toBe(blogExternalId(`${A}/brunch-list/`));
-		expect(posts.every(p => p.views === 0 && p.city.id === berlin.id && p.analysedAt == null)).toBe(true);
+		expect(
+			posts.every(p => p.views === 0 && p.city.id === berlin.id && p.analysedAt == null),
+		).toBe(true);
 
-		const accounts = await em.find(SocialAccount, { handle: { $in: ['blog-a.example.de', 'blog_a.example'] } }, { orderBy: { platform: 'asc' } });
+		const accounts = await em.find(
+			SocialAccount,
+			{ handle: { $in: ['blog-a.example.de', 'blog_a.example'] } },
+			{ orderBy: { platform: 'asc' } },
+		);
 		expect(accounts.map(a => [a.platform, a.handle, a.displayName])).toEqual([
 			[SocialPlatformEnum.INSTAGRAM, 'blog_a.example', null],
 			[SocialPlatformEnum.BLOG, 'blog-a.example.de', null],
 		]);
 		expect(accounts[0].creator.id).toBe(accounts[1].creator.id);
 
-		const sources = await em.find(CitySource, { city: berlin.id }, { orderBy: { value: 'asc' } });
-		expect(sources.map(s => [s.value, s.feedUrl ?? null, s.error ?? null, s.checkedAt ?? null])).toEqual([
+		const sources = await em.find(
+			CitySource,
+			{ city: berlin.id },
+			{ orderBy: { value: 'asc' } },
+		);
+		expect(
+			sources.map(s => [s.value, s.feedUrl ?? null, s.error ?? null, s.checkedAt ?? null]),
+		).toEqual([
 			[B, B, null, NOW],
 			['https://blog-c.example.org', null, 'No RSS or Atom feed found', NOW],
 			['https://off.example.com', null, null, null],

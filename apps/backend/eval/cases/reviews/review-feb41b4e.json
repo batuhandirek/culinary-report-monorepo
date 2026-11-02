@@ -1,0 +1,321 @@
+{
+  "id": "review-feb41b4e",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:3",
+    "platform:google",
+    "length:long"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "feb41b4e-92b0-4703-9f6f-09465c6029bb",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21FMVdUWjRiVTl3YzNKWU1qTmxkelZOVUZOTlgzYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Nobelhart & Schmutzig",
+    "venueId": "2abc768f-7206-4aa4-9075-8aebd441b5de",
+    "brand": "Nobelhart & Schmutzig",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-24T14:03:20.355Z",
+    "stars": 3,
+    "text": "Leider muss ich mich einigen Kritiken anschließen. Es ist normal das der Wein in den gehobenen Restaurants teuer ist, aber wenn 3 Gläser mit 0,1 den Preis der gesamten Flasche von der Weinkarte überschreiten, dann ist das nicht in Ordnung, besonders wenn der Preis des Glases nicht klar kommuniziert wird, da erwarte ich von einem guten Sommelier einen Hinweis. Der Einsatz von regionalen Produkten ist prima, nur in einem Restaurant dieser Güte sollte das Produkt durch die Zubereitung und Würze unterstützt, hervorgehoben etc. werden und das war hier nicht der Fall. Das Brot war klasse und das Personal  sehr freundlich und kleine Fehler wurden großzügig behoben.",
+    "textTranslated": "Unfortunately, I have to agree with some of the criticism. It's normal for wine to be expensive in upscale restaurants, but when three 0.1-liter glasses exceed the price of an entire bottle on the wine list, that's unacceptable, especially when the price per glass isn't clearly communicated. I would expect a good sommelier to point this out. The use of regional products is excellent, but in a restaurant of this caliber, the product should be supported and highlighted through preparation and seasoning, which wasn't the case here. The bread was fantastic, the staff very friendly, and minor issues were generously rectified."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:34:41.064Z",
+    "claims": [
+      {
+        "text": "wine was expensive",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "three 0.1-liter glasses exceeded the price of an entire bottle on the wine list",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "value_for_money",
+        "foods": [
+          "wine"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "price per glass wasn't clearly communicated",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the regional products were excellent",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the product should be supported and highlighted through preparation and seasoning",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bread was fantastic",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff was very friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "minor issues were generously rectified",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:56.210Z",
+    "usage": {
+      "inputTokens": 5390,
+      "outputTokens": 2962,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the glass-vs-bottle complaint is price_level or value_for_money, and its quote names no wine word, so foods is left empty; the uncommunicated glass price could sit under price, advice or extra_charges, and the sommelier remark may merge into it. The weak seasoning/preparation complaint is seasoning, with taste or cooking also defensible.",
+    "claims": [
+      {
+        "text": "the reviewer has to agree with some of the criticism",
+        "quote": "Leider muss ich mich einigen Kritiken anschließen.",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it is normal for wine to be expensive in upscale restaurants",
+        "quote": "Es ist normal das der Wein in den gehobenen Restaurants teuer ist",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Wein"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "three 0.1 glasses of wine cost more than the whole bottle on the wine list, which is not okay",
+        "quote": "wenn 3 Gläser mit 0,1 den Preis der gesamten Flasche von der Weinkarte überschreiten, dann ist das nicht in Ordnung",
+        "sentiment": "negative",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the price per glass of wine was not clearly communicated",
+        "quote": "der Preis des Glases nicht klar kommuniziert wird",
+        "sentiment": "negative",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "advice",
+            "extra_charges"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer expects a good sommelier to point the glass price out",
+        "quote": "da erwarte ich von einem guten Sommelier einen Hinweis",
+        "sentiment": "negative",
+        "aspect": "advice",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the use of regional products is excellent",
+        "quote": "Der Einsatz von regionalen Produkten ist prima",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the products were not supported or highlighted by preparation and seasoning, as a restaurant of this calibre should",
+        "quote": "in einem Restaurant dieser Güte sollte das Produkt durch die Zubereitung und Würze unterstützt, hervorgehoben etc. werden und das war hier nicht der Fall",
+        "sentiment": "negative",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Brot was great",
+        "quote": "Das Brot war klasse",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Brot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff were very friendly",
+        "quote": "das Personal  sehr freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "small mistakes were generously fixed",
+        "quote": "kleine Fehler wurden großzügig behoben",
+        "sentiment": "positive",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.222Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.418Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

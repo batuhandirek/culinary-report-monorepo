@@ -4,7 +4,7 @@ import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 
 import { TOPIC_SEED } from '../constants/topic-seed.constant.js';
 import { TopicKindEnum } from '../entities/topic.entity.js';
-import { TopicIndex } from '../util/topics.js';
+import { type IndexedTerm, TopicIndex } from '../util/topics.js';
 import { MENU_DISTRICT_MIN_VENUES, menuItemsOf, menuTopicPrices } from '../util/menu-topics.js';
 import { parseTrendsAutocomplete, trendsAutocompleteUrl } from '../util/trends-autocomplete.js';
 
@@ -76,7 +76,13 @@ describe('TopicIndex.resolveMenuItem', () => {
 
 describe('menuTopicPrices', () => {
 	// Each item stored with its topics, as the delivery scrape writes them
-	const row = (venueId: string, district: string | null, name: string, price: number, category: string | null = null) => ({
+	const row = (
+		venueId: string,
+		district: string | null,
+		name: string,
+		price: number,
+		category: string | null = null,
+	) => ({
 		venueId,
 		district,
 		topics: index.resolveMenuItem({ name, category }),
@@ -118,10 +124,18 @@ describe('menuTopicPrices', () => {
 		expect(prices.topics.has('cafe')).toBe(false);
 		// Only the topics asked for
 		expect([...menuTopicPrices(rows, index, ['sushi']).topics.keys()]).toEqual(['sushi']);
-		expect(menuItemsOf(index, 'japanese')({ topics: index.resolveMenuItem({ name: 'Sushi Set' }) })).toBe(true);
-		expect(menuItemsOf(index, 'japanese')({ topics: index.resolveMenuItem({ name: 'Cola', category: 'Getränke' }) })).toBe(
-			false,
-		);
+		expect(
+			menuItemsOf(
+				index,
+				'japanese',
+			)({ topics: index.resolveMenuItem({ name: 'Sushi Set' }) }),
+		).toBe(true);
+		expect(
+			menuItemsOf(
+				index,
+				'japanese',
+			)({ topics: index.resolveMenuItem({ name: 'Cola', category: 'Getränke' }) }),
+		).toBe(false);
 	});
 });
 
@@ -134,30 +148,87 @@ describe('TopicIndex.withParents', () => {
 
 	it('stops on a cycle', () => {
 		const cyclic = new TopicIndex([
-			{ key: 'a', label: 'A', kind: TopicKindEnum.DISH, parentKey: 'b', aliases: [] },
-			{ key: 'b', label: 'B', kind: TopicKindEnum.DISH, parentKey: 'a', aliases: [] },
+			{ key: 'a', label: 'A', kind: TopicKindEnum.DISH, parentKey: 'b' },
+			{ key: 'b', label: 'B', kind: TopicKindEnum.DISH, parentKey: 'a' },
 		]);
 		expect(cyclic.withParents(['a'])).toEqual(['a', 'b']);
 	});
+});
 
-	it("prefers a topic's key over another's alias", () => {
-		const both = new TopicIndex([
-			{
-				key: 'bar',
-				label: 'Bar',
-				kind: TopicKindEnum.FORMAT,
-				parentKey: null,
-				aliases: ['pub'],
-			},
-			{
-				key: 'pub',
-				label: 'Pub',
-				kind: TopicKindEnum.FORMAT,
-				parentKey: null,
-				aliases: [],
-			},
+/* The decided terms in the index: a wording's forms point at the list of topics it was decided to be. */
+describe('TopicIndex with decided terms', () => {
+	const withTerms = (terms: IndexedTerm[]) => new TopicIndex(seedIndex().topics, terms);
+	const decided = withTerms([
+		{ key: 'vegan doner', name: 'vegan döner', topicKeys: ['kebab', 'vegan'] },
+		{ key: 'iced matcha', name: 'iced matcha', topicKeys: ['vegan', 'matcha'] },
+		{ key: 'waiting time', name: 'waiting time', topicKeys: ['wait'] },
+		// Decided "none", and decided for a topic that is gone
+		{ key: 'meat', name: 'meat', topicKeys: [] },
+		{ key: 'house special', name: 'house special', topicKeys: ['unicorn'] },
+	]);
+
+	it('resolves a term to every topic it is, in the order decided, whole or as a run of words', () => {
+		expect(decided.exactAll('vegan döner')).toEqual(['kebab', 'vegan']);
+		expect(decided.exactAll('Vegan Doner')).toEqual(['kebab', 'vegan']);
+		expect(decided.exact('vegan döner')).toBe('kebab');
+		// The term's order, not the words': the seed alone gives vegan first
+		expect(decided.resolve('Vegan Döner')).toEqual(['kebab', 'vegan']);
+		expect(seedIndex().resolve('Vegan Döner')).toEqual(['vegan', 'kebab']);
+		expect(decided.resolve('Vegan Döner Haus')).toEqual(['kebab', 'vegan']);
+	});
+
+	it("gives a mention's and a menu item's topics from a decided wording", () => {
+		expect(decided.resolveMention('vegan döner', 'Restaurant')).toEqual(['kebab', 'vegan']);
+		expect(decided.resolveMention(null, 'Vegan Döner')).toEqual(['kebab', 'vegan']);
+		expect(decided.resolveMenuItem({ name: 'Vegan Döner', category: null })).toEqual([
+			'kebab',
+			'vegan',
 		]);
+		expect(decided.resolveMenuItem({ name: 'Menü 3', category: 'Vegan Döner' })).toEqual([
+			'kebab',
+			'vegan',
+		]);
+		// A drink's term under a drinks section keeps its drink only
+		expect(decided.resolveMenuItem({ name: 'Iced Matcha', category: 'Getränke' })).toEqual([
+			'matcha',
+		]);
+	});
+
+	it('adds nothing for a term decided none, one whose topics are gone, or a spelling nobody decided', () => {
+		expect(decided.exactAll('meat')).toEqual([]);
+		expect(decided.exact('meat')).toBeUndefined();
+		expect(decided.resolve('meat')).toEqual([]);
+		expect(decided.exactAll('house special')).toEqual([]);
+		expect(decided.exactAll('cheese counter')).toEqual([]);
+		expect(decided.exact('cheese counter')).toBeUndefined();
+	});
+
+	it("takes a topic's own key over a term's form", () => {
+		const both = new TopicIndex(
+			[
+				{ key: 'bar', label: 'Bar', kind: TopicKindEnum.FORMAT, parentKey: null },
+				{ key: 'pub', label: 'Pub', kind: TopicKindEnum.FORMAT, parentKey: null },
+			],
+			[{ key: 'pub', name: 'pub', topicKeys: ['bar'] }],
+		);
 		expect(both.resolve('Pub')).toEqual(['pub']);
+		expect(both.exactAll('pub')).toEqual(['pub']);
+	});
+
+	it("picks a wording's dish topic as the first dish or drink of the list, none for a list without one", () => {
+		expect(decided.dishTopic('vegan döner')).toBe('kebab');
+		expect(decided.dishTopic('Iced Matcha')).toBe('matcha');
+		expect(decided.dishTopic('waiting time')).toBeUndefined();
+		// Not decided: a topic's own key, as written or by its term key
+		expect(decided.dishTopic('Kebabs')).toBe('kebab');
+		expect(decided.dishTopic('Vegetable kebab')).toBeUndefined();
+	});
+
+	it('names an aspect through a decided term as a whole; an aspect key alone is no kind of food', () => {
+		expect(decided.exactAll('waiting time')).toEqual(['wait']);
+		expect(decided.exact('Waiting Time')).toBe('wait');
+		expect(decided.resolve('#service')).toEqual([]);
+		expect(decided.resolve('wait')).toEqual([]);
 	});
 });
 
@@ -176,16 +247,15 @@ describe('TOPIC_SEED', () => {
 		}
 	});
 
-	it('has each alias resolve to its own topic: no alias is shadowed by another topic', () => {
-		for (const s of TOPIC_SEED) {
-			for (const alias of s.aliases ?? [])
-				expect([alias, index.resolve(alias)]).toEqual([alias, [s.key]]);
-		}
-	});
-
 	it('has each label resolve to its own topic: extraction is told to use the labels', () => {
+		// With no decided wording at all: a label never needs an alias ("Desserts" is `dessert`)
+		const bare = new TopicIndex(index.topics, []);
 		for (const s of TOPIC_SEED)
-			expect([s.label, index.resolve(s.label)]).toEqual([s.label, [s.key]]);
+			expect([s.label, bare.resolve(s.label), index.resolve(s.label)]).toEqual([
+				s.label,
+				[s.key],
+				[s.key],
+			]);
 	});
 
 	it('gives each Trends topic id to one topic', () => {

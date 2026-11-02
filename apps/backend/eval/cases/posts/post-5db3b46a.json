@@ -1,0 +1,774 @@
+{
+  "id": "post-5db3b46a",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:many",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "oicaramba",
+    "locationName": null,
+    "hashtags": [
+      "expat",
+      "lifeabroad",
+      "berlin",
+      "foodies"
+    ],
+    "taggedHandles": [],
+    "text": "Best restaurants in Berlin according to an American #expat #lifeabroad #berlin #foodies ",
+    "subtitles": "Here's the three best restaurants in Berlin that remind me a lot of the U. S.\nNo. 1 is fine bagels. Best bagel in Berlin.\nI don't give a fuck what you say,\nit's still the best one. And they have the best chocolate chip cookie.\nNo.2 is Manello.\nThat is a pizza place in vetting that although it's run by Italians,\nthey have stuffed crust pizza you cannot get to anywhere else.\nI don't even think Pizza Hut sells that shit anymore.\nSo if you're if you wanna get like that digorno style 90s Pizza Hut shit,\nyou gotta go there. I swear to God it is so fucking good.\nIt's actual stuffed crust pizza.\nLegit decent and fucking good.\nAlso not too bad, like 15 bucks give or take. Whatever.\nNumber three best restaurant if you really wanna fulfill that kind of like\nAmerican Oof that you've been lacking a bit.\nIt's actually gonna be like a two two combo.\nRebel Room in Berlin. It's like a burger place.\nTheir burgers are like legit,\nlegit, actually good.\nAnd No. 2 is actually Burger Am,\nbut not for their burgers.\nTheir French fries are legit on fire.\nI gotta say, I really love it.\nSo what I'm curious about is what do you think about my list?\nLet me know in the comments.\nAmericans, what are the like,\nrestaurants that you like?\nThe. The kind of restaurants in Berlin that are really good,\nthey remind you a little bit of Home.\nAnd for the Germans out there.\nWhat are the restaurants that you think that I'm missing?\nThat you think that are very American?\nLet me go ahead and rate that shit,\ncause I promise I'm ruthless.\nI cut them off, you know what I mean?\nBut I'm also an open minded person as well, so.\nBy the way, awesome.\nJonathan American has been in Berlin for over 10 years.\nEvery day I'm posting videos.\nIf you wanna give me a follow,\nshare this video, like it,\nwhatever, I'd be very grateful.\nPeace out and stay tuned for more fucking thing,\nyou know what I'm saying? Bye.",
+    "subtitlesLanguage": "en",
+    "id": "5db3b46a-2143-4417-8efb-b13241a09392",
+    "externalId": "7674599146812149025",
+    "url": "https://www.tiktok.com/@oicaramba/video/7674599146812149025",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-08-16T12:04:24.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:26:54.607Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Fine Bagels",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "a7a202a0-0026-44b2-91f6-2bf2f7385fba",
+          "brandName": "Fine Bagels",
+          "venueId": "56fbcbbe-d2fd-4be1-8384-1f1fc1f17b33",
+          "venueName": "Fine Bagels"
+        }
+      },
+      {
+        "venueName": "Manello",
+        "locationHint": "Wedding",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "e2982c44-adaf-487d-936c-f21851ed6210",
+          "brandName": "Pizzeria Monello",
+          "venueId": "bb33a893-fded-4342-8fc6-27efc646d2f1",
+          "venueName": "Pizzeria Monello"
+        }
+      },
+      {
+        "venueName": "Rebel Room",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e476c53f-7bee-4551-afc9-cdf2570e0068",
+          "brandName": "Rebel Room",
+          "venueId": "c5ef6a59-20a3-44bf-aab0-0d21794df69f",
+          "venueName": "Rebel Room"
+        }
+      },
+      {
+        "venueName": "Burger AM",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the best bagel in Berlin",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bagel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the best chocolate chip cookie",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chocolate chip cookie"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Manello is a pizza place in Wedding",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "it is run by Italians",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "it has stuffed crust pizza you cannot get anywhere else",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "availability",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pizza is legit decent and good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "the pizza costs about 15 bucks",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": 15,
+        "unit": "money",
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Rebel Room is a burger place",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "the burgers are legit good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "french fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Burger Am is not for their burgers",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the French fries are legit on fire",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "french fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the creator has been in Berlin for over 10 years",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:40:43.488Z",
+    "usage": {
+      "inputTokens": 18512,
+      "outputTokens": 5846,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Venue names come only from the transcript: 'Burger Am' is likely Burgeramt and 'vetting' is Wedding, but transcript spellings were kept. Pizza Hut is only a comparison, not listed as a place; the 'not for their burgers' remark is treated as an optional neutral-to-negative opinion.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Fine Bagels",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "a7a202a0-0026-44b2-91f6-2bf2f7385fba",
+          "brandName": "Fine Bagels",
+          "venueId": "56fbcbbe-d2fd-4be1-8384-1f1fc1f17b33",
+          "venueName": "Fine Bagels",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Manello",
+        "locationHint": "Wedding",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The post puts Manello in Wedding, but Pizzeria Monello is on Groß-Ziethener Chaussee in Neukölln, so the similar name points to another venue."
+        }
+      },
+      {
+        "venueName": "Rebel Room",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e476c53f-7bee-4551-afc9-cdf2570e0068",
+          "brandName": "Rebel Room",
+          "venueId": "c5ef6a59-20a3-44bf-aab0-0d21794df69f",
+          "venueName": "Rebel Room",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Burger Am",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "'Burger Am' is most likely a transcript of Burgeramt, a well-known Berlin burger place that is not among the candidates; BURGER JAM is only a similar name."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the three restaurants remind the author a lot of the U.S.",
+        "quote": "three best restaurants in Berlin that remind me a lot of the U. S.",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Fine Bagels has the best bagel in Berlin",
+        "quote": "Best bagel in Berlin.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "bagel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Fine Bagels is still the best one",
+        "quote": "it's still the best one",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Fine Bagels has the best chocolate chip cookie",
+        "quote": "they have the best chocolate chip cookie",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "chocolate chip cookie"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Manello is a pizza place in Wedding",
+        "quote": "That is a pizza place in vetting",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello is run by Italians",
+        "quote": "it's run by Italians",
+        "sentiment": "neutral",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello has stuffed crust pizza you cannot get anywhere else",
+        "quote": "they have stuffed crust pizza you cannot get to anywhere else",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [
+          "stuffed crust pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Pizza Hut probably no longer sells stuffed crust pizza",
+        "quote": "I don't even think Pizza Hut sells that shit anymore.",
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "for Digiorno-style 90s Pizza Hut pizza you have to go to Manello",
+        "quote": "you gotta go there",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello's stuffed crust pizza is so fucking good",
+        "quote": "it is so fucking good",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "stuffed crust pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello's pizza is actual stuffed crust pizza",
+        "quote": "It's actual stuffed crust pizza.",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "stuffed crust pizza"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello's pizza is legit decent and fucking good",
+        "quote": "Legit decent and fucking good.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello's price is not too bad",
+        "quote": "not too bad",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Manello costs about 15 bucks",
+        "quote": "like 15 bucks give or take",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": 15,
+        "unit": "money",
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "Rebel Room is a burger place",
+        "quote": "It's like a burger place.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Rebel Room's burgers are legit, actually good",
+        "quote": "Their burgers are like legit,",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Burger Am makes the list not for its burgers",
+        "quote": "but not for their burgers",
+        "sentiment": "neutral",
+        "aspect": "taste",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative",
+            "mixed"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Burger Am's French fries are legit on fire",
+        "quote": "Their French fries are legit on fire.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "French fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "the author really loves Burger Am",
+        "quote": "I really love it.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "which Berlin restaurants remind Americans of home or are very American",
+        "quote": "what are the like,\nrestaurants that you like?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.237Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

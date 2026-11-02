@@ -1,0 +1,213 @@
+{
+  "id": "review-c83e0a88",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:2",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "c83e0a88-61ba-496f-b234-a00a620f5bfa",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xwM1ZreGZWbmd6WldWc09HbGFPVEpVWjJZd05uYxAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Mustafa's Gemüse Kebap",
+    "venueId": "d82044aa-3c71-4c8b-8a2d-2876a2270495",
+    "brand": "Mustafa's Gemüse Kebap",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-06T04:35:44.960Z",
+    "stars": 2,
+    "text": "1,5 saat sıra bekledik\nMidemizi ağrıttı\nTadı klasik alman döneriydi\nBukadar sıranın neyini bekledik anlamadık\nAlmanyada herhangi bi dönerciye gitseniz aynı tadı alırız",
+    "textTranslated": "We waited in line for 1.5 hours\nIt gave us stomach ache\nIt tasted like classic German doner kebab\nWe didn't understand why we waited in line for so long\nYou would get the same taste if you went to any doner kebab shop in Germany"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:08:51.487Z",
+    "claims": [
+      {
+        "text": "waited in line for 1.5 hours",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": null
+      },
+      {
+        "text": "it gave us stomach ache",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it tasted like classic German doner kebab",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we did not understand why we waited in line for so long",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you would get the same taste at any doner kebab shop in Germany",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "authenticity",
+        "foods": [
+          "doner kebab"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:29:29.679Z",
+    "usage": {
+      "inputTokens": 5082,
+      "outputTokens": 1508,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 1.5-hour line is stated as a fact but reads as a complaint in a 2-star review, so negative/opinion with neutral/fact allowed. The quote has 'döneriydi', inflected, while the claim says 'döner', so foods follows the claim. 'dönerciye' is a doner shop, not a food. The stomach ache fits food_hygiene best, with food allowed.",
+    "claims": [
+      {
+        "text": "waited in line for 1.5 hours",
+        "quote": "1,5 saat sıra bekledik",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": 90,
+        "unit": "minutes",
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the food gave us stomach ache",
+        "quote": "Midemizi ağrıttı",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the döner tasted like classic German döner",
+        "quote": "Tadı klasik alman döneriydi",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "didn't understand why we waited in such a long line",
+        "quote": "Bukadar sıranın neyini bekledik anlamadık",
+        "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "you get the same taste at any doner shop in Germany",
+        "quote": "Almanyada herhangi bi dönerciye gitseniz aynı tadı alırız",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "döner"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.593Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.foods (reference_wrong): The claim judges the taste of the döner, and the rules count a food the words only point at."
+      },
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.415Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "id": "term-17421",
+  "kind": "term",
+  "tags": [
+    "used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 17421,
+    "key": "hazelnut",
+    "name": "hazelnuts",
+    "uses": 4
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": "Hazelnuts"
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:55:47.343Z",
+    "usage": {
+      "inputTokens": 170,
+      "outputTokens": 99,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 34
+    },
+    "notes": null,
+    "topics": [],
+    "alsoAcceptable": [],
+    "suggestion": "Hazelnuts",
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.448Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

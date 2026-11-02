@@ -1,0 +1,225 @@
+{
+  "id": "post-9223f335",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "own",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "gercek_chicken",
+    "locationName": "Gercek Grillhähnchen - Chicken, Salad & Fries",
+    "hashtags": [
+      "berlin",
+      "chicken",
+      "foodtok",
+      "foodies"
+    ],
+    "taggedHandles": [],
+    "text": "🔥 MORGEN IST ES SOWEIT! 🔥\n\nUnser 30-jähriges Jubiläum geht in die nächste Runde! 🎉🐔\n\n📅 Morgen & übermorgen\n⏰ Ab 12:00 Uhr\n🍗 Unser Jubiläums-Angebot wartet auf euch!\n\nKommt vorbei und feiert mit uns! ❤️\n📍 Turmstr. 82, 10551 Berlin\n\nMarkiert eure Chicken-Lover! 😍🐔 #Berlin #Chicken #foodtok #foodies ",
+    "subtitles": "Leute nicht vergessen\nmorgen haben wir unser dreijähriges Jubiläum",
+    "subtitlesLanguage": "deu-DE",
+    "id": "9223f335-83cf-4ef3-908f-1a8c8e2a76e2",
+    "externalId": "7694283366320966945",
+    "url": "https://www.tiktok.com/@gercek_chicken/video/7694283366320966945",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Gercek Chicken - Chicken, Salad & Fries",
+    "postedAt": "2026-10-08T13:09:13.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:29:34.318Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Gercek Grillhähnchen - Chicken, Salad & Fries",
+        "locationHint": "Turmstr. 82, 10551",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "6f21c9c6-17e6-4313-b858-4b2925804fe9",
+          "brandName": "Gercek Chicken - Chicken, Salad & Fries",
+          "venueId": "864d7d52-63fe-4fbb-8625-4f78e3ab2d29",
+          "venueName": "Gercek Chicken - Chicken, Salad & Fries"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the venue is having its 30-year anniversary celebration",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the anniversary offer is available tomorrow and the day after",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the offer starts at 12:00",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": 12,
+        "unit": "minutes",
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:24:35.634Z",
+    "usage": {
+      "inputTokens": 10396,
+      "outputTokens": 1531,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 6323
+    },
+    "notes": "Own-account promo; the tagged 'Gercek Grillhähnchen' is the same venue as the given name. The transcript's 'dreijähriges' contradicts the caption's 30 years and is likely a transcription error, so the caption is followed; the 12:00 start can be kept apart or folded into the event claim.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Gercek Chicken - Chicken, Salad & Fries",
+        "locationHint": "Turmstr. 82, 10551 Berlin",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "6f21c9c6-17e6-4313-b858-4b2925804fe9",
+          "brandName": "Gercek Chicken - Chicken, Salad & Fries",
+          "venueId": "864d7d52-63fe-4fbb-8625-4f78e3ab2d29",
+          "venueName": "Gercek Chicken - Chicken, Salad & Fries",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Gercek Chicken's 30-year anniversary celebration continues tomorrow and the day after",
+        "quote": "Unser 30-jähriges Jubiläum geht in die nächste Runde!",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "ownership"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the anniversary celebration starts from 12:00 on both days",
+        "quote": "⏰ Ab 12:00 Uhr",
+        "sentiment": "neutral",
+        "aspect": "opening_hours",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Gercek Chicken has an anniversary offer for the celebration days",
+        "quote": "Unser Jubiläums-Angebot wartet auf euch!",
+        "sentiment": "neutral",
+        "aspect": "price",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Gercek Chicken is located at Turmstr. 82, 10551 Berlin",
+        "quote": "📍 Turmstr. 82, 10551 Berlin",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.440Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.244Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.434Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

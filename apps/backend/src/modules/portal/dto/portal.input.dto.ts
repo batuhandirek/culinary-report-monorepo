@@ -3,7 +3,6 @@ import { tags } from 'typia';
 import type { ProspectLanguage } from 'src/modules/outreach/constants/outreach.constant.js';
 import type { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import type { ReviewPlatformEnum } from 'src/modules/venues/entities/review.entity.js';
-import type { FeedbackTopic } from 'src/modules/venues/interfaces/feedback.interface.js';
 
 export interface PortalUpdateSettingsInputDto {
 	/** `null` clears it */
@@ -36,8 +35,8 @@ export interface PortalListReviewsInputDto {
 	size: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<50>;
 	month?: Month;
 	stars?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<5>;
-	/** A topic the review praised or criticised */
-	topic?: FeedbackTopic;
+	/** An aspect root key (`food`, `service`, `wait`, …): reviews with a claim under it */
+	topic?: string & tags.MaxLength<64>;
 	/** Answered on Google or marked answered here */
 	answered?: boolean;
 	/** The review's original language, e.g. `de` */

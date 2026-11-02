@@ -1,0 +1,42 @@
+{
+  "id": "term-4815",
+  "kind": "term",
+  "tags": [
+    "most-used",
+    "decided:pending"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 4815,
+    "key": "pork",
+    "name": "pork",
+    "uses": 26
+  },
+  "stored": {
+    "decidedBy": null,
+    "topics": null,
+    "suggestion": "Pork"
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:56:20.767Z",
+    "usage": {
+      "inputTokens": 170,
+      "outputTokens": 90,
+      "cachedInputTokens": 34,
+      "cacheWriteTokens": 0
+    },
+    "notes": null,
+    "topics": [],
+    "alsoAcceptable": [],
+    "suggestion": "Pork",
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.463Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

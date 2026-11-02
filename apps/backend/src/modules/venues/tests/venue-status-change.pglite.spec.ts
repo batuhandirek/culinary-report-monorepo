@@ -254,8 +254,6 @@ describe('VenueStatusChange (pglite)', () => {
 				venue: v,
 				visited: true,
 				isNewOpening,
-				sentiment: 'positive',
-				summary: 'Just opened.',
 			});
 		};
 		post(fresh, lastMonth, true);
@@ -347,8 +345,6 @@ describe('VenueStatusChange (pglite)', () => {
 				brand: v.brand,
 				visited: true,
 				isNewOpening: true,
-				sentiment: 'positive',
-				summary: 'Just opened.',
 			});
 		};
 		const reviews = (v: Venue, dates: Date[]) =>

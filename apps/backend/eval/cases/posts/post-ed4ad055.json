@@ -1,0 +1,302 @@
+{
+  "id": "post-ed4ad055",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "monsieur_vuong",
+    "locationName": "Monsieur Vuong",
+    "hashtags": [
+      "monsieurvuong",
+      "monsieruvuongberlin",
+      "fabulouspho",
+      "pho",
+      "berlinrestaurants",
+      "spicy"
+    ],
+    "taggedHandles": [],
+    "text": "Drei leuchtende Neonbuchstaben weisen den Weg zu MONSIEUR VUONGs wärmend-kräftiger Pho: Unserer berühmte vietnamesische Nudelsuppe. \n\nWir kochen sie ganz klassisch aufwendig in einem riesigen Kessel - stundenlang über Nacht. Mit den besten Zutaten und ausgewählten Gewürzen. Das schmecken Sie persönlich mit jedem Löffel. \n\nDa wird das Herz ganz warm.\n\n#monsieurvuong #monsieruvuongberlin #fabulouspho #pho #berlinrestaurants #spicy",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "ed4ad055-9484-4d27-9ad5-242c8e591e90",
+    "externalId": "ig_4010735900413433035",
+    "url": "https://www.instagram.com/p/Deo_w04DJTL/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Monsieur Vuong",
+    "postedAt": "2026-10-18T15:23:18.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-19T07:59:44.406Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Monsieur Vuong",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "df1ed200-bce5-417f-b12a-20c4d3183dd4",
+          "brandName": "Monsieur Vuong",
+          "venueId": "7729db7b-c5b6-43e8-a3af-6f18572b734d",
+          "venueName": "Monsieur Vuong"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "warming and rich pho",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "classic preparation cooked overnight",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "best ingredients and selected spices",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:52:29.639Z",
+    "usage": {
+      "inputTokens": 9662,
+      "outputTokens": 1980,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5865
+    },
+    "notes": "Own-account promotional post; claims are the venue's self-description of its Pho. The neon letters line is an interior/location detail of minor weight, and 'famous noodle soup' could be read as a neutral fact or a self-praising opinion.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Monsieur Vuong",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "df1ed200-bce5-417f-b12a-20c4d3183dd4",
+          "brandName": "Monsieur Vuong",
+          "venueId": "7729db7b-c5b6-43e8-a3af-6f18572b734d",
+          "venueName": "Monsieur Vuong",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "three glowing neon letters show the way to Monsieur Vuong",
+        "quote": "Drei leuchtende Neonbuchstaben weisen den Weg zu MONSIEUR VUONGs",
+        "sentiment": "neutral",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "location"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Monsieur Vuong's Pho is warming and hearty",
+        "quote": "wärmend-kräftiger Pho",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pho is their famous Vietnamese noodle soup",
+        "quote": "Unserer berühmte vietnamesische Nudelsuppe",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "vietnamesische Nudelsuppe"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pho is cooked classically and elaborately in a huge kettle for hours overnight",
+        "quote": "Wir kochen sie ganz klassisch aufwendig in einem riesigen Kessel - stundenlang über Nacht",
+        "sentiment": "neutral",
+        "aspect": "cooking",
+        "foods": [
+          "Pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "authenticity"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pho is made with the best ingredients and selected spices",
+        "quote": "Mit den besten Zutaten und ausgewählten Gewürzen",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can taste the quality of the Pho in every spoonful",
+        "quote": "Das schmecken Sie persönlich mit jedem Löffel",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Pho warms the heart",
+        "quote": "Da wird das Herz ganz warm.",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Pho"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.254Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.442Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

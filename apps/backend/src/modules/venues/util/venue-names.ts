@@ -56,7 +56,10 @@ const MIN_STREET_KEY = 5;
 /** Whether a location hint names this street, house number or not. */
 export const hintNamesStreet = (hint: string, street: string): boolean => {
 	const key = streetKey(street);
-	return key.replaceAll(' ', '').length >= MIN_STREET_KEY && ` ${streetKey(hint)} `.includes(` ${key} `);
+	return (
+		key.replaceAll(' ', '').length >= MIN_STREET_KEY &&
+		` ${streetKey(hint)} `.includes(` ${key} `)
+	);
 };
 
 /** A city's stopwords (`City.nameStopwords`) in the form `normalizeVenueName` compares. */
@@ -73,9 +76,9 @@ export const normalizeVenueName = (name: string, cityWords?: ReadonlySet<string>
 /** Google names often carry a slogan after a separator: "Hard Rock Cafe | Berlin". */
 export const venueAliases = (name: string, cityWords?: ReadonlySet<string>): string[] => {
 	const head = name.split(/\s[|\-–·•]\s|[|]/)[0];
-	return [...new Set([normalizeVenueName(name, cityWords), normalizeVenueName(head, cityWords)])].filter(
-		Boolean,
-	);
+	return [
+		...new Set([normalizeVenueName(name, cityWords), normalizeVenueName(head, cityWords)]),
+	].filter(Boolean);
 };
 
 const trigrams = (s: string): Set<string> => {
@@ -83,6 +86,17 @@ const trigrams = (s: string): Set<string> => {
 	const out = new Set<string>();
 	for (let i = 0; i < padded.length - 2; i++) out.add(padded.slice(i, i + 3));
 	return out;
+};
+
+/**
+ * Whether one normalized name is the other's head, word for word ("bahadur" of "bahadur tandoori grill
+ * currys", "kadewe" of "kadewe kaufhaus des westens"): the same place named short and long. The head
+ * must be at least `NAME_HEAD_MIN` characters, so "five" never heads "five elephant".
+ */
+export const NAME_HEAD_MIN = 5;
+export const namesSameHead = (a: string, b: string): boolean => {
+	const [short, long] = a.length <= b.length ? [a, b] : [b, a];
+	return short.length >= NAME_HEAD_MIN && (long === short || long.startsWith(`${short} `));
 };
 
 /** Dice coefficient over character trigrams, 1 for identical strings. */
@@ -99,8 +113,10 @@ export const nameSimilarity = (a: string, b: string): number => {
  * Whether a mention's city is the target city, given its name and aliases (`cityNames`). A
  * mention without a known city is assumed to be in it.
  */
-export const isInCity = (mentionCity: string | null | undefined, names: readonly string[]): boolean =>
-	!mentionCity || names.some(name => plain(mentionCity).includes(plain(name)));
+export const isInCity = (
+	mentionCity: string | null | undefined,
+	names: readonly string[],
+): boolean => !mentionCity || names.some(name => plain(mentionCity).includes(plain(name)));
 
 // Google categories of places that serve food or drinks
 const FOOD_CATEGORY =

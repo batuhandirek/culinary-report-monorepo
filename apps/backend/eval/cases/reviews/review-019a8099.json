@@ -1,0 +1,262 @@
+{
+  "id": "review-019a8099",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "019a8099-57ee-4579-ae3c-a5af134cde53",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2tJemVWOXVhRzF4WldkRk5WbFNTa054T1ZwRVJGRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "PLATON Restaurant",
+    "venueId": "4cb2d1cc-ff26-416f-842e-a856d0805179",
+    "brand": "PLATON Restaurant",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-23T16:31:41.393Z",
+    "stars": 4,
+    "text": "Ein sehr schönes Restaurant mit echt leckerem Essen. Das Personal ist freundlich. Auch draußen sitzen ist möglich. Und das ist der Punkt der nervig sein kann denn das Lokal ist an einem Kreisverkehr. Also ist es dort recht laut. Geht man aber rein, ist alles super. Dennoch kann ich das Restaurant echt empfehlen.",
+    "textTranslated": "A very nice restaurant with really delicious food. The staff is friendly. Outdoor seating is also available. And that's the only slightly annoying thing, because the restaurant is located at a roundabout. So it's quite noisy there. But once you're inside, everything is great. Nevertheless, I can definitely recommend this restaurant."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:10.862Z",
+    "claims": [
+      {
+        "text": "the food was really delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the staff is friendly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "outdoor seating is available",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the restaurant is located at a roundabout",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it is quite noisy there",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "once you're inside, everything is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T10:59:10.025Z",
+    "usage": {
+      "inputTokens": 5143,
+      "outputTokens": 1756,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 4778
+    },
+    "notes": "Hard calls: whether 'sehr schönes Restaurant' is a vibe opinion or an overall verdict, and whether the roundabout complaint is about the outdoor seating, the location or noise; I tied it to outdoor seating since the reviewer says that is the annoying point.",
+    "claims": [
+      {
+        "text": "a very nice restaurant",
+        "quote": "Ein sehr schönes Restaurant",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "interior",
+            "atmosphere",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the food is really delicious",
+        "quote": "echt leckerem Essen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff is friendly",
+        "quote": "Das Personal ist freundlich",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "sitting outside is also possible",
+        "quote": "Auch draußen sitzen ist möglich",
+        "sentiment": "neutral",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "sitting outside can be annoying because the restaurant is at a roundabout",
+        "quote": "das ist der Punkt der nervig sein kann denn das Lokal ist an einem Kreisverkehr",
+        "sentiment": "negative",
+        "aspect": "outdoor_seating",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "location",
+            "noise"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "it is quite loud outside",
+        "quote": "Also ist es dort recht laut",
+        "sentiment": "negative",
+        "aspect": "noise",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "inside everything is great",
+        "quote": "Geht man aber rein, ist alles super",
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere",
+            "none"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "can really recommend the restaurant",
+        "quote": "Dennoch kann ich das Restaurant echt empfehlen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.201Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.400Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,14 +1,12 @@
 import { tags } from 'typia';
 
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
-import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import type { ImageOutputDto } from 'src/modules/image/dto/image.output.dto.js';
+import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
+import type { StatementOutputDto } from 'src/modules/statements/dto/statement.output.dto.js';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
-import type {
-	FeedbackSentiment,
-} from '../interfaces/feedback.interface.js';
 import type { LeadSignals } from '../interfaces/lead-score.interface.js';
 import type { VenueDetails } from '../interfaces/venue-details.interface.js';
 
@@ -73,7 +71,7 @@ export interface AdminVenueOutputDto extends Omit<AdminVenueListItemOutputDto, '
 	detailsAt?: Date;
 	/**
 	 * The food topic each of its review tags (`details.reviewsTags`) names, by the tag's title;
-	 * tags that name no food are left out (`DishNameService.reviewTagTopics`)
+	 * tags that name no food are left out (`TermService.reviewTagTopics`)
 	 */
 	reviewTagTopics: { title: string; key: string; label: string }[];
 }
@@ -108,9 +106,8 @@ export interface AdminReviewOutputDto {
 	likes: number;
 	ownerResponse?: string;
 	ownerResponseAt?: Date;
-	sentiment?: FeedbackSentiment;
-	/** What it says, as feedback rows (none before it is analysed) */
-	feedback: FeedbackPointOutputDto[];
+	/** What it says, one claim per row with its parts (none before it is analysed) */
+	statements: StatementOutputDto[];
 	analysedAt?: Date;
 }
 

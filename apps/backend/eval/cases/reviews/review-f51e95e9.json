@@ -1,0 +1,260 @@
+{
+  "id": "review-f51e95e9",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "f51e95e9-00ab-40ae-9cf1-a622b1863e38",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT21wRmFXY3hVRFkxY0hSbU16UlJRbE5ZTUd0alJHYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Ormos by Milchhäuschen",
+    "venueId": "2dc24f47-907f-4355-bf9a-4b7745749833",
+    "brand": "Ormos by Milchhäuschen",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-22T08:51:38.047Z",
+    "stars": 5,
+    "text": "Alles super, nur der Service war nicht so dolle. Bestellen mußte man zweimal weil es vergessen wurde, die Rechnung wurde auch erst nach nochmaliger Erinnerung gebracht. Ja, es war sehr viel zu tun, aber es sind auch sehr viele Kellner dort. Trotzdem würde ich wieder dort essen gehen.",
+    "textTranslated": "Everything was great, except the service wasn't so good. We had to order twice because it was forgotten, and the bill only arrived after we reminded them again. Yes, they were very busy, but there were also a lot of waiters. Despite that, I would eat there again."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:22.617Z",
+    "claims": [
+      {
+        "text": "everything was great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service wasn't so good",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had to order twice because it was forgotten",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the bill only arrived after we reminded them again",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [
+          "bill"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they were very busy",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "there were also a lot of waiters",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "I would eat there again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:30:29.251Z",
+    "usage": {
+      "inputTokens": 5110,
+      "outputTokens": 1551,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the forgotten order is attentiveness (the order was not taken) rather than order_accuracy, which is allowed as an alternative. 'Very busy' and 'many waiters' are context offered as an excuse and a rebuttal, so they are read as facts. 'Alles super' is general praise, kept as an opinion, with verdict also allowed.",
+    "claims": [
+      {
+        "text": "everything was great",
+        "quote": "Alles super",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "the service wasn't so good",
+        "quote": "der Service war nicht so dolle",
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had to order twice because the order was forgotten",
+        "quote": "Bestellen mußte man zweimal weil es vergessen wurde",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "order_accuracy"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the bill was only brought after another reminder",
+        "quote": "die Rechnung wurde auch erst nach nochmaliger Erinnerung gebracht",
+        "sentiment": "negative",
+        "aspect": "attentiveness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the staff were very busy",
+        "quote": "es war sehr viel zu tun",
+        "sentiment": "neutral",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "there are a lot of waiters there",
+        "quote": "es sind auch sehr viele Kellner dort",
+        "sentiment": "neutral",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "attentiveness"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "would eat there again despite that",
+        "quote": "Trotzdem würde ich wieder dort essen gehen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.221Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.417Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

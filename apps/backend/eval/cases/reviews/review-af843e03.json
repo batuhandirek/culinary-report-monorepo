@@ -1,0 +1,136 @@
+{
+  "id": "review-af843e03",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "af843e03-ef3f-49dc-a322-e00470c8c41d",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xscVMyRm5aRmRqTUcxUlYxRnVlSGhyY1daM01sRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "KONG Chinese Noodle Restaurant",
+    "venueId": "61228e7c-69e6-4728-b903-306da72fc4ec",
+    "brand": "KONG Chinese Noodle Restaurant",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-21T17:34:21.079Z",
+    "stars": 5,
+    "text": "sehr leckeres Essen und freundliche Bedienung. Kommen gerne wieder 🫶🏻",
+    "textTranslated": "Delicious food and friendly service. We'll gladly come again 🫶🏻"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:56:53.862Z",
+    "claims": [
+      {
+        "text": "delicious food",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "friendly service",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we'll gladly come again",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:33.421Z",
+    "usage": {
+      "inputTokens": 4966,
+      "outputTokens": 416,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "'Sehr leckeres Essen' is about how the food tasted, so taste fits best; the root food is also allowed. 'Kommen gerne wieder' is a will-be-back verdict with no aspect.",
+    "claims": [
+      {
+        "text": "the food was very delicious",
+        "quote": "sehr leckeres Essen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the service was friendly",
+        "quote": "freundliche Bedienung",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they will gladly come again",
+        "quote": "Kommen gerne wieder",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.217Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.413Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

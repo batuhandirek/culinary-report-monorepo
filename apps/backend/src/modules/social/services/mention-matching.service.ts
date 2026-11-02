@@ -5,11 +5,11 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
-import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
+import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { brandKey } from 'src/modules/venues/util/brands.js';
@@ -35,6 +35,8 @@ import { HashtagService } from './hashtag.service.js';
 const AUTO_SCORE = 0.9;
 // Below this a candidate is not worth showing to the LLM
 const CANDIDATE_SCORE = 0.45;
+// Candidates shown: one-branch namesakes ("City Chicken" ×5) must not crowd out the one meant
+const MAX_CANDIDATES = 8;
 // An admin's correction: matching never overwrites these
 const ADMIN_METHODS = [MentionMatchMethodEnum.MANUAL, MentionMatchMethodEnum.IGNORED];
 // How far a brand's best branch must score ahead of its next one to be the branch the post means
@@ -66,7 +68,51 @@ export interface MatchCandidate {
 	branches?: number;
 }
 
-type CandidateVenue = Omit<MatchCandidate, 'raw' | 'score' | 'branchKnown' | 'branches'>;
+export type CandidateVenue = Omit<MatchCandidate, 'raw' | 'score' | 'branchKnown' | 'branches'>;
+
+/** A hint that says it is a guess ("implied", "inferred", "not stated") places nothing */
+const GUESSED_HINT = /\b(implied|inferred|not stated|unclear|guess)/i;
+
+/**
+ * Whether where the post says the place is speaks against a brand: the hint names a district or a
+ * street the city's venues are in, and none of the brand's branches is in one of them ("Velvet
+ * Coffee, Schöneberg" and the Velvet bar in Neukölln). Never a verdict on its own ("near Rosenthaler
+ * Platz" is a square a Torstraße branch is next to; Kreuzkölln is filed under Neukölln): it only
+ * keeps a sure name match from being accepted in code, so the LLM, which knows the city, decides.
+ * A hint naming nothing the venues know, or calling itself implied, speaks against nothing.
+ */
+export const hintElsewhere = (
+	hint: string | null | undefined,
+	venues: CandidateVenue[],
+): ((brandId: string) => boolean) => {
+	if (!hasHint(hint) || GUESSED_HINT.test(hint!)) return () => false;
+	const words = ` ${plain(hint!).replace(/\s+/g, ' ')} `;
+	const districts = new Set(
+		_.uniq(venues.map(v => v.district).filter((d): d is string => !!d)).filter(d =>
+			d
+				.split('-')
+				.some(part => plain(part).length >= 3 && words.includes(` ${plain(part)} `)),
+		),
+	);
+	const streets = new Set(
+		_.uniq(venues.map(v => v.street).filter((st): st is string => !!st)).filter(st =>
+			hintNamesStreet(hint!, st),
+		),
+	);
+	if (!districts.size && !streets.size) return () => false;
+	const byBrand = _.groupBy(venues, v => v.brandId);
+	return brandId => {
+		const branches = (byBrand[brandId] ?? []).filter(v => v.district || v.street);
+		return (
+			branches.length > 0 &&
+			!branches.some(
+				v =>
+					(!!v.district && districts.has(v.district)) ||
+					(!!v.street && streets.has(v.street)),
+			)
+		);
+	};
+};
 
 /**
  * The venues a mention could mean, best first: name similarity, plus a boost when the creator
@@ -76,7 +122,7 @@ type CandidateVenue = Omit<MatchCandidate, 'raw' | 'score' | 'branchKnown' | 'br
  * when one was tagged; when the post names more than the brand, when the closest name is
  * `BRANCH_LEAD` ahead of the next ("Burgermeister Kottbusser Tor"); when it names only the brand,
  * when a hint naming one branch's district or street puts it that far ahead (the name alone
- * would pick a branch called just like the brand).
+ * would pick a branch called just like the brand). At most `MAX_CANDIDATES`.
  */
 export const rankCandidates = (
 	mention: Pick<Mention, 'venueName' | 'locationHint'>,
@@ -96,7 +142,9 @@ export const rankCandidates = (
 			if (isTagged) total += 0.15;
 			const named =
 				(!!venue.district && !!hint && hint.includes(normalizeVenueName(venue.district))) ||
-				(!!venue.street && !!mention.locationHint && hintNamesStreet(mention.locationHint, venue.street));
+				(!!venue.street &&
+					!!mention.locationHint &&
+					hintNamesStreet(mention.locationHint, venue.street));
 			if (named) total += 0.1;
 			// `total` is uncapped, so a hint still tells two exact-named branches apart
 			return { ...venue, raw, score: Math.min(total, 1), total, isTagged, branchKnown: true };
@@ -133,7 +181,7 @@ export const rankCandidates = (
 		}
 		out.push({ ...strip(pick), score: c.score, branchKnown: known, branches: branches.length });
 	}
-	return out.slice(0, 5);
+	return out.slice(0, MAX_CANDIDATES);
 };
 
 // Enough to tell whether a mention's address is one of a chain's
@@ -153,20 +201,192 @@ const branchLocations = (venues: CandidateVenue[], brandId: string) =>
 		.map(v => ({ id: v.id, district: v.district, street: v.street }));
 
 /** Whether the hint names the streets of two or more of a brand's branches: then it means none of them. */
-const namesSeveralBranches = (hint: string | null | undefined, venues: CandidateVenue[], brandId: string): boolean =>
+const namesSeveralBranches = (
+	hint: string | null | undefined,
+	venues: CandidateVenue[],
+	brandId: string,
+): boolean =>
 	!!hint &&
-	venues.filter(v => v.brandId === brandId && !!v.street && hintNamesStreet(hint, v.street)).length >= 2;
+	venues.filter(v => v.brandId === brandId && !!v.street && hintNamesStreet(hint, v.street))
+		.length >= 2;
 
 /** A location hint with words in it ("/", "." or a postcode alone place nothing). */
 const hasHint = (hint: string | null | undefined): boolean =>
 	!!hint && plain(hint).replace(/\d+/g, '').trim().length >= 3;
 
-const strip = <T extends { total: number; isTagged: boolean }>({ total: _t, isTagged: _i, ...c }: T) => c;
+const strip = <T extends { total: number; isTagged: boolean }>({
+	total: _t,
+	isTagged: _i,
+	...c
+}: T) => c;
 
 /** Accepted without the LLM: confident, and clearly ahead of the runner-up. */
 export const autoMatch = (candidates: MatchCandidate[]): MatchCandidate | null => {
 	const [best, second] = candidates;
-	return best && best.score >= AUTO_SCORE && (!second || best.score - second.score >= 0.1) ? best : null;
+	return best && best.score >= AUTO_SCORE && (!second || best.score - second.score >= 0.1) ?
+			best
+		:	null;
+};
+
+/** A city's venues (brand populated) as matching candidates: the open food venues, each with its brand's branch count */
+export const toCandidateVenues = (
+	venues: Venue[],
+	words: ReadonlySet<string>,
+): CandidateVenue[] => {
+	const food = venues.filter(v => !v.closed && isFoodVenue(v.category));
+	const branchCount = _.countBy(food, v => v.brand.id);
+	return food.map(v => ({
+		id: v.id,
+		name: v.name,
+		category: v.category ?? null,
+		district: v.district ?? null,
+		street: v.street ?? null,
+		aliases: venueAliases(v.name, words),
+		brandId: v.brand.id,
+		brandName: v.brand.name,
+		branchCount: branchCount[v.brand.id],
+		reviewsCount: v.reviewsCount ?? null,
+	}));
+};
+
+/** One place a post names, as matching reads it */
+export interface MatchInput {
+	venueName: string;
+	locationHint: string | null;
+	cuisine: string | null;
+	/** The city the post says the place is in */
+	city: string | null;
+	/** The post's account: a venue posting about itself spells its own name right */
+	author: string | null;
+	taggedLocation: string | null;
+	/** What the post says about it (a mention has no summary of its own): its first claims */
+	said: string[];
+}
+
+export interface MatchDecision {
+	method: MentionMatchMethodEnum;
+	brandId: string | null;
+	/** The branch, only when the post says which */
+	venueId: string | null;
+	score: number | null;
+}
+
+/** One `VenueMatchAgent` call: the input message in, its answer out */
+export type MatchAsk = (
+	message: string,
+) => Promise<{ venueId: string | null; branchId: string | null }>;
+
+/**
+ * What matching decides for one place (`MentionMatchingService` writes it on the mention, the eval
+ * scores it): another city's is `other_city`; else the ranked candidates, a sure name match
+ * accepted in code, the close calls asked of the LLM, and a sure chain whose hint the code
+ * couldn't place asked for the branch alone (no branch fits: no match).
+ */
+export const decideMatch = async (
+	mention: MatchInput,
+	venues: CandidateVenue[],
+	names: string[],
+	words: ReadonlySet<string>,
+	askAgent: MatchAsk,
+): Promise<MatchDecision> => {
+	if (!isInCity(mention.city, names))
+		return {
+			method: MentionMatchMethodEnum.OTHER_CITY,
+			brandId: null,
+			venueId: null,
+			score: null,
+		};
+
+	const candidates = rankCandidates(mention, mention.taggedLocation, venues, words);
+	// A sure name the hint places elsewhere is the LLM's call, never the code's
+	const elsewhere = hintElsewhere(mention.locationHint, venues);
+	let picked = autoMatch(candidates);
+	if (picked && elsewhere(picked.brandId)) picked = null;
+	let method =
+		picked ?
+			picked.raw === 1 ?
+				MentionMatchMethodEnum.EXACT
+			:	MentionMatchMethodEnum.FUZZY
+		:	MentionMatchMethodEnum.NONE;
+	// The LLM's pick among a chain's branches, when the code couldn't tell
+	let branchId: string | null = null;
+
+	const ask = async (offered: MatchCandidate[]) => {
+		const answer = await askAgent(
+			JSON.stringify({
+				mention: {
+					name: mention.venueName,
+					author: mention.author,
+					locationHint: mention.locationHint,
+					cuisine: mention.cuisine,
+					said: mention.said.slice(0, 5),
+					taggedLocation: mention.taggedLocation,
+				},
+				// A chain whose branch is unknown is offered as the brand, with where its branches are
+				candidates: offered.map(c => ({
+					id: c.id,
+					name: !c.branchKnown ? c.brandName : c.name,
+					category: c.category,
+					...(!c.branchKnown ?
+						{ branches: c.branches, locations: branchLocations(venues, c.brandId) }
+					:	{ district: c.district, street: c.street }),
+				})),
+			}),
+		);
+		// A chain is offered by one branch's id; a model may answer with another of its branches' ids:
+		// still the chain (the branch only from `branchId`, never a guess)
+		const chosen =
+			offered.find(c => c.id === answer.venueId) ??
+			offered.find(
+				c =>
+					!c.branchKnown &&
+					venues.some(v => v.id === answer.venueId && v.brandId === c.brandId),
+			) ??
+			null;
+		// The model sometimes picks one of several branches a post lists: the streets decide that
+		const branch =
+			(
+				chosen &&
+				!chosen.branchKnown &&
+				answer.branchId &&
+				!namesSeveralBranches(mention.locationHint, venues, chosen.brandId)
+			) ?
+				venues.find(v => v.id === answer.branchId && v.brandId === chosen.brandId)
+			:	undefined;
+		return { chosen, branchId: branch?.id ?? null };
+	};
+
+	if (!picked && candidates.length > 0) {
+		const res = await ask(candidates);
+		picked = res.chosen;
+		branchId = res.branchId;
+		if (picked) method = MentionMatchMethodEnum.LLM;
+	} else if (
+		picked &&
+		!picked.branchKnown &&
+		hasHint(mention.locationHint) &&
+		!names.some(n => plain(n).trim() === plain(mention.locationHint!).trim()) &&
+		!namesSeveralBranches(mention.locationHint, venues, picked.brandId)
+	) {
+		// The chain is sure but the code couldn't place the hint ("near Rosenthaler Platz",
+		// "Prenzlauer Berg"): the LLM picks the branch, or none
+		const res = await ask([picked]);
+		if (res.chosen) branchId = res.branchId;
+		else {
+			// None of its branches is where the post says: another place of the same name
+			picked = null;
+			method = MentionMatchMethodEnum.NONE;
+		}
+	}
+
+	// A chain's branch only when the post says which: else the brand alone
+	if (picked?.branchKnown) branchId = picked.id;
+	return {
+		method,
+		brandId: picked?.brandId ?? null,
+		venueId: branchId,
+		score: picked?.score ?? candidates[0]?.score ?? null,
+	};
 };
 
 @Injectable()
@@ -201,11 +421,13 @@ export class MentionMatchingService {
 	async match(
 		opts: { cityId?: string; rematch?: boolean } = {},
 	): Promise<Record<MentionMatchMethodEnum, number>> {
-		const counts = Object.fromEntries(Object.values(MentionMatchMethodEnum).map(m => [m, 0])) as Record<
-			MentionMatchMethodEnum,
-			number
-		>;
-		const cities = opts.cityId ? [await this.cityService.getById(opts.cityId)] : await this.cityService.list();
+		const counts = Object.fromEntries(
+			Object.values(MentionMatchMethodEnum).map(m => [m, 0]),
+		) as Record<MentionMatchMethodEnum, number>;
+		const cities =
+			opts.cityId ?
+				[await this.cityService.getById(opts.cityId)]
+			:	await this.cityService.list();
 		for (const city of cities) await this.matchCity(city, !!opts.rematch, counts);
 		return counts;
 	}
@@ -218,15 +440,20 @@ export class MentionMatchingService {
 		const words = cityStopwords(city.nameStopwords);
 		const venues = await this.candidateVenues(city, words);
 
-		const [newestVenue] = await this.em.find(Venue, { city }, { orderBy: { createdAt: 'desc' }, limit: 1 });
+		const [newestVenue] = await this.em.find(
+			Venue,
+			{ city },
+			{ orderBy: { createdAt: 'desc' }, limit: 1 },
+		);
 		// `not in` drops nulls, so a never-matched mention needs its own branch
 		const notCorrected: FilterQuery<Mention> = {
 			$or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }],
 		};
 		const mentions = await this.em.find(
 			Mention,
-			rematch ? { $and: [notCorrected, { post: { city } }] } : (
-				{
+			rematch ?
+				{ $and: [notCorrected, { post: { city } }] }
+			:	{
 					$and: [
 						notCorrected,
 						{ post: { city } },
@@ -241,11 +468,12 @@ export class MentionMatchingService {
 							],
 						},
 					],
-				}
-			),
-			{ populate: ['post'] },
+				},
+			{ populate: ['post', 'statements'] },
 		);
-		this.logger.log(`Matching ${mentions.length} mentions against ${venues.length} venues of ${city.name}`);
+		this.logger.log(
+			`Matching ${mentions.length} mentions against ${venues.length} venues of ${city.name}`,
+		);
 
 		const names = cityNames(city);
 		await this.matchAll(mentions, venues, names, words, counts);
@@ -292,16 +520,20 @@ export class MentionMatchingService {
 	 * an admin merged or split them), except the ones an admin corrected.
 	 */
 	async rematchBrands(brandIds: string[]): Promise<Record<MentionMatchMethodEnum, number>> {
-		const counts = Object.fromEntries(Object.values(MentionMatchMethodEnum).map(m => [m, 0])) as Record<
-			MentionMatchMethodEnum,
-			number
-		>;
+		const counts = Object.fromEntries(
+			Object.values(MentionMatchMethodEnum).map(m => [m, 0]),
+		) as Record<MentionMatchMethodEnum, number>;
 		if (brandIds.length === 0) return counts;
 		const mentions = await this.em.find(
 			Mention,
 			{
 				$and: [
-					{ $or: [{ brand: { $in: brandIds } }, { venue: { brand: { $in: brandIds } } }] },
+					{
+						$or: [
+							{ brand: { $in: brandIds } },
+							{ venue: { brand: { $in: brandIds } } },
+						],
+					},
 					{ $or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }] },
 				],
 			},
@@ -319,23 +551,14 @@ export class MentionMatchingService {
 	}
 
 	/** The city's open food venues as matching candidates. */
-	private async candidateVenues(city: City, words: ReadonlySet<string>): Promise<CandidateVenue[]> {
-		const venues = (await this.em.find(Venue, { city, closed: false }, { populate: ['brand'] })).filter(v =>
-			isFoodVenue(v.category),
+	private async candidateVenues(
+		city: City,
+		words: ReadonlySet<string>,
+	): Promise<CandidateVenue[]> {
+		return toCandidateVenues(
+			await this.em.find(Venue, { city, closed: false }, { populate: ['brand'] }),
+			words,
 		);
-		const branchCount = _.countBy(venues, v => v.brand.id);
-		return venues.map(v => ({
-				id: v.id,
-				name: v.name,
-				category: v.category ?? null,
-				district: v.district ?? null,
-				street: v.street ?? null,
-			aliases: venueAliases(v.name, words),
-			brandId: v.brand.id,
-			brandName: v.brand.name,
-			branchCount: branchCount[v.brand.id],
-			reviewsCount: v.reviewsCount ?? null,
-		}));
 	}
 
 	private async matchOne(
@@ -346,81 +569,33 @@ export class MentionMatchingService {
 		llm: { down?: Error } = {},
 	): Promise<MentionMatchMethodEnum> {
 		mention.matchedAt = new Date();
-		if (!isInCity(mention.city, names)) {
-			mention.brand = null;
-			mention.venue = null;
-			mention.matchMethod = MentionMatchMethodEnum.OTHER_CITY;
-			mention.matchScore = null;
-			return MentionMatchMethodEnum.OTHER_CITY;
-		}
-
-		const candidates = rankCandidates(mention, mention.post.locationName, venues, words);
-		let picked = autoMatch(candidates);
-		let method = picked ? (picked.raw === 1 ? MentionMatchMethodEnum.EXACT : MentionMatchMethodEnum.FUZZY) : MentionMatchMethodEnum.NONE;
-		// The LLM's pick among a chain's branches, when the code couldn't tell
-		let branchId: string | null = null;
-
-		const ask = async (offered: MatchCandidate[]) => {
-			// The LLM account failed on another mention: this close call waits for the next run
-			if (llm.down) throw llm.down;
-			const res = await this.venueMatchAgent.generate(
-				JSON.stringify({
-					mention: {
-						name: mention.venueName,
-						// The post's account: a venue posting about itself spells its own name right
-						author: mention.post.author,
-						locationHint: mention.locationHint,
-						cuisine: mention.cuisine,
-						summary: mention.summary,
-						taggedLocation: mention.post.locationName,
-					},
-					// A chain whose branch is unknown is offered as the brand, with where its branches are
-					candidates: offered.map(c => ({
-						id: c.id,
-						name: !c.branchKnown ? c.brandName : c.name,
-						category: c.category,
-						...(!c.branchKnown ?
-							{ branches: c.branches, locations: branchLocations(venues, c.brandId) }
-						:	{ district: c.district, street: c.street }),
-					})),
-				}),
-			);
-			const chosen = offered.find(c => c.id === res.object.venueId) ?? null;
-			// The model sometimes picks one of several branches a post lists: the streets decide that
-			const branch =
-				chosen &&
-				!chosen.branchKnown &&
-				res.object.branchId &&
-				!namesSeveralBranches(mention.locationHint, venues, chosen.brandId) ?
-					venues.find(v => v.id === res.object.branchId && v.brandId === chosen.brandId)
-				:	undefined;
-			return { chosen, branchId: branch?.id ?? null };
-		};
-
-		if (!picked && candidates.length > 0) {
-			const res = await ask(candidates);
-			picked = res.chosen;
-			branchId = res.branchId;
-			if (picked) method = MentionMatchMethodEnum.LLM;
-		} else if (
-			picked &&
-			!picked.branchKnown &&
-			hasHint(mention.locationHint) &&
-			!namesSeveralBranches(mention.locationHint, venues, picked.brandId)
-		) {
-			// The chain is sure but the code couldn't place the hint ("near Rosenthaler Platz",
-			// "Prenzlauer Berg"): the LLM picks the branch, or none
-			const res = await ask([picked]);
-			if (res.chosen) branchId = res.branchId;
-		}
-
-		// A chain's branch only when the post says which: else the brand alone
-		if (picked?.branchKnown) branchId = picked.id;
-		mention.brand = picked ? this.em.getReference(Brand, picked.brandId) : null;
-		mention.venue = branchId ? this.em.getReference(Venue, branchId) : null;
-		mention.matchMethod = method;
-		mention.matchScore = picked?.score ?? candidates[0]?.score ?? null;
-		return method;
+		const decision = await decideMatch(
+			{
+				venueName: mention.venueName,
+				locationHint: mention.locationHint ?? null,
+				cuisine: mention.cuisine ?? null,
+				city: mention.city ?? null,
+				author: mention.post.author ?? null,
+				taggedLocation: mention.post.locationName ?? null,
+				said: mention.statements
+					.getItems()
+					.map(s => s.text)
+					.filter((t): t is string => !!t),
+			},
+			venues,
+			names,
+			words,
+			async message => {
+				// The LLM account failed on another mention: this close call waits for the next run
+				if (llm.down) throw llm.down;
+				return (await this.venueMatchAgent.generate(message)).object;
+			},
+		);
+		mention.brand = decision.brandId ? this.em.getReference(Brand, decision.brandId) : null;
+		mention.venue = decision.venueId ? this.em.getReference(Venue, decision.venueId) : null;
+		mention.matchMethod = decision.method;
+		mention.matchScore = decision.score;
+		return decision.method;
 	}
 
 	/**
@@ -430,20 +605,32 @@ export class MentionMatchingService {
 	 */
 	async correct(
 		id: number,
-		input: { venueId: string | null; brandId?: string | null; ignored?: boolean; note?: string },
+		input: {
+			venueId: string | null;
+			brandId?: string | null;
+			ignored?: boolean;
+			note?: string;
+		},
 	): Promise<Mention> {
 		const mention = await this.em.findOneOrFail(Mention, { id });
 		const venue =
-			input.venueId && !input.ignored ? await this.em.findOneOrFail(Venue, { id: input.venueId }) : null;
+			input.venueId && !input.ignored ?
+				await this.em.findOneOrFail(Venue, { id: input.venueId })
+			:	null;
 		const brand =
 			venue?.brand ??
-			(input.brandId && !input.ignored ? await this.em.findOneOrFail(Brand, { id: input.brandId }) : null);
+			(input.brandId && !input.ignored ?
+				await this.em.findOneOrFail(Brand, { id: input.brandId })
+			:	null);
 		mention.venue = venue;
 		mention.brand = brand;
-		mention.matchMethod = input.ignored ? MentionMatchMethodEnum.IGNORED : MentionMatchMethodEnum.MANUAL;
+		mention.matchMethod =
+			input.ignored ? MentionMatchMethodEnum.IGNORED : MentionMatchMethodEnum.MANUAL;
 		mention.matchScore = null;
 		mention.matchedAt = new Date();
 		mention.matchNote = input.note?.trim() || null;
+		// An admin's word confirms it, whatever a re-read said
+		mention.unconfirmedAt = null;
 		await this.em.flush();
 		await this.em.populate(mention, ['venue', 'brand', 'post']);
 		await this.relinkFood([mention]);

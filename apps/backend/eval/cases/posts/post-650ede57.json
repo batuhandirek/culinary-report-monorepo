@@ -1,0 +1,138 @@
+{
+  "id": "post-650ede57",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "allpastaofficial",
+    "locationName": "allPasta",
+    "hashtags": [
+      "pasta",
+      "pastainberlin",
+      "foodspot",
+      "berlinfoodspots",
+      "pastalover"
+    ],
+    "taggedHandles": [],
+    "text": "Öl im pasta Wasser ? 🤔\n\n#pasta #pastainberlin #foodspot #berlinfoodspots #pastalover ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "650ede57-f9f3-4ed9-bf4e-f1ef0e809906",
+    "externalId": "7616438083470380320",
+    "url": "https://www.tiktok.com/@allpastaofficial/video/7616438083470380320",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-12T18:29:48.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:39:18.833Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "allPasta",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "oil in pasta water",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pasta"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:40:29.088Z",
+    "usage": {
+      "inputTokens": 8976,
+      "outputTokens": 1177,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The post is tagged at allPasta but only asks a general cooking question, so the venue is listed and the question is treated as about pasta in general, not the venue. Berlin is inferred from #pastainberlin. It may be the venue's own account, but nothing says so, so it is not marked promotional.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "allPasta",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "The author account 'allpastaofficial' spells the name 'allPasta', and no candidate has that name."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "question whether oil belongs in pasta water",
+        "quote": "Öl im pasta Wasser ?",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Öl",
+          "pasta Wasser"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "question",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.238Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.429Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

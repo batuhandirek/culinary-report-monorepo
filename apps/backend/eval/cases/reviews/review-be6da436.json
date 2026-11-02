@@ -1,0 +1,282 @@
+{
+  "id": "review-be6da436",
+  "kind": "review",
+  "tags": [
+    "lang:tr",
+    "stars:3",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "be6da436-2165-4cb0-9c6b-2009b4e84a2f",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT20xRldESnFWbDh3U21sdE5VZFBVME5oWDJFMmQxRRAB",
+    "platform": "google",
+    "language": "tr",
+    "venue": "Rüyam Gemüse Kebab",
+    "venueId": "d885fb9e-69f4-44e6-a465-0e92a47178c3",
+    "brand": "Rüyam Gemüse Kebab",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-05T18:50:57.191Z",
+    "stars": 3,
+    "text": "Aşırı yoğun ve yer bulmakta zorlandık. Nakit çalışma sistemini anlamış değilim. Kart geçerli olmadığı için deneyemeden kalkmak zorunda kaldık. Bu biraz üzücü oldu. Tüm gün gezip akşam gitmiştik ve naktimiz yoktu.",
+    "textTranslated": "It was extremely crowded and we had trouble finding a seat. I don't understand their cash payment system. We had to leave without even trying because they didn't accept cards. That was a bit disappointing. We had spent the whole day sightseeing and left in the evening without any cash."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:08:33.771Z",
+    "claims": [
+      {
+        "text": "it was extremely crowded",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had trouble finding a seat",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "space",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "cash payment system",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they didn't accept cards",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "card_payment",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had to leave without even trying",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "availability",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "that was a bit disappointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we had spent the whole day sightseeing",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "we left in the evening without any cash",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:53.780Z",
+    "usage": {
+      "inputTokens": 5103,
+      "outputTokens": 1753,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether trouble finding a seat is wait_for_table versus space or crowding, and how finely to split the card refusal, the forced departure and the disappointment; the latter two are marked optional since they can sit inside the card-refusal claim.",
+    "claims": [
+      {
+        "text": "the place was extremely crowded",
+        "quote": "Aşırı yoğun",
+        "sentiment": "negative",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had trouble finding a seat",
+        "quote": "yer bulmakta zorlandık",
+        "sentiment": "negative",
+        "aspect": "wait_for_table",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "space",
+            "crowding"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer doesn't understand the cash-only system",
+        "quote": "Nakit çalışma sistemini anlamış değilim",
+        "sentiment": "negative",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "cards were not accepted",
+        "quote": "Kart geçerli olmadığı",
+        "sentiment": "negative",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "they had to leave without trying the food because cards were not accepted",
+        "quote": "deneyemeden kalkmak zorunda kaldık",
+        "sentiment": "negative",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "having to leave was a bit disappointing",
+        "quote": "Bu biraz üzücü oldu",
+        "sentiment": "negative",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had spent the whole day sightseeing and went in the evening",
+        "quote": "Tüm gün gezip akşam gitmiştik",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "they had no cash with them",
+        "quote": "naktimiz yoktu",
+        "sentiment": "neutral",
+        "aspect": "cash_only",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.218Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.414Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

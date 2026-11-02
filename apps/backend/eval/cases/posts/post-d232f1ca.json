@@ -1,0 +1,316 @@
+{
+  "id": "post-d232f1ca",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T14:17:48.703Z",
+  "source": {
+    "platform": "instagram",
+    "author": "roykombucha",
+    "locationName": "Berlin, Deutschland",
+    "hashtags": [
+      "roy",
+      "roykombucha",
+      "brlo",
+      "hopskombucha",
+      "specialedition",
+      "kombucha",
+      "kombuchabrewery",
+      "kombuchalovers",
+      "booch",
+      "boochlife",
+      "berlinbrewery",
+      "berlinfoodie"
+    ],
+    "taggedHandles": [
+      "brlobeer"
+    ],
+    "text": "Love a good beer but craving something a little lighter? We get it. 🍻\n\nThat's why we teamed up with @brlobeer again to bring back ROY Hops Kombucha. 🍃\n\nIt's got all the floral, fruity character of Ariana hops, balanced by our kombucha's gentle sweet-acidic touch — smooth, refreshing, and just bitter enough to keep things interesting. Alcohol-free, but never short on flavour.\n\n#ROY #ROYKombucha #BRLO #HopsKombucha #specialedition #kombucha #kombuchabrewery #kombuchalovers #booch #boochlife #berlinbrewery #berlinfoodie",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "d232f1ca-af54-4dcc-af82-aab6e1f5e564",
+    "externalId": "ig_4011367059791033494",
+    "url": "https://www.instagram.com/p/DerPRZ2jDSW/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-19T12:17:19.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-22T04:00:59.220Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "BRLO",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "b137a269-f32e-417c-aca7-732ef4185f85",
+          "brandName": "BRLO",
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "smooth, refreshing, floral and fruity",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "special edition alcohol-free kombucha collaboration",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_selection",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T14:25:39.148Z",
+    "usage": {
+      "inputTokens": 12314,
+      "outputTokens": 2633,
+      "cachedInputTokens": 7388,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: whether the kombucha producer ROY and the brewery BRLO count as places (included as drink sellers in Berlin; claims attributed to ROY, the post's author), and whether bringing back a special edition is a new_item (chosen) rather than a change or deal.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "ROY Kombucha",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "ROY Kombucha is a kombucha brand and none of the candidates is it; BRLO is the partner brewery, not ROY."
+        }
+      },
+      {
+        "venueName": "BRLO",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "b137a269-f32e-417c-aca7-732ef4185f85",
+          "brandName": "BRLO",
+          "venueId": null,
+          "venueName": null,
+          "note": "The post names the BRLO brewery but gives no location, so no branch is picked."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "ROY teamed up with BRLO again to bring back ROY Hops Kombucha",
+        "quote": "we teamed up with @brlobeer again to bring back ROY Hops Kombucha",
+        "sentiment": "neutral",
+        "aspect": "drink_selection",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "new_item",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "availability"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ROY Hops Kombucha is a lighter alternative to beer",
+        "quote": "craving something a little lighter",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ROY Hops Kombucha has all the floral, fruity character of Ariana hops",
+        "quote": "It's got all the floral, fruity character of Ariana hops",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "ROY Hops Kombucha",
+          "Ariana hops"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ROY Hops Kombucha is balanced by the kombucha's gentle sweet-acidic touch",
+        "quote": "balanced by our kombucha's gentle sweet-acidic touch",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ROY Hops Kombucha is smooth, refreshing and just bitter enough",
+        "quote": "smooth, refreshing, and just bitter enough to keep things interesting",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ROY Hops Kombucha is alcohol-free",
+        "quote": "Alcohol-free",
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drink_selection",
+            "drink_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "ROY Hops Kombucha is never short on flavour",
+        "quote": "never short on flavour",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "ROY Hops Kombucha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T14:39:43.604Z",
+        "by": "adjudication:mini-base",
+        "note": "parts.aspect (both_ok): A returning special-edition drink fits both drink_selection and availability."
+      },
+      {
+        "at": "2026-11-01T15:11:31.442Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.440Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

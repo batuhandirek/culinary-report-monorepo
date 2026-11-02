@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 
 import { Mention } from '../entities/mention.entity.js';
@@ -65,7 +66,7 @@ export class BrandPostsService {
 					{ post: { $in: posts.map(p => p.id) }, brand: brandId },
 					{
 						orderBy: { id: QueryOrder.ASC },
-						populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+						populate: [...STATEMENT_POPULATE],
 					},
 				)
 			: [];

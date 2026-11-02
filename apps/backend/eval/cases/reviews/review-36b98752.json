@@ -1,0 +1,167 @@
+{
+  "id": "review-36b98752",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T14:17:33.701Z",
+  "source": {
+    "id": "36b98752-0864-4b9a-ac5e-283f2c6d43e1",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2pWYVkydzFWREI0U0ZOSlRGWnJha3RSY1c1YVJIYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Sandos",
+    "venueId": "e8ccf038-e415-4aa6-b0a5-42f259113ca7",
+    "brand": "Sandos",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-18T17:02:07.044Z",
+    "stars": 5,
+    "text": "Leckere Sandos, direkt aus Japan inspiriert- und super nette Leute im Laden, die für einen tollen Service sorgen.",
+    "textTranslated": "Delicious sandos, inspired directly from Japan - and super nice people in the shop who provide great service."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:39:14.435Z",
+    "claims": [
+      {
+        "text": "the sandos were inspired directly from Japan",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "sandos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the people in the shop were super nice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the service was great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T14:18:04.973Z",
+    "usage": {
+      "inputTokens": 5394,
+      "outputTokens": 570,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 5200
+    },
+    "notes": "Hard call: 'directly inspired from Japan' reads as an approving description of authenticity, though a neutral-fact reading is allowed. 'Great service' may be kept apart or left inside the friendliness claim.",
+    "claims": [
+      {
+        "text": "the Sandos were delicious",
+        "quote": "Leckere Sandos",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Sandos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Sandos are inspired directly by Japan",
+        "quote": "direkt aus Japan inspiriert",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [
+          "Sandos"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "menu_variety"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "the people in the shop are super nice",
+        "quote": "super nette Leute im Laden",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the staff provide great service",
+        "quote": "für einen tollen Service sorgen",
+        "sentiment": "positive",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T15:11:31.429Z",
+        "by": "restamp",
+        "note": "Written 2026-11-01 while round 1's clarifications were in agent B's and A's rules; they moved to coaching unchanged (agent-rule-books), so no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.404Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

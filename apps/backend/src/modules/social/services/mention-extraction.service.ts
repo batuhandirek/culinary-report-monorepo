@@ -1,43 +1,359 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 
-import { FeedbackService } from 'src/modules/feedback/services/feedback.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import _ from 'lodash';
+
+import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
+import { POSTS_GATED_AT } from 'src/modules/statements/constants/statements-shipped.constant.js';
+import type { Statement } from 'src/modules/statements/entities/statement.entity.js';
+import { StatementService } from 'src/modules/statements/services/statement.service.js';
+import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
 import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 import { normalizeVenueName, plain } from 'src/modules/venues/util/venue-names.js';
 import { runPool } from 'src/shared/util/pool.js';
 
-import { MentionExtractionAgent } from '../agents/mention-extraction.agent.js';
+import { PostClaimsAgent } from '../agents/post-claims.agent.js';
+import { PostGateAgent, type PostGateInput } from '../agents/post-gate.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
-import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
+import {
+	PostSkipReasonEnum,
+	SocialPlatformEnum,
+	SocialPost,
+} from '../entities/social-post.entity.js';
+import { postClaimsSource } from '../util/post-claims-input.js';
+import { readPostClaims } from '../util/post-claims-read.js';
 
-// A caption shorter than this (without hashtags) rarely names a venue
-const MIN_CAPTION_CHARS = 60;
+// Posts a daily-backlog batch of the re-read takes (~200 agent calls)
+const REREAD_BATCH_POSTS = 200;
+// Posts the gate reads side by side, one a call
+const GATE_CONCURRENCY = 10;
+// The gate reads the start of a post: enough to tell what it is about
+const GATE_TEXT_CHARS = 600;
+const GATE_TRANSCRIPT_CHARS = 400;
+// Mentions an admin decided: a re-read or a skip never removes them
+const ADMIN_METHODS = [MentionMatchMethodEnum.MANUAL, MentionMatchMethodEnum.IGNORED];
+// Mentions a match stands on: kept when a re-read no longer names them, and listed as unconfirmed
+const MATCHED_METHODS = [
+	MentionMatchMethodEnum.EXACT,
+	MentionMatchMethodEnum.FUZZY,
+	MentionMatchMethodEnum.LLM,
+];
+const isAdminDecided = (mention: Mention) =>
+	!!mention.matchMethod && ADMIN_METHODS.includes(mention.matchMethod);
+
+/**
+ * Whether a post has anything worth judging: an article, a transcript, a tagged place, or a caption
+ * with a word beyond its hashtags and handles ("📍Giri, berlin #jazzbar" names a bar; "#dublin
+ * #dublinfood" alone goes nowhere). The gate judges the rest: a short caption may still be a
+ * venue's own post.
+ */
+export const hasContent = (
+	post: Pick<SocialPost, 'platform' | 'text' | 'subtitles' | 'locationName'>,
+): boolean =>
+	post.platform === SocialPlatformEnum.BLOG ?
+		!!post.text?.trim()
+	:	!!post.subtitles?.trim() ||
+		!!post.locationName?.trim() ||
+		(post.text ?? '').replace(/[#@][\p{L}\p{N}_.]+/gu, '').replace(/[^\p{L}]/gu, '').length >=
+			3;
+
+/** What the gate is shown of a post: the start of its caption or article and of its transcript */
+export const gateInput = (post: SocialPost): PostGateInput => ({
+	platform:
+		post.platform === SocialPlatformEnum.BLOG ?
+			`blog article on ${post.author ?? 'a food blog'}`
+		:	post.platform,
+	...(post.account?.brand && { ownBrand: post.account.brand.name }),
+	...(post.locationName && { location: post.locationName }),
+	text: (post.text ?? '').slice(0, GATE_TEXT_CHARS),
+	...(post.subtitles && { transcript: post.subtitles.slice(0, GATE_TRANSCRIPT_CHARS) }),
+});
+
+/** What the re-read of stored posts did (`MentionExtractionService.reread`) */
+export interface RereadResult {
+	/** Posts taken, read (digested or skipped), and failed (a failed post stays to be read again) */
+	posts: number;
+	read: number;
+	failed: number;
+	/** Posts the gate (or the code) said not to digest: their mentions and claims removed, an admin's mentions kept */
+	skipped: number;
+	/** Answered places paired with a stored mention, and answered places new to the post (added, to be matched) */
+	paired: number;
+	added: number;
+	/** Stored mentions the answer didn't name: unmatched ones deleted, matched ones kept and marked unconfirmed */
+	deleted: number;
+	unconfirmed: number;
+	/** Statements written, the city claims among them */
+	claims: number;
+	cityClaims: number;
+	tokens: number;
+}
+
 @Injectable()
-export class MentionExtractionService {
+export class MentionExtractionService implements OnModuleInit {
 	private readonly logger = new Logger(MentionExtractionService.name);
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly mentionExtractionAgent: MentionExtractionAgent,
+		private readonly postClaimsAgent: PostClaimsAgent,
+		private readonly postGateAgent: PostGateAgent,
 		private readonly topicService: TopicService,
-		private readonly feedbackService: FeedbackService,
+		private readonly statementService: StatementService,
+		private readonly statementPartsService: StatementPartsService,
 		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
+		private readonly llmBacklogRegistry: LlmBacklogRegistry,
 	) {}
 
+	/** Posts read before the gate and the food-places rule (`POSTS_GATED_AT`) are read again, a little each night */
+	onModuleInit() {
+		this.llmBacklogRegistry.register({
+			key: 'reread-posts',
+			label: 'Re-read posts as claims',
+			priority: 45,
+			remaining: () => this.countToReread(POSTS_GATED_AT),
+			runBatch: async () => {
+				const res = await this.reread({
+					before: POSTS_GATED_AT,
+					limit: REREAD_BATCH_POSTS,
+				});
+				return { done: res.read, tokens: res.tokens };
+			},
+		});
+	}
+
+	/** Posts analysed before `before`: what the `reread-posts` backlog still has to read */
+	countToReread(before: Date): Promise<number> {
+		return this.em.count(SocialPost, { analysedAt: { $lt: before } });
+	}
+
 	/**
-	 * Extracts venue mentions from posts not analysed yet (of one city, or all), most viewed
-	 * first. The prompt names the post's city and the food topics, so cuisines use their words.
+	 * Judges whether each post is worth digesting: in code, one with nothing to read is `no_content`;
+	 * the others go to the gate (`PostGateAgent`, ~20 a call, one city a call), which says digest or
+	 * skip with a reason. Sets `skipReason` (null when digested) and `gatedAt`. A post the gate
+	 * didn't answer (a failed call, an id left out) is in neither list and is judged next time.
+	 * Posts need `city` and `account.brand` loaded.
+	 */
+	async gate(
+		posts: SocialPost[],
+	): Promise<{ digest: SocialPost[]; skipped: SocialPost[]; tokens: number }> {
+		const now = new Date();
+		const digest: SocialPost[] = [];
+		const skipped: SocialPost[] = [];
+		let tokens = 0;
+		const toAsk: SocialPost[] = [];
+		for (const post of posts) {
+			if (hasContent(post)) toAsk.push(post);
+			else {
+				post.skipReason = PostSkipReasonEnum.NO_CONTENT;
+				post.gatedAt = now;
+				skipped.push(post);
+			}
+		}
+		// One post a call: a call packing posts drops some and mixes them up
+		await runPool(
+			toAsk,
+			GATE_CONCURRENCY,
+			async post => {
+				const res = await this.postGateAgent.generate(JSON.stringify(gateInput(post)), {
+					cityName: post.city.name,
+				});
+				tokens += res.usage?.totalTokens ?? 0;
+				post.gatedAt = now;
+				post.skipReason =
+					res.object.digest ? null : (res.object.reason ?? PostSkipReasonEnum.NOT_FOOD);
+				(res.object.digest ? digest : skipped).push(post);
+			},
+			(post, e) => this.logger.warn(`The gate failed on post ${post.externalId}: ${e.message}`),
+		);
+		return { digest, skipped, tokens };
+	}
+
+	/**
+	 * Reads up to `limit` posts analysed before `before` again (most viewed first): the gate first,
+	 * then agent A on the posts it digests. A skipped post loses its claims and its mentions but an
+	 * admin's (`manual`, `ignored`). On a digested post A's places are paired with the stored
+	 * mentions by name (one left on each side pairs too, as `reflagOpenings` pairs): a paired mention
+	 * takes the answer's reading (`visited`, `isNewOpening`) and the place's claims, and is confirmed
+	 * again; an answered place with no stored mention is added (the next
+	 * matching run matches it); a stored mention the answer didn't name is deleted with its claims
+	 * when nothing matched it (`none`, `other_city`, never matched), kept with its claims and marked
+	 * `unconfirmedAt` when a match stands on it (an admin confirms or ignores it), and left alone when
+	 * an admin decided it. A paired mention's match is never touched. The post's city and other
+	 * claims are written, agent B reads the new claims, `analysedAt` is restamped. The `reread-posts`
+	 * backlog.
+	 */
+	async reread(opts: { before: Date; limit: number; cityId?: string }): Promise<RereadResult> {
+		const posts = await this.em.find(
+			SocialPost,
+			{ analysedAt: { $lt: opts.before }, ...(opts.cityId && { city: opts.cityId }) },
+			{
+				orderBy: { views: 'desc', id: 'asc' },
+				limit: opts.limit,
+				populate: [
+					'city',
+					'mentions',
+					'hashtagLinks.hashtag',
+					'statements',
+					'account.brand',
+				],
+			},
+		);
+		const result: RereadResult = {
+			posts: posts.length,
+			read: 0,
+			failed: 0,
+			skipped: 0,
+			paired: 0,
+			added: 0,
+			deleted: 0,
+			unconfirmed: 0,
+			claims: 0,
+			cityClaims: 0,
+			tokens: 0,
+		};
+		if (!posts.length) return result;
+		const now = new Date();
+		const gated = await this.gate(posts);
+		result.tokens += gated.tokens;
+		result.failed += posts.length - gated.digest.length - gated.skipped.length;
+		for (const post of gated.skipped) {
+			const kept = post.mentions.getItems().filter(m => isAdminDecided(m));
+			for (const mention of post.mentions.getItems().filter(m => !isAdminDecided(m))) {
+				post.mentions.remove(mention);
+				this.em.remove(mention);
+				result.deleted++;
+			}
+			this.statementService.replaceForPost(post, [], [], kept);
+			post.analysedAt = now;
+			result.read++;
+			result.skipped++;
+		}
+
+		const index = await this.topicService.index();
+		const topics = index.food.map(t => t.label);
+		const key = (name: string) => normalizeVenueName(name) || plain(name);
+		const created: Statement[] = [];
+		const added: Mention[] = [];
+		try {
+			await runPool(
+				gated.digest,
+				10,
+				async post => {
+					const res = await readPostClaims(this.postClaimsAgent, postClaimsSource(post), {
+						cityName: post.city.name,
+						topics,
+					});
+					// Paired over every stored mention, the ignored ones included, so a place naming an
+					// ignored mention is its match (and left alone below), never the one other mention left
+					const left = [...post.mentions.getItems()];
+					const paired: (Mention | null)[] = res.object.places.map(() => null);
+					const unanswered: number[] = [];
+					res.object.places.forEach((answer, i) => {
+						const j = left.findIndex(m => key(m.venueName) === key(answer.venueName));
+						if (j < 0) unanswered.push(i);
+						else paired[i] = left.splice(j, 1)[0];
+					});
+					// One stored and one answered left: the same venue, spelled another way
+					if (left.length === 1 && unanswered.length === 1) {
+						paired[unanswered[0]] = left.pop()!;
+						unanswered.pop();
+					}
+					// An admin said an ignored mention is no venue: it keeps everything, and the place's claims go
+					const dropped = new Set<number>();
+					paired.forEach((mention, i) => {
+						if (mention?.matchMethod === MentionMatchMethodEnum.IGNORED) {
+							left.push(mention);
+							paired[i] = null;
+							dropped.add(i);
+						}
+					});
+					paired.forEach((mention, i) => {
+						if (!mention) return;
+						const answer = res.object.places[i];
+						mention.visited = answer.visited;
+						mention.isNewOpening = answer.isNewOpening;
+						mention.unconfirmedAt = null;
+						result.paired++;
+					});
+					// A place new to the post is added, unmatched: the next matching run matches it
+					for (const i of unanswered) {
+						const mention = this.em.create(Mention, { post, ...res.object.places[i] });
+						paired[i] = mention;
+						added.push(mention);
+						result.added++;
+					}
+					// The stored mentions it didn't name: an admin's stay, a matched one stays unconfirmed, the rest go
+					const keep: Mention[] = [];
+					for (const mention of left) {
+						if (isAdminDecided(mention)) keep.push(mention);
+						else if (
+							mention.matchMethod &&
+							MATCHED_METHODS.includes(mention.matchMethod)
+						) {
+							mention.unconfirmedAt ??= now;
+							keep.push(mention);
+							result.unconfirmed++;
+						} else {
+							post.mentions.remove(mention);
+							this.em.remove(mention);
+							result.deleted++;
+						}
+					}
+					const claims = res.object.claims.filter(
+						c =>
+							c.subject !== 'place' ||
+							(c.place != null && !dropped.has(c.place) && !!paired[c.place]),
+					);
+					created.push(
+						...this.statementService.replaceForPost(post, claims, paired, keep),
+					);
+					post.isPromotional = res.object.isPromotional;
+					post.analysisTokens = res.usage?.totalTokens ?? null;
+					post.analysedAt = now;
+					result.read++;
+					result.claims += claims.length;
+					result.cityClaims += claims.filter(c => c.subject === 'city').length;
+					result.tokens += res.usage?.totalTokens ?? 0;
+				},
+				(post, e) => {
+					result.failed++;
+					this.logger.warn(`Re-reading post ${post.externalId} failed: ${e.message}`);
+				},
+			);
+		} catch (e) {
+			await this.em.flush();
+			throw e;
+		}
+		// One flush at the end: the posts run side by side on this entity manager
+		await this.em.flush();
+		// Agent B over the new claims in the same batch; what it misses, the `statement-parts` backlog reads
+		const parts = await this.statementPartsService.read({ ids: created.map(s => s.id) });
+		result.tokens += parts.tokens;
+		if (added.length) {
+			await this.mentionTopicService.relink({ mentionIds: added.map(m => m.id) });
+			await this.venueTopicService.queueCityRefresh(posts.map(p => p.city.id));
+		}
+		return result;
+	}
+
+	/**
+	 * Extracts the places and the claims of posts not analysed yet (of one city, or all), most
+	 * viewed first: the gate first (a post not worth digesting keeps its `skipReason` and gets
+	 * nothing), then agent A (`PostClaimsAgent`) on the rest: the places (mentions, a venue's own
+	 * post listing itself) and the claims, each about a place, the city or nothing (statements);
+	 * agent B reads the claims' parts right after. The prompt names the post's city, its own brand
+	 * when the author is one, and the food topics, so cuisines use their words.
 	 */
 	async extract(opts: {
 		month?: string;
 		limit: number;
 		cityId?: string;
-	}): Promise<{ analysed: number; mentions: number }> {
+	}): Promise<{ analysed: number; mentions: number; skipped: number }> {
 		const range = opts.month ? monthRange(opts.month) : null;
 		const candidates = await this.em.find(
 			SocialPost,
@@ -48,53 +364,44 @@ export class MentionExtractionService {
 			},
 			{
 				orderBy: { views: 'desc' },
-				limit: opts.limit * 2,
-				populate: ['city', 'hashtagLinks.hashtag'],
+				limit: opts.limit,
+				populate: ['city', 'hashtagLinks.hashtag', 'statements', 'account.brand'],
 			},
 		);
-		const posts = candidates
-			.filter(
-				p =>
-					p.subtitles ||
-					(p.text ?? '').replaceAll('#', '').trim().length >= MIN_CAPTION_CHARS,
-			)
-			.slice(0, opts.limit);
-		// Too short to name anything: marked analysed so they are not picked up again
-		for (const post of candidates.filter(p => !posts.includes(p))) post.analysedAt = new Date();
+		const now = new Date();
+		const { digest: posts, skipped } = await this.gate(candidates);
+		// Not worth digesting: done, so they are not picked up again
+		for (const post of skipped) post.analysedAt = now;
 
-		const topics = posts.length ? await this.feedbackService.dishTopics() : undefined;
-		// The food topics' labels for the cuisine field, the aspects' legend for the points
+		// The food topics' labels for the cuisine field
 		const index = posts.length ? await this.topicService.index() : undefined;
 		const topicLabels = index?.food.map(t => t.label) ?? [];
-		const legend = index?.aspectLegend() ?? '';
 		let mentions = 0;
 		let analysed = 0;
 		const created: Mention[] = [];
+		const claims: Statement[] = [];
 		// A provider failure (no credits) stops the pool: keep what was finished before it
 		try {
 			await runPool(
 				posts,
 				10,
 				async post => {
-					const res = await this.mentionExtractionAgent.generate(this.prompt(post), {
+					const res = await readPostClaims(this.postClaimsAgent, postClaimsSource(post), {
 						cityName: post.city.name,
 						topics: topicLabels,
-						legend,
 					});
-					for (const { praise, complaints, dishes, ...m } of res.object.mentions) {
-						const mention = this.em.create(Mention, { post, ...m });
-						created.push(mention);
-						// What it says, as rows, flushed with the mention
-						this.feedbackService.replaceFor(
-							mention,
-							{ praise, complaints, dishes },
-							{ asked: true, topics: topics! },
-						);
-						mentions++;
-					}
+					const places = res.object.places.map(m =>
+						this.em.create(Mention, { post, ...m }),
+					);
+					created.push(...places);
+					mentions += places.length;
+					// What it says, one claim per row, flushed with the post and its mentions
+					claims.push(
+						...this.statementService.replaceForPost(post, res.object.claims, places),
+					);
 					post.isPromotional = res.object.isPromotional;
 					post.analysisTokens = res.usage?.totalTokens ?? null;
-					post.analysedAt = new Date();
+					post.analysedAt = now;
 					analysed++;
 				},
 				(post, e) => this.logger.warn(`Post ${post.externalId} failed: ${e.message}`),
@@ -105,12 +412,14 @@ export class MentionExtractionService {
 		}
 		// One flush at the end: the posts run side by side on this entity manager
 		await this.em.flush();
+		// Agent B over the new claims in the same step; what it misses, the `statement-parts` backlog reads
+		await this.statementPartsService.read({ ids: claims.map(s => s.id) });
 		// What the new mentions are about, and their cities' venue tags by job
 		if (created.length) {
 			await this.mentionTopicService.relink({ mentionIds: created.map(m => m.id) });
 			await this.venueTopicService.queueCityRefresh(posts.map(p => p.city.id));
 		}
-		return { analysed, mentions };
+		return { analysed, mentions, skipped: skipped.length };
 	}
 
 	/**
@@ -183,22 +492,20 @@ export class MentionExtractionService {
 		);
 		const index = await this.topicService.index();
 		const topics = index.food.map(t => t.label);
-		const legend = index.aspectLegend();
 		const key = (name: string) => normalizeVenueName(name) || plain(name);
 		try {
 			await runPool(
 				posts,
 				10,
 				async post => {
-					const res = await this.mentionExtractionAgent.generate(this.prompt(post), {
+					const res = await readPostClaims(this.postClaimsAgent, postClaimsSource(post), {
 						cityName: post.city.name,
 						topics,
-						legend,
 					});
 					const left = [...post.mentions.getItems()];
 					const pairs: [Mention, boolean][] = [];
 					const unanswered: boolean[] = [];
-					for (const answer of res.object.mentions) {
+					for (const answer of res.object.places) {
 						const i = left.findIndex(m => key(m.venueName) === key(answer.venueName));
 						if (i < 0) unanswered.push(answer.isNewOpening);
 						else pairs.push([left.splice(i, 1)[0], answer.isNewOpening]);
@@ -235,23 +542,5 @@ export class MentionExtractionService {
 		// One flush at the end: the posts run side by side on this entity manager
 		await this.em.flush();
 		return result;
-	}
-
-	private prompt(post: SocialPost): string {
-		if (post.platform === SocialPlatformEnum.BLOG)
-			return [
-				`Platform: blog article on ${post.author ?? 'a food blog'}`,
-				`Article:\n${post.text ?? ''}`,
-			].join('\n\n');
-		return [
-			`Platform: ${post.platform}`,
-			`Tagged location: ${post.locationName ?? 'none'}`,
-			`Hashtags: ${post.hashtagLinks.map(link => link.hashtag.tag).join(', ') || 'none'}`,
-			`Mentioned accounts: ${(post.taggedHandles ?? []).join(', ') || 'none'}`,
-			`Caption:\n${post.text ?? ''}`,
-			post.subtitles ?
-				`Transcript (${post.subtitlesLanguage}):\n${post.subtitles}`
-			:	'Transcript: not available',
-		].join('\n\n');
 	}
 }

@@ -7,14 +7,17 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
-import { FeedbackModule } from '../feedback/feedback.module.js';
+import { BacklogModule } from '../backlog/backlog.module.js';
+import { StatementsModule } from '../statements/statements.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 import { VenuesModule } from '../venues/venues.module.js';
 
+import { CommentDisagreementAgent } from './agents/comment-disagreement.agent.js';
 import { CommentIntentAgent } from './agents/comment-intent.agent.js';
-import { MentionExtractionAgent } from './agents/mention-extraction.agent.js';
+import { PostClaimsAgent } from './agents/post-claims.agent.js';
+import { PostGateAgent } from './agents/post-gate.agent.js';
 import { VenueMatchAgent } from './agents/venue-match.agent.js';
 import { AdminAccountsController } from './controllers/admin.accounts.controller.js';
 import { AdminBrandAccountsController } from './controllers/admin.brand-accounts.controller.js';
@@ -46,6 +49,7 @@ import { PostCommentService } from './services/post-comment.service.js';
 import { SocialAccountService } from './services/social-account.service.js';
 import { HashtagService } from './services/hashtag.service.js';
 import { PostCountsService } from './services/post-counts.service.js';
+import { PostDigestionService } from './services/post-digestion.service.js';
 import { SocialPostService } from './services/social-post.service.js';
 import { SocialScrapeService } from './services/social-scrape.service.js';
 import { BrandChangedWorker } from './workers/brand-changed.worker.js';
@@ -67,7 +71,8 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		]),
 		ApifyModule,
 		AuthModule,
-		FeedbackModule,
+		StatementsModule,
+		BacklogModule,
 		CitiesModule,
 		TopicsModule,
 		LLMModule,
@@ -85,6 +90,7 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 	providers: [
 		SocialPostService,
 		PostCountsService,
+		PostDigestionService,
 		HashtagService,
 		BlogFetchService,
 		BlogScrapeService,
@@ -99,14 +105,17 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		MentionMatchingService,
 		BrandPostsService,
 		PostCommentService,
-		MentionExtractionAgent,
+		PostClaimsAgent,
+		PostGateAgent,
 		CommentIntentAgent,
+		CommentDisagreementAgent,
 		VenueMatchAgent,
 		BrandChangedWorker,
 	],
 	exports: [
 		SocialScrapeService,
 		PostCountsService,
+		PostDigestionService,
 		BlogScrapeService,
 		SocialAccountService,
 		OwnAccountService,

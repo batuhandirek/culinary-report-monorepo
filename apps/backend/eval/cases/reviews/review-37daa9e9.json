@@ -1,0 +1,380 @@
+{
+  "id": "review-37daa9e9",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "37daa9e9-bd0c-4e86-93a1-1353108d8527",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2twV1NGcDZMVFpOY0hCMlNqSjZSSFZQWmtaRGVFRRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Wen Cheng",
+    "venueId": "39c59d16-58a4-4a69-a194-09ac4965bc58",
+    "brand": "Wen Cheng",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-20T16:33:20.305Z",
+    "stars": 5,
+    "text": "the food is delicious and flavorful. i went on a date with my fiancé because we've heard so many positive feedback about this place and let me tell you - all the reviews are absolutely true. the food is delicious, has the perfect level of spice and the portions are ideal - not too big but you will get full. we also tried the traditional beer Shifu & the rhubarb drink. both were delicious and complimented the dishes perfectly",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:37:22.198Z",
+    "claims": [
+      {
+        "text": "the food is delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food is flavorful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "went on a date with my fiancé",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "heard so many positive feedback about this place",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the reviews are absolutely true",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the food has the perfect level of spice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portions are ideal",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the portions are not too big",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "you will get full",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "traditional beer Shifu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "beer Shifu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the rhubarb drink",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "drinks",
+        "foods": [
+          "rhubarb drink"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "both were delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "beer Shifu",
+          "rhubarb drink"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "both complemented the dishes perfectly",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:32.616Z",
+    "usage": {
+      "inputTokens": 5022,
+      "outputTokens": 2169,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The review says \"the food is delicious\" twice, so the second one is optional and may be merged with the first. \"All the reviews are absolutely true\" is taken as a verdict on the whole place; opinion is also allowed. The drink pairing claim fits drink_quality best, with drinks as an alternative.",
+    "claims": [
+      {
+        "text": "the food is delicious and flavorful",
+        "quote": "the food is delicious and flavorful",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "went on a date with the fiancé",
+        "quote": "i went on a date with my fiancé",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "had heard a lot of positive feedback about this place",
+        "quote": "we've heard so many positive feedback about this place",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "all the positive reviews about the place are absolutely true",
+        "quote": "all the reviews are absolutely true",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the food is delicious",
+        "quote": "the food is delicious, has",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the food has the perfect level of spice",
+        "quote": "has the perfect level of spice",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the portions are ideal, not too big but filling",
+        "quote": "the portions are ideal - not too big but you will get full",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "tried the traditional beer Shifu and the rhubarb drink",
+        "quote": "we also tried the traditional beer Shifu & the rhubarb drink",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "traditional beer Shifu",
+          "rhubarb drink"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks",
+            "drink_selection"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the beer Shifu and the rhubarb drink were delicious",
+        "quote": "both were delicious",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "beer Shifu",
+          "rhubarb drink"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the beer Shifu and the rhubarb drink complemented the dishes perfectly",
+        "quote": "complimented the dishes perfectly",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "beer Shifu",
+          "rhubarb drink"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "drinks"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.207Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

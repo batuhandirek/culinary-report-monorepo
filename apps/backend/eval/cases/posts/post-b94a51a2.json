@@ -1,0 +1,523 @@
+{
+  "id": "post-b94a51a2",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "macar.real",
+    "locationName": null,
+    "hashtags": [
+      "berlinfoodguide",
+      "jemenitischesrestaurant",
+      "yemenifood",
+      "yemenifoodberlin"
+    ],
+    "taggedHandles": [
+      "je_restaurant"
+    ],
+    "text": "Ad / Werbung!\n\nWer möchte bei diesem Anblick von dem leckeren Essen bei @je_restaurant nicht direkt hin und sich einfach ordentlich den Bauch vorschlagen?\nDie Jemenitische Küche ist würzig, vielfältig und anders als das, was wir hier in Europa gewohnt sind. So lecker wie die Gerichte bei @je_restaurant sind, genau so ein Geheimtipp sind sie, denn viele haben sie noch nicht auf dem Schirm. Die Leute, die das @je_restaurant allerdings bereits kennen, kommen definitiv immer wieder. Saftiges, zartes Fleisch das vom Knochen fällt und im Munde zergeht, fluffiger, aromatischer, würziger Reis und buttrig-weiches, hausgemachtes Brot sind nur einiges der vielen Dinge die mich hier immer wieder herziehen.\nNeben leckeren Essen und freundlichem Personal, bietet das @je_restaurant vermutlich das beste Preis-Leistungsverhältnis, das ich je in einem Restaurant gesehen habe. Das Essen ist lecker, der Preis mehr als gerecht und die Portionen so riesig, dass sich zwei Leute ein Gericht teilen können. Das alles, trotz des hohen Qualitätsstandards und sorgfältig ausgewählter Zutaten.\nEinen Besuch kann ich jedem nur ans Herz legen.\n\n#berlinfoodguide #jemenitischesrestaurant #yemenifood #yemenifoodberlin",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "b94a51a2-1c0d-4a1d-91f2-62aad62323fb",
+    "externalId": "ig_4009860678045893523",
+    "url": "https://www.instagram.com/p/Del4wqhu4OT/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-17T10:32:28.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-18T19:55:16.725Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "JE Restaurant",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "flavorful and varied Yemeni cuisine",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "juicy tender meat falling off the bone",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fluffy aromatic spiced rice",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "rice"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "buttery soft homemade bread",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "homemade bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "friendly staff",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "probably the best value for money the creator has seen",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "fair prices despite high quality ingredients",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "very large portions, enough for two people to share one dish",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:48:59.794Z",
+    "usage": {
+      "inputTokens": 10149,
+      "outputTokens": 4163,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Marked 'Ad / Werbung', so promotional. The venue is known only from its handle @je_restaurant; city Berlin from #yemenifoodberlin. The general line on Yemeni cuisine is subject none, and its aspect is a judgement call. The repeated 'Das Essen ist lecker' and 'die mich hier immer wieder herziehen' are optional.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Je Restaurant",
+        "locationHint": "@je_restaurant",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "@je_restaurant is evidently a Yemeni restaurant, but two separate Yemeni candidates share that name (Karl-Marx-Straße and Huttenstraße), and the post gives no location to tell them apart."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the food at Je Restaurant looks delicious",
+        "quote": "dem leckeren Essen bei @je_restaurant",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Yemeni cuisine is spicy, varied and different from what we are used to in Europe",
+        "quote": "Die Jemenitische Küche ist würzig, vielfältig und anders als das, was wir hier in Europa gewohnt sind",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "seasoning",
+            "none"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the dishes at Je Restaurant are delicious",
+        "quote": "So lecker wie die Gerichte bei @je_restaurant sind",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Je Restaurant is a hidden tip that many do not know yet",
+        "quote": "genau so ein Geheimtipp sind sie, denn viele haben sie noch nicht auf dem Schirm",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "crowding"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "people who know Je Restaurant definitely keep coming back",
+        "quote": "Die Leute, die das @je_restaurant allerdings bereits kennen, kommen definitiv immer wieder",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meat is juicy and tender, falls off the bone and melts in the mouth",
+        "quote": "Saftiges, zartes Fleisch das vom Knochen fällt und im Munde zergeht",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [
+          "Fleisch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the rice is fluffy, aromatic and spicy",
+        "quote": "fluffiger, aromatischer, würziger Reis",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Reis"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "seasoning"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the homemade bread is buttery-soft",
+        "quote": "buttrig-weiches, hausgemachtes Brot",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Brot"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the meat, rice and bread draw the author back to Je Restaurant again and again",
+        "quote": "die mich hier immer wieder herziehen",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the staff at Je Restaurant are friendly",
+        "quote": "freundlichem Personal",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Je Restaurant offers probably the best value for money the author has ever seen in a restaurant",
+        "quote": "vermutlich das beste Preis-Leistungsverhältnis, das ich je in einem Restaurant gesehen habe",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food at Je Restaurant is delicious",
+        "quote": "Das Essen ist lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the price at Je Restaurant is more than fair",
+        "quote": "der Preis mehr als gerecht",
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "price_level"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the portions are so huge that two people can share one dish",
+        "quote": "die Portionen so riesig, dass sich zwei Leute ein Gericht teilen können",
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Je Restaurant has high quality standards and carefully selected ingredients",
+        "quote": "trotz des hohen Qualitätsstandards und sorgfältig ausgewählter Zutaten",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the author recommends a visit to Je Restaurant to everyone",
+        "quote": "Einen Besuch kann ich jedem nur ans Herz legen.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.250Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.438Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

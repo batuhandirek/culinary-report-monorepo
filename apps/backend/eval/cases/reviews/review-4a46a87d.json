@@ -1,0 +1,351 @@
+{
+  "id": "review-4a46a87d",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "4a46a87d-2c89-4c23-babe-4ee50e2dbbbe",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xsb05FWjFjMEpMWTNaWVJGTkpjRVJETjJVeE9IYxAB",
+    "platform": "google",
+    "language": "ar",
+    "venue": "Nhas City Chicken",
+    "venueId": "2b39e9bc-7011-4664-8e18-e61f829c618f",
+    "brand": "Nhas City Chicken",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-20T22:05:04.280Z",
+    "stars": 1,
+    "text": "السندويش جدا سيئ الجاج طعمتو غريبة ومحروق كأنو مقلي من كم يوم وطعمة الزيت قديم والسندويشة فاضية وناشفة\nمارح عيدا ابدا\nالمدينة الجديد مو نفسو القديم تحول لمحل وجبات سريعة",
+    "textTranslated": "The sandwich was terrible. The chicken tasted strange and burnt, like it had been fried days ago. The oil tasted old, and the sandwich was empty and dry.\nI will never order from them again. The new location isn't the same as the old one; it's become a fast-food restaurant."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:57:41.993Z",
+    "claims": [
+      {
+        "text": "the sandwich was terrible",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken tasted strange",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken tasted burnt",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the chicken had been fried days ago",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "chicken"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the oil tasted old",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "oil"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the sandwich was empty",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the sandwich was dry",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "sandwich"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the new location isn't the same as the old one",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      },
+      {
+        "text": "it's become a fast-food restaurant",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change"
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:26:08.001Z",
+    "usage": {
+      "inputTokens": 5104,
+      "outputTokens": 2420,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard call: the restaurant moved and the reviewer says the new place is worse and became fast food; this is the same venue getting worse than before, so change rather than 'another location' (opinion allowed). 'Burnt' and 'dry' quotes lack the noun, so foods come from the neighbouring words (الجاج, السندويشة).",
+    "claims": [
+      {
+        "text": "the sandwich was very bad",
+        "quote": "السندويش جدا سيئ",
+        "sentiment": "negative",
+        "aspect": "food",
+        "foods": [
+          "السندويش"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the chicken tasted strange",
+        "quote": "الجاج طعمتو غريبة",
+        "sentiment": "negative",
+        "aspect": "taste",
+        "foods": [
+          "الجاج"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the chicken was burnt",
+        "quote": "ومحروق",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "الجاج"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the chicken seemed fried days ago",
+        "quote": "كأنو مقلي من كم يوم",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "الجاج"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the oil tasted old",
+        "quote": "وطعمة الزيت قديم",
+        "sentiment": "negative",
+        "aspect": "freshness",
+        "foods": [
+          "الزيت"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality",
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the sandwich was empty",
+        "quote": "والسندويشة فاضية",
+        "sentiment": "negative",
+        "aspect": "portion_size",
+        "foods": [
+          "السندويشة"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the sandwich was dry",
+        "quote": "وناشفة",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "السندويشة"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "will never order from them again",
+        "quote": "مارح عيدا ابدا",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the new location isn't the same as the old one",
+        "quote": "المدينة الجديد مو نفسو القديم",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "other"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "it has become a fast-food restaurant",
+        "quote": "تحول لمحل وجبات سريعة",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe",
+            "other"
+          ],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.209Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.406Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

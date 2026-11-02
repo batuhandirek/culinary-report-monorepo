@@ -1,17 +1,18 @@
 import { describe, expect, it } from '@jest/globals';
 
-import { type AnsweredPoint, feedbackRows } from 'src/modules/feedback/util/feedback-rows.js';
+import type { TestClaim } from 'src/modules/statements/tests/factories/statement.factory.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 
 import type { ReportAnalysis } from '../interfaces/report-analysis.interface.js';
 import type { ReportData } from '../interfaces/report-data.interface.js';
 import { editorPack, packGaps, packKeys } from '../util/editor-pack.js';
 import type { PromptScope } from '../util/report-sections.js';
 import { summarizeReport, type SummaryMention, type SummaryReview } from '../util/summarize-report.js';
-import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
+import { said as saidOf } from './factories/statement-like.factory.js';
 
 const index = seedIndex();
-const said = (praise: AnsweredPoint[] = [], complaints: AnsweredPoint[] = [], changes: string[] = []) =>
-	feedbackRows({ praise, complaints, dishes: [], changes }, { asked: true, aspects: index });
+/** A source's claims with their parts, as agents A and B leave them */
+const said = (claims: TestClaim[]) => saidOf(index, claims);
 
 const mention = (overrides: Partial<SummaryMention>): SummaryMention => ({
 	postId: 'p1',
@@ -28,9 +29,11 @@ const mention = (overrides: Partial<SummaryMention>): SummaryMention => ({
 	isAd: false,
 	isPromotional: false,
 	visited: true,
-	sentiment: 'positive',
-	summary: 'Juicy chicken, praise for the owner.',
-	feedback: said([{ topic: 'food', theme: 'seasoning', detail: 'juicy, marinated chicken' }]),
+	statements: said([
+		{ text: 'juicy, marinated chicken', sentiment: 'positive', aspect: 'seasoning' },
+		// A fact stated without judging: material, neither praise nor complaint
+		{ text: 'fries for 10 euros', sentiment: 'neutral', aspect: 'price_level', amount: 10, unit: 'money', foods: ['fries'] },
+	]),
 	...overrides,
 });
 
@@ -40,7 +43,7 @@ const review = (overrides: Partial<SummaryReview>): SummaryReview => ({
 	publishedAt: new Date('2026-09-15T12:00:00Z'),
 	stars: 5,
 	text: 'Great.',
-	feedback: said([{ topic: 'food', theme: 'taste', detail: 'great chicken' }]),
+	statements: said([{ text: 'great chicken', sentiment: 'positive', aspect: 'taste' }]),
 	...overrides,
 });
 
@@ -54,13 +57,13 @@ const data = (): ReportData => {
 		month: '2026-09',
 		mentions: [
 			mention({}),
-			mention({ postId: 'p2', author: 'traitic', authorFans: 460, views: 169955, sentiment: 'negative', summary: 'Says the owner is under investigation.', feedback: said([], [{ topic: 'other', theme: 'other', detail: 'owner allegedly involved in a case' }]) }),
-			mention({ postId: 'own', author: 'nhascitychicken1993', own: true, views: 990414, summary: 'Our chicken.' }),
+			mention({ postId: 'p2', author: 'traitic', authorFans: 460, views: 169955, statements: said([{ text: 'owner allegedly involved in a case', sentiment: 'negative', aspect: 'other' }]) }),
+			mention({ postId: 'own', author: 'nhascitychicken1993', own: true, views: 990414 }),
 		],
 		reviews: [
 			review({ branch: 'Torstraße 125' }),
-			review({ branch: 'Sonnenallee 73', stars: 4, text: 'Pricier than the other branches.', feedback: said([], [{ topic: 'price', theme: 'price_level', detail: 'more expensive than other branches' }]) }),
-			review({ branch: 'Torstraße 125', stars: 1, text: 'Not what you used to be.', feedback: said([], [{ topic: 'food', theme: 'quality_change', detail: 'quality declined' }], ['quality declined']) }),
+			review({ branch: 'Sonnenallee 73', stars: 4, text: 'Pricier than the other branches.', statements: said([{ text: 'more expensive than other branches', sentiment: 'negative', aspect: 'price_level' }]) }),
+			review({ branch: 'Torstraße 125', stars: 1, text: 'Not what you used to be.', statements: said([{ text: 'quality declined', sentiment: 'negative', aspect: 'taste' }, { text: 'quality declined', change: true }]) }),
 			review({ branch: 'Torstraße 125' }),
 			review({ branch: 'Sonnenallee 73' }),
 		],
@@ -112,8 +115,12 @@ describe('editorPack', () => {
 		// Most viewed first, each with what it said and what the comments under it said
 		expect(pack.postsByOthers!.map(p => p.creator)).toEqual(['@navito on TikTok, 492700 followers', '@traitic on TikTok, 460 followers']);
 		expect(pack.postsByOthers![0].commentsUnderIt).toMatchObject({ read: 79, disagreed: 11, whatTheDisagreeingOnesSay: 'Several call it overpriced and hype.' });
-		// A point filed at a root is named by the root alone
+		// A claim filed at a root is named by the root alone
 		expect(pack.postsByOthers![1].complaints).toEqual(['other: owner allegedly involved in a case']);
+		// A neutral claim is material too, as noted, with the wording it names as a dish
+		expect(pack.postsByOthers![0].noted).toEqual(['price / price level: fries for 10 euros']);
+		expect(pack.postsByOthers![0].dishes).toEqual(['fries (neutral)']);
+		expect(pack.postsByOthers![1].noted).toBeUndefined();
 		expect(pack.questionsViewersKeptAsking).toEqual(['"Where does the chicken come from?" (7 times)']);
 		expect(pack.ownPosts!.posts[0]).toMatchObject({ views: 990414, account: expect.stringContaining('@nhascitychicken1993 on TikTok') });
 		expect(pack.press![0]).toMatchObject({ outlet: 'DerWesten', kind: 'feature' });

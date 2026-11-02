@@ -1,0 +1,587 @@
+{
+  "id": "post-d057d8ef",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "jsix.tv",
+    "locationName": null,
+    "hashtags": [
+      "berlin",
+      "fürdich",
+      "pankow",
+      "foodtok",
+      "pasta"
+    ],
+    "taggedHandles": [
+      "@Pasta degli Angeli"
+    ],
+    "text": "Pasta Angeli - Dietzgenstraße 63, 13156 Berlim @Pasta degli Angeli \n\n#berlin #fürdich #pankow #foodtok #pasta ",
+    "subtitles": "Alter die Nudeln sind böse der Hammer\nund der Steak muss ich noch mal ganz kurz sagen\naber richtig krass er sagt das ist grad mal der Rumsteak\ndas ist 1 Rumsteak\nich hab ja auch gerade gesagt\nich will die anderen Läden Namen nicht nennen\ngibt ja so Steak oder so wie Gummi\nAlter du kaust und kaust\nja okay\nalso kannst du komplett vergessen ne die ganzen Digga\nalso hier ist ja komplett vorbei\njetzt versteh ich warum die ganzen äh\nStammkunden reinkommen grüßen ohne Ende und so und hier\naligali ist ohne Ende\nmehrere Leute jetzt immer mehr kommen\nund äh die Nudeln sind sehr geil gemacht ja\nMH\nsehr unorthodox gerade Nudeln und äh Steak aber\nich wollt ja beides ausprobieren ne\nman kann natürlich auch nachsalzen\naber das Essen ist perfekt und es sieht so Aus\nals würde ich das alles heute aufessen\n100 Prozent mit dem Trüffel\nne die raspeln hier original Trüffel mit drauf\nne\nTrüffel ist ja eigentlich sehr teuer ne\nne diese italienische Familie gibt dir richtig Gas Alter\nschon krass\nna ja und eigentlich haben sie Werbung gar nich nötig ne\naber is schon krass ja sehr sehr lecker",
+    "subtitlesLanguage": "deu-DE",
+    "id": "d057d8ef-64dc-4098-bc1a-8f713f9a83da",
+    "externalId": "7694384137716665633",
+    "url": "https://www.tiktok.com/@jsix.tv/video/7694384137716665633",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-08T19:40:14.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:32:14.488Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Pasta degli Angeli",
+        "locationHint": "Dietzgenstraße 63, Pankow",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "80908533-8191-46b4-9825-d269f1cc06d5",
+          "brandName": "Trattoria Pasta degli Angeli",
+          "venueId": "f6c63fe3-1bbb-41b0-a8ab-dca4de54f251",
+          "venueName": "Trattoria Pasta degli Angeli"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the noodles were extremely good",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "noodle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak was very strong",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak was a rump steak",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "other steak places were chewy like rubber",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "steak places"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the food was perfect",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the truffle was grated on top as original truffle",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "truffle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "truffle is very expensive",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "truffle"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "an Italian family is running things with real energy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "change",
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place does not really need advertising",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it was very delicious",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:50:35.988Z",
+    "usage": {
+      "inputTokens": 10284,
+      "outputTokens": 4351,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue name comes from the mentioned account (\"Pasta degli Angeli\") over the caption's shorter \"Pasta Angeli\". The rubbery steak at other, unnamed places is kept as a general comparison with subject none. \"nachsalzen\" is read as a mild note on seasoning rather than a complaint.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Pasta degli Angeli",
+        "locationHint": "Dietzgenstraße 63, 13156, Pankow",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "80908533-8191-46b4-9825-d269f1cc06d5",
+          "brandName": "Trattoria Pasta degli Angeli",
+          "venueId": "f6c63fe3-1bbb-41b0-a8ab-dca4de54f251",
+          "venueName": "Trattoria Pasta degli Angeli",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Nudeln are amazing",
+        "quote": "die Nudeln sind böse der Hammer",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Nudeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak is really great",
+        "quote": "der Steak muss ich noch mal ganz kurz sagen\naber richtig krass",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the steak is just a Rumsteak",
+        "quote": "er sagt das ist grad mal der Rumsteak",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Rumsteak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "steak at other places is like rubber, you chew and chew",
+        "quote": "gibt ja so Steak oder so wie Gummi",
+        "sentiment": "negative",
+        "aspect": "cooking",
+        "foods": [
+          "Steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "regular customers come in and greet endlessly",
+        "quote": "Stammkunden reinkommen grüßen ohne Ende",
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "vibe",
+            "crowding"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place is very lively, more and more people are coming",
+        "quote": "aligali ist ohne Ende",
+        "sentiment": "positive",
+        "aspect": "crowding",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "atmosphere"
+          ],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Nudeln are made really well",
+        "quote": "die Nudeln sind sehr geil gemacht",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Nudeln"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "cooking",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "he ordered both Nudeln and Steak, which is unorthodox",
+        "quote": "sehr unorthodox gerade Nudeln und äh Steak",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Nudeln",
+          "Steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can add more salt to the food",
+        "quote": "man kann natürlich auch nachsalzen",
+        "sentiment": "neutral",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is perfect",
+        "quote": "das Essen ist perfekt",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "it looks like he will eat it all up today",
+        "quote": "als würde ich das alles heute aufessen",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they grate real Trüffel on top",
+        "quote": "die raspeln hier original Trüffel mit drauf",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Trüffel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Trüffel is actually very expensive",
+        "quote": "Trüffel ist ja eigentlich sehr teuer",
+        "sentiment": "neutral",
+        "aspect": "price_level",
+        "foods": [
+          "Trüffel"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the Italian family really goes all out",
+        "quote": "diese italienische Familie gibt dir richtig Gas",
+        "sentiment": "positive",
+        "aspect": "ownership",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service",
+            "friendliness"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "they don't really need advertising",
+        "quote": "eigentlich haben sie Werbung gar nich nötig",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the food is very, very tasty",
+        "quote": "sehr sehr lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.251Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

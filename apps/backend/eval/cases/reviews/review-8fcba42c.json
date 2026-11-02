@@ -1,0 +1,145 @@
+{
+  "id": "review-8fcba42c",
+  "kind": "review",
+  "tags": [
+    "lang:other",
+    "stars:4",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "8fcba42c-2f90-42f6-be12-5ddca320864a",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2w5RmFHSlhZVkl3Y1c5WlZUbDRjbGc0YTJ0VFVYYxAB",
+    "platform": "google",
+    "language": "nl",
+    "venue": "Luzii Berlin",
+    "venueId": "888caf53-803f-4c9e-889c-dfec082a7323",
+    "brand": "Luzii Berlin",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-19T10:19:39.052Z",
+    "stars": 4,
+    "text": "Eenvoudige kaart op basis van Duitse gerechten. Superfijne bediening. Goede cocktails.",
+    "textTranslated": "Simple menu based on German dishes. Super friendly service. Good cocktails."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:37:32.484Z",
+    "claims": [
+      {
+        "text": "simple menu based on German dishes",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "super friendly service",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "good cocktails",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "cocktail"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:50.085Z",
+    "usage": {
+      "inputTokens": 4964,
+      "outputTokens": 472,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The hard call is 'Eenvoudige kaart' (simple menu): it can be read as a neutral description or a mild judgement. 'Superfijne bediening' is read as friendliness, with general service also acceptable. 'Cocktails' is kept as a drink named, not a general word.",
+    "claims": [
+      {
+        "text": "simple menu based on German dishes",
+        "quote": "Eenvoudige kaart op basis van Duitse gerechten",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive",
+            "mixed"
+          ],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "super friendly service",
+        "quote": "Superfijne bediening",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "good cocktails",
+        "quote": "Goede cocktails",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "cocktails"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.214Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

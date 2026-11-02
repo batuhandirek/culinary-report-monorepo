@@ -5,12 +5,9 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@je
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { addFeedback } from 'src/modules/feedback/tests/factories/feedback.factory.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import {
-	seedTopics,
-	seedIndex,
-} from 'src/modules/topics/tests/factories/topic.factory.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
@@ -52,7 +49,8 @@ describe('LandingEditionService (pglite)', () => {
 		service = harness.moduleRef.get(LandingEditionService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
-		seedTopics(em, ['ramen']);
+		// The dish the posts name, and the aspect their praise is filed under
+		seedTopics(em, ['ramen', 'taste']);
 
 		city = testCity(em, {
 			slug: 'berlin',
@@ -119,8 +117,6 @@ describe('LandingEditionService (pglite)', () => {
 					venueName: v.name,
 					cuisine: 'Ramen',
 					visited: true,
-					sentiment: 'positive',
-					summary: `Loved ${v.name}.`,
 					isNewOpening: opts.isNew ?? false,
 				}),
 			);
@@ -142,14 +138,12 @@ describe('LandingEditionService (pglite)', () => {
 		// Another city's talk stays there
 		for (let i = 0; i < 8; i++) post([schnitzel], `wiener${i}`, 5_000, { city: wien });
 		await em.flush();
-		addFeedback(
+		// What Anna's post says about Sori, as agents A and B store it
+		addStatements(
 			em,
 			m1,
-			{
-				praise: [{ topic: 'food', theme: 'taste', detail: 'rich broth', dish: 'Tonkotsu' }],
-				dishes: [{ name: 'Tonkotsu', sentiment: 'positive' }],
-			},
-			{ index: seedIndex() },
+			[{ text: 'rich broth', sentiment: 'positive', aspect: 'taste', foods: ['Tonkotsu'] }],
+			{ index: await harness.moduleRef.get(TopicService).index() },
 		);
 		await em.flush();
 	});
@@ -228,7 +222,8 @@ describe('LandingEditionService (pglite)', () => {
 			peoplePosting: 3,
 			views: '3,500',
 			praiseInPosts: ['rich broth'],
-			whatPostsSaid: ['Loved Sori Ramen.'],
+			// What the positive mentions said, their claims (no summaries since claim model v2): only Anna's post has one
+			whatPostsSaid: ['rich broth'],
 		});
 		expect(edition.copy.lede).toBe('Berlin talked: 3 people on Sori Ramen.');
 		expect(edition.copy.places[0].said).toBe('Sori Ramen had people talking.');

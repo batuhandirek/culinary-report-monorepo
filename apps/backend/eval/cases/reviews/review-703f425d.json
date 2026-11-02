@@ -1,0 +1,181 @@
+{
+  "id": "review-703f425d",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:5",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "703f425d-7c40-4970-9194-a09dceb7c511",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT205dGNFcHhWRkpaYkRkc1ltUXplVjlsYUdWb2FVRRAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Burgermeister",
+    "venueId": "26636764-820f-4b12-ad9b-3570a76647d2",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-25T07:34:07.902Z",
+    "stars": 5,
+    "text": "Sehr nette Mitarbeiter und immer Freundlich. Ich bestelle immer einen Burger und er kam nie schlecht an. Ich empfehle das Restaurant sehr !",
+    "textTranslated": "Very nice and always friendly staff. I always order a burger and it's never been bad. I highly recommend this restaurant!"
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:53:41.149Z",
+    "claims": [
+      {
+        "text": "very nice staff",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "always friendly staff",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "always order a burger",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [
+          "burgers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it's never been bad",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion"
+      },
+      {
+        "text": "I highly recommend this restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:27:09.026Z",
+    "usage": {
+      "inputTokens": 4996,
+      "outputTokens": 616,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The burger has 'never arrived bad', which judges the burger in general, so the aspect is food, with taste as an alternative. 'Always order a burger' is a neutral fact and can be folded into the burger claim. The burger quote is a pronoun span ('er'), but the food is named from the neighbouring claim's 'Burger'.",
+    "claims": [
+      {
+        "text": "the staff are very nice and always friendly",
+        "quote": "Sehr nette Mitarbeiter und immer Freundlich.",
+        "sentiment": "positive",
+        "aspect": "friendliness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the reviewer always orders a burger",
+        "quote": "Ich bestelle immer einen Burger",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the burger has never arrived bad",
+        "quote": "er kam nie schlecht an",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "Burger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "highly recommends the restaurant",
+        "quote": "Ich empfehle das Restaurant sehr !",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.212Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.409Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -12,7 +12,14 @@ import { normalizeAccountHandle, profileOf } from '../util/accounts.js';
 import { creatorKey } from '../util/creators.js';
 
 // Berlin's words as `AccountMatchingService` passes them: stopwords, names and districts
-const CITY_WORDS = ['berlin', 'Berlin', 'Mitte', 'Friedrichshain-Kreuzberg', 'Neukölln', 'Steglitz-Zehlendorf'];
+const CITY_WORDS = [
+	'berlin',
+	'Berlin',
+	'Mitte',
+	'Friedrichshain-Kreuzberg',
+	'Neukölln',
+	'Steglitz-Zehlendorf',
+];
 
 // One-branch brands: the brand's name and its venue's, as the service indexes them
 const solo = (id: string, name: string): AccountMatchName[] => [
@@ -54,7 +61,10 @@ const NAMES: AccountMatchName[] = [
 ];
 
 const index = accountMatchIndex(NAMES, CITY_WORDS);
-const match = (handle: string, opts: { postedAbout?: string[]; rejected?: string[]; displayName?: string } = {}) =>
+const match = (
+	handle: string,
+	opts: { postedAbout?: string[]; rejected?: string[]; displayName?: string } = {},
+) =>
 	matchAccount(
 		{
 			handle,
@@ -67,7 +77,11 @@ const match = (handle: string, opts: { postedAbout?: string[]; rejected?: string
 
 describe('matchAccount', () => {
 	it('links a handle that is the name once city words and venue words are off', () => {
-		expect(match('soriramen.berlin')).toMatchObject({ brandId: 'sori', tier: AccountMatchTier.EXACT, link: true });
+		expect(match('soriramen.berlin')).toMatchObject({
+			brandId: 'sori',
+			tier: AccountMatchTier.EXACT,
+			link: true,
+		});
 		expect(match('markthalleneun')).toMatchObject({ brandId: 'markthalle', link: true });
 		expect(match('misspho.berlin')).toMatchObject({ brandId: 'misspho', link: true });
 		expect(match('restaurant.salamat')).toMatchObject({ brandId: 'salamat', link: true });
@@ -87,7 +101,10 @@ describe('matchAccount', () => {
 
 	it('links a short name only when the account posted about it', () => {
 		expect(match('drei.berlin')).toMatchObject({ brandId: 'drei', link: false });
-		expect(match('drei.berlin', { postedAbout: ['drei'] })).toMatchObject({ brandId: 'drei', link: true });
+		expect(match('drei.berlin', { postedAbout: ['drei'] })).toMatchObject({
+			brandId: 'drei',
+			link: true,
+		});
 	});
 
 	it('links a looser match only when the posts agree', () => {
@@ -98,7 +115,10 @@ describe('matchAccount', () => {
 			tier: AccountMatchTier.CONTAINS,
 			link: true,
 		});
-		expect(match('berlin.burger.int', { postedAbout: ['berlinburger'] })).toMatchObject({ brandId: 'berlinburger', link: true });
+		expect(match('berlin.burger.int', { postedAbout: ['berlinburger'] })).toMatchObject({
+			brandId: 'berlinburger',
+			link: true,
+		});
 		// The start of a longer name is offered to an admin
 		expect(match('papa_pane')).toMatchObject({ brandId: 'papapane', link: false });
 	});
@@ -113,13 +133,20 @@ describe('matchAccount', () => {
 		expect(match('osteriamare', { postedAbout: ['ribaltone'] })?.link).not.toBe(true);
 		// A name made of food words is no one's by itself
 		expect(match('ramen.berlin')).toBeNull();
-		expect(match('ramen.berlin', { postedAbout: ['ramen'] })).toMatchObject({ brandId: 'ramen' });
+		expect(match('ramen.berlin', { postedAbout: ['ramen'] })).toMatchObject({
+			brandId: 'ramen',
+		});
 	});
 
 	it('leaves two brands of one name to the posts, else to an admin', () => {
 		expect(match('pizza.napoli.berlin')?.link).toBe(false);
-		expect(match('pizza.napoli.berlin', { postedAbout: ['pizza-b'] })).toMatchObject({ brandId: 'pizza-b', link: true });
-		expect(match('pizza.napoli.berlin', { postedAbout: ['pizza-a', 'pizza-b'] })?.link).toBe(false);
+		expect(match('pizza.napoli.berlin', { postedAbout: ['pizza-b'] })).toMatchObject({
+			brandId: 'pizza-b',
+			link: true,
+		});
+		expect(match('pizza.napoli.berlin', { postedAbout: ['pizza-a', 'pizza-b'] })?.link).toBe(
+			false,
+		);
 	});
 
 	it("tells a chain's account from a branch's own", () => {
@@ -127,7 +154,11 @@ describe('matchAccount', () => {
 		expect(match('burgermeister.berlin')).toMatchObject({ brandId: 'bm', link: true });
 		expect(match('burgermeister.berlin')?.branchId).toBeUndefined();
 		// One branch's name only: that branch's
-		expect(match('weddingsnackbar')).toMatchObject({ brandId: 'kb', branchId: 'kb-wedding', link: true });
+		expect(match('weddingsnackbar')).toMatchObject({
+			brandId: 'kb',
+			branchId: 'kb-wedding',
+			link: true,
+		});
 		expect(match('kottiburger')).toMatchObject({ brandId: 'kb', link: true });
 		expect(match('kottiburger')?.branchId).toBeUndefined();
 	});
@@ -137,27 +168,40 @@ describe('matchAccount', () => {
 	});
 
 	it("matches on the profile's display name too", () => {
-		expect(match('bestnoodles_42', { displayName: 'SORI Ramen Berlin' })).toMatchObject({ brandId: 'sori', link: true });
+		expect(match('bestnoodles_42', { displayName: 'SORI Ramen Berlin' })).toMatchObject({
+			brandId: 'sori',
+			link: true,
+		});
 	});
 });
 
 describe('handles', () => {
 	it('strips city words and venue words off either end, one at a time', () => {
 		const words = accountMatchIndex([], CITY_WORDS).cityWords;
-		expect(handleForms('soriramen.berlin', words)).toEqual(expect.arrayContaining(['soriramenberlin', 'soriramen']));
-		expect(handleForms('restaurant.salamat', words)).toEqual(expect.arrayContaining(['salamat']));
-		expect(handleForms('thetastezehlendorf', words)).toEqual(expect.arrayContaining(['thetaste']));
+		expect(handleForms('soriramen.berlin', words)).toEqual(
+			expect.arrayContaining(['soriramenberlin', 'soriramen']),
+		);
+		expect(handleForms('restaurant.salamat', words)).toEqual(
+			expect.arrayContaining(['salamat']),
+		);
+		expect(handleForms('thetastezehlendorf', words)).toEqual(
+			expect.arrayContaining(['thetaste']),
+		);
 	});
 
 	it('normalizes handles and profile links', () => {
 		expect(normalizeAccountHandle('@ChenChe_Berlin ')).toBe('chenche_berlin');
-		expect(normalizeAccountHandle('https://www.instagram.com/chenche_berlin/')).toBe('chenche_berlin');
+		expect(normalizeAccountHandle('https://www.instagram.com/chenche_berlin/')).toBe(
+			'chenche_berlin',
+		);
 		expect(normalizeAccountHandle('not a handle')).toBeNull();
 		expect(profileOf('https://www.instagram.com/arkadasch_bar_kaffee/?hl=de')).toEqual({
 			platform: SocialPlatformEnum.INSTAGRAM,
 			handle: 'arkadasch_bar_kaffee',
 		});
-		expect(profileOf('https://instagram.com/loveatfirstbite_berlin?igshid=YmMyMTA2M2Y=')).toMatchObject({
+		expect(
+			profileOf('https://instagram.com/loveatfirstbite_berlin?igshid=YmMyMTA2M2Y='),
+		).toMatchObject({
 			handle: 'loveatfirstbite_berlin',
 		});
 		expect(profileOf('https://www.tiktok.com/@chenche.berlin')).toEqual({

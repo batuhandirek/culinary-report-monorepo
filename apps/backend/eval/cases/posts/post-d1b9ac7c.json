@@ -1,0 +1,156 @@
+{
+  "id": "post-d1b9ac7c",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "nghesnger",
+    "locationName": "Bonvivant Cocktail Bistro",
+    "hashtags": [
+      "berlinbrunch",
+      "michelinstar",
+      "plantbasedberlin",
+      "berlinfoodguide"
+    ],
+    "taggedHandles": [],
+    "text": "Berlin’s perfect Michelin-star vegan brunch. 🌱 #BerlinBrunch  #MichelinStar #PlantBasedBerlin #BerlinFoodGuide ",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "d1b9ac7c-ea6e-44fc-b3eb-454e3cab5e26",
+    "externalId": "7686194334508584225",
+    "url": "https://www.tiktok.com/@nghesnger/video/7686194334508584225",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-09-16T17:59:39.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:19.899Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Bonvivant Cocktail Bistro",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "cbafb605-fd4b-4fef-9ca7-da99cea6e722",
+          "brandName": "Bonvivant",
+          "venueId": "ebb53dfe-a278-468b-8d3c-706bfa9710fd",
+          "venueName": "Bonvivant"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Berlin’s perfect Michelin-star vegan brunch",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:50:32.375Z",
+    "usage": {
+      "inputTokens": 9270,
+      "outputTokens": 1117,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The caption never names the venue; the tagged location counts. Hard calls: whether the brunch praise is an opinion or a verdict on the place, and whether the Michelin-star detail is kept as its own claim or left inside the brunch claim.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Bonvivant Cocktail Bistro",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "cbafb605-fd4b-4fef-9ca7-da99cea6e722",
+          "brandName": "Bonvivant",
+          "venueId": "ebb53dfe-a278-468b-8d3c-706bfa9710fd",
+          "venueName": "Bonvivant",
+          "note": "Bonvivant Cocktail Bistro is the Michelin-starred vegan restaurant on Goltzstraße, listed simply as Bonvivant with a single branch."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Bonvivant Cocktail Bistro serves Berlin's perfect vegan brunch",
+        "quote": "Berlin’s perfect Michelin-star vegan brunch",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "vegan brunch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "menu_variety"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Bonvivant Cocktail Bistro has a Michelin star",
+        "quote": "Michelin-star",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.439Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

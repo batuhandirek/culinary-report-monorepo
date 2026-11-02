@@ -1,7 +1,8 @@
 // The reach and press sections of a report, from what the pipeline stored. Pure functions.
 
-import { type FeedbackRowLike, topicsOf } from 'src/modules/feedback/util/feedback-rows.js';
 import _ from 'lodash';
+
+import { rootsOf, type StatementLike } from 'src/modules/statements/util/statement-views.js';
 
 import type { ReportData, ReportPost } from '../interfaces/report-data.interface.js';
 import type {
@@ -139,13 +140,13 @@ export interface PlatformReviewInput {
 	text?: string | null;
 	textTranslated?: string | null;
 	ownerResponse?: string | null;
-	/** What it says: its feedback rows */
-	feedback: FeedbackRowLike[];
+	/** What it says: its statements with their aspect parts */
+	statements: StatementLike[];
 }
 
-/** Topic → written reviews raising it on that side, once each */
+/** Aspect root → written reviews raising it on that side, once each (a claim about no aspect under none) */
 const countSources = (reviews: PlatformReviewInput[], sentiment: 'positive' | 'negative') =>
-	_.countBy(reviews.flatMap(r => topicsOf(r.feedback, sentiment)));
+	_.countBy(reviews.flatMap(r => rootsOf(r.statements, sentiment)));
 
 /**
  * Google and TripAdvisor side by side, and the topics their reviewers see differently (both

@@ -75,8 +75,6 @@ describe('TodayService (pglite)', () => {
 			post,
 			venueName: 'Mystery Spot',
 			visited: true,
-			sentiment: 'positive',
-			summary: 'Good.',
 			matchMethod: MentionMatchMethodEnum.NONE,
 		});
 		await em.flush();

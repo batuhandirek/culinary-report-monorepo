@@ -7,13 +7,14 @@ import _ from 'lodash';
 
 import { ExceptionCodes } from 'exceptions';
 
-import type { FeedbackPointOutputDto } from 'src/modules/feedback/dto/feedback-point.output.dto.js';
 import { CityDayService } from 'src/modules/cities/services/city-day.service.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
 import { BrandPostsService } from 'src/modules/social/services/brand-posts.service.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import { sentimentOf } from 'src/modules/statements/util/statement-views.js';
 import { Brand, BrandReportScopeEnum } from 'src/modules/venues/entities/brand.entity.js';
 import { CompetitorPickedByEnum } from 'src/modules/venues/entities/brand-competitor.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
@@ -317,23 +318,21 @@ export class PortalService {
 			items: items.map(({ post, mention, own, paid }) => ({
 				...(wrap(post).serialize({ skipNull: true, forceObject: true }) as unknown as Omit<
 					PortalPostOutputDto,
-					'own' | 'paid' | 'sentiment' | 'summary' | 'visited' | 'feedback'
+					'own' | 'paid' | 'sentiment' | 'visited' | 'statements'
 				>),
 				own,
 				paid,
-				sentiment: mention.sentiment,
-				summary: mention.summary,
+				// The post's sentiment about the brand, from its claims (no stored one since claim model v2)
+				sentiment: sentimentOf(mention.statements.getItems()),
 				visited: mention.visited,
-				feedback: mention.feedback
-					.getItems()
-					.map(
-						row =>
-							wrap(row).serialize({
-								skipNull: true,
-								forceObject: true,
-								populate: ['foodTopic', 'aspect', 'aspect.parent'],
-							}) as unknown as FeedbackPointOutputDto,
-					),
+				// What the post says about the brand: the mention's statements with their parts
+				statements: (
+					wrap(mention).serialize({
+						skipNull: true,
+						forceObject: true,
+						populate: [...STATEMENT_POPULATE],
+					}) as unknown as Pick<PortalPostOutputDto, 'statements'>
+				).statements,
 			})),
 			totalItems: total,
 			page,
@@ -414,7 +413,7 @@ export class PortalService {
 		const { replyDraft: _stored, ...fields } = wrap(review).serialize({
 			skipNull: true,
 			forceObject: true,
-			populate: ['feedback', 'feedback.foodTopic', 'feedback.aspect', 'feedback.aspect.parent'],
+			populate: [...STATEMENT_POPULATE],
 		}) as unknown as PortalReviewOutputDto;
 		return {
 			...fields,

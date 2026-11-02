@@ -1,0 +1,266 @@
+{
+  "id": "post-28ea0f18",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "wernerskraeutergarten",
+    "locationName": "Markthalle Neun",
+    "hashtags": [],
+    "taggedHandles": [
+      "wernerskraeutergarten",
+      "markthalleneun"
+    ],
+    "text": "„Blüte schön, Biss mit Wumms!“\n\nKapuzinenerkresse vom Feinsten. ♥️\n\nGanz frisch bei @wernerskraeutergarten \n\nWo? @markthalleneun 🌻",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "28ea0f18-a3d2-4d39-b9dd-c653456acd1a",
+    "externalId": "ig_4004829792529585112",
+    "url": "https://www.instagram.com/p/DeUA3pRoJPY/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-10T12:12:55.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:34:51.117Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Markthalle Neun",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the flowers are beautiful",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "flowers"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "has a strong bite",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Kapuzinenerkresse from the best",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Kapuzinenerkresse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "at Markthalle Neun",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:34:19.352Z",
+    "usage": {
+      "inputTokens": 11425,
+      "outputTokens": 2143,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Markthalle Neun is a food hall and so a place, but the post only names it as where the herb stall Werners Kräutergarten is; all judgements go to the stall. 'Ganz frisch bei' is read as freshness, with 'just in' (new_item) as an allowed reading.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Werners Kräutergarten",
+        "locationHint": "Markthalle Neun",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Werners Kräutergarten is a market stall at Markthalle Neun; none of the garden/biergarten candidates is it, and the Markthalle Neun candidate is the market hall itself, not the stall."
+        }
+      },
+      {
+        "venueName": "Markthalle Neun",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e26a6151-ace5-4d19-b6d7-91b9a6d5ad8f",
+          "brandName": "Markthalle Neun",
+          "venueId": "84c28955-7228-415b-a69c-76f79363ae47",
+          "venueName": "Markthalle Neun",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "the Kapuzinenerkresse blossom is beautiful",
+        "quote": "Blüte schön",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Kapuzinenerkresse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kapuzinenerkresse has a bite with a punch",
+        "quote": "Biss mit Wumms!",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Kapuzinenerkresse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "seasoning"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kapuzinenerkresse is of the finest quality",
+        "quote": "Kapuzinenerkresse vom Feinsten",
+        "sentiment": "positive",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Kapuzinenerkresse"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Kapuzinenerkresse is very fresh at Werners Kräutergarten",
+        "quote": "Ganz frisch bei @wernerskraeutergarten",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "new_item"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Werners Kräutergarten is at Markthalle Neun",
+        "quote": "Wo? @markthalleneun",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.228Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.423Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

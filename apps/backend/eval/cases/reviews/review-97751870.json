@@ -1,0 +1,164 @@
+{
+  "id": "review-97751870",
+  "kind": "review",
+  "tags": [
+    "lang:de",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "97751870-441e-44ae-b33d-2224fe9d2904",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT2xBNGNGUm9aalZzY21sUmNIQkRWaTF1WmtRMVIyYxAB",
+    "platform": "google",
+    "language": "de",
+    "venue": "Burgermeister Akazienstraße",
+    "venueId": "db4a6000-46b4-428b-b256-423fe8120782",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-16T17:49:57.450Z",
+    "stars": 1,
+    "text": "Burger mit Fries und Käse Sauce bestellt - einfach komplett Fries und Sauce vergessen. Top, war auch ne komplizierte Bestellung.",
+    "textTranslated": "Ordered a burger with fries and cheese sauce – they completely forgot the fries and sauce. Great, and it was a complicated order."
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:40:12.223Z",
+    "claims": [
+      {
+        "text": "ordered a burger with fries and cheese sauce",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "burgers",
+          "fries",
+          "cheese sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they completely forgot the fries",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "fries"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "they completely forgot the cheese sauce",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "cheese sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "it was a complicated order",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:01.459Z",
+    "usage": {
+      "inputTokens": 5002,
+      "outputTokens": 939,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The closing 'Top, war auch ne komplizierte Bestellung' is sarcasm, so it is read as negative about order accuracy; it may be kept apart or folded into the forgotten-items claim. The forgotten Fries and Sauce are a complaint, so opinion, with fact also allowed.",
+    "claims": [
+      {
+        "text": "ordered a Burger with Fries and Käse Sauce",
+        "quote": "Burger mit Fries und Käse Sauce bestellt",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Burger",
+          "Fries",
+          "Käse Sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "order_accuracy"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the Fries and Sauce were completely forgotten from the order",
+        "quote": "einfach komplett Fries und Sauce vergessen",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [
+          "Fries",
+          "Sauce"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "sarcastically: 'great, it was a complicated order too'",
+        "quote": "Top, war auch ne komplizierte Bestellung.",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

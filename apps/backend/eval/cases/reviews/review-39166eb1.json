@@ -1,0 +1,202 @@
+{
+  "id": "review-39166eb1",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "39166eb1-406f-4787-9eca-e17746351a54",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT205c1MzRk9iMkpvVG5wRFRtdHBUM1JwWlV3d2NYYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Anjappar Chettinad Indian Restaurant",
+    "venueId": "c0991109-bd68-4f25-ad9c-4b8d125ead58",
+    "brand": "Anjappar Chettinad Indian Restaurant",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-08-18T09:50:33.122Z",
+    "stars": 1,
+    "text": "Unfortunately, I had a really disappointing experience yesterday. I found a large piece of plastic in my food. What makes it even more upsetting is that this is my favorite restaurant and the place I always recommend to anyone looking for an authentic South Indian dining experience. Please check your food if you would still prefer to go there.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T14:00:19.689Z",
+    "claims": [
+      {
+        "text": "had a really disappointing experience yesterday",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "service",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "found a large piece of plastic in my food",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [
+          "food"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this is my favorite restaurant",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "the place is an authentic South Indian dining experience",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "always recommend it to anyone",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:25:26.629Z",
+    "usage": {
+      "inputTokens": 5001,
+      "outputTokens": 738,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The plastic is a foreign object in the food, so food_hygiene fits it. 'Always recommend' and 'favorite restaurant' are positive verdicts about the past. The closing warning reads as a cautionary verdict.",
+    "claims": [
+      {
+        "text": "had a really disappointing experience yesterday",
+        "quote": "I had a really disappointing experience yesterday",
+        "sentiment": "negative",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "found a large piece of plastic in the food",
+        "quote": "I found a large piece of plastic in my food",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact"
+          ]
+        }
+      },
+      {
+        "text": "this is the reviewer's favorite restaurant",
+        "quote": "this is my favorite restaurant",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "the reviewer always recommends it for an authentic South Indian dining experience",
+        "quote": "the place I always recommend to anyone looking for an authentic South Indian dining experience",
+        "sentiment": "positive",
+        "aspect": "authenticity",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "check your food if you still go there",
+        "quote": "Please check your food if you would still prefer to go there.",
+        "sentiment": "negative",
+        "aspect": "food_hygiene",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.208Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.405Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

@@ -1,0 +1,419 @@
+{
+  "id": "post-01f172dd",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "eatyourbohnen",
+    "locationName": "Berlin, Deutschland",
+    "hashtags": [
+      "vegan",
+      "katsu",
+      "sandwich",
+      "berlinvegan",
+      "shokupan"
+    ],
+    "taggedHandles": [],
+    "text": "KATSU-SANDO\n- panko-crusted soy steak\n- pickled red onion\n- shaved fresh apple\n- tonkatsu mayo\n\nserved on sliced, toasted shokupan. soft like pillow.\n\nCOME AND FIND US AT OUR NEXT POP-UP 🌱\n\nHOT, STUFFED SANDWICHES\n\nALL BREAD MADE IN-HOUSE\n\n#vegan #katsu #sandwich #berlinvegan #shokupan",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "01f172dd-9165-42ea-8c08-0b06caad9edd",
+    "externalId": "ig_4004654605006671954",
+    "url": "https://www.instagram.com/p/DeTZCVLjhBS/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-10T06:00:06.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:10.865Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "KATSU-SANDO",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "panko-crusted soy steak with pickled red onion, apple and tonkatsu mayo",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "KATSU-SANDO"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "soft like pillow",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "KATSU-SANDO"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "bread made in-house",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "katsu-sando",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "KATSU-SANDO"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "panko-crusted soy steak",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "panko-crusted soy steak"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "pickled red onion",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "pickled red onion"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "shaved fresh apple",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "shaved fresh apple"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "tonkatsu mayo",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "tonkatsu mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "served on sliced, toasted shokupan",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "shokupan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "soft like pillow",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "next pop-up",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "hot, stuffed sandwiches",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "sandwiches"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "all bread made in-house",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "bread"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:15.921Z",
+    "usage": {
+      "inputTokens": 6031,
+      "outputTokens": 1893,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 5784
+    },
+    "notes": "The vendor is never named and the tagged location is just Berlin, so there is no place and all claims are subject none. The ingredient list is kept as one claim because the quote spans a contiguous list; the vegan claim from the hashtag is optional.",
+    "isPromotional": true,
+    "places": [],
+    "claims": [
+      {
+        "text": "the KATSU-SANDO has panko-crusted soy steak, pickled red onion, shaved fresh apple and tonkatsu mayo",
+        "quote": "KATSU-SANDO\n- panko-crusted soy steak\n- pickled red onion\n- shaved fresh apple\n- tonkatsu mayo",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "KATSU-SANDO",
+          "panko-crusted soy steak",
+          "pickled red onion",
+          "shaved fresh apple",
+          "tonkatsu mayo"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the KATSU-SANDO is served on sliced, toasted shokupan",
+        "quote": "served on sliced, toasted shokupan",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "shokupan"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the shokupan is soft like a pillow",
+        "quote": "soft like pillow",
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "freshness",
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they will be at their next pop-up",
+        "quote": "COME AND FIND US AT OUR NEXT POP-UP",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "event",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "they serve hot, stuffed sandwiches",
+        "quote": "HOT, STUFFED SANDWICHES",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "SANDWICHES"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "portion_size",
+            "temperature"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "all bread is made in-house",
+        "quote": "ALL BREAD MADE IN-HOUSE",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "BREAD"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food",
+            "freshness"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "the KATSU-SANDO is vegan",
+        "quote": "#vegan",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "none",
+        "place": null
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.223Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

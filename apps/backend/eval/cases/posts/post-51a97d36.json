@@ -1,0 +1,219 @@
+{
+  "id": "post-51a97d36",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "konakcafeberlin",
+    "locationName": null,
+    "hashtags": [
+      "steakhouse",
+      "berlin",
+      "gig"
+    ],
+    "taggedHandles": [],
+    "text": "Wenn Selbstbewusstsein im Sonderangebot war😅\n#steakhouse #berlin #gig ",
+    "subtitles": "G I G Gastro ist geil\nwie geil ist das denn\nnach dem Essen kriegst du 1 achusher Mutter\nTiramisu von Seite wachiat immer\ndiese geht in Magen auf linke oder rechte Seite\nwallah der geht bequem rein",
+    "subtitlesLanguage": "deu-DE",
+    "id": "51a97d36-b929-4809-a3dd-fd989328d72e",
+    "externalId": "7663530462723263776",
+    "url": "https://www.tiktok.com/@konakcafeberlin/video/7663530462723263776",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-07-17T16:12:14.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:40.058Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "GIG Gastro",
+        "locationHint": "",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "none",
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "GIG Gastro is great",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the place is in Berlin",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "after the meal you get Tiramisu",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Tiramisu goes down comfortably",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:39:03.899Z",
+    "usage": {
+      "inputTokens": 9274,
+      "outputTokens": 1695,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The venue name comes only from the transcript ('G I G Gastro') and the #gig hashtag; I spelled it 'GIG Gastro', and the city is Berlin from #berlin. The transcript is garbled: I read the Tiramisu lines as Tiramisu always being served after the meal (possibly on the house, so deal is an alternative), and I left out the vague 'wie geil ist das denn'.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "GIG Gastro",
+        "locationHint": null,
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "None of the candidates is named GIG Gastro, a steakhouse; the similar names are different venues."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "GIG Gastro is awesome",
+        "quote": "G I G Gastro ist geil",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "after the meal you always get a Tiramisu",
+        "quote": "Tiramisu von Seite wachiat immer",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [
+          "Tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "deal"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the Tiramisu goes down comfortably",
+        "quote": "wallah der geht bequem rein",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [
+          "Tiramisu"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.235Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.427Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

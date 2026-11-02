@@ -7,7 +7,8 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityDayService } from 'src/modules/cities/services/city-day.service.js';
-import { changesOf, complaintsOf, praiseOf } from 'src/modules/feedback/util/feedback-rows.js';
+import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import { changesOf, complaintsOf, praiseOf, type StatementView } from 'src/modules/statements/util/statement-views.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { ThemeInsightService } from 'src/modules/trends/services/theme-insight.service.js';
@@ -47,12 +48,12 @@ const EXCERPT_CHARS = 160;
 /** The week after the month: reviews a post late in the month brings in */
 const AFTER_DAYS = 7;
 
-/** A point's theme label, the topic for a point without one */
-const themeLabel = (p: { theme?: string; topic: string }, index: TopicIndex) => (p.theme ? index.label(p.theme) : p.topic);
+/** A claim's aspect label; "other" for a claim about no aspect (where the report files it) */
+const themeLabel = (v: StatementView, index: TopicIndex) => (v.aspect ? index.label(v.aspect) : 'other');
 
 /**
  * What the analysis reads beyond `ReportData`, loaded once per build (`context`): the brand's
- * review rows of the month with their themes, the city's stored days, the city's complaint
+ * reviews of the month with their statements' aspects, the city's stored days, the city's complaint
  * themes (`ThemeInsightService`), the month before's competitors and the aspect vocabulary
  * (`TopicService.index`, read once). `tools` makes the agent's read tools over it, each call
  * counted by one `ToolRun` (the budget and the trace).
@@ -78,19 +79,19 @@ export class ReportEvidenceService {
 		const rows = await this.em.find(
 			Review,
 			{ venue: { $in: branches.map(b => b.id) }, publishedAt: { $gte: start, $lt: until } },
-			{ populate: ['feedback', 'venue'], orderBy: { publishedAt: 'desc', id: 'asc' } },
+			{ populate: [...STATEMENT_POPULATE, 'venue'], orderBy: { publishedAt: 'desc', id: 'asc' } },
 		);
 		const reviews: EvidenceReview[] = rows.map(r => {
-			const feedback = r.feedback.getItems();
+			const statements = r.statements.getItems();
 			const text = r.textTranslated || r.text;
 			return {
 				date: r.publishedAt.toISOString().slice(0, 10),
 				week: weekStart(r.publishedAt, timeZone),
 				...(r.stars != null && { stars: r.stars }),
 				...(text && { excerpt: excerpt(text, EXCERPT_CHARS) }),
-				complaints: _.uniq(complaintsOf(feedback).map(p => themeLabel(p, index))),
-				praise: _.uniq(praiseOf(feedback).map(p => themeLabel(p, index))),
-				changes: changesOf(feedback).map(c => c.detail),
+				complaints: _.uniq(complaintsOf(statements).map(v => themeLabel(v, index))),
+				praise: _.uniq(praiseOf(statements).map(v => themeLabel(v, index))),
+				changes: changesOf(statements).map(c => c.text),
 				replied: !!r.ownerResponse || !!r.markedRepliedAt,
 				platform: r.platform === ReviewPlatformEnum.TRIPADVISOR ? 'tripadvisor' : 'google',
 				...(chain && { branch: r.venue.name }),
@@ -102,7 +103,8 @@ export class ReportEvidenceService {
 				stars: r.stars,
 				text: r.text,
 				textTranslated: r.textTranslated,
-				themes: complaintsOf(r.feedback.getItems()).map(p => p.theme ?? p.topic),
+				// The aspects its complaints were filed under (a claim about no aspect raises none)
+				themes: complaintsOf(r.statements.getItems()).flatMap(v => (v.aspect ? [v.aspect] : [])),
 			})),
 			timeZone,
 		);

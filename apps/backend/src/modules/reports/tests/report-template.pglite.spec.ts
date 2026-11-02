@@ -352,8 +352,6 @@ describe('report templates and brand configurations (pglite)', () => {
 					brand,
 					matchMethod: MentionMatchMethodEnum.EXACT,
 					visited: true,
-					sentiment: 'positive',
-					summary: 'Good.',
 				});
 			}
 			await em.flush();

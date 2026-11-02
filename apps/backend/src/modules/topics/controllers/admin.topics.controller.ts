@@ -21,6 +21,7 @@ import {
 	AdminUpdateTopicInputDto,
 } from '../dto/admin-topics.dto.js';
 import { Topic } from '../entities/topic.entity.js';
+import { TermService } from '../services/term.service.js';
 import { TopicService } from '../services/topic.service.js';
 import { TrendsTopicLookupService } from '../services/trends-topic-lookup.service.js';
 
@@ -30,6 +31,7 @@ import { TrendsTopicLookupService } from '../services/trends-topic-lookup.servic
 export class AdminTopicsController {
 	constructor(
 		private readonly topicService: TopicService,
+		private readonly termService: TermService,
 		private readonly trendsTopicLookupService: TrendsTopicLookupService,
 	) {}
 
@@ -40,9 +42,10 @@ export class AdminTopicsController {
 	): Promise<AdminTopicsOutputDto> {
 		const { topics, unmapped, ignored } = await this.topicService.overview(query.cityId);
 		const keyById = new Map(topics.map(({ topic }) => [topic.id, topic.key]));
+		const aliases = await this.termService.aliasesOf(topics.map(({ topic }) => topic.id));
 		return {
 			topics: topics.map(({ topic, mentions, venues }) => ({
-				...toDto(topic, keyById),
+				...toDto(topic, keyById, aliases.get(topic.id) ?? []),
 				mentions,
 				venues,
 			})),
@@ -54,7 +57,7 @@ export class AdminTopicsController {
 	/** Dismisses an unrecognised word (no kind of food to map), or brings it back. */
 	/**
 	 * Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions,
-	 * menu items, feedback dishes, then every city's venue tags). A topic or alias change queues it
+	 * menu items, then every city's venue tags). A topic or alias change queues it
 	 * on its own; this is for a first fill or after a change made outside the admin.
 	 */
 	@TypedRoute.Post('/relink')
@@ -65,7 +68,7 @@ export class AdminTopicsController {
 
 	@TypedRoute.Put('/ignored-words')
 	async setIgnoredWord(@TypedBody() body: AdminIgnoreWordInputDto): Promise<void> {
-		await this.topicService.setIgnored(body.word, body.ignored);
+		await this.termService.setIgnored(body.word, body.ignored);
 	}
 
 	/** Google Trends topic ids for some words (Trends' autocomplete), to set a topic's `trendsTopicId`. */
@@ -76,23 +79,27 @@ export class AdminTopicsController {
 		return { topics: await this.trendsTopicLookupService.lookup(query.q) };
 	}
 
-	/** A new topic; 409 when its key exists. */
+	/** A new topic; 409 when its key exists. Its `aliases` become admin terms linked to it. */
 	@TypedRoute.Post('/')
 	async createTopic(
 		@TypedBody() body: AdminCreateTopicInputDto,
 	): Promise<AdminTopicBaseOutputDto> {
-		const topic = await this.topicService.create(body);
-		return toDto(topic, await this.keysById());
+		const { aliases, ...input } = body;
+		const topic = await this.topicService.create(input);
+		if (aliases?.length) await this.termService.setAliases(topic, aliases);
+		return toDto(topic, await this.keysById(), (await this.termService.aliasesOf([topic.id])).get(topic.id) ?? []);
 	}
 
-	/** Changes the fields given; an unmapped key is mapped by adding it to `aliases`. */
+	/** Changes the fields given; an unmapped key is mapped by adding it to `aliases` (admin terms of the topic). */
 	@TypedRoute.Patch('/:id')
 	async updateTopic(
 		@TypedParam('id') id: string,
 		@TypedBody() body: AdminUpdateTopicInputDto,
 	): Promise<AdminTopicBaseOutputDto> {
-		const topic = await this.topicService.update(id, body);
-		return toDto(topic, await this.keysById());
+		const { aliases, ...input } = body;
+		const topic = await this.topicService.update(id, input);
+		if (aliases !== undefined) await this.termService.setAliases(topic, aliases);
+		return toDto(topic, await this.keysById(), (await this.termService.aliasesOf([topic.id])).get(topic.id) ?? []);
 	}
 
 	/** Deletes an aspect (400 for a kind of food, a root, or one with children); its points move to its parent. */
@@ -106,13 +113,14 @@ export class AdminTopicsController {
 	}
 }
 
-const toDto = (topic: Topic, keyById: Map<string, string>): AdminTopicBaseOutputDto => {
+const toDto = (topic: Topic, keyById: Map<string, string>, aliases: string[]): AdminTopicBaseOutputDto => {
 	const parentKey = topic.parent ? keyById.get(topic.parent.id) : undefined;
 	return {
 		...(wrap(topic).serialize({
 			skipNull: true,
 			forceObject: true,
 		}) as unknown as AdminTopicBaseOutputDto),
+		aliases,
 		...(parentKey && { parentKey }),
 	};
 };

@@ -1,0 +1,52 @@
+{
+  "id": "term-2635",
+  "kind": "term",
+  "tags": [
+    "most-used",
+    "decided:match"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.342Z",
+  "source": {
+    "termId": 2635,
+    "key": "kebap",
+    "name": "kebap",
+    "uses": 28
+  },
+  "stored": {
+    "decidedBy": "match",
+    "topics": [
+      {
+        "key": "kebab",
+        "relation": "same"
+      }
+    ],
+    "suggestion": null
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "d3811313a74a",
+    "at": "2026-11-01T11:55:45.545Z",
+    "usage": {
+      "inputTokens": 171,
+      "outputTokens": 94,
+      "cachedInputTokens": 0,
+      "cacheWriteTokens": 34
+    },
+    "notes": null,
+    "topics": [
+      {
+        "key": "kebab",
+        "relation": "same"
+      }
+    ],
+    "alsoAcceptable": [],
+    "suggestion": null,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:49:05.454Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

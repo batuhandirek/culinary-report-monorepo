@@ -1,0 +1,141 @@
+{
+  "id": "review-98215cda",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:5",
+    "platform:google",
+    "length:short"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "98215cda-15f6-4bf1-998c-b6b663d2c8fc",
+    "reviewId": "Ci9DQUlRQUNvZENodHljRjlvT25CdFh6Wk5kWGhpYTJScFZWaExOMjU0VnpKMExYYxAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Arminiusmarkthalle",
+    "venueId": "14c0cdd8-b12a-47cd-8185-adc122033cf8",
+    "brand": "Arminiusmarkthalle",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-29T12:02:37.192Z",
+    "stars": 5,
+    "text": "A beautiful markethall with lots of food options and very nice restaurants.",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:04:46.701Z",
+    "claims": [
+      {
+        "text": "a beautiful markethall",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "atmosphere",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "lots of food options",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "very nice restaurants",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:28:01.444Z",
+    "usage": {
+      "inputTokens": 4914,
+      "outputTokens": 443,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "The 'beautiful markethall' claim fits interior best, though vibe is acceptable. 'Very nice restaurants' is general praise of the vendors that no aspect clearly fits, so its aspect is null.",
+    "claims": [
+      {
+        "text": "Arminiusmarkthalle is a beautiful market hall",
+        "quote": "A beautiful markethall",
+        "sentiment": "positive",
+        "aspect": "interior",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "vibe"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the market hall has lots of food options",
+        "quote": "lots of food options",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the market hall has very nice restaurants",
+        "quote": "very nice restaurants",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food",
+            "vibe"
+          ],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.215Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.412Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

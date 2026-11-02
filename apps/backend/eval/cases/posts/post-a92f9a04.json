@@ -1,0 +1,268 @@
+{
+  "id": "post-a92f9a04",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:few",
+    "own",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "cafe.kannva",
+    "locationName": "Cafe KannVa and Coffee House - Berlin",
+    "hashtags": [
+      "cafekannva",
+      "berlinfood",
+      "berlinsnacks",
+      "bundesplatz",
+      "berlinschöneberg",
+      "wilmersdorf",
+      "snacktime"
+    ],
+    "taggedHandles": [],
+    "text": "Lust auf etwas Knuspriges? 😋🍗\n\nBei Café KannVa gibt’s auch leckere Snacks! Für den kleinen Hunger zwischendurch oder zum Teilen mit Freunden. 🙌\n\nKommt vorbei – vor Ort genießen oder einfach mitnehmen! 🛍️\n\n📍 Café KannVa\nWexstraße 23, 10715 Berlin · am Bundesplatz\n\nMit wem würdet ihr diese Snackrunde teilen? 👇\n\n#CafeKannVa #BerlinFood #BerlinSnacks #Bundesplatz #BerlinSchöneberg #Wilmersdorf #SnackTime #snacktime😋",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "a92f9a04-63a4-431a-8075-a87e3fd7b680",
+    "externalId": "ig_4018187378098841846",
+    "url": "https://www.instagram.com/p/DfDeCGQiij2/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": "Cafe Kannva and Pizza House - Berlin",
+    "postedAt": "2026-10-28T22:08:06.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-29T04:01:23.776Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Café KannVa",
+        "locationHint": "Wexstraße 23, 10715 Berlin · am Bundesplatz",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "0f37e686-8c1f-4569-af52-3a59e5e06ed8",
+          "brandName": "Cafe Kannva and Pizza House - Berlin",
+          "venueId": "2b644f48-7f9b-4c6a-a004-490e48d8ef10",
+          "venueName": "Cafe Kannva and Pizza House - Berlin"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "called the snacks lecker",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "described as crispy",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "good for a small hunger or to share",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "portion_size",
+        "foods": [
+          "snacks"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "can be taken away",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:46:48.002Z",
+    "usage": {
+      "inputTokens": 9948,
+      "outputTokens": 1724,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5895
+    },
+    "notes": "Own-account promotional post with no named dish; 'Snacks' is a general word so foods stay empty. The opening 'Lust auf etwas Knuspriges?' is a rhetorical question implying crispy snacks, kept optional; the closing engagement question is left out as narration.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Cafe Kannva and Pizza House - Berlin",
+        "locationHint": "Wexstraße 23, 10715 Berlin, am Bundesplatz",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "0f37e686-8c1f-4569-af52-3a59e5e06ed8",
+          "brandName": "Cafe Kannva and Pizza House - Berlin",
+          "venueId": "2b644f48-7f9b-4c6a-a004-490e48d8ef10",
+          "venueName": "Cafe Kannva and Pizza House - Berlin",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Café KannVa offers tasty snacks",
+        "quote": "gibt’s auch leckere Snacks",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "menu_variety",
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the snacks are crispy",
+        "quote": "etwas Knuspriges",
+        "sentiment": "positive",
+        "aspect": "cooking",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "neutral"
+          ],
+          "aspects": [
+            "food",
+            "taste"
+          ],
+          "kinds": [
+            "question",
+            "fact"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the snacks are for a small hunger in between or for sharing with friends",
+        "quote": "Für den kleinen Hunger zwischendurch oder zum Teilen mit Freunden",
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food",
+            "none"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the snacks can be eaten on site or taken away",
+        "quote": "vor Ort genießen oder einfach mitnehmen",
+        "sentiment": "neutral",
+        "aspect": "takeaway_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "none",
+            "other"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Café KannVa is at Wexstraße 23 at Bundesplatz",
+        "quote": "Wexstraße 23, 10715 Berlin · am Bundesplatz",
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.248Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.436Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

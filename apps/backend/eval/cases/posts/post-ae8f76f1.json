@@ -1,0 +1,691 @@
+{
+  "id": "post-ae8f76f1",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:few",
+    "transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "zohrajaaa",
+    "locationName": "Velvet Coffee Berlin",
+    "hashtags": [
+      "fyp",
+      "viral",
+      "trending",
+      "berlinfoodie",
+      "brunch"
+    ],
+    "taggedHandles": [
+      "@Velvet Coffee Berlin"
+    ],
+    "text": "Okay Berlin… ich glaube, ich habe einen neuen Lieblings Brunchspot gefunden! 👀\n\nMenemen mit warmem Simit, eine Strawberry Cloud Matcha, diese unfassbar leckere Spinat-Ei-Kombi UND eine Müsli-Bowl, die ich am liebsten komplett alleine gegessen hätte 😮‍💨🤌🏼\n\nUnd jetzt kommt das Beste: Ihr könnt einen Brunch für 2 gewinnen! 🎁\n\nSo seid ihr dabei:\n❤️ Video liken & speichern\n➕ Mir & @Velvet Coffee Berlin auf TikTok folgen\n👯‍♀️ Mindestens 1 Person markieren, mit der ihr dort frühstücken wollt\n✨ Mehrfach teilnehmen = mehrere Chancen\n\n📅 Gewinnspiel endet am 15.10.26\n\nAlso schickt das direkt an eure Frühstücks Bestie, denn ich würde diesen Spot definitiv nicht mehr geheim halten. 👀\n\n📍Velvet Coffee, Berlin-Schöneberg\n\nTeilnahme ab 18 Jahren und nur für Personen mit Wohnsitz in Deutschland. Die Teilnahmebedingungen gelten. Der Gewinn ist nicht an Dritte übertragbar. #fyp #viral #trending #berlinfoodie #brunch ",
+    "subtitles": "Berlin aufgepasst!\nich hab grade einen neuen frühstücksfavoriten in Berlin\ngefunden und ihr könnt hier sogar 1 Brunch mit 2 gewinnen.\nich war bei Velvet\nCoffee in Schöneberg und wir starten direkt mit dieser\nStrawberry Cloud Matcha.\ndie war einfach wow!\ndanach gabs mannemann für mich mit einem warmen\nzimtring dazu und es war einfach richtig lecker.\nwürzig, frisch und genau Mein Geschmack.\ndann Kam diese bunte Frühstücksplatte mit Obst,\nGemüse, Aufschnitt,\nAufstrich, natürlich Brötchen dazu.\nMein persönliches Highlight Kam danach Spiegelei mit Spinat.\ndiese Kombination hatte ich vorher noch nie.\ndieser Spinat\neinfach unglaublich lecker und dann dachte ich wirklich,\nes kann kann nicht mehr besser werden.\nbis diese Müsli Bowl ankam.\nselbstgemachtes Granola,\nApfel, Obst, Zimt. perfekt geschichtet,\nüberhaupt nicht übertrieben süß.\nund jetzt könnt ihr das ganze selbst\ntesten gewinnt 1 Brunch für 2 bei\nVelvet Coffee!\nfolgt Mir und Velvet Coffee auf TikTok,\nliket und speichert das Video\nmarkiert mindestens eine Person\nmit der ihr hingehen möchtet. viel Glück!",
+    "subtitlesLanguage": "deu-DE",
+    "id": "ae8f76f1-46cf-459a-a9e6-4d58c62440fc",
+    "externalId": "7692527849206467872",
+    "url": "https://www.tiktok.com/@zohrajaaa/video/7692527849206467872",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-03T19:36:54.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:36:40.110Z",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Velvet Coffee Berlin",
+        "locationHint": "Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "a0cd230d-637c-4dbc-a3b1-3eca2da53efb",
+          "brandName": "Velvet",
+          "venueId": "8e47c725-6390-424c-a4d1-88d0814dda40",
+          "venueName": "Velvet"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "new favorite brunch spot",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "vibe",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Strawberry Cloud Matcha was wow",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Strawberry Cloud Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "menemen with warm simit",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "menemen",
+          "warm simit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the menemen was really tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "menemen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "spicy, fresh and exactly my taste",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "a breakfast platter with fruit, vegetables, cold cuts, spreads and rolls",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "breakfast platter",
+          "fruit",
+          "vegetables",
+          "cold cuts",
+          "spreads",
+          "rolls"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "spiegelei with spinach",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Spiegelei",
+          "spinach"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the spinach was incredibly tasty",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "spinach"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the muesli bowl had homemade granola, apple, fruit and cinnamon",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "muesli bowl",
+          "Homemade granola",
+          "apple",
+          "fruit",
+          "cinnamon"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the muesli bowl was perfectly layered and not overly sweet",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "muesli bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "you can win a brunch for 2",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "the post says the venue is in Schöneberg",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "location",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:48:02.854Z",
+    "usage": {
+      "inputTokens": 11166,
+      "outputTokens": 5332,
+      "cachedInputTokens": 6966,
+      "cacheWriteTokens": 0
+    },
+    "notes": "A giveaway run with the venue's account makes the post promotional; 'neuer Lieblings Brunchspot' is the creator's new favourite, not a new opening. Transcript misspellings (mannemann, zimtring) were read as the caption's Menemen and Simit; the giveaway is a deal (free brunch with conditions and an end date), and its participation steps are narration and left out.",
+    "isPromotional": true,
+    "places": [
+      {
+        "venueName": "Velvet Coffee",
+        "locationHint": "Berlin-Schöneberg",
+        "city": "Berlin",
+        "visited": true,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": null,
+          "brandName": null,
+          "venueId": null,
+          "venueName": null,
+          "note": "Velvet Coffee in Schöneberg matches none of the candidates. Velvet is a cocktail bar in Neukölln, Velvet52 is in Mitte, and Velicious is a different name."
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Velvet Coffee is the creator's new favourite brunch spot",
+        "quote": "einen neuen Lieblings Brunchspot gefunden",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Followers can win a brunch for 2 at Velvet Coffee",
+        "quote": "Ihr könnt einen Brunch für 2 gewinnen!",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [],
+          "kinds": [
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The brunch giveaway ends on 15.10.26",
+        "quote": "Gewinnspiel endet am 15.10.26",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "deal",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "fact",
+            "event"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Strawberry Cloud Matcha was simply wow",
+        "quote": "die war einfach wow!",
+        "sentiment": "positive",
+        "aspect": "drink_quality",
+        "foods": [
+          "Strawberry Cloud Matcha"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator had Menemen with warm Simit",
+        "quote": "Menemen mit warmem Simit",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Menemen",
+          "Simit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "temperature"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Menemen with warm Simit was really delicious",
+        "quote": "es war einfach richtig lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Menemen",
+          "Simit"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Menemen was well spiced",
+        "quote": "würzig",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Menemen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Menemen was fresh and exactly to the creator's taste",
+        "quote": "frisch und genau Mein Geschmack",
+        "sentiment": "positive",
+        "aspect": "freshness",
+        "foods": [
+          "Menemen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "A colourful breakfast platter came with fruit, vegetables, cold cuts, spread and rolls",
+        "quote": "diese bunte Frühstücksplatte mit Obst,\nGemüse, Aufschnitt,\nAufstrich, natürlich Brötchen dazu.",
+        "sentiment": "neutral",
+        "aspect": "food",
+        "foods": [
+          "Frühstücksplatte",
+          "Obst",
+          "Gemüse",
+          "Aufschnitt",
+          "Aufstrich",
+          "Brötchen"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "presentation"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The fried egg with spinach was the creator's personal highlight",
+        "quote": "Mein persönliches Highlight Kam danach Spiegelei mit Spinat.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Spiegelei",
+          "Spinat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The spinach-egg combo was unbelievably delicious",
+        "quote": "diese unfassbar leckere Spinat-Ei-Kombi",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Spinat-Ei-Kombi"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator had never had the fried egg with spinach combination before",
+        "quote": "diese Kombination hatte ich vorher noch nie.",
+        "sentiment": "neutral",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The spinach was unbelievably delicious",
+        "quote": "dieser Spinat\neinfach unglaublich lecker",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Spinat"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator would have liked to eat the Müsli-Bowl completely alone",
+        "quote": "Müsli-Bowl, die ich am liebsten komplett alleine gegessen hätte",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Müsli-Bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Müsli Bowl was even better than the dishes before",
+        "quote": "es kann kann nicht mehr besser werden.\nbis diese Müsli Bowl ankam.",
+        "sentiment": "positive",
+        "aspect": "taste",
+        "foods": [
+          "Müsli Bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Müsli Bowl has homemade granola, apple, fruit and cinnamon",
+        "quote": "selbstgemachtes Granola,\nApfel, Obst, Zimt.",
+        "sentiment": "neutral",
+        "aspect": "ingredient_quality",
+        "foods": [
+          "Granola",
+          "Apfel",
+          "Obst",
+          "Zimt"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Müsli Bowl was perfectly layered",
+        "quote": "perfekt geschichtet",
+        "sentiment": "positive",
+        "aspect": "presentation",
+        "foods": [
+          "Müsli Bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The Müsli Bowl was not overly sweet at all",
+        "quote": "überhaupt nicht übertrieben süß.",
+        "sentiment": "positive",
+        "aspect": "seasoning",
+        "foods": [
+          "Müsli Bowl"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "taste"
+          ],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "The creator would definitely not keep Velvet Coffee a secret anymore",
+        "quote": "ich würde diesen Spot definitiv nicht mehr geheim halten",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "place",
+        "place": 0
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.249Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.437Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

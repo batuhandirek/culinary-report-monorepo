@@ -1,4 +1,4 @@
-// Pure: how dish names are compared across spellings.
+// Pure: how wordings (dish names, tags, aliases) are compared across spellings.
 
 import { plain } from './venue-names.js';
 
@@ -13,11 +13,13 @@ const singular = (word: string) => {
 };
 
 /**
- * "Döner" and "doner" are one dish, and so are "burgers" and "burger". A name in another script
- * ("تشريب", "牛肉面") keeps its own letters, lower case: the Latin key of such a name is empty, and
- * an empty key would drop the dish or lump every such dish together.
+ * The key a wording is kept under (`Term.key`), across spellings and plurals: "Döner" and "doner"
+ * are one dish, and so are "burgers" and "burger"; "Pommes" stays apart from "fries" (a term is kept
+ * as said; its links say what it is). A name in another script ("تشريب", "牛肉面") keeps its own
+ * letters, lower case: the Latin key of such a name is empty, and an empty key would drop the
+ * wording or lump every such wording together.
  */
-export const dishKey = (name: string) => {
+export const termKey = (name: string) => {
 	const latin = plain(name).split(' ').map(singular).join(' ');
 	if (latin) return latin;
 	return name
@@ -33,5 +35,5 @@ export const dishKey = (name: string) => {
  */
 export const namesDish = (phrase: string, key: string): boolean => {
 	if (!key) return false;
-	return ` ${dishKey(phrase)} `.includes(` ${key} `);
+	return ` ${termKey(phrase)} `.includes(` ${key} `);
 };

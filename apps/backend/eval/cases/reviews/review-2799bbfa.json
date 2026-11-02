@@ -1,0 +1,233 @@
+{
+  "id": "review-2799bbfa",
+  "kind": "review",
+  "tags": [
+    "lang:en",
+    "stars:1",
+    "platform:google",
+    "length:medium",
+    "chain"
+  ],
+  "collectedAt": "2026-11-01T10:56:26.343Z",
+  "source": {
+    "id": "2799bbfa-7002-479a-92c8-a53455e42201",
+    "reviewId": "ChdDSUhNMG9nS0VJQ0FnTURvN2N5Rm13RRAB",
+    "platform": "google",
+    "language": "en",
+    "venue": "Burgermeister Akazienstraße",
+    "venueId": "db4a6000-46b4-428b-b256-423fe8120782",
+    "brand": "Burgermeister",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "publishedAt": "2026-09-28T19:49:41.352Z",
+    "stars": 1,
+    "text": "Burgermeister all over is amazing. Only this branch gave me a wrong order to take away.\n2 extra fleisch pattys for a single hamburger is an easy math (3 in total).\nSo findinf about it when being home is Super dissapointing.\nAlso going back and asking for it to be right this time and having to wait again.. is even kore dissapointing.\nNo additional ways to compensate for their mistake.. well you get the idea",
+    "textTranslated": null
+  },
+  "stored": {
+    "analysedAt": "2026-10-30T13:04:08.179Z",
+    "claims": [
+      {
+        "text": "Burgermeister all over is amazing",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "this branch gave a wrong order to take away",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "2 extra fleisch pattys for a single hamburger",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "portion_size",
+        "foods": [
+          "fleisch pattys"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "finding about it when being home was super dissapointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "going back and waiting again was even more disappointing",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "wait",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      },
+      {
+        "text": "no additional ways to compensate for their mistake",
+        "quote": null,
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "243a888d45c3",
+    "at": "2026-11-01T11:24:44.316Z",
+    "usage": {
+      "inputTokens": 5009,
+      "outputTokens": 1549,
+      "cachedInputTokens": 4778,
+      "cacheWriteTokens": 0
+    },
+    "notes": "Hard calls: the chain-wide praise is about Burgermeister in general rather than this branch, so opinion with verdict allowed; the return trip and second wait is mainly about how the mistake was handled, with the wait aspects allowed.",
+    "claims": [
+      {
+        "text": "Burgermeister all over is amazing",
+        "quote": "Burgermeister all over is amazing.",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "verdict"
+          ]
+        }
+      },
+      {
+        "text": "only this branch gave the reviewer a wrong takeaway order",
+        "quote": "Only this branch gave me a wrong order to take away.",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "ordered 2 extra fleisch pattys for a single hamburger, 3 in total",
+        "quote": "2 extra fleisch pattys for a single hamburger is an easy math (3 in total).",
+        "sentiment": "neutral",
+        "aspect": "order_accuracy",
+        "foods": [
+          "fleisch pattys",
+          "hamburger"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "negative"
+          ],
+          "aspects": [
+            "none"
+          ],
+          "kinds": [
+            "opinion"
+          ]
+        }
+      },
+      {
+        "text": "finding out about the wrong order at home was super disappointing",
+        "quote": "findinf about it when being home is Super dissapointing",
+        "sentiment": "negative",
+        "aspect": "order_accuracy",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": true,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "takeaway_handling"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "going back to ask for the order to be fixed and having to wait again was even more disappointing",
+        "quote": "going back and asking for it to be right this time and having to wait again.. is even kore dissapointing",
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "wait",
+            "wait_for_food"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "no additional compensation offered for their mistake",
+        "quote": "No additional ways to compensate for their mistake",
+        "sentiment": "negative",
+        "aspect": "complaint_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      }
+    ],
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.206Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.403Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

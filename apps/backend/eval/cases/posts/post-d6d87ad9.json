@@ -1,0 +1,80 @@
+{
+  "id": "post-d6d87ad9",
+  "kind": "post",
+  "tags": [
+    "platform:tiktok",
+    "places:none",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "tiktok",
+    "author": "linacipolina",
+    "locationName": "Berlin",
+    "hashtags": [
+      "berlinkebab",
+      "berlin",
+      "foodtok",
+      "foodie",
+      "fyp"
+    ],
+    "taggedHandles": [],
+    "text": "Love it #berlinkebab #berlin #foodtok #foodie #fyp 🇩🇪",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "d6d87ad9-b899-4353-82ac-4f8d9bee1893",
+    "externalId": "7612388678295424278",
+    "url": "https://www.tiktok.com/@linacipolina/video/7612388678295424278",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-03-01T20:36:00.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:45:12.391Z",
+    "isPromotional": false,
+    "places": [],
+    "claims": [
+      {
+        "text": "love it",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "food",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:50:51.073Z",
+    "usage": {
+      "inputTokens": 5898,
+      "outputTokens": 244,
+      "cachedInputTokens": 5784,
+      "cacheWriteTokens": 0
+    },
+    "notes": "No venue is named or tagged; the location tag is only the city. 'Love it' has no stated subject, and tying it to the #berlinkebab hashtag would be an inference, so no claims are extracted.",
+    "isPromotional": false,
+    "places": [],
+    "claims": [],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.252Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.440Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}

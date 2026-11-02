@@ -1,0 +1,551 @@
+{
+  "id": "post-0216fd1d",
+  "kind": "post",
+  "tags": [
+    "platform:instagram",
+    "places:many",
+    "no-transcript"
+  ],
+  "collectedAt": "2026-11-01T10:57:04.271Z",
+  "source": {
+    "platform": "instagram",
+    "author": "secretberlin_smn",
+    "locationName": null,
+    "hashtags": [
+      "essenundtrinken",
+      "neukölln",
+      "berlinfood",
+      "berlinrestaurants",
+      "neuköllnfood"
+    ],
+    "taggedHandles": [
+      "ringbarberlin",
+      "asiafarmhouse",
+      "la_bolognina",
+      "plus82_berlin",
+      "sfera.berlin",
+      "cafe_pilz"
+    ],
+    "text": "Wo kann man in Berlin-Neukölln gut und günstig essen? 🌮🍝⁠\nHier kommen 6 coole Food-Spots für deine nächste Essensrunde! Von Tacos über Pasta bis zu veganem Brunch: Unser Food-Guide für Neukölln bringt neue Ideen auf deine Liste – auch mit leckeren Veggie-Optionen. 🌱⁠\n⁠\n📍 Ringbar – @ringbarberlin�⁠\n📍 Asia Farmhouse – @asiafarmhouse�⁠\n📍 La Bolognina – @la_bolognina�⁠\n📍 Plus Acht Zwo (+82) – @plus82_berlin�⁠\n📍 Sfera – @sfera.berlin�⁠\n📍 Café Pilz – @cafe_pilz⁠\n⁠\nWelchen Spot in Neukölln haben wir vergessen? Schreibt euren Favoriten in die Kommentare! 💬 Speichert euch den Guide für euren nächsten Food-Ausflug.⁠\n⁠\n#EssenundTrinken #Neukölln #BerlinFood #BerlinRestaurants #NeuköllnFood⁠\n⁠",
+    "subtitles": null,
+    "subtitlesLanguage": null,
+    "id": "0216fd1d-0d38-4318-9d00-85974143141e",
+    "externalId": "ig_4010044929472960760",
+    "url": "https://www.instagram.com/p/Demip4Cl5j4/",
+    "cityId": "af972ec2-9340-4478-8246-dd5b2145e1f4",
+    "cityName": "Berlin",
+    "ownBrand": null,
+    "postedAt": "2026-10-17T16:30:52.000Z"
+  },
+  "stored": {
+    "analysedAt": "2026-10-31T13:49:12.002Z",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Ringbar",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "989cf34c-fb73-4576-92e1-db214014bcc2",
+          "brandName": "Ringbar",
+          "venueId": "704919e4-8a90-4cfc-8a02-62b1a12e14d1",
+          "venueName": "Ringbar"
+        }
+      },
+      {
+        "venueName": "Asia Farmhouse",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "llm",
+          "brandId": "340db85d-f297-4700-a967-61d23ac46791",
+          "brandName": "Asia Imbiss",
+          "venueId": "f09c6b75-4734-450a-9a83-5fbc21679dce",
+          "venueName": "Asia Imbiss"
+        }
+      },
+      {
+        "venueName": "La Bolognina",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "e598598b-c4dd-4a05-a509-79dd859a796d",
+          "brandName": "La Bolognina",
+          "venueId": "d8c1e57e-2251-4d93-96e8-5416e7a3f965",
+          "venueName": "La Bolognina"
+        }
+      },
+      {
+        "venueName": "Plus Acht Zwo (+82)",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "1e4c8283-5d93-4858-a122-652577074586",
+          "brandName": "Plus Acht Zwo (+82)",
+          "venueId": "57f6de6a-0cbc-4108-a481-32710ab3f585",
+          "venueName": "Plus Acht Zwo (+82)"
+        }
+      },
+      {
+        "venueName": "Sfera",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "2f8807c8-9c55-465a-92ba-de583ba910f3",
+          "brandName": "Sfera",
+          "venueId": "284aa078-5f77-4f0d-975b-857752e74584",
+          "venueName": "Sfera"
+        }
+      },
+      {
+        "venueName": "Café Pilz",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": "exact",
+          "brandId": "225bb1b3-72a9-4207-82d1-dfeeedcc3227",
+          "brandName": "Café Pilz",
+          "venueId": "01fe0500-f071-4621-8aa1-0a8ed788cbd4",
+          "venueName": "Café Pilz"
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "good and cheap food in Berlin-Neukölln",
+        "quote": null,
+        "sentiment": "positive",
+        "aspect": "value_for_money",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "six cool food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Tacos, Pasta, vegan brunch, Veggie options",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "taco",
+          "pasta",
+          "vegan brunch",
+          "veggie"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "none",
+        "place": null
+      },
+      {
+        "text": "Ringbar is one of the listed food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Asia Farmhouse is one of the listed food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "La Bolognina is one of the listed food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Plus Acht Zwo is one of the listed food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Sfera is one of the listed food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Café Pilz is one of the listed food spots",
+        "quote": null,
+        "sentiment": "neutral",
+        "aspect": "other",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": null,
+        "subject": "place",
+        "place": 5
+      }
+    ]
+  },
+  "reference": {
+    "model": "anthropic/claude-opus-5-5",
+    "specHash": "e4af8941525a",
+    "at": "2026-11-01T11:31:28.600Z",
+    "usage": {
+      "inputTokens": 23301,
+      "outputTokens": 3342,
+      "cachedInputTokens": 1182,
+      "cacheWriteTokens": 5784
+    },
+    "notes": "A listicle naming six venues with no venue-specific text; each gets one claim for being listed as a cool food spot, while the general statements about cheap eating, the dish range and the veggie options are kept as claims about the city (Neukölln). The opening line is phrased as a question but works as a rhetorical statement, so question is allowed as an alternative kind.",
+    "isPromotional": false,
+    "places": [
+      {
+        "venueName": "Ringbar",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "989cf34c-fb73-4576-92e1-db214014bcc2",
+          "brandName": "Ringbar",
+          "venueId": "704919e4-8a90-4cfc-8a02-62b1a12e14d1",
+          "venueName": "Ringbar",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Asia Farmhouse",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "c15b134c-7e4c-400f-97db-5445a6bb1b86",
+          "brandName": "Asia Farmhouse",
+          "venueId": "1f780eb3-fb3a-4b51-bf33-8a92904808c7",
+          "venueName": "Asia Farmhouse",
+          "note": null
+        }
+      },
+      {
+        "venueName": "La Bolognina",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "e598598b-c4dd-4a05-a509-79dd859a796d",
+          "brandName": "La Bolognina",
+          "venueId": "d8c1e57e-2251-4d93-96e8-5416e7a3f965",
+          "venueName": "La Bolognina",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Plus Acht Zwo (+82)",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "1e4c8283-5d93-4858-a122-652577074586",
+          "brandName": "Plus Acht Zwo (+82)",
+          "venueId": "57f6de6a-0cbc-4108-a481-32710ab3f585",
+          "venueName": "Plus Acht Zwo (+82)",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Sfera",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "2f8807c8-9c55-465a-92ba-de583ba910f3",
+          "brandName": "Sfera",
+          "venueId": "284aa078-5f77-4f0d-975b-857752e74584",
+          "venueName": "Sfera",
+          "note": null
+        }
+      },
+      {
+        "venueName": "Café Pilz",
+        "locationHint": "Neukölln",
+        "city": "Berlin",
+        "visited": false,
+        "isNewOpening": false,
+        "match": {
+          "method": null,
+          "brandId": "225bb1b3-72a9-4207-82d1-dfeeedcc3227",
+          "brandName": "Café Pilz",
+          "venueId": "01fe0500-f071-4621-8aa1-0a8ed788cbd4",
+          "venueName": "Café Pilz",
+          "note": null
+        }
+      }
+    ],
+    "claims": [
+      {
+        "text": "Neukölln has places to eat well and cheaply",
+        "quote": "gut und günstig essen",
+        "sentiment": "positive",
+        "aspect": "price_level",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "value_for_money"
+          ],
+          "kinds": [
+            "question"
+          ]
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the Neukölln food guide ranges from Tacos and Pasta to veganem Brunch",
+        "quote": "Von Tacos über Pasta bis zu veganem Brunch",
+        "sentiment": "neutral",
+        "aspect": "menu_variety",
+        "foods": [
+          "Tacos",
+          "Pasta",
+          "veganem Brunch"
+        ],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [
+            "positive"
+          ],
+          "aspects": [
+            "food"
+          ],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "the Neukölln spots include tasty veggie options",
+        "quote": "auch mit leckeren Veggie-Optionen",
+        "sentiment": "positive",
+        "aspect": "menu_variety",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        },
+        "subject": "city",
+        "place": null
+      },
+      {
+        "text": "Ringbar is one of 6 cool food spots in Neukölln",
+        "quote": "6 coole Food-Spots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 0
+      },
+      {
+        "text": "Asia Farmhouse is one of 6 cool food spots in Neukölln",
+        "quote": "6 coole Food-Spots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 1
+      },
+      {
+        "text": "La Bolognina is one of 6 cool food spots in Neukölln",
+        "quote": "6 coole Food-Spots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 2
+      },
+      {
+        "text": "Plus Acht Zwo (+82) is one of 6 cool food spots in Neukölln",
+        "quote": "6 coole Food-Spots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 3
+      },
+      {
+        "text": "Sfera is one of 6 cool food spots in Neukölln",
+        "quote": "6 coole Food-Spots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 4
+      },
+      {
+        "text": "Café Pilz is one of 6 cool food spots in Neukölln",
+        "quote": "6 coole Food-Spots",
+        "sentiment": "positive",
+        "aspect": null,
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "verdict",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": [
+            "opinion"
+          ]
+        },
+        "subject": "place",
+        "place": 5
+      }
+    ],
+    "venuesAtMatch": 9175,
+    "revisions": [
+      {
+        "at": "2026-11-01T21:36:47.223Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one review, one source's claims), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-01T21:49:05.419Z",
+        "by": "restamp",
+        "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      }
+    ]
+  }
+}
