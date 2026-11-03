@@ -91,7 +91,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:25:16.559Z",
     "usage": {
       "inputTokens": 5135,
@@ -105,7 +105,7 @@
         "text": "it takes a really, really long time",
         "quote": "Het duurt echt heel erg lang.",
         "sentiment": "negative",
-        "aspect": "wait",
+        "aspect": "queue",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -114,8 +114,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "queue",
-            "wait_for_food"
+            "wait"
           ],
           "kinds": []
         }
@@ -140,7 +139,7 @@
         "text": "the food is definitely not worth the wait",
         "quote": "echt niet het wachten waard",
         "sentiment": "negative",
-        "aspect": "wait",
+        "aspect": "queue",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -149,8 +148,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "queue",
-            "wait_for_food"
+            "wait"
           ],
           "kinds": []
         }
@@ -209,7 +207,6 @@
             "neutral"
           ],
           "aspects": [
-            "wait_for_food",
             "wait"
           ],
           "kinds": [
@@ -247,10 +244,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "authenticity",
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -260,7 +254,7 @@
         "text": "not a place where you will have a good döner experience",
         "quote": "een plek waar je een goede döner ervaring zal opdoen",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": null,
         "foods": [
           "döner"
         ],
@@ -270,9 +264,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -289,6 +281,11 @@
         "at": "2026-11-01T21:49:05.404Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:09.143Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 9 claims changed"
       }
     ]
   }

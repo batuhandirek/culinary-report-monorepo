@@ -145,7 +145,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:25:15.034Z",
     "usage": {
       "inputTokens": 14348,
@@ -212,7 +212,7 @@
         "text": "Nichi Getsu is discreet, without loud neon signage or big fuss",
         "quote": "Ohne laute Leuchtschrift und großes Aufsehen",
         "sentiment": "positive",
-        "aspect": "vibe",
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -223,8 +223,8 @@
             "neutral"
           ],
           "aspects": [
-            "interior",
-            "atmosphere"
+            "vibe",
+            "interior"
           ],
           "kinds": [
             "fact"
@@ -317,9 +317,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -339,7 +337,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "space"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -472,7 +472,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -483,7 +483,7 @@
         "text": "in Bara Chirashi the fish is cut into small bite-sized pieces, often lightly marinated and mixed with other seasonal ingredients",
         "quote": "Der Fisch wird in kleine, mundgerechte Stücke geschnitten, oft leicht mariniert und mit weiteren saisonalen Zutaten vermengt",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Bara Chirashi",
           "Fisch"
@@ -495,7 +495,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "food"
           ],
           "kinds": []
         },
@@ -506,7 +506,7 @@
         "text": "Bara Chirashi is less formal and more generous, and every bite brings something different",
         "quote": "Das Ergebnis ist weniger förmlich, großzügiger – und jeder Bissen bringt etwas anderes mit sich.",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "portion_size",
         "foods": [
           "Bara Chirashi"
         ],
@@ -517,8 +517,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "portion_size"
+            "food",
+            "taste"
           ],
           "kinds": []
         },
@@ -529,7 +529,7 @@
         "text": "Nichi Getsu's concept has a clever sustainability story",
         "quote": "Hinter dem Konzept steckt außerdem eine clevere Nachhaltigkeitsgeschichte.",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "ingredient_quality",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -538,7 +538,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "other"
+            "food"
           ],
           "kinds": []
         },
@@ -569,7 +569,7 @@
         "text": "the fish used just lacks the perfect shape or look a flawless Nigiri requires",
         "quote": "er hat lediglich nicht die perfekte Form oder Optik, die ein makelloses Nigiri verlangt",
         "sentiment": "neutral",
-        "aspect": "presentation",
+        "aspect": "ingredient_quality",
         "foods": [
           "Fisch",
           "Nigiri"
@@ -581,7 +581,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality"
+            "presentation"
           ],
           "kinds": []
         },
@@ -623,7 +623,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -665,7 +665,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
             "ingredient_quality"
           ],
           "kinds": []
@@ -690,9 +689,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -716,9 +713,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -767,7 +762,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "seasoning"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -812,9 +809,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -881,7 +876,7 @@
         "text": "bring your sushi-loving friends to Nichi Getsu",
         "quote": "Bring Deine sushibegeisterten Freund:innen mit.",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -899,7 +894,7 @@
         "text": "bring someone you want to impress to Nichi Getsu",
         "quote": "Bring jemanden mit, den:die Du beeindrucken willst.",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -925,7 +920,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -945,9 +942,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1022,6 +1017,16 @@
         "at": "2026-11-01T21:49:05.431Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:41:52.535Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 18 of 38 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:33.358Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial blog review with no stated payment, gift, invitation, ad or collab; photos credited to the venue are not a sponsorship disclosure.)"
       }
     ]
   }

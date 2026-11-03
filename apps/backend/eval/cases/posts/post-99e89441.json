@@ -203,7 +203,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:45:54.902Z",
     "usage": {
       "inputTokens": 11216,
@@ -259,7 +259,7 @@
         "text": "The women making the dumplings show a lot of experience in every move",
         "quote": "Man sieht sofort, wie viel Erfahrung in jedem Handgriff steckt.",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "authenticity",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -267,9 +267,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -287,9 +285,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -301,7 +297,7 @@
         "text": "The dumplings are still really made by hand: rolling, filling and folding the dough, dumpling by dumpling",
         "quote": "Hier wird noch richtig mit den Händen gearbeitet.",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "authenticity",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -310,7 +306,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "ingredient_quality"
           ],
           "kinds": [
             "fact"
@@ -341,7 +337,7 @@
         "text": "Knowing how much time, skill and love goes into each Dumpling makes you enjoy it more consciously",
         "quote": "Wenn man weiß, wie viel Zeit, Können und Liebe in jedem einzelnen Dumpling steckt, genießt man ihn viel bewusster und wertschätzender.",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "authenticity",
         "foods": [
           "Dumpling"
         ],
@@ -351,9 +347,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -374,7 +368,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -429,6 +423,16 @@
         "at": "2026-11-01T21:49:05.435Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:49.190Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 9 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:50.558Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → true (Creator's behind-the-scenes visit by invitation (\"Ich durfte\"), marked \"Werbung\" with the venue tagged; this is invited or paid content, not a plain unpaid visit.)"
       }
     ]
   }

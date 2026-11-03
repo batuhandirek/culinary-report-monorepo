@@ -349,7 +349,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:40:24.527Z",
     "usage": {
       "inputTokens": 23575,
@@ -358,7 +358,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "Sponsored Wolt post (#werbung); the Wolt code is kept as an optional subject-none deal since Wolt is not a venue. Hard calls: scores 'X von 10' treated as verdicts, the transcript's misspelled 'harmosa' kept as the quoted food, and the sarcastic 'fast 40 Euro' read as a negative price judgement.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Samosa Club",
@@ -452,7 +452,7 @@
             "neutral"
           ],
           "aspects": [
-            "none"
+            "delivery_platform"
           ],
           "kinds": []
         },
@@ -475,9 +475,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "value_for_money"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -499,9 +497,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -521,9 +517,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -559,7 +553,7 @@
         "text": "the pastrami Sandwich is served with a small bowl of Gurken",
         "quote": "es wird mit dieser kleinen Schale Gurken serviert",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Gurken"
         ],
@@ -572,7 +566,7 @@
             "negative"
           ],
           "aspects": [
-            "portion_size"
+            "presentation"
           ],
           "kinds": []
         },
@@ -616,7 +610,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "food",
+            "value_for_money"
           ],
           "kinds": [
             "opinion"
@@ -637,9 +632,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -651,7 +644,7 @@
         "text": "Ippai no Ramen is the only Japanese ramen shop where you order your food at a machine, just like in Japan",
         "quote": "zum einzigen japanischen\nramenladen bei dem du\ngenau wie in Japan dein Essen an einem\nAutomaten bestellen kannst",
         "sentiment": "positive",
-        "aspect": "service",
+        "aspect": "authenticity",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -662,8 +655,7 @@
             "neutral"
           ],
           "aspects": [
-            "authenticity",
-            "other"
+            "service"
           ],
           "kinds": [
             "opinion"
@@ -687,7 +679,7 @@
             "neutral"
           ],
           "aspects": [
-            "atmosphere"
+            "authenticity"
           ],
           "kinds": [
             "fact"
@@ -711,7 +703,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
             "none"
           ],
           "kinds": [
@@ -733,9 +724,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -747,7 +736,7 @@
         "text": "every Berliner says Rüyam has the best Döner in the city",
         "quote": "jeder Berliner sagt\nder beste Döner der Stadt ist",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "taste",
         "foods": [
           "Döner"
         ],
@@ -758,8 +747,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "food"
+            "none"
           ],
           "kinds": [
             "opinion"
@@ -772,7 +760,7 @@
         "text": "the name Rüyam is beautiful",
         "quote": "nicht nur der Name ist wunderschön",
         "sentiment": "positive",
-        "aspect": "other",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -781,7 +769,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -886,9 +874,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -922,7 +908,7 @@
         "text": "Mubis Cookies sells Softeis with hot Keksteig",
         "quote": "sie verkaufen Softeis mit heißem Keksteig",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Softeis",
           "Keksteig"
@@ -933,9 +919,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -945,7 +929,7 @@
         "text": "Softeis with hot Keksteig is an insane idea",
         "quote": "so eine geisteskranke Idee",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -955,9 +939,7 @@
           "sentiments": [
             "mixed"
           ],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -999,9 +981,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1021,6 +1001,16 @@
         "at": "2026-11-01T21:49:05.428Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:34.954Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 17 of 25 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:16.333Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The #werbung ad is for a Wolt discount code, not paid by any venue, and the caption says 'Alles selbst gekauft', so all the venue visits were self-paid.)"
       }
     ]
   }

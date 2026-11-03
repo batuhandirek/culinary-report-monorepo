@@ -131,31 +131,21 @@ describe('statements (pglite)', () => {
 		return { claims: reviewClaims?.(text) ?? REVIEW_CLAIMS[text] ?? [{ text, quote: text }] };
 	});
 	const postAgent = mockAgent(() => postAnswer);
+	// Agent B reads one claim a call, its source's other claims beside it
 	const partsAgent = mockAgent((input: unknown) => {
-		// One source a call
-		const sources = [JSON.parse(input as string)] as {
-			claims: { id: string; text: string }[];
-		}[];
+		const { claim } = JSON.parse(input as string) as { claim: { text: string } };
 		return {
-			claims: sources.flatMap(s =>
-				s.claims.map(c => ({
-					id: c.id,
-					sentiment: 'neutral',
-					aspect: null,
-					foods: [],
-					amount: null,
-					unit: null,
-					kind: 'opinion',
-					...(partsOverride?.(c.text) ?? PARTS[c.text]),
-				})),
-			),
+			sentiment: 'neutral',
+			aspect: null,
+			foods: [],
+			amount: null,
+			unit: null,
+			kind: 'opinion',
+			...(partsOverride?.(claim.text) ?? PARTS[claim.text]),
 		};
 	});
-	// Agent C: every wording none, so the `terms` backlog settles whatever a drain hands it
-	const termAgent = mockAgent((input: unknown) => {
-		const { terms } = JSON.parse(input as string) as { terms: { id: string }[] };
-		return { terms: terms.map(t => ({ id: t.id, topics: [], suggestion: null })) };
-	});
+	// Agent C, one wording a call: every wording none, so the `terms` backlog settles whatever a drain hands it
+	const termAgent = mockAgent(() => ({ topics: [], suggestion: null }));
 
 	const em = () => harness.orm.em;
 	const sql = <T>(query: string, params: unknown[] = []): Promise<T[]> =>
@@ -371,13 +361,13 @@ describe('statements (pglite)', () => {
 					text: 'the fries were damn good',
 					quote: 'damn good fries',
 					subject: 'place',
-					place: 0,
+					place: 'Batu Burger',
 				},
 				{
 					text: 'the fries cost 10 euros',
 					quote: 'fries for 10 euros',
 					subject: 'place',
-					place: 0,
+					place: 'Batu Burger',
 				},
 			],
 		};
@@ -495,13 +485,13 @@ describe('statements (pglite)', () => {
 					text: 'Batu Burger has the best fries',
 					quote: 'Batu Burger has the best fries',
 					subject: 'place',
-					place: 0,
+					place: 'Batu Burger',
 				},
 				{
 					text: 'it also has the best waiters',
 					quote: 'It also has the best waiters',
 					subject: 'place',
-					place: 0,
+					place: 'Batu Burger',
 				},
 				{ text: 'the weather was nice', quote: null, subject: 'none', place: null },
 			],
@@ -701,18 +691,24 @@ describe('statements (pglite)', () => {
 			['terms', 0, 'empty', 0],
 		]);
 		expect(reviewAgent.generate).not.toHaveBeenCalled();
-		expect(partsAgent.generate).toHaveBeenCalledTimes(1);
-		// One call: the review's claims together, with the place they are about and the aspects' legend
-		const [input, context] = partsAgent.generate.mock.calls[0] as [string, { legend: string }];
-		// One source a call
-		expect(JSON.parse(input)).toEqual({
-			kind: 'review',
-			venue: 'Batu Burger',
-			claims: [
-				{ id: expect.any(String), text: 'rude staff' },
-				{ id: expect.any(String), text: 'waited an hour for the food' },
-			],
-		});
+		// One claim a call, with the place it is about, the source's other claims beside it, and the aspects' legend
+		expect(partsAgent.generate).toHaveBeenCalledTimes(2);
+		const calls = partsAgent.generate.mock.calls as [string, { legend: string }][];
+		expect(calls.map(([input]) => JSON.parse(input))).toEqual([
+			{
+				source: 'review',
+				place: 'Batu Burger',
+				otherClaims: ['waited an hour for the food'],
+				claim: { text: 'rude staff' },
+			},
+			{
+				source: 'review',
+				place: 'Batu Burger',
+				otherClaims: ['rude staff'],
+				claim: { text: 'waited an hour for the food' },
+			},
+		]);
+		const [, context] = calls[0];
 		expect(context.legend).toContain(
 			'wait: wait (about waiting, when nothing finer fits), queue (',
 		);
@@ -771,9 +767,10 @@ describe('statements (pglite)', () => {
 			'positive',
 		]);
 		const [input] = partsAgent.generate.mock.calls[0] as [string];
-		expect(JSON.parse(input).claims).toEqual([
-			{ id: String(s.id), text: 'delicious as always', quote: 'Lecker wie immer' },
-		]);
+		expect(JSON.parse(input).claim).toEqual({
+			text: 'delicious as always',
+			quote: 'Lecker wie immer',
+		});
 	});
 
 	it('counts a backlog batch whose answers carry only unknown aspect keys as done, the claims settled', async () => {

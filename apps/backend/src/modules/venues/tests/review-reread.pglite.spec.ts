@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
-
 import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
@@ -79,23 +78,16 @@ describe('ReviewService.reread (pglite)', () => {
 		}),
 	};
 	const partsAgent = mockAgent((input: unknown) => {
-		// One source a call
-		const sources = [JSON.parse(input as string)] as {
-			claims: { id: string; text: string }[];
-		}[];
+		// One claim a call
+		const { text } = (JSON.parse(input as string) as { claim: { text: string } }).claim;
 		return {
-			claims: sources.flatMap(s =>
-				s.claims.map(c => ({
-					id: c.id,
-					sentiment: 'neutral',
-					aspect: null,
-					foods: [],
-					amount: null,
-					unit: null,
-					kind: 'opinion',
-					...PARTS[c.text],
-				})),
-			),
+			sentiment: 'neutral',
+			aspect: null,
+			foods: [],
+			amount: null,
+			unit: null,
+			kind: 'opinion',
+			...PARTS[text],
 		};
 	});
 
@@ -286,6 +278,25 @@ describe('ReviewService.reread (pglite)', () => {
 			stars: 2,
 			text: 'Rude staff, but the Pommes were good.',
 		});
+		// Agent B got one claim a call: the source, the venue and the review's other claims beside it
+		expect(
+			partsAgent.generate.mock.calls
+				.map(([input]) => JSON.parse(input as string))
+				.sort((x, y) => x.claim.text.localeCompare(y.claim.text)),
+		).toEqual([
+			{
+				source: 'review',
+				place: 'Batu Burger',
+				otherClaims: ['the döner was damn good'],
+				claim: { text: 'I waited darn 50 minutes', quote: 'Rude staff' },
+			},
+			{
+				source: 'review',
+				place: 'Batu Burger',
+				otherClaims: ['I waited darn 50 minutes'],
+				claim: { text: 'the döner was damn good' },
+			},
+		]);
 		em().clear();
 		const rows = await rowsOf(r.id);
 		expect(

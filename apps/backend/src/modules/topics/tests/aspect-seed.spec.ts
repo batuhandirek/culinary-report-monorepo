@@ -99,7 +99,9 @@ describe('TopicIndex aspects', () => {
 		expect(legend.startsWith('food: food (about the food, when nothing finer fits), ')).toBe(
 			true,
 		);
-		expect(legend).toContain('wait_for_food (the time between ordering and the food arriving)');
+		expect(legend).toContain(
+			"wait_for_food (the time between ordering and the food arriving: the kitchen's pace)",
+		);
 		expect(legend).toContain('; drinks: drinks (about the drinks, when nothing finer fits), ');
 		// Each root heads its own part, in order (a hint may hold "; " itself, so no split)
 		const heads = ASPECT_ROOTS.map(root => legend.indexOf(`${root}: ${root} (`));

@@ -15,7 +15,7 @@ import { validateEnv } from 'src/shared/util/env.js';
 
 import { isLlmModelChoice, LlmModelChoice } from '../constants/llm-models.constant.js';
 
-/** `term-topic:high,topic-discovery:anthropic/claude-sonnet-5-5` → agent id → choice */
+/** `term-topic:full,topic-discovery:openai/gpt-5.4` → agent id → choice */
 const parseAgentModels = (raw: unknown): Record<string, LlmModelChoice> => {
 	if (raw && typeof raw === 'object') return raw as Record<string, LlmModelChoice>;
 	const out: Record<string, LlmModelChoice> = {};
@@ -65,7 +65,10 @@ export class LLMConfig {
 	@Transform(v => Number(v.value))
 	public LLM_BLOCK_HOURS: number = 24;
 
-	/** The paid Claude models of the roster (`LLM_ROSTER`); unset leaves them out */
+	/**
+	 * The paid Claude models of the roster (`LLM_ROSTER`), used only inside `llmPaid` (the eval's
+	 * hand-started Opus work); unset leaves them out
+	 */
 	@IsString()
 	@IsOptional()
 	public ANTHROPIC_API_KEY?: string;
@@ -84,8 +87,8 @@ export class LLMConfig {
 
 	/**
 	 * Agents put on another tier or model than their own `getModel()`, by agent id
-	 * (`term-topic:high`). Setting one is a yes to spend: the agent may use paid models even in
-	 * the daily backlogs (`llmFreeOnly`).
+	 * (`term-topic:full`). Free models only, as everywhere outside `llmPaid`: `high` runs on
+	 * gpt-5.4, and a Claude model alone serves nothing.
 	 */
 	@IsOptional()
 	@Transform(v => parseAgentModels(v.value))

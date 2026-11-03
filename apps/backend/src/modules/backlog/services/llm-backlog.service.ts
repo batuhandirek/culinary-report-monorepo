@@ -3,7 +3,6 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { processShutdown } from 'src/modules/apify/util/apify-run-context.js';
-import { llmFreeOnly } from 'src/modules/llm/util/llm-scope.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { isFatalProviderError } from 'src/shared/util/pool.js';
 
@@ -64,20 +63,19 @@ export class LlmBacklogService {
 	 * Takes the backlogs by priority and runs batches of each until it is empty, the day's token
 	 * budget (over every backlog, counted from what batches report) is spent, a batch throws what
 	 * `isFatalProviderError` matches (no model left for it: that backlog stops for the day, the job
-	 * does not fail; batches run `llmFreeOnly` unless `LLM_BACKLOG_ALLOW_PAID`, so the paid models
-	 * take over only when the user said so), or the time limit is reached. A backlog that waits for something (`waitsFor`) runs no batch and says why. A
+	 * does not fail; batches run on the free models only, as everything outside `llmPaid` does), or
+	 * the time limit is reached. A backlog that waits for something (`waitsFor`) runs no batch and says why. A
 	 * batch's other errors stop that backlog only. Each backlog's day is one `BacklogRun`, flushed
 	 * after every batch so the Data page sees progress.
 	 */
 	async drain(
-		opts: { budget?: number; maxMinutes?: number; allowPaid?: boolean; now?: () => Date } = {},
+		opts: { budget?: number; maxMinutes?: number; now?: () => Date } = {},
 	): Promise<BacklogRun[]> {
 		const now = opts.now ?? (() => new Date());
 		const startedAt = now().getTime();
 		const deadline = startedAt + (opts.maxMinutes ?? LLM_BACKLOG_MAX_MINUTES) * 60_000;
 		const day = utcDay(now());
 		const budget = opts.budget ?? backlogConfig.LLM_BACKLOG_DAILY_TOKENS;
-		const allowPaid = opts.allowPaid ?? backlogConfig.LLM_BACKLOG_ALLOW_PAID;
 		let spent = await this.tokensOn(day);
 		let dayStop: BacklogStopReason | undefined;
 		const runs: BacklogRun[] = [];
@@ -106,8 +104,7 @@ export class LlmBacklogService {
 				}
 				let batch: { done: number; tokens?: number };
 				try {
-					// The roster's free models only, unless the user let the backlogs pay for a while
-					batch = await (allowPaid ? backlog.runBatch() : llmFreeOnly(() => backlog.runBatch()));
+					batch = await backlog.runBatch();
 				} catch (e) {
 					if (isFatalProviderError(e)) reason = 'allowance';
 					else {

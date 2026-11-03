@@ -108,10 +108,13 @@ export const readPostClaims = async (
 	context: PostClaimsContext,
 ): Promise<PostClaimsRead> => {
 	const plan = postClaimsPlan(source);
+	// Promotional is about someone else paid or invited by a venue: a venue's own post never is
+	const own = (reading: PostClaimsReading): PostClaimsReading =>
+		source.ownBrand ? { ...reading, isPromotional: false } : reading;
 	if ('single' in plan) {
 		const res = await agent.generate(plan.single, context);
 		return {
-			object: resolvePlaces(res.object),
+			object: own(resolvePlaces(res.object)),
 			usage: { totalTokens: res.usage?.totalTokens ?? 0 },
 			model: res.model,
 			calls: 1,
@@ -122,9 +125,11 @@ export const readPostClaims = async (
 		plan.parts(first.object.places.map(p => p.venueName)).map(m => agent.generate(m, context)),
 	);
 	return {
-		object: mergePostParts(
-			first.object,
-			answers.map(a => a.object),
+		object: own(
+			mergePostParts(
+				first.object,
+				answers.map(a => a.object),
+			),
 		),
 		usage: {
 			totalTokens: [first, ...answers].reduce((n, a) => n + (a.usage?.totalTokens ?? 0), 0),

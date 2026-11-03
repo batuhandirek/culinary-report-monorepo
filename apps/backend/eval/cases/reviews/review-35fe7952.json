@@ -118,7 +118,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T14:18:13.410Z",
     "usage": {
       "inputTokens": 5535,
@@ -141,7 +141,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "none"
           ],
           "kinds": []
         }
@@ -178,7 +178,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "wait_for_food"
+          ],
           "kinds": []
         }
       },
@@ -240,7 +242,7 @@
         "text": "the free Turkish black tea is no longer offered",
         "quote": "le thé noir turc gratuit n’est malheureusement plus offert",
         "sentiment": "negative",
-        "aspect": "drinks",
+        "aspect": "on_the_house",
         "foods": [
           "thé noir turc"
         ],
@@ -250,10 +252,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "availability",
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": []
         }
       }
@@ -273,6 +272,11 @@
         "at": "2026-11-01T21:49:05.404Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:03.000Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 7 claims changed"
       }
     ]
   }

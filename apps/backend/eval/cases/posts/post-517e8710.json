@@ -77,7 +77,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:21:03.572Z",
     "usage": {
       "inputTokens": 9694,
@@ -120,7 +120,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "food",
+            "none"
           ],
           "kinds": []
         },
@@ -144,6 +145,16 @@
         "at": "2026-11-01T21:49:05.427Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:18.084Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 1 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:11.501Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (The post only tags the pizzeria '60 seconds to napoli'. Nothing in it says it was paid, gifted, invited or a collab, and the input does not say it comes from the venue's own account.)"
       }
     ]
   }

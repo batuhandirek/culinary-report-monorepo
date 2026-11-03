@@ -167,7 +167,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:45:19.687Z",
     "usage": {
       "inputTokens": 13746,
@@ -214,7 +214,7 @@
         "text": "Strolling up Vorbergstraße in Schöneberg feels like being in France",
         "quote": "Ist das noch Berlin oder schon Frankreich?",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "location",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -225,7 +225,7 @@
             "neutral"
           ],
           "aspects": [
-            "other"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -272,7 +272,7 @@
         "text": "Barlevain serves accessible bistro cuisine",
         "quote": "Mit zugänglicher Bistroküche",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -332,7 +332,7 @@
         "text": "The owners see Barlevain as a modern Wirtshaus",
         "quote": "Sie verstehen das Barlevain als modernes Wirtshaus",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "vibe",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -341,8 +341,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
-            "other"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -353,7 +352,7 @@
         "text": "Barlevain cooks high-quality dishes",
         "quote": "hochqualitative",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -362,7 +361,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -458,7 +457,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere",
             "presentation"
           ],
           "kinds": []
@@ -470,7 +468,7 @@
         "text": "Guests at Barlevain feel welcome",
         "quote": "das Gefühl, willkommen zu sein",
         "sentiment": "positive",
-        "aspect": "atmosphere",
+        "aspect": "friendliness",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -479,7 +477,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "friendliness"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -490,7 +488,7 @@
         "text": "Walk-ins and solo diners find a seat at the bar",
         "quote": "Spontane und allein Essende finden an der Bar Platz",
         "sentiment": "neutral",
-        "aspect": "space",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -580,9 +578,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -605,8 +601,8 @@
             "positive"
           ],
           "aspects": [
-            "authenticity",
-            "food"
+            "ingredient_quality",
+            "authenticity"
           ],
           "kinds": []
         },
@@ -617,7 +613,7 @@
         "text": "All dishes at Barlevain are meant for sharing",
         "quote": "Alle Gerichte sind zum Teilen gedacht",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -626,7 +622,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "portion_size"
+            "occasion"
           ],
           "kinds": []
         },
@@ -648,7 +644,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -659,7 +655,7 @@
         "text": "The Sauerteigbrot comes from the nearby Johann Bäckerei",
         "quote": "Sauerteigbrot aus der unweit gelegenen Johann Bäckerei",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "ingredient_quality",
         "foods": [
           "Sauerteigbrot"
         ],
@@ -669,9 +665,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -693,7 +687,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -715,7 +709,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -726,7 +720,7 @@
         "text": "The Oeuf Mayo is currently served with a Bärlauchmayonnaise",
         "quote": "aktuell mit einer Bärlauchmayonnaise serviert",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Oeuf Mayo",
           "Bärlauchmayonnaise"
@@ -737,9 +731,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "availability"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -760,7 +752,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety",
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -771,7 +764,7 @@
         "text": "The Cavatelli are currently served as Pasta alla Norma",
         "quote": "aktuell als Pasta alla Norma",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Cavatelli",
           "Pasta alla Norma"
@@ -782,9 +775,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "availability"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -812,7 +803,7 @@
         "text": "The meat dish can be Gulasch in winter or Perlhuhn in summer",
         "quote": "Gulasch im Winter oder auch ein Perlhuhn im Sommer",
         "sentiment": "neutral",
-        "aspect": "availability",
+        "aspect": "menu_variety",
         "foods": [
           "Gulasch",
           "Perlhuhn"
@@ -823,9 +814,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -902,7 +891,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "location"
           ],
           "kinds": [
             "opinion"
@@ -994,6 +983,16 @@
         "at": "2026-11-01T21:49:05.434Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:37.137Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 19 of 36 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:44.721Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial blog review of Barlevain with no sign of payment, gifting, invitation, collab or giveaway; the @ handles are only credits and the venue's link.)"
       }
     ]
   }

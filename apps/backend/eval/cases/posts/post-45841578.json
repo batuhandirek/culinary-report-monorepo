@@ -303,7 +303,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:21:22.229Z",
     "usage": {
       "inputTokens": 19422,
@@ -380,7 +380,7 @@
         "text": "the four spots are must-tries for eating cheap and tasty in Berlin under 10 euros",
         "quote": "die ihr unbedingt probieren müsst",
         "sentiment": "positive",
-        "aspect": "price_level",
+        "aspect": null,
         "foods": [],
         "amount": 10,
         "unit": "money",
@@ -389,7 +389,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
+            "price_level",
             "value_for_money"
           ],
           "kinds": [
@@ -467,9 +467,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -557,9 +555,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -593,7 +589,7 @@
         "text": "Mezame Matcha really surprised the creator",
         "quote": "aber dieser hier hat mich wirklich überrascht",
         "sentiment": "positive",
-        "aspect": "drink_quality",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -602,8 +598,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks",
-            "none"
+            "drink_quality"
           ],
           "kinds": [
             "verdict"
@@ -626,9 +621,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -638,7 +631,7 @@
         "text": "the creator ordered a Matcha einspanner",
         "quote": "ich habe Mir eine Matcha einspanner",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "Matcha einspanner"
         ],
@@ -649,7 +642,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks"
+            "none",
+            "drink_selection"
           ],
           "kinds": []
         },
@@ -692,9 +686,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -714,9 +706,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -750,7 +740,7 @@
         "text": "the creator piled on fresh fruits, granola and nuts",
         "quote": "ich hab natürlich komplett übertrieben frische Früchte",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "portion_size",
         "foods": [
           "Früchte",
           "Granola",
@@ -765,8 +755,7 @@
             "positive"
           ],
           "aspects": [
-            "freshness",
-            "none"
+            "freshness"
           ],
           "kinds": [
             "opinion"
@@ -805,9 +794,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -827,9 +814,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -849,9 +834,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -861,7 +844,7 @@
         "text": "noodle refills are even free, the best part",
         "quote": "nudelnachschlag gibt's sogar for free",
         "sentiment": "positive",
-        "aspect": "value_for_money",
+        "aspect": "on_the_house",
         "foods": [
           "nudelnachschlag"
         ],
@@ -872,6 +855,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "value_for_money",
             "portion_size"
           ],
           "kinds": [
@@ -919,9 +903,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -944,6 +926,16 @@
         "at": "2026-11-01T21:49:05.426Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:59.370Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 14 of 25 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:02.908Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own budget food-spot roundup; no ad, gift, invitation or paid partnership disclosed)"
       }
     ]
   }

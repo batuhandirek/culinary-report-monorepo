@@ -125,7 +125,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:26:07.933Z",
     "usage": {
       "inputTokens": 5270,
@@ -273,9 +273,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "attentiveness"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -283,7 +281,7 @@
         "text": "would have loved to try the Acai",
         "quote": "Auch wenn ich die Acai sehr gerne probiert hätte",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "availability",
         "foods": [
           "Acai"
         ],
@@ -296,7 +294,7 @@
             "negative"
           ],
           "aspects": [
-            "availability"
+            "none"
           ],
           "kinds": [
             "fact"
@@ -330,6 +328,11 @@
         "at": "2026-11-01T21:49:05.407Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:33.004Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 10 claims changed"
       }
     ]
   }

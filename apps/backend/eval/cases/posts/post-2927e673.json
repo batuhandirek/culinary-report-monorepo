@@ -142,7 +142,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:34:23.018Z",
     "usage": {
       "inputTokens": 9709,
@@ -185,7 +185,7 @@
             "positive"
           ],
           "aspects": [
-            "none"
+            "occasion"
           ],
           "kinds": [
             "question"
@@ -208,7 +208,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "reservation_handling"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -242,7 +244,7 @@
         "text": "The lunch at Käfer is a starter, main course and dessert",
         "quote": "başlangıç, ana yemek ve tatlı",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -250,10 +252,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety",
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -263,7 +262,7 @@
         "text": "Lunch at Käfer is a very nice plan for taking guests visiting Berlin",
         "quote": "Berlin’e gelen misafirlerinizi götürmek için de çok güzel bir plan.",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -331,6 +330,16 @@
         "at": "2026-11-01T21:49:05.423Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:06.460Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 7 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:52.669Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → true (Labelled 'Werbung', a paid partnership with GetYourGuide selling the lunch package at the Käfer restaurant on the Reichstag roof, with a booking link and discount code. The meal at the venue is the advertised product.)"
       }
     ]
   }

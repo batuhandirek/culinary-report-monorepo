@@ -32,8 +32,6 @@ export interface AdminLlmBacklogsOutputDto {
 	dailyTokens: number;
 	/** Reported by today's batches (UTC day) */
 	spentToday: number;
-	/** `LLM_BACKLOG_ALLOW_PAID`: the backlogs may use Claude, not only the free allowance */
-	allowsPaid: boolean;
 	items: AdminLlmBacklogOutputDto[];
 }
 

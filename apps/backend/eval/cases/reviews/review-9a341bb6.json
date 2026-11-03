@@ -109,7 +109,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:28:13.471Z",
     "usage": {
       "inputTokens": 5112,
@@ -211,7 +211,7 @@
         "text": "the food style was awkwardly between fusion and traditional",
         "quote": "食物风格介于fusion和tradition之间让人尴尬的位置",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -268,6 +268,11 @@
         "at": "2026-11-01T21:49:05.412Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:43.447Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 8 claims changed"
       }
     ]
   }

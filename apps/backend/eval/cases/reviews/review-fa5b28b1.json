@@ -125,7 +125,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T14:19:23.059Z",
     "usage": {
       "inputTokens": 5546,
@@ -152,8 +152,7 @@
             "neutral"
           ],
           "aspects": [
-            "wait",
-            "wait_for_food"
+            "wait"
           ],
           "kinds": [
             "fact"
@@ -164,7 +163,7 @@
         "text": "the döner was very different",
         "quote": "Döner çok farklı",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "Döner"
         ],
@@ -175,7 +174,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -202,6 +201,25 @@
         "text": "only one person serving despite such a long line is unacceptable",
         "quote": "o kadar sıra varken sadece bir kişinin hizmet etmesi kabul edilemez",
         "sentiment": "negative",
+        "aspect": "queue",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "opinion",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [
+            "speed_of_service",
+            "service"
+          ],
+          "kinds": []
+        }
+      },
+      {
+        "text": "the understaffing is a big failing of the shop owner",
+        "quote": "Dükkan sahibinin büyük ayıbı bu",
+        "sentiment": "negative",
         "aspect": "service",
         "foods": [],
         "amount": null,
@@ -211,26 +229,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "queue",
-            "speed_of_service"
-          ],
-          "kinds": []
-        }
-      },
-      {
-        "text": "the understaffing is a big failing of the shop owner",
-        "quote": "Dükkan sahibinin büyük ayıbı bu",
-        "sentiment": "negative",
-        "aspect": "ownership",
-        "foods": [],
-        "amount": null,
-        "unit": null,
-        "kind": "opinion",
-        "optional": false,
-        "alsoAcceptable": {
-          "sentiments": [],
-          "aspects": [
-            "service"
+            "queue"
           ],
           "kinds": []
         }
@@ -247,7 +246,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "friendliness"
+          ],
           "kinds": []
         }
       },
@@ -299,6 +300,11 @@
         "at": "2026-11-01T21:49:05.418Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:37:51.238Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 8 claims changed"
       }
     ]
   }

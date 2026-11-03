@@ -183,7 +183,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:27:16.845Z",
     "usage": {
       "inputTokens": 14170,
@@ -246,7 +246,10 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "dietary",
+            "none"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -274,7 +277,7 @@
         "text": "the Syrian dish Demeter at Pêle-Mêle has no carbohydrates",
         "quote": "Ganz ohne Kohlenhydrate: Das syrische Gericht „Demeter“",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Demeter"
         ],
@@ -285,7 +288,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "menu_variety"
+            "food"
           ],
           "kinds": []
         },
@@ -380,7 +383,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "interior"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -470,7 +475,7 @@
         "text": "Pêle-Mêle cooks purely plant-based",
         "quote": "in einem rein pflanzlich kochenden lokal",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -533,7 +538,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership"
+            "other"
           ],
           "kinds": []
         },
@@ -573,7 +578,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking"
+            "taste"
           ],
           "kinds": []
         },
@@ -584,7 +589,7 @@
         "text": "Pêle-Mêle is a pioneer of vegan Berlin cuisine",
         "quote": "ein Pionier der veganen Berliner Küche",
         "sentiment": "positive",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -593,7 +598,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -631,7 +636,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "opening_hours"
+            "interior",
+            "other"
           ],
           "kinds": [
             "fact"
@@ -652,7 +658,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "dietary"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -670,7 +678,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "dietary"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -694,7 +704,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "dietary"
+          ],
           "kinds": [
             "fact"
           ]
@@ -714,7 +726,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "dietary"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -758,9 +772,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -782,7 +794,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -808,9 +820,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -829,7 +839,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "opening_hours"
+            "availability"
           ],
           "kinds": []
         },
@@ -848,9 +858,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": [
             "deal"
           ]
@@ -882,7 +890,7 @@
         "text": "the brunch is especially popular in the neighbourhood",
         "quote": "Das kommt in der Nachbarschaft ganz besonders gut an",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "crowding",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -891,7 +899,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "crowding"
+            "none"
           ],
           "kinds": []
         },
@@ -912,9 +920,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -946,7 +952,7 @@
         "text": "the main dishes use lots of vegetables, protein-rich foods and regional sauces",
         "quote": "Dafür viel Gemüse, proteinreiche Lebensmittel und Soßen aus der Region",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "ingredient_quality",
         "foods": [
           "Gemüse",
           "Soßen"
@@ -958,7 +964,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -991,7 +997,7 @@
         "text": "the Demeter is seasonal grilled vegetables, for them including asparagus, tomatoes and mushrooms, on a homemade zucchini cream",
         "quote": "Saisonales Grillgemüse, bei uns unter anderem mit Spargel, Tomaten und Champignons, angerichtet auf einer hausgemachten Zucchini-Creme",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Demeter",
           "Grillgemüse",
@@ -1009,7 +1015,7 @@
             "positive"
           ],
           "aspects": [
-            "menu_variety"
+            "ingredient_quality"
           ],
           "kinds": [
             "opinion"
@@ -1096,7 +1102,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "taste",
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1190,7 +1197,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "other"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1291,6 +1300,16 @@
         "at": "2026-11-01T21:49:05.438Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:01.320Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 23 of 52 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:08.703Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial tipBerlin review with no paid, gifted, invited, collab or giveaway disclosure; the venue-credited photo and the plug for tipBerlin's own food guide don't count.)"
       }
     ]
   }

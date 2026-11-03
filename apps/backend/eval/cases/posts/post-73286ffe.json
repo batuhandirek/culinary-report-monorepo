@@ -162,7 +162,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:23:57.213Z",
     "usage": {
       "inputTokens": 10596,
@@ -171,7 +171,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "Promotional post by the venue itself, outside Berlin (Tiefenbach, Kraichgau). The hard call is the opening flag: this is the existing winery restaurant renamed and modernised for its seasonal reopening, so I treated it as a change rather than a new opening. Hotel Kreuzberghof and Restaurant Albatros are only named as the source of the brasserie's classics, so I did not list them as places.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Heitlinger Brasserie",
@@ -194,7 +194,7 @@
         "text": "the restaurant at Weingut Heitlinger becomes the Heitlinger Brasserie from 1 November",
         "quote": "Aus unserem Restaurant im Weingut Heitlinger wird die Heitlinger Brasserie",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -204,7 +204,7 @@
           "sentiments": [],
           "aspects": [
             "ownership",
-            "other"
+            "none"
           ],
           "kinds": []
         },
@@ -225,9 +225,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -237,7 +235,7 @@
         "text": "the Heitlinger Brasserie has a new concept",
         "quote": "mit neuem Konzept",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -248,8 +246,7 @@
             "positive"
           ],
           "aspects": [
-            "menu_variety",
-            "other"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -292,7 +289,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": [
             "fact"
           ]
@@ -312,9 +311,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": [
             "change"
           ]
@@ -334,7 +331,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "event"
           ]
@@ -428,7 +427,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "other"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -458,6 +459,16 @@
         "at": "2026-11-01T21:49:05.431Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:41:33.843Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 7 of 12 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:30.159Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The venue posts about itself (\"unser Restaurant\", \"Wir freuen uns auf euren Besuch\"). It is not a paid, gifted or invited post by a third party.)"
       }
     ]
   }

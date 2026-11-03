@@ -12,7 +12,9 @@ import { claimSchema } from 'src/modules/venues/agents/review-claims.agent.js';
 const postClaimsSchema = z.object({
 	isPromotional: z
 		.boolean()
-		.describe('Paid partnership, ad, gifted meal, "invited by", or collab signals'),
+		.describe(
+			'True only for a post by someone other than the venue (a creator, a blog) that a venue paid for, gifted or invited: a paid partnership, an ad, a gifted meal, "invited by", a collab or a giveaway. A venue\'s own post about itself is never promotional',
+		),
 	places: z
 		.array(
 			z.object({
@@ -126,6 +128,7 @@ export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, Po
 			`A claim names what it is about: "the Gemüse kebab is incredibly delicious", never "it is incredibly delicious"; "the dürüm and the box were delicious", never "both were". ` +
 			`With each claim give its quote: the exact words of the caption, transcript or article it comes from, copied character for character in their language (never translated), the shortest span that says it. ` +
 			`Only what the text says: never add, judge or summarise a claim; within that scope never drop one because it fits no category. ` +
+			`isPromotional is true only for a post by someone other than the venue, a creator or a blog, that a venue paid for, gifted or invited: a paid partnership, an ad, a gifted meal, "invited by", a collab or a giveaway with the venue. It is false for a venue's own post about itself (its menu, its offers, "come by": that is the venue's own post, counted apart), for a creator's own unpaid visit even with a disclosure such as "unpaid ad" or "not sponsored", and for a creator plugging their own guide, app or channel. ` +
 			`Mark a venue as a new opening only when the post itself says it is new or has just opened; a new dish, a new menu or a creator's first visit is not an opening. ` +
 			(context?.topics?.length ?
 				`For cuisine, use these words where one fits: ${context.topics.join(', ')}. Use another short English word only when none fits. `

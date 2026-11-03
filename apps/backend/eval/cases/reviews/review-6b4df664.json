@@ -159,7 +159,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:27:09.859Z",
     "usage": {
       "inputTokens": 5290,
@@ -207,7 +207,7 @@
         "text": "had the Königsberger Klopse vom Kalb with Roter Bete and Kartoffelpüree",
         "quote": "Ich hatte die Königsberger Klopse vom Kalb mit Roter Bete und Kartoffelpüree",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Königsberger Klopse vom Kalb",
           "Roter Bete",
@@ -220,7 +220,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "food"
           ],
           "kinds": []
         }
@@ -388,6 +388,11 @@
         "at": "2026-11-01T21:49:05.409Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:57.591Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 12 claims changed"
       }
     ]
   }

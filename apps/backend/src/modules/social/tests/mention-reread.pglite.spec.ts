@@ -7,10 +7,7 @@ import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { ClaimPartsAgent } from 'src/modules/statements/agents/claim-parts.agent.js';
 import { POSTS_GATED_AT } from 'src/modules/statements/constants/statements-shipped.constant.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
-import {
-	type PostClaim,
-	StatementService,
-} from 'src/modules/statements/services/statement.service.js';
+import { StatementService } from 'src/modules/statements/services/statement.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
 import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
@@ -24,8 +21,8 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { PostClaimsAgent } from '../agents/post-claims.agent.js';
-import { PostGateAgent } from '../agents/post-gate.agent.js';
+import { PostClaimsAgent, type PostClaimsAnswer } from '../agents/post-claims.agent.js';
+import { PostGateAgent, type PostGateInput } from '../agents/post-gate.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import {
 	PostSkipReasonEnum,
@@ -65,10 +62,11 @@ const isAfter = (date: Date | null | undefined, than = BEFORE) =>
 /** What a paired mention takes from the answer: its own reading, never its match */
 const REFRESHED = ['visited', 'is_new_opening', 'updated_at'];
 
+type AnswerClaim = PostClaimsAnswer['claims'][number];
 interface Answer {
 	isPromotional: boolean;
 	places: ReturnType<typeof place>[];
-	claims: PostClaim[];
+	claims: AnswerClaim[];
 }
 const place = (venueName: string, extra: Partial<Record<string, unknown>> = {}) => ({
 	venueName,
@@ -79,16 +77,17 @@ const place = (venueName: string, extra: Partial<Record<string, unknown>> = {}) 
 	isNewOpening: false,
 	...extra,
 });
+/** A claim as agent A answers it: its place by the name in the answer's places */
 const claim = (
 	text: string,
-	subject: PostClaim['subject'],
-	placeIndex: number | null = null,
+	subject: AnswerClaim['subject'],
+	placeName: string | null = null,
 	quote: string | null = null,
-): PostClaim => ({
+): AnswerClaim => ({
 	text,
 	quote,
 	subject,
-	place: placeIndex,
+	place: placeName,
 });
 const NOTHING: Answer = { isPromotional: false, places: [], claims: [] };
 
@@ -123,23 +122,16 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		}),
 	};
 	const partsAgent = mockAgent((input: unknown) => {
-		// One source a call
-		const sources = [JSON.parse(input as string)] as {
-			claims: { id: string; text: string }[];
-		}[];
+		// One claim a call
+		const { text } = (JSON.parse(input as string) as { claim: { text: string } }).claim;
 		return {
-			claims: sources.flatMap(s =>
-				s.claims.map(c => ({
-					id: c.id,
-					sentiment: 'neutral',
-					aspect: null,
-					foods: [],
-					amount: null,
-					unit: null,
-					kind: 'opinion',
-					...PARTS[c.text],
-				})),
-			),
+			sentiment: 'neutral',
+			aspect: null,
+			foods: [],
+			amount: null,
+			unit: null,
+			kind: 'opinion',
+			...PARTS[text],
 		};
 	});
 
@@ -284,9 +276,14 @@ describe('MentionExtractionService.reread (pglite)', () => {
 				],
 				claims: [
 					// The caption's own words are kept as the quote; words it never said are not
-					claim('the broth was damn good', 'place', 0, 'all worth a visit'),
-					claim('the döner cost 15 euros', 'place', 1, 'der Döner kostet 15 Euro'),
-					claim('some new bar is great', 'place', 2),
+					claim('the broth was damn good', 'place', 'PHO HOUSE', 'all worth a visit'),
+					claim(
+						'the döner cost 15 euros',
+						'place',
+						'Doner Palast',
+						'der Döner kostet 15 Euro',
+					),
+					claim('some new bar is great', 'place', 'Some New Bar'),
 					claim('Berlin has increasing prices in the last years', 'city', null),
 					claim('the weather was nice', 'none'),
 				],
@@ -407,7 +404,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			TOKENS,
 			true,
 		]);
-		// Agent B read the new claims in the same batch, one call a source (each place's claims, the city's)
+		// Agent B read the new claims in the same batch, one call a claim
 		expect(partsAgent.generate).toHaveBeenCalledTimes(5);
 		expect(await registry().get('statement-parts')!.remaining()).toBe(0);
 	});
@@ -422,7 +419,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			'[p2]': {
 				isPromotional: false,
 				places: [place('Kiezkaffee Neukölln', { visited: false })],
-				claims: [claim('the flat white was great', 'place', 0)],
+				claims: [claim('the flat white was great', 'place', 'Kiezkaffee Neukölln')],
 			},
 		};
 		expect(await reread()).toMatchObject({
@@ -468,14 +465,14 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			'[p3]': {
 				...NOTHING,
 				places: [place('Pho House')],
-				claims: [claim('the pho was great', 'place', 0)],
+				claims: [claim('the pho was great', 'place', 'Pho House')],
 			},
 			'[p4]': {
 				...NOTHING,
 				places: [place('Pho House'), place('Lazy Bar', { visited: false })],
 				claims: [
-					claim('the pho was great', 'place', 0),
-					claim('lazy bar was loud', 'place', 1),
+					claim('the pho was great', 'place', 'Pho House'),
+					claim('lazy bar was loud', 'place', 'Lazy Bar'),
 				],
 			},
 		};
@@ -526,7 +523,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			'[p5]': {
 				...NOTHING,
 				places: [place('Lazy Bar', { visited: false })],
-				claims: [claim('lazy bar was loud', 'place', 0)],
+				claims: [claim('lazy bar was loud', 'place', 'Lazy Bar')],
 			},
 		};
 		expect(await reread()).toMatchObject({
@@ -606,7 +603,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			'[p13]': {
 				...NOTHING,
 				places: [place('Pho House')],
-				claims: [claim('the pho was great', 'place', 0)],
+				claims: [claim('the pho was great', 'place', 'Pho House')],
 			},
 			'[p14]': NOTHING,
 		};
@@ -674,31 +671,34 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		expect(await service().countToReread(BEFORE)).toBe(0);
 	});
 
-	it('skips a post with nothing to read without asking the gate, and tells agent A and the gate when the post is a venue own', async () => {
+	it("skips a post with nothing to read without asking the gate, tells agent A and the gate when the post is a venue's own, and never stores it as promotional", async () => {
 		const empty = post('p16', { text: '#berlinfood #fyp' });
 		const own = post('p17', { account: ownAccount(em(), pho.brand, city, 'phohouse') });
 		await em().flush();
 		answers = {
 			'[p17]': {
 				...NOTHING,
+				// A venue's own post is never promotional, whatever agent A says
+				isPromotional: true,
 				places: [place(pho.brand.name)],
-				claims: [claim('three new flavours', 'place', 0)],
+				claims: [claim('three new flavours', 'place', pho.brand.name)],
 			},
 		};
 		expect(await reread()).toMatchObject({ read: 2, skipped: 1, added: 1, claims: 1 });
-		const asked = JSON.parse(gate.generate.mock.calls[0][0] as string) as {
-			posts: { id: string; ownBrand?: string }[];
-		};
-		expect(asked.posts).toEqual([
-			expect.objectContaining({ id: own.id, ownBrand: pho.brand.name }),
-		]);
-		const [, context] = postAgent.generate.mock.calls[0] as unknown as [
+		// One post a call: the empty one never reaches the gate
+		expect(gate.generate).toHaveBeenCalledTimes(1);
+		const asked = JSON.parse(gate.generate.mock.calls[0][0] as string) as PostGateInput;
+		expect(asked).toEqual(expect.objectContaining({ ownBrand: pho.brand.name }));
+		// Agent A is told in the message, never the context (the cached instructions stay one)
+		const [message, context] = postAgent.generate.mock.calls[0] as unknown as [
 			string,
 			{ ownBrand?: string },
 		];
-		expect(context.ownBrand).toBe(pho.brand.name);
+		expect(message).toContain(`Posted by the venue's own account: ${pho.brand.name}`);
+		expect(context.ownBrand).toBeUndefined();
 		em().clear();
 		expect((await em().findOneOrFail(SocialPost, empty.id)).skipReason).toBe('no_content');
-		expect((await em().findOneOrFail(SocialPost, own.id)).skipReason ?? null).toBeNull();
+		const saved = await em().findOneOrFail(SocialPost, own.id);
+		expect([saved.skipReason ?? null, saved.isPromotional]).toEqual([null, false]);
 	});
 });

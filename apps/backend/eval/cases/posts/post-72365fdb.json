@@ -156,7 +156,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:41:19.963Z",
     "usage": {
       "inputTokens": 14173,
@@ -358,9 +358,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -378,9 +376,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -398,9 +394,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -418,6 +412,16 @@
         "at": "2026-11-01T21:49:05.431Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:41:26.426Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 10 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:30.005Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own self-paid visit; 'Unbezahlte Werbung/selbst bezahlt' disclosure, no venue paid, gifted or invited)"
       }
     ]
   }

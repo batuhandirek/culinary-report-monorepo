@@ -129,7 +129,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:24:10.736Z",
     "usage": {
       "inputTokens": 4986,
@@ -179,7 +179,7 @@
         "text": "my sauce was only on 1/3 of the kebab",
         "quote": "only on 1/3 of the kebab",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "presentation",
         "foods": [
           "kebab"
         ],
@@ -190,8 +190,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation",
-            "portion_size"
+            "order_accuracy"
           ],
           "kinds": []
         }
@@ -200,7 +199,7 @@
         "text": "the halloumi was described as \"grilled cheese\", which was misleading",
         "quote": "the halloumi was described as “grilled cheese”, which was misleading",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "halloumi",
           "grilled cheese"
@@ -212,8 +211,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "advice",
-            "other"
+            "advice"
           ],
           "kinds": []
         }
@@ -222,7 +220,7 @@
         "text": "the wait was around 1 hour",
         "quote": "the wait was around 1 hour",
         "sentiment": "negative",
-        "aspect": "wait",
+        "aspect": "wait_for_food",
         "foods": [],
         "amount": 60,
         "unit": "minutes",
@@ -233,7 +231,7 @@
             "neutral"
           ],
           "aspects": [
-            "wait_for_food"
+            "wait"
           ],
           "kinds": [
             "fact"
@@ -244,7 +242,7 @@
         "text": "the vegetables weren't good",
         "quote": "the vegetables werent good either",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "vegetables"
         ],
@@ -255,8 +253,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "ingredient_quality"
+            "ingredient_quality",
+            "food"
           ],
           "kinds": []
         }
@@ -290,7 +288,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "wait"
+            "wait_for_food"
           ],
           "kinds": [
             "opinion"
@@ -318,6 +316,11 @@
         "at": "2026-11-01T21:49:05.402Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:39.343Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 8 claims changed"
       }
     ]
   }

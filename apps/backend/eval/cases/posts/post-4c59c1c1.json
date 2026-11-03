@@ -66,7 +66,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:38:45.395Z",
     "usage": {
       "inputTokens": 9157,
@@ -106,9 +106,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -126,6 +124,16 @@
         "at": "2026-11-01T21:49:05.427Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:11.173Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 1 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:08.348Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own review visit with no paid, gifted or invited disclosure)"
       }
     ]
   }

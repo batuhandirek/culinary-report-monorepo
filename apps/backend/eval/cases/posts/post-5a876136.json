@@ -110,7 +110,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:39:41.367Z",
     "usage": {
       "inputTokens": 9815,
@@ -119,7 +119,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The post is the venue's own launch announcement (\"Follow us\"). It is unclear whether this is a new café or a new Açaí offering at an existing Ormado Kaffeehaus. I read \"Dein neuer ... Spot ist da\" as the post saying the spot is new, so the place is marked as a new opening, and fact or new_item are allowed for that claim. \"das ist erst der Anfang\" is narration and was left out.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Ormado Kaffeehaus",
@@ -142,7 +142,7 @@
         "text": "Ormado Kaffeehaus is your new favourite Açaí spot, now here",
         "quote": "Dein neuer Lieblings-Açaí-Spot ist da!",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Açaí"
         ],
@@ -155,7 +155,7 @@
             "neutral"
           ],
           "aspects": [
-            "menu_variety"
+            "none"
           ],
           "kinds": [
             "fact",
@@ -169,7 +169,7 @@
         "text": "the Açaí is creamy",
         "quote": "Cremiges Açaí",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [
           "Açaí"
         ],
@@ -213,7 +213,7 @@
         "text": "the toppings are crunchy",
         "quote": "crunchy Toppings",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -221,10 +221,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste",
-            "freshness"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -234,7 +231,7 @@
         "text": "lots of love goes into every bowl",
         "quote": "ganz viel Liebe in jeder Bowl",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "authenticity",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -242,9 +239,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "presentation"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -280,6 +275,16 @@
         "at": "2026-11-01T21:49:05.429Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:51.334Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 6 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:19.742Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (Reads as the venue's own announcement (\"Follow us & stay tuned\", \"Dein neuer Lieblings-Açaí-Spot ist da\"), not a creator's paid, gifted or invited post.)"
       }
     ]
   }

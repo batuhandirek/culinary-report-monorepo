@@ -1,51 +1,51 @@
 # Ingestion eval: mini-v6b
 
-2026-11-01 22:20 UTC · 172 reviews, 199 posts, 0 wordings · 500 cases left out (no reference or no output) · 4 sources dropped by the agents (scored as nothing read)
+2026-11-02 09:22 UTC · 172 reviews, 199 posts, 0 wordings · 500 cases left out (no reference or no output) · 4 sources dropped by the agents (scored as nothing read)
 Tokens: 1,693,549
 Models: review-claims: openai/gpt-5.4-mini (172); claim-parts: openai/gpt-5.4-mini (367); post-claims: openai/gpt-5.4-mini (199); venue-match: openai/gpt-5.4-mini (88)
 
 ## Reviews
 
-| Metric | mini-v6b | stored | mini-v6 | one-v1 | mini-v5 |
+| Metric | mini-v6b | stored | mini-v6 | mini-base-2 | mini-base |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 94% (923/978) | 93% +1 | 95% -1 | 98% -4 | — |
-| Claims that are real (of produced) | 99% (1215/1232) | 99% -1 | 99% ±0 | 98% +1 | — |
-| Sentiment | 93% (959/1036) | 88% +5 | 92% ±0 | 92% ±0 | — |
-| Aspect, exact | 79% (820/1036) | 71% +8 | 84% -5 | 86% -6 | — |
-| Aspect, right root | 84% (874/1036) | 81% +4 | 90% -6 | 92% -8 | — |
-| Kind | 95% (985/1036) | 67% +28 | 95% ±0 | 94% +1 | — |
-| Kind given at all | 98% (1036/1053) | 4% +94 | 100% -2 | 100% -2 | — |
-| Changes that are changes | 75% (15/20) | 56% +19 | 63% +13 | 58% +17 | — |
-| Changes found | 81% (13/16) | 80% +1 | 81% ±0 | 75% +6 | — |
-| Amount | 65% (28/43) | 41% +24 | 64% +1 | 67% -2 | — |
-| Foods named, precision | 78% (326/417) | 32% +46 | 81% -3 | 75% +3 | — |
-| Foods named, recall | 79% (295/375) | 23% +56 | 79% -1 | 86% -8 | — |
+| Claims found (of the reference) | 94% (923/978) | 93% +1 | 95% -1 | 95% ±0 | 96% -1 |
+| Claims that are real (of produced) | 99% (1215/1232) | 99% -1 | 99% ±0 | 99% ±0 | 99% ±0 |
+| Sentiment | 93% (959/1036) | 88% +5 | 92% ±0 | 92% ±0 | 91% +1 |
+| Aspect, exact | 75% (772/1036) | 71% +4 | 79% -5 | 76% -1 | 77% -3 |
+| Aspect, right root | 82% (853/1036) | 81% +2 | 88% -6 | 84% -2 | 87% -5 |
+| Kind | 95% (985/1036) | 67% +28 | 95% ±0 | 89% +6 | 88% +7 |
+| Kind given at all | 98% (1036/1053) | 4% +94 | 100% -2 | 100% -1 | 99% -1 |
+| Changes that are changes | 75% (15/20) | 56% +19 | 63% +13 | 73% +2 | 52% +23 |
+| Changes found | 81% (13/16) | 80% +1 | 81% ±0 | 69% +13 | 81% ±0 |
+| Amount | 65% (28/43) | 41% +24 | 63% +2 | 64% +1 | 69% -4 |
+| Foods named, precision | 78% (326/417) | 32% +46 | 81% -3 | 66% +12 | 71% +8 |
+| Foods named, recall | 79% (295/375) | 23% +56 | 79% -1 | 66% +13 | 68% +11 |
 
 ## Posts and articles
 
-| Metric | mini-v6b | stored | mini-v6 | one-v1 | mini-v5 |
+| Metric | mini-v6b | stored | mini-v6 | mini-base-2 | mini-base |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 85% (1762/2077) | 56% +29 | 83% +2 | 86% -1 | 83% +2 |
-| Claims that are real (of produced) | 91% (2399/2634) | 95% -4 | 88% +4 | 88% +3 | 87% +4 |
-| Sentiment | 89% (1923/2162) | 86% +3 | 89% ±0 | 91% -2 | 88% +1 |
-| Aspect, exact | 72% (1550/2162) | 63% +8 | 76% -4 | 76% -4 | 72% ±0 |
-| Aspect, right root | 81% (1756/2162) | 78% +4 | 87% -5 | 86% -5 | 81% ±0 |
-| Kind | 85% (1841/2162) | 47% +38 | 87% -2 | 87% -2 | 83% +2 |
-| Kind given at all | 98% (2162/2208) | 4% +94 | 99% -1 | 100% -2 | 99% -1 |
-| Changes that are changes | 40% (35/87) | 46% -6 | 44% -4 | 49% -9 | 47% -7 |
-| Changes found | 59% (19/32) | 38% +22 | 56% +3 | 63% -3 | 59% ±0 |
-| Amount | 66% (61/92) | 46% +20 | 62% +5 | 74% -8 | 54% +12 |
-| Foods named, precision | 80% (1141/1426) | 46% +34 | 78% +2 | 74% +6 | 77% +3 |
-| Foods named, recall | 75% (1051/1396) | 39% +36 | 77% -2 | 82% -7 | 78% -3 |
-| Subject (place, city, none) | 86% (2266/2630) | 85% +1 | 87% -1 | 91% -5 | 87% -1 |
-| Claim on the right place | 91% (1967/2160) | 85% +7 | 89% +2 | 92% -1 | 89% +2 |
-| Places found | 90% (389/433) | 73% +17 | 91% -1 | 87% +3 | 88% +2 |
-| Places that are places | 89% (389/438) | 85% +4 | 89% -1 | 91% -2 | 89% ±0 |
-| Match: brand (found places) | 93% (361/389) | 92% +1 | 92% +1 | 93% ±0 | 93% -1 |
-| Match: branch (right brand) | 95% (295/309) | 97% -2 | 95% ±0 | 96% -1 | 95% ±0 |
-| Match on the reference's places: brand | 92% (399/433) | — | 92% ±0 | 93% -1 | 94% -1 |
-| Match on the reference's places: branch | 96% (326/340) | — | 96% ±0 | 96% ±0 | 97% -1 |
-| Promotional flag | 80% (159/199) | 82% -2 | 77% +3 | 78% +2 | 78% +2 |
+| Claims found (of the reference) | 85% (1762/2077) | 56% +29 | 83% +2 | 74% +10 | 75% +10 |
+| Claims that are real (of produced) | 91% (2399/2634) | 95% -4 | 88% +4 | 91% ±0 | 94% -3 |
+| Sentiment | 89% (1922/2162) | 86% +3 | 89% ±0 | 89% ±0 | 88% +1 |
+| Aspect, exact | 61% (1327/2162) | 63% -2 | 64% -3 | 51% +10 | 49% +12 |
+| Aspect, right root | 78% (1697/2162) | 78% +1 | 84% -5 | 77% +1 | 73% +5 |
+| Kind | 85% (1841/2162) | 47% +38 | 87% -2 | 85% +1 | 86% -1 |
+| Kind given at all | 98% (2162/2208) | 4% +94 | 99% -1 | 100% -2 | 100% -2 |
+| Changes that are changes | 40% (35/87) | 46% -6 | 44% -4 | 40% +1 | 53% -13 |
+| Changes found | 59% (19/32) | 38% +22 | 56% +3 | 41% +19 | 38% +22 |
+| Amount | 66% (61/92) | 46% +20 | 61% +5 | 65% +1 | 53% +13 |
+| Foods named, precision | 80% (1141/1426) | 46% +34 | 78% +2 | 78% +2 | 74% +6 |
+| Foods named, recall | 75% (1051/1396) | 39% +36 | 77% -2 | 72% +3 | 68% +7 |
+| Subject (place, city, none) | 86% (2266/2630) | 85% +1 | 87% -1 | 87% -1 | 84% +2 |
+| Claim on the right place | 91% (1967/2160) | 85% +7 | 89% +2 | 91% +1 | 90% +1 |
+| Places found | 90% (389/433) | 73% +17 | 91% -1 | 83% +7 | 81% +9 |
+| Places that are places | 89% (389/438) | 85% +4 | 89% -1 | 92% -3 | 92% -3 |
+| Match: brand (found places) | 93% (361/389) | 92% +1 | 92% +1 | 92% +1 | 92% +1 |
+| Match: branch (right brand) | 95% (295/309) | 97% -2 | 95% ±0 | 94% +1 | 96% ±0 |
+| Match on the reference's places: brand | 92% (399/433) | — | 92% ±0 | 93% -1 | 93% -1 |
+| Match on the reference's places: branch | 96% (326/340) | — | 96% ±0 | 96% ±0 | 96% ±0 |
+| Promotional flag | 80% (159/199) | 82% -2 | 77% +3 | 79% +1 | 79% +1 |
 
 _Other runs show their share and the points this run is above (+) or below (−) it._
 
@@ -55,124 +55,124 @@ _Only the test side: cases never read while tuning. A change counts when it move
 
 ### Reviews
 
-| Metric | mini-v6b (train) | mini-v6b (test) | mini-v6 (test) | one-v1 (test) | mini-v5 (test) |
+| Metric | mini-v6b (train) | mini-v6b (test) | mini-v6 (test) | mini-base-2 (test) | mini-base (test) |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 95% | 94% (280/298) | 95% -1 | 98% -4 | — |
-| Claims that are real (of produced) | 98% | 100% (358/359) | 100% ±0 | 99% ±0 | — |
-| Sentiment | 92% | 94% (287/305) | 91% +3 | 91% +3 | — |
-| Aspect, exact | 80% | 77% (234/305) | 85% -8 | 87% -10 | — |
-| Aspect, right root | 85% | 82% (251/305) | 91% -9 | 91% -9 | — |
-| Kind | 94% | 98% (298/305) | 95% +3 | 95% +3 | — |
-| Kind given at all | 100% | 95% (305/322) | 100% -5 | 100% -5 | — |
-| Changes that are changes | 76% | 67% (2/3) | 40% +27 | 40% +27 | — |
-| Changes found | 79% | 100% (2/2) | 100% ±0 | 100% ±0 | — |
-| Amount | 56% | 81% (13/16) | 72% +9 | 72% +9 | — |
-| Foods named, precision | 78% | 78% (81/104) | 84% -6 | 76% +2 | — |
-| Foods named, recall | 84% | 67% (79/118) | 84% -17 | 83% -16 | — |
+| Claims found (of the reference) | 95% | 94% (280/298) | 95% -1 | 94% ±0 | 97% -3 |
+| Claims that are real (of produced) | 98% | 100% (358/359) | 100% ±0 | 100% ±0 | 99% +1 |
+| Sentiment | 92% | 94% (287/305) | 91% +3 | 92% +2 | 92% +2 |
+| Aspect, exact | 76% | 72% (219/305) | 79% -8 | 76% -5 | 77% -5 |
+| Aspect, right root | 83% | 80% (244/305) | 89% -9 | 86% -6 | 87% -7 |
+| Kind | 94% | 98% (298/305) | 95% +3 | 91% +7 | 91% +7 |
+| Kind given at all | 100% | 95% (305/322) | 100% -5 | 100% -5 | 100% -5 |
+| Changes that are changes | 76% | 67% (2/3) | 40% +27 | 100% -33 | 40% +27 |
+| Changes found | 79% | 100% (2/2) | 100% ±0 | 100% ±0 | 100% ±0 |
+| Amount | 56% | 81% (13/16) | 72% +9 | 73% +8 | 81% ±0 |
+| Foods named, precision | 78% | 78% (81/104) | 84% -6 | 67% +11 | 78% ±0 |
+| Foods named, recall | 84% | 67% (79/118) | 84% -17 | 62% +5 | 70% -3 |
 
 ### Posts and articles
 
-| Metric | mini-v6b (train) | mini-v6b (test) | mini-v6 (test) | one-v1 (test) | mini-v5 (test) |
+| Metric | mini-v6b (train) | mini-v6b (test) | mini-v6 (test) | mini-base-2 (test) | mini-base (test) |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 83% | 90% (544/606) | 86% +3 | 91% -1 | 86% +4 |
-| Claims that are real (of produced) | 90% | 92% (778/842) | 89% +4 | 91% +1 | 86% +6 |
-| Sentiment | 89% | 90% (616/688) | 89% ±0 | 91% -1 | 90% -1 |
-| Aspect, exact | 73% | 70% (479/688) | 74% -5 | 75% -6 | 67% +3 |
-| Aspect, right root | 82% | 80% (550/688) | 83% -3 | 85% -5 | 76% +4 |
-| Kind | 85% | 85% (584/688) | 87% -2 | 86% -2 | 87% -2 |
-| Kind given at all | 98% | 97% (688/709) | 100% -3 | 100% -3 | 100% -3 |
-| Changes that are changes | 40% | 41% (12/29) | 54% -12 | 50% -9 | 50% -9 |
-| Changes found | 50% | 80% (8/10) | 70% +10 | 70% +10 | 60% +20 |
-| Amount | 67% | 66% (21/32) | 67% -1 | 72% -6 | 72% -6 |
-| Foods named, precision | 80% | 79% (343/434) | 80% -1 | 72% +7 | 76% +3 |
-| Foods named, recall | 78% | 70% (311/447) | 79% -9 | 80% -10 | 77% -8 |
-| Subject (place, city, none) | 85% | 89% (741/835) | 86% +3 | 91% -2 | 87% +1 |
-| Claim on the right place | 91% | 90% (635/704) | 91% -1 | 88% +2 | 86% +4 |
-| Places found | 92% | 85% (94/111) | 86% -2 | 84% +1 | 82% +3 |
-| Places that are places | 90% | 84% (94/112) | 90% -6 | 88% -4 | 86% -2 |
-| Match: brand (found places) | 93% | 91% (86/94) | 91% +1 | 90% +1 | 96% -4 |
-| Match: branch (right brand) | 95% | 99% (70/71) | 99% ±0 | 99% ±0 | 97% +1 |
-| Match on the reference's places: brand | 92% | 93% (103/111) | 92% +1 | 93% ±0 | 93% ±0 |
-| Match on the reference's places: branch | 96% | 96% (82/85) | 98% -1 | 96% ±0 | 98% -1 |
-| Promotional flag | 80% | 79% (46/58) | 78% +2 | 79% ±0 | 78% +2 |
+| Claims found (of the reference) | 83% | 90% (544/606) | 86% +3 | 72% +18 | 72% +17 |
+| Claims that are real (of produced) | 90% | 92% (778/842) | 89% +4 | 95% -3 | 96% -3 |
+| Sentiment | 89% | 90% (616/688) | 89% ±0 | 91% -1 | 92% -3 |
+| Aspect, exact | 62% | 59% (408/688) | 61% -2 | 51% +8 | 51% +9 |
+| Aspect, right root | 79% | 77% (531/688) | 79% -2 | 77% ±0 | 76% +2 |
+| Kind | 85% | 85% (586/688) | 87% -2 | 87% -2 | 89% -4 |
+| Kind given at all | 98% | 97% (688/709) | 100% -3 | 99% -2 | 100% -3 |
+| Changes that are changes | 40% | 41% (12/29) | 54% -12 | 21% +20 | 45% -4 |
+| Changes found | 50% | 80% (8/10) | 70% +10 | 30% +50 | 30% +50 |
+| Amount | 67% | 66% (21/32) | 65% +1 | 80% -14 | 69% -4 |
+| Foods named, precision | 80% | 79% (343/434) | 80% -1 | 82% -3 | 78% +1 |
+| Foods named, recall | 78% | 70% (311/447) | 79% -9 | 73% -4 | 67% +3 |
+| Subject (place, city, none) | 85% | 89% (741/835) | 86% +3 | 83% +6 | 85% +4 |
+| Claim on the right place | 91% | 90% (635/704) | 91% -1 | 88% +2 | 84% +6 |
+| Places found | 92% | 85% (94/111) | 86% -2 | 80% +5 | 78% +6 |
+| Places that are places | 90% | 84% (94/112) | 90% -6 | 86% -2 | 85% -1 |
+| Match: brand (found places) | 93% | 91% (86/94) | 91% +1 | 91% ±0 | 90% +2 |
+| Match: branch (right brand) | 95% | 99% (70/71) | 99% ±0 | 96% +3 | 97% +2 |
+| Match on the reference's places: brand | 92% | 93% (103/111) | 92% +1 | 90% +3 | 93% ±0 |
+| Match on the reference's places: branch | 96% | 96% (82/85) | 98% -1 | 98% -1 | 95% +1 |
+| Promotional flag | 80% | 79% (46/58) | 78% +2 | 83% -3 | 81% -2 |
 
 ## By case tag
 
 | Tag | Claims found (of the reference) | Claims that are real (of produced) | Aspect, exact | Sentiment | Places found | Match: brand (found places) |
 |---|---|---|---|---|---|---|
-| chain | 96% (372/389) | 100% (476/478) | 81% (331/407) | 95% (388/407) | — | — |
-| hard | 88% (80/91) | 93% (104/112) | 74% (71/96) | 93% (89/96) | 100% (11/11) | 100% (11/11) |
-| lang:de | 91% (326/359) | 98% (413/420) | 85% (313/368) | 94% (345/368) | — | — |
-| lang:en | 95% (228/239) | 100% (296/297) | 76% (199/262) | 94% (245/262) | — | — |
-| lang:other | 97% (303/313) | 98% (411/420) | 76% (259/342) | 91% (312/342) | — | — |
+| chain | 96% (372/389) | 100% (476/478) | 77% (313/407) | 95% (388/407) | — | — |
+| hard | 88% (80/91) | 93% (104/112) | 67% (64/96) | 93% (89/96) | 100% (11/11) | 100% (11/11) |
+| lang:de | 91% (326/359) | 98% (413/420) | 81% (297/368) | 94% (345/368) | — | — |
+| lang:en | 95% (228/239) | 100% (296/297) | 71% (185/262) | 94% (245/262) | — | — |
+| lang:other | 97% (303/313) | 98% (411/420) | 70% (241/342) | 91% (312/342) | — | — |
 | lang:tr | 99% (66/67) | 100% (95/95) | 77% (49/64) | 89% (57/64) | — | — |
-| length:long | 91% (269/294) | 97% (398/411) | 75% (230/308) | 90% (276/308) | — | — |
-| length:medium | 96% (600/627) | 99% (758/762) | 81% (541/669) | 93% (625/669) | — | — |
-| length:short | 95% (54/57) | 100% (59/59) | 83% (49/59) | 98% (58/59) | — | — |
-| no-transcript | 92% (444/482) | 91% (580/636) | 74% (403/544) | 93% (505/544) | 95% (121/127) | 94% (114/121) |
-| own | 95% (63/66) | 85% (94/110) | 75% (62/83) | 94% (78/83) | 100% (20/20) | 100% (20/20) |
-| places:few | 87% (1301/1490) | 92% (1895/2052) | 71% (1128/1594) | 92% (1460/1594) | 89% (166/186) | 93% (154/166) |
-| places:many | 78% (452/578) | 87% (492/565) | 74% (414/557) | 81% (453/557) | 90% (221/245) | 93% (205/221) |
+| length:long | 91% (269/294) | 97% (398/411) | 72% (223/308) | 90% (276/308) | — | — |
+| length:medium | 96% (600/627) | 99% (758/762) | 75% (503/669) | 93% (625/669) | — | — |
+| length:short | 95% (54/57) | 100% (59/59) | 78% (46/59) | 98% (58/59) | — | — |
+| no-transcript | 92% (444/482) | 91% (580/636) | 64% (350/544) | 93% (505/544) | 95% (121/127) | 94% (114/121) |
+| own | 95% (63/66) | 85% (94/110) | 70% (58/83) | 94% (78/83) | 100% (20/20) | 100% (20/20) |
+| places:few | 87% (1301/1490) | 92% (1895/2052) | 60% (958/1594) | 92% (1459/1594) | 89% (166/186) | 93% (154/166) |
+| places:many | 78% (452/578) | 87% (492/565) | 65% (361/557) | 81% (453/557) | 90% (221/245) | 93% (205/221) |
 | places:none | 100% (9/9) | 71% (12/17) | 73% (8/11) | 91% (10/11) | 100% (2/2) | 100% (2/2) |
-| platform:blog | 80% (855/1067) | 92% (1187/1297) | 70% (734/1047) | 86% (904/1047) | 84% (167/199) | 96% (161/167) |
-| platform:google | 94% (923/978) | 99% (1215/1232) | 79% (820/1036) | 93% (959/1036) | — | — |
-| platform:instagram | 92% (298/325) | 92% (389/423) | 75% (276/367) | 92% (339/367) | 94% (67/71) | 93% (62/67) |
-| platform:tiktok | 89% (609/685) | 90% (823/914) | 72% (540/748) | 91% (680/748) | 95% (155/163) | 89% (138/155) |
-| size:large | 82% (829/1016) | 93% (1149/1238) | 70% (693/991) | 87% (861/991) | 84% (161/191) | 93% (149/161) |
-| size:medium | 86% (657/767) | 91% (857/938) | 71% (571/803) | 90% (723/803) | 94% (134/142) | 93% (125/134) |
-| size:small | 94% (276/294) | 86% (393/458) | 78% (286/368) | 92% (339/368) | 94% (94/100) | 93% (87/94) |
-| stars:1 | 97% (156/161) | 97% (216/222) | 78% (131/168) | 92% (155/168) | — | — |
-| stars:2 | 96% (156/162) | 97% (212/219) | 76% (132/174) | 90% (156/174) | — | — |
-| stars:3 | 92% (201/219) | 100% (258/259) | 75% (174/231) | 90% (207/231) | — | — |
-| stars:4 | 94% (191/204) | 100% (254/254) | 81% (174/215) | 94% (202/215) | — | — |
-| stars:5 | 94% (219/232) | 99% (275/278) | 84% (209/248) | 96% (239/248) | — | — |
-| transcript | 88% (463/528) | 90% (632/701) | 72% (413/571) | 90% (514/571) | 94% (101/107) | 85% (86/101) |
+| platform:blog | 80% (855/1067) | 92% (1187/1297) | 58% (606/1047) | 86% (903/1047) | 84% (167/199) | 96% (161/167) |
+| platform:google | 94% (923/978) | 99% (1215/1232) | 75% (772/1036) | 93% (959/1036) | — | — |
+| platform:instagram | 92% (298/325) | 92% (389/423) | 64% (236/367) | 92% (339/367) | 94% (67/71) | 93% (62/67) |
+| platform:tiktok | 89% (609/685) | 90% (823/914) | 65% (485/748) | 91% (680/748) | 95% (155/163) | 89% (138/155) |
+| size:large | 82% (829/1016) | 93% (1149/1238) | 60% (595/991) | 87% (860/991) | 84% (161/191) | 93% (149/161) |
+| size:medium | 86% (657/767) | 91% (857/938) | 61% (487/803) | 90% (723/803) | 94% (134/142) | 93% (125/134) |
+| size:small | 94% (276/294) | 86% (393/458) | 67% (245/368) | 92% (339/368) | 94% (94/100) | 93% (87/94) |
+| stars:1 | 97% (156/161) | 97% (216/222) | 74% (125/168) | 92% (155/168) | — | — |
+| stars:2 | 96% (156/162) | 97% (212/219) | 75% (130/174) | 90% (156/174) | — | — |
+| stars:3 | 92% (201/219) | 100% (258/259) | 68% (158/231) | 90% (207/231) | — | — |
+| stars:4 | 94% (191/204) | 100% (254/254) | 77% (166/215) | 94% (202/215) | — | — |
+| stars:5 | 94% (219/232) | 99% (275/278) | 78% (193/248) | 96% (239/248) | — | — |
+| transcript | 88% (463/528) | 90% (632/701) | 65% (371/571) | 90% (514/571) | 94% (101/107) | 85% (86/101) |
 
 ## Misses
 
-### parts.aspect (828)
+### parts.aspect (1099)
 
-- `review-02556664` at the competition you eat exactly the same thing with limo…: food ≠ taste
-- `review-02d1586d` they thank the waiter as well: service ≠ none
+- `review-019a8099` a very nice restaurant: none ≠ atmosphere
+- `review-02556664` at the competition you eat exactly the same thing with limo…: none ≠ taste
+- `review-02d1586d` the staff were very good: service ≠ friendliness
 - `review-0541b749` the frites were frozen: ingredient_quality ≠ seasoning
-- `review-0541b749` the meat in the sandwich was chicken only: menu_variety ≠ ingredient_quality
 - `review-070860ca` not worth the hassle: none ≠ value_for_money
-- `review-0f14e04b` great food: taste ≠ none
+- `review-07871fa7` they add some kind of potato to the dürüm as standard, whic…: food ≠ taste
+- `review-0f14e04b` great food: food ≠ none
 - `review-0f14e04b` great service: service ≠ none
 - `review-0f14e04b` good prices: price_level ≠ none
-- `review-1016bd13` pre-ordered a menu of 4 cold dishes, 8 hot dishes and one s…: none ≠ menu_variety
-- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: none ≠ menu_variety
-- `review-1016bd13` the soup was served quickly on arrival: speed_of_service ≠ none
-- `review-1016bd13` reserved 15 tables in total: none ≠ wait_for_table
+- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: drinks ≠ menu_variety
+- `review-1016bd13` arranged a 7 PM time with the restaurant in advance: reservation_handling ≠ none
+- `review-1016bd13` called the lobby manager 20 minutes ahead so hot dishes cou…: reservation_handling ≠ none
+- `review-1016bd13` the restaurant said the cold dishes were already set out: service ≠ none
+- `review-1016bd13` the soup was served quickly on arrival: wait_for_food ≠ none
+- `review-1016bd13` reserved 15 tables in total: reservation_handling ≠ wait_for_table
 - `review-1016bd13` none of the tables had a bottle opener: service ≠ none
 - `review-1016bd13` had to find waiters to open the bottles, chaotic with over …: attentiveness ≠ none
-- `review-1016bd13` all hot dishes (15 plates each for 15 tables) came within j…: speed_of_service ≠ none
+- `review-1016bd13` all hot dishes (15 plates each for 15 tables) came within j…: wait_for_food ≠ none
 - `review-1016bd13` for a full 20 minutes the guests only had 4 cold dishes and…: wait_for_food ≠ none
 - `review-1016bd13` repeatedly urged the manager and runners but was only told …: complaint_handling ≠ none
 - `review-1016bd13` asked the manager to serve each dish as ready but got no ef…: complaint_handling ≠ none
-- `review-1016bd13` asks why, if staff served dishes one at a time, all 8 hot d…: speed_of_service ≠ none
-- `review-1016bd13` suspects the hot dishes were deliberately held in the kitch…: speed_of_service ≠ none
-- `review-1016bd13` waiters kept pushing drinks on guests while they waited, wh…: service ≠ none
+- `review-1016bd13` asks why, if staff served dishes one at a time, all 8 hot d…: wait_for_food ≠ none
+- `review-1016bd13` suspects the hot dishes were deliberately held in the kitch…: pressure ≠ none
+- `review-1016bd13` waiters kept pushing drinks on guests while they waited, wh…: pressure ≠ none
 - `review-1016bd13` drinks are sold at exorbitant prices: price_level ≠ none
-- `review-1016bd13` asks whether serving hot dishes earlier would really mean f…: speed_of_service ≠ none
+- `review-1016bd13` asks whether serving hot dishes earlier would really mean f…: pressure ≠ none
 - `review-1104925b` the food is so, so delicious: taste ≠ none
 - `review-1104925b` the staff are friendly: friendliness ≠ none
 - `review-1104925b` Kebab No. 1 is super tasty: taste ≠ none
+- `review-13683c42` the chain has several locations in Berlin: other ≠ none
 - `review-13683c42` the hamburguesas are decent: taste ≠ none
 - `review-13683c42` the price is similar to McDonald's: price_level ≠ none
 - `review-13683c42` the hamburguesas are not as industrial as McDonald's: ingredient_quality ≠ none
 - `review-13683c42` the patatas fritas are tastier than McDonald's: taste ≠ none
+- `review-13683c42` Burgermeister is an option for a quick lunch or dinner: occasion ≠ none
 - `review-13683c42` the price is reasonable: price_level ≠ none
 - `review-13683c42` some locations only have a terrace with high tables: outdoor_seating ≠ none
 - `review-13683c42` the seating is quite uncomfortable: interior ≠ none
 - `review-13f72d12` the taste of the kebsa was mediocre: taste ≠ none
-- `review-13f72d12` has had better kebsa elsewhere in Berlin: taste ≠ none
 - `review-164fbfea` the burgers were very good: taste ≠ none
-- `review-164fbfea` nice location: location ≠ none
-- `review-16bdd5e0` they mixed up our sauces: order_accuracy ≠ none
-- `review-16bdd5e0` my sauce was wrong: order_accuracy ≠ none
-- `review-16bdd5e0` the halloumi was described as "grilled cheese", which was m…: food ≠ none
-- … 788 more in issues.jsonl
+- … 1059 more in issues.jsonl
 
 ### parts.foods (661)
 
@@ -350,7 +350,7 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-1c0d4023` Horváth is recommended by 6 food editorial teams: place ≠ none
 - … 324 more in issues.jsonl
 
-### parts.sentiment (316)
+### parts.sentiment (317)
 
 - `review-019a8099` sitting outside can be annoying because the restaurant is a…: negative ≠ neutral
 - `review-02556664` after 30 minutes the reviewer had moved only 3 metres in th…: negative ≠ neutral
@@ -392,7 +392,7 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `review-693fb047` expected the best kebab but the kebab was only edible: negative ≠ neutral
 - `review-71868223` glad they waited in the queue: positive ≠ neutral
 - `review-7483275e` the long wait was due to the service, not the queue itself: negative ≠ neutral
-- … 276 more in issues.jsonl
+- … 277 more in issues.jsonl
 
 ### claims.extra (252)
 

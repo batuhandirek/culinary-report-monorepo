@@ -115,8 +115,8 @@ describe('editorPack', () => {
 		// Most viewed first, each with what it said and what the comments under it said
 		expect(pack.postsByOthers!.map(p => p.creator)).toEqual(['@navito on TikTok, 492700 followers', '@traitic on TikTok, 460 followers']);
 		expect(pack.postsByOthers![0].commentsUnderIt).toMatchObject({ read: 79, disagreed: 11, whatTheDisagreeingOnesSay: 'Several call it overpriced and hype.' });
-		// A claim filed at a root is named by the root alone
-		expect(pack.postsByOthers![1].complaints).toEqual(['other: owner allegedly involved in a case']);
+		// A claim filed at a root is named by the root's label alone (`other` is "Practical")
+		expect(pack.postsByOthers![1].complaints).toEqual(['practical: owner allegedly involved in a case']);
 		// A neutral claim is material too, as noted, with the wording it names as a dish
 		expect(pack.postsByOthers![0].noted).toEqual(['price / price level: fries for 10 euros']);
 		expect(pack.postsByOthers![0].dishes).toEqual(['fries (neutral)']);

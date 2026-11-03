@@ -218,7 +218,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:20:48.632Z",
     "usage": {
       "inputTokens": 14400,
@@ -274,7 +274,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere"
+            "atmosphere",
+            "none"
           ],
           "kinds": [
             "verdict"
@@ -296,7 +297,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -316,8 +317,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere",
-            "location"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -328,7 +328,7 @@
         "text": "Magma is a day bar, wine bar and scene hangout at once",
         "quote": "Tagesbar, Weinlokal und Szenetreff zugleich",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "vibe",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -337,7 +337,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
+            "occasion",
             "menu_variety"
           ],
           "kinds": []
@@ -367,7 +367,7 @@
         "text": "at the next table people talk about their last Berghain visit",
         "quote": "Am Nebentisch wird über den letzten Berghainbesuch gesprochen",
         "sentiment": "neutral",
-        "aspect": "vibe",
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -376,7 +376,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere",
             "crowding"
           ],
           "kinds": []
@@ -486,7 +485,7 @@
         "text": "the Hauswein is a Greek orange wine",
         "quote": "der Hauswein – griechisch, orange",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "Hauswein"
         ],
@@ -496,9 +495,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -538,9 +535,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "drinks"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -550,7 +545,7 @@
         "text": "the alcohol-free Helles pleasingly comes in a can",
         "quote": "erfreulicherweise in der Dose",
         "sentiment": "positive",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "alkoholfreies Helles"
         ],
@@ -561,7 +556,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_selection"
+            "drinks"
           ],
           "kinds": []
         },
@@ -594,7 +589,7 @@
         "text": "Magma is perfect for date nights",
         "quote": "Das Magma ist perfekt für Date-Nights",
         "sentiment": "positive",
-        "aspect": "atmosphere",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -602,9 +597,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -616,7 +609,7 @@
         "text": "the Tomato Tonnato uses large slices of aromatic Fleischtomaten with a creamy Thunfischsoße instead of veal",
         "quote": "statt Kalbsfleisch große Scheiben aromatischer Fleischtomaten mit einer sämigen Thunfischsoße garniert",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "menu_variety",
         "foods": [
           "Tomato Tonnato",
           "Fleischtomaten",
@@ -629,7 +622,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -651,6 +644,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "menu_variety",
             "taste"
           ],
           "kinds": []
@@ -662,7 +656,7 @@
         "text": "whipped butter always works",
         "quote": "Auch geschlagene Butter geht immer",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "geschlagene Butter"
         ],
@@ -673,7 +667,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         },
@@ -696,7 +690,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -707,7 +701,7 @@
         "text": "the butter is served with wheat sourdough bread from Albatross Bäckerei",
         "quote": "zum Weizensauerteigbrot von der Albatross Bäckerei gereicht",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "ingredient_quality",
         "foods": [
           "Weizensauerteigbrot"
         ],
@@ -720,7 +714,7 @@
             "positive"
           ],
           "aspects": [
-            "ingredient_quality"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -731,7 +725,7 @@
         "text": "Bistro Spumante shows that summer evenings on the Reichenberger Straße sidewalk can become legendary",
         "quote": "Dass laue Sommerabende auf dem Gehweg der Reichenberger Straße legendär werden können, wissen wir bereits aus dem Bistro Spumante",
         "sentiment": "positive",
-        "aspect": "outdoor_seating",
+        "aspect": "location",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -740,6 +734,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "outdoor_seating",
             "atmosphere"
           ],
           "kinds": []
@@ -778,8 +773,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
-            "interior"
+            "vibe"
           ],
           "kinds": []
         },
@@ -798,7 +792,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "space"
+          ],
           "kinds": [
             "change"
           ]
@@ -852,7 +848,7 @@
         "text": "a date night at Magma is better without hearing about the last Berghain visit",
         "quote": "aber dann lieber ohne Bericht vom letzten Berghainbesuch",
         "sentiment": "mixed",
-        "aspect": "atmosphere",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -863,8 +859,7 @@
             "negative"
           ],
           "aspects": [
-            "noise",
-            "vibe"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -924,6 +919,16 @@
         "at": "2026-11-01T21:49:05.420Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:37.016Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 18 of 31 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:38.532Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial tipBerlin review of Magma with no sign of payment, gift, invitation or collab; the plug for tipBerlin's own food guide doesn't count.)"
       }
     ]
   }

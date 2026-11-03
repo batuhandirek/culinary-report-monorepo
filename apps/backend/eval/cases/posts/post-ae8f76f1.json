@@ -227,7 +227,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:48:02.854Z",
     "usage": {
       "inputTokens": 11166,
@@ -342,7 +342,7 @@
         "text": "The creator had Menemen with warm Simit",
         "quote": "Menemen mit warmem Simit",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Menemen",
           "Simit"
@@ -396,9 +396,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -430,7 +428,7 @@
         "text": "A colourful breakfast platter came with fruit, vegetables, cold cuts, spread and rolls",
         "quote": "diese bunte Frühstücksplatte mit Obst,\nGemüse, Aufschnitt,\nAufstrich, natürlich Brötchen dazu.",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Frühstücksplatte",
           "Obst",
@@ -502,7 +500,7 @@
         "text": "The creator had never had the fried egg with spinach combination before",
         "quote": "diese Kombination hatte ich vorher noch nie.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -512,9 +510,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -606,7 +602,7 @@
             "positive"
           ],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -647,9 +643,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -685,6 +679,16 @@
         "at": "2026-11-01T21:49:05.437Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:20.565Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 6 of 19 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:01.691Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → true (Creator's giveaway with Velvet Coffee: 'gewinnt 1 Brunch für 2 bei Velvet Coffee', follow both accounts, with contest terms. A collab giveaway with the venue counts as promotional.)"
       }
     ]
   }

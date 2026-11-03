@@ -120,7 +120,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:51:24.535Z",
     "usage": {
       "inputTokens": 9347,
@@ -129,7 +129,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The caption reads like the venue's own self-promotion (tagged at the venue, superlative self-praise, no reviewer voice), so it is marked promotional. The bare dish list is kept as one neutral fact claim. 'Beste Qualität' is read as ingredient quality, with food also acceptable. #weddingres hints at Wedding, but this is too uncertain to use as a location hint.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Falafel Al Amin Imbiss",
@@ -152,7 +152,7 @@
         "text": "Falafel Al Amin Imbiss serves Falafel, schwarma and halloumi",
         "quote": "Falafel schwarma halloumi",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Falafel",
           "schwarma",
@@ -164,10 +164,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food",
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -177,7 +174,7 @@
         "text": "Falafel Al Amin Imbiss has the best quality",
         "quote": "Beste Qualität",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -186,7 +183,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality",
+            "none"
           ],
           "kinds": []
         },
@@ -223,6 +221,16 @@
         "at": "2026-11-01T21:49:05.440Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:22.932Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 3 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:19.003Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (No paid partnership, ad, gift, invitation, collab or giveaway is disclosed; the post only praises the tagged Falafel Al Amin Imbiss.)"
       }
     ]
   }

@@ -140,7 +140,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:23:37.560Z",
     "usage": {
       "inputTokens": 5020,
@@ -180,10 +180,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none",
-            "takeaway_handling"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -258,8 +255,8 @@
             "neutral"
           ],
           "aspects": [
-            "complaint_handling",
-            "takeaway_handling"
+            "takeaway_handling",
+            "complaint_handling"
           ],
           "kinds": [
             "opinion"
@@ -270,7 +267,7 @@
         "text": "the correct order arrived 2 hours late",
         "quote": "didn't get our correct order until 2 hours late",
         "sentiment": "negative",
-        "aspect": "wait_for_food",
+        "aspect": "delivery_platform",
         "foods": [],
         "amount": 120,
         "unit": "minutes",
@@ -279,9 +276,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "takeaway_handling",
-            "delivery_platform",
-            "wait"
+            "wait_for_food"
           ],
           "kinds": [
             "fact"
@@ -292,7 +287,7 @@
         "text": "the food was mid, nothing to write home about",
         "quote": "the food arrived it was mid nothing to write home about",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -303,7 +298,7 @@
             "mixed"
           ],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -337,6 +332,11 @@
         "at": "2026-11-01T21:49:05.401Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:20.703Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 9 claims changed"
       }
     ]
   }

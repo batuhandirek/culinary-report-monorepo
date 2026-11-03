@@ -89,7 +89,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:27:45.878Z",
     "usage": {
       "inputTokens": 5016,
@@ -103,7 +103,7 @@
         "text": "a pleasant evening with a friend",
         "quote": "Serata simpatica in compagnia di un amico.",
         "sentiment": "positive",
-        "aspect": "atmosphere",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -112,8 +112,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
-            "none"
+            "atmosphere"
           ],
           "kinds": [
             "verdict"
@@ -124,7 +123,7 @@
         "text": "the food was quite good",
         "quote": "Abbiamo mangiato discretamente bene.",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -135,7 +134,7 @@
             "mixed"
           ],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": []
         }
@@ -203,6 +202,11 @@
         "at": "2026-11-01T21:49:05.411Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:24.147Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 5 claims changed"
       }
     ]
   }

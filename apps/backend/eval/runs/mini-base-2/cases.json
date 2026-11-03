@@ -21,7 +21,7 @@
         8
       ],
       "parts.aspect": [
-        8,
+        7,
         8
       ],
       "parts.aspect_root": [
@@ -115,7 +115,7 @@
         4
       ],
       "parts.aspect": [
-        3,
+        2,
         4
       ],
       "parts.aspect_root": [
@@ -127,7 +127,7 @@
         4
       ],
       "parts.kind": [
-        3,
+        4,
         4
       ],
       "parts.amount": [
@@ -171,7 +171,7 @@
         11
       ],
       "parts.aspect_root": [
-        9,
+        10,
         11
       ],
       "parts.kind_read": [
@@ -262,7 +262,7 @@
         9
       ],
       "parts.aspect": [
-        6,
+        7,
         9
       ],
       "parts.aspect_root": [
@@ -302,19 +302,19 @@
         8
       ],
       "claims.precision": [
-        10,
+        11,
         11
       ],
       "parts.sentiment": [
-        7,
+        8,
         8
       ],
       "parts.aspect": [
-        4,
+        5,
         8
       ],
       "parts.aspect_root": [
-        4,
+        5,
         8
       ],
       "parts.kind_read": [
@@ -322,7 +322,7 @@
         8
       ],
       "parts.kind": [
-        7,
+        8,
         8
       ],
       "parts.amount": [
@@ -362,7 +362,7 @@
         6
       ],
       "parts.aspect": [
-        6,
+        5,
         6
       ],
       "parts.aspect_root": [
@@ -509,11 +509,11 @@
         18
       ],
       "parts.aspect": [
-        16,
+        14,
         18
       ],
       "parts.aspect_root": [
-        18,
+        17,
         18
       ],
       "parts.kind_read": [
@@ -695,19 +695,19 @@
         19
       ],
       "claims.precision": [
-        34,
+        38,
         40
       ],
       "parts.sentiment": [
-        18,
+        19,
         23
       ],
       "parts.aspect": [
-        14,
+        8,
         23
       ],
       "parts.aspect_root": [
-        16,
+        13,
         23
       ],
       "parts.kind_read": [
@@ -728,7 +728,7 @@
       ],
       "parts.foods_precision": [
         1,
-        11
+        14
       ]
     }
   },
@@ -803,11 +803,11 @@
         10
       ],
       "parts.aspect": [
-        9,
+        8,
         10
       ],
       "parts.aspect_root": [
-        10,
+        9,
         10
       ],
       "parts.kind_read": [
@@ -946,7 +946,7 @@
         6
       ],
       "parts.aspect": [
-        6,
+        5,
         6
       ],
       "parts.aspect_root": [
@@ -975,6 +975,22 @@
       ]
     }
   },
+  "review-170f36a3": {
+    "kind": "review",
+    "tags": [
+      "lang:en",
+      "stars:5",
+      "platform:google",
+      "length:medium",
+      "chain"
+    ],
+    "tally": {
+      "claims.recall": [
+        0,
+        4
+      ]
+    }
+  },
   "review-1798cc23": {
     "kind": "review",
     "tags": [
@@ -997,11 +1013,11 @@
         16
       ],
       "parts.aspect": [
-        12,
+        10,
         16
       ],
       "parts.aspect_root": [
-        15,
+        14,
         16
       ],
       "parts.kind_read": [
@@ -1053,11 +1069,11 @@
         10
       ],
       "parts.aspect": [
-        9,
+        8,
         10
       ],
       "parts.aspect_root": [
-        9,
+        8,
         10
       ],
       "parts.kind_read": [
@@ -1105,11 +1121,11 @@
         3
       ],
       "parts.aspect": [
-        3,
+        2,
         3
       ],
       "parts.aspect_root": [
-        3,
+        2,
         3
       ],
       "parts.kind_read": [
@@ -1200,7 +1216,7 @@
         6
       ],
       "parts.aspect": [
-        6,
+        5,
         6
       ],
       "parts.aspect_root": [
@@ -1345,7 +1361,7 @@
         5
       ],
       "parts.aspect": [
-        3,
+        2,
         5
       ],
       "parts.aspect_root": [
@@ -1441,11 +1457,11 @@
         7
       ],
       "parts.aspect": [
-        1,
+        2,
         7
       ],
       "parts.aspect_root": [
-        1,
+        2,
         7
       ],
       "parts.kind_read": [
@@ -1489,11 +1505,11 @@
         6
       ],
       "parts.aspect": [
-        2,
+        1,
         6
       ],
       "parts.aspect_root": [
-        2,
+        1,
         6
       ],
       "parts.kind_read": [
@@ -1834,7 +1850,7 @@
         19
       ],
       "parts.sentiment": [
-        10,
+        11,
         13
       ],
       "parts.aspect": [
@@ -1890,11 +1906,11 @@
         7
       ],
       "parts.aspect": [
-        0,
+        1,
         7
       ],
       "parts.aspect_root": [
-        0,
+        1,
         7
       ],
       "parts.kind_read": [
@@ -2028,7 +2044,7 @@
     ],
     "tally": {
       "claims.recall": [
-        5,
+        6,
         7
       ],
       "claims.precision": [
@@ -2036,28 +2052,28 @@
         6
       ],
       "parts.sentiment": [
-        7,
-        7
+        8,
+        8
       ],
       "parts.aspect": [
-        5,
-        7
+        6,
+        8
       ],
       "parts.aspect_root": [
-        5,
-        7
+        6,
+        8
       ],
       "parts.kind_read": [
-        7,
-        7
+        8,
+        8
       ],
       "parts.kind": [
-        6,
-        7
+        8,
+        8
       ],
       "parts.amount": [
         0,
-        1
+        2
       ],
       "parts.foods_recall": [
         1,
@@ -2226,19 +2242,19 @@
         4
       ],
       "claims.precision": [
-        9,
+        10,
         11
       ],
       "parts.sentiment": [
-        6,
+        7,
         7
       ],
       "parts.aspect": [
-        6,
+        5,
         7
       ],
       "parts.aspect_root": [
-        6,
+        5,
         7
       ],
       "parts.kind_read": [
@@ -2246,7 +2262,7 @@
         7
       ],
       "parts.kind": [
-        6,
+        7,
         7
       ],
       "parts.foods_recall": [
@@ -2431,7 +2447,7 @@
         7
       ],
       "parts.aspect": [
-        6,
+        5,
         7
       ],
       "parts.aspect_root": [
@@ -2467,7 +2483,7 @@
     ],
     "tally": {
       "claims.recall": [
-        7,
+        6,
         7
       ],
       "claims.precision": [
@@ -2476,30 +2492,30 @@
       ],
       "parts.sentiment": [
         5,
-        8
+        7
       ],
       "parts.aspect": [
         5,
-        8
+        7
       ],
       "parts.aspect_root": [
-        6,
-        8
+        5,
+        7
       ],
       "parts.kind_read": [
-        8,
-        8
+        7,
+        7
       ],
       "parts.kind": [
         7,
-        8
+        7
       ],
       "parts.foods_recall": [
         2,
         3
       ],
       "parts.foods_precision": [
-        2,
+        3,
         4
       ]
     }
@@ -2575,7 +2591,7 @@
         5
       ],
       "parts.aspect": [
-        2,
+        1,
         5
       ],
       "parts.aspect_root": [
@@ -2812,28 +2828,28 @@
         14
       ],
       "parts.sentiment": [
-        12,
-        12
+        13,
+        13
       ],
       "parts.aspect": [
-        11,
-        12
+        12,
+        13
       ],
       "parts.aspect_root": [
-        11,
-        12
+        12,
+        13
       ],
       "parts.kind_read": [
-        12,
-        12
+        13,
+        13
       ],
       "parts.kind": [
-        12,
-        12
+        13,
+        13
       ],
       "parts.foods_recall": [
-        1,
-        1
+        2,
+        2
       ],
       "parts.foods_precision": [
         2,
@@ -2864,11 +2880,11 @@
         10
       ],
       "parts.aspect": [
-        9,
+        8,
         10
       ],
       "parts.aspect_root": [
-        10,
+        9,
         10
       ],
       "parts.kind_read": [
@@ -2919,11 +2935,11 @@
         13
       ],
       "parts.aspect": [
-        12,
+        11,
         13
       ],
       "parts.aspect_root": [
-        12,
+        11,
         13
       ],
       "parts.kind_read": [
@@ -3013,7 +3029,7 @@
         5
       ],
       "claims.precision": [
-        12,
+        14,
         15
       ],
       "parts.sentiment": [
@@ -3041,8 +3057,8 @@
         2
       ],
       "parts.foods_precision": [
-        2,
-        2
+        3,
+        3
       ]
     }
   },
@@ -3068,11 +3084,11 @@
         4
       ],
       "parts.aspect": [
-        4,
+        3,
         4
       ],
       "parts.aspect_root": [
-        4,
+        3,
         4
       ],
       "parts.kind_read": [
@@ -3103,44 +3119,44 @@
     ],
     "tally": {
       "claims.recall": [
-        12,
+        10,
         12
       ],
       "claims.precision": [
-        17,
+        18,
         18
       ],
       "parts.sentiment": [
         12,
-        15
+        14
       ],
       "parts.aspect": [
         7,
-        15
+        14
       ],
       "parts.aspect_root": [
         10,
-        15
+        14
       ],
       "parts.kind_read": [
-        15,
-        15
+        14,
+        14
       ],
       "parts.kind": [
-        13,
-        15
+        12,
+        14
       ],
       "parts.amount": [
-        0,
+        1,
         1
       ],
       "parts.foods_recall": [
-        4,
-        9
-      ],
-      "parts.foods_precision": [
         5,
         8
+      ],
+      "parts.foods_precision": [
+        6,
+        9
       ]
     }
   },
@@ -3215,7 +3231,7 @@
         4
       ],
       "parts.aspect": [
-        2,
+        3,
         4
       ],
       "parts.aspect_root": [
@@ -3227,7 +3243,7 @@
         4
       ],
       "parts.kind": [
-        2,
+        3,
         4
       ],
       "parts.foods_recall": [
@@ -3262,11 +3278,11 @@
         10
       ],
       "parts.aspect": [
-        7,
+        6,
         10
       ],
       "parts.aspect_root": [
-        9,
+        8,
         10
       ],
       "parts.kind_read": [
@@ -3346,7 +3362,7 @@
     ],
     "tally": {
       "claims.recall": [
-        11,
+        12,
         12
       ],
       "claims.precision": [
@@ -3355,27 +3371,27 @@
       ],
       "parts.sentiment": [
         14,
-        15
+        16
       ],
       "parts.aspect": [
-        13,
-        15
+        12,
+        16
       ],
       "parts.aspect_root": [
-        13,
-        15
+        14,
+        16
       ],
       "parts.kind_read": [
-        15,
-        15
+        16,
+        16
       ],
       "parts.kind": [
         15,
-        15
+        16
       ],
       "parts.amount": [
         2,
-        2
+        3
       ],
       "parts.foods_recall": [
         5,
@@ -3508,11 +3524,11 @@
         5
       ],
       "parts.aspect": [
-        5,
+        3,
         5
       ],
       "parts.aspect_root": [
-        5,
+        3,
         5
       ],
       "parts.kind_read": [
@@ -3547,7 +3563,7 @@
         7
       ],
       "claims.precision": [
-        9,
+        10,
         10
       ],
       "parts.sentiment": [
@@ -3577,6 +3593,21 @@
       "parts.foods_precision": [
         0,
         0
+      ]
+    }
+  },
+  "review-69365171": {
+    "kind": "review",
+    "tags": [
+      "lang:de",
+      "stars:4",
+      "platform:google",
+      "length:medium"
+    ],
+    "tally": {
+      "claims.recall": [
+        0,
+        5
       ]
     }
   },
@@ -3698,11 +3729,11 @@
         12
       ],
       "parts.aspect": [
-        11,
+        10,
         12
       ],
       "parts.aspect_root": [
-        11,
+        10,
         12
       ],
       "parts.kind_read": [
@@ -3825,11 +3856,11 @@
         3
       ],
       "parts.aspect": [
-        3,
+        2,
         3
       ],
       "parts.aspect_root": [
-        3,
+        2,
         3
       ],
       "parts.kind_read": [
@@ -3877,7 +3908,7 @@
         4
       ],
       "parts.aspect_root": [
-        3,
+        4,
         4
       ],
       "parts.kind_read": [
@@ -3967,7 +3998,7 @@
         9
       ],
       "parts.aspect": [
-        8,
+        7,
         9
       ],
       "parts.aspect_root": [
@@ -4006,19 +4037,19 @@
         13
       ],
       "claims.precision": [
-        16,
+        17,
         17
       ],
       "parts.sentiment": [
-        13,
+        15,
         16
       ],
       "parts.aspect": [
-        13,
+        14,
         16
       ],
       "parts.aspect_root": [
-        14,
+        15,
         16
       ],
       "parts.kind_read": [
@@ -4034,12 +4065,12 @@
         1
       ],
       "parts.foods_recall": [
-        4,
+        6,
         8
       ],
       "parts.foods_precision": [
-        4,
-        9
+        7,
+        10
       ]
     }
   },
@@ -4116,7 +4147,7 @@
         6
       ],
       "parts.aspect": [
-        6,
+        5,
         6
       ],
       "parts.aspect_root": [
@@ -4175,7 +4206,7 @@
         7
       ],
       "parts.kind": [
-        6,
+        7,
         7
       ],
       "parts.foods_recall": [
@@ -4283,6 +4314,21 @@
       ]
     }
   },
+  "review-7d7ef8ca": {
+    "kind": "review",
+    "tags": [
+      "lang:de",
+      "stars:4",
+      "platform:google",
+      "length:medium"
+    ],
+    "tally": {
+      "claims.recall": [
+        0,
+        7
+      ]
+    }
+  },
   "review-7f3142f7": {
     "kind": "review",
     "tags": [
@@ -4293,7 +4339,7 @@
     ],
     "tally": {
       "claims.recall": [
-        5,
+        6,
         7
       ],
       "claims.precision": [
@@ -4302,23 +4348,23 @@
       ],
       "parts.sentiment": [
         4,
-        5
+        6
       ],
       "parts.aspect": [
-        4,
-        5
+        3,
+        6
       ],
       "parts.aspect_root": [
         4,
-        5
+        6
       ],
       "parts.kind_read": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.kind": [
         4,
-        5
+        6
       ],
       "parts.amount": [
         0,
@@ -4404,11 +4450,11 @@
         3
       ],
       "parts.aspect": [
-        2,
+        3,
         3
       ],
       "parts.aspect_root": [
-        2,
+        3,
         3
       ],
       "parts.kind_read": [
@@ -4596,11 +4642,11 @@
         7
       ],
       "parts.aspect": [
-        4,
+        3,
         7
       ],
       "parts.aspect_root": [
-        7,
+        6,
         7
       ],
       "parts.kind_read": [
@@ -4643,7 +4689,7 @@
         5
       ],
       "parts.aspect": [
-        5,
+        4,
         5
       ],
       "parts.aspect_root": [
@@ -4691,7 +4737,7 @@
         5
       ],
       "parts.aspect": [
-        5,
+        4,
         5
       ],
       "parts.aspect_root": [
@@ -4965,32 +5011,32 @@
     ],
     "tally": {
       "claims.recall": [
-        14,
+        13,
         14
       ],
       "claims.precision": [
-        16,
+        15,
         16
       ],
       "parts.sentiment": [
-        13,
-        15
+        12,
+        13
       ],
       "parts.aspect": [
         10,
-        15
+        13
       ],
       "parts.aspect_root": [
-        13,
-        15
+        11,
+        13
       ],
       "parts.kind_read": [
-        15,
-        15
+        13,
+        13
       ],
       "parts.kind": [
         11,
-        15
+        13
       ],
       "parts.amount": [
         0,
@@ -5020,7 +5066,7 @@
         14
       ],
       "claims.precision": [
-        17,
+        18,
         18
       ],
       "parts.sentiment": [
@@ -5028,11 +5074,11 @@
         17
       ],
       "parts.aspect": [
-        14,
+        15,
         17
       ],
       "parts.aspect_root": [
-        14,
+        15,
         17
       ],
       "parts.kind_read": [
@@ -5040,7 +5086,7 @@
         17
       ],
       "parts.kind": [
-        15,
+        16,
         17
       ],
       "parts.foods_recall": [
@@ -5170,7 +5216,7 @@
         3
       ],
       "parts.aspect": [
-        3,
+        2,
         3
       ],
       "parts.aspect_root": [
@@ -5209,28 +5255,28 @@
         14
       ],
       "claims.precision": [
-        15,
+        17,
         17
       ],
       "parts.sentiment": [
         12,
-        16
+        15
       ],
       "parts.aspect": [
-        11,
-        16
+        12,
+        15
       ],
       "parts.aspect_root": [
         14,
-        16
+        15
       ],
       "parts.kind_read": [
-        16,
-        16
+        15,
+        15
       ],
       "parts.kind": [
         10,
-        16
+        15
       ],
       "parts.amount": [
         1,
@@ -5241,8 +5287,8 @@
         8
       ],
       "parts.foods_precision": [
-        3,
-        6
+        4,
+        7
       ]
     }
   },
@@ -5268,7 +5314,7 @@
         8
       ],
       "parts.aspect": [
-        8,
+        7,
         8
       ],
       "parts.aspect_root": [
@@ -5315,7 +5361,7 @@
         4
       ],
       "parts.aspect": [
-        3,
+        2,
         4
       ],
       "parts.aspect_root": [
@@ -5402,7 +5448,7 @@
         6
       ],
       "claims.precision": [
-        6,
+        8,
         8
       ],
       "parts.sentiment": [
@@ -5414,7 +5460,7 @@
         6
       ],
       "parts.aspect_root": [
-        5,
+        6,
         6
       ],
       "parts.kind_read": [
@@ -5426,12 +5472,12 @@
         6
       ],
       "parts.foods_recall": [
-        2,
+        5,
         5
       ],
       "parts.foods_precision": [
-        2,
-        2
+        5,
+        8
       ]
     }
   },
@@ -5457,7 +5503,7 @@
         7
       ],
       "parts.aspect": [
-        6,
+        5,
         7
       ],
       "parts.aspect_root": [
@@ -5469,7 +5515,7 @@
         7
       ],
       "parts.kind": [
-        4,
+        5,
         7
       ],
       "parts.amount": [
@@ -5509,11 +5555,11 @@
         8
       ],
       "parts.aspect": [
-        6,
+        5,
         8
       ],
       "parts.aspect_root": [
-        6,
+        5,
         8
       ],
       "parts.kind_read": [
@@ -5603,7 +5649,7 @@
         10
       ],
       "parts.aspect": [
-        9,
+        6,
         10
       ],
       "parts.aspect_root": [
@@ -5651,11 +5697,11 @@
         3
       ],
       "parts.aspect": [
-        3,
+        2,
         3
       ],
       "parts.aspect_root": [
-        3,
+        2,
         3
       ],
       "parts.kind_read": [
@@ -5839,11 +5885,11 @@
         11
       ],
       "parts.aspect": [
-        7,
+        6,
         11
       ],
       "parts.aspect_root": [
-        8,
+        9,
         11
       ],
       "parts.kind_read": [
@@ -6028,11 +6074,11 @@
         9
       ],
       "parts.aspect": [
-        7,
+        8,
         9
       ],
       "parts.aspect_root": [
-        7,
+        8,
         9
       ],
       "parts.kind_read": [
@@ -6040,7 +6086,7 @@
         9
       ],
       "parts.kind": [
-        5,
+        6,
         9
       ],
       "parts.amount": [
@@ -6171,7 +6217,7 @@
         6
       ],
       "claims.precision": [
-        8,
+        9,
         9
       ],
       "parts.sentiment": [
@@ -6179,7 +6225,7 @@
         8
       ],
       "parts.aspect": [
-        6,
+        7,
         8
       ],
       "parts.aspect_root": [
@@ -6215,7 +6261,7 @@
     ],
     "tally": {
       "claims.recall": [
-        9,
+        8,
         9
       ],
       "claims.precision": [
@@ -6223,24 +6269,24 @@
         12
       ],
       "parts.sentiment": [
-        10,
-        11
+        9,
+        10
       ],
       "parts.aspect": [
         10,
-        11
+        10
       ],
       "parts.aspect_root": [
         10,
-        11
+        10
       ],
       "parts.kind_read": [
-        11,
-        11
+        10,
+        10
       ],
       "parts.kind": [
-        9,
-        11
+        8,
+        10
       ],
       "parts.foods_recall": [
         11,
@@ -6322,11 +6368,11 @@
         6
       ],
       "parts.aspect": [
-        6,
+        5,
         6
       ],
       "parts.aspect_root": [
-        6,
+        5,
         6
       ],
       "parts.kind_read": [
@@ -6362,7 +6408,7 @@
         8
       ],
       "claims.precision": [
-        9,
+        8,
         9
       ],
       "parts.sentiment": [
@@ -6370,7 +6416,7 @@
         8
       ],
       "parts.aspect": [
-        5,
+        4,
         8
       ],
       "parts.aspect_root": [
@@ -6395,7 +6441,7 @@
       ],
       "parts.foods_precision": [
         2,
-        7
+        6
       ],
       "change.precision": [
         2,
@@ -6477,11 +6523,11 @@
         8
       ],
       "parts.aspect": [
-        8,
+        7,
         8
       ],
       "parts.aspect_root": [
-        8,
+        7,
         8
       ],
       "parts.kind_read": [
@@ -6575,7 +6621,7 @@
         18
       ],
       "parts.aspect": [
-        16,
+        15,
         18
       ],
       "parts.aspect_root": [
@@ -6682,7 +6728,7 @@
         10
       ],
       "parts.kind": [
-        9,
+        10,
         10
       ],
       "parts.foods_recall": [
@@ -6948,7 +6994,7 @@
     ],
     "tally": {
       "claims.recall": [
-        6,
+        7,
         7
       ],
       "claims.precision": [
@@ -6956,24 +7002,24 @@
         7
       ],
       "parts.sentiment": [
-        7,
-        7
+        8,
+        8
       ],
       "parts.aspect": [
-        6,
-        7
+        7,
+        8
       ],
       "parts.aspect_root": [
-        7,
-        7
+        8,
+        8
       ],
       "parts.kind_read": [
-        7,
-        7
+        8,
+        8
       ],
       "parts.kind": [
-        7,
-        7
+        8,
+        8
       ],
       "parts.amount": [
         1,
@@ -6981,7 +7027,7 @@
       ],
       "parts.foods_recall": [
         0,
-        4
+        5
       ],
       "parts.foods_precision": [
         0,
@@ -7060,7 +7106,7 @@
         5
       ],
       "parts.aspect": [
-        4,
+        3,
         5
       ],
       "parts.aspect_root": [
@@ -7211,11 +7257,11 @@
         2
       ],
       "parts.aspect": [
-        1,
+        0,
         2
       ],
       "parts.aspect_root": [
-        1,
+        0,
         2
       ],
       "parts.kind_read": [
@@ -7258,11 +7304,11 @@
         14
       ],
       "parts.aspect": [
-        13,
+        14,
         14
       ],
       "parts.aspect_root": [
-        13,
+        14,
         14
       ],
       "parts.kind_read": [
@@ -7400,7 +7446,7 @@
         3
       ],
       "parts.aspect": [
-        2,
+        1,
         3
       ],
       "parts.aspect_root": [
@@ -7499,7 +7545,7 @@
         3
       ],
       "parts.aspect_root": [
-        3,
+        1,
         3
       ],
       "parts.kind_read": [
@@ -7781,7 +7827,7 @@
         7
       ],
       "parts.aspect": [
-        6,
+        5,
         7
       ],
       "parts.aspect_root": [
@@ -7937,7 +7983,7 @@
         11
       ],
       "parts.aspect": [
-        10,
+        9,
         11
       ],
       "parts.aspect_root": [
@@ -7949,7 +7995,7 @@
         11
       ],
       "parts.kind": [
-        8,
+        10,
         11
       ],
       "parts.foods_recall": [
@@ -7984,7 +8030,7 @@
         4
       ],
       "parts.aspect": [
-        4,
+        3,
         4
       ],
       "parts.aspect_root": [
@@ -8066,7 +8112,7 @@
     ],
     "tally": {
       "claims.recall": [
-        8,
+        7,
         8
       ],
       "claims.precision": [
@@ -8074,15 +8120,15 @@
         9
       ],
       "parts.sentiment": [
-        6,
-        9
-      ],
-      "parts.aspect": [
         7,
         9
       ],
-      "parts.aspect_root": [
+      "parts.aspect": [
         8,
+        9
+      ],
+      "parts.aspect_root": [
+        9,
         9
       ],
       "parts.kind_read": [
@@ -8090,15 +8136,15 @@
         9
       ],
       "parts.kind": [
-        8,
+        9,
         9
       ],
       "parts.foods_recall": [
-        1,
-        1
+        2,
+        2
       ],
       "parts.foods_precision": [
-        1,
+        2,
         6
       ]
     }
@@ -8126,7 +8172,7 @@
         10
       ],
       "parts.aspect": [
-        8,
+        6,
         10
       ],
       "parts.aspect_root": [
@@ -8189,7 +8235,7 @@
         2
       ],
       "parts.kind": [
-        1,
+        2,
         2
       ],
       "parts.foods_recall": [
@@ -8369,11 +8415,11 @@
         6
       ],
       "parts.aspect": [
-        4,
+        3,
         6
       ],
       "parts.aspect_root": [
-        4,
+        5,
         6
       ],
       "parts.kind_read": [
@@ -8424,7 +8470,7 @@
         6
       ],
       "parts.aspect": [
-        5,
+        4,
         6
       ],
       "parts.aspect_root": [
@@ -8507,7 +8553,7 @@
         9
       ],
       "parts.aspect": [
-        9,
+        7,
         9
       ],
       "parts.aspect_root": [
@@ -8573,7 +8619,7 @@
     ],
     "tally": {
       "claims.recall": [
-        15,
+        14,
         21
       ],
       "claims.precision": [
@@ -8581,28 +8627,28 @@
         20
       ],
       "parts.sentiment": [
-        16,
-        17
+        15,
+        16
       ],
       "parts.aspect": [
-        11,
-        17
+        8,
+        16
       ],
       "parts.aspect_root": [
-        16,
-        17
+        14,
+        16
       ],
       "parts.kind_read": [
-        17,
-        17
+        16,
+        16
       ],
       "parts.kind": [
-        16,
-        17
+        15,
+        16
       ],
       "parts.foods_recall": [
         17,
-        20
+        19
       ],
       "parts.foods_precision": [
         17,
@@ -8637,8 +8683,8 @@
         1
       ],
       "claims.subject": [
-        20,
-        21
+        19,
+        20
       ],
       "claims.place": [
         14,
@@ -8664,11 +8710,11 @@
         1
       ],
       "parts.aspect": [
-        1,
+        0,
         1
       ],
       "parts.aspect_root": [
-        1,
+        0,
         1
       ],
       "parts.kind_read": [
@@ -8719,11 +8765,11 @@
         5
       ],
       "parts.aspect": [
-        2,
+        5,
         5
       ],
       "parts.aspect_root": [
-        2,
+        5,
         5
       ],
       "parts.kind_read": [
@@ -8793,40 +8839,40 @@
     ],
     "tally": {
       "claims.recall": [
-        7,
+        8,
         16
       ],
       "claims.precision": [
-        8,
+        10,
         11
       ],
       "parts.sentiment": [
         7,
-        9
+        8
       ],
       "parts.aspect": [
-        4,
-        9
+        2,
+        8
       ],
       "parts.aspect_root": [
-        6,
-        9
+        7,
+        8
       ],
       "parts.kind_read": [
-        9,
-        9
+        8,
+        8
       ],
       "parts.kind": [
         7,
-        9
+        8
       ],
       "parts.foods_recall": [
-        3,
-        4
+        7,
+        8
       ],
       "parts.foods_precision": [
-        4,
-        8
+        9,
+        9
       ],
       "post.promotional": [
         1,
@@ -8857,12 +8903,12 @@
         1
       ],
       "claims.subject": [
-        13,
-        14
+        8,
+        10
       ],
       "claims.place": [
-        13,
-        13
+        8,
+        8
       ]
     }
   },
@@ -8888,7 +8934,7 @@
         2
       ],
       "parts.aspect": [
-        1,
+        0,
         2
       ],
       "parts.aspect_root": [
@@ -8900,7 +8946,7 @@
         2
       ],
       "parts.kind": [
-        1,
+        2,
         2
       ],
       "parts.foods_recall": [
@@ -8951,11 +8997,11 @@
         14
       ],
       "parts.aspect": [
-        9,
+        8,
         14
       ],
       "parts.aspect_root": [
-        11,
+        12,
         14
       ],
       "parts.kind_read": [
@@ -9021,35 +9067,35 @@
         18
       ],
       "claims.precision": [
-        16,
+        17,
         17
       ],
       "parts.sentiment": [
-        18,
-        22
+        17,
+        19
       ],
       "parts.aspect": [
-        11,
-        22
+        7,
+        19
       ],
       "parts.aspect_root": [
-        17,
-        22
+        16,
+        19
       ],
       "parts.kind_read": [
-        22,
-        22
+        19,
+        19
       ],
       "parts.kind": [
-        13,
-        22
+        15,
+        19
       ],
       "parts.foods_recall": [
-        6,
+        7,
         9
       ],
       "parts.foods_precision": [
-        6,
+        7,
         7
       ],
       "post.promotional": [
@@ -9081,12 +9127,12 @@
         8
       ],
       "claims.subject": [
-        24,
-        24
+        22,
+        22
       ],
       "claims.place": [
-        23,
-        24
+        22,
+        22
       ]
     }
   },
@@ -9113,11 +9159,11 @@
         7
       ],
       "parts.aspect": [
-        6,
+        5,
         7
       ],
       "parts.aspect_root": [
-        7,
+        6,
         7
       ],
       "parts.kind_read": [
@@ -9200,7 +9246,7 @@
         3
       ],
       "parts.aspect_root": [
-        3,
+        2,
         3
       ],
       "parts.kind_read": [
@@ -9263,7 +9309,7 @@
         2
       ],
       "claims.precision": [
-        6,
+        3,
         8
       ],
       "parts.sentiment": [
@@ -9315,12 +9361,12 @@
         2
       ],
       "claims.subject": [
-        6,
-        6
+        3,
+        3
       ],
       "claims.place": [
-        4,
-        4
+        2,
+        2
       ]
     }
   },
@@ -9408,7 +9454,7 @@
     ],
     "tally": {
       "claims.recall": [
-        23,
+        20,
         24
       ],
       "claims.precision": [
@@ -9416,28 +9462,28 @@
         20
       ],
       "parts.sentiment": [
-        20,
-        29
+        17,
+        20
       ],
       "parts.aspect": [
-        21,
-        29
+        12,
+        20
       ],
       "parts.aspect_root": [
-        26,
-        29
+        18,
+        20
       ],
       "parts.kind_read": [
-        29,
-        29
+        20,
+        20
       ],
       "parts.kind": [
-        20,
-        29
+        16,
+        20
       ],
       "parts.foods_recall": [
-        8,
-        12
+        7,
+        11
       ],
       "parts.foods_precision": [
         9,
@@ -9468,12 +9514,12 @@
         4
       ],
       "claims.subject": [
-        28,
-        31
+        21,
+        22
       ],
       "claims.place": [
-        25,
-        27
+        18,
+        20
       ]
     }
   },
@@ -9897,7 +9943,7 @@
         7
       ],
       "claims.precision": [
-        11,
+        12,
         13
       ],
       "parts.sentiment": [
@@ -9905,11 +9951,11 @@
         11
       ],
       "parts.aspect": [
-        11,
+        5,
         11
       ],
       "parts.aspect_root": [
-        11,
+        5,
         11
       ],
       "parts.kind_read": [
@@ -9933,8 +9979,8 @@
         1
       ],
       "claims.subject": [
-        10,
-        11
+        11,
+        12
       ]
     }
   },
@@ -9948,40 +9994,44 @@
     ],
     "tally": {
       "claims.recall": [
-        4,
+        5,
         13
       ],
       "claims.precision": [
-        6,
+        7,
         8
       ],
       "parts.sentiment": [
-        5,
-        6
+        6,
+        7
       ],
       "parts.aspect": [
-        5,
-        6
+        4,
+        7
       ],
       "parts.aspect_root": [
-        5,
-        6
+        6,
+        7
       ],
       "parts.kind_read": [
-        6,
-        6
+        7,
+        7
       ],
       "parts.kind": [
-        5,
-        6
+        6,
+        7
+      ],
+      "parts.amount": [
+        1,
+        1
       ],
       "parts.foods_recall": [
         2,
-        2
+        3
       ],
       "parts.foods_precision": [
         2,
-        4
+        5
       ],
       "post.promotional": [
         1,
@@ -10012,12 +10062,12 @@
         1
       ],
       "claims.subject": [
-        6,
-        6
+        7,
+        7
       ],
       "claims.place": [
-        6,
-        6
+        7,
+        7
       ]
     }
   },
@@ -10034,7 +10084,7 @@
         32
       ],
       "claims.precision": [
-        23,
+        24,
         24
       ],
       "parts.sentiment": [
@@ -10042,11 +10092,11 @@
         20
       ],
       "parts.aspect": [
-        8,
+        7,
         20
       ],
       "parts.aspect_root": [
-        15,
+        17,
         20
       ],
       "parts.kind_read": [
@@ -10054,16 +10104,16 @@
         20
       ],
       "parts.kind": [
-        16,
+        18,
         20
       ],
       "parts.foods_recall": [
-        21,
+        22,
         25
       ],
       "parts.foods_precision": [
-        23,
-        24
+        25,
+        26
       ],
       "post.promotional": [
         1,
@@ -10094,12 +10144,12 @@
         1
       ],
       "claims.subject": [
-        18,
-        24
+        19,
+        25
       ],
       "claims.place": [
-        17,
-        17
+        18,
+        18
       ]
     }
   },
@@ -10125,7 +10175,7 @@
         4
       ],
       "parts.aspect": [
-        3,
+        2,
         4
       ],
       "parts.aspect_root": [
@@ -10181,36 +10231,36 @@
         1
       ],
       "claims.precision": [
-        7,
+        5,
         11
       ],
       "parts.sentiment": [
         3,
-        4
+        3
       ],
       "parts.aspect": [
         1,
-        4
+        3
       ],
       "parts.aspect_root": [
         1,
-        4
+        3
       ],
       "parts.kind_read": [
-        4,
-        4
+        3,
+        3
       ],
       "parts.kind": [
-        2,
-        4
+        1,
+        3
       ],
       "parts.foods_recall": [
         2,
-        4
+        2
       ],
       "parts.foods_precision": [
         2,
-        6
+        4
       ],
       "post.promotional": [
         0,
@@ -10241,12 +10291,12 @@
         1
       ],
       "claims.subject": [
-        7,
-        7
+        5,
+        5
       ],
       "claims.place": [
-        7,
-        7
+        5,
+        5
       ]
     }
   },
@@ -10264,7 +10314,7 @@
         12
       ],
       "claims.precision": [
-        14,
+        13,
         14
       ],
       "parts.sentiment": [
@@ -10272,7 +10322,7 @@
         11
       ],
       "parts.aspect": [
-        9,
+        8,
         11
       ],
       "parts.aspect_root": [
@@ -10293,7 +10343,7 @@
       ],
       "parts.foods_precision": [
         2,
-        12
+        11
       ],
       "post.promotional": [
         1,
@@ -10317,7 +10367,7 @@
       ],
       "claims.subject": [
         4,
-        14
+        13
       ],
       "claims.place": [
         2,
@@ -10342,24 +10392,24 @@
         16
       ],
       "parts.sentiment": [
-        14,
-        16
+        13,
+        15
       ],
       "parts.aspect": [
-        12,
-        16
+        5,
+        15
       ],
       "parts.aspect_root": [
-        14,
-        16
+        13,
+        15
       ],
       "parts.kind_read": [
-        16,
-        16
+        15,
+        15
       ],
       "parts.kind": [
         13,
-        16
+        15
       ],
       "parts.amount": [
         3,
@@ -10406,12 +10456,12 @@
         3
       ],
       "claims.subject": [
-        16,
-        18
+        15,
+        17
       ],
       "claims.place": [
-        3,
-        16
+        2,
+        15
       ]
     }
   },
@@ -10539,28 +10589,28 @@
         7
       ],
       "claims.precision": [
-        7,
+        6,
         8
       ],
       "parts.sentiment": [
         5,
-        7
+        6
       ],
       "parts.aspect": [
-        4,
-        7
+        1,
+        6
       ],
       "parts.aspect_root": [
-        5,
-        7
+        3,
+        6
       ],
       "parts.kind_read": [
-        7,
-        7
+        6,
+        6
       ],
       "parts.kind": [
         5,
-        7
+        6
       ],
       "parts.amount": [
         2,
@@ -10603,12 +10653,12 @@
         1
       ],
       "claims.subject": [
-        6,
-        7
+        5,
+        6
       ],
       "claims.place": [
-        6,
-        6
+        5,
+        5
       ]
     }
   },
@@ -10634,7 +10684,7 @@
         4
       ],
       "parts.aspect": [
-        3,
+        1,
         4
       ],
       "parts.aspect_root": [
@@ -10709,11 +10759,11 @@
         6
       ],
       "parts.aspect": [
-        4,
+        3,
         6
       ],
       "parts.aspect_root": [
-        5,
+        4,
         6
       ],
       "parts.kind_read": [
@@ -10875,11 +10925,11 @@
         5
       ],
       "parts.aspect": [
-        5,
+        3,
         5
       ],
       "parts.aspect_root": [
-        5,
+        4,
         5
       ],
       "parts.kind_read": [
@@ -10945,32 +10995,32 @@
     ],
     "tally": {
       "claims.recall": [
-        11,
+        14,
         41
       ],
       "claims.precision": [
-        13,
+        14,
         21
       ],
       "parts.sentiment": [
-        13,
-        14
+        15,
+        18
       ],
       "parts.aspect": [
-        7,
-        14
+        3,
+        18
       ],
       "parts.aspect_root": [
-        9,
-        14
+        10,
+        18
       ],
       "parts.kind_read": [
-        14,
-        14
+        18,
+        18
       ],
       "parts.kind": [
-        12,
-        14
+        14,
+        18
       ],
       "parts.foods_recall": [
         2,
@@ -11013,12 +11063,12 @@
         16
       ],
       "claims.subject": [
-        13,
-        14
+        17,
+        18
       ],
       "claims.place": [
-        12,
-        12
+        15,
+        16
       ]
     }
   },
@@ -11031,7 +11081,7 @@
     ],
     "tally": {
       "claims.recall": [
-        20,
+        17,
         26
       ],
       "claims.precision": [
@@ -11039,24 +11089,24 @@
         24
       ],
       "parts.sentiment": [
-        16,
-        21
+        12,
+        18
       ],
       "parts.aspect": [
-        7,
-        21
+        1,
+        18
       ],
       "parts.aspect_root": [
-        7,
-        21
+        9,
+        18
       ],
       "parts.kind_read": [
-        21,
-        21
+        18,
+        18
       ],
       "parts.kind": [
-        16,
-        21
+        12,
+        18
       ],
       "parts.foods_recall": [
         5,
@@ -11095,12 +11145,12 @@
         10
       ],
       "claims.subject": [
-        21,
-        21
+        18,
+        18
       ],
       "claims.place": [
-        19,
-        20
+        16,
+        17
       ]
     }
   },
@@ -11280,7 +11330,7 @@
     ],
     "tally": {
       "claims.recall": [
-        25,
+        24,
         34
       ],
       "claims.precision": [
@@ -11288,24 +11338,24 @@
         36
       ],
       "parts.sentiment": [
-        26,
-        32
+        23,
+        28
       ],
       "parts.aspect": [
-        8,
-        32
+        1,
+        28
       ],
       "parts.aspect_root": [
-        12,
-        32
+        11,
+        28
       ],
       "parts.kind_read": [
-        32,
-        32
+        28,
+        28
       ],
       "parts.kind": [
-        24,
-        32
+        20,
+        28
       ],
       "parts.amount": [
         0,
@@ -11352,12 +11402,12 @@
         6
       ],
       "claims.subject": [
-        36,
-        41
+        30,
+        35
       ],
       "claims.place": [
-        23,
-        24
+        15,
+        18
       ]
     }
   },
@@ -11375,7 +11425,7 @@
         3
       ],
       "claims.precision": [
-        6,
+        7,
         7
       ],
       "parts.sentiment": [
@@ -11383,7 +11433,7 @@
         5
       ],
       "parts.aspect": [
-        4,
+        3,
         5
       ],
       "parts.aspect_root": [
@@ -11403,12 +11453,12 @@
         2
       ],
       "parts.foods_recall": [
-        5,
+        6,
         7
       ],
       "parts.foods_precision": [
-        6,
-        6
+        7,
+        7
       ],
       "change.precision": [
         0,
@@ -11431,12 +11481,12 @@
         1
       ],
       "claims.subject": [
-        6,
-        6
+        7,
+        7
       ],
       "claims.place": [
-        6,
-        6
+        7,
+        7
       ]
     }
   },
@@ -11541,7 +11591,7 @@
         7
       ],
       "parts.aspect": [
-        3,
+        4,
         7
       ],
       "parts.aspect_root": [
@@ -11613,7 +11663,7 @@
     ],
     "tally": {
       "claims.recall": [
-        5,
+        4,
         7
       ],
       "claims.precision": [
@@ -11621,32 +11671,32 @@
         7
       ],
       "parts.sentiment": [
-        6,
-        7
+        5,
+        5
       ],
       "parts.aspect": [
         4,
-        7
+        5
       ],
       "parts.aspect_root": [
-        5,
-        7
+        4,
+        5
       ],
       "parts.kind_read": [
-        7,
-        7
+        5,
+        5
       ],
       "parts.kind": [
-        4,
-        7
+        5,
+        5
       ],
       "parts.foods_recall": [
         2,
-        3
+        2
       ],
       "parts.foods_precision": [
-        2,
-        2
+        3,
+        3
       ],
       "post.promotional": [
         1,
@@ -11669,12 +11719,12 @@
         1
       ],
       "claims.subject": [
-        5,
-        7
+        6,
+        6
       ],
       "claims.place": [
-        5,
-        5
+        6,
+        6
       ]
     }
   },
@@ -11699,11 +11749,11 @@
         35
       ],
       "parts.aspect": [
-        24,
+        26,
         35
       ],
       "parts.aspect_root": [
-        27,
+        29,
         35
       ],
       "parts.kind_read": [
@@ -11781,44 +11831,44 @@
     ],
     "tally": {
       "claims.recall": [
-        60,
+        49,
         61
       ],
       "claims.precision": [
-        40,
+        43,
         47
       ],
       "parts.sentiment": [
-        62,
-        79
+        46,
+        57
       ],
       "parts.aspect": [
-        23,
-        79
+        17,
+        57
       ],
       "parts.aspect_root": [
-        31,
-        79
+        24,
+        57
       ],
       "parts.kind_read": [
-        79,
-        79
+        57,
+        57
       ],
       "parts.kind": [
-        41,
-        79
+        39,
+        57
       ],
       "parts.amount": [
         0,
-        4
+        2
       ],
       "parts.foods_recall": [
-        10,
-        20
+        14,
+        17
       ],
       "parts.foods_precision": [
-        9,
-        18
+        13,
+        20
       ],
       "change.precision": [
         0,
@@ -11829,19 +11879,19 @@
         1
       ],
       "places.recall": [
-        19,
+        20,
         37
       ],
       "match.brand": [
-        19,
-        19
+        20,
+        20
       ],
       "match.branch": [
         16,
         17
       ],
       "places.precision": [
-        19,
+        20,
         20
       ],
       "match_isolated.brand": [
@@ -11853,12 +11903,12 @@
         31
       ],
       "claims.subject": [
-        82,
-        86
+        65,
+        65
       ],
       "claims.place": [
-        17,
-        82
+        9,
+        65
       ]
     }
   },
@@ -11885,7 +11935,7 @@
         2
       ],
       "parts.aspect": [
-        2,
+        1,
         2
       ],
       "parts.aspect_root": [
@@ -12051,7 +12101,7 @@
         9
       ],
       "parts.kind": [
-        6,
+        9,
         9
       ],
       "parts.foods_recall": [
@@ -12112,11 +12162,11 @@
         4
       ],
       "claims.precision": [
-        10,
+        7,
         10
       ],
       "parts.sentiment": [
-        5,
+        4,
         6
       ],
       "parts.aspect": [
@@ -12124,7 +12174,7 @@
         6
       ],
       "parts.aspect_root": [
-        4,
+        3,
         6
       ],
       "parts.kind_read": [
@@ -12172,12 +12222,12 @@
         1
       ],
       "claims.subject": [
-        10,
-        10
+        7,
+        7
       ],
       "claims.place": [
-        10,
-        10
+        7,
+        7
       ]
     }
   },
@@ -12278,7 +12328,7 @@
         10
       ],
       "parts.aspect": [
-        9,
+        7,
         10
       ],
       "parts.aspect_root": [
@@ -12351,7 +12401,7 @@
         3
       ],
       "parts.aspect": [
-        3,
+        1,
         3
       ],
       "parts.aspect_root": [
@@ -12431,7 +12481,7 @@
         21
       ],
       "parts.aspect": [
-        13,
+        8,
         21
       ],
       "parts.aspect_root": [
@@ -12584,7 +12634,7 @@
     ],
     "tally": {
       "claims.recall": [
-        13,
+        14,
         25
       ],
       "claims.precision": [
@@ -12592,24 +12642,24 @@
         14
       ],
       "parts.sentiment": [
-        11,
-        13
+        13,
+        14
       ],
       "parts.aspect": [
-        9,
-        13
+        6,
+        14
       ],
       "parts.aspect_root": [
-        10,
-        13
+        11,
+        14
       ],
       "parts.kind_read": [
-        13,
-        13
+        14,
+        14
       ],
       "parts.kind": [
-        11,
-        13
+        12,
+        14
       ],
       "parts.amount": [
         3,
@@ -12617,7 +12667,7 @@
       ],
       "parts.foods_recall": [
         14,
-        14
+        15
       ],
       "parts.foods_precision": [
         15,
@@ -12652,12 +12702,12 @@
         4
       ],
       "claims.subject": [
-        12,
-        14
+        13,
+        15
       ],
       "claims.place": [
-        10,
-        10
+        11,
+        11
       ]
     }
   },
@@ -12683,11 +12733,11 @@
         9
       ],
       "parts.aspect": [
-        7,
+        5,
         9
       ],
       "parts.aspect_root": [
-        8,
+        7,
         9
       ],
       "parts.kind_read": [
@@ -12766,7 +12816,7 @@
         8
       ],
       "parts.aspect": [
-        5,
+        3,
         8
       ],
       "parts.aspect_root": [
@@ -12841,11 +12891,11 @@
         3
       ],
       "parts.aspect": [
-        3,
+        2,
         3
       ],
       "parts.aspect_root": [
-        3,
+        2,
         3
       ],
       "parts.kind_read": [
@@ -12983,7 +13033,7 @@
         10
       ],
       "claims.precision": [
-        21,
+        23,
         27
       ],
       "parts.sentiment": [
@@ -12991,7 +13041,7 @@
         14
       ],
       "parts.aspect": [
-        6,
+        7,
         14
       ],
       "parts.aspect_root": [
@@ -13003,7 +13053,7 @@
         14
       ],
       "parts.kind": [
-        9,
+        10,
         14
       ],
       "parts.foods_recall": [
@@ -13012,7 +13062,7 @@
       ],
       "parts.foods_precision": [
         11,
-        14
+        15
       ],
       "change.precision": [
         0,
@@ -13040,7 +13090,7 @@
       ],
       "claims.subject": [
         7,
-        21
+        23
       ],
       "claims.place": [
         4,
@@ -13196,11 +13246,11 @@
         2
       ],
       "parts.aspect": [
-        2,
+        1,
         2
       ],
       "parts.aspect_root": [
-        2,
+        1,
         2
       ],
       "parts.kind_read": [
@@ -13271,11 +13321,11 @@
         8
       ],
       "parts.aspect": [
-        8,
+        4,
         8
       ],
       "parts.aspect_root": [
-        8,
+        7,
         8
       ],
       "parts.kind_read": [
@@ -13333,40 +13383,40 @@
     ],
     "tally": {
       "claims.recall": [
-        31,
+        26,
         31
       ],
       "claims.precision": [
-        28,
+        31,
         32
       ],
       "parts.sentiment": [
-        30,
-        44
+        29,
+        35
       ],
       "parts.aspect": [
-        17,
-        44
+        10,
+        35
       ],
       "parts.aspect_root": [
-        30,
-        44
+        23,
+        35
       ],
       "parts.kind_read": [
-        44,
-        45
+        35,
+        36
       ],
       "parts.kind": [
-        31,
-        44
+        29,
+        35
       ],
       "parts.foods_recall": [
         30,
-        42
+        38
       ],
       "parts.foods_precision": [
-        28,
-        28
+        29,
+        29
       ],
       "post.promotional": [
         1,
@@ -13389,12 +13439,12 @@
         1
       ],
       "claims.subject": [
-        44,
-        46
+        37,
+        40
       ],
       "claims.place": [
-        43,
-        43
+        36,
+        36
       ]
     }
   },
@@ -13492,27 +13542,27 @@
       ],
       "parts.sentiment": [
         2,
-        3
+        2
       ],
       "parts.aspect": [
-        2,
-        3
+        0,
+        2
       ],
       "parts.aspect_root": [
-        2,
-        3
+        0,
+        2
       ],
       "parts.kind_read": [
-        3,
-        3
+        2,
+        2
       ],
       "parts.kind": [
         2,
-        3
+        2
       ],
       "parts.foods_recall": [
-        2,
-        2
+        1,
+        1
       ],
       "parts.foods_precision": [
         2,
@@ -13557,40 +13607,40 @@
     ],
     "tally": {
       "claims.recall": [
-        12,
+        11,
         20
       ],
       "claims.precision": [
-        15,
+        17,
         18
       ],
       "parts.sentiment": [
-        13,
-        14
+        12,
+        13
       ],
       "parts.aspect": [
         8,
-        14
+        13
       ],
       "parts.aspect_root": [
-        10,
-        14
+        11,
+        13
       ],
       "parts.kind_read": [
-        14,
-        14
+        13,
+        13
       ],
       "parts.kind": [
         12,
-        14
+        13
       ],
       "parts.foods_recall": [
-        11,
+        12,
         18
       ],
       "parts.foods_precision": [
-        13,
-        17
+        14,
+        18
       ],
       "post.promotional": [
         1,
@@ -13621,12 +13671,12 @@
         1
       ],
       "claims.subject": [
-        12,
-        16
+        13,
+        17
       ],
       "claims.place": [
-        12,
-        12
+        13,
+        13
       ]
     }
   },
@@ -13735,11 +13785,11 @@
         17
       ],
       "parts.aspect": [
-        8,
+        7,
         17
       ],
       "parts.aspect_root": [
-        14,
+        9,
         17
       ],
       "parts.kind_read": [
@@ -13810,36 +13860,36 @@
     ],
     "tally": {
       "claims.recall": [
-        4,
+        6,
         8
       ],
       "claims.precision": [
-        8,
+        10,
         10
       ],
       "parts.sentiment": [
-        4,
-        6
+        6,
+        8
       ],
       "parts.aspect": [
-        3,
-        6
+        5,
+        8
       ],
       "parts.aspect_root": [
-        5,
-        6
+        7,
+        8
       ],
       "parts.kind_read": [
-        6,
-        6
+        8,
+        8
       ],
       "parts.kind": [
-        4,
-        6
+        6,
+        8
       ],
       "parts.foods_recall": [
         3,
-        4
+        8
       ],
       "parts.foods_precision": [
         3,
@@ -13862,12 +13912,12 @@
         1
       ],
       "claims.subject": [
-        8,
-        8
+        10,
+        10
       ],
       "claims.place": [
-        8,
-        8
+        10,
+        10
       ]
     }
   },
@@ -13880,40 +13930,40 @@
     ],
     "tally": {
       "claims.recall": [
-        19,
+        22,
         23
       ],
       "claims.precision": [
-        25,
+        26,
         28
       ],
       "parts.sentiment": [
-        21,
-        23
+        22,
+        28
       ],
       "parts.aspect": [
-        9,
-        23
+        10,
+        28
       ],
       "parts.aspect_root": [
-        16,
-        23
+        19,
+        28
       ],
       "parts.kind_read": [
-        23,
-        23
+        28,
+        28
       ],
       "parts.kind": [
-        20,
-        23
+        21,
+        28
       ],
       "parts.foods_recall": [
         9,
-        23
+        26
       ],
       "parts.foods_precision": [
         10,
-        17
+        18
       ],
       "change.precision": [
         0,
@@ -13941,7 +13991,7 @@
       ],
       "claims.subject": [
         17,
-        27
+        32
       ],
       "claims.place": [
         10,
@@ -13970,11 +14020,11 @@
         19
       ],
       "parts.aspect": [
-        14,
+        7,
         19
       ],
       "parts.aspect_root": [
-        17,
+        16,
         19
       ],
       "parts.kind_read": [
@@ -14123,7 +14173,7 @@
         6
       ],
       "parts.aspect": [
-        5,
+        4,
         6
       ],
       "parts.aspect_root": [
@@ -14185,7 +14235,7 @@
     ],
     "tally": {
       "claims.recall": [
-        4,
+        5,
         8
       ],
       "claims.precision": [
@@ -14193,32 +14243,32 @@
         4
       ],
       "parts.sentiment": [
-        3,
-        4
+        4,
+        5
       ],
       "parts.aspect": [
         3,
-        4
+        5
       ],
       "parts.aspect_root": [
-        4,
-        4
+        5,
+        5
       ],
       "parts.kind_read": [
-        4,
-        4
+        5,
+        5
       ],
       "parts.kind": [
-        3,
-        4
+        4,
+        5
       ],
       "parts.amount": [
         1,
-        1
+        2
       ],
       "parts.foods_recall": [
-        2,
-        3
+        3,
+        4
       ],
       "parts.foods_precision": [
         2,
@@ -14253,12 +14303,12 @@
         2
       ],
       "claims.subject": [
-        4,
-        4
+        5,
+        5
       ],
       "claims.place": [
-        4,
-        4
+        5,
+        5
       ]
     }
   },
@@ -14276,7 +14326,7 @@
         4
       ],
       "claims.precision": [
-        2,
+        3,
         5
       ],
       "parts.sentiment": [
@@ -14284,7 +14334,7 @@
         5
       ],
       "parts.aspect": [
-        2,
+        1,
         5
       ],
       "parts.aspect_root": [
@@ -14296,7 +14346,7 @@
         5
       ],
       "parts.kind": [
-        4,
+        5,
         5
       ],
       "parts.foods_recall": [
@@ -14305,7 +14355,7 @@
       ],
       "parts.foods_precision": [
         2,
-        2
+        3
       ],
       "post.promotional": [
         1,
@@ -14329,7 +14379,7 @@
       ],
       "claims.subject": [
         5,
-        5
+        6
       ],
       "claims.place": [
         5,
@@ -14422,36 +14472,36 @@
     ],
     "tally": {
       "claims.recall": [
-        17,
+        11,
         17
       ],
       "claims.precision": [
-        13,
+        12,
         13
       ],
       "parts.sentiment": [
-        19,
-        21
+        12,
+        12
       ],
       "parts.aspect": [
-        13,
-        21
+        6,
+        12
       ],
       "parts.aspect_root": [
-        15,
-        21
+        10,
+        12
       ],
       "parts.kind_read": [
-        21,
-        21
+        12,
+        12
       ],
       "parts.kind": [
-        12,
-        21
+        11,
+        12
       ],
       "parts.foods_recall": [
-        7,
-        12
+        6,
+        9
       ],
       "parts.foods_precision": [
         5,
@@ -14486,12 +14536,12 @@
         1
       ],
       "claims.subject": [
-        16,
-        21
+        10,
+        12
       ],
       "claims.place": [
-        16,
-        16
+        10,
+        10
       ]
     }
   },
@@ -14505,40 +14555,40 @@
     ],
     "tally": {
       "claims.recall": [
-        12,
+        8,
         12
       ],
       "claims.precision": [
-        15,
-        18
-      ],
-      "parts.sentiment": [
-        13,
-        18
-      ],
-      "parts.aspect": [
-        9,
-        18
-      ],
-      "parts.aspect_root": [
         16,
         18
       ],
+      "parts.sentiment": [
+        10,
+        10
+      ],
+      "parts.aspect": [
+        6,
+        10
+      ],
+      "parts.aspect_root": [
+        9,
+        10
+      ],
       "parts.kind_read": [
-        18,
-        18
+        10,
+        10
       ],
       "parts.kind": [
-        13,
-        18
+        10,
+        10
       ],
       "parts.amount": [
         1,
-        2
+        1
       ],
       "parts.foods_recall": [
-        7,
-        10
+        5,
+        7
       ],
       "parts.foods_precision": [
         5,
@@ -14573,12 +14623,12 @@
         2
       ],
       "claims.subject": [
-        16,
-        23
+        10,
+        16
       ],
       "claims.place": [
-        16,
-        16
+        10,
+        10
       ]
     }
   },
@@ -14604,7 +14654,7 @@
         8
       ],
       "parts.aspect": [
-        5,
+        3,
         8
       ],
       "parts.aspect_root": [
@@ -14671,7 +14721,7 @@
     ],
     "tally": {
       "claims.recall": [
-        8,
+        9,
         9
       ],
       "claims.precision": [
@@ -14679,24 +14729,24 @@
         12
       ],
       "parts.sentiment": [
-        11,
-        11
+        12,
+        12
       ],
       "parts.aspect": [
-        5,
-        11
+        4,
+        12
       ],
       "parts.aspect_root": [
         5,
-        11
+        12
       ],
       "parts.kind_read": [
-        11,
-        11
+        12,
+        12
       ],
       "parts.kind": [
-        11,
-        11
+        12,
+        12
       ],
       "parts.amount": [
         0,
@@ -14731,12 +14781,12 @@
         1
       ],
       "claims.subject": [
-        8,
-        11
+        9,
+        12
       ],
       "claims.place": [
-        8,
-        8
+        9,
+        9
       ]
     }
   },
@@ -14764,11 +14814,11 @@
         10
       ],
       "parts.aspect": [
-        7,
+        5,
         10
       ],
       "parts.aspect_root": [
-        9,
+        8,
         10
       ],
       "parts.kind_read": [
@@ -14867,11 +14917,15 @@
         1
       ],
       "places.recall": [
+        1,
+        1
+      ],
+      "match.brand": [
         0,
         1
       ],
       "places.precision": [
-        0,
+        1,
         1
       ],
       "match_isolated.brand": [
@@ -14883,7 +14937,7 @@
         5
       ],
       "claims.place": [
-        0,
+        5,
         5
       ]
     }
@@ -14981,7 +15035,7 @@
         12
       ],
       "parts.aspect": [
-        6,
+        0,
         12
       ],
       "parts.aspect_root": [
@@ -14993,7 +15047,7 @@
         12
       ],
       "parts.kind": [
-        3,
+        4,
         12
       ],
       "parts.foods_recall": [
@@ -15051,7 +15105,7 @@
     ],
     "tally": {
       "claims.recall": [
-        17,
+        16,
         29
       ],
       "claims.precision": [
@@ -15063,11 +15117,11 @@
         19
       ],
       "parts.aspect": [
-        10,
+        5,
         19
       ],
       "parts.aspect_root": [
-        12,
+        11,
         19
       ],
       "parts.kind_read": [
@@ -15075,7 +15129,7 @@
         19
       ],
       "parts.kind": [
-        14,
+        15,
         19
       ],
       "parts.foods_recall": [
@@ -15146,11 +15200,11 @@
         16
       ],
       "parts.aspect": [
-        8,
+        2,
         16
       ],
       "parts.aspect_root": [
-        9,
+        4,
         16
       ],
       "parts.kind_read": [
@@ -15190,12 +15244,12 @@
         12
       ],
       "claims.subject": [
-        16,
-        16
+        17,
+        17
       ],
       "claims.place": [
-        11,
-        16
+        12,
+        17
       ]
     }
   },
@@ -15221,7 +15275,7 @@
         1
       ],
       "parts.aspect": [
-        1,
+        0,
         1
       ],
       "parts.aspect_root": [
@@ -15268,40 +15322,40 @@
     ],
     "tally": {
       "claims.recall": [
-        15,
+        11,
         15
       ],
       "claims.precision": [
-        12,
+        10,
         12
       ],
       "parts.sentiment": [
-        16,
-        20
+        12,
+        13
       ],
       "parts.aspect": [
-        8,
-        20
+        3,
+        13
       ],
       "parts.aspect_root": [
-        11,
-        20
+        9,
+        13
       ],
       "parts.kind_read": [
-        20,
-        20
+        13,
+        13
       ],
       "parts.kind": [
-        17,
-        20
+        13,
+        13
       ],
       "parts.amount": [
         1,
-        3
+        2
       ],
       "parts.foods_recall": [
-        10,
-        13
+        8,
+        10
       ],
       "parts.foods_precision": [
         7,
@@ -15336,12 +15390,12 @@
         1
       ],
       "claims.subject": [
-        20,
-        20
+        14,
+        14
       ],
       "claims.place": [
-        20,
-        20
+        14,
+        14
       ]
     }
   },
@@ -15358,35 +15412,35 @@
         17
       ],
       "claims.precision": [
-        21,
+        22,
         23
       ],
       "parts.sentiment": [
         11,
-        13
+        12
       ],
       "parts.aspect": [
-        9,
-        13
+        5,
+        12
       ],
       "parts.aspect_root": [
-        9,
-        13
+        10,
+        12
       ],
       "parts.kind_read": [
-        13,
-        13
+        12,
+        12
       ],
       "parts.kind": [
-        10,
-        13
+        11,
+        12
       ],
       "parts.foods_recall": [
-        10,
+        13,
         20
       ],
       "parts.foods_precision": [
-        10,
+        14,
         14
       ],
       "post.promotional": [
@@ -15422,7 +15476,7 @@
         22
       ],
       "claims.place": [
-        21,
+        22,
         22
       ]
     }
@@ -15436,7 +15490,7 @@
     ],
     "tally": {
       "claims.recall": [
-        17,
+        16,
         25
       ],
       "claims.precision": [
@@ -15444,28 +15498,28 @@
         22
       ],
       "parts.sentiment": [
-        17,
-        19
+        16,
+        18
       ],
       "parts.aspect": [
-        13,
-        19
+        15,
+        18
       ],
       "parts.aspect_root": [
         18,
-        19
+        18
       ],
       "parts.kind_read": [
-        19,
-        19
+        18,
+        18
       ],
       "parts.kind": [
         17,
-        19
+        18
       ],
       "parts.foods_recall": [
-        26,
-        35
+        25,
+        33
       ],
       "parts.foods_precision": [
         25,
@@ -15496,12 +15550,12 @@
         1
       ],
       "claims.subject": [
-        23,
-        23
+        22,
+        22
       ],
       "claims.place": [
-        23,
-        23
+        22,
+        22
       ]
     }
   },
@@ -15514,36 +15568,36 @@
     ],
     "tally": {
       "claims.recall": [
-        13,
+        15,
         26
       ],
       "claims.precision": [
-        16,
+        17,
         18
       ],
       "parts.sentiment": [
-        12,
-        14
+        13,
+        16
       ],
       "parts.aspect": [
-        11,
-        14
-      ],
-      "parts.aspect_root": [
-        13,
-        14
-      ],
-      "parts.kind_read": [
-        14,
-        14
-      ],
-      "parts.kind": [
-        11,
-        14
-      ],
-      "parts.foods_recall": [
         9,
         16
+      ],
+      "parts.aspect_root": [
+        15,
+        16
+      ],
+      "parts.kind_read": [
+        16,
+        16
+      ],
+      "parts.kind": [
+        12,
+        16
+      ],
+      "parts.foods_recall": [
+        10,
+        17
       ],
       "parts.foods_precision": [
         9,
@@ -15574,12 +15628,12 @@
         1
       ],
       "claims.subject": [
-        16,
-        16
+        18,
+        18
       ],
       "claims.place": [
-        12,
-        16
+        14,
+        18
       ]
     }
   },
@@ -15605,7 +15659,7 @@
         10
       ],
       "parts.aspect": [
-        10,
+        7,
         10
       ],
       "parts.aspect_root": [
@@ -15676,7 +15730,7 @@
     ],
     "tally": {
       "claims.recall": [
-        7,
+        5,
         7
       ],
       "claims.precision": [
@@ -15684,24 +15738,24 @@
         8
       ],
       "parts.sentiment": [
-        10,
-        11
+        7,
+        7
       ],
       "parts.aspect": [
-        7,
-        11
+        5,
+        7
       ],
       "parts.aspect_root": [
-        8,
-        11
+        6,
+        7
       ],
       "parts.kind_read": [
-        11,
-        11
+        7,
+        7
       ],
       "parts.kind": [
-        11,
-        11
+        7,
+        7
       ],
       "parts.foods_recall": [
         0,
@@ -15736,12 +15790,12 @@
         1
       ],
       "claims.subject": [
-        12,
-        12
+        9,
+        9
       ],
       "claims.place": [
-        12,
-        12
+        9,
+        9
       ]
     }
   },
@@ -15767,11 +15821,11 @@
         1
       ],
       "parts.aspect": [
-        1,
+        0,
         1
       ],
       "parts.aspect_root": [
-        1,
+        0,
         1
       ],
       "parts.kind_read": [
@@ -15837,40 +15891,40 @@
     ],
     "tally": {
       "claims.recall": [
-        33,
+        32,
         41
       ],
       "claims.precision": [
-        60,
+        62,
         63
       ],
       "parts.sentiment": [
-        41,
-        44
+        40,
+        43
       ],
       "parts.aspect": [
-        31,
-        44
+        29,
+        43
       ],
       "parts.aspect_root": [
-        37,
-        44
+        35,
+        43
       ],
       "parts.kind_read": [
-        44,
-        44
+        43,
+        43
       ],
       "parts.kind": [
         38,
-        44
+        43
       ],
       "parts.foods_recall": [
-        32,
-        42
+        31,
+        41
       ],
       "parts.foods_precision": [
-        38,
-        50
+        40,
+        52
       ],
       "change.recall": [
         0,
@@ -15897,12 +15951,12 @@
         1
       ],
       "claims.subject": [
-        57,
-        60
+        59,
+        62
       ],
       "claims.place": [
-        56,
-        56
+        58,
+        58
       ]
     }
   },
@@ -15923,24 +15977,24 @@
         25
       ],
       "parts.sentiment": [
-        21,
-        22
+        20,
+        21
       ],
       "parts.aspect": [
-        16,
-        22
+        14,
+        21
       ],
       "parts.aspect_root": [
-        21,
-        22
+        20,
+        21
       ],
       "parts.kind_read": [
-        22,
-        23
-      ],
-      "parts.kind": [
         21,
         22
+      ],
+      "parts.kind": [
+        20,
+        21
       ],
       "parts.foods_recall": [
         11,
@@ -15971,12 +16025,12 @@
         1
       ],
       "claims.subject": [
-        23,
-        27
+        22,
+        26
       ],
       "claims.place": [
-        17,
-        17
+        16,
+        16
       ]
     }
   },
@@ -16002,11 +16056,11 @@
         6
       ],
       "parts.aspect": [
-        5,
+        3,
         6
       ],
       "parts.aspect_root": [
-        6,
+        4,
         6
       ],
       "parts.kind_read": [
@@ -16128,7 +16182,7 @@
     ],
     "tally": {
       "claims.recall": [
-        38,
+        39,
         42
       ],
       "claims.precision": [
@@ -16136,35 +16190,35 @@
         52
       ],
       "parts.sentiment": [
-        34,
-        40
+        35,
+        41
       ],
       "parts.aspect": [
-        29,
-        40
+        23,
+        41
       ],
       "parts.aspect_root": [
-        34,
-        40
+        37,
+        41
       ],
       "parts.kind_read": [
-        40,
-        40
+        41,
+        41
       ],
       "parts.kind": [
-        33,
-        40
+        34,
+        41
       ],
       "parts.amount": [
         1,
         1
       ],
       "parts.foods_recall": [
-        23,
+        22,
         28
       ],
       "parts.foods_precision": [
-        24,
+        23,
         33
       ],
       "post.promotional": [
@@ -16227,11 +16281,11 @@
         8
       ],
       "parts.aspect": [
-        6,
+        5,
         8
       ],
       "parts.aspect_root": [
-        8,
+        7,
         8
       ],
       "parts.kind_read": [
@@ -16298,7 +16352,7 @@
         5
       ],
       "parts.aspect": [
-        4,
+        3,
         5
       ],
       "parts.aspect_root": [
@@ -16361,7 +16415,7 @@
     ],
     "tally": {
       "claims.recall": [
-        15,
+        14,
         16
       ],
       "claims.precision": [
@@ -16369,24 +16423,24 @@
         16
       ],
       "parts.sentiment": [
-        16,
-        17
+        15,
+        16
       ],
       "parts.aspect": [
-        13,
-        17
+        10,
+        16
       ],
       "parts.aspect_root": [
-        14,
-        17
+        13,
+        16
       ],
       "parts.kind_read": [
-        17,
-        17
+        16,
+        16
       ],
       "parts.kind": [
         16,
-        17
+        16
       ],
       "parts.foods_recall": [
         15,
@@ -16425,12 +16479,12 @@
         5
       ],
       "claims.subject": [
-        18,
-        18
+        17,
+        17
       ],
       "claims.place": [
-        18,
-        18
+        17,
+        17
       ]
     }
   },
@@ -16456,11 +16510,11 @@
         11
       ],
       "parts.aspect": [
-        10,
+        4,
         11
       ],
       "parts.aspect_root": [
-        11,
+        10,
         11
       ],
       "parts.kind_read": [
@@ -16476,11 +16530,11 @@
         3
       ],
       "parts.foods_recall": [
-        6,
-        11
+        7,
+        12
       ],
       "parts.foods_precision": [
-        7,
+        8,
         9
       ],
       "post.promotional": [
@@ -16531,32 +16585,32 @@
     ],
     "tally": {
       "claims.recall": [
-        12,
+        11,
         15
       ],
       "claims.precision": [
-        21,
+        22,
         22
       ],
       "parts.sentiment": [
-        17,
-        17
+        16,
+        16
       ],
       "parts.aspect": [
-        9,
-        17
+        6,
+        16
       ],
       "parts.aspect_root": [
-        13,
-        17
+        11,
+        16
       ],
       "parts.kind_read": [
-        17,
-        17
+        16,
+        16
       ],
       "parts.kind": [
         16,
-        17
+        16
       ],
       "parts.amount": [
         3,
@@ -16567,8 +16621,8 @@
         13
       ],
       "parts.foods_precision": [
-        12,
-        13
+        13,
+        14
       ],
       "post.promotional": [
         1,
@@ -16622,7 +16676,7 @@
         5
       ],
       "parts.aspect": [
-        5,
+        3,
         5
       ],
       "parts.aspect_root": [
@@ -16764,7 +16818,7 @@
         11
       ],
       "parts.aspect": [
-        8,
+        7,
         11
       ],
       "parts.aspect_root": [
@@ -16839,7 +16893,7 @@
         4
       ],
       "claims.precision": [
-        10,
+        8,
         19
       ],
       "parts.sentiment": [
@@ -16847,11 +16901,11 @@
         8
       ],
       "parts.aspect": [
-        4,
+        2,
         8
       ],
       "parts.aspect_root": [
-        4,
+        5,
         8
       ],
       "parts.kind_read": [
@@ -16903,12 +16957,12 @@
         1
       ],
       "claims.subject": [
-        4,
-        10
+        5,
+        9
       ],
       "claims.place": [
-        3,
-        3
+        4,
+        4
       ]
     }
   },
@@ -16997,40 +17051,40 @@
     ],
     "tally": {
       "claims.recall": [
-        24,
+        28,
         33
       ],
       "claims.precision": [
-        29,
+        35,
         38
       ],
       "parts.sentiment": [
-        24,
-        29
+        27,
+        35
       ],
       "parts.aspect": [
-        19,
-        29
+        13,
+        35
       ],
       "parts.aspect_root": [
-        21,
-        29
+        24,
+        35
       ],
       "parts.kind_read": [
-        29,
-        29
+        35,
+        35
       ],
       "parts.kind": [
-        22,
-        29
+        24,
+        35
       ],
       "parts.foods_recall": [
-        15,
-        15
+        16,
+        17
       ],
       "parts.foods_precision": [
-        15,
-        18
+        16,
+        25
       ],
       "post.promotional": [
         1,
@@ -17061,12 +17115,12 @@
         10
       ],
       "claims.subject": [
-        27,
-        29
+        32,
+        35
       ],
       "claims.place": [
-        26,
-        27
+        28,
+        32
       ]
     }
   },
@@ -17172,7 +17226,7 @@
         6
       ],
       "claims.precision": [
-        7,
+        8,
         8
       ],
       "parts.sentiment": [
@@ -17180,11 +17234,11 @@
         8
       ],
       "parts.aspect": [
-        4,
+        8,
         8
       ],
       "parts.aspect_root": [
-        4,
+        8,
         8
       ],
       "parts.kind_read": [
@@ -17225,7 +17279,7 @@
       ],
       "claims.subject": [
         1,
-        8
+        9
       ]
     }
   },
@@ -17247,24 +17301,24 @@
         8
       ],
       "parts.sentiment": [
-        4,
-        5
+        3,
+        4
       ],
       "parts.aspect": [
         2,
-        5
+        4
       ],
       "parts.aspect_root": [
-        2,
-        5
+        3,
+        4
       ],
       "parts.kind_read": [
-        5,
-        5
+        4,
+        4
       ],
       "parts.kind": [
-        4,
-        5
+        2,
+        4
       ],
       "parts.foods_recall": [
         0,
@@ -17295,12 +17349,12 @@
         1
       ],
       "claims.subject": [
-        9,
-        9
+        8,
+        8
       ],
       "claims.place": [
-        9,
-        9
+        8,
+        8
       ]
     }
   },
@@ -17327,7 +17381,7 @@
         2
       ],
       "parts.aspect": [
-        2,
+        1,
         2
       ],
       "parts.aspect_root": [
@@ -17401,7 +17455,7 @@
     ],
     "tally": {
       "claims.recall": [
-        19,
+        18,
         28
       ],
       "claims.precision": [
@@ -17409,31 +17463,31 @@
         23
       ],
       "parts.sentiment": [
-        18,
-        23
+        17,
+        22
       ],
       "parts.aspect": [
-        18,
-        23
+        11,
+        22
       ],
       "parts.aspect_root": [
         20,
-        23
+        22
       ],
       "parts.kind_read": [
-        23,
-        23
+        22,
+        22
       ],
       "parts.kind": [
-        15,
-        23
+        14,
+        22
       ],
       "parts.foods_recall": [
-        15,
-        15
+        13,
+        13
       ],
       "parts.foods_precision": [
-        14,
+        13,
         16
       ],
       "change.precision": [
@@ -17469,12 +17523,12 @@
         2
       ],
       "claims.subject": [
-        24,
-        25
+        23,
+        24
       ],
       "claims.place": [
-        24,
-        24
+        23,
+        23
       ]
     }
   },
@@ -17488,7 +17542,7 @@
     ],
     "tally": {
       "claims.recall": [
-        19,
+        20,
         25
       ],
       "claims.precision": [
@@ -17496,32 +17550,32 @@
         25
       ],
       "parts.sentiment": [
-        17,
-        20
+        19,
+        21
       ],
       "parts.aspect": [
-        15,
-        20
+        16,
+        21
       ],
       "parts.aspect_root": [
-        19,
-        20
+        20,
+        21
       ],
       "parts.kind_read": [
-        20,
-        20
+        21,
+        21
       ],
       "parts.kind": [
-        17,
-        20
+        19,
+        21
       ],
       "parts.amount": [
         1,
         1
       ],
       "parts.foods_recall": [
-        18,
-        21
+        20,
+        23
       ],
       "parts.foods_precision": [
         21,
@@ -17556,12 +17610,12 @@
         1
       ],
       "claims.subject": [
-        25,
-        25
+        26,
+        26
       ],
       "claims.place": [
-        25,
-        25
+        26,
+        26
       ]
     }
   },
@@ -17659,7 +17713,7 @@
     ],
     "tally": {
       "claims.recall": [
-        1,
+        2,
         2
       ],
       "claims.precision": [
@@ -17667,24 +17721,24 @@
         6
       ],
       "parts.sentiment": [
-        3,
-        3
+        4,
+        4
       ],
       "parts.aspect": [
         2,
-        3
+        4
       ],
       "parts.aspect_root": [
-        3,
-        3
+        2,
+        4
       ],
       "parts.kind_read": [
-        3,
-        3
+        4,
+        4
       ],
       "parts.kind": [
-        3,
-        3
+        2,
+        4
       ],
       "parts.foods_recall": [
         0,
@@ -17734,32 +17788,32 @@
     ],
     "tally": {
       "claims.recall": [
-        12,
+        10,
         12
       ],
       "claims.precision": [
-        14,
+        13,
         16
       ],
       "parts.sentiment": [
-        14,
-        18
+        13,
+        13
       ],
       "parts.aspect": [
-        10,
-        18
+        9,
+        13
       ],
       "parts.aspect_root": [
-        11,
-        18
+        13,
+        13
       ],
       "parts.kind_read": [
-        18,
-        18
+        13,
+        13
       ],
       "parts.kind": [
-        12,
-        18
+        13,
+        13
       ],
       "parts.foods_recall": [
         3,
@@ -17798,12 +17852,12 @@
         3
       ],
       "claims.subject": [
-        15,
-        18
+        12,
+        15
       ],
       "claims.place": [
-        15,
-        15
+        12,
+        12
       ]
     }
   },
@@ -17817,39 +17871,39 @@
     ],
     "tally": {
       "claims.recall": [
-        19,
+        13,
         20
       ],
       "claims.precision": [
-        18,
+        17,
         18
       ],
       "parts.sentiment": [
-        20,
-        24
+        16,
+        16
       ],
       "parts.aspect": [
-        19,
-        24
+        13,
+        16
       ],
       "parts.aspect_root": [
-        21,
-        24
+        16,
+        16
       ],
       "parts.kind_read": [
-        24,
-        24
+        16,
+        16
       ],
       "parts.kind": [
-        17,
-        24
+        15,
+        16
       ],
       "parts.foods_recall": [
-        9,
-        19
+        10,
+        15
       ],
       "parts.foods_precision": [
-        9,
+        12,
         16
       ],
       "change.precision": [
@@ -17885,12 +17939,12 @@
         2
       ],
       "claims.subject": [
-        17,
-        26
+        13,
+        18
       ],
       "claims.place": [
-        16,
-        17
+        13,
+        13
       ]
     }
   },
@@ -17962,7 +18016,7 @@
     ],
     "tally": {
       "claims.recall": [
-        19,
+        13,
         19
       ],
       "claims.precision": [
@@ -17970,31 +18024,31 @@
         17
       ],
       "parts.sentiment": [
-        21,
-        27
+        14,
+        17
       ],
       "parts.aspect": [
-        23,
-        27
+        14,
+        17
       ],
       "parts.aspect_root": [
-        23,
-        27
+        14,
+        17
       ],
       "parts.kind_read": [
-        27,
-        27
+        17,
+        17
       ],
       "parts.kind": [
-        15,
-        27
+        11,
+        17
       ],
       "parts.foods_recall": [
-        4,
-        7
+        2,
+        3
       ],
       "parts.foods_precision": [
-        4,
+        2,
         5
       ],
       "post.promotional": [
@@ -18026,12 +18080,12 @@
         7
       ],
       "claims.subject": [
-        18,
-        27
+        14,
+        17
       ],
       "claims.place": [
-        17,
-        17
+        13,
+        13
       ]
     }
   },
@@ -18141,7 +18195,7 @@
         4
       ],
       "parts.aspect_root": [
-        3,
+        4,
         4
       ],
       "parts.kind_read": [
@@ -18200,32 +18254,32 @@
     ],
     "tally": {
       "claims.recall": [
-        7,
+        5,
         7
       ],
       "claims.precision": [
-        7,
+        8,
         8
       ],
       "parts.sentiment": [
-        8,
-        10
+        7,
+        7
       ],
       "parts.aspect": [
         5,
-        10
+        7
       ],
       "parts.aspect_root": [
         5,
-        10
+        7
       ],
       "parts.kind_read": [
-        10,
-        10
+        7,
+        7
       ],
       "parts.kind": [
-        9,
-        10
+        7,
+        7
       ],
       "parts.foods_recall": [
         0,
@@ -18233,7 +18287,7 @@
       ],
       "parts.foods_precision": [
         0,
-        2
+        3
       ],
       "post.promotional": [
         1,
@@ -18256,12 +18310,12 @@
         1
       ],
       "claims.subject": [
-        6,
-        10
+        5,
+        8
       ],
       "claims.place": [
-        6,
-        6
+        5,
+        5
       ]
     }
   },
@@ -18279,36 +18333,36 @@
         5
       ],
       "claims.precision": [
-        12,
+        13,
         14
       ],
       "parts.sentiment": [
-        7,
-        9
+        6,
+        8
       ],
       "parts.aspect": [
-        2,
-        9
+        1,
+        8
       ],
       "parts.aspect_root": [
         2,
-        9
+        8
       ],
       "parts.kind_read": [
-        9,
-        9
+        8,
+        8
       ],
       "parts.kind": [
         8,
-        9
+        8
       ],
       "parts.foods_recall": [
-        2,
+        3,
         3
       ],
       "parts.foods_precision": [
-        2,
-        2
+        3,
+        3
       ],
       "post.promotional": [
         1,
@@ -18370,7 +18424,7 @@
         5
       ],
       "parts.aspect": [
-        2,
+        1,
         5
       ],
       "parts.aspect_root": [
@@ -18425,7 +18479,7 @@
         4
       ],
       "parts.aspect": [
-        4,
+        3,
         4
       ],
       "parts.aspect_root": [
@@ -18500,7 +18554,7 @@
         1
       ],
       "claims.precision": [
-        1,
+        2,
         2
       ],
       "parts.sentiment": [
@@ -18512,7 +18566,7 @@
         1
       ],
       "parts.aspect_root": [
-        0,
+        1,
         1
       ],
       "parts.kind_read": [
@@ -18548,7 +18602,11 @@
         1
       ],
       "claims.subject": [
-        0,
+        1,
+        2
+      ],
+      "claims.place": [
+        1,
         1
       ]
     }
@@ -18563,7 +18621,7 @@
     ],
     "tally": {
       "claims.recall": [
-        14,
+        12,
         14
       ],
       "claims.precision": [
@@ -18571,24 +18629,24 @@
         15
       ],
       "parts.sentiment": [
-        23,
-        25
+        14,
+        15
       ],
       "parts.aspect": [
-        15,
-        25
+        8,
+        15
       ],
       "parts.aspect_root": [
-        16,
-        25
+        13,
+        15
       ],
       "parts.kind_read": [
-        25,
-        25
+        15,
+        15
       ],
       "parts.kind": [
-        16,
-        25
+        12,
+        15
       ],
       "parts.foods_recall": [
         3,
@@ -18619,12 +18677,12 @@
         9
       ],
       "claims.subject": [
-        25,
-        25
+        15,
+        15
       ],
       "claims.place": [
-        16,
-        24
+        11,
+        14
       ]
     }
   },
@@ -18784,24 +18842,24 @@
         3
       ],
       "parts.sentiment": [
-        2,
-        3
+        1,
+        2
       ],
       "parts.aspect": [
-        3,
-        3
+        2,
+        2
       ],
       "parts.aspect_root": [
-        3,
-        3
+        2,
+        2
       ],
       "parts.kind_read": [
-        3,
-        3
+        2,
+        2
       ],
       "parts.kind": [
-        3,
-        3
+        2,
+        2
       ],
       "parts.foods_recall": [
         0,
@@ -18831,7 +18889,7 @@
     ],
     "tally": {
       "claims.recall": [
-        1,
+        2,
         2
       ],
       "claims.precision": [
@@ -18843,11 +18901,11 @@
         3
       ],
       "parts.aspect": [
-        2,
+        3,
         3
       ],
       "parts.aspect_root": [
-        2,
+        3,
         3
       ],
       "parts.kind_read": [
@@ -18855,7 +18913,7 @@
         3
       ],
       "parts.kind": [
-        2,
+        3,
         3
       ],
       "parts.foods_recall": [
@@ -18914,44 +18972,44 @@
     ],
     "tally": {
       "claims.recall": [
-        19,
+        18,
         23
       ],
       "claims.precision": [
-        22,
+        23,
         24
       ],
       "parts.sentiment": [
-        24,
-        24
+        21,
+        21
       ],
       "parts.aspect": [
-        17,
-        24
+        13,
+        21
       ],
       "parts.aspect_root": [
-        20,
-        24
+        16,
+        21
       ],
       "parts.kind_read": [
-        24,
-        24
+        21,
+        21
       ],
       "parts.kind": [
-        23,
-        24
+        21,
+        21
       ],
       "parts.amount": [
         1,
         2
       ],
       "parts.foods_recall": [
-        7,
-        17
+        5,
+        16
       ],
       "parts.foods_precision": [
-        7,
-        21
+        6,
+        23
       ],
       "post.promotional": [
         0,
@@ -18982,12 +19040,12 @@
         1
       ],
       "claims.subject": [
-        22,
-        25
+        20,
+        23
       ],
       "claims.place": [
-        22,
-        22
+        20,
+        20
       ]
     }
   },
@@ -19013,7 +19071,7 @@
         7
       ],
       "parts.aspect": [
-        6,
+        2,
         7
       ],
       "parts.aspect_root": [
@@ -19025,7 +19083,7 @@
         7
       ],
       "parts.kind": [
-        5,
+        6,
         7
       ],
       "parts.foods_recall": [
@@ -19097,7 +19155,7 @@
         3
       ],
       "parts.aspect": [
-        3,
+        1,
         3
       ],
       "parts.aspect_root": [
@@ -19179,11 +19237,11 @@
         27
       ],
       "parts.aspect": [
-        23,
+        13,
         27
       ],
       "parts.aspect_root": [
-        24,
+        23,
         27
       ],
       "parts.kind_read": [
@@ -19191,7 +19249,7 @@
         27
       ],
       "parts.kind": [
-        20,
+        22,
         27
       ],
       "parts.amount": [
@@ -19274,7 +19332,7 @@
         10
       ],
       "parts.aspect": [
-        9,
+        4,
         10
       ],
       "parts.aspect_root": [
@@ -19354,7 +19412,7 @@
         2
       ],
       "claims.precision": [
-        4,
+        5,
         5
       ],
       "parts.sentiment": [
@@ -19418,12 +19476,12 @@
         1
       ],
       "claims.subject": [
-        4,
-        4
+        5,
+        5
       ],
       "claims.place": [
-        4,
-        4
+        5,
+        5
       ]
     }
   },
@@ -19449,7 +19507,7 @@
         5
       ],
       "parts.aspect": [
-        5,
+        4,
         5
       ],
       "parts.aspect_root": [
@@ -19520,24 +19578,24 @@
         21
       ],
       "parts.sentiment": [
-        17,
-        18
+        16,
+        17
       ],
       "parts.aspect": [
-        14,
-        18
+        10,
+        17
       ],
       "parts.aspect_root": [
         15,
-        18
+        17
       ],
       "parts.kind_read": [
-        18,
-        18
+        17,
+        17
       ],
       "parts.kind": [
-        15,
-        18
+        14,
+        17
       ],
       "parts.foods_recall": [
         11,
@@ -19577,7 +19635,7 @@
       ],
       "claims.subject": [
         16,
-        21
+        20
       ],
       "claims.place": [
         15,
@@ -19607,11 +19665,11 @@
         4
       ],
       "parts.aspect": [
-        4,
+        2,
         4
       ],
       "parts.aspect_root": [
-        4,
+        2,
         4
       ],
       "parts.kind_read": [
@@ -19670,7 +19728,7 @@
     ],
     "tally": {
       "claims.recall": [
-        14,
+        11,
         14
       ],
       "claims.precision": [
@@ -19678,28 +19736,28 @@
         14
       ],
       "parts.sentiment": [
-        15,
-        18
+        13,
+        15
       ],
       "parts.aspect": [
-        12,
-        18
+        6,
+        15
       ],
       "parts.aspect_root": [
-        14,
-        18
+        12,
+        15
       ],
       "parts.kind_read": [
-        18,
-        18
+        15,
+        15
       ],
       "parts.kind": [
-        16,
-        18
+        14,
+        15
       ],
       "parts.foods_recall": [
-        16,
-        25
+        14,
+        23
       ],
       "parts.foods_precision": [
         13,
@@ -19726,12 +19784,12 @@
         1
       ],
       "claims.subject": [
-        18,
-        18
+        15,
+        15
       ],
       "claims.place": [
-        18,
-        18
+        15,
+        15
       ]
     }
   },
@@ -19837,28 +19895,28 @@
         13
       ],
       "parts.sentiment": [
-        8,
-        8
+        7,
+        7
       ],
       "parts.aspect": [
-        3,
-        8
+        4,
+        7
       ],
       "parts.aspect_root": [
-        4,
-        8
+        5,
+        7
       ],
       "parts.kind_read": [
-        8,
-        8
+        7,
+        7
       ],
       "parts.kind": [
-        8,
-        8
+        7,
+        7
       ],
       "parts.amount": [
         2,
-        3
+        2
       ],
       "parts.foods_recall": [
         3,
@@ -19927,11 +19985,11 @@
         20
       ],
       "parts.aspect": [
-        17,
+        10,
         20
       ],
       "parts.aspect_root": [
-        19,
+        14,
         20
       ],
       "parts.kind_read": [
@@ -19939,7 +19997,7 @@
         20
       ],
       "parts.kind": [
-        18,
+        19,
         20
       ],
       "parts.amount": [
@@ -20001,7 +20059,7 @@
     ],
     "tally": {
       "claims.recall": [
-        14,
+        17,
         24
       ],
       "claims.precision": [
@@ -20009,24 +20067,24 @@
         23
       ],
       "parts.sentiment": [
-        15,
-        17
+        16,
+        21
       ],
       "parts.aspect": [
-        12,
-        17
+        9,
+        21
       ],
       "parts.aspect_root": [
-        15,
-        17
+        16,
+        21
       ],
       "parts.kind_read": [
-        17,
-        17
+        21,
+        21
       ],
       "parts.kind": [
         16,
-        17
+        21
       ],
       "parts.foods_recall": [
         13,
@@ -20073,12 +20131,12 @@
         4
       ],
       "claims.subject": [
-        24,
-        24
+        28,
+        28
       ],
       "claims.place": [
-        24,
-        24
+        25,
+        28
       ]
     }
   },
@@ -20117,7 +20175,7 @@
         8
       ],
       "parts.kind": [
-        6,
+        8,
         8
       ],
       "parts.foods_recall": [
@@ -20176,7 +20234,7 @@
     ],
     "tally": {
       "claims.recall": [
-        11,
+        12,
         13
       ],
       "claims.precision": [
@@ -20188,7 +20246,7 @@
         13
       ],
       "parts.aspect": [
-        12,
+        10,
         13
       ],
       "parts.aspect_root": [
@@ -20232,12 +20290,12 @@
         1
       ],
       "claims.subject": [
-        15,
+        14,
         15
       ],
       "claims.place": [
-        15,
-        15
+        14,
+        14
       ]
     }
   },
@@ -20255,7 +20313,7 @@
         6
       ],
       "claims.precision": [
-        7,
+        6,
         7
       ],
       "parts.sentiment": [
@@ -20263,7 +20321,7 @@
         6
       ],
       "parts.aspect": [
-        3,
+        2,
         6
       ],
       "parts.aspect_root": [
@@ -20323,12 +20381,12 @@
         1
       ],
       "claims.subject": [
-        7,
-        7
+        6,
+        6
       ],
       "claims.place": [
-        7,
-        7
+        6,
+        6
       ]
     }
   },
@@ -20349,35 +20407,35 @@
         24
       ],
       "parts.sentiment": [
-        21,
-        25
+        20,
+        24
       ],
       "parts.aspect": [
-        18,
-        25
+        17,
+        24
       ],
       "parts.aspect_root": [
-        22,
-        25
+        21,
+        24
       ],
       "parts.kind_read": [
-        25,
-        25
+        24,
+        24
       ],
       "parts.kind": [
-        20,
-        25
+        19,
+        24
       ],
       "parts.amount": [
         2,
         2
       ],
       "parts.foods_recall": [
-        8,
+        9,
         11
       ],
       "parts.foods_precision": [
-        15,
+        16,
         17
       ],
       "post.promotional": [
@@ -20409,12 +20467,12 @@
         1
       ],
       "claims.subject": [
-        22,
+        21,
         32
       ],
       "claims.place": [
-        19,
-        19
+        18,
+        18
       ]
     }
   },
@@ -20440,7 +20498,7 @@
         7
       ],
       "parts.aspect": [
-        5,
+        4,
         7
       ],
       "parts.aspect_root": [
@@ -20599,7 +20657,7 @@
     ],
     "tally": {
       "claims.recall": [
-        18,
+        16,
         43
       ],
       "claims.precision": [
@@ -20607,32 +20665,32 @@
         17
       ],
       "parts.sentiment": [
-        14,
-        19
+        12,
+        16
       ],
       "parts.aspect": [
-        15,
-        19
+        10,
+        16
       ],
       "parts.aspect_root": [
-        19,
-        19
+        16,
+        16
       ],
       "parts.kind_read": [
-        19,
-        19
+        16,
+        16
       ],
       "parts.kind": [
-        15,
-        19
+        14,
+        16
       ],
       "parts.amount": [
         1,
-        2
+        1
       ],
       "parts.foods_recall": [
-        17,
-        29
+        16,
+        28
       ],
       "parts.foods_precision": [
         17,
@@ -20663,12 +20721,12 @@
         1
       ],
       "claims.subject": [
-        20,
-        21
+        16,
+        17
       ],
       "claims.place": [
-        20,
-        20
+        16,
+        16
       ]
     }
   },
@@ -20681,40 +20739,40 @@
     ],
     "tally": {
       "claims.recall": [
-        11,
+        12,
         18
       ],
       "claims.precision": [
-        17,
+        18,
         18
       ],
       "parts.sentiment": [
         14,
-        14
+        15
       ],
       "parts.aspect": [
         7,
-        14
+        15
       ],
       "parts.aspect_root": [
         12,
-        14
+        15
       ],
       "parts.kind_read": [
-        14,
-        14
+        15,
+        15
       ],
       "parts.kind": [
         11,
-        14
+        15
       ],
       "parts.foods_recall": [
-        5,
+        6,
         10
       ],
       "parts.foods_precision": [
-        6,
-        10
+        7,
+        11
       ],
       "change.precision": [
         0,
@@ -20753,12 +20811,12 @@
         2
       ],
       "claims.subject": [
-        14,
-        17
+        15,
+        18
       ],
       "claims.place": [
-        14,
-        14
+        15,
+        15
       ]
     }
   },
@@ -20781,42 +20839,42 @@
       ],
       "parts.sentiment": [
         36,
-        42
+        40
       ],
       "parts.aspect": [
-        29,
-        42
+        26,
+        40
       ],
       "parts.aspect_root": [
-        37,
-        42
+        36,
+        40
       ],
       "parts.kind_read": [
-        42,
-        42
+        40,
+        40
       ],
       "parts.kind": [
-        30,
-        42
+        31,
+        40
       ],
       "parts.amount": [
         3,
-        8
+        9
       ],
       "parts.foods_recall": [
-        22,
-        30
+        23,
+        28
       ],
       "parts.foods_precision": [
-        31,
-        50
+        33,
+        53
       ],
       "change.precision": [
         4,
         6
       ],
       "change.recall": [
-        4,
+        3,
         6
       ],
       "post.promotional": [
@@ -20844,7 +20902,7 @@
         61
       ],
       "claims.place": [
-        37,
+        38,
         48
       ]
     }
@@ -20946,7 +21004,7 @@
         1
       ],
       "claims.precision": [
-        6,
+        4,
         6
       ],
       "parts.sentiment": [
@@ -20991,7 +21049,7 @@
       ],
       "claims.subject": [
         0,
-        6
+        4
       ]
     }
   },
@@ -21029,7 +21087,7 @@
         10
       ],
       "parts.kind": [
-        8,
+        9,
         10
       ],
       "parts.foods_recall": [
@@ -21087,36 +21145,36 @@
     ],
     "tally": {
       "claims.recall": [
-        16,
+        14,
         22
       ],
       "claims.precision": [
-        22,
+        19,
         22
       ],
       "parts.sentiment": [
-        16,
-        19
+        14,
+        16
       ],
       "parts.aspect": [
-        7,
-        19
+        6,
+        16
       ],
       "parts.aspect_root": [
         11,
-        19
+        16
       ],
       "parts.kind_read": [
-        19,
-        19
+        16,
+        16
       ],
       "parts.kind": [
         14,
-        19
+        16
       ],
       "parts.amount": [
         0,
-        2
+        1
       ],
       "parts.foods_recall": [
         2,
@@ -21124,7 +21182,7 @@
       ],
       "parts.foods_precision": [
         3,
-        10
+        9
       ],
       "change.precision": [
         1,
@@ -21164,7 +21222,7 @@
       ],
       "claims.subject": [
         19,
-        22
+        19
       ],
       "claims.place": [
         19,
@@ -21198,7 +21256,7 @@
         2
       ],
       "parts.aspect_root": [
-        1,
+        2,
         2
       ],
       "parts.kind_read": [
@@ -21273,15 +21331,15 @@
         12
       ],
       "parts.sentiment": [
-        10,
+        11,
         11
       ],
       "parts.aspect": [
-        9,
+        8,
         11
       ],
       "parts.aspect_root": [
-        9,
+        8,
         11
       ],
       "parts.kind_read": [
@@ -21289,7 +21347,7 @@
         11
       ],
       "parts.kind": [
-        10,
+        11,
         11
       ],
       "parts.foods_recall": [
@@ -21348,7 +21406,7 @@
     ],
     "tally": {
       "claims.recall": [
-        5,
+        6,
         6
       ],
       "claims.precision": [
@@ -21357,27 +21415,27 @@
       ],
       "parts.sentiment": [
         5,
-        5
+        6
       ],
       "parts.aspect": [
-        5,
-        5
+        3,
+        6
       ],
       "parts.aspect_root": [
         5,
-        5
+        6
       ],
       "parts.kind_read": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.kind": [
         5,
-        5
+        6
       ],
       "parts.foods_recall": [
         3,
-        6
+        7
       ],
       "parts.foods_precision": [
         3,
@@ -21408,12 +21466,12 @@
         1
       ],
       "claims.subject": [
-        6,
-        6
+        7,
+        7
       ],
       "claims.place": [
         0,
-        6
+        7
       ]
     }
   },
@@ -21613,7 +21671,7 @@
     ],
     "tally": {
       "claims.recall": [
-        2,
+        3,
         4
       ],
       "claims.precision": [
@@ -21621,32 +21679,32 @@
         3
       ],
       "parts.sentiment": [
-        1,
-        2
+        2,
+        3
       ],
       "parts.aspect": [
         2,
-        2
+        3
       ],
       "parts.aspect_root": [
         2,
-        2
+        3
       ],
       "parts.kind_read": [
-        2,
-        2
+        3,
+        3
       ],
       "parts.kind": [
-        1,
-        2
+        2,
+        3
       ],
       "parts.amount": [
         2,
-        2
+        3
       ],
       "parts.foods_recall": [
-        1,
-        1
+        2,
+        2
       ],
       "parts.foods_precision": [
         2,
@@ -21673,12 +21731,12 @@
         1
       ],
       "claims.subject": [
-        3,
-        3
+        4,
+        4
       ],
       "claims.place": [
-        2,
-        2
+        3,
+        3
       ]
     }
   },
@@ -21704,7 +21762,7 @@
         2
       ],
       "parts.aspect": [
-        2,
+        1,
         2
       ],
       "parts.aspect_root": [
@@ -21787,7 +21845,7 @@
         3
       ],
       "parts.aspect": [
-        3,
+        2,
         3
       ],
       "parts.aspect_root": [
@@ -21857,7 +21915,7 @@
     ],
     "tally": {
       "claims.recall": [
-        5,
+        6,
         8
       ],
       "claims.precision": [
@@ -21865,28 +21923,28 @@
         6
       ],
       "parts.sentiment": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.aspect": [
-        4,
-        5
+        3,
+        6
       ],
       "parts.aspect_root": [
         5,
-        5
+        6
       ],
       "parts.kind_read": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.kind": [
-        4,
-        5
+        5,
+        6
       ],
       "parts.foods_recall": [
-        11,
-        12
+        12,
+        13
       ],
       "parts.foods_precision": [
         11,
@@ -21913,12 +21971,12 @@
         1
       ],
       "claims.subject": [
-        6,
-        6
+        7,
+        7
       ],
       "claims.place": [
-        4,
-        4
+        5,
+        5
       ]
     }
   },
@@ -22029,7 +22087,7 @@
         15
       ],
       "parts.aspect": [
-        12,
+        11,
         15
       ],
       "parts.aspect_root": [
@@ -22041,7 +22099,7 @@
         15
       ],
       "parts.kind": [
-        12,
+        13,
         15
       ],
       "parts.amount": [
@@ -22103,7 +22161,7 @@
     ],
     "tally": {
       "claims.recall": [
-        3,
+        4,
         9
       ],
       "claims.precision": [
@@ -22111,24 +22169,24 @@
         7
       ],
       "parts.sentiment": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.aspect": [
-        1,
-        5
+        2,
+        6
       ],
       "parts.aspect_root": [
-        2,
-        5
+        6,
+        6
       ],
       "parts.kind_read": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.kind": [
-        5,
-        5
+        6,
+        6
       ],
       "parts.foods_recall": [
         5,
@@ -22193,7 +22251,7 @@
     ],
     "tally": {
       "claims.recall": [
-        17,
+        21,
         27
       ],
       "claims.precision": [
@@ -22201,32 +22259,32 @@
         22
       ],
       "parts.sentiment": [
-        20,
-        25
+        25,
+        28
       ],
       "parts.aspect": [
-        17,
-        25
+        14,
+        28
       ],
       "parts.aspect_root": [
-        17,
-        25
+        19,
+        28
       ],
       "parts.kind_read": [
-        25,
-        25
+        28,
+        28
       ],
       "parts.kind": [
-        20,
-        25
+        26,
+        28
       ],
       "parts.foods_recall": [
-        11,
-        13
+        10,
+        11
       ],
       "parts.foods_precision": [
         10,
-        12
+        13
       ],
       "change.precision": [
         1,
@@ -22265,12 +22323,12 @@
         5
       ],
       "claims.subject": [
-        24,
-        26
+        26,
+        28
       ],
       "claims.place": [
-        22,
-        24
+        20,
+        26
       ]
     }
   },
@@ -22497,7 +22555,7 @@
         15
       ],
       "claims.precision": [
-        17,
+        18,
         19
       ],
       "parts.sentiment": [
@@ -22505,11 +22563,11 @@
         17
       ],
       "parts.aspect": [
-        14,
+        12,
         17
       ],
       "parts.aspect_root": [
-        14,
+        12,
         17
       ],
       "parts.kind_read": [
@@ -22549,12 +22607,12 @@
         4
       ],
       "claims.subject": [
-        17,
-        17
+        18,
+        18
       ],
       "claims.place": [
-        17,
-        17
+        18,
+        18
       ]
     }
   },
@@ -22709,11 +22767,11 @@
         19
       ],
       "parts.aspect": [
-        15,
+        14,
         19
       ],
       "parts.aspect_root": [
-        18,
+        17,
         19
       ],
       "parts.kind_read": [
@@ -22773,7 +22831,7 @@
     ],
     "tally": {
       "claims.recall": [
-        3,
+        4,
         4
       ],
       "claims.precision": [
@@ -22781,15 +22839,15 @@
         4
       ],
       "parts.sentiment": [
-        4,
+        3,
         4
       ],
       "parts.aspect": [
-        3,
+        4,
         4
       ],
       "parts.aspect_root": [
-        3,
+        4,
         4
       ],
       "parts.kind_read": [
@@ -22797,15 +22855,15 @@
         4
       ],
       "parts.kind": [
-        4,
+        3,
         4
       ],
       "parts.foods_recall": [
-        2,
-        3
+        3,
+        4
       ],
       "parts.foods_precision": [
-        2,
+        3,
         4
       ],
       "post.promotional": [
@@ -22864,24 +22922,24 @@
         12
       ],
       "parts.sentiment": [
-        7,
-        8
+        8,
+        9
       ],
       "parts.aspect": [
-        8,
-        8
+        7,
+        9
       ],
       "parts.aspect_root": [
         8,
-        8
+        9
       ],
       "parts.kind_read": [
-        8,
-        8
+        9,
+        9
       ],
       "parts.kind": [
-        8,
-        8
+        9,
+        9
       ],
       "parts.foods_recall": [
         0,
@@ -22920,12 +22978,12 @@
         1
       ],
       "claims.subject": [
-        9,
-        12
+        10,
+        13
       ],
       "claims.place": [
-        9,
-        9
+        10,
+        10
       ]
     }
   },
@@ -22952,7 +23010,7 @@
         4
       ],
       "parts.aspect": [
-        4,
+        3,
         4
       ],
       "parts.aspect_root": [
@@ -23118,7 +23176,7 @@
         5
       ],
       "parts.aspect": [
-        4,
+        3,
         5
       ],
       "parts.aspect_root": [
@@ -23177,7 +23235,7 @@
         7
       ],
       "parts.aspect": [
-        6,
+        4,
         7
       ],
       "parts.aspect_root": [
@@ -23256,7 +23314,7 @@
         5
       ],
       "parts.aspect": [
-        4,
+        3,
         5
       ],
       "parts.aspect_root": [
@@ -23300,12 +23358,12 @@
         1
       ],
       "claims.subject": [
-        5,
-        5
+        6,
+        6
       ],
       "claims.place": [
-        5,
-        5
+        6,
+        6
       ]
     }
   },
@@ -23390,39 +23448,39 @@
     ],
     "tally": {
       "claims.recall": [
-        7,
-        9
-      ],
-      "claims.precision": [
         9,
         9
       ],
+      "claims.precision": [
+        8,
+        9
+      ],
       "parts.sentiment": [
-        6,
-        8
+        8,
+        10
       ],
       "parts.aspect": [
-        6,
-        8
+        4,
+        10
       ],
       "parts.aspect_root": [
-        7,
-        8
+        8,
+        10
       ],
       "parts.kind_read": [
-        8,
-        8
+        10,
+        10
       ],
       "parts.kind": [
-        5,
-        8
+        7,
+        10
       ],
       "parts.foods_recall": [
-        1,
-        2
+        5,
+        6
       ],
       "parts.foods_precision": [
-        1,
+        4,
         4
       ],
       "post.promotional": [
@@ -23446,12 +23504,12 @@
         1
       ],
       "claims.subject": [
-        8,
-        9
+        9,
+        10
       ],
       "claims.place": [
-        8,
-        8
+        9,
+        9
       ]
     }
   },
@@ -23472,24 +23530,24 @@
         26
       ],
       "parts.sentiment": [
-        26,
-        28
+        27,
+        29
       ],
       "parts.aspect": [
-        13,
-        28
+        9,
+        29
       ],
       "parts.aspect_root": [
-        23,
-        28
+        24,
+        29
       ],
       "parts.kind_read": [
-        28,
+        29,
         30
       ],
       "parts.kind": [
-        25,
-        28
+        26,
+        29
       ],
       "parts.amount": [
         1,
@@ -23497,7 +23555,7 @@
       ],
       "parts.foods_recall": [
         8,
-        18
+        17
       ],
       "parts.foods_precision": [
         8,
@@ -23554,7 +23612,7 @@
     ],
     "tally": {
       "claims.recall": [
-        14,
+        12,
         28
       ],
       "claims.precision": [
@@ -23562,24 +23620,24 @@
         19
       ],
       "parts.sentiment": [
-        16,
-        17
+        14,
+        15
       ],
       "parts.aspect": [
-        11,
-        17
+        6,
+        15
       ],
       "parts.aspect_root": [
-        15,
-        17
+        12,
+        15
       ],
       "parts.kind_read": [
-        17,
-        17
+        15,
+        15
       ],
       "parts.kind": [
-        14,
-        17
+        12,
+        15
       ],
       "parts.amount": [
         3,
@@ -23626,12 +23684,12 @@
         1
       ],
       "claims.subject": [
-        18,
-        19
+        16,
+        17
       ],
       "claims.place": [
         2,
-        18
+        16
       ]
     }
   }

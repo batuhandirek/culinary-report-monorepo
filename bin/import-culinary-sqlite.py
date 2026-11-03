@@ -17,7 +17,7 @@ import sys
 import uuid
 
 CONTAINER = 'culinary-report-dev-db'
-PSQL = ['docker', 'exec', '-i', CONTAINER, 'psql', '-U', 'postgres', '-d', 'culinary_report', '-v', 'ON_ERROR_STOP=1', '-q']
+PSQL = ['docker', 'exec', '-i', CONTAINER, 'psql', '-U', 'postgres', '-d', 'munchwerk', '-v', 'ON_ERROR_STOP=1', '-q']
 
 
 def psql(sql: str) -> str:

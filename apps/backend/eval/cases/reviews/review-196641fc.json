@@ -204,7 +204,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:24:36.290Z",
     "usage": {
       "inputTokens": 5479,
@@ -269,8 +269,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "queue",
-            "wait_for_food"
+            "queue"
           ],
           "kinds": []
         }
@@ -279,7 +278,7 @@
         "text": "the wait is probably due to the social media and Maps hype",
         "quote": "wohl durch Social Media und Maps Hype",
         "sentiment": "neutral",
-        "aspect": "crowding",
+        "aspect": "wait",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -290,7 +289,7 @@
             "negative"
           ],
           "aspects": [
-            "wait"
+            "crowding"
           ],
           "kinds": [
             "fact"
@@ -327,9 +326,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "crowding"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -362,6 +359,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "friendliness",
             "service"
           ],
           "kinds": []
@@ -415,7 +413,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "service"
+          ],
           "kinds": [
             "fact"
           ]
@@ -450,7 +450,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         }
@@ -468,7 +468,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "queue",
             "space"
           ],
           "kinds": [
@@ -505,6 +504,11 @@
         "at": "2026-11-01T21:49:05.402Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:45.296Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 7 of 15 claims changed"
       }
     ]
   }

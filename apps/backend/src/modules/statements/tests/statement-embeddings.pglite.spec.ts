@@ -37,8 +37,8 @@ const VECTORS: Record<string, number[]> = {
 };
 
 /*
- * Claim embeddings: the `statement-embeddings` backlog (waiting for the user's yes and for the
- * re-read of posts, then embedding claims with text and no vector, newest month first, 1024 long,
+ * Claim embeddings: the `statement-embeddings` backlog (waiting for the user's yes only, not for
+ * the re-read of posts, then embedding claims with text and no vector, newest month first, 1024 long,
  * dish-only statements skipped, tokens counted) and the Claims tables' `like` (ordered by cosine
  * distance with every other filter applied, claims without a vector left out and counted). The
  * embedder is mocked.
@@ -89,7 +89,7 @@ describe('statement embeddings (pglite)', () => {
 		service = harness.moduleRef.get(StatementEmbeddingService);
 		controller = harness.moduleRef.get(AdminStatementsController);
 		service.onModuleInit();
-		// The posts' re-read, which the embeddings wait for
+		// The posts' re-read, which the embeddings no longer wait for
 		registry().register({
 			key: 'reread-posts',
 			label: 'Re-read posts as claims',
@@ -163,13 +163,11 @@ describe('statement embeddings (pglite)', () => {
 		expect(await backlog.remaining()).toBe(5);
 	});
 
-	it('waits for the yes to the spend, then for the re-read of posts, and embeds nothing while it waits', async () => {
+	it('waits for the yes to the spend only, not for the re-read of posts, and embeds nothing while it waits', async () => {
 		service.approvedAt = null;
 		expect(await service.waitsFor()).toBe(
 			'The spend is not approved yet (STATEMENT_EMBEDDINGS_APPROVED_AT)',
 		);
-		service.approvedAt = new Date('2026-11-01T00:00:00Z');
-		expect(await service.waitsFor()).toBe('Waits for reread-posts to finish (3 left)');
 
 		const runs = await harness.moduleRef
 			.get(LlmBacklogService)
@@ -177,14 +175,17 @@ describe('statement embeddings (pglite)', () => {
 		const run = runs.find(r => r.key === 'statement-embeddings')!;
 		expect([run.stopReason, run.error, run.batches, run.remaining]).toEqual([
 			'waiting',
-			'Waits for reread-posts to finish (3 left)',
+			'The spend is not approved yet (STATEMENT_EMBEDDINGS_APPROVED_AT)',
 			0,
 			5,
 		]);
 		expect(embedder.embedManyUncached).not.toHaveBeenCalled();
 
-		reread.left = 0;
+		// Once approved it may run while posts are still being re-read
+		service.approvedAt = new Date('2026-11-02T00:00:00Z');
+		expect(reread.left).toBe(3);
 		expect(await service.waitsFor()).toBeNull();
+		reread.left = 0;
 		await em.nativeDelete(BacklogRun, {});
 	});
 

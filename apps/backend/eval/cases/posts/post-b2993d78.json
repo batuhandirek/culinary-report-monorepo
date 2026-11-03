@@ -164,7 +164,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:47:57.975Z",
     "usage": {
       "inputTokens": 10723,
@@ -173,7 +173,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "Markthalle Neun is a food hall but the post says nothing about it beyond hosting the stall, so only Mani in Pasta is listed, with the hall as its location hint. The caption repeats in English, so quotes come from the German half. The 'watch the chefs' line is a fact with a positive slant, and its aspect is a soft call. The shop link makes the post promotional.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Mani in Pasta",
@@ -207,7 +207,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -253,8 +253,7 @@
             "neutral"
           ],
           "aspects": [
-            "vibe",
-            "none"
+            "authenticity"
           ],
           "kinds": [
             "opinion"
@@ -267,7 +266,7 @@
         "text": "the Teig is wafer-thin",
         "quote": "Hauchdünner Teig",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [
           "Teig"
         ],
@@ -277,9 +276,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "cooking"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -331,7 +328,7 @@
         "text": "Mani in Pasta is perfect for a tasty snack in between",
         "quote": "perfekt für einen leckeren Happen zwischendurch",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -339,9 +336,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -377,9 +372,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -415,6 +408,16 @@
         "at": "2026-11-01T21:49:05.437Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:20.634Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 10 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:03.394Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (A creator's guide-style post with no sign of payment, gift, invitation or collab with Mani in Pasta. The hamoni.com link is the creator's own platform, not a venue sponsorship.)"
       }
     ]
   }

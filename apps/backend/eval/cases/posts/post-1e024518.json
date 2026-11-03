@@ -150,7 +150,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:32:45.262Z",
     "usage": {
       "inputTokens": 9255,
@@ -159,7 +159,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The post is the venue's own promotion ('unser Masala Dosa'); the venue is named only through its order site masalas.de, which I took as naming it 'Masalas' in Köpenick. The ordering link is borderline narration, so it is optional.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Masalas",
@@ -218,7 +218,7 @@
             "neutral"
           ],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": [
             "fact"
@@ -231,7 +231,7 @@
         "text": "the Masala Dosa comes with Sambar and Chutneys",
         "quote": "Dazu Sambar und Chutneys.",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Sambar",
           "Chutneys"
@@ -242,9 +242,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -278,7 +276,7 @@
         "text": "orders can be placed directly at masalas.de",
         "quote": "Bestell direkt: masalas.de",
         "sentiment": "neutral",
-        "aspect": "takeaway_handling",
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -287,7 +285,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
             "delivery_platform"
           ],
           "kinds": []
@@ -312,6 +309,16 @@
         "at": "2026-11-01T21:49:05.422Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:42.546Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 5 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:44.190Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The venue's own post about its food (\"unser Masala Dosa\", \"Bestell direkt\"), not a paid or gifted post by another creator)"
       }
     ]
   }

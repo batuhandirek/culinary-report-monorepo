@@ -176,7 +176,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:23:25.253Z",
     "usage": {
       "inputTokens": 10543,
@@ -185,7 +185,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The opening is stated as news, so it is a new opening; the opening-day claim is a fact with event allowed. The tagged location 'Pensionsaufenthalt' is ignored, and the bare 'boah' about the matcha is folded into the coconut-milk recommendation.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Sandos",
@@ -216,9 +216,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "opening_hours"
-          ],
+          "aspects": [],
           "kinds": [
             "event"
           ]
@@ -241,7 +239,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "drink_selection"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -269,7 +269,7 @@
         "text": "Sandos has vegan options",
         "quote": "die haben auf jeden Fall auch vegane Optionen",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -291,7 +291,7 @@
         "text": "Sandos has lots of Matcha",
         "quote": "ganz viel Matcha",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "drink_selection",
         "foods": [
           "Matcha"
         ],
@@ -303,9 +303,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -317,7 +315,7 @@
         "text": "Sandos also has Halal Fleisch",
         "quote": "auch Halal Fleisch",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [
           "Halal Fleisch"
         ],
@@ -329,9 +327,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -349,7 +345,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -422,7 +420,7 @@
         "text": "unsure whether the Chili sin carne is soy-based",
         "quote": "ich weiß nicht ob's auf Soja Basis ist",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "ingredient_quality",
         "foods": [
           "Chili sin carne",
           "Soja"
@@ -434,7 +432,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality"
+            "dietary"
           ],
           "kinds": []
         },
@@ -445,7 +443,7 @@
         "text": "you must order the Matcha with Kokosmilch",
         "quote": "ihr müsst mit Kokosmilch bestellen",
         "sentiment": "positive",
-        "aspect": "drinks",
+        "aspect": "drink_quality",
         "foods": [
           "Matcha",
           "Kokosmilch"
@@ -457,7 +455,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_quality"
+            "drinks"
           ],
           "kinds": []
         },
@@ -468,7 +466,7 @@
         "text": "Matcha is generally best with Kokosmilch",
         "quote": "generell Matcha mit Kokosmilch.",
         "sentiment": "positive",
-        "aspect": "drinks",
+        "aspect": "drink_quality",
         "foods": [
           "Matcha",
           "Kokosmilch"
@@ -480,7 +478,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_quality"
+            "drinks",
+            "none"
           ],
           "kinds": []
         },
@@ -565,6 +564,16 @@
         "at": "2026-11-01T21:49:05.429Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:41:07.028Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 9 of 15 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:22.614Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (Posted by Sandos' own account about itself (opening, menu, hours, 'kommt vorbei'): a venue's own post, not a paid/gifted creator post)"
       }
     ]
   }

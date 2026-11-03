@@ -221,7 +221,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:43:44.686Z",
     "usage": {
       "inputTokens": 10636,
@@ -230,7 +230,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The venue is never clearly named: I took the transcript's 'kurmanche Restaurant' at Wilmersdorfer Straße 104 as its name, since the address pins it down and the report is useless without it. I left out garbled lines ('in diese Gegend braucht man sowas nicht', the krüde aside is kept only as optional) and the repeated 1-euro announcement already covered by the caption deal.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Kurmanche Restaurant",
@@ -261,9 +261,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": [
             "event"
           ]
@@ -275,7 +273,7 @@
         "text": "Döner and Schawarma for 1€ on 2.10.2026",
         "quote": "Döner in Schawarma zusammen  1€  am 2.10.2026",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Döner",
           "Schawarma"
@@ -288,9 +286,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -300,7 +296,7 @@
         "text": "it is a Syrian-Kurdish restaurant in Charlottenburg",
         "quote": "surich kurdische Restaurant in charlotteenburg",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -309,9 +305,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location",
-            "authenticity",
-            "other"
+            "location"
           ],
           "kinds": []
         },
@@ -380,7 +374,7 @@
         "text": "the restaurant serves Syrian-style food",
         "quote": "das ist 1 sorianische Art essen",
         "sentiment": "neutral",
-        "aspect": "authenticity",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -389,8 +383,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
-            "food"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -452,7 +445,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -495,9 +488,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -509,7 +500,7 @@
         "text": "for the opening, Shawarma costs 1 Euro on Friday",
         "quote": "zum Eröffnung gibt's Shawarma für 1 Euro",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Shawarma"
         ],
@@ -521,9 +512,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -533,7 +522,7 @@
         "text": "Shawarma costs 2 Euro on the second opening day",
         "quote": "für 2 Euro am 2.",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Shawarma"
         ],
@@ -545,9 +534,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -557,7 +544,7 @@
         "text": "Shawarma then costs 3 Euro on the third opening day",
         "quote": "und dann für 3 Euro",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Shawarma"
         ],
@@ -569,9 +556,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -581,7 +566,7 @@
         "text": "50 percent discount on everything for 3 days",
         "quote": "50 Prozent äh 3 Tage lang Rabatt auf alles",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -592,7 +577,7 @@
             "positive"
           ],
           "aspects": [
-            "price_level"
+            "price"
           ],
           "kinds": []
         },
@@ -611,7 +596,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "event"
           ]
@@ -670,7 +657,7 @@
         "text": "everything is healthy, nice and made with love",
         "quote": "alles was gesundes und schönes und mit Liebe gemacht",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "authenticity",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -679,7 +666,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality"
+            "food"
           ],
           "kinds": []
         },
@@ -703,9 +690,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -740,6 +725,16 @@
         "at": "2026-11-01T21:49:05.432Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:06.103Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 13 of 21 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:42.733Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (A creator covers an opening and interviews the owner, but nothing says the venue paid, gifted or invited them: no ad, partnership, gifted meal or collab disclosure.)"
       }
     ]
   }

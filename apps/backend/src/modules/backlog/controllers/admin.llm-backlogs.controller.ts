@@ -14,7 +14,6 @@ import {
 	AdminLlmBacklogsOutputDto,
 	AdminRunLlmBacklogsOutputDto,
 } from '../dto/admin-llm-backlog.output.dto.js';
-import { backlogConfig } from '../config/backlog.config.js';
 import { LlmBacklogService } from '../services/llm-backlog.service.js';
 
 @Controller('/admin/llm-backlogs')
@@ -30,7 +29,6 @@ export class AdminLlmBacklogsController {
 		return {
 			dailyTokens: status.dailyTokens,
 			spentToday: status.spentToday,
-			allowsPaid: backlogConfig.LLM_BACKLOG_ALLOW_PAID,
 			items: status.backlogs.map(backlog => ({
 				key: backlog.key,
 				label: backlog.label,

@@ -131,7 +131,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:51:14.085Z",
     "usage": {
       "inputTokens": 12712,
@@ -181,7 +181,7 @@
         "text": "Vinos (Naturales) is a popular natural wine shop in the Wrangelkiez",
         "quote": "Mitten im Wrangelkiez bringt ein beliebter Naturweinladen",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "location",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -190,7 +190,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location"
+            "drink_selection"
           ],
           "kinds": [
             "fact"
@@ -261,7 +261,7 @@
         "text": "The shop has been renamed Vinos (Naturales)",
         "quote": "Unter dem neuen Namen Vinos (Naturales)",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "ownership",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -270,7 +270,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership"
+            "other"
           ],
           "kinds": []
         },
@@ -414,7 +414,7 @@
             "positive"
           ],
           "aspects": [
-            "drinks"
+            "outdoor_seating"
           ],
           "kinds": []
         },
@@ -445,7 +445,7 @@
         "text": "The cellar has a long shared table for private occasions, birthdays and dinners",
         "quote": "eine lange gemeinsame Tafel für private Anlässe, Geburtstage und Dinner",
         "sentiment": "neutral",
-        "aspect": "space",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -453,9 +453,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "interior"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -475,9 +473,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -509,7 +505,7 @@
         "text": "Vinos remains a meeting point for wine tastings",
         "quote": "bleibt der Laden ein Treffpunkt für Weinverkostungen",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -519,7 +515,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "fact"
           ]
@@ -558,7 +556,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "vibe"
           ],
           "kinds": [
             "fact"
@@ -581,7 +579,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -626,7 +626,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "drink_selection"
+          ],
           "kinds": [
             "fact"
           ]
@@ -740,6 +742,16 @@
         "at": "2026-11-01T21:49:05.439Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:17.092Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 9 of 28 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:12.907Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial blog feature with no paid partnership, ad, gifted meal, invitation or giveaway disclosed)"
       }
     ]
   }

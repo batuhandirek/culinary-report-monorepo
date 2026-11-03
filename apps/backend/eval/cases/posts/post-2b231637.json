@@ -199,7 +199,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:35:35.612Z",
     "usage": {
       "inputTokens": 56130,
@@ -403,7 +403,7 @@
         "text": "Duo Sicilian Ice Cream serves Sicilian Gelato",
         "quote": "sizilianisches Gelato",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Gelato"
         ],
@@ -413,9 +413,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -466,7 +464,7 @@
         "text": "Zàgara serves Sicilian Eis",
         "quote": "sizilianisches Eis",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Eis"
         ],
@@ -476,9 +474,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -529,7 +525,7 @@
         "text": "Cuore di Vetro is a Gelato manufactory",
         "quote": "Gelato-Manufaktur",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Gelato"
         ],
@@ -540,7 +536,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -592,7 +588,7 @@
         "text": "Marina macht Eis makes handmade Eis",
         "quote": "handgemachtes Eis",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "ingredient_quality",
         "foods": [
           "Eis"
         ],
@@ -605,7 +601,7 @@
             "positive"
           ],
           "aspects": [
-            "ingredient_quality"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -722,7 +718,7 @@
         "text": "Jones Ice Cream makes Craft Ice Cream",
         "quote": "Craft Ice Cream",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Craft Ice Cream"
         ],
@@ -732,7 +728,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -783,7 +781,7 @@
         "text": "Die Eismacher is an Italian ice cream manufactory",
         "quote": "italienische Eismanufaktur",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -792,7 +790,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -844,7 +842,7 @@
         "text": "Tribeca Ice Cream now has a second branch at Graefekiez",
         "quote": "inzwischen mit zweiter Filiale am Graefekiez",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "location",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -853,7 +851,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location"
+            "other"
           ],
           "kinds": []
         },
@@ -886,7 +884,7 @@
         "text": "Schöne & das Biest is a small ice cream manufactory",
         "quote": "kleine Eismanufaktur",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -895,7 +893,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -929,7 +927,7 @@
         "text": "Eiscafé Monheim is a classic ice cream café",
         "quote": "klassisches Eiscafé",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -939,9 +937,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -959,6 +955,16 @@
         "at": "2026-11-01T21:49:05.423Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:17.484Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 9 of 27 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:52.444Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial roundup curated from press recommendations and ratings; no paid partnership, gift, invitation or giveaway with any venue. Linking its own map is self-promotion, not venue-paid.)"
       }
     ]
   }

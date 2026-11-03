@@ -158,7 +158,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:36:46.981Z",
     "usage": {
       "inputTokens": 14510,
@@ -220,7 +220,7 @@
         "text": "bowls might be the ultimate trendy food",
         "quote": "Bowls might be THE ultimate trendy food",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "food",
         "foods": [
           "Bowls"
         ],
@@ -233,7 +233,7 @@
             "positive"
           ],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": [
             "fact"
@@ -246,7 +246,7 @@
         "text": "bowls are one of the creator's favorite things to eat",
         "quote": "they’re also one of my favorite things to eat",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "food",
         "foods": [
           "bowls"
         ],
@@ -257,7 +257,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
             "taste"
           ],
           "kinds": []
@@ -269,7 +268,7 @@
         "text": "bowls can get a little boring sometimes",
         "quote": "they can get a little boring sometimes",
         "sentiment": "negative",
-        "aspect": null,
+        "aspect": "food",
         "foods": [
           "bowls"
         ],
@@ -280,8 +279,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
-            "taste"
+            "taste",
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -292,7 +291,7 @@
         "text": "Schüsseldienst does bowls a little differently",
         "quote": "do bowls a little differently",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "bowls"
         ],
@@ -305,7 +304,7 @@
             "neutral"
           ],
           "aspects": [
-            "menu_variety"
+            "food"
           ],
           "kinds": []
         },
@@ -334,7 +333,7 @@
         "text": "Kitchari Kitchen does bowls a little differently",
         "quote": "do bowls a little differently",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "bowls"
         ],
@@ -347,7 +346,7 @@
             "neutral"
           ],
           "aspects": [
-            "menu_variety"
+            "food"
           ],
           "kinds": []
         },
@@ -376,7 +375,7 @@
         "text": "Fatoush does bowls a little differently",
         "quote": "do bowls a little differently",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "bowls"
         ],
@@ -389,7 +388,7 @@
             "neutral"
           ],
           "aspects": [
-            "menu_variety"
+            "food"
           ],
           "kinds": []
         },
@@ -459,6 +458,16 @@
         "at": "2026-11-01T21:49:05.425Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:34.976Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 6 of 10 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:00.446Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own recommendation list of three bowl spots; no paid partnership, ad, gifted meal, invitation or collab is indicated.)"
       }
     ]
   }

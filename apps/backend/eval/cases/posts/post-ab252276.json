@@ -123,7 +123,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:47:11.341Z",
     "usage": {
       "inputTokens": 9458,
@@ -132,7 +132,7 @@
       "cacheWriteTokens": 5859
     },
     "notes": "Own-account promotional post announcing a new Berlin branch; the opening statement could be a fact or an event, and the 'try our Döner' invitation sits between a neutral fact and a recommendation. The garbled 'haust es krass' was left out.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Haus des Döners",
@@ -155,7 +155,7 @@
         "text": "Haus des Döners is open from now on at Torstraße 117, 10119 Berlin",
         "quote": "Haus des Döners findet ihr ab SOFORT in der 📍Torstraße 117, 10119 Berlin",
         "sentiment": "neutral",
-        "aspect": "location",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -164,8 +164,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
-            "opening_hours"
+            "location"
           ],
           "kinds": [
             "event"
@@ -178,7 +177,7 @@
         "text": "come by and try the Döner at Haus des Döners",
         "quote": "Kommt vorbei und probiert unseren Döner",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": null,
         "foods": [
           "Döner"
         ],
@@ -191,7 +190,7 @@
             "neutral"
           ],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": [
             "fact",
@@ -237,7 +236,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "event",
             "opinion"
@@ -258,6 +259,16 @@
         "at": "2026-11-01T21:49:05.437Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:07.765Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 4 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:58.873Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (Venue's own post about its new Berlin opening (\"Kommt vorbei\"), not a paid, gifted or invited post by a creator or blog)"
       }
     ]
   }

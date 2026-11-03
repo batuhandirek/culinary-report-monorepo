@@ -112,7 +112,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:23:28.766Z",
     "usage": {
       "inputTokens": 5148,
@@ -188,9 +188,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "friendliness"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -206,9 +204,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -225,8 +221,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
-            "interior"
+            "location",
+            "vibe"
           ],
           "kinds": []
         }
@@ -314,8 +310,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "friendliness",
-            "attentiveness"
+            "none"
           ],
           "kinds": []
         }
@@ -331,6 +326,11 @@
         "at": "2026-11-01T21:49:05.400Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:12.477Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 11 claims changed"
       }
     ]
   }

@@ -115,7 +115,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:28:29.621Z",
     "usage": {
       "inputTokens": 5110,
@@ -145,7 +145,7 @@
         "text": "sometimes the food is delicious, sometimes not",
         "quote": "有时很好吃，有时不好吃",
         "sentiment": "mixed",
-        "aspect": "taste",
+        "aspect": "consistency",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -156,9 +156,7 @@
             "negative",
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -166,7 +164,7 @@
         "text": "wonders whether there are two teams of chefs",
         "quote": "不知道是不是有2波厨子",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "consistency",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -176,9 +174,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "question"
           ]
@@ -196,9 +192,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "crowding"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -206,7 +200,7 @@
         "text": "once ordered a 0.4L water",
         "quote": "点了一杯0.4L的水",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "水"
         ],
@@ -217,7 +211,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks"
+            "none"
           ],
           "kinds": []
         }
@@ -226,7 +220,7 @@
         "text": "the server brought the water as an open glass, not a sealed plastic or glass bottle",
         "quote": "服务员直接裸着上了一杯水，不是那种密封的塑料瓶或者玻璃瓶",
         "sentiment": "negative",
-        "aspect": "order_accuracy",
+        "aspect": "drinks",
         "foods": [
           "水"
         ],
@@ -237,8 +231,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks",
-            "food_hygiene"
+            "food_hygiene",
+            "order_accuracy"
           ],
           "kinds": []
         }
@@ -277,6 +271,11 @@
         "at": "2026-11-01T21:49:05.413Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:49.878Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 7 claims changed"
       }
     ]
   }

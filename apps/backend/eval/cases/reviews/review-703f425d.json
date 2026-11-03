@@ -82,7 +82,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:27:09.026Z",
     "usage": {
       "inputTokens": 4996,
@@ -132,7 +132,7 @@
         "text": "the burger has never arrived bad",
         "quote": "er kam nie schlecht an",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "consistency",
         "foods": [
           "Burger"
         ],
@@ -143,7 +143,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food",
+            "takeaway_handling"
           ],
           "kinds": []
         }
@@ -175,6 +176,11 @@
         "at": "2026-11-01T21:49:05.409Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:00.580Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 4 claims changed"
       }
     ]
   }

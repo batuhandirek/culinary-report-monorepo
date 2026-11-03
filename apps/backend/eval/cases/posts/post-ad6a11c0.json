@@ -309,7 +309,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:48:14.880Z",
     "usage": {
       "inputTokens": 23043,
@@ -453,9 +453,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -493,9 +491,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -523,7 +519,7 @@
         "text": "Dot Tea Bar is a Chinese tea house and restaurant",
         "quote": "a Chinese tea house and restaurant",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -531,7 +527,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -552,7 +550,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
             "availability"
           ],
           "kinds": []
@@ -573,8 +570,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere",
-            "presentation"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -603,7 +599,7 @@
         "text": "make sure to try the cold noodles and main dishes at night at Dot Tea Bar",
         "quote": "Make sure to try their cold noodles and main dishes at night",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "cold noodles"
         ],
@@ -613,9 +609,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -636,9 +630,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -748,7 +740,7 @@
         "text": "the pastries at Bonanza are from Canal Bakery",
         "quote": "The pastries here are actually from 📍Canal Bakery",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "ingredient_quality",
         "foods": [
           "pastries"
         ],
@@ -758,10 +750,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food",
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -811,7 +800,7 @@
         "text": "the creator had a date night with her boyfriend at Muschelbar",
         "quote": "I had a little date night with my boyfriend",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -819,9 +808,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "atmosphere"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -858,7 +845,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "other"
+            "menu_variety"
           ],
           "kinds": [
             "verdict"
@@ -909,7 +896,7 @@
         "text": "the food at Muschelbar tastes like in France",
         "quote": "it tastes like in France",
         "sentiment": "positive",
-        "aspect": "authenticity",
+        "aspect": "taste",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -918,7 +905,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -937,7 +924,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -947,7 +936,7 @@
         "text": "the creator went to Munchies for the cheeseburger with cheese sauce and the biryani tacos",
         "quote": "I was there for the cheeseburger with cheese sauce and the biryani tacos",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "cheeseburger with cheese sauce",
           "biryani tacos"
@@ -959,7 +948,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": []
         },
@@ -970,7 +959,7 @@
         "text": "the creator tried the veggie version of the iconic hamburger and tacos at Munchies",
         "quote": "I tried the veggie version of the iconic hamburger and tacos",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [
           "hamburger",
           "tacos"
@@ -981,9 +970,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1001,9 +988,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1022,7 +1007,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "authenticity"
+            "dietary"
           ],
           "kinds": []
         },
@@ -1041,6 +1026,16 @@
         "at": "2026-11-01T21:49:05.437Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:22.250Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 16 of 31 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:00.570Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own weekly eats roundup with no paid partnership, ad, gifted meal, invitation or venue collab disclosed.)"
       }
     ]
   }

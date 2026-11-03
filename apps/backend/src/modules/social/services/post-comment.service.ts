@@ -20,7 +20,6 @@ import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.j
 import { ownPostSql } from '../util/accounts.js';
 import { type CommentFields, plainIntent } from '../util/post-comments.js';
 
-// Comments sent to the LLM in one call
 // Comments read side by side, one a call
 const CONCURRENCY = 10;
 

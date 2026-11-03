@@ -119,7 +119,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:49:04.852Z",
     "usage": {
       "inputTokens": 13316,
@@ -161,7 +161,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -171,7 +173,7 @@
         "text": "after the long wait the young man orders only a small Decaf Flat White",
         "quote": "nur einen kleinen Decaf Flat White bestellt hat",
         "sentiment": "neutral",
-        "aspect": "queue",
+        "aspect": null,
         "foods": [
           "Decaf Flat White"
         ],
@@ -184,7 +186,7 @@
             "negative"
           ],
           "aspects": [
-            "drinks"
+            "queue"
           ],
           "kinds": [
             "opinion"
@@ -230,9 +232,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -252,7 +252,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "cooking"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -272,9 +274,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "crowding"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -302,7 +302,7 @@
         "text": "Restaurant India has closed after 31 years",
         "quote": "Geschlossen nach 31 Jahren",
         "sentiment": "negative",
-        "aspect": "opening_hours",
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -326,7 +326,7 @@
         "text": "Restaurant India closed because its lease was terminated",
         "quote": "Weil der Mietvertrag gekündigt wurde",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -337,8 +337,7 @@
             "negative"
           ],
           "aspects": [
-            "ownership",
-            "opening_hours"
+            "none"
           ],
           "kinds": [
             "change"
@@ -359,7 +358,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -379,9 +380,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -419,9 +418,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -439,7 +436,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "consistency"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -489,7 +488,7 @@
         "text": "they always went home from Restaurant India full and happy",
         "quote": "dass wir satt und glücklich nach Hause gehen würden",
         "sentiment": "positive",
-        "aspect": "portion_size",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -498,7 +497,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "portion_size"
           ],
           "kinds": []
         },
@@ -509,7 +508,7 @@
         "text": "Restaurant India has a small table with an always-lit candle in the window niche",
         "quote": "Der kleine Tisch mit der stets brennenden Kerze in der Fensternische",
         "sentiment": "positive",
-        "aspect": "atmosphere",
+        "aspect": "interior",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -520,7 +519,7 @@
             "neutral"
           ],
           "aspects": [
-            "interior"
+            "atmosphere"
           ],
           "kinds": [
             "fact"
@@ -533,7 +532,7 @@
         "text": "the author drank her Yogi-Tee at Restaurant India many times, in peace",
         "quote": "meinen Yogi-Tee getrunken habe. In Ruhe",
         "sentiment": "positive",
-        "aspect": "noise",
+        "aspect": "atmosphere",
         "foods": [
           "Yogi-Tee"
         ],
@@ -546,8 +545,7 @@
             "neutral"
           ],
           "aspects": [
-            "atmosphere",
-            "drinks"
+            "noise"
           ],
           "kinds": [
             "opinion"
@@ -560,7 +558,7 @@
         "text": "until the end everything at Restaurant India seemed as always",
         "quote": "Bis zuletzt schien im Restaurant India alles wie immer",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "consistency",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -570,7 +568,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -580,7 +580,7 @@
         "text": "owner Virender Aurora has friendly, soft features",
         "quote": "Der Mann mit den freundlichen, weichen Gesichtszügen",
         "sentiment": "positive",
-        "aspect": "friendliness",
+        "aspect": "ownership",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -589,7 +589,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership"
+            "friendliness"
           ],
           "kinds": []
         },
@@ -600,7 +600,7 @@
         "text": "the owner wanted to say goodbye personally to the guests who had grown dear to him",
         "quote": "Er wolle die Gäste, die ihm im Laufe der Jahre „ans Herz gewachsen seien“, gerne persönlich verabschieden",
         "sentiment": "positive",
-        "aspect": "ownership",
+        "aspect": "friendliness",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -611,7 +611,7 @@
             "neutral"
           ],
           "aspects": [
-            "friendliness"
+            "ownership"
           ],
           "kinds": [
             "opinion"
@@ -652,7 +652,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "consistency"
+          ],
           "kinds": [
             "verdict"
           ]
@@ -684,7 +686,7 @@
         "text": "the author ordered her Byriani extra spicy on 1 January 2023",
         "quote": "bestellte ich mir mein Byriani extra scharf",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "seasoning",
         "foods": [
           "Byriani"
         ],
@@ -695,7 +697,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "seasoning"
+            "none"
           ],
           "kinds": []
         },
@@ -718,9 +720,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "portion_size"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -732,7 +732,7 @@
         "text": "Halwa is an Indian dessert of semolina, raisins, almonds and cashews",
         "quote": "eine indische Nachspeise aus Grieß, Rosinen, Mandeln und Cashewnüssen",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": null,
         "foods": [
           "Halwa",
           "Grieß",
@@ -747,7 +747,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -758,7 +758,7 @@
         "text": "on the last evening before closing the owner only reluctantly let them pay for dinner",
         "quote": "Bezahlen durften wir unser Abendessen am letzten Abend vor der Schließung nur noch widerwillig",
         "sentiment": "positive",
-        "aspect": "payment",
+        "aspect": "on_the_house",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -766,11 +766,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "billing",
-            "friendliness",
-            "ownership"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -782,7 +778,7 @@
         "text": "the new international deli supermarket opposite sells Halwa packaged from the fridge",
         "quote": "Hier gibt es auch Halwa – abgepackt aus dem Kühlregal",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": null,
         "foods": [
           "Halwa"
         ],
@@ -794,9 +790,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "freshness"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -806,7 +800,7 @@
         "text": "\"Gerne wie immer\" was enough to order",
         "quote": "Gerne wie immer",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "service",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -816,7 +810,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "friendliness"
+          ],
           "kinds": []
         }
       }
@@ -842,6 +838,16 @@
         "at": "2026-11-01T21:49:05.438Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:38.706Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 24 of 31 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:03.470Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial farewell piece on a closed restaurant; no payment, gift or invitation from a venue (the last meal being nearly free is the owner's goodbye, not a sponsored visit), and the Food-Guide plug is the blog's own product.)"
       }
     ]
   }

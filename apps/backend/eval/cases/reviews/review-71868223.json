@@ -135,7 +135,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:27:23.163Z",
     "usage": {
       "inputTokens": 5262,
@@ -213,10 +213,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "wait",
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict",
             "fact"
@@ -237,9 +234,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -294,7 +289,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": [
             "verdict"
@@ -305,7 +300,7 @@
         "text": "recommends waiting in the queue at least once",
         "quote": "ben en azından o kuyruğu bir kere beklemenizi tavsiye ederim",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "queue",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -314,7 +309,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "queue"
+            "none"
           ],
           "kinds": []
         }
@@ -340,6 +335,11 @@
         "at": "2026-11-01T21:49:05.409Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:03.214Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 9 claims changed"
       }
     ]
   }

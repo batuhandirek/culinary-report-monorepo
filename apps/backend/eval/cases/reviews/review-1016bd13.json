@@ -446,7 +446,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:24:29.013Z",
     "usage": {
       "inputTokens": 6828,
@@ -460,7 +460,7 @@
         "text": "large groups should avoid this place",
         "quote": "大型团队可以避雷了！",
         "sentiment": "negative",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -468,7 +468,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         }
       },
@@ -476,7 +478,7 @@
         "text": "the group was 120 people",
         "quote": "我们是120人的团队",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -484,7 +486,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         }
       },
@@ -492,7 +496,7 @@
         "text": "pre-ordered a menu of 4 cold dishes, 8 hot dishes and one soup",
         "quote": "提前定好了菜单（4冷8热一汤）",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "汤"
         ],
@@ -512,7 +516,7 @@
         "text": "reserved 6 bottles of beer, 1 large bottle of cola and 1 large bottle of orange juice per table",
         "quote": "酒水预订了6瓶啤酒，1大瓶可乐，1大瓶橙汁",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "啤酒",
           "可乐",
@@ -524,7 +528,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "drink_selection"
+          ],
           "kinds": []
         }
       },
@@ -532,7 +538,7 @@
         "text": "planned to order more drinks on site as needed",
         "quote": "现场再看客人需要现点酒水",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -540,7 +546,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         }
       },
@@ -548,7 +556,23 @@
         "text": "arranged a 7 PM time with the restaurant in advance",
         "quote": "提前跟餐厅说好时间（预计19点）",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "reservation_handling",
+        "foods": [],
+        "amount": null,
+        "unit": null,
+        "kind": "fact",
+        "optional": false,
+        "alsoAcceptable": {
+          "sentiments": [],
+          "aspects": [],
+          "kinds": []
+        }
+      },
+      {
+        "text": "called the lobby manager 20 minutes ahead so hot dishes could be prepared",
+        "quote": "特意给大堂经理打了电话，告知我们20分钟后到",
+        "sentiment": "neutral",
+        "aspect": "reservation_handling",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -557,24 +581,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "reservation_handling"
+            "wait_for_food"
           ],
-          "kinds": []
-        }
-      },
-      {
-        "text": "called the lobby manager 20 minutes ahead so hot dishes could be prepared",
-        "quote": "特意给大堂经理打了电话，告知我们20分钟后到",
-        "sentiment": "neutral",
-        "aspect": null,
-        "foods": [],
-        "amount": null,
-        "unit": null,
-        "kind": "fact",
-        "optional": false,
-        "alsoAcceptable": {
-          "sentiments": [],
-          "aspects": [],
           "kinds": []
         }
       },
@@ -582,7 +590,7 @@
         "text": "the restaurant said the cold dishes were already set out",
         "quote": "餐厅告知，凉菜已经布好",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "service",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -590,7 +598,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "reservation_handling"
+          ],
           "kinds": []
         }
       },
@@ -606,7 +616,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "reservation_handling"
+          ],
           "kinds": []
         }
       },
@@ -614,7 +626,7 @@
         "text": "the soup was served quickly on arrival",
         "quote": "汤很快上来",
         "sentiment": "positive",
-        "aspect": "speed_of_service",
+        "aspect": "wait_for_food",
         "foods": [
           "汤"
         ],
@@ -626,9 +638,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "wait_for_food"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -638,7 +648,7 @@
         "text": "reserved 15 tables in total",
         "quote": "我们总共预订了15桌",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "reservation_handling",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -690,7 +700,7 @@
         "text": "all hot dishes (15 plates each for 15 tables) came within just 5 minutes around 7:30",
         "quote": "所有的热菜（每道都是15盘，因为开了15桌），在短短的5分钟内全部都来了",
         "sentiment": "negative",
-        "aspect": "speed_of_service",
+        "aspect": "wait_for_food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -698,9 +708,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "wait_for_food"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -718,9 +726,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "speed_of_service"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -736,7 +742,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "wait_for_food"
+          ],
           "kinds": []
         }
       },
@@ -760,7 +768,7 @@
         "text": "asks why, if staff served dishes one at a time, all 8 hot dishes appeared in the last 5 minutes",
         "quote": "为什么会在最后5分钟，8个热菜，每道15份，就都出现在我们面前？",
         "sentiment": "negative",
-        "aspect": "speed_of_service",
+        "aspect": "wait_for_food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -778,7 +786,7 @@
         "text": "suspects the hot dishes were deliberately held in the kitchen until all were ready, so guests would order more",
         "quote": "还是故意的放在厨房，等8个菜都齐了才一起推出来？",
         "sentiment": "negative",
-        "aspect": "speed_of_service",
+        "aspect": "pressure",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -787,7 +795,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "service"
+            "wait_for_food"
           ],
           "kinds": [
             "opinion"
@@ -814,7 +822,7 @@
         "text": "the 16-person table got 4 plates of 土豆丝 instead of 2 and 4 plates of another cold dish, sarcastically 'how generous'",
         "quote": "上了4盘土豆丝（不是两盘）和4盘另外一个凉菜",
         "sentiment": "negative",
-        "aspect": "order_accuracy",
+        "aspect": "portion_size",
         "foods": [
           "土豆丝"
         ],
@@ -825,7 +833,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "portion_size"
+            "order_accuracy"
           ],
           "kinds": []
         }
@@ -834,7 +842,7 @@
         "text": "waiters kept pushing drinks on guests while they waited, which was unpleasant",
         "quote": "服务员却一直在给宾客推荐酒水",
         "sentiment": "negative",
-        "aspect": "service",
+        "aspect": "pressure",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -842,9 +850,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "advice"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -868,7 +874,7 @@
         "text": "asks whether serving hot dishes earlier would really mean fewer drinks sold",
         "quote": "热菜早点上，客人满意了，酒水会少点吗？",
         "sentiment": "negative",
-        "aspect": "speed_of_service",
+        "aspect": "pressure",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -876,7 +882,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "wait_for_food"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -893,6 +901,11 @@
         "at": "2026-11-01T21:49:05.401Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:37.547Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 19 of 24 claims changed"
       }
     ]
   }

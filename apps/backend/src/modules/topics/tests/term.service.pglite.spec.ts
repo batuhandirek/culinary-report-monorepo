@@ -15,7 +15,11 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { TermTopicAgent } from '../agents/term-topic.agent.js';
+import {
+	TermTopicAgent,
+	type TermTopicContext,
+	type TermTopicInputTopic,
+} from '../agents/term-topic.agent.js';
 import { AdminTermsController } from '../controllers/admin.terms.controller.js';
 import { Term } from '../entities/term.entity.js';
 import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
@@ -63,28 +67,20 @@ describe('TermService (pglite)', () => {
 	let hamburg: City;
 	let venue: Venue;
 	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => 'job-id') };
-	/** What the agent was offered and asked on its last call */
-	let offered: { key: string; label: string; kind: string; parent?: string }[] = [];
+	/** The topics the agent was offered on its last call, and the wordings asked since the case began (one a call) */
+	let offered: TermTopicInputTopic[] = [];
 	let asked: string[] = [];
-	const agent = mockAgent((prompt: unknown) => {
-		const { topics: given, terms } = JSON.parse(prompt as string) as {
-			topics: typeof offered;
-			terms: { id: string; name: string }[];
-		};
-		offered = given;
-		asked = terms.map(t => t.name);
+	const agent = mockAgent((message: unknown, context: unknown) => {
+		const name = JSON.parse((message as string).replace(/^Wording: /, '')) as string;
+		offered = (context as TermTopicContext).topics;
+		asked.push(name);
+		const answer = ANSWERS[name.toLowerCase()] ?? { topics: [], suggestion: null };
 		return {
-			terms: terms.map(t => {
-				const answer = ANSWERS[t.name.toLowerCase()] ?? { topics: [], suggestion: null };
-				return {
-					id: t.id,
-					suggestion: answer.suggestion,
-					topics: answer.topics.map(key => ({
-						key,
-						relation: RELATIONS[t.name.toLowerCase()]?.[key] ?? 'same',
-					})),
-				};
-			}),
+			suggestion: answer.suggestion,
+			topics: answer.topics.map(key => ({
+				key,
+				relation: RELATIONS[name.toLowerCase()]?.[key] ?? 'same',
+			})),
 		};
 	});
 
@@ -203,7 +199,10 @@ describe('TermService (pglite)', () => {
 	});
 
 	// A fresh unit of work each case: the service and the cases share the entity manager
-	beforeEach(() => em().clear());
+	beforeEach(() => {
+		em().clear();
+		asked = [];
+	});
 
 	/** Every food part's term, with the topics the statements' readers see through its links today (rank order) */
 	const topicsOfParts = async (): Promise<Record<string, string[]>> => {
@@ -311,6 +310,7 @@ describe('TermService (pglite)', () => {
 		expect(registry.list().map(b => [b.key, b.priority])).toEqual([['terms', 25]]);
 		const backlog = registry.get('terms')!;
 		expect(await backlog.remaining()).toBe(8);
+		asked = [];
 		expect(await backlog.runBatch()).toEqual({ done: 8, tokens: 0 });
 
 		// Every topic of every kind offered, with its parent
@@ -396,7 +396,8 @@ describe('TermService (pglite)', () => {
 		// Each asked once
 		expect(await service().countPending()).toBe(0);
 		expect(await service().decide({ limit: 100 })).toEqual({ looked: 0, linked: 0, tokens: 0 });
-		expect(agent.generate).toHaveBeenCalledTimes(2);
+		// One call a wording: Pommes, then the batch's eight
+		expect(agent.generate).toHaveBeenCalledTimes(9);
 	});
 
 	it('gives the index every decision: an alias, a compound to both topics, a tag to its aspect, a "none" to nothing', async () => {

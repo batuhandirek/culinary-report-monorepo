@@ -112,7 +112,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:23:38.392Z",
     "usage": {
       "inputTokens": 5065,
@@ -197,7 +197,7 @@
             "neutral"
           ],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": [
             "fact"
@@ -237,10 +237,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food",
-            "freshness"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -261,8 +258,7 @@
             "mixed"
           ],
           "aspects": [
-            "taste",
-            "ingredient_quality"
+            "taste"
           ],
           "kinds": []
         }
@@ -271,7 +267,7 @@
         "text": "the fresh légumes were good",
         "quote": "Les légumes frais sont bons",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "freshness",
         "foods": [
           "légumes"
         ],
@@ -282,7 +278,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "freshness"
+            "taste"
           ],
           "kinds": []
         }
@@ -301,7 +297,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food_hygiene"
+          ],
           "kinds": []
         }
       }
@@ -316,6 +314,11 @@
         "at": "2026-11-01T21:49:05.400Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:18.174Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 9 claims changed"
       }
     ]
   }

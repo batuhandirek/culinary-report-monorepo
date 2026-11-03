@@ -133,7 +133,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:48:10.886Z",
     "usage": {
       "inputTokens": 12083,
@@ -185,7 +185,7 @@
         "text": "the Main serves Dry Aged Beef",
         "quote": "Dry Aged Beef",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Dry Aged Beef"
         ],
@@ -195,9 +195,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -236,7 +234,7 @@
             "positive"
           ],
           "aspects": [
-            "none"
+            "atmosphere"
           ],
           "kinds": [
             "fact"
@@ -260,8 +258,7 @@
             "positive"
           ],
           "aspects": [
-            "vibe",
-            "noise"
+            "vibe"
           ],
           "kinds": [
             "event"
@@ -274,7 +271,7 @@
         "text": "cocktails are mixed at the bar",
         "quote": "an der Bar Cocktails gemixt werden",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "Cocktails"
         ],
@@ -284,9 +281,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -307,7 +302,7 @@
             "neutral"
           ],
           "aspects": [
-            "vibe"
+            "occasion"
           ],
           "kinds": [
             "fact"
@@ -369,7 +364,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": [
             "change"
@@ -382,7 +377,7 @@
         "text": "the Beef Grill Club by Hasir was known citywide for its meat dishes",
         "quote": "stadtweit bekannt für seine Fleischgerichte",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Fleischgerichte"
         ],
@@ -392,7 +387,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": [
             "fact"
           ]
@@ -422,7 +419,7 @@
         "text": "the restaurant got a deliberately chosen new name",
         "quote": "Der neue Name ist dabei bewusst gewählt",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -442,7 +439,7 @@
         "text": "the brand has other locations: Beef Grill Club at Leipziger Platz and at Adenauerplatz",
         "quote": "Neben weiteren Standorten wie dem Beef Grill Club am Leipziger Platz oder am Adenauerplatz",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -462,7 +459,7 @@
         "text": "the Main is meant to be the brand's mothership, where it all began",
         "quote": "soll the Main künftig stärker als das Mutterschiff der Marke funktionieren – dort, wo alles begann",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "ownership",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -471,7 +468,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership"
+            "other"
           ],
           "kinds": []
         },
@@ -524,7 +521,7 @@
         "text": "creamy Burrata with grilled artichoke, truffle, hazelnut and parsley pesto is served as a starter",
         "quote": "Zum Einstieg landen cremige Burrata mit gegrillter Artischocke, Trüffel, Haselnuss und Petersilienpesto auf dem Tisch",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Burrata",
           "Artischocke",
@@ -540,9 +537,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -564,9 +559,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -590,8 +583,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "freshness",
-            "food"
+            "freshness"
           ],
           "kinds": []
         },
@@ -615,7 +607,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "taste"
           ],
           "kinds": []
         },
@@ -637,8 +629,7 @@
             "neutral"
           ],
           "aspects": [
-            "interior",
-            "atmosphere"
+            "interior"
           ],
           "kinds": []
         },
@@ -649,7 +640,7 @@
         "text": "head chef David Creuzet's French signature shows in dishes like Lobster Thermidor and the intense sauces",
         "quote": "Die französische Handschrift von Chefkoch David Creuzet zeigt sich in Gerichten wie Lobster Thermidor und den intensiven Saucen",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Lobster Thermidor",
           "Saucen"
@@ -674,7 +665,7 @@
         "text": "sous chef Matteo De Angelis brings Italian influences with Rigatoni alla Vodka",
         "quote": "während Sous Chef Matteo De Angelis mit Rigatoni alla Vodka italienische Einflüsse hineinbringt",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Rigatoni alla Vodka"
         ],
@@ -686,9 +677,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -709,7 +698,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -720,7 +709,7 @@
         "text": "the old DNA has not entirely disappeared",
         "quote": "Ganz verschwunden ist die alte DNA trotzdem nicht.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -730,7 +719,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": [
             "fact"
           ]
@@ -742,7 +733,7 @@
         "text": "the steaks remain the real main act of the evening",
         "quote": "Die Steaks bleiben der eigentliche Main Act des Abends",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Steaks"
         ],
@@ -752,7 +743,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -775,7 +768,6 @@
             "positive"
           ],
           "aspects": [
-            "service",
             "advice"
           ],
           "kinds": []
@@ -838,7 +830,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "seasoning"
           ],
           "kinds": []
         },
@@ -849,7 +841,7 @@
         "text": "the steak comes with a little flaky salt on top and the meat's roast aromas",
         "quote": "Ein wenig flaky salt obendrauf, dazu die Röstaromen des Fleisches",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "seasoning",
         "foods": [
           "flaky salt",
           "Fleisches"
@@ -863,7 +855,7 @@
             "neutral"
           ],
           "aspects": [
-            "seasoning"
+            "taste"
           ],
           "kinds": [
             "fact"
@@ -884,9 +876,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -896,7 +886,7 @@
         "text": "the Main is less classic fine dining than an evening experienced together",
         "quote": "weniger klassisches Fine Dining, sondern ein Abend, den man gemeinsam erlebt",
         "sentiment": "positive",
-        "aspect": "atmosphere",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -907,7 +897,7 @@
             "neutral"
           ],
           "aspects": [
-            "vibe"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -918,7 +908,7 @@
         "text": "starters, mains and desserts are served for sharing",
         "quote": "Vorspeisen, Hauptgänge und Desserts werden bewusst zum Teilen serviert",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -927,8 +917,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
-            "presentation"
+            "occasion"
           ],
           "kinds": []
         },
@@ -939,7 +928,7 @@
         "text": "desserts are New York Cheesecake with berries, Pistazien-Tiramisu with mascarpone and amaretto, and Baklava with vanilla ice cream",
         "quote": "Zum Abschluss gibt es New York Cheesecake mit Beeren, Pistazien-Tiramisu mit Mascarpone und Amaretto sowie Baklava mit Vanilleeis",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "New York Cheesecake",
           "Beeren",
@@ -955,9 +944,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -995,9 +982,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1007,7 +992,7 @@
         "text": "traditional Turkish tea ends the meal",
         "quote": "Traditionellertürkischer Tee setzt schließlich einen kleinen Schlusspunkt",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "türkischer Tee"
         ],
@@ -1019,9 +1004,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1045,8 +1028,7 @@
             "positive"
           ],
           "aspects": [
-            "none",
-            "ownership"
+            "menu_variety"
           ],
           "kinds": [
             "opinion"
@@ -1069,9 +1051,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1089,6 +1069,16 @@
         "at": "2026-11-01T21:49:05.436Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:24.765Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 31 of 41 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:58.689Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Blog review of the Main with no stated payment, gift, invitation, ad or collab; venue-supplied photo credits alone do not show sponsorship.)"
       }
     ]
   }

@@ -120,7 +120,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:26:23.414Z",
     "usage": {
       "inputTokens": 9737,
@@ -161,9 +161,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
-            "atmosphere",
-            "menu_variety"
+            "occasion"
           ],
           "kinds": [
             "verdict"
@@ -196,7 +194,7 @@
         "text": "the creator tried the Dulce Himbeer & Pistazie",
         "quote": "Tried the Dulce Himbeer & Pistazie",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": null,
         "foods": [
           "Dulce Himbeer & Pistazie"
         ],
@@ -207,7 +205,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "menu_variety"
+            "food"
           ],
           "kinds": []
         },
@@ -218,7 +216,7 @@
         "text": "the Dulce Himbeer & Pistazie was delicate and creamy",
         "quote": "delicate, creamy",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "cooking",
         "foods": [
           "Dulce Himbeer & Pistazie"
         ],
@@ -229,7 +227,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": []
         },
@@ -275,6 +273,16 @@
         "at": "2026-11-01T21:49:05.442Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:55.696Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 5 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:30.674Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own review of ZUKA with no sign of payment, gift, invitation, ad or collab)"
       }
     ]
   }

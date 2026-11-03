@@ -9,6 +9,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { CommentDisagreementAgent } from '../agents/comment-disagreement.agent.js';
 import { CommentIntentAgent } from '../agents/comment-intent.agent.js';
 import { AdminPostCommentsController } from '../controllers/admin.post-comments.controller.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
@@ -90,44 +91,40 @@ describe('Post comments (pglite)', () => {
 			return ITEMS[url.split('/').at(-1)!] ?? [];
 		},
 	);
+	/** The intent agent's reading of each comment the model is sent, by its text */
+	const READ: Record<
+		string,
+		[PostCommentIntentEnum, PostCommentQuestionTopicEnum | null, string | null]
+	> = {
+		'wo ist das??': [
+			PostCommentIntentEnum.QUESTION,
+			PostCommentQuestionTopicEnum.LOCATION,
+			'Where is it?',
+		],
+		'Saving this for Saturday 😍': [PostCommentIntentEnum.INTENT, null, null],
+		'overrated, the portions got tiny': [PostCommentIntentEnum.DISAGREEMENT, null, null],
+		'Where is this place?': [
+			PostCommentIntentEnum.QUESTION,
+			PostCommentQuestionTopicEnum.LOCATION,
+			'Where is it?',
+		],
+		'been there, so good': [PostCommentIntentEnum.CONFIRMATION, null, null],
+		'Was kostet das?': [
+			PostCommentIntentEnum.QUESTION,
+			PostCommentQuestionTopicEnum.PRICE,
+			'How much is it?',
+		],
+	};
+	// One comment a call
 	const agent = mockAgent((input: unknown) => {
-		const { comments: batch } = JSON.parse(input as string) as {
-			comments: { id: string; text: string }[];
+		const { comment: c } = JSON.parse(input as string) as {
+			comment: { text: string; likes: number };
 		};
-		const read: Record<
-			string,
-			[PostCommentIntentEnum, PostCommentQuestionTopicEnum | null, string | null]
-		> = {
-			c1: [
-				PostCommentIntentEnum.QUESTION,
-				PostCommentQuestionTopicEnum.LOCATION,
-				'Where is it?',
-			],
-			c2: [PostCommentIntentEnum.INTENT, null, null],
-			c4: [PostCommentIntentEnum.DISAGREEMENT, null, null],
-			c5: [
-				PostCommentIntentEnum.QUESTION,
-				PostCommentQuestionTopicEnum.LOCATION,
-				'Where is it?',
-			],
-			c7: [PostCommentIntentEnum.CONFIRMATION, null, null],
-			c8: [
-				PostCommentIntentEnum.QUESTION,
-				PostCommentQuestionTopicEnum.PRICE,
-				'How much is it?',
-			],
-		};
-		return {
-			comments: batch.map(c => ({
-				id: c.id,
-				intent: read[c.id][0],
-				questionTopic: read[c.id][1],
-				question: read[c.id][2],
-			})),
-			disagreement:
-				batch.some(c => c.id === 'c4') ? 'One says the portions got smaller.' : null,
-		};
+		const [intent, questionTopic, question] = READ[c.text];
+		return { intent, questionTopic, question };
 	});
+	// One post a call, on its disagreeing comments
+	const disagreementAgent = mockAgent({ summary: ' One says the portions got smaller. ' });
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -139,6 +136,7 @@ describe('Post comments (pglite)', () => {
 				CityService,
 				{ provide: ApifyService, useValue: { runActor } },
 				{ provide: CommentIntentAgent, useValue: agent },
+				{ provide: CommentDisagreementAgent, useValue: disagreementAgent },
 			],
 		});
 		scrape = harness.moduleRef.get(SocialScrapeService);
@@ -247,18 +245,34 @@ describe('Post comments (pglite)', () => {
 		expect(JSON.stringify(stored)).not.toContain('someone');
 	});
 
-	it('classifies the comments: tags and emoji without the model, the rest per post', async () => {
+	it('classifies the comments: tags and emoji without the model, the rest one a call, then each post’s disagreement', async () => {
 		const em = harness.orm.em;
-		expect(await comments.analyse(city)).toEqual({ analysed: 8, calls: 2 });
-		// Told the venue each post is about
-		expect(agent.generate.mock.calls[0][1]).toEqual({
-			venueName: 'Chén Chè',
-			cityName: 'Berlin',
-		});
-		const sent = agent.generate.mock.calls.flatMap(([input]) =>
-			(JSON.parse(input as string) as { comments: { id: string }[] }).comments.map(c => c.id),
+		// Six comments one a call, one post with a disagreeing comment
+		expect(await comments.analyse(city)).toEqual({ analysed: 8, calls: 7 });
+		// Told the venue the post is about, the caption and the comment; the city in the context
+		const asked = agent.generate.mock.calls.map(
+			([input]) =>
+				JSON.parse(input as string) as {
+					venue: string;
+					caption: string | null;
+					comment: { text: string; likes: number };
+				},
 		);
-		expect(sent.sort()).toEqual(['c1', 'c2', 'c4', 'c5', 'c7', 'c8']);
+		expect(asked.find(a => a.comment.text === 'wo ist das??')).toEqual({
+			venue: 'Chén Chè',
+			caption: 'Best pho in Mitte',
+			comment: { text: 'wo ist das??', likes: 40 },
+		});
+		expect(agent.generate.mock.calls[0][1]).toEqual({ cityName: 'Berlin' });
+		expect(asked.map(a => a.comment.text).sort()).toEqual(Object.keys(READ).sort());
+		// The disagreement agent reads the post's disagreeing comments together
+		expect(disagreementAgent.generate).toHaveBeenCalledTimes(1);
+		expect(JSON.parse(disagreementAgent.generate.mock.calls[0][0] as string)).toEqual({
+			venue: 'Chén Chè',
+			caption: 'Best pho in Mitte',
+			comments: ['overrated, the portions got tiny'],
+		});
+		expect(disagreementAgent.generate.mock.calls[0][1]).toEqual({ cityName: 'Berlin' });
 
 		em.clear();
 		const byId = new Map((await em.find(PostComment, {})).map(c => [c.externalId, c]));

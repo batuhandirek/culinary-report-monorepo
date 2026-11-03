@@ -209,7 +209,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:22:47.436Z",
     "usage": {
       "inputTokens": 12048,
@@ -218,7 +218,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The Coral is named only as Enrico Römer's origin, with nothing said about it, so it is left out as a place; 1800 is a tequila brand. The article reads as promotional (venue-supplied photo, launch announcements); the general birria/mole and pulled-beef sentences are treated as about the dish in general, and the Wasabi-Yuzu special is borderline between new item and event.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Taco & Gringo",
@@ -250,8 +250,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location",
-            "vibe"
+            "accessibility"
           ],
           "kinds": []
         },
@@ -300,7 +299,7 @@
         "text": "Taco & Gringo is a go-to spot for lovers of Mexican street food, new tastes and a good time",
         "quote": "eine Anlaufstelle für alle, die mexikanisches Streetfood zu schätzen wissen, die neugierig sind auf neue Genüsse oder die Lust haben, eine gute Zeit zu verbringen",
         "sentiment": "positive",
-        "aspect": "menu_variety",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -309,8 +308,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
-            "vibe"
+            "menu_variety",
+            "none"
           ],
           "kinds": [
             "verdict"
@@ -332,8 +331,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location",
-            "other"
+            "location"
           ],
           "kinds": []
         },
@@ -396,7 +394,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "seasoning"
           ],
           "kinds": []
         },
@@ -437,9 +435,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -481,9 +477,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -506,7 +500,7 @@
             "positive"
           ],
           "aspects": [
-            "drink_selection"
+            "drink_quality"
           ],
           "kinds": []
         },
@@ -517,7 +511,7 @@
         "text": "The Tacos de Birria are juicy, with fresh ingredients, sauce and dips",
         "quote": "saftige Tacos de Birria mit frischen Zutaten, Sauce und Dips",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [
           "Tacos de Birria"
         ],
@@ -528,7 +522,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking",
             "freshness"
           ],
           "kinds": []
@@ -550,9 +543,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -572,9 +563,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -584,7 +573,7 @@
         "text": "The Gringa de Birria is the authors' favourite",
         "quote": "Gringa de Birria (unser Favorit",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "Gringa de Birria"
         ],
@@ -595,7 +584,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         },
@@ -616,9 +605,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -628,7 +615,7 @@
         "text": "The tender birria meat brings the taste of Mexico",
         "quote": "bringt dieses zarte Fleisch uns auf den Geschmack Mexikos",
         "sentiment": "positive",
-        "aspect": "cooking",
+        "aspect": "authenticity",
         "foods": [
           "Fleisch"
         ],
@@ -639,7 +626,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "authenticity",
+            "cooking",
             "taste"
           ],
           "kinds": []
@@ -651,7 +638,7 @@
         "text": "El Maestro de la Birria and the team put great effort into the vegan version",
         "quote": "Bei der veganen Variante hat sich El Maestro de la Birria mit dem Team so viel Mühe gegeben",
         "sentiment": "positive",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -660,7 +647,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -682,7 +669,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "dietary"
           ],
           "kinds": []
         },
@@ -703,9 +690,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -715,7 +700,7 @@
         "text": "The authors recommend the Quesabirria Vegana with vegan cheese",
         "quote": "Unser Tipp: Quesabirria Vegana mit veganem Käse",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "dietary",
         "foods": [
           "Quesabirria Vegana"
         ],
@@ -747,9 +732,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -759,7 +742,7 @@
         "text": "Every Friday from 20:00 the Margaritas Social Club takes place at Taco & Gringo",
         "quote": "Jeden Freitag lädt ab 20 Uhr der Margaritas Social Club im Taco & Gringo zu mehr Geselligkeit ein.",
         "sentiment": "positive",
-        "aspect": "atmosphere",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -770,7 +753,7 @@
             "neutral"
           ],
           "aspects": [
-            "none"
+            "drinks"
           ],
           "kinds": []
         },
@@ -805,7 +788,7 @@
         "text": "The margaritas are always made with real tequila such as 1800",
         "quote": "stets nur echter Tequila wie der von 1800 die Basis bildet",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "drink_quality",
         "foods": [
           "Tequila"
         ],
@@ -816,7 +799,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_quality"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -865,7 +848,7 @@
         "text": "On the last Friday of every month there is an extra special",
         "quote": "An jedem letzten Freitag des Monats wird dazu noch ein Special geboten.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drink_selection",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -875,7 +858,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "deal"
           ]
@@ -963,8 +948,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "other",
-            "food"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -1021,6 +1005,16 @@
         "at": "2026-11-01T21:49:05.428Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:51.677Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 22 of 35 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:18.906Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (No disclosure of payment, gifted meal, invitation, ad, collab or giveaway. The glowing, press-release-like tone and the venue-credited photo ('Copyright: Taco& Gringo') do not by themselves show it was paid or gifted.)"
       }
     ]
   }

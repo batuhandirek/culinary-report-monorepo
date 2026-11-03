@@ -68,7 +68,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:24:46.530Z",
     "usage": {
       "inputTokens": 9568,
@@ -100,7 +100,7 @@
         "text": "had a ramen date at Mianmarket",
         "quote": "Ramen Date",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "occasion",
         "foods": [
           "Ramen"
         ],
@@ -113,8 +113,7 @@
             "positive"
           ],
           "aspects": [
-            "none",
-            "menu_variety"
+            "none"
           ],
           "kinds": [
             "opinion"
@@ -138,7 +137,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -162,6 +161,16 @@
         "at": "2026-11-01T21:49:05.435Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:51.639Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 2 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:52.899Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (A creator's visit post that only tags Mianmarket, with no paid partnership, ad, gift, invitation, collab or giveaway disclosed.)"
       }
     ]
   }

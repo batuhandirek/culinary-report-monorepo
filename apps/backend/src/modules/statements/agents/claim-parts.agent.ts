@@ -68,7 +68,7 @@ export interface ClaimPartsContext {
 /**
  * Agent B: the parts of stored claims, from the claim's text alone (never a source read again):
  * its sentiment, the aspect it is about, the food wordings it names as spelled, the number it
- * states, its kind (`KIND_RULES`; final). One call per ~100 claims from any source kind.
+ * states, its kind (`KIND_RULES`; final). One claim a call, its source's other claims beside it (`claimPartsQuestions`).
  */
 @Injectable()
 export class ClaimPartsAgent extends BaseMastraAgent<typeof claimPartsSchema, ClaimPartsContext> {

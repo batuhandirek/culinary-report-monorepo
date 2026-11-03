@@ -9,11 +9,12 @@ export type LlmModelId = `openai/${string}` | `anthropic/${string}`;
 export type LlmModelChoice = LlmTier | LlmModelId;
 
 /**
- * `mini` and `full` are free first: OpenAI's daily complimentary allowance (10M tokens a day per
- * account on mini, 1M on the full model), then Claude, paid from the Anthropic credit. `high` is
- * paid first: Claude's top model for work worth the credit (no agent's own tier; an agent is put
- * on it with `LLM_AGENT_MODELS`), then OpenAI's full model. Per million tokens, input/output:
- * Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10, Opus 5.5 $4/$20.
+ * Each tier's free model is OpenAI's daily complimentary allowance (10M tokens a day per account
+ * on mini, 1M on the full model). Its Claude models, paid from the Anthropic credit, serve only
+ * inside `llmPaid` (work the user starts by hand): there `mini` and `full` move to Claude once the
+ * allowance is out, and `high` asks Claude's top model first. Outside it every tier runs on its
+ * OpenAI model alone, `high` on the full one. Per million tokens, input/output: Haiku 5.5
+ * $0.10/$0.50, Sonnet 5.5 $2/$10, Opus 5.5 $4/$20.
  */
 export const LLM_ROSTER: Record<LlmTier, LlmModelId[]> = {
 	mini: ['openai/gpt-5.4-mini', 'anthropic/claude-haiku-5-5'],
@@ -29,7 +30,7 @@ export const isLlmModelChoice = (value: string): value is LlmModelChoice =>
 export const providerOf = (model: LlmModelId): 'openai' | 'anthropic' =>
 	model.startsWith('openai/') ? 'openai' : 'anthropic';
 
-/** Paid per token, with no allowance: never used where only free work may run (`llmFreeOnly`) */
+/** Paid per token, with no allowance: used only inside `llmPaid` */
 export const isPaidModel = (model: LlmModelId): boolean => !model.startsWith('openai/');
 
 /** The models to try, in order: a tier's roster, or the chosen model then the rest of its tier */

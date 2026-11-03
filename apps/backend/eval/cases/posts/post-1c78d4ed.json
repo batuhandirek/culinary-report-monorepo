@@ -171,7 +171,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:20:00.201Z",
     "usage": {
       "inputTokens": 7035,
@@ -180,7 +180,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The posting roaster is never named and the only tagged location is the city, so there are no places; Col-Spirit is a sourcing partner, not a venue, and the claims about the espresso are subject none. The bilingual caption repeats itself, so each claim is quoted once from the English half. Whether 'responsibly sourced' and the tasting notes count as approving judgements or as neutral facts is the main sentiment call.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [],
     "claims": [
       {
@@ -198,7 +198,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks"
+            "drink_selection"
           ],
           "kinds": []
         },
@@ -209,7 +209,7 @@
         "text": "El Líbano is responsibly sourced from Colombia's Cordillera Central",
         "quote": "responsibly sourced from Colombia’s Cordillera Central",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "drinks",
         "foods": [
           "El Líbano"
         ],
@@ -222,7 +222,7 @@
             "neutral"
           ],
           "aspects": [
-            "drinks"
+            "ingredient_quality"
           ],
           "kinds": [
             "fact"
@@ -235,7 +235,7 @@
         "text": "The high-altitude, mineral-rich soils are perfect for coffee",
         "quote": "High altitude, mineral-rich soils — perfect for coffee.",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "drinks",
         "foods": [
           "coffee"
         ],
@@ -246,7 +246,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks"
+            "drink_quality"
           ],
           "kinds": []
         },
@@ -257,7 +257,7 @@
         "text": "The El Líbano beans are washed-processed",
         "quote": "The beans are washed",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "beans"
         ],
@@ -267,11 +267,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "drinks",
-            "ingredient_quality",
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -281,7 +277,7 @@
         "text": "The El Líbano beans are a single-origin blend of four varieties: Caturra, Colombia, Castillo and Tabi",
         "quote": "a single origin blend of four varieties: Caturra, Colombia, Castillo and Tabi",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "Caturra",
           "Colombia",
@@ -295,9 +291,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks",
-            "ingredient_quality",
-            "other"
+            "drink_selection"
           ],
           "kinds": []
         },
@@ -328,7 +322,7 @@
         "text": "The El Líbano espresso is Arabica",
         "quote": "SPECIES Arabica",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "EL LÍBANO Espresso"
         ],
@@ -339,8 +333,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks",
-            "other"
+            "drink_selection"
           ],
           "kinds": []
         },
@@ -351,7 +344,7 @@
         "text": "The El Líbano beans are sourced in partnership with Col-Spirit",
         "quote": "These beans are responsibly sourced in partnership with Col-Spirit",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drinks",
         "foods": [
           "beans"
         ],
@@ -364,8 +357,7 @@
             "positive"
           ],
           "aspects": [
-            "ingredient_quality",
-            "other"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -376,7 +368,7 @@
         "text": "The El Líbano beans are available through the roaster's webshop and select resellers throughout Berlin",
         "quote": "Available through our webshop and at select resellers throughout Berlin.",
         "sentiment": "neutral",
-        "aspect": "availability",
+        "aspect": "drinks",
         "foods": [
           "beans"
         ],
@@ -387,7 +379,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "availability"
           ],
           "kinds": []
         },
@@ -398,7 +390,7 @@
         "text": "El Líbano originates from El Líbano, Tolima, Colombia",
         "quote": "ORIGIN El Líbano, Tolima, Colombia",
         "sentiment": "neutral",
-        "aspect": "other",
+        "aspect": "drinks",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -408,7 +400,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": []
         }
       },
@@ -416,7 +410,7 @@
         "text": "the roast is Espresso",
         "quote": "ROAST Espresso",
         "sentiment": "neutral",
-        "aspect": "other",
+        "aspect": "drinks",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -426,7 +420,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "drink_selection"
+          ],
           "kinds": []
         }
       }
@@ -482,6 +478,16 @@
         "at": "2026-11-01T21:49:05.421Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:41.420Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 10 of 11 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:42.950Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The roaster is posting about its own espresso and webshop. The Col-Spirit sourcing partnership is not a paid or gifted post about a venue.)"
       }
     ]
   }

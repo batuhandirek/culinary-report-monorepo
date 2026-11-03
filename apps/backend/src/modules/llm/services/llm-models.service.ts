@@ -7,7 +7,7 @@ import {
 	modelsFor,
 	providerOf,
 } from '../constants/llm-models.constant.js';
-import { isLlmFreeOnly } from '../util/llm-scope.js';
+import { isLlmPaid } from '../util/llm-scope.js';
 import { accountErrorReason, isProviderAccountError } from '../util/provider-errors.js';
 import {
 	isOpenAIAccountError,
@@ -37,9 +37,8 @@ export interface LlmModelsOptions {
 }
 
 /**
- * Every model of the choice is left out (disabled, no key, blocked, or paid inside
- * `llmFreeOnly`); `isFatalProviderError` matches the message, so a step stops instead of failing
- * item by item.
+ * Every model of the choice is left out (disabled, no key, blocked, or paid outside `llmPaid`);
+ * `isFatalProviderError` matches the message, so a step stops instead of failing item by item.
  */
 export class NoModelError extends Error {}
 
@@ -55,10 +54,9 @@ export const isAnthropicAccountError = (error: unknown): boolean =>
  * credit is one). Any other error is rethrown as is. When no model is left, the last provider's
  * error is thrown, which `isFatalProviderError` matches.
  *
- * A disabled provider is left out. Inside `llmFreeOnly` (the daily backlogs) the paid models are
- * left out too, unless the call may pay (`paidAllowed`: the agent was put on its choice with
- * `LLM_AGENT_MODELS`, the user's yes to spend). State is in memory, as the OpenAI blocks are. Built
- * by a factory in `LLMModule` from `llmConfig`.
+ * A disabled provider is left out, and so are the paid models (Claude) except inside `llmPaid`:
+ * production never pays, only work the user starts by hand does. State is in memory, as the
+ * OpenAI blocks are. Built by a factory in `LLMModule` from `llmConfig`.
  */
 export class LlmModelsService implements OnApplicationBootstrap {
 	private readonly logger = new Logger(LlmModelsService.name);
@@ -95,28 +93,25 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		if (off.length) this.logger.warn(`Left out of the roster: ${off.join(', ')}`);
 		if (!this.anthropicApiKey) this.logger.log('No ANTHROPIC_API_KEY: Claude is left out');
 		for (const [agent, choice] of Object.entries(this.agentModels)) {
-			if (this.agents.has(agent))
-				this.logger.warn(`${agent} runs on ${choice}, paid models allowed`);
-			else this.logger.error(`LLM_AGENT_MODELS names ${agent}, which is no agent`);
+			if (!this.agents.has(agent))
+				this.logger.error(`LLM_AGENT_MODELS names ${agent}, which is no agent`);
+			else if (modelsFor(choice).every(isPaidModel))
+				this.logger.error(`LLM_AGENT_MODELS puts ${agent} on ${choice}, which has no free model`);
+			else this.logger.log(`${agent} runs on ${choice}`);
 		}
 	}
 
-	/** The agent's choice: its `LLM_AGENT_MODELS` entry, which may pay, or its own */
-	choiceFor(
-		agentId: string,
-		own: LlmModelChoice,
-	): { choice: LlmModelChoice; paidAllowed: boolean } {
-		const set = this.agentModels[agentId];
-		return set ? { choice: set, paidAllowed: true } : { choice: own, paidAllowed: false };
+	/** The agent's choice: its `LLM_AGENT_MODELS` entry, else its own */
+	choiceFor(agentId: string, own: LlmModelChoice): LlmModelChoice {
+		return this.agentModels[agentId] ?? own;
 	}
 
 	/** Runs `fn` on the first model of `choice` that can serve it; says which one did */
 	async run<T>(
 		choice: LlmModelChoice,
 		fn: (model: LlmModelKey) => Promise<T>,
-		opts: { paidAllowed?: boolean } = {},
 	): Promise<{ result: T; model: LlmModelId }> {
-		const freeOnly = isLlmFreeOnly() && !opts.paidAllowed;
+		const freeOnly = !isLlmPaid();
 		const models = modelsFor(choice).filter(
 			model => !this.disabled[providerOf(model)] && !(freeOnly && isPaidModel(model)),
 		);
@@ -144,7 +139,7 @@ export class LlmModelsService implements OnApplicationBootstrap {
 				const provider = providerOf(model);
 				const why =
 					this.disabled[provider] ? 'disabled'
-					: freeOnly && isPaidModel(model) ? 'paid, and only free models may run'
+					: freeOnly && isPaidModel(model) ? 'paid, and only free models run outside llmPaid'
 					: provider === 'anthropic' && !this.anthropicApiKey ? 'no ANTHROPIC_API_KEY'
 					: provider === 'anthropic' && this.anthropicBlock ?
 						`blocked: ${this.anthropicBlock.reason}`

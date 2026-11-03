@@ -230,7 +230,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:31:15.921Z",
     "usage": {
       "inputTokens": 6031,
@@ -239,14 +239,14 @@
       "cacheWriteTokens": 5784
     },
     "notes": "The vendor is never named and the tagged location is just Berlin, so there is no place and all claims are subject none. The ingredient list is kept as one claim because the quote spans a contiguous list; the vegan claim from the hashtag is optional.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [],
     "claims": [
       {
         "text": "the KATSU-SANDO has panko-crusted soy steak, pickled red onion, shaved fresh apple and tonkatsu mayo",
         "quote": "KATSU-SANDO\n- panko-crusted soy steak\n- pickled red onion\n- shaved fresh apple\n- tonkatsu mayo",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "KATSU-SANDO",
           "panko-crusted soy steak",
@@ -261,7 +261,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "food"
           ],
           "kinds": []
         },
@@ -272,7 +272,7 @@
         "text": "the KATSU-SANDO is served on sliced, toasted shokupan",
         "quote": "served on sliced, toasted shokupan",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "shokupan"
         ],
@@ -283,7 +283,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "food"
           ],
           "kinds": []
         },
@@ -294,7 +294,7 @@
         "text": "the shokupan is soft like a pillow",
         "quote": "soft like pillow",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -302,10 +302,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "freshness",
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -323,7 +320,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "other"
+          ],
           "kinds": []
         },
         "subject": "none",
@@ -333,7 +332,7 @@
         "text": "they serve hot, stuffed sandwiches",
         "quote": "HOT, STUFFED SANDWICHES",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "SANDWICHES"
         ],
@@ -346,7 +345,6 @@
             "positive"
           ],
           "aspects": [
-            "portion_size",
             "temperature"
           ],
           "kinds": [
@@ -372,10 +370,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food",
-            "freshness"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -385,7 +380,7 @@
         "text": "the KATSU-SANDO is vegan",
         "quote": "#vegan",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -393,9 +388,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -413,6 +406,16 @@
         "at": "2026-11-01T21:49:05.419Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:03.945Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 7 of 7 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:29.841Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The pop-up is advertising itself ('come and find us at our next pop-up', 'all bread made in-house'); no paid, gifted or invited third party is involved.)"
       }
     ]
   }

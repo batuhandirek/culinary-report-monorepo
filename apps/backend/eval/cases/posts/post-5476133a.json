@@ -112,7 +112,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:21:31.355Z",
     "usage": {
       "inputTokens": 11905,
@@ -176,7 +176,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "interior"
           ],
           "kinds": []
         },
@@ -272,9 +272,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -293,7 +291,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "vibe",
+            "none"
           ],
           "kinds": []
         },
@@ -348,7 +347,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -371,6 +372,16 @@
         "at": "2026-11-01T21:49:05.428Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:29.163Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 11 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:14.355Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own visit to KaDeWe with praise, but no paid partnership, ad, gift, invitation, collab or giveaway disclosed)"
       }
     ]
   }

@@ -46,14 +46,14 @@ describe('MentionExtractionService (pglite)', () => {
 				text: 'the broth at Pho House is something else',
 				quote: 'the broth at Pho House is something else',
 				subject: 'place',
-				place: 0,
+				place: 'Pho House',
 			},
 			// A quote the post never said (a translation): dropped
 			{
 				text: 'the pho cost 14 euros',
 				quote: 'die Pho kostet 14 Euro',
 				subject: 'place',
-				place: 0,
+				place: 'Pho House',
 			},
 			// About the city, no place: a statement without a mention
 			{
@@ -62,38 +62,27 @@ describe('MentionExtractionService (pglite)', () => {
 				subject: 'city',
 				place: null,
 			},
-			// A place index the answer has no place for: about nothing
-			{ text: 'went on a Tuesday', quote: null, subject: 'place', place: 7 },
+			// A place name the answer has no place for: about nothing
+			{ text: 'went on a Tuesday', quote: null, subject: 'place', place: 'Nowhere Bar' },
 		],
 	});
-	// Agent B, as a function of the claims it is sent
+	// Agent B, as a function of the one claim it is sent
 	const partsAgent = mockAgent((input: unknown) => {
-		// One source a call
-		const sources = [JSON.parse(input as string)] as {
-			claims: { id: string; text: string }[];
-		}[];
+		// One claim a call
+		const { text } = (JSON.parse(input as string) as { claim: { text: string } }).claim;
 		return {
-			claims: sources.flatMap(s =>
-				s.claims.map(c => ({
-					id: c.id,
-					sentiment:
-						c.text.includes('cost') || c.text.includes('Tuesday') ?
-							'neutral'
-						:	'positive',
-					aspect:
-						c.text.includes('cost') ? 'price_level'
-						: c.text.includes('broth') ? 'taste'
-						: null,
-					foods:
-						c.text.includes('broth') ? ['broth']
-						: c.text.includes('pho') ? ['pho']
-						: [],
-					amount: c.text.includes('cost') ? 14 : null,
-					unit: c.text.includes('cost') ? 'money' : null,
-					kind:
-						c.text.includes('cost') || c.text.includes('Tuesday') ? 'fact' : 'opinion',
-				})),
-			),
+			sentiment: text.includes('cost') || text.includes('Tuesday') ? 'neutral' : 'positive',
+			aspect:
+				text.includes('cost') ? 'price_level'
+				: text.includes('broth') ? 'taste'
+				: null,
+			foods:
+				text.includes('broth') ? ['broth']
+				: text.includes('pho') ? ['pho']
+				: [],
+			amount: text.includes('cost') ? 14 : null,
+			unit: text.includes('cost') ? 'money' : null,
+			kind: text.includes('cost') || text.includes('Tuesday') ? 'fact' : 'opinion',
 		};
 	});
 
@@ -239,8 +228,8 @@ describe('MentionExtractionService (pglite)', () => {
 			},
 		]);
 		expect(statements.every(s => s.sourceKind === 'post' && s.partsAt)).toBe(true);
-		// One call a source: the place's claims, the city's, the rest
-		expect(partsAgent.generate).toHaveBeenCalledTimes(3);
+		// One call a claim
+		expect(partsAgent.generate).toHaveBeenCalledTimes(4);
 	});
 
 	it('gives the agent a blog article as an article: the blog, its title and text', async () => {
@@ -294,7 +283,7 @@ describe('MentionExtractionService (pglite)', () => {
 								text: 'the broth at Pho House simmers for twelve hours',
 								quote: null,
 								subject: 'place',
-								place: 0,
+								place: 'Pho House',
 							},
 						],
 					}
@@ -307,13 +296,13 @@ describe('MentionExtractionService (pglite)', () => {
 								text: 'Curry 36 has the best currywurst',
 								quote: null,
 								subject: 'place',
-								place: 1,
+								place: 'Curry 36',
 							},
 							{
 								text: 'Pho House is worth the queue',
 								quote: null,
 								subject: 'place',
-								place: 0,
+								place: 'Pho House',
 							},
 						],
 					};

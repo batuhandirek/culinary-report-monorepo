@@ -72,7 +72,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:23:48.446Z",
     "usage": {
       "inputTokens": 4917,
@@ -86,7 +86,7 @@
         "text": "great food",
         "quote": "Great food",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -95,7 +95,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": []
         }
@@ -129,6 +129,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "price",
             "value_for_money"
           ],
           "kinds": []
@@ -161,6 +162,11 @@
         "at": "2026-11-01T21:49:05.401Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:24.015Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 4 claims changed"
       }
     ]
   }

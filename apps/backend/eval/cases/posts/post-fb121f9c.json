@@ -118,7 +118,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:53:19.314Z",
     "usage": {
       "inputTokens": 9883,
@@ -150,7 +150,7 @@
         "text": "Hackescher Hof is a little culinary discovery in the heart of Berlin",
         "quote": "A little culinary discovery in the heart of Berlin!",
         "sentiment": "positive",
-        "aspect": "location",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -161,7 +161,7 @@
             "neutral"
           ],
           "aspects": [
-            "none"
+            "location"
           ],
           "kinds": [
             "fact",
@@ -185,9 +185,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -197,7 +195,7 @@
         "text": "the Wiener Schnitzel is served with roasted potatoes",
         "quote": "Wiener Schnitzel served with roasted potatoes",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Wiener Schnitzel",
           "roasted potatoes"
@@ -228,9 +226,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -240,7 +236,7 @@
         "text": "the meat dish comes with potato cakes and fresh greens",
         "quote": "accompanied by potato cakes and fresh greens",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "potato cakes",
           "greens"
@@ -275,9 +271,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "authenticity"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -336,8 +330,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "interior",
-            "vibe"
+            "interior"
           ],
           "kinds": []
         },
@@ -392,6 +385,16 @@
         "at": "2026-11-01T21:49:05.443Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:45:00.071Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 7 of 11 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:31.830Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own food-diary post about Hackescher Hof; no paid partnership, ad, gifted meal, invitation or collab is stated)"
       }
     ]
   }

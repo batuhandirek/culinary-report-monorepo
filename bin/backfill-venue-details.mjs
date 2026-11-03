@@ -20,7 +20,7 @@ import {
 } from '../apps/backend/dist/modules/venues/util/venue-details.js';
 
 const CONTAINER = 'culinary-report-dev-db';
-const PSQL = ['exec', '-i', CONTAINER, 'psql', '-U', 'postgres', '-d', 'culinary_report', '-v', 'ON_ERROR_STOP=1', '-qtA'];
+const PSQL = ['exec', '-i', CONTAINER, 'psql', '-U', 'postgres', '-d', 'munchwerk', '-v', 'ON_ERROR_STOP=1', '-qtA'];
 
 const files = process.argv.slice(2);
 if (files.length === 0) {

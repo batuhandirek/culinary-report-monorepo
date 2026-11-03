@@ -119,7 +119,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:50:02.350Z",
     "usage": {
       "inputTokens": 12118,
@@ -151,7 +151,7 @@
         "text": "Peggy Bee is still operating in 2026",
         "quote": "the family-run gelateria is still operating at Weichselstraße 13",
         "sentiment": "neutral",
-        "aspect": "opening_hours",
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -236,7 +236,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -312,6 +312,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "taste",
             "ownership"
           ],
           "kinds": []
@@ -355,7 +356,9 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -398,7 +401,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "price"
+            "menu_variety"
           ],
           "kinds": [
             "event"
@@ -421,7 +424,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -461,7 +466,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -500,7 +505,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "cooking"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -532,7 +539,7 @@
         "text": "the buffalo milk is more delicate than sheep's milk and stronger than cow's",
         "quote": "more delicate than sheep’s milk and stronger than cow’s",
         "sentiment": "neutral",
-        "aspect": "taste",
+        "aspect": "ingredient_quality",
         "foods": [
           "sheep’s milk"
         ],
@@ -545,7 +552,7 @@
             "positive"
           ],
           "aspects": [
-            "ingredient_quality"
+            "taste"
           ],
           "kinds": [
             "opinion"
@@ -568,9 +575,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -607,7 +612,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "taste",
+            "ownership"
           ],
           "kinds": []
         },
@@ -618,7 +624,7 @@
         "text": "they also tried Wild Cheescake (berries and cookie crumble) and Sicilian Pistachio",
         "quote": "Other flavors we tried included Wild Cheescake (berries and cookie crumble) and Sicilian Pistachio.",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Wild Cheescake",
           "Sicilian Pistachio"
@@ -629,10 +635,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none",
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -652,9 +655,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -674,9 +675,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ownership"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -728,7 +727,7 @@
         "text": "Enrico wants the Traveplatz location to become a community hub to work and hang out",
         "quote": "Enrico wants this Traveplatz location to be a sort of community hub",
         "sentiment": "neutral",
-        "aspect": "vibe",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -737,8 +736,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
-            "other"
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -749,7 +747,7 @@
         "text": "Enrico won't make his recipes healthier or lower in sugar",
         "quote": "he won’t alter his recipes to suit any health-nut crowd",
         "sentiment": "neutral",
-        "aspect": "ingredient_quality",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -758,7 +756,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "seasoning"
           ],
           "kinds": []
         },
@@ -777,9 +775,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -789,7 +785,7 @@
         "text": "during Berlin Ice Cream Week, 6 to 12 May 2021, 31 of the city's best ice cream parlours offer special flavours for 1€ a scoop",
         "quote": "31 of the city’s best ice cream parlours will be showing off their best, special-edition flavours for just 1€ a scoop",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "price_level",
         "foods": [],
         "amount": 1,
         "unit": "money",
@@ -798,8 +794,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "price_level",
-            "price"
+            "none"
           ],
           "kinds": [
             "deal"
@@ -822,7 +817,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": [
             "verdict"
           ]
@@ -834,7 +831,7 @@
         "text": "the spiciness comes after a few seconds",
         "quote": "The spiciness comes after a few seconds.",
         "sentiment": "neutral",
-        "aspect": "taste",
+        "aspect": "seasoning",
         "foods": [
           "spiced chocolate"
         ],
@@ -846,7 +843,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "taste"
+          ],
           "kinds": []
         }
       },
@@ -884,7 +883,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "cooking"
+          ],
           "kinds": []
         }
       }
@@ -955,6 +956,16 @@
         "at": "2026-11-01T21:49:05.438Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:59.995Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 21 of 36 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:07.494Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial blog review of Peggy Bee with no disclosure of payment, a gifted tasting, an invitation or a collab; mentioning Ice Cream Week is event context, not sponsorship.)"
       }
     ]
   }

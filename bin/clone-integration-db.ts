@@ -10,7 +10,7 @@ if (!DB_HOST || !DB_PORT || !DB_USERNAME) {
 	process.exit(1);
 }
 
-const SOURCE_DB = process.env.DB_NAME ?? 'culinary_report';
+const SOURCE_DB = process.env.DB_NAME ?? 'munchwerk';
 const INTEGRATION_DB = process.env.INTEGRATION_DB_NAME ?? `${SOURCE_DB}_integration`;
 
 const connectionBase = {

@@ -5,7 +5,7 @@ import { isFatalProviderError } from 'src/shared/util/pool.js';
 import { modelsFor } from '../constants/llm-models.constant.js';
 import { LlmModelKey, LlmModelsOptions, LlmModelsService } from '../services/llm-models.service.js';
 import { OpenAIAccountsService } from '../services/openai-accounts.service.js';
-import { llmFreeOnly } from '../util/llm-scope.js';
+import { llmPaid } from '../util/llm-scope.js';
 
 const HOUR = 3_600_000;
 const MINI = 'openai/gpt-5.4-mini';
@@ -45,20 +45,23 @@ const setup = (opts: SetupOptions = { anthropicApiKey: 'sk-ant-xxxx' }) => {
 		blockMs: 24 * HOUR,
 		now: () => now,
 	});
-	/** Which models a call was tried on, in order; `fail` decides per model */
+	/**
+	 * Which models a call was tried on, in order; `fail` decides per model. Inside `llmPaid`, where
+	 * the roster's Claude models serve too
+	 */
 	const call = async (
 		choice: Parameters<LlmModelsService['run']>[0],
 		fail: (model: LlmModelKey) => Error | null = () => null,
 	) => {
 		const tried: string[] = [];
-		const out = await service
-			.run(choice, async model => {
+		const out = await llmPaid(() =>
+			service.run(choice, async model => {
 				tried.push(model.id);
 				const error = fail(model);
 				if (error) throw error;
 				return model;
-			})
-			.catch((e: Error) => e);
+			}),
+		).catch((e: Error) => e);
 		return { tried, out };
 	};
 	return { service, call, advance: (ms: number) => (now += ms) };
@@ -131,18 +134,29 @@ describe('LlmModelsService', () => {
 		expect(isFatalProviderError(out.out)).toBe(true);
 	});
 
-	it('uses only the free models inside llmFreeOnly', async () => {
+	it('uses only the free models outside llmPaid, failing rather than paying', async () => {
 		const { service } = setup();
 		const tried: string[] = [];
-		const out = await llmFreeOnly(() =>
-			service.run(SONNET, async model => {
+		const out = await service
+			.run(SONNET, async model => {
 				tried.push(model.id);
 				if (model.id === FULL) throw openAIOut();
 				return model.id;
-			}),
-		).catch((e: Error) => e);
+			})
+			.catch((e: Error) => e);
 		expect(tried).toEqual([FULL]);
 		expect(isFatalProviderError(out)).toBe(true);
+		expect((out as Error).message).toMatch(/You have no credits remaining/);
+
+		// `high` runs on its free model; a Claude model alone serves nothing
+		const fresh = setup().service;
+		expect((await fresh.run('high', async model => model.id)).model).toBe(FULL);
+		const claudeOnly = await fresh
+			.run('anthropic/claude-fable-5-1', async model => model.id)
+			.catch((e: Error) => e);
+		expect((claudeOnly as Error).message).toBe(
+			'No model can serve anthropic/claude-fable-5-1: anthropic/claude-fable-5-1 paid, and only free models run outside llmPaid',
+		);
 	});
 
 	it('rethrows any other error without moving on', async () => {
@@ -182,16 +196,12 @@ describe('LlmModelsService', () => {
 		expect(isFatalProviderError(out.out)).toBe(true);
 	});
 
-	it("puts an agent on its LLM_AGENT_MODELS choice, which may pay inside llmFreeOnly", async () => {
+	it('puts an agent on its LLM_AGENT_MODELS choice, still free outside llmPaid', async () => {
 		const { service } = setup({ anthropicApiKey: 'sk-ant-xxxx', agentModels: { 'term-topic': 'high' } });
-		expect(service.choiceFor('term-topic', 'mini')).toEqual({ choice: 'high', paidAllowed: true });
-		expect(service.choiceFor('post-gate', 'mini')).toEqual({ choice: 'mini', paidAllowed: false });
+		expect(service.choiceFor('term-topic', 'mini')).toBe('high');
+		expect(service.choiceFor('post-gate', 'mini')).toBe('mini');
 
-		const served = await llmFreeOnly(() =>
-			service.run('high', async model => model.id, { paidAllowed: true }),
-		);
-		expect(served.model).toBe(OPUS);
-		const free = await llmFreeOnly(() => service.run('high', async model => model.id));
-		expect(free.model).toBe(FULL);
+		expect((await service.run('high', async model => model.id)).model).toBe(FULL);
+		expect((await llmPaid(() => service.run('high', async model => model.id))).model).toBe(OPUS);
 	});
 });

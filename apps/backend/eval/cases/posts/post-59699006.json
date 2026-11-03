@@ -85,7 +85,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:39:59.228Z",
     "usage": {
       "inputTokens": 12834,
@@ -132,7 +132,7 @@
         "text": "Café Amano at Hotel Amano now opens its green window to serve passers-by",
         "quote": "Das Hotel Amano in Mitte öffnet jetzt dieses grüne Fenster",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -141,8 +141,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership",
-            "other"
+            "takeaway_handling"
           ],
           "kinds": []
         },
@@ -164,9 +163,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -189,8 +186,7 @@
             "positive"
           ],
           "aspects": [
-            "none",
-            "service"
+            "takeaway_handling"
           ],
           "kinds": []
         },
@@ -251,9 +247,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -274,8 +268,7 @@
             "neutral"
           ],
           "aspects": [
-            "atmosphere",
-            "space"
+            "atmosphere"
           ],
           "kinds": [
             "opinion"
@@ -373,8 +366,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location",
-            "vibe"
+            "location"
           ],
           "kinds": []
         },
@@ -420,6 +412,16 @@
         "at": "2026-11-01T21:49:05.428Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:47.065Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 6 of 13 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:18.029Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial tipBerlin review of Café Amano with no paid partnership, gift, invitation or ad disclosure; plugging its own food guide doesn't count.)"
       }
     ]
   }

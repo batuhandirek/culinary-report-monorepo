@@ -230,7 +230,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:20:43.102Z",
     "usage": {
       "inputTokens": 10052,
@@ -309,8 +309,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "food"
+            "taste"
           ],
           "kinds": []
         },
@@ -380,7 +379,7 @@
             "positive"
           ],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": [
             "opinion"
@@ -402,7 +401,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
             "menu_variety"
           ],
           "kinds": []
@@ -423,8 +421,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "value_for_money",
-            "price"
+            "value_for_money"
           ],
           "kinds": []
         },
@@ -447,7 +444,7 @@
           ],
           "aspects": [
             "crowding",
-            "wait"
+            "queue"
           ],
           "kinds": [
             "opinion"
@@ -468,7 +465,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "other"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -511,10 +510,7 @@
             "negative",
             "neutral"
           ],
-          "aspects": [
-            "wait",
-            "queue"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -557,6 +553,16 @@
         "at": "2026-11-01T21:49:05.425Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:45.270Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 7 of 13 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:02.735Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (A creator's own visit to Aroma. The only plug is for the creator's recommendations on @miotravelapp, not anything the venue paid for, gifted or arranged.)"
       }
     ]
   }

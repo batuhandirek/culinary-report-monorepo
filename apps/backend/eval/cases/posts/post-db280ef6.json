@@ -111,7 +111,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:25:33.571Z",
     "usage": {
       "inputTokens": 10141,
@@ -120,7 +120,7 @@
       "cacheWriteTokens": 6277
     },
     "notes": "Own-account promo: the Kantstraße lunch-price claim is about the street/city, not the venue; the under-10€-with-drink price is read as a standing price (fact), with deal and a positive reading allowed. 'Wer kommt heute vorbei?' is a call to action and left out.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "572Pasta",
@@ -151,9 +151,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -163,7 +161,7 @@
         "text": "572Pasta serves homemade pasta",
         "quote": "bei uns bekommt ihr hausgemachte Pasta",
         "sentiment": "positive",
-        "aspect": "menu_variety",
+        "aspect": "ingredient_quality",
         "foods": [
           "Pasta"
         ],
@@ -176,8 +174,7 @@
             "neutral"
           ],
           "aspects": [
-            "food",
-            "ingredient_quality"
+            "menu_variety"
           ],
           "kinds": [
             "fact"
@@ -225,8 +222,7 @@
             "positive"
           ],
           "aspects": [
-            "value_for_money",
-            "price"
+            "value_for_money"
           ],
           "kinds": [
             "deal",
@@ -273,6 +269,16 @@
         "at": "2026-11-01T21:49:05.440Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:20.910Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 5 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:17.012Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (Venue's own account (572Pasta) advertising its own lunch offer; not a paid, gifted or invited post by a creator)"
       }
     ]
   }

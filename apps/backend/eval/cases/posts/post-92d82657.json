@@ -242,7 +242,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:45:04.279Z",
     "usage": {
       "inputTokens": 16073,
@@ -412,7 +412,7 @@
         "text": "Sweet Jamaica is a Jamaican place in Neukölln",
         "quote": "there's this Jamaican place in neukolln",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -480,7 +480,7 @@
         "text": "Burma Bliss makes Burmese cuisine",
         "quote": "a restaurant that makes Burmese cuisine",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -488,9 +488,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -508,7 +506,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -538,7 +538,7 @@
         "text": "the food at Burma Bliss reminded the creator of a fusion between Indian and Vietnamese",
         "quote": "reminded me a bit of a fusion between Indian and Vietnamese",
         "sentiment": "neutral",
-        "aspect": "taste",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -549,7 +549,7 @@
             "positive"
           ],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": [
             "fact"
@@ -613,7 +613,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -672,6 +672,16 @@
         "at": "2026-11-01T21:49:05.434Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:34.455Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 18 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:46.787Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own recommendation list of restaurants they discovered; no paid partnership, gift, invitation or collab with any venue. 'Follow me' is self-promotion of the channel, which does not count.)"
       }
     ]
   }

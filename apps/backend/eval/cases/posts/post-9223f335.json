@@ -90,7 +90,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:24:35.634Z",
     "usage": {
       "inputTokens": 10396,
@@ -99,7 +99,7 @@
       "cacheWriteTokens": 6323
     },
     "notes": "Own-account promo; the tagged 'Gercek Grillhähnchen' is the same venue as the given name. The transcript's 'dreijähriges' contradicts the caption's 30 years and is likely a transcription error, so the caption is followed; the 12:00 start can be kept apart or folded into the event claim.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Gercek Chicken - Chicken, Salad & Fries",
@@ -132,9 +132,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "ownership"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -144,7 +142,7 @@
         "text": "the anniversary celebration starts from 12:00 on both days",
         "quote": "⏰ Ab 12:00 Uhr",
         "sentiment": "neutral",
-        "aspect": "opening_hours",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -153,7 +151,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "opening_hours"
           ],
           "kinds": [
             "fact"
@@ -219,6 +217,16 @@
         "at": "2026-11-01T21:49:05.434Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:26.785Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 4 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:46.620Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (Venue's own post promoting its anniversary offer and inviting people to come by; this is self-promotion, not a paid or gifted post by a third party.)"
       }
     ]
   }

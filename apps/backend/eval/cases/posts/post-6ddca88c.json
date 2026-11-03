@@ -163,7 +163,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:24:17.334Z",
     "usage": {
       "inputTokens": 15081,
@@ -237,7 +237,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "vibe",
+            "atmosphere"
           ],
           "kinds": []
         },
@@ -248,7 +249,7 @@
         "text": "Breda brings a little bit of Milan to Paul-Lincke-Ufer",
         "quote": "Im Breda findet man jetzt am Paul-Lincke-Ufer ein klein wenig Mailand",
         "sentiment": "positive",
-        "aspect": "authenticity",
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -257,7 +258,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "vibe",
+            "authenticity"
           ],
           "kinds": []
         },
@@ -348,7 +350,7 @@
         "text": "Pinci is a see-and-be-seen place",
         "quote": "trotz allem Sehen-und-Gesehen-Werdens",
         "sentiment": "neutral",
-        "aspect": "crowding",
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -359,7 +361,7 @@
             "mixed"
           ],
           "aspects": [
-            "vibe"
+            "crowding"
           ],
           "kinds": [
             "opinion"
@@ -392,7 +394,7 @@
         "text": "Pinci's kitchen is not always as convincing as in its first wild weeks",
         "quote": "mit Küche und Service, die nicht immer ganz so überzeugen wie in den ersten wilden Wochen ihrer Existenz",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "consistency",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -400,7 +402,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -438,7 +442,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "atmosphere"
+          ],
           "kinds": [
             "fact"
           ]
@@ -530,7 +536,7 @@
         "text": "Looking different has lately been almost impossible for Berlin restaurants",
         "quote": "das in Berlin zuletzt beinahe Unmögliche",
         "sentiment": "negative",
-        "aspect": "interior",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -539,7 +545,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "interior"
           ],
           "kinds": []
         },
@@ -582,7 +588,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -613,7 +619,7 @@
         "text": "The Fischcrudo with paper-thin rhubarb slices translates Berlin seasonality into Italian",
         "quote": "Ein Fischcrudo, das mit hauchdünnen Rhabarberscheiben Berliner Saisonalität ins Italienische übersetzt.",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Fischcrudo",
           "Rhabarberscheiben"
@@ -625,8 +631,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality",
-            "presentation"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -647,9 +652,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -659,7 +662,7 @@
         "text": "The Ricotta-Gnocchi are spring-like with mint and peas",
         "quote": "frühlingshaft mit Minze und Erbsen",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "Ricotta-Gnocchi",
           "Minze",
@@ -674,7 +677,7 @@
             "neutral"
           ],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": [
             "fact"
@@ -748,7 +751,7 @@
         "text": "The Garibaldi seems to have become Breda's signature drink right after opening",
         "quote": "der direkt nach Eröffnung zum Signature-Drink geworden zu sein scheint: der Garibaldi",
         "sentiment": "positive",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "Garibaldi"
         ],
@@ -760,9 +763,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "drink_quality"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -774,7 +775,7 @@
         "text": "The Garibaldi is freshly pressed orange juice and Campari",
         "quote": "frischgepresster Orangensaft und Campari",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "Garibaldi",
           "Orangensaft",
@@ -789,7 +790,7 @@
             "positive"
           ],
           "aspects": [
-            "drink_quality"
+            "drinks"
           ],
           "kinds": [
             "opinion"
@@ -813,7 +814,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation",
             "drink_quality"
           ],
           "kinds": []
@@ -938,6 +938,16 @@
         "at": "2026-11-01T21:49:05.430Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:41:38.060Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 13 of 34 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:30.464Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Independent editorial review by tipBerlin of its own visit; no paid partnership, invitation, gifted meal or ad disclosed. The plug for the tipBerlin food guide is the blog promoting its own product, which does not count.)"
       }
     ]
   }

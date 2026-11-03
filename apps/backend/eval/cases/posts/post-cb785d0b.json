@@ -623,7 +623,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:51:29.435Z",
     "usage": {
       "inputTokens": 15521,
@@ -632,7 +632,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The transcript is a compilation: Sagos's owners (Kreuzberg) review a square-spit döner place in Mitte named only in speech as 'Beef 73 Haus' (spelling uncertain), then Sagos's own promotional clips; I attributed the unnamed 1-cent/renovation clip to Sagos as the speaker's own venue, which is a judgement call. Marked promotional because most of the post is the venue advertising its own deals; the second branch is unnamed so not a place.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Beef 73 Haus",
@@ -679,7 +679,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -690,7 +690,7 @@
         "text": "they eat a square Döner",
         "quote": "einen viereckigen Döner",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Döner"
         ],
@@ -700,9 +700,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -712,7 +710,7 @@
         "text": "the square spit is something never seen in Berlin before",
         "quote": "den wir so noch nie in Berlin gesehen haben",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -722,9 +720,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -762,10 +758,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "atmosphere",
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -786,7 +779,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -807,7 +802,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -847,7 +844,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -859,7 +858,7 @@
         "text": "the square Döner looks very juicy",
         "quote": "sehr saftig Aus",
         "sentiment": "positive",
-        "aspect": "presentation",
+        "aspect": "cooking",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -868,7 +867,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking"
+            "presentation"
           ],
           "kinds": []
         },
@@ -879,7 +878,7 @@
         "text": "the Döner is super juicy and brutally solid",
         "quote": "super saftig und einfach brutal stabile Döner wirklich",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "cooking",
         "foods": [
           "Döner"
         ],
@@ -889,9 +888,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "cooking"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -901,7 +898,7 @@
         "text": "the Brot is really soft and nice, he likes it a lot",
         "quote": "das Brot gefällt Mir auch sehr gut",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "cooking",
         "foods": [
           "Brot"
         ],
@@ -912,8 +909,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "freshness",
-            "food"
+            "taste"
           ],
           "kinds": []
         },
@@ -962,7 +958,7 @@
         "text": "there was lammfett on top of the spit",
         "quote": "oben auf dem Spieß hatten wir lammfett",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "ingredient_quality",
         "foods": [
           "lammfett"
         ],
@@ -973,7 +969,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality"
+            "food"
           ],
           "kinds": []
         },
@@ -1004,7 +1000,7 @@
         "text": "the lammfett does not have an unpleasant smell",
         "quote": "aber es ist nicht dieses lammfett",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "taste",
         "foods": [
           "lammfett"
         ],
@@ -1015,7 +1011,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -1038,7 +1034,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "none"
           ],
           "kinds": []
         },
@@ -1058,7 +1054,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "none"
           ],
           "kinds": []
         },
@@ -1069,7 +1065,7 @@
         "text": "the dish is a real calorie bomb, but the more calories the more taste",
         "quote": "das hier ist eine richtige Kalorienbombe",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1081,7 +1077,7 @@
             "mixed"
           ],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         },
@@ -1125,7 +1121,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1153,7 +1151,7 @@
         "text": "the bill came to 75.49 euros",
         "quote": "75 Euro 49",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [],
         "amount": 75.49,
         "unit": "money",
@@ -1162,7 +1160,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "price_level"
+            "price"
           ],
           "kinds": []
         },
@@ -1193,7 +1191,7 @@
         "text": "tomorrow the Döner costs only one cent",
         "quote": "für nur einen Cent",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Döner"
         ],
@@ -1206,7 +1204,7 @@
             "positive"
           ],
           "aspects": [
-            "price_level"
+            "price"
           ],
           "kinds": []
         },
@@ -1227,7 +1225,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "event"
           ]
@@ -1317,7 +1317,7 @@
         "text": "the renovation took 8 months",
         "quote": "8 Monate hatte der Umbau gedauert",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "interior",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1326,7 +1326,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "interior"
+            "none"
           ],
           "kinds": [
             "change"
@@ -1350,8 +1350,7 @@
             "neutral"
           ],
           "aspects": [
-            "wait_for_food",
-            "queue"
+            "wait_for_food"
           ],
           "kinds": []
         },
@@ -1362,7 +1361,7 @@
         "text": "on the 1-cent day only Döner with Hähnchen or homemade Falafel, no Dürum or other dishes",
         "quote": "mit Hähnchen oder hausgemachten",
         "sentiment": "neutral",
-        "aspect": "availability",
+        "aspect": "menu_variety",
         "foods": [
           "Döner",
           "Hähnchen",
@@ -1375,7 +1374,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "availability"
+          ],
           "kinds": [
             "fact"
           ]
@@ -1407,7 +1408,7 @@
         "text": "for the two-year anniversary the Döner costs only 3 euros",
         "quote": "kostet unser Döner nur 3 Euro",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Döner"
         ],
@@ -1419,9 +1420,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1439,9 +1438,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ownership"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1469,7 +1466,7 @@
         "text": "the Döner was improved day by day since the start, from vegetables to bread",
         "quote": "Tag verbessert",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "ingredient_quality",
         "foods": [
           "Döner"
         ],
@@ -1480,8 +1477,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "ingredient_quality"
+            "food"
           ],
           "kinds": []
         },
@@ -1492,7 +1488,7 @@
         "text": "at first bread was delivered, now they bake their own Brot every day",
         "quote": "seitdem backen wir unser Brot",
         "sentiment": "positive",
-        "aspect": "freshness",
+        "aspect": "ingredient_quality",
         "foods": [
           "Brot"
         ],
@@ -1504,9 +1500,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -1538,7 +1532,7 @@
         "text": "the same price applies for Falafel",
         "quote": "gleiches Geld für Falafel",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "Falafel"
         ],
@@ -1589,7 +1583,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": [
             "fact"
           ]
@@ -1641,7 +1637,7 @@
         "text": "much has changed at Sagos's prep kitchen",
         "quote": "bei unserer vorbereitungsküche hat sich vieles geändert",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1650,7 +1646,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "other"
+            "none"
           ],
           "kinds": [
             "fact"
@@ -1683,7 +1679,7 @@
         "text": "the prep kitchen will be finished around the same time as the second branch",
         "quote": "aber das ganze wird ziemlich genau mit der 2. Filiale fertig",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1691,7 +1687,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1712,7 +1710,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "seasoning"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1732,9 +1732,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -1744,7 +1742,7 @@
         "text": "the salty Schafskäse balances the fresh salad very well",
         "quote": "passt es sehr gut als Ausgleich zu dem frischen Salat",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "seasoning",
         "foods": [
           "Salat"
         ],
@@ -1754,7 +1752,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "taste"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1824,7 +1824,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1843,6 +1843,16 @@
         "at": "2026-11-01T21:49:05.439Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:10.002Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 34 of 55 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:12.245Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The 1-cent and 3-euro döner offers are Sagos promoting itself in its own videos ('unser Döner'), not a paid creator post. The visit to Beef 73 Haus shows no paid, gifted or invited sign; they paid the bill themselves.)"
       }
     ]
   }

@@ -6,9 +6,8 @@
  *
  * Never a backlog: extracting posts again (it recreates mentions and loses their matches and
  * admins' corrections), or anything that costs per call beyond the LLM allowance (Apify, paid
- * models). A backlog runs on the allowance's model only (`llmFreeOnly`), unless the user lets it
- * pay for a while (`LLM_BACKLOG_ALLOW_PAID`, or an agent's `LLM_AGENT_MODELS` entry). The one
- * exception is a backlog whose spend the user said yes to and that waits for it (`waitsFor`):
+ * models). A backlog runs on the allowance's models only, as everything outside `llmPaid` does. The
+ * one exception is a backlog whose spend the user said yes to and that waits for it (`waitsFor`):
  * `statement-embeddings`, cents of embeddings once, then a few thousand claims a month.
  */
 export interface LlmBacklog {

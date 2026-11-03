@@ -1,6 +1,6 @@
 {
   "label": "mini-v6",
-  "at": "2026-11-01T22:19:33.304Z",
+  "at": "2026-11-02T09:22:22.674Z",
   "cases": {
     "review": 172,
     "post": 199,
@@ -23,11 +23,11 @@
         1069
       ],
       "parts.aspect": [
-        902,
+        847,
         1069
       ],
       "parts.aspect_root": [
-        964,
+        945,
         1069
       ],
       "parts.kind_read": [
@@ -48,7 +48,7 @@
       ],
       "parts.amount": [
         29,
-        45
+        46
       ],
       "change.precision": [
         15,
@@ -73,11 +73,11 @@
         2195
       ],
       "parts.aspect": [
-        1667,
+        1403,
         2195
       ],
       "parts.aspect_root": [
-        1899,
+        1841,
         2195
       ],
       "parts.kind_read": [
@@ -85,7 +85,7 @@
         2211
       ],
       "parts.kind": [
-        1919,
+        1918,
         2195
       ],
       "parts.foods_recall": [
@@ -134,7 +134,7 @@
       ],
       "parts.amount": [
         61,
-        99
+        100
       ],
       "change.precision": [
         35,
@@ -163,11 +163,11 @@
           743
         ],
         "parts.aspect": [
-          626,
+          588,
           743
         ],
         "parts.aspect_root": [
-          666,
+          655,
           743
         ],
         "parts.kind_read": [
@@ -188,7 +188,7 @@
         ],
         "parts.amount": [
           16,
-          27
+          28
         ],
         "change.precision": [
           13,
@@ -213,11 +213,11 @@
           1515
         ],
         "parts.aspect": [
-          1162,
+          986,
           1515
         ],
         "parts.aspect_root": [
-          1332,
+          1301,
           1515
         ],
         "parts.kind_read": [
@@ -225,7 +225,7 @@
           1531
         ],
         "parts.kind": [
-          1327,
+          1326,
           1515
         ],
         "parts.foods_recall": [
@@ -302,11 +302,11 @@
           326
         ],
         "parts.aspect": [
-          276,
+          259,
           326
         ],
         "parts.aspect_root": [
-          298,
+          290,
           326
         ],
         "parts.kind_read": [
@@ -352,11 +352,11 @@
           680
         ],
         "parts.aspect": [
-          505,
+          417,
           680
         ],
         "parts.aspect_root": [
-          567,
+          540,
           680
         ],
         "parts.kind_read": [
@@ -413,7 +413,7 @@
         ],
         "parts.amount": [
           24,
-          36
+          37
         ],
         "change.recall": [
           7,
@@ -438,7 +438,7 @@
         447
       ],
       "parts.aspect": [
-        336,
+        315,
         386
       ],
       "parts.sentiment": [
@@ -456,7 +456,7 @@
         256
       ],
       "parts.aspect": [
-        193,
+        182,
         216
       ],
       "parts.sentiment": [
@@ -474,7 +474,7 @@
         1238
       ],
       "parts.aspect": [
-        902,
+        847,
         1069
       ],
       "parts.sentiment": [
@@ -492,7 +492,7 @@
         751
       ],
       "parts.aspect": [
-        568,
+        524,
         667
       ],
       "parts.sentiment": [
@@ -510,7 +510,7 @@
         276
       ],
       "parts.aspect": [
-        215,
+        204,
         249
       ],
       "parts.sentiment": [
@@ -528,7 +528,7 @@
         416
       ],
       "parts.aspect": [
-        278,
+        259,
         344
       ],
       "parts.sentiment": [
@@ -546,7 +546,7 @@
         208
       ],
       "parts.aspect": [
-        144,
+        137,
         168
       ],
       "parts.sentiment": [
@@ -564,7 +564,7 @@
         90
       ],
       "parts.aspect": [
-        66,
+        67,
         82
       ],
       "parts.sentiment": [
@@ -582,7 +582,7 @@
         462
       ],
       "parts.aspect": [
-        357,
+        336,
         416
       ],
       "parts.sentiment": [
@@ -600,7 +600,7 @@
         285
       ],
       "parts.aspect": [
-        222,
+        206,
         257
       ],
       "parts.sentiment": [
@@ -618,7 +618,7 @@
         224
       ],
       "parts.aspect": [
-        156,
+        141,
         191
       ],
       "parts.sentiment": [
@@ -636,7 +636,7 @@
         428
       ],
       "parts.aspect": [
-        277,
+        269,
         343
       ],
       "parts.sentiment": [
@@ -654,7 +654,7 @@
         59
       ],
       "parts.aspect": [
-        57,
+        54,
         59
       ],
       "parts.sentiment": [
@@ -672,7 +672,7 @@
         274
       ],
       "parts.aspect": [
-        194,
+        183,
         245
       ],
       "parts.sentiment": [
@@ -690,7 +690,7 @@
         114
       ],
       "parts.aspect": [
-        82,
+        66,
         102
       ],
       "parts.sentiment": [
@@ -716,7 +716,7 @@
         937
       ],
       "parts.aspect": [
-        593,
+        504,
         750
       ],
       "parts.sentiment": [
@@ -742,7 +742,7 @@
         15
       ],
       "parts.aspect": [
-        7,
+        8,
         11
       ],
       "parts.sentiment": [
@@ -768,11 +768,11 @@
         644
       ],
       "parts.aspect": [
-        432,
+        368,
         534
       ],
       "parts.sentiment": [
-        490,
+        491,
         534
       ],
       "places.recall": [
@@ -794,11 +794,11 @@
         482
       ],
       "parts.aspect": [
-        295,
+        263,
         365
       ],
       "parts.sentiment": [
-        334,
+        335,
         365
       ],
       "places.recall": [
@@ -820,11 +820,11 @@
         425
       ],
       "parts.aspect": [
-        294,
+        250,
         364
       ],
       "parts.sentiment": [
-        336,
+        337,
         364
       ],
       "places.recall": [
@@ -846,7 +846,7 @@
         2037
       ],
       "parts.aspect": [
-        1208,
+        1011,
         1611
       ],
       "parts.sentiment": [
@@ -872,11 +872,11 @@
         958
       ],
       "parts.aspect": [
-        620,
+        502,
         806
       ],
       "parts.sentiment": [
-        729,
+        728,
         806
       ],
       "places.recall": [
@@ -898,7 +898,7 @@
         659
       ],
       "parts.aspect": [
-        452,
+        384,
         573
       ],
       "parts.sentiment": [
@@ -924,11 +924,11 @@
         1349
       ],
       "parts.aspect": [
-        780,
+        649,
         1081
       ],
       "parts.sentiment": [
-        927,
+        926,
         1081
       ],
       "places.recall": [
@@ -950,7 +950,7 @@
         718
       ],
       "parts.aspect": [
-        455,
+        386,
         580
       ],
       "parts.sentiment": [
@@ -976,7 +976,7 @@
         109
       ],
       "parts.aspect": [
-        68,
+        60,
         78
       ],
       "parts.sentiment": [
@@ -1002,7 +1002,7 @@
         1271
       ],
       "parts.aspect": [
-        752,
+        638,
         1024
       ],
       "parts.sentiment": [
@@ -1034,5 +1034,6 @@
     }
   },
   "tokens": 1708839,
+  "cachedTokens": 0,
   "staleReferences": 0
 }

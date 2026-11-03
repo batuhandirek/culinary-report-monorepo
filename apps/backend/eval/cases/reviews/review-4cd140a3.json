@@ -149,7 +149,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:26:11.376Z",
     "usage": {
       "inputTokens": 5498,
@@ -333,7 +333,7 @@
         "text": "they had hoped for a nice date and a pleasant evening",
         "quote": "Wir hatten uns eigentlich ein nettes Date und einen schönen Abend erhofft.",
         "sentiment": "negative",
-        "aspect": "atmosphere",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -344,7 +344,7 @@
             "neutral"
           ],
           "aspects": [
-            "none"
+            "atmosphere"
           ],
           "kinds": [
             "fact"
@@ -373,7 +373,7 @@
         "text": "they had to leave because it was unbearable",
         "quote": "mussten wir leider gehen da es nicht mehr auszuhalten war",
         "sentiment": "negative",
-        "aspect": "noise",
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -382,7 +382,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere"
+            "noise",
+            "none"
           ],
           "kinds": []
         }
@@ -416,6 +417,11 @@
         "at": "2026-11-01T21:49:05.407Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:31.218Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 14 claims changed"
       }
     ]
   }

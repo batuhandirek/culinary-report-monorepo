@@ -1,12 +1,13 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
-const scope = new AsyncLocalStorage<{ freeOnly: true }>();
+const scope = new AsyncLocalStorage<{ paid: true }>();
 
 /**
- * Runs `fn` with only the free models of the roster (OpenAI's allowance): every agent call
- * inside it, however deep, skips the paid ones (`isPaidModel`) and fails once the allowance is out
- * instead of spending. The daily backlogs run in it.
+ * Runs `fn` with the roster's paid models (Claude) allowed: every agent call inside it, however
+ * deep, may move to them. Only for work the user starts by hand and means to pay for (the eval's
+ * Opus references and rulings). Everywhere else, production included, only the free models run
+ * (OpenAI's allowance) and a call fails once it is out instead of spending.
  */
-export const llmFreeOnly = <T>(fn: () => Promise<T>): Promise<T> => scope.run({ freeOnly: true }, fn);
+export const llmPaid = <T>(fn: () => Promise<T>): Promise<T> => scope.run({ paid: true }, fn);
 
-export const isLlmFreeOnly = (): boolean => scope.getStore()?.freeOnly === true;
+export const isLlmPaid = (): boolean => scope.getStore()?.paid === true;

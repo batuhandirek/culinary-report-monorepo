@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
 import { validateEnv } from 'src/shared/util/env.js';
 
@@ -14,16 +14,6 @@ export class BacklogConfig {
 	@IsOptional()
 	@Transform(v => Number(v.value))
 	public LLM_BACKLOG_DAILY_TOKENS: number = 3_000_000;
-
-	/**
-	 * Lets the backlogs use the roster's paid models (Claude), for a while: the user's yes to
-	 * spend. Off, a backlog runs on the free allowance only (`llmFreeOnly`).
-	 * `LLM_BACKLOG_DAILY_TOKENS` still caps a day, and then caps money.
-	 */
-	@IsBoolean()
-	@IsOptional()
-	@Transform(v => v.value === true || v.value === 'true')
-	public LLM_BACKLOG_ALLOW_PAID: boolean = false;
 }
 
 const backlogConfig = validateEnv(BacklogConfig);

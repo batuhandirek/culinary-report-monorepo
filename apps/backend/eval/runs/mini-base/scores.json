@@ -1,53 +1,54 @@
 {
   "label": "mini-base",
-  "at": "2026-11-01T15:22:38.366Z",
+  "at": "2026-11-02T09:20:06.237Z",
   "cases": {
-    "review": 170,
+    "review": 172,
     "post": 199,
     "term": 0
   },
-  "unscored": 502,
+  "unscored": 500,
+  "dropped": 2,
   "byKind": {
     "review": {
       "claims.recall": [
-        934,
-        966
+        935,
+        978
       ],
       "claims.precision": [
-        1217,
+        1220,
         1236
       ],
       "parts.sentiment": [
-        972,
-        1065
+        971,
+        1063
       ],
       "parts.aspect": [
-        877,
-        1065
+        819,
+        1063
       ],
       "parts.aspect_root": [
-        945,
-        1065
+        925,
+        1063
       ],
       "parts.kind_read": [
-        1065,
-        1071
+        1063,
+        1069
       ],
       "parts.kind": [
-        931,
-        1065
+        937,
+        1063
       ],
       "parts.foods_recall": [
-        259,
-        385
+        260,
+        384
       ],
       "parts.foods_precision": [
-        285,
+        287,
         407
       ],
       "parts.amount": [
-        28,
-        41
+        29,
+        42
       ],
       "change.precision": [
         13,
@@ -60,64 +61,64 @@
     },
     "post": {
       "claims.recall": [
-        1573,
+        1564,
         2077
       ],
       "claims.precision": [
-        2038,
+        2062,
         2203
       ],
       "parts.sentiment": [
-        1680,
-        1923
+        1678,
+        1910
       ],
       "parts.aspect": [
-        1166,
-        1923
+        934,
+        1910
       ],
       "parts.aspect_root": [
-        1420,
-        1923
+        1398,
+        1910
       ],
       "parts.kind_read": [
-        1923,
-        1932
+        1910,
+        1919
       ],
       "parts.kind": [
-        1605,
-        1923
+        1643,
+        1910
       ],
       "parts.foods_recall": [
-        848,
-        1283
+        877,
+        1291
       ],
       "parts.foods_precision": [
-        892,
-        1239
+        940,
+        1265
       ],
       "post.promotional": [
         157,
         199
       ],
       "claims.subject": [
-        1877,
-        2217
+        1873,
+        2232
       ],
       "places.recall": [
-        350,
+        352,
         433
       ],
       "match.brand": [
-        322,
-        350
+        323,
+        352
       ],
       "places.precision": [
-        350,
+        352,
         383
       ],
       "parts.amount": [
-        63,
-        114
+        64,
+        121
       ],
       "match.branch": [
         276,
@@ -132,15 +133,15 @@
         337
       ],
       "claims.place": [
-        1565,
-        1746
+        1575,
+        1743
       ],
       "change.precision": [
-        24,
+        23,
         43
       ],
       "change.recall": [
-        16,
+        12,
         32
       ]
     },
@@ -150,44 +151,44 @@
     "train": {
       "review": {
         "claims.recall": [
-          644,
-          668
+          645,
+          680
         ],
         "claims.precision": [
           845,
           858
         ],
         "parts.sentiment": [
-          667,
-          733
+          665,
+          731
         ],
         "parts.aspect": [
-          607,
-          733
+          564,
+          731
         ],
         "parts.aspect_root": [
-          649,
-          733
+          635,
+          731
         ],
         "parts.kind_read": [
-          733,
-          738
+          731,
+          736
         ],
         "parts.kind": [
-          633,
-          733
+          636,
+          731
         ],
         "parts.foods_recall": [
           173,
-          260
+          259
         ],
         "parts.foods_precision": [
-          193,
-          289
+          194,
+          288
         ],
         "parts.amount": [
           16,
-          24
+          26
         ],
         "change.precision": [
           11,
@@ -200,64 +201,64 @@
       },
       "post": {
         "claims.recall": [
-          1128,
+          1126,
           1471
         ],
         "claims.precision": [
-          1443,
+          1466,
           1580
         ],
         "parts.sentiment": [
-          1166,
-          1357
+          1174,
+          1364
         ],
         "parts.aspect": [
-          799,
-          1357
+          657,
+          1364
         ],
         "parts.aspect_root": [
-          992,
-          1357
+          985,
+          1364
         ],
         "parts.kind_read": [
-          1357,
-          1365
+          1364,
+          1372
         ],
         "parts.kind": [
-          1124,
-          1357
+          1156,
+          1364
         ],
         "parts.foods_recall": [
-          591,
-          887
+          613,
+          895
         ],
         "parts.foods_precision": [
-          615,
-          872
+          657,
+          900
         ],
         "post.promotional": [
           110,
           141
         ],
         "claims.subject": [
-          1329,
-          1579
+          1346,
+          1610
         ],
         "places.recall": [
-          264,
+          265,
           322
         ],
         "match.brand": [
-          244,
-          264
+          245,
+          265
         ],
         "places.precision": [
-          264,
+          265,
           281
         ],
         "parts.amount": [
           39,
-          83
+          85
         ],
         "match.branch": [
           210,
@@ -272,15 +273,15 @@
           253
         ],
         "claims.place": [
-          1144,
-          1236
+          1162,
+          1253
         ],
         "change.precision": [
-          19,
+          18,
           32
         ],
         "change.recall": [
-          12,
+          9,
           22
         ]
       },
@@ -293,19 +294,19 @@
           298
         ],
         "claims.precision": [
-          372,
+          375,
           378
         ],
         "parts.sentiment": [
-          305,
+          306,
           332
         ],
         "parts.aspect": [
-          270,
+          255,
           332
         ],
         "parts.aspect_root": [
-          296,
+          290,
           332
         ],
         "parts.kind_read": [
@@ -313,20 +314,20 @@
           333
         ],
         "parts.kind": [
-          298,
+          301,
           332
         ],
         "parts.foods_recall": [
-          86,
+          87,
           125
         ],
         "parts.foods_precision": [
-          92,
-          118
+          93,
+          119
         ],
         "parts.amount": [
-          12,
-          17
+          13,
+          16
         ],
         "change.precision": [
           2,
@@ -339,63 +340,63 @@
       },
       "post": {
         "claims.recall": [
-          445,
+          438,
           606
         ],
         "claims.precision": [
-          595,
+          596,
           623
         ],
         "parts.sentiment": [
-          514,
-          566
+          504,
+          546
         ],
         "parts.aspect": [
-          367,
-          566
+          277,
+          546
         ],
         "parts.aspect_root": [
-          428,
-          566
+          413,
+          546
         ],
         "parts.kind_read": [
-          566,
-          567
+          546,
+          547
         ],
         "parts.kind": [
-          481,
-          566
+          487,
+          546
         ],
         "parts.foods_recall": [
-          257,
+          264,
           396
         ],
         "parts.foods_precision": [
-          277,
-          367
+          283,
+          365
         ],
         "post.promotional": [
           47,
           58
         ],
         "claims.subject": [
-          548,
-          638
+          527,
+          622
         ],
         "places.recall": [
-          86,
+          87,
           111
         ],
         "match.brand": [
           78,
-          86
+          87
         ],
         "match.branch": [
           66,
           68
         ],
         "places.precision": [
-          86,
+          87,
           102
         ],
         "match_isolated.brand": [
@@ -407,19 +408,19 @@
           84
         ],
         "claims.place": [
-          421,
-          510
+          413,
+          490
         ],
         "parts.amount": [
-          24,
-          31
+          25,
+          36
         ],
         "change.precision": [
           5,
           11
         ],
         "change.recall": [
-          4,
+          3,
           10
         ]
       },
@@ -429,73 +430,73 @@
   "byTag": {
     "lang:de": {
       "claims.recall": [
-        336,
-        347
+        338,
+        359
       ],
       "claims.precision": [
-        428,
+        432,
         436
       ],
       "parts.aspect": [
-        317,
-        372
+        302,
+        371
       ],
       "parts.sentiment": [
         339,
-        372
+        371
       ]
     },
     "stars:4": {
       "claims.recall": [
-        187,
-        192
+        188,
+        204
       ],
       "claims.precision": [
-        252,
+        254,
         257
       ],
       "parts.aspect": [
-        187,
-        211
+        178,
+        212
       ],
       "parts.sentiment": [
-        193,
-        211
+        194,
+        212
       ]
     },
     "platform:google": {
       "claims.recall": [
-        934,
-        966
+        935,
+        978
       ],
       "claims.precision": [
-        1217,
+        1220,
         1236
       ],
       "parts.aspect": [
-        877,
-        1065
+        819,
+        1063
       ],
       "parts.sentiment": [
-        972,
-        1065
+        971,
+        1063
       ]
     },
     "length:medium": {
       "claims.recall": [
-        601,
-        615
+        600,
+        627
       ],
       "claims.precision": [
-        761,
+        765,
         771
       ],
       "parts.aspect": [
-        554,
+        513,
         672
       ],
       "parts.sentiment": [
-        620,
+        619,
         672
       ]
     },
@@ -505,11 +506,11 @@
         232
       ],
       "claims.precision": [
-        280,
+        284,
         285
       ],
       "parts.aspect": [
-        203,
+        190,
         253
       ],
       "parts.sentiment": [
@@ -519,20 +520,20 @@
     },
     "lang:other": {
       "claims.recall": [
-        302,
+        299,
         313
       ],
       "claims.precision": [
-        400,
+        396,
         405
       ],
       "parts.aspect": [
-        268,
-        345
+        244,
+        341
       ],
       "parts.sentiment": [
-        308,
-        345
+        305,
+        341
       ]
     },
     "stars:2": {
@@ -541,51 +542,51 @@
         162
       ],
       "claims.precision": [
-        211,
+        208,
         215
       ],
       "parts.aspect": [
-        149,
-        177
+        143,
+        176
       ],
       "parts.sentiment": [
-        158,
-        177
+        157,
+        176
       ]
     },
     "lang:tr": {
       "claims.recall": [
-        62,
+        64,
         67
       ],
       "claims.precision": [
-        85,
+        87,
         88
       ],
       "parts.aspect": [
         70,
-        78
+        80
       ],
       "parts.sentiment": [
-        70,
-        78
+        72,
+        80
       ]
     },
     "chain": {
       "claims.recall": [
-        376,
+        377,
         389
       ],
       "claims.precision": [
-        477,
+        479,
         482
       ],
       "parts.aspect": [
-        350,
+        334,
         430
       ],
       "parts.sentiment": [
-        400,
+        399,
         430
       ]
     },
@@ -595,21 +596,21 @@
         239
       ],
       "claims.precision": [
-        304,
+        305,
         307
       ],
       "parts.aspect": [
-        222,
-        270
+        203,
+        271
       ],
       "parts.sentiment": [
         255,
-        270
+        271
       ]
     },
     "stars:1": {
       "claims.recall": [
-        157,
+        155,
         161
       ],
       "claims.precision": [
@@ -617,30 +618,30 @@
         215
       ],
       "parts.aspect": [
-        148,
-        187
+        133,
+        183
       ],
       "parts.sentiment": [
-        168,
-        187
+        166,
+        183
       ]
     },
     "length:long": {
       "claims.recall": [
-        277,
+        279,
         294
       ],
       "claims.precision": [
-        396,
+        395,
         405
       ],
       "parts.aspect": [
-        271,
-        332
+        258,
+        330
       ],
       "parts.sentiment": [
         293,
-        332
+        330
       ]
     },
     "length:short": {
@@ -653,7 +654,7 @@
         60
       ],
       "parts.aspect": [
-        52,
+        48,
         61
       ],
       "parts.sentiment": [
@@ -663,7 +664,7 @@
     },
     "stars:3": {
       "claims.recall": [
-        207,
+        209,
         219
       ],
       "claims.precision": [
@@ -671,17 +672,17 @@
         264
       ],
       "parts.aspect": [
-        190,
-        237
+        175,
+        239
       ],
       "parts.sentiment": [
-        213,
-        237
+        214,
+        239
       ]
     },
     "hard": {
       "claims.recall": [
-        78,
+        77,
         91
       ],
       "claims.precision": [
@@ -689,12 +690,12 @@
         107
       ],
       "parts.aspect": [
-        72,
-        95
+        56,
+        94
       ],
       "parts.sentiment": [
         85,
-        95
+        94
       ],
       "places.recall": [
         11,
@@ -707,20 +708,20 @@
     },
     "platform:tiktok": {
       "claims.recall": [
-        587,
+        572,
         685
       ],
       "claims.precision": [
-        803,
+        813,
         872
       ],
       "parts.aspect": [
-        511,
-        742
+        403,
+        722
       ],
       "parts.sentiment": [
-        667,
-        742
+        655,
+        722
       ],
       "places.recall": [
         153,
@@ -741,7 +742,7 @@
         18
       ],
       "parts.aspect": [
-        10,
+        9,
         11
       ],
       "parts.sentiment": [
@@ -759,7 +760,7 @@
     },
     "no-transcript": {
       "claims.recall": [
-        433,
+        430,
         482
       ],
       "claims.precision": [
@@ -767,25 +768,25 @@
         655
       ],
       "parts.aspect": [
-        361,
-        538
+        300,
+        539
       ],
       "parts.sentiment": [
-        489,
-        538
+        493,
+        539
       ],
       "places.recall": [
-        119,
+        120,
         127
       ],
       "match.brand": [
         110,
-        119
+        120
       ]
     },
     "size:small": {
       "claims.recall": [
-        270,
+        272,
         294
       ],
       "claims.precision": [
@@ -793,77 +794,77 @@
         486
       ],
       "parts.aspect": [
-        257,
-        360
+        221,
+        367
       ],
       "parts.sentiment": [
-        330,
-        360
+        337,
+        367
       ],
       "places.recall": [
-        91,
+        92,
         100
       ],
       "match.brand": [
         84,
-        91
+        92
       ]
     },
     "platform:instagram": {
       "claims.recall": [
-        293,
+        291,
         325
       ],
       "claims.precision": [
-        405,
+        406,
         446
       ],
       "parts.aspect": [
-        240,
-        366
+        201,
+        364
       ],
       "parts.sentiment": [
-        329,
-        366
+        331,
+        364
       ],
       "places.recall": [
-        64,
+        65,
         71
       ],
       "match.brand": [
         59,
-        64
+        65
       ]
     },
     "places:few": {
       "claims.recall": [
-        1090,
+        1061,
         1490
       ],
       "claims.precision": [
-        1452,
+        1480,
         1562
       ],
       "parts.aspect": [
-        869,
-        1318
+        702,
+        1290
       ],
       "parts.sentiment": [
-        1190,
-        1318
+        1175,
+        1290
       ],
       "places.recall": [
-        145,
+        146,
         186
       ],
       "match.brand": [
         134,
-        145
+        146
       ]
     },
     "size:medium": {
       "claims.recall": [
-        606,
+        595,
         767
       ],
       "claims.precision": [
@@ -871,12 +872,12 @@
         800
       ],
       "parts.aspect": [
-        449,
-        729
+        352,
+        706
       ],
       "parts.sentiment": [
-        642,
-        729
+        640,
+        706
       ],
       "places.recall": [
         130,
@@ -889,72 +890,72 @@
     },
     "places:many": {
       "claims.recall": [
-        474,
+        494,
         578
       ],
       "claims.precision": [
-        572,
+        568,
         623
       ],
       "parts.aspect": [
-        287,
-        594
+        223,
+        609
       ],
       "parts.sentiment": [
-        480,
-        594
+        493,
+        609
       ],
       "places.recall": [
-        203,
+        204,
         245
       ],
       "match.brand": [
-        186,
-        203
+        187,
+        204
       ]
     },
     "platform:blog": {
       "claims.recall": [
-        693,
+        701,
         1067
       ],
       "claims.precision": [
-        830,
+        843,
         885
       ],
       "parts.aspect": [
-        415,
-        815
+        330,
+        824
       ],
       "parts.sentiment": [
-        684,
-        815
+        692,
+        824
       ],
       "places.recall": [
-        133,
+        134,
         199
       ],
       "match.brand": [
-        127,
-        133
+        128,
+        134
       ]
     },
     "transcript": {
       "claims.recall": [
-        447,
+        433,
         528
       ],
       "claims.precision": [
-        614,
+        625,
         663
       ],
       "parts.aspect": [
-        390,
-        570
+        304,
+        547
       ],
       "parts.sentiment": [
-        507,
-        570
+        493,
+        547
       ],
       "places.recall": [
         98,
@@ -967,7 +968,7 @@
     },
     "own": {
       "claims.recall": [
-        59,
+        60,
         66
       ],
       "claims.precision": [
@@ -975,12 +976,12 @@
         117
       ],
       "parts.aspect": [
-        60,
-        77
+        50,
+        78
       ],
       "parts.sentiment": [
-        72,
-        77
+        73,
+        78
       ],
       "places.recall": [
         20,
@@ -997,30 +998,30 @@
         1016
       ],
       "claims.precision": [
-        862,
+        886,
         917
       ],
       "parts.aspect": [
-        460,
-        834
+        361,
+        837
       ],
       "parts.sentiment": [
-        708,
-        834
+        701,
+        837
       ],
       "places.recall": [
-        129,
+        130,
         191
       ],
       "match.brand": [
-        122,
-        129
+        123,
+        130
       ]
     }
   },
   "models": {
     "review-claims": {
-      "openai/gpt-5.4-mini": 170
+      "openai/gpt-5.4-mini": 172
     },
     "claim-parts": {
       "openai/gpt-5.4-mini": 368
@@ -1032,6 +1033,7 @@
       "openai/gpt-5.4-mini": 88
     }
   },
-  "tokens": 1197382,
+  "tokens": 1198833,
+  "cachedTokens": 0,
   "staleReferences": 0
 }

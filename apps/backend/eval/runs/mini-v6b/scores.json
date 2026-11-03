@@ -1,6 +1,6 @@
 {
   "label": "mini-v6b",
-  "at": "2026-11-01T22:20:31.752Z",
+  "at": "2026-11-02T09:22:23.603Z",
   "cases": {
     "review": 172,
     "post": 199,
@@ -23,11 +23,11 @@
         1036
       ],
       "parts.aspect": [
-        820,
+        772,
         1036
       ],
       "parts.aspect_root": [
-        874,
+        853,
         1036
       ],
       "parts.kind_read": [
@@ -69,15 +69,15 @@
         2634
       ],
       "parts.sentiment": [
-        1923,
+        1922,
         2162
       ],
       "parts.aspect": [
-        1550,
+        1327,
         2162
       ],
       "parts.aspect_root": [
-        1756,
+        1697,
         2162
       ],
       "parts.kind_read": [
@@ -163,11 +163,11 @@
           731
         ],
         "parts.aspect": [
-          586,
+          553,
           731
         ],
         "parts.aspect_root": [
-          623,
+          609,
           731
         ],
         "parts.kind_read": [
@@ -209,15 +209,15 @@
           1792
         ],
         "parts.sentiment": [
-          1307,
+          1306,
           1474
         ],
         "parts.aspect": [
-          1071,
+          919,
           1474
         ],
         "parts.aspect_root": [
-          1206,
+          1166,
           1474
         ],
         "parts.kind_read": [
@@ -225,7 +225,7 @@
           1499
         ],
         "parts.kind": [
-          1257,
+          1255,
           1474
         ],
         "parts.foods_recall": [
@@ -302,11 +302,11 @@
           305
         ],
         "parts.aspect": [
-          234,
+          219,
           305
         ],
         "parts.aspect_root": [
-          251,
+          244,
           305
         ],
         "parts.kind_read": [
@@ -352,11 +352,11 @@
           688
         ],
         "parts.aspect": [
-          479,
+          408,
           688
         ],
         "parts.aspect_root": [
-          550,
+          531,
           688
         ],
         "parts.kind_read": [
@@ -364,7 +364,7 @@
           709
         ],
         "parts.kind": [
-          584,
+          586,
           688
         ],
         "parts.foods_recall": [
@@ -438,7 +438,7 @@
         420
       ],
       "parts.aspect": [
-        313,
+        297,
         368
       ],
       "parts.sentiment": [
@@ -456,7 +456,7 @@
         254
       ],
       "parts.aspect": [
-        174,
+        166,
         215
       ],
       "parts.sentiment": [
@@ -474,7 +474,7 @@
         1232
       ],
       "parts.aspect": [
-        820,
+        772,
         1036
       ],
       "parts.sentiment": [
@@ -492,7 +492,7 @@
         762
       ],
       "parts.aspect": [
-        541,
+        503,
         669
       ],
       "parts.sentiment": [
@@ -510,7 +510,7 @@
         278
       ],
       "parts.aspect": [
-        209,
+        193,
         248
       ],
       "parts.sentiment": [
@@ -528,7 +528,7 @@
         420
       ],
       "parts.aspect": [
-        259,
+        241,
         342
       ],
       "parts.sentiment": [
@@ -546,7 +546,7 @@
         219
       ],
       "parts.aspect": [
-        132,
+        130,
         174
       ],
       "parts.sentiment": [
@@ -582,7 +582,7 @@
         478
       ],
       "parts.aspect": [
-        331,
+        313,
         407
       ],
       "parts.sentiment": [
@@ -600,7 +600,7 @@
         297
       ],
       "parts.aspect": [
-        199,
+        185,
         262
       ],
       "parts.sentiment": [
@@ -618,7 +618,7 @@
         222
       ],
       "parts.aspect": [
-        131,
+        125,
         168
       ],
       "parts.sentiment": [
@@ -636,7 +636,7 @@
         411
       ],
       "parts.aspect": [
-        230,
+        223,
         308
       ],
       "parts.sentiment": [
@@ -654,7 +654,7 @@
         59
       ],
       "parts.aspect": [
-        49,
+        46,
         59
       ],
       "parts.sentiment": [
@@ -672,7 +672,7 @@
         259
       ],
       "parts.aspect": [
-        174,
+        158,
         231
       ],
       "parts.sentiment": [
@@ -690,7 +690,7 @@
         112
       ],
       "parts.aspect": [
-        71,
+        64,
         96
       ],
       "parts.sentiment": [
@@ -716,7 +716,7 @@
         914
       ],
       "parts.aspect": [
-        540,
+        485,
         748
       ],
       "parts.sentiment": [
@@ -768,7 +768,7 @@
         636
       ],
       "parts.aspect": [
-        403,
+        350,
         544
       ],
       "parts.sentiment": [
@@ -794,7 +794,7 @@
         458
       ],
       "parts.aspect": [
-        286,
+        245,
         368
       ],
       "parts.sentiment": [
@@ -820,7 +820,7 @@
         423
       ],
       "parts.aspect": [
-        276,
+        236,
         367
       ],
       "parts.sentiment": [
@@ -846,11 +846,11 @@
         2052
       ],
       "parts.aspect": [
-        1128,
+        958,
         1594
       ],
       "parts.sentiment": [
-        1460,
+        1459,
         1594
       ],
       "places.recall": [
@@ -872,7 +872,7 @@
         938
       ],
       "parts.aspect": [
-        571,
+        487,
         803
       ],
       "parts.sentiment": [
@@ -898,7 +898,7 @@
         565
       ],
       "parts.aspect": [
-        414,
+        361,
         557
       ],
       "parts.sentiment": [
@@ -924,11 +924,11 @@
         1297
       ],
       "parts.aspect": [
-        734,
+        606,
         1047
       ],
       "parts.sentiment": [
-        904,
+        903,
         1047
       ],
       "places.recall": [
@@ -950,7 +950,7 @@
         701
       ],
       "parts.aspect": [
-        413,
+        371,
         571
       ],
       "parts.sentiment": [
@@ -976,7 +976,7 @@
         110
       ],
       "parts.aspect": [
-        62,
+        58,
         83
       ],
       "parts.sentiment": [
@@ -1002,11 +1002,11 @@
         1238
       ],
       "parts.aspect": [
-        693,
+        595,
         991
       ],
       "parts.sentiment": [
-        861,
+        860,
         991
       ],
       "places.recall": [
@@ -1034,5 +1034,6 @@
     }
   },
   "tokens": 1693549,
+  "cachedTokens": 0,
   "staleReferences": 0
 }

@@ -67,7 +67,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:53:01.265Z",
     "usage": {
       "inputTokens": 9056,
@@ -76,7 +76,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The caption never says what is sold. The first-person \"we run out\" and the candelaberlin mention suggest a promotional post by the venue itself, so Candela is the place, with the Schöneberg tag as its location hint. The limited-stock line is read as an availability fact; deal is allowed because it is a limited-availability push.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Candela",
@@ -129,6 +129,16 @@
         "at": "2026-11-01T21:49:05.443Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:54.165Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 0 of 1 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:32.926Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (\"Get yours before we run out!!\" reads as the seller's own offer, likely Candela Berlin promoting itself, with no paid partnership, gift, invite, collab or giveaway disclosed.)"
       }
     ]
   }

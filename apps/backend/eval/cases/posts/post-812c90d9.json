@@ -208,7 +208,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:42:46.890Z",
     "usage": {
       "inputTokens": 9735,
@@ -258,7 +258,7 @@
         "text": "the jjm at hängbok is hands down the best jjm the author has had in Berlin",
         "quote": "hands down the best jjm I’ve had in Berlin",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "taste",
         "foods": [
           "jjm"
         ],
@@ -268,9 +268,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -332,9 +330,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -344,7 +340,7 @@
         "text": "jjm jajangmyun is black bean noodles with pork",
         "quote": "jjm jajangmyun 짜장면 is black bean noodles, with pork",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "jjm jajangmyun",
           "black bean noodles",
@@ -357,7 +353,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": []
         },
@@ -368,7 +364,7 @@
         "text": "tangsuyuk is fried pork with sweet and sour sauce",
         "quote": "tangsuyuk 탕수육 is fried pork with sweet and sour sauce",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "tangsuyuk",
           "fried pork",
@@ -381,7 +377,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": []
         },
@@ -402,9 +398,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -424,9 +418,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -446,7 +438,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -522,7 +516,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -540,6 +536,16 @@
         "at": "2026-11-01T21:49:05.432Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:41:58.404Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 8 of 14 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:36.503Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own review of hängbok with no paid, gifted, invited or collab disclosure.)"
       }
     ]
   }

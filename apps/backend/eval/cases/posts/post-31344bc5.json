@@ -399,7 +399,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:36:15.734Z",
     "usage": {
       "inputTokens": 35546,
@@ -581,7 +581,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -593,7 +595,7 @@
         "text": "casual fine dining pairs tasting menus with Naturwein",
         "quote": "Degustationsmenues neben Naturwein",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Naturwein"
         ],
@@ -635,7 +637,7 @@
         "text": "casual fine dining offers the quality of a starred restaurant with the atmosphere of a good bar",
         "quote": "Die Qualitaet eines Sterne-Restaurants, die Atmosphaere einer guten Bar",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -646,7 +648,7 @@
             "neutral"
           ],
           "aspects": [
-            "atmosphere"
+            "food"
           ],
           "kinds": [
             "opinion"
@@ -659,7 +661,7 @@
         "text": "casual fine dining means a 7-course menu while wearing sneakers",
         "quote": "Du bekommst ein 7-Gaenge-Menue, aber du darfst Sneaker tragen",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -668,7 +670,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -705,9 +707,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -767,7 +767,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -785,9 +787,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -805,9 +805,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -867,7 +865,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -885,9 +885,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -919,7 +917,7 @@
         "text": "Nouri serves Singapore-inspired crossroads cooking",
         "quote": "Singapur-inspiriertes „Crossroads Cooking“",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -927,9 +925,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -949,9 +945,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "vibe"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -974,7 +968,7 @@
             "positive"
           ],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -994,8 +988,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking",
-            "food"
+            "cooking"
           ],
           "kinds": []
         },
@@ -1014,7 +1007,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1033,7 +1028,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1044,7 +1039,7 @@
         "text": "Fukagawa is conceptually well thought out",
         "quote": "konzeptionell durchdacht",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1053,7 +1048,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "food"
           ],
           "kinds": []
         },
@@ -1144,7 +1139,7 @@
         "text": "Common is trending",
         "quote": "Trending",
         "sentiment": "positive",
-        "aspect": "crowding",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1154,9 +1149,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1168,7 +1161,7 @@
         "text": "Cookies Cream is trending among creator picks",
         "quote": "Trending",
         "sentiment": "positive",
-        "aspect": "crowding",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1178,9 +1171,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1192,7 +1183,7 @@
         "text": "Stoke is trending among creator picks",
         "quote": "Trending",
         "sentiment": "positive",
-        "aspect": "crowding",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1202,9 +1193,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1256,7 +1245,7 @@
         "text": "Ming Dynastie has 4 creator recommendations and serves Chinese cuisine",
         "quote": "4 Creator-Empfehlungen · Chinesisch",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1266,7 +1255,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1370,7 +1361,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1427,7 +1418,7 @@
         "text": "350 of 632 Berlin restaurants on the map offer vegetarian or vegan options",
         "quote": "350 der 632 Berliner Restaurants auf unserer Karte bieten vegetarische oder vegane Optionen",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1437,7 +1428,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -1447,7 +1440,7 @@
         "text": "vegan is no longer niche in Berlin but a basic requirement",
         "quote": "Vegan ist kein Nischenthema mehr, sondern Grundvoraussetzung",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1457,7 +1450,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "fact"
           ]
@@ -1477,6 +1472,16 @@
         "at": "2026-11-01T21:49:05.424Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:25.797Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 24 of 44 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:54.637Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Blog's own trend roundup with no paid, gifted or invited venue mention; it only plugs the blog's own map.)"
       }
     ]
   }

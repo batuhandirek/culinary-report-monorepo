@@ -203,7 +203,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T14:18:37.858Z",
     "usage": {
       "inputTokens": 5516,
@@ -217,7 +217,7 @@
         "text": "the kebab was good",
         "quote": "Good kebab",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "kebab"
         ],
@@ -228,7 +228,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -286,8 +286,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "food"
+            "taste"
           ],
           "kinds": [
             "opinion"
@@ -401,8 +400,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "wait",
-            "queue"
+            "queue",
+            "wait"
           ],
           "kinds": []
         }
@@ -429,7 +428,7 @@
         "text": "the kebab is good and the reviewer enjoyed it",
         "quote": "it’s a good kebab and I enjoyed it",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "kebab"
         ],
@@ -440,7 +439,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -458,8 +457,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "wait",
-            "crowding"
+            "none"
           ],
           "kinds": []
         }
@@ -518,6 +516,11 @@
         "at": "2026-11-01T21:49:05.409Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:06.128Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 15 claims changed"
       }
     ]
   }

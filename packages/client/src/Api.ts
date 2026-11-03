@@ -3309,8 +3309,6 @@ export interface AdminLlmBacklogOutputDto {
 }
 
 export interface AdminLlmBacklogsOutputDto {
-	/** `LLM_BACKLOG_ALLOW_PAID`: the backlogs may use Claude, not only the free allowance */
-	allowsPaid: boolean;
 	/** `LLM_BACKLOG_DAILY_TOKENS`: what a day's runs may spend over every backlog */
 	dailyTokens: number;
 	items: AdminLlmBacklogOutputDto[];

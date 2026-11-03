@@ -7,16 +7,16 @@ export const STATEMENTS_SHIPPED_AT = new Date('2026-10-30T11:00:00Z');
 // The dev run of the re-read raised `LLM_BACKLOG_DAILY_TOKENS` to 10M in `env/server/.env.local` (2026-10-30); put it back after.
 
 /**
- * When posts got the gate (`PostGateAgent`: not digested with a reason), the food-places rule, a
- * venue's own posts in agent A, and claim model v2 (each claim's quote; agent B's kind): a post
- * analysed before it is read again by `reread-posts` (gate first). Reviews keep
- * `STATEMENTS_SHIPPED_AT` until their own re-read for quotes is approved.
+ * The pipeline posts are read by now (2026-11-02): one post a question (the gate, agent A, each
+ * claim's parts), a long post in parts, places named, the aspects of 2026-11-02 (Dietary, On the
+ * house, Occasion, Consistency, Pressure & rushing; clearer definitions). A post analysed before it
+ * is read again by `reread-posts`, a little each night (the user's yes, 2026-11-02).
  */
-export const POSTS_GATED_AT = new Date('2026-10-31T18:25:00Z');
+export const POSTS_GATED_AT = new Date('2026-11-02T09:00:00Z');
 
 /**
- * When reviews got claim model v2 (each claim's quote in the review's own words, from its original
- * text; agent B's kind): a review analysed before it is read again by `reread-reviews` (the user's
- * yes, 2026-10-31).
+ * The pipeline reviews are read by now (2026-11-02): one review a question, each claim's parts one
+ * claim a question, the aspects of 2026-11-02. A review analysed before it is read again by
+ * `reread-reviews` (the user's yes, 2026-11-02).
  */
-export const REVIEWS_QUOTED_AT = new Date('2026-10-31T18:25:00Z');
+export const REVIEWS_QUOTED_AT = new Date('2026-11-02T09:00:00Z');

@@ -171,7 +171,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:25:32.616Z",
     "usage": {
       "inputTokens": 5022,
@@ -201,7 +201,7 @@
         "text": "went on a date with the fiancé",
         "quote": "i went on a date with my fiancé",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -210,7 +210,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere"
+            "none"
           ],
           "kinds": []
         }
@@ -305,7 +305,7 @@
         "text": "tried the traditional beer Shifu and the rhubarb drink",
         "quote": "we also tried the traditional beer Shifu & the rhubarb drink",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "drink_selection",
         "foods": [
           "traditional beer Shifu",
           "rhubarb drink"
@@ -317,8 +317,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks",
-            "drink_selection"
+            "drinks"
           ],
           "kinds": []
         }
@@ -374,6 +373,11 @@
         "at": "2026-11-01T21:49:05.405Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:11.702Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 10 claims changed"
       }
     ]
   }

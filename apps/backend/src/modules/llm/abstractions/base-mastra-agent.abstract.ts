@@ -131,11 +131,8 @@ export abstract class BaseMastraAgent<
 	): Promise<MastraGenerateResult<Output>> {
 		const instructions = this.instructionsFor(context);
 		const { model: chosen, ...callOptions } = options ?? ({} as MastraGenerateOptions<Output>);
-		// A call's own choice, else the agent's `LLM_AGENT_MODELS` entry (which may pay), else its own
-		const { choice, paidAllowed } =
-			chosen ?
-				{ choice: chosen, paidAllowed: false }
-			:	this.llmModels.choiceFor(this.config.id, this.getModel(context));
+		// A call's own choice, else the agent's `LLM_AGENT_MODELS` entry, else its own
+		const choice = chosen ?? this.llmModels.choiceFor(this.config.id, this.getModel(context));
 		const tools = this.getTools(context);
 		const outputProcessors = this.getOutputProcessors(context);
 
@@ -189,9 +186,7 @@ export abstract class BaseMastraAgent<
 
 		const start = Date.now();
 		try {
-			const { result: res, model } = await this.llmModels.run(choice, callWith, {
-				paidAllowed,
-			});
+			const { result: res, model } = await this.llmModels.run(choice, callWith);
 			if (llmConfig.IS_LLM_VERBOSE || this.config.verbose) {
 				const usage = res.totalUsage ?? res.usage;
 				this.logger.debug(

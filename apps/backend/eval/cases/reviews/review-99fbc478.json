@@ -217,7 +217,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T14:19:11.498Z",
     "usage": {
       "inputTokens": 5915,
@@ -240,8 +240,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
-            "crowding"
+            "crowding",
+            "vibe"
           ],
           "kinds": [
             "verdict"
@@ -277,8 +277,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "outdoor_seating",
-            "wait_for_table"
+            "outdoor_seating"
           ],
           "kinds": []
         }
@@ -287,7 +286,7 @@
         "text": "the partner was cold sitting outside",
         "quote": "Mijn partner had het koud",
         "sentiment": "negative",
-        "aspect": "atmosphere",
+        "aspect": "outdoor_seating",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -296,7 +295,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "outdoor_seating"
+            "atmosphere"
           ],
           "kinds": []
         }
@@ -305,7 +304,7 @@
         "text": "it started to rain lightly",
         "quote": "Het begon ook licht te regenen",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "outdoor_seating",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -316,7 +315,7 @@
             "negative"
           ],
           "aspects": [
-            "outdoor_seating"
+            "none"
           ],
           "kinds": [
             "opinion"
@@ -327,7 +326,7 @@
         "text": "the staff did open gigantic umbrellas",
         "quote": "Ze hebben wél gigantische paraplu 's geopend",
         "sentiment": "positive",
-        "aspect": "outdoor_seating",
+        "aspect": "attentiveness",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -336,8 +335,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "attentiveness",
-            "service"
+            "outdoor_seating"
           ],
           "kinds": []
         }
@@ -346,7 +344,7 @@
         "text": "the famous schnitzel was brought to the table quite quickly",
         "quote": "De fameuze schnitzel die we besteld hadden werd vrij vlug aan tafel gebracht",
         "sentiment": "positive",
-        "aspect": "speed_of_service",
+        "aspect": "wait_for_food",
         "foods": [
           "schnitzel"
         ],
@@ -357,7 +355,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "wait_for_food"
+            "speed_of_service"
           ],
           "kinds": []
         }
@@ -384,7 +382,7 @@
         "text": "the schnitzel was a flap of mushy breaded dough",
         "quote": "één  flap papperig gepanneerd deeg",
         "sentiment": "negative",
-        "aspect": "freshness",
+        "aspect": "cooking",
         "foods": [
           "schnitzel"
         ],
@@ -394,10 +392,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "cooking",
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -418,9 +413,7 @@
             "neutral",
             "mixed"
           ],
-          "aspects": [
-            "presentation"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -461,7 +454,6 @@
             "negative"
           ],
           "aspects": [
-            "presentation",
             "portion_size"
           ],
           "kinds": [
@@ -484,7 +476,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "food"
           ],
           "kinds": []
         }
@@ -537,7 +529,7 @@
         "text": "when paying they offered a consolation drink",
         "quote": "Bij het afrekenen, dat ding koste wel 38€ per persoon, hebben ze ons een troostdrankje aangeboden",
         "sentiment": "positive",
-        "aspect": "complaint_handling",
+        "aspect": "on_the_house",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -546,7 +538,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "service"
+            "complaint_handling"
           ],
           "kinds": []
         }
@@ -565,7 +557,9 @@
           "sentiments": [
             "mixed"
           ],
-          "aspects": [],
+          "aspects": [
+            "on_the_house"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -587,6 +581,11 @@
         "at": "2026-11-01T21:49:05.412Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:46.937Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 12 of 17 claims changed"
       }
     ]
   }

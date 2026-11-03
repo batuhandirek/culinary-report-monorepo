@@ -74,7 +74,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:26:21.974Z",
     "usage": {
       "inputTokens": 5092,
@@ -88,7 +88,7 @@
         "text": "came yesterday expecting to enjoy a tasty broodje gemuse kebab again",
         "quote": "Gisteren dachten we weer te kunnen genieten van een lekker broodje gemuse kebab",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "taste",
         "foods": [
           "broodje gemuse kebab"
         ],
@@ -101,7 +101,7 @@
             "positive"
           ],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": []
         }
@@ -119,7 +119,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
+            "consistency",
             "taste"
           ],
           "kinds": [
@@ -142,10 +142,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste",
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -179,9 +176,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "speed_of_service"
-          ],
+          "aspects": [],
           "kinds": []
         }
       }
@@ -196,6 +191,11 @@
         "at": "2026-11-01T21:49:05.407Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:41.298Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 5 claims changed"
       }
     ]
   }

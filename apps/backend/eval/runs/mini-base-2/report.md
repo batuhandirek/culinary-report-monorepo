@@ -1,51 +1,51 @@
 # Ingestion eval: mini-base-2
 
-2026-11-01 15:23 UTC · 169 reviews, 199 posts, 0 wordings · 503 cases left out (no reference or no output)
-Tokens: 1,189,651
-Models: review-claims: openai/gpt-5.4-mini (169); claim-parts: openai/gpt-5.4-mini (367); post-claims: openai/gpt-5.4-mini (199); venue-match: openai/gpt-5.4-mini (91)
+2026-11-02 09:22 UTC · 172 reviews, 199 posts, 0 wordings · 500 cases left out (no reference or no output) · 3 sources dropped by the agents (scored as nothing read)
+Tokens: 1,191,863
+Models: review-claims: openai/gpt-5.4-mini (172); claim-parts: openai/gpt-5.4-mini (367); post-claims: openai/gpt-5.4-mini (199); venue-match: openai/gpt-5.4-mini (91)
 
 ## Reviews
 
-| Metric | mini-base-2 | stored | mini-base | mini-r3 | second-gpt54 |
+| Metric | mini-base-2 | stored | mini-base | one-v1 | one-v2 |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 96% (928/962) | 93% +3 | 97% ±0 | 96% ±0 | 98% -1 |
-| Claims that are real (of produced) | 98% (1209/1238) | 99% -1 | 98% -1 | 99% -1 | 99% -1 |
-| Sentiment | 91% (965/1056) | 88% +4 | 91% ±0 | 93% -1 | 98% -6 |
-| Aspect, exact | 80% (841/1056) | 71% +9 | 82% -3 | 82% -2 | 84% -4 |
-| Aspect, right root | 85% (900/1056) | 81% +5 | 89% -4 | 90% -5 | 88% -3 |
-| Kind | 87% (920/1056) | 67% +20 | 87% ±0 | 92% -4 | 97% -10 |
-| Kind given at all | 100% (1056/1061) | 4% +96 | 99% ±0 | 98% +1 | 100% ±0 |
-| Changes that are changes | 73% (11/15) | 56% +17 | 52% +21 | 72% +1 | 67% +7 |
-| Changes found | 69% (11/16) | 80% -11 | 81% -12 | 81% -12 | 100% -31 |
-| Amount | 65% (28/43) | 41% +24 | 68% -3 | 76% -11 | 87% -22 |
-| Foods named, precision | 65% (262/401) | 32% +33 | 70% -5 | 71% -5 | 88% -23 |
-| Foods named, recall | 64% (244/381) | 23% +41 | 67% -3 | 67% -3 | 80% -15 |
+| Claims found (of the reference) | 95% (926/978) | 93% +1 | 96% -1 | 98% -3 | 98% -3 |
+| Claims that are real (of produced) | 99% (1224/1238) | 99% ±0 | 99% ±0 | 98% +1 | 98% ±0 |
+| Sentiment | 92% (973/1055) | 88% +5 | 91% +1 | 92% ±0 | 93% -1 |
+| Aspect, exact | 76% (797/1055) | 71% +5 | 77% -2 | 80% -4 | 82% -7 |
+| Aspect, right root | 84% (888/1055) | 81% +3 | 87% -3 | 90% -6 | 91% -7 |
+| Kind | 89% (935/1055) | 67% +22 | 88% ±0 | 94% -6 | 95% -6 |
+| Kind given at all | 100% (1055/1060) | 4% +96 | 99% ±0 | 100% ±0 | 100% ±0 |
+| Changes that are changes | 73% (11/15) | 56% +17 | 52% +21 | 58% +15 | 55% +18 |
+| Changes found | 69% (11/16) | 80% -11 | 81% -12 | 75% -6 | 81% -12 |
+| Amount | 64% (29/45) | 41% +23 | 69% -5 | 63% +1 | 73% -8 |
+| Foods named, precision | 66% (273/413) | 32% +34 | 71% -4 | 75% -9 | 76% -9 |
+| Foods named, recall | 66% (252/383) | 23% +43 | 68% -2 | 86% -20 | 86% -20 |
 
 ## Posts and articles
 
-| Metric | mini-base-2 | stored | mini-base | mini-r3 | second-gpt54 |
+| Metric | mini-base-2 | stored | mini-base | one-v1 | one-v2 |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 76% (1582/2077) | 56% +21 | 76% ±0 | 85% -9 | 85% -9 |
-| Claims that are real (of produced) | 91% (2014/2222) | 95% -4 | 93% -2 | 88% +3 | 92% -2 |
-| Sentiment | 87% (1733/1983) | 86% +2 | 87% ±0 | 88% -1 | 91% -4 |
-| Aspect, exact | 64% (1269/1983) | 63% +1 | 61% +3 | 63% +1 | 71% -7 |
-| Aspect, right root | 77% (1526/1983) | 78% -1 | 74% +3 | 76% +1 | 83% -6 |
-| Kind | 80% (1590/1983) | 47% +33 | 83% -3 | 84% -4 | 88% -8 |
-| Kind given at all | 100% (1983/1987) | 4% +96 | 100% ±0 | 100% ±0 | 100% ±0 |
-| Changes that are changes | 40% (21/53) | 46% -7 | 56% -16 | 51% -11 | 79% -39 |
-| Changes found | 44% (14/32) | 38% +6 | 50% -6 | 66% -22 | 60% -16 |
-| Amount | 62% (63/101) | 46% +16 | 55% +7 | 47% +15 | 40% +22 |
-| Foods named, precision | 77% (958/1248) | 46% +31 | 72% +5 | 75% +2 | 73% +3 |
-| Foods named, recall | 70% (916/1304) | 39% +31 | 66% +4 | 63% +8 | 68% +2 |
-| Subject (place, city, none) | 87% (1964/2270) | 85% +2 | 85% +2 | 88% -2 | 94% -8 |
-| Claim on the right place | 90% (1666/1845) | 85% +6 | 90% +1 | 91% -1 | 97% -7 |
-| Places found | 82% (356/433) | 73% +9 | 81% +1 | 90% -8 | 86% -4 |
-| Places that are places | 92% (356/389) | 85% +6 | 91% ±0 | 92% -1 | 94% -3 |
-| Match: brand (found places) | 92% (328/356) | 92% ±0 | 92% ±0 | 92% ±0 | 97% -5 |
-| Match: branch (right brand) | 94% (272/288) | 97% -3 | 96% -1 | 96% -1 | 98% -3 |
-| Match on the reference's places: brand | 93% (328/351) | — | 93% ±0 | 92% +1 | — |
-| Match on the reference's places: branch | 96% (269/280) | — | 96% ±0 | 96% ±0 | — |
-| Promotional flag | 79% (157/199) | 82% -3 | 79% ±0 | 78% +1 | 69% +10 |
+| Claims found (of the reference) | 74% (1545/2077) | 56% +19 | 75% -1 | 86% -11 | 86% -12 |
+| Claims that are real (of produced) | 91% (2032/2222) | 95% -3 | 94% -2 | 88% +3 | 86% +5 |
+| Sentiment | 89% (1669/1873) | 86% +4 | 88% +1 | 90% -1 | 89% ±0 |
+| Aspect, exact | 51% (959/1873) | 63% -12 | 49% +2 | 65% -14 | 70% -19 |
+| Aspect, right root | 77% (1448/1873) | 78% ±0 | 73% +4 | 83% -6 | 86% -8 |
+| Kind | 85% (1585/1873) | 47% +38 | 86% -1 | 87% -3 | 87% -3 |
+| Kind given at all | 100% (1873/1876) | 4% +96 | 100% ±0 | 100% ±0 | 100% ±0 |
+| Changes that are changes | 40% (21/53) | 46% -7 | 53% -14 | 49% -9 | 41% -1 |
+| Changes found | 41% (13/32) | 38% +3 | 38% +3 | 63% -22 | 66% -25 |
+| Amount | 65% (64/98) | 46% +19 | 53% +12 | 74% -9 | 71% -6 |
+| Foods named, precision | 78% (990/1276) | 46% +31 | 74% +3 | 74% +3 | 73% +5 |
+| Foods named, recall | 72% (929/1288) | 39% +33 | 68% +4 | 82% -10 | 83% -11 |
+| Subject (place, city, none) | 87% (1887/2175) | 85% +2 | 84% +3 | 91% -5 | 90% -4 |
+| Claim on the right place | 91% (1601/1769) | 85% +6 | 90% ±0 | 92% -1 | 92% -2 |
+| Places found | 83% (358/433) | 73% +10 | 81% +1 | 87% -5 | 88% -6 |
+| Places that are places | 92% (358/389) | 85% +7 | 92% ±0 | 91% +1 | 91% +1 |
+| Match: brand (found places) | 92% (329/358) | 92% ±0 | 92% ±0 | 93% -1 | 91% +1 |
+| Match: branch (right brand) | 94% (272/288) | 97% -3 | 96% -1 | 96% -2 | 94% ±0 |
+| Match on the reference's places: brand | 93% (328/351) | — | 93% ±0 | 93% +1 | 92% +2 |
+| Match on the reference's places: branch | 96% (269/280) | — | 96% ±0 | 96% ±0 | 95% +1 |
+| Promotional flag | 79% (157/199) | 82% -3 | 79% ±0 | 78% +1 | 79% -1 |
 
 _Other runs show their share and the points this run is above (+) or below (−) it._
 
@@ -55,126 +55,126 @@ _Only the test side: cases never read while tuning. A change counts when it move
 
 ### Reviews
 
-| Metric | mini-base-2 (train) | mini-base-2 (test) | mini-base (test) | mini-r3 (test) | second-gpt54 (test) |
+| Metric | mini-base-2 (train) | mini-base-2 (test) | mini-base (test) | one-v1 (test) | one-v2 (test) |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 97% | 95% (284/298) | 97% -2 | 96% -1 | 98% -2 |
-| Claims that are real (of produced) | 97% | 99% (365/367) | 98% +1 | 99% ±0 | 99% +1 |
-| Sentiment | 92% | 90% (295/326) | 92% -1 | 92% -2 | 98% -7 |
-| Aspect, exact | 79% | 80% (262/326) | 81% -1 | 82% -2 | 84% -3 |
-| Aspect, right root | 84% | 88% (287/326) | 89% -1 | 90% -2 | 88% ±0 |
-| Kind | 86% | 89% (289/326) | 90% -1 | 92% -3 | 97% -9 |
-| Kind given at all | 99% | 100% (326/326) | 100% ±0 | 95% +5 | 100% ±0 |
-| Changes that are changes | 69% | 100% (2/2) | 40% +60 | 100% ±0 | 67% +33 |
+| Claims found (of the reference) | 95% | 94% (281/298) | 97% -3 | 98% -3 | 97% -2 |
+| Claims that are real (of produced) | 99% | 100% (366/367) | 99% +1 | 99% ±0 | 99% ±0 |
+| Sentiment | 92% | 92% (296/323) | 92% -1 | 91% +1 | 93% -1 |
+| Aspect, exact | 75% | 76% (247/323) | 77% ±0 | 78% -2 | 79% -3 |
+| Aspect, right root | 83% | 86% (278/323) | 87% -1 | 89% -3 | 88% -2 |
+| Kind | 88% | 91% (294/323) | 91% ±0 | 95% -4 | 96% -5 |
+| Kind given at all | 99% | 100% (323/323) | 100% ±0 | 100% ±0 | 100% ±0 |
+| Changes that are changes | 69% | 100% (2/2) | 40% +60 | 40% +60 | 40% +60 |
 | Changes found | 64% | 100% (2/2) | 100% ±0 | 100% ±0 | 100% ±0 |
-| Amount | 64% | 67% (10/15) | 71% -4 | 67% ±0 | 87% -20 |
-| Foods named, precision | 65% | 66% (80/121) | 78% -12 | 71% -4 | 88% -22 |
-| Foods named, recall | 66% | 61% (75/123) | 69% -8 | 60% +1 | 80% -19 |
+| Amount | 60% | 73% (11/15) | 81% -8 | 72% +1 | 82% -9 |
+| Foods named, precision | 66% | 67% (82/122) | 78% -11 | 76% -9 | 76% -9 |
+| Foods named, recall | 68% | 62% (76/123) | 70% -8 | 83% -21 | 82% -20 |
 
 ### Posts and articles
 
-| Metric | mini-base-2 (train) | mini-base-2 (test) | mini-base (test) | mini-r3 (test) | second-gpt54 (test) |
+| Metric | mini-base-2 (train) | mini-base-2 (test) | mini-base (test) | one-v1 (test) | one-v2 (test) |
 |---|---|---|---|---|---|
-| Claims found (of the reference) | 77% | 75% (452/606) | 73% +1 | 88% -14 | 85% -11 |
-| Claims that are real (of produced) | 90% | 93% (567/609) | 96% -2 | 86% +7 | 92% +1 |
-| Sentiment | 87% | 89% (514/579) | 91% -2 | 88% +1 | 91% -2 |
-| Aspect, exact | 64% | 65% (377/579) | 65% ±0 | 61% +4 | 71% -6 |
-| Aspect, right root | 76% | 79% (459/579) | 76% +4 | 75% +4 | 83% -3 |
-| Kind | 79% | 83% (481/579) | 85% -2 | 84% -1 | 88% -5 |
-| Kind given at all | 100% | 99% (579/583) | 100% -1 | 100% ±0 | 100% -1 |
-| Changes that are changes | 46% | 21% (3/14) | 45% -24 | 48% -26 | 79% -57 |
-| Changes found | 50% | 30% (3/10) | 40% -10 | 80% -50 | 60% -30 |
-| Amount | 55% | 80% (24/30) | 77% +3 | 67% +13 | 40% +40 |
-| Foods named, precision | 74% | 83% (295/356) | 75% +7 | 75% +8 | 73% +9 |
-| Foods named, recall | 70% | 71% (284/402) | 65% +6 | 60% +11 | 68% +2 |
-| Subject (place, city, none) | 88% | 83% (538/646) | 86% -3 | 87% -4 | 94% -11 |
-| Claim on the right place | 91% | 87% (437/500) | 83% +5 | 91% -4 | 97% -9 |
-| Places found | 83% | 79% (88/111) | 77% +2 | 85% -5 | 86% -7 |
-| Places that are places | 94% | 85% (88/103) | 84% +1 | 88% -2 | 94% -9 |
-| Match: brand (found places) | 92% | 92% (81/88) | 91% +1 | 91% +1 | 97% -5 |
-| Match: branch (right brand) | 94% | 96% (65/68) | 97% -1 | 99% -3 | 98% -2 |
-| Match on the reference's places: brand | 94% | 90% (64/71) | 93% -3 | 92% -2 | — |
-| Match on the reference's places: branch | 96% | 98% (48/49) | 95% +3 | 96% +2 | — |
-| Promotional flag | 77% | 83% (48/58) | 81% +2 | 79% +3 | 69% +14 |
+| Claims found (of the reference) | 75% | 72% (437/606) | 72% ±0 | 91% -18 | 90% -18 |
+| Claims that are real (of produced) | 90% | 95% (581/609) | 96% ±0 | 91% +4 | 85% +11 |
+| Sentiment | 88% | 91% (493/542) | 92% -1 | 90% ±0 | 89% +2 |
+| Aspect, exact | 51% | 51% (279/542) | 51% +1 | 62% -11 | 67% -16 |
+| Aspect, right root | 77% | 77% (419/542) | 76% +2 | 80% -3 | 82% -5 |
+| Kind | 83% | 87% (474/542) | 89% -2 | 86% +1 | 86% +1 |
+| Kind given at all | 100% | 99% (542/545) | 100% ±0 | 100% -1 | 100% -1 |
+| Changes that are changes | 46% | 21% (3/14) | 45% -24 | 50% -29 | 34% -13 |
+| Changes found | 45% | 30% (3/10) | 30% ±0 | 70% -40 | 70% -40 |
+| Amount | 59% | 80% (24/30) | 69% +11 | 72% +8 | 64% +16 |
+| Foods named, precision | 76% | 82% (303/369) | 78% +5 | 72% +10 | 72% +10 |
+| Foods named, recall | 72% | 73% (286/391) | 67% +6 | 80% -6 | 85% -12 |
+| Subject (place, city, none) | 88% | 83% (516/624) | 85% -2 | 91% -8 | 91% -8 |
+| Claim on the right place | 91% | 88% (421/477) | 84% +4 | 88% ±0 | 89% -1 |
+| Places found | 84% | 80% (89/111) | 78% +2 | 84% -4 | 90% -10 |
+| Places that are places | 94% | 86% (89/103) | 85% +1 | 88% -1 | 85% +2 |
+| Match: brand (found places) | 92% | 91% (81/89) | 90% +1 | 90% +1 | 90% +1 |
+| Match: branch (right brand) | 94% | 96% (65/68) | 97% -1 | 99% -3 | 96% ±0 |
+| Match on the reference's places: brand | 94% | 90% (64/71) | 93% -3 | 93% -3 | 91% -1 |
+| Match on the reference's places: branch | 96% | 98% (48/49) | 95% +3 | 96% +1 | 95% +3 |
+| Promotional flag | 77% | 83% (48/58) | 81% +2 | 79% +3 | 83% ±0 |
 
 ## By case tag
 
 | Tag | Claims found (of the reference) | Claims that are real (of produced) | Aspect, exact | Sentiment | Places found | Match: brand (found places) |
 |---|---|---|---|---|---|---|
-| chain | 95% (366/385) | 99% (469/474) | 78% (328/419) | 94% (395/419) | — | — |
-| hard | 87% (79/91) | 96% (102/106) | 74% (71/96) | 94% (90/96) | 100% (11/11) | 100% (11/11) |
-| lang:de | 96% (334/347) | 98% (424/433) | 83% (306/368) | 93% (342/368) | — | — |
-| lang:en | 96% (225/235) | 99% (295/298) | 80% (207/258) | 93% (239/258) | — | — |
-| lang:other | 98% (306/313) | 96% (398/414) | 74% (260/350) | 90% (314/350) | — | — |
-| lang:tr | 94% (63/67) | 99% (92/93) | 85% (68/80) | 88% (70/80) | — | — |
-| length:long | 97% (284/294) | 96% (399/417) | 77% (261/337) | 88% (296/337) | — | — |
-| length:medium | 96% (588/611) | 99% (750/761) | 80% (524/658) | 93% (610/658) | — | — |
-| length:short | 98% (56/57) | 100% (60/60) | 92% (56/61) | 97% (59/61) | — | — |
-| no-transcript | 91% (438/482) | 90% (593/658) | 72% (392/545) | 90% (489/545) | 95% (121/127) | 92% (111/121) |
-| own | 86% (57/66) | 90% (101/112) | 72% (55/76) | 91% (69/76) | 100% (20/20) | 100% (20/20) |
-| places:few | 74% (1107/1490) | 93% (1493/1606) | 68% (942/1387) | 88% (1223/1387) | 82% (152/186) | 92% (140/152) |
-| places:many | 81% (466/578) | 85% (509/602) | 55% (319/585) | 85% (499/585) | 82% (202/245) | 92% (186/202) |
-| places:none | 100% (9/9) | 86% (12/14) | 73% (8/11) | 100% (11/11) | 100% (2/2) | 100% (2/2) |
-| platform:blog | 66% (699/1067) | 91% (839/924) | 57% (492/859) | 85% (732/859) | 69% (137/199) | 96% (132/137) |
-| platform:google | 96% (928/962) | 98% (1209/1238) | 80% (841/1056) | 91% (965/1056) | — | — |
-| platform:instagram | 90% (294/325) | 91% (399/438) | 75% (271/363) | 88% (321/363) | 93% (66/71) | 91% (60/66) |
-| platform:tiktok | 86% (589/685) | 90% (776/860) | 66% (506/761) | 89% (680/761) | 94% (153/163) | 89% (136/153) |
-| size:large | 67% (682/1016) | 91% (840/923) | 60% (500/837) | 86% (717/837) | 69% (131/191) | 95% (124/131) |
-| size:medium | 81% (625/767) | 93% (770/825) | 65% (504/778) | 87% (680/778) | 93% (132/142) | 91% (120/132) |
-| size:small | 94% (275/294) | 85% (404/474) | 72% (265/368) | 91% (336/368) | 93% (93/100) | 90% (84/93) |
-| stars:1 | 97% (156/161) | 96% (214/224) | 77% (145/188) | 91% (172/188) | — | — |
-| stars:2 | 97% (157/162) | 97% (207/214) | 81% (142/176) | 90% (159/176) | — | — |
-| stars:3 | 97% (213/219) | 99% (273/276) | 75% (179/238) | 88% (209/238) | — | — |
-| stars:4 | 97% (186/192) | 99% (241/244) | 82% (172/210) | 93% (195/210) | — | — |
-| stars:5 | 95% (216/228) | 98% (274/280) | 83% (203/244) | 94% (230/244) | — | — |
-| transcript | 84% (445/528) | 91% (582/640) | 66% (385/579) | 88% (512/579) | 92% (98/107) | 87% (85/98) |
+| chain | 94% (364/389) | 99% (470/474) | 75% (313/417) | 95% (397/417) | — | — |
+| hard | 86% (78/91) | 93% (99/106) | 63% (59/94) | 94% (88/94) | 100% (11/11) | 100% (11/11) |
+| lang:de | 93% (333/359) | 99% (427/433) | 78% (288/369) | 93% (345/369) | — | — |
+| lang:en | 95% (227/239) | 100% (297/298) | 75% (196/260) | 93% (242/260) | — | — |
+| lang:other | 96% (302/313) | 98% (407/414) | 71% (245/345) | 91% (315/345) | — | — |
+| lang:tr | 96% (64/67) | 100% (93/93) | 84% (68/81) | 88% (71/81) | — | — |
+| length:long | 96% (281/294) | 98% (410/417) | 75% (251/336) | 90% (301/336) | — | — |
+| length:medium | 94% (589/627) | 99% (754/761) | 75% (493/658) | 93% (613/658) | — | — |
+| length:short | 98% (56/57) | 100% (60/60) | 87% (53/61) | 97% (59/61) | — | — |
+| no-transcript | 93% (446/482) | 90% (591/658) | 55% (301/546) | 90% (493/546) | 96% (122/127) | 91% (111/122) |
+| own | 91% (60/66) | 87% (97/112) | 62% (47/76) | 89% (68/76) | 100% (20/20) | 100% (20/20) |
+| places:few | 74% (1098/1490) | 94% (1505/1606) | 54% (724/1341) | 90% (1202/1341) | 82% (153/186) | 92% (140/153) |
+| places:many | 76% (438/578) | 86% (515/602) | 44% (228/521) | 88% (456/521) | 83% (203/245) | 92% (187/203) |
+| places:none | 100% (9/9) | 86% (12/14) | 64% (7/11) | 100% (11/11) | 100% (2/2) | 100% (2/2) |
+| platform:blog | 64% (679/1067) | 93% (855/924) | 45% (359/805) | 87% (699/805) | 69% (138/199) | 96% (133/138) |
+| platform:google | 95% (926/978) | 99% (1224/1238) | 76% (797/1055) | 92% (973/1055) | — | — |
+| platform:instagram | 92% (300/325) | 91% (399/438) | 58% (212/364) | 89% (325/364) | 94% (67/71) | 90% (60/67) |
+| platform:tiktok | 83% (566/685) | 90% (778/860) | 55% (388/704) | 92% (645/704) | 94% (153/163) | 89% (136/153) |
+| size:large | 66% (675/1016) | 93% (859/923) | 47% (376/804) | 87% (699/804) | 69% (132/191) | 95% (125/132) |
+| size:medium | 77% (590/767) | 94% (776/825) | 52% (369/703) | 91% (637/703) | 93% (132/142) | 91% (120/132) |
+| size:small | 95% (280/294) | 84% (397/474) | 58% (214/366) | 91% (333/366) | 94% (94/100) | 89% (84/94) |
+| stars:1 | 98% (157/161) | 97% (217/224) | 70% (132/188) | 93% (174/188) | — | — |
+| stars:2 | 97% (157/162) | 99% (212/214) | 76% (133/176) | 91% (161/176) | — | — |
+| stars:3 | 96% (210/219) | 100% (275/276) | 72% (170/236) | 90% (212/236) | — | — |
+| stars:4 | 91% (186/204) | 99% (242/244) | 80% (167/210) | 93% (195/210) | — | — |
+| stars:5 | 93% (216/232) | 99% (278/280) | 80% (195/245) | 94% (231/245) | — | — |
+| transcript | 80% (420/528) | 92% (586/640) | 57% (299/522) | 91% (477/522) | 92% (98/107) | 87% (85/98) |
 
 ## Misses
 
-### parts.aspect (929)
+### parts.aspect (1172)
 
-- `review-02556664` at the competition you eat exactly the same thing with limo…: food ≠ authenticity
+- `review-019a8099` a very nice restaurant: none ≠ atmosphere
+- `review-02556664` after 30 minutes the reviewer had moved only 3 metres in th…: queue ≠ wait
+- `review-02556664` at the competition you eat exactly the same thing with limo…: none ≠ authenticity
 - `review-02d1586d` everything was very good: none ≠ vibe
-- `review-02d1586d` they thank the waiter as well: service ≠ none
+- `review-02d1586d` the staff were very good: service ≠ friendliness
 - `review-0541b749` the frites were frozen: ingredient_quality ≠ seasoning
-- `review-0541b749` the meat in the sandwich was chicken only: menu_variety ≠ ingredient_quality
 - `review-0541b749` the pain was quickly made, nothing special: food ≠ none
 - `review-070860ca` received a refund: complaint_handling ≠ billing
 - `review-070860ca` had to reorder: order_accuracy ≠ none
-- `review-070860ca` the food was mid, nothing to write home about: food ≠ none
 - `review-070860ca` not worth the hassle: none ≠ value_for_money
+- `review-07871fa7` they add some kind of potato to the dürüm as standard, whic…: food ≠ taste
 - `review-0ac47c59` waited in line a little over an hour: queue ≠ wait
 - `review-0ac47c59` orders deliberately not taken from the person at the front …: queue ≠ service
-- `review-1016bd13` large groups should avoid this place: none ≠ space
-- `review-1016bd13` pre-ordered a menu of 4 cold dishes, 8 hot dishes and one s…: none ≠ menu_variety
-- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: none ≠ order_accuracy
-- `review-1016bd13` planned to order more drinks on site as needed: none ≠ menu_variety
-- `review-1016bd13` the soup was served quickly on arrival: speed_of_service ≠ none
-- `review-1016bd13` reserved 15 tables in total: none ≠ reservation_handling
+- `review-0ac47c59` the chicken meat was in the döner: food ≠ ingredient_quality
+- `review-0ac47c59` complimentary tea is offered, the only thing earning 1 point: on_the_house ≠ drinks
+- `review-1016bd13` large groups should avoid this place: occasion ≠ space
+- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: drinks ≠ order_accuracy
+- `review-1016bd13` planned to order more drinks on site as needed: drinks ≠ menu_variety
+- `review-1016bd13` arranged a 7 PM time with the restaurant in advance: reservation_handling ≠ none
+- `review-1016bd13` called the lobby manager 20 minutes ahead so hot dishes cou…: reservation_handling ≠ none
+- `review-1016bd13` the restaurant said the cold dishes were already set out: service ≠ none
+- `review-1016bd13` the soup was served quickly on arrival: wait_for_food ≠ none
 - `review-1016bd13` none of the tables had a bottle opener: service ≠ order_accuracy
+- `review-1016bd13` all hot dishes (15 plates each for 15 tables) came within j…: wait_for_food ≠ speed_of_service
+- `review-1016bd13` for a full 20 minutes the guests only had 4 cold dishes and…: wait_for_food ≠ speed_of_service
 - `review-1016bd13` repeatedly urged the manager and runners but was only told …: complaint_handling ≠ attentiveness
-- `review-1016bd13` asked the manager to serve each dish as ready but got no ef…: complaint_handling ≠ none
+- `review-1016bd13` asked the manager to serve each dish as ready but got no ef…: complaint_handling ≠ availability
+- `review-1016bd13` asks why, if staff served dishes one at a time, all 8 hot d…: wait_for_food ≠ speed_of_service
+- `review-1016bd13` waiters kept pushing drinks on guests while they waited, wh…: pressure ≠ advice
+- `review-1016bd13` asks whether serving hot dishes earlier would really mean f…: pressure ≠ speed_of_service
+- `review-13683c42` Burgermeister is an option for a quick lunch or dinner: occasion ≠ none
 - `review-13683c42` the seating is quite uncomfortable: interior ≠ space
+- `review-16bdd5e0` my sauce was only on 1/3 of the kebab: presentation ≠ portion_size
 - `review-1798cc23` the Google listing is no longer accurate: other ≠ ownership
-- `review-1798cc23` the menu, prices and cuisine differ from those in the listi…: menu_variety ≠ ownership
-- `review-1798cc23` the cuisine is now Afghan instead of Persian: food ≠ ownership
+- `review-1798cc23` the menu, prices and cuisine differ from those in the listi…: other ≠ ownership
+- `review-1798cc23` the cuisine is now Afghan instead of Persian: menu_variety ≠ ownership
+- `review-1798cc23` the old listing including its reviews was simply continued: other ≠ ownership
 - `review-1798cc23` dishes cost around 20 € each: price_level ≠ price
+- `review-1798cc23` one of the three Bier bottles looked different: drinks ≠ order_accuracy
 - `review-196641fc` cool stickers from all over the (football) world as the des…: interior ≠ none
-- `review-257f4791` we were a table of five French people: none ≠ crowding
-- `review-257f4791` there were live musicians: atmosphere ≠ none
-- `review-27722511` the kebab is great, really very good: taste ≠ none
-- `review-27722511` those who want the kebab have to wait in a queue: queue ≠ none
-- `review-27722511` don't expect an exceptional atmosphere inside: atmosphere ≠ none
-- `review-27722511` don't expect exceptional service: service ≠ none
-- `review-27722511` the kebab is an ordinary kebab with phenomenal status: food ≠ none
-- `review-27722511` the kebab is very tasty: taste ≠ none
-- `review-2799bbfa` only this branch gave the reviewer a wrong takeaway order: order_accuracy ≠ none
-- `review-2799bbfa` finding out about the wrong order at home was super disappo…: order_accuracy ≠ none
-- `review-2799bbfa` going back to ask for the order to be fixed and having to w…: complaint_handling ≠ none
-- `review-2799bbfa` no additional compensation offered for their mistake: complaint_handling ≠ none
-- `review-279b23c3` the food rated 12/10: food ≠ none
-- … 889 more in issues.jsonl
+- … 1132 more in issues.jsonl
 
-### parts.foods (787)
+### parts.foods (750)
 
 - `review-0217fd90` the soup was really incredibly good: [Suppe] ≠ [soup]
 - `review-0217fd90` the soup was full of flavour: [Suppe] ≠ [soup]
@@ -204,29 +204,71 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `review-0ac47c59` complimentary tea is offered, the only thing earning 1 point: [çay] ≠ [tea]
 - `review-0ac47c59` complimentary tea is offered, the only thing earning 1 point: [çay] ≠ [tea]
 - `review-1016bd13` pre-ordered a menu of 4 cold dishes, 8 hot dishes and one s…: [汤] ≠ []
-- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: [啤酒, 可乐, 橙汁] ≠ [beer, cola, orange juice]
-- `review-1016bd13` the soup was served quickly on arrival: [汤] ≠ [soup]
+- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: [啤酒, 可乐, 橙汁] ≠ [beer, cola, orange juice, beer]
+- `review-1016bd13` the soup was served quickly on arrival: [汤] ≠ [soup, soup]
 - `review-1016bd13` for a full 20 minutes the guests only had 4 cold dishes and…: [啤酒] ≠ [cold dishes, beer]
 - `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: [啤酒, 可乐, 橙汁] ≠ [beer]
 - `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: [啤酒, 可乐, 橙汁] ≠ [cola]
 - `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: [啤酒, 可乐, 橙汁] ≠ [orange juice]
 - `review-1016bd13` the soup was served quickly on arrival: [汤] ≠ [soup]
+- `review-1016bd13` reserved 6 bottles of beer, 1 large bottle of cola and 1 la…: [啤酒, 可乐, 橙汁] ≠ [beer]
+- `review-1016bd13` the soup was served quickly on arrival: [汤] ≠ [soup]
 - `review-1016bd13` for a full 20 minutes the guests only had 4 cold dishes and…: [啤酒] ≠ [cold dishes, beer]
 - `review-1016bd13` waiters kept pushing drinks on guests while they waited, wh…: [] ≠ [drinks]
 - `review-1016bd13` drinks are sold at exorbitant prices: [] ≠ [drinks]
-- `review-1016bd13` asks whether serving hot dishes earlier would really mean f…: [] ≠ [hot dishes]
-- `review-1016bd13` asks whether serving hot dishes earlier would really mean f…: [] ≠ [drinks]
-- … 747 more in issues.jsonl
+- … 710 more in issues.jsonl
 
-### parts.kind (529)
+### claims.missed (584)
+
+- `review-0217fd90` very delicious
+- `review-02556664` go to the competition instead
+- `review-070860ca` the reviewer is not happy
+- `review-07871fa7` all in all pretty okay
+- `review-0ac47c59` found nothing to praise about the place
+- `review-16bdd5e0` would not recommend
+- `review-16bdd5e0` definitely not worth the time
+- `review-170f36a3` everything is awesome
+- `review-170f36a3` the atmosphere has vibes
+- `review-170f36a3` the service is fast
+- `review-170f36a3` the food is really tasty
+- `review-196641fc` the crowd is a big mix of almost only under-30 tourists, business(wo)men from Asia or Eas…
+- `review-196641fc` visited on a late Saturday midday
+- `review-196641fc` the kebab experts ignore guests' questions
+- `review-21de844d` there are far better cafés in Berlin than this one
+- `review-3639cae4` doesn't understand the enthusiasm for this kebab
+- `review-36f2fac8` go to another authentic spot instead
+- `review-3e075e7e` doesn't know what people are raving about
+- `review-5582d6b8` skip the matcha latte
+- `review-5582d6b8` sit inside
+- `review-5604a426` they were sorely disappointed by the broodje gemuse kebab
+- `review-58540992` the reviewer does not want to be told off because someone else did not show up
+- `review-69365171` had the Büffet from 12-15 Uhr for 16,50€
+- `review-69365171` very good selection of food and desserts
+- `review-69365171` value for money is ok
+- `review-69365171` staff very friendly
+- `review-69365171` we will come back
+- `review-7a1ba6d7` the kebabs were a little salty for them, but they expected it
+- `review-7d7ef8ca` the food is super delicious
+- `review-7d7ef8ca` the food is a bit pricey
+- `review-7d7ef8ca` it was still a very great experience
+- `review-7d7ef8ca` you need to allow some time, even on weekdays
+- `review-7d7ef8ca` waited almost 40 minutes for the food
+- `review-7d7ef8ca` drinks arrive faster
+- `review-7d7ef8ca` the drinks are almost empty again by the time the food arrives
+- `review-7f3142f7` the website's ticket information is very misleading
+- `review-80d9a747` loved the visit
+- `review-80d9a747` would highly recommend the place
+- `review-90e99b19` staff clearing the reviewer's table left the dishcloth on the table
+- `review-937ea9e9` Sandos is simply outstanding
+- … 544 more in issues.jsonl
+
+### parts.kind (408)
 
 - `review-019a8099` sitting outside can be annoying because the restaurant is a…: opinion ≠ fact
-- `review-02556664` at the competition you eat exactly the same thing with limo…: opinion ≠ fact
 - `review-02d1586d` Rüyam Gemüse Kebab was their choice on their first day in B…: fact ≠ verdict
 - `review-02d1586d` glad they came to Rüyam Gemüse Kebab: verdict ≠ fact
 - `review-02d1586d` they thank the waiter as well: opinion ≠ fact
 - `review-0541b749` the pain was quickly made, nothing special: opinion ≠ fact
-- `review-070860ca` the food was mid, nothing to write home about: opinion ≠ fact
 - `review-08c67545` the reviewer would not do it again for the price: verdict ≠ opinion
 - `review-0ac47c59` the line didn't move: opinion ≠ fact
 - `review-0ac47c59` asking a question in Turkish gets a 'no Turkish' answer: opinion ≠ fact
@@ -260,97 +302,11 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `review-3486a0a9` hopes they will add a vegetarian option for their chicken b…: opinion ≠ new_item
 - `review-3486a0a9` would love to see gf buns on offer: opinion ≠ new_item
 - `review-356e149a` the employee made me wait several more minutes before takin…: opinion ≠ fact
-- … 489 more in issues.jsonl
+- `review-35fe7952` orders are prepared in no time: opinion ≠ fact
+- `review-3639cae4` there were practically no sauces: opinion ≠ fact
+- … 368 more in issues.jsonl
 
-### claims.missed (529)
-
-- `review-0217fd90` very delicious
-- `review-02556664` go to the competition instead
-- `review-070860ca` the reviewer is not happy
-- `review-07871fa7` all in all pretty okay
-- `review-0ac47c59` found nothing to praise about the place
-- `review-16bdd5e0` would not recommend
-- `review-16bdd5e0` definitely not worth the time
-- `review-196641fc` the crowd is a big mix of almost only under-30 tourists, business(wo)men from Asia or Eas…
-- `review-196641fc` visited on a late Saturday midday
-- `review-196641fc` the kebab experts ignore guests' questions
-- `review-21de844d` there are far better cafés in Berlin than this one
-- `review-3639cae4` the meat was dry
-- `review-36f2fac8` you wait 1.5 hours in the queue for your food
-- `review-36f2fac8` go to another authentic spot instead
-- `review-5604a426` they were sorely disappointed by the broodje gemuse kebab
-- `review-58540992` the reviewer does not want to be told off because someone else did not show up
-- `review-5d173a89` the döner is not worth €7.90
-- `review-7a1ba6d7` the kebabs were a little salty for them, but they expected it
-- `review-7f3142f7` the website's ticket information is very misleading
-- `review-7f3142f7` the atmosphere is lively
-- `review-80d9a747` loved the visit
-- `review-80d9a747` would highly recommend the place
-- `review-937ea9e9` Sandos is simply outstanding
-- `review-af8dacaa` the place is super
-- `review-bf2322b7` keep up the great work
-- `review-bf2322b7` absolutely recommended
-- `review-c117171d` the place is degrading
-- `review-d77ecb53` had the crispy pork knuckle
-- `review-dcd4db39` the queue nonetheless moved relatively quickly
-- `review-dcd4db39` the order terminal takes card payment only
-- `review-dcd4db39` keep up the good work, dear team
-- `review-e12f5f74` the salad (salatası) was fresh
-- `review-eacefe43` came late at night
-- `review-fa5b28b1` the understaffing is a big failing of the shop owner
-- `post-019b903e` Boddensee is in Birkenwerder near Berlin
-- `post-020c68fb` if you have never been to Markthalle Neun you cannot say you really know today's Berlin
-- `post-020c68fb` Markthalle Neun is open Monday to Saturday 9:00–20:00
-- `post-047130f4` Salami Social Club is still serving in Berlin in 2026
-- `post-047130f4` Salami Social Club is the tasty new kid on the Friedrichshain block
-- `post-047130f4` Salami Social Club was founded by Jacob and Ben
-- … 489 more in issues.jsonl
-
-### parts.sentiment (341)
-
-- `review-019a8099` sitting outside can be annoying because the restaurant is a…: negative ≠ neutral
-- `review-02556664` after 30 minutes the reviewer had moved only 3 metres in th…: negative ≠ neutral
-- `review-02d1586d` glad they came to Rüyam Gemüse Kebab: positive ≠ neutral
-- `review-02d1586d` they thank the waiter as well: positive ≠ neutral
-- `review-0541b749` the pain was quickly made, nothing special: negative ≠ neutral
-- `review-070860ca` the food was mid, nothing to write home about: negative ≠ neutral
-- `review-0ac47c59` complimentary tea is offered, the only thing earning 1 point: positive ≠ neutral
-- `review-1016bd13` all hot dishes (15 plates each for 15 tables) came within j…: negative ≠ positive
-- `review-1016bd13` for a full 20 minutes the guests only had 4 cold dishes and…: negative ≠ neutral
-- `review-1016bd13` asked the manager to serve each dish as ready but got no ef…: negative ≠ neutral
-- `review-1016bd13` asks why, if staff served dishes one at a time, all 8 hot d…: negative ≠ neutral
-- `review-1016bd13` the 16-person table got 4 plates of 土豆丝 instead of 2 and 4 …: negative ≠ neutral
-- `review-1798cc23` the Google listing is no longer accurate: negative ≠ neutral
-- `review-1798cc23` one of the three Bier bottles looked different: negative ≠ neutral
-- `review-196641fc` food pickup is an anonymous moving along: negative ≠ neutral
-- `review-196641fc` few eat on site today because of the crowding and queue: negative ≠ neutral
-- `review-257f4791` perfect for the atmosphere: positive ≠ neutral
-- `review-27722511` there are better kebabs in Berlin: negative ≠ positive
-- `review-27722511` the kebab is an ordinary kebab with phenomenal status: mixed ≠ neutral
-- `review-2b737ce5` before today the food was okay: positive ≠ neutral
-- `review-3486a0a9` hopes they will add a vegetarian option for their chicken b…: neutral ≠ positive
-- `review-3486a0a9` would love to see gf buns on offer: neutral ≠ positive
-- `review-356e149a` stood at the counter for about five minutes without being g…: negative ≠ neutral
-- `review-356e149a` that is no way to treat guests: negative ≠ positive
-- `review-356e149a` friendly and respectful treatment of customers matters just…: negative ≠ positive
-- `review-382cd7e9` the message is that they don't care about people, only thei…: negative ≠ neutral
-- `review-3bab8289` the place is huge: neutral ≠ positive
-- `review-3bab8289` the service from the staff could have been better: negative ≠ mixed
-- `review-3bab8289` the food is nothing extraordinary: negative ≠ neutral
-- `review-3e075e7e` doubts the gemuse kebab and wrap are really one of the best…: negative ≠ positive
-- `review-3e075e7e` ate 2 kebsy there, both average: negative ≠ neutral
-- `review-3e075e7e` doesn't know what people are raving about: negative ≠ neutral
-- `review-3f2a2713` the venue should offer a vegan burger already: negative ≠ neutral
-- `review-4a46a87d` it has become a fast-food restaurant: negative ≠ neutral
-- `review-4cd140a3` the price/performance ratio is okay: positive ≠ mixed
-- `review-503d63e2` never got to eat the Acai: negative ≠ neutral
-- `review-52ef0f64` the Vöner Döner was nothing outstanding: mixed ≠ neutral
-- `review-5582d6b8` the friend barely touched the table and the spoons fell: negative ≠ neutral
-- `review-5582d6b8` only managed a couple of sips of the iced matcha latte: negative ≠ neutral
-- `review-5582d6b8` skip the matcha latte: negative ≠ neutral
-- … 301 more in issues.jsonl
-
-### claims.subject (306)
+### claims.subject (288)
 
 - `post-0216fd1d` Ringbar is one of 6 cool food spots in Neukölln: place ≠ city
 - `post-0216fd1d` Asia Farmhouse is one of 6 cool food spots in Neukölln: place ≠ city
@@ -362,15 +318,14 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-088e18e6` The 1 euro Steak Döner is a limited offer for one week only…: place ≠ none
 - `post-088e18e6` The 1 euro Steak Döner is a limited offer for one week only…: place ≠ none
 - `post-088e18e6` Only a limited number of deals are available per day and lo…: place ≠ none
-- `post-0a8f804b` Each flavour brings together dishes and ingredients from ar…: place ≠ none
+- `post-0a8f804b` Flavours range from Gochujang-Karamell to silky tofu with p…: place ≠ none
+- `post-0a8f804b` Flavours range from Gochujang-Karamell to silky tofu with p…: place ≠ none
 - `post-0bf8447d` Pastaia serves Pizza, Pasta and Caprese, three classics on …: place ≠ none
 - `post-0bf8447d` Pastaia serves Pizza, Pasta and Caprese, three classics on …: place ≠ none
 - `post-0bf8447d` Pastaia's tip for Thursday evening: come as three, order ev…: place ≠ none
 - `post-0bf8447d` Pastaia's tip for Thursday evening: come as three, order ev…: place ≠ none
 - `post-0bf8447d` Pastaia's tip for Thursday evening: come as three, order ev…: place ≠ none
-- `post-11f0057b` Magma is hot, but in a cool way: place ≠ city
 - `post-11f0057b` Bistro Spumante shows that summer evenings on the Reichenbe…: place ≠ city
-- `post-11f0057b` Bistro Spumante is diagonally opposite Magma: place ≠ city
 - `post-14d4fc29` today home tastes like Streetfood at Markthalle Neun: place ≠ city
 - `post-165a9370` the Indian restaurant is a cozy and aesthetic place to hang…: none ≠ place
 - `post-165a9370` the Indian restaurant is the perfect place for a date night…: none ≠ place
@@ -392,55 +347,99 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-217c8e79` the meat is grilled over charcoal: place ≠ none
 - `post-217c8e79` the gegrillter Schweinebauch is delicious with grill aromas: place ≠ none
 - `post-217c8e79` the dessert is the creator's favourite snack: place ≠ none
-- … 266 more in issues.jsonl
+- `post-217c8e79` the dessert traditionally has Kokosmilch and Eis in it: place ≠ none
+- … 248 more in issues.jsonl
 
-### claims.extra (237)
+### parts.sentiment (286)
 
-- `review-070860ca` the food was mid
+- `review-019a8099` sitting outside can be annoying because the restaurant is a…: negative ≠ neutral
+- `review-02556664` after 30 minutes the reviewer had moved only 3 metres in th…: negative ≠ neutral
+- `review-02d1586d` glad they came to Rüyam Gemüse Kebab: positive ≠ neutral
+- `review-02d1586d` they thank the waiter as well: positive ≠ neutral
+- `review-0541b749` the pain was quickly made, nothing special: negative ≠ neutral
+- `review-0ac47c59` complimentary tea is offered, the only thing earning 1 point: positive ≠ neutral
+- `review-1016bd13` all hot dishes (15 plates each for 15 tables) came within j…: negative ≠ positive
+- `review-1016bd13` for a full 20 minutes the guests only had 4 cold dishes and…: negative ≠ neutral
+- `review-1016bd13` asks why, if staff served dishes one at a time, all 8 hot d…: negative ≠ neutral
+- `review-1016bd13` the 16-person table got 4 plates of 土豆丝 instead of 2 and 4 …: negative ≠ neutral
+- `review-1798cc23` the Google listing is no longer accurate: negative ≠ neutral
+- `review-1798cc23` one of the three Bier bottles looked different: negative ≠ neutral
+- `review-196641fc` food pickup is an anonymous moving along: negative ≠ neutral
+- `review-196641fc` few eat on site today because of the crowding and queue: negative ≠ neutral
+- `review-257f4791` perfect for the atmosphere: positive ≠ neutral
+- `review-27722511` there are better kebabs in Berlin: negative ≠ positive
+- `review-27722511` the kebab is an ordinary kebab with phenomenal status: mixed ≠ neutral
+- `review-2b737ce5` before today the food was okay: positive ≠ neutral
+- `review-3486a0a9` hopes they will add a vegetarian option for their chicken b…: neutral ≠ positive
+- `review-3486a0a9` would love to see gf buns on offer: neutral ≠ positive
+- `review-356e149a` stood at the counter for about five minutes without being g…: negative ≠ neutral
+- `review-356e149a` friendly and respectful treatment of customers matters just…: negative ≠ positive
+- `review-3bab8289` the place is huge: neutral ≠ positive
+- `review-3bab8289` the service from the staff could have been better: negative ≠ mixed
+- `review-3bab8289` the food is nothing extraordinary: negative ≠ neutral
+- `review-3e075e7e` doubts the gemuse kebab and wrap are really one of the best…: negative ≠ positive
+- `review-3e075e7e` ate 2 kebsy there, both average: negative ≠ neutral
+- `review-3f2a2713` the venue should offer a vegan burger already: negative ≠ neutral
+- `review-4a46a87d` it has become a fast-food restaurant: negative ≠ neutral
+- `review-4cd140a3` the price/performance ratio is okay: positive ≠ mixed
+- `review-503d63e2` never got to eat the Acai: negative ≠ neutral
+- `review-52ef0f64` the Vöner Döner was nothing outstanding: mixed ≠ neutral
+- `review-5582d6b8` the friend barely touched the table and the spoons fell: negative ≠ neutral
+- `review-5582d6b8` only managed a couple of sips of the iced matcha latte: negative ≠ neutral
+- `review-5d173a89` it took around 30 minutes to prepare a single döner: negative ≠ neutral
+- `review-5d173a89` the döner is not worth €7.90: negative ≠ neutral
+- `review-6217ec70` waited in line for about an hour: negative ≠ mixed
+- `review-6217ec70` not sure they would repeat the experience: negative ≠ neutral
+- `review-6752188e` the market was so good the reviewer went back a 2nd time on…: positive ≠ neutral
+- `review-693fb047` expected the best kebab but the kebab was only edible: negative ≠ positive
+- … 246 more in issues.jsonl
+
+### claims.extra (204)
+
 - `review-1016bd13` first bus had 40 people
-- `review-1016bd13` each table was supposed to have 6 bottles of beer
-- `review-1016bd13` the soup came quickly
-- `review-1016bd13` the cold dishes were already laid out
 - `review-1016bd13` from 19:05 to 19:30
-- `review-1016bd13` we would order extra drinks
 - `review-356e149a` the employee works there
 - `review-356e149a` replied "Nein"
-- `review-356e149a` my order was taken
+- `review-356e149a` leaned against the counter
 - `review-356e149a` replied "Ich bin Araber"
 - `review-35fe7952` the Turkish black tea was free
-- `review-382cd7e9` they do not care about the people
-- `review-382cd7e9` they only care about their money
-- `review-510fc086` the locale was very cute
+- `review-382cd7e9` the message is clear
 - `review-510fc086` living in Berlin has advantages
-- `review-510fc086` the Yuzu-Limo was truly phenomenal
-- `review-5582d6b8` iced matcha latte cost 8€
-- `review-6752188e` the trip to Berlin
-- `review-7483275e` next time they mention Mustafa, remember Alibabà
 - `review-88fe4146` the server knew the reviewer and friend were about to sit down together
 - `review-88fe4146` the reviewer refused the table
-- `review-937ea9e9` you must stop by here
+- `review-90e99b19` they left the dishcloth on the table
 - `review-96daa0a9` the young man had a schönen Bart
-- `review-99fbc478` they had to eat outside in the evening
-- `review-99fbc478` the famous schnitzel was ordered
-- `review-a088b847` the micro locali and botteghe sold typical products of various kinds and countries
-- `review-a088b847` the cuisines included bbq, argentino, italiano, coreano, panini and dolci
-- `review-be6da436` went in the evening
+- `review-c117171d` cheeseburger had signature caramelized onions
 - `post-01239695` the girl ATE
 - `post-019b903e` the weather is bad
 - `post-019b903e` there is no bad weather, only wrong clothes
 - `post-019b903e` good morning and a successful day
 - `post-0216fd1d` the guide has new ideas for Neukölln
-- `post-0a8f804b` they create a weekly secret flavor
-- `post-0a8f804b` visitors can guess the ingredients and the dish that inspired the secret flavor
-- `post-0a8f804b` the flavors include Gochujang caramel
-- `post-0d484513` Dufte opens on 29 May
+- `post-0a8f804b` each flavor is a tribute to people they love and the communities they belong to
 - `post-0dde5eb7` the dish does not need much to make them happy
 - `post-0fa29641` the post is a Berlin guide for Kreuzberg
-- … 197 more in issues.jsonl
+- `post-0fa29641` the spots are in the creator's neighborhood
+- `post-0fa29641` everything is tagged
+- `post-0fa29641` the first photo is from Magma Berlin
+- `post-0fa29641` the last photo is from La Maison Berlin
+- `post-1b8b0789` the creator ordered for takeout
+- `post-1b8b0789` they tried it before flying to New York
+- `post-1b8b0789` they came for the food
+- `post-1b8b0789` the creator asks viewers to comment what they think of the place
+- `post-1b8b0789` they want opinions especially about the food there
+- `post-1c0d4023` Nobelhart & Schmutzig is in Kreuzberg
+- `post-1c0d4023` Nobelhart & Schmutzig is German
+- `post-1c0d4023` Rutz Restaurant is in Mitte
+- `post-1c0d4023` Rutz Restaurant is a bar
+- `post-1c0d4023` Tulus Lotrek is in Kreuzberg
+- `post-1c0d4023` Coda is in Neukoelln
+- `post-1c0d4023` Coda is a bar
+- `post-1c0d4023` Hallmann & Klee is in Neukoelln
+- `post-1c0d4023` Otto is in Pankow / Prenzlauer Berg
+- … 164 more in issues.jsonl
 
-### claims.place (179)
+### claims.place (168)
 
-- `post-0d484513` CeeCee's review of Kissabo is enthusiastic: Kissabo ≠ Café Ploetz
 - `post-11f0057b` they serve an alcohol-free Helles from Berlin brewery Fuers…: Magma ≠ Fuerst Wiacek
 - `post-11f0057b` the alcohol-free Helles pleasingly comes in a can: Magma ≠ Fuerst Wiacek
 - `post-22c25ac1` a charming street sale now offers a look behind the scenes: Yumcha Heroes Manufaktur ≠ Yumcha Heroes Manufaktur
@@ -457,32 +456,33 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-22c25ac1` the frozen range adds White-Chicken, Pink-Lamb and Orange-P…: Yumcha Heroes Manufaktur ≠ Yumcha Heroes Manufaktur
 - `post-22c25ac1` the Manufaktur is open Wednesday to Sunday from 12 to 18: Yumcha Heroes Manufaktur ≠ Yumcha Heroes Manufaktur
 - `post-28ea0f18` Werners Kräutergarten is at Markthalle Neun: Werners Kräutergarten ≠ Markthalle Neun
-- `post-2b231637` Zàgara has a 4.8 rating: Zàgara ≠ Cuore di Vetro
-- `post-31344bc5` Stoke implements casual fine dining most convincingly: Stoke ≠ Cookies Cream
+- `post-2a8e9606` at Café Benjamine guests stay longer with the quality of th…: Café Benjamine ≠ Michelberger Hotel
+- `post-2b231637` Tribeca Ice Cream is a CeeCee tip: Tribeca Ice Cream ≠ Chipi Chipi Bombón
+- `post-31344bc5` Stoke is trending among creator picks: Stoke ≠ Cookies Cream
+- `post-31344bc5` Ming Dynastie is a favourite of Berlin food creators: Ming Dynastie ≠ Stoke
+- `post-31344bc5` Ming Dynastie is rated 4.6 stars: Ming Dynastie ≠ Stoke
 - `post-388b4383` many guests have come to Jörgs Curry Container for more tha…: Zur Bratpfanne ≠ Jörgs Curry Container
-- `post-3a0ad71a` etwas. kleines in Friedrichshain is now a place dedicated o…: etwas. kleines ≠ Rram
-- `post-3a0ad71a` is etwas. kleines, offering only croissants, one-dimensiona…: etwas. kleines ≠ Rram
 - `post-3a0ad71a` Max Lemke is the owner and baker of Common: Common ≠ Ital. Eis Lanzano (la piccola gelateria)
 - `post-3a0ad71a` Common's owner Max Lemke is known for his exceptional dough…: Common ≠ Ital. Eis Lanzano (la piccola gelateria)
-- `post-3a0ad71a` Bertie is one of the Berlin restaurants selected by Max Lem…: Bertie ≠ Bar Clara
-- `post-3a0ad71a` Goldies Smashburger is one of the Berlin restaurants select…: Goldies Smashburger ≠ Bar Clara
-- `post-3a0ad71a` Ora is one of the Berlin restaurants selected by Max Lemke: Ora ≠ Bar Clara
-- `post-3a0ad71a` Estelle is one of the Berlin restaurants selected by Max Le…: Estelle ≠ Bar Clara
+- `post-3a0ad71a` Bertie is one of the Berlin restaurants selected by Max Lem…: Bertie ≠ d'Brunch Berlin
+- `post-3a0ad71a` Goldies Smashburger is one of the Berlin restaurants select…: Goldies Smashburger ≠ d'Brunch Berlin
+- `post-3a0ad71a` Ora is one of the Berlin restaurants selected by Max Lemke: Ora ≠ d'Brunch Berlin
+- `post-3a0ad71a` Estelle is one of the Berlin restaurants selected by Max Le…: Estelle ≠ d'Brunch Berlin
 - `post-3a0ad71a` the Torten at Mr. Minsch are great: Mr. Minsch ≠ d'Brunch Berlin
 - `post-3a0ad71a` tip Berlin recommends the Torten at Mr. Minsch: Mr. Minsch ≠ d'Brunch Berlin
-- `post-3a0ad71a` Mr. Minsch is open Wed-Sat 11-19 and Sun 10-18: Mr. Minsch ≠ d'Brunch Berlin
 - `post-3a0ad71a` tip Berlin lists Hanuman Thai Curry House in Kreuzberg: Hanuman Thai Curry House ≠ Mr Minsch
 - `post-3a0ad71a` Hanuman Thai Curry House stands for Thai cuisine: Hanuman Thai Curry House ≠ Mr Minsch
-- `post-3a0ad71a` Grace Restaurant Bar is rated 4.4 stars: Grace Restaurant Bar ≠ Mibap
-- `post-3a0ad71a` Grace Restaurant Bar has good drinks: Grace Restaurant Bar ≠ Mibap
-- `post-3a0ad71a` Grace Restaurant Bar serves small dishes: Grace Restaurant Bar ≠ Mibap
-- `post-3a0ad71a` Grace Restaurant Bar's dishes are concentrated in flavour: Grace Restaurant Bar ≠ Mibap
-- `post-3a0ad71a` Grace Restaurant Bar has a special design language: Grace Restaurant Bar ≠ Mibap
-- `post-3a0ad71a` Grace Restaurant Bar has a flexible, casual atmosphere: Grace Restaurant Bar ≠ Mibap
+- `post-3a0ad71a` Grace Restaurant Bar is rated 4.4 stars: Grace Restaurant Bar ≠ none
+- `post-3a0ad71a` Grace Restaurant Bar has good drinks: Grace Restaurant Bar ≠ none
+- `post-3a0ad71a` Grace Restaurant Bar serves small dishes: Grace Restaurant Bar ≠ none
+- `post-3a0ad71a` Grace Restaurant Bar's dishes are concentrated in flavour: Grace Restaurant Bar ≠ none
+- `post-3a0ad71a` Grace Restaurant Bar has a special design language: Grace Restaurant Bar ≠ none
+- `post-3a0ad71a` Grace Restaurant Bar has a flexible, casual atmosphere: Grace Restaurant Bar ≠ none
 - `post-3a0ad71a` Kírkē Deli is rated 4.9 stars: Kírkē Deli ≠ Magma
-- … 139 more in issues.jsonl
+- `post-3a0ad71a` Kírkē Deli costs 15–30 €: Kírkē Deli ≠ Magma
+- … 128 more in issues.jsonl
 
-### places.missed (77)
+### places.missed (75)
 
 - `post-0bf8447d` Pastaia
 - `post-1e024518` Masalas
@@ -512,7 +512,6 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-3a0ad71a` Estelle
 - `post-3a0ad71a` Grace Restaurant Bar
 - `post-3a0ad71a` Kírkē Deli
-- `post-3a0ad71a` Rogacki (Markthalle Neun)
 - `post-3a0ad71a` File Asto Taverna
 - `post-3a0ad71a` Ploetz
 - `post-3a0ad71a` Zur letzten Instanz
@@ -524,9 +523,10 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-3a0ad71a` Kissabo
 - `post-40f86f07` Jan Burgerrestaurant
 - `post-45dafb41` Standard
-- … 37 more in issues.jsonl
+- `post-45dafb41` Malafemmena
+- … 35 more in issues.jsonl
 
-### parts.amount (53)
+### parts.amount (50)
 
 - `review-1016bd13` called the lobby manager 20 minutes ahead so hot dishes cou…: —  ≠ 20 minutes
 - `review-1016bd13` all hot dishes (15 plates each for 15 tables) came within j…: —  ≠ 5 minutes
@@ -535,7 +535,8 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `review-279b23c3` the service rated 12/10: —  ≠ 10 money
 - `review-2c7253a2` arrived around 5 PM: —  ≠ 5 minutes
 - `review-36f2fac8` the queue is 8 meters long: —  ≠ 1.5 minutes
-- `review-5582d6b8` the iced matcha latte cost a whopping €8: 8 money ≠ —
+- `review-36f2fac8` you wait 1.5 hours in the queue for your food: 90 minutes ≠ 1.5 minutes
+- `review-5d173a89` the döner is not worth €7.90: —  ≠ 7.9 money
 - `review-7593dfff` with about 12 people in line, the wait was about an hour: 60 minutes ≠ 12 minutes
 - `review-7f3142f7` the website says event tickets include 2 litres of beer per…: —  ≠ 2 money
 - `review-90e99b19` the place is not worth more than 15 minutes of travel: 15 minutes ≠ —
@@ -547,28 +548,27 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-0d1e7abc` Isla has existed for 10 years: —  ≠ 10 minutes
 - `post-0d1e7abc` the author has been going to Isla for 10 years: —  ≠ 10 minutes
 - `post-31344bc5` Cookies Cream is rated 4.7 stars: —  ≠ 4.7 money
-- `post-31344bc5` Stoke is rated 4.5 stars: —  ≠ 4.5 money
+- `post-31344bc5` Stoke has 5 creator recommendations: —  ≠ 4.5 money
 - `post-31344bc5` the best Ramen bars in Berlin have Google ratings above 4.5: —  ≠ 4.5 money
 - `post-33308126` Rogacki is trying out Seelachs for 1 week: —  ≠ 1 minutes
 - `post-388b4383` the first guests get a Currywurst at Langes Imbiss at 5:30 …: —  ≠ 330 minutes
-- `post-3a0ad71a` Rram costs 30–60 €: 60 money ≠ —
 - `post-3a0ad71a` Kírkē Deli costs 15–30 €: 30 money ≠ —
-- `post-3a0ad71a` Le Faubourg is a fine-dining restaurant: —  ≠ 4 money
 - `post-3a0ad71a` Le Faubourg offers four new Signature Cocktails on its terr…: —  ≠ 4 money
 - `post-45841578` the four spots are must-tries for eating cheap and tasty in…: 10 money ≠ —
 - `post-45841578` frozen yogurt at Drei starts from 6 euros: 6 money ≠ 9.9 money
 - `post-45841578` the beef noodle soup is really good: —  ≠ 9.9 money
 - `post-48e30fa6` open 11:00 to 18:30 at Oranienburg: —  ≠ 570 minutes
-- `post-5db3b46a` Manello's price is not too bad: —  ≠ 15 money
+- `post-59699006` Café Amano's Aperol Spritz is unbeatably cheap: —  ≠ 5 money
 - `post-606d88e9` took 3 different coffee cakes to go to try them: —  ≠ 3 minutes
 - `post-68b0cd44` the creator had spicy bian bian hand pulled noodles: —  ≠ 8.9 money
-- `post-68b0cd44` the bian bian noodles had an impressive texture: —  ≠ 8.9 money
 - `post-816a40e7` 50 percent discount on everything for 3 days: —  ≠ 50 money
 - `post-875be07a` food at the Street Food Market at Markthalle Neun costs 5–1…: 12 money ≠ 5 money
 - `post-a3178d9e` Come to The Bun Society before 17:00, then it is not too cr…: —  ≠ 17 minutes
 - `post-a7757925` HOMì is a new spot in Berlin: —  ≠ 1 money
-- `post-b41bb2f8` Olayinka is the founder of Berlin Naija Foodie: —  ≠ 90 minutes
-- … 13 more in issues.jsonl
+- `post-cb785d0b` the place now has almost 60 seats: —  ≠ 60 money
+- `post-cb785d0b` the renovation took 8 months: —  ≠ 8 minutes
+- `post-cb785d0b` Sagos opened exactly 2 years ago: —  ≠ 2 money
+- … 10 more in issues.jsonl
 
 ### change.false (36)
 
@@ -609,14 +609,13 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-fe3794c9` this year SpreeWiesn moved to the upper floor of Hofbräu München – Wirtshaus Berlin in Mi…
 - `post-fe3794c9` an own SpreeWiesn area was set up for the season
 
-### places.extra (33)
+### places.extra (31)
 
 - `post-0dde5eb7` Ristorante Bocca Felice
 - `post-11f0057b` Fuerst Wiacek
 - `post-11f0057b` Albatross Bäckerei
 - `post-165a9370` Indian Restaurant
 - `post-233389f4` an Indian restaurant
-- `post-3a0ad71a` Rogacki
 - `post-3b1b4cd6` Crispy's Chicken Berlin
 - `post-3b1b4cd6` Crispy's Chicken Berlin
 - `post-3b1b4cd6` Crispy's Chicken Berlin
@@ -624,7 +623,6 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-48e30fa6` Kaufland Oranienburg
 - `post-5f073ec2` Atomic Balance
 - `post-5f073ec2` Nha Trang
-- `post-63b83025` Restaurant Athen Adlershof
 - `post-66f606db` Kalle Halle
 - `post-66f606db` Kerb
 - `post-66f606db` Manifesto
@@ -645,7 +643,7 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-f0fb51e5` Hackescher Markt
 - `post-fe3794c9` SpreeWiesn
 
-### match.brand (28)
+### match.brand (29)
 
 - `post-106450e8` Amato: amatō ≠ Amato Café (llm)
 - `post-2b231637` Hokey Pokey: Eispatisserie Hokey Pokey ≠ Hokey Pokey (exact)
@@ -657,6 +655,7 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-5a876136` Ormado Kaffeehaus: none ≠ Ormado Kaffeehaus (exact)
 - `post-5b5671fa` City Chicken: Nhas City Chicken ≠ City Chicken (llm)
 - `post-5f073ec2` Arirang: none ≠ Arirang Restaurant (exact)
+- `post-63b83025` Restaurant Athen: Griechisches Restaurant Athen ≠ none (none)
 - `post-66f606db` Abuya: Abuya Hummus Culture @Dufte ≠ none (none)
 - `post-66f606db` Domberger Brot-Werk: Domberger Brot-Werk – Kantgarage ≠ none (none)
 - `post-78e0e15a` Zacharias Tagesbar: Zacharias.Kaffeebar ≠ none (none)
@@ -676,7 +675,7 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-f0003e83` Hot Chicks: Hot Chick‘s Grill ≠ none (none)
 - `post-f17dfe96` Jemenitisches Restaurant: Jemenitisches Restaurant المطعم اليمني ≠ Jemenitisches Restaurant (llm)
 
-### change.missed (23)
+### change.missed (24)
 
 - `review-1798cc23` the restaurant has apparently been taken over
 - `review-1798cc23` the menu, prices and cuisine differ from those in the listing
@@ -696,10 +695,11 @@ _Only the test side: cases never read while tuning. A change counts when it move
 - `post-c4e7c0a9` on taking over, Luca removed the dividing wall and opened up the room
 - `post-cb785d0b` after the renovation there is much more space
 - `post-cb785d0b` the place now has almost 60 seats
+- `post-cb785d0b` at first bread was delivered, now they bake their own Brot every day
 - `post-d1ab7367` Andy King hands the Kreuzberg premises over to new owners Santiago Cornejo and Josepha Ni…
 - `post-d1ab7367` The shop has been renamed Vinos (Naturales)
 - `post-e2a421e9` In the 1990s Lindner changed its colours from red and blue to blue and gold
-- `post-e2a421e9` After about 20 years Lindner is returning to its old name Butter Lindner
+- `post-e2a421e9` Butter Lindner was renamed to just Lindner
 - `post-fc96acff` Facil has quietly gotten better
 
 ### match_isolated.brand (23)

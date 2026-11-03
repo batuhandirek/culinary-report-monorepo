@@ -79,7 +79,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:46:53.405Z",
     "usage": {
       "inputTokens": 10504,
@@ -88,7 +88,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "Venue's own promotional post. The hard calls were whether the limited-time seasonal specials are new items or a deal, since they have dates but no discount, and whether the Halloween theme counts as an event or simply as atmosphere.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "UMAMI Ku’damm",
@@ -157,7 +157,7 @@
         "text": "The KÜRBICILLIN special is pumpkin-infused blended whisky with ginger, pumpkin spice, lime juice and Angostura bitters",
         "quote": "KÜRBICILLIN — Pumpkin-infused blended whisky, ginger, pumpkin spice, lime juice & Angostura bitters.",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "KÜRBICILLIN",
           "Pumpkin-infused blended whisky",
@@ -172,9 +172,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -186,7 +184,7 @@
         "text": "The PUMP IT UP special is a creamy pumpkin smoothie with fresh mango, cherry nectar, ginger and coconut milk",
         "quote": "PUMP IT UP — Creamy pumpkin smoothie with fresh mango, cherry nectar, ginger & coconut milk.",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "PUMP IT UP",
           "pumpkin smoothie",
@@ -203,9 +201,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -217,7 +213,7 @@
         "text": "The CHOCOLATE DREAM special is a freshly baked chocolate brownie with almonds, walnuts and fresh fruit",
         "quote": "CHOCOLATE DREAM — Freshly baked chocolate brownie with almonds, walnuts & fresh fruit.",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "CHOCOLATE DREAM",
           "chocolate brownie",
@@ -233,10 +229,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "freshness",
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -248,7 +241,7 @@
         "text": "The GOLDEN LUCK special is a mango-passion fruit mousse cake with soft sponge layers and fresh fruit",
         "quote": "GOLDEN LUCK — Mango-passion fruit mousse cake with soft sponge layers & fresh fruit.",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "GOLDEN LUCK",
           "Mango-passion fruit mousse cake",
@@ -261,9 +254,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": [
             "fact"
           ]
@@ -305,7 +296,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": [
             "deal",
             "fact"
@@ -326,6 +319,16 @@
         "at": "2026-11-01T21:49:05.436Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:43:02.130Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 8 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:56.496Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The venue's own post: \"our October specials\" and \"See you at UMAMI Ku'damm\". It advertises itself, with no paid partnership, gift or invitation from a third party.)"
       }
     ]
   }

@@ -237,7 +237,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:19:54.797Z",
     "usage": {
       "inputTokens": 10559,
@@ -317,7 +317,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "other"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -367,7 +369,7 @@
         "text": "Isla sells Kaffeebohnen for home",
         "quote": "Kaffeebohnen für zuhause",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "drink_selection",
         "foods": [
           "Kaffeebohnen"
         ],
@@ -378,7 +380,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_selection"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -389,7 +391,7 @@
         "text": "Isla has really good food",
         "quote": "richtig gutes Essen",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -398,7 +400,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         },
@@ -440,9 +442,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -452,7 +452,7 @@
         "text": "there are very many vegan options",
         "quote": "Es gibt super viele vegane Optionen",
         "sentiment": "positive",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -481,8 +481,7 @@
             "neutral"
           ],
           "aspects": [
-            "menu_variety",
-            "food"
+            "menu_variety"
           ],
           "kinds": [
             "fact"
@@ -503,9 +502,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -515,7 +512,7 @@
         "text": "the author especially likes the Grilled Cheese mit Kimchi",
         "quote": "Ich mag besonders das Grilled Cheese mit Kimchi",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "Grilled Cheese mit Kimchi"
         ],
@@ -525,9 +522,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -567,7 +562,7 @@
           "sentiments": [],
           "aspects": [
             "atmosphere",
-            "location"
+            "outdoor_seating"
           ],
           "kinds": []
         },
@@ -604,9 +599,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -629,6 +622,16 @@
         "at": "2026-11-01T21:49:05.420Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:18.174Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 10 of 17 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:35.295Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (A creator's own unpaid revisit of a long-time favourite café (Isla). There is no paid partnership, ad, gift, invitation or collab marker.)"
       }
     ]
   }

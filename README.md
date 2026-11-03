@@ -21,7 +21,7 @@ In development email, SMS, Telegram and OTP are disabled: every verification cod
 To make an account an admin, set its roles in the database:
 
 ```sh
-docker exec culinary-report-dev-db psql -U postgres -d culinary_report \
+docker exec culinary-report-dev-db psql -U postgres -d munchwerk \
   -c "update users set roles = '{user,admin}' where email = 'you@example.com'"
 ```
 
@@ -96,3 +96,7 @@ Notes:
 
 
 - "Won't come back" -> Is this a signal?
+
+-http://localhost:5011/admin/posts/ad28b428-88e8-44bd-9e97-dc7f651be20b
+	- familiar ban mi flavours” is not tagged
+

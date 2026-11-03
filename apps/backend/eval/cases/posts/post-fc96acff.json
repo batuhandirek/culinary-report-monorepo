@@ -159,7 +159,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:55:08.402Z",
     "usage": {
       "inputTokens": 23277,
@@ -276,7 +276,9 @@
           "sentiments": [
             "mixed"
           ],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -328,7 +330,7 @@
         "text": "of Berlin's 19 Michelin-starred restaurants only one opens for weekday lunch",
         "quote": "Of the 19 Michelin-starred restaurants in the city, exactly one opens its doors for lunch during the week.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "opening_hours",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -354,9 +356,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -366,7 +366,7 @@
         "text": "lunch at Facil is a specialty, not an afterthought",
         "quote": "lunch is not an afterthought at this restaurant. It is a specialty",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -375,7 +375,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "occasion",
+            "none"
           ],
           "kinds": []
         },
@@ -394,7 +395,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -432,7 +435,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": [
             "event"
           ]
@@ -452,9 +457,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "other"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -482,7 +485,7 @@
         "text": "Facil is set in a glass pavilion inside a bamboo courtyard above Potsdamer Platz",
         "quote": "set in a glass pavilion inside a bamboo courtyard above Potsdamer Platz",
         "sentiment": "neutral",
-        "aspect": "interior",
+        "aspect": "location",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -491,7 +494,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location"
+            "interior"
           ],
           "kinds": []
         },
@@ -512,7 +515,9 @@
           "sentiments": [
             "mixed"
           ],
-          "aspects": [],
+          "aspects": [
+            "atmosphere"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -522,7 +527,7 @@
         "text": "Facil is classic German fine dining with polished glass and white tablecloths",
         "quote": "This is classic German fine dining across the board",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -533,6 +538,7 @@
             "positive"
           ],
           "aspects": [
+            "atmosphere",
             "interior"
           ],
           "kinds": [
@@ -575,7 +581,7 @@
             "positive"
           ],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -597,7 +603,7 @@
             "positive"
           ],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -617,7 +623,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -637,7 +643,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": [
             "change"
@@ -659,8 +665,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_selection",
-            "none"
+            "drink_selection"
           ],
           "kinds": []
         },
@@ -680,7 +685,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -702,7 +707,8 @@
             "neutral"
           ],
           "aspects": [
-            "food"
+            "consistency",
+            "ownership"
           ],
           "kinds": []
         },
@@ -740,6 +746,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "other",
             "ownership"
           ],
           "kinds": []
@@ -760,7 +767,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership",
             "other"
           ],
           "kinds": []
@@ -780,9 +786,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -800,9 +804,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -820,9 +822,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -840,9 +840,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -860,9 +858,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -903,6 +899,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
+            "menu_variety",
             "food"
           ],
           "kinds": []
@@ -923,7 +920,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "consistency"
           ],
           "kinds": []
         },
@@ -954,7 +951,7 @@
         "text": "the signature Brittany sole came as a roulade with oyster and scallop rolled inside",
         "quote": "The signature Brittany sole came as a roulade with oyster and scallop rolled inside it",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Brittany sole",
           "oyster",
@@ -967,7 +964,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
             "presentation"
           ],
           "kinds": []
@@ -1042,7 +1038,7 @@
         "text": "nowhere else in Berlin can you eat a dish like the Brittany sole",
         "quote": "There is nowhere else in this city where you can eat a dish like that.",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Brittany sole"
         ],
@@ -1064,7 +1060,7 @@
         "text": "the Austrian chicken dish comes with arancini, artichoke and an Albufera Madeira & Foie Gras sauce that reads like a dare",
         "quote": "The Austrian chicken dish does something similar with an arancini, artichoke, and an Albufera Madeira & Foie Gras sauce that reads on paper like a dare",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Austrian chicken",
           "arancini",
@@ -1077,9 +1073,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1109,7 +1103,7 @@
         "text": "the set lunch menu at Facil costs 88 EUR",
         "quote": "At lunch you can take the set menu for 88EUR",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [],
         "amount": 88,
         "unit": "money",
@@ -1117,9 +1111,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1241,7 +1233,7 @@
         "text": "the 2015 Vosne-Romanée cost 100 euros",
         "quote": "for 100 euros",
         "sentiment": "neutral",
-        "aspect": "price",
+        "aspect": "price_level",
         "foods": [
           "2015 Vosne-Romanée"
         ],
@@ -1251,9 +1243,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "price_level"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1296,7 +1286,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "presentation"
+            "presentation",
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1318,7 +1309,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "presentation"
           ],
           "kinds": []
         },
@@ -1351,7 +1342,7 @@
         "text": "the signature cloud dessert is the author's favourite",
         "quote": "My favorite is his signature cloud dessert",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "cloud dessert"
         ],
@@ -1362,7 +1353,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         },
@@ -1394,7 +1385,7 @@
         "text": "Facil has not lost its glamour at 25",
         "quote": "I would argue the exact opposite",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1403,7 +1394,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "vibe",
+            "none"
           ],
           "kinds": [
             "verdict"
@@ -1425,7 +1417,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking"
+            "consistency",
+            "taste"
           ],
           "kinds": [
             "change"
@@ -1438,7 +1431,7 @@
         "text": "Berlin has too many small shared plates and neo-bistros copying each other's menus",
         "quote": "small shared plates and neo-bistros copying each other's menus down to the the smallest detail",
         "sentiment": "negative",
-        "aspect": "menu_variety",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1446,9 +1439,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -1514,7 +1505,7 @@
         "text": "Berlin has no corporate expense accounts for that kind of lunch",
         "quote": "there are no corporate expense accounts that include this kind of luxury",
         "sentiment": "negative",
-        "aspect": "price",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1590,6 +1581,16 @@
         "at": "2026-11-01T21:49:05.443Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:45:25.507Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 38 of 62 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:34.771Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (The blog's own review of Facil has no disclosure of payment, a gifted meal or an invitation; the anniversary lunch is not described as hosted.)"
       }
     ]
   }

@@ -87,7 +87,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:46:10.352Z",
     "usage": {
       "inputTokens": 6166,
@@ -96,7 +96,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "A promotional post from an unnamed catering business; the tagged location is only the city, so no venue is named and there are no places. The self-descriptions of the food are kept as subject-none claims; whether to split 'nachhaltig, frisch und auf den Punkt serviert' into separate claims is a judgement call.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [],
     "claims": [
       {
@@ -116,8 +116,7 @@
             "positive"
           ],
           "aspects": [
-            "none",
-            "food"
+            "occasion"
           ],
           "kinds": []
         },
@@ -194,7 +193,7 @@
         "text": "the food is served on point",
         "quote": "auf den Punkt serviert",
         "sentiment": "positive",
-        "aspect": "service",
+        "aspect": "cooking",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -203,8 +202,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking",
-            "food"
+            "service"
           ],
           "kinds": []
         },
@@ -223,6 +221,16 @@
         "at": "2026-11-01T21:49:05.435Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:47.206Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 5 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:50.720Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (A catering business advertising its own services in its own voice (\"Wir sorgen dafür\"). This is the venue's own post, not a paid, gifted or invited post by a creator.)"
       }
     ]
   }

@@ -217,7 +217,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:32:03.564Z",
     "usage": {
       "inputTokens": 11513,
@@ -258,7 +258,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "opening_hours"
+            "other"
           ],
           "kinds": []
         },
@@ -287,7 +287,7 @@
         "text": "Salami Social Club is the tasty new kid on the Friedrichshain block",
         "quote": "the tasty new kid on the Friedrichshain block",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -296,7 +296,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": [
             "verdict"
@@ -327,7 +327,7 @@
         "text": "only a small handful of places in Berlin serve good pizza",
         "quote": "there are only small handful of places in Berlin which I would classify as “good pizza”",
         "sentiment": "negative",
-        "aspect": null,
+        "aspect": "taste",
         "foods": [
           "pizza"
         ],
@@ -338,8 +338,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
-            "taste"
+            "none"
           ],
           "kinds": []
         },
@@ -372,7 +371,7 @@
         "text": "the founders started making pizza for staff meals and realized they had a solid product",
         "quote": "We started making pizza for staff meals and realized we actually had a solid product",
         "sentiment": "positive",
-        "aspect": "ownership",
+        "aspect": null,
         "foods": [
           "pizza"
         ],
@@ -385,8 +384,7 @@
             "neutral"
           ],
           "aspects": [
-            "none",
-            "food"
+            "taste"
           ],
           "kinds": [
             "opinion"
@@ -413,8 +411,7 @@
             "neutral"
           ],
           "aspects": [
-            "none",
-            "food"
+            "atmosphere"
           ],
           "kinds": [
             "opinion"
@@ -447,7 +444,7 @@
         "text": "Salami Social Club serves a black dough pizza with blutwurst and bacon",
         "quote": "the black dough with blutwurst and bacon",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "black dough",
           "blutwurst",
@@ -459,10 +456,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety",
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -516,7 +510,7 @@
         "text": "the craft beer scene is one of the most exciting things in Berlin",
         "quote": "The craft beer scene is undoubtedly one of the most exciting things happening here in Berlin",
         "sentiment": "positive",
-        "aspect": "drinks",
+        "aspect": null,
         "foods": [
           "craft beer"
         ],
@@ -526,10 +520,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none",
-            "drink_selection"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "city",
@@ -634,9 +625,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -646,7 +635,7 @@
         "text": "Salami Social Club just put a Hawaiian on the menu",
         "quote": "we just put an Hawaiian on the menu",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Hawaiian"
         ],
@@ -656,9 +645,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -732,7 +719,7 @@
         "text": "the black pudding/blutwurst pizza was the first pizza Salami Social Club made",
         "quote": "Black pudding/blutwurst – first pizza we made",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [
           "Black pudding",
           "blutwurst"
@@ -743,7 +730,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -764,9 +753,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -786,9 +773,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "none",
@@ -809,7 +794,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": []
         },
@@ -828,6 +813,16 @@
         "at": "2026-11-01T21:49:05.419Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:14.895Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 13 of 26 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:31.663Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Blog's own interview and review of the venue; no paid partnership, gift, invitation or ad disclosed)"
       }
     ]
   }

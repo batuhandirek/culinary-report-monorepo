@@ -795,7 +795,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:43:32.972Z",
     "usage": {
       "inputTokens": 71816,
@@ -1047,7 +1047,7 @@
         "text": "Wurst Pate is run by the most lovely lady",
         "quote": "Run by the most lovely lady.",
         "sentiment": "positive",
-        "aspect": "ownership",
+        "aspect": "friendliness",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1056,7 +1056,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "friendliness"
+            "ownership"
           ],
           "kinds": []
         },
@@ -1080,7 +1080,6 @@
             "positive"
           ],
           "aspects": [
-            "price",
             "value_for_money"
           ],
           "kinds": []
@@ -1122,8 +1121,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "interior",
-            "vibe"
+            "interior"
           ],
           "kinds": []
         },
@@ -1165,7 +1163,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "atmosphere"
+            "occasion"
           ],
           "kinds": [
             "opinion"
@@ -1187,8 +1185,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "authenticity",
-            "vibe"
+            "authenticity"
           ],
           "kinds": []
         },
@@ -1199,7 +1196,7 @@
         "text": "Niko Izakaya serves small dishes",
         "quote": "Small dishes",
         "sentiment": "neutral",
-        "aspect": "portion_size",
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1208,7 +1205,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "menu_variety"
+            "portion_size"
           ],
           "kinds": []
         },
@@ -1247,7 +1244,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1325,7 +1324,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "interior"
           ],
           "kinds": []
         },
@@ -1345,7 +1344,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_quality",
             "drinks"
           ],
           "kinds": []
@@ -1369,9 +1367,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "drinks"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1413,9 +1409,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1433,7 +1427,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -1455,9 +1451,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1570,7 +1564,7 @@
         "text": "Lap Coffee has stores all around Germany",
         "quote": "Lap coffee of stores all around Germany.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1579,7 +1573,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "location"
+            "none"
           ],
           "kinds": []
         },
@@ -1590,7 +1584,7 @@
         "text": "Lap Coffee is a great spot to grab a quick coffee or a matcha",
         "quote": "Great spot to just grab a quick coffee or a matcha.",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [
           "coffee",
           "matcha"
@@ -1602,7 +1596,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drinks"
+            "none"
           ],
           "kinds": [
             "opinion"
@@ -1635,7 +1629,7 @@
         "text": "Canal is known for its gelato",
         "quote": "Canal in Berlin is known for the gelato.",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "gelato"
         ],
@@ -1647,7 +1641,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": [
             "fact"
           ]
@@ -1757,9 +1753,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1801,9 +1795,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "verdict"
           ]
@@ -1825,7 +1817,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": [
             "fact"
           ]
@@ -1845,7 +1839,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "food"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -1867,10 +1863,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food",
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1948,6 +1941,16 @@
         "at": "2026-11-01T21:49:05.431Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:02.887Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 21 of 44 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:34.506Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's own food guide of 13 spots with no paid partnership, ad, gifting, invitation, collab or giveaway disclosed and no venue accounts tagged.)"
       }
     ]
   }

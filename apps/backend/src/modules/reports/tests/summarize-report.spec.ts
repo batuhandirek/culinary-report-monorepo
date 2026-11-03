@@ -532,7 +532,7 @@ describe('ratingTrend', () => {
 			{ theme: 'interior', label: 'Interior', reviews: 1, details: ['renovated'] },
 			{ theme: 'ownership', label: 'Ownership', reviews: 1, details: ['new owner'] },
 			// A root (a change "about something else, nothing finer"), then the changes under no aspect, last
-			{ theme: 'other', label: 'Other', reviews: 1, details: ['new kebab shop'] },
+			{ theme: 'other', label: 'Practical', reviews: 1, details: ['new kebab shop'] },
 			{ label: 'Other changes', reviews: 1, details: ['new menu'] },
 		]);
 	});

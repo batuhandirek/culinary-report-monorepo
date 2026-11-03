@@ -175,7 +175,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:30:59.353Z",
     "usage": {
       "inputTokens": 5252,
@@ -198,7 +198,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "takeaway_handling",
             "none"
           ],
           "kinds": []
@@ -240,9 +239,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -268,7 +265,7 @@
         "text": "the mealy Pommes with the Cheesesauce were completely unacceptable",
         "quote": "Was aber gar nicht geht sind diese mehligen Pommes mit der  Cheesesauce.",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [
           "Pommes",
           "Cheesesauce"
@@ -280,8 +277,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste",
-            "cooking"
+            "taste"
           ],
           "kinds": []
         }
@@ -310,7 +306,7 @@
         "text": "the Pommes were soggy, as if they had been sitting for hours",
         "quote": "pappig, als ob sie schon paar Stunden rumgelegen haben",
         "sentiment": "negative",
-        "aspect": "freshness",
+        "aspect": "cooking",
         "foods": [
           "Pommes"
         ],
@@ -320,7 +316,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "freshness"
+          ],
           "kinds": []
         }
       },
@@ -340,9 +338,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "price"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -378,7 +374,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "verdict"
           ]
@@ -395,6 +393,11 @@
         "at": "2026-11-01T21:49:05.418Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:01.276Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 6 of 10 claims changed"
       }
     ]
   }

@@ -107,7 +107,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:46:39.007Z",
     "usage": {
       "inputTokens": 9589,
@@ -150,8 +150,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
-            "food"
+            "none"
           ],
           "kinds": [
             "opinion"
@@ -176,7 +175,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "taste"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -216,7 +217,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": []
         },
         "subject": "city",
@@ -234,6 +237,16 @@
         "at": "2026-11-01T21:49:05.436Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:42:56.501Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 4 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:55.553Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (A creator's own unpaid trip report; no paid partnership, ad, gifted meal, invitation or collab with Rüyam Gemüse Kebab or the Georgian restaurant is mentioned.)"
       }
     ]
   }

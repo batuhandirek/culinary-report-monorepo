@@ -282,7 +282,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:29:20.040Z",
     "usage": {
       "inputTokens": 5636,
@@ -340,9 +340,7 @@
           "sentiments": [
             "negative"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -411,7 +409,7 @@
         "text": "other burger restaurants do these ingredients fine, but this place manages to mess it up",
         "quote": "andere burger restaurants kunnen dat prima, maar om een of andere reden heb en ze het toch nog kunnen verkloten",
         "sentiment": "negative",
-        "aspect": "taste",
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -420,7 +418,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": []
         }
@@ -429,7 +427,7 @@
         "text": "the friet was tough, as if made from old potatoes",
         "quote": "De friet was taai, alsof het oude aardappels waren",
         "sentiment": "negative",
-        "aspect": "freshness",
+        "aspect": "cooking",
         "foods": [
           "friet"
         ],
@@ -440,7 +438,6 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking",
             "ingredient_quality"
           ],
           "kinds": []
@@ -498,7 +495,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": []
         }
       },
@@ -551,6 +550,11 @@
         "at": "2026-11-01T21:49:05.414Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:37:10.079Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 13 claims changed"
       }
     ]
   }

@@ -42,7 +42,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:30:00.870Z",
     "usage": {
       "inputTokens": 4900,
@@ -56,7 +56,7 @@
         "text": "there was no extra sauce",
         "quote": "No extra sauce:(",
         "sentiment": "negative",
-        "aspect": "order_accuracy",
+        "aspect": "availability",
         "foods": [
           "sauce"
         ],
@@ -67,8 +67,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "availability",
-            "takeaway_handling"
+            "order_accuracy"
           ],
           "kinds": []
         }
@@ -84,6 +83,11 @@
         "at": "2026-11-01T21:49:05.416Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:37:32.096Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 1 claims changed"
       }
     ]
   }

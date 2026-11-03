@@ -1,6 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-import { isLlmFreeOnly } from 'src/modules/llm/util/llm-scope.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -109,37 +108,6 @@ describe('LLM backlog (pglite)', () => {
 			70,
 		]);
 		expect([rb.key, rb.batches, rb.done, rb.stopReason, rb.remaining]).toEqual(['b-second', 0, 0, 'budget', 50]);
-	});
-
-	it('runs every batch on the free models only', async () => {
-		const freeOnly: boolean[] = [];
-		const a = fakeBacklog('a-first', 10, { items: 20, perBatch: 10, tokens: 100 });
-		const runBatch = a.backlog.runBatch;
-		a.backlog.runBatch = async () => {
-			freeOnly.push(isLlmFreeOnly());
-			return runBatch();
-		};
-		registry.register(a.backlog);
-
-		await service.drain({ budget: 1_000_000, now: at('2026-10-22T22:00:00Z') });
-
-		expect(freeOnly).toEqual([true, true]);
-		expect(isLlmFreeOnly()).toBe(false);
-	});
-
-	it('lets the batches use paid models when the user allowed it', async () => {
-		const freeOnly: boolean[] = [];
-		const a = fakeBacklog('a-first', 10, { items: 10, perBatch: 10, tokens: 100 });
-		const runBatch = a.backlog.runBatch;
-		a.backlog.runBatch = async () => {
-			freeOnly.push(isLlmFreeOnly());
-			return runBatch();
-		};
-		registry.register(a.backlog);
-
-		await service.drain({ budget: 1_000_000, allowPaid: true, now: at('2026-10-22T22:00:00Z') });
-
-		expect(freeOnly).toEqual([false]);
 	});
 
 	it('moves on to the next backlog when one is empty', async () => {

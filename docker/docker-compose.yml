@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD:?run with --env-file env/server/.env.local}
-      POSTGRES_DB: ${DB_NAME:-culinary_report}
+      POSTGRES_DB: ${DB_NAME:-munchwerk}
       PGDATA: /.data/postgres
     ports:
       - "${DB_PORT:-5441}:5432"

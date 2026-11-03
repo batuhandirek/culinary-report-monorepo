@@ -91,7 +91,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:25:39.148Z",
     "usage": {
       "inputTokens": 12314,
@@ -100,7 +100,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "Hard calls: whether the kombucha producer ROY and the brewery BRLO count as places (included as drink sellers in Berlin; claims attributed to ROY, the post's author), and whether bringing back a special edition is a new_item (chosen) rather than a change or deal.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "ROY Kombucha",
@@ -150,9 +150,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "availability"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -175,7 +173,7 @@
             "neutral"
           ],
           "aspects": [
-            "drinks"
+            "drink_selection"
           ],
           "kinds": [
             "fact"
@@ -249,7 +247,7 @@
         "text": "ROY Hops Kombucha is alcohol-free",
         "quote": "Alcohol-free",
         "sentiment": "neutral",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [
           "ROY Hops Kombucha"
         ],
@@ -260,8 +258,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_selection",
-            "drink_quality"
+            "dietary"
           ],
           "kinds": []
         },
@@ -310,6 +307,16 @@
         "at": "2026-11-01T21:49:05.440Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:15.442Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 7 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:15.930Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (ROY Kombucha's own post about its product made with BRLO, not a paid, gifted or invited creator or blog post)"
       }
     ]
   }

@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
+import _ from 'lodash';
 
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
@@ -107,16 +108,17 @@ describe('WebMentionService (pglite)', () => {
 			];
 		},
 	);
-	const agent = mockAgent((input: unknown) => ({
-		results: (JSON.parse(input as string) as { id: string; title: string }[]).map(r => ({
-			id: r.id,
+	// One page a call
+	const agent = mockAgent((input: unknown) => {
+		const { title } = JSON.parse(input as string) as { title: string };
+		return {
 			kind:
-				r.title.startsWith('Die 10') ? WebMentionKindEnum.LISTICLE
-				: r.title.startsWith('Breakfast') ? WebMentionKindEnum.UNRELATED
+				title.startsWith('Die 10') ? WebMentionKindEnum.LISTICLE
+				: title.startsWith('Breakfast') ? WebMentionKindEnum.UNRELATED
 				: WebMentionKindEnum.FEATURE,
-			summary: `About ${r.title}`,
-		})),
-	}));
+			summary: ` About ${title} `,
+		};
+	});
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -227,14 +229,23 @@ describe('WebMentionService (pglite)', () => {
 		expect((await em.findOneOrFail(Venue, { id: zola.id })).pressSearchedAt).toEqual(now);
 	});
 
-	it('classifies a venue’s mentions in one call and hands the report the press, features first', async () => {
+	it('classifies a venue’s mentions one page a call and hands the report the press, features first', async () => {
 		expect(await service.classifyMonth(city, '2026-09')).toEqual({ classified: 3 });
-		expect(agent.generate).toHaveBeenCalledTimes(1);
-		expect(agent.generate.mock.calls[0][1]).toEqual({
-			venueName: 'Café Frieda',
+		expect(agent.generate).toHaveBeenCalledTimes(3);
+		// Told the venue, its district and the page; the city in the context
+		const asked = agent.generate.mock.calls.map(([input]) => JSON.parse(input as string));
+		expect(asked.find(a => a.title.startsWith('Café Frieda:'))).toEqual({
+			venue: 'Café Frieda',
 			district: 'Neukölln',
-			cityName: 'Berlin',
+			title: 'Café Frieda: Neuer Brunch am Weserkiez',
+			outlet: 'tip Berlin',
+			snippet: 'Café Frieda: Neuer Brunch am Weserkiez. Wir waren da.',
 		});
+		expect(
+			agent.generate.mock.calls.every(([, context]) =>
+				_.isEqual(context, { cityName: 'Berlin' }),
+			),
+		).toBe(true);
 		// The brand's press: found under any of its branches
 		const press = await service.forReport(frieda.brand.id, city.id, '2026-09');
 		expect(press.map(m => m.kind)).toEqual([

@@ -97,7 +97,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:52:43.477Z",
     "usage": {
       "inputTokens": 9698,
@@ -106,7 +106,7 @@
       "cacheWriteTokens": 5862
     },
     "notes": "Venue's own promotional post. Hard calls: whether 'homemade' sauce is a neutral fact or praise, and whether '3 Currywürste' is a menu fact or a portion claim; 'HALLIGALLI-Menü' treated as a named dish rather than a general word.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Ullas Currybude",
@@ -129,7 +129,7 @@
         "text": "the Halligalli plate comes with 3 Currywürste",
         "quote": "Gleich 3 Currywürste",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "portion_size",
         "foods": [
           "Currywürste"
         ],
@@ -142,7 +142,7 @@
             "positive"
           ],
           "aspects": [
-            "portion_size"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -165,9 +165,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -199,7 +197,7 @@
         "text": "the HALLIGALLI-Menü is hearty and crispy",
         "quote": "Herzhaft. Knusprig.",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "cooking",
         "foods": [
           "HALLIGALLI-Menü"
         ],
@@ -210,8 +208,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "cooking",
-            "food"
+            "taste"
           ],
           "kinds": []
         },
@@ -248,6 +245,16 @@
         "at": "2026-11-01T21:49:05.442Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:51.390Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 3 of 5 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:28.064Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (The venue's own account is posting about its own HALLIGALLI menu. It is not a paid, gifted or invited post by a creator.)"
       }
     ]
   }

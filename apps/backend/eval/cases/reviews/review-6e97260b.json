@@ -64,7 +64,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:27:04.049Z",
     "usage": {
       "inputTokens": 4937,
@@ -78,7 +78,7 @@
         "text": "the coca-cola sent in the delivery was warm",
         "quote": "send a warm coca-cola in delivery",
         "sentiment": "negative",
-        "aspect": "drink_quality",
+        "aspect": "takeaway_handling",
         "foods": [
           "coca-cola"
         ],
@@ -89,9 +89,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "takeaway_handling",
-            "delivery_platform",
-            "drinks"
+            "delivery_platform"
           ],
           "kinds": []
         }
@@ -100,7 +98,7 @@
         "text": "never seen such terrible attitude towards a customer",
         "quote": "I have never seen such terrible attitude towards a customer",
         "sentiment": "negative",
-        "aspect": "service",
+        "aspect": "friendliness",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -108,10 +106,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "takeaway_handling",
-            "friendliness"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -148,6 +143,11 @@
         "at": "2026-11-01T21:49:05.409Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:58.807Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 3 claims changed"
       }
     ]
   }

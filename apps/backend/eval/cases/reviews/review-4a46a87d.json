@@ -134,7 +134,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:26:08.001Z",
     "usage": {
       "inputTokens": 5104,
@@ -148,7 +148,7 @@
         "text": "the sandwich was very bad",
         "quote": "السندويش جدا سيئ",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "السندويش"
         ],
@@ -159,7 +159,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -233,8 +233,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality",
-            "taste"
+            "taste",
+            "ingredient_quality"
           ],
           "kinds": []
         }
@@ -273,9 +273,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -299,7 +297,7 @@
         "text": "the new location isn't the same as the old one",
         "quote": "المدينة الجديد مو نفسو القديم",
         "sentiment": "negative",
-        "aspect": null,
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -308,7 +306,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "other"
+            "consistency",
+            "none"
           ],
           "kinds": [
             "opinion"
@@ -319,7 +318,7 @@
         "text": "it has become a fast-food restaurant",
         "quote": "تحول لمحل وجبات سريعة",
         "sentiment": "negative",
-        "aspect": null,
+        "aspect": "menu_variety",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -328,7 +327,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe",
+            "food",
             "other"
           ],
           "kinds": []
@@ -345,6 +344,11 @@
         "at": "2026-11-01T21:49:05.406Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:35:31.093Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 5 of 10 claims changed"
       }
     ]
   }

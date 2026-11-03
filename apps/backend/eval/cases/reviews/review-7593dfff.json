@@ -156,7 +156,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T14:18:34.807Z",
     "usage": {
       "inputTokens": 5686,
@@ -181,9 +181,7 @@
             "negative",
             "positive"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion",
             "verdict"
@@ -255,7 +253,7 @@
         "text": "the bread roll was average",
         "quote": "buła jednak średnia",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "buła"
         ],
@@ -268,7 +266,7 @@
             "mixed"
           ],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -277,7 +275,7 @@
         "text": "the overall vibe won't appeal to everyone",
         "quote": "ogólny vibe",
         "sentiment": "negative",
-        "aspect": "atmosphere",
+        "aspect": "vibe",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -288,7 +286,7 @@
             "mixed"
           ],
           "aspects": [
-            "vibe"
+            "atmosphere"
           ],
           "kinds": []
         }
@@ -309,8 +307,7 @@
             "neutral"
           ],
           "aspects": [
-            "service",
-            "other"
+            "service"
           ],
           "kinds": [
             "fact"
@@ -321,7 +318,7 @@
         "text": "the older gentleman serving was wonderful",
         "quote": "Starszy Pan z obsługi cudowny",
         "sentiment": "positive",
-        "aspect": "service",
+        "aspect": "friendliness",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -330,7 +327,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "friendliness"
+            "service"
           ],
           "kinds": []
         }
@@ -347,7 +344,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "queue"
+          ],
           "kinds": []
         }
       },
@@ -417,6 +416,11 @@
         "at": "2026-11-01T21:49:05.409Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:36:08.020Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 6 of 10 claims changed"
       }
     ]
   }

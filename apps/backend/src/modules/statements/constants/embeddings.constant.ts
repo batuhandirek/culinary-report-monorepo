@@ -12,15 +12,12 @@ export const EMBEDDING_REQUEST_CLAIMS = 1_000;
 
 /**
  * The user's yes to the first drain of `statement-embeddings`, a spend (POC rule: data is re-read
- * with money only after the user said yes to the estimate). Until it is set, the backlog waits
- * and embeds nothing, whatever the nightly run or "Run now" asks; it also waits while the
- * `reread-posts` backlog has posts left, since the re-read rewrites the post claims and their
- * vectors would be paid for and deleted the same night. Set to the day of the yes.
+ * with money only after the user said yes to the estimate): 2026-11-02, ~$0.08 for every claim,
+ * now rather than after the re-read, to find the aspect list's gaps ("Missing aspects") on the
+ * claims there are. Until it is set the backlog embeds nothing. A claim a re-read rewrites is a
+ * new claim, embedded the next night (cents).
  */
-export const STATEMENT_EMBEDDINGS_APPROVED_AT: Date | null = null;
-
-/** The backlog the embeddings wait for: it rewrites the post claims */
-export const EMBEDDINGS_WAIT_FOR_BACKLOG = 'reread-posts';
+export const STATEMENT_EMBEDDINGS_APPROVED_AT: Date | null = new Date('2026-11-02');
 
 /** "Missing aspects" (`StatementClusterService`): what a cluster needs to be shown */
 export const CLUSTER_FLOORS = {

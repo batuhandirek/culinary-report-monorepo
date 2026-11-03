@@ -81,21 +81,13 @@ describe('Food topic links (pglite)', () => {
 		claims: [{ text: 'the pide there is great too', quote: null, subject: 'place', place: 0 }],
 	});
 	// Agent B: the claim names "Pide", a wording no topic knows yet
-	const partsAgent = mockAgent((prompt: unknown) => {
-		const sources = [JSON.parse(prompt as string)] as { claims: { id: string }[] }[];
-		return {
-			claims: sources.flatMap(s =>
-				s.claims.map(c => ({
-					id: c.id,
-					sentiment: 'positive',
-					aspect: null,
-					foods: ['Pide'],
-					amount: null,
-					unit: null,
-					kind: 'opinion',
-				})),
-			),
-		};
+	const partsAgent = mockAgent({
+		sentiment: 'positive',
+		aspect: null,
+		foods: ['Pide'],
+		amount: null,
+		unit: null,
+		kind: 'opinion',
 	});
 	const venues: Record<string, Venue> = {};
 

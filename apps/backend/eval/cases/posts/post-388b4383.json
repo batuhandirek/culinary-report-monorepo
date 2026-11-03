@@ -601,7 +601,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:38:37.370Z",
     "usage": {
       "inputTokens": 48707,
@@ -768,7 +768,7 @@
         "text": "Zur Bratpfanne is a likeable snack bar",
         "quote": "sympathischen Imbiss Zur Bratpfanne",
         "sentiment": "positive",
-        "aspect": "vibe",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -777,7 +777,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none",
+            "vibe",
             "friendliness"
           ],
           "kinds": []
@@ -799,7 +799,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "ownership"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -871,7 +873,7 @@
         "text": "the Pommes, Currywurst, Bouletten, Hamburger and Rostbratwürste at Zur Bratpfanne are of the best quality",
         "quote": "doppelt frittierte Pommes, Currywurst mit und ohne Darm, Bouletten, Hamburger und Rostbratwürste in bester Qualität",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "food",
         "foods": [
           "Pommes",
           "Currywurst",
@@ -886,7 +888,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "ingredient_quality"
           ],
           "kinds": []
         },
@@ -966,7 +968,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -987,9 +989,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "crowding"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -1001,7 +1001,7 @@
         "text": "Jörgs Curry Container is off the tourist paths",
         "quote": "Abseits von Touri-Pfaden",
         "sentiment": "neutral",
-        "aspect": "location",
+        "aspect": "crowding",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1012,7 +1012,7 @@
             "positive"
           ],
           "aspects": [
-            "crowding"
+            "location"
           ],
           "kinds": []
         },
@@ -1083,7 +1083,7 @@
         "text": "the quality at Jörgs Curry Container has remained",
         "quote": "die Qualität ist natürlich geblieben",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "consistency",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1091,9 +1091,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "ingredient_quality"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1103,7 +1101,7 @@
         "text": "the recipe behind Jörgs Curry Container's success stays secret",
         "quote": "Was sich hinter dem Erfolgsrezept verbirgt, bleibt geheim.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1111,7 +1109,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1131,7 +1131,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "queue"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1149,7 +1151,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "consistency"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1167,7 +1171,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "location"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1206,7 +1212,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ownership"
+            "other"
           ],
           "kinds": []
         },
@@ -1217,7 +1223,7 @@
         "text": "at Ketch’up 35 you can eat weatherproof under a roof instead of open-air",
         "quote": "Statt Open-Air am Stehtisch kann man die Spezialitäten im Ketch’up 35 in Britz sogar wetterfest unter einem Dach genießen.",
         "sentiment": "positive",
-        "aspect": "vibe",
+        "aspect": "interior",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1226,8 +1232,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "space",
-            "interior"
+            "outdoor_seating",
+            "space"
           ],
           "kinds": [
             "fact"
@@ -1252,7 +1258,9 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -1298,9 +1306,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1360,9 +1366,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1426,7 +1430,7 @@
         "text": "the cult snack bar under the U-Bahn has existed since 1960",
         "quote": "den kultigen Imbiss unter der U-Bahn gibt es seit 1960",
         "sentiment": "neutral",
-        "aspect": "location",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1435,7 +1439,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "location"
           ],
           "kinds": []
         },
@@ -1497,7 +1501,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "vibe"
+            "none"
           ],
           "kinds": [
             "fact"
@@ -1524,7 +1528,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "taste",
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1589,7 +1594,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "occasion"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -1599,7 +1606,7 @@
         "text": "shift workers, partygoers and early risers, the neighbourhood and older tourists come to Langes Imbiss",
         "quote": "egal, ob Schichtarbeiter, Partygänger oder Frühaufsteher",
         "sentiment": "neutral",
-        "aspect": "crowding",
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1608,7 +1615,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "crowding"
           ],
           "kinds": []
         },
@@ -1637,7 +1644,7 @@
         "text": "the spicy Sauce at Langes Imbiss is homemade",
         "quote": "Die würzige Sauce ist hausgemacht",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "ingredient_quality",
         "foods": [
           "Sauce"
         ],
@@ -1648,8 +1655,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "seasoning",
-            "ingredient_quality"
+            "authenticity"
           ],
           "kinds": [
             "fact"
@@ -1672,9 +1678,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -1729,7 +1733,7 @@
         "text": "Cult Curry Mitte has a real Berlin fan base of local foodies, party people and Berliners",
         "quote": "die echte Berliner Fangemeinde, die der Imbiss in der Torstraße hat",
         "sentiment": "positive",
-        "aspect": "crowding",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -1740,7 +1744,7 @@
             "neutral"
           ],
           "aspects": [
-            "none"
+            "crowding"
           ],
           "kinds": [
             "opinion"
@@ -1771,7 +1775,7 @@
         "text": "the beef variant at Cult Curry Mitte is highly recommended",
         "quote": "die Variante mit Rind sehr zu empfehlen",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "food",
         "foods": [
           "Rind"
         ],
@@ -1782,7 +1786,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": []
         },
@@ -1793,7 +1797,7 @@
         "text": "the scharfen Zwiebeln and Pommes with Trüffelmayo go well with it at Cult Curry Mitte",
         "quote": "Dazu passen die scharfen Zwiebeln und Pommes mit Trüffelmayo.",
         "sentiment": "positive",
-        "aspect": "taste",
+        "aspect": "food",
         "foods": [
           "scharfen Zwiebeln",
           "Pommes",
@@ -1806,7 +1810,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "taste"
           ],
           "kinds": []
         },
@@ -1926,7 +1930,7 @@
         "text": "the sauce creations at Curry & Chili come in ten heat levels",
         "quote": "Bei den zehn unterschiedlichen Schärfegraden der Soßenkreationen",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "seasoning",
         "foods": [
           "Soßenkreationen"
         ],
@@ -1937,7 +1941,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "seasoning"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -1968,7 +1972,7 @@
         "text": "whoever withstands all chili variations at Curry & Chili can join the world's hottest club",
         "quote": "Wer alle Chili-Variationen aushält, kann in den schärfsten Club der Welt eintreten.",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "seasoning",
         "foods": [
           "Chili-Variationen"
         ],
@@ -1979,7 +1983,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "seasoning"
+            "none"
           ],
           "kinds": []
         },
@@ -1990,7 +1994,7 @@
         "text": "Curry & Chili's Saucen can be bought in the online shop",
         "quote": "kannst du die Saucen auch im Online-Shop kaufen",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [
           "Saucen"
         ],
@@ -2020,7 +2024,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -2030,7 +2036,7 @@
         "text": "Reina Lehmann's butchery secretly supplies many successful Currywurst businesses in the city",
         "quote": "seine Fleischerei ist der heimliche Zulieferer vieler Currywurst-Erfolgsunternehmen in der Stadt",
         "sentiment": "neutral",
-        "aspect": "ingredient_quality",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -2041,7 +2047,6 @@
             "positive"
           ],
           "aspects": [
-            "none",
             "ownership"
           ],
           "kinds": []
@@ -2127,7 +2132,7 @@
             "neutral"
           ],
           "aspects": [
-            "queue"
+            "none"
           ],
           "kinds": [
             "fact"
@@ -2148,7 +2153,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "queue"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -2160,7 +2167,7 @@
         "text": "Curry Wolf's special sauce is called Opium",
         "quote": "Hier gibt es ausreichend Opium für das Volk! Und dabei ist die gleichnamige Spezialsoße absolut legal.",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Opium",
           "Spezialsoße"
@@ -2173,9 +2180,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -2185,7 +2190,7 @@
         "text": "the secret sauce recipe came to the Curry Wolf boss on holiday",
         "quote": "Die geheime Rezeptur kam dem Curry-Wolf-Chef im Urlaub",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "food",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -2193,7 +2198,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -2237,9 +2244,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -2261,9 +2266,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "food"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -2283,9 +2286,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -2295,7 +2296,7 @@
         "text": "Curry Wolf sells supplies in jars online",
         "quote": "bestellt online einfach ausreichend Vorrat im Weckglas",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "other",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -2322,7 +2323,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "other"
           ],
           "kinds": []
         },
@@ -2333,7 +2334,7 @@
         "text": "the family business Schmidt's Imbiss has stood for the best quality for over 50 years",
         "quote": "Seit über 50 Jahren steht das Familienunternehmen für beste Qualität",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "consistency",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -2342,7 +2343,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "ingredient_quality"
+            "food"
           ],
           "kinds": []
         },
@@ -2353,7 +2354,7 @@
         "text": "Schmidt's Imbiss is known for its special creation Curry mit gedünsteten Zwiebeln",
         "quote": "die besondere Kreation „Curry mit gedünsteten Zwiebeln“",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Curry mit gedünsteten Zwiebeln"
         ],
@@ -2365,9 +2366,7 @@
           "sentiments": [
             "neutral"
           ],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -2492,6 +2491,16 @@
         "at": "2026-11-01T21:49:05.424Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:39:57.192Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 42 of 81 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:59.427Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Editorial top-10 list on qiez.de with no paid partnership, ad, gifted meal or invitation disclosed; contact links and photo credits are standard listing info.)"
       }
     ]
   }

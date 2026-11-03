@@ -63,7 +63,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:30:16.733Z",
     "usage": {
       "inputTokens": 5000,
@@ -86,8 +86,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "price_level",
-            "price"
+            "price_level"
           ],
           "kinds": [
             "verdict"
@@ -98,7 +97,7 @@
         "text": "the food was bad",
         "quote": "comida mala",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -107,7 +106,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -116,7 +115,7 @@
         "text": "only the codillo is decent",
         "quote": "solo se salva el codillo",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "codillo"
         ],
@@ -129,7 +128,7 @@
             "mixed"
           ],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -158,7 +157,7 @@
         "text": "the reviewer wishes they could un-eat the tabla de entrantes",
         "quote": "ojalá poder descomerlo",
         "sentiment": "negative",
-        "aspect": "food",
+        "aspect": "taste",
         "foods": [
           "tabla de entrantes"
         ],
@@ -169,7 +168,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "taste"
+            "food"
           ],
           "kinds": []
         }
@@ -185,6 +184,11 @@
         "at": "2026-11-01T21:49:05.417Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:37:38.720Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 5 claims changed"
       }
     ]
   }

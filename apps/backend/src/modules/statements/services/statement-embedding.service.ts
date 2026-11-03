@@ -11,7 +11,6 @@ import { toVectorLiteral } from 'src/shared/util/vector.js';
 import {
 	EMBEDDING_BATCH_CLAIMS,
 	EMBEDDING_REQUEST_CLAIMS,
-	EMBEDDINGS_WAIT_FOR_BACKLOG,
 	STATEMENT_EMBEDDING_DIMENSIONS,
 	STATEMENT_EMBEDDINGS_APPROVED_AT,
 } from '../constants/embeddings.constant.js';
@@ -29,7 +28,7 @@ const PHRASE_CACHE = 200;
  * its own (`text-embedding-3-large`, 1024 dimensions), through the `statement-embeddings` LLM
  * backlog (priority 60, after the re-reads), 2,000 claims a batch, most recent month first; new
  * claims get theirs the next night. The backlog waits (`waitsFor`) until the user approved the
- * spend (`STATEMENT_EMBEDDINGS_APPROVED_AT`) and while `reread-posts` has posts left. Also embeds
+ * spend (`STATEMENT_EMBEDDINGS_APPROVED_AT`). Also embeds
  * a search phrase for the Claims tables (`phraseVector`).
  */
 @Injectable()
@@ -61,13 +60,7 @@ export class StatementEmbeddingService implements OnModuleInit {
 
 	/** Why the backfill must not run yet, or null */
 	async waitsFor(): Promise<string | null> {
-		if (!this.approvedAt)
-			return 'The spend is not approved yet (STATEMENT_EMBEDDINGS_APPROVED_AT)';
-		const reread = this.llmBacklogRegistry.get(EMBEDDINGS_WAIT_FOR_BACKLOG);
-		const left = reread ? await reread.remaining() : 0;
-		return left > 0 ?
-				`Waits for ${EMBEDDINGS_WAIT_FOR_BACKLOG} to finish (${left} left)`
-			:	null;
+		return this.approvedAt ? null : 'The spend is not approved yet (STATEMENT_EMBEDDINGS_APPROVED_AT)';
 	}
 
 	async countPending(): Promise<number> {

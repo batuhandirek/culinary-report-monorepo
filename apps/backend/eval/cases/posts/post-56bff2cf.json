@@ -163,7 +163,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T14:22:18.998Z",
     "usage": {
       "inputTokens": 14625,
@@ -210,7 +210,7 @@
         "text": "Dro balances casualness and competence",
         "quote": "Zwischen Lässigkeit und Kompetenz",
         "sentiment": "positive",
-        "aspect": "vibe",
+        "aspect": "atmosphere",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -219,7 +219,8 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "service"
+            "service",
+            "none"
           ],
           "kinds": [
             "verdict"
@@ -292,7 +293,7 @@
         "text": "8000 Vintages is the offshoot of an iconic Georgian wine bar",
         "quote": "dem Ableger einer georgischen Weinbar-Ikone",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "ownership",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -303,7 +304,7 @@
             "positive"
           ],
           "aspects": [
-            "ownership"
+            "none"
           ],
           "kinds": []
         },
@@ -314,7 +315,7 @@
         "text": "Gugushvili opened 8000 Vintages on Yorckstraße in 2023",
         "quote": "die er 2023 an der Yorckstraße eröffnet hatte",
         "sentiment": "neutral",
-        "aspect": "ownership",
+        "aspect": null,
         "foods": [],
         "amount": null,
         "unit": null,
@@ -323,7 +324,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "ownership"
           ],
           "kinds": []
         },
@@ -334,7 +335,7 @@
         "text": "Sommelier Giorgi Silagadze followed Gugushvili from 8000 Vintages to Dro",
         "quote": "Sommelier Giorgi Silagadze zusammen, der ihm ins Dro folgte",
         "sentiment": "neutral",
-        "aspect": "ownership",
+        "aspect": "service",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -343,7 +344,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "none"
+            "ownership"
           ],
           "kinds": []
         },
@@ -380,7 +381,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -425,7 +428,10 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "drink_selection",
+            "none"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -449,7 +455,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": [
             "opinion"
           ]
@@ -527,7 +535,7 @@
         "text": "The typical Maisbrot is baked without leavening, like a crisp, dense flatbread",
         "quote": "Zum typischen Maisbrot, das ohne Triebmittel gebacken wird und somit an einen knusprigen, dichten Fladen erinnert",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "cooking",
         "foods": [
           "Maisbrot"
         ],
@@ -540,7 +548,7 @@
             "neutral"
           ],
           "aspects": [
-            "cooking"
+            "food"
           ],
           "kinds": [
             "fact"
@@ -564,7 +572,9 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "ingredient_quality"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -596,7 +606,7 @@
         "text": "The Georgian salad is cucumber, red onion and ripe beefsteak tomatoes in green pesto, garnished with Jonjoli",
         "quote": "aus Gurke, roter Zwiebel und reifen Fleischtomaten in einem grünen Pesto, garniert mit Jonjoli",
         "sentiment": "positive",
-        "aspect": "ingredient_quality",
+        "aspect": "menu_variety",
         "foods": [
           "Gurke",
           "roter Zwiebel",
@@ -613,6 +623,7 @@
             "neutral"
           ],
           "aspects": [
+            "ingredient_quality",
             "food"
           ],
           "kinds": [
@@ -637,7 +648,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "authenticity"
+            "none"
           ],
           "kinds": []
         },
@@ -678,7 +689,9 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "none"
+          ],
           "kinds": []
         },
         "subject": "none",
@@ -688,7 +701,7 @@
         "text": "Sommelier Silagadze explains there are many Khachapuri variants in Georgia",
         "quote": "in Georgien gäbe es viele Khachapuri-Varianten",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "advice",
         "foods": [
           "Khachapuri"
         ],
@@ -701,7 +714,7 @@
             "positive"
           ],
           "aspects": [
-            "advice"
+            "menu_variety"
           ],
           "kinds": []
         },
@@ -712,7 +725,7 @@
         "text": "Dro's Khachapuri is more understated than the boat-shaped version: a thin, hot flatbread filled with cheese",
         "quote": "ein dünner Teigfladen, heiß und mit Käse gefüllt",
         "sentiment": "positive",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Khachapuri",
           "Käse"
@@ -726,8 +739,8 @@
             "neutral"
           ],
           "aspects": [
-            "presentation",
-            "temperature"
+            "temperature",
+            "presentation"
           ],
           "kinds": [
             "fact"
@@ -762,7 +775,7 @@
         "text": "The bean variant, Lobiani, is vegan",
         "quote": "Die Variante mit Bohnen heißt Lobiani und ist vegan",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [
           "Bohnen",
           "Lobiani"
@@ -815,7 +828,10 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [],
+          "aspects": [
+            "seasoning",
+            "cooking"
+          ],
           "kinds": []
         },
         "subject": "place",
@@ -833,9 +849,7 @@
         "optional": true,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "none"
-          ],
+          "aspects": [],
           "kinds": []
         },
         "subject": "place",
@@ -876,6 +890,16 @@
         "at": "2026-11-01T21:49:05.428Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:46.555Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 17 of 30 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:15.365Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Independent editorial tipBerlin review of Dro; no paid partnership, gifted meal, invitation or collab disclosed. The plug for tipBerlin's own food guide is the blog promoting itself, which does not count.)"
       }
     ]
   }

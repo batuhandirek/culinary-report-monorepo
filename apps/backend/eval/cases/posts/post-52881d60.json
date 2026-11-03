@@ -82,7 +82,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:39:19.148Z",
     "usage": {
       "inputTokens": 10149,
@@ -127,6 +127,7 @@
             "positive"
           ],
           "aspects": [
+            "occasion",
             "none"
           ],
           "kinds": []
@@ -138,7 +139,7 @@
         "text": "they tested the Schnitzel at Scheers Schnitzel",
         "quote": "Wir haben das Schnitzel bei @scheersschnitzel getestet",
         "sentiment": "neutral",
-        "aspect": null,
+        "aspect": "food",
         "foods": [
           "Schnitzel"
         ],
@@ -149,7 +150,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food"
+            "none"
           ],
           "kinds": []
         },
@@ -229,6 +230,16 @@
         "at": "2026-11-01T21:49:05.428Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:40:23.102Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 5 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:43:13.708Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (A creator's own visit to Scheers Schnitzel with a personal recommendation. There is no paid partnership, ad, gift, invitation or collab disclosed; tagging the venue is not one.)"
       }
     ]
   }

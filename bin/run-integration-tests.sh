@@ -64,7 +64,7 @@ if [ -n "${INTEGRATION_BASE_URL:-}" ]; then
 fi
 
 INTEGRATION_PORT="${INTEGRATION_PORT:-3010}"
-INTEGRATION_DB_NAME="${INTEGRATION_DB_NAME:-culinary_report_integration}"
+INTEGRATION_DB_NAME="${INTEGRATION_DB_NAME:-munchwerk_integration}"
 HEALTH_URL="http://localhost:${INTEGRATION_PORT}/api/health-check"
 
 echo "==> Cloning dev database into ${INTEGRATION_DB_NAME}"

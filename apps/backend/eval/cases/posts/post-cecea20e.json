@@ -96,7 +96,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:49:58.949Z",
     "usage": {
       "inputTokens": 6024,
@@ -105,7 +105,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "Bikini Berlin is a shopping mall hosting a food event, and events are never places; the tagged brand accounts appear only as photo credits with nothing said about them, so no places are listed and the event claims go to the city.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [],
     "claims": [
       {
@@ -142,7 +142,9 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [],
+          "aspects": [
+            "menu_variety"
+          ],
           "kinds": [
             "fact"
           ]
@@ -182,6 +184,16 @@
         "at": "2026-11-01T21:49:05.439Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:44:03.312Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 3 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:44:11.628Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (An event organiser's own thank-you recap of its food fair at Bikini Berlin; no paid partnership, ad, gifted meal, invitation or giveaway from a venue. The tagged brands are participants and photo credits.)"
       }
     ]
   }

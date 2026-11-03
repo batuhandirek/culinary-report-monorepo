@@ -78,7 +78,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:31:52.633Z",
     "usage": {
       "inputTokens": 9141,
@@ -110,7 +110,7 @@
         "text": "Amato has fun drinks",
         "quote": "Fun drinks at @amatoberlin",
         "sentiment": "positive",
-        "aspect": "drinks",
+        "aspect": "drink_selection",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -119,7 +119,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "drink_selection"
+            "drinks"
           ],
           "kinds": []
         },
@@ -158,6 +158,16 @@
         "at": "2026-11-01T21:49:05.420Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:24.046Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 1 of 2 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:42:37.746Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (Creator's plain recommendation of @amatoberlin; no ad, gift, invitation or collab is disclosed)"
       }
     ]
   }

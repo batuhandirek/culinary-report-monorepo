@@ -133,7 +133,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "243a888d45c3",
+    "specHash": "0ae8d06b61ec",
     "at": "2026-11-01T11:25:06.274Z",
     "usage": {
       "inputTokens": 5045,
@@ -220,8 +220,7 @@
         "alsoAcceptable": {
           "sentiments": [],
           "aspects": [
-            "food",
-            "menu_variety"
+            "dietary"
           ],
           "kinds": []
         }
@@ -240,10 +239,7 @@
         "optional": false,
         "alsoAcceptable": {
           "sentiments": [],
-          "aspects": [
-            "freshness",
-            "taste"
-          ],
+          "aspects": [],
           "kinds": []
         }
       },
@@ -269,7 +265,7 @@
         "text": "hopes they will add a vegetarian option for their chicken burgers",
         "quote": "Hopefully in the future they'll add a vegetarian option for their chicken burgers",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [
           "chicken burgers"
         ],
@@ -290,7 +286,7 @@
         "text": "would love to see gf buns on offer",
         "quote": "I'd also love to see gf buns on offer",
         "sentiment": "neutral",
-        "aspect": "menu_variety",
+        "aspect": "dietary",
         "foods": [
           "gf buns"
         ],
@@ -318,6 +314,11 @@
         "at": "2026-11-01T21:49:05.404Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:34:57.955Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 4 of 8 claims changed"
       }
     ]
   }

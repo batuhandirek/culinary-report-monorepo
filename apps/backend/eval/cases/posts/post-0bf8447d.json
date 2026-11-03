@@ -123,7 +123,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "e4af8941525a",
+    "specHash": "0bbeb3579796",
     "at": "2026-11-01T11:31:40.900Z",
     "usage": {
       "inputTokens": 9496,
@@ -132,7 +132,7 @@
       "cacheWriteTokens": 0
     },
     "notes": "The venue is named only by the hashtag #pastaia next to #spandau, and the 'Unser Tipp' voice marks it as the venue's own promotional post, so Pastaia in Spandau is taken as the place. 'Von oben sieht man's am besten' and 'Swipe' are narration about the photos and are left out.",
-    "isPromotional": true,
+    "isPromotional": false,
     "places": [
       {
         "venueName": "Pastaia",
@@ -155,7 +155,7 @@
         "text": "Pastaia serves Pizza, Pasta and Caprese, three classics on one table",
         "quote": "Pizza, Pasta, Caprese – drei Klassiker, ein Tisch",
         "sentiment": "neutral",
-        "aspect": "food",
+        "aspect": "menu_variety",
         "foods": [
           "Pizza",
           "Pasta",
@@ -169,9 +169,7 @@
           "sentiments": [
             "positive"
           ],
-          "aspects": [
-            "menu_variety"
-          ],
+          "aspects": [],
           "kinds": [
             "opinion"
           ]
@@ -183,7 +181,7 @@
         "text": "Pastaia's tip for Thursday evening: come as three, order everything and share everything",
         "quote": "Unser Tipp für den Donnerstagabend: zu dritt kommen, alles bestellen, alles teilen",
         "sentiment": "positive",
-        "aspect": null,
+        "aspect": "occasion",
         "foods": [],
         "amount": null,
         "unit": null,
@@ -215,6 +213,21 @@
         "at": "2026-11-01T21:49:05.420Z",
         "by": "restamp",
         "note": "Rules reworded for one item a call (one claim of B, a place named not numbered by A, one gate post, one wording), 2026-11-01: no right answer moved"
+      },
+      {
+        "at": "2026-11-02T07:38:09.279Z",
+        "by": "aspect-relabel",
+        "note": "aspects answered again by the table of 2026-11-02: 2 of 2 claims changed"
+      },
+      {
+        "at": "2026-11-02T12:35:25.991Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: true → false (No paid partnership, gift, invitation, collab or giveaway is mentioned; the 'Unser Tipp... alles bestellen' wording reads like the venue's own post (#pastaia), which is not promotional.)"
+      },
+      {
+        "at": "2026-11-02T12:42:34.209Z",
+        "by": "promotional-relabel",
+        "note": "promotional by the rule of 2026-11-02: false → false (No paid partnership, ad, gift, invitation or giveaway. The 'Unser Tipp' wording reads like the venue's own post, not a sponsored one.)"
       }
     ]
   }
