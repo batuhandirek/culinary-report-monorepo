@@ -94,6 +94,16 @@ export class LLMConfig {
 	@Transform(v => parseAgentModels(v.value))
 	public LLM_AGENT_MODELS: Record<string, LlmModelChoice> = {};
 
+	/**
+	 * One-off: when set, the boot queues the topics' Claude pass (`TopicsClaudePassService`) with
+	 * this many dollars of the Anthropic credit at most. Set for one deploy, then removed.
+	 */
+	@IsNumber()
+	@Min(0)
+	@IsOptional()
+	@Transform(v => Number(v.value))
+	public TOPICS_CLAUDE_PASS_USD: number = 0;
+
 	@IsBoolean()
 	@IsOptional()
 	@Transform(v => v.value === 'true')

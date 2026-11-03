@@ -1,0 +1,124 @@
+{
+  "label": "terms-sonnet",
+  "at": "2026-11-03T15:09:55.911Z",
+  "cases": {
+    "review": 0,
+    "post": 0,
+    "term": 500
+  },
+  "unscored": 371,
+  "dropped": 0,
+  "byKind": {
+    "review": {},
+    "post": {},
+    "term": {
+      "terms.precision": [
+        365,
+        368
+      ],
+      "terms.recall": [
+        347,
+        382
+      ],
+      "terms.exact": [
+        292,
+        328
+      ],
+      "terms.first": [
+        309,
+        328
+      ],
+      "terms.linked": [
+        310,
+        328
+      ],
+      "terms.relation": [
+        310,
+        347
+      ],
+      "terms.none": [
+        161,
+        172
+      ]
+    }
+  },
+  "bySplit": {
+    "train": {
+      "review": {},
+      "post": {},
+      "term": {
+        "terms.precision": [
+          264,
+          267
+        ],
+        "terms.recall": [
+          249,
+          269
+        ],
+        "terms.exact": [
+          212,
+          234
+        ],
+        "terms.first": [
+          224,
+          234
+        ],
+        "terms.linked": [
+          225,
+          234
+        ],
+        "terms.relation": [
+          224,
+          249
+        ],
+        "terms.none": [
+          113,
+          120
+        ]
+      }
+    },
+    "test": {
+      "review": {},
+      "post": {},
+      "term": {
+        "terms.precision": [
+          101,
+          101
+        ],
+        "terms.recall": [
+          98,
+          113
+        ],
+        "terms.exact": [
+          80,
+          94
+        ],
+        "terms.first": [
+          85,
+          94
+        ],
+        "terms.linked": [
+          85,
+          94
+        ],
+        "terms.relation": [
+          86,
+          98
+        ],
+        "terms.none": [
+          48,
+          52
+        ]
+      }
+    }
+  },
+  "byTag": {},
+  "models": {
+    "term-topic": {
+      "anthropic/claude-sonnet-5-5": 500
+    }
+  },
+  "tokens": 3839121,
+  "cachedTokens": 3725370,
+  "staleReferences": 0
+}

@@ -6,6 +6,8 @@ import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
+import { answerUsd } from 'src/modules/llm/util/llm-cost.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import {
@@ -42,7 +44,7 @@ interface Candidate {
 }
 
 export interface DiscoveryResult {
-	/** Wordings sent, and stamped `groupedAt` */
+	/** Wordings answered, and stamped `groupedAt` */
 	looked: number;
 	/** New topics created, by label */
 	created: string[];
@@ -50,6 +52,8 @@ export interface DiscoveryResult {
 	linked: number;
 	/** New topics the agent proposed that fell below the floors (not created) */
 	belowFloor: number;
+	/** What the paid models charged (0 on the allowance) */
+	usd: number;
 	tokens: number;
 }
 
@@ -118,9 +122,10 @@ export class TopicDiscoveryService implements OnModuleInit {
 	/**
 	 * Groups up to `limit` candidate wordings (most used first) and applies the groups: an existing
 	 * topic links its wordings; a new one is created under its parent when its wordings reach the
-	 * floors, then linked. Every wording sent is stamped `groupedAt`. Flushes.
+	 * floors, then linked. Every wording whose call was answered is stamped `groupedAt` (a failed
+	 * call's are sent again next time). Flushes.
 	 */
-	async discover(opts: { limit: number; now?: Date }): Promise<DiscoveryResult> {
+	async discover(opts: { limit: number; now?: Date; model?: LlmModelChoice }): Promise<DiscoveryResult> {
 		const now = opts.now ?? new Date();
 		const rows: Candidate[] = await this.em
 			.getConnection()
@@ -129,7 +134,7 @@ export class TopicDiscoveryService implements OnModuleInit {
 				this.regroupBefore(now),
 				opts.limit,
 			]);
-		const result: DiscoveryResult = { looked: 0, created: [], linked: 0, belowFloor: 0, tokens: 0 };
+		const result: DiscoveryResult = { looked: 0, created: [], linked: 0, belowFloor: 0, tokens: 0, usd: 0 };
 		if (!rows.length) return result;
 		const terms = await this.em.find(Term, { id: { $in: rows.map(r => r.id) } }, { populate: ['topics', 'topics.topic'] });
 		const termById = new Map(terms.map(t => [String(t.id), t]));
@@ -141,6 +146,8 @@ export class TopicDiscoveryService implements OnModuleInit {
 
 		type Group = { existing: string | null; label: string | null; kind: string | null; parent: string | null; wordings: { id: string; relation: TermRelation }[] };
 		const groups: Group[] = [];
+		// Wordings whose call was answered: only they count as grouped (a failed call's are sent again next time)
+		const answered = new Set<string>();
 		await runPool(
 			_.chunk(rows, PER_CALL),
 			2,
@@ -153,9 +160,15 @@ export class TopicDiscoveryService implements OnModuleInit {
 						.filter(l => !l.topic.deletedAt)
 						.map(l => ({ key: l.topic.key, relation: l.relation })),
 				}));
-				const res = await this.topicDiscoveryAgent.generate(JSON.stringify({ topics: legend, wordings }));
+				const res = await this.topicDiscoveryAgent.generate(
+					JSON.stringify({ topics: legend, wordings }),
+					undefined,
+					opts.model ? { model: opts.model } : undefined,
+				);
 				result.tokens += res.usage?.totalTokens ?? 0;
+				result.usd += answerUsd(res);
 				groups.push(...res.object.groups);
+				chunk.forEach(r => answered.add(String(r.id)));
 			},
 			(chunk, e) => this.logger.warn(`Topic discovery call of ${chunk.length} wordings failed: ${e.message}`),
 		);
@@ -190,8 +203,9 @@ export class TopicDiscoveryService implements OnModuleInit {
 				result.linked++;
 			}
 		}
-		for (const term of terms) term.groupedAt = now;
-		result.looked = terms.length;
+		const grouped = terms.filter(t => answered.has(String(t.id)));
+		for (const term of grouped) term.groupedAt = now;
+		result.looked = grouped.length;
 		await this.em.flush();
 		return result;
 	}

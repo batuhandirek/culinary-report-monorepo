@@ -145,6 +145,22 @@ describe('TopicDiscoveryService (pglite)', () => {
 		venue = await em().findOneOrFail(Venue, { placeId: 'td-venue' });
 	});
 
+	it("leaves a failed call's wordings ungrouped, so the next batch sends them again", async () => {
+		await said('falafel wrap', 3, [['sandwiches', 'kind_of']]);
+		discoveryAgent.generate.mockImplementationOnce(async () => {
+			throw new Error('rate limited');
+		});
+		const res = await service().discover({ limit: 50 });
+		expect(res).toMatchObject({ looked: 0, linked: 0 });
+		em().clear();
+		const term = await em().findOneOrFail(Term, { name: 'falafel wrap' });
+		expect(term.groupedAt ?? null).toBeNull();
+		expect(await service().countCandidates()).toBe(1);
+		// Answered the next time: stamped
+		expect((await service().discover({ limit: 50 })).looked).toBe(1);
+		expect(await service().countCandidates()).toBe(0);
+	});
+
 	it("creates a finer topic under its parent, links its wordings first and keeps their old links (an admin's too), and a child still counts for its parent", async () => {
 		// The seed's alias of Burgers (an admin's), and a wording agent C linked as a kind of burger
 		await said('smash burger', 10);

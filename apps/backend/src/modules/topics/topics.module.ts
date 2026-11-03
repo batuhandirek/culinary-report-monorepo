@@ -26,10 +26,12 @@ import { TermService } from './services/term.service.js';
 import { TopicService } from './services/topic.service.js';
 import { TopicDiscoveryService } from './services/topic-discovery.service.js';
 import { TopicRelinkService } from './services/topic-relink.service.js';
+import { TopicsClaudePassService } from './services/topics-claude-pass.service.js';
 import { TrendsTopicLookupService } from './services/trends-topic-lookup.service.js';
 import { VenueTopicService } from './services/venue-topic.service.js';
 import { TopicCityRefreshWorker } from './workers/topic-city-refresh.worker.js';
 import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
+import { TopicsClaudePassWorker } from './workers/topics-claude-pass.worker.js';
 
 /**
  * The topic tree (kinds of food and aspects) every reader resolves raw cuisines and files points
@@ -61,6 +63,8 @@ import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
 		TopicRelinkService,
 		TopicRelinkWorker,
 		TopicCityRefreshWorker,
+		TopicsClaudePassService,
+		TopicsClaudePassWorker,
 		MentionTopicService,
 		MenuTopicService,
 		TrendsTopicLookupService,

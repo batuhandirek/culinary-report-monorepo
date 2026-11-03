@@ -303,7 +303,7 @@ describe('TermService (pglite)', () => {
 
 	it('decides the waiting wordings once in the backlog, the most named first: lists of topics of any kind in rank order, suggestions kept unless they name a topic, every statement following', async () => {
 		// A batch of one takes the wording the most statements name: "Pommes", two food parts
-		expect(await service().decide({ limit: 1 })).toEqual({ looked: 1, linked: 0, tokens: 0 });
+		expect(await service().decide({ limit: 1 })).toEqual({ looked: 1, linked: 0, tokens: 0, usd: 0 });
 		expect(asked).toEqual(['Pommes']);
 
 		const registry = harness.moduleRef.get(LlmBacklogRegistry);
@@ -395,7 +395,7 @@ describe('TermService (pglite)', () => {
 		});
 		// Each asked once
 		expect(await service().countPending()).toBe(0);
-		expect(await service().decide({ limit: 100 })).toEqual({ looked: 0, linked: 0, tokens: 0 });
+		expect(await service().decide({ limit: 100 })).toEqual({ looked: 0, linked: 0, tokens: 0, usd: 0 });
 		// One call a wording: Pommes, then the batch's eight
 		expect(agent.generate).toHaveBeenCalledTimes(9);
 	});

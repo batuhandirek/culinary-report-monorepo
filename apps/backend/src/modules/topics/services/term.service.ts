@@ -13,6 +13,8 @@ import _ from 'lodash';
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
+import { answerUsd } from 'src/modules/llm/util/llm-cost.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import { TermTopicAgent } from '../agents/term-topic.agent.js';
@@ -240,24 +242,30 @@ export class TermService implements OnModuleInit {
 	}
 
 	/**
-	 * Decides up to `limit` pending wordings (the most used first) with the agent: the topics each
+	 * Decides up to `limit` pending wordings (the most used first; `uses` keeps those used that many
+	 * times in claims) with the agent, on `model` when given (a hand-started pass): the topics each
 	 * is, or none with a suggestion for a missing topic. Flushes, also when the pool stops on a
-	 * provider failure, then rethrows.
+	 * provider failure, then rethrows. `usd` is what the paid models charged (0 on the allowance).
 	 */
 	async decide(opts: {
 		limit: number;
-	}): Promise<{ looked: number; linked: number; tokens: number }> {
+		model?: LlmModelChoice;
+		uses?: { min?: number; max?: number };
+	}): Promise<{ looked: number; linked: number; tokens: number; usd: number }> {
 		const index = await this.topicService.index();
 		await this.sync(index);
+		const uses = 'coalesce(p.n, 0)';
 		const ids: { id: number }[] = await this.em.getConnection().execute(
 			`select t.id from terms t
 			left join (select term_id, count(*) as n from statement_parts group by term_id) p on p.term_id = t.id
 			where t.decided_by is null
-			order by coalesce(p.n, 0) desc, t.id
+				${opts.uses?.min !== undefined ? `and ${uses} >= ${Number(opts.uses.min)}` : ''}
+				${opts.uses?.max !== undefined ? `and ${uses} <= ${Number(opts.uses.max)}` : ''}
+			order by ${uses} desc, t.id
 			limit ?`,
 			[opts.limit],
 		);
-		if (!ids.length) return { looked: 0, linked: 0, tokens: 0 };
+		if (!ids.length) return { looked: 0, linked: 0, tokens: 0, usd: 0 };
 		const terms = await this.em.find(
 			Term,
 			{ id: { $in: ids.map(r => r.id) } },
@@ -268,14 +276,20 @@ export class TermService implements OnModuleInit {
 		let looked = 0;
 		let linked = 0;
 		let tokens = 0;
+		let usd = 0;
 		try {
 			await runPool(
 				// One wording a call, the topics in the agent's (cached) instructions
 				terms,
 				CONCURRENCY,
 				async term => {
-					const res = await this.termTopicAgent.generate(termTopicInput(term.name), { topics });
+					const res = await this.termTopicAgent.generate(
+						termTopicInput(term.name),
+						{ topics },
+						opts.model ? { model: opts.model } : undefined,
+					);
 					tokens += res.usage?.totalTokens ?? 0;
+					usd += answerUsd(res);
 					if (term.decidedBy) return;
 					const { keys, relations, suggestion } = termAnswerLinks(res.object, index);
 					this.setLinks(term, keys, index, 'ai', now, relations);
@@ -288,7 +302,7 @@ export class TermService implements OnModuleInit {
 		} finally {
 			await this.em.flush();
 		}
-		return { looked, linked, tokens };
+		return { looked, linked, tokens, usd };
 	}
 
 	/**
