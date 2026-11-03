@@ -10,7 +10,7 @@ export type ExploreSide = (typeof EXPLORE_SIDES)[number];
 export const EXPLORE_DIMENSIONS = ['brand', 'venue', 'place', 'food', 'aspect', 'district', 'source', 'term', 'month', 'kind', 'subject', 'side'] as const;
 export type ExploreDimension = (typeof EXPLORE_DIMENSIONS)[number];
 
-/** One view: the scope, the node, the further nodes and the filters, plus the breakdown shown */
+/** One view: the scope, the node, the further nodes and the filters */
 export interface ExploreView {
 	cityId?: string;
 	brandId?: string;
@@ -26,16 +26,14 @@ export interface ExploreView {
 	kind?: string;
 	source?: string;
 	subject?: string;
-	by?: ExploreDimension;
 }
 
 /** The view's fields in the order the URL lists them; `with` is comma-separated */
-const KEYS = ['node', 'with', 'cityId', 'brandId', 'venueId', 'district', 'place', 'from', 'to', 'side', 'kind', 'source', 'subject', 'by'] as const;
+const KEYS = ['node', 'with', 'cityId', 'brandId', 'venueId', 'district', 'place', 'from', 'to', 'side', 'kind', 'source', 'subject'] as const;
 
 export const viewOf = (params: Pick<URLSearchParams, 'get'>): ExploreView => {
 	const get = (key: string) => params.get(key) || undefined;
 	const side = get('side');
-	const by = get('by');
 	return {
 		cityId: get('cityId'),
 		brandId: get('brandId'),
@@ -49,8 +47,7 @@ export const viewOf = (params: Pick<URLSearchParams, 'get'>): ExploreView => {
 		side: EXPLORE_SIDES.find((s) => s === side),
 		kind: get('kind'),
 		source: get('source'),
-		subject: get('subject'),
-		by: EXPLORE_DIMENSIONS.find((d) => d === by)
+		subject: get('subject')
 	};
 };
 
@@ -85,21 +82,6 @@ export const exploreTopicHref = (
 	});
 
 export const isTermRef = (ref: string) => ref.startsWith('term:');
-
-export const DIMENSION_LABELS: Record<ExploreDimension, string> = {
-	brand: 'Brand',
-	venue: 'Branch',
-	place: 'Kind of place',
-	food: 'Food',
-	aspect: 'Aspect',
-	district: 'District',
-	source: 'Source',
-	term: 'Wording',
-	month: 'Month',
-	kind: 'Kind',
-	subject: 'About',
-	side: 'Side'
-};
 
 export const SIDE_LABELS: Record<ExploreSide, string> = {
 	praise: 'Praise',

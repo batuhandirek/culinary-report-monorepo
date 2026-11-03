@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { CircleDashed, Minus, ThumbsDown, ThumbsUp } from '@lucide/svelte';
 	import type { AdminDigestionTallyOutputDto } from 'client';
 
-	// A source's claims by sentiment, in one line: positive, negative, neutral or mixed, and those
-	// agent B has not read yet. A zero is left out; no claims at all is a dash.
+	// A source's claims by sentiment, in one line, with the icons the opened row's claims carry:
+	// positive, negative, neutral or mixed, and those agent B has not read yet. A zero is left out;
+	// no claims at all is a dash.
 	interface Props {
 		sentiments: AdminDigestionTallyOutputDto;
 	}
@@ -11,18 +13,18 @@
 
 	const PARTS = $derived(
 		[
-			{ n: sentiments.positive, label: 'positive', sign: '+', class: 'text-success' },
-			{ n: sentiments.negative, label: 'negative', sign: '−', class: 'text-destructive' },
-			{ n: sentiments.neutral + sentiments.mixed, label: 'neutral or mixed', sign: '·', class: 'text-muted-foreground' },
-			{ n: sentiments.unread, label: 'not read by agent B yet', sign: '?', class: 'text-faint' }
+			{ n: sentiments.positive, label: 'positive', icon: ThumbsUp, class: 'text-success' },
+			{ n: sentiments.negative, label: 'negative', icon: ThumbsDown, class: 'text-destructive' },
+			{ n: sentiments.neutral + sentiments.mixed, label: 'neutral or mixed', icon: Minus, class: 'text-muted-foreground' },
+			{ n: sentiments.unread, label: 'not read by agent B yet', icon: CircleDashed, class: 'text-faint' }
 		].filter((part) => part.n > 0)
 	);
 </script>
 
 {#if PARTS.length}
-	<span class="inline-flex gap-2 tabular-nums">
+	<span class="inline-flex gap-2.5 tabular-nums">
 		{#each PARTS as part (part.label)}
-			<span class={`font-semibold ${part.class}`} title={`${part.n} ${part.label}`}>{part.sign}{part.n}</span>
+			<span class={`inline-flex items-center gap-0.5 font-semibold ${part.class}`} title={`${part.n} ${part.label}`}><part.icon class="size-3.5" />{part.n}</span>
 		{/each}
 	</span>
 {:else}

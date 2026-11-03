@@ -5,19 +5,23 @@
 	import { SvelteSet } from 'svelte/reactivity';
 
 	import { api } from '#lib/api.js';
-	import { isTermRef } from '#lib/explore.js';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// Every topic the view's claims are about, aspects and kinds of food apart, each with its
 	// reviews and posts (a source once, what is under it counted in) and its Google tag places.
-	// A search finds topics by label and wordings by name; picking one sets the page's X.
+	// A search finds topics by label (and wordings by name, with `terms`); picking one picks it,
+	// "Any" picks none. The Explore bar shows the aspects in one picker and food in another.
 	interface Props {
 		nodes: AdminExploreTreeNodeOutputDto[] | null;
 		selected?: string;
-		onPick: (ref: string) => void;
+		/** Search the wordings too (food and drink) */
+		terms?: boolean;
+		anyLabel: string;
+		onPick: (ref: string | undefined) => void;
 	}
 
-	let { nodes, selected, onPick }: Props = $props();
+	let { nodes, selected, terms: searchTerms = true, anyLabel, onPick }: Props = $props();
+	const marked = (ref: string) => selected === ref;
 
 	const byKey = $derived(new Map((nodes ?? []).map((n) => [n.key, n])));
 	const order = (a: AdminExploreTreeNodeOutputDto, b: AdminExploreTreeNodeOutputDto) =>
@@ -33,10 +37,12 @@
 		return out;
 	});
 	const roots = $derived(children[''] ?? []);
-	const groups = $derived([
-		{ label: 'Aspects', roots: roots.filter((n) => n.kind === 'aspect') },
-		{ label: 'Food and drink', roots: roots.filter((n) => n.kind !== 'aspect') }
-	]);
+	const groups = $derived(
+		[
+			{ label: 'Aspects', roots: roots.filter((n) => n.kind === 'aspect') },
+			{ label: 'Food and drink', roots: roots.filter((n) => n.kind !== 'aspect') }
+		].filter((g) => g.roots.length)
+	);
 
 	// Open: what the user opened, and the path to the picked node unless the user closed it
 	const opened = new SvelteSet<string>();
@@ -63,7 +69,7 @@
 	$effect(() => {
 		const q = query.trim();
 		clearTimeout(timer);
-		if (q.length < 2) {
+		if (q.length < 2 || !searchTerms) {
 			terms = [];
 			return;
 		}
@@ -94,9 +100,7 @@
 {#snippet branch(node: AdminExploreTreeNodeOutputDto, depth: number)}
 	{@const kids = children[node.key] ?? []}
 	<li>
-		<div
-			class={['flex min-h-9 items-center gap-1 rounded pr-1.5', selected === node.key ? 'bg-tint font-medium' : 'hover:bg-sand']}
-			style:padding-left={`${depth * 0.875}rem`}>
+		<div class={['group flex min-h-9 items-center gap-1 rounded pr-1', marked(node.key) ? 'bg-tint font-medium' : 'hover:bg-sand']} style:padding-left={`${depth * 0.875}rem`}>
 			{#if kids.length}
 				<button
 					type="button"
@@ -127,36 +131,35 @@
 <div class="flex flex-col gap-3">
 	<label class="border-line bg-paper flex h-(--field-height) items-center gap-2 rounded-md border px-3">
 		<Search class="text-muted-foreground size-4 shrink-0" />
-		<input class="min-w-0 flex-1 bg-transparent text-sm outline-none" placeholder="A topic or a wording…" bind:value={query} aria-label="Find a topic or a wording" />
+		<!-- svelte-ignore a11y_autofocus -->
+		<input class="min-w-0 flex-1 bg-transparent text-sm outline-none" placeholder={searchTerms ? 'A topic or a wording…' : 'Search…'} bind:value={query} aria-label="Search" autofocus />
 	</label>
 
 	{#if query.trim().length >= 2}
 		<div class="flex flex-col gap-1">
 			{#each topicHits as hit (hit.key)}
-				<button
-					type="button"
-					class={['hover:bg-sand flex min-h-9 items-center justify-between gap-2 rounded px-2 text-left text-sm', selected === hit.key && 'bg-tint font-medium']}
-					onclick={() => onPick(hit.key)}>
-					<span class="min-w-0">
-						<span class="block truncate">{hit.label}</span>
-						{#if pathLabel(hit)}<span class="text-muted-foreground block truncate text-xs">{pathLabel(hit)}</span>{/if}
-					</span>
-					{@render count(hit)}
-				</button>
+				<div class={['group flex min-h-9 items-center gap-1 rounded pr-1', marked(hit.key) ? 'bg-tint font-medium' : 'hover:bg-sand']}>
+					<button type="button" class="flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1 text-left text-sm" onclick={() => onPick(hit.key)}>
+						<span class="min-w-0">
+							<span class="block truncate">{hit.label}</span>
+							{#if pathLabel(hit)}<span class="text-muted-foreground block truncate text-xs">{pathLabel(hit)}</span>{/if}
+						</span>
+						{@render count(hit)}
+					</button>
+				</div>
 			{/each}
 			{#if terms.length}
 				<p class="eyebrow text-muted-foreground m-0 mt-2">Wordings</p>
 				{#each terms as term (term.ref)}
-					<button
-						type="button"
-						class={['hover:bg-sand flex min-h-9 items-center justify-between gap-2 rounded px-2 text-left text-sm', selected === term.ref && 'bg-tint font-medium']}
-						onclick={() => onPick(term.ref)}>
-						<span class="min-w-0">
-							<span class="block truncate">“{term.label}”</span>
-							<span class="text-muted-foreground block truncate text-xs">{term.topics.length ? term.topics.join(', ') : 'linked to no topic yet'}</span>
-						</span>
-						<span class="text-muted-foreground shrink-0 text-xs tabular-nums" title="Claims naming it, anywhere">{n(term.uses)}×</span>
-					</button>
+					<div class={['group flex min-h-9 items-center gap-1 rounded pr-1', marked(term.ref) ? 'bg-tint font-medium' : 'hover:bg-sand']}>
+						<button type="button" class="flex min-w-0 flex-1 items-center justify-between gap-2 px-2 py-1 text-left text-sm" onclick={() => onPick(term.ref)}>
+							<span class="min-w-0">
+								<span class="block truncate">“{term.label}”</span>
+								<span class="text-muted-foreground block truncate text-xs">{term.topics.length ? term.topics.join(', ') : 'linked to no topic yet'}</span>
+							</span>
+							<span class="text-muted-foreground shrink-0 text-xs tabular-nums" title="Claims naming it, anywhere">{n(term.uses)}×</span>
+						</button>
+					</div>
 				{/each}
 			{/if}
 			{#if !topicHits.length && !terms.length}
@@ -168,13 +171,16 @@
 	{:else if !nodes.length}
 		<p class="text-muted-foreground m-0 text-sm">No claim in this view is filed under a topic.</p>
 	{:else}
-		{#if selected && isTermRef(selected)}
-			<p class="bg-tint m-0 rounded px-2 py-1.5 text-sm">Showing the wording “{selected.slice(5)}”.</p>
-		{/if}
+		<button
+			type="button"
+			class={['flex min-h-9 items-center rounded px-2 text-left text-sm', !selected ? 'bg-tint font-medium' : 'hover:bg-sand']}
+			onclick={() => onPick(undefined)}>
+			{anyLabel}
+		</button>
 		{#each groups as group (group.label)}
 			{#if group.roots.length}
 				<div>
-					<p class="eyebrow text-muted-foreground m-0 mb-1">{group.label}</p>
+					{#if groups.length > 1}<p class="eyebrow text-muted-foreground m-0 mb-1">{group.label}</p>{/if}
 					<ul class="m-0 list-none p-0">
 						{#each group.roots as root (root.key)}
 							{@render branch(root, 0)}

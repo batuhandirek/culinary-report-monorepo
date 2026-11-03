@@ -1,17 +1,15 @@
 <script lang="ts">
-	import { X } from '@lucide/svelte';
 	import type {
-		AdminExploreBreakdownOutputDto,
-		AdminExploreBreakdownRowOutputDto,
 		AdminExploreGroupsOutputDto,
 		AdminExploreHeadOutputDto,
 		AdminExploreTreeNodeOutputDto
 	} from 'client';
 
-	import ExploreBreakdown from './components/ExploreBreakdown.svelte';
+	import ExploreFilters, { type TopicPick } from './components/ExploreFilters.svelte';
 	import ExploreGroups from './components/ExploreGroups.svelte';
 	import ExploreHead from './components/ExploreHead.svelte';
-	import ExploreTree from './components/ExploreTree.svelte';
+	import ExploreOverTime from './components/ExploreOverTime.svelte';
+	import ExploreSection from './components/ExploreSection.svelte';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -22,20 +20,21 @@
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api, isNotFoundError } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
-	import { type ExploreDimension, exploreHref, type ExploreSide, type ExploreView, SIDE_LABELS, SOURCE_LABELS, SUBJECT_LABELS, viewOf } from '#lib/explore.js';
-	import { KIND_LABELS } from '#lib/statements.js';
+	import { exploreHref, type ExploreView, viewOf } from '#lib/explore.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
+	import * as Tabs from '#ui/primitives-new/tabs/index.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// "Who talked about X, how much, and what did they say": any topic or wording (the tree on the
-	// left) in any scope (the city, a district, a brand, a branch) over any months, with its
-	// figures, a breakdown whose rows narrow the view, the claims grouped by meaning, and every
-	// claim with its source. Everything is in the URL, so a view is a link.
+	// "Who talked about X, how much, and what did they say": an aspect and/or a food or drink (the
+	// bar's What pickers) in any scope (the city, a district, a brand, a branch) over any
+	// months: one bar of everything that narrows it, its figures, then folding sections (over time,
+	// the claims as a table or grouped by meaning).
+	// Everything but which sections and tab are open is in the URL, so a view is a link.
 	adminCitiesStore.load();
 	const view = $derived(viewOf(page.url.searchParams));
 	const cityId = $derived(view.cityId ?? (adminCitiesStore.list.find((c) => c.active) ?? adminCitiesStore.list[0])?.id);
@@ -46,7 +45,6 @@
 	};
 	const to = $derived(view.to ?? defaultTo);
 	const from = $derived(view.from ?? shift(to, -5));
-	const by = $derived<ExploreDimension>(view.by ?? 'brand');
 
 	/** A new view: the current one changed by `patch` (the table's own search and page dropped) */
 	const setView = (patch: Partial<ExploreView>) => goto(exploreHref({ ...view, ...patch }), { reset: false });
@@ -82,13 +80,9 @@
 
 	let tree = $state<AdminExploreTreeNodeOutputDto[] | null>(null);
 	let head = $state<AdminExploreHeadOutputDto | null>(null);
-	let breakdown = $state<AdminExploreBreakdownOutputDto | null>(null);
 	let groups = $state<AdminExploreGroupsOutputDto | null>(null);
 	const treeLoader = createLoader((q: Query) => api.admin.getExploreTree(q as never), { onSuccess: (res) => (tree = res.nodes) });
 	const headLoader = createLoader((q: Query) => api.admin.getExploreHead(q as never), { onSuccess: (res) => (head = res) });
-	const breakdownLoader = createLoader((q: Query, dimension: ExploreDimension) => api.admin.getExploreBreakdown({ ...q, by: dimension } as never), {
-		onSuccess: (res) => (breakdown = res)
-	});
 	const groupsLoader = createLoader((q: Query) => api.admin.getExploreGroups(q as never), { onSuccess: (res) => (groups = res) });
 
 	// The tree's counts don't depend on X: reloaded only when the rest of the view moves
@@ -109,65 +103,40 @@
 		headLoader.load(q);
 		groupsLoader.load(q);
 	});
-	$effect(() => {
-		if (!viewKey) return;
-		breakdownLoader.load(JSON.parse(viewKey) as Query, by);
-	});
-	// A new view starts the breakdown from its skeleton; another dimension keeps the rows dimmed
-	$effect(() => {
-		if (viewKey) breakdown = null;
-	});
 
-	/** A breakdown row narrows the view: the scope, a filter, the months, or a finer topic */
-	const pick = (row: AdminExploreBreakdownRowOutputDto) => {
-		const key = row.key;
-		if (key === undefined) return;
-		if (by === 'brand') return setView({ brandId: key, venueId: undefined });
-		if (by === 'venue') return setView({ venueId: key });
-		if (by === 'district') return setView({ district: key });
-		if (by === 'place') return setView({ place: key });
-		if (by === 'source') return setView({ source: key });
-		if (by === 'subject') return setView({ subject: key });
-		if (by === 'kind') return setView({ kind: key });
-		if (by === 'side') return setView({ side: key as ExploreSide });
-		if (by === 'month') return setView({ from: key, to: key });
-		// A topic or a wording: a finer one replaces the topic it is under, else it is X or narrows X
-		const under = breakdown?.under?.ref;
-		if (under && key === under) return;
-		if (under && view.node === under) return setView({ node: key });
-		if (under && view.with?.includes(under)) return setView({ with: view.with.map((r) => (r === under ? key : r)) });
-		if (!view.node) return setView({ node: key });
-		if (view.node === key || view.with?.includes(key)) return;
-		setView({ with: [...(view.with ?? []), key] });
-	};
-
+	let claimsOpen = $state<boolean | undefined>(undefined);
+	let claimsTab = $state<'all' | 'groups'>('all');
 	const setLike = (phrase: string) => {
 		const url = new URL(page.url.href);
 		url.searchParams.set('like', phrase);
 		url.searchParams.delete('q');
 		url.searchParams.delete('page');
+		claimsOpen = true;
+		claimsTab = 'all';
 		goto(url, { reset: false }).then(() => document.getElementById('explore-claims')?.scrollIntoView({ behavior: 'smooth' }));
 	};
 
-	// The chips: what narrows the view besides X and the months, each removable
-	const refLabel = (ref: string) => head?.with.find((w) => w.ref === ref)?.label ?? ref.replace(/^term:/, '');
-	interface Chip {
-		label: string;
-		clear: Partial<ExploreView>;
-	}
-	const chips = $derived.by((): Chip[] => {
-		const out: Chip[] = [];
-		if (view.brandId) out.push({ label: `At ${head?.brand?.name ?? 'one brand'}`, clear: { brandId: undefined, venueId: undefined } });
-		if (view.venueId) out.push({ label: `Branch ${head?.venue?.name ?? ''}`.trim(), clear: { venueId: undefined } });
-		if (view.district) out.push({ label: `In ${view.district}`, clear: { district: undefined } });
-		if (view.place) out.push({ label: `${head?.place?.label ?? view.place} places`, clear: { place: undefined } });
-		for (const ref of view.with ?? []) out.push({ label: `And ${refLabel(ref)}`, clear: { with: view.with!.filter((r) => r !== ref) } });
-		if (view.side) out.push({ label: SIDE_LABELS[view.side], clear: { side: undefined } });
-		if (view.kind) out.push({ label: `Kind: ${KIND_LABELS[view.kind] ?? view.kind}`, clear: { kind: undefined } });
-		if (view.source) out.push({ label: SOURCE_LABELS[view.source] ?? view.source, clear: { source: undefined } });
-		if (view.subject) out.push({ label: SUBJECT_LABELS[view.subject] ?? view.subject, clear: { subject: undefined } });
-		return out;
-	});
+	// The topics: an aspect and a food or drink (each a picker), claims about both when both are
+	// picked; node is the first, `with` the rest, and any further one an older link carried stays
+	const treeByKey = $derived(new Map((tree ?? []).map((t) => [t.key, t])));
+	const kindOf = (ref: string): 'aspect' | 'food' =>
+		!ref.startsWith('term:') && (treeByKey.get(ref)?.kind ?? (head?.node?.ref === ref ? head.node.kind : undefined)) === 'aspect' ? 'aspect' : 'food';
+	const pickOf = (ref: string): TopicPick => {
+		const node = head?.node?.ref === ref ? head.node : undefined;
+		return {
+			ref,
+			label: node?.label ?? treeByKey.get(ref)?.label ?? head?.with.find((w) => w.ref === ref)?.label ?? ref.replace(/^term:/, ''),
+			hint: node?.hint
+		};
+	};
+	const refs = $derived([view.node, ...(view.with ?? [])].filter((r): r is string => !!r));
+	const aspectRef = $derived(refs.find((r) => kindOf(r) === 'aspect'));
+	const foodRef = $derived(refs.find((r) => kindOf(r) === 'food'));
+	const extraRefs = $derived(refs.filter((r) => r !== aspectRef && r !== foodRef));
+	const setTopic = (kind: 'aspect' | 'food', ref: string | undefined) => {
+		const list = [kind === 'aspect' ? ref : aspectRef, kind === 'food' ? ref : foodRef, ...extraRefs].filter((r): r is string => !!r);
+		setView({ node: list[0], with: list.slice(1) });
+	};
 	const clearAll: Partial<ExploreView> = {
 		brandId: undefined,
 		venueId: undefined,
@@ -183,89 +152,75 @@
 
 <AdminPageHeader description={findAdminMenu(page.url.pathname)?.description}>
 	{#snippet rightTitle()}
-		<div class="flex flex-wrap items-center gap-2">
+		<div class="flex flex-wrap items-center gap-1.5">
 			{#if adminCitiesStore.list.length > 1}
-				<div class="w-40">
-					<Select items={cityItems(adminCitiesStore.list)} value={cityId} aria-label="City" size="sm" onValueChange={(v) => setView({ ...clearAll, cityId: v })} />
-				</div>
+				<Select items={cityItems(adminCitiesStore.list)} value={cityId} aria-label="City" size="sm" onValueChange={(v) => setView({ ...clearAll, cityId: v })} />
 			{/if}
-			<div class="w-40">
-				<Select items={MONTHS} value={from} aria-label="From" size="sm" onValueChange={(v) => setMonths({ from: v, to })} />
-			</div>
-			<span class="text-muted-foreground text-sm">to</span>
-			<div class="w-40">
-				<Select items={MONTHS} value={to} aria-label="To" size="sm" onValueChange={(v) => setMonths({ from, to: v })} />
-			</div>
+			<Select items={MONTHS} value={from} aria-label="From" size="sm" onValueChange={(v) => setMonths({ from: v, to })} />
+			<span class="text-muted-foreground text-sm">–</span>
+			<Select items={MONTHS} value={to} aria-label="To" size="sm" onValueChange={(v) => setMonths({ from, to: v })} />
 		</div>
 	{/snippet}
 </AdminPageHeader>
 
-<div class="grid grid-cols-1 items-start gap-5 pb-12 lg:grid-cols-[18rem_minmax(0,1fr)]">
-	<aside class="lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
-		<AdminPanel title="Topics" note="reviews and posts">
-			{#if treeLoader.error && !tree}
-				<ErrorState onRetry={() => query && treeLoader.load({ ...query, node: undefined } as never)} />
-			{:else}
-				<ExploreTree nodes={tree} selected={view.node} onPick={(ref) => setView({ node: ref, with: view.with?.filter((r) => r !== ref) })} />
-			{/if}
-		</AdminPanel>
-	</aside>
+<div class="flex min-w-0 flex-col gap-4 pb-12">
+	<ExploreFilters
+		{view}
+		{head}
+		{query}
+		aspect={aspectRef ? pickOf(aspectRef) : undefined}
+		food={foodRef ? pickOf(foodRef) : undefined}
+		extras={extraRefs.map(pickOf)}
+		{tree}
+		treeFailed={!!treeLoader.error}
+		onRetryTree={() => query && treeLoader.load({ ...query, node: undefined } as never)}
+		onTopic={setTopic}
+		onChange={setView}
+		onClearAll={() => setView({ ...clearAll, node: undefined })} />
 
-	<div class="flex min-w-0 flex-col gap-5">
-		{#if chips.length}
-			<div class="flex flex-wrap items-center gap-1.5">
-				{#each chips as chip (chip.label)}
-					<button type="button" class="chip flex items-center gap-1 text-xs" aria-pressed="true" onclick={() => setView(chip.clear)}>
-						{chip.label}<X class="size-3.5" aria-label="Clear" />
-					</button>
-				{/each}
-				{#if chips.length > 1}
-					<Button size="sm" variant="ghost" onclick={() => setView(clearAll)}>Clear all</Button>
-				{/if}
-			</div>
-		{/if}
-
-		{#if headLoader.error && !head}
-			{#if isNotFoundError(headLoader.error)}
-				<EmptyState title="Nothing by that name" hint="No topic or wording has this key: it may have been renamed or removed.">
-					<Button size="sm" variant="outline" onclick={() => setView({ node: undefined, with: undefined })}>Start over</Button>
-				</EmptyState>
-			{:else}
-				<ErrorState onRetry={() => query && headLoader.load(query)} />
-			{/if}
-		{:else if !head}
-			<AdminPanel><SkeletonRows count={6} lines={2} /></AdminPanel>
+	{#if headLoader.error && !head}
+		{#if isNotFoundError(headLoader.error)}
+			<EmptyState title="Nothing by that name" hint="No topic or wording has this key: it may have been renamed or removed.">
+				<Button size="sm" variant="outline" onclick={() => setView({ node: undefined, with: undefined })}>Start over</Button>
+			</EmptyState>
 		{:else}
-			<ExploreHead
-				{head}
-				side={view.side}
-				onSide={(side) => setView({ side })}
-				onRef={(ref) => setView({ node: ref })}
-				onMonth={(month) => setView({ from: month, to: month })} />
+			<ErrorState onRetry={() => query && headLoader.load(query)} />
+		{/if}
+	{:else if !head}
+		<AdminPanel><SkeletonRows count={4} lines={2} /></AdminPanel>
+	{:else}
+		<ExploreHead {head} side={view.side} />
 
-			<AdminPanel title="Break down" note="a row narrows the view">
-				{#if breakdownLoader.error && !breakdown}
-					<ErrorState onRetry={() => query && breakdownLoader.load(query, by)} />
-				{:else}
-					<ExploreBreakdown {by} data={breakdown} loading={breakdownLoader.loading} onBy={(d) => setView({ by: d === 'brand' ? undefined : d })} onPick={pick} />
-				{/if}
-			</AdminPanel>
+		<ExploreSection id="over-time" title="Over time" note="Month by month · click a month to narrow to it" defaultOpen={false}>
+			<ExploreOverTime {head} side={view.side} onMonth={(month) => setView({ from: month, to: month })} />
+		</ExploreSection>
 
-			<AdminPanel title="What they say" note="grouped by meaning">
+		<ExploreSection
+			id="claims"
+			title="Claims"
+			note={claimsTab === 'all' ? 'Every claim in the view, newest first · a row opens its source' : 'Claims that say the same thing · “See claims” lists one group'}
+			bind:open={claimsOpen}>
+			{#snippet actions()}
+				<Tabs.Root bind:value={claimsTab}>
+					<Tabs.List>
+						<Tabs.Trigger value="all">All</Tabs.Trigger>
+						<Tabs.Trigger value="groups">
+							Grouped by meaning{#if groups?.groups.length}<span class="font-term text-base leading-none opacity-70">{groups.groups.length}</span>{/if}
+						</Tabs.Trigger>
+					</Tabs.List>
+				</Tabs.Root>
+			{/snippet}
+			{#if claimsTab === 'groups'}
 				{#if groupsLoader.error && !groups}
 					<ErrorState onRetry={() => query && groupsLoader.load(query)} />
 				{:else}
 					<ExploreGroups data={groups} onLike={setLike} />
 				{/if}
-			</AdminPanel>
-
-			<section id="explore-claims" class="scroll-mt-20">
-				{#if cityId && query}
-					{#key viewKey}
-						<ClaimsTable scope={{ cityId }} topicsCityId={cityId} explore={query as never} />
-					{/key}
-				{/if}
-			</section>
-		{/if}
-	</div>
+			{:else if cityId && query}
+				{#key viewKey}
+					<ClaimsTable scope={{ cityId }} topicsCityId={cityId} explore={query as never} />
+				{/key}
+			{/if}
+		</ExploreSection>
+	{/if}
 </div>

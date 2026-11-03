@@ -11,7 +11,8 @@ import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.consta
 import { KIND_RULES, STATEMENT_KINDS } from '../constants/kind.constant.js';
 import { SENTIMENTS } from '../constants/sentiment.constant.js';
 
-const claimPartsSchema = z.object({
+/** B's answer for one claim: also the parts each claim of the one-call readers carries */
+export const claimPartsSchema = z.object({
 	sentiment: z
 		.enum(SENTIMENTS)
 		.describe(

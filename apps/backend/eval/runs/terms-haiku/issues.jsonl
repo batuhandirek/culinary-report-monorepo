@@ -1,0 +1,60 @@
+{"caseId":"term-10329","metric":"terms.topics","detail":"meat alternative: [vegetarian:with] ≠ [none]","split":"train"}
+{"caseId":"term-10864","metric":"terms.topics","detail":"1-liter mugs: [beer:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-1146","metric":"terms.topics","detail":"meat substitute: [vegetarian:with] ≠ [none]","split":"test"}
+{"caseId":"term-1330","metric":"terms.topics","detail":"Heaven and Earth: [german:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-13669","metric":"terms.topics","detail":"flavors and textures: [taste:same] ≠ [none]","split":"train"}
+{"caseId":"term-14904","metric":"terms.topics","detail":"seafood boil buldak ramen: [noodles:kind_of] ≠ [ramen:kind_of, seafood:with, chicken:with]","split":"train"}
+{"caseId":"term-15548","metric":"terms.topics","detail":"Jollof Fries: [fries:kind_of, west african:with] ≠ [fries:kind_of]","split":"train"}
+{"caseId":"term-16968","metric":"terms.topics","detail":"Moksal: [korean barbecue:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-17247","metric":"terms.none","detail":"sambal dummer: none ≠ chicken","split":"test"}
+{"caseId":"term-173","metric":"terms.topics","detail":"cheesecake: [cake:kind_of] ≠ [cake:kind_of, dessert:kind_of]","split":"train"}
+{"caseId":"term-18243","metric":"terms.topics","detail":"cuisson d'un kilo: [cooking:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-1834","metric":"terms.topics","detail":"Panisse mit Trüffelmayonnaise: [fries:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-18531","metric":"terms.topics","detail":"breakfast offer: [breakfast:same] ≠ [none]","split":"train"}
+{"caseId":"term-18825","metric":"terms.topics","detail":"K Wings: [fried chicken:kind_of, korean:kind_of] ≠ [korean:with, chicken:with]","split":"test"}
+{"caseId":"term-20759","metric":"terms.topics","detail":"malaycofter: [curry:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-2129","metric":"terms.none","detail":"Com gia dinh: none ≠ vietnamese","split":"train"}
+{"caseId":"term-21605","metric":"terms.topics","detail":"the John: [toilets:same] ≠ [none]","split":"train"}
+{"caseId":"term-22168","metric":"terms.topics","detail":"unique food experiences: [food:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-2306","metric":"terms.none","detail":"cút lộn xào me: none ≠ vietnamese","split":"train"}
+{"caseId":"term-2357","metric":"terms.none","detail":"hot dog: none ≠ sausages","split":"train"}
+{"caseId":"term-2567","metric":"terms.topics","detail":"Diätbratwurst: [sausages:kind_of] ≠ [sausages:kind_of, healthy:with]","split":"train"}
+{"caseId":"term-2621","metric":"terms.none","detail":"Samowar set for two: none ≠ tea","split":"train"}
+{"caseId":"term-2825","metric":"terms.none","detail":"Sapa Rolls: none ≠ vietnamese","split":"train"}
+{"caseId":"term-3167","metric":"terms.topics","detail":"Indian favourites: [indian:same] ≠ [none]","split":"train"}
+{"caseId":"term-3235","metric":"terms.topics","detail":"sound latte: [coffee drinks:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-35404","metric":"terms.topics","detail":"butter squishies: [dessert:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-37002","metric":"terms.topics","detail":"tuz: [seasoning:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-373","metric":"terms.topics","detail":"cheesecake with berry sauce: [cake:kind_of] ≠ [dessert:kind_of]","split":"train"}
+{"caseId":"term-37729","metric":"terms.topics","detail":"curry show rice and peas: [curry:kind_of, jamaican:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-38289","metric":"terms.topics","detail":"tono pizza: [pizza:kind_of, seafood:with] ≠ [pizza:kind_of]","split":"test"}
+{"caseId":"term-4138","metric":"terms.none","detail":"tataki with choy choi: none ≠ japanese","split":"train"}
+{"caseId":"term-45188","metric":"terms.topics","detail":"breakfast pita: [sandwiches:kind_of, breakfast:with] ≠ [bread:kind_of, breakfast:with]","split":"test"}
+{"caseId":"term-45655","metric":"terms.none","detail":"sushi set: none ≠ sushi","split":"train"}
+{"caseId":"term-4713","metric":"terms.topics","detail":"Chicken Tenders: [fried chicken:kind_of, chicken:kind_of] ≠ [chicken:kind_of]","split":"test"}
+{"caseId":"term-4788","metric":"terms.topics","detail":"Korean Fried Chicken: [fried chicken:kind_of, chicken:kind_of, korean:kind_of] ≠ [fried chicken:kind_of, korean:with]","split":"train"}
+{"caseId":"term-4873","metric":"terms.topics","detail":"vegetable döner: [kebab:kind_of, vegetarian:with] ≠ [kebab:kind_of]","split":"test"}
+{"caseId":"term-4874","metric":"terms.topics","detail":"vegetable doner kebab: [kebab:kind_of, vegetarian:with] ≠ [kebab:kind_of]","split":"train"}
+{"caseId":"term-4876","metric":"terms.topics","detail":"vegetable kebab: [kebab:kind_of, vegetarian:with] ≠ [kebab:kind_of]","split":"test"}
+{"caseId":"term-52","metric":"terms.topics","detail":"dim sum: [dumplings:kind_of] ≠ [chinese:kind_of]","split":"test"}
+{"caseId":"term-55","metric":"terms.topics","detail":"momo: [dumplings:kind_of, nepalese:kind_of] ≠ [dumplings:kind_of]","split":"train"}
+{"caseId":"term-5581","metric":"terms.topics","detail":"Prosecco flat rate: [wine:kind_of] ≠ [wine:kind_of, price:with]","split":"train"}
+{"caseId":"term-5595","metric":"terms.topics","detail":"Bistecca Fiorentina: [steakhouse:kind_of, italian:kind_of] ≠ [steakhouse:kind_of]","split":"test"}
+{"caseId":"term-5723","metric":"terms.none","detail":"vegan Thanksgiving plate: none ≠ vegan","split":"train"}
+{"caseId":"term-5886","metric":"terms.topics","detail":"Hähnchenschnitzel mit Pommes und Gemüse: [schnitzel:kind_of, chicken:with] ≠ [none]","split":"train"}
+{"caseId":"term-602","metric":"terms.topics","detail":"broth: [soups:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-6102","metric":"terms.topics","detail":"kavurma toast: [sandwiches:kind_of] ≠ [turkish:kind_of]","split":"train"}
+{"caseId":"term-6166","metric":"terms.topics","detail":"Korean wings: [fried chicken:kind_of, korean:kind_of] ≠ [chicken:kind_of, korean:with]","split":"test"}
+{"caseId":"term-6307","metric":"terms.topics","detail":"matcha (mixed with orange juice): [matcha:kind_of] ≠ [matcha:same, milkshakes:with]","split":"train"}
+{"caseId":"term-6481","metric":"terms.topics","detail":"original city chicken: [chicken:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-6631","metric":"terms.topics","detail":"Pizza Napoli: [pizza:kind_of] ≠ [pizza:kind_of, italian:with]","split":"train"}
+{"caseId":"term-6683","metric":"terms.topics","detail":"protein cheesecake with raspberries: [cake:kind_of] ≠ [dessert:kind_of]","split":"train"}
+{"caseId":"term-683","metric":"terms.none","detail":"French toast: none ≠ bread","split":"train"}
+{"caseId":"term-7015","metric":"terms.topics","detail":"spicy tuna roll: [sushi:kind_of, seafood:with] ≠ [sushi:kind_of]","split":"train"}
+{"caseId":"term-7993","metric":"terms.none","detail":"deposit: none ≠ payment","split":"train"}
+{"caseId":"term-8226","metric":"terms.topics","detail":"kothu parotta: [sri lankan:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-8407","metric":"terms.topics","detail":"pistachio baklava: [pastry:kind_of] ≠ [dessert:kind_of]","split":"train"}
+{"caseId":"term-841","metric":"terms.topics","detail":"pork knuckle: [german:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-851","metric":"terms.topics","detail":"rolls: [bread:kind_of] ≠ [none]","split":"test"}
+{"caseId":"term-879","metric":"terms.topics","detail":"tzatziki: [greek:kind_of] ≠ [none]","split":"train"}
+{"caseId":"term-920","metric":"terms.topics","detail":"Taramas: [greek:kind_of, seafood:with] ≠ [none]","split":"test"}

@@ -9,7 +9,8 @@ import {
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 import { claimSchema } from 'src/modules/venues/agents/review-claims.agent.js';
 
-const postClaimsSchema = z.object({
+/** A's answer for one post: also the frame of the one-call post reader (`PostReaderAgent`), whose claims carry B's parts */
+export const postClaimsSchema = z.object({
 	isPromotional: z
 		.boolean()
 		.describe(

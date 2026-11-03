@@ -28,14 +28,20 @@ export const postClaimsSource = (post: SocialPost): PostClaimsSource => ({
 	ownBrand: post.account?.brand?.name ?? null,
 });
 
-/** Agent A's input message for one post or article */
-export const postClaimsPrompt = (post: PostClaimsSource): string => {
+/**
+ * Agent A's input message for one post or article. `cityName` starts it for a reader whose
+ * instructions name no city (the one-call `PostReaderAgent`); agent A has its city in its instructions.
+ */
+export const postClaimsPrompt = (post: PostClaimsSource, cityName?: string): string => {
+	const city = cityName ? [`City: ${cityName}`] : [];
 	if (post.platform === SocialPlatformEnum.BLOG)
 		return [
+			...city,
 			`Platform: blog article on ${post.author ?? 'a food blog'}`,
 			`Article:\n${post.text ?? ''}`,
 		].join('\n\n');
 	return [
+		...city,
 		`Platform: ${post.platform}`,
 		// In the message, not the instructions: what differs per post never breaks the cached instructions
 		...(post.ownBrand ? [`Posted by the venue's own account: ${post.ownBrand}`] : []),
@@ -109,14 +115,15 @@ const bodyFields = (post: PostClaimsSource): ('text' | 'subtitles')[] =>
  */
 export const postClaimsPlan = (
 	post: PostClaimsSource,
+	cityName?: string,
 ): { single: string } | { places: string; parts: (places: string[]) => string[] } => {
 	const length = (post.text?.length ?? 0) + (post.subtitles?.length ?? 0);
-	if (length <= POST_SPLIT_ABOVE) return { single: postClaimsPrompt(post) };
+	if (length <= POST_SPLIT_ABOVE) return { single: postClaimsPrompt(post, cityName) };
 	const fields = bodyFields(post);
 	const chunks = fields.flatMap(field =>
 		post[field]?.trim() ? splitText(post[field]!).map(text => ({ field, text })) : [],
 	);
-	if (chunks.length < 2) return { single: postClaimsPrompt(post) };
+	if (chunks.length < 2) return { single: postClaimsPrompt(post, cityName) };
 	const what = (field: 'text' | 'subtitles') =>
 		post.platform === SocialPlatformEnum.BLOG ? 'article'
 		: field === 'subtitles' ? 'transcript'
@@ -132,7 +139,7 @@ export const postClaimsPlan = (
 	};
 	return {
 		places:
-			postClaimsPrompt(post) +
+			postClaimsPrompt(post, cityName) +
 			'\n\nThis text is long and its claims are read in parts after this: for now give every place it talks ' +
 			'about, in the order it first names them, and whether it is promotional; give no claims.',
 		parts: places =>
@@ -141,11 +148,14 @@ export const postClaimsPlan = (
 				const other = fields.find(f => f !== field);
 				const ofField = chunks.filter(c => c.field === field);
 				return (
-					postClaimsPrompt({
-						...post,
-						[field]: text,
-						...(other && { [other]: context(other) }),
-					}) +
+					postClaimsPrompt(
+						{
+							...post,
+							[field]: text,
+							...(other && { [other]: context(other) }),
+						},
+						cityName,
+					) +
 					`\n\nThis is part ${ofField.indexOf(chunks[k]) + 1} of ${ofField.length} of the ${what(field)}; the ` +
 					'other parts are read apart. ' +
 					(before ?

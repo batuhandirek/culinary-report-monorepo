@@ -92,6 +92,11 @@ export abstract class BaseMastraAgent<
 		return this.getInstructions(context);
 	}
 
+	/** The agent's coaching (`getCoaching`): what an agent composing this one's rules takes as its coaching too */
+	coachingFor(context?: Context): string {
+		return this.getCoaching(context);
+	}
+
 	/** The instructions a call with this context runs on: the rules, then the coaching */
 	instructionsFor(context?: Context): string {
 		const coaching = this.getCoaching(context);

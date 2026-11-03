@@ -1,0 +1,124 @@
+{
+  "label": "terms-haiku",
+  "at": "2026-11-03T14:43:37.925Z",
+  "cases": {
+    "review": 0,
+    "post": 0,
+    "term": 500
+  },
+  "unscored": 371,
+  "dropped": 0,
+  "byKind": {
+    "review": {},
+    "post": {},
+    "term": {
+      "terms.precision": [
+        352,
+        360
+      ],
+      "terms.recall": [
+        335,
+        382
+      ],
+      "terms.exact": [
+        279,
+        328
+      ],
+      "terms.first": [
+        299,
+        328
+      ],
+      "terms.linked": [
+        303,
+        328
+      ],
+      "terms.relation": [
+        308,
+        335
+      ],
+      "terms.none": [
+        161,
+        172
+      ]
+    }
+  },
+  "bySplit": {
+    "train": {
+      "review": {},
+      "post": {},
+      "term": {
+        "terms.precision": [
+          254,
+          262
+        ],
+        "terms.recall": [
+          243,
+          269
+        ],
+        "terms.exact": [
+          204,
+          234
+        ],
+        "terms.first": [
+          218,
+          234
+        ],
+        "terms.linked": [
+          219,
+          234
+        ],
+        "terms.relation": [
+          223,
+          243
+        ],
+        "terms.none": [
+          110,
+          120
+        ]
+      }
+    },
+    "test": {
+      "review": {},
+      "post": {},
+      "term": {
+        "terms.precision": [
+          98,
+          98
+        ],
+        "terms.recall": [
+          92,
+          113
+        ],
+        "terms.exact": [
+          75,
+          94
+        ],
+        "terms.first": [
+          81,
+          94
+        ],
+        "terms.linked": [
+          84,
+          94
+        ],
+        "terms.relation": [
+          85,
+          92
+        ],
+        "terms.none": [
+          51,
+          52
+        ]
+      }
+    }
+  },
+  "byTag": {},
+  "models": {
+    "term-topic": {
+      "anthropic/claude-haiku-5-5": 500
+    }
+  },
+  "tokens": 3889772,
+  "cachedTokens": 3725370,
+  "staleReferences": 0
+}

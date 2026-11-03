@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { ExternalLink } from '@lucide/svelte';
+	import { AtSign, Bookmark, Calendar, ExternalLink, Eye, FileText, Globe, Hash, Heart, MapPin, MessageCircle, Share2, Store, Users } from '@lucide/svelte';
 	import type { AdminDigestedPostOutputDto, AdminDigestionStatementOutputDto } from 'client';
+	import type { Component } from 'svelte';
 
 	import DigestedClaims from './DigestedClaims.svelte';
-	import PipelineStep from './PipelineStep.svelte';
+	import PipelineStrip, { type Step } from './PipelineStrip.svelte';
 	import SourceText from './SourceText.svelte';
 
 	import { atShort } from '#components/admin/admin-format.js';
@@ -11,8 +12,10 @@
 	import { MATCH_METHOD_LABELS, matchMethodVariant } from '#lib/digestion.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
 
-	// A post and every step the pipeline took over it: what was scraped, the gate's verdict, the
-	// places agent A took from it and what matching made of each, and its claims with agent B's parts.
+	// A post and what the pipeline made of it: a strip of how far each step got, the post's figures
+	// as icons, its texts with the claims' quotes marked on the left, and on the right what it says,
+	// place by place (each place with what matching made of it, its claims under it), then about the
+	// city and in general.
 	interface Props {
 		post: AdminDigestedPostOutputDto;
 	}
@@ -22,177 +25,204 @@
 	const isBlog = $derived(post.platform === 'blog');
 	const quotes = $derived(post.statements.map((s) => s.quote));
 	const texts = $derived([post.text, post.subtitles]);
-	const mentionsById = $derived(new Map(post.mentions.map((m) => [m.id, m])));
-	const claimsAbout = (mentionId: number) => post.statements.filter((s) => s.mention?.id === mentionId).length;
 	const readByB = $derived(post.statements.filter((s) => s.partsAt).length);
+	const MATCHED = new Set(['exact', 'fuzzy', 'llm', 'manual']);
+	const matched = $derived(post.mentions.filter((m) => m.matchMethod && MATCHED.has(m.matchMethod)).length);
+	const plural = (n: number, one: string) => `${n} ${n === 1 ? one : `${one}s`}`;
 
-	const gate = $derived(
-		post.skipReason
-			? `Skipped: ${SKIP_REASON_LABELS[post.skipReason] ?? post.skipReason}. Not digested, so agent A took no places and no claims from it.`
-			: post.gatedAt
-				? `Digested: about eating or drinking out in ${post.city.name}.`
-				: post.analysedAt
-					? 'No verdict stored: agent A read it before the gate judged it.'
-					: 'Not judged by the gate yet.'
+	const steps = $derived.by((): Step[] => {
+		const skipped = !!post.skipReason;
+		const read = !!post.analysedAt && !skipped;
+		const out: Step[] = [
+			skipped
+				? { label: 'Gate', state: 'skipped', result: SKIP_REASON_LABELS[post.skipReason!] ?? post.skipReason, hint: post.gatedAt && `judged ${atShort(post.gatedAt)}` }
+				: post.gatedAt
+					? { label: 'Gate', state: 'done', result: 'food', hint: `about eating or drinking out in ${post.city.name}; judged ${atShort(post.gatedAt)}` }
+					: post.analysedAt
+						? { label: 'Gate', state: 'partly', result: 'no verdict', hint: 'agent A read it before the gate judged it' }
+						: { label: 'Gate', state: 'pending', hint: 'not judged yet' },
+			{
+				label: 'Places',
+				state: read ? 'done' : 'pending',
+				result: read ? String(post.mentions.length) : undefined,
+				hint: read ? `agent A, ${atShort(post.analysedAt!)}${post.analysisTokens ? ` · ${post.analysisTokens.toLocaleString('en-GB')} tokens` : ''}` : skipped ? 'the gate skipped it' : 'not read by agent A yet'
+			}
+		];
+		if (post.mentions.length)
+			out.push({ label: 'Matched', state: matched === post.mentions.length ? 'done' : 'partly', result: `${matched} of ${post.mentions.length}`, hint: 'places matched to a brand' });
+		out.push({ label: 'Claims', state: read || post.statements.length ? 'done' : 'pending', result: read || post.statements.length ? String(post.statements.length) : undefined, hint: 'split by agent A' });
+		if (post.statements.length)
+			out.push({
+				label: 'Parts',
+				state: readByB === post.statements.length ? 'done' : readByB ? 'partly' : 'pending',
+				result: `${readByB} of ${post.statements.length}`,
+				hint: 'claims agent B read: sentiment, kind, aspect, foods, number'
+			});
+		return out;
+	});
+
+	// The figures, as icons; a zero or an unknown is left out
+	const STATS = $derived(
+		(
+			[
+				{ icon: Eye, n: post.views, label: 'views' },
+				{ icon: Heart, n: post.likes, label: 'likes' },
+				{ icon: MessageCircle, n: post.comments, label: 'comments' },
+				{ icon: Share2, n: post.shares, label: 'shares' },
+				{ icon: Bookmark, n: post.saves, label: 'saves' }
+			] as { icon: Component; n: number | undefined; label: string }[]
+		).filter((s) => !isBlog && s.n)
 	);
 
-	const aboutOf = (statement: AdminDigestionStatementOutputDto) => {
-		if (statement.subject === 'city') return { label: post.city.name, muted: true };
-		if (statement.subject === 'none') return { label: 'nothing in particular', muted: true };
-		const mention = statement.mention ? mentionsById.get(statement.mention.id) : undefined;
-		if (!mention) return { label: 'a place' };
-		return mention.brand
-			? { label: mention.brand.name, href: `/admin/brands/${mention.brand.id}` }
-			: { label: mention.venueName };
-	};
+	// What it says, one group per place it names (in order), then the city, then nothing in particular
+	const aboutPlace = (mentionId: number) => post.statements.filter((s) => s.subject === 'place' && s.mention?.id === mentionId);
+	const mentionIds = $derived(new Set(post.mentions.map((m) => m.id)));
+	const placeless = $derived(post.statements.filter((s) => s.subject === 'place' && !(s.mention && mentionIds.has(s.mention.id))));
+	const aboutCity = $derived(post.statements.filter((s) => s.subject === 'city'));
+	const aboutNothing = $derived(post.statements.filter((s) => s.subject === 'none'));
+	const OTHER_GROUPS = $derived(
+		[
+			{ key: 'place', icon: Store, label: 'A place', statements: placeless },
+			{ key: 'city', icon: Globe, label: `About ${post.city.name}`, statements: aboutCity },
+			{ key: 'none', icon: FileText, label: 'In general', statements: aboutNothing }
+		].filter((g) => g.statements.length)
+	) as { key: string; icon: Component; label: string; statements: AdminDigestionStatementOutputDto[] }[];
 
-	const COUNTS = $derived(
-		isBlog
-			? []
-			: [
-					{ label: 'views', n: post.views },
-					{ label: 'likes', n: post.likes },
-					{ label: 'comments', n: post.comments },
-					{ label: 'shares', n: post.shares },
-					{ label: 'saves', n: post.saves }
-				]
-	);
+	const hashtags = $derived(post.hashtagLinks.filter((l) => !l.hashtag.ignored));
+	let allTags = $state(false);
+	const TAGS_SHOWN = 10;
+	const shownTags = $derived(allTags ? hashtags : hashtags.slice(0, TAGS_SHOWN));
 </script>
 
-<div class="flex min-w-0 flex-col gap-6">
-	<div class="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-		<!-- What was scraped -->
-		<div class="flex min-w-0 flex-col gap-3">
-			<p class="m-0 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
-				<span class="font-semibold">{PLATFORM_LABELS[post.platform] ?? post.platform}</span>
-				{#if post.account}
-					<a href={`/admin/creators/${post.account.creator.id}`} class="underline-offset-4 hover:underline">
-						{authorLabel(post.platform, post.author)}
-					</a>
-				{:else}
-					<span>{authorLabel(post.platform, post.author)}</span>
-				{/if}
-				{#if post.authorFans}<span class="text-muted-foreground">{compact(post.authorFans)} followers</span>{/if}
-				{#if post.account?.brand}
-					<span>
-						own account of
-						<a href={`/admin/brands/${post.account.brand.id}`} class="font-medium underline-offset-4 hover:underline">{post.account.brand.name}</a>
-					</span>
-				{/if}
-				<span class="text-muted-foreground">{post.city.name} · {atShort(post.postedAt)}</span>
-				{#each COUNTS as count (count.label)}
-					<span class="text-muted-foreground tabular-nums">{compact(count.n)} {count.label}</span>
-				{/each}
-				{#if post.isAd}<Badge variant="warning">ad</Badge>{/if}
-				<a href={`/admin/posts/${post.id}`} class="font-medium underline-offset-4 hover:underline">Post page</a>
-				<a href={post.url} target="_blank" rel="noopener noreferrer" class="text-muted-foreground inline-flex items-center gap-1 hover:underline">
-					Original <ExternalLink class="size-3" />
-				</a>
-			</p>
-			<SourceText label={isBlog ? 'Article' : 'Caption'} text={post.text} {quotes} note={post.text ? `${post.text.length.toLocaleString('en-GB')} characters` : undefined} />
-			{#if !isBlog}
-				<SourceText label="Transcript" text={post.subtitles} {quotes} note={post.subtitlesLanguage} />
-			{/if}
-			<dl class="m-0 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 text-sm">
-				<dt class="text-muted-foreground">Tagged place</dt>
-				<dd class="m-0">{post.locationName ?? '—'}</dd>
-				{#if post.taggedHandles?.length}
-					<dt class="text-muted-foreground">Tagged</dt>
-					<dd class="m-0">{post.taggedHandles.map((h) => `@${h}`).join(', ')}</dd>
-				{/if}
-				<dt class="text-muted-foreground">Hashtags</dt>
-				<dd class="m-0 flex flex-wrap gap-x-2 gap-y-0.5">
-					{#each post.hashtagLinks as link (link.hashtag.id)}
-						<span class={link.hashtag.ignored ? 'text-faint' : ''}>
-							#{link.hashtag.tag}{#if link.hashtag.topic}<span class="text-beet"> → {link.hashtag.topic.label}</span>{/if}{#if link.hashtag.brand}<span class="text-beet"> → {link.hashtag.brand.name}</span>{/if}
-						</span>
-					{:else}
-						—
-					{/each}
-				</dd>
-			</dl>
-		</div>
-
-		<!-- The gate and the places -->
-		<div class="flex min-w-0 flex-col gap-5">
-			<PipelineStep step={1} title="Gate" note={post.gatedAt ? `judged ${atShort(post.gatedAt)}` : undefined}>
-				<p class={`m-0 text-sm ${post.skipReason ? 'ink-strip' : ''}`}>{gate}</p>
-			</PipelineStep>
-
-			<PipelineStep
-				step={2}
-				title="Places (agent A)"
-				note={post.analysedAt
-					? `read ${atShort(post.analysedAt)}${post.analysisTokens ? ` · ${post.analysisTokens.toLocaleString('en-GB')} tokens` : ''}`
-					: 'not read by agent A yet'}>
-				{#if post.isPromotional}
-					<p class="m-0 text-sm"><Badge variant="warning">promotional</Badge> Paid, gifted or invited, as agent A read it.</p>
-				{/if}
-				{#if post.mentions.length}
-					<ul class="divide-line m-0 flex list-none flex-col divide-y p-0">
-						{#each post.mentions as mention (mention.id)}
-							{@const claims = claimsAbout(mention.id)}
-							<li class="flex flex-col gap-1 py-2 text-sm">
-								<div class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-									<span class="font-semibold">“{mention.venueName}”</span>
-									{#each [mention.locationHint, mention.cuisine, mention.city].filter(Boolean) as fact (fact)}
-										<span class="text-muted-foreground text-xs">{fact}</span>
-									{/each}
-									{#if !mention.visited}<Badge variant="quiet">not visited</Badge>{/if}
-									{#if mention.isNewOpening}<Badge variant="warning">new opening</Badge>{/if}
-								</div>
-								<div class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
-									<Badge variant={matchMethodVariant(mention.matchMethod)} title={mention.matchNote}>
-										{mention.matchMethod ? (MATCH_METHOD_LABELS[mention.matchMethod] ?? mention.matchMethod) : 'not matched yet'}
-									</Badge>
-									{#if mention.matchScore != null}
-										<span class="text-muted-foreground tabular-nums">score {mention.matchScore.toFixed(2)}</span>
-									{/if}
-									{#if mention.brand}
-										<a href={`/admin/brands/${mention.brand.id}`} class="font-medium underline-offset-4 hover:underline">{mention.brand.name}</a>
-										<span class="text-faint">→</span>
-										{#if mention.venue}
-											<a href={`/admin/venues/${mention.venue.id}`} class="underline-offset-4 hover:underline">
-												{mention.venue.name}{mention.venue.district ? ` (${mention.venue.district})` : ''}
-											</a>
-										{:else}
-											<span class="text-muted-foreground">no branch named</span>
-										{/if}
-									{/if}
-									{#if mention.unconfirmedAt}<Badge variant="warning">unconfirmed</Badge>{/if}
-									<span class="text-muted-foreground">· {claims} claim{claims === 1 ? '' : 's'} about it</span>
-								</div>
-								{#if mention.matchNote}
-									<p class="text-muted-foreground m-0 text-xs">Note: {mention.matchNote}</p>
-								{/if}
-							</li>
-						{/each}
-					</ul>
-				{:else}
-					<p class="text-muted-foreground m-0 text-sm">
-						{post.skipReason
-							? 'None: the gate skipped it.'
-							: post.analysedAt
-								? 'Agent A found no food or drink place in it.'
-								: 'Not read by agent A yet.'}
-					</p>
-				{/if}
-			</PipelineStep>
+<div class="flex min-w-0 flex-col gap-4">
+	<div class="flex flex-wrap items-center justify-between gap-2">
+		<PipelineStrip {steps} />
+		<div class="flex items-center gap-3 text-xs">
+			<a href={`/admin/posts/${post.id}`} class="font-medium underline-offset-4 hover:underline">Post page</a>
+			<a href={post.url} target="_blank" rel="noopener noreferrer" class="text-muted-foreground inline-flex items-center gap-1 hover:underline">
+				Original <ExternalLink class="size-3" />
+			</a>
 		</div>
 	</div>
 
-	<PipelineStep
-		step={3}
-		title="Claims (agent A) and their parts (agent B)"
-		note={post.statements.length
-			? `${post.statements.length} claim${post.statements.length === 1 ? '' : 's'} · ${readByB} read by agent B`
-			: undefined}>
-		{#if post.skipReason && !post.statements.length}
-			<p class="text-muted-foreground m-0 text-sm">None: the gate skipped it.</p>
-		{:else if !post.analysedAt}
-			<p class="text-muted-foreground m-0 text-sm">Not read by agent A yet.</p>
+	<!-- Who posted it, where, when, and its figures -->
+	<p class="text-muted-foreground m-0 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs">
+		<span class="text-ink font-semibold">{PLATFORM_LABELS[post.platform] ?? post.platform}</span>
+		{#if post.account}
+			<a href={`/admin/creators/${post.account.creator.id}`} class="text-ink underline-offset-4 hover:underline">{authorLabel(post.platform, post.author)}</a>
 		{:else}
-			<DigestedClaims statements={post.statements} {texts} {aboutOf} />
+			<span class="text-ink">{authorLabel(post.platform, post.author)}</span>
 		{/if}
-	</PipelineStep>
+		{#if post.authorFans}<span class="inline-flex items-center gap-1 tabular-nums" title="followers"><Users class="size-3.5" />{compact(post.authorFans)}</span>{/if}
+		{#if post.account?.brand}
+			<span class="inline-flex items-center gap-1" title="The brand's own account: not word of mouth">
+				<Store class="size-3.5" />own account of
+				<a href={`/admin/brands/${post.account.brand.id}`} class="text-ink font-medium underline-offset-4 hover:underline">{post.account.brand.name}</a>
+			</span>
+		{/if}
+		<span class="inline-flex items-center gap-1"><MapPin class="size-3.5" />{post.city.name}</span>
+		<span class="inline-flex items-center gap-1"><Calendar class="size-3.5" />{atShort(post.postedAt)}</span>
+		{#each STATS as stat (stat.label)}
+			<span class="inline-flex items-center gap-1 tabular-nums" title={stat.label}><stat.icon class="size-3.5" />{compact(stat.n)}</span>
+		{/each}
+		{#if post.isAd}<Badge variant="warning">ad</Badge>{/if}
+		{#if post.isPromotional}<span title="Paid, gifted or invited, as agent A read it"><Badge variant="warning">promotional</Badge></span>{/if}
+	</p>
+
+	<div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+		<!-- What was scraped -->
+		<div class="flex min-w-0 flex-col gap-3">
+			<SourceText label={isBlog ? 'Article' : 'Caption'} text={post.text} {quotes} note={post.text ? `${post.text.length.toLocaleString('en-GB')} chars` : undefined} />
+			{#if !isBlog}
+				<SourceText label="Transcript" text={post.subtitles} {quotes} note={post.subtitlesLanguage} />
+			{/if}
+			{#if post.locationName || post.taggedHandles?.length || hashtags.length}
+				<div class="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+					{#if post.locationName}
+						<span class="inline-flex items-center gap-1" title="The place the creator tagged"><MapPin class="size-3.5" /><span class="text-ink">{post.locationName}</span></span>
+					{/if}
+					{#each post.taggedHandles ?? [] as handle (handle)}
+						<span class="inline-flex items-center gap-0.5" title="Tagged"><AtSign class="size-3" />{handle}</span>
+					{/each}
+					{#each shownTags as link (link.hashtag.id)}
+						<span class="inline-flex items-center"
+							><Hash class="size-3" />{link.hashtag.tag}{#if link.hashtag.topic}<span class="text-beet">&nbsp;→ {link.hashtag.topic.label}</span>{/if}{#if link.hashtag.brand}<span class="text-beet">&nbsp;→ {link.hashtag.brand.name}</span>{/if}</span>
+					{/each}
+					{#if hashtags.length > shownTags.length}
+						<button type="button" class="text-beet" onclick={() => (allTags = true)}>+{hashtags.length - shownTags.length} more</button>
+					{/if}
+				</div>
+			{/if}
+		</div>
+
+		<!-- What it says, place by place -->
+		<div class="flex min-w-0 flex-col gap-4">
+			{#if post.skipReason}
+				<p class="ink-strip m-0 text-sm">
+					Skipped by the gate: {SKIP_REASON_LABELS[post.skipReason] ?? post.skipReason}. No places or claims taken from it.
+				</p>
+			{:else if !post.analysedAt}
+				<p class="text-muted-foreground m-0 text-sm">Not read by agent A yet.</p>
+			{:else if !post.mentions.length && !post.statements.length}
+				<p class="text-muted-foreground m-0 text-sm">Agent A found no food or drink place and no claim in it.</p>
+			{/if}
+
+			{#each post.mentions as mention (mention.id)}
+				{@const claims = aboutPlace(mention.id)}
+				{@const facts = [mention.locationHint, mention.cuisine, mention.city].filter(Boolean)}
+				<section class="flex min-w-0 flex-col gap-1.5">
+					<header class="flex flex-col gap-0.5">
+						<div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+							<Store class="text-muted-foreground size-4 shrink-0" />
+							<span class="text-sm font-semibold">{mention.venueName}</span>
+							<span title={[mention.matchScore != null ? `score ${mention.matchScore.toFixed(2)}` : '', mention.matchNote ?? ''].filter(Boolean).join(' · ') || undefined}>
+								<Badge variant={matchMethodVariant(mention.matchMethod)}>
+									{mention.matchMethod ? (MATCH_METHOD_LABELS[mention.matchMethod] ?? mention.matchMethod) : 'not matched yet'}
+								</Badge>
+							</span>
+							{#if mention.brand}
+								<span class="text-sm">
+									<a href={`/admin/brands/${mention.brand.id}`} class="font-medium underline-offset-4 hover:underline">{mention.brand.name}</a>
+									{#if mention.venue}
+										<span class="text-faint">›</span>
+										<a href={`/admin/venues/${mention.venue.id}`} class="underline-offset-4 hover:underline">
+											{mention.venue.name}{mention.venue.district ? ` (${mention.venue.district})` : ''}
+										</a>
+									{:else}
+										<span class="text-muted-foreground text-xs">no branch named</span>
+									{/if}
+								</span>
+							{/if}
+							{#if !mention.visited}<Badge variant="quiet">not visited</Badge>{/if}
+							{#if mention.isNewOpening}<Badge variant="warning">new opening</Badge>{/if}
+							{#if mention.unconfirmedAt}<Badge variant="warning">unconfirmed</Badge>{/if}
+						</div>
+						{#if facts.length || mention.matchNote}
+							<p class="text-muted-foreground m-0 pl-6 text-xs">
+								{facts.join(' · ')}{#if mention.matchNote}{facts.length ? ' · ' : ''}<span class="italic">{mention.matchNote}</span>{/if}
+							</p>
+						{/if}
+					</header>
+					<div class="pl-6">
+						{#if claims.length}
+							<DigestedClaims statements={claims} {texts} />
+						{:else}
+							<p class="text-faint m-0 text-xs">No claim about it.</p>
+						{/if}
+					</div>
+				</section>
+			{/each}
+
+			{#each OTHER_GROUPS as group (group.key)}
+				<section class="flex min-w-0 flex-col gap-1.5">
+					<header class="flex items-center gap-2">
+						<group.icon class="text-muted-foreground size-4 shrink-0" />
+						<span class="text-sm font-semibold">{group.label}</span>
+						<span class="text-muted-foreground text-xs">{plural(group.statements.length, 'claim')}</span>
+					</header>
+					<div class="pl-6"><DigestedClaims statements={group.statements} {texts} /></div>
+				</section>
+			{/each}
+		</div>
+	</div>
 </div>

@@ -1,11 +1,13 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, ServiceUnavailableException } from '@nestjs/common';
 
 import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { EmbeddingsService } from 'src/modules/embeddings/services/embeddings.service.js';
+import { accountErrorReason, errorChain } from 'src/modules/llm/util/provider-errors.js';
+import { isFatalProviderError } from 'src/shared/util/pool.js';
 import { toVectorLiteral } from 'src/shared/util/vector.js';
 
 import {
@@ -96,7 +98,11 @@ export class StatementEmbeddingService implements OnModuleInit {
 		return { embedded, tokens };
 	}
 
-	/** The vector of a search phrase, at the claims' dimensions; the newest phrases are kept in memory */
+	/**
+	 * The vector of a search phrase, at the claims' dimensions; the newest phrases are kept in
+	 * memory. OpenAI refusing the account (no credits, a wrong key) answers 503 saying so: the
+	 * page shows why "Similar to" is off rather than a bare 500.
+	 */
 	async phraseVector(phrase: string): Promise<number[]> {
 		const key = phrase.trim().toLowerCase();
 		const cached = this.phrases.get(key);
@@ -105,9 +111,14 @@ export class StatementEmbeddingService implements OnModuleInit {
 			this.phrases.set(key, cached);
 			return cached;
 		}
-		const { embeddings } = await this.embeddingsService.embedManyUncached([phrase.trim()], {
-			dimensions: STATEMENT_EMBEDDING_DIMENSIONS,
-		});
+		const { embeddings } = await this.embeddingsService
+			.embedManyUncached([phrase.trim()], { dimensions: STATEMENT_EMBEDDING_DIMENSIONS })
+			.catch((error: unknown) => {
+				if (!errorChain(error).some(e => isFatalProviderError(e))) throw error;
+				throw new ServiceUnavailableException(
+					`Search by meaning is unavailable: ${accountErrorReason(error)}`,
+				);
+			});
 		this.phrases.set(key, embeddings[0]);
 		if (this.phrases.size > PHRASE_CACHE)
 			this.phrases.delete(this.phrases.keys().next().value!);

@@ -1,32 +1,55 @@
-import type { LlmModelId } from 'src/modules/llm/constants/llm-models.constant.js';
+import type { LlmModelChoice, LlmModelId } from 'src/modules/llm/constants/llm-models.constant.js';
 import {
 	nameSimilarity,
 	namesSameHead,
 	normalizeVenueName,
 } from 'src/modules/venues/util/venue-names.js';
 
-import type {
-	PostClaimsAgent,
-	PostClaimsAnswer,
-	PostClaimsContext,
-	PostClaimsReading,
-} from '../agents/post-claims.agent.js';
+import type { PostClaimsAnswer } from '../agents/post-claims.agent.js';
 
 import { type PostClaimsSource, postClaimsPlan } from './post-claims-input.js';
 
 /** Names at least this alike are one place when the parts of a long post are merged */
 const SAME_PLACE_SIMILARITY = 0.85;
 
-/** A post as agent A read it, in one call or in parts: what `MentionExtractionService` and the eval store */
-export interface PostClaimsRead {
-	object: PostClaimsReading;
-	usage: { totalTokens: number };
-	/** The model of the first call (every call runs on the same tier) */
+type Place = PostClaimsAnswer['places'][number];
+
+/** A claim of a post's answer: agent A's, or the one-call reader's with B's parts beside it */
+type AnswerClaim = PostClaimsAnswer['claims'][number];
+
+/** One answer for a post (or a part of one): its places and claims, each claim naming its place */
+interface PostAnswer<C extends AnswerClaim> {
+	isPromotional: boolean;
+	places: Place[];
+	claims: C[];
+}
+
+/** An answer as the pipeline stores it: each claim's place by its index in places */
+export type PostReadingOf<C extends AnswerClaim = AnswerClaim> = Omit<PostAnswer<C>, 'claims'> & {
+	claims: (Omit<C, 'place'> & { place: number | null })[];
+};
+
+/** A post as a reader read it, in one call or in parts: what `MentionExtractionService` and the eval store */
+export interface PostClaimsRead<C extends AnswerClaim = AnswerClaim> {
+	object: PostReadingOf<C>;
+	usage: { totalTokens: number; cachedInputTokens: number };
+	/** The model of the first call (every call runs on the same choice) */
 	model: LlmModelId;
 	calls: number;
 }
 
-type Place = PostClaimsAnswer['places'][number];
+/** What reads a post: agent A (`PostClaimsAgent`) or the one-call reader (`PostReaderAgent`) */
+export interface PostClaimsReader<C extends AnswerClaim, Context> {
+	generate(
+		input: string,
+		context: Context,
+		options?: { model?: LlmModelChoice },
+	): Promise<{
+		object: PostAnswer<C>;
+		usage?: { totalTokens?: number; cachedInputTokens?: number };
+		model: LlmModelId;
+	}>;
+}
 
 /**
  * Where a name is in a list of places: the same name, one heading the other (`namesSameHead`), or
@@ -51,14 +74,17 @@ export const placeIndex = (places: Pick<Place, 'venueName'>[], name: string): nu
 };
 
 /** A claim's place named → its index in `places`; a name on no place is no place */
-const claimsOn = (claims: PostClaimsAnswer['claims'], places: Pick<Place, 'venueName'>[]) =>
+const claimsOn = <C extends AnswerClaim>(
+	claims: C[],
+	places: Pick<Place, 'venueName'>[],
+): PostReadingOf<C>['claims'] =>
 	claims.map(c => {
 		const i = c.subject === 'place' && c.place ? placeIndex(places, c.place) : -1;
 		return { ...c, place: i >= 0 ? i : null };
 	});
 
 /** One answer as the pipeline stores it: each claim's place by its index */
-export const resolvePlaces = (answer: PostClaimsAnswer): PostClaimsReading => ({
+export const resolvePlaces = <C extends AnswerClaim>(answer: PostAnswer<C>): PostReadingOf<C> => ({
 	...answer,
 	claims: claimsOn(answer.claims, answer.places),
 });
@@ -70,12 +96,12 @@ export const resolvePlaces = (answer: PostClaimsAnswer): PostClaimsReading => ({
  * opening (it read the whole text; every part re-lists every place, so a part's call would be one
  * more chance of a false one), as the post keeps it on whether it is promotional.
  */
-export const mergePostParts = (
-	first: PostClaimsAnswer,
-	parts: PostClaimsAnswer[],
-): PostClaimsReading => {
+export const mergePostParts = <C extends AnswerClaim>(
+	first: PostAnswer<AnswerClaim>,
+	parts: PostAnswer<C>[],
+): PostReadingOf<C> => {
 	const places: Place[] = first.places.map(p => ({ ...p }));
-	const claims: PostClaimsReading['claims'] = [];
+	const claims: PostReadingOf<C>['claims'] = [];
 	for (const part of parts) {
 		for (const p of part.places) {
 			const i = placeIndex(places, p.venueName);
@@ -98,31 +124,40 @@ export const mergePostParts = (
 };
 
 /**
- * Agent A on one post or article: one call for a short one; for a long one (`postClaimsPlan`) its
+ * A reader on one post or article: one call for a short one; for a long one (`postClaimsPlan`) its
  * places first, then its parts side by side with that list, merged (`mergePostParts`). The one
- * way a post is read, in production and in the eval.
+ * way a post is read, in production and in the eval, by agent A or by the one-call reader (which
+ * takes the city in the message, `cityName`, and may be put on a model, `model`).
  */
-export const readPostClaims = async (
-	agent: Pick<PostClaimsAgent, 'generate'>,
+export const readPostClaims = async <C extends AnswerClaim, Context>(
+	agent: PostClaimsReader<C, Context>,
 	source: PostClaimsSource,
-	context: PostClaimsContext,
-): Promise<PostClaimsRead> => {
-	const plan = postClaimsPlan(source);
+	context: Context,
+	opts: { cityName?: string; model?: LlmModelChoice } = {},
+): Promise<PostClaimsRead<C>> => {
+	const plan = postClaimsPlan(source, opts.cityName);
+	const options = opts.model ? { model: opts.model } : undefined;
 	// Promotional is about someone else paid or invited by a venue: a venue's own post never is
-	const own = (reading: PostClaimsReading): PostClaimsReading =>
+	const own = (reading: PostReadingOf<C>): PostReadingOf<C> =>
 		source.ownBrand ? { ...reading, isPromotional: false } : reading;
+	const usageOf = (answers: { usage?: { totalTokens?: number; cachedInputTokens?: number } }[]) => ({
+		totalTokens: answers.reduce((n, a) => n + (a.usage?.totalTokens ?? 0), 0),
+		cachedInputTokens: answers.reduce((n, a) => n + (a.usage?.cachedInputTokens ?? 0), 0),
+	});
 	if ('single' in plan) {
-		const res = await agent.generate(plan.single, context);
+		const res = await agent.generate(plan.single, context, options);
 		return {
 			object: own(resolvePlaces(res.object)),
-			usage: { totalTokens: res.usage?.totalTokens ?? 0 },
+			usage: usageOf([res]),
 			model: res.model,
 			calls: 1,
 		};
 	}
-	const first = await agent.generate(plan.places, context);
+	const first = await agent.generate(plan.places, context, options);
 	const answers = await Promise.all(
-		plan.parts(first.object.places.map(p => p.venueName)).map(m => agent.generate(m, context)),
+		plan
+			.parts(first.object.places.map(p => p.venueName))
+			.map(m => agent.generate(m, context, options)),
 	);
 	return {
 		object: own(
@@ -131,9 +166,7 @@ export const readPostClaims = async (
 				answers.map(a => a.object),
 			),
 		),
-		usage: {
-			totalTokens: [first, ...answers].reduce((n, a) => n + (a.usage?.totalTokens ?? 0), 0),
-		},
+		usage: usageOf([first, ...answers]),
 		model: first.model,
 		calls: 1 + answers.length,
 	};
