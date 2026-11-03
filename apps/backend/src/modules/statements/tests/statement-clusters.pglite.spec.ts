@@ -182,6 +182,7 @@ describe('statement clusters (pglite)', () => {
 	beforeEach(() => {
 		agent.generate.mockClear();
 		answer = {
+			isAspect: true,
 			label: 'Music volume',
 			hint: 'How loud the music is, not which music',
 			root: 'vibe',
@@ -276,6 +277,7 @@ describe('statement clusters (pglite)', () => {
 
 	it('takes a quarter, keeps an existing aspect it fits, and drops a root it was never given', async () => {
 		answer = {
+			isAspect: true,
 			label: 'Loud music in the bars tonight',
 			hint: 'Loudness',
 			root: 'nonsense',
@@ -304,7 +306,7 @@ describe('statement clusters (pglite)', () => {
 		});
 		expect([unnamed.clusters[0].label, unnamed.clusters[0].claims]).toEqual([undefined, 5]);
 
-		answer = { label: 'Music volume', hint: '-', root: 'vibe', fits: null };
+		answer = { isAspect: true, label: 'Music volume', hint: '-', root: 'vibe', fits: null };
 		const named = await controller.getStatementClusters({ cityId: city.id, month: '2026-10' });
 		expect(named.clusters[0].label).toBe('Music volume');
 		expect(agent.generate).toHaveBeenCalledTimes(2);

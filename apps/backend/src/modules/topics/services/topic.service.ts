@@ -104,6 +104,9 @@ export class TopicService {
 	 */
 	async create(
 		input: TopicInput & { label: string; kind: TopicKindEnum; key?: string; discovered?: boolean },
+		// A caller creating several in a row (topic discovery) re-links once itself, after its own writes:
+		// a re-link running between them rewrites the same wordings' links in another unit of work
+		opts: { relink?: boolean } = {},
 	): Promise<Topic> {
 		const raw = input.key ?? input.label;
 		const key =
@@ -130,7 +133,7 @@ export class TopicService {
 		await this.apply(topic, input);
 		this.em.persist(topic);
 		await this.em.flush();
-		await this.queueRelink();
+		if (opts.relink !== false) await this.queueRelink();
 		return topic;
 	}
 

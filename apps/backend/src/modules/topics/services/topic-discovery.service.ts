@@ -123,9 +123,16 @@ export class TopicDiscoveryService implements OnModuleInit {
 	 * Groups up to `limit` candidate wordings (most used first) and applies the groups: an existing
 	 * topic links its wordings; a new one is created under its parent when its wordings reach the
 	 * floors, then linked. Every wording whose call was answered is stamped `groupedAt` (a failed
-	 * call's are sent again next time). Flushes.
+	 * call's are sent again next time). Flushes, then queues one re-link when it created topics (never
+	 * one per topic: a re-link running beside the batch's writes rewrites the same wordings' links).
 	 */
-	async discover(opts: { limit: number; now?: Date; model?: LlmModelChoice }): Promise<DiscoveryResult> {
+	async discover(opts: {
+		limit: number;
+		now?: Date;
+		model?: LlmModelChoice;
+		/** `queue` (default): one re-link job once this batch is saved; `caller`: the caller re-links */
+		relink?: 'queue' | 'caller';
+	}): Promise<DiscoveryResult> {
 		const now = opts.now ?? new Date();
 		const rows: Candidate[] = await this.em
 			.getConnection()
@@ -207,6 +214,9 @@ export class TopicDiscoveryService implements OnModuleInit {
 		for (const term of grouped) term.groupedAt = now;
 		result.looked = grouped.length;
 		await this.em.flush();
+		// One re-link for the batch, after its writes: one per topic would run beside them on the same wordings
+		if (result.created.length && (opts.relink ?? 'queue') === 'queue')
+			await this.topicService.queueRelink();
 		return result;
 	}
 
@@ -237,12 +247,15 @@ export class TopicDiscoveryService implements OnModuleInit {
 			return null;
 		}
 		try {
-			const topic = await this.topicService.create({
-				label,
-				kind: group.kind as TopicKindEnum,
-				parentKey: food(group.parent),
-				discovered: true,
-			});
+			const topic = await this.topicService.create(
+				{
+					label,
+					kind: group.kind as TopicKindEnum,
+					parentKey: food(group.parent),
+					discovered: true,
+				},
+				{ relink: false },
+			);
 			result.created.push(topic.label);
 			return topic.key;
 		} catch (e) {

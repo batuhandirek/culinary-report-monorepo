@@ -54,8 +54,9 @@ export const isAnthropicAccountError = (error: unknown): boolean =>
  * credit is one). Any other error is rethrown as is. When no model is left, the last provider's
  * error is thrown, which `isFatalProviderError` matches.
  *
- * A disabled provider is left out, and so are the paid models (Claude) except inside `llmPaid`:
- * production never pays, only work the user starts by hand does. State is in memory, as the
+ * A disabled provider is left out, and so are the paid models (Claude) except inside `llmPaid`
+ * or for an agent with `paidFallback`: production never pays, except for the few small agents the
+ * user allowed, and work the user starts by hand. State is in memory, as the
  * OpenAI blocks are. Built by a factory in `LLMModule` from `llmConfig`.
  */
 export class LlmModelsService implements OnApplicationBootstrap {
@@ -106,12 +107,17 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		return this.agentModels[agentId] ?? own;
 	}
 
-	/** Runs `fn` on the first model of `choice` that can serve it; says which one did */
+	/**
+	 * Runs `fn` on the first model of `choice` that can serve it; says which one did. `paidFallback`
+	 * (an agent's `BaseMastraAgentConfig.paidFallback`) lets the choice's Claude models serve
+	 * outside `llmPaid` too, behind its free ones.
+	 */
 	async run<T>(
 		choice: LlmModelChoice,
 		fn: (model: LlmModelKey) => Promise<T>,
+		opts: { paidFallback?: boolean } = {},
 	): Promise<{ result: T; model: LlmModelId }> {
-		const freeOnly = !isLlmPaid();
+		const freeOnly = !isLlmPaid() && !opts.paidFallback;
 		const models = modelsFor(choice).filter(
 			model => !this.disabled[providerOf(model)] && !(freeOnly && isPaidModel(model)),
 		);

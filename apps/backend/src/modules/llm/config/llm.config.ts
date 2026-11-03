@@ -3,6 +3,7 @@ import {
 	ArrayNotEmpty,
 	IsArray,
 	IsBoolean,
+	IsIn,
 	IsNotEmpty,
 	IsNumber,
 	IsOptional,
@@ -103,6 +104,15 @@ export class LLMConfig {
 	@IsOptional()
 	@Transform(v => Number(v.value))
 	public TOPICS_CLAUDE_PASS_USD: number = 0;
+
+	/**
+	 * One-off: when set, the boot queues aspect discovery (`AspectDiscoveryService`, free: mini on
+	 * the allowance) for every active city. `dry` names the groups and logs what it would create;
+	 * `run` creates the aspects and has agent B read their claims again. Set for one boot, then removed.
+	 */
+	@IsIn(['off', 'dry', 'run'])
+	@IsOptional()
+	public ASPECT_DISCOVERY_ON_BOOT: 'off' | 'dry' | 'run' = 'off';
 
 	@IsBoolean()
 	@IsOptional()

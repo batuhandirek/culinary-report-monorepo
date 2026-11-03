@@ -19,6 +19,7 @@ import {
 	TopicDiscoveryAgent,
 } from '../agents/topic-discovery.agent.js';
 import { Term } from '../entities/term.entity.js';
+import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
 import { TermTopic } from '../entities/term-topic.entity.js';
 import { Topic } from '../entities/topic.entity.js';
 import { TermService } from '../services/term.service.js';
@@ -202,7 +203,9 @@ describe('TopicDiscoveryService (pglite)', () => {
 			['burgers', 'same'],
 		]);
 		expect((await em().findOneOrFail(Term, { name: 'smash burger' })).decidedBy).toBe('admin');
-		expect(pgBoss.sendJob).toHaveBeenCalled();
+		// One re-link for the batch, queued after its writes (none per topic: it would run beside them)
+		expect(pgBoss.sendJob).toHaveBeenCalledTimes(1);
+		expect(pgBoss.sendJob).toHaveBeenCalledWith(TopicRelinkJob.jobName, expect.anything(), expect.anything());
 		// Stamped: a candidate again only once REGROUP_DAYS have passed (the data grows)
 		expect(await service().countCandidates()).toBe(0);
 		expect(

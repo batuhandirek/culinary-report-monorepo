@@ -63,6 +63,12 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	 * is new every call: a cache write there is never read.
 	 */
 	cacheConversation?: boolean;
+	/**
+	 * May move to its tier's Claude model when the free one is out, outside `llmPaid` too: only for
+	 * small agents the user allowed by name (2026-11-03: `aspect-suggestion`, `claim-group-title`,
+	 * a few dozen short calls when an admin opens a page or a run names its groups), never a bulk one.
+	 */
+	paidFallback?: boolean;
 }
 
 /** Claude's prompt cache, 5 minutes from each use (a read restarts it) */
@@ -191,7 +197,9 @@ export abstract class BaseMastraAgent<
 
 		const start = Date.now();
 		try {
-			const { result: res, model } = await this.llmModels.run(choice, callWith);
+			const { result: res, model } = await this.llmModels.run(choice, callWith, {
+				paidFallback: this.config.paidFallback,
+			});
 			if (llmConfig.IS_LLM_VERBOSE || this.config.verbose) {
 				const usage = res.totalUsage ?? res.usage;
 				this.logger.debug(

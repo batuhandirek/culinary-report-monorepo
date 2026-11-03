@@ -1,13 +1,16 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import _ from 'lodash';
 
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
+import { runPool } from 'src/shared/util/pool.js';
 import { toVectorLiteral } from 'src/shared/util/vector.js';
+
+import { ClaimGroupTitleAgent } from '../agents/claim-group-title.agent.js';
 
 import {
 	CLUSTER_DIMENSIONS,
@@ -195,6 +198,8 @@ export interface InsightGroupClaim {
 
 /** Claims of the view that say one thing, grouped by meaning */
 export interface InsightGroup {
+	/** What they say, six words at most (`ClaimGroupTitleAgent`); absent when the call failed */
+	title?: string;
 	claims: number;
 	sources: number;
 	praise: number;
@@ -227,6 +232,11 @@ export interface InsightTermHit {
 export const INSIGHT_GROUP_FLOORS = { threshold: 0.82, minClaims: 3, minSources: 2, minBrands: 1 };
 export const INSIGHT_GROUPS = 12;
 const INSIGHT_GROUP_SAMPLES = 3;
+/** Claims the title agent reads of a group: the samples, then others */
+const TITLE_CLAIMS = 8;
+const TITLE_CONCURRENCY = 6;
+/** Titles kept in memory, by a group's sample claims */
+const TITLE_CACHE_SIZE = 500;
 
 const CHANNEL_LABELS: Record<string, string> = {
 	google_review: 'Google reviews',
@@ -282,10 +292,14 @@ const parseVector = (text: string): number[] => text.slice(1, -1).split(',').map
  */
 @Injectable()
 export class StatementInsightService {
+	private readonly logger = new Logger(StatementInsightService.name);
+	private readonly titles = new Map<string, string>();
+
 	constructor(
 		private readonly em: EntityManager,
 		private readonly topicService: TopicService,
 		private readonly statementEmbeddingService: StatementEmbeddingService,
+		private readonly claimGroupTitleAgent: ClaimGroupTitleAgent,
 	) {}
 
 	/** Every topic the scope's claims are about, each with its descendants' sources folded in (a source once per topic) */
@@ -835,7 +849,8 @@ export class StatementInsightService {
 		const found = clusterClaims(items, INSIGHT_GROUP_FLOORS);
 		const sourcesOf = (list: typeof items, side: string) =>
 			new Set(list.filter(i => i.side === side).map(i => i.source)).size;
-		const groups = found.slice(0, INSIGHT_GROUPS).map(cluster => {
+		const listed = found.slice(0, INSIGHT_GROUPS);
+		const groups: InsightGroup[] = listed.map(cluster => {
 			const samples = diverseSamples(
 				cluster.items,
 				INSIGHT_GROUP_SAMPLES,
@@ -855,12 +870,49 @@ export class StatementInsightService {
 				like: samples[0].text,
 			};
 		});
+		await this.title(groups, listed);
 		return {
 			...counts,
 			considered: items.length,
 			groups,
 			more: Math.max(0, found.length - groups.length),
 		};
+	}
+
+	/**
+	 * One title call per group, side by side, kept in memory by the group's samples (a view worked
+	 * out again asks nothing); a group whose call failed shows without a title.
+	 */
+	private async title(groups: InsightGroup[], clusters: { items: { id: number; text: string }[] }[]): Promise<void> {
+		const todo: number[] = [];
+		groups.forEach((group, i) => {
+			const cached = this.titles.get(titleKey(group));
+			if (cached) group.title = cached;
+			else todo.push(i);
+		});
+		try {
+			await runPool(
+				todo,
+				TITLE_CONCURRENCY,
+				async i => {
+					const ids = new Set(groups[i].samples.map(s => s.id));
+					const claims = [
+						...groups[i].samples.map(s => s.text),
+						...clusters[i].items.filter(item => !ids.has(item.id)).map(item => item.text),
+					].slice(0, TITLE_CLAIMS);
+					const res = await this.claimGroupTitleAgent.generate(JSON.stringify({ claims }));
+					const title = res.object.title.trim().replace(/[.!]+$/, '').split(/\s+/).slice(0, 6).join(' ');
+					if (!title) return;
+					groups[i].title = title;
+					this.titles.set(titleKey(groups[i]), title);
+					if (this.titles.size > TITLE_CACHE_SIZE) this.titles.delete(this.titles.keys().next().value!);
+				},
+				(i, e) => this.logger.warn(`Titling a group of ${groups[i].claims} claims failed: ${e.message}`),
+			);
+		} catch (e) {
+			// Every account out of allowance: the groups still show, untitled
+			this.logger.warn(`Titling the groups stopped: ${(e as Error).message}`);
+		}
 	}
 
 	/** Wordings whose name or key holds `q`, the most used first: what the tree's search finds besides topics */
@@ -985,3 +1037,10 @@ export class StatementInsightService {
 		return this.em.getConnection().execute<T[]>(query.text, query.params as never[]);
 	}
 }
+
+/** A group's samples as a key: the same claims say the same thing, whatever view they came from */
+const titleKey = (group: InsightGroup): string =>
+	group.samples
+		.map(s => s.id)
+		.sort((a, b) => a - b)
+		.join(',');

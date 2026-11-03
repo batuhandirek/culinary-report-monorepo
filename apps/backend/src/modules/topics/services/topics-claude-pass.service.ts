@@ -9,6 +9,7 @@ import { TopicsClaudePassJob } from '../jobs/topics-claude-pass.job.js';
 
 import { TermService } from './term.service.js';
 import { TopicDiscoveryService } from './topic-discovery.service.js';
+import { TopicRelinkService } from './topic-relink.service.js';
 
 /** Wordings a `decide` call reads: the budget is checked between batches, so a batch is what it can overshoot */
 const DECIDE_BATCH = 200;
@@ -19,8 +20,9 @@ const DISCOVER_BATCH = 600;
  * One step of the pass: decide pending wordings used `uses` times on a model, or discover topics.
  * In order of value, so a budget that runs out leaves the cheapest tail to the free backlogs: the
  * wordings that carry most counts on the model that wrote the eval's answer key, then discovery
- * over them (it groups only wordings used twice or more), then the long tail after discovery, so
- * it sees the new topics.
+ * over them (it groups only wordings used twice or more) and one re-link after it, then those
+ * wordings again (the re-link reopens a "none" decided before a topic was created: it may fit one
+ * now), then the long tail, so it sees the new topics.
  */
 export const CLAUDE_PASS_STEPS: (
 	| { kind: 'decide'; label: string; model: LlmModelId; uses: { min?: number; max?: number } }
@@ -33,6 +35,12 @@ export const CLAUDE_PASS_STEPS: (
 		uses: { min: 2 },
 	},
 	{ kind: 'discover', label: 'topic discovery', model: 'anthropic/claude-opus-5-5' },
+	{
+		kind: 'decide',
+		label: 'wordings used twice or more, reopened by the new topics',
+		model: 'anthropic/claude-opus-5-5',
+		uses: { min: 2 },
+	},
 	{
 		kind: 'decide',
 		label: 'wordings used once',
@@ -65,6 +73,7 @@ export class TopicsClaudePassService implements OnApplicationBootstrap {
 	constructor(
 		private readonly termService: TermService,
 		private readonly topicDiscoveryService: TopicDiscoveryService,
+		private readonly topicRelinkService: TopicRelinkService,
 		private readonly pgBossService: PgBossService,
 	) {}
 
@@ -109,9 +118,11 @@ export class TopicsClaudePassService implements OnApplicationBootstrap {
 						// Nothing pending, or a batch that settled nothing (every call failed): next step
 						if (!res.looked) break;
 					} else {
+						// The pass re-links once after the step, never beside its writes
 						const res = await this.topicDiscoveryService.discover({
 							limit: DISCOVER_BATCH,
 							model: step.model,
+							relink: 'caller',
 						});
 						spent += res.usd;
 						looked += res.looked;
@@ -123,6 +134,9 @@ export class TopicsClaudePassService implements OnApplicationBootstrap {
 						`${step.label} on ${step.model}: ${looked} read, ${linked} linked, $${spent.toFixed(2)} of $${budgetUsd} spent`,
 					);
 				}
+				// The new topics reach every link (terms first: an agent "none" a new topic may fit is reopened)
+				if (step.kind === 'discover' && created.length)
+					this.logger.log(`Re-linked after discovery: ${JSON.stringify(await this.topicRelinkService.relinkAll())}`);
 				this.logger.warn(
 					`Done: ${step.label} on ${step.model}: ${looked} read, ${linked} linked` +
 						(step.kind === 'discover' ? `, ${created.length} topics created (${created.join(', ')})` : '') +

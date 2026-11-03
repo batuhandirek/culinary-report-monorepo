@@ -28,6 +28,7 @@ import {
 	type ClusterItem,
 	diverseSamples,
 } from '../util/cluster.js';
+import { claimsOfCitySql, LOOSE_CLAIM_SQL } from '../util/loose-claims-sql.js';
 
 /** Whose claims to cluster: a city's month or quarter, all aspect-less and root-filed claims or one root's (`none`: no aspect) */
 export interface ClusterScope {
@@ -180,21 +181,8 @@ export class StatementClusterService {
 		const rootSql =
 			root === 'none' ? 'and a.id is null'
 			: root ? 'and a.key = ?'
-			: 'and (a.id is null or a.parent_id is null)';
-		// A claim has one aspect part at most; a root has no parent. A post by a brand's own account
-		// is out: its claims about that brand, and its claims about the city or nothing
-		const from = `from statements s
-			left join reviews r on r.id = s.review_id
-			left join venues rv on rv.id = r.venue_id
-			left join brands rb on rb.id = rv.brand_id
-			left join mentions m on m.id = s.mention_id
-			left join brands mb on mb.id = m.brand_id
-			left join social_posts po on po.id = s.post_id
-			left join statement_parts ap on ap.statement_id = s.id and ap.role = 'aspect'
-			left join topics a on a.id = ap.topic_id
-			where s.city_id = ? and s.month in (${monthList}) and s.text is not null ${rootSql}
-				and not exists (select 1 from social_accounts own_account where own_account.id = po.account_id
-					and own_account.brand_id is not null and (s.mention_id is null or own_account.brand_id = m.brand_id))`;
+			: `and ${LOOSE_CLAIM_SQL}`;
+		const from = claimsOfCitySql(`and s.month in (${monthList}) ${rootSql}`);
 		const params = [cityId, ...months, ...(root && root !== 'none' ? [root] : [])];
 		const conn = this.em.getConnection();
 		const [counts]: { claims: number; notEmbedded: number }[] = await conn.execute(

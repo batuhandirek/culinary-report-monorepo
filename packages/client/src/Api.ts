@@ -2094,6 +2094,8 @@ export interface AdminExploreGroupOutputDto {
 		text: string;
 	}[];
 	sources: number;
+	/** What the group says, six words at most; absent when it could not be titled */
+	title?: string;
 }
 
 export enum AdminExploreGroupOutputDtoSentimentEnum {

@@ -12,16 +12,19 @@ import { LLMModule } from '../llm/llm.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 
 import { AspectSuggestionAgent } from './agents/aspect-suggestion.agent.js';
+import { ClaimGroupTitleAgent } from './agents/claim-group-title.agent.js';
 import { ClaimPartsAgent } from './agents/claim-parts.agent.js';
 import { AdminExploreController } from './controllers/admin.explore.controller.js';
 import { AdminStatementsController } from './controllers/admin.statements.controller.js';
 import { Statement } from './entities/statement.entity.js';
 import { StatementPart } from './entities/statement-part.entity.js';
+import { AspectDiscoveryService } from './services/aspect-discovery.service.js';
 import { StatementService } from './services/statement.service.js';
 import { StatementClusterService } from './services/statement-cluster.service.js';
 import { StatementEmbeddingService } from './services/statement-embedding.service.js';
 import { StatementInsightService } from './services/statement-insight.service.js';
 import { StatementPartsService } from './services/statement-parts.service.js';
+import { AspectDiscoveryWorker } from './workers/aspect-discovery.worker.js';
 
 /**
  * What posts, articles and reviews say, one claim per row (`Statement`), and what each is about
@@ -48,8 +51,11 @@ import { StatementPartsService } from './services/statement-parts.service.js';
 		StatementEmbeddingService,
 		StatementClusterService,
 		StatementInsightService,
+		AspectDiscoveryService,
+		AspectDiscoveryWorker,
 		ClaimPartsAgent,
 		AspectSuggestionAgent,
+		ClaimGroupTitleAgent,
 	],
 	exports: [StatementService, StatementPartsService],
 })

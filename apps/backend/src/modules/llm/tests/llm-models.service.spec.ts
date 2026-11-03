@@ -159,6 +159,31 @@ describe('LlmModelsService', () => {
 		);
 	});
 
+	it("moves an agent with paidFallback to its tier's Claude model outside llmPaid", async () => {
+		const { service } = setup();
+		const tried: string[] = [];
+		const out = await service.run(
+			'mini',
+			async model => {
+				tried.push(model.id);
+				if (model.id.startsWith('openai/')) throw openAIOut();
+				return model.id;
+			},
+			{ paidFallback: true },
+		);
+		expect(tried).toEqual([MINI, HAIKU]);
+		expect(out.model).toBe(HAIKU);
+		// Without it, the same call fails rather than paying
+		const fresh = setup().service;
+		const refused = await fresh
+			.run('mini', async model => {
+				if (model.id.startsWith('openai/')) throw openAIOut();
+				return model.id;
+			})
+			.catch((e: Error) => e);
+		expect(isFatalProviderError(refused)).toBe(true);
+	});
+
 	it('rethrows any other error without moving on', async () => {
 		const { call, service } = setup();
 		const out = await call('mini', () =>

@@ -16,6 +16,7 @@ import { TermTopicAgent } from '../agents/term-topic.agent.js';
 import { type DiscoveryInputWording, TopicDiscoveryAgent } from '../agents/topic-discovery.agent.js';
 import { TopicsClaudePassJob } from '../jobs/topics-claude-pass.job.js';
 import { Term } from '../entities/term.entity.js';
+import { Topic } from '../entities/topic.entity.js';
 import { TermService } from '../services/term.service.js';
 import { TopicService } from '../services/topic.service.js';
 import { TopicDiscoveryService } from '../services/topic-discovery.service.js';
@@ -37,13 +38,19 @@ describe('TopicsClaudePassService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let venue: Venue;
 	const calls: string[] = [];
+	/** The topics agent C answers per wording (none for the rest), and discovery's groups for a call */
+	let answers: Record<string, string[]> = {};
+	let groups: (wordings: DiscoveryInputWording[]) => object[] = () => [];
 	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => 'job-id') };
 	const termAgent = {
 		generate: jest.fn(async (message: unknown, _context: unknown, options?: { model?: string }) => {
 			const name = JSON.parse((message as string).replace(/^Wording: /, '')) as string;
 			calls.push(`decide ${name} on ${options?.model} paid=${isLlmPaid()}`);
 			return {
-				object: { suggestion: null, topics: name === 'Pommes' ? [{ key: 'burgers', relation: 'kind_of' }] : [] },
+				object: {
+					suggestion: null,
+					topics: (answers[name] ?? []).map(key => ({ key, relation: 'kind_of' })),
+				},
 				usage,
 				model: options?.model ?? 'openai/gpt-5.4',
 			};
@@ -53,7 +60,7 @@ describe('TopicsClaudePassService (pglite)', () => {
 		generate: jest.fn(async (input: unknown, _context: unknown, options?: { model?: string }) => {
 			const { wordings } = JSON.parse(input as string) as { wordings: DiscoveryInputWording[] };
 			calls.push(`discover ${wordings.map(w => w.name).join(',')} on ${options?.model}`);
-			return { object: { groups: [] }, usage, model: options?.model ?? 'openai/gpt-5.4' };
+			return { object: { groups: groups(wordings) }, usage, model: options?.model ?? 'openai/gpt-5.4' };
 		}),
 	};
 	const em = () => harness.orm.em;
@@ -80,6 +87,7 @@ describe('TopicsClaudePassService (pglite)', () => {
 		term.topics.removeAll();
 		term.decidedBy = null;
 		term.decidedAt = null;
+		term.groupedAt = null;
 		await em().flush();
 	};
 
@@ -98,6 +106,8 @@ describe('TopicsClaudePassService (pglite)', () => {
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
+		// Registers agent C's re-linker, as at module init
+		harness.moduleRef.get(TermService).onModuleInit();
 		seedTopics(em(), ['burgers']);
 		venue = em().create(Venue, { city: testCity(em()), placeId: 'cp-venue', name: 'Pommes Bude' });
 		await em().flush();
@@ -113,9 +123,12 @@ describe('TopicsClaudePassService (pglite)', () => {
 		discoveryAgent.generate.mockClear();
 		pgBoss.sendJob.mockClear();
 		// Each case counts its own uses
+		answers = { Pommes: ['burgers'] };
+		groups = () => [];
 		em().clear();
 		await em().nativeDelete(Statement, {});
 		await em().nativeDelete(Review, {});
+		await em().nativeDelete(Topic, { discoveredAt: { $ne: null } });
 		await pending('Pommes', 3);
 		await pending('Ketchup', 1);
 		await pending('Currywurst-Sauce', 0);
@@ -142,6 +155,39 @@ describe('TopicsClaudePassService (pglite)', () => {
 		em().clear();
 		const left = await em().find(Term, { decidedBy: null }, { orderBy: { name: 'asc' } });
 		expect(left.map(t => t.name)).toEqual(['Currywurst-Sauce', 'Ketchup']);
+	});
+
+	it('re-links once after discovery, never beside it, then asks Opus again about the wordings a new topic reopened', async () => {
+		// "Pommes" grouped into a new topic; "Mayo", a "none" from before it, is reopened by it
+		answers = {};
+		await pending('Pommes', 15);
+		await pending('Mayo', 2);
+		groups = wordings => [
+			{
+				existing: null,
+				label: 'Fries',
+				kind: 'dish',
+				parent: null,
+				wordings: wordings.filter(w => w.name === 'Pommes').map(w => ({ id: w.id, relation: 'same' })),
+			},
+		];
+		const relinkAll = jest.spyOn(harness.moduleRef.get(TopicRelinkService), 'relinkAll');
+		await service().run(10);
+		expect(calls).toEqual([
+			'decide Pommes on anthropic/claude-opus-5-5 paid=true',
+			'decide Mayo on anthropic/claude-opus-5-5 paid=true',
+			'discover Pommes,Mayo on anthropic/claude-opus-5-5',
+			'decide Mayo on anthropic/claude-opus-5-5 paid=true',
+			'decide Ketchup on anthropic/claude-sonnet-5-5 paid=true',
+			'decide Currywurst-Sauce on anthropic/claude-haiku-5-5 paid=true',
+		]);
+		expect(relinkAll).toHaveBeenCalledTimes(1);
+		// No re-link job queued: the pass re-linked itself, after discovery's writes
+		expect(pgBoss.sendJob).not.toHaveBeenCalled();
+		em().clear();
+		const pommes = await em().findOneOrFail(Term, { name: 'Pommes' }, { populate: ['topics.topic'] });
+		expect(pommes.topics.getItems().map(l => l.topic.key)).toEqual(['fries']);
+		relinkAll.mockRestore();
 	});
 
 	describe('at boot', () => {
