@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { Download } from '@lucide/svelte';
+	import { Download, UserPlus } from '@lucide/svelte';
 	import type { AdminUserOutputDto } from 'client';
 
 	import { AdminUserOutputDtoRolesEnum, ListUsersParamsSortEnum } from 'client';
 
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import AdminListPage from '#components/admin/AdminListPage.svelte';
 	import UserChip from '#components/admin/user-chip.svelte';
+	import CreateUserDialog from '#dialogs/admin/CreateUserDialog.svelte';
 	import { api } from '#lib/api.js';
 	import type { Column, Filter, Sort } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
@@ -21,6 +23,7 @@
 	];
 	const FILTERS: Filter[] = [
 		{ key: 'q', name: 'Search', type: 'text', placeholder: 'Name, e-mail or phone…' },
+		{ key: 'isAdmin', name: 'Admins only', type: 'toggle' },
 		{ key: 'isMarkedForDeletion', name: 'Marked for deletion', type: 'toggle' }
 	];
 	const COLUMNS: Column<AdminUserOutputDto>[] = [
@@ -67,6 +70,8 @@
 
 	const filters = { sort: ListUsersParamsSortEnum.CreatedAtDesc, q: undefined };
 
+	let createOpen = $state(false);
+
 	// The export is the whole user base, not the page in view.
 	const exportAction = createAction(
 		() => api.admin.exportUsersCsv({}, { format: 'blob' }) as Promise<Blob>,
@@ -86,6 +91,7 @@
 
 <AdminListPage>
 	{#snippet actions()}
+		<Button size="sm" icon={UserPlus} onclick={() => (createOpen = true)}>New user</Button>
 		<Button
 			variant="outline"
 			size="sm"
@@ -106,3 +112,5 @@
 		columns={COLUMNS}
 		rowHref={(row) => `/admin/users/${row.id}`} />
 </AdminListPage>
+
+<CreateUserDialog bind:active={createOpen} onCreated={(user) => goto(`/admin/users/${user.id}`)} />

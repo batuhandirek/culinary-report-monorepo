@@ -1,8 +1,15 @@
 import { wrap } from '@mikro-orm/core';
 
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+	BadRequestException,
+	Injectable,
+	Logger,
+	UnprocessableEntityException,
+} from '@nestjs/common';
 
 import _ from 'lodash';
+
+import { ExceptionCodes } from 'exceptions';
 
 import { UserRepository } from 'src/modules/auth/repositories/user.repository.js';
 import { UserSessionRepository } from 'src/modules/auth/repositories/user-session.repository.js';
@@ -15,9 +22,13 @@ import {
 } from '../constants/assignable-user-roles.constant.js';
 import { type PromotionalChannel } from '../constants/promotional-channel.constant.js';
 import { UserRoleEnum } from '../constants/user-role.enum.constant.js';
+import { AdminCreateUserInputDto } from '../dto/admin-create-user.input.dto.js';
 import { UpdateMeInputDto } from '../dto/update-me.input.dto.js';
 import { User } from '../entities/user.entity.js';
 import { acceptsPromotional } from '../util/notification-consent.js';
+
+import { AccountNoticeService } from './account-notice.service.js';
+import { PasswordService } from './password.service.js';
 
 @Injectable()
 export class UserService {
@@ -27,6 +38,8 @@ export class UserService {
 		private userSessionRepository: UserSessionRepository,
 		private imageService: ImageService,
 		private notificationPreferenceService: NotificationPreferenceService,
+		private passwordService: PasswordService,
+		private accountNoticeService: AccountNoticeService,
 	) {}
 
 	public async deleteUser(user: User): Promise<void> {
@@ -111,12 +124,7 @@ export class UserService {
 		if (user.roles.includes(UserRoleEnum.SYSTEM)) {
 			throw new BadRequestException("The system account's roles cannot be changed");
 		}
-		const notAssignable = (roles as UserRoleEnum[]).filter(
-			role => !(ASSIGNABLE_USER_ROLES as readonly UserRoleEnum[]).includes(role),
-		);
-		if (notAssignable.length) {
-			throw new BadRequestException(`Not assignable from here: ${notAssignable.join(', ')}`);
-		}
+		this.assertAssignable(roles);
 
 		// `venue_owner` follows the venue memberships, not the panel: an edit here keeps it
 		const derived = user.roles.filter(role => role === UserRoleEnum.VENUE_OWNER);
@@ -129,6 +137,54 @@ export class UserService {
 		);
 
 		return user;
+	}
+
+	/**
+	 * An account made from the admin panel: e-mail and password, the e-mail taken as verified
+	 * (an admin vouches for it, and with e-mail off nothing could verify it), `user` plus the
+	 * assignable roles asked for. A taken address is 422 `USER_ALREADY_EXISTS`, as at signup.
+	 */
+	public async createUser(input: AdminCreateUserInputDto): Promise<User> {
+		this.assertAssignable(input.roles);
+		const email = input.email.toLowerCase().trim();
+		if (await this.userRepository.findOne({ email })) {
+			throw new UnprocessableEntityException({ code: ExceptionCodes.USER_ALREADY_EXISTS });
+		}
+
+		const now = new Date();
+		const user = this.userRepository.create({
+			firstName: input.firstName.trim(),
+			lastName: input.lastName.trim(),
+			email,
+			emailVerifiedAt: now,
+			hashedPassword: await this.passwordService.hashPassword(input.password),
+			passwordLastChangedAt: now,
+			roles: _.uniq([UserRoleEnum.USER, ...input.roles]),
+		});
+		await this.userRepository.getEntityManager().flush();
+		return user;
+	}
+
+	/**
+	 * An admin sets an account's password, with no old password asked (the way in when an
+	 * account has none, or its owner can't reset it with e-mail off). The account is signed
+	 * out everywhere, except the session doing it when an admin sets their own.
+	 */
+	public async setPassword(user: User, password: string, actingSessionId: string): Promise<void> {
+		user.hashedPassword = await this.passwordService.hashPassword(password);
+		user.passwordLastChangedAt = new Date();
+		await this.userRepository.getEntityManager().flush();
+		await this.userSessionRepository.nativeDelete({ user, id: { $ne: actingSessionId } });
+		await this.accountNoticeService.passwordChanged(user);
+	}
+
+	private assertAssignable(roles: AssignableUserRole[]): void {
+		const notAssignable = (roles as UserRoleEnum[]).filter(
+			role => !(ASSIGNABLE_USER_ROLES as readonly UserRoleEnum[]).includes(role),
+		);
+		if (notAssignable.length) {
+			throw new BadRequestException(`Not assignable from here: ${notAssignable.join(', ')}`);
+		}
 	}
 
 	/**

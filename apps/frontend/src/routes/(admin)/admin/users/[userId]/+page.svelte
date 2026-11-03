@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BadgeCheck, Ellipsis, ShieldUser, Trash } from '@lucide/svelte';
+	import { BadgeCheck, Ellipsis, KeyRound, ShieldUser, Trash } from '@lucide/svelte';
 
 	import { AdminUserOutputDtoRolesEnum } from 'client';
 
@@ -9,6 +9,7 @@
 	import { onDay } from '#components/admin/admin-format.js';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import ChangeUserRolesDialog from '#dialogs/admin/ChangeUserRolesDialog.svelte';
+	import SetUserPasswordDialog from '#dialogs/admin/SetUserPasswordDialog.svelte';
 	import { api } from '#lib/api.js';
 	import { enumToName } from '#lib/util.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
@@ -31,6 +32,7 @@
 	// Both open from the menu and live outside it: a DropdownMenu.Item unmounts its contents
 	// when the menu closes.
 	let changeRolesOpen = $state(false);
+	let setPasswordOpen = $state(false);
 	let deleteOpen = $state(false);
 
 	const deleteUserAction = createAction(() => api.admin.deleteUser(user.id), {
@@ -82,6 +84,9 @@
 	{/snippet}
 	{#snippet rightTitle()}
 		<div class="flex shrink-0 items-center gap-2">
+			<Button variant="outline" size="sm" icon={KeyRound} onclick={() => (setPasswordOpen = true)}>
+				Set password
+			</Button>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger aria-label="More actions">
 					<Buttonish icon={Ellipsis} size="icon" variant="outline" iconClass="size-4" />
@@ -110,6 +115,7 @@
 	bind:active={changeRolesOpen}
 	{user}
 	onChanged={() => invalidate(`user:${user.id}`)} />
+<SetUserPasswordDialog bind:active={setPasswordOpen} {user} />
 <PopConfirm
 	bind:open={deleteOpen}
 	title={`Delete ${name}?`}

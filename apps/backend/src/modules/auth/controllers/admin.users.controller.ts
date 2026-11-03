@@ -12,10 +12,13 @@ import { csvEscape } from 'src/shared/util/csv.js';
 
 import { UserRoleEnum } from '../constants/user-role.enum.constant.js';
 import { AuthenticatedUserId } from '../decorators/authenticated-user-id.decorator.js';
+import { AuthenticatedUserSessionId } from '../decorators/authenticated-user-session-id.decorator.js';
 import { Roles } from '../decorators/roles.decorator.js';
+import { AdminCreateUserInputDto } from '../dto/admin-create-user.input.dto.js';
 import { AdminExportUsersCsvInputDto } from '../dto/admin-export-users-csv.input.dto.js';
 import { AdminListUsersInputDto } from '../dto/admin-list-users.input.dto.js';
 import { AdminListUsersOutputDto } from '../dto/admin-list-users.output.dto.js';
+import { AdminSetUserPasswordInputDto } from '../dto/admin-set-user-password.input.dto.js';
 import { AdminUpdateUserRolesInputDto } from '../dto/admin-update-user-roles.input.dto.js';
 import { User } from '../entities/user.entity.js';
 import { AuthenticationGuard } from '../guards/authentication.guard.js';
@@ -97,6 +100,9 @@ export class AdminUsersController {
 		if (query.isMarkedForDeletion) {
 			filters.isMarkedForDeletion = { $eq: true };
 		}
+		if (query.isAdmin) {
+			filters.roles = { $contains: [UserRoleEnum.ADMIN] };
+		}
 
 		type PopulateKeys = 'profileImage';
 		const populate = ['profileImage'] as PopulateKeys[];
@@ -139,6 +145,29 @@ export class AdminUsersController {
 	): Promise<OkResponse> {
 		const user = await this.userRepository.findOneOrFail({ id });
 		await this.userService.updateUserRoles(user, body.roles, actingUserId);
+		return { ok: true };
+	}
+
+	/** An account with e-mail and password, its e-mail taken as verified (`UserService.createUser`). */
+	@TypedRoute.Post('/')
+	@UseGuards(AuthenticationGuard, RolesGuard)
+	@Roles(UserRoleEnum.ADMIN)
+	async createUser(@TypedBody() body: AdminCreateUserInputDto): Promise<AdminUserOutputDto> {
+		const user = await this.userService.createUser(body);
+		return wrap(user).serialize({ skipNull: true, forceObject: true }) as AdminUserOutputDto;
+	}
+
+	/** Sets any account's password, the admin's own too; signs it out elsewhere. */
+	@TypedRoute.Put('/:id/password')
+	@UseGuards(AuthenticationGuard, RolesGuard)
+	@Roles(UserRoleEnum.ADMIN)
+	async setUserPassword(
+		@TypedParam('id') id: string,
+		@TypedBody() body: AdminSetUserPasswordInputDto,
+		@AuthenticatedUserSessionId() sessionId: string,
+	): Promise<OkResponse> {
+		const user = await this.userRepository.findOneOrFail({ id });
+		await this.userService.setPassword(user, body.password, sessionId);
 		return { ok: true };
 	}
 

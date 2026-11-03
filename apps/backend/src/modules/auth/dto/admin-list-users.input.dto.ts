@@ -9,4 +9,6 @@ export interface AdminListUsersInputDto extends PaginationRequest {
 	sort?: AdminListUsersInputDtoFieldSort;
 	q?: string;
 	isMarkedForDeletion?: boolean;
+	/** Only accounts with the admin role. */
+	isAdmin?: boolean;
 }

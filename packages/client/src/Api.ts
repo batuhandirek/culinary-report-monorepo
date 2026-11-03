@@ -1170,6 +1170,24 @@ export enum AdminCreateTopicInputDtoKindEnum {
 	Aspect = 'aspect',
 }
 
+export interface AdminCreateUserInputDto {
+	/** @format email */
+	email: string;
+	/** @minLength 1 */
+	firstName: string;
+	lastName: string;
+	/** @minLength 8 */
+	password: string;
+	/** Granted on top of `user`; anything outside `ASSIGNABLE_USER_ROLES` is rejected. */
+	roles: AdminCreateUserInputDtoRolesEnum[];
+}
+
+export enum AdminCreateUserInputDtoRolesEnum {
+	Admin = 'admin',
+	Promoter = 'promoter',
+	User = 'user',
+}
+
 /** One of a creator's accounts in a list row. */
 export interface AdminCreatorAccountRefOutputDto {
 	/** A brand's own account */
@@ -1891,8 +1909,8 @@ export enum AdminExploreBreakdownInputDtoByEnum {
 	Brand = 'brand',
 	Kind = 'kind',
 	Source = 'source',
-	Subject = 'subject',
 	Month = 'month',
+	Subject = 'subject',
 	District = 'district',
 	Venue = 'venue',
 	Aspect = 'aspect',
@@ -1954,8 +1972,8 @@ export enum AdminExploreBreakdownOutputDtoByEnum {
 	Brand = 'brand',
 	Kind = 'kind',
 	Source = 'source',
-	Subject = 'subject',
 	Month = 'month',
+	Subject = 'subject',
 	District = 'district',
 	Venue = 'venue',
 	Aspect = 'aspect',
@@ -3209,6 +3227,8 @@ export interface AdminListSuggestedProspectsInputDto {
 }
 
 export interface AdminListUsersInputDto {
+	/** Only accounts with the admin role. */
+	isAdmin?: boolean;
 	isMarkedForDeletion?: boolean;
 	/** @min 1 */
 	page: number;
@@ -4471,6 +4491,11 @@ export enum AdminSessionOutputDtoUserRolesEnum {
 	Promoter = 'promoter',
 	User = 'user',
 	VenueOwner = 'venue_owner',
+}
+
+export interface AdminSetUserPasswordInputDto {
+	/** @minLength 8 */
+	password: string;
 }
 
 export interface AdminSocialPostListItemOutputDto {
@@ -6488,6 +6513,8 @@ export type CreateTagData = BlogTagOutputDto;
 
 export type CreateTopicData = AdminTopicBaseOutputDto;
 
+export type CreateUserData = AdminUserOutputDto;
+
 export enum DecideAccountActionEnum {
 	Link = 'link',
 }
@@ -6783,8 +6810,8 @@ export enum GetExploreBreakdownParamsByEnum {
 	Brand = 'brand',
 	Kind = 'kind',
 	Source = 'source',
-	Subject = 'subject',
 	Month = 'month',
+	Subject = 'subject',
 	District = 'district',
 	Venue = 'venue',
 	Aspect = 'aspect',
@@ -10643,6 +10670,8 @@ export type SetDefaultReportTemplateData = AdminReportTemplateOutputDto;
 
 export type SetIgnoredWordData = any;
 
+export type SetUserPasswordData = OkResponseO1;
+
 /**
  * A report opened through a private link: the same document the admin sees, without its delivery
  * record and without the analysis's trace (`toPublicOutput`).
@@ -11933,6 +11962,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		 */
 		listUsers: (
 			query: {
+				/** Only accounts with the admin role. */
+				isAdmin?: boolean;
 				isMarkedForDeletion?: boolean;
 				/** @min 1 */
 				page: number;
@@ -11952,6 +11983,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description An account with e-mail and password, its e-mail taken as verified (`UserService.createUser`).
+		 *
+		 * @name CreateUser
+		 * @summary An account with e-mail and password, its e-mail taken as verified (`UserService.createUser`)
+		 * @request POST:/admin/users
+		 * @response `201` `CreateUserData`
+		 */
+		createUser: (data: AdminCreateUserInputDto, params: RequestParams = {}) =>
+			this.request<CreateUserData, any>({
+				path: `/admin/users`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description Replaces a user's roles. `user` is always kept, `system` can never be handed out, and an admin cannot edit their own roles — see `UserService.updateUserRoles`.
 		 *
 		 * @name UpdateUserRoles
@@ -11965,6 +12014,28 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<UpdateUserRolesData, any>({
 				path: `/admin/users/${id}/roles`,
+				method: 'PUT',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Sets any account's password, the admin's own too; signs it out elsewhere.
+		 *
+		 * @name SetUserPassword
+		 * @summary Sets any account's password, the admin's own too; signs it out elsewhere
+		 * @request PUT:/admin/users/{id}/password
+		 * @response `200` `SetUserPasswordData`
+		 */
+		setUserPassword: (
+			id: string,
+			data: AdminSetUserPasswordInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<SetUserPasswordData, any>({
+				path: `/admin/users/${id}/password`,
 				method: 'PUT',
 				body: data,
 				type: ContentType.Json,
