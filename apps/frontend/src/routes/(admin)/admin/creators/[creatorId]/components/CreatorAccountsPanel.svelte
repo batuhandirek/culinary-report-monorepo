@@ -3,11 +3,13 @@
 	import type { AdminAccountOutputDto, AdminCreatorOutputDto, DecideAccountPayload } from 'client';
 
 	import { invalidateAll } from '$app/navigation';
+	import { onDay } from '#components/admin/admin-format.js';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { ACCOUNT_SOURCE_LABELS, branchLabel, followersText } from '#lib/accounts.js';
 	import { api } from '#lib/api.js';
 	import { compact, monthLabel, PLATFORM_LABELS } from '#lib/culinary.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
+	import Badge from '#ui/wrapped/Badge.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
 	import Input from '#ui/wrapped/Input.svelte';
 
@@ -20,6 +22,12 @@
 	}
 
 	let { creator, month }: Props = $props();
+
+	// The handles each account had before, newest first
+	const formerHandles = (account: AdminAccountOutputDto) =>
+		creator.handleChanges
+			.filter((c) => c.account.id === account.id && c.fromHandle && c.fromHandle !== account.handle)
+			.map((c) => `@${c.fromHandle}`);
 
 	const splitAction = createAction((account: AdminAccountOutputDto) => api.admin.splitAccount(account.id), {
 		onSuccess: () => invalidateAll(),
@@ -68,9 +76,20 @@
 		{#each creator.accounts as account (account.id)}
 			<li class="flex items-start gap-3 py-2.5">
 				<div class="flex min-w-0 flex-1 flex-col gap-0.5">
-					<a href={account.url} target="_blank" rel="noreferrer" class="truncate font-medium hover:underline">
-						{PLATFORM_LABELS[account.platform]} · @{account.handle}
-					</a>
+					{#if account.handleLostAt}
+						<!-- Its handle is someone else's now: the profile there is not theirs -->
+						<span class="flex flex-wrap items-center gap-2">
+							<span class="truncate font-medium">{PLATFORM_LABELS[account.platform]} · @{account.handle}</span>
+							<Badge variant="secondary">handle used by someone else since {onDay(account.handleLostAt)}</Badge>
+						</span>
+					{:else}
+						<a href={account.url} target="_blank" rel="noreferrer" class="truncate font-medium hover:underline">
+							{PLATFORM_LABELS[account.platform]} · @{account.handle}
+						</a>
+					{/if}
+					{#if formerHandles(account).length}
+						<span class="text-muted-foreground truncate text-xs">was {formerHandles(account).join(', ')}</span>
+					{/if}
 					{#if account.displayName}
 						<span class="text-muted-foreground truncate text-xs">“{account.displayName}”</span>
 					{/if}

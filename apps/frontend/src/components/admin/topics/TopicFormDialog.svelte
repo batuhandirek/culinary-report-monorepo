@@ -26,11 +26,11 @@
 		topic?: Pick<AdminTopicBaseOutputDto, 'id' | 'key' | 'label' | 'parentKey' | 'aliases' | 'trendsTopicId' | 'trendsQuery' | 'hint'> & {
 			kind: string;
 		};
-		/** A new topic's label, e.g. an unmapped key */
+		/** A new topic's label, e.g. a wording's suggested topic */
 		label?: string;
 		/** A new topic's type, cuisine unless given */
 		kind?: string;
-		/** A new topic's parent key (an aspect found by "Missing aspects": its root) */
+		/** A new topic's parent key (a new aspect's root) */
 		parent?: string;
 		/** A new aspect's hint, what it covers */
 		aspectHint?: string;

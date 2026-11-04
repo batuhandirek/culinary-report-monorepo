@@ -18,6 +18,7 @@ import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.ent
 import { RunPipelineJob } from '../jobs/run-pipeline.job.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { MAX_PIPELINE_RESUMES, PipelineRecoveryService } from '../services/pipeline-recovery.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('Pipeline runs after a backend restart (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -38,6 +39,7 @@ describe('Pipeline runs after a backend restart (pglite)', () => {
 				BrandService,
 				CityService,
 				PipelineService,
+				caughtUpIngestion(),
 				PipelineRecoveryService,
 				ProspectQueryService,
 				{ provide: PgBossService, useValue: { sendJob } },

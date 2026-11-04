@@ -38,8 +38,13 @@ export interface AdminAccountBrandRefOutputDto {
 export interface AdminAccountOutputDto {
 	id: string;
 	platform: SocialPlatformEnum;
+	/** For an account whose handle another user took (`handleLostAt`), the handle it last had */
 	handle: string;
 	url: string;
+	/** The platform's id of the user, which outlives a handle */
+	platformUserId?: string;
+	/** When another user showed up under its handle: what it is called now is unknown */
+	handleLostAt?: Date;
 	displayName?: string;
 	/** The latest follower count an item or a profile scrape gave */
 	followers?: number;

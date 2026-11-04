@@ -9,6 +9,7 @@ import {
 	Newspaper,
 	Palette,
 	ScanText,
+	Sparkles,
 	Store,
 	Telescope,
 	TrendingUp,
@@ -91,7 +92,7 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/trends',
 		icon: TrendingUp,
 		group: 'Market',
-		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'terms', 'wordings', 'unrecognised words'],
+		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'terms', 'wordings'],
 		description:
 			'What the city eats and talks about: each kind of food with its venues, posts and Google searches, and how the month moved against the last.'
 	}),
@@ -103,6 +104,15 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		keywords: ['who talked about', 'what they say', 'praise', 'complaints', 'themes', 'aspects', 'claims', 'statements', 'google tags', 'waiting', 'price', 'dish', 'wording', 'breakdown'],
 		description:
 			'Who talked about anything, how much, and what they said: any topic or wording, in the city, a district, a brand or a branch, over any months.'
+	}),
+	menu({
+		name: 'Ask',
+		href: '/admin/ask',
+		icon: Sparkles,
+		group: 'Market',
+		keywords: ['analyst', 'question', 'sql', 'query', 'chat', 'ai', 'llm', 'analysis', 'conversation', 'why', 'how many'],
+		description:
+			'Ask anything about the data in plain words: the analyst plans, queries the database read-only and answers, every step kept. Name rows with @.'
 	}),
 	menu({
 		name: 'Cities',

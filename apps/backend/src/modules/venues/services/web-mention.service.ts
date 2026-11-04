@@ -163,10 +163,24 @@ export class WebMentionService {
 	}
 
 	/** Classifies the city's mentions of the month that have no kind yet, one page a call. Flushes once. */
-	async classifyMonth(city: City, month: string): Promise<{ classified: number }> {
+	classifyMonth(city: City, month: string): Promise<{ classified: number }> {
+		return this.classify(city, { month });
+	}
+
+	/** The same for every month: the reading job's part */
+	classifyPending(city: City): Promise<{ classified: number }> {
+		return this.classify(city, {});
+	}
+
+	/** The city's press pages not classified yet */
+	countPending(cityId: string): Promise<number> {
+		return this.em.count(WebMention, { analysedAt: null, venue: { city: cityId } });
+	}
+
+	private async classify(city: City, where: { month?: string }): Promise<{ classified: number }> {
 		const mentions = await this.em.find(
 			WebMention,
-			{ month, analysedAt: null, venue: { city } },
+			{ ...where, analysedAt: null, venue: { city } },
 			{ populate: ['venue', 'venue.brand'] },
 		);
 		let classified = 0;

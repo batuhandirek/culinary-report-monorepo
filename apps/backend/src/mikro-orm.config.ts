@@ -1,5 +1,8 @@
 import { defineConfig } from '@mikro-orm/postgresql';
 
+import { AnalystMessage } from 'src/modules/analyst/entities/analyst-message.entity.js';
+import { AnalystMessagePart } from 'src/modules/analyst/entities/analyst-message-part.entity.js';
+import { AnalystThread } from 'src/modules/analyst/entities/analyst-thread.entity.js';
 import { ApifyRun } from 'src/modules/apify/entities/apify-run.entity.js';
 import { BrandMember } from 'src/modules/auth/entities/brand-member.entity.js';
 import { CredentialVerificationRequest } from 'src/modules/auth/entities/credential-verification-request.entity.js';
@@ -46,6 +49,7 @@ import { PostHashtag } from 'src/modules/social/entities/post-hashtag.entity.js'
 import { PostSource } from 'src/modules/social/entities/post-source.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialAccountSnapshot } from 'src/modules/social/entities/social-account-snapshot.entity.js';
+import { SocialAccountHandleChange } from 'src/modules/social/entities/social-account-handle-change.entity.js';
 import { SocialPostSnapshot } from 'src/modules/social/entities/social-post-snapshot.entity.js';
 import { SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { SocialAccountSubscriber } from 'src/modules/social/subscribers/social-account.subscriber.js';
@@ -119,6 +123,7 @@ export default defineConfig({
 		SocialPost,
 		SocialAccount,
 		SocialAccountSnapshot,
+		SocialAccountHandleChange,
 		SocialPostSnapshot,
 		Creator,
 		Mention,
@@ -144,6 +149,9 @@ export default defineConfig({
 		Prospect,
 		OutreachTouch,
 		BrandMember,
+		AnalystThread,
+		AnalystMessage,
+		AnalystMessagePart,
 	],
 
 	debug: false,

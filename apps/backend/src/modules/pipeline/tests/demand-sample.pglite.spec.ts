@@ -22,6 +22,7 @@ import { DemandSampleCron } from '../crons/demand-sample.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { dueDemandSteps } from '../util/demand-schedule.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('dueDemandSteps', () => {
 	it('samples at 19:00 local on Thursdays (with reservations) and Saturdays', () => {
@@ -58,6 +59,7 @@ describe('Demand sampling (pglite)', () => {
 				BrandService,
 				DemandSampleCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				ProspectQueryService,
 				CompetitorService,

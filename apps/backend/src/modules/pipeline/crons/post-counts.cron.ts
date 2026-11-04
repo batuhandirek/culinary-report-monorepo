@@ -30,6 +30,6 @@ export class PostCountsCron {
 		// The run's month is a label: the step reads the posts that are seven days old today
 		const month = now.toISOString().slice(0, 7);
 		for (const city of await this.cityService.forMonthlyCron())
-			await this.pipelineService.queue(city.id, PipelineStepEnum.REFRESH_POST_COUNTS, month);
+			await this.pipelineService.queueOnce(city.id, PipelineStepEnum.REFRESH_POST_COUNTS, month, 12, now);
 	}
 }

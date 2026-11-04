@@ -9,6 +9,9 @@ import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 export enum PipelineRunStatusEnum {
 	QUEUED = 'QUEUED',
 	RUNNING = 'RUNNING',
+	// A step needs the reading caught up and no model answers: woken by every reading pass
+	// and hourly (`IngestionCron`), it goes on where it stopped
+	WAITING = 'WAITING',
 	SUCCEEDED = 'SUCCEEDED',
 	FAILED = 'FAILED',
 }
@@ -20,6 +23,8 @@ export interface PipelineRunParams {
 	since?: string;
 	// MONTHLY: skip the paid steps that already succeeded for the city and month ("finish the month")
 	onlyMissing?: boolean;
+	// Go on without waiting for the reading (`READ_GATED_STEPS`, `ALL_READ_STEPS`)
+	noWait?: boolean;
 }
 
 /** One run of a pipeline step, started by the monthly cron or an admin. */
@@ -55,6 +60,10 @@ export class PipelineRun extends MikroOrmEntityAbstractClass<'resumes'> {
 
 	@Property({ type: 'datetime', nullable: true })
 	finishedAt?: Date | null;
+
+	// Since when it waits for the reading (`WAITING`); cleared when it goes on
+	@Property({ type: 'datetime', nullable: true })
+	waitingSince?: Date | null;
 
 	// How often a backend restart cut it short and it was queued again to go on where it stopped
 	@Property({ type: 'int', default: 0 })

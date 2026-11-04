@@ -13,8 +13,9 @@ import { monthRange } from 'src/modules/venues/util/month.js';
 import { AccountRejectedBrand } from '../entities/account-rejected-brand.entity.js';
 import { Creator } from '../entities/creator.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
+import { SocialAccountHandleChange } from '../entities/social-account-handle-change.entity.js';
 import { AccountSnapshotSourceEnum, SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
-import { SocialPlatformEnum } from '../entities/social-post.entity.js';
+import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
 import { normalizeHandle } from '../util/accounts.js';
 import {
@@ -65,6 +66,8 @@ export interface AccountWithFigures {
 
 /** What an item says about its author, beyond the handle. */
 export interface AccountSeen {
+	/** The platform's id of the user (Instagram's `ownerId` / profile `id`, TikTok's `authorMeta.id` / `uid`) */
+	platformUserId?: string | number | null;
 	displayName?: string | null;
 	followers?: number | null;
 	following?: number | null;
@@ -183,6 +186,17 @@ export class SocialAccountService {
 	 * `polina.iz.berlina`), else with one of its own (`SocialAccountSubscriber`). A known account
 	 * takes the newer display name and follower count. Does not flush; finds accounts created
 	 * earlier in the same flush. Null for a handle it cannot use.
+	 *
+	 * With the platform's user id (`seen.platformUserId`) the id decides who it is, the handle
+	 * only where no account has the id yet:
+	 * - the account with the id under another handle was renamed: it takes this handle and the
+	 *   change is kept (`SocialAccountHandleChange`); an account holding this handle without an id
+	 *   was the same person seen by handle alone and is merged into it (`absorb`), one holding it
+	 *   with another id renamed away and loses it (`loseHandle`);
+	 * - the account with this handle and no id takes the id;
+	 * - the account with this handle and another id lost it to someone new, who gets an account.
+	 * Rows a rename or merge moves away are written at once, so the unit of work's flush never
+	 * meets two rows of one handle.
 	 */
 	// Keyed by the managed entity, so one unit of work's scrape shares its snapshots and a new
 	// request (a new entity) starts afresh
@@ -197,10 +211,35 @@ export class SocialAccountService {
 	): Promise<SocialAccount | null> {
 		const handle = normalizeHandle(platform, input);
 		if (!handle) return null;
-		let account = this.pending(platform, handle) ?? (await this.em.findOne(SocialAccount, { platform, handle }));
+		const userId = seen.platformUserId != null && `${seen.platformUserId}`.trim() ? `${seen.platformUserId}`.trim() : null;
+		const source = seen.source ?? AccountSnapshotSourceEnum.POST;
+		let account = await this.find(platform, 'handle', handle);
+		let lost: SocialAccountHandleChange | null = null;
+		if (userId) {
+			const owner = await this.find(platform, 'platformUserId', userId);
+			if (owner && owner !== account) {
+				if (account && !account.platformUserId) account = await this.absorb(account, owner, handle, source, now);
+				else {
+					if (account) await this.loseHandle(account, source, now, owner);
+					this.renameTo(owner, handle, source, now);
+					account = owner;
+				}
+			} else if (account && !account.platformUserId) account.platformUserId = userId;
+			else if (account && account.platformUserId !== userId) {
+				lost = await this.loseHandle(account, source, now);
+				account = null;
+			}
+		}
 		if (!account) {
 			const twin = await this.twinCreator(platform, handle);
-			account = this.em.create(SocialAccount, { platform, handle, city, ...(twin && { creator: twin }) });
+			account = this.em.create(SocialAccount, {
+				platform,
+				handle,
+				city,
+				platformUserId: userId,
+				...(twin && { creator: twin }),
+			});
+			if (lost) lost.takenBy = account;
 		}
 		if (seen.displayName?.trim()) account.displayName = seen.displayName.trim();
 		if (typeof seen.followers === 'number' && seen.followers >= 0) {
@@ -209,11 +248,122 @@ export class SocialAccountService {
 			this.recordSnapshot(
 				account,
 				{ followers: seen.followers, following: seen.following, posts: seen.posts },
-				seen.source ?? AccountSnapshotSourceEnum.POST,
+				source,
 				now,
 			);
 		}
 		return account;
+	}
+
+	/** The account takes `handle` (its user id came back under it), the change kept. */
+	private renameTo(account: SocialAccount, handle: string, source: AccountSnapshotSourceEnum, now: Date): void {
+		this.em.create(SocialAccountHandleChange, {
+			account,
+			fromHandle: account.handleLostAt ? null : account.handle,
+			toHandle: handle,
+			seenAt: now,
+			source,
+		});
+		account.handle = handle;
+		account.handleLostAt = null;
+	}
+
+	/**
+	 * Another user id showed up under the account's handle: it moves to a placeholder no scrape
+	 * names until its own id is seen again. Written at once, so the handle is free for the flush.
+	 */
+	private async loseHandle(
+		account: SocialAccount,
+		source: AccountSnapshotSourceEnum,
+		now: Date,
+		takenBy: SocialAccount | null = null,
+	): Promise<SocialAccountHandleChange> {
+		const change = this.em.create(SocialAccountHandleChange, {
+			account,
+			fromHandle: account.handle,
+			toHandle: null,
+			takenBy,
+			seenAt: now,
+			source,
+		});
+		const placeholder = `${account.handle}~${account.platformUserId}`;
+		if (account.id)
+			await this.em.nativeUpdate(SocialAccount, { id: account.id }, { handle: placeholder, handleLostAt: now });
+		account.handle = placeholder;
+		account.handleLostAt = now;
+		return change;
+	}
+
+	/**
+	 * An account known by its handle alone (`byHandle`) is the user id's (`owner`, under another
+	 * handle): the two become one row under `handle`, the change kept. The row the database
+	 * already holds stays (both stored: the owner's), and takes the other's posts, snapshots,
+	 * handle changes and rejections, and a brand link, a suggestion and figures it lacks; the
+	 * other goes, with its creator when that is left without an account. Moves and the delete are
+	 * written at once, so the handle is free for the flush. Returns the row that stays.
+	 */
+	private async absorb(
+		byHandle: SocialAccount,
+		owner: SocialAccount,
+		handle: string,
+		source: AccountSnapshotSourceEnum,
+		now: Date,
+	): Promise<SocialAccount> {
+		const [keep, gone] = owner.id || !byHandle.id ? [owner, byHandle] : [byHandle, owner];
+		// The owner's identity and newest figures win, whichever row stays
+		keep.platformUserId = owner.platformUserId;
+		keep.displayName = owner.displayName ?? byHandle.displayName;
+		const figures = owner.followers != null ? owner : byHandle;
+		keep.followers = figures.followers;
+		keep.followersAt = figures.followersAt;
+		if (!keep.brand && gone.brand) {
+			keep.brand = gone.brand;
+			keep.branch = gone.branch;
+			keep.brandSource = gone.brandSource;
+		}
+		if (!keep.brand && !keep.suggestedBrand && gone.suggestedBrand) {
+			keep.suggestedBrand = gone.suggestedBrand;
+			keep.suggestedScore = gone.suggestedScore;
+		}
+		keep.twinCheckedAt ??= gone.twinCheckedAt;
+		keep.followersAskedAt ??= gone.followersAskedAt;
+		const snapshot = this.lastSnapshots.get(gone);
+		if (snapshot && !this.lastSnapshots.has(keep)) this.lastSnapshots.set(keep, snapshot);
+
+		// What this unit of work holds, loaded or new
+		const uow = this.em.getUnitOfWork();
+		for (const entity of [...uow.getIdentityMap().values(), ...uow.getPersistStack()]) {
+			if (
+				(entity instanceof SocialPost ||
+					entity instanceof SocialAccountSnapshot ||
+					entity instanceof SocialAccountHandleChange ||
+					entity instanceof AccountRejectedBrand) &&
+				entity.account === gone
+			)
+				entity.account = keep;
+		}
+		if (gone.id) {
+			// What the database holds (both rows are stored here)
+			const conn = this.em.getConnection();
+			for (const table of ['social_posts', 'social_account_snapshots', 'social_account_handle_changes'])
+				await conn.execute(`update ${table} set account_id = ? where account_id = ?`, [keep.id, gone.id]);
+			await conn.execute(
+				`update account_rejected_brands r set account_id = ? where r.account_id = ?
+				and not exists (select 1 from account_rejected_brands o where o.account_id = ? and o.brand_id = r.brand_id)`,
+				[keep.id, gone.id, keep.id],
+			);
+			const creatorId = gone.creator?.id;
+			await conn.execute(`delete from social_accounts where id = ?`, [gone.id]);
+			uow.unsetIdentity(gone);
+			if (creatorId && creatorId !== keep.creator?.id) await this.dropEmpty([creatorId]);
+		} else this.em.remove(gone);
+
+		const from = owner.handleLostAt ? null : owner.handle;
+		keep.handle = handle;
+		keep.handleLostAt = null;
+		if (from !== handle)
+			this.em.create(SocialAccountHandleChange, { account: keep, fromHandle: from, toHandle: handle, seenAt: now, source });
+		return keep;
 	}
 
 	/**
@@ -252,11 +402,22 @@ export class SocialAccountService {
 		return snapshot;
 	}
 
-	/** An account created in this unit of work but not flushed yet. */
-	private pending(platform: SocialPlatformEnum, handle: string): SocialAccount | undefined {
-		for (const entity of this.em.getUnitOfWork().getPersistStack())
-			if (entity instanceof SocialAccount && entity.platform === platform && entity.handle === handle) return entity;
-		return undefined;
+	/**
+	 * The account with this handle or user id as this unit of work has it: a rename or a new id
+	 * earlier in the same scrape counts before the flush, and a row the database still holds under
+	 * a value it has since lost is not it. New accounts (not flushed yet) included.
+	 */
+	private async find(
+		platform: SocialPlatformEnum,
+		field: 'handle' | 'platformUserId',
+		value: string,
+	): Promise<SocialAccount | null> {
+		const uow = this.em.getUnitOfWork();
+		const loaded = uow.getIdentityMap().getStore(this.em.getMetadata().get(SocialAccount)).values();
+		for (const entity of [...uow.getPersistStack(), ...loaded])
+			if (entity instanceof SocialAccount && entity.platform === platform && entity[field] === value) return entity;
+		const found = await this.em.findOne(SocialAccount, { platform, [field]: value });
+		return found && found[field] === value ? found : null;
 	}
 
 	/** The creator of the one account on another platform with the same letters, if one. */

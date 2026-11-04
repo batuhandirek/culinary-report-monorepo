@@ -98,8 +98,13 @@ export class AccountMatchingService {
 			set.add(row.brand_id);
 		}
 
-		// A blog is a publication, never a venue's own account
-		const accounts = await this.em.find(SocialAccount, { city: city.id, platform: { $ne: SocialPlatformEnum.BLOG } });
+		// A blog is a publication, never a venue's own account; an account whose handle another user took keeps
+		// its link as it was, since no handle of its own is known
+		const accounts = await this.em.find(SocialAccount, {
+			city: city.id,
+			platform: { $ne: SocialPlatformEnum.BLOG },
+			handleLostAt: null,
+		});
 		const result: AccountMatchResult = {
 			accounts: accounts.length,
 			linked: 0,

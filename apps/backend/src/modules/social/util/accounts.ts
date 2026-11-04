@@ -127,6 +127,12 @@ export const profileLinks = (html: string): LinkedProfile[] => {
 	return [...out.values()];
 };
 
+/**
+ * The handle to show: an account whose handle another user took keeps it as a placeholder
+ * (`<handle>~<user id>`, `SocialAccountService.ensure`), shown as the handle it last had.
+ */
+export const shownHandle = (handle: string): string => handle.replace(/~[^~]*$/, '');
+
 export const accountUrl = (platform: SocialPlatformEnum, handle: string): string =>
 	platform === SocialPlatformEnum.TIKTOK ? `https://www.tiktok.com/@${handle}`
 	: platform === SocialPlatformEnum.BLOG ? `https://${handle}/`

@@ -2,7 +2,6 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
@@ -30,7 +29,6 @@ describe('TodayService (pglite)', () => {
 				CityService,
 				DataCoverageService,
 				{ provide: BrandService, useValue: { suggestions: async () => [{}, {}] } },
-				{ provide: TopicService, useValue: { overview: async () => ({ unmapped: [{ key: 'kumpir' }] }) } },
 				{ provide: ProspectQueryService, useValue: { due: async () => [], suggested: async () => [] } },
 			],
 		});
@@ -89,7 +87,6 @@ describe('TodayService (pglite)', () => {
 			[`coverage-${city.id}`, 'todo'],
 			['unmatched', 'info'],
 			[`merges-${city.id}`, 'info'],
-			[`words-${city.id}`, 'info'],
 		]);
 		expect(today.todos.find(t => t.key === 'failed-runs')?.text).toContain('1 pipeline run failed');
 		expect(today.todos.find(t => t.key === 'replies')?.href).toBe('/admin/brands?segment=prospects&stage=REPLIED');

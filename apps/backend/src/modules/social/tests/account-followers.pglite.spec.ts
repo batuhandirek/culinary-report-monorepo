@@ -31,6 +31,8 @@ const DAY = 24 * 3600 * 1000;
 // in its latest) and a TikTok video whose author has 18,500 fans
 const instagramItem = (handle: string) => ({
 	...TWIN_INSTAGRAM_ITEMS[0],
+	// Each renamed profile is another user
+	id: `ig-${handle}`,
 	username: handle,
 	url: `https://www.instagram.com/${handle}`,
 	latestPosts: [
@@ -50,7 +52,7 @@ const instagramItem = (handle: string) => ({
 const tiktokItem = (handle: string) => ({
 	...TWIN_TIKTOK_ITEMS[1],
 	input: handle,
-	authorMeta: { ...TWIN_TIKTOK_ITEMS[1].authorMeta, name: handle, nickName: handle },
+	authorMeta: { ...TWIN_TIKTOK_ITEMS[1].authorMeta, id: `tt-${handle}`, name: handle, nickName: handle },
 });
 
 /*

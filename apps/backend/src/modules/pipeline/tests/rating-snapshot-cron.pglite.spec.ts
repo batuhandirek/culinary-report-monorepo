@@ -11,11 +11,11 @@ import { PipelineService } from '../services/pipeline.service.js';
 
 describe('RatingSnapshotCron (pglite)', () => {
 	let harness: PgliteTestingModule;
-	const queue = jest.fn(async () => ({}));
+	const queueOnce = jest.fn(async () => ({}));
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [RatingSnapshotCron, CityService, { provide: PipelineService, useValue: { queue } }],
+			providers: [RatingSnapshotCron, CityService, { provide: PipelineService, useValue: { queueOnce } }],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
 	});
@@ -28,7 +28,9 @@ describe('RatingSnapshotCron (pglite)', () => {
 		const berlin = cityFactory.build({ name: 'Berlin', cronEnabled: true });
 		cityFactory.build({ name: 'By hand', cronEnabled: false });
 		await harness.orm.em.flush();
-		await harness.moduleRef.get(RatingSnapshotCron).queueAll(new Date('2026-10-27T04:30:00Z'));
-		expect(queue.mock.calls).toEqual([[berlin.id, PipelineStepEnum.SNAPSHOT_RATINGS, '2026-10']]);
+		const now = new Date('2026-10-27T04:30:00Z');
+		await harness.moduleRef.get(RatingSnapshotCron).queueAll(now);
+		// Never twice in a day: a cron firing again around a restart paid the run twice (2026-11-03)
+		expect(queueOnce.mock.calls).toEqual([[berlin.id, PipelineStepEnum.SNAPSHOT_RATINGS, '2026-10', 24, now]]);
 	});
 });

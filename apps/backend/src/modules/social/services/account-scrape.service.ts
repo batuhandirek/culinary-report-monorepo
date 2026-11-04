@@ -44,6 +44,14 @@ const PROFILE_MIN_CAP_USD = 0.05;
 // (private, renamed or gone)
 export const FOLLOWERS_RETRY_DAYS = 30;
 
+// The profile tracking (`TRACK_PROFILES`): every account is read again this many days after its
+// last profile, so a weekly run reads it every other week
+export const TRACK_PROFILE_EVERY_DAYS = 13;
+// A creator account (not a brand's) is tracked from this many followers, or this average of views
+// over its stored posts (an Instagram creator's followers are unknown until its profile is read)
+export const TRACK_CREATOR_MIN_FOLLOWERS = 5_000;
+export const TRACK_CREATOR_MIN_VIEWS = 10_000;
+
 /** A profile to scrape: an account we know, or a handle a city watches that never posted for us yet. */
 export interface AccountToScrape {
 	platform: ProfilePlatform;
@@ -60,6 +68,17 @@ export interface AccountScrapeResult {
 	/** Posts the profiles showed since `since` */
 	found: number;
 	saved: number;
+}
+
+export interface ProfileTrackResult {
+	/** Brand accounts and creator accounts over the thresholds whose last profile is due */
+	due: number;
+	/** Of them, brand accounts */
+	brandAccounts: number;
+	/** Asked for in this run: as many as the budget covers, brand accounts first */
+	asked: number;
+	/** Profiles that came back (each a snapshot with followers, following and post count) */
+	profiles: number;
 }
 
 export interface FollowerFillResult {
@@ -172,7 +191,12 @@ export class AccountScrapeService {
 					SocialPlatformEnum.INSTAGRAM,
 					`${item.username}`,
 					city,
-					{ displayName: item.fullName, followers: profile.followers, source: AccountSnapshotSourceEnum.PROFILE },
+					{
+						platformUserId: item.id,
+						displayName: item.fullName,
+						followers: profile.followers,
+						source: AccountSnapshotSourceEnum.PROFILE,
+					},
 					now,
 				);
 				if (!account) continue;
@@ -197,6 +221,7 @@ export class AccountScrapeService {
 					handle,
 					city,
 					{
+						platformUserId: author.id,
 						displayName: author.nickName,
 						followers: typeof author.fans === 'number' ? author.fans : undefined,
 						source: AccountSnapshotSourceEnum.PROFILE,
@@ -254,35 +279,105 @@ export class AccountScrapeService {
 		const rows: { id: string; platform: ProfilePlatform; handle: string }[] = await this.em.getConnection().execute(
 			`select a.id, a.platform, a.handle from social_accounts a
 			join brands b on b.id = a.brand_id
-			where a.platform in (?, ?) and a.followers is null
+			where a.platform in (?, ?) and a.followers is null and a.handle_lost_at is null
 			and (a.followers_asked_at is null or a.followers_asked_at < ?)
 			and exists (select 1 from venues v where v.brand_id = a.brand_id and v.city_id = ? and not v.closed)
 			order by b.lead_score desc nulls last, a.handle`,
 			[SocialPlatformEnum.INSTAGRAM, SocialPlatformEnum.TIKTOK, retryBefore, city.id],
 		);
+		const { asked, profiles, accounts } = await this.profilesOnly(city, rows, budgetUsd, 'followers', now);
+		return {
+			missing: rows.length,
+			asked,
+			filled: accounts.filter(a => a.followers != null).length,
+			profiles,
+		};
+	}
+
+	/**
+	 * Every two weeks, the figures of every account whose numbers move a report or a page: the
+	 * profile only (followers, following, post count; a snapshot each) of every brand account with
+	 * an open branch in the city, highest lead score first, then every creator account first seen
+	 * in the city with `TRACK_CREATOR_MIN_FOLLOWERS` followers or `TRACK_CREATOR_MIN_VIEWS` average
+	 * views over its stored posts, most followed first, and once each creator account whose
+	 * followers are unknown (Instagram's posts carry none). An account is due
+	 * `TRACK_PROFILE_EVERY_DAYS` after its last profile snapshot; one asked for that came back
+	 * without a count waits `FOLLOWERS_RETRY_DAYS`, as in the follower fill.
+	 */
+	async trackProfiles(city: City, budgetUsd: number, now = new Date()): Promise<ProfileTrackResult> {
+		const dueBefore = new Date(now.getTime() - TRACK_PROFILE_EVERY_DAYS * 24 * 3600 * 1000);
+		const retryBefore = new Date(now.getTime() - FOLLOWERS_RETRY_DAYS * 24 * 3600 * 1000);
+		const rows: { id: string; platform: ProfilePlatform; handle: string; brand: boolean }[] = await this.em
+			.getConnection()
+			.execute(
+				`with views as (
+					select p.account_id, avg(p.views) views from social_posts p
+					where p.views > 0 and p.account_id is not null group by p.account_id
+				)
+				select a.id, a.platform, a.handle, a.brand_id is not null brand from social_accounts a
+				left join brands b on b.id = a.brand_id
+				left join views v on v.account_id = a.id
+				where a.platform in (?, ?) and a.handle_lost_at is null
+				and (a.followers_asked_at is null or a.followers_asked_at < ? or a.followers is not null)
+				and not exists (
+					select 1 from social_account_snapshots s
+					where s.account_id = a.id and s.source = ? and s.scraped_at >= ?
+				)
+				and (
+					(a.brand_id is not null and exists (
+						select 1 from venues ve where ve.brand_id = a.brand_id and ve.city_id = ? and not ve.closed
+					))
+					or (a.brand_id is null and a.city_id = ? and (
+						a.followers >= ? or v.views >= ? or (a.followers is null and a.followers_asked_at is null)
+					))
+				)
+				order by (a.brand_id is null), b.lead_score desc nulls last, a.followers desc nulls last, a.handle`,
+				[
+					SocialPlatformEnum.INSTAGRAM,
+					SocialPlatformEnum.TIKTOK,
+					retryBefore,
+					AccountSnapshotSourceEnum.PROFILE,
+					dueBefore,
+					city.id,
+					city.id,
+					TRACK_CREATOR_MIN_FOLLOWERS,
+					TRACK_CREATOR_MIN_VIEWS,
+				],
+			);
+		const { asked, profiles } = await this.profilesOnly(city, rows, budgetUsd, 'tracking', now);
+		return { due: rows.length, brandAccounts: rows.filter(r => r.brand).length, asked, profiles };
+	}
+
+	/**
+	 * The profiles of `rows`, in their order, as many as the budget covers: profile only, no post
+	 * stored. An account asked for that came back without a follower count is stamped
+	 * `followersAskedAt`.
+	 */
+	private async profilesOnly(
+		city: City,
+		rows: { id: string; platform: ProfilePlatform; handle: string }[],
+		budgetUsd: number,
+		label: string,
+		now: Date,
+	): Promise<{ asked: number; profiles: number; accounts: SocialAccount[] }> {
 		let left = budgetUsd;
 		const picked = rows.filter(row => {
 			if (PROFILE_ONLY_USD[row.platform] > left) return false;
 			left -= PROFILE_ONLY_USD[row.platform];
 			return true;
 		});
-		const result: FollowerFillResult = { missing: rows.length, asked: picked.length, filled: 0, profiles: 0 };
-		if (!picked.length) return result;
+		if (!picked.length) return { asked: 0, profiles: 0, accounts: [] };
 
 		const scraped = await this.scrape(city, picked, {
 			since: now.toISOString(),
 			budgetUsd: budgetUsd - left,
 			profileOnly: true,
-			label: 'followers',
+			label,
 			now,
 		});
-		result.profiles = scraped.profiles;
 		const accounts = await this.em.find(SocialAccount, { id: { $in: picked.map(r => r.id) } });
-		for (const account of accounts) {
-			if (account.followers != null) result.filled++;
-			else account.followersAskedAt = now;
-		}
+		for (const account of accounts) if (account.followers == null) account.followersAskedAt = now;
 		await this.em.flush();
-		return result;
+		return { asked: picked.length, profiles: scraped.profiles, accounts };
 	}
 }

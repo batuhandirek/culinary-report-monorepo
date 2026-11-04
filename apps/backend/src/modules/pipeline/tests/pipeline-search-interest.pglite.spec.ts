@@ -15,6 +15,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('PipelineService SEARCH_INTEREST (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -27,6 +28,7 @@ describe('PipelineService SEARCH_INTEREST (pglite)', () => {
 				BrandService,
 				CityService,
 				PipelineService,
+				caughtUpIngestion(),
 				ProspectQueryService,
 				{ provide: SearchInterestService, useValue: { pull } },
 			],

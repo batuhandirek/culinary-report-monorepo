@@ -1,0 +1,16 @@
+diff --git a/apps/backend/src/modules/statements/agents/claim-parts.agent.ts b/apps/backend/src/modules/statements/agents/claim-parts.agent.ts
+index 2225647..31ecc90 100644
+--- a/apps/backend/src/modules/statements/agents/claim-parts.agent.ts
++++ b/apps/backend/src/modules/statements/agents/claim-parts.agent.ts
+@@ -120,6 +120,11 @@ export class ClaimPartsAgent extends BaseMastraAgent<typeof claimPartsSchema, Cl
+ 			'"the owners are two brothers"). A food the claim is about counts even when its words only point at it ("it was ' +
+ 			'greasy" after "the lahmacun came cold" is about the lahmacun); when its quote does not name it ("schön knusprig" for ' +
+ 			'"the schnitzel was nicely crispy"), spell it as the quotes of the other claims spell it ("Schnitzel"). ' +
++			'Take the finest aspect whose description covers the claim, and a root only when none of its aspects does: read ' +
++			'the aspects under a root before answering the root. A price stated for a dish, a menu, a meal or the bill is ' +
++			'price_level ("a pide costs 9 euros", "we paid 40 euros for two"), never the bare price; halal, vegan, vegetarian ' +
++			'or gluten-free food is dietary; a buffet, a spread or the sauces and extras on offer are menu_variety; homemade ' +
++			'or made with care is authenticity; how soft, crisp or chewy a bun, dough or crust is, is cooking. ' +
+ 			'The root other is not "none": a rating, a ranking, an award, a recommendation, a visit, an event or what kind of ' +
+ 			"place it is has no aspect, so answer null; other is for the place's practicalities when none of the aspects under " +
+ 			'it fits; music, a band or a DJ is atmosphere. Foods: read the quote, not the English text, which is a translation: copy each food word out of the quote ' +

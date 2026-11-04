@@ -439,44 +439,54 @@ export class MentionMatchingService {
 	): Promise<void> {
 		const words = cityStopwords(city.nameStopwords);
 		const venues = await this.candidateVenues(city, words);
-
-		const [newestVenue] = await this.em.find(
-			Venue,
-			{ city },
-			{ orderBy: { createdAt: 'desc' }, limit: 1 },
-		);
-		// `not in` drops nulls, so a never-matched mention needs its own branch
-		const notCorrected: FilterQuery<Mention> = {
-			$or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }],
-		};
-		const mentions = await this.em.find(
-			Mention,
-			rematch ?
-				{ $and: [notCorrected, { post: { city } }] }
-			:	{
-					$and: [
-						notCorrected,
-						{ post: { city } },
-						{
-							$or: [
-								{ matchedAt: null },
-								{
-									brand: null,
-									matchMethod: { $ne: MentionMatchMethodEnum.OTHER_CITY },
-									matchedAt: { $lt: newestVenue?.createdAt ?? new Date(0) },
-								},
-							],
-						},
-					],
-				},
-			{ populate: ['post', 'statements'] },
-		);
+		const mentions = await this.em.find(Mention, await this.toMatch(city, rematch), {
+			populate: ['post', 'statements'],
+		});
 		this.logger.log(
 			`Matching ${mentions.length} mentions against ${venues.length} venues of ${city.name}`,
 		);
 
 		const names = cityNames(city);
 		await this.matchAll(mentions, venues, names, words, counts);
+	}
+
+	/**
+	 * The city's mentions a `match` would take: never matched, or unmatched since before the
+	 * city's newest venue (a lookup may have added theirs); with `rematch` every one an admin
+	 * didn't correct.
+	 */
+	private async toMatch(city: City, rematch: boolean): Promise<FilterQuery<Mention>> {
+		// `not in` drops nulls, so a never-matched mention needs its own branch
+		const notCorrected: FilterQuery<Mention> = {
+			$or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }],
+		};
+		if (rematch) return { $and: [notCorrected, { post: { city } }] };
+		const [newestVenue] = await this.em.find(
+			Venue,
+			{ city },
+			{ orderBy: { createdAt: 'desc' }, limit: 1 },
+		);
+		return {
+			$and: [
+				notCorrected,
+				{ post: { city } },
+				{
+					$or: [
+						{ matchedAt: null },
+						{
+							brand: null,
+							matchMethod: { $ne: MentionMatchMethodEnum.OTHER_CITY },
+							matchedAt: { $lt: newestVenue?.createdAt ?? new Date(0) },
+						},
+					],
+				},
+			],
+		};
+	}
+
+	/** How many of the city's mentions the next `match` would take: the reading's "caught up" check */
+	async pendingCount(cityId: string): Promise<number> {
+		return this.em.count(Mention, await this.toMatch(await this.cityService.getById(cityId), false));
 	}
 
 	/**

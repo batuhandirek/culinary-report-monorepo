@@ -11,10 +11,11 @@ import {
 import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
-import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
-import { termKey } from 'src/modules/venues/util/dishes.js';
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 import { answerUsd } from 'src/modules/llm/util/llm-cost.js';
+import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
+import { termKey } from 'src/modules/venues/util/dishes.js';
+import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import { TermTopicAgent } from '../agents/term-topic.agent.js';
@@ -196,21 +197,35 @@ export class TermService implements OnModuleInit {
 	}
 
 	/**
-	 * Stores the wordings the venues' Google tags carry that have no row yet (a tag as Google writes
-	 * it): decided at once by a name match when the wording is a topic's key or label as a whole,
-	 * else waiting for the agent. Statements' wordings need no sync: agent B stores them as it reads
-	 * (`ensure`). Idempotent. Returns the terms added and matched.
+	 * Stores the wordings that have no row yet, as written: the venues' Google tags, and the raw food
+	 * text the index resolves to nothing — a food venue's Google category ("Serbian restaurant") and
+	 * a mention's cuisine ("Roman") — so the agent decides them like any wording, and once decided
+	 * they resolve through the index. Each is decided at once by a name match when it is a topic's key
+	 * or label as a whole, else waits for the agent. Statements' wordings need no sync: agent B stores
+	 * them as it reads (`ensure`). Idempotent. Returns the terms added and matched.
 	 */
 	async sync(index: TopicIndex): Promise<{ added: number; matched: number }> {
 		const conn = this.em.getConnection();
-		const tagTitles: { title: string }[] = await conn.execute(
-			`select distinct t->>'title' as title from venues v, jsonb_array_elements(v.details->'reviewsTags') t
-			where jsonb_exists(v.details, 'reviewsTags') and t->>'title' is not null`,
-		);
+		const [tagTitles, foodTexts] = await Promise.all([
+			conn.execute<{ title: string }[]>(
+				`select distinct t->>'title' as title from venues v, jsonb_array_elements(v.details->'reviewsTags') t
+					where jsonb_exists(v.details, 'reviewsTags') and t->>'title' is not null`,
+			),
+			conn.execute<{ text: string; category: boolean }[]>(
+				`select distinct category as text, true as category from venues where category is not null
+					union select distinct cuisine, false from mentions where cuisine is not null`,
+			),
+		]);
 		const missing = new Map<string, string>();
-		for (const { title } of tagTitles) {
-			const key = termKey(title);
-			if (key && !missing.has(key)) missing.set(key, title);
+		const add = (name: string) => {
+			const key = termKey(name);
+			if (key && !missing.has(key)) missing.set(key, name.trim());
+		};
+		for (const { title } of tagTitles) add(title);
+		for (const { text, category } of foodTexts) {
+			// A hotel or a dance school a scrape found is no kind of food; "Restaurant" alone says nothing
+			if (category && !isFoodVenue(text)) continue;
+			if (normalizeCuisine(text) && !index.resolve(text).length) add(text);
 		}
 		const added: { key: string; name: string }[] = [];
 		for (const chunk of _.chunk([...missing], CHUNK)) {
@@ -595,38 +610,6 @@ export class TermService implements OnModuleInit {
 			const row = term ?? this.em.create(Term, { key, name });
 			this.setLinks(row, [topic.key], index, 'admin', now);
 			row.suggestion = null;
-		}
-		await this.em.flush();
-	}
-
-	/** The words an admin dismissed from the unrecognised list: admin terms with no topic, as `normalizeCuisine` keys */
-	async ignoredWords(): Promise<string[]> {
-		const rows: { name: string }[] = await this.em.getConnection().execute(
-			`select t.name from terms t where t.decided_by = 'admin'
-				and not exists (select 1 from term_topics tt where tt.term_id = t.id) order by t.name`,
-		);
-		return _.uniq(rows.map(r => normalizeCuisine(r.name) ?? r.name.trim().toLowerCase()));
-	}
-
-	/**
-	 * Dismisses a word from the unrecognised list (an admin term with no topic: "no kind of food to
-	 * map"), or brings it back (pending again: the match and the agent decide). Idempotent; flushes.
-	 */
-	async setIgnored(word: string, ignored: boolean): Promise<void> {
-		const name = normalizeCuisine(word) ?? word.trim().toLowerCase();
-		const key = termKey(name);
-		if (!key) return;
-		const found: Term | null = await this.em.findOne(Term, { key }, { populate: ['topics'] });
-		const term: Term | null = found ?? (ignored ? this.em.create(Term, { key, name }) : null);
-		if (!term) return;
-		if (ignored) {
-			term.topics.removeAll();
-			term.decidedBy = 'admin';
-			term.decidedAt = new Date();
-			term.suggestion = null;
-		} else if (term.decidedBy === 'admin' && !term.topics.count()) {
-			term.decidedBy = null;
-			term.decidedAt = null;
 		}
 		await this.em.flush();
 	}

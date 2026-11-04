@@ -66,9 +66,15 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	/**
 	 * May move to its tier's Claude model when the free one is out, outside `llmPaid` too: only for
 	 * small agents the user allowed by name (2026-11-03: `aspect-suggestion`, `claim-group-title`,
-	 * a few dozen short calls when an admin opens a page or a run names its groups), never a bulk one.
+	 * a few dozen short calls when an admin opens a page or a run names its groups; `analyst`, whose
+	 * choice puts Claude first: each answer is a question an admin asked), never a bulk one.
 	 */
 	paidFallback?: boolean;
+	/**
+	 * The answer is the model's own text (`res.text`), not an object: a conversational agent whose
+	 * answer is prose (the analyst). `outputSchema` is then unused; pass an empty object.
+	 */
+	freeText?: boolean;
 }
 
 /** Claude's prompt cache, 5 minutes from each use (a read restarts it) */
@@ -191,7 +197,10 @@ export abstract class BaseMastraAgent<
 				abortSignal,
 				instructions: system,
 				model: resolvedModel,
-				structuredOutput: { schema: this.config.outputSchema as any },
+				// A free-text agent's answer is `res.text`: no structured output at all
+				structuredOutput: (this.config.freeText ?
+					undefined
+				:	{ schema: this.config.outputSchema as any }) as any,
 			});
 		};
 

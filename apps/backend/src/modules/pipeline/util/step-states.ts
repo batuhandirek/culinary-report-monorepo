@@ -1,7 +1,7 @@
 import { DEFAULT_STEP_BUDGET_USD, MONTHLY_STEPS, PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 
-export type StepState = 'succeeded' | 'failed' | 'running' | 'queued' | 'skipped';
+export type StepState = 'succeeded' | 'failed' | 'running' | 'queued' | 'waiting' | 'skipped';
 
 /** One step's latest attempt for a city and month, from a run of that step or a monthly run. */
 export interface StepAttempt {
@@ -54,7 +54,11 @@ export function stepAttempts(run: RunForStates): StepAttempt[] {
 			continue;
 		}
 		if (reachedOpen) {
-			if (run.status === PipelineRunStatusEnum.QUEUED || run.status === PipelineRunStatusEnum.RUNNING) {
+			if (
+				run.status === PipelineRunStatusEnum.QUEUED ||
+				run.status === PipelineRunStatusEnum.RUNNING ||
+				run.status === PipelineRunStatusEnum.WAITING
+			) {
 				out.push({ step, state: 'queued', runId: run.id, at });
 			}
 			continue;
@@ -69,6 +73,10 @@ export function stepAttempts(run: RunForStates): StepAttempt[] {
 				break;
 			case PipelineRunStatusEnum.QUEUED:
 				out.push({ step, state: 'queued', runId: run.id, at });
+				break;
+			// The step it waits before: it needs the reading caught up
+			case PipelineRunStatusEnum.WAITING:
+				out.push({ step, state: 'waiting', runId: run.id, at });
 				break;
 			// A succeeded run has every key; nothing to add
 		}

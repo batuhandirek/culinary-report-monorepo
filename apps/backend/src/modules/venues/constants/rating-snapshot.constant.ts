@@ -1,8 +1,7 @@
-// Which venues get a Google rating snapshot twice a week (`SNAPSHOT_RATINGS`): every open venue
-// of the city with at least this many reviews, and every one a post named in the last
+// Every open venue of the city gets a Google rating snapshot weekly (`SNAPSHOT_RATINGS`); a
+// budget too small for all takes first the venues a post named in the last
 // `RATING_SNAPSHOT_TALKED_DAYS` (a post naming a brand but no branch counts for its branches in
-// the city). A rolling window, so the first days of a month don't empty the set.
-export const RATING_SNAPSHOT_MIN_REVIEWS = 500;
+// the city), then the most reviewed.
 export const RATING_SNAPSHOT_TALKED_DAYS = 30;
 
 // A snapshot costs one Google review (`compass/Google-Maps-Reviews-Scraper`, Free plan): the

@@ -35,11 +35,17 @@ export type PostFields = Omit<
 	Pick<SocialPost, 'externalId' | 'platform' | 'url' | 'postedAt'> & {
 		/** The name the author's profile shows, when the item carries it: the account's `displayName` */
 		authorName?: string | null;
+		/** The platform's id of the author (`SocialAccount.platformUserId`), which outlives a handle */
+		authorId?: string | null;
 		/** The caption's hashtags, in its order (`PostHashtag`) */
 		hashtags?: string[];
 		/** What found it in this scrape (`PostSource`); rows of one post merged keep them all */
 		finds?: PostFind[];
 	};
+
+/** A platform's user id as text, or null for none. */
+export const idOf = (id: unknown): string | null =>
+	(typeof id === 'string' && id.trim()) || (typeof id === 'number' && Number.isFinite(id)) ? `${id}`.trim() : null;
 
 /** What found a `clockworks/tiktok-scraper` item: the hashtag or the query it came from. */
 export const clockworksFinds = (row: any): PostFind[] => {
@@ -101,12 +107,12 @@ export class SocialPostService {
 	 * reach their city source with `linkPostSources` after the flush.
 	 */
 	async upsert(fields: PostFields, city: City, seenAt = new Date()): Promise<boolean> {
-		const { authorName, hashtags, finds, ...postFields } = fields;
+		const { authorName, authorId, hashtags, finds, ...postFields } = fields;
 		const account = await this.socialAccountService.ensure(
 			fields.platform,
 			fields.author,
 			city,
-			{ displayName: authorName, followers: fields.authorFans },
+			{ platformUserId: authorId, displayName: authorName, followers: fields.authorFans },
 			seenAt,
 		);
 		const existing = await this.em.findOne(SocialPost, { externalId: fields.externalId });
@@ -184,6 +190,7 @@ export class SocialPostService {
 			url: row.webVideoUrl,
 			postedAt: new Date(row.createTimeISO),
 			author: row.authorMeta?.name ?? null,
+			authorId: idOf(row.authorMeta?.id),
 			authorName: row.authorMeta?.nickName ?? null,
 			authorFans: row.authorMeta?.fans ?? null,
 			...clockworksCounts(row),
@@ -224,6 +231,8 @@ export class SocialPostService {
 			url: `https://www.tiktok.com/@${handle}/video/${row.aweme_id}`,
 			postedAt: new Date(row.create_time * 1000),
 			author: handle,
+			// TikTok's uid: the clockworks actors' `authorMeta.id`
+			authorId: idOf(row.author.uid),
 			authorName: row.author.nickname ?? null,
 			authorFans: row.author.follower_count ?? null,
 			views: stats.play_count ?? 0,
@@ -253,6 +262,8 @@ export class SocialPostService {
 			url: row.postUrl,
 			postedAt: new Date(row.publishedAt),
 			author: row.username ?? null,
+			// The user pk: the other Instagram actors' `ownerId`
+			authorId: idOf(row.creatorId),
 			authorName: row.fullName ?? null,
 			// The actor does not return follower counts
 			authorFans: null,
@@ -286,6 +297,7 @@ export class SocialPostService {
 			url: row.url,
 			postedAt: new Date(row.timestamp),
 			author: row.ownerUsername ?? null,
+			authorId: idOf(row.ownerId),
 			authorName: row.ownerFullName ?? null,
 			authorFans: null,
 			...instagramCounts(row),
@@ -306,7 +318,9 @@ export class SocialPostService {
 	/**
 	 * One of the `latestPosts` of an `apify/instagram-profile-scraper` item (`profile`, the
 	 * account's): the same media fields as the hashtag actor's items (`id` is the media pk), views
-	 * on videos only, hidden like counts as -1. The profile carries the author's followers.
+	 * on videos only, hidden like counts as -1. The profile carries the author's followers, but
+	 * only its own posts are the profile's: a collab post on its grid is owned by someone else,
+	 * whose account must not take the profile's name and followers.
 	 */
 	fromInstagramProfilePost(post: any, profile: any): PostFields | null {
 		if (!post?.id || !post.url || !post.timestamp) return null;
@@ -314,14 +328,20 @@ export class SocialPostService {
 		const usernames = (list: unknown) =>
 			Array.isArray(list) ? list.map((u: any) => u?.username).filter(Boolean) : [];
 		const author = post.ownerUsername ?? profile?.username ?? null;
+		// The owner's id when both carry one, else the handle
+		const profileOwn =
+			post.ownerId != null && profile?.id != null ?
+				`${post.ownerId}` === `${profile.id}`
+			:	!post.ownerUsername || `${post.ownerUsername}`.toLowerCase() === `${profile?.username ?? ''}`.toLowerCase();
 		return {
 			externalId: `ig_${`${post.id}`.split('_')[0]}`,
 			platform: SocialPlatformEnum.INSTAGRAM,
 			url: post.url,
 			postedAt: new Date(post.timestamp),
 			author,
-			authorName: profile?.fullName ?? null,
-			authorFans: typeof profile?.followersCount === 'number' ? profile.followersCount : null,
+			authorId: idOf(post.ownerId) ?? (profileOwn ? idOf(profile?.id) : null),
+			authorName: profileOwn ? (profile?.fullName ?? null) : (post.ownerFullName ?? null),
+			authorFans: profileOwn && typeof profile?.followersCount === 'number' ? profile.followersCount : null,
 			...instagramCounts(post),
 			isAd: !!(post.paidPartnership || post.isSponsored),
 			locationName: typeof post.locationName === 'string' && post.locationName.trim() ? post.locationName.trim() : null,

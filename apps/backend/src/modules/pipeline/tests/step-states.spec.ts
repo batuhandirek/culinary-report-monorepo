@@ -37,6 +37,15 @@ describe('pipeline step states', () => {
 		expect(attempts[9]).toMatchObject({ step: MONTHLY_STEPS[9], state: 'failed', error: 'boom' });
 	});
 
+	it('reads a waiting monthly run: done up to the step it waits before, the rest queued', () => {
+		const attempts = stepAttempts(
+			run({ step: PipelineStepEnum.MONTHLY, status: PipelineRunStatusEnum.WAITING, result: monthlyResult(3) }),
+		);
+		expect(attempts).toHaveLength(MONTHLY_STEPS.length);
+		expect(attempts[3]).toMatchObject({ step: MONTHLY_STEPS[3], state: 'waiting' });
+		expect(attempts.slice(4).every(a => a.state === 'queued')).toBe(true);
+	});
+
 	it('marks the steps a running monthly run has ahead as queued', () => {
 		const attempts = stepAttempts(
 			run({ step: PipelineStepEnum.MONTHLY, status: PipelineRunStatusEnum.RUNNING, result: monthlyResult(2) }),

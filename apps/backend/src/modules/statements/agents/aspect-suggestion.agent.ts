@@ -54,10 +54,10 @@ export interface AspectSuggestionContext {
 }
 
 /**
- * Names a cluster of claims no aspect fits (the "missing aspects" of `StatementClusterService`): a
+ * Names a cluster of claims no aspect fits (a group of `AspectDiscoveryService`): a
  * label of four words at most, a one-line hint, the root it belongs under, or the existing aspect
- * that already covers it. One call per cluster; nothing it says is stored: an admin creates the
- * aspect from it.
+ * that already covers it, or that the group is no aspect at all. One call per group; the job
+ * creates the aspects from its answers (no review step).
  */
 @Injectable()
 export class AspectSuggestionAgent extends BaseMastraAgent<
@@ -68,13 +68,14 @@ export class AspectSuggestionAgent extends BaseMastraAgent<
 		id: 'aspect-suggestion',
 		name: 'AspectSuggestionAgent',
 		outputSchema: aspectSuggestionSchema,
-		// A few dozen short calls a run: on Claude when OpenAI is out (the user's call, 2026-11-03)
+		// ~90 short calls a city a week: on Sonnet when OpenAI is out, cents a run (the user's call, 2026-11-03)
 		paidFallback: true,
 	};
 
-	// ~30 short calls when an admin opens the tab: mini
+	// What it decides creates aspects nobody reviews, and it runs ~90 calls a city a week (~270k
+	// tokens, a quarter of one account's daily gpt-5.4 allowance): full (the user's call, 2026-11-03)
 	protected getModel(): LlmModelChoice {
-		return 'mini';
+		return 'full';
 	}
 
 	protected getInstructions(context?: AspectSuggestionContext): string {

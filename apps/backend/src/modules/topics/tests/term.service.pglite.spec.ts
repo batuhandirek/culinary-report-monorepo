@@ -56,7 +56,8 @@ const ANSWERS: Record<string, { topics: string[]; suggestion: string | null }> =
 
 /*
  * Every wording seen (`Term`) and the topics each is (`TermTopic`): stored as agent B reads a
- * claim's food wordings (`ensure`) and from the venues' Google tags (`sync`), decided by a name
+ * claim's food wordings (`ensure`) and from the venues' Google tags (`sync`; the raw cuisines and
+ * categories nothing resolves: `topic.service.pglite.spec.ts`), decided by a name
  * match, the agent (the `terms` backlog) or an admin, re-decided when topics change, part of the
  * index every reader resolves text with. A statement's food part points at its term and takes the
  * term's links at read time: a decision moves every statement naming the wording at once.
@@ -702,31 +703,6 @@ describe('TermService (pglite)', () => {
 			topics: ['kebab'],
 			decidedBy: 'admin',
 		});
-	});
-
-	it('dismisses a word as an admin term with no topic, and brings it back pending', async () => {
-		// An admin's "none" from the Terms tab ("sauce") is one too
-		expect(await service().ignoredWords()).toEqual(['sauce']);
-		await service().setIgnored('Meat', true);
-		expect((await terms()).get('meat')).toMatchObject({
-			name: 'meat',
-			topics: [],
-			decidedBy: 'admin',
-		});
-		// Idempotent; a decided wording dismissed loses its links
-		await service().setIgnored('meat', true);
-		await service().setIgnored('waiting time', true);
-		expect(await service().ignoredWords()).toEqual(['meat', 'sauce', 'waiting time']);
-		expect(await decisions(['waiting time'])).toEqual({ 'waiting time': [[], 'admin', null] });
-		expect(await service().reviewTagTopics(['waiting time'])).toEqual(new Map());
-
-		// Brought back: pending again, for the match and the agent to decide
-		await service().setIgnored('Meat', false);
-		expect((await terms()).get('meat')).toMatchObject({ topics: [], decidedBy: null });
-		expect(await service().ignoredWords()).toEqual(['sauce', 'waiting time']);
-		// Un-dismissing a word never seen stores nothing
-		await service().setIgnored('unicorn', false);
-		expect((await terms()).has('unicorn')).toBe(false);
 	});
 
 	it("lets an admin keep one of a wording's current topics, and make a decided wording a topic's other name", async () => {

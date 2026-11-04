@@ -243,6 +243,35 @@ describe('AccountScrapeService (pglite)', () => {
 		expect(await em.count(SocialPost, { platform: SocialPlatformEnum.INSTAGRAM })).toBe(2);
 	});
 
+	it("never gives a collab post's owner the profile's name and followers", async () => {
+		const em = harness.orm.em;
+		// A post on the venue's grid owned by a creator (a collab), as on @sonmezbaklavaofficial
+		const [creator] = structuredClone(INSTAGRAM_PROFILE_ITEMS);
+		const collab = {
+			...creator.latestPosts[0],
+			id: '4012237201383699999',
+			shortCode: 'DeuVHoXcollab',
+			url: 'https://www.instagram.com/p/DeuVHoXcollab/',
+			ownerUsername: '_collab_kitchen_',
+			ownerFullName: 'Collab Kitchen',
+			ownerId: '999',
+		};
+		runActor.mockImplementationOnce(async () => [{ ...creator, latestPosts: [collab] }]);
+		await service.scrape(city, [{ platform: SocialPlatformEnum.INSTAGRAM, handle: 'berlindeneyenir' }], {
+			since: SINCE,
+			budgetUsd: 1,
+			label: 'last week',
+			now: new Date('2026-10-26T05:00:00Z'),
+		});
+
+		em.clear();
+		const owner = await em.findOneOrFail(SocialAccount, { handle: '_collab_kitchen_' });
+		expect([owner.displayName, owner.followers ?? null]).toEqual(['Collab Kitchen', null]);
+		expect(await em.count(SocialAccountSnapshot, { account: owner })).toBe(0);
+		const post = await em.findOneOrFail(SocialPost, { externalId: 'ig_4012237201383699999' });
+		expect(post.authorFans ?? null).toBeNull();
+	});
+
 	it('scrapes nothing for no targets', async () => {
 		expect(
 			await service.scrape(city, [], { since: SINCE, budgetUsd: 2, label: 'last week' }),

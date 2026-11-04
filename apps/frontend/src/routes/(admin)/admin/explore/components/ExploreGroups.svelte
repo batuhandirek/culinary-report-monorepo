@@ -5,13 +5,12 @@
 
 	// What they say, grouped by meaning: X's claims whose vectors sit close together, largest
 	// first, each with a few of its claims said in different ways. A reading aid, never a count a
-	// report quotes; "See claims" orders the table below by the group's most central claim.
+	// report quotes.
 	interface Props {
 		data: AdminExploreGroupsOutputDto | null;
-		onLike: (phrase: string) => void;
 	}
 
-	let { data, onLike }: Props = $props();
+	let { data }: Props = $props();
 
 	const n = (value: number) => value.toLocaleString('en-GB');
 	const TONES: Record<string, string> = { positive: 'text-success', negative: 'text-destructive' };
@@ -36,17 +35,14 @@
 	<ul class="divide-line m-0 flex list-none flex-col divide-y p-0">
 		{#each data.groups as group, i (i)}
 			<li class="flex flex-col gap-1.5 py-2.5">
-				<div class="flex flex-wrap items-baseline justify-between gap-2">
-					<div class="flex flex-col gap-0.5">
-						{#if group.title}<p class="m-0 text-base font-medium">{group.title}</p>{/if}
-						<p class="m-0 text-sm {group.title ? 'text-muted-foreground' : 'font-medium'}">
-							{n(group.claims)} claims from {n(group.sources)} reviews and posts
-							<span class="text-muted-foreground font-normal">
-								· <span class="text-success">{n(group.praise)} praise</span> · <span class="text-destructive">{n(group.complaints)} complaints</span>
-							</span>
-						</p>
-					</div>
-					<button type="button" class="text-beet text-xs" onclick={() => onLike(group.like)}>See claims</button>
+				<div class="flex flex-col gap-0.5">
+					{#if group.title}<p class="m-0 text-base font-medium">{group.title}</p>{/if}
+					<p class="m-0 text-sm {group.title ? 'text-muted-foreground' : 'font-medium'}">
+						{n(group.claims)} claims from {n(group.sources)} reviews and posts
+						<span class="text-muted-foreground font-normal">
+							· <span class="text-success">{n(group.praise)} praise</span> · <span class="text-destructive">{n(group.complaints)} complaints</span>
+						</span>
+					</p>
 				</div>
 				<ul class="m-0 flex list-none flex-col gap-0.5 p-0 text-sm">
 					{#each group.samples as sample (sample.id)}

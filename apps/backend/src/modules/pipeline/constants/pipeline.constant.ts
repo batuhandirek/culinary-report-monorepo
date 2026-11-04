@@ -24,6 +24,8 @@ export enum PipelineStepEnum {
 	// The city's food blogs through their feeds: each new article a post (free; the weekly cron
 	// and the month end)
 	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
+	// The reading steps, for an admin's run: the crons and MONTHLY leave reading to
+	// `IngestionService` (the hourly pass and the one each scrape run queues)
 	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
@@ -45,6 +47,10 @@ export enum PipelineStepEnum {
 	// Brands' own accounts with no follower count yet: their profiles only, no posts (the daily
 	// cron), so every brand account has followers within days of being linked
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	// Every brand account with an open branch in the city and every creator account over
+	// `TRACK_CREATOR_MIN_FOLLOWERS` / `TRACK_CREATOR_MIN_VIEWS`: their profiles only (followers,
+	// following, post count), each again `TRACK_PROFILE_EVERY_DAYS` after its last (the weekly cron)
+	TRACK_PROFILES = 'TRACK_PROFILES',
 	// Brands' own accounts on the platform they have none on: their other account's handle looked
 	// up there, linked when the profile proves it (the weekly cron, after matching)
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -70,8 +76,8 @@ export enum PipelineStepEnum {
 	// Open evening tables of every venue with a booking page (Google's own, TheFork, OpenTable),
 	// won prospects and report venues first (the Thursday demand cron)
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
-	// Google rating and review count of every venue posts named in the last 30 days and every
-	// one with 500+ reviews (`RatingSnapshotService`, the twice-weekly rating cron)
+	// Every open venue of the city: its Google reviews since the last fetch, its rating and review
+	// count, those posts named first (`RatingSnapshotService`, the weekly rating cron)
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	// Wolt / Lieferando ratings, fees and menus of the report venues and competitors
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
@@ -82,35 +88,29 @@ export enum PipelineStepEnum {
 	MONTHLY = 'MONTHLY',
 }
 
-// The monthly run, in order: city-wide posts and blog articles, their mentions, filling in missing venues,
-// then the most talked-about brands' posts (searched by name, and the watched accounts' own
-// profiles), competitors for those without, their reviews, their Google Maps details (hours,
-// amenities, popular times) and their reports, and last the outreach lead scores over everything
-// gathered. A stored run's result is keyed by position ("<n>. <STEP>"), so reordering needs a
-// migration re-keying stored results (`Migration20261025050000_watched_accounts`)
+// The monthly run, in order: the month-end passes over the city's posts and blogs, the names
+// they named looked up, the most talked-about brands' posts (searched by name, and the watched
+// accounts' own profiles), competitors for those without, their reviews, their Google Maps
+// details, delivery, comments, press and search ranks, Google Trends, then their reports and
+// last the outreach lead scores. No reading step: the steps that need the posts read
+// (`READ_GATED_STEPS`) or everything read (`ALL_READ_STEPS`) read first and wait when no model
+// answers. A stored run's result is keyed by position ("<n>. <STEP>"), so reordering needs a
+// migration re-keying stored results (`Migration20261104150000_monthly_without_reading`)
 export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_TIKTOK,
 	PipelineStepEnum.SCRAPE_INSTAGRAM,
 	PipelineStepEnum.SCRAPE_BLOGS,
-	PipelineStepEnum.EXTRACT_MENTIONS,
-	PipelineStepEnum.MATCH_MENTIONS,
 	PipelineStepEnum.LOOKUP_VENUES,
-	PipelineStepEnum.MATCH_MENTIONS,
 	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
-	// Before extraction: the profiles' posts are read and matched with the rest
 	PipelineStepEnum.SCRAPE_ACCOUNTS,
-	PipelineStepEnum.EXTRACT_MENTIONS,
-	PipelineStepEnum.MATCH_MENTIONS,
-	// After the last match: the report brands are final here, and the review scrape takes
-	// their competitors
+	// The report brands are final once the profiles' posts are read: competitors, then the
+	// review scrape takes theirs too
 	PipelineStepEnum.FILL_COMPETITORS,
 	PipelineStepEnum.SCRAPE_REVIEWS,
-	PipelineStepEnum.ANALYSE_REVIEWS,
 	PipelineStepEnum.REFRESH_VENUE_DETAILS,
 	// After the details: Google's "Order online" links say where each venue delivers
 	PipelineStepEnum.SCRAPE_DELIVERY,
 	PipelineStepEnum.SCRAPE_COMMENTS,
-	PipelineStepEnum.ANALYSE_COMMENTS,
 	PipelineStepEnum.SCRAPE_PRESS,
 	PipelineStepEnum.TRACK_SEARCH_RANKS,
 	// Before the reports: their city section quotes the search changes
@@ -118,6 +118,61 @@ export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.BUILD_REPORTS,
 	PipelineStepEnum.SCORE_LEADS,
 ];
+
+/**
+ * Steps that read what the reading found (the names posts gave, the month's top brands, the
+ * accounts matching linked): a pass runs first, and with no model the run waits, at most
+ * `READ_WAIT_HOURS`, then goes on with what is read.
+ */
+export const READ_GATED_STEPS: readonly PipelineStepEnum[] = [
+	PipelineStepEnum.LOOKUP_VENUES,
+	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
+	PipelineStepEnum.SCRAPE_ACCOUNTS,
+	PipelineStepEnum.FILL_COMPETITORS,
+	PipelineStepEnum.SCRAPE_REVIEWS,
+	PipelineStepEnum.REFRESH_VENUE_DETAILS,
+	PipelineStepEnum.SCRAPE_DELIVERY,
+	PipelineStepEnum.SCRAPE_COMMENTS,
+	PipelineStepEnum.SCRAPE_PRESS,
+	PipelineStepEnum.TRACK_SEARCH_RANKS,
+	PipelineStepEnum.FIND_OWN_ACCOUNTS,
+];
+
+/** Steps that read everything, the month's reviews included: they wait until it is read */
+export const ALL_READ_STEPS: readonly PipelineStepEnum[] = [
+	PipelineStepEnum.BUILD_REPORTS,
+	PipelineStepEnum.SCORE_LEADS,
+];
+
+/** Steps that store something to read (posts, reviews, comments, press, venues to match against): a run of them queues a reading pass when it ends */
+export const SOURCE_STEPS: readonly PipelineStepEnum[] = [
+	PipelineStepEnum.SCRAPE_VENUES,
+	PipelineStepEnum.SEARCH_BRANCHES,
+	PipelineStepEnum.LOOKUP_OSM_PLACES,
+	PipelineStepEnum.SCRAPE_TIKTOK,
+	PipelineStepEnum.SCRAPE_TIKTOK_RECENT,
+	PipelineStepEnum.SCRAPE_INSTAGRAM,
+	PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT,
+	PipelineStepEnum.SCRAPE_INSTAGRAM_REELS,
+	PipelineStepEnum.SCRAPE_BLOGS,
+	PipelineStepEnum.LOOKUP_VENUES,
+	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
+	PipelineStepEnum.SCRAPE_ACCOUNTS,
+	PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT,
+	PipelineStepEnum.SCRAPE_REVIEWS,
+	PipelineStepEnum.SCRAPE_COMMENTS,
+	PipelineStepEnum.SCRAPE_PRESS,
+	PipelineStepEnum.WATCH_REVIEWS,
+];
+
+// How a reading pass takes the city's unread posts: batches of this many, at most this many
+// batches a pass (a batch that reads nothing ends it)
+export const INGEST_EXTRACT_BATCH = 1000;
+export const INGEST_EXTRACT_MAX_BATCHES = 20;
+
+// The unread reviews a reading pass takes, newest first: a backfill's thousands are read over
+// several passes, so the posts of the hours between are never stuck behind them
+export const INGEST_REVIEWS_PER_PASS = 1000;
 
 /** What a step spends on Apify at most, when the admin gives no budget. */
 export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> = {
@@ -172,9 +227,14 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.WATCH_REVIEWS]: 1,
 	[PipelineStepEnum.SAMPLE_BUSYNESS]: 1,
 	[PipelineStepEnum.SAMPLE_RESERVATIONS]: 1,
-	// One review a venue at $0.0006, planned on 80 %: up to 4,000 venues (Berlin 2026-10: ~3,300,
-	// about $2 a run, $16 a month)
-	[PipelineStepEnum.SNAPSHOT_RATINGS]: 3,
+	// $0.0006 a Google review: Berlin 2026-11, ~50,000-70,000 new reviews a month over 9,503 open
+	// venues, ~$9 a week, plus one review each for the venues with nothing new (at most ~$5.70,
+	// 40 % of the budget kept for it): ~$40 a month
+	[PipelineStepEnum.SNAPSHOT_RATINGS]: 15,
+	// A profile at ~$0.003 (Instagram) / ~$0.004 (TikTok), each every two weeks: Berlin 2026-11,
+	// ~3,700 brand accounts and ~900 creators over the thresholds, ~$14 a fortnight, so a weekly
+	// run takes about half
+	[PipelineStepEnum.TRACK_PROFILES]: 10,
 	// Wolt menus on 30 %, then Lieferando's city listing, whose actor refuses a cap under $5
 	[PipelineStepEnum.SCRAPE_DELIVERY]: 7,
 	// Every post once, at seven days, at ~$0.0039 (TikTok) / $0.0027 (Instagram): Berlin's

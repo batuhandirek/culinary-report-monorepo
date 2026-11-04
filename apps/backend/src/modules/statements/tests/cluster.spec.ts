@@ -9,7 +9,7 @@ import {
 } from '../util/cluster.js';
 
 /*
- * The greedy cosine clustering behind "Missing aspects", on fixed vectors: paraphrases group, a
+ * The greedy cosine clustering behind aspect discovery and Explore's groups, on fixed vectors: paraphrases group, a
  * different thing stays apart, the floors (claims, sources, brands) and the order.
  */
 

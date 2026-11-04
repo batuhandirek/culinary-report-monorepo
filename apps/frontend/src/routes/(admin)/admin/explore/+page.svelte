@@ -106,15 +106,6 @@
 
 	let claimsOpen = $state<boolean | undefined>(undefined);
 	let claimsTab = $state<'all' | 'groups'>('all');
-	const setLike = (phrase: string) => {
-		const url = new URL(page.url.href);
-		url.searchParams.set('like', phrase);
-		url.searchParams.delete('q');
-		url.searchParams.delete('page');
-		claimsOpen = true;
-		claimsTab = 'all';
-		goto(url, { reset: false }).then(() => document.getElementById('explore-claims')?.scrollIntoView({ behavior: 'smooth' }));
-	};
 
 	// The topics: an aspect and a food or drink (each a picker), claims about both when both are
 	// picked; node is the first, `with` the rest, and any further one an older link carried stays
@@ -198,7 +189,7 @@
 		<ExploreSection
 			id="claims"
 			title="Claims"
-			note={claimsTab === 'all' ? 'Every claim in the view, newest first · a row opens its source' : 'Claims that say the same thing · “See claims” lists one group'}
+			note={claimsTab === 'all' ? 'Every claim in the view, newest first · a row opens its source' : 'Claims that say the same thing'}
 			bind:open={claimsOpen}>
 			{#snippet actions()}
 				<Tabs.Root bind:value={claimsTab}>
@@ -214,7 +205,7 @@
 				{#if groupsLoader.error && !groups}
 					<ErrorState onRetry={() => query && groupsLoader.load(query)} />
 				{:else}
-					<ExploreGroups data={groups} onLike={setLike} />
+					<ExploreGroups data={groups} />
 				{/if}
 			{:else if cityId && query}
 				{#key viewKey}

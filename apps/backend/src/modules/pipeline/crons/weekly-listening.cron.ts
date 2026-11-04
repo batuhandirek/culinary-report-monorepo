@@ -51,15 +51,10 @@ export class WeeklyListeningCron {
 				// Every city has watched profiles (its report brands' own accounts at least)
 				PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT,
 			];
-			for (const step of [
-				...steps,
-				PipelineStepEnum.EXTRACT_MENTIONS,
-				PipelineStepEnum.MATCH_MENTIONS,
-				PipelineStepEnum.LOOKUP_VENUES,
-				PipelineStepEnum.MATCH_MENTIONS,
-				PipelineStepEnum.FIND_OWN_ACCOUNTS,
-			])
-				await this.pipelineService.queue(city.id, step, month);
+			// The scrapes, then the steps that read what the reading made of them: each waits for
+			// the posts to be read (`READ_GATED_STEPS`)
+			for (const step of [...steps, PipelineStepEnum.LOOKUP_VENUES, PipelineStepEnum.FIND_OWN_ACCOUNTS])
+				await this.pipelineService.queueOnce(city.id, step, month, 24, now);
 		}
 	}
 }

@@ -26,6 +26,16 @@ export const cityVenueScrapeDue = (
 	return due <= now;
 };
 
+// The reading of what the scrapes stored: hourly at :10 (a scrape run also queues a pass when it
+// ends), so a model out at night costs the reading an hour after it answers again, not a day
+export const INGESTION_CRON = '10 * * * *';
+
+/**
+ * How long a step that needs the posts read waits for a model before it goes on with what is
+ * read (`READ_GATED_STEPS`). Reports and lead scores (`ALL_READ_STEPS`) never go on unread.
+ */
+export const READ_WAIT_HOURS = 24;
+
 // The weekly review watch: Mondays, 05:00 UTC, an hour before a monthly run on the same day
 export const REVIEW_WATCH_CRON = '0 5 * * 1';
 
@@ -48,8 +58,13 @@ export const WEEKLY_LISTENING_CRON = '0 3 * * 0';
  */
 export const WEEKLY_LISTENING_DAYS = 8;
 
-// The rating snapshots: Tuesdays and Fridays, 04:30 UTC, after the daily Instagram run is queued
-export const RATING_SNAPSHOT_CRON = '30 4 * * 2,5';
+// The rating snapshots of every open venue: Tuesdays, 04:30 UTC, after the daily Instagram run
+// is queued
+export const RATING_SNAPSHOT_CRON = '30 4 * * 2';
+
+// The profile tracking (brand accounts and big creators, each every two weeks): Wednesdays,
+// 04:45 UTC
+export const PROFILE_TRACK_CRON = '45 4 * * 3';
 
 // The dish-search snapshots: daily, 05:15 UTC, a city's run queued only when its newest snapshot
 // is `City.dishSearchEveryDays` old (`dishSearchDue`)

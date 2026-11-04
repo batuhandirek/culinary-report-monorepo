@@ -107,6 +107,11 @@ export class PostCommentService {
 		return unique.length;
 	}
 
+	/** The city's comments not classified yet: what the next `analyse` takes */
+	countUnread(cityId: string): Promise<number> {
+		return this.em.count(PostComment, { analysedAt: null, post: { city: cityId } });
+	}
+
 	/**
 	 * Classifies the city's comments that have none yet, one post at a time (the agent is told
 	 * the venue the post is about). Tags-only and emoji-only comments need no model. Flushes once.

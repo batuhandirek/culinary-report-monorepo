@@ -147,7 +147,7 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		]);
 	});
 
-	it('tells the venues with a Google review from before the month: TripAdvisor and the month itself are no history', async () => {
+	it('tells the venues with a Google review from before a date: TripAdvisor and the reviews from the date on are no history', async () => {
 		const em = harness.orm.em;
 		const [old, recent, tourist, none] = ['h-old', 'h-recent', 'h-ta', 'h-none'].map(placeId =>
 			em.create(Venue, { city: testCity(em), placeId, name: placeId }),
@@ -170,8 +170,13 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		});
 		await em.flush();
 		const ids = [old, recent, tourist, none].map(v => v.id);
-		expect([...(await service.venuesWithHistory(ids, '2026-09'))]).toEqual([old.id]);
-		expect(await service.venuesWithHistory([], '2026-09')).toEqual(new Set());
+		const before = new Date('2026-09-01T00:00:00Z');
+		expect([...(await service.venuesWithHistory(ids, before))]).toEqual([old.id]);
+		expect(await service.venuesWithHistory([], before)).toEqual(new Set());
+		// A stored stretch from before the date is history too, a review or not
+		none.reviewsFetchedFrom = new Date('2026-08-01T00:00:00Z');
+		await em.flush();
+		expect([...(await service.venuesWithHistory(ids, before))].sort()).toEqual([old.id, none.id].sort());
 	});
 
 	it('updates the day’s snapshot when the step runs twice', async () => {

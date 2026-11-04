@@ -6,7 +6,6 @@ import type { City } from 'src/modules/cities/entities/city.entity.js';
 
 import {
 	RATING_SNAPSHOT_BUDGET_HEADROOM,
-	RATING_SNAPSHOT_MIN_REVIEWS,
 	RATING_SNAPSHOT_TALKED_DAYS,
 	RATING_SNAPSHOT_USD,
 } from '../constants/rating-snapshot.constant.js';
@@ -21,9 +20,9 @@ export interface RatingSnapshotTarget {
 }
 
 /**
- * Google rating snapshots beyond the report venues (`SNAPSHOT_RATINGS`, twice a week): every
- * venue people post about and every well-reviewed one, so a rating trend exists before a brand
- * is in a report.
+ * The weekly fetch of every open venue (`SNAPSHOT_RATINGS`): its Google reviews since the last
+ * fetch and today's rating snapshot (`ReviewService.snapshotRatings`), so reviews, a rating and a
+ * review-count trend exist for any venue before its brand is in a report.
  */
 @Injectable()
 export class RatingSnapshotService {
@@ -33,9 +32,9 @@ export class RatingSnapshotService {
 	) {}
 
 	/**
-	 * The city's open venues to snapshot, those posts named most first, then the most reviewed:
-	 * named in the last `RATING_SNAPSHOT_TALKED_DAYS` days (directly, or a branch of a brand a
-	 * post named without one), or with `RATING_SNAPSHOT_MIN_REVIEWS` reviews.
+	 * The city's open venues, the order a budget too small for all of them cuts in: those posts
+	 * named in the last `RATING_SNAPSHOT_TALKED_DAYS` days most first (directly, or a branch of a
+	 * brand a post named without one), then the most reviewed.
 	 */
 	async due(city: City, now = new Date()): Promise<RatingSnapshotTarget[]> {
 		const since = new Date(now.getTime() - RATING_SNAPSHOT_TALKED_DAYS * 86_400_000);
@@ -57,9 +56,8 @@ export class RatingSnapshotService {
 			select v.id, coalesce(c.posts, 0) posts, v.reviews_count from venues v
 			left join counts c on c.venue_id = v.id
 			where v.city_id = ? and not v.closed
-				and (c.posts > 0 or v.reviews_count >= ?)
 			order by coalesce(c.posts, 0) desc, v.reviews_count desc nulls last, v.id`,
-			[since, city.id, since, city.id, RATING_SNAPSHOT_MIN_REVIEWS],
+			[since, city.id, since, city.id],
 		);
 		return rows.map(r => ({ id: r.id, posts: r.posts, reviewsCount: r.reviews_count }));
 	}
@@ -69,7 +67,15 @@ export class RatingSnapshotService {
 		city: City,
 		budgetUsd: number,
 		now = new Date(),
-	): Promise<{ due: number; talked: number; requested: number; snapshots: number }> {
+	): Promise<{
+		due: number;
+		talked: number;
+		requested: number;
+		saved: number;
+		snapshots: number;
+		upToDate: number;
+		missed: number;
+	}> {
 		const due = await this.due(city, now);
 		const room = Math.floor((budgetUsd * RATING_SNAPSHOT_BUDGET_HEADROOM) / RATING_SNAPSHOT_USD);
 		const result = await this.reviewService.snapshotRatings(

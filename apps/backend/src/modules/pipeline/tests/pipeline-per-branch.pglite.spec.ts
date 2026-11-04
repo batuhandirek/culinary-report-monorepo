@@ -23,6 +23,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 /* A chain with three open branches in a city: every branch's place figures in one monthly run,
  * the searches by name once for the brand. Actors mocked at the services that run them. */
@@ -49,6 +50,7 @@ describe('PipelineService: every branch of a report brand (pglite)', () => {
 				BrandService,
 				CityService,
 				PipelineService,
+				caughtUpIngestion(),
 				ProspectQueryService,
 				CompetitorService,
 				{ provide: MentionMatchingService, useValue: { topBrandIds } },

@@ -20,18 +20,18 @@ import { Statement } from './entities/statement.entity.js';
 import { StatementPart } from './entities/statement-part.entity.js';
 import { AspectDiscoveryService } from './services/aspect-discovery.service.js';
 import { StatementService } from './services/statement.service.js';
-import { StatementClusterService } from './services/statement-cluster.service.js';
 import { StatementEmbeddingService } from './services/statement-embedding.service.js';
 import { StatementInsightService } from './services/statement-insight.service.js';
 import { StatementPartsService } from './services/statement-parts.service.js';
 import { AspectDiscoveryWorker } from './workers/aspect-discovery.worker.js';
+import { AspectDiscoveryCron } from './crons/aspect-discovery.cron.js';
 
 /**
  * What posts, articles and reviews say, one claim per row (`Statement`), and what each is about
  * (`StatementPart`: an aspect, or a food wording whose topics are its term's). Agent B
  * (`ClaimPartsAgent`) reads the parts, right after agent A and as the `statement-parts` backlog.
- * Each claim gets a vector (`statement-embeddings` backlog) for search by meaning and the missing
- * aspects (`StatementClusterService`). The Explore page reads them (`StatementInsightService`).
+ * Each claim gets a vector (`statement-embeddings` backlog) for search by meaning, Explore's groups and
+ * aspect discovery (`AspectDiscoveryService`). The Explore page reads them (`StatementInsightService`).
  * Imports no module whose entities it points at (venues, social): entity references need none,
  * and both import this one to write their sources' claims.
  */
@@ -49,10 +49,10 @@ import { AspectDiscoveryWorker } from './workers/aspect-discovery.worker.js';
 		StatementService,
 		StatementPartsService,
 		StatementEmbeddingService,
-		StatementClusterService,
 		StatementInsightService,
 		AspectDiscoveryService,
 		AspectDiscoveryWorker,
+		AspectDiscoveryCron,
 		ClaimPartsAgent,
 		AspectSuggestionAgent,
 		ClaimGroupTitleAgent,

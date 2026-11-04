@@ -8,6 +8,7 @@
 	} from 'client';
 
 	import CreatorAccountsPanel from './components/CreatorAccountsPanel.svelte';
+	import CreatorHandlesPanel from './components/CreatorHandlesPanel.svelte';
 	import CreatorWatchPanel from './components/CreatorWatchPanel.svelte';
 
 	import { goto, invalidateAll } from '$app/navigation';
@@ -126,7 +127,10 @@
 
 <div class="flex min-w-0 flex-col gap-5 pb-12">
 	<div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
-		<CreatorAccountsPanel {creator} {month} />
+		<div class="flex min-w-0 flex-col gap-5">
+			<CreatorAccountsPanel {creator} {month} />
+			<CreatorHandlesPanel {creator} />
+		</div>
 
 		<div class="flex min-w-0 flex-col gap-5">
 			<CreatorWatchPanel {creator} {month} />

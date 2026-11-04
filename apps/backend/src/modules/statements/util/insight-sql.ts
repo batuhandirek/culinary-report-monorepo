@@ -76,7 +76,7 @@ export interface InsightFilters {
  * One row per claim of the city in the months (Google tags whatever the months: they are all-time),
  * with what every reader of the page needs. Out, as on the theme pages: reviews with no text, claims
  * of a post about a place matched to no brand or made by that brand's own account; and a post's
- * claims about the city or nothing when a brand's own account made it (as the missing aspects
+ * claims about the city or nothing when a brand's own account made it (as aspect discovery
  * leave them out). Brand and place are joined through the source, never stored on the claim.
  */
 const claimRowsSql = (cityId: string, months: { from: string; to: string }): Sql =>

@@ -77,7 +77,7 @@ export class AccountTwinService {
 			.execute(
 				`select a.id, a.platform from social_accounts a
 			join brands b on b.id = a.brand_id
-			where a.platform in (?, ?) and a.twin_checked_at is null
+			where a.platform in (?, ?) and a.twin_checked_at is null and a.handle_lost_at is null
 			and exists (select 1 from venues v where v.brand_id = a.brand_id and v.city_id = ? and not v.closed)
 			and not exists (
 				select 1 from social_accounts o
@@ -228,6 +228,7 @@ export class AccountTwinService {
 					profile.handle,
 					city,
 					{
+						platformUserId: profile.platformUserId,
 						displayName: profile.displayName,
 						followers: profile.followers,
 						following: profile.following,
@@ -243,6 +244,7 @@ export class AccountTwinService {
 					profile.handle,
 					city,
 					{
+						platformUserId: profile.platformUserId,
 						displayName: profile.displayName,
 						followers: profile.followers,
 						following: profile.following,

@@ -2,19 +2,12 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 
-import _ from 'lodash';
-
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
-import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
 import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
 import { aspectKey, type IndexedTerm, TopicIndex } from '../util/topics.js';
-
-// Unmapped keys the admin read lists, most used first, each with the venues it was said of
-const UNMAPPED_LIMIT = 100;
-const UNMAPPED_EXAMPLES = 3;
 
 export interface TopicCounts {
 	topic: Topic;
@@ -26,10 +19,6 @@ export interface TopicCounts {
 
 export interface TopicOverview {
 	topics: TopicCounts[];
-	/** `normalizeCuisine` keys of the city's mentions and food venues' categories that resolve to no topic, ignored ones left out */
-	unmapped: { key: string; mentions: number; venues: number; examples: string[] }[];
-	/** Words an admin dismissed, of every city */
-	ignored: string[];
 }
 
 /** What an admin sets on a topic; on an update only the fields given change, null clears. */
@@ -236,90 +225,34 @@ export class TopicService {
 	}
 
 	async overview(cityId: string): Promise<TopicOverview> {
-		const [topics, terms, ignoredRows] = await Promise.all([
-			this.all(),
-			this.decidedTerms(),
-			// The words an admin dismissed: admin terms with no topic (`TermService.setIgnored`)
-			this.em.getConnection().execute<{ name: string }[]>(
-				`select t.name from terms t where t.decided_by = 'admin'
-					and not exists (select 1 from term_topics tt where tt.term_id = t.id) order by t.name`,
-			),
-		]);
-		const ignored = _.uniq(ignoredRows.map(r => normalizeCuisine(r.name) ?? r.name.trim().toLowerCase()));
+		const [topics, terms] = await Promise.all([this.all(), this.decidedTerms()]);
 		const index = toIndex(topics, terms);
 		const conn = this.em.getConnection();
 		const [mentionRows, venueRows] = await Promise.all([
-			conn.execute<
-				{ cuisine: string | null; category: string | null; name: string; n: number }[]
-			>(
-				`select m.cuisine, v.category, v.name, count(*)::int as n from mentions m
+			conn.execute<{ cuisine: string | null; category: string | null; n: number }[]>(
+				`select m.cuisine, v.category, count(*)::int as n from mentions m
 					join venues v on v.id = m.venue_id
-					where v.city_id = ? group by 1, 2, 3`,
+					where v.city_id = ? group by 1, 2`,
 				[cityId],
 			),
-			conn.execute<{ category: string | null; name: string; n: number }[]>(
-				`select category, name, 1 as n from venues where city_id = ?`,
+			conn.execute<{ category: string | null; n: number }[]>(
+				`select category, count(*)::int as n from venues where city_id = ? group by 1`,
 				[cityId],
 			),
 		]);
 		const mentions = new Map<string, number>();
 		const venues = new Map<string, number>();
-		const unmapped = new Map<
-			string,
-			{ key: string; mentions: number; venues: number; names: Map<string, number> }
-		>();
-		const miss = (
-			raw: string | null,
-			field: 'mentions' | 'venues',
-			n: number,
-			name: string,
-		) => {
-			const key = normalizeCuisine(raw);
-			if (!key) return;
-			const row = unmapped.get(key) ?? {
-				key,
-				mentions: 0,
-				venues: 0,
-				names: new Map<string, number>(),
-			};
-			row[field] += n;
-			row.names.set(name, (row.names.get(name) ?? 0) + n);
-			unmapped.set(key, row);
-		};
-		for (const r of mentionRows) {
-			const keys = index.resolveMention(r.cuisine, r.category);
-			if (!keys.length) miss(r.cuisine ?? r.category, 'mentions', r.n, r.name);
-			for (const k of keys) mentions.set(k, (mentions.get(k) ?? 0) + r.n);
-		}
-		for (const r of venueRows) {
-			const keys = index.resolve(r.category);
-			// A hotel or a dance school a scrape found is no kind of food to map
-			if (!keys.length && isFoodVenue(r.category)) miss(r.category, 'venues', r.n, r.name);
-			for (const k of keys) venues.set(k, (venues.get(k) ?? 0) + r.n);
-		}
+		for (const r of mentionRows)
+			for (const k of index.resolveMention(r.cuisine, r.category))
+				mentions.set(k, (mentions.get(k) ?? 0) + r.n);
+		for (const r of venueRows)
+			for (const k of index.resolve(r.category)) venues.set(k, (venues.get(k) ?? 0) + r.n);
 		return {
 			topics: topics.map(topic => ({
 				topic,
 				mentions: mentions.get(topic.key) ?? 0,
 				venues: venues.get(topic.key) ?? 0,
 			})),
-			ignored,
-			unmapped: _.sortBy(
-				[...unmapped.values()].filter(r => !ignored.includes(r.key)),
-				r => -(r.mentions * 5 + r.venues),
-				r => r.key,
-			)
-				.slice(0, UNMAPPED_LIMIT)
-				.map(({ names, ...r }) => ({
-					...r,
-					examples: _.sortBy(
-						[...names],
-						([, n]) => -n,
-						([name]) => name,
-					)
-						.slice(0, UNMAPPED_EXAMPLES)
-						.map(([name]) => name),
-				})),
 		};
 	}
 }

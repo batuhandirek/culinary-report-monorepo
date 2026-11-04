@@ -21,6 +21,8 @@ export interface ProfileFacts {
 	handle: string;
 	/** False when the platform says no such profile */
 	exists: boolean;
+	/** The platform's id of the user (`SocialAccount.platformUserId`) */
+	platformUserId?: string | null;
 	displayName?: string | null;
 	followers?: number | null;
 	following?: number | null;
@@ -46,6 +48,7 @@ export const instagramProfileFacts = (item: any): ProfileFacts | null => {
 		platform: SocialPlatformEnum.INSTAGRAM,
 		handle,
 		exists: true,
+		platformUserId: item.id != null ? `${item.id}` : null,
 		displayName: item.fullName || null,
 		followers: typeof item.followersCount === 'number' ? item.followersCount : null,
 		following: typeof item.followsCount === 'number' ? item.followsCount : null,
@@ -70,6 +73,7 @@ export const tiktokProfileFacts = (item: any): ProfileFacts | null => {
 		platform: SocialPlatformEnum.TIKTOK,
 		handle,
 		exists: true,
+		platformUserId: author.id != null ? `${author.id}` : null,
 		displayName: author.nickName || null,
 		followers: typeof author.fans === 'number' ? author.fans : null,
 		following: typeof author.following === 'number' ? author.following : null,

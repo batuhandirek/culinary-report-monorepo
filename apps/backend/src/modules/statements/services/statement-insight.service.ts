@@ -228,7 +228,7 @@ export interface InsightTermHit {
 	topics: string[];
 }
 
-/** Explore's grouping floors: smaller than the missing aspects', since the view is already one topic's */
+/** Explore's grouping floors: smaller than aspect discovery's, since the view is already one topic's */
 export const INSIGHT_GROUP_FLOORS = { threshold: 0.82, minClaims: 3, minSources: 2, minBrands: 1 };
 export const INSIGHT_GROUPS = 12;
 const INSIGHT_GROUP_SAMPLES = 3;
@@ -783,7 +783,7 @@ export class StatementInsightService {
 	}
 
 	/**
-	 * X's claims in the view grouped by meaning (the greedy cosine pass of the missing aspects over
+	 * X's claims in the view grouped by meaning (aspect discovery's greedy cosine pass over
 	 * the vectors' first `CLUSTER_DIMENSIONS`, at `INSIGHT_GROUP_FLOORS`), largest first. Nothing is
 	 * stored or named: each group shows its most central claims, and its count is a reading aid,
 	 * never a figure a report quotes. Empty until the claims have vectors.

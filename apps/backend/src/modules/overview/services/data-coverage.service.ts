@@ -36,6 +36,7 @@ const RECURRING_STEPS = [
 	PipelineStepEnum.SAMPLE_BUSYNESS,
 	PipelineStepEnum.SAMPLE_RESERVATIONS,
 	PipelineStepEnum.SNAPSHOT_RATINGS,
+	PipelineStepEnum.TRACK_PROFILES,
 	PipelineStepEnum.REFRESH_POST_COUNTS,
 	PipelineStepEnum.TRACK_DISH_SEARCHES,
 	PipelineStepEnum.WATCH_REVIEWS,
@@ -173,12 +174,17 @@ export class DataCoverageService {
 			months: months.map(monthDto),
 			recurring: RECURRING_STEPS.map(latestRecurring),
 			queue: runs
-				.filter(r => r.status === PipelineRunStatusEnum.QUEUED || r.status === PipelineRunStatusEnum.RUNNING)
+				.filter(r =>
+					[PipelineRunStatusEnum.QUEUED, PipelineRunStatusEnum.RUNNING, PipelineRunStatusEnum.WAITING].includes(r.status),
+				)
 				.map(r => ({
 					runId: r.id,
 					step: r.step,
 					month: r.month,
-					state: r.status === PipelineRunStatusEnum.RUNNING ? ('running' as const) : ('queued' as const),
+					state:
+						r.status === PipelineRunStatusEnum.RUNNING ? ('running' as const)
+						: r.status === PipelineRunStatusEnum.WAITING ? ('waiting' as const)
+						: ('queued' as const),
 					createdAt: r.createdAt,
 				})),
 		};

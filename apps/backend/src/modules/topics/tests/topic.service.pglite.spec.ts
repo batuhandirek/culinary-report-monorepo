@@ -41,7 +41,7 @@ describe('TopicService (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				TopicService,
-				// The aliases and the dismissed words are its terms
+				// The aliases are its terms
 				TermService,
 				TrendsTopicLookupService,
 				AdminTopicsController,
@@ -69,6 +69,12 @@ describe('TopicService (pglite)', () => {
 			category: 'Restaurant',
 		});
 		em.create(Venue, { city, placeId: 'ft-hotel', name: 'Hotel Y', category: 'Hotel' });
+		em.create(Venue, {
+			city: other,
+			placeId: 'ft-roman',
+			name: 'Trattoria Roma',
+			category: 'Roman restaurant',
+		});
 		em.create(Venue, {
 			city: other,
 			placeId: 'ft-other',
@@ -111,7 +117,7 @@ describe('TopicService (pglite)', () => {
 		expect(searched.some(t => t.key === 'bar')).toBe(false);
 	});
 
-	it("counts the city's mentions and venues per topic and lists the keys nothing maps", async () => {
+	it("counts the city's mentions and venues per topic", async () => {
 		const res = await controller.getTopics({ cityId: city.id });
 		const byKey = new Map(res.topics.map(t => [t.key, t]));
 		expect(byKey.get('ramen')).toMatchObject({
@@ -127,25 +133,29 @@ describe('TopicService (pglite)', () => {
 		expect(byKey.get('vegan')?.mentions).toBe(1);
 		expect(byKey.get('kebab')?.mentions).toBe(1);
 		expect(byKey.get('bar')?.trendsTopicId).toBeUndefined();
-		// "Restaurant" says nothing; cheesesteaks are known to no topic; a hotel is no food to map
-		expect(res.unmapped).toEqual([
-			{ key: 'cheesesteaks', mentions: 2, venues: 0, examples: ['Döner X'] },
+	});
+
+	it("stores the food words nothing resolves as terms for the agent: a mention's cuisine and a food venue's category, in every city", async () => {
+		const terms = harness.moduleRef.get(TermService);
+		const index = await service.index();
+		expect(index.resolve('Cheesesteaks')).toEqual([]);
+		// "Restaurant" says nothing, a hotel is no food, "Vegan Döner" and "Ramen restaurant" resolve
+		expect(await terms.sync(index)).toEqual({ added: 2, matched: 0 });
+		const rows: { key: string; name: string; decided_by: string | null }[] =
+			await harness.orm.em
+				.getConnection()
+				.execute(
+					`select key, name, decided_by from terms where decided_by is null order by key`,
+				);
+		expect(rows).toEqual([
+			{ key: 'cheesesteak', name: 'Cheesesteaks', decided_by: null },
+			{ key: 'roman restaurant', name: 'Roman restaurant', decided_by: null },
 		]);
+		expect(await terms.countPending()).toBe(2);
+		expect(await terms.sync(index)).toEqual({ added: 0, matched: 0 });
 	});
 
-	it('dismisses a word from the list and brings it back', async () => {
-		await controller.setIgnoredWord({ word: 'Cheesesteaks', ignored: true });
-		await controller.setIgnoredWord({ word: 'cheesesteaks', ignored: true });
-		let res = await controller.getTopics({ cityId: city.id });
-		expect(res.unmapped).toEqual([]);
-		expect(res.ignored).toEqual(['cheesesteaks']);
-		await controller.setIgnoredWord({ word: 'cheesesteaks', ignored: false });
-		res = await controller.getTopics({ cityId: city.id });
-		expect(res.unmapped.map(u => u.key)).toEqual(['cheesesteaks']);
-		expect(res.ignored).toEqual([]);
-	});
-
-	it('creates a topic keyed by its label and maps an unmapped key as an alias', async () => {
+	it('creates a topic keyed by its label and makes a waiting word its other name', async () => {
 		const created = await controller.createTopic({
 			label: 'Philly Cheesesteak',
 			kind: TopicKindEnum.DISH,
@@ -173,14 +183,20 @@ describe('TopicService (pglite)', () => {
 			controller.createTopic({ label: 'Restaurant', kind: TopicKindEnum.FORMAT }),
 		).rejects.toThrow(BadRequestException);
 
-		// One click on an unmapped key: it joins the aliases, trimmed and once
+		// A waiting word made the topic's other name: it joins the aliases, trimmed and once
 		const updated = await controller.updateTopic(created.id, {
 			aliases: [' cheesesteaks', 'Cheesesteaks', 'philly cheesesteak'],
 		});
-		expect(updated.aliases).toEqual(['cheesesteaks']);
+		// The waiting term keeps the spelling it was stored with
+		expect(updated.aliases).toEqual(['Cheesesteaks']);
 		const res = await controller.getTopics({ cityId: city.id });
 		expect(res.topics.find(t => t.key === 'philly cheesesteak')?.mentions).toBe(2);
-		expect(res.unmapped).toEqual([]);
+		// Decided, so the cuisine resolves and nothing is stored again
+		expect((await service.index()).resolve('Cheesesteaks')).toEqual(['philly cheesesteak']);
+		expect(await harness.moduleRef.get(TermService).sync(await service.index())).toEqual({
+			added: 0,
+			matched: 0,
+		});
 	});
 
 	it("refuses another topic's admin word, an unknown parent and a parent under the topic", async () => {

@@ -39,11 +39,19 @@ export interface AdminAccountOutputDto {
 	followersAt?: string;
 	/** Followers against the newest count 30 or more days older; absent without one */
 	followersChange?: number;
+	/** For an account whose handle another user took (`handleLostAt`), the handle it last had */
 	handle: string;
+	/**
+	 * When another user showed up under its handle: what it is called now is unknown
+	 * @format date-time
+	 */
+	handleLostAt?: string;
 	id: string;
 	/** Its newest figures; absent when no scrape gave a follower count */
 	latest?: AdminAccountSnapshotOutputDto;
 	platform: AdminAccountOutputDtoPlatformEnum;
+	/** The platform's id of the user, which outlives a handle */
+	platformUserId?: string;
 	/** Brands an admin said it is not */
 	rejections: {
 		brand: {
@@ -206,6 +214,228 @@ export interface AdminAddProspectInputDto {
 export enum AdminAddProspectInputDtoLanguageEnum {
 	En = 'en',
 	De = 'de',
+}
+
+export interface AdminAnalystAskInputDto {
+	/**
+	 * The question; `@Venue:<id>`, `@Brand:<id>`, `@Aspect:<key>`, `@Topic:<key>`, … name rows
+	 * @minLength 1
+	 * @maxLength 4000
+	 */
+	text: string;
+	/**
+	 * A follow-up in this thread; none starts a thread
+	 * @format uuid
+	 */
+	threadId?: string;
+}
+
+export interface AdminAnalystAskOutputDto {
+	answer: AdminAnalystMessageOutputDto;
+	question: AdminAnalystMessageOutputDto;
+	thread: AdminAnalystThreadOutputDto;
+}
+
+export interface AdminAnalystMentionOutputDto {
+	detail?: string;
+	id: string;
+	label: string;
+	ref: string;
+	/** What the composer inserts: `@Venue:<id>` */
+	token: string;
+	type: AdminAnalystMentionOutputDtoTypeEnum;
+}
+
+export enum AdminAnalystMentionOutputDtoTypeEnum {
+	Brand = 'brand',
+	Creator = 'creator',
+	Topic = 'topic',
+	Post = 'post',
+	City = 'city',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+}
+
+export interface AdminAnalystMentionsInputDto {
+	/** @format uuid */
+	cityId?: string;
+	/**
+	 * @minLength 1
+	 * @maxLength 100
+	 */
+	q: string;
+	type?: AdminAnalystMentionsInputDtoTypeEnum;
+}
+
+export enum AdminAnalystMentionsInputDtoTypeEnum {
+	Brand = 'brand',
+	Creator = 'creator',
+	Topic = 'topic',
+	Post = 'post',
+	City = 'city',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+}
+
+export interface AdminAnalystMentionsOutputDto {
+	items: AdminAnalystMentionOutputDto[];
+}
+
+export interface AdminAnalystMessageOutputDto {
+	author: {
+		firstName: string;
+		id: string;
+		roles: string[];
+	};
+	/** @format date-time */
+	createdAt: string;
+	/** @format date-time */
+	finishedAt?: string;
+	id: string;
+	model?: string;
+	parts: AdminAnalystPartOutputDto[];
+	status: AdminAnalystMessageOutputDtoStatusEnum;
+	thread: {
+		id: string;
+	};
+	usage?: {
+		cacheWriteTokens: number;
+		cachedInputTokens: number;
+		inputTokens: number;
+		outputTokens: number;
+		queries: number;
+		steps: number;
+	};
+	usd?: number;
+}
+
+export enum AdminAnalystMessageOutputDtoStatusEnum {
+	Done = 'done',
+	Failed = 'failed',
+	Queued = 'queued',
+	Running = 'running',
+}
+
+/** The wire shapes mirror `sdk`'s `Analyst*Payload` (what the socket sends), dates as `Date` here */
+export interface AdminAnalystPartOutputDto {
+	/** @format date-time */
+	createdAt: string;
+	data:
+		| {
+				text: string;
+				type: AdminAnalystPartOutputDtoTypeEnum;
+		  }
+		| {
+				mentions: AnalystMention[];
+				type: AdminAnalystPartOutputDtoTypeEnum1;
+		  }
+		| {
+				steps: AnalystPlanStep[];
+				type: AdminAnalystPartOutputDtoTypeEnum2;
+		  }
+		| {
+				chart?: AnalystChart;
+				columns?: string[];
+				durationMs?: number;
+				error?: string;
+				purpose: string;
+				rowCount?: number;
+				rows?: (string | null | number | null | boolean | null)[][];
+				show: boolean;
+				sql: string;
+				title?: string;
+				truncated?: boolean;
+				type: AdminAnalystPartOutputDtoTypeEnum3;
+		  }
+		| {
+				error?: string;
+				/** Construct a type with a set of properties K of type T */
+				input: Recordstringunknown;
+				summary?: string;
+				tool: string;
+				type: AdminAnalystPartOutputDtoTypeEnum4;
+		  }
+		| {
+				message: string;
+				type: AdminAnalystPartOutputDtoTypeEnum5;
+		  };
+	id: string;
+	position: number;
+	streaming: boolean;
+}
+
+export enum AdminAnalystPartOutputDtoTypeEnum {
+	Text = 'text',
+}
+
+export enum AdminAnalystPartOutputDtoTypeEnum1 {
+	Mentions = 'mentions',
+}
+
+export enum AdminAnalystPartOutputDtoTypeEnum2 {
+	Plan = 'plan',
+}
+
+export enum AdminAnalystPartOutputDtoTypeEnum3 {
+	Query = 'query',
+}
+
+export enum AdminAnalystPartOutputDtoTypeEnum4 {
+	Lookup = 'lookup',
+}
+
+export enum AdminAnalystPartOutputDtoTypeEnum5 {
+	Error = 'error',
+}
+
+export interface AdminAnalystRenameInputDto {
+	/**
+	 * @minLength 1
+	 * @maxLength 200
+	 */
+	title: string;
+}
+
+export interface AdminAnalystThreadDetailOutputDto {
+	/** Oldest first */
+	messages: AdminAnalystMessageOutputDto[];
+	thread: AdminAnalystThreadOutputDto;
+}
+
+export interface AdminAnalystThreadOutputDto {
+	/** @format date-time */
+	createdAt: string;
+	id: string;
+	/** @format date-time */
+	lastMessageAt: string;
+	owner: {
+		firstName: string;
+		id: string;
+	};
+	title: string;
+	usd: number;
+}
+
+export interface AdminAnalystThreadsInputDto {
+	/** @min 1 */
+	page: number;
+	/**
+	 * Words in the title
+	 * @maxLength 200
+	 */
+	q?: string;
+	/**
+	 * @min 1
+	 * @max 100
+	 */
+	size: number;
+}
+
+export interface AdminAnalystThreadsOutputDto {
+	items: AdminAnalystThreadOutputDto[];
+	total: number;
 }
 
 export interface AdminApifyRunOutputDto {
@@ -922,29 +1152,6 @@ export enum AdminCitySourceYieldOutputDtoKindEnum {
 	InstagramAccount = 'instagram_account',
 }
 
-export interface AdminClusterClaimOutputDto {
-	brandName?: string;
-	id: number;
-	sentiment?: AdminClusterClaimOutputDtoSentimentEnum;
-	sourceKind: AdminClusterClaimOutputDtoSourceKindEnum;
-	text: string;
-}
-
-export enum AdminClusterClaimOutputDtoSentimentEnum {
-	Positive = 'positive',
-	Mixed = 'mixed',
-	Negative = 'negative',
-	Neutral = 'neutral',
-}
-
-export enum AdminClusterClaimOutputDtoSourceKindEnum {
-	Comment = 'comment',
-	Post = 'post',
-	Press = 'press',
-	Review = 'review',
-	GoogleTag = 'google_tag',
-}
-
 /** A whole brand on the competition list. */
 export interface AdminCompetitorBrandOutputDto {
 	/** Its open branches */
@@ -1247,6 +1454,30 @@ export enum AdminCreatorFindOutputDtoKindEnum {
 	InstagramAccount = 'instagram_account',
 }
 
+/**
+ * One handle change as a scrape saw it (`seenAt`, never when the person renamed): a rename
+ * (`fromHandle` → `toHandle`), or a handle another user took (`toHandle` absent, `takenBy` who has
+ * it now); `fromHandle` is absent when the account had lost its handle before.
+ */
+export interface AdminCreatorHandleChangeOutputDto {
+	/** An account in a handle change: its handle as it is now (the last one it had, when taken), and whose it is. */
+	account: AdminHandleChangeAccountOutputDto;
+	fromHandle?: string;
+	id: string;
+	/** @format date-time */
+	seenAt: string;
+	source: AdminCreatorHandleChangeOutputDtoSourceEnum;
+	/** An account in a handle change: its handle as it is now (the last one it had, when taken), and whose it is. */
+	takenBy?: AdminHandleChangeAccountOutputDto;
+	toHandle?: string;
+}
+
+export enum AdminCreatorHandleChangeOutputDtoSourceEnum {
+	Profile = 'profile',
+	Lookup = 'lookup',
+	Post = 'post',
+}
+
 /** A creator's posts in the month asked for, over all their accounts. */
 export interface AdminCreatorMonthOutputDto {
 	/** Brands their posts named */
@@ -1275,6 +1506,8 @@ export interface AdminCreatorOutputDto {
 	createdAt: string;
 	/** What found their posts, the most posts first (15 at most) */
 	foundBy: AdminCreatorFindOutputDto[];
+	/** Their accounts' handle changes, and the handles their accounts took from others, newest first */
+	handleChanges: AdminCreatorHandleChangeOutputDto[];
 	id: string;
 	/** Posts and views per month, six months up to the one asked for, oldest first */
 	months: {
@@ -1345,6 +1578,7 @@ export interface AdminDataCoverageOutputDto {
 }
 
 export enum AdminDataCoverageOutputDtoStateEnum {
+	Waiting = 'waiting',
 	Queued = 'queued',
 	Running = 'running',
 }
@@ -1371,6 +1605,7 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -1436,6 +1671,7 @@ export interface AdminDataStepOutputDto {
 
 export enum AdminDataStepOutputDtoStateEnum {
 	Failed = 'failed',
+	Waiting = 'waiting',
 	Queued = 'queued',
 	Skipped = 'skipped',
 	Running = 'running',
@@ -1464,6 +1700,7 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -2553,6 +2790,25 @@ export interface AdminGetVenueStatusChangesInputDto {
 	month: string;
 }
 
+/** An account in a handle change: its handle as it is now (the last one it had, when taken), and whose it is. */
+export interface AdminHandleChangeAccountOutputDto {
+	creator: {
+		id: string;
+		name: string;
+	};
+	handle: string;
+	/** @format date-time */
+	handleLostAt?: string;
+	id: string;
+	platform: AdminHandleChangeAccountOutputDtoPlatformEnum;
+}
+
+export enum AdminHandleChangeAccountOutputDtoPlatformEnum {
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Blog = 'blog',
+}
+
 export interface AdminHashtagOutputDto {
 	brand?: {
 		id: string;
@@ -2565,16 +2821,6 @@ export interface AdminHashtagOutputDto {
 		key: string;
 		label: string;
 	};
-}
-
-export interface AdminIgnoreWordInputDto {
-	ignored: boolean;
-	/**
-	 * The word as listed; true dismisses it, false brings it back
-	 * @minLength 1
-	 * @maxLength 80
-	 */
-	word: string;
 }
 
 export interface AdminInviteToPortalInputDto {
@@ -3531,37 +3777,6 @@ export interface AdminMergeCreatorAccountsInputDto {
 	accountIds: string[];
 }
 
-/** One group of claims and the suggested aspect for it; nothing of it is stored */
-export interface AdminMissingAspectOutputDto {
-	/** Most claims first; the city has no id */
-	brands: {
-		claims: number;
-		id?: string;
-		name: string;
-	}[];
-	claims: number;
-	/** Where its claims are filed now; no `aspect` = under none */
-	filedAt: {
-		aspect?: string;
-		claims: number;
-		label: string;
-	}[];
-	/** An existing aspect that already covers it (its claims should have been filed there) */
-	fits?: {
-		key: string;
-		label: string;
-	};
-	hint?: string;
-	/** At most four words; absent when naming it failed */
-	label?: string;
-	/** The phrase "See claims" searches by */
-	like: string;
-	/** The root aspect it belongs under */
-	root?: string;
-	samples: AdminClusterClaimOutputDto[];
-	sources: number;
-}
-
 export interface AdminNewsletterCountsInputDto {
 	/** @format uuid */
 	cityId: string;
@@ -3764,6 +3979,7 @@ export type AdminPipelineRunOutputDtoNullable = {
 export enum AdminPipelineRunOutputDtoNullableStatusEnum {
 	QUEUED = 'QUEUED',
 	RUNNING = 'RUNNING',
+	WAITING = 'WAITING',
 	SUCCEEDED = 'SUCCEEDED',
 	FAILED = 'FAILED',
 }
@@ -3790,6 +4006,7 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -3811,6 +4028,7 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 export enum AdminPipelineRunOutputDtoStatusEnum {
 	QUEUED = 'QUEUED',
 	RUNNING = 'RUNNING',
+	WAITING = 'WAITING',
 	SUCCEEDED = 'SUCCEEDED',
 	FAILED = 'FAILED',
 }
@@ -3837,6 +4055,7 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -4678,6 +4897,7 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -4694,40 +4914,6 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
 	MONTHLY = 'MONTHLY',
-}
-
-/** A city's month or quarter of claims no aspect fits, grouped by meaning ("Missing aspects") */
-export interface AdminStatementClustersInputDto {
-	/** @format uuid */
-	cityId: string;
-	/**
-	 * One of `month` and `quarter`
-	 * @pattern ^[0-9]{4}-[0-9]{2}$
-	 */
-	month?: string;
-	/** @pattern ^[0-9]{4}-q[1-4]$ */
-	quarter?: string;
-	/**
-	 * A root aspect's key: only the claims filed at it; `none`: only those under no aspect
-	 * @maxLength 80
-	 */
-	root?: string;
-}
-
-export interface AdminStatementClustersOutputDto {
-	/** Claims with no aspect or only a root, with a vector */
-	claims: number;
-	clusters: AdminMissingAspectOutputDto[];
-	/** @format date-time */
-	computedAt: string;
-	/** Of them, the ones clustered */
-	considered: number;
-	months: string[];
-	/** Clusters past the floors beyond the ones listed */
-	more: number;
-	/** Claims with no aspect or only a root that have no vector yet */
-	notEmbedded: number;
-	root?: string;
 }
 
 /** One claim with where it was said: the review and its venue, or the post and the mention it is about */
@@ -5350,11 +5536,7 @@ export enum AdminTopicVenueOutputDtoSourceEnum {
 }
 
 export interface AdminTopicsOutputDto {
-	/** Words an admin dismissed (every city), left out of `unmapped` */
-	ignored: string[];
 	topics: AdminTopicOutputDto[];
-	/** Cuisine keys of the city that resolve to no topic, most used first */
-	unmapped: AdminUnmappedCuisineOutputDto[];
 }
 
 export interface AdminTrendsLookupInputDto {
@@ -5393,14 +5575,6 @@ export interface AdminTrendsTopicOutputDto {
 	title: string;
 	/** What Google calls it: "Cuisine", "Dish", "Topic", "Restaurant chain"… */
 	type: string;
-}
-
-export interface AdminUnmappedCuisineOutputDto {
-	/** Venues the word was said of (posts) or is the Google category of, most first */
-	examples: string[];
-	key: string;
-	mentions: number;
-	venues: number;
 }
 
 /** A post naming a place no venue matched yet, the most viewed first. */
@@ -6074,6 +6248,51 @@ export interface AdminWatchRefOutputDto {
 
 export type AnalyseReportData = AdminReportOutputDto;
 
+export interface AnalystChart {
+	kind: AnalystChartKindEnum;
+	x: string;
+	y: string[];
+}
+
+export enum AnalystChartKindEnum {
+	Line = 'line',
+	Bar = 'bar',
+}
+
+export interface AnalystMention {
+	facts?: string;
+	found: boolean;
+	id?: string;
+	label?: string;
+	ref: string;
+	type: AnalystMentionTypeEnum;
+}
+
+export enum AnalystMentionTypeEnum {
+	Brand = 'brand',
+	Creator = 'creator',
+	Topic = 'topic',
+	Post = 'post',
+	City = 'city',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+}
+
+export interface AnalystPlanStep {
+	status: AnalystPlanStepStatusEnum;
+	title: string;
+}
+
+export enum AnalystPlanStepStatusEnum {
+	Done = 'done',
+	Skipped = 'skipped',
+	Todo = 'todo',
+	Doing = 'doing',
+}
+
+export type AskAnalystData = AdminAnalystAskOutputDto;
+
 export interface BlogEntryAuthorOutputDto {
 	id: string;
 	profileImage?: {
@@ -6555,6 +6774,8 @@ export type DecideAccountPayload =
 			branchId: string | null;
 	  };
 
+export type DeleteAnalystThreadData = OkResponse;
+
 export type DeleteMeData = GetMeOutputDto;
 
 export type DeleteReportConfigData = any;
@@ -6775,6 +6996,8 @@ export interface ForgotPasswordInputDto {
 export type GetAdminOverviewData = AdminOverviewOutputDto;
 
 export type GetAdminTodayData = AdminTodayOutputDto;
+
+export type GetAnalystThreadData = AdminAnalystThreadDetailOutputDto;
 
 export type GetBrandData = AdminBrandOutputDto;
 
@@ -7084,8 +7307,6 @@ export type GetSectionsData = SitemapSectionsOutputDto;
 export type GetSharedReportData = SharedReportOutputDto;
 
 export type GetSharedReportPdfData = any;
-
-export type GetStatementClustersData = AdminStatementClustersOutputDto;
 
 export type GetStatementsSummaryData = AdminStatementsSummaryOutputDto;
 
@@ -7452,6 +7673,8 @@ export enum ListAccountsParamsStatusEnum {
 	Suggested = 'suggested',
 	Linked = 'linked',
 }
+
+export type ListAnalystThreadsData = AdminAnalystThreadsOutputDto;
 
 export type ListApifyRunsData = AdminListApifyRunsOutputDto;
 
@@ -8157,7 +8380,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1205'?: PartialOmitCredentialVerificationRequestuserOptionalProps1205Enum;
+	'__@OptionalProps@1224'?: PartialOmitCredentialVerificationRequestuserOptionalProps1224Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -8183,7 +8406,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1205Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1224Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -8236,6 +8459,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SNAPSHOT_RATINGS?: number;
 	SYNC_OSM_PLACES?: number;
 	TRACK_DISH_SEARCHES?: number;
+	TRACK_PROFILES?: number;
 	TRACK_SEARCH_RANKS?: number;
 	WATCH_REVIEWS?: number;
 }
@@ -8417,6 +8641,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	TRACK_DISH_SEARCHES?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	TRACK_PROFILES?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -9358,6 +9587,8 @@ export type RemovePortalCompetitorData = PortalCompetitorsOutputDto;
 export type RemovePortalMemberData = AdminProspectOutputDto;
 
 export type RemoveProspectData = any;
+
+export type RenameAnalystThreadData = AdminAnalystThreadOutputDto;
 
 export interface ReportAnalysis {
 	builtAt: string;
@@ -10644,6 +10875,19 @@ export type RevokeSessionData = OkResponse;
 
 export type RunLlmBacklogsData = AdminRunLlmBacklogsOutputDto;
 
+export type SearchAnalystMentionsData = AdminAnalystMentionsOutputDto;
+
+export enum SearchAnalystMentionsParamsTypeEnum {
+	Brand = 'brand',
+	Creator = 'creator',
+	Topic = 'topic',
+	Post = 'post',
+	City = 'city',
+	Venue = 'venue',
+	Aspect = 'aspect',
+	Term = 'term',
+}
+
 export type SearchBrandBranchesData = any;
 
 /** A topic's Google search interest and mention share, the month against the one before. */
@@ -10669,8 +10913,6 @@ export type SearchPortalCompetitorsData = PortalCompetitorSearchOutputDto;
 export type SendReportData = AdminReportOutputDto;
 
 export type SetDefaultReportTemplateData = AdminReportTemplateOutputDto;
-
-export type SetIgnoredWordData = any;
 
 export type SetUserPasswordData = OkResponseO1;
 
@@ -13046,40 +13288,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description "Missing aspects": a city's month or quarter of claims no aspect fits, grouped by meaning, each with a suggested aspect. Worked out on request (kept in memory for hours), never stored
-		 *
-		 * @name GetStatementClusters
-		 * @request GET:/admin/statements/clusters
-		 * @response `200` `GetStatementClustersData`
-		 */
-		getStatementClusters: (
-			query: {
-				/** @format uuid */
-				cityId: string;
-				/**
-				 * One of `month` and `quarter`
-				 * @pattern ^[0-9]{4}-[0-9]{2}$
-				 */
-				month?: string;
-				/** @pattern ^[0-9]{4}-q[1-4]$ */
-				quarter?: string;
-				/**
-				 * A root aspect's key: only the claims filed at it; `none`: only those under no aspect
-				 * @maxLength 80
-				 */
-				root?: string;
-			},
-			params: RequestParams = {},
-		) =>
-			this.request<GetStatementClustersData, any>({
-				path: `/admin/statements/clusters`,
-				method: 'GET',
-				query: query,
-				format: 'json',
-				...params,
-			}),
-
-		/**
 		 * @description How many venues had a waiting complaint in the city's month, and how long the stated waits were
 		 *
 		 * @name GetWaitComplaints
@@ -13409,10 +13617,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Every food topic with the city's mentions and venues on it, and the city's unmapped cuisine keys.
+		 * @description Every topic with the city's mentions and venues on it.
 		 *
 		 * @name GetTopics
-		 * @summary Every food topic with the city's mentions and venues on it, and the city's unmapped cuisine keys
+		 * @summary Every topic with the city's mentions and venues on it
 		 * @request GET:/admin/topics
 		 * @response `200` `GetTopicsData`
 		 */
@@ -13465,23 +13673,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * No description
-		 *
-		 * @name SetIgnoredWord
-		 * @request PUT:/admin/topics/ignored-words
-		 * @response `200` `SetIgnoredWordData`
-		 */
-		setIgnoredWord: (data: AdminIgnoreWordInputDto, params: RequestParams = {}) =>
-			this.request<SetIgnoredWordData, any>({
-				path: `/admin/topics/ignored-words`,
-				method: 'PUT',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
 		 * @description Google Trends topic ids for some words (Trends' autocomplete), to set a topic's `trendsTopicId`.
 		 *
 		 * @name LookupTrendsTopics
@@ -13508,10 +13699,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Changes the fields given; an unmapped key is mapped by adding it to `aliases` (admin terms of the topic).
+		 * @description Changes the fields given; `aliases` are the topic's other names (admin terms linked to it alone).
 		 *
 		 * @name UpdateTopic
-		 * @summary Changes the fields given; an unmapped key is mapped by adding it to `aliases` (admin terms of the topic)
+		 * @summary Changes the fields given; `aliases` are the topic's other names (admin terms linked to it alone)
 		 * @request PATCH:/admin/topics/{id}
 		 * @response `200` `UpdateTopicData`
 		 */
@@ -15602,6 +15793,134 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				method: 'PUT',
 				body: data,
 				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Every admin's threads, the latest active first
+		 *
+		 * @name ListAnalystThreads
+		 * @request GET:/admin/analyst/threads
+		 * @response `200` `ListAnalystThreadsData`
+		 */
+		listAnalystThreads: (
+			query: {
+				/** @min 1 */
+				page: number;
+				/**
+				 * Words in the title
+				 * @maxLength 200
+				 */
+				q?: string;
+				/**
+				 * @min 1
+				 * @max 100
+				 */
+				size: number;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListAnalystThreadsData, any>({
+				path: `/admin/analyst/threads`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A thread with every message and part, oldest first
+		 *
+		 * @name GetAnalystThread
+		 * @request GET:/admin/analyst/threads/{id}
+		 * @response `200` `GetAnalystThreadData`
+		 */
+		getAnalystThread: (id: string, params: RequestParams = {}) =>
+			this.request<GetAnalystThreadData, any>({
+				path: `/admin/analyst/threads/${id}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name RenameAnalystThread
+		 * @request PATCH:/admin/analyst/threads/{id}
+		 * @response `200` `RenameAnalystThreadData`
+		 */
+		renameAnalystThread: (
+			id: string,
+			data: AdminAnalystRenameInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<RenameAnalystThreadData, any>({
+				path: `/admin/analyst/threads/${id}`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name DeleteAnalystThread
+		 * @request DELETE:/admin/analyst/threads/{id}
+		 * @response `200` `DeleteAnalystThreadData`
+		 */
+		deleteAnalystThread: (id: string, params: RequestParams = {}) =>
+			this.request<DeleteAnalystThreadData, any>({
+				path: `/admin/analyst/threads/${id}`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description A question: a new thread, or a follow-up (409 while the last answer is being written)
+		 *
+		 * @name AskAnalyst
+		 * @request POST:/admin/analyst/questions
+		 * @response `201` `AskAnalystData`
+		 */
+		askAnalyst: (data: AdminAnalystAskInputDto, params: RequestParams = {}) =>
+			this.request<AskAnalystData, any>({
+				path: `/admin/analyst/questions`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Rows by name for the composer's `@` picker, each with the token it inserts
+		 *
+		 * @name SearchAnalystMentions
+		 * @request GET:/admin/analyst/mentions
+		 * @response `200` `SearchAnalystMentionsData`
+		 */
+		searchAnalystMentions: (
+			query: {
+				/** @format uuid */
+				cityId?: string;
+				/**
+				 * @minLength 1
+				 * @maxLength 100
+				 */
+				q: string;
+				type?: SearchAnalystMentionsParamsTypeEnum;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<SearchAnalystMentionsData, any>({
+				path: `/admin/analyst/mentions`,
+				method: 'GET',
+				query: query,
 				format: 'json',
 				...params,
 			}),

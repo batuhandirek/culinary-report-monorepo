@@ -16,6 +16,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const MONTH = '2026-09';
 
@@ -29,6 +30,7 @@ describe('BUILD_REPORTS for a brand reported across its cities (pglite)', () => 
 		harness = await createPgliteTestingModule({
 			providers: [
 				PipelineService,
+				caughtUpIngestion(),
 				ProspectQueryService,
 				BrandLeadScoreService,
 				BrandService,

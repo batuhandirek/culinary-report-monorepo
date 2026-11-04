@@ -46,5 +46,5 @@ export interface AdminDataCoverageOutputDto {
 	/** Steps that run on their own schedule, whatever the month: their latest run */
 	recurring: AdminDataStepOutputDto[];
 	/** Runs waiting or running now */
-	queue: { runId: string; step: PipelineStepEnum; month: string; state: 'queued' | 'running'; createdAt: Date }[];
+	queue: { runId: string; step: PipelineStepEnum; month: string; state: 'queued' | 'running' | 'waiting'; createdAt: Date }[];
 }

@@ -10,6 +10,7 @@ import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 import { Creator } from '../entities/creator.entity.js';
 import type { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialAccount } from '../entities/social-account.entity.js';
+import { SocialAccountHandleChange } from '../entities/social-account-handle-change.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
 
@@ -46,7 +47,14 @@ export interface CreatorDetail {
 	views: number;
 	/** What found their posts, the most posts first: a city source, a venue search or their own profile */
 	foundBy: CreatorFind[];
+	/**
+	 * Their accounts' handle changes, and those where one of their accounts took another's handle,
+	 * newest first, with both accounts and their creators populated (`HANDLE_CHANGE_POPULATE`)
+	 */
+	handleChanges: SocialAccountHandleChange[];
 }
+
+export const HANDLE_CHANGE_POPULATE = ['account', 'account.creator', 'takenBy', 'takenBy.creator'] as const;
 
 /** One thing that found a creator's posts (`PostSource`), with how many of their posts. */
 export interface CreatorFind {
@@ -226,7 +234,15 @@ export class CreatorService {
 				)
 			:	[];
 		const ownBrands = new Set(accounts.map(a => a.brand?.id).filter(Boolean));
+		const handleChanges = ids.length ?
+				await this.em.find(
+					SocialAccountHandleChange,
+					{ $or: [{ account: { $in: ids } }, { takenBy: { $in: ids } }] },
+					{ populate: [...HANDLE_CHANGE_POPULATE], orderBy: { seenAt: QueryOrder.DESC, createdAt: QueryOrder.DESC } },
+				)
+			:	[];
 		return {
+			handleChanges,
 			creator,
 			accounts: await this.socialAccountService.withFigures(accounts, month),
 			months: months.map(m => {

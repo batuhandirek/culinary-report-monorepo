@@ -61,13 +61,9 @@
 	);
 
 	const MONTHS = recentMonths(12).map((m) => ({ name: monthLabel(m), value: m }));
-	const SEARCHES: Filter[] = [
-		{ key: 'q', name: 'Search', type: 'text', placeholder: 'Words in the claim…' },
-		{ key: 'like', name: 'Similar to', type: 'text', placeholder: 'Similar to…' }
-	];
+	const SEARCHES: Filter[] = [{ key: 'q', name: 'Search', type: 'text', placeholder: 'Words in the claim…' }];
 	const FILTERS: Filter[] = $derived(explore ? SEARCHES : [
 		{ key: 'q', name: 'Search', type: 'text', placeholder: 'Words in the claim…' },
-		{ key: 'like', name: 'Similar to', type: 'text', placeholder: 'Similar to…' },
 		...(scope.month ? [] : [{ key: 'month', name: 'Month', type: 'select', options: MONTHS } satisfies Filter]),
 		{
 			key: 'sourceKind',
@@ -218,16 +214,10 @@
 	// The scope is fixed: the page mounts the table again when it changes
 	const filters = $derived(explore ? { ...explore } : { ...scope });
 
-	// "Similar to…" orders the page by meaning and leaves out the claims without a vector yet,
-	// which the response counts (`notEmbedded`, only with `like`)
-	let notEmbedded = $state<number | undefined>(undefined);
-	const listStatements = async (params: Parameters<typeof api.admin.listStatements>[0]) => {
-		const res = explore
-			? await api.admin.listExploreClaims(params as unknown as Parameters<typeof api.admin.listExploreClaims>[0])
-			: await api.admin.listStatements(params);
-		notEmbedded = res.notEmbedded;
-		return res;
-	};
+	const listStatements = (params: Parameters<typeof api.admin.listStatements>[0]) =>
+		explore
+			? api.admin.listExploreClaims(params as unknown as Parameters<typeof api.admin.listExploreClaims>[0])
+			: api.admin.listStatements(params);
 	const n = (value: number) => value.toLocaleString('en-GB');
 	const share = (part: number, whole: number) => `${whole ? Math.round((part / whole) * 100) : 0} %`;
 	const FIGURES: { label: string; value: (s: AdminStatementsSummaryOutputDto) => string }[] = [
@@ -261,13 +251,6 @@
 			<div class="h-24"></div>
 		{/if}
 	</AdminPanel>
-	{/if}
-
-	{#if notEmbedded !== undefined}
-		<p class="text-muted-foreground m-0 text-sm">
-			Closest in meaning first.
-			{#if notEmbedded}{n(notEmbedded)} matching {notEmbedded === 1 ? 'claim has' : 'claims have'} no vector yet and {notEmbedded === 1 ? 'is' : 'are'} left out.{/if}
-		</p>
 	{/if}
 
 	<PaginatedDataTable

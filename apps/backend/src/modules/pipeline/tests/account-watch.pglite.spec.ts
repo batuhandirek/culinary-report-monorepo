@@ -26,6 +26,7 @@ import { AdminCreatorWatchController } from '../controllers/admin.creator-watch.
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { AccountWatchService, WatchReasonKindEnum } from '../services/account-watch.service.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const MONTH = '2026-09';
 
@@ -44,6 +45,7 @@ describe('AccountWatchService (pglite)', () => {
 			providers: [
 				AdminCreatorWatchController,
 				PipelineService,
+				caughtUpIngestion(),
 				AccountWatchService,
 				CompetitorService,
 				CityService,

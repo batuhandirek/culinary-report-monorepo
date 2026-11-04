@@ -12,6 +12,7 @@ import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { PostCountsCron } from '../crons/post-counts.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('Daily post counts (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -32,6 +33,7 @@ describe('Daily post counts (pglite)', () => {
 				BrandService,
 				PostCountsCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				{ provide: PgBossService, useValue: { sendJob } },
 				{ provide: PostCountsService, useValue: { refresh } },

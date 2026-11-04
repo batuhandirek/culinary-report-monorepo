@@ -128,6 +128,16 @@ export class Venue extends MikroOrmEntityAbstractClass<'mentionCount' | 'closed'
 	@Property({ type: 'datetime', nullable: true })
 	pressSearchedAt?: Date | null;
 
+	// Its Google reviews are stored without a gap from `reviewsFetchedFrom` (a day) to
+	// `reviewsFetchedAt` (`ReviewService`): the next fetch starts at `reviewsFetchedAt`'s day, and
+	// a month inside the stretch is paid for once. Set by a run that came back with its reviews,
+	// or that showed it had none newer
+	@Property({ type: 'datetime', nullable: true })
+	reviewsFetchedFrom?: Date | null;
+
+	@Property({ type: 'datetime', nullable: true })
+	reviewsFetchedAt?: Date | null;
+
 	// Its TripAdvisor page, found once by a web search and confirmed by name (`isSameVenue`)
 	@Property({ type: 'text', nullable: true })
 	tripadvisorUrl?: string | null;

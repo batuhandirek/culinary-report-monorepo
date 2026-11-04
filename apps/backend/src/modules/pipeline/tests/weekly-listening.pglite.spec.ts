@@ -17,6 +17,7 @@ import { WeeklyListeningCron } from '../crons/weekly-listening.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const DAY_MS = 24 * 3600 * 1000;
 
@@ -33,6 +34,7 @@ describe('Weekly listening (pglite)', () => {
 				BrandService,
 				WeeklyListeningCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				SocialScrapeService,
 				DataCoverageService,
@@ -67,7 +69,7 @@ describe('Weekly listening (pglite)', () => {
 		return em.findOneOrFail(PipelineRun, { id: run.id });
 	};
 
-	it('queues the TikTok, reels, blog and watched-profile runs, then extraction, matching, the name lookup, matching again and the own-account lookup, per cron city with sources', async () => {
+	it('queues the TikTok, reels, blog and watched-profile runs, then the name lookup and the own-account lookup (both wait for the reading), per cron city with sources', async () => {
 		const em = harness.orm.em;
 		const berlin = cityFactory.build({ name: 'Berlin', cronEnabled: true, instagramEnabled: true });
 		// Twenty hashtags and two searches: the budget split below
@@ -96,27 +98,18 @@ describe('Weekly listening (pglite)', () => {
 			['Berlin', PipelineStepEnum.SCRAPE_INSTAGRAM_REELS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_BLOGS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Berlin', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Berlin', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Berlin', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_TIKTOK_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Wien', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Wien', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Wien', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			// No sources on, but every city has profiles to watch (its report brands' own accounts)
 			['Quiet', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Quiet', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Quiet', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Quiet', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 		]);
-		expect(sendJob).toHaveBeenCalledTimes(22);
+		expect(sendJob).toHaveBeenCalledTimes(13);
 		await em.nativeDelete(PipelineRun, {});
 	});
 

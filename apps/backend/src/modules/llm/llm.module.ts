@@ -14,6 +14,7 @@ const openAIAccountsProvider = {
 			apiKeys: llmConfig.OPENAI_API_KEYS,
 			rotateAfterRequests: llmConfig.OPENAI_ROTATE_AFTER_REQUESTS,
 			blockMs,
+			creditRetryMs: llmConfig.LLM_CREDIT_RETRY_MINUTES * 60_000,
 		}),
 };
 

@@ -87,7 +87,7 @@ const CATCH_ALL_LABEL = /^(overall|general|generic|total|in general)\b/i;
 const parseVector = (text: string): number[] => text.slice(1, -1).split(',').map(Number);
 
 /**
- * Aspect discovery: the automatic side of "Missing aspects". For a city, its loose claims (under
+ * Aspect discovery, weekly and by itself. For a city, its loose claims (under
  * no aspect, or at a root because nothing finer fitted; own posts out; 3+ words) are grouped by
  * meaning at `DISCOVERY_FLOORS`, the largest `DISCOVERY_MAX_NAMED` named by
  * `AspectSuggestionAgent`, and each group that is an aspect and none that exists becomes one
@@ -95,8 +95,9 @@ const parseVector = (text: string): number[] => text.slice(1, -1).split(',').map
  * loose claims closest to each new aspect's group (cosine at the floor, `DISCOVERY_MAX_REFILE` at
  * most) lose `partsAt` and agent B reads them again at once, so they move into it. Groups an
  * existing aspect fits are only logged: B saw that aspect and chose the root, and a re-read with
- * the same legend answers the same. Free (mini on the allowance); no review step (the user's call,
- * 2026-11-03, as for food topics). Runs once at boot while `ASPECT_DISCOVERY_ON_BOOT` is set.
+ * the same legend answers the same. Naming on gpt-5.4's allowance, else Sonnet (cents); B's re-read
+ * on mini's; no review step (the user's call, 2026-11-03, as for food topics). Runs weekly over the
+ * cron cities (`AspectDiscoveryCron`), and once at boot while `ASPECT_DISCOVERY_ON_BOOT` is set.
  */
 @Injectable()
 export class AspectDiscoveryService implements OnApplicationBootstrap {
@@ -113,21 +114,26 @@ export class AspectDiscoveryService implements OnApplicationBootstrap {
 	async onApplicationBootstrap(): Promise<void> {
 		const mode = llmConfig.ASPECT_DISCOVERY_ON_BOOT;
 		if (mode === 'off') return;
-		await this.pgBossService.sendJob(
-			AspectDiscoveryJob.jobName,
-			new AspectDiscoveryJob({ dryRun: mode === 'dry' }),
-			{ singletonKey: AspectDiscoveryJob.singletonKey },
-		);
+		await this.queue({ dryRun: mode === 'dry' });
 		this.logger.warn(
 			`Queued aspect discovery (${mode}): remove ASPECT_DISCOVERY_ON_BOOT once it has run`,
 		);
 	}
 
-	/** Every active city in turn */
-	async runAll(opts: { dryRun: boolean }): Promise<AspectDiscoveryResult[]> {
+	/** Queues a run (the weekly cron, a boot run): one waits at a time */
+	async queue(payload: { dryRun: boolean; cronOnly?: boolean }): Promise<void> {
+		await this.pgBossService.sendJob(AspectDiscoveryJob.jobName, new AspectDiscoveryJob(payload), {
+			singletonKey: AspectDiscoveryJob.singletonKey,
+		});
+	}
+
+	/** Every active city in turn, or only those whose cron is on */
+	async runAll(opts: { dryRun: boolean; cronOnly?: boolean }): Promise<AspectDiscoveryResult[]> {
 		const cities: { id: string; name: string }[] = await this.em
 			.getConnection()
-			.execute(`select id, name from cities where active order by name`);
+			.execute(
+				`select id, name from cities where active${opts.cronOnly ? ' and cron_enabled' : ''} order by name`,
+			);
 		const out: AspectDiscoveryResult[] = [];
 		for (const city of cities) out.push(await this.discover(city.id, opts));
 		return out;

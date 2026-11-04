@@ -14,15 +14,17 @@ import { previousMonth } from 'src/modules/venues/util/month.js';
 import {
 	AdminCreatorAccountRefOutputDto,
 	AdminCreatorDetailInputDto,
+	AdminCreatorHandleChangeOutputDto,
 	AdminCreatorOutputDto,
 	AdminListCreatorsInputDto,
 	AdminListCreatorsOutputDto,
 	AdminMergeCreatorAccountsInputDto,
 	AdminUpdateCreatorInputDto,
 } from '../dto/admin-creator.dto.js';
-import { CreatorService } from '../services/creator.service.js';
+import { CreatorService, HANDLE_CHANGE_POPULATE } from '../services/creator.service.js';
 import { SocialAccountService } from '../services/social-account.service.js';
 import { accountOutput } from '../util/account-output.js';
+import { shownHandle } from '../util/accounts.js';
 
 /** Creators (`/admin/creators`): who posts about the city's food, over all their accounts. */
 @Controller('/admin/creators')
@@ -76,6 +78,18 @@ export class AdminCreatorsController {
 			posts: detail.posts,
 			views: detail.views,
 			foundBy: detail.foundBy,
+			handleChanges: detail.handleChanges.map(change => {
+				const out = wrap(change).serialize({
+					skipNull: true,
+					forceObject: true,
+					populate: [...HANDLE_CHANGE_POPULATE],
+					exclude: ['account.creator.accounts', 'takenBy.creator.accounts'],
+				}) as unknown as AdminCreatorHandleChangeOutputDto;
+				// A taken account's placeholder is shown as the handle it last had
+				out.account.handle = shownHandle(out.account.handle);
+				if (out.takenBy) out.takenBy.handle = shownHandle(out.takenBy.handle);
+				return out;
+			}),
 		};
 	}
 

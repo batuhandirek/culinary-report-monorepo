@@ -34,6 +34,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { PipelineStepEnum, REVIEW_BACKFILL_BUDGET_SHARE } from '../constants/pipeline.constant.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 interface ReviewsInput {
 	placeIds: string[];
@@ -70,6 +71,7 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 				CityService,
 				CompetitorService,
 				PipelineService,
+				caughtUpIngestion(),
 				ProspectQueryService,
 				ReviewService,
 				VenueService,
@@ -143,15 +145,15 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 
 	let newBrandId: string;
 
-	it('starts a venue with no review from before the month six months back, in a second run on its capped share', async () => {
+	it('starts a venue with no review from the backfill window’s first month six months back, in a second run on its capped share', async () => {
 		const em = harness.orm.em;
 		const city = cityRef();
 		const known = em.create(Venue, { city, placeId: 'known', name: 'Döner Pro' });
 		const fresh = em.create(Venue, { city, placeId: 'fresh', name: 'Chén Chè' });
 		const rival = em.create(Venue, { city, placeId: 'rival', name: 'Zola' });
-		// Known has August on file; Fresh only a TripAdvisor review and one the weekly watch
-		// stored this month: neither is Google history
-		em.create(Review, { venue: known, reviewId: 'known-aug', publishedAt: new Date('2026-08-15T10:00:00Z') });
+		// Known has March on file (its backfill's first month); Fresh only a TripAdvisor review and
+		// one the weekly fetch stored this month: neither is Google history
+		em.create(Review, { venue: known, reviewId: 'known-mar', publishedAt: new Date('2026-03-15T10:00:00Z') });
 		em.create(Review, {
 			venue: fresh,
 			reviewId: 'ta_1',
@@ -227,10 +229,12 @@ describe('PipelineService SCRAPE_REVIEWS (pglite)', () => {
 		expect(report.data.correlations?.buzzToReviews).toBeDefined();
 	});
 
-	it('once tracked, the venues get the month alone; `params.since` starts every venue there in one run', async () => {
+	it('once tracked and fetched since, the venues start at their last fetch; `params.since` starts every venue there in one run', async () => {
+		// Each stretch covers September up to the last run: nothing of it is paid for again
+		const today = new Date().toISOString().slice(0, 10);
 		const plain = await execute({});
 		expect(plain.calls).toEqual([
-			{ placeIds: ['known', 'fresh', 'rival'], since: '2026-09-01', cap: expect.closeTo(10.8, 5) },
+			{ placeIds: ['known', 'fresh', 'rival'], since: today, cap: expect.closeTo(10.8, 5) },
 		]);
 		expect(plain.result).toMatchObject({ backfilled: 0 });
 		expect(plain.result.backfillSince).toBeUndefined();

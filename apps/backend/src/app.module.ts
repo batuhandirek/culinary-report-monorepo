@@ -27,6 +27,7 @@ import { PipelineModule } from './modules/pipeline/pipeline.module.js';
 import { PortalModule } from './modules/portal/portal.module.js';
 import { ReportsModule } from './modules/reports/reports.module.js';
 import { S3Module } from './modules/s3/s3.module.js';
+import { AnalystModule } from './modules/analyst/analyst.module.js';
 import { SitemapModule } from './modules/sitemap/sitemap.module.js';
 import { SocialModule } from './modules/social/social.module.js';
 import { TopicsModule } from './modules/topics/topics.module.js';
@@ -83,6 +84,7 @@ import sdk from './tracing.js';
 		LandingModule,
 		NewsletterModule,
 		BlogModule,
+		AnalystModule,
 	],
 	controllers: [],
 	providers: [],

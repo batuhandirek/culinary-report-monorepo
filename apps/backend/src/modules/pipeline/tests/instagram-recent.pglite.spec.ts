@@ -13,6 +13,7 @@ import { InstagramRecentCron } from '../crons/instagram-recent.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { INSTAGRAM_RECENT_DAYS } from '../util/monthly-schedule.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('Daily Instagram scrape (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -28,6 +29,7 @@ describe('Daily Instagram scrape (pglite)', () => {
 				BrandService,
 				InstagramRecentCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				{ provide: PgBossService, useValue: { sendJob } },
 				{ provide: SocialScrapeService, useValue: { scrapeCityInstagram } },
@@ -40,23 +42,24 @@ describe('Daily Instagram scrape (pglite)', () => {
 		await harness.stop();
 	});
 
-	it('queues the scrape, then extraction and matching, per city with the cron and Instagram on, labelled with the month', async () => {
+	it('queues the scrape alone (the reading follows by itself), once a day, per city with the cron and Instagram on, labelled with the month', async () => {
 		cityFactory.build({ name: 'Berlin', cronEnabled: true, instagramEnabled: true });
 		cityFactory.build({ name: 'No Instagram', cronEnabled: true, instagramEnabled: false });
 		cityFactory.build({ name: 'By hand', cronEnabled: false, instagramEnabled: true });
 		await harness.orm.em.flush();
 
-		await harness.moduleRef.get(InstagramRecentCron).queueAll(new Date('2026-11-01T04:00:00Z'));
+		const cron = harness.moduleRef.get(InstagramRecentCron);
+		await cron.queueAll(new Date('2026-11-01T04:00:00Z'));
+		// A cron firing again around a restart queues nothing
+		await cron.queueAll(new Date('2026-11-01T05:20:00Z'));
 
 		harness.orm.em.clear();
 		// Oldest first: the order the queue works them in
 		const runs = await harness.orm.em.find(PipelineRun, {}, { populate: ['city'], orderBy: { createdAt: 'asc' } });
 		expect(runs.map(r => [r.city.name, r.step, r.month, r.status])).toEqual([
 			['Berlin', PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Berlin', PipelineStepEnum.EXTRACT_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
-			['Berlin', PipelineStepEnum.MATCH_MENTIONS, '2026-11', PipelineRunStatusEnum.QUEUED],
 		]);
-		expect(sendJob).toHaveBeenCalledTimes(3);
+		expect(sendJob).toHaveBeenCalledTimes(1);
 	});
 
 	it('scrapes the posts feed only, two days back whatever the month, on the $2 default', async () => {

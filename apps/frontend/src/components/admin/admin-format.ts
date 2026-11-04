@@ -137,6 +137,7 @@ export const pipelineRunStatusVariant = (status: string): BadgeVariant => {
 		case 'FAILED':
 			return 'destructive';
 		case 'RUNNING':
+		case 'WAITING':
 			return 'warning';
 		default:
 			return 'secondary';

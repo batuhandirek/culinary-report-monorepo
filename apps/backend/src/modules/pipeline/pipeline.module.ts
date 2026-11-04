@@ -19,17 +19,21 @@ import { AdminCreatorWatchController } from './controllers/admin.creator-watch.c
 import { AdminPipelineController } from './controllers/admin.pipeline.controller.js';
 import { DemandSampleCron } from './crons/demand-sample.cron.js';
 import { DishSearchCron } from './crons/dish-search.cron.js';
+import { IngestionCron } from './crons/ingestion.cron.js';
 import { InstagramRecentCron } from './crons/instagram-recent.cron.js';
 import { MonthlyPipelineCron } from './crons/monthly-pipeline.cron.js';
 import { AccountFollowersCron } from './crons/account-followers.cron.js';
 import { PostCountsCron } from './crons/post-counts.cron.js';
+import { ProfileTrackCron } from './crons/profile-track.cron.js';
 import { RatingSnapshotCron } from './crons/rating-snapshot.cron.js';
 import { ReviewWatchCron } from './crons/review-watch.cron.js';
 import { WeeklyListeningCron } from './crons/weekly-listening.cron.js';
 import { PipelineRun } from './entities/pipeline-run.entity.js';
 import { AccountWatchService } from './services/account-watch.service.js';
+import { IngestionService } from './services/ingestion.service.js';
 import { PipelineService } from './services/pipeline.service.js';
 import { PipelineRecoveryService } from './services/pipeline-recovery.service.js';
+import { IngestCityWorker } from './workers/ingest-city.worker.js';
 import { RunPipelineWorker } from './workers/run-pipeline.worker.js';
 
 @Module({
@@ -48,6 +52,10 @@ import { RunPipelineWorker } from './workers/run-pipeline.worker.js';
 	controllers: [AdminPipelineController, AdminCreatorWatchController],
 	providers: [
 		PipelineService,
+		IngestionService,
+		IngestCityWorker,
+		IngestionCron,
+		ProfileTrackCron,
 		AccountWatchService,
 		PipelineRecoveryService,
 		RunPipelineWorker,

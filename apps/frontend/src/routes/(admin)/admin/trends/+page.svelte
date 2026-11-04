@@ -3,7 +3,6 @@
 
 	import SearchInterestPanel from './components/SearchInterestPanel.svelte';
 	import TrendsClaimsTab from './components/TrendsClaimsTab.svelte';
-	import TrendsMissingAspectsTab from './components/TrendsMissingAspectsTab.svelte';
 	import TrendsPostsTab from './components/TrendsPostsTab.svelte';
 	import TrendsTermsTab from './components/TrendsTermsTab.svelte';
 	import TrendsThemesTab from './components/TrendsThemesTab.svelte';
@@ -15,7 +14,6 @@
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
 	import TopicFormDialog from '#components/admin/topics/TopicFormDialog.svelte';
-	import UnrecognisedWords from '#components/admin/topics/UnrecognisedWords.svelte';
 	import { findAdminMenu } from '#constants/ADMIN_MENUS.js';
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
@@ -28,8 +26,8 @@
 
 	// What the city eats and talks about. Topics first: each kind of food with its venues (supply),
 	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, every claim the month was split into, the aspects the tree lacks (its claims no aspect fits, grouped by meaning), searches,
-	// openings and closures, the terms (every wording reviews, posts and Google's tags use, linked to
-	// its topics), and the words no topic covers yet.
+	// openings and closures, and the terms (every wording reviews, posts, Google's tags and
+	// categories use, linked to its topics).
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
 	const cityId = $derived(
@@ -49,11 +47,9 @@
 		{ value: 'posts', label: 'In posts' },
 		{ value: 'themes', label: 'Praise and complaints' },
 		{ value: 'claims', label: 'Claims' },
-		{ value: 'missing', label: 'Missing aspects' },
 		{ value: 'searches', label: 'Searches' },
 		{ value: 'openings', label: 'Openings and closures' },
-		{ value: 'terms', label: 'Terms' },
-		{ value: 'words', label: 'Unrecognised words' }
+		{ value: 'terms', label: 'Terms' }
 	];
 	let tab = $state('topics');
 
@@ -106,16 +102,12 @@
 				<TrendsThemesTab {cityId} {month} />
 			{:else if tab === 'claims'}
 				<TrendsClaimsTab {cityId} {month} />
-			{:else if tab === 'missing'}
-				<TrendsMissingAspectsTab {cityId} {month} onCreateAspect={(label, parent, hint) => newTopic(label, 'aspect', parent, hint)} />
 			{:else if tab === 'searches'}
 				<div class="pb-12"><SearchInterestPanel {cityId} {month} /></div>
 			{:else if tab === 'openings'}
 				<div class="pb-12"><VenueOpeningsPanel {cityId} {month} /></div>
 			{:else if tab === 'terms'}
 				<TrendsTermsTab {cityId} {version} onNewTopic={newTopic} />
-			{:else}
-				<div class="pb-12"><UnrecognisedWords {cityId} {version} onNewTopic={newTopic} /></div>
 			{/if}
 		{/key}
 	{/if}

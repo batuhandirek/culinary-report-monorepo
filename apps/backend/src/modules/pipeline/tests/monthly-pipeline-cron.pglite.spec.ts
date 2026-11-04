@@ -13,6 +13,7 @@ import { MonthlyPipelineCron } from '../crons/monthly-pipeline.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { cityVenueScrapeDue } from '../util/monthly-schedule.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('MonthlyPipelineCron (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -24,6 +25,7 @@ describe('MonthlyPipelineCron (pglite)', () => {
 				BrandService,
 				MonthlyPipelineCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				{ provide: PgBossService, useValue: { sendJob } },
 			],

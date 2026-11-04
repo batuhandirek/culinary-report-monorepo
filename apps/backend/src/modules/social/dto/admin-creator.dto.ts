@@ -4,6 +4,7 @@ import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interfac
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
 import type { PostSourceKindEnum } from '../entities/post-source.entity.js';
+import type { AccountSnapshotSourceEnum } from '../entities/social-account-snapshot.entity.js';
 import type { SocialPlatformEnum } from '../entities/social-post.entity.js';
 
 import type { AdminAccountOutputDto } from './admin-account.output.dto.js';
@@ -79,6 +80,32 @@ export interface AdminCreatorOutputDto {
 	views: number;
 	/** What found their posts, the most posts first (15 at most) */
 	foundBy: AdminCreatorFindOutputDto[];
+	/** Their accounts' handle changes, and the handles their accounts took from others, newest first */
+	handleChanges: AdminCreatorHandleChangeOutputDto[];
+}
+
+/** An account in a handle change: its handle as it is now (the last one it had, when taken), and whose it is. */
+export interface AdminHandleChangeAccountOutputDto {
+	id: string;
+	platform: SocialPlatformEnum;
+	handle: string;
+	handleLostAt?: Date;
+	creator: { id: string; name: string };
+}
+
+/**
+ * One handle change as a scrape saw it (`seenAt`, never when the person renamed): a rename
+ * (`fromHandle` → `toHandle`), or a handle another user took (`toHandle` absent, `takenBy` who has
+ * it now); `fromHandle` is absent when the account had lost its handle before.
+ */
+export interface AdminCreatorHandleChangeOutputDto {
+	id: string;
+	account: AdminHandleChangeAccountOutputDto;
+	fromHandle?: string;
+	toHandle?: string;
+	takenBy?: AdminHandleChangeAccountOutputDto;
+	seenAt: Date;
+	source: AccountSnapshotSourceEnum;
 }
 
 /** One thing that found a creator's posts: a city's source, a venue search or place page, or their own profile. */

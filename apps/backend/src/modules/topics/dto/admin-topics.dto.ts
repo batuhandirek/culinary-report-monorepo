@@ -70,26 +70,8 @@ export interface AdminTopicOutputDto extends AdminTopicBaseOutputDto {
 	venues: number;
 }
 
-export interface AdminUnmappedCuisineOutputDto {
-	key: string;
-	mentions: number;
-	venues: number;
-	/** Venues the word was said of (posts) or is the Google category of, most first */
-	examples: string[];
-}
-
-export interface AdminIgnoreWordInputDto {
-	/** The word as listed; true dismisses it, false brings it back */
-	word: string & tags.MinLength<1> & tags.MaxLength<80>;
-	ignored: boolean;
-}
-
 export interface AdminTopicsOutputDto {
 	topics: AdminTopicOutputDto[];
-	/** Words an admin dismissed (every city), left out of `unmapped` */
-	ignored: string[];
-	/** Cuisine keys of the city that resolve to no topic, most used first */
-	unmapped: AdminUnmappedCuisineOutputDto[];
 }
 
 export interface AdminRelinkTopicsOutputDto {

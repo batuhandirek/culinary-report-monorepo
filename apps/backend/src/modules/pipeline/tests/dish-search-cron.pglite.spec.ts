@@ -12,6 +12,7 @@ import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { DishSearchCron } from '../crons/dish-search.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('DishSearchCron (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -24,6 +25,7 @@ describe('DishSearchCron (pglite)', () => {
 				BrandService,
 				DishSearchCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				{ provide: PgBossService, useValue: { sendJob } },
 				{ provide: DishSearchService, useValue: { newestSnapshots } },

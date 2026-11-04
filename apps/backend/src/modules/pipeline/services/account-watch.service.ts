@@ -150,7 +150,8 @@ export class AccountWatchService {
 		if (reasonsByBrand.size) {
 			const accounts = await this.em.find(
 				SocialAccount,
-				{ brand: { $in: [...reasonsByBrand.keys()] }, platform: { $in: PROFILE_PLATFORMS } },
+				// An account whose handle another user took has no profile to scrape until it is seen again
+				{ brand: { $in: [...reasonsByBrand.keys()] }, platform: { $in: PROFILE_PLATFORMS }, handleLostAt: null },
 				{ populate: ['branch'] },
 			);
 			for (const account of accounts) {

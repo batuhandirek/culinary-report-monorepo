@@ -15,10 +15,11 @@ import { CompetitorService } from 'src/modules/venues/services/competitor.servic
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { MONTHLY_STEPS, PipelineStepEnum } from '../constants/pipeline.constant.js';
+import { MONTHLY_STEPS, PipelineStepEnum, READ_GATED_STEPS } from '../constants/pipeline.constant.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { isPaidStep } from '../util/step-states.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const MONTH = '2026-09';
 
@@ -33,6 +34,7 @@ describe('FILL_COMPETITORS (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				PipelineService,
+				caughtUpIngestion(),
 				CompetitorService,
 				TopicService,
 				VenueTopicService,
@@ -70,9 +72,11 @@ describe('FILL_COMPETITORS (pglite)', () => {
 		await harness.stop();
 	});
 
-	it('is a free step of the monthly run, after the last match and right before the review scrape', () => {
+	it('is a free step of the monthly run, after the watched profiles and right before the review scrape', () => {
 		const at = MONTHLY_STEPS.indexOf(PipelineStepEnum.FILL_COMPETITORS);
-		expect(at).toBe(MONTHLY_STEPS.lastIndexOf(PipelineStepEnum.MATCH_MENTIONS) + 1);
+		// It waits for the reading first, so the profiles' posts count for the report brands
+		expect(MONTHLY_STEPS[at - 1]).toBe(PipelineStepEnum.SCRAPE_ACCOUNTS);
+		expect(READ_GATED_STEPS).toContain(PipelineStepEnum.FILL_COMPETITORS);
 		expect(MONTHLY_STEPS[at + 1]).toBe(PipelineStepEnum.SCRAPE_REVIEWS);
 		expect(isPaidStep(PipelineStepEnum.FILL_COMPETITORS)).toBe(false);
 	});

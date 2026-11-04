@@ -21,6 +21,7 @@ import {
 	type AssignableUserRole,
 } from '../constants/assignable-user-roles.constant.js';
 import { type PromotionalChannel } from '../constants/promotional-channel.constant.js';
+import { SYSTEM_USER_EMAIL } from '../constants/system-user-email.constant.js';
 import { UserRoleEnum } from '../constants/user-role.enum.constant.js';
 import { AdminCreateUserInputDto } from '../dto/admin-create-user.input.dto.js';
 import { UpdateMeInputDto } from '../dto/update-me.input.dto.js';
@@ -215,9 +216,23 @@ export class UserService {
 			user.roles = user.roles.filter(role => role !== UserRoleEnum.VENUE_OWNER);
 	}
 
+	/**
+	 * The internal service account (role `system`, no password: nobody signs in as it), created on
+	 * first use. The analyst's answers are its messages (`AnalystThreadService`).
+	 */
 	public async getSystemUser(): Promise<User> {
-		return this.userRepository.findOneOrFail({ email: 'system@culinaryreport.com' });
+		const found = await this.userRepository.findOne({ email: SYSTEM_USER_EMAIL });
+		if (found) return found;
+		await this.userRepository.getEntityManager().upsert(
+			User,
+			{
+				firstName: 'Munchwerk',
+				lastName: 'Analyst',
+				email: SYSTEM_USER_EMAIL,
+				roles: [UserRoleEnum.SYSTEM],
+			},
+			{ onConflictFields: ['email'], onConflictAction: 'ignore' },
+		);
+		return this.userRepository.findOneOrFail({ email: SYSTEM_USER_EMAIL });
 	}
-
-
 }

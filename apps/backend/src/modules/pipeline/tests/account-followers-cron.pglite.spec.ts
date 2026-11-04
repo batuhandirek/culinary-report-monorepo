@@ -12,6 +12,7 @@ import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { AccountFollowersCron } from '../crons/account-followers.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 describe('Daily follower fill (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -29,6 +30,7 @@ describe('Daily follower fill (pglite)', () => {
 				BrandService,
 				AccountFollowersCron,
 				PipelineService,
+				caughtUpIngestion(),
 				CityService,
 				{ provide: PgBossService, useValue: { sendJob } },
 				{ provide: AccountScrapeService, useValue: { fillFollowers: refresh } },

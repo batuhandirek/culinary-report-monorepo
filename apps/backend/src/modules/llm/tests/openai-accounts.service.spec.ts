@@ -56,14 +56,41 @@ describe('OpenAIAccountsService', () => {
 		]);
 	});
 
-	it('takes the account back once the block runs out', async () => {
+	it('takes an account out of credit back after an hour: credit can be added any time', async () => {
 		const { service, keyFor, advance } = setup({ rotateAfter: 100 });
 		await service.run(MINI, async account => {
 			if (account.apiKey === 'sk-aaaa') throw noCredits();
 		});
-		advance(23 * HOUR);
+		advance(HOUR - 1);
 		expect(await keyFor()).toBe('sk-bbbb');
-		advance(1 * HOUR);
+		advance(1);
+		expect(await keyFor()).toBe('sk-aaaa');
+		expect(service.status()).toEqual([]);
+	});
+
+	it('takes an account out of its daily allowance back at 00:00 UTC, when the allowance starts again', async () => {
+		// Refused at 22:00, as the night's backlog run uses up what the day left
+		const { service, keyFor, advance } = setup({ rotateAfter: 100 });
+		advance(10 * HOUR);
+		await service.run(MINI, async account => {
+			if (account.apiKey === 'sk-aaaa')
+				throw openAIError('You exceeded your current quota, please check your plan and billing details.');
+		});
+		expect(service.status()[0].until.toISOString()).toBe('2026-10-20T00:00:00.000Z');
+		advance(2 * HOUR - 1);
+		expect(await keyFor()).toBe('sk-bbbb');
+		advance(1);
+		expect(await keyFor()).toBe('sk-aaaa');
+	});
+
+	it('blocks a rejected key for the whole block length', async () => {
+		const { service, keyFor, advance } = setup({ rotateAfter: 100 });
+		await service.run(MINI, async account => {
+			if (account.apiKey === 'sk-aaaa') throw openAIError('Incorrect API key provided: sk-aaaa.', 401);
+		});
+		advance(24 * HOUR - 1);
+		expect(await keyFor()).toBe('sk-bbbb');
+		advance(1);
 		expect(await keyFor()).toBe('sk-aaaa');
 		expect(service.status()).toEqual([]);
 	});
@@ -95,7 +122,7 @@ describe('OpenAIAccountsService', () => {
 		expect((error as Error).message).toMatch(
 			/No OpenAI account can serve openai\/gpt-5.4-mini/,
 		);
-		expect((error as Error).message).toMatch(/#1 \(…aaaa\) until 2026-10-20T12:00:00.000Z/);
+		expect((error as Error).message).toMatch(/#1 \(…aaaa\) until 2026-10-19T13:00:00.000Z/);
 		expect(isFatalProviderError(error)).toBe(true);
 	});
 

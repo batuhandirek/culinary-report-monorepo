@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, CircleDashed, Clock, Loader, Minus, Redo2, Wand2, X } from '@lucide/svelte';
+	import { Check, CircleDashed, Clock, Hourglass, Loader, Minus, Redo2, Wand2, X } from '@lucide/svelte';
 	import type { AdminDataCoverageOutputDto, AdminDataStepOutputDto } from 'client';
 
 	import { onMount, untrack } from 'svelte';
@@ -58,6 +58,7 @@
 		failed: { icon: X, class: 'bg-destructive/10 text-destructive', label: 'Failed' },
 		running: { icon: Loader, class: 'bg-tint text-ink', label: 'Running' },
 		queued: { icon: Clock, class: 'bg-tint text-muted-foreground', label: 'Queued' },
+		waiting: { icon: Hourglass, class: 'bg-warning/15 text-warning', label: 'Waiting for the reading (no model answers)' },
 		never: { icon: Minus, class: 'text-faint', label: 'Never ran' }
 	} as const;
 	const stateOf = (cell?: AdminDataStepOutputDto) => STATES[(cell?.state ?? 'never') as keyof typeof STATES];
@@ -122,6 +123,8 @@
 	];
 	const running = $derived(coverage?.queue.find((q) => q.state === 'running'));
 	const queued = $derived(coverage?.queue.filter((q) => q.state === 'queued').length ?? 0);
+	// Runs that wait for the reading: a model refused, so a step that needs the posts read waits
+	const waiting = $derived(coverage?.queue.filter((q) => q.state === 'waiting') ?? []);
 </script>
 
 {#if loader.failed}
@@ -141,6 +144,12 @@
 				<span class="text-muted-foreground">{queued} queued, starting</span>
 			{:else}
 				<span class="text-muted-foreground flex items-center gap-2"><CircleDashed class="size-4" /> Nothing running</span>
+			{/if}
+			{#if waiting.length}
+				<span class="text-warning flex items-center gap-2" title="No model answers, so they wait for the reading; each checks again hourly and goes on once the posts are read">
+					<Hourglass class="size-4" />
+					{waiting.length} waiting for the reading: {waiting.map((w) => `${stepLabel(w.step)}, ${monthLabel(w.month)}`).join(' · ')}
+				</span>
 			{/if}
 			<span class="text-muted-foreground ml-auto text-xs">
 				The monthly cron reports on {monthLabel(coverage.reportMonth)}. A cell's tooltip says what the step found.

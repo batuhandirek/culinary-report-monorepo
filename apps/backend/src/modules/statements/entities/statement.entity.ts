@@ -132,7 +132,7 @@ export class Statement extends MikroOrmSimpleEntityAbstractClass<'count' | 'part
 
 	/**
 	 * The claim's text as a vector (`text-embedding-3-large` at 1024 dimensions), for search by
-	 * meaning and the missing aspects (`StatementEmbeddingService`, the one writer). A discovery and
+	 * meaning, Explore's groups and aspect discovery (`StatementEmbeddingService`, the one writer). A discovery and
 	 * search layer, never a count. Lazy, so no other read of statements selects it; never in a DTO.
 	 * A claim's text never changes (a re-read writes new rows), so a vector never goes stale.
 	 */

@@ -14,7 +14,7 @@ Routes: the `(landing)` group (the home page `/`, SSR'd, built from the Claude D
 
 - `/src/ui` — self-contained design system: `primitives-new/` (direct shadcn imports via `npm run add:component`, keep upstream-compatible), `wrapped/`, `components/`, `lib/`, `types/`. Its living catalogue is `/admin/ui-kit`.
 - `/src/views` — page-level components that also embed elsewhere, and the admin table views.
-- `/src/stores` — one rune class per `XStore.svelte.ts`. WS stores type payloads with `sdk` event classes, so changing a payload means changing `packages/sdk` for both sides.
+- `/src/stores` — one rune class per `XStore.svelte.ts`. WS stores type payloads with `sdk` event classes, so changing a payload means changing `packages/sdk` for both sides. A runtime import from `sdk` (an event's `type`, a constant) is `from 'sdk/src'`: its `dist` is CommonJS, which Vite can't give named exports from; type-only imports may use `sdk`.
 - **A component only one route uses lives in that route's `components/` folder** (stores in `stores/`), imported relatively. Layout-only chrome is `routes/components/`. `/src/components` holds only what several routes share; `/src/dialogs` dialogs several routes open (admin ones under `admin/`).
 - **A screen that needs data dev rarely has is a fetching shell (`+page.svelte`) plus a presentational view under `components/`** that takes plain data and callbacks, so it can be mounted with any data. `/admin/ui-kit` is the component gallery only; whole-screen fixture pages were removed.
 - `/src/constants` — one file per group, UPPER_SNAKE filenames. `/src/lib` — app logic; a `*-status.ts` / `*-event.ts` file is the single source for a domain's wording and which moves exist.

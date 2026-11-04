@@ -49,12 +49,15 @@ import { previousMonth } from 'src/modules/venues/util/month.js';
 import { reservationUrlOf } from 'src/modules/venues/util/reservations.js';
 
 import {
+	ALL_READ_STEPS,
 	MONTHLY_STEPS,
 	PipelineStepEnum,
+	READ_GATED_STEPS,
 	RESERVATION_SAMPLE_MAX_VENUES,
 	REVIEW_BACKFILL_BUDGET_SHARE,
 	REVIEW_BACKFILL_MONTHS,
 	REVIEW_WATCH_DAYS,
+	SOURCE_STEPS,
 } from '../constants/pipeline.constant.js';
 import {
 	PipelineRun,
@@ -62,10 +65,11 @@ import {
 	PipelineRunStatusEnum,
 } from '../entities/pipeline-run.entity.js';
 import { RunPipelineJob } from '../jobs/run-pipeline.job.js';
-import { INSTAGRAM_RECENT_DAYS, WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
+import { INSTAGRAM_RECENT_DAYS, READ_WAIT_HOURS, WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
 import { isPaidStep, latestStepStates, SKIPPED_RESULT } from '../util/step-states.js';
 
 import { AccountWatchService } from './account-watch.service.js';
+import { IngestionService, type ReadLevel, type ReadPass } from './ingestion.service.js';
 
 
 // The share of SCRAPE_REVIEWS' budget for TripAdvisor: reviews cost $0.40 per 1k there
@@ -124,6 +128,7 @@ export class PipelineService {
 		private readonly accountTwinService: AccountTwinService,
 		private readonly accountWatchService: AccountWatchService,
 		private readonly postCountsService: PostCountsService,
+		private readonly ingestionService: IngestionService,
 	) {}
 
 	/**
@@ -149,6 +154,44 @@ export class PipelineService {
 			new RunPipelineJob({ pipelineRunId: run.id }),
 		);
 		return run;
+	}
+
+	/**
+	 * Queues a run like `queue`, unless one of the same step for the city was created in the last
+	 * `withinHours` (a cron firing twice around a restart; a step queued by hand just before).
+	 */
+	async queueOnce(
+		cityId: string,
+		step: PipelineStepEnum,
+		month: string,
+		withinHours: number,
+		now = new Date(),
+	): Promise<PipelineRun | null> {
+		const recent = await this.em.count(PipelineRun, {
+			city: cityId,
+			step,
+			createdAt: { $gt: new Date(now.getTime() - withinHours * 3_600_000) },
+		});
+		if (recent > 0) {
+			this.logger.log(`${step} for city ${cityId} was queued within ${withinHours} h: not again`);
+			return null;
+		}
+		return this.queue(cityId, step, month);
+	}
+
+	/** The city's runs waiting for the reading are queued again: each checks again where it stopped. */
+	async wakeWaiting(cityId: string): Promise<number> {
+		const em = this.em.fork();
+		const waiting = await em.find(
+			PipelineRun,
+			{ city: cityId, status: PipelineRunStatusEnum.WAITING },
+			{ orderBy: { createdAt: QueryOrder.ASC } },
+		);
+		if (!waiting.length) return 0;
+		for (const run of waiting) run.status = PipelineRunStatusEnum.QUEUED;
+		await em.flush();
+		await this.wake(waiting[0].id);
+		return waiting.length;
 	}
 
 	/** Wakes the worker: it works through every queued run, oldest first. */
@@ -303,7 +346,8 @@ export class PipelineService {
 	 * (`apifyRunContext`), so nothing is paid twice.
 	 */
 	async execute(pipelineRunId: string): Promise<void> {
-		const run = await this.em.findOneOrFail(PipelineRun, { id: pipelineRunId }, { populate: ['city'] });
+		// Fresh from the database: a run woken from waiting was queued again by another entity manager
+		const run = await this.em.findOneOrFail(PipelineRun, { id: pipelineRunId }, { populate: ['city'], refresh: true });
 		if (run.status !== PipelineRunStatusEnum.QUEUED || this.executing.has(run.id)) return;
 		this.executing.add(run.id);
 		try {
@@ -321,7 +365,7 @@ export class PipelineService {
 
 		const steps = run.step === PipelineStepEnum.MONTHLY ? MONTHLY_STEPS : [run.step];
 		// "Finish the month": the paid steps that already succeeded for it are not paid again; the
-		// free ones (extraction, matching, analysis, reports, scores) run, as new data came in
+		// free ones (competitors, reports, scores) run, as new data came in
 		const done =
 			run.step === PipelineStepEnum.MONTHLY && run.params?.onlyMissing ?
 				await this.succeededSteps(run)
@@ -338,6 +382,16 @@ export class PipelineService {
 					await this.em.flush();
 					continue;
 				}
+				const level: ReadLevel | undefined =
+					READ_GATED_STEPS.includes(step) ? 'posts'
+					: ALL_READ_STEPS.includes(step) ? 'all'
+					: undefined;
+				let read: Record<string, number> | undefined;
+				if (level && !run.params?.noWait) {
+					const gate = await this.readFirst(run, step, level);
+					if (gate === 'wait') return;
+					read = gate;
+				}
 				this.logger.log(`Run ${run.id}: ${step} for ${run.city.name}, ${run.month}`);
 				const result = await apifyRunContext.run({ pipelineRunId: run.id, stepKey: key }, () =>
 					this.runStep(
@@ -350,7 +404,13 @@ export class PipelineService {
 				// A step that ended during a shutdown may have swallowed a refused Apify run (a
 				// failed search "yields nothing"): not recorded, so it runs again and re-attaches
 				if (processShutdown.requested) return;
-				run.result = { ...run.result, [key]: result ?? null };
+				run.result = {
+					...run.result,
+					[key]:
+						read && Object.keys(read).length && result && typeof result === 'object' ?
+							{ ...result, read }
+						:	(result ?? null),
+				};
 				await this.em.flush();
 			}
 			run.status = PipelineRunStatusEnum.SUCCEEDED;
@@ -364,7 +424,51 @@ export class PipelineService {
 			this.logger.error(`Run ${run.id} failed: ${run.error}`);
 		}
 		run.finishedAt = new Date();
+		run.waitingSince = null;
 		await this.em.flush();
+		// What it stored is read now, not at the next cron
+		if (steps.some(step => SOURCE_STEPS.includes(step))) {
+			await this.ingestionService
+				.queue(run.city.id)
+				.catch(e => this.logger.warn(`Reading not queued after run ${run.id}: ${(e as Error).message}`));
+		}
+	}
+
+	/**
+	 * Before a step that reads the reading's results: a reading pass, then go on (what the pass
+	 * read, for the step's result) or `wait`. A run waits while no model answers: a step reading
+	 * posts and matches at most `READ_WAIT_HOURS` from when the run began waiting, then it goes on
+	 * with what is read, saying how much was left; `waitingSince` stays, so the run's later steps
+	 * don't wait a day each again. Reports and lead scores wait until everything is read.
+	 */
+	private async readFirst(
+		run: PipelineRun,
+		step: PipelineStepEnum,
+		level: ReadLevel,
+	): Promise<Record<string, number> | 'wait'> {
+		const { ready, pass } = await this.ingestionService.catchUp(run.city, level, run.month);
+		const read = readCounts(pass);
+		if (ready) {
+			run.waitingSince = null;
+			return read;
+		}
+		const since = run.waitingSince ?? new Date();
+		const waitedHours = (Date.now() - since.getTime()) / 3_600_000;
+		if (level === 'posts' && waitedHours >= READ_WAIT_HOURS) {
+			this.logger.warn(`Run ${run.id}: ${step} goes on after ${Math.round(waitedHours)} h waiting for the reading`);
+			run.waitingSince = since;
+			return {
+				...read,
+				waitedHours: Math.round(waitedHours),
+				unreadPosts: pass.pending.posts,
+				unmatchedMentions: pass.pending.mentions,
+			};
+		}
+		run.status = PipelineRunStatusEnum.WAITING;
+		run.waitingSince = since;
+		await this.em.flush();
+		this.logger.warn(`Run ${run.id} waits before ${step}: the reading can't catch up (${pass.blocked ?? 'no model'})`);
+		return 'wait';
 	}
 
 	/**
@@ -454,14 +558,17 @@ export class PipelineService {
 				// Every article not stored yet, whatever the run's month
 				return this.blogScrapeService.scrapeCity(city);
 			case PipelineStepEnum.EXTRACT_MENTIONS:
-				return this.mentionExtractionService.extract({ limit: 5000, cityId: city.id });
+				// An admin's run: under the reading's lock, so it never reads a post a pass is reading
+				return this.ingestionService.locked(city.id, () =>
+					this.mentionExtractionService.extract({ limit: 5000, cityId: city.id }),
+				);
 			case PipelineStepEnum.MATCH_MENTIONS:
 				// Mentions to venues, then authors to the brands they are the own accounts of: the
 				// posts by others that rank brands leave those out
-				return {
+				return this.ingestionService.locked(city.id, async () => ({
 					...(await this.mentionMatchingService.match({ cityId: city.id })),
 					accounts: await this.accountMatchingService.match(city),
-				};
+				}));
 			case PipelineStepEnum.LOOKUP_VENUES:
 				return this.venueScrapeService.lookupNames(
 					city,
@@ -506,20 +613,27 @@ export class PipelineService {
 						backfilled: 0,
 					};
 				} else {
-					const tracked = await this.reviewService.venuesWithHistory(googleIds, month);
+					const start = new Date(`${month}-01T00:00:00Z`);
+					start.setUTCMonth(start.getUTCMonth() - REVIEW_BACKFILL_MONTHS);
+					const backfillSince = start.toISOString().slice(0, 10);
+					// History is a review from the backfill window's first month: the weekly fetch
+					// gives every venue its last weeks, which is no history
+					const historyBefore = new Date(start);
+					historyBefore.setUTCMonth(historyBefore.getUTCMonth() + 1);
+					const tracked = await this.reviewService.venuesWithHistory(googleIds, historyBefore);
 					const fresh = googleIds.filter(id => !tracked.has(id));
 					const backfillBudget =
 						fresh.length === 0 ? 0
 						: tracked.size === 0 ? googleBudget
 						: googleBudget * REVIEW_BACKFILL_BUDGET_SHARE;
-					const start = new Date(`${month}-01T00:00:00Z`);
-					start.setUTCMonth(start.getUTCMonth() - REVIEW_BACKFILL_MONTHS);
-					const backfillSince = start.toISOString().slice(0, 10);
+					// From the month's start, or the last weekly fetch when later: those are stored
 					const saved = await this.reviewService.scrapeMonth(
 						month,
 						googleIds.filter(id => tracked.has(id)),
 						googleBudget - backfillBudget,
 						now,
+						undefined,
+						{ fromLastFetch: true },
 					);
 					const backfillSaved = await this.reviewService.scrapeMonth(month, fresh, backfillBudget, now, backfillSince);
 					google = {
@@ -543,7 +657,9 @@ export class PipelineService {
 				};
 			}
 			case PipelineStepEnum.ANALYSE_REVIEWS:
-				return { analysed: await this.reviewService.analyseMonth(month) };
+				return this.ingestionService.locked(city.id, async () => ({
+					analysed: await this.reviewService.analyseMonth(month),
+				}));
 			case PipelineStepEnum.REFRESH_VENUE_DETAILS: {
 				// Every report branch and the competitors: the report compares hours and amenities
 				const brands = await topBrands();
@@ -597,6 +713,9 @@ export class PipelineService {
 					})),
 				};
 			}
+			case PipelineStepEnum.TRACK_PROFILES:
+				// The month is a label: the brand accounts and big creators whose last profile is old
+				return this.accountScrapeService.trackProfiles(city, budgetUsd);
 			case PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS:
 				// The month is a label: the brand accounts with no follower count today
 				return this.accountScrapeService.fillFollowers(city, budgetUsd);
@@ -619,13 +738,11 @@ export class PipelineService {
 					budgetUsd,
 				);
 			case PipelineStepEnum.ANALYSE_COMMENTS:
-				return this.postCommentService.analyse(city);
+				return this.ingestionService.locked(city.id, () => this.postCommentService.analyse(city));
 			case PipelineStepEnum.SCRAPE_PRESS:
-				return {
-					// One search per brand (`searchMonth` groups the branches), every branch stamped
-					...(await this.webMentionService.searchMonth(city, await branches(), month, budgetUsd)),
-					...(await this.webMentionService.classifyMonth(city, month)),
-				};
+				// One search per brand (`searchMonth` groups the branches), every branch stamped; the
+				// pages are classified by the reading
+				return this.webMentionService.searchMonth(city, await branches(), month, budgetUsd);
 			case PipelineStepEnum.TRACK_SEARCH_RANKS:
 				await this.refreshTopics(city.id);
 				return this.venueSearchRankService.track(city, month, await branches(), budgetUsd);
@@ -674,7 +791,7 @@ export class PipelineService {
 			case PipelineStepEnum.SCORE_LEADS:
 				return this.brandLeadScoreService.scoreAll(month, city.id);
 			case PipelineStepEnum.SNAPSHOT_RATINGS:
-				// The month is a label: the venues are today's (named in the last 30 days, or well reviewed)
+				// The month is a label: every open venue's reviews since its last fetch, and its rating
 				return this.ratingSnapshotService.snapshot(city, budgetUsd);
 			case PipelineStepEnum.SAMPLE_BUSYNESS: {
 				// Every open branch of the month's report brands (won prospects included) and their
@@ -720,3 +837,15 @@ export class PipelineService {
 		}
 	}
 }
+
+/** What a reading pass read, its non-zero counts only: a gated step's `read` */
+const readCounts = (pass: ReadPass): Record<string, number> =>
+	Object.fromEntries(
+		Object.entries({
+			posts: pass.extracted,
+			mentions: pass.matched,
+			reviews: pass.reviews,
+			comments: pass.comments,
+			press: pass.press,
+		}).filter(([, n]) => n > 0),
+	);

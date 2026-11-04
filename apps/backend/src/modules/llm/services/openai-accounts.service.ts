@@ -11,7 +11,10 @@ export interface OpenAIAccount {
 export interface OpenAIAccountsOptions {
 	apiKeys: string[];
 	rotateAfterRequests: number;
+	/** The longest block, and a rejected key's */
 	blockMs: number;
+	/** How soon an account out of credit is tried again: credit can be added any time */
+	creditRetryMs?: number;
 	now?: () => number;
 }
 
@@ -32,12 +35,22 @@ export class NoOpenAIAccountError extends Error {}
 export const isOpenAIAccountError = (error: unknown): boolean =>
 	isProviderAccountError(error, 'api.openai.com');
 
+const NO_CREDIT = /no credits remaining|credit balance is too low/i;
+const QUOTA = /insufficient_quota|exceeded your current quota/i;
+
+/** The next 00:00 UTC after `now`, when OpenAI's complimentary daily tokens start again */
+export const nextUtcMidnight = (now: number): number => {
+	const day = new Date(now);
+	return Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate() + 1);
+};
+
 /**
  * Hands out the OpenAI accounts' keys (`OPENAI_API_KEYS`). One account serves
- * `rotateAfterRequests` calls, then the next takes over. An account OpenAI says is out of credits
- * (or whose key it rejects) is blocked for that model for `blockMs`, and the call is retried on
- * the next account; the daily complimentary allowance is per model, so the account keeps serving
- * the others. When every account is blocked for a model, the call throws an error that
+ * `rotateAfterRequests` calls, then the next takes over. An account OpenAI refuses is blocked for
+ * that model, and the call is retried on the next account; the daily complimentary allowance is
+ * per model, so the account keeps serving the others. How long depends on why (`blockUntil`): its
+ * quota until the next 00:00 UTC, when the allowance starts again; no credit for `creditRetryMs`,
+ * since credit can be added any time; a rejected key for `blockMs`. None longer than `blockMs`. When every account is blocked for a model, the call throws an error that
  * `isFatalProviderError` recognises, so the pipeline step fails instead of skipping every item.
  *
  * State is in memory: after a restart a blocked account is tried once more per model, fails, and
@@ -48,6 +61,7 @@ export class OpenAIAccountsService {
 	private readonly accounts: OpenAIAccount[];
 	private readonly rotateAfterRequests: number;
 	private readonly blockMs: number;
+	private readonly creditRetryMs: number;
 	private readonly now: () => number;
 	/** `${account index}|${model}` → block */
 	private readonly blocks = new Map<string, Block>();
@@ -63,6 +77,7 @@ export class OpenAIAccountsService {
 		}));
 		this.rotateAfterRequests = Math.max(1, options.rotateAfterRequests);
 		this.blockMs = options.blockMs;
+		this.creditRetryMs = options.creditRetryMs ?? 3_600_000;
 		this.now = options.now ?? Date.now;
 	}
 
@@ -123,8 +138,8 @@ export class OpenAIAccountsService {
 
 	private block(account: OpenAIAccount, model: string, error: unknown): void {
 		const index = this.accounts.indexOf(account);
-		const until = this.now() + this.blockMs;
 		const reason = accountErrorReason(error);
+		const until = this.blockUntil(reason);
 		// Calls in flight on the same account fail together; log the first
 		if (!this.blockOf(index, model)) {
 			this.logger.warn(
@@ -132,6 +147,15 @@ export class OpenAIAccountsService {
 			);
 		}
 		this.blocks.set(`${index}|${model}`, { index, model, until, reason });
+	}
+
+	/** When a block for this refusal ends: see the class comment */
+	private blockUntil(reason: string): number {
+		const now = this.now();
+		const longest = now + this.blockMs;
+		if (NO_CREDIT.test(reason)) return Math.min(now + this.creditRetryMs, longest);
+		if (QUOTA.test(reason)) return Math.min(nextUtcMidnight(now), longest);
+		return longest;
 	}
 
 	private blockOf(index: number, model: string): Block | undefined {

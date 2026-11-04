@@ -29,6 +29,34 @@ const REVIEW_CONCURRENCY = 10;
 import { VenueService } from './venue.service.js';
 
 const GOOGLE_REVIEWS_ACTOR = 'compass/Google-Maps-Reviews-Scraper';
+// What one review costs on the reviews actor (Free plan), the unit its cap counts in
+const REVIEW_USD = 0.0006;
+// A run that spent this share of its cap may have been cut by it: its last venue's older reviews
+const CAP_REACHED_SHARE = 0.9;
+// The smallest cap a review run gets, so a small group's run isn't refused
+const MIN_RUN_CAP_USD = 0.05;
+// The weekly fetch's share of its budget kept for the check of the venues with nothing new
+const CHECK_BUDGET_SHARE = 0.4;
+/** How far back a venue's first weekly fetch starts: its week, no backfill */
+export const FIRST_FETCH_DAYS = 7;
+
+const dayOf = (at: Date) => at.toISOString().slice(0, 10);
+
+/**
+ * Where a fetch from `day` can start for this venue: at its last fetch's day when its stored
+ * stretch (`reviewsFetchedFrom`..`reviewsFetchedAt`) covers `day`, else at `day` itself.
+ */
+const fetchStart = (day: string, venue: Venue): string =>
+	venue.reviewsFetchedFrom && venue.reviewsFetchedAt && dayOf(venue.reviewsFetchedFrom) <= day && dayOf(venue.reviewsFetchedAt) > day ?
+		dayOf(venue.reviewsFetchedAt)
+	:	day;
+
+/** A fetch from `day` came back whole for the venue: its stored stretch now reaches `now` */
+const markFetched = (venue: Venue, day: string, now: Date): void => {
+	const joins = venue.reviewsFetchedFrom && venue.reviewsFetchedAt && day <= dayOf(venue.reviewsFetchedAt);
+	if (!joins || day < dayOf(venue.reviewsFetchedFrom!)) venue.reviewsFetchedFrom = new Date(`${day}T00:00:00Z`);
+	venue.reviewsFetchedAt = now;
+};
 
 /** What the portal's review list filters on. All optional; they combine with AND. */
 export interface ReviewListFilters {
@@ -130,11 +158,12 @@ export class ReviewService implements OnModuleInit {
 	 * Pulls one month's Google reviews of these venues. The actor only takes a start date, so
 	 * everything since the month began (or since `since`, a backfill) comes back, and all of it is
 	 * kept: each review belongs to the month it was posted in, and a later month's were paid for
-	 * too. Run right after a month ends, nothing extra comes back.
+	 * too. With `fromLastFetch` a venue starts at its `reviewsFetchedAt` when that is later: the
+	 * weekly fetch has its reviews up to then, and paying for them twice buys nothing.
 	 *
 	 * Every item repeats its place's all-time rating and review count, so each venue with at
 	 * least one item gets today's `VenueSnapshot` for free: the report's rating trend. A venue
-	 * with no review since the month began returns no item and gets none.
+	 * with no review since its start returns no item and gets none.
 	 *
 	 * The places go to the actor in `venueIds`' order, so when the cap stops a run the first
 	 * ones are the ones covered.
@@ -145,19 +174,21 @@ export class ReviewService implements OnModuleInit {
 		budgetUsd: number,
 		now = new Date(),
 		since = `${month}-01`,
+		opts: { fromLastFetch?: boolean } = {},
 	): Promise<number> {
-		return this.scrape(venueIds, {
-			startDate: since,
-			keep: publishedAt => publishedAt.slice(0, 10) >= since,
-			budgetUsd,
-			label: since === `${month}-01` ? month : `${month} from ${since}`,
-			now,
-		});
+		const venues = await this.ordered(venueIds);
+		const fetches = venues.map(venue => ({
+			venue,
+			since: opts.fromLastFetch ? fetchStart(since, venue) : since,
+		}));
+		const label = since === `${month}-01` ? month : `${month} from ${since}`;
+		return (await this.fetch(fetches, budgetUsd, label, now)).saved;
 	}
 
 	/**
 	 * The weekly watch: these venues' reviews published since `since` (the actor takes a day),
-	 * whatever month they fall in. Also snapshots each venue's rating, like `scrapeMonth`.
+	 * whatever month they fall in, or since their last fetch when that is later. Also snapshots
+	 * each venue's rating, like `scrapeMonth`.
 	 */
 	async scrapeRecent(
 		venueIds: string[],
@@ -165,146 +196,186 @@ export class ReviewService implements OnModuleInit {
 		budgetUsd: number,
 		now = new Date(),
 	): Promise<number> {
-		const day = since.toISOString().slice(0, 10);
-		return this.scrape(venueIds, {
-			startDate: day,
-			keep: publishedAt => new Date(publishedAt) >= since,
-			budgetUsd,
-			label: `since ${day}`,
-			now,
-		});
+		const venues = await this.ordered(venueIds);
+		const fetches = venues.map(venue => ({ venue, since: fetchStart(dayOf(since), venue) }));
+		return (await this.fetch(fetches, budgetUsd, `since ${dayOf(since)}`, now)).saved;
 	}
 
 	/**
-	 * Today's rating snapshot of these venues at the price of one review each: the newest review
-	 * of every place repeats its all-time rating and review count. The reviews themselves are
-	 * not kept, since the month scrape keeps the report venues' and the rest would only add
-	 * analysis. A place without any review returns nothing. The places go to the actor in the
-	 * order given, so a cap that stops the run cuts the last ones. Flushes.
+	 * The weekly fetch of these venues (`SNAPSHOT_RATINGS`, every open venue): every Google
+	 * review published since its last fetch (`reviewsFetchedAt`; a venue never fetched starts
+	 * `FIRST_FETCH_DAYS` back, no backfill), kept like any review, and today's rating snapshot
+	 * from the items. A venue with nothing new returns nothing, so the ones the first run returned
+	 * nothing for are asked for their one newest review (`maxReviews: 1`, $0.0006 a place): older
+	 * than their start, they had nothing new, get their snapshot and count as fetched; newer, the
+	 * first run never reached them (its cap) and they start there again next time. The places go
+	 * to the actor in the order given, so a cap cuts the last ones. Flushes.
 	 */
 	async snapshotRatings(
 		venueIds: string[],
 		budgetUsd: number,
 		now = new Date(),
-	): Promise<{ requested: number; snapshots: number }> {
-		const order = new Map(venueIds.map((id, i) => [id, i]));
-		const venues = _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v =>
-			order.get(v.id),
-		);
-		if (venues.length === 0) return { requested: 0, snapshots: 0 };
-		const byPlaceId = new Map(venues.map(v => [v.placeId, v]));
-		const items = await this.apifyService.runActor<GoogleReviewItem>(
-			GOOGLE_REVIEWS_ACTOR,
-			{
-				placeIds: venues.map(v => v.placeId),
-				maxReviews: 1,
-				reviewsSort: 'newest',
-				language: 'en',
-				personalData: false,
-			},
-			{ maxCostUsd: budgetUsd, purpose: `google-ratings: ${venues.length} venues` },
-		);
-		const rated = new Set<string>();
-		for (const item of items) {
-			const venue = item.placeId ? byPlaceId.get(item.placeId) : undefined;
-			if (!venue || rated.has(venue.id)) continue;
-			if (item.totalScore == null && item.reviewsCount == null) continue;
-			await this.venueService.recordRating(venue, item, now);
-			rated.add(venue.id);
+	): Promise<{ requested: number; saved: number; snapshots: number; upToDate: number; missed: number }> {
+		const venues = await this.ordered(venueIds);
+		const result = { requested: venues.length, saved: 0, snapshots: 0, upToDate: 0, missed: 0 };
+		if (venues.length === 0) return result;
+		const firstDay = dayOf(new Date(now.getTime() - FIRST_FETCH_DAYS * 86_400_000));
+		const fetches = venues.map(venue => ({
+			venue,
+			since: venue.reviewsFetchedAt ? dayOf(venue.reviewsFetchedAt) : firstDay,
+		}));
+		// What the check of the quiet ones needs, all of them at most, planned on 80 %
+		const reserve = Math.min(budgetUsd * CHECK_BUDGET_SHARE, (venues.length * REVIEW_USD) / 0.8);
+		const first = await this.fetch(fetches, budgetUsd - reserve, 'new', now);
+		result.saved = first.saved;
+		result.snapshots = first.rated;
+
+		const rest = fetches.filter(f => !first.returned.has(f.venue.id));
+		if (rest.length) {
+			const byPlaceId = new Map(rest.map(f => [f.venue.placeId, f]));
+			const items = await this.apifyService.runActor<GoogleReviewItem>(
+				GOOGLE_REVIEWS_ACTOR,
+				{
+					placeIds: rest.map(f => f.venue.placeId),
+					maxReviews: 1,
+					reviewsSort: 'newest',
+					language: 'en',
+					personalData: false,
+				},
+				{ maxCostUsd: reserve, purpose: `google-ratings: ${rest.length} venues without new reviews` },
+			);
+			const answered = new Set<string>();
+			for (const item of items) {
+				const fetch = item.placeId ? byPlaceId.get(item.placeId) : undefined;
+				if (!fetch || answered.has(fetch.venue.id)) continue;
+				answered.add(fetch.venue.id);
+				// A review since its start: the first run never got to it
+				if (item.publishedAtDate && item.publishedAtDate.slice(0, 10) >= fetch.since) {
+					result.missed++;
+					continue;
+				}
+				if (item.totalScore != null || item.reviewsCount != null) {
+					await this.venueService.recordRating(fetch.venue, item, now);
+					result.snapshots++;
+				}
+				markFetched(fetch.venue, fetch.since, now);
+				result.upToDate++;
+			}
+			// A place the check returned nothing for has no review at all, unless its cap cut it
+			if (items.length * REVIEW_USD < reserve * CAP_REACHED_SHARE)
+				for (const f of rest) if (!answered.has(f.venue.id)) markFetched(f.venue, f.since, now);
+			await this.em.flush();
 		}
-		await this.em.flush();
-		return { requested: venues.length, snapshots: rated.size };
+		return result;
 	}
 
 	/**
-	 * Of these venues, the ones with a Google review stored from before `month`: a venue without
-	 * one has no history yet (never in a month scrape, or only in the weekly watch's last days),
-	 * and the monthly `SCRAPE_REVIEWS` starts it months earlier. TripAdvisor rows don't count.
+	 * Of these venues, the ones whose Google reviews are stored from before `before`: their
+	 * stored stretch starts by then (`reviewsFetchedFrom`), or a review from before it is stored
+	 * (the venues fetched before the stretch was kept). A venue with neither (never in a month
+	 * scrape, or only in the weekly fetch's last weeks) is backfilled by the monthly
+	 * `SCRAPE_REVIEWS`. TripAdvisor rows don't count.
 	 */
-	async venuesWithHistory(venueIds: string[], month: string): Promise<Set<string>> {
+	async venuesWithHistory(venueIds: string[], before: Date): Promise<Set<string>> {
 		if (venueIds.length === 0) return new Set();
+		const ids = venueIds.map(() => '?').join(', ');
 		const rows = await this.em.getConnection().execute<{ venue_id: string }[]>(
-			`select distinct venue_id from reviews
-			where platform = '${ReviewPlatformEnum.GOOGLE}' and published_at < ?
-				and venue_id in (${venueIds.map(() => '?').join(', ')})`,
-			[monthRange(month).start, ...venueIds],
+			`select id venue_id from venues where reviews_fetched_from < ? and id in (${ids})
+			union
+			select distinct venue_id from reviews
+			where platform = '${ReviewPlatformEnum.GOOGLE}' and published_at < ? and venue_id in (${ids})`,
+			[before, ...venueIds, before, ...venueIds],
 		);
 		return new Set(rows.map(r => r.venue_id));
 	}
 
-	private async scrape(
-		venueIds: string[],
-		opts: {
-			startDate: string;
-			keep: (publishedAt: string) => boolean;
-			budgetUsd: number;
-			label: string;
-			now: Date;
-		},
-	): Promise<number> {
+	/** The venues, in the order of the ids given */
+	private async ordered(venueIds: string[]): Promise<Venue[]> {
 		const order = new Map(venueIds.map((id, i) => [id, i]));
-		const venues = _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v =>
-			order.get(v.id),
-		);
-		if (venues.length === 0) return 0;
-		const byPlaceId = new Map(venues.map(v => [v.placeId, v]));
+		return _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v => order.get(v.id));
+	}
 
-		const items = await this.apifyService.runActor<GoogleReviewItem>(
-			GOOGLE_REVIEWS_ACTOR,
-			{
-				placeIds: venues.map(v => v.placeId),
-				reviewsStartDate: opts.startDate,
-				reviewsSort: 'newest',
-				language: 'en',
-				personalData: false,
-			},
-			{
-				maxCostUsd: opts.budgetUsd,
-				purpose: `google-reviews ${opts.label}: ${venues.length} venues`,
-			},
-		);
-
-		const rated = new Set<string>();
-		for (const item of items) {
-			const venue = item.placeId ? byPlaceId.get(item.placeId) : undefined;
-			if (!venue || rated.has(venue.id)) continue;
-			if (item.totalScore == null && item.reviewsCount == null) continue;
-			await this.venueService.recordRating(venue, item, opts.now);
-			rated.add(venue.id);
-		}
-
+	/**
+	 * Every review of each venue published from its `since` day on: one actor run per start day
+	 * (after the first weekly fetch most venues share one), the budget split by venues. Each venue
+	 * with an item gets its rating snapshot and `reviewsFetchedAt` = now, except the last one of a
+	 * run that spent its cap, whose older reviews the cap may have cut. Flushes.
+	 */
+	private async fetch(
+		fetches: { venue: Venue; since: string }[],
+		budgetUsd: number,
+		label: string,
+		now: Date,
+	): Promise<{ saved: number; rated: number; returned: Set<string> }> {
+		const returned = new Set<string>();
 		let saved = 0;
-		for (const item of items) {
-			const venue = item.placeId ? byPlaceId.get(item.placeId) : undefined;
-			if (
-				!venue ||
-				!item.reviewId ||
-				!item.publishedAtDate ||
-				!opts.keep(item.publishedAtDate)
-			)
-				continue;
-			const review =
-				(await this.em.findOne(Review, { reviewId: item.reviewId })) ??
-				this.em.create(Review, {
-					reviewId: item.reviewId,
-					venue,
-					publishedAt: new Date(item.publishedAtDate),
-				});
-			review.stars = item.stars ?? null;
-			review.text = item.text ?? null;
-			review.textTranslated = item.textTranslated ?? null;
-			review.language = item.originalLanguage ?? null;
-			review.likes = item.likesCount ?? 0;
-			review.ownerResponse = item.responseFromOwnerText ?? null;
-			review.ownerResponseAt =
-				item.responseFromOwnerDate ? new Date(item.responseFromOwnerDate) : null;
-			saved++;
+		let rated = 0;
+		if (fetches.length === 0) return { saved, rated, returned };
+		const byDay = _.groupBy(fetches, f => f.since);
+		for (const day of Object.keys(byDay).sort()) {
+			const group = byDay[day];
+			const capUsd = Math.max((budgetUsd * group.length) / fetches.length, MIN_RUN_CAP_USD);
+			const byPlaceId = new Map(group.map(f => [f.venue.placeId, f.venue]));
+			const items = await this.apifyService.runActor<GoogleReviewItem>(
+				GOOGLE_REVIEWS_ACTOR,
+				{
+					placeIds: group.map(f => f.venue.placeId),
+					reviewsStartDate: day,
+					reviewsSort: 'newest',
+					language: 'en',
+					personalData: false,
+				},
+				{
+					maxCostUsd: capUsd,
+					purpose: `google-reviews ${label}${day === label ? '' : ` from ${day}`}: ${group.length} venues`,
+				},
+			);
+
+			const seen = new Set<string>();
+			// One row per Google review id (unique): looked up first, so a review fetched again is
+			// updated, never stored twice; this run's own new rows aren't in the database until the flush
+			const fresh = new Map<string, Review>();
+			let last: Venue | undefined;
+			for (const item of items) {
+				const venue = item.placeId ? byPlaceId.get(item.placeId) : undefined;
+				if (!venue) continue;
+				last = venue;
+				if (!seen.has(venue.id)) {
+					seen.add(venue.id);
+					if (item.totalScore != null || item.reviewsCount != null) {
+						await this.venueService.recordRating(venue, item, now);
+						rated++;
+					}
+				}
+				if (!item.reviewId || !item.publishedAtDate || item.publishedAtDate.slice(0, 10) < day) continue;
+				const review =
+					fresh.get(item.reviewId) ??
+					(await this.em.findOne(Review, { reviewId: item.reviewId })) ??
+					this.em.create(Review, {
+						reviewId: item.reviewId,
+						venue,
+						publishedAt: new Date(item.publishedAtDate),
+					});
+				fresh.set(item.reviewId, review);
+				review.stars = item.stars ?? null;
+				review.text = item.text ?? null;
+				review.textTranslated = item.textTranslated ?? null;
+				review.language = item.originalLanguage ?? null;
+				review.likes = item.likesCount ?? 0;
+				review.ownerResponse = item.responseFromOwnerText ?? null;
+				review.ownerResponseAt =
+					item.responseFromOwnerDate ? new Date(item.responseFromOwnerDate) : null;
+				saved++;
+			}
+			const capped = items.length * REVIEW_USD >= capUsd * CAP_REACHED_SHARE;
+			for (const id of seen) returned.add(id);
+			for (const f of group) if (seen.has(f.venue.id) && !(capped && f.venue === last)) markFetched(f.venue, day, now);
+			await this.em.flush();
+			this.logger.log(
+				`Saved ${saved} reviews ${label} from ${day}; ${seen.size} of ${group.length} venues returned reviews${capped ? ' (cap reached)' : ''}`,
+			);
 		}
-		await this.em.flush();
-		this.logger.log(
-			`Saved ${saved} reviews ${opts.label}; rating snapshots for ${rated.size} of ${venues.length} venues`,
-		);
-		return saved;
+		return { saved, rated, returned };
 	}
 
 	/** Topics, dishes and noticed changes for the month's reviews that have none yet. */
@@ -312,6 +383,23 @@ export class ReviewService implements OnModuleInit {
 		const { start, end } = monthRange(month);
 		return (await this.analyse({ analysedAt: null, publishedAt: { $gte: start, $lt: end } }))
 			.analysed;
+	}
+
+	/**
+	 * The city's written reviews not read yet, newest first, `limit` at most: the reading job's
+	 * part, whatever the month (a backfill's months too)
+	 */
+	analysePending(cityId: string, limit: number): Promise<{ analysed: number; tokens: number }> {
+		return this.analyse({ analysedAt: null, venue: { city: cityId } }, { limit });
+	}
+
+	/** The city's written reviews not read yet: what `analysePending` still has to read */
+	countPending(cityId: string): Promise<number> {
+		return this.em.count(Review, {
+			analysedAt: null,
+			venue: { city: cityId },
+			...WITH_TEXT,
+		} as FilterQuery<Review>);
 	}
 
 	/** Reviews with text analysed before `before`: what the `reread-reviews` backlog still has to read */

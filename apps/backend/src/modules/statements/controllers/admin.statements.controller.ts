@@ -10,8 +10,6 @@ import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guar
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
 
 import {
-	AdminStatementClustersInputDto,
-	AdminStatementClustersOutputDto,
 	AdminStatementRowOutputDto,
 	AdminStatementsInputDto,
 	AdminStatementsScopeInputDto,
@@ -21,7 +19,6 @@ import {
 	AdminWaitComplaintsOutputDto,
 } from '../dto/admin-statements.dto.js';
 import { STATEMENT_SOURCE_POPULATE, StatementService } from '../services/statement.service.js';
-import { StatementClusterService } from '../services/statement-cluster.service.js';
 import { STATEMENT_PARTS_POPULATE } from '../util/statement-populate.js';
 
 @Controller('/admin/statements')
@@ -30,7 +27,6 @@ import { STATEMENT_PARTS_POPULATE } from '../util/statement-populate.js';
 export class AdminStatementsController {
 	constructor(
 		private readonly statementService: StatementService,
-		private readonly statementClusterService: StatementClusterService,
 	) {}
 
 	/** A page of a scope's claims (a city's month, a brand's, a branch's), filtered, newest first or closest to `like`: the Claims tables */
@@ -76,16 +72,6 @@ export class AdminStatementsController {
 		return this.statementService.summary(query);
 	}
 
-	/**
-	 * "Missing aspects": a city's month or quarter of claims no aspect fits, grouped by meaning, each
-	 * with a suggested aspect. Worked out on request (kept in memory for hours), never stored
-	 */
-	@TypedRoute.Get('/clusters')
-	async getStatementClusters(
-		@TypedQuery() query: AdminStatementClustersInputDto,
-	): Promise<AdminStatementClustersOutputDto> {
-		return this.statementClusterService.clusters(query);
-	}
 
 	/** How many venues had a waiting complaint in the city's month, and how long the stated waits were */
 	@TypedRoute.Get('/wait-complaints')

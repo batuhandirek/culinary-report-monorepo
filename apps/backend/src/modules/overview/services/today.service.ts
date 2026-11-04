@@ -3,7 +3,6 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
@@ -34,7 +33,6 @@ const KEY_ORDER = [
 	'unconfirmed',
 	'merges',
 	'accounts',
-	'words',
 ];
 const keyRank = (key: string) => KEY_ORDER.findIndex(k => key === k || key.startsWith(`${k}-`));
 
@@ -50,7 +48,6 @@ export class TodayService {
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
 		private readonly brandService: BrandService,
-		private readonly topicService: TopicService,
 		private readonly prospectQueryService: ProspectQueryService,
 		private readonly dataCoverageService: DataCoverageService,
 	) {}
@@ -241,19 +238,6 @@ export class TodayService {
 							text: `${plural(n, 'account', 'accounts')} in ${city.name} look like a venue's own`,
 							href: `/admin/posts?tab=review&cityId=${city.id}`,
 							cta: 'Review',
-						});
-				}),
-			),
-			...cities.map(city =>
-				tryRead(`words ${city.name}`, async () => {
-					const words = (await this.topicService.overview(city.id)).unmapped.length;
-					if (words)
-						todos.push({
-							key: `words-${city.id}`,
-							tone: 'info',
-							text: `${plural(words, 'food word', 'food words')} in ${city.name} map to no topic`,
-							href: '/admin/trends?tab=words',
-							cta: 'Map',
 						});
 				}),
 			),

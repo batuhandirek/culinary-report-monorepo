@@ -25,6 +25,9 @@ export class AspectDiscoveryWorker {
 	})
 	@EnsureRequestContext()
 	async onAspectDiscovery(job: JobWithMetadata<AspectDiscoveryJobPayload>) {
-		await this.aspectDiscoveryService.runAll({ dryRun: job.data.dryRun });
+		await this.aspectDiscoveryService.runAll({
+			dryRun: job.data.dryRun,
+			cronOnly: job.data.cronOnly ?? false,
+		});
 	}
 }

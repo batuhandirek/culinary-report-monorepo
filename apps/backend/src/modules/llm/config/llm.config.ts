@@ -57,14 +57,22 @@ export class LLMConfig {
 	public OPENAI_ROTATE_AFTER_REQUESTS: number = 20;
 
 	/**
-	 * How long a provider account out of allowance or credit (or with a rejected key) is left out:
-	 * an OpenAI account for that model, Anthropic for every Claude model
+	 * The longest a provider account is left out: Anthropic for every Claude model, an OpenAI
+	 * account with a rejected key. An OpenAI account out of its daily allowance waits for 00:00
+	 * UTC instead, one out of credit `LLM_CREDIT_RETRY_MINUTES`, never longer than this
 	 */
 	@IsNumber()
 	@Min(0.01)
 	@IsOptional()
 	@Transform(v => Number(v.value))
 	public LLM_BLOCK_HOURS: number = 24;
+
+	/** How soon an OpenAI account out of credit is tried again: credit can be added any time */
+	@IsNumber()
+	@Min(1)
+	@IsOptional()
+	@Transform(v => Number(v.value))
+	public LLM_CREDIT_RETRY_MINUTES: number = 60;
 
 	/**
 	 * The paid Claude models of the roster (`LLM_ROSTER`), used only inside `llmPaid` (the eval's

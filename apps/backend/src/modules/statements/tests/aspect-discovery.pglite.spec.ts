@@ -18,6 +18,8 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 
 import { type AspectSuggestion, AspectSuggestionAgent } from '../agents/aspect-suggestion.agent.js';
 import type { Statement } from '../entities/statement.entity.js';
+import { AspectDiscoveryCron } from '../crons/aspect-discovery.cron.js';
+import { AspectDiscoveryJob } from '../jobs/aspect-discovery.job.js';
 import { AspectDiscoveryService } from '../services/aspect-discovery.service.js';
 import { StatementPartsService } from '../services/statement-parts.service.js';
 
@@ -50,6 +52,7 @@ describe('aspect discovery (pglite)', () => {
 			music
 		:	cash,
 	);
+	const sendJob = jest.fn(async (..._args: unknown[]) => undefined);
 	const read = jest.fn(async (_opts: { ids?: number[] }) => ({ read: 0, tokens: 0 }));
 	const ids: Record<string, number[]> = { music: [], cash: [], filed: [], far: [] };
 
@@ -65,10 +68,11 @@ describe('aspect discovery (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				AspectDiscoveryService,
+				AspectDiscoveryCron,
 				TopicService,
 				{ provide: AspectSuggestionAgent, useValue: agent },
 				{ provide: StatementPartsService, useValue: { read } },
-				{ provide: PgBossService, useValue: { sendJob: jest.fn() } },
+				{ provide: PgBossService, useValue: { sendJob } },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -201,5 +205,17 @@ describe('aspect discovery (pglite)', () => {
 		expect(read).toHaveBeenCalledTimes(1);
 		// Every claim near the groups is pending for agent B, none was lost
 		expect((await parts([...ids.music, ...ids.cash])).every(r => !r.parts_at)).toBe(true);
+	});
+
+	it('queues the weekly run for the cron cities, and runs only those', async () => {
+		await harness.moduleRef.get(AspectDiscoveryCron).handleCron();
+		expect(sendJob).toHaveBeenCalledWith(
+			AspectDiscoveryJob.jobName,
+			{ payload: { dryRun: false, cronOnly: true } },
+			{ singletonKey: AspectDiscoveryJob.singletonKey },
+		);
+		expect(await service.runAll({ dryRun: true, cronOnly: true })).toEqual([]);
+		await em.getConnection().execute(`update cities set active = true, cron_enabled = true where id = ?`, [city.id]);
+		expect((await service.runAll({ dryRun: true, cronOnly: true })).map(r => r.cityId)).toEqual([city.id]);
 	});
 });

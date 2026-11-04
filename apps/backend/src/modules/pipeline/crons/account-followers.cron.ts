@@ -30,6 +30,6 @@ export class AccountFollowersCron {
 		// The run's month is a label: the step takes the accounts missing a count today
 		const month = now.toISOString().slice(0, 7);
 		for (const city of await this.cityService.forMonthlyCron())
-			await this.pipelineService.queue(city.id, PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS, month);
+			await this.pipelineService.queueOnce(city.id, PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS, month, 12, now);
 	}
 }

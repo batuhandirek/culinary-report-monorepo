@@ -14,6 +14,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const MONTH = '2026-09';
 
@@ -27,6 +28,7 @@ describe('PipelineService.topBrands (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				PipelineService,
+				caughtUpIngestion(),
 				ProspectQueryService,
 				BrandLeadScoreService,
 				BrandService,

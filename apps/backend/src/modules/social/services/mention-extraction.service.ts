@@ -341,6 +341,11 @@ export class MentionExtractionService implements OnModuleInit {
 		return result;
 	}
 
+	/** The city's posts not read yet: what the next `extract` takes */
+	countUnread(cityId: string): Promise<number> {
+		return this.em.count(SocialPost, { analysedAt: null, city: cityId });
+	}
+
 	/**
 	 * Extracts the places and the claims of posts not analysed yet (of one city, or all), most
 	 * viewed first: the gate first (a post not worth digesting keeps its `skipReason` and gets

@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 /**
- * Greedy cosine clustering against running centroids (pure): the "missing aspects" of
- * `StatementClusterService`. Each item, in the order given, joins the cluster whose centroid it is
+ * Greedy cosine clustering against running centroids (pure): aspect discovery's groups
+ * (`AspectDiscoveryService`) and Explore's (`StatementInsightService.groups`). Each item, in the order given, joins the cluster whose centroid it is
  * most similar to when that similarity reaches the threshold, else it starts a cluster of its own.
  * Similarity is cosine; the vectors are normalised here, so a dot product with a centroid's sum
  * over that sum's length is the cosine, and a sum's length is kept up to date in O(d).

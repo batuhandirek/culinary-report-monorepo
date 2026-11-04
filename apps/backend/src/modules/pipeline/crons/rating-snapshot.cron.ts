@@ -18,8 +18,8 @@ export class RatingSnapshotCron {
 		private readonly cityService: CityService,
 	) {}
 
-	// Tuesdays and Fridays (`RATING_SNAPSHOT_CRON`): one `SNAPSHOT_RATINGS` run per city the
-	// monthly cron covers
+	// Tuesdays (`RATING_SNAPSHOT_CRON`): one `SNAPSHOT_RATINGS` run per city the monthly cron
+	// covers, every open venue
 	@OnCron('rating-snapshot', RATING_SNAPSHOT_CRON)
 	@EnsureRequestContext()
 	async handleCron() {
@@ -30,6 +30,6 @@ export class RatingSnapshotCron {
 		// The run's month is a label: the step snapshots today's venues
 		const month = now.toISOString().slice(0, 7);
 		for (const city of await this.cityService.forMonthlyCron())
-			await this.pipelineService.queue(city.id, PipelineStepEnum.SNAPSHOT_RATINGS, month);
+			await this.pipelineService.queueOnce(city.id, PipelineStepEnum.SNAPSHOT_RATINGS, month, 24, now);
 	}
 }

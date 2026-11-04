@@ -15,7 +15,6 @@ import {
 	AdminTopicBaseOutputDto,
 	AdminTopicsOutputDto,
 	AdminGetTopicsInputDto,
-	AdminIgnoreWordInputDto,
 	AdminTrendsLookupInputDto,
 	AdminTrendsLookupOutputDto,
 	AdminUpdateTopicInputDto,
@@ -35,12 +34,12 @@ export class AdminTopicsController {
 		private readonly trendsTopicLookupService: TrendsTopicLookupService,
 	) {}
 
-	/** Every food topic with the city's mentions and venues on it, and the city's unmapped cuisine keys. */
+	/** Every topic with the city's mentions and venues on it. */
 	@TypedRoute.Get('/')
 	async getTopics(
 		@TypedQuery() query: AdminGetTopicsInputDto,
 	): Promise<AdminTopicsOutputDto> {
-		const { topics, unmapped, ignored } = await this.topicService.overview(query.cityId);
+		const { topics } = await this.topicService.overview(query.cityId);
 		const keyById = new Map(topics.map(({ topic }) => [topic.id, topic.key]));
 		const aliases = await this.termService.aliasesOf(topics.map(({ topic }) => topic.id));
 		return {
@@ -49,12 +48,9 @@ export class AdminTopicsController {
 				mentions,
 				venues,
 			})),
-			unmapped,
-			ignored,
 		};
 	}
 
-	/** Dismisses an unrecognised word (no kind of food to map), or brings it back. */
 	/**
 	 * Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions,
 	 * menu items, then every city's venue tags). A topic or alias change queues it
@@ -64,11 +60,6 @@ export class AdminTopicsController {
 	async relinkTopics(): Promise<AdminRelinkTopicsOutputDto> {
 		await this.topicService.queueRelink();
 		return { queued: true };
-	}
-
-	@TypedRoute.Put('/ignored-words')
-	async setIgnoredWord(@TypedBody() body: AdminIgnoreWordInputDto): Promise<void> {
-		await this.termService.setIgnored(body.word, body.ignored);
 	}
 
 	/** Google Trends topic ids for some words (Trends' autocomplete), to set a topic's `trendsTopicId`. */
@@ -90,7 +81,7 @@ export class AdminTopicsController {
 		return toDto(topic, await this.keysById(), (await this.termService.aliasesOf([topic.id])).get(topic.id) ?? []);
 	}
 
-	/** Changes the fields given; an unmapped key is mapped by adding it to `aliases` (admin terms of the topic). */
+	/** Changes the fields given; `aliases` are the topic's other names (admin terms linked to it alone). */
 	@TypedRoute.Patch('/:id')
 	async updateTopic(
 		@TypedParam('id') id: string,

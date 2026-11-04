@@ -33,6 +33,7 @@ import { PipelineStepEnum, REVIEW_WATCH_DAYS } from '../constants/pipeline.const
 import { ReviewWatchCron } from '../crons/review-watch.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const DAY = 24 * 60 * 60 * 1000;
 const daysAgo = (n: number) => new Date(Date.now() - n * DAY).toISOString();
@@ -118,6 +119,7 @@ describe('the weekly review watch (pglite)', () => {
 			providers: [
 				BrandService,
 				PipelineService,
+				caughtUpIngestion(),
 				ReviewWatchCron,
 				CityService,
 				ReviewService,
