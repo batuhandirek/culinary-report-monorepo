@@ -4,8 +4,8 @@ import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { cityFactory, testCitySource } from 'src/modules/cities/tests/factories/city.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -100,18 +100,6 @@ const reel = {
 // The city's Instagram hashtags: one is turned off
 const INSTAGRAM_HASHTAGS = ['berlinbrunch', 'brunchberlin', 'berlincafe', 'berlinbakery'];
 
-// One item in the shape `clockworks/tiktok-scraper` returns for a hashtag
-const tiktokVideo = {
-	id: '7550000000000000001',
-	webVideoUrl: 'https://www.tiktok.com/@wienisst/video/7550000000000000001',
-	createTimeISO: '2026-09-05T18:00:00.000Z',
-	searchHashtag: { name: 'wienfood' },
-	text: 'Best Schnitzel in Wien #wienfood',
-	authorMeta: { name: 'wienisst', fans: 1200 },
-	playCount: 5400,
-	hashtags: [{ name: 'wienfood' }],
-};
-
 // Items in the shape `novi/advanced-search-tiktok-api` returns (TikTok's own video object;
 // runs esT7dJSU1VGEZB9fw, PXHahUnBDAkxcs1fD)
 const searchVideo = {
@@ -171,6 +159,13 @@ const searchVideo = {
 		region: 'AT',
 	},
 };
+// A hashtag's word searched: the find keeps the hashtag's kind
+const hashtagWordVideo = {
+	...searchVideo,
+	aweme_id: '7551000000000000003',
+	video: {},
+	__search_terms: { ...searchVideo.__search_terms, keyword: 'wienfood' },
+};
 // Inside the three months searched, before the month scraped
 const julySearchVideo = {
 	...searchVideo,
@@ -185,10 +180,9 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 	let berlin: City;
 	const runActor = jest.fn(
 		async (actor: string, input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
-			if (actor === 'clockworks/tiktok-scraper') return [tiktokVideo];
 			if (actor === 'novi/advanced-search-tiktok-api')
 				return input.keywords.includes('wien restaurant') ?
-						[searchVideo, julySearchVideo, searchVideo]
+						[searchVideo, julySearchVideo, searchVideo, hashtagWordVideo]
 					:	[];
 			if (actor === 'apify/instagram-scraper') {
 				if (input.resultsType === 'reels') return [reel];
@@ -457,28 +451,23 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 			max: opts.maxCostUsd,
 		}));
 		expect(calls).toEqual([
-			{
-				actor: 'clockworks/tiktok-scraper',
-				input: expect.objectContaining({ hashtags: ['wienfood'] }),
-				max: 6,
-			},
-			// Every query in one run, in the city's region
+			// Every query and enabled hashtag word in one search run, in the city's region: no hashtag feed
 			{
 				actor: 'novi/advanced-search-tiktok-api',
 				input: {
-					keywords: ['wien restaurant', 'wien schnitzel'],
+					keywords: ['wien restaurant', 'wien schnitzel', 'wienfood'],
 					limit: 100,
 					region: 'AT',
 					publishTime: 'THREE_MONTH',
 					sortType: 0,
 					includeSearchTerms: true,
 				},
-				max: 4,
+				max: 10,
 			},
 		]);
 
 		em.clear();
-		const hashtagVideo = await em.findOneOrFail(SocialPost, { externalId: tiktokVideo.id });
+		const hashtagVideo = await em.findOneOrFail(SocialPost, { externalId: hashtagWordVideo.aweme_id });
 		expect(hashtagVideo).toMatchObject({ city: { id: wien.id } });
 		expect((await linksOf(hashtagVideo.id)).finds).toEqual([
 			'tiktok_hashtag wienfood (wienfood)',

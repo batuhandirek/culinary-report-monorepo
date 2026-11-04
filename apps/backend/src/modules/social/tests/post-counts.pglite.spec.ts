@@ -3,16 +3,17 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@je
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { POST_COUNTS_AGE_DAYS } from '../constants/post-counts.constant.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
-import { SocialPostSnapshot } from '../entities/social-post-snapshot.entity.js';
 import { PostCountsService } from '../services/post-counts.service.js';
 import { SocialAccountService } from '../services/social-account.service.js';
 import { PostFields, SocialPostService } from '../services/social-post.service.js';
 
+import { ownAccount, socialAccountFactory } from './factories/social-account.factory.js';
 import {
 	instagramGoneItem,
 	instagramPhotoItem,
@@ -306,6 +307,22 @@ describe('Post counts at a fixed age (pglite)', () => {
 			notReturned: 2,
 			waiting: 1,
 		});
+	});
+
+	it("leaves a brand's own posts to the weekly own-account scrape, which sees them again at that age", async () => {
+		const em = harness.orm.em;
+		const city = await cityFactory.create({ instagramEnabled: true });
+		const venue = em.create(Venue, { city, placeId: 'place-own-counts', name: 'Own counts' });
+		await em.flush();
+		const own = ownAccount(em, venue.brand, city, 'own_counts');
+		const creator = socialAccountFactory.build({ handle: 'a_creator' }, { associations: { city }, transient: { em } });
+		const at = daysAgo(8);
+		seed(city, { externalId: '7400000000000000001', platform: SocialPlatformEnum.TIKTOK, url: 'https://t/1', postedAt: at, account: own });
+		seed(city, { externalId: '7400000000000000002', platform: SocialPlatformEnum.TIKTOK, url: 'https://t/2', postedAt: at, account: creator });
+		seed(city, { externalId: '7400000000000000003', platform: SocialPlatformEnum.TIKTOK, url: 'https://t/3', postedAt: at });
+		await em.flush();
+
+		expect((await counts.due(city)).map(p => p.externalId).sort()).toEqual(['7400000000000000002', '7400000000000000003']);
 	});
 
 	it("keeps one platform's reads when the other run fails, then fails", async () => {

@@ -14,6 +14,14 @@ import type { ProfilePlatform } from 'src/modules/social/util/accounts.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 
+import {
+	CREATOR_WATCH_MAX,
+	CREATOR_WATCH_MIN_POSTS,
+	CREATOR_WATCH_MIN_SHARE,
+	CREATOR_WATCH_QUIET_DAYS,
+	CREATOR_WATCH_WINDOW_DAYS,
+} from '../constants/creator-watch.constant.js';
+
 import type { TopBrand } from './pipeline.service.js';
 
 /** Why an account's profile is scraped. */
@@ -26,7 +34,34 @@ export enum WatchReasonKindEnum {
 	TOP_BRAND = 'top_brand',
 	// The account is the own account of a competitor of one of the month's report brands
 	RIVAL = 'rival',
+	// The account is the own account of any other brand with an open branch in the city
+	BRAND = 'brand',
+	// The account is a creator's on the self-kept list: enough of their recent posts name a place
+	// in the city (`CREATOR_WATCH_*`); they join and leave by themselves
+	CREATOR = 'creator',
 }
+
+/** What the weekly own-account scrape takes: every brand's own accounts, the report brands' first */
+export const BRAND_WATCH_KINDS = [
+	WatchReasonKindEnum.CUSTOMER,
+	WatchReasonKindEnum.TOP_BRAND,
+	WatchReasonKindEnum.RIVAL,
+	WatchReasonKindEnum.BRAND,
+];
+
+/** What the daily creator scrape takes: the creators the city follows and the self-kept list */
+export const CREATOR_WATCH_KINDS = [WatchReasonKindEnum.CITY_SOURCE, WatchReasonKindEnum.CREATOR];
+
+/**
+ * What the monthly scrape takes (the snapshot with averages over the latest ten that closes the
+ * month): the creators the city follows and the report brands' and their rivals' own accounts
+ */
+export const MONTHLY_WATCH_KINDS = [
+	WatchReasonKindEnum.CITY_SOURCE,
+	WatchReasonKindEnum.CUSTOMER,
+	WatchReasonKindEnum.TOP_BRAND,
+	WatchReasonKindEnum.RIVAL,
+];
 
 interface Ref {
 	id: string;
@@ -46,9 +81,15 @@ export interface WatchReason {
 	instagramOff?: boolean;
 	/** The brand whose own account it is (customer, top brand, rival) */
 	brand?: Ref;
-	/** A top brand's place in the month's list, and the list's length */
+	/** A top brand's place in the month's list, or a creator's in the creator list, and the list's length */
 	rank?: number;
 	top?: number;
+	/** A creator's posts in the window naming a place in the city, of their read posts, and the last one's time */
+	posts?: number;
+	readPosts?: number;
+	lastPostAt?: string;
+	/** The window those are counted over, in days */
+	windowDays?: number;
 	/** The report brands it competes with (a rival) */
 	rivalOf?: Ref[];
 	/** The month the report brands are of */
@@ -67,10 +108,12 @@ const PROFILE_PLATFORMS = [SocialPlatformEnum.INSTAGRAM, SocialPlatformEnum.TIKT
 
 /**
  * Which TikTok and Instagram profiles a city's runs scrape, and why (`SCRAPE_ACCOUNTS` monthly,
- * `SCRAPE_ACCOUNTS_RECENT` weekly, and the creator page's "Watched" panel): the creators the city
- * follows (account sources), and the own accounts (`SocialAccount.brand`) of the month's report
- * brands — paying customers and the most talked-about — and of those brands' competitors. One
- * list, so what the page says is what the run does.
+ * `SCRAPE_ACCOUNTS_RECENT` weekly, `SCRAPE_CREATORS` daily, and the creator page's "Watched"
+ * panel): the creators the city follows (account sources), the self-kept creator list, and the
+ * own accounts (`SocialAccount.brand`) of every brand with an open branch in the city, the month's
+ * report brands (paying customers and the most talked-about) and their competitors named as such.
+ * One list, so what the page says is what the runs do; each run takes the kinds of reason it is
+ * for (`BRAND_WATCH_KINDS`, `CREATOR_WATCH_KINDS`, `MONTHLY_WATCH_KINDS`).
  */
 @Injectable()
 export class AccountWatchService {
@@ -86,7 +129,11 @@ export class AccountWatchService {
 	 * scraped). `brands` are the month's report brands (`PipelineService.topBrands`); a branch's
 	 * own account counts only in the branch's city.
 	 */
-	async watchList(city: City, brands: TopBrand[], opts: { month: string; top: number }): Promise<WatchedAccount[]> {
+	async watchList(
+		city: City,
+		brands: TopBrand[],
+		opts: { month: string; top: number; now?: Date },
+	): Promise<WatchedAccount[]> {
 		const cityRef = { id: city.id, name: city.name };
 		const out = new Map<string, WatchedAccount>();
 		const entry = (platform: ProfilePlatform, handle: string, accountId?: string) => {
@@ -162,20 +209,148 @@ export class AccountWatchService {
 					watched.reasons.push({ ...reason, city: cityRef, active: true });
 			}
 		}
+
+		// The self-kept creator list
+		for (const creator of await this.creators(city, opts.now ?? new Date())) {
+			const instagramOff = creator.platform === SocialPlatformEnum.INSTAGRAM && !city.instagramEnabled;
+			entry(creator.platform, creator.handle, creator.accountId).reasons.push({
+				kind: WatchReasonKindEnum.CREATOR,
+				city: cityRef,
+				active: !instagramOff,
+				...(instagramOff && { instagramOff }),
+				rank: creator.rank,
+				top: CREATOR_WATCH_MAX,
+				posts: creator.posts,
+				readPosts: creator.readPosts,
+				lastPostAt: creator.lastPostAt,
+				windowDays: CREATOR_WATCH_WINDOW_DAYS,
+			});
+		}
+
+		// Every other brand with an open branch in the city: its own accounts, highest lead score first
+		const brandAccounts = await this.em.getConnection().execute<
+			{ id: string; platform: ProfilePlatform; handle: string; brand_id: string; brand_name: string }[]
+		>(
+			`select a.id, a.platform, a.handle, b.id brand_id, b.name brand_name from social_accounts a
+			join brands b on b.id = a.brand_id
+			left join venues branch on branch.id = a.branch_id
+			where a.platform in (?, ?) and a.handle_lost_at is null
+			and (a.branch_id is null or branch.city_id = ?)
+			and exists (select 1 from venues v where v.brand_id = a.brand_id and v.city_id = ? and not v.closed)
+			order by b.lead_score desc nulls last, a.handle`,
+			[...PROFILE_PLATFORMS, city.id, city.id],
+		);
+		for (const row of brandAccounts) {
+			if (reasonsByBrand.has(row.brand_id)) continue;
+			entry(row.platform, row.handle, row.id).reasons.push({
+				kind: WatchReasonKindEnum.BRAND,
+				city: cityRef,
+				active: true,
+				brand: { id: row.brand_id, name: row.brand_name },
+			});
+		}
 		return [...out.values()];
 	}
 
-	/** The profiles a run scrapes: the watched accounts with an active reason. */
-	targets(watched: WatchedAccount[]): AccountToScrape[] {
-		return watched.filter(w => w.reasons.some(r => r.active)).map(w => ({ platform: w.platform, handle: w.handle }));
+	/**
+	 * The self-kept creator list: creators (people; brand accounts out) whose posts found in the
+	 * city in the last `CREATOR_WATCH_WINDOW_DAYS` include `CREATOR_WATCH_MIN_POSTS`+ naming a
+	 * place matched to a brand, at least `CREATOR_WATCH_MIN_SHARE` of their read posts, the last
+	 * one within `CREATOR_WATCH_QUIET_DAYS`; the most such posts first, then the most viewed,
+	 * `CREATOR_WATCH_MAX` at most. Nothing is stored: each run works it out again, so a creator
+	 * joins and leaves by themselves. Once watched, every post of theirs is found and read, so the
+	 * share is their real one. A creator with a switched-off account source in the city is left
+	 * out: an admin's "stop watching" is final. Each of their TikTok and Instagram accounts is listed.
+	 */
+	async creators(
+		city: City,
+		now: Date,
+	): Promise<
+		{
+			accountId: string;
+			platform: ProfilePlatform;
+			handle: string;
+			rank: number;
+			posts: number;
+			readPosts: number;
+			lastPostAt: string;
+		}[]
+	> {
+		const day = 86_400_000;
+		const rows = await this.em.getConnection().execute<
+			{ creator_id: string; posts: number; read_posts: number; last_post: Date }[]
+		>(
+			`with posts as (
+				select a.creator_id, p.posted_at, coalesce(p.views, 0) views,
+				p.skip_reason is null and exists (
+					select 1 from mentions m where m.post_id = p.id and m.brand_id is not null
+				) named
+				from social_posts p join social_accounts a on a.id = p.account_id
+				where p.city_id = ? and a.brand_id is null and p.platform in (?, ?)
+				and p.analysed_at is not null and p.posted_at >= ?
+			), creators as (
+				select creator_id, count(*) filter (where named)::int posts, count(*)::int read_posts,
+				max(posted_at) filter (where named) last_post, sum(views) filter (where named) views
+				from posts group by creator_id
+			)
+			select c.creator_id, c.posts, c.read_posts, c.last_post from creators c
+			where c.posts >= ? and c.posts >= ? * c.read_posts and c.last_post >= ?
+			and not exists (
+				select 1 from social_accounts x
+				join city_sources s on s.city_id = ? and not s.enabled and s.value = x.handle
+				and s.kind::text = (case x.platform::text when 'tiktok' then 'tiktok_account' else 'instagram_account' end)
+				where x.creator_id = c.creator_id
+			)
+			order by c.posts desc, c.views desc nulls last, c.creator_id
+			limit ?`,
+			[
+				city.id,
+				...PROFILE_PLATFORMS,
+				new Date(now.getTime() - CREATOR_WATCH_WINDOW_DAYS * day),
+				CREATOR_WATCH_MIN_POSTS,
+				CREATOR_WATCH_MIN_SHARE,
+				new Date(now.getTime() - CREATOR_WATCH_QUIET_DAYS * day),
+				city.id,
+				CREATOR_WATCH_MAX,
+			],
+		);
+		if (!rows.length) return [];
+		const rank = new Map(rows.map((r, i) => [r.creator_id, { ...r, rank: i + 1 }]));
+		const accounts = await this.em.find(
+			SocialAccount,
+			{ creator: { $in: [...rank.keys()] }, platform: { $in: PROFILE_PLATFORMS }, brand: null, handleLostAt: null },
+			{ fields: ['id', 'platform', 'handle', 'creator'] },
+		);
+		return _.sortBy(
+			accounts.map(a => {
+				const r = rank.get(a.creator.id)!;
+				return {
+					accountId: a.id,
+					platform: a.platform as ProfilePlatform,
+					handle: a.handle,
+					rank: r.rank,
+					posts: r.posts,
+					readPosts: r.read_posts,
+					lastPostAt: new Date(r.last_post).toISOString(),
+				};
+			}),
+			c => c.rank,
+		);
 	}
 
-	/** How many accounts each kind of reason brought in (a step's result). */
-	summary(watched: WatchedAccount[]): Record<WatchReasonKindEnum, number> {
+	/** The profiles a run scrapes: the watched accounts with an active reason of these kinds (any without). */
+	targets(watched: WatchedAccount[], kinds?: WatchReasonKindEnum[]): AccountToScrape[] {
+		return watched
+			.filter(w => w.reasons.some(r => r.active && (!kinds || kinds.includes(r.kind))))
+			.map(w => ({ platform: w.platform, handle: w.handle }));
+	}
+
+	/** How many accounts each kind of reason brought in (a step's result), for these kinds (all without). */
+	summary(watched: WatchedAccount[], kinds = Object.values(WatchReasonKindEnum)): Partial<Record<WatchReasonKindEnum, number>> {
 		const active = watched.filter(w => w.reasons.some(r => r.active));
 		return Object.fromEntries(
-			Object.values(WatchReasonKindEnum).map(kind => [kind, active.filter(w => w.reasons.some(r => r.active && r.kind === kind)).length]),
-		) as Record<WatchReasonKindEnum, number>;
+			kinds.map(kind => [kind, active.filter(w => w.reasons.some(r => r.active && r.kind === kind)).length]),
+		);
 	}
 
 	/**

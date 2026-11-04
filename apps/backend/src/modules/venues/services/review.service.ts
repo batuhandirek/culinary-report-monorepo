@@ -40,6 +40,16 @@ const CHECK_BUDGET_SHARE = 0.4;
 /** How far back a venue's first weekly fetch starts: its week, no backfill */
 export const FIRST_FETCH_DAYS = 7;
 
+// The one-off backfill (`backfill`): a venue is planned at this share of its all-time Google
+// review count per month back (Berlin 2026-11: six months were 6.3 % of it over 42 venues with
+// the whole stretch stored), at least `BACKFILL_MIN_REVIEWS`
+const BACKFILL_MONTHLY_SHARE = 0.0105;
+const BACKFILL_MIN_REVIEWS = 5;
+// Venues per actor run: a run the cap or a restart cuts loses only its own
+const BACKFILL_RUN_VENUES = 100;
+// A run's cap over its plan, since busy places run above the average
+const BACKFILL_CAP_HEADROOM = 1.5;
+
 const dayOf = (at: Date) => at.toISOString().slice(0, 10);
 
 /**
@@ -267,6 +277,68 @@ export class ReviewService implements OnModuleInit {
 			await this.em.flush();
 		}
 		return result;
+	}
+
+	/**
+	 * A one-off backfill (`BACKFILL_REVIEWS`): every Google review of these venues published from
+	 * `since` (YYYY-MM-DD) on, in runs of `BACKFILL_RUN_VENUES` in the order given. Each venue is
+	 * planned at `BACKFILL_MONTHLY_SHARE` of its all-time review count per month back, and venues
+	 * are taken while the plan fits the budget (the rest are `left`); a run's cap is its plan with
+	 * `BACKFILL_CAP_HEADROOM`, never more than the budget left. A venue that came back whole gets
+	 * its stored stretch from `since` (`markFetched`), so the weekly fetch and the monthly scrape go
+	 * on from its last fetch and never pay for these months again; the last venue of a run its cap
+	 * stopped does not. Each run flushes.
+	 */
+	async backfill(
+		venueIds: string[],
+		since: string,
+		budgetUsd: number,
+		now = new Date(),
+	): Promise<{ venues: number; taken: number; left: number; runs: number; saved: number; returned: number; plannedUsd: number }> {
+		const venues = await this.ordered(venueIds);
+		const months = Math.max(1, (now.getTime() - new Date(`${since}T00:00:00Z`).getTime()) / (30.44 * 86_400_000));
+		const planOf = (venue: Venue) =>
+			Math.max(BACKFILL_MIN_REVIEWS, (venue.reviewsCount ?? 0) * BACKFILL_MONTHLY_SHARE * months) * REVIEW_USD;
+		let plannedUsd = 0;
+		const taken: Venue[] = [];
+		for (const venue of venues) {
+			if (plannedUsd + planOf(venue) > budgetUsd) break;
+			plannedUsd += planOf(venue);
+			taken.push(venue);
+		}
+		let spentUsd = 0;
+		let saved = 0;
+		let returned = 0;
+		let runs = 0;
+		for (const chunk of _.chunk(taken, BACKFILL_RUN_VENUES)) {
+			runs++;
+			const capUsd = Math.min(
+				_.sumBy(chunk, planOf) * BACKFILL_CAP_HEADROOM,
+				Math.max(budgetUsd - spentUsd, MIN_RUN_CAP_USD),
+			);
+			const result = await this.fetch(
+				chunk.map(venue => ({ venue, since })),
+				capUsd,
+				`backfill from ${since}`,
+				now,
+			);
+			saved += result.saved;
+			returned += result.returned.size;
+			spentUsd += result.saved * REVIEW_USD;
+			if (spentUsd >= budgetUsd) break;
+		}
+		this.logger.log(
+			`Backfill from ${since}: ${returned} of ${taken.length} venues returned ${saved} reviews (${venues.length - taken.length} left over budget)`,
+		);
+		return {
+			venues: venues.length,
+			taken: taken.length,
+			left: venues.length - taken.length,
+			runs,
+			saved,
+			returned,
+			plannedUsd: Math.round(plannedUsd * 100) / 100,
+		};
 	}
 
 	/**

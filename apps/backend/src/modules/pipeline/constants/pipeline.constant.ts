@@ -1,3 +1,5 @@
+import type { PipelineRunParams } from '../entities/pipeline-run.entity.js';
+
 export enum PipelineStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	// Every confirmed brand's name on Google Maps in the city, for branches that opened since
@@ -8,11 +10,12 @@ export enum PipelineStepEnum {
 	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
 	// The OSM places no venue is, searched on Google Maps by name and address, once each
 	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
-	// The month-end TikTok pass: the searches over three months and a short page of each hashtag,
-	// kept from the month's start; the weekly SCRAPE_TIKTOK_RECENT collects most of the month
+	// The month-end TikTok pass: the city's searches and hashtag words searched over the last
+	// month, kept from the month's start; the weekly SCRAPE_TIKTOK_RECENT collects most of the month
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
-	// The city's TikTok searches over the last week and a short page of each hashtag (the weekly
-	// cron): hashtag feeds ignore dates, so only scraping through the month finds its videos
+	// The city's TikTok searches and hashtag words, searched over the last week (the weekly cron).
+	// A hashtag's own feed has no date filter (half of it was over three months old), so its word
+	// is searched instead
 	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
 	// The newest page of each Instagram hashtag (the daily cron): on Apify's Free plan a hashtag
@@ -30,10 +33,17 @@ export enum PipelineStepEnum {
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	// TikTok searches by brand name over the last week (the weekly cron): the last finished month's
+	// report brands (customers included), their competitors and the open prospects
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	// Report brands with no competitors get their best suggestions (free; before the review
 	// scrape, so the competitors' reviews come in the same run); brands with any are left alone
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	// A one-off: the Google reviews since `params.since` of every open venue posts named in the
+	// last `params.talkedDays` that has none stored from then (queued once at boot by
+	// `PipelineBootService`, `ONE_OFF_RUNS`)
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	// Google Maps detail pages (hours, amenities, popular times) of report venues and competitors
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
@@ -41,9 +51,14 @@ export enum PipelineStepEnum {
 	// follows, the report brands' and their rivals' own accounts): their posts since the month
 	// began and a profile snapshot (followers, reach per post over the latest ten)
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
-	// The same accounts' posts of the last week (the weekly cron) and a snapshot (followers;
-	// TikTok's without averages, as only the week's videos come)
+	// Every brand's own accounts (a brand with an open branch in the city, the report brands and
+	// their rivals first): their posts of the last week (the weekly cron) and a snapshot
+	// (followers; TikTok's without averages, as only the week's videos come)
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	// The watched creators (the city's creator sources and the self-kept creator list,
+	// `AccountWatchService`): TikTok's videos since the last run, every day; an Instagram profile's
+	// latest posts every `CREATOR_INSTAGRAM_EVERY_DAYS` (the daily creator cron)
+	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	// Brands' own accounts with no follower count yet: their profiles only, no posts (the daily
 	// cron), so every brand account has followers within days of being linked
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
@@ -157,9 +172,12 @@ export const SOURCE_STEPS: readonly PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_BLOGS,
 	PipelineStepEnum.LOOKUP_VENUES,
 	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
+	PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT,
 	PipelineStepEnum.SCRAPE_ACCOUNTS,
 	PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT,
+	PipelineStepEnum.SCRAPE_CREATORS,
 	PipelineStepEnum.SCRAPE_REVIEWS,
+	PipelineStepEnum.BACKFILL_REVIEWS,
 	PipelineStepEnum.SCRAPE_COMMENTS,
 	PipelineStepEnum.SCRAPE_PRESS,
 	PipelineStepEnum.WATCH_REVIEWS,
@@ -181,12 +199,10 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.SEARCH_BRANCHES]: 2,
 	// One result a place at ~$0.004, planned on 80 % of it: about 2,000 places
 	[PipelineStepEnum.LOOKUP_OSM_PLACES]: 10,
-	// TikTok, ~$15 a month in all. Each run's search share is the larger of 40 % and the search
-	// actor's $4 floor, and spends far less (~$0.60 for 24 queries); hashtags take the rest at
-	// ~$0.0037 an item, their page size cut to fit. Month end: $3 of hashtags (~40 a tag)
-	[PipelineStepEnum.SCRAPE_TIKTOK]: 7,
-	// Weekly: $2 of hashtags (~25 a tag) and the week's searches, ~$2.60 a week spent
-	[PipelineStepEnum.SCRAPE_TIKTOK_RECENT]: 6,
+	// TikTok's search at ~$0.0004 a result (24 queries, 497 results: $0.24 on 2026-10-25), so ~44
+	// queries and hashtag words spend well under $1 a run; the cap is the search actor's $4 floor
+	[PipelineStepEnum.SCRAPE_TIKTOK]: 4,
+	[PipelineStepEnum.SCRAPE_TIKTOK_RECENT]: 4,
 	[PipelineStepEnum.SCRAPE_INSTAGRAM]: 8,
 	// One page (up to ~27 posts) of twenty hashtags at $0.0027 a post is about $1.50
 	[PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT]: 2,
@@ -195,16 +211,26 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	[PipelineStepEnum.LOOKUP_VENUES]: 6,
 	// Half to the TikTok search, whose actor refuses a cap under $4
 	[PipelineStepEnum.SCRAPE_VENUE_SOCIAL]: 8,
+	// Up to 30 results a brand at ~$0.0004: ~$0.012 a brand, ~$2 for 150 brands; the search actor
+	// refuses a cap under $4
+	[PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT]: 4,
 	// $0.0006 a Google review (Berlin 2026-09: ~6,300 for 127 venues, ~$3.80). A tenth to
 	// TripAdvisor, then of the $10.80 left the month takes 60 % ($6.48) and the backfill of
 	// venues new to the set 40 % ($4.32: ~7,200 reviews, ~22 venues at seven months of ~47)
 	[PipelineStepEnum.SCRAPE_REVIEWS]: 12,
+	// The one-off's own budget is in `ONE_OFF_RUNS`; this is what a run started by hand gets
+	[PipelineStepEnum.BACKFILL_REVIEWS]: 90,
 	[PipelineStepEnum.REFRESH_VENUE_DETAILS]: 2,
 	// Instagram profiles at ~$0.0026 each (twelve latest posts included), TikTok's latest ten
 	// videos at ~$0.003 each: ~100 accounts, mostly TikTok's videos, about $2
 	[PipelineStepEnum.SCRAPE_ACCOUNTS]: 4,
-	// The week's videos only (TikTok's date filter), so a quiet account costs a profile at most
-	[PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT]: 2,
+	// Every brand account with an open branch in the city: Berlin 2026-11, ~2,850 Instagram profiles
+	// at ~$0.0026 (~$7.40) and ~890 TikTok profiles paying only for the week's videos at ~$0.003
+	// (a quiet account costs nothing): ~$11 a week, ~$50 a month
+	[PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT]: 16,
+	// ~300 creators: TikTok's new videos at ~$0.003 (~$0.50 a day), a third of the Instagram
+	// profiles a day at ~$0.003: ~$20 a month
+	[PipelineStepEnum.SCRAPE_CREATORS]: 3,
 	// An Instagram profile at ~$0.003, a TikTok one (its latest video) at ~$0.004: ~300 profiles a
 	// day. Berlin's backlog in 2026-10 was ~1,200 accounts (~$3.40, four days); then only the
 	// accounts linked since, cents a day
@@ -267,3 +293,20 @@ export const REVIEW_BACKFILL_MONTHS = 6;
  * of the venues already tracked always fit. All of it when no venue is tracked yet.
  */
 export const REVIEW_BACKFILL_BUDGET_SHARE = 0.4;
+
+/**
+ * Runs queued once, at the first boot of a deploy that carries them (`PipelineBootService`), one
+ * per city the monthly cron covers: never again once a run of the step with the same `key`
+ * exists for the city, whatever became of it (a failed one is rerun from the Data page).
+ */
+export const ONE_OFF_RUNS: { step: PipelineStepEnum; key: string; params: PipelineRunParams }[] = [
+	{
+		// The user's call, 2026-11-04: six months of Google reviews of every venue posts named in
+		// the last 90 days (Berlin: ~1,960 venues, ~130,000 reviews at $0.0006, ~$80), for what
+		// changed in the city and to give aspect discovery more claims. The rest of the city's
+		// ~7,500 venues (~$150) is a later slice
+		step: PipelineStepEnum.BACKFILL_REVIEWS,
+		key: 'reviews-talked-2026-11',
+		params: { since: '2026-05-01', talkedDays: 90, budgetUsd: 90 },
+	},
+];

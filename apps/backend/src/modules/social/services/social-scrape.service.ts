@@ -19,10 +19,8 @@ import { instagramTagUrl } from '../util/instagram-tags.js';
 import { fromClockworksComment } from '../util/post-comments.js';
 
 import { PostCommentService } from './post-comment.service.js';
-import { clockworksFinds, mergeFinds, PostFields, SocialPostService, tikTokSearchFinds } from './social-post.service.js';
+import { mergeFinds, PostFields, SocialPostService, tikTokSearchFinds } from './social-post.service.js';
 
-// clockworks' search fails on device registration; it is still the hashtag actor
-const TIKTOK_HASHTAG_ACTOR = 'clockworks/tiktok-scraper';
 // Keyword search in the city's region, with subtitle links. `limit` is per keyword, so one run
 // covers every query; it refuses a cap under $4
 const TIKTOK_SEARCH_ACTOR = 'novi/advanced-search-tiktok-api';
@@ -35,14 +33,12 @@ const TIKTOK_COMMENTS_ACTOR = 'clockworks/tiktok-comments-scraper';
 // Free-plan prices per result, to size a run inside its cap (Apify enforces the cap regardless)
 const INSTAGRAM_RESULT_USD = 0.0027;
 const TIKTOK_COMMENT_USD = 0.00125;
-// clockworks' hashtag items, measured: 2,000 for $7.40 on 2026-10-18
-const TIKTOK_HASHTAG_RESULT_USD = 0.0037;
 // The search actor's smallest `limit`, and the smallest cap it accepts
 const TIKTOK_SEARCH_MIN_LIMIT = 30;
 const TIKTOK_SEARCH_MIN_CAP_USD = 4;
 
 /** `novi/advanced-search-tiktok-api`'s `publishTime`: how far back a search looks. */
-export type TikTokSearchWindow = 'WEEK' | 'THREE_MONTH';
+export type TikTokSearchWindow = 'WEEK' | 'MONTH' | 'THREE_MONTH';
 
 /** `apify/instagram-scraper`'s `resultsType` on a tag URL: the feed's posts, or its top reels. */
 export type InstagramHashtagKind = 'posts' | 'reels';
@@ -106,12 +102,12 @@ export class SocialScrapeService {
 	}
 
 	/**
-	 * The city-wide TikTok scrape: the city's enabled hashtags and searches, searched in its
-	 * region, the searches over `searchWindow` (three months without). Videos older than `since`
-	 * were paid for but stay out (hashtag feeds have no date filter). Without hashtags the whole
-	 * budget goes to the searches, and the other way round. With both, the searches get the larger
-	 * of 40 % and the search actor's $4 floor (they spend far less), the hashtags the rest, their
-	 * page size cut so the cap never stops the run before the last hashtag.
+	 * The city-wide TikTok scrape: the city's enabled searches and hashtag words, all through
+	 * TikTok's search in its region over `searchWindow` (three months without), in one run. A
+	 * hashtag's own feed (clockworks) has no date filter and came back half older than three months
+	 * at ~$0.004 an item, so its word is searched instead (~$0.0004 a result, as relevant: on Berlin's
+	 * first weeks 54 % of each named a matched place); a find of a hashtag's word keeps the hashtag's
+	 * kind, so the Sources tab's yield stays the source's. Videos older than `since` stay out.
 	 */
 	async scrapeCityTikTok(opts: {
 		city: City;
@@ -125,40 +121,25 @@ export class SocialScrapeService {
 			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_HASHTAG),
 			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_SEARCH),
 		]);
-		const searchBudget =
-			!searches.length ? 0
-			: !hashtags.length ? opts.budgetUsd
-			: Math.min(opts.budgetUsd, Math.max(opts.budgetUsd * 0.4, TIKTOK_SEARCH_MIN_CAP_USD));
-		const hashtagBudget = opts.budgetUsd - searchBudget;
-		const perHashtag = Math.min(
-			opts.perSource,
-			Math.floor(hashtagBudget / (Math.max(hashtags.length, 1) * TIKTOK_HASHTAG_RESULT_USD)),
-		);
-
-		const hashtagItems =
-			hashtags.length && perHashtag >= 1 ?
-				await this.apifyService.runActor(
-					TIKTOK_HASHTAG_ACTOR,
-					{
-						hashtags,
-						resultsPerPage: perHashtag,
-						downloadSubtitlesOptions: 'DOWNLOAD_SUBTITLES',
-						shouldDownloadVideos: false,
-						shouldDownloadCovers: false,
-					},
-					{ maxCostUsd: hashtagBudget, purpose: `tiktok hashtags ${city.name}: ${hashtags.length}` },
-				)
-			:	[];
-		const hashtagRows = await this.collect(hashtagItems, row => this.socialPostService.fromClockworks(row), opts.since);
-
-		const search = await this.searchTikTok(city, searches, {
+		const searchSet = new Set(searches.map(q => q.toLowerCase()));
+		const hashtagSet = new Set(hashtags.map(h => h.toLowerCase()));
+		const queries = _.uniqBy([...searches, ...hashtags], q => q.toLowerCase());
+		const search = await this.searchTikTok(city, queries, {
 			perQuery: opts.perSource,
-			budgetUsd: searchBudget,
+			budgetUsd: Math.max(opts.budgetUsd, TIKTOK_SEARCH_MIN_CAP_USD),
 			window: opts.searchWindow,
-			label: `tiktok search ${city.name}: ${searches.length} queries`,
+			label: `tiktok search ${city.name}: ${searches.length} queries, ${hashtags.length} hashtags`,
 		});
-		const rows = [...hashtagRows, ...search.rows.filter(r => r.postedAt.toISOString() >= opts.since)];
-		return { found: hashtagItems.length + search.found, saved: await this.saveAll(rows, city) };
+		const rows = search.rows
+			.filter(r => r.postedAt.toISOString() >= opts.since)
+			.map(r => ({
+				...r,
+				finds: (r.finds ?? []).map(f => {
+					const word = f.value.toLowerCase();
+					return hashtagSet.has(word) && !searchSet.has(word) ? { ...f, kind: PostSourceKindEnum.TIKTOK_HASHTAG } : f;
+				}),
+			}));
+		return { found: search.found, saved: await this.saveAll(rows, city) };
 	}
 
 	/**
@@ -220,7 +201,8 @@ export class SocialScrapeService {
 
 	/**
 	 * TikTok searches by venue name (with the city's name, in its region) and Instagram posts
-	 * tagged at the venue. The venues are the city's.
+	 * tagged at the venue. The venues are the city's. With `tiktokOnly` (the weekly run) the
+	 * whole budget goes to the search over `window`, and no Instagram place is read.
 	 */
 	async scrapeVenueSocial(opts: {
 		city: City;
@@ -228,17 +210,25 @@ export class SocialScrapeService {
 		since: string;
 		perVenue: number;
 		budgetUsd: number;
+		tiktokOnly?: boolean;
+		window?: TikTokSearchWindow;
 	}): Promise<ScrapeResult> {
 		const { city } = opts;
+		if (!opts.venues.length) return { found: 0, saved: 0 };
 		// The search actor refuses a cap under $4, hence the step's $8 default
-		const half = opts.budgetUsd / 2;
+		const half = opts.tiktokOnly ? opts.budgetUsd : opts.budgetUsd / 2;
 
 		const byInput = new Map(opts.venues.map(v => [venueSearchQuery(v, city.name), v]));
 		const search = await this.searchTikTok(
 			city,
 			// A branch is searched under its brand's name
 			[...byInput.keys()],
-			{ perQuery: opts.perVenue, budgetUsd: half, label: `tiktok venue search ${city.name}: ${opts.venues.length} venues` },
+			{
+				perQuery: opts.perVenue,
+				budgetUsd: half,
+				window: opts.window,
+				label: `tiktok venue search ${city.name}: ${opts.venues.length} venues`,
+			},
 		);
 		// Found by a search for one venue, not by a city source
 		const tiktok = search.rows
@@ -251,6 +241,8 @@ export class SocialScrapeService {
 					venueId: byInput.get(f.value)?.id,
 				})),
 			}));
+
+		if (opts.tiktokOnly) return { found: search.found, saved: await this.saveAll(tiktok, city) };
 
 		const instagramItems = await this.apifyService.runActor<any>(
 			INSTAGRAM_LOCATION_ACTOR,
@@ -316,22 +308,6 @@ export class SocialScrapeService {
 			if (row) rows.push({ ...row, finds: _.uniqBy(group.flatMap(tikTokSearchFinds), f => f.value) });
 		}
 		return { found: items.length, rows };
-	}
-
-	private async collect(
-		items: any[],
-		map: (row: any) => Promise<PostFields | null>,
-		since: string,
-	): Promise<PostFields[]> {
-		const rows: PostFields[] = [];
-		// A video two hashtags found is mapped (its subtitles downloaded) once, with both finds
-		for (const group of Object.values(_.groupBy(items, i => `${i?.id}`))) {
-			const item = group[0];
-			if (item?.createTimeISO && item.createTimeISO < since) continue;
-			const row = await map(item);
-			if (row) rows.push({ ...row, finds: _.uniqBy(group.flatMap(clockworksFinds), f => `${f.kind} ${f.value}`) });
-		}
-		return rows;
 	}
 
 	private async saveAll(rows: PostFields[], city: City): Promise<number> {

@@ -31,6 +31,8 @@ const RECURRING_STEPS = [
 	PipelineStepEnum.SCRAPE_INSTAGRAM_REELS,
 	PipelineStepEnum.SCRAPE_BLOGS,
 	PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT,
+	PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT,
+	PipelineStepEnum.SCRAPE_CREATORS,
 	PipelineStepEnum.FIND_OWN_ACCOUNTS,
 	PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS,
 	PipelineStepEnum.SAMPLE_BUSYNESS,
@@ -42,6 +44,7 @@ const RECURRING_STEPS = [
 	PipelineStepEnum.WATCH_REVIEWS,
 	PipelineStepEnum.SCRAPE_VENUES,
 	PipelineStepEnum.SEARCH_BRANCHES,
+	PipelineStepEnum.BACKFILL_REVIEWS,
 ];
 
 /** A step result's figures in a line: its numbers, nested one level, up to five. */

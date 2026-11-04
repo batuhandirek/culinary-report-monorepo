@@ -17,6 +17,7 @@ import { WeeklyListeningCron } from '../crons/weekly-listening.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
 import { WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
+
 import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const DAY_MS = 24 * 3600 * 1000;
@@ -69,10 +70,10 @@ describe('Weekly listening (pglite)', () => {
 		return em.findOneOrFail(PipelineRun, { id: run.id });
 	};
 
-	it('queues the TikTok, reels, blog and watched-profile runs, then the name lookup and the own-account lookup (both wait for the reading), per cron city with sources', async () => {
+	it('queues the TikTok, reels, blog, own-account and brand-name runs, then the name lookup and the own-account lookup (both wait for the reading), per cron city with sources', async () => {
 		const em = harness.orm.em;
 		const berlin = cityFactory.build({ name: 'Berlin', cronEnabled: true, instagramEnabled: true });
-		// Twenty hashtags and two searches: the budget split below
+		// Twenty hashtags and two searches: all searched
 		for (let i = 0; i < 20; i++)
 			testCitySource(em, berlin, CitySourceKindEnum.TIKTOK_HASHTAG, `berlinfood${i}`);
 		testCitySource(em, berlin, CitySourceKindEnum.TIKTOK_SEARCH, 'berlin ramen');
@@ -98,51 +99,52 @@ describe('Weekly listening (pglite)', () => {
 			['Berlin', PipelineStepEnum.SCRAPE_INSTAGRAM_REELS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_BLOGS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_TIKTOK_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Wien', PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
-			// No sources on, but every city has profiles to watch (its report brands' own accounts)
+			// No sources on, but every city has profiles to watch (its brands' own accounts) and names to search
 			['Quiet', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 		]);
-		expect(sendJob).toHaveBeenCalledTimes(13);
+		expect(sendJob).toHaveBeenCalledTimes(16);
 		await em.nativeDelete(PipelineRun, {});
 	});
 
-	it("searches the last week and pages each hashtag to fit the weekly $6, whatever the run's month", async () => {
+	it("searches the last week's searches and hashtag words in one run, whatever the run's month", async () => {
 		const done = await runStep('Berlin', PipelineStepEnum.SCRAPE_TIKTOK_RECENT);
 
 		expect(done.status).toBe(PipelineRunStatusEnum.SUCCEEDED);
-		const [hashtags, search] = runActor.mock.calls;
-		// The search gets its actor's $4 floor; $2 over twenty hashtags at $0.0037 an item is 27 a tag
-		expect(hashtags[0]).toBe('clockworks/tiktok-scraper');
-		expect(hashtags[1]).toMatchObject({ resultsPerPage: 27 });
-		expect(hashtags[1].hashtags).toHaveLength(20);
-		expect(hashtags[2].maxCostUsd).toBe(2);
-		expect(search[0]).toBe('novi/advanced-search-tiktok-api');
-		expect(search[1]).toMatchObject({
-			keywords: expect.arrayContaining(['berlin ramen', 'kreuzberg food']),
+		// No hashtag feed any more: one search run over the 2 searches and the 20 hashtag words
+		expect(runActor).toHaveBeenCalledTimes(1);
+		const [actor, input, opts] = runActor.mock.calls[0];
+		expect(actor).toBe('novi/advanced-search-tiktok-api');
+		expect(input.keywords).toHaveLength(22);
+		expect(input).toMatchObject({
+			keywords: expect.arrayContaining(['berlin ramen', 'kreuzberg food', 'berlinfood0', 'berlinfood19']),
 			limit: 30,
 			region: 'DE',
 			publishTime: 'WEEK',
 		});
-		expect(search[2].maxCostUsd).toBe(4);
+		// The search actor's $4 floor, the step's default
+		expect(opts.maxCostUsd).toBe(4);
 		expect(done.result).toEqual({ '1. SCRAPE_TIKTOK_RECENT': { found: 0, saved: 0 } });
 	});
 
-	it('keeps the month-end pass smaller: three months of searches, a shorter page per hashtag', async () => {
+	it('searches the last month at month end, 50 a query', async () => {
 		await runStep('Berlin', PipelineStepEnum.SCRAPE_TIKTOK);
 
-		const [hashtags, search] = runActor.mock.calls;
-		// $7: the search's $4 floor, $3 over twenty hashtags is 40 a tag
-		expect(hashtags[1]).toMatchObject({ resultsPerPage: 40 });
-		expect(hashtags[2].maxCostUsd).toBe(3);
-		expect(search[1]).toMatchObject({ limit: 50, publishTime: 'THREE_MONTH' });
-		expect(search[2].maxCostUsd).toBe(4);
+		expect(runActor).toHaveBeenCalledTimes(1);
+		const [, input, opts] = runActor.mock.calls[0];
+		expect(input).toMatchObject({ limit: 50, publishTime: 'MONTH' });
+		expect(input.keywords).toHaveLength(22);
+		expect(opts.maxCostUsd).toBe(4);
 	});
 
 	it("scrapes each Instagram hashtag's top reels of the last eight days on $1", async () => {

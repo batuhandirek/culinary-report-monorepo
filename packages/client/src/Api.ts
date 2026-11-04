@@ -1598,12 +1598,15 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -1693,12 +1696,15 @@ export enum AdminDataStepOutputDtoStepEnum {
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -3999,12 +4005,15 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -4048,12 +4057,15 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -4890,12 +4902,15 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
@@ -6224,14 +6239,19 @@ export interface AdminWatchReasonOutputDto {
 	enabled?: boolean;
 	instagramOff?: boolean;
 	kind: AdminWatchReasonOutputDtoKindEnum;
+	lastPostAt?: string;
 	month?: string;
-	/** A top brand's place in the month's list, and its length */
+	/** A listed creator's posts in the window naming a place in the city, of their read posts, the last one's time, the window in days */
+	posts?: number;
+	/** A top brand's place in the month's list, or a creator's in the creator list, and its length */
 	rank?: number;
+	readPosts?: number;
 	/** The report brands a rival competes with */
 	rivalOf?: AdminWatchRefOutputDto[];
 	/** A city source's id, and whether it is on */
 	sourceId?: string;
 	top?: number;
+	windowDays?: number;
 }
 
 export enum AdminWatchReasonOutputDtoKindEnum {
@@ -6239,6 +6259,8 @@ export enum AdminWatchReasonOutputDtoKindEnum {
 	Customer = 'customer',
 	TopBrand = 'top_brand',
 	Rival = 'rival',
+	Brand = 'brand',
+	Creator = 'creator',
 }
 
 export interface AdminWatchRefOutputDto {
@@ -8426,6 +8448,7 @@ export enum PartialOmitCredentialVerificationRequestuserTypeEnum {
 export interface PartialRecordPipelineStepEnumnumber {
 	ANALYSE_COMMENTS?: number;
 	ANALYSE_REVIEWS?: number;
+	BACKFILL_REVIEWS?: number;
 	BUILD_REPORTS?: number;
 	EXTRACT_MENTIONS?: number;
 	FILL_ACCOUNT_FOLLOWERS?: number;
@@ -8444,6 +8467,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SCRAPE_ACCOUNTS_RECENT?: number;
 	SCRAPE_BLOGS?: number;
 	SCRAPE_COMMENTS?: number;
+	SCRAPE_CREATORS?: number;
 	SCRAPE_DELIVERY?: number;
 	SCRAPE_INSTAGRAM?: number;
 	SCRAPE_INSTAGRAM_RECENT?: number;
@@ -8454,6 +8478,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SCRAPE_TIKTOK_RECENT?: number;
 	SCRAPE_VENUES?: number;
 	SCRAPE_VENUE_SOCIAL?: number;
+	SCRAPE_VENUE_SOCIAL_RECENT?: number;
 	SEARCH_BRANCHES?: number;
 	SEARCH_INTEREST?: number;
 	SNAPSHOT_RATINGS?: number;
@@ -8480,6 +8505,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	BACKFILL_REVIEWS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	BUILD_REPORTS?: number;
 	/**
 	 * @min 0
@@ -8570,6 +8600,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
+	SCRAPE_CREATORS?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
 	SCRAPE_DELIVERY?: number;
 	/**
 	 * @min 0
@@ -8616,6 +8651,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	SCRAPE_VENUE_SOCIAL?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	SCRAPE_VENUE_SOCIAL_RECENT?: number;
 	/**
 	 * @min 0
 	 * @max 100

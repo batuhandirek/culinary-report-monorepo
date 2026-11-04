@@ -25,6 +25,10 @@ export interface PipelineRunParams {
 	onlyMissing?: boolean;
 	// Go on without waiting for the reading (`READ_GATED_STEPS`, `ALL_READ_STEPS`)
 	noWait?: boolean;
+	// A one-off run's name (`ONE_OFF_RUNS`): the boot queues it once per city
+	key?: string;
+	// BACKFILL_REVIEWS: the venues posts named in this many days before the run
+	talkedDays?: number;
 }
 
 /** One run of a pipeline step, started by the monthly cron or an admin. */

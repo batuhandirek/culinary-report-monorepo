@@ -63,7 +63,8 @@ export class PostCountsService {
 	/**
 	 * The city's TikTok and Instagram posts (Instagram only while it is on for the city) at least
 	 * `POST_COUNTS_AGE_DAYS` old and younger than `POST_COUNTS_LATE_DAYS` whose counts aren't
-	 * final, oldest first. Blog articles have no counts.
+	 * final, oldest first. Blog articles have no counts, and a brand's own posts are left out: the
+	 * weekly own-account scrape reads them again at that age (`OWN_ACCOUNTS_RECENT_DAYS`).
 	 */
 	async due(city: City, now = new Date()): Promise<SocialPost[]> {
 		return this.em.find(
@@ -74,6 +75,9 @@ export class PostCountsService {
 					$in: [SocialPlatformEnum.TIKTOK, ...(city.instagramEnabled ? [SocialPlatformEnum.INSTAGRAM] : [])],
 				},
 				countsFinalAt: null,
+				// A brand's own post is read again by the weekly own-account scrape, which looks back
+				// `OWN_ACCOUNTS_RECENT_DAYS` and so sees each post again at 7 to 14 days old for free
+				$or: [{ account: null }, { account: { brand: null } }],
 				postedAt: {
 					$lte: new Date(now.getTime() - POST_COUNTS_AGE_DAYS * DAY_MS),
 					$gt: new Date(now.getTime() - POST_COUNTS_LATE_DAYS * DAY_MS),

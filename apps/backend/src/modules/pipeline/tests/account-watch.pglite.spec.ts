@@ -7,12 +7,17 @@ import { testCity, testCitySource } from 'src/modules/cities/tests/factories/cit
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
+import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
-import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
+import { PostSkipReasonEnum, SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { AccountScrapeService } from 'src/modules/social/services/account-scrape.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
-import { ownAccount, socialAccountFactory } from 'src/modules/social/tests/factories/social-account.factory.js';
+import {
+	accountSnapshot,
+	ownAccount,
+	socialAccountFactory,
+} from 'src/modules/social/tests/factories/social-account.factory.js';
 import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { BrandCompetitor } from 'src/modules/venues/entities/brand-competitor.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -24,8 +29,14 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { AdminCreatorWatchController } from '../controllers/admin.creator-watch.controller.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
-import { AccountWatchService, WatchReasonKindEnum } from '../services/account-watch.service.js';
+import {
+	AccountWatchService,
+	BRAND_WATCH_KINDS,
+	CREATOR_WATCH_KINDS,
+	WatchReasonKindEnum,
+} from '../services/account-watch.service.js';
 import { PipelineService } from '../services/pipeline.service.js';
+
 import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const MONTH = '2026-09';
@@ -106,12 +117,16 @@ describe('AccountWatchService (pglite)', () => {
 	const berlinList = async () =>
 		watch.watchList(berlin, await pipeline.topBrands(berlin, MONTH), { month: MONTH, top: berlin.topBrands });
 
-	it("watches the city's creators, the report brands' own accounts and their rivals', each with its reasons", async () => {
+	it("watches the city's creators, the report brands' own accounts and their rivals', and every other brand's, each with its reasons", async () => {
 		const list = await berlinList();
 		const byHandle = new Map(list.map(w => [w.handle, w]));
 		expect([...byHandle.keys()].sort()).toEqual(
-			['berlingoodfood', 'buzzing_tt', 'customer_ig', 'new_creator', 'paused_creator', 'place_tt', 'rival_ig'].sort(),
+			['berlingoodfood', 'buzzing_tt', 'customer_ig', 'new_creator', 'outsider', 'paused_creator', 'place_tt', 'rival_ig'].sort(),
 		);
+		// A brand with a place open in the city that is no report brand nor a rival: its own account, weekly
+		expect(byHandle.get('outsider')!.reasons).toEqual([
+			expect.objectContaining({ kind: WatchReasonKindEnum.BRAND, active: true, brand: { id: brands.outsider.id, name: 'Outsider' } }),
+		]);
 		expect(byHandle.get('berlingoodfood')!.reasons).toEqual([
 			expect.objectContaining({ kind: WatchReasonKindEnum.CITY_SOURCE, active: true, enabled: true, city: { id: berlin.id, name: 'Berlin' } }),
 		]);
@@ -133,9 +148,15 @@ describe('AccountWatchService (pglite)', () => {
 		]);
 		// Only active reasons get a profile scraped; the counts say what brought them in
 		expect(watch.targets(list).map(t => t.handle).sort()).toEqual(
-			['berlingoodfood', 'buzzing_tt', 'customer_ig', 'new_creator', 'place_tt', 'rival_ig'].sort(),
+			['berlingoodfood', 'buzzing_tt', 'customer_ig', 'new_creator', 'outsider', 'place_tt', 'rival_ig'].sort(),
 		);
-		expect(watch.summary(list)).toEqual({ city_source: 2, customer: 1, top_brand: 1, rival: 2 });
+		expect(watch.summary(list)).toEqual({ city_source: 2, customer: 1, top_brand: 1, rival: 2, brand: 1, creator: 0 });
+		// Each run takes its kinds: the weekly one every brand's, the report brands' first
+		expect(watch.targets(list, BRAND_WATCH_KINDS).map(t => t.handle)).toEqual(
+			expect.arrayContaining(['buzzing_tt', 'customer_ig', 'place_tt', 'rival_ig', 'outsider']),
+		);
+		expect(watch.targets(list, BRAND_WATCH_KINDS).at(-1)!.handle).toBe('outsider');
+		expect(watch.targets(list, CREATOR_WATCH_KINDS).map(t => t.handle).sort()).toEqual(['berlingoodfood', 'new_creator']);
 	});
 
 	it("leaves an Instagram creator waiting where the city has Instagram off, and a branch's account to its own city", async () => {
@@ -144,10 +165,14 @@ describe('AccountWatchService (pglite)', () => {
 		expect(byHandle.get('berlingoodfood')!.reasons).toEqual([
 			expect.objectContaining({ kind: WatchReasonKindEnum.CITY_SOURCE, active: false, enabled: true, instagramOff: true }),
 		]);
-		// Buzzing is no report brand in Wien; its Wien branch's account is not watched in Berlin either
-		expect(byHandle.has('buzzing.wien')).toBe(false);
+		// Buzzing is no report brand in Wien, but it has a place open there: its accounts are a brand's,
+		// weekly, its Wien branch's own among them; that one is never watched in Berlin
+		expect(byHandle.get('buzzing.wien')!.reasons).toEqual([
+			expect.objectContaining({ kind: WatchReasonKindEnum.BRAND, active: true, brand: { id: brands.buzzing.id, name: 'Buzzing' } }),
+		]);
 		expect((await berlinList()).some(w => w.handle === 'buzzing.wien')).toBe(false);
-		expect(watch.targets(list)).toEqual([]);
+		expect(watch.targets(list).map(t => t.handle).sort()).toEqual(['buzzing.wien', 'buzzing_tt']);
+		expect(watch.targets(list, CREATOR_WATCH_KINDS)).toEqual([]);
 	});
 
 	it("tells a creator's page why each of their profiles is watched, in every cron city", async () => {
@@ -165,7 +190,13 @@ describe('AccountWatchService (pglite)', () => {
 			},
 		]);
 		const outsider = await em.findOneOrFail(SocialAccount, { handle: 'outsider' }, { populate: ['creator'] });
-		expect((await controller.getCreatorWatch(outsider.creator.id, { month: MONTH })).accounts[0].reasons).toEqual([]);
+		expect((await controller.getCreatorWatch(outsider.creator.id, { month: MONTH })).accounts[0].reasons).toEqual([
+			expect.objectContaining({ kind: WatchReasonKindEnum.BRAND, active: true }),
+		]);
+		const nobody = socialAccountFactory.build({ handle: 'nobody_watches' }, { associations: { city: berlin }, transient: { em } });
+		await em.flush();
+		const unwatched = await em.findOneOrFail(SocialAccount, { id: nobody.id }, { populate: ['creator'] });
+		expect((await controller.getCreatorWatch(unwatched.creator.id, { month: MONTH })).accounts[0].reasons).toEqual([]);
 		await expect(controller.getCreatorWatch('00000000-0000-4000-8000-000000000000', {})).rejects.toThrow();
 	});
 
@@ -189,9 +220,144 @@ describe('AccountWatchService (pglite)', () => {
 
 		const weekly = await run(PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT);
 		expect(weekly.status).toBe(PipelineRunStatusEnum.SUCCEEDED);
-		const weeklyOpts = scrape.mock.calls[1][2] as { since: string; latestTen?: boolean; budgetUsd: number };
+		// Every brand's own accounts, the report brands' and rivals' first; no creator
+		expect(weekly.result?.['1. SCRAPE_ACCOUNTS_RECENT']).toMatchObject({ watched: { customer: 1, top_brand: 1, rival: 2, brand: 1 } });
+		const [, weeklyTargets, weeklyOpts] = scrape.mock.calls[1] as [
+			unknown,
+			{ handle: string }[],
+			{ since: string; latestTen?: boolean; budgetUsd: number; tiktokItemsPerProfile?: number },
+		];
+		expect(weeklyTargets.map(t => t.handle).sort()).toEqual(['buzzing_tt', 'customer_ig', 'outsider', 'place_tt', 'rival_ig']);
 		expect(weeklyOpts.latestTen).toBeUndefined();
-		expect(weeklyOpts.budgetUsd).toBe(2);
-		expect(Date.now() - new Date(weeklyOpts.since).getTime()).toBeGreaterThan(7.9 * 24 * 3600 * 1000);
+		expect(weeklyOpts.budgetUsd).toBe(16);
+		expect(weeklyOpts.tiktokItemsPerProfile).toBe(3);
+		// Fifteen days back: each post is seen again at seven days old
+		expect(Date.now() - new Date(weeklyOpts.since).getTime()).toBeGreaterThan(14.9 * 24 * 3600 * 1000);
+	});
+
+	describe('the self-kept creator list', () => {
+		const DAY = 86_400_000;
+		const posts = (account: SocialAccount, opts: { named: number; read: number; daysAgo: number; skipped?: boolean }) => {
+			const em = harness.orm.em;
+			for (let i = 0; i < opts.read; i++) {
+				const post = em.create(SocialPost, {
+					city: berlin,
+					externalId: `${account.handle}-${i}`,
+					platform: account.platform,
+					url: `https://example.com/${account.handle}/${i}`,
+					postedAt: new Date(Date.now() - (opts.daysAgo + i) * DAY),
+					author: account.handle,
+					account,
+					views: 1000,
+					analysedAt: new Date(),
+					...(opts.skipped && { skipReason: PostSkipReasonEnum.NOT_FOOD }),
+				});
+				if (i < opts.named)
+					em.create(Mention, {
+						post,
+						venueName: 'Buzzing',
+						brand: brands.buzzing,
+						matchMethod: MentionMatchMethodEnum.EXACT,
+						visited: true,
+					});
+			}
+		};
+
+		beforeAll(async () => {
+			const em = harness.orm.em;
+			const creator = (handle: string, platform = SocialPlatformEnum.TIKTOK) =>
+				socialAccountFactory.build({ handle, platform }, { associations: { city: berlin }, transient: { em } });
+			const foodie = creator('foodie_eats');
+			const foodieIg = creator('foodie.eats.ig', SocialPlatformEnum.INSTAGRAM);
+			// Three of four posts name a place: in
+			posts(foodie, { named: 3, read: 4, daysAgo: 5 });
+			// Three of twelve: mostly something else, out
+			posts(creator('mixed_feed'), { named: 3, read: 12, daysAgo: 5 });
+			// Three, but the last over sixty days ago: quiet, out
+			posts(creator('quiet_eater'), { named: 3, read: 3, daysAgo: 70 });
+			// Three, but the gate skipped them: out
+			posts(creator('skipped_feed'), { named: 3, read: 3, daysAgo: 5, skipped: true });
+			// In by the numbers, but an admin switched their source off: out
+			posts(creator('blocked_eater'), { named: 3, read: 3, daysAgo: 5 });
+			testCitySource(em, berlin, CitySourceKindEnum.TIKTOK_ACCOUNT, 'blocked_eater', false);
+			await em.flush();
+			// The same person on Instagram
+			foodieIg.creator = foodie.creator;
+			await em.flush();
+		});
+
+		it('lists the creators whose recent posts name places in the city, every account of theirs, and none an admin stopped', async () => {
+			const list = await berlinList();
+			const creators = list.filter(w => w.reasons.some(r => r.kind === WatchReasonKindEnum.CREATOR));
+			expect(creators.map(w => w.handle).sort()).toEqual(['foodie.eats.ig', 'foodie_eats']);
+			expect(creators[0].reasons).toEqual([
+				expect.objectContaining({
+					kind: WatchReasonKindEnum.CREATOR,
+					active: true,
+					rank: 1,
+					top: 300,
+					posts: 3,
+					readPosts: 4,
+					windowDays: 90,
+					city: { id: berlin.id, name: 'Berlin' },
+				}),
+			]);
+			// The admin's switched-off source is what keeps them out
+			expect(list.find(w => w.handle === 'blocked_eater')!.reasons).toEqual([
+				expect.objectContaining({ kind: WatchReasonKindEnum.CITY_SOURCE, active: false, enabled: false }),
+			]);
+			expect(watch.targets(list, CREATOR_WATCH_KINDS).map(t => t.handle).sort()).toEqual(
+				['berlingoodfood', 'foodie.eats.ig', 'foodie_eats', 'new_creator'].sort(),
+			);
+			// A city with Instagram off lists no posts of theirs: none there
+			const wienList = await watch.watchList(wien, [], { month: MONTH, top: 20 });
+			expect(wienList.some(w => w.reasons.some(r => r.kind === WatchReasonKindEnum.CREATOR))).toBe(false);
+		});
+
+		it('scrapes TikTok daily since the last run, Instagram only when its last profile is three days old', async () => {
+			const em = harness.orm.em;
+			scrape.mockClear();
+			const run = async () => {
+				const created = em.create(PipelineRun, {
+					city: berlin,
+					step: PipelineStepEnum.SCRAPE_CREATORS,
+					month: MONTH,
+					params: {},
+					status: PipelineRunStatusEnum.QUEUED,
+				});
+				await em.flush();
+				await pipeline.execute(created.id);
+				em.clear();
+				return em.findOneOrFail(PipelineRun, { id: created.id });
+			};
+			const first = await run();
+			expect(first.status).toBe(PipelineRunStatusEnum.SUCCEEDED);
+			const [tiktokCall, instagramCall] = scrape.mock.calls as unknown as [
+				[unknown, { handle: string }[], { since: string; budgetUsd: number; tiktokItemsPerProfile?: number }],
+				[unknown, { handle: string }[], { since: string; budgetUsd: number }],
+			];
+			expect(tiktokCall[1].map(t => t.handle).sort()).toEqual(['berlingoodfood', 'foodie_eats']);
+			expect(tiktokCall[2].tiktokItemsPerProfile).toBe(1);
+			// No run before: eight days back at most
+			expect(Date.now() - new Date(tiktokCall[2].since).getTime()).toBeGreaterThan(7.9 * DAY);
+			// Instagram: the source never seen posting and the creator never read, at ~$0.003 each
+			expect(instagramCall[1].map(t => t.handle).sort()).toEqual(['foodie.eats.ig', 'new_creator']);
+			expect(instagramCall[2].budgetUsd).toBeCloseTo(0.006);
+			expect(tiktokCall[2].budgetUsd).toBeCloseTo(2.994);
+			expect(first.result?.['1. SCRAPE_CREATORS']).toMatchObject({ watched: { city_source: 2, creator: 2 } });
+
+			// foodie's Instagram was read a moment ago: not due; TikTok goes on from the last run
+			const ig = await em.findOneOrFail(SocialAccount, { handle: 'foodie.eats.ig' });
+			accountSnapshot(em, ig, new Date());
+			await em.flush();
+			scrape.mockClear();
+			await run();
+			const [again, igAgain] = scrape.mock.calls as unknown as [
+				[unknown, { handle: string }[], { since: string }],
+				[unknown, { handle: string }[], { since: string }],
+			];
+			expect(Date.now() - new Date(again[2].since).getTime()).toBeLessThan(2 * 3_600_000);
+			expect(igAgain[1].map(t => t.handle)).toEqual(['new_creator']);
+		});
 	});
 });

@@ -28,9 +28,14 @@ export interface AdminWatchReasonOutputDto {
 	instagramOff?: boolean;
 	/** The brand whose own account it is */
 	brand?: AdminWatchRefOutputDto;
-	/** A top brand's place in the month's list, and its length */
+	/** A top brand's place in the month's list, or a creator's in the creator list, and its length */
 	rank?: number;
 	top?: number;
+	/** A listed creator's posts in the window naming a place in the city, of their read posts, the last one's time, the window in days */
+	posts?: number;
+	readPosts?: number;
+	lastPostAt?: string;
+	windowDays?: number;
 	/** The report brands a rival competes with */
 	rivalOf?: AdminWatchRefOutputDto[];
 	month?: string;

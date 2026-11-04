@@ -13,11 +13,11 @@ import {
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { stepBudgetUsd } from 'src/modules/cities/util/city.js';
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
-import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
+import { AccountSnapshotSourceEnum } from 'src/modules/social/entities/social-account-snapshot.entity.js';
+import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { AccountMatchingService } from 'src/modules/social/services/account-matching.service.js';
 import { AccountScrapeService } from 'src/modules/social/services/account-scrape.service.js';
 import { AccountTwinService } from 'src/modules/social/services/account-twin.service.js';
@@ -28,6 +28,8 @@ import { OwnAccountService } from 'src/modules/social/services/own-account.servi
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
 import { PostCountsService } from 'src/modules/social/services/post-counts.service.js';
 import { SocialScrapeService } from 'src/modules/social/services/social-scrape.service.js';
+import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { Brand, BrandReportScopeEnum } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -49,6 +51,11 @@ import { previousMonth } from 'src/modules/venues/util/month.js';
 import { reservationUrlOf } from 'src/modules/venues/util/reservations.js';
 
 import {
+	CREATOR_INSTAGRAM_EVERY_DAYS,
+	CREATOR_INSTAGRAM_PROFILE_USD,
+	CREATOR_TIKTOK_MAX_DAYS,
+} from '../constants/creator-watch.constant.js';
+import {
 	ALL_READ_STEPS,
 	MONTHLY_STEPS,
 	PipelineStepEnum,
@@ -65,10 +72,20 @@ import {
 	PipelineRunStatusEnum,
 } from '../entities/pipeline-run.entity.js';
 import { RunPipelineJob } from '../jobs/run-pipeline.job.js';
-import { INSTAGRAM_RECENT_DAYS, READ_WAIT_HOURS, WEEKLY_LISTENING_DAYS } from '../util/monthly-schedule.js';
+import {
+	INSTAGRAM_RECENT_DAYS,
+	OWN_ACCOUNTS_RECENT_DAYS,
+	READ_WAIT_HOURS,
+	WEEKLY_LISTENING_DAYS,
+} from '../util/monthly-schedule.js';
 import { isPaidStep, latestStepStates, SKIPPED_RESULT } from '../util/step-states.js';
 
-import { AccountWatchService } from './account-watch.service.js';
+import {
+	AccountWatchService,
+	BRAND_WATCH_KINDS,
+	CREATOR_WATCH_KINDS,
+	MONTHLY_WATCH_KINDS,
+} from './account-watch.service.js';
 import { IngestionService, type ReadLevel, type ReadPass } from './ingestion.service.js';
 
 
@@ -481,6 +498,95 @@ export class PipelineService {
 		await this.venueTopicService.refreshCity(cityId);
 	}
 
+	/**
+	 * One open branch of each of these brands in the city, the most reviewed, its brand loaded: what
+	 * a search by brand name carries (`venueSearchQuery`)
+	 */
+	private async searchVenuesOf(city: City, brandIds: string[]): Promise<Venue[]> {
+		const ids = _.uniq(brandIds);
+		if (!ids.length) return [];
+		const rows = await this.em.getConnection().execute<{ id: string }[]>(
+			`select distinct on (brand_id) id from venues
+			where city_id = ? and not closed and brand_id in (${ids.map(() => '?').join(', ')})
+			order by brand_id, reviews_count desc nulls last, id`,
+			[city.id, ...ids],
+		);
+		return this.em.find(Venue, { id: { $in: rows.map(r => r.id) } }, { populate: ['brand'] });
+	}
+
+	/**
+	 * `SCRAPE_CREATORS`, the daily creator cron: the creators the city follows and the self-kept
+	 * creator list (`CREATOR_WATCH_KINDS`). TikTok profiles every day, paying only for the videos
+	 * since the city's last finished run of the step (`CREATOR_TIKTOK_MAX_DAYS` at most); an
+	 * Instagram profile (its twelve latest posts, paid per profile) once its last profile read is
+	 * `CREATOR_INSTAGRAM_EVERY_DAYS` old, its posts of the last week kept. Instagram's due profiles
+	 * are planned first, TikTok gets the rest of the budget as its cap.
+	 */
+	private async scrapeCreators(city: City, top: number, budgetUsd: number) {
+		const now = new Date();
+		const day = 86_400_000;
+		const reportMonth = previousMonth();
+		const watched = await this.accountWatchService.watchList(city, await this.topBrands(city, reportMonth, top), {
+			month: reportMonth,
+			top,
+			now,
+		});
+		const targets = this.accountWatchService.targets(watched, CREATOR_WATCH_KINDS);
+		const tiktok = targets.filter(t => t.platform === SocialPlatformEnum.TIKTOK);
+		const instagram = targets.filter(t => t.platform === SocialPlatformEnum.INSTAGRAM);
+
+		// Instagram: profiles not read in the last few days (a source's handle never seen posting is due)
+		const readLately = new Set(
+			(
+				await this.em.getConnection().execute<{ handle: string }[]>(
+					`select distinct a.handle from social_accounts a
+					join social_account_snapshots s on s.account_id = a.id
+					where a.platform = ? and s.source = ? and s.scraped_at >= ?`,
+					[SocialPlatformEnum.INSTAGRAM, AccountSnapshotSourceEnum.PROFILE, new Date(now.getTime() - CREATOR_INSTAGRAM_EVERY_DAYS * day + 3_600_000)],
+				)
+			).map(r => r.handle),
+		);
+		const instagramDue = instagram.filter(t => !readLately.has(t.handle));
+		const instagramBudget = Math.min(budgetUsd / 2, instagramDue.length * CREATOR_INSTAGRAM_PROFILE_USD);
+		const picked = instagramDue.slice(0, Math.floor(instagramBudget / CREATOR_INSTAGRAM_PROFILE_USD + 1e-9));
+
+		// TikTok: since the last finished run's day, so a missed day leaves no gap
+		const last = await this.em.findOne(
+			PipelineRun,
+			{ city: city.id, step: PipelineStepEnum.SCRAPE_CREATORS, status: PipelineRunStatusEnum.SUCCEEDED },
+			{ orderBy: { startedAt: QueryOrder.DESC } },
+		);
+		const floor = now.getTime() - CREATOR_TIKTOK_MAX_DAYS * day;
+		// An hour before it started: TikTok's filter takes a day, so only that hour's videos are paid twice
+		const tiktokSince = new Date(Math.max((last?.startedAt?.getTime() ?? floor) - 3_600_000, floor));
+
+		const empty = { accounts: 0, profiles: 0, snapshots: 0, found: 0, saved: 0 };
+		const [tiktokResult, instagramResult] = [
+			tiktok.length ?
+				await this.accountScrapeService.scrape(city, tiktok, {
+					since: tiktokSince.toISOString(),
+					budgetUsd: Math.max(budgetUsd - instagramBudget, 0.5),
+					tiktokItemsPerProfile: 1,
+					label: 'creators',
+					now,
+				})
+			:	empty,
+			picked.length ?
+				await this.accountScrapeService.scrape(city, picked, {
+					since: new Date(now.getTime() - WEEKLY_LISTENING_DAYS * day).toISOString(),
+					budgetUsd: instagramBudget,
+					label: 'creators',
+					now,
+				})
+			:	empty,
+		];
+		return {
+			watched: this.accountWatchService.summary(watched, CREATOR_WATCH_KINDS),
+			tiktok: { since: tiktokSince.toISOString().slice(0, 10), ...tiktokResult },
+			instagram: { due: instagramDue.length, ...instagramResult },
+		};
+	}
+
 	private async runStep(
 		city: City,
 		step: PipelineStepEnum,
@@ -518,10 +624,10 @@ export class PipelineService {
 					since,
 					perSource: 50,
 					budgetUsd,
+					searchWindow: 'MONTH',
 				});
 			case PipelineStepEnum.SCRAPE_TIKTOK_RECENT:
-				// The weekly cron: the week's searches and a short page of each hashtag, whatever
-				// the run's month
+				// The weekly cron: the week's searches and hashtag words, whatever the run's month
 				return this.socialScrapeService.scrapeCityTikTok({
 					city,
 					since: new Date(Date.now() - WEEKLY_LISTENING_DAYS * 24 * 3600 * 1000).toISOString(),
@@ -584,6 +690,58 @@ export class PipelineService {
 					perVenue: 30,
 					budgetUsd,
 				});
+			case PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT: {
+				// The weekly cron: one TikTok search a brand by its name over the last week, for the
+				// last finished month's report brands (customers included), their competitors and
+				// the open prospects, whatever the run's month
+				const reportBrands = await this.topBrands(city, previousMonth(), top);
+				const competitorIds = await this.competitorService.competitorVenueIdsOf(
+					reportBrands.map(t => t.brand.id),
+					city.id,
+				);
+				const competitorBrands = await this.em.find(Venue, { id: { $in: competitorIds } }, { fields: ['brand'] });
+				const venues = await this.searchVenuesOf(city, [
+					...reportBrands.map(t => t.brand.id),
+					...competitorBrands.map(v => v.brand.id),
+					...(await this.prospectQueryService.openBrandIds()),
+				]);
+				return {
+					brands: venues.length,
+					...(await this.socialScrapeService.scrapeVenueSocial({
+						city,
+						venues,
+						since: new Date(Date.now() - WEEKLY_LISTENING_DAYS * 24 * 3600 * 1000).toISOString(),
+						perVenue: 30,
+						budgetUsd,
+						tiktokOnly: true,
+						window: 'WEEK',
+					})),
+				};
+			}
+			case PipelineStepEnum.BACKFILL_REVIEWS: {
+				// A one-off (`ONE_OFF_RUNS`): the venues posts named lately, most named first, that
+				// have no Google reviews stored from `since`
+				const since = params.since ?? `${month}-01`;
+				const talked = (await this.ratingSnapshotService.due(city, new Date(), params.talkedDays ?? 90)).filter(
+					v => v.posts > 0,
+				);
+				const ids = talked.map(v => v.id);
+				// A stretch from `since` itself counts: the day after is the bound
+				const withHistory = await this.reviewService.venuesWithHistory(
+					ids,
+					new Date(new Date(`${since}T00:00:00Z`).getTime() + 86_400_000),
+				);
+				return {
+					talked: ids.length,
+					withHistory: withHistory.size,
+					since,
+					...(await this.reviewService.backfill(
+						ids.filter(id => !withHistory.has(id)),
+						since,
+						budgetUsd,
+					)),
+				};
+			}
 			case PipelineStepEnum.FILL_COMPETITORS:
 				await this.refreshTopics(city.id);
 				return this.fillCompetitors(city.id, month, top);
@@ -687,8 +845,8 @@ export class PipelineService {
 				const watched = await this.accountWatchService.watchList(city, brands, { month, top });
 				return {
 					fromProspects: fromProspects.created,
-					watched: this.accountWatchService.summary(watched),
-					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched), {
+					watched: this.accountWatchService.summary(watched, MONTHLY_WATCH_KINDS),
+					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched, MONTHLY_WATCH_KINDS), {
 						since,
 						budgetUsd,
 						latestTen: true,
@@ -697,22 +855,28 @@ export class PipelineService {
 				};
 			}
 			case PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT: {
-				// The weekly cron: the same profiles' posts of the last week, whatever the run's month.
-				// The report brands are the last finished month's, the ones the creator page shows
+				// The weekly cron: every brand's own accounts, the report brands' and their rivals'
+				// first (the last finished month's, the ones the creator page shows), then by lead
+				// score; their posts of the last `OWN_ACCOUNTS_RECENT_DAYS`, whatever the run's month,
+				// so each post is read again at seven days old. A brand account posts a few videos a
+				// week: TikTok is planned at three a profile
 				const reportMonth = previousMonth();
 				const watched = await this.accountWatchService.watchList(city, await this.topBrands(city, reportMonth, top), {
 					month: reportMonth,
 					top,
 				});
 				return {
-					watched: this.accountWatchService.summary(watched),
-					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched), {
-						since: new Date(Date.now() - WEEKLY_LISTENING_DAYS * 24 * 3600 * 1000).toISOString(),
+					watched: this.accountWatchService.summary(watched, BRAND_WATCH_KINDS),
+					...(await this.accountScrapeService.scrape(city, this.accountWatchService.targets(watched, BRAND_WATCH_KINDS), {
+						since: new Date(Date.now() - OWN_ACCOUNTS_RECENT_DAYS * 24 * 3600 * 1000).toISOString(),
 						budgetUsd,
-						label: 'last week',
+						tiktokItemsPerProfile: 3,
+						label: 'own, last two weeks',
 					})),
 				};
 			}
+			case PipelineStepEnum.SCRAPE_CREATORS:
+				return this.scrapeCreators(city, top, budgetUsd);
 			case PipelineStepEnum.TRACK_PROFILES:
 				// The month is a label: the brand accounts and big creators whose last profile is old
 				return this.accountScrapeService.trackProfiles(city, budgetUsd);

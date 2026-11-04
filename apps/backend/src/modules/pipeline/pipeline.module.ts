@@ -8,21 +8,22 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { TopicsModule } from '../topics/topics.module.js';
 import { OutreachModule } from '../outreach/outreach.module.js';
 import { ReportsModule } from '../reports/reports.module.js';
 import { SocialModule } from '../social/social.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 import { TrendsModule } from '../trends/trends.module.js';
 import { VenuesModule } from '../venues/venues.module.js';
 
 import { AdminCreatorWatchController } from './controllers/admin.creator-watch.controller.js';
 import { AdminPipelineController } from './controllers/admin.pipeline.controller.js';
+import { AccountFollowersCron } from './crons/account-followers.cron.js';
+import { CreatorWatchCron } from './crons/creator-watch.cron.js';
 import { DemandSampleCron } from './crons/demand-sample.cron.js';
 import { DishSearchCron } from './crons/dish-search.cron.js';
 import { IngestionCron } from './crons/ingestion.cron.js';
 import { InstagramRecentCron } from './crons/instagram-recent.cron.js';
 import { MonthlyPipelineCron } from './crons/monthly-pipeline.cron.js';
-import { AccountFollowersCron } from './crons/account-followers.cron.js';
 import { PostCountsCron } from './crons/post-counts.cron.js';
 import { ProfileTrackCron } from './crons/profile-track.cron.js';
 import { RatingSnapshotCron } from './crons/rating-snapshot.cron.js';
@@ -32,6 +33,7 @@ import { PipelineRun } from './entities/pipeline-run.entity.js';
 import { AccountWatchService } from './services/account-watch.service.js';
 import { IngestionService } from './services/ingestion.service.js';
 import { PipelineService } from './services/pipeline.service.js';
+import { PipelineBootService } from './services/pipeline-boot.service.js';
 import { PipelineRecoveryService } from './services/pipeline-recovery.service.js';
 import { IngestCityWorker } from './workers/ingest-city.worker.js';
 import { RunPipelineWorker } from './workers/run-pipeline.worker.js';
@@ -66,6 +68,8 @@ import { RunPipelineWorker } from './workers/run-pipeline.worker.js';
 		ReviewWatchCron,
 		InstagramRecentCron,
 		WeeklyListeningCron,
+		CreatorWatchCron,
+		PipelineBootService,
 		PostCountsCron,
 		AccountFollowersCron,
 	],

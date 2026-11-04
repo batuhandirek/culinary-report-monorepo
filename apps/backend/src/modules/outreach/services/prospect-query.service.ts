@@ -28,6 +28,19 @@ export class ProspectQueryService {
 		return won.map(prospect => prospect.brand.id);
 	}
 
+	/**
+	 * Brands of prospects still in play (not won, lost or opted out): the weekly search by brand
+	 * name keeps their posts coming before they buy.
+	 */
+	async openBrandIds(): Promise<string[]> {
+		const open = await this.em.find(
+			Prospect,
+			{ stage: { $nin: [ProspectStageEnum.WON, ProspectStageEnum.LOST, ProspectStageEnum.OPTED_OUT] } },
+			{ fields: ['brand'] },
+		);
+		return open.map(prospect => prospect.brand.id);
+	}
+
 	/** The Instagram handles outreach knows for these brands: their own accounts. */
 	async instagramHandles(brandIds: string[]): Promise<{ brandId: string; instagram: string }[]> {
 		if (!brandIds.length) return [];

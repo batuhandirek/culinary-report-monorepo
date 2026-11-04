@@ -58,6 +58,18 @@ export const WEEKLY_LISTENING_CRON = '0 3 * * 0';
  */
 export const WEEKLY_LISTENING_DAYS = 8;
 
+/**
+ * How far back the weekly own-account scrape keeps posts: two weeks and a day, so each post of a
+ * brand's own account is seen again at 7 to 14 days old and that read is its count at seven days
+ * (`SocialPostService.readCounts`); the paid count refresh leaves those posts out. Instagram's
+ * profile carries its latest posts free; TikTok pays each video twice, still under the refresh's
+ * price for one.
+ */
+export const OWN_ACCOUNTS_RECENT_DAYS = 15;
+
+// The watched creators: daily, 04:20 UTC, after the daily Instagram scrape is queued
+export const CREATOR_WATCH_CRON = '20 4 * * *';
+
 // The rating snapshots of every open venue: Tuesdays, 04:30 UTC, after the daily Instagram run
 // is queued
 export const RATING_SNAPSHOT_CRON = '30 4 * * 2';

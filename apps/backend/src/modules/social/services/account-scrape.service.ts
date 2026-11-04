@@ -129,6 +129,11 @@ export class AccountScrapeService {
 			budgetUsd: number;
 			latestTen?: boolean;
 			profileOnly?: boolean;
+			/**
+			 * The paid TikTok items a profile is planned at, to split the budget between the two
+			 * runs (the latest ten without): a date-filtered run of many quiet accounts pays for few
+			 */
+			tiktokItemsPerProfile?: number;
 			label: string;
 			now?: Date;
 		},
@@ -141,7 +146,7 @@ export class AccountScrapeService {
 		if (!unique.length) return result;
 		// A TikTok profile is up to ten paid items (one alone), an Instagram one is one
 		const perTiktok = opts.profileOnly ? 1 : ACCOUNT_RECENT_POSTS;
-		const weight = instagram.length + tiktok.length * perTiktok;
+		const weight = instagram.length + tiktok.length * (opts.tiktokItemsPerProfile ?? perTiktok);
 		const budget = (units: number) => {
 			const share = (opts.budgetUsd * units) / weight;
 			return opts.profileOnly ? Math.max(share, PROFILE_MIN_CAP_USD) : share;
@@ -171,7 +176,7 @@ export class AccountScrapeService {
 						shouldDownloadAvatars: false,
 					},
 					{
-						maxCostUsd: budget(tiktok.length * perTiktok),
+						maxCostUsd: budget(tiktok.length * (opts.tiktokItemsPerProfile ?? perTiktok)),
 						purpose: `tiktok profiles ${opts.label}: ${tiktok.length}`,
 					},
 				)

@@ -33,11 +33,11 @@ export class RatingSnapshotService {
 
 	/**
 	 * The city's open venues, the order a budget too small for all of them cuts in: those posts
-	 * named in the last `RATING_SNAPSHOT_TALKED_DAYS` days most first (directly, or a branch of a
-	 * brand a post named without one), then the most reviewed.
+	 * named in the last `talkedDays` (`RATING_SNAPSHOT_TALKED_DAYS` by default) most first
+	 * (directly, or a branch of a brand a post named without one), then the most reviewed.
 	 */
-	async due(city: City, now = new Date()): Promise<RatingSnapshotTarget[]> {
-		const since = new Date(now.getTime() - RATING_SNAPSHOT_TALKED_DAYS * 86_400_000);
+	async due(city: City, now = new Date(), talkedDays = RATING_SNAPSHOT_TALKED_DAYS): Promise<RatingSnapshotTarget[]> {
+		const since = new Date(now.getTime() - talkedDays * 86_400_000);
 		const rows = await this.em.getConnection().execute<
 			{ id: string; posts: number; reviews_count: number | null }[]
 		>(

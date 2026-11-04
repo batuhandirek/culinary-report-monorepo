@@ -17,11 +17,14 @@
 	import Button from '#ui/wrapped/Button.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
-	// Why each of the creator's profiles is scraped every Sunday and at month end, or isn't: a city
-	// follows them (an account source on its Sources tab), or the profile is the own account of a
-	// report brand of the month (a paying customer, one of the most talked about) or of a report
-	// brand's competitor. The backend's watch list is the one the runs use, so this says what they
-	// do. "Watch in <city>" adds the creator to a city's sources.
+	// Why each of the creator's profiles is scraped, or isn't: a city follows them (an account
+	// source on its Sources tab), they are on a city's creator list (enough of their recent posts
+	// name a place there: they join and leave by themselves), both scraped daily; or the profile is a
+	// brand's own account (a paying customer, a most talked-about brand, a report brand's
+	// competitor, or any brand with a place open in the city), scraped weekly. The backend's watch
+	// list is the one the runs use, so this says what they do. "Watch in <city>" adds the creator to
+	// a city's sources; "Stop watching" on the creator list adds them switched off, which keeps them
+	// off it.
 	interface Props {
 		creator: AdminCreatorOutputDto;
 		month: string;
@@ -58,7 +61,7 @@
 			onSuccess: () => refreshKey++,
 			successNotification: (_, [reason, enabled]) => ({
 				title: enabled ? `Watched in ${reason.city.name}` : `No longer watched in ${reason.city.name}`,
-				text: enabled ? 'Their profile is scraped every Sunday and at month end' : 'The source stays on the Sources tab, switched off'
+				text: enabled ? 'Their profile is scraped daily' : 'The source stays on the Sources tab, switched off, and keeps them off the creator list'
 			})
 		}
 	);
@@ -91,10 +94,39 @@
 			onSuccess: () => refreshKey++,
 			successNotification: (_, [city]) => ({
 				title: `${creator.name} is watched in ${city.name}`,
-				text: 'Their profiles are scraped every Sunday and at month end'
+				text: 'Their profiles are scraped daily'
 			})
 		}
 	);
+
+	// Off a city's creator list for good: each profile becomes a switched-off source of the city
+	// (an enabled one is switched off), which the list leaves out
+	const stopCreator = createAction(
+		async (city: { id: string; name: string }) => {
+			for (const account of watch?.accounts ?? []) {
+				const existing = account.reasons.find((r) => r.kind === Reason.CitySource && r.city.id === city.id);
+				if (existing?.sourceId) {
+					if (existing.enabled) await api.admin.updateCitySource(city.id, existing.sourceId, { enabled: false });
+					continue;
+				}
+				await api.admin.addCitySource(city.id, {
+					kind: account.platform === 'tiktok' ? Kind.TiktokAccount : Kind.InstagramAccount,
+					value: account.handle,
+					enabled: false,
+					note: `Kept off the creator list from ${creator.name}'s page`
+				});
+			}
+		},
+		{
+			onSuccess: () => refreshKey++,
+			successNotification: (_, [city]) => ({
+				title: `${creator.name} is no longer watched in ${city.name}`,
+				text: "Their profiles are switched-off sources of the city, which keep them off its creator list"
+			})
+		}
+	);
+	const lastPost = (at?: string) =>
+		at ? new Date(at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
 	const watchedIn = (id: string) =>
 		watch?.accounts.every((a) => a.reasons.some((r) => r.kind === Reason.CitySource && r.city.id === id && r.enabled)) ?? false;
 </script>
@@ -102,7 +134,7 @@
 <AdminPanel title="Watched" note={watch ? `for ${monthLabel(watch.month)}'s report brands` : undefined}>
 	{#snippet action()}
 		{#if watch?.accounts.length}
-			<Badge pill variant={watched ? 'success' : 'secondary'}>{watched ? 'Scraped weekly' : 'Not watched'}</Badge>
+			<Badge pill variant={watched ? 'success' : 'secondary'}>{watched ? 'Watched' : 'Not watched'}</Badge>
 		{/if}
 	{/snippet}
 	{#if !watch}
@@ -118,7 +150,8 @@
 					<span class="font-medium">{PLATFORM_LABELS[account.platform]} · @{account.handle}</span>
 					{#if !account.reasons.length}
 						<span class="text-muted-foreground text-xs">
-							Not watched: its posts reach us only when a city's hashtag or search, or a search for a venue, finds them.
+							Not watched: its posts reach us only when a city's hashtag or search, or a search for a venue, finds them. A
+							creator joins a city's creator list by themselves once 3 of their posts in 90 days name a place there.
 						</span>
 					{/if}
 					{#each account.reasons as reason, i (i)}
@@ -134,6 +167,9 @@
 										Tied to <a href={sourcesHref(reason.city.id)} class="font-medium hover:underline">{reason.city.name}'s discovery</a>:
 										a creator source of the city{sourceState(reason) ? ` (${sourceState(reason)})` : ''}
 									</span>
+									{#if reason.sourceId && reason.enabled === false}
+										<span class="text-muted-foreground">Keeps them off the city's creator list.</span>
+									{/if}
 									{#if reason.sourceId && reason.enabled}
 										<Button size="sm" variant="ghost" loading={toggleSource.executing} onclick={() => toggleSource.execute(reason, false)}
 											>Stop watching</Button>
@@ -141,6 +177,14 @@
 										<Button size="sm" variant="outline" loading={toggleSource.executing} onclick={() => toggleSource.execute(reason, true)}
 											>Turn on</Button>
 									{/if}
+								{:else if reason.kind === Reason.Creator}
+									<span class={reason.active ? '' : 'text-muted-foreground'}>
+										On {reason.city.name}'s creator list, #{reason.rank} of {reason.top} at most: {reason.posts} of their {reason.readPosts}
+										posts in {reason.windowDays} days named a place there, the last on {lastPost(reason.lastPostAt)}. Scraped daily; they
+										leave the list by themselves{reason.instagramOff ? ` (waiting: Instagram is off for ${reason.city.name})` : ''}
+									</span>
+									<Button size="sm" variant="ghost" loading={stopCreator.executing} onclick={() => stopCreator.execute(reason.city)}
+										>Stop watching</Button>
 								{:else}
 									<span>
 										Tied to <a href={brandLink(reason.brand)} class="font-medium hover:underline">{reason.brand?.name}</a>'s own
@@ -153,6 +197,8 @@
 											a rival of
 											{#each reason.rivalOf ?? [] as of, j (of.id)}{j ? ', ' : ''}<a href={brandLink(of)} class="hover:underline">{of.name}</a
 												>{/each} in {reason.city.name}, whose report compares them
+										{:else if reason.kind === Reason.Brand}
+											a brand with a place open in {reason.city.name}, scraped weekly
 										{/if}
 									</span>
 								{/if}
@@ -184,7 +230,7 @@
 						icon={Eye}
 						loading={watchAction.executing}
 						onclick={() => watchAction.execute({ id: pickedCity.id, name: pickedCity.name })}>Watch in {pickedCity.name}</Button>
-					<span class="text-muted-foreground text-xs">Adds their profiles to the city's sources: scraped every Sunday and at month end.</span>
+					<span class="text-muted-foreground text-xs">Adds their profiles to the city's sources: scraped daily.</span>
 				{/if}
 			</div>
 		{/if}
