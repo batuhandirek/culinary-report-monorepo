@@ -47,7 +47,6 @@ import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness
 import { VenueDeliveryService } from 'src/modules/venues/services/venue-delivery.service.js';
 import { VenueReservationService } from 'src/modules/venues/services/venue-reservation.service.js';
 import { VenueScrapeService } from 'src/modules/venues/services/venue-scrape.service.js';
-import { VenueSearchRankService } from 'src/modules/venues/services/venue-search-rank.service.js';
 import { WebMentionService } from 'src/modules/venues/services/web-mention.service.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
 import { reservationUrlOf } from 'src/modules/venues/util/reservations.js';
@@ -136,7 +135,6 @@ export class PipelineService {
 		private readonly ratingSnapshotService: RatingSnapshotService,
 		private readonly venueReservationService: VenueReservationService,
 		private readonly venueDeliveryService: VenueDeliveryService,
-		private readonly venueSearchRankService: VenueSearchRankService,
 		private readonly dishSearchService: DishSearchService,
 		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
@@ -948,11 +946,10 @@ export class PipelineService {
 				// One search per brand (`searchMonth` groups the branches), every branch stamped; the
 				// pages are classified by the reading
 				return this.webMentionService.searchMonth(city, await branches(), month, budgetUsd);
-			case PipelineStepEnum.TRACK_SEARCH_RANKS:
-				await this.refreshTopics(city.id);
-				return this.venueSearchRankService.track(city, month, await branches(), budgetUsd);
 			case PipelineStepEnum.TRACK_DISH_SEARCHES:
-				// Today's snapshot of every dish in every district; the run's month is a label
+				// Today's snapshot of every food topic in every district, the most served first (the
+				// venues' tags brought up to date for that order); the run's month is a label
+				await this.refreshTopics(city.id);
 				return this.dishSearchService.sweep(city, budgetUsd);
 			case PipelineStepEnum.SEARCH_INTEREST: {
 				// The city's top cuisines, and the names of the subscribers with a branch in the city

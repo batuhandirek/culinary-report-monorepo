@@ -92,18 +92,18 @@ describe('One-off runs, the review backfill and the creator cron (pglite)', () =
 	it('queues a one-off for its own month when it names one, else the boot month', async () => {
 		const em = harness.orm.em;
 		const boot = harness.moduleRef.get(PipelineBootService);
-		const ranks: OneOffRun = {
-			step: PipelineStepEnum.TRACK_SEARCH_RANKS,
-			key: 'ranks-test',
+		const press: OneOffRun = {
+			step: PipelineStepEnum.SCRAPE_PRESS,
+			key: 'press-test',
 			month: '2026-10',
-			params: { budgetUsd: 10 },
+			params: { budgetUsd: 3 },
 		};
-		expect(await boot.queueOneOffs(new Date('2026-11-05T10:00:00Z'), [ranks, BACKFILL])).toBe(2);
+		expect(await boot.queueOneOffs(new Date('2026-11-05T10:00:00Z'), [press, BACKFILL])).toBe(2);
 		em.clear();
 		const runs = await em.find(PipelineRun, {}, { orderBy: { step: 'asc' } });
 		expect(runs.map(r => [r.step, r.month])).toEqual([
 			[PipelineStepEnum.BACKFILL_REVIEWS, '2026-11'],
-			[PipelineStepEnum.TRACK_SEARCH_RANKS, '2026-10'],
+			[PipelineStepEnum.SCRAPE_PRESS, '2026-10'],
 		]);
 		await em.nativeDelete(PipelineRun, {});
 	});

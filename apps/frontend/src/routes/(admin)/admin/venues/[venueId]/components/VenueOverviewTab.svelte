@@ -10,7 +10,6 @@
 	import VenueDetailsPanel from '#components/admin/venues/VenueDetailsPanel.svelte';
 	import VenueDishSearchesPanel from '#components/admin/venues/VenueDishSearchesPanel.svelte';
 	import VenueRatingPanel from '#components/admin/venues/VenueRatingPanel.svelte';
-	import VenueSearchRanksPanel from '#components/admin/venues/VenueSearchRanksPanel.svelte';
 	import VenueTopicsPanel from '#components/admin/venues/VenueTopicsPanel.svelte';
 
 	// The place itself: Google's facts and details, the food it is known for, demand and where it
@@ -51,7 +50,6 @@
 	</div>
 	<div class="flex min-w-0 flex-col gap-5">
 		<VenueDemandPanel {venue} />
-		<VenueSearchRanksPanel {venue} />
 		<VenueDishSearchesPanel {venue} />
 		<VenueRatingPanel {venue} />
 	</div>

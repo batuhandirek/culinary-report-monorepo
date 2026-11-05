@@ -2,18 +2,19 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
 
+import _ from 'lodash';
+
+import { judgingSql } from 'src/modules/statements/util/statement-sql.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
-import _ from 'lodash';
-
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import type { VenueDetails } from 'src/modules/venues/interfaces/venue-details.interface.js';
-import { RATING_BENCHMARK_MIN_REVIEWS, RatingPeer, isRatingPeer } from 'src/modules/venues/util/rating-benchmark.js';
-import { VenueSearchRankService } from 'src/modules/venues/services/venue-search-rank.service.js';
+import { DishSearchService } from 'src/modules/venues/services/dish-search.service.js';
 import { VenueStatusChangeService } from 'src/modules/venues/services/venue-status-change.service.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
+import { isRatingPeer,RATING_BENCHMARK_MIN_REVIEWS, RatingPeer } from 'src/modules/venues/util/rating-benchmark.js';
 import { quarterWindow } from 'src/modules/venues/util/venue-status.js';
 
 import type {
@@ -22,17 +23,17 @@ import type {
 	ReportRatingBenchmark,
 	ReportSearchRank,
 } from '../interfaces/report-data.interface.js';
-import { cityThemes, type CityThemeComplaint } from '../util/city-themes.js';
 import { BaselineReview, baselineVenues, citySection } from '../util/city-section.js';
-import { ratingBenchmark } from '../util/rating-benchmark.js';
+import { type CityThemeComplaint,cityThemes } from '../util/city-themes.js';
 import { neighbourhoodChanges } from '../util/neighbourhood.js';
-import { reportSearchRanks } from '../util/search-ranks.js';
-import { judgingSql } from 'src/modules/statements/util/statement-sql.js';
+import { ratingBenchmark } from '../util/rating-benchmark.js';
+import { reportSearchRanks, searchWindow } from '../util/search-ranks.js';
 
 /**
  * The report's city context: the city's rising cuisines and dishes (`TrendService`), the brand's
  * place in its kind of food and its month against the month's report brands; and, per branch,
- * its neighbourhood's openings and closures (`VenueStatusChangeService`), search ranks and
+ * its neighbourhood's openings and closures (`VenueStatusChangeService`), its place on the food
+ * searches of its district (the dish-search snapshots) and
  * rating benchmark.
  */
 @Injectable()
@@ -42,18 +43,25 @@ export class ReportCityService {
 		private readonly trendService: TrendService,
 		private readonly searchInterestService: SearchInterestService,
 		private readonly venueStatusChangeService: VenueStatusChangeService,
-		private readonly venueSearchRankService: VenueSearchRankService,
+		private readonly dishSearchService: DishSearchService,
 		private readonly topicService: TopicService,
 		private readonly venueTopicService: VenueTopicService,
 	) {}
 
-	/** The venue's Google Maps search ranks of the month with their history (`TRACK_SEARCH_RANKS`). */
+	/**
+	 * The venue's place on its city's food searches in its district, from the month's dish-search
+	 * snapshot (`reportSearchRanks`): its own food topics, primary first, then their parents.
+	 * Undefined without a district or a snapshot of the month.
+	 */
 	async searchRanks(venue: Venue, month: string): Promise<ReportSearchRank[] | undefined> {
-		return reportSearchRanks(
-			await this.venueSearchRankService.forVenue(venue.id),
-			month,
-			venue.placeId,
-		);
+		if (!venue.district) return undefined;
+		const index = await this.topicService.index();
+		const own = ((await this.venueTopicService.tags([venue])).get(venue.id) ?? []).map(t => t.key);
+		// A ramen bar's "ramen Mitte", then its "japanese food Mitte"
+		const topicKeys = _.uniq([...own, ...index.withParents(own)]);
+		const { from, to } = searchWindow(month);
+		const rows = await this.dishSearchService.inDistrict(venue.city.id, venue.district, topicKeys, from, to);
+		return reportSearchRanks(rows, { month, district: venue.district, placeId: venue.placeId, topicKeys });
 	}
 
 	/**

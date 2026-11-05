@@ -18,7 +18,7 @@ import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
 import { DishSearchService } from '../services/dish-search.service.js';
 import { VenueService } from '../services/venue.service.js';
 import { VenueScrapeService } from '../services/venue-scrape.service.js';
-import type { SearchPlaceItem } from '../util/search-ranks.js';
+import type { SearchPlaceItem } from '../util/places-search.js';
 
 import { answerSearches, searchTextOf } from './factories/places-search.mock.js';
 
@@ -79,7 +79,7 @@ describe('DishSearchService (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		const em = harness.orm.em;
-		// Two dishes and their cuisine parent (Italian), which is no dish and never searched
+		// Two dishes and their cuisine parent (Italian), searched as "italian food"
 		seedTopics(em, ['pasta', 'pizza']);
 		city = await cityFactory.create({ lat: 52.52, lng: 13.405 });
 		trattoria = em.create(Venue, {
@@ -103,7 +103,7 @@ describe('DishSearchService (pglite)', () => {
 	/** An instant on a Berlin day, mid-morning */
 	const on = (day: string) => new Date(`${day}T10:00:00Z`);
 
-	it("snapshots every dish in every district, each search's top ten in Google's order, dated the city's day", async () => {
+	it("snapshots every food topic in every district, each search's top ten in Google's order, dated the city's day", async () => {
 		const pastaMitte = 'pasta Mitte Berlin';
 		answerSearches(runActor, [
 			// Out of order and twenty deep, as a dataset can be: `rank` is what counts, ten are kept
@@ -138,9 +138,9 @@ describe('DishSearchService (pglite)', () => {
 		const summary = await service.sweep(city, 25, on('2026-10-25'));
 		expect(summary).toEqual({
 			searchedOn: '2026-10-25',
-			dishes: 2,
+			dishes: 3,
 			districts: 3,
-			searches: 6,
+			searches: 9,
 			returned: 4,
 			places: 34,
 			linked: 32,
@@ -149,11 +149,13 @@ describe('DishSearchService (pglite)', () => {
 		});
 		// One run a search: the actor outputs a place once a run, so a shared run would leave the
 		// trattoria out of whichever pasta search came second
+		// The cuisine typed with "food"; none of its searches came back here
 		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual([
+			...DISTRICTS.map(d => `italian food ${d} Berlin`),
 			...DISTRICTS.map(d => `pasta ${d} Berlin`),
 			...DISTRICTS.map(d => `pizza ${d} Berlin`),
 		]);
-		const [actor, input, options] = runActor.mock.calls[2] as [
+		const [actor, input, options] = runActor.mock.calls[5] as [
 			string,
 			Record<string, unknown>,
 			Record<string, unknown>,
@@ -258,7 +260,7 @@ describe('DishSearchService (pglite)', () => {
 		answerSearches(runActor, []);
 		// $0.0042 × 10 × 3 districts = $0.126 a dish
 		const summary = await service.sweep(city, 0.2, on('2026-10-26'));
-		expect(summary).toMatchObject({ dishes: 1, searches: 3, returned: 0, notCovered: 1 });
+		expect(summary).toMatchObject({ dishes: 1, searches: 3, returned: 0, notCovered: 2 });
 		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual(
 			DISTRICTS.map(d => `pizza ${d} Berlin`),
 		);
@@ -296,14 +298,14 @@ describe('DishSearchService (pglite)', () => {
 			return [result(searchTextOf(input), 1, `one-${searchTextOf(input)}`)];
 		});
 		expect(await service.sweep(city, 25, on('2026-10-27'))).toMatchObject({
-			searches: 6,
-			returned: 5,
+			searches: 9,
+			returned: 8,
 			failed: 1,
 		});
 		expect(
 			await em.count(DishSearchRank, { searchedOn: '2026-10-27', district: 'Mitte', topic: { key: 'pasta' } }),
 		).toBe(0);
-		expect(await em.count(DishSearchRank, { searchedOn: '2026-10-27' })).toBe(5);
+		expect(await em.count(DishSearchRank, { searchedOn: '2026-10-27' })).toBe(8);
 
 		runActor.mockRejectedValue(new Error('Run failed'));
 		await expect(service.sweep(city, 25, on('2026-10-28'))).rejects.toThrow('Every dish search failed: Run failed');
@@ -394,6 +396,16 @@ describe('DishSearchService (pglite)', () => {
 		const other = await em.findOneOrFail(Venue, { placeId: 'k' });
 		await em.nativeDelete(DishSearchRank, { venue: other.id });
 		expect((await service.forVenue(other.id)).searches).toEqual([]);
+	});
+
+	it("reads one district's searches of some topics between two days, for a report", async () => {
+		const rows = await service.inDistrict(city.id, 'Neukölln', ['pasta', 'pizza'], '2026-10-02', '2026-10-31');
+		// Only the 25th's Neukölln pasta search is in the window
+		expect(rows.map(r => [r.searchedOn, r.topicKey, r.topicKind, r.rank, r.placeId])).toEqual([
+			['2026-10-25', 'pasta', 'dish', 1, 'n'],
+			['2026-10-25', 'pasta', 'dish', 2, 'trattoria'],
+		]);
+		expect(await service.inDistrict(city.id, 'Neukölln', [], '2026-10-01', '2026-10-31')).toEqual([]);
 	});
 
 	it("gives each city's newest snapshot for the cron", async () => {

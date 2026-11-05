@@ -80,10 +80,10 @@ export enum PipelineStepEnum {
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	// Google News and web search for the report venues' press and listicle mentions
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	// The report venues' places on the Google Maps searches a guest would type ("ramen Mitte")
-	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
-	// A dated snapshot of every dish topic × every district on Google Maps ("pasta Mitte Berlin"),
-	// the top ten each (`DishSearchCron`, every `City.dishSearchEveryDays`; not part of MONTHLY)
+	// A dated snapshot of every food topic a guest searches (dishes, cuisines, kinds of place,
+	// meals, diets, drinks) × every district on Google Maps ("pasta Mitte Berlin", "vietnamese
+	// food Mitte Berlin"), the top ten each (`DishSearchCron`, every `City.dishSearchEveryDays`;
+	// not part of MONTHLY). A report branch's place on those searches is read from the snapshot
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	// Google Trends: search interest per cuisine and won venue over twelve months, in the city's region
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
@@ -112,7 +112,7 @@ export enum PipelineStepEnum {
 // The monthly run, in order: the month-end passes over the city's posts and blogs, the names
 // they named looked up, the most talked-about brands' posts (searched by name, and the watched
 // accounts' own profiles), competitors for those without, their reviews, their Google Maps
-// details, delivery, comments, press and search ranks, Google Trends, then their reports and
+// details, delivery, comments and press, Google Trends, then their reports and
 // last the outreach lead scores. No reading step: the steps that need the posts read
 // (`READ_GATED_STEPS`) or everything read (`ALL_READ_STEPS`) read first and wait when no model
 // answers. A stored run's result is keyed by position ("<n>. <STEP>"), so reordering needs a
@@ -133,7 +133,6 @@ export const MONTHLY_STEPS: PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_DELIVERY,
 	PipelineStepEnum.SCRAPE_COMMENTS,
 	PipelineStepEnum.SCRAPE_PRESS,
-	PipelineStepEnum.TRACK_SEARCH_RANKS,
 	// Before the reports: their city section quotes the search changes
 	PipelineStepEnum.SEARCH_INTEREST,
 	PipelineStepEnum.BUILD_REPORTS,
@@ -155,7 +154,6 @@ export const READ_GATED_STEPS: readonly PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_DELIVERY,
 	PipelineStepEnum.SCRAPE_COMMENTS,
 	PipelineStepEnum.SCRAPE_PRESS,
-	PipelineStepEnum.TRACK_SEARCH_RANKS,
 	PipelineStepEnum.FIND_OWN_ACCOUNTS,
 	PipelineStepEnum.READ_MENTIONED_PROFILES,
 ];
@@ -256,12 +254,10 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// A hundred comments under each of ~100 posts at $0.00125 a comment
 	[PipelineStepEnum.SCRAPE_COMMENTS]: 13,
 	[PipelineStepEnum.SCRAPE_PRESS]: 3,
-	// Up to three searches of twenty places per report branch, one run each at ~$0.084 (twenty
-	// places at $0.0042); Berlin's October 2026 had ~102 queries, ~$8.60; every branch of a chain
-	// counts, about a third more
-	[PipelineStepEnum.TRACK_SEARCH_RANKS]: 10,
-	// A snapshot: up to ten places a search at ~$0.004, 47 dishes × 12 districts in Berlin is
-	// 564 searches, ~$24 at most; ~$15 in practice, since many searches find fewer than ten
+	// A snapshot: up to ten places a search at ~$0.004, ~$0.50 a topic across Berlin's 12
+	// districts, so ~49 topics, the most served first (2026-11-05: a search for 89 of the 93
+	// branches of October's 50 most mentioned brands); less in practice, since many searches
+	// find fewer than ten
 	[PipelineStepEnum.TRACK_DISH_SEARCHES]: 25,
 	// Two runs of signalbench/google-trends-scraper (~110 food topics, then the won venues) at
 	// ~$0.004 a term; the actor refuses a cap under $1, so each run gets at least that
@@ -324,16 +320,4 @@ export interface OneOffRun {
  * exists for the city, whatever became of it (a failed one is rerun from the Data page). An entry
  * goes once production has queued it: the key stops it running again anyway.
  */
-export const ONE_OFF_RUNS: OneOffRun[] = [
-	{
-		// The user's call, 2026-11-05: October's ranks came from one shared Places run, which
-		// left out of each search the places an earlier one found
-		// (`Migration20261105100000_drop_shared_run_search_ranks` deleted them); searched again a
-		// run per query (~102 queries at twenty places, ~$8.60, the step's default). The dish
-		// searches need no one-off: with their rows gone the daily `DishSearchCron` finds the city due
-		step: PipelineStepEnum.TRACK_SEARCH_RANKS,
-		key: 'search-ranks-one-run-each',
-		month: '2026-10',
-		params: {},
-	},
-];
+export const ONE_OFF_RUNS: OneOffRun[] = [];

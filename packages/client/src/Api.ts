@@ -1615,7 +1615,6 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
@@ -1714,7 +1713,6 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
@@ -4017,7 +4015,6 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
@@ -4070,7 +4067,6 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
@@ -4916,7 +4912,6 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_SEARCH_RANKS = 'TRACK_SEARCH_RANKS',
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
 	BUILD_REPORTS = 'BUILD_REPORTS',
@@ -6116,19 +6111,6 @@ export enum AdminVenueReservationSampleOutputDtoPlatformEnum {
 	Thefork = 'thefork',
 	Opentable = 'opentable',
 	Google = 'google',
-}
-
-export interface AdminVenueSearchRankOutputDto {
-	id: string;
-	/** `YYYY-MM` */
-	month: string;
-	query: string;
-	/** Absent when the venue was not among the results */
-	rank?: number;
-	results: number;
-	/** @format date-time */
-	searchedAt: string;
-	top: VenueSearchRankEntry[];
 }
 
 export interface AdminVenueSnapshotOutputDto {
@@ -8171,8 +8153,6 @@ export enum ListUsersParamsSortEnum {
 
 export type ListVenueReviewsData = AdminListVenueReviewsOutputDto;
 
-export type ListVenueSearchRanksData = AdminVenueSearchRankOutputDto[];
-
 export type ListVenuesData = AdminListVenuesOutputDto;
 
 export enum ListVenuesParamsSortEnum {
@@ -8389,7 +8369,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1224'?: PartialOmitCredentialVerificationRequestuserOptionalProps1224Enum;
+	'__@OptionalProps@1220'?: PartialOmitCredentialVerificationRequestuserOptionalProps1220Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -8415,7 +8395,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1224Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1220Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -8473,7 +8453,6 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SYNC_OSM_PLACES?: number;
 	TRACK_DISH_SEARCHES?: number;
 	TRACK_PROFILES?: number;
-	TRACK_SEARCH_RANKS?: number;
 	WATCH_REVIEWS?: number;
 }
 
@@ -8679,11 +8658,6 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	TRACK_PROFILES?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	TRACK_SEARCH_RANKS?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -10760,18 +10734,23 @@ export interface ReportReviewStats {
 	written: number;
 }
 
-/** The venue's place on one Google Maps search ("ramen Mitte") in the report month. */
+/**
+ * The venue's place on one Google Maps search ("ramen Mitte", "vietnamese food Mitte"), from the
+ * city's dish-search snapshot of the report month (`TRACK_DISH_SEARCHES`).
+ */
 export interface ReportSearchRank {
-	/** The same search in earlier months, oldest first, five at most; `rank` absent when not among the results */
+	/** The same search in earlier months, oldest first, five at most; `rank` absent when not in the top ten */
 	history: {
 		month: string;
 		rank?: number;
 	}[];
 	query: string;
-	/** 1-based; absent when it was not among the `results` places */
+	/** 1-based; absent when it was not among the `results` places (the top ten) */
 	rank?: number;
 	results: number;
-	/** The first ten places in Google's order */
+	/** The snapshot's day, `YYYY-MM-DD` (`snapshotMonth`: a snapshot early in the next month counts) */
+	searchedOn?: string;
+	/** The places in Google's order, ten at most */
 	top: {
 		isVenue: boolean;
 		name: string;
@@ -11447,16 +11426,6 @@ export interface VenueDetails {
 		title: string;
 	}[];
 	temporarilyClosed?: boolean;
-}
-
-/** One place in a Google Maps search's top ten. */
-export interface VenueSearchRankEntry {
-	name: string;
-	placeId: string;
-	rating?: number;
-	reviewsCount?: number;
-	/** Our venue, when we know the place */
-	venueId?: string;
 }
 
 /** A status change with its venue, as the trends panel and the report read it. */
@@ -12858,22 +12827,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				path: `/admin/venue-status-changes`,
 				method: 'GET',
 				query: query,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * @description The venue's Google Maps search ranks (`TRACK_SEARCH_RANKS`), newest month first.
-		 *
-		 * @name ListVenueSearchRanks
-		 * @summary The venue's Google Maps search ranks (`TRACK_SEARCH_RANKS`), newest month first
-		 * @request GET:/admin/venues/{id}/search-ranks
-		 * @response `200` `ListVenueSearchRanksData`
-		 */
-		listVenueSearchRanks: (id: string, params: RequestParams = {}) =>
-			this.request<ListVenueSearchRanksData, any>({
-				path: `/admin/venues/${id}/search-ranks`,
-				method: 'GET',
 				format: 'json',
 				...params,
 			}),

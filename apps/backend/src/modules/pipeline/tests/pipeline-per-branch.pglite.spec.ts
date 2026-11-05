@@ -14,7 +14,6 @@ import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness.service.js';
 import { VenueDeliveryService } from 'src/modules/venues/services/venue-delivery.service.js';
-import { VenueSearchRankService } from 'src/modules/venues/services/venue-search-rank.service.js';
 import { WebMentionService } from 'src/modules/venues/services/web-mention.service.js';
 import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
@@ -23,6 +22,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
+
 import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 /* A chain with three open branches in a city: every branch's place figures in one monthly run,
@@ -35,7 +35,6 @@ describe('PipelineService: every branch of a report brand (pglite)', () => {
 	let city: City;
 	let chain: Brand;
 	const topBrandIds = jest.fn<(month: string, top: number, cityId: string) => Promise<string[]>>();
-	const track = jest.fn<(city: unknown, month: string, venues: Names, budgetUsd: number) => Promise<unknown>>();
 	const sample = jest.fn<(venues: Names, budgetUsd: number) => Promise<Record<string, number>>>();
 	const scrape = jest.fn<(venues: Names, city: unknown, month: string, budgetUsd: number) => Promise<unknown>>();
 	const searchMonth = jest.fn<(city: unknown, venues: Names, month: string, budgetUsd: number) => Promise<unknown>>();
@@ -54,7 +53,6 @@ describe('PipelineService: every branch of a report brand (pglite)', () => {
 				ProspectQueryService,
 				CompetitorService,
 				{ provide: MentionMatchingService, useValue: { topBrandIds } },
-				{ provide: VenueSearchRankService, useValue: { track } },
 				{ provide: VenueBusynessService, useValue: { sample } },
 				{ provide: VenueDeliveryService, useValue: { scrape } },
 				{ provide: WebMentionService, useValue: { searchMonth, classifyMonth } },
@@ -77,7 +75,7 @@ describe('PipelineService: every branch of a report brand (pglite)', () => {
 		em.create(BrandCompetitor, { brand: chain, venue: rival });
 		await em.flush();
 		topBrandIds.mockResolvedValue([chain.id]);
-		for (const fn of [track, scrape, searchMonth, scrapeVenueSocial]) fn.mockResolvedValue({});
+		for (const fn of [scrape, searchMonth, scrapeVenueSocial]) fn.mockResolvedValue({});
 		sample.mockResolvedValue({ requested: 4 });
 		topPosts.mockResolvedValue([]);
 	});
@@ -97,12 +95,7 @@ describe('PipelineService: every branch of a report brand (pglite)', () => {
 	const names = (venues: Names) => venues.map(v => v.name).sort();
 	const OPEN = ['Burgermeister Kotti', 'Burgermeister Schlesisches Tor', 'Burgermeister Zoo'];
 
-	it('tracks search ranks, samples busyness and scrapes delivery for all three open branches', async () => {
-		await run(PipelineStepEnum.TRACK_SEARCH_RANKS);
-		expect(names(track.mock.calls[0][2])).toEqual(OPEN);
-		// The default budget makes room for every branch
-		expect(track.mock.calls[0][3]).toBe(10);
-
+	it('samples busyness and scrapes delivery for all three open branches', async () => {
 		await run(PipelineStepEnum.SAMPLE_BUSYNESS);
 		expect(names(sample.mock.calls[0][0])).toEqual([...OPEN, 'Rival'].sort());
 

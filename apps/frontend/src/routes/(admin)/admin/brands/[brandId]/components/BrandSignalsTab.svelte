@@ -7,7 +7,6 @@
 	import VenueDemandPanel from '#components/admin/venues/VenueDemandPanel.svelte';
 	import VenueDishSearchesPanel from '#components/admin/venues/VenueDishSearchesPanel.svelte';
 	import VenueRatingPanel from '#components/admin/venues/VenueRatingPanel.svelte';
-	import VenueSearchRanksPanel from '#components/admin/venues/VenueSearchRanksPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
@@ -68,7 +67,6 @@
 			<div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
 				<VenueDemandPanel {venue} />
 				<div class="flex min-w-0 flex-col gap-5">
-					<VenueSearchRanksPanel {venue} />
 					<VenueDishSearchesPanel {venue} />
 					<VenueRatingPanel {venue} />
 				</div>

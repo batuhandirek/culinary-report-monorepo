@@ -1,6 +1,6 @@
 import type { jest } from '@jest/globals';
 
-import type { SearchPlaceItem } from '../../util/search-ranks.js';
+import type { SearchPlaceItem } from '../../util/places-search.js';
 
 /**
  * The search a `compass/crawler-google-places` run was started for: one search a run

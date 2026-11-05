@@ -1,23 +1,49 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+
 import {
 	dishesWithinBudget,
 	dishSearchDue,
 	dishSearches,
 	type DishSearchRow,
 	dishSearchTable,
+	isSearchedTopic,
+	searchWords,
 } from '../util/dish-searches.js';
 import { calendarDay } from '../util/week.js';
 
 describe('dishSearches', () => {
-	it('crosses every dish with every district, dish by dish, as a guest types it', () => {
-		expect(dishSearches(['pasta', 'pizza'], ['Mitte', 'Neukölln'], 'Berlin')).toEqual([
+	const dish = (key: string) => ({ key, kind: TopicKindEnum.DISH });
+
+	it('crosses every topic with every district, topic by topic, as a guest types it', () => {
+		expect(dishSearches([dish('pasta'), { key: 'vietnamese', kind: TopicKindEnum.CUISINE }], ['Mitte', 'Neukölln'], 'Berlin')).toEqual([
 			{ topicKey: 'pasta', district: 'Mitte', text: 'pasta Mitte Berlin' },
 			{ topicKey: 'pasta', district: 'Neukölln', text: 'pasta Neukölln Berlin' },
-			{ topicKey: 'pizza', district: 'Mitte', text: 'pizza Mitte Berlin' },
-			{ topicKey: 'pizza', district: 'Neukölln', text: 'pizza Neukölln Berlin' },
+			{ topicKey: 'vietnamese', district: 'Mitte', text: 'vietnamese food Mitte Berlin' },
+			{ topicKey: 'vietnamese', district: 'Neukölln', text: 'vietnamese food Neukölln Berlin' },
 		]);
-		expect(dishSearches(['pasta'], [], 'Berlin')).toEqual([]);
+		expect(dishSearches([dish('pasta')], [], 'Berlin')).toEqual([]);
+	});
+
+	it('types a cuisine and a diet with "food", a dish, a kind of place, a meal and a drink as they are', () => {
+		const words = (key: string, kind: TopicKindEnum) => searchWords({ key, kind }, 'Mitte');
+		expect(words('ramen', TopicKindEnum.DISH)).toBe('ramen Mitte');
+		expect(words('vietnamese', TopicKindEnum.CUISINE)).toBe('vietnamese food Mitte');
+		expect(words('vegan', TopicKindEnum.DIET)).toBe('vegan food Mitte');
+		expect(words('cafe', TopicKindEnum.FORMAT)).toBe('cafe Mitte');
+		expect(words('brunch', TopicKindEnum.MEAL)).toBe('brunch Mitte');
+		expect(words('cocktails', TopicKindEnum.DRINK)).toBe('cocktails Mitte');
+	});
+
+	it('searches the food a guest types, not an ingredient, an aspect or a word nobody searches', () => {
+		expect(isSearchedTopic(dish('ramen'))).toBe(true);
+		expect(isSearchedTopic({ key: 'bakery', kind: TopicKindEnum.FORMAT })).toBe(true);
+		expect(isSearchedTopic({ key: 'avocado', kind: TopicKindEnum.INGREDIENT })).toBe(false);
+		expect(isSearchedTopic({ key: 'wait_for_food', kind: TopicKindEnum.ASPECT })).toBe(false);
+		expect(isSearchedTopic({ key: 'fast food', kind: TopicKindEnum.FORMAT })).toBe(false);
+		expect(isSearchedTopic({ key: 'halal', kind: TopicKindEnum.DIET })).toBe(false);
+		expect(isSearchedTopic({ key: 'coffee drinks', kind: TopicKindEnum.DRINK })).toBe(false);
 	});
 });
 

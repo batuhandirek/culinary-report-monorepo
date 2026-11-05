@@ -10,7 +10,8 @@
 	import Select from '#ui/wrapped/Select.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// Who Google Maps puts first for the dish in each district ("pasta Mitte Berlin"): the
+	// Who Google Maps puts first for the food in each district ("pasta Mitte Berlin", "vietnamese
+	// food Mitte Berlin"): the
 	// TRACK_DISH_SEARCHES top ten, kept as dated snapshots (the city's "every N days"), a district
 	// and a snapshot at a time, each place against its rank in the snapshot before
 	interface Props {
@@ -79,7 +80,7 @@
 	{:else if !data.searchedOn || !shown}
 		<EmptyState
 			title="Not searched yet"
-			hint={`Every dish is searched in every district on Google Maps ("${topicKey} <district> <city>") and the top ten kept, as often as the city's "Dish searches every N days" says.`}
+			hint={`The food guests search for (dishes, cuisines, kinds of place, meals, diets, drinks) is searched in every district on Google Maps and the top ten kept, as often as the city's "Dish searches every N days" says, the most served first as far as the budget goes.`}
 			ground="none"
 			size="sm" />
 	{:else}
@@ -138,7 +139,7 @@
 			</table>
 		</div>
 		{#if !data.previousOn}
-			<p class="text-muted-foreground m-0 mt-2 text-xs">The first snapshot of this dish: moves show from the next one.</p>
+			<p class="text-muted-foreground m-0 mt-2 text-xs">The first snapshot of this search: moves show from the next one.</p>
 		{:else if !shown.previousSearched}
 			<p class="text-muted-foreground m-0 mt-2 text-xs">
 				{shown.district} wasn't searched on {dayLabel(data.previousOn)}, so no place's move is known here.

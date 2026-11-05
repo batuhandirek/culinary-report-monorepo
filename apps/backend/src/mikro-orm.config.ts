@@ -16,30 +16,22 @@ import { CityDay } from 'src/modules/cities/entities/city-day.entity.js';
 import { CityEvent } from 'src/modules/cities/entities/city-event.entity.js';
 import { CitySource } from 'src/modules/cities/entities/city-source.entity.js';
 import { Embedding } from 'src/modules/embeddings/entities/embedding.entity.js';
-import { Statement } from 'src/modules/statements/entities/statement.entity.js';
-import { StatementPart } from 'src/modules/statements/entities/statement-part.entity.js';
-import { Topic } from 'src/modules/topics/entities/topic.entity.js';
-import { Term } from 'src/modules/topics/entities/term.entity.js';
-import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
-import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
-import { MenuItemTopic } from 'src/modules/topics/entities/menu-item-topic.entity.js';
-import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
 import { FoodTrendsReport } from 'src/modules/food-trends/entities/food-trends-report.entity.js';
 import { FsmStateChange } from 'src/modules/fsm/entities/fsm-state-change.entity.js';
 import { CityHighlight } from 'src/modules/highlights/entities/city-highlight.entity.js';
+import { Image } from 'src/modules/image/entities/image.entity.js';
 import { LandingEdition } from 'src/modules/landing/entities/landing-edition.entity.js';
 import { NewsletterSubscriber } from 'src/modules/newsletter/entities/newsletter-subscriber.entity.js';
-import { Image } from 'src/modules/image/entities/image.entity.js';
 import { Notification } from 'src/modules/notification/entities/notification.entity.js';
 import { NotificationPreference } from 'src/modules/notification-preferences/entities/notification-preference.entity.js';
 import { OutreachTouch } from 'src/modules/outreach/entities/outreach-touch.entity.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { PipelineRun } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
+import { BrandReportConfig } from 'src/modules/reports/entities/brand-report-config.entity.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import { REPORT_SECTION_TYPES } from 'src/modules/reports/entities/report-section.embeddable.js';
 import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
 import { ReportTemplate } from 'src/modules/reports/entities/report-template.entity.js';
-import { BrandReportConfig } from 'src/modules/reports/entities/brand-report-config.entity.js';
 import { AccountRejectedBrand } from 'src/modules/social/entities/account-rejected-brand.entity.js';
 import { Creator } from 'src/modules/social/entities/creator.entity.js';
 import { Hashtag } from 'src/modules/social/entities/hashtag.entity.js';
@@ -48,11 +40,19 @@ import { PostComment } from 'src/modules/social/entities/post-comment.entity.js'
 import { PostHashtag } from 'src/modules/social/entities/post-hashtag.entity.js';
 import { PostSource } from 'src/modules/social/entities/post-source.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
-import { SocialAccountSnapshot } from 'src/modules/social/entities/social-account-snapshot.entity.js';
 import { SocialAccountHandleChange } from 'src/modules/social/entities/social-account-handle-change.entity.js';
-import { SocialPostSnapshot } from 'src/modules/social/entities/social-post-snapshot.entity.js';
+import { SocialAccountSnapshot } from 'src/modules/social/entities/social-account-snapshot.entity.js';
 import { SocialPost } from 'src/modules/social/entities/social-post.entity.js';
+import { SocialPostSnapshot } from 'src/modules/social/entities/social-post-snapshot.entity.js';
 import { SocialAccountSubscriber } from 'src/modules/social/subscribers/social-account.subscriber.js';
+import { Statement } from 'src/modules/statements/entities/statement.entity.js';
+import { StatementPart } from 'src/modules/statements/entities/statement-part.entity.js';
+import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
+import { MenuItemTopic } from 'src/modules/topics/entities/menu-item-topic.entity.js';
+import { Term } from 'src/modules/topics/entities/term.entity.js';
+import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
+import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
 import { TrendRelatedQuery } from 'src/modules/trends/entities/trend-related-query.entity.js';
 import { TrendSearchInterest } from 'src/modules/trends/entities/trend-search-interest.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
@@ -69,7 +69,6 @@ import { VenueDeliveryListing } from 'src/modules/venues/entities/venue-delivery
 import { VenueDeliverySnapshot } from 'src/modules/venues/entities/venue-delivery-snapshot.entity.js';
 import { VenueLookup } from 'src/modules/venues/entities/venue-lookup.entity.js';
 import { VenueReservationSample } from 'src/modules/venues/entities/venue-reservation-sample.entity.js';
-import { VenueSearchRank } from 'src/modules/venues/entities/venue-search-rank.entity.js';
 import { VenueSnapshot } from 'src/modules/venues/entities/venue-snapshot.entity.js';
 import { VenueStatusChange } from 'src/modules/venues/entities/venue-status-change.entity.js';
 import { WebMention } from 'src/modules/venues/entities/web-mention.entity.js';
@@ -106,7 +105,6 @@ export default defineConfig({
 		Venue,
 		VenueSnapshot,
 		VenueStatusChange,
-		VenueSearchRank,
 		DishSearchRank,
 		BrandCompetitor,
 		VenueLookup,

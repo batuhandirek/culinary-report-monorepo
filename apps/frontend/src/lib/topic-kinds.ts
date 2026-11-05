@@ -15,6 +15,9 @@ export const KIND_ITEMS: { value: TopicKind; label: string; hint?: string }[] = 
 
 export const kindLabel = (kind: string) => KIND_ITEMS.find((k) => k.value === kind)?.label ?? kind;
 
+/** The kinds the dish-search snapshot searches on Google Maps ("pasta Mitte", "cafe Mitte"): not ingredients or aspects */
+export const isSearchedKind = (kind: string) => kind !== 'ingredient' && kind !== 'aspect';
+
 /** An aspect against the kinds of food: the two sides of the topic tree never mix */
 export const isAspectKind = (kind: string) => kind === 'aspect';
 

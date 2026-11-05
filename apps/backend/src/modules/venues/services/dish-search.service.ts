@@ -6,7 +6,6 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { districtNames } from 'src/modules/cities/util/city.js';
-import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 
@@ -17,9 +16,11 @@ import {
 	dishesWithinBudget,
 	type DishSearchDistrict,
 	dishSearches,
+	type DishSearchSnapshotRow,
 	dishSearchTable,
+	isSearchedTopic,
 } from '../util/dish-searches.js';
-import { nearCity, orderedPlaces, type SearchPlaceItem } from '../util/search-ranks.js';
+import { nearCity, orderedPlaces, type SearchPlaceItem } from '../util/places-search.js';
 import { calendarDay } from '../util/week.js';
 
 import { VenueScrapeService } from './venue-scrape.service.js';
@@ -53,8 +54,9 @@ export interface VenueDishSearches {
 }
 
 /**
- * Who Google Maps puts first for each dish in each district ("pasta Mitte Berlin"): every dish
- * topic × every district of the city, the top ten each, kept as a dated snapshot of that day's
+ * Who Google Maps puts first for each food in each district ("pasta Mitte Berlin", "vietnamese
+ * food Mitte Berlin", "cafe Mitte Berlin"): every searched food topic (`isSearchedTopic`: dishes,
+ * cuisines, kinds of place, meals, diets, drinks) × every district of the city, the top ten each, kept as a dated snapshot of that day's
  * rankings (`TRACK_DISH_SEARCHES`, every `City.dishSearchEveryDays`). One Places run a search
  * (`VenueScrapeService.searchEach`), from a map of the city; places far from it are left out
  * (`nearCity`). The places found are saved as venues (`saveFound`), which also writes each venue's
@@ -72,9 +74,9 @@ export class DishSearchService {
 	) {}
 
 	/**
-	 * Takes today's snapshot (the city's local date): searches every dish in every district of
-	 * the city, as many dishes as the budget covers (the ones most of the city's open venues serve
-	 * first), and stores each search's top ten, replacing that day's rows of each search that came
+	 * Takes today's snapshot (the city's local date): searches every searched topic in every
+	 * district of the city, as many topics as the budget covers (the ones most of the city's open
+	 * venues are tagged with first, whatever their kind), and stores each search's top ten, replacing that day's rows of each search that came
 	 * back. A search that came back empty (failed, or cut by the cap) stores nothing.
 	 */
 	async sweep(
@@ -96,16 +98,12 @@ export class DishSearchService {
 		const districts = districtNames(city);
 		const served = await this.venueTopicService.venueCounts(city.id);
 		const dishes = _.orderBy(
-			(await this.topicService.all()).filter(t => t.kind === TopicKindEnum.DISH),
+			(await this.topicService.all()).filter(isSearchedTopic),
 			[t => served.get(t.key) ?? 0, t => t.key],
 			['desc', 'asc'],
 		);
 		const planned = dishes.slice(0, dishesWithinBudget(budgetUsd, districts.length));
-		const searches = dishSearches(
-			planned.map(t => t.key),
-			districts,
-			city.name,
-		);
+		const searches = dishSearches(planned, districts, city.name);
 		const summary = {
 			searchedOn: day.date,
 			dishes: planned.length,
@@ -271,6 +269,40 @@ export class DishSearchService {
 				previousOn,
 			),
 		};
+	}
+
+	/**
+	 * One district's searches of these topics in the city's snapshots from `from` to `to`
+	 * (`YYYY-MM-DD`, both included), a row a place: what a report reads a branch's searches from.
+	 */
+	async inDistrict(
+		cityId: string,
+		district: string,
+		topicKeys: string[],
+		from: string,
+		to: string,
+	): Promise<DishSearchSnapshotRow[]> {
+		if (!topicKeys.length) return [];
+		const rows = await this.em.find(
+			DishSearchRank,
+			{
+				city: cityId,
+				district,
+				topic: { key: { $in: topicKeys } },
+				searchedOn: { $gte: from, $lte: to },
+			},
+			{ populate: ['topic'], orderBy: { searchedOn: 'desc', rank: 'asc' } },
+		);
+		return rows.map(r => ({
+			searchedOn: r.searchedOn,
+			topicKey: r.topic.key,
+			topicKind: r.topic.kind,
+			rank: r.rank,
+			placeId: r.placeId,
+			name: r.name,
+			rating: r.rating,
+			reviewsCount: r.reviewsCount,
+		}));
 	}
 
 	/**

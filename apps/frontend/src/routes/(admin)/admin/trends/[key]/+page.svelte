@@ -17,7 +17,7 @@
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
 	import { exploreTopicHref } from '#lib/explore.js';
 	import { change, points, tone, topicHref } from '#lib/topic-format.js';
-	import { isAspectKind, kindLabel, type TopicOption, toTopicOption } from '#lib/topic-kinds.js';
+	import { isAspectKind, isSearchedKind, kindLabel, type TopicOption, toTopicOption } from '#lib/topic-kinds.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
@@ -294,7 +294,7 @@
 			{/if}
 		</AdminPanel>
 
-		{#if data.row.kind === 'dish'}
+		{#if isSearchedKind(data.row.kind)}
 			<TopicDishSearches {cityId} topicKey={key} label={data.row.label} />
 		{/if}
 

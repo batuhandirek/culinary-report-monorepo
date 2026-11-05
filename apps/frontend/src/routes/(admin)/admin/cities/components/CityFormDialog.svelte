@@ -23,8 +23,7 @@
 		{ key: 'SAMPLE_BUSYNESS', label: 'Sample busyness', fallback: 1 },
 		{ key: 'SAMPLE_RESERVATIONS', label: 'Sample open tables', fallback: 1 },
 		{ key: 'SNAPSHOT_RATINGS', label: 'Snapshot ratings, twice a week', fallback: 3 },
-		{ key: 'TRACK_SEARCH_RANKS', label: 'Track search ranks', fallback: 3 },
-		{ key: 'TRACK_DISH_SEARCHES', label: 'Track dish searches (every dish × district)', fallback: 25 },
+		{ key: 'TRACK_DISH_SEARCHES', label: 'Track dish searches (every food × district)', fallback: 25 },
 		{ key: 'SEARCH_INTEREST', label: 'Google Trends', fallback: 2 }
 	] as const;
 </script>

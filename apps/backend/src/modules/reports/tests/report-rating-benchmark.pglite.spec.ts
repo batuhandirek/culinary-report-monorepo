@@ -1,17 +1,17 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
+import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
-import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
+import { linkTopics,seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
-import { CityService } from 'src/modules/cities/services/city.service.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
-import { VenueSearchRankService } from 'src/modules/venues/services/venue-search-rank.service.js';
+import { DishSearchService } from 'src/modules/venues/services/dish-search.service.js';
 import { VenueStatusChangeService } from 'src/modules/venues/services/venue-status-change.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
@@ -19,8 +19,8 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
-import { ReportCityService } from '../services/report-city.service.js';
 import { ReportService } from '../services/report.service.js';
+import { ReportCityService } from '../services/report-city.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
 import { ReportTemplateService } from '../services/report-template.service.js';
 import { ratingBenchmarkSentence } from '../util/rating-benchmark.js';
@@ -45,7 +45,7 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 				CompetitorService,
 				BrandService,
 				CityService,
-				VenueSearchRankService,
+				DishSearchService,
 				{ provide: ReportEditorAgent, useValue: highlights },
 				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },
 				ReportCityService,

@@ -9,8 +9,9 @@
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// The dish searches the place is in the Google Maps top ten of ("pasta Mitte"), snapshot by
-	// snapshot: TRACK_DISH_SEARCHES searches every dish in every district of its city every N days,
+	// The food searches the place is in the Google Maps top ten of ("pasta Mitte", "cafe Mitte"),
+	// snapshot by snapshot: TRACK_DISH_SEARCHES searches the food guests search for in every
+	// district of its city every N days,
 	// whoever the place is, so this fills for venues without a report too
 	interface Props {
 		venue: AdminVenueOutputDto;
@@ -42,13 +43,13 @@
 	{:else if !data.snapshots.length}
 		<EmptyState
 			title="Not searched yet"
-			hint="Every dish is searched in every district of the city on Google Maps as often as the city says; the searches this place is in the top ten of show here."
+			hint="The food guests search for (dishes, cuisines, kinds of place, meals, diets, drinks) is searched in every district of the city on Google Maps as often as the city says; the searches this place is in the top ten of show here."
 			ground="none"
 			size="sm" />
 	{:else if !data.searches.length}
 		<EmptyState
 			title="In no dish search's top ten"
-			hint={`Every dish is searched in every district; this place wasn't in a top ten since ${dayLabel(data.snapshots[data.snapshots.length - 1], true)}.`}
+			hint={`The food guests search for is searched in every district; this place wasn't in a top ten since ${dayLabel(data.snapshots[data.snapshots.length - 1], true)}.`}
 			ground="none"
 			size="sm" />
 	{:else}

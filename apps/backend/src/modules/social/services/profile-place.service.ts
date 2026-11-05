@@ -8,7 +8,7 @@ import { cityNames } from 'src/modules/cities/util/city.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { VenueScrapeService } from 'src/modules/venues/services/venue-scrape.service.js';
-import { GOOGLE_PLACE_USD } from 'src/modules/venues/util/search-ranks.js';
+import { GOOGLE_PLACE_USD } from 'src/modules/venues/util/places-search.js';
 import { cityStopwords, isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 import { isFatalProviderError, runPool } from 'src/shared/util/pool.js';
 

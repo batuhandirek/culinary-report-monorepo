@@ -1,10 +1,61 @@
-import { GOOGLE_PLACE_USD } from './search-ranks.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+
+import { GOOGLE_PLACE_USD } from './places-search.js';
 import { addDays } from './week.js';
 
 /** Places kept per dish search: Google Maps' first screen and a bit */
 export const DISH_SEARCH_DEPTH = 10;
 
-/** One dish searched in one district: `text` is what goes into Google Maps. */
+/**
+ * The food topics a guest searches a district for, by kind: what it is (a dish, a cuisine), what
+ * kind of place (a format: cafe, bakery, bar), a meal (brunch), a diet (vegan), a drink
+ * (cocktails). A cuisine and a diet are typed with "food" ("vietnamese food Mitte").
+ */
+export const SEARCHED_TOPIC_KINDS: ReadonlySet<TopicKindEnum> = new Set([
+	TopicKindEnum.DISH,
+	TopicKindEnum.CUISINE,
+	TopicKindEnum.FORMAT,
+	TopicKindEnum.MEAL,
+	TopicKindEnum.DIET,
+	TopicKindEnum.DRINK,
+]);
+const WITH_FOOD: ReadonlySet<TopicKindEnum> = new Set([TopicKindEnum.CUISINE, TopicKindEnum.DIET]);
+
+/**
+ * Topics nobody searches a district for: every second place is fast food, halal is a filter, a
+ * nightclub is no food place, and a drink's umbrella ("coffee drinks") is no guest's words
+ */
+export const UNSEARCHED_TOPICS: ReadonlySet<string> = new Set([
+	'fast food',
+	'street food',
+	'halal',
+	'nightclub',
+	'coffee drinks',
+	'soft drinks',
+]);
+
+/** Whether the snapshot searches this topic. */
+export const isSearchedTopic = (topic: { key: string; kind: TopicKindEnum }): boolean =>
+	SEARCHED_TOPIC_KINDS.has(topic.kind) && !UNSEARCHED_TOPICS.has(topic.key);
+
+/** What a guest types for the topic in the district, without the city: "vietnamese food Mitte". */
+export const searchWords = (topic: { key: string; kind: TopicKindEnum }, district: string): string =>
+	`${topic.key}${WITH_FOOD.has(topic.kind) ? ' food' : ''} ${district}`;
+
+/** One place of one district's search in one snapshot, with the topic searched: the report's read. */
+export interface DishSearchSnapshotRow {
+	/** The snapshot, `YYYY-MM-DD` */
+	searchedOn: string;
+	topicKey: string;
+	topicKind: TopicKindEnum;
+	rank: number;
+	placeId: string;
+	name: string;
+	rating?: number | null;
+	reviewsCount?: number | null;
+}
+
+/** One topic searched in one district: `text` is what goes into Google Maps. */
 export interface DishSearch {
 	topicKey: string;
 	district: string;
@@ -12,23 +63,24 @@ export interface DishSearch {
 }
 
 /**
- * Every dish in every district, as a guest types it: "pasta Mitte Berlin" (the dish's key, the
- * district, the city). Dish by dish, so a budget that covers fewer cuts whole dishes.
+ * Every topic in every district, as a guest types it: "pasta Mitte Berlin", "vietnamese food
+ * Mitte Berlin" (`searchWords` and the city). Topic by topic, so a budget that covers fewer cuts
+ * whole topics.
  */
 export const dishSearches = (
-	topicKeys: string[],
+	topics: { key: string; kind: TopicKindEnum }[],
 	districts: string[],
 	cityName: string,
 ): DishSearch[] =>
-	topicKeys.flatMap(topicKey =>
+	topics.flatMap(topic =>
 		districts.map(district => ({
-			topicKey,
+			topicKey: topic.key,
 			district,
-			text: `${topicKey} ${district} ${cityName}`,
+			text: `${searchWords(topic, district)} ${cityName}`,
 		})),
 	);
 
-/** How many dishes a budget searches in every district, at `DISH_SEARCH_DEPTH` places a search. */
+/** How many topics a budget searches in every district, at `DISH_SEARCH_DEPTH` places a search. */
 export const dishesWithinBudget = (budgetUsd: number, districts: number): number =>
 	districts ? Math.floor(budgetUsd / (DISH_SEARCH_DEPTH * GOOGLE_PLACE_USD * districts)) : 0;
 

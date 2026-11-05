@@ -8,8 +8,8 @@ import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro
 import { Venue } from './venue.entity.js';
 
 /**
- * One place in the top ten of a dish's Google Maps search in one district ("pasta Mitte Berlin")
- * on one day: a snapshot of the rankings that day, one row a place, with Google's figures for it.
+ * One place in the top ten of one food's Google Maps search in one district ("pasta Mitte Berlin",
+ * "vietnamese food Mitte Berlin") on one day: a snapshot of the rankings that day, one row a place, with Google's figures for it.
  * The day is the city's local date, split out (year, month, week, weekday…) for SQL to group by.
  * Written by `DishSearchService.sweep` (`TRACK_DISH_SEARCHES`); a rerun the same day replaces
  * each search it got back.
@@ -25,7 +25,7 @@ export class DishSearchRank extends MikroOrmSimpleEntityAbstractClass {
 	@ManyToOne({ entity: () => City, deleteRule: 'cascade' })
 	city: Rel<City>;
 
-	// The dish searched (a `Topic` of kind dish); its key is the word typed
+	// The food searched (a `Topic` `isSearchedTopic` takes); `searchWords` is what was typed
 	@ManyToOne({ entity: () => Topic, deleteRule: 'cascade' })
 	topic: Rel<Topic>;
 

@@ -7,19 +7,18 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { ApifyModule } from '../apify/apify.module.js';
 import { AuthModule } from '../auth/auth.module.js';
-import { CitiesModule } from '../cities/cities.module.js';
 import { BacklogModule } from '../backlog/backlog.module.js';
-import { StatementsModule } from '../statements/statements.module.js';
-import { TopicsModule } from '../topics/topics.module.js';
+import { CitiesModule } from '../cities/cities.module.js';
 import { ImagesModule } from '../image/images.module.js';
 import { LLMModule } from '../llm/llm.module.js';
+import { StatementsModule } from '../statements/statements.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 
 import { PressClassificationAgent } from './agents/press-classification.agent.js';
 import { ReviewClaimsAgent } from './agents/review-claims.agent.js';
 import { AdminBrandsController } from './controllers/admin.brands.controller.js';
 import { AdminDishSearchesController } from './controllers/admin.dish-searches.controller.js';
 import { AdminReviewsController } from './controllers/admin.reviews.controller.js';
-import { AdminVenueSearchRanksController } from './controllers/admin.venue-search-ranks.controller.js';
 import { AdminVenueStatusChangesController } from './controllers/admin.venue-status-changes.controller.js';
 import { AdminVenuesController } from './controllers/admin.venues.controller.js';
 import { VenueFaviconCron } from './crons/venue-favicon.cron.js';
@@ -51,7 +50,6 @@ import { VenueDeliveryService } from './services/venue-delivery.service.js';
 import { VenueFaviconService } from './services/venue-favicon.service.js';
 import { VenueReservationService } from './services/venue-reservation.service.js';
 import { VenueScrapeService } from './services/venue-scrape.service.js';
-import { VenueSearchRankService } from './services/venue-search-rank.service.js';
 import { VenueStatusChangeService } from './services/venue-status-change.service.js';
 import { WebMentionService } from './services/web-mention.service.js';
 import { BrandAutoMergeWorker } from './workers/brand-auto-merge.worker.js';
@@ -84,7 +82,6 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		AdminReviewsController,
 		AdminVenuesController,
 		AdminVenueStatusChangesController,
-		AdminVenueSearchRanksController,
 		AdminDishSearchesController,
 		AdminBrandsController,
 	],
@@ -98,7 +95,6 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		PressClassificationAgent,
 		VenueScrapeService,
 		VenueStatusChangeService,
-		VenueSearchRankService,
 		DishSearchService,
 		OverpassService,
 		OsmPlaceService,
@@ -125,7 +121,6 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		TripadvisorReviewService,
 		VenueScrapeService,
 		VenueStatusChangeService,
-		VenueSearchRankService,
 		DishSearchService,
 		OsmPlaceService,
 		CompetitorService,

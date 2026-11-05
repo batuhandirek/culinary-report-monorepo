@@ -4,11 +4,11 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
@@ -16,7 +16,7 @@ import { Venue } from '../entities/venue.entity.js';
 import { VenueLookup } from '../entities/venue-lookup.entity.js';
 import { BrandAutoMergeJob } from '../jobs/brand-auto-merge.job.js';
 import { isBrandName } from '../util/brands.js';
-import { citySearchUrl, GOOGLE_PLACE_USD } from '../util/search-ranks.js';
+import { citySearchUrl, GOOGLE_PLACE_USD } from '../util/places-search.js';
 import { cityStopwords, isFoodVenue, isInCity, normalizeVenueName } from '../util/venue-names.js';
 
 import { GooglePlaceItem, VenueService } from './venue.service.js';
@@ -251,7 +251,7 @@ export class VenueScrapeService {
 
 	/**
 	 * Searches Google Maps the way a guest in the city would, one actor run per search, for the
-	 * steps that read a search's order (dish searches, search ranks). The actor outputs each place
+	 * steps that read a search's order (the dish searches). The actor outputs each place
 	 * once per run, so a place an earlier search of the same run found is missing from every later
 	 * one; a run of its own gives each search its whole list. Each starts from a map centred on the
 	 * city (`citySearchUrl`). The searches run in the order given, `SEARCH_RUNS_AT_ONCE` side by

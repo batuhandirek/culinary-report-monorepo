@@ -3,6 +3,7 @@ import type { Sentiment } from 'src/modules/statements/constants/sentiment.const
 import type { SearchDelta } from 'src/modules/trends/util/search-interest.js';
 import type { ReviewsDistribution } from 'src/modules/venues/interfaces/venue-details.interface.js';
 
+import type { ReportAnalysisTraceStep } from './report-analysis.interface.js';
 import type {
 	ReportComments,
 	ReportOwnAccount,
@@ -10,7 +11,6 @@ import type {
 	ReportPress,
 	ReportReviewPlatform,
 } from './report-reach.interface.js';
-import type { ReportAnalysisTraceStep } from './report-analysis.interface.js';
 import type {
 	ReportBusyness,
 	ReportCorrelations,
@@ -591,14 +591,19 @@ export interface ReportNeighbourhood {
 	changes: ReportNeighbourhoodChanges;
 }
 
-/** The venue's place on one Google Maps search ("ramen Mitte") in the report month. */
+/**
+ * The venue's place on one Google Maps search ("ramen Mitte", "vietnamese food Mitte"), from the
+ * city's dish-search snapshot of the report month (`TRACK_DISH_SEARCHES`).
+ */
 export interface ReportSearchRank {
 	query: string;
-	/** 1-based; absent when it was not among the `results` places */
+	/** 1-based; absent when it was not among the `results` places (the top ten) */
 	rank?: number;
 	results: number;
-	/** The first ten places in Google's order */
+	/** The snapshot's day, `YYYY-MM-DD` (`snapshotMonth`: a snapshot early in the next month counts) */
+	searchedOn?: string;
+	/** The places in Google's order, ten at most */
 	top: { name: string; rating?: number; reviewsCount?: number; isVenue: boolean }[];
-	/** The same search in earlier months, oldest first, five at most; `rank` absent when not among the results */
+	/** The same search in earlier months, oldest first, five at most; `rank` absent when not in the top ten */
 	history: { month: string; rank?: number }[];
 }
