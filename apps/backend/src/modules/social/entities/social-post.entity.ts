@@ -40,7 +40,17 @@ export enum PostSkipReasonEnum {
 /** A TikTok video, an Instagram post or a blog article about food and drink in the city. */
 @Entity({ tableName: 'social_posts', repository: () => SocialPostRepository })
 export class SocialPost extends MikroOrmEntityAbstractClass<
-	'views' | 'likes' | 'shares' | 'comments' | 'saves' | 'isAd' | 'mentions' | 'hashtagLinks' | 'foundBy' | 'snapshots' | 'statements'
+	| 'views'
+	| 'likes'
+	| 'shares'
+	| 'comments'
+	| 'saves'
+	| 'isAd'
+	| 'mentions'
+	| 'hashtagLinks'
+	| 'foundBy'
+	| 'snapshots'
+	| 'statements'
 > {
 	// The platform's own id: a TikTok video id, `ig_<postId>` for Instagram, `blog_<hash of the URL>`
 	// for a blog article
@@ -156,7 +166,10 @@ export class SocialPost extends MikroOrmEntityAbstractClass<
 	mentions = new Collection<Mention>(this);
 
 	/** Every claim it makes (`StatementService`): about a place it names (with its `mention`), the city, or nothing */
-	@OneToMany(() => Statement, statement => statement.post, { orderBy: { id: 'asc' }, orphanRemoval: true })
+	@OneToMany(() => Statement, statement => statement.post, {
+		orderBy: { id: 'asc' },
+		orphanRemoval: true,
+	})
 	statements = new Collection<Statement>(this);
 
 	// The hashtags in its caption, in the caption's order

@@ -12,7 +12,7 @@ import { MentionTopicService } from 'src/modules/topics/services/mention-topic.s
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
-import { brandKey } from 'src/modules/venues/util/brands.js';
+import { brandKey, siteNamedAfter } from 'src/modules/venues/util/brands.js';
 import {
 	cityStopwords,
 	hintNamesStreet,
@@ -27,7 +27,9 @@ import { isFatalProviderError, runPool } from 'src/shared/util/pool.js';
 
 import { VenueMatchAgent } from '../agents/venue-match.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
-import { ownPostSql } from '../util/accounts.js';
+import { SocialPlatformEnum } from '../entities/social-post.entity.js';
+import { normalizeAccountHandle, ownPostSql } from '../util/accounts.js';
+import { profileSearchName } from '../util/profile-places.js';
 
 import { HashtagService } from './hashtag.service.js';
 
@@ -261,7 +263,86 @@ export interface MatchInput {
 	taggedLocation: string | null;
 	/** What the post says about it (a mention has no summary of its own): its first claims */
 	said: string[];
+	/**
+	 * The brands' own accounts the post tags (Instagram's @-mentions, co-authors, photo tags), and
+	 * the one the mention's name is when it is written as a handle (`taggedAccountsOf`)
+	 */
+	taggedAccounts?: readonly TaggedAccount[];
 }
+
+/** A brand's own account (`SocialAccount.brand`, a branch's own with `branchId`), as matching reads it. */
+export interface TaggedAccount {
+	handle: string;
+	brandId: string;
+	branchId: string | null;
+}
+
+/**
+ * The place a mention is when the post tags the brand's own account named after it (the mention
+ * "lucys.berlin" or "Lucy's" and the tag @lucys.berlin, linked to Lucy's): the brand calls itself
+ * that, so no name similarity is needed and two look-alike places are told apart. The account's
+ * handle is the mention's name written as a handle, or named after it (`siteNamedAfter`); tags
+ * pointing at two brands decide nothing. The branch: the account's own branch, a one-branch
+ * brand's place, or the one branch the location hint names; else the brand alone. Only a brand
+ * with an open food venue in the city.
+ */
+export const taggedAccountPick = (
+	mention: Pick<MatchInput, 'venueName' | 'locationHint' | 'taggedAccounts'>,
+	venues: CandidateVenue[],
+	words: ReadonlySet<string>,
+): MatchDecision | null => {
+	if (!mention.taggedAccounts?.length) return null;
+	const asHandle = normalizeAccountHandle(mention.venueName);
+	const picks = mention.taggedAccounts.filter(
+		a =>
+			(a.handle === asHandle || siteNamedAfter(a.handle, mention.venueName, words)) &&
+			venues.some(v => v.brandId === a.brandId),
+	);
+	const brandIds = _.uniq(picks.map(p => p.brandId));
+	if (brandIds.length !== 1) return null;
+	const branches = venues.filter(v => v.brandId === brandIds[0]);
+	const own = picks.find(p => p.branchId && branches.some(b => b.id === p.branchId));
+	const hint = mention.locationHint;
+	const hinted =
+		hasHint(hint) && !GUESSED_HINT.test(hint!) ?
+			branches.filter(
+				b =>
+					(!!b.street && hintNamesStreet(hint!, b.street)) ||
+					(!!b.district && ` ${plain(hint!)} `.includes(` ${plain(b.district)} `)),
+			)
+		:	[];
+	const venueId =
+		own?.branchId ??
+		(branches.length === 1 ? branches[0].id
+		: hinted.length === 1 ? hinted[0].id
+		: null);
+	return { method: MentionMatchMethodEnum.ACCOUNT, brandId: brandIds[0], venueId, score: 1 };
+};
+
+/**
+ * The tagged accounts of one mention: the post's tagged handles (Instagram only: TikTok's are
+ * display names, not handles), and the mention's name when it is written as a handle ("@x", or
+ * with a dot or an underscore), each that is a brand's own account (`accounts`, by
+ * `platform:handle`).
+ */
+export const taggedAccountsOf = (
+	post: { platform: SocialPlatformEnum; taggedHandles?: string[] | null },
+	venueName: string,
+	accounts: ReadonlyMap<string, TaggedAccount>,
+): TaggedAccount[] => {
+	const handles = new Set<string>();
+	if (post.platform === SocialPlatformEnum.INSTAGRAM)
+		for (const tag of post.taggedHandles ?? []) {
+			const handle = normalizeAccountHandle(tag);
+			if (handle) handles.add(handle);
+		}
+	const name = venueName.trim();
+	if (/^@/.test(name) || /^[\w]+[._][\w.]+$/.test(name)) {
+		const handle = normalizeAccountHandle(name);
+		if (handle) handles.add(handle);
+	}
+	return [...handles].map(h => accounts.get(`${post.platform}:${h}`)).filter((a): a is TaggedAccount => !!a);
+};
 
 export interface MatchDecision {
 	method: MentionMatchMethodEnum;
@@ -296,6 +377,10 @@ export const decideMatch = async (
 			venueId: null,
 			score: null,
 		};
+
+	// The brand's own account, tagged and named after the place: what the brand calls itself
+	const tagged = taggedAccountPick(mention, venues, words);
+	if (tagged) return tagged;
 
 	const candidates = rankCandidates(mention, mention.taggedLocation, venues, words);
 	// A sure name the hint places elsewhere is the LLM's call, never the code's
@@ -447,7 +532,88 @@ export class MentionMatchingService {
 		);
 
 		const names = cityNames(city);
-		await this.matchAll(mentions, venues, names, words, counts);
+		const accounts = await this.brandAccounts();
+		await this.matchAll(mentions, venues, names, words, counts, accounts);
+		await this.sweepTags(city, venues, words, accounts, counts);
+	}
+
+	/** Every brand's own account on Instagram and TikTok, by `platform:handle`: what a post's tags can point at. */
+	private async brandAccounts(): Promise<Map<string, TaggedAccount>> {
+		const rows: { platform: string; handle: string; brand_id: string; branch_id: string | null }[] = await this.em
+			.getConnection()
+			.execute(
+				`select platform, handle, brand_id, branch_id from social_accounts
+				where brand_id is not null and handle_lost_at is null and platform in (?, ?)`,
+				[SocialPlatformEnum.INSTAGRAM, SocialPlatformEnum.TIKTOK],
+			);
+		return new Map(
+			rows.map(r => [`${r.platform}:${r.handle}`, { handle: r.handle, brandId: r.brand_id, branchId: r.branch_id }]),
+		);
+	}
+
+	/**
+	 * The city's unmatched mentions (`none`) a tagged own account now places (`taggedAccountPick`),
+	 * matched in code with no LLM: an account linked since their last attempt (a profile read, a
+	 * site, an admin) settles them, though no venue was added. Flushes.
+	 */
+	private async sweepTags(
+		city: City,
+		venues: CandidateVenue[],
+		words: ReadonlySet<string>,
+		accounts: ReadonlyMap<string, TaggedAccount>,
+		counts: Record<MentionMatchMethodEnum, number>,
+	): Promise<void> {
+		const rows: { id: number }[] = await this.em.getConnection().execute(
+			`select m.id from mentions m join social_posts p on p.id = m.post_id
+			where p.city_id = ? and m.match_method = ?
+			and ((p.platform = ? and jsonb_array_length(coalesce(p.tagged_handles, '[]'::jsonb)) > 0) or m.venue_name ~ '^@|^\\w+[._]')`,
+			[city.id, MentionMatchMethodEnum.NONE, SocialPlatformEnum.INSTAGRAM],
+		);
+		if (!rows.length || !accounts.size) return;
+		const matched: Mention[] = [];
+		for (const ids of _.chunk(rows.map(r => r.id), 1000)) {
+			for (const mention of await this.em.find(Mention, { id: { $in: ids } }, { populate: ['post'] })) {
+				const decision = taggedAccountPick(
+					{
+						venueName: mention.venueName,
+						locationHint: mention.locationHint ?? null,
+						taggedAccounts: taggedAccountsOf(mention.post, mention.venueName, accounts),
+					},
+					venues,
+					words,
+				);
+				if (!decision) continue;
+				Object.assign(mention, {
+					brand: this.em.getReference(Brand, decision.brandId!),
+					venue: decision.venueId ? this.em.getReference(Venue, decision.venueId) : null,
+					matchMethod: decision.method,
+					matchScore: decision.score,
+					matchedAt: new Date(),
+				});
+				counts[decision.method]++;
+				matched.push(mention);
+			}
+		}
+		if (!matched.length) return;
+		await this.em.flush();
+		this.logger.log(`Matched ${matched.length} unmatched mentions of ${city.name} by their tagged own accounts`);
+		await this.relinkFood(matched);
+		await this.hashtagService.relink();
+	}
+
+	/**
+	 * The city's unmatched mentions a tagged own account places, matched with no LLM
+	 * (`sweepTags`): after the account matcher linked accounts from their profiles. Every `match`
+	 * runs it too.
+	 */
+	async matchByTags(cityId: string): Promise<Record<MentionMatchMethodEnum, number>> {
+		const counts = Object.fromEntries(
+			Object.values(MentionMatchMethodEnum).map(m => [m, 0]),
+		) as Record<MentionMatchMethodEnum, number>;
+		const city = await this.cityService.getById(cityId);
+		const words = cityStopwords(city.nameStopwords);
+		await this.sweepTags(city, await this.candidateVenues(city, words), words, await this.brandAccounts(), counts);
+		return counts;
 	}
 
 	/**
@@ -501,6 +667,7 @@ export class MentionMatchingService {
 		names: string[],
 		words: ReadonlySet<string>,
 		counts: Record<MentionMatchMethodEnum, number>,
+		accounts: ReadonlyMap<string, TaggedAccount>,
 	): Promise<void> {
 		const llm: { down?: Error } = {};
 		await runPool(
@@ -509,7 +676,7 @@ export class MentionMatchingService {
 			async mention => {
 				const before = mention.matchedAt;
 				try {
-					counts[await this.matchOne(mention, venues, names, words, llm)]++;
+					counts[await this.matchOne(mention, venues, names, words, accounts, llm)]++;
 				} catch (e) {
 					mention.matchedAt = before;
 					if (!isFatalProviderError(e)) throw e;
@@ -555,7 +722,7 @@ export class MentionMatchingService {
 			const words = cityStopwords(city.nameStopwords);
 			const venues = await this.candidateVenues(city, words);
 			const names = cityNames(city);
-			await this.matchAll(cityMentions, venues, names, words, counts);
+			await this.matchAll(cityMentions, venues, names, words, counts, await this.brandAccounts());
 		}
 		this.logger.log(`Rematched ${mentions.length} mentions of ${brandIds.length} brands`);
 		return counts;
@@ -577,6 +744,7 @@ export class MentionMatchingService {
 		venues: CandidateVenue[],
 		names: string[],
 		words: ReadonlySet<string>,
+		accounts: ReadonlyMap<string, TaggedAccount>,
 		llm: { down?: Error } = {},
 	): Promise<MentionMatchMethodEnum> {
 		mention.matchedAt = new Date();
@@ -588,6 +756,7 @@ export class MentionMatchingService {
 				city: mention.city ?? null,
 				author: mention.post.author ?? null,
 				taggedLocation: mention.post.locationName ?? null,
+				taggedAccounts: taggedAccountsOf(mention.post, mention.venueName, accounts),
 				said: mention.statements
 					.getItems()
 					.map(s => s.text)
@@ -650,18 +819,37 @@ export class MentionMatchingService {
 
 	/**
 	 * Every name the city's mentions gave that nothing matched yet, most posted first, then by
-	 * views, then likes (Instagram posts carry no views): what to look up. No limit here, since
-	 * `lookupNames` drops the names searched lately before it caps the run.
+	 * views, then likes (Instagram posts carry no views): what to look up. A name that is a
+	 * business profile's handle we read ("selocoffeeberlin") is searched as that profile's name and
+	 * the address its bio writes out ("SELO COFFEE Tempelhofer Damm 212, 12099",
+	 * `profileSearchName`), which Google Maps finds where the handle finds nothing. No limit here,
+	 * since `lookupNames` drops the names searched lately before it caps the run.
 	 */
 	async unmatchedNames(cityId: string): Promise<string[]> {
-		const rows: { venue_name: string }[] = await this.em.getConnection().execute(
-			`select m.venue_name from mentions m join social_posts p on p.id = m.post_id
-			where m.match_method = ? and p.city_id = ?
-			group by m.venue_name
-			order by count(distinct p.id) desc, sum(p.views) desc, sum(p.likes) desc, m.venue_name`,
+		const rows: {
+			venue_name: string;
+			handle: string | null;
+			display_name: string | null;
+			bio: string | null;
+		}[] = await this.em.getConnection().execute(
+			`select n.venue_name, a.handle, a.display_name, a.bio
+			from (
+				select m.venue_name, p.platform, count(distinct p.id) posts, sum(p.views) views, sum(p.likes) likes
+				from mentions m join social_posts p on p.id = m.post_id
+				where m.match_method = ? and p.city_id = ?
+				group by m.venue_name, p.platform
+			) n
+			left join social_accounts a on a.platform = n.platform
+				and a.handle = rtrim(ltrim(lower(n.venue_name), '@'), '.')
+				and a.is_business and a.brand_id is null and a.profile_read_at is not null
+			order by n.posts desc, n.views desc nulls last, n.likes desc, n.venue_name`,
 			[MentionMatchMethodEnum.NONE, cityId],
 		);
-		return rows.map(r => r.venue_name);
+		return _.uniq(
+			rows.map(r =>
+				r.handle ? profileSearchName({ handle: r.handle, displayName: r.display_name, bio: r.bio }) : r.venue_name,
+			),
+		);
 	}
 
 	/**

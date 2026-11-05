@@ -257,12 +257,16 @@ describe('AccountScrapeService (pglite)', () => {
 			ownerId: '999',
 		};
 		runActor.mockImplementationOnce(async () => [{ ...creator, latestPosts: [collab] }]);
-		await service.scrape(city, [{ platform: SocialPlatformEnum.INSTAGRAM, handle: 'berlindeneyenir' }], {
-			since: SINCE,
-			budgetUsd: 1,
-			label: 'last week',
-			now: new Date('2026-10-26T05:00:00Z'),
-		});
+		await service.scrape(
+			city,
+			[{ platform: SocialPlatformEnum.INSTAGRAM, handle: 'berlindeneyenir' }],
+			{
+				since: SINCE,
+				budgetUsd: 1,
+				label: 'last week',
+				now: new Date('2026-10-26T05:00:00Z'),
+			},
+		);
 
 		em.clear();
 		const owner = await em.findOneOrFail(SocialAccount, { handle: '_collab_kitchen_' });

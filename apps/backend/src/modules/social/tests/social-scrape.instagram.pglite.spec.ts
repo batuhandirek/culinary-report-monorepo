@@ -467,7 +467,9 @@ describe('SocialScrapeService city scrapes (pglite)', () => {
 		]);
 
 		em.clear();
-		const hashtagVideo = await em.findOneOrFail(SocialPost, { externalId: hashtagWordVideo.aweme_id });
+		const hashtagVideo = await em.findOneOrFail(SocialPost, {
+			externalId: hashtagWordVideo.aweme_id,
+		});
 		expect(hashtagVideo).toMatchObject({ city: { id: wien.id } });
 		expect((await linksOf(hashtagVideo.id)).finds).toEqual([
 			'tiktok_hashtag wienfood (wienfood)',

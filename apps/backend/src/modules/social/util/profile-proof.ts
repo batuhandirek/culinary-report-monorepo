@@ -29,10 +29,15 @@ export interface ProfileFacts {
 	bio?: string | null;
 	/** Its website link(s) */
 	links: string[];
+	/** Instagram's business category ("Health Food Restaurant", "Bar"); none for TikTok */
+	category?: string | null;
+	/** Whether it is a business (or creator) account rather than a personal one; unknown for TikTok */
+	isBusiness?: boolean | null;
 }
 
 /**
- * One `apify/instagram-profile-scraper` item: `externalUrl(s)`, `biography`, `fullName`; a
+ * One `apify/instagram-profile-scraper` item: `externalUrl(s)`, `biography`, `fullName`,
+ * `businessCategoryName`, `isBusinessAccount`; a
  * missing profile is `{ username, error: 'not_found' }`. Null for an item naming no profile.
  */
 export const instagramProfileFacts = (item: any): ProfileFacts | null => {
@@ -54,6 +59,12 @@ export const instagramProfileFacts = (item: any): ProfileFacts | null => {
 		following: typeof item.followsCount === 'number' ? item.followsCount : null,
 		bio: item.biography || null,
 		links: [...new Set(links.map(decodeLink))],
+		// Instagram writes "None" for a business without a category
+		category:
+			typeof item.businessCategoryName === 'string' && !/^none$/i.test(item.businessCategoryName.trim()) ?
+				item.businessCategoryName.trim() || null
+			:	null,
+		isBusiness: typeof item.isBusinessAccount === 'boolean' ? item.isBusinessAccount : null,
 	};
 };
 
@@ -106,7 +117,7 @@ export interface ProofBrand {
 export type ProfileProof = 'site' | 'street' | 'account';
 
 // A domain written out in a bio ("eatmunchies.de", "www.cafe-paula.berlin")
-const BIO_DOMAINS = /(?<![@\w.-])(?:https?:\/\/)?((?:[a-z0-9-]+\.)+[a-z]{2,})(?![\w-])/gi;
+export const BIO_DOMAINS = /(?<![@\w.-])(?:https?:\/\/)?((?:[a-z0-9-]+\.)+[a-z]{2,})(?![\w-])/gi;
 
 /**
  * Whether the profile proves itself the brand's own: its website link, or a domain in its bio,

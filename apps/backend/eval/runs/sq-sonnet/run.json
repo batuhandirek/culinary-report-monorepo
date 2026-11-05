@@ -1,0 +1,4 @@
+{
+  "reader": "split",
+  "model": "anthropic/claude-sonnet-5-5"
+}

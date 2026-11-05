@@ -74,7 +74,9 @@ describe('OpenAIAccountsService', () => {
 		advance(10 * HOUR);
 		await service.run(MINI, async account => {
 			if (account.apiKey === 'sk-aaaa')
-				throw openAIError('You exceeded your current quota, please check your plan and billing details.');
+				throw openAIError(
+					'You exceeded your current quota, please check your plan and billing details.',
+				);
 		});
 		expect(service.status()[0].until.toISOString()).toBe('2026-10-20T00:00:00.000Z');
 		advance(2 * HOUR - 1);
@@ -86,7 +88,8 @@ describe('OpenAIAccountsService', () => {
 	it('blocks a rejected key for the whole block length', async () => {
 		const { service, keyFor, advance } = setup({ rotateAfter: 100 });
 		await service.run(MINI, async account => {
-			if (account.apiKey === 'sk-aaaa') throw openAIError('Incorrect API key provided: sk-aaaa.', 401);
+			if (account.apiKey === 'sk-aaaa')
+				throw openAIError('Incorrect API key provided: sk-aaaa.', 401);
 		});
 		advance(24 * HOUR - 1);
 		expect(await keyFor()).toBe('sk-bbbb');

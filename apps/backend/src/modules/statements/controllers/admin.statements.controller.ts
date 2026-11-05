@@ -12,8 +12,8 @@ import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
 import {
 	AdminStatementRowOutputDto,
 	AdminStatementsInputDto,
-	AdminStatementsScopeInputDto,
 	AdminStatementsOutputDto,
+	AdminStatementsScopeInputDto,
 	AdminStatementsSummaryOutputDto,
 	AdminWaitComplaintsInputDto,
 	AdminWaitComplaintsOutputDto,
@@ -25,9 +25,7 @@ import { STATEMENT_PARTS_POPULATE } from '../util/statement-populate.js';
 @UseGuards(AuthenticationGuard, RolesGuard)
 @Roles(UserRoleEnum.ADMIN)
 export class AdminStatementsController {
-	constructor(
-		private readonly statementService: StatementService,
-	) {}
+	constructor(private readonly statementService: StatementService) {}
 
 	/** A page of a scope's claims (a city's month, a brand's, a branch's), filtered, newest first or closest to `like`: the Claims tables */
 	@TypedRoute.Get()
@@ -71,7 +69,6 @@ export class AdminStatementsController {
 	): Promise<AdminStatementsSummaryOutputDto> {
 		return this.statementService.summary(query);
 	}
-
 
 	/** How many venues had a waiting complaint in the city's month, and how long the stated waits were */
 	@TypedRoute.Get('/wait-complaints')

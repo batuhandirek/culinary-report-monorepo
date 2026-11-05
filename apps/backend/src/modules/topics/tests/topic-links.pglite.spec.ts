@@ -12,9 +12,10 @@ import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/soci
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
 import { gateAgent } from 'src/modules/social/tests/factories/post-gate.mock.js';
-import { ClaimPartsAgent } from 'src/modules/statements/agents/claim-parts.agent.js';
+import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
+import { labelsClassifier } from 'src/modules/statements/tests/factories/claim-labels.mock.js';
 import {
 	countTopicMentions,
 	TOPIC_MENTIONS_SQL,
@@ -78,17 +79,21 @@ describe('Food topic links (pglite)', () => {
 				isNewOpening: false,
 			},
 		],
-		claims: [{ text: 'the pide there is great too', quote: null, subject: 'place', place: 0 }],
+		// The claim names "Pide", a wording no topic knows yet
+		claims: [
+			{
+				text: 'the pide there is great too',
+				quote: null,
+				foods: ['Pide'],
+				amount: null,
+				unit: null,
+				subject: 'place',
+				place: 0,
+			},
+		],
 	});
-	// Agent B: the claim names "Pide", a wording no topic knows yet
-	const partsAgent = mockAgent({
-		sentiment: 'positive',
-		aspect: null,
-		foods: ['Pide'],
-		amount: null,
-		unit: null,
-		kind: 'opinion',
-	});
+	// The claim-labels classifier: praise about no aspect
+	const labels = labelsClassifier(() => ({ sentiment: 'positive' }));
 	const venues: Record<string, Venue> = {};
 
 	const service = <T>(type: new (...args: never[]) => T) => harness.moduleRef.get(type);
@@ -151,7 +156,7 @@ describe('Food topic links (pglite)', () => {
 				{ provide: PgBossService, useValue: pgBoss },
 				{ provide: PostClaimsAgent, useValue: agent },
 				{ provide: PostGateAgent, useValue: gateAgent() },
-				{ provide: ClaimPartsAgent, useValue: partsAgent },
+				{ provide: ClaimLabelsClassifier, useValue: labels },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);

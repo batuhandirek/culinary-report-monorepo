@@ -1,3 +1,4 @@
+import { RequestContext } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
@@ -9,21 +10,24 @@ import { cityNames, districtNames } from 'src/modules/cities/util/city.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
+import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { faviconSite } from 'src/modules/venues/util/favicon.js';
-import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
+import { cityStopwords, isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import {
-	EXACT_MIN_LENGTH,
 	type AccountMatchIndex,
 	accountMatchIndex,
 	type AccountMatchName,
 	AccountMatchTier,
+	EXACT_MIN_LENGTH,
 	handleForms,
 	matchAccount,
+	SUGGEST_MIN_SCORE,
 } from '../util/account-match.js';
-import { type LinkedProfile, normalizeAccountHandle, profileOf } from '../util/accounts.js';
+import { captionHandles, type LinkedProfile, normalizeAccountHandle, profileOf } from '../util/accounts.js';
+import { placesAreOneBusiness, profilePlaceIndex, profilePlaces } from '../util/profile-places.js';
 import { siteProfileVerdicts } from '../util/site-profiles.js';
 
 import { SocialAccountService } from './social-account.service.js';
@@ -44,8 +48,12 @@ export interface AccountMatchResult {
 	fromSites: number;
 	/** Suggested because the brand's own website links the profile */
 	siteSuggested: number;
-	/** Accounts created for handles posts about a brand tagged, named like that brand */
+	/** Accounts created for the Instagram handles the city's posts tag or its profiles' bios name (`addMentionedAccounts`) */
 	fromTags: number;
+	/** Linked because their own profile names a branch's address or links its website (`profilePlaces`) */
+	fromProfiles: number;
+	/** Places joined to an account's brand because its profile names them as its own */
+	joinedByProfiles: number;
 }
 
 /**
@@ -57,9 +65,24 @@ export interface AccountMatchResult {
  * evidence (a tagged handle named like a brand its post named becomes an account first). A link
  * becomes `brand` (source `handle`), a likely one `suggestedBrand` for an admin. Last, the
  * profiles the brands' own websites link (`Venue.siteProfiles`) are linked (source `site`) or
- * suggested (`siteProfileVerdicts`). An admin's link, a website's, a site's, a profile's and
- * outreach's are never touched; nor is a brand an admin said an account is not.
+ * suggested (`siteProfileVerdicts`). Then every account whose profile we read says itself which
+ * places it is (`profilePlaces`: its bio names their street and house number, or it links their
+ * website, and it is named after them): it is linked to their brand (source `bio`), and the
+ * places it names that are a brand of their own join that brand (`BrandService.joinByProfile`).
+ * An admin's link, a website's, a site's, a profile's and outreach's are never touched; nor is a
+ * brand an admin said an account is not.
  */
+/**
+ * Whether a handle carries the whole name its match is on, at `EXACT_MIN_LENGTH`+ letters (exact,
+ * near, or holding it: "eat.kanaan" for Kanaan), never a part of it: "@samurai" or "@garden" is
+ * someone else's handle. What a link that only posts' tags back needs.
+ */
+const tagsCarryName = (match: NonNullable<ReturnType<typeof matchAccount>>, handle: string, index: AccountMatchIndex): boolean => {
+	if (match.matched.length < EXACT_MIN_LENGTH) return false;
+	const longest = Math.max(...handleForms(handle, index.cityWords).map(f => f.length));
+	return !(match.tier === AccountMatchTier.CONTAINS && longest <= match.matched.length);
+};
+
 @Injectable()
 export class AccountMatchingService {
 	private readonly logger = new Logger(AccountMatchingService.name);
@@ -68,6 +91,7 @@ export class AccountMatchingService {
 		private readonly em: EntityManager,
 		private readonly socialAccountService: SocialAccountService,
 		private readonly venueTopicService: VenueTopicService,
+		private readonly brandService: BrandService,
 	) {}
 
 	async match(city: City): Promise<AccountMatchResult> {
@@ -84,7 +108,7 @@ export class AccountMatchingService {
 		const index = accountMatchIndex(names, [...city.nameStopwords, ...cityNames(city), ...districtNames(city)]);
 
 		const tagged = await this.taggedBrands(city);
-		const fromTags = await this.addTaggedAccounts(tagged, index, city);
+		const fromTags = await this.addMentionedAccounts(city);
 
 		const postedAbout = new Map<string, Set<string>>();
 		const rows: { account_id: string; brand_id: string }[] = await this.em.getConnection().execute(
@@ -114,6 +138,8 @@ export class AccountMatchingService {
 			fromSites: 0,
 			siteSuggested: 0,
 			fromTags,
+			fromProfiles: 0,
+			joinedByProfiles: 0,
 		};
 		const rejectedOf = await this.socialAccountService.rejectedBrands(accounts.map(a => a.id));
 		for (const account of accounts) {
@@ -123,15 +149,20 @@ export class AccountMatchingService {
 				...(postedAbout.get(account.id) ?? []),
 				...(tagged.get(`${account.platform}:${account.handle}`) ?? []),
 			]);
-			const match = matchAccount(
-				{
-					handle: account.handle,
-					displayName: account.displayName,
-					postedAbout: evidence,
-					rejected: rejectedOf.get(account.id) ?? new Set(),
-				},
+			const rejected = rejectedOf.get(account.id) ?? new Set<string>();
+			let match = matchAccount(
+				{ handle: account.handle, displayName: account.displayName, postedAbout: evidence, rejected },
 				index,
 			);
+			// A link only the tags back must carry the brand's whole name: "@samurai" under a post
+			// about Samurai Wagyu Yakiniku is someone else
+			if (match && !postedAbout.get(account.id)?.has(match.brandId) && tagged.get(`${account.platform}:${account.handle}`)?.has(match.brandId)) {
+				const alone = matchAccount(
+					{ handle: account.handle, displayName: account.displayName, postedAbout: new Set(postedAbout.get(account.id) ?? []), rejected },
+					index,
+				);
+				if (!(alone?.brandId === match.brandId && alone.link) && !tagsCarryName(match, account.handle, index)) match = null;
+			}
 			if (match?.link) {
 				if (account.brand?.id !== match.brandId || (account.branch?.id ?? undefined) !== match.branchId) {
 					await this.socialAccountService.setBrand(
@@ -154,8 +185,9 @@ export class AccountMatchingService {
 		}
 		Object.assign(result, await this.linkSiteProfiles(venues, city, index));
 		await this.em.flush();
+		Object.assign(result, await this.linkProfilePlaces(venues, city));
 		this.logger.log(
-			`Accounts ${city.name}: ${result.linked} linked, ${result.unlinked} unlinked, ${result.suggested} suggested, ${websites} from Google websites, ${result.fromSites} linked and ${result.siteSuggested} suggested from sites, ${fromTags} new from tags`,
+			`Accounts ${city.name}: ${result.linked} linked, ${result.unlinked} unlinked, ${result.suggested} suggested, ${websites} from Google websites, ${result.fromSites} linked and ${result.siteSuggested} suggested from sites, ${fromTags} new from tags, ${result.fromProfiles} linked and ${result.joinedByProfiles} places joined from their own profiles`,
 		);
 		// An own account moves what posts by others say a venue's food is: its city's tags by job
 		await this.venueTopicService.queueCityRefresh([city.id]);
@@ -217,39 +249,154 @@ export class AccountMatchingService {
 	}
 
 	/**
-	 * An account for each tagged handle we have none for that carries the whole name of a brand
-	 * the tagging posts named ("@munchiesde" under a post about Munchies), so the handle pass can
-	 * link it before it ever posts for us. The handle must be that name (or a near spelling) or
-	 * hold it, at `EXACT_MIN_LENGTH`+ letters: a caption's @ cuts at a hyphen ("@Frieda" of
-	 * "@Frieda-Schlamassel.de"), and a part of a name ("@samurai", "@garden") is someone else.
-	 * Flushes. Returns how many were created.
+	 * An account for every Instagram handle the city's posts tag (caption @-mentions, co-authors,
+	 * photo tags; any post, read or not) or its Instagram profiles' bios name ("by @haelibo"),
+	 * so every account anyone mentions is in the system, its profile to be read
+	 * (`READ_MENTIONED_PROFILES`). Existing is no link: the matcher's rules decide that, and a
+	 * link only tags back needs the brand's whole name (`tagsCarryName`). TikTok's tags are
+	 * display names, not handles, so they make none. Flushes. Returns how many were created.
 	 */
-	private async addTaggedAccounts(
-		tagged: Map<string, Set<string>>,
-		index: AccountMatchIndex,
-		city: City,
-	): Promise<number> {
+	async addMentionedAccounts(city: City): Promise<number> {
+		const rows: { handle: string }[] = await this.em.getConnection().execute(
+			`select distinct h.handle from social_posts p
+			cross join lateral jsonb_array_elements_text(coalesce(p.tagged_handles, '[]'::jsonb)) as h(handle)
+			where p.city_id = ? and p.platform = ?`,
+			[city.id, SocialPlatformEnum.INSTAGRAM],
+		);
+		const bios: { bio: string }[] = await this.em.getConnection().execute(
+			`select bio from social_accounts where city_id = ? and platform = ? and bio like '%@%'`,
+			[city.id, SocialPlatformEnum.INSTAGRAM],
+		);
+		const handles = new Set<string>();
+		for (const row of rows) {
+			const handle = normalizeAccountHandle(row.handle);
+			if (handle) handles.add(handle);
+		}
+		for (const { bio } of bios) for (const handle of captionHandles(bio)) handles.add(handle);
 		const known = new Set<string>();
-		for (const keys of _.chunk([...tagged.keys()], 1000)) {
-			const rows: { platform: string; handle: string }[] = await this.em.getConnection().execute(
-				`select platform, handle from social_accounts where (platform, handle) in (${keys.map(() => '(?, ?)').join(', ')})`,
-				keys.flatMap(key => key.split(/:(.*)/s).slice(0, 2)),
+		for (const chunk of _.chunk([...handles], 1000)) {
+			const found: { handle: string }[] = await this.em.getConnection().execute(
+				`select handle from social_accounts where platform = ? and handle in (${chunk.map(() => '?').join(', ')})`,
+				[SocialPlatformEnum.INSTAGRAM, ...chunk],
 			);
-			for (const row of rows) known.add(`${row.platform}:${row.handle}`);
+			for (const row of found) known.add(row.handle);
 		}
 		let created = 0;
-		for (const [key, brands] of tagged) {
-			if (known.has(key)) continue;
-			const [platform, handle] = key.split(/:(.*)/s) as [SocialPlatformEnum, string];
-			const match = matchAccount({ handle, postedAbout: brands }, index);
-			if (!match?.link || !brands.has(match.brandId) || match.matched.length < EXACT_MIN_LENGTH) continue;
-			// Contained: only the handle holding the name, never the name holding the handle
-			const longest = Math.max(...handleForms(handle, index.cityWords).map(f => f.length));
-			if (match.tier === AccountMatchTier.CONTAINS && longest <= match.matched.length) continue;
-			if (await this.socialAccountService.ensure(platform, handle, city)) created++;
+		for (const handle of handles) {
+			if (known.has(handle)) continue;
+			if (await this.socialAccountService.ensure(SocialPlatformEnum.INSTAGRAM, handle, city)) created++;
+			if (created % 200 === 0) await this.em.flush();
 		}
-		if (created) await this.em.flush();
+		await this.em.flush();
 		return created;
+	}
+
+	/**
+	 * The accounts whose profile we read (`profileReadAt`, a bio or links stored), each read
+	 * against the city's open food venues (`profilePlaces`). The brand they name is the account's
+	 * own (source `bio`), unless an admin, a website, a site, a profile lookup or outreach linked
+	 * it already, which stays; a rejected brand is never taken. Among several brands it names, the
+	 * one with the most branches in the city stays, else the most reviewed place's, and its other
+	 * places that are a brand of their own join it (`BrandService.joinByProfile`, in an entity
+	 * manager of its own: a merge clears the one it runs in), but only when they are one
+	 * business's (`placesAreOneBusiness`: a business account, three places at most, one name);
+	 * else the account is only suggested the brand, for an admin. Then the accounts and venues are
+	 * read again and linked. An account naming one branch of a brand with others in the city is
+	 * that branch's own. Flushes.
+	 */
+	private async linkProfilePlaces(
+		venues: Venue[],
+		city: City,
+	): Promise<{ fromProfiles: number; joinedByProfiles: number }> {
+		const out = { fromProfiles: 0, joinedByProfiles: 0 };
+		const where = {
+			platform: { $in: [SocialPlatformEnum.INSTAGRAM, SocialPlatformEnum.TIKTOK] },
+			handleLostAt: null,
+			profileReadAt: { $ne: null },
+			$or: [{ bio: { $ne: null } }, { bioLinks: { $ne: null } }],
+		};
+		let accounts = await this.em.find(SocialAccount, where);
+		if (!accounts.length) return out;
+		const words = cityStopwords([...city.nameStopwords, ...cityNames(city)]);
+		const rejectedOf = await this.socialAccountService.rejectedBrands(accounts.map(a => a.id));
+
+		// What each profile names, and the brand that keeps its places
+		const read = (places: Venue[]) => {
+			const index = profilePlaceIndex(
+				places.map(v => ({
+					id: v.id,
+					name: v.name,
+					brandId: v.brand.id,
+					brandName: v.brand.name,
+					street: v.street ?? null,
+					website: v.website ?? null,
+				})),
+			);
+			const byId = new Map(places.map(v => [v.id, v]));
+			const branchesOf = _.countBy(places, v => v.brand.id);
+			return (account: SocialAccount) => {
+				const rejected = rejectedOf.get(account.id) ?? new Set<string>();
+				const named = profilePlaces(
+					{ handle: account.handle, displayName: account.displayName, bio: account.bio, links: account.bioLinks },
+					index,
+					words,
+				)
+					.map(p => byId.get(p.venueId)!)
+					.filter(v => !rejected.has(v.brand.id));
+				if (!named.length) return null;
+				const decided =
+					!!account.brand &&
+					account.brandSource !== AccountBrandSourceEnum.HANDLE &&
+					account.brandSource !== AccountBrandSourceEnum.BIO;
+				const brandId =
+					decided ?
+						account.brand!.id
+					:	_.orderBy(named, [v => branchesOf[v.brand.id] ?? 0, v => v.reviewsCount ?? 0], ['desc', 'desc'])[0].brand.id;
+				// Places of several brands are joined only when they are one business's branches
+				const brands = new Set(named.map(v => v.brand.id));
+				const oneBusiness = placesAreOneBusiness(account, named.map(v => v.name), words);
+				return { named, decided, brandId, branches: branchesOf[brandId] ?? 0, several: brands.size > 1, oneBusiness };
+			};
+		};
+
+		let plan = read(venues);
+		for (const account of accounts) {
+			const p = plan(account);
+			const others = p?.named.filter(v => v.brand.id !== p.brandId).map(v => v.id) ?? [];
+			if (!p || !others.length || !p.oneBusiness) continue;
+			const joined = await RequestContext.create(this.em.fork(), () => this.brandService.joinByProfile(p.brandId, others));
+			out.joinedByProfiles += joined?.length ?? 0;
+		}
+		if (out.joinedByProfiles) {
+			// The joins moved venues, accounts and mentions to the brands that stayed
+			venues = (await this.em.find(Venue, { city: city.id, closed: false }, { populate: ['brand'], refresh: true })).filter(v =>
+				isFoodVenue(v.category),
+			);
+			accounts = await this.em.find(SocialAccount, where, { refresh: true });
+			plan = read(venues);
+		}
+
+		for (const account of accounts) {
+			const p = plan(account);
+			if (!p || p.decided) continue;
+			// Places of several brands that are not one business: an admin's call, never a link
+			if (p.several) {
+				if (!account.brand && account.suggestedBrand?.id !== p.brandId) {
+					account.suggestedBrand = this.em.getReference(Brand, p.brandId);
+					account.suggestedScore = SUGGEST_MIN_SCORE;
+				}
+				continue;
+			}
+			const own = p.named.filter(v => v.brand.id === p.brandId);
+			const branch = own.length === 1 && p.branches > 1 ? own[0] : null;
+			if (account.brand?.id === p.brandId && (account.branch?.id ?? null) === (branch?.id ?? null)) continue;
+			await this.socialAccountService.setBrand(account, this.em.getReference(Brand, p.brandId), AccountBrandSourceEnum.BIO, branch);
+			account.suggestedBrand = null;
+			account.suggestedScore = null;
+			out.fromProfiles++;
+		}
+		await this.em.flush();
+		return out;
 	}
 
 	/**

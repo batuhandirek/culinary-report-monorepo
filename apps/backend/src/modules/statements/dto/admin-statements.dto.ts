@@ -93,10 +93,6 @@ export interface AdminStatementRowOutputDto extends StatementOutputDto {
 		brand?: { id: string; name: string };
 		venue?: { id: string; name: string };
 	};
-	/** A Google tag's place (served by Explore's claims only) */
-	venue?: { id: string; name: string };
-	/** Google's count for a tag; 1 otherwise */
-	count: number;
 }
 
 /** The scope as a whole, whatever a table filters: how its claims were split and read */

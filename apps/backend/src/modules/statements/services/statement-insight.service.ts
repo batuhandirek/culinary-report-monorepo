@@ -9,7 +9,6 @@ import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
 import { toVectorLiteral } from 'src/shared/util/vector.js';
 
-
 import {
 	CLUSTER_DIMENSIONS,
 	CLUSTER_MAX_CLAIMS,
@@ -93,15 +92,11 @@ export type InsightDimension = (typeof INSIGHT_DIMENSIONS)[number];
 
 /** The figures every tree node and breakdown row carries */
 export interface InsightCounts {
-	/** Reviews, posts and other dated sources raising it, each once */
+	/** Reviews, posts and other sources raising it, each once */
 	sources: number;
 	/** Of them, with a praise / a complaint about it */
 	praise: number;
 	complaints: number;
-	/** Places whose Google tags name it (all-time) */
-	tagVenues: number;
-	/** Google's counts of those tags, summed */
-	tagMentions: number;
 }
 
 export interface InsightTreeNode extends InsightCounts {
@@ -150,12 +145,10 @@ export interface InsightHead {
 	sources: number;
 	reviews: number;
 	posts: number;
-	/** Other dated sources (comments, press) */
+	/** Other sources (comments, press) */
 	others: number;
 	brands: number;
 	claims: number;
-	tagVenues: number;
-	tagMentions: number;
 	/** The scope's sources the shares are of (with a claim; for praise or complaints with one of those; for changes with one of the three) */
 	base: { sources: number; reviews: number; posts: number };
 	share: number | null;
@@ -235,7 +228,6 @@ const CHANNEL_LABELS: Record<string, string> = {
 	tiktok: 'TikTok',
 	instagram: 'Instagram',
 	blog: 'Blog articles',
-	google_tag: 'Google tags',
 	comment: 'Comments',
 	press: 'Press',
 };
@@ -278,12 +270,11 @@ const parseVector = (text: string): number[] => text.slice(1, -1).split(',').map
  * "Who talked about X, how much, and what did they say", for any X (a topic and everything under
  * it, or a wording) in any scope (a city, a brand, a branch, a district) and months: the tree's
  * counts, X's figures, a breakdown by one dimension, its claims and their groups by meaning. A
- * source counts once per node, Google tags apart (all-time, by place). Reads stored statements
+ * source counts once per node. Reads stored statements
  * only; the one reader behind `/admin/explore/*`. The SQL is the pure `util/insight-sql.ts`.
  */
 @Injectable()
 export class StatementInsightService {
-
 	constructor(
 		private readonly em: EntityManager,
 		private readonly topicService: TopicService,
@@ -325,12 +316,10 @@ export class StatementInsightService {
 						sources: r.sources,
 						praise: r.praise,
 						complaints: r.complaints,
-						tagVenues: r.tagVenues,
-						tagMentions: r.tagMentions,
 					}
 				);
 			})
-			.filter((n): n is InsightTreeNode => !!n && (n.sources > 0 || n.tagVenues > 0));
+			.filter((n): n is InsightTreeNode => !!n && n.sources > 0);
 	}
 
 	/** X's figures in the scope: its sources, shares, sides, months and stated numbers */
@@ -338,7 +327,7 @@ export class StatementInsightService {
 		const { scope, filters, node, refs, index } = await this.resolve(selection);
 		const before = shiftMonth(scope.from, -1);
 		const cte = claimsCte(scope.cityId, { from: before, to: scope.to });
-		const window = sql('(not c.dated or c.month >= ?)', [scope.from]);
+		const window = sql('c.month >= ?', [scope.from]);
 		const nodeWhere = node ? [nodeSql(node)] : [];
 		const all = [
 			...scopeSql(scope),
@@ -363,9 +352,9 @@ export class StatementInsightService {
 						sql(`select ${COUNT_FIELDS('c')},
 							count(distinct c.source) filter (where c.source_kind = 'review')::int as reviews,
 							count(distinct c.source) filter (where c.source_kind = 'post')::int as posts,
-							count(distinct c.source) filter (where c.dated and c.source_kind not in ('review', 'post'))::int as others,
-							count(distinct c.brand_id) filter (where c.dated)::int as brands,
-							count(*) filter (where c.dated)::int as claims
+							count(distinct c.source) filter (where c.source_kind not in ('review', 'post'))::int as others,
+							count(distinct c.brand_id)::int as brands,
+							count(*)::int as claims
 							from claims c`),
 						whereSql([window, ...all]),
 					],
@@ -382,7 +371,7 @@ export class StatementInsightService {
 						),
 						whereSql([
 							window,
-							sql('c.dated and c.side is not null'),
+							sql('c.side is not null'),
 							...scopeSql(scope),
 							...populationSql(filters),
 							...narrowingSql({ ...filters, side: undefined }),
@@ -401,7 +390,7 @@ export class StatementInsightService {
 						sql(
 							'select c.month, c.source_kind, count(distinct c.source)::int as sources from claims c',
 						),
-						whereSql([sql('c.dated'), ...all]),
+						whereSql(all),
 						sql('group by 1, 2'),
 					],
 					' ',
@@ -416,7 +405,6 @@ export class StatementInsightService {
 							'select c.month, c.source_kind, count(distinct c.source)::int as sources from claims c',
 						),
 						whereSql([
-							sql('c.dated'),
 							...scopeSql(scope),
 							...populationSql(filters),
 							baseSideSql(filters.side),
@@ -437,7 +425,7 @@ export class StatementInsightService {
 							count(distinct c.source) filter (where c.source_kind = 'post')::int as posts
 							from claims c`),
 						whereSql([
-							sql('c.dated and c.month >= ?', [scope.from]),
+							sql('c.month >= ?', [scope.from]),
 							...scopeSql(scope),
 							...populationSql(filters),
 							baseSideSql(filters.side),
@@ -454,7 +442,7 @@ export class StatementInsightService {
 						sql('select c.source, c.unit, max(c.amount) as amount from claims c'),
 						whereSql([
 							window,
-							sql('c.dated and c.amount is not null and c.unit is not null'),
+							sql('c.amount is not null and c.unit is not null'),
 							...all,
 						]),
 						sql('group by 1, 2'),
@@ -525,8 +513,6 @@ export class StatementInsightService {
 			others: totals.others,
 			brands: totals.brands,
 			claims: totals.claims,
-			tagVenues: totals.tagVenues,
-			tagMentions: totals.tagMentions,
 			base,
 			share: percent(totals.sources, base.sources),
 			reviewShare: percent(totals.reviews, base.reviews),
@@ -598,13 +584,11 @@ export class StatementInsightService {
 				side: `select distinct c.side as key, c.side as label, null::text as detail, c.* from claims c`,
 				month: `select distinct c.month as key, c.month as label, null::text as detail, c.* from claims c`,
 			};
-			const only = by === 'month' || by === 'kind' || by === 'side' ? [sql('c.dated')] : [];
 			const w = whereSql([
 				...scopeSql(scope),
 				...populationSql(filters),
 				...narrowingSql(filters),
 				...(node ? [nodeSql(node)] : []),
-				...only,
 			]);
 			keyed = joinSql([sql(dimension[by]), w], ' ');
 		}
@@ -619,7 +603,7 @@ export class StatementInsightService {
 				),
 				keyed,
 				sql(
-					`) c group by key, label, detail order by ${by === 'month' ? 'key' : 'sources desc, "tagVenues" desc, label'} limit ?`,
+					`) c group by key, label, detail order by ${by === 'month' ? 'key' : 'sources desc, label'} limit ?`,
 					[INSIGHT_BREAKDOWN_ROWS],
 				),
 			],
@@ -659,8 +643,6 @@ export class StatementInsightService {
 				sources: r.sources,
 				praise: r.praise,
 				complaints: r.complaints,
-				tagVenues: r.tagVenues,
-				tagMentions: r.tagMentions,
 			})),
 			more: Math.max(0, (rows[0]?.total ?? 0) - rows.length),
 		};
@@ -754,11 +736,7 @@ export class StatementInsightService {
 					Statement,
 					{ id: { $in: ids } },
 					{
-						populate: [
-							...STATEMENT_PARTS_POPULATE,
-							...STATEMENT_SOURCE_POPULATE,
-							'venue',
-						],
+						populate: [...STATEMENT_PARTS_POPULATE, ...STATEMENT_SOURCE_POPULATE],
 					},
 				)
 			:	[];
@@ -780,7 +758,7 @@ export class StatementInsightService {
 		const { scope, filters, node } = await this.resolve(selection);
 		const cte = claimsCte(scope.cityId, scope);
 		const conditions = [
-			sql('c.dated and c.text is not null'),
+			sql('c.text is not null'),
 			...scopeSql(scope),
 			...populationSql(filters),
 			...narrowingSql(filters),
@@ -988,4 +966,3 @@ export class StatementInsightService {
 		return this.em.getConnection().execute<T[]>(query.text, query.params as never[]);
 	}
 }
-

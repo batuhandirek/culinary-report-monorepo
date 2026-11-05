@@ -109,7 +109,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T11:52:54.325Z",
     "usage": {
       "inputTokens": 21322,
@@ -981,6 +981,21 @@
         "at": "2026-11-02T12:44:21.431Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: false → false (Editorial tipBerlin review with no paid, gifted, invited or collab disclosure; author visited on opening day)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.260Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.717Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.189Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }

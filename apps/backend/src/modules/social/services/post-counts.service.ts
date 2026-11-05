@@ -12,6 +12,7 @@ import {
 	POST_COUNTS_LATE_DAYS,
 	TIKTOK_POST_COUNTS_USD,
 } from '../constants/post-counts.constant.js';
+import { MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import {
 	clockworksCounts,
@@ -64,7 +65,11 @@ export class PostCountsService {
 	 * The city's TikTok and Instagram posts (Instagram only while it is on for the city) at least
 	 * `POST_COUNTS_AGE_DAYS` old and younger than `POST_COUNTS_LATE_DAYS` whose counts aren't
 	 * final, oldest first. Blog articles have no counts, and a brand's own posts are left out: the
-	 * weekly own-account scrape reads them again at that age (`OWN_ACCOUNTS_RECENT_DAYS`).
+	 * weekly own-account scrape reads them again at that age (`OWN_ACCOUNTS_RECENT_DAYS`). Only
+	 * posts about eating and drinking out are read (the user's call, 2026-11-05: a fifth of the
+	 * reads were music videos and outfits a search had caught, at $0.004 each): one the gate
+	 * skipped never is, one not read yet is (it may be), and one read before the gate existed
+	 * (`gatedAt` null) only when it names a place, until the re-read gates it.
 	 */
 	async due(city: City, now = new Date()): Promise<SocialPost[]> {
 		return this.em.find(
@@ -75,9 +80,28 @@ export class PostCountsService {
 					$in: [SocialPlatformEnum.TIKTOK, ...(city.instagramEnabled ? [SocialPlatformEnum.INSTAGRAM] : [])],
 				},
 				countsFinalAt: null,
-				// A brand's own post is read again by the weekly own-account scrape, which looks back
-				// `OWN_ACCOUNTS_RECENT_DAYS` and so sees each post again at 7 to 14 days old for free
-				$or: [{ account: null }, { account: { brand: null } }],
+				skipReason: null,
+				$and: [
+					// A brand's own post is read again by the weekly own-account scrape, which looks back
+					// `OWN_ACCOUNTS_RECENT_DAYS` and so sees each post again at 7 to 14 days old for free
+					{ $or: [{ account: null }, { account: { brand: null } }] },
+					{
+						$or: [
+							{ analysedAt: null },
+							{ gatedAt: { $ne: null } },
+							{
+								// A mention there is (a missing one would pass `matchMethod: null`), not ignored
+								mentions: {
+									id: { $ne: null },
+									$or: [
+										{ matchMethod: null },
+										{ matchMethod: { $ne: MentionMatchMethodEnum.IGNORED } },
+									],
+								},
+							},
+						],
+					},
+				],
 				postedAt: {
 					$lte: new Date(now.getTime() - POST_COUNTS_AGE_DAYS * DAY_MS),
 					$gt: new Date(now.getTime() - POST_COUNTS_LATE_DAYS * DAY_MS),

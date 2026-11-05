@@ -1,0 +1,5 @@
+{
+  "reader": "split",
+  "claimsModel": "anthropic/claude-haiku-5-5",
+  "labeller": "classifier"
+}

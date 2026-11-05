@@ -24,7 +24,9 @@ export class WeeklyListeningCron {
 	// a `SCRAPE_INSTAGRAM_REELS` run where Instagram is on, a `SCRAPE_BLOGS` run where it has blogs,
 	// a `SCRAPE_ACCOUNTS_RECENT` run (every brand's own accounts: `AccountWatchService`) and a
 	// `SCRAPE_VENUE_SOCIAL_RECENT` run (the report brands', their competitors' and the open
-	// prospects' names searched), then `LOOKUP_VENUES` (the queue runs oldest first, so it follows),
+	// prospects' names searched), then `READ_MENTIONED_PROFILES` (the profiles the week's posts tag,
+	// so the lookup can search a business profile by its name and address), `LOOKUP_VENUES` (the
+	// queue runs oldest first, so they follow),
 	// and last `FIND_OWN_ACCOUNTS` (the brands' accounts on the platform they lack, after matching
 	// linked what the week gave). TikTok's search is by relevance over the week, so only
 	// listening through the month finds the month's videos. The
@@ -56,7 +58,12 @@ export class WeeklyListeningCron {
 			];
 			// The scrapes, then the steps that read what the reading made of them: each waits for
 			// the posts to be read (`READ_GATED_STEPS`)
-			for (const step of [...steps, PipelineStepEnum.LOOKUP_VENUES, PipelineStepEnum.FIND_OWN_ACCOUNTS])
+			for (const step of [
+				...steps,
+				PipelineStepEnum.READ_MENTIONED_PROFILES,
+				PipelineStepEnum.LOOKUP_VENUES,
+				PipelineStepEnum.FIND_OWN_ACCOUNTS,
+			])
 				await this.pipelineService.queueOnce(city.id, step, month, 24, now);
 		}
 	}

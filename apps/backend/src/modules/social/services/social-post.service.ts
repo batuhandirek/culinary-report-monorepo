@@ -10,6 +10,7 @@ import { PostHashtag } from '../entities/post-hashtag.entity.js';
 import { PostSource, PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { SocialPostSnapshot } from '../entities/social-post-snapshot.entity.js';
+import { captionHandles } from '../util/accounts.js';
 import { captionHashtags, ensureHashtags, normalizeHashtag } from '../util/hashtags.js';
 import { hashtagOfTagUrl } from '../util/instagram-tags.js';
 import { clockworksCounts, COUNT_FIELDS, countsOf, instagramCounts, isFinalAge, type PostCounts } from '../util/post-counts.js';
@@ -246,7 +247,7 @@ export class SocialPostService {
 			finds: tikTokSearchFinds(row),
 			text,
 			hashtags: _.uniq(tags.length ? tags : captionHashtags(text)),
-			taggedHandles: _.uniq((text.match(/@[\w.]+/g) ?? []).map(h => h.slice(1))),
+			taggedHandles: captionHandles(text),
 			subtitles: subs?.subtitles ?? null,
 			subtitlesLanguage: subs?.language ?? null,
 		};
@@ -275,7 +276,7 @@ export class SocialPostService {
 			finds: [{ kind: PostSourceKindEnum.VENUE_PLACE, value: venue.name, venueId: venue.id }],
 			text: caption,
 			hashtags: captionHashtags(caption),
-			taggedHandles: (caption.match(/@[\w.]+/g) ?? []).map(h => h.slice(1)),
+			taggedHandles: captionHandles(caption),
 		};
 	}
 
@@ -308,7 +309,7 @@ export class SocialPostService {
 			hashtags: captionHashtags(caption),
 			// Caption @-mentions, co-authors and people tagged in the photo
 			taggedHandles: _.uniq([
-				...(caption.match(/@[\w.]+/g) ?? []).map(h => h.slice(1)),
+				...captionHandles(caption),
 				...usernames(row.coauthorProducers),
 				...usernames(row.taggedUsers),
 			]),
@@ -348,7 +349,7 @@ export class SocialPostService {
 			text: caption,
 			hashtags: captionHashtags(caption),
 			taggedHandles: _.uniq([
-				...(caption.match(/@[\w.]+/g) ?? []).map(h => h.slice(1)),
+				...captionHandles(caption),
 				...usernames(post.coauthorProducers),
 				...usernames(post.taggedUsers),
 			]),

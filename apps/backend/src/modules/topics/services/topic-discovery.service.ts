@@ -99,7 +99,7 @@ export class TopicDiscoveryService implements OnModuleInit {
 		return `select ${select} from terms t
 			join (
 				select sp.term_id, count(*)::int as uses,
-					count(distinct coalesce(s.review_id::text, s.post_id::text, s.comment_id::text, s.web_mention_id::text, s.venue_id::text))::int as sources
+					count(distinct coalesce(s.review_id::text, s.post_id::text, s.comment_id::text, s.web_mention_id::text))::int as sources
 				from statement_parts sp join statements s on s.id = sp.statement_id
 				where sp.role = 'food' group by sp.term_id
 			) u on u.term_id = t.id

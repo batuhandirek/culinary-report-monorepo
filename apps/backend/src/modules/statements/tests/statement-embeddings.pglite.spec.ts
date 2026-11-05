@@ -93,7 +93,7 @@ describe('statement embeddings (pglite)', () => {
 		registry().register({
 			key: 'reread-posts',
 			label: 'Re-read posts as claims',
-			priority: 45,
+			priority: 35,
 			remaining: async () => reread.left,
 			runBatch: async () => ({ done: 0 }),
 		});

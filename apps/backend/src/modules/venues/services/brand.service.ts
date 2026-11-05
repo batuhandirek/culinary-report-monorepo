@@ -301,6 +301,43 @@ export class BrandService {
 	}
 
 	/**
+	 * Joins the places a brand's own profile says are its own (its bio gives their streets and
+	 * house numbers, or it links their website, and it is named after them: the account matcher's
+	 * `profilePlaces`) to the brand, as `addBranches` does: Lucy's profile lists Torstraße 116
+	 * and Brunnenstraße 24, so its two places are one brand. Only a place that is a brand of its
+	 * own joins (a chain is never swallowed by a profile), never one the brand excluded, and none
+	 * while an admin's split or dismissal holds the brand's key or the place's. A place whose
+	 * brand can't be merged in (two prospects) is left and logged. One `BrandChangedJob`.
+	 * Returns the venues that joined.
+	 */
+	async joinByProfile(brandId: string, venueIds: string[]): Promise<string[]> {
+		const brand = await this.get(brandId);
+		const excluded = (await this.excludedVenues([brandId])).get(brandId) ?? new Set<string>();
+		const venues = (
+			await this.em.find(Venue, { id: { $in: _.uniq(venueIds) } }, { populate: ['brand', 'brand.branches'] })
+		).filter(v => v.brand.id !== brandId && !excluded.has(v.id) && v.brand.branches.length === 1);
+		if (!venues.length) return [];
+		const keys = [brand.key, ...venues.map(v => v.brand.key)];
+		const dismissed = new Set(
+			(await this.em.find(BrandDismissal, { key: { $in: _.uniq(keys) } }, { fields: ['key'] })).map(d => d.key),
+		);
+		if (dismissed.has(brand.key)) return [];
+		const joined: Venue[] = [];
+		for (const venue of venues.filter(v => !dismissed.has(v.brand.key))) {
+			try {
+				joined.push(...(await this.join(brandId, [venue.id])));
+			} catch (e) {
+				this.logger.warn(`${venue.name} not joined to ${brand.name} by its profile: ${(e as Error).message}`);
+			}
+		}
+		if (joined.length) {
+			this.logger.log(`Joined ${joined.map(v => v.name).join(', ')} to ${brand.name}: its profile names them`);
+			await this.changed([brandId], [...joined, ...brand.branches.getItems()]);
+		}
+		return joined.map(v => v.id);
+	}
+
+	/**
 	 * Takes a branch off the brand: it becomes a brand of its own, named like it, and the brand's
 	 * records (reports, prospect, members) stay with the brand. It is never offered or joined
 	 * again (`BrandExcludedVenue`), or `autoMerge` would put it back; with `exclude`, a venue that

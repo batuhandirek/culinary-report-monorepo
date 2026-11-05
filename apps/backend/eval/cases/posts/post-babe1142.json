@@ -119,7 +119,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T11:50:02.350Z",
     "usage": {
       "inputTokens": 12118,
@@ -966,6 +966,21 @@
         "at": "2026-11-02T12:44:07.494Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: false → false (Editorial blog review of Peggy Bee with no disclosure of payment, a gifted tasting, an invitation or a collab; mentioning Ice Cream Week is event context, not sponsorship.)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.256Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.714Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.186Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }

@@ -63,7 +63,7 @@
 
 	const titled = (label: string) => label[0].toUpperCase() + label.slice(1);
 	const sideOptions = $derived(EXPLORE_SIDES.map((s) => ({ value: s, label: SIDE_LABELS[s], count: head?.sides.find((x) => x.side === s)?.sources })));
-	const SOURCES = ['review', 'google_review', 'tripadvisor_review', 'post', 'tiktok', 'instagram', 'blog', 'google_tag'];
+	const SOURCES = ['review', 'google_review', 'tripadvisor_review', 'post', 'tiktok', 'instagram', 'blog'];
 	const SOURCE_OPTIONS = SOURCES.map((s) => ({ value: s, label: SOURCE_LABELS[s] ?? s }));
 	const KIND_OPTIONS = Object.entries(KIND_LABELS).map(([value, label]) => ({ value, label: titled(label) }));
 	const SUBJECT_OPTIONS = Object.entries(SUBJECT_LABELS).map(([value, label]) => ({ value, label }));

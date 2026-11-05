@@ -1,0 +1,1187 @@
+{"caseId":"review-02556664","ref":0,"got":0,"metric":"parts.aspect","detail":"the reviewer did not get to eat: queue ≠ service","split":"train"}
+{"caseId":"review-02556664","ref":3,"got":3,"metric":"parts.sentiment","detail":"go to the competition instead: negative ≠ positive","split":"train"}
+{"caseId":"review-02556664","ref":3,"got":3,"metric":"parts.aspect","detail":"go to the competition instead: none ≠ queue","split":"train"}
+{"caseId":"review-037bbe20","ref":1,"got":1,"metric":"parts.aspect","detail":"the venue is unique: vibe ≠ none","split":"train"}
+{"caseId":"review-0541b749","ref":8,"got":8,"metric":"parts.aspect","detail":"the légumes were hard to digest: food ≠ cooking","split":"test"}
+{"caseId":"review-070860ca","ref":6,"got":6,"metric":"parts.amount","detail":"the correct order arrived 2 hours late: 120 minutes ≠ —","split":"test"}
+{"caseId":"review-070860ca","ref":8,"got":8,"metric":"parts.aspect","detail":"not worth the hassle: none ≠ service","split":"test"}
+{"caseId":"review-07871fa7","ref":3,"got":3,"metric":"parts.sentiment","detail":"the music was very loud: negative ≠ positive","split":"train"}
+{"caseId":"review-08c67545","ref":0,"got":0,"metric":"parts.aspect","detail":"the ambiance was very nice and unique: atmosphere ≠ interior","split":"train"}
+{"caseId":"review-08c67545","ref":2,"got":2,"metric":"parts.aspect","detail":"none of the starters or desserts appealed to the reviewer: menu_variety ≠ taste","split":"train"}
+{"caseId":"review-08c67545","ref":2,"got":2,"metric":"shortlist.recall","detail":"none of the starters or desserts appealed to the reviewer: menu_variety not offered","split":"train"}
+{"caseId":"review-0ac47c59","ref":1,"got":1,"metric":"parts.sentiment","detail":"came because it was the most reviewed, highly rated kebab s…: neutral ≠ positive","split":"test"}
+{"caseId":"review-0ac47c59","ref":1,"got":1,"metric":"parts.kind","detail":"came because it was the most reviewed, highly rated kebab s…: fact ≠ opinion","split":"test"}
+{"caseId":"review-0ac47c59","ref":19,"got":19,"metric":"parts.aspect","detail":"the chicken meat was in the döner: food ≠ ingredient_quality","split":"test"}
+{"caseId":"review-1016bd13","ref":6,"got":6,"metric":"parts.amount","detail":"called the lobby manager 20 minutes ahead so hot dishes cou…: —  ≠ 20 minutes","split":"train"}
+{"caseId":"review-1016bd13","ref":7,"got":7,"metric":"parts.aspect","detail":"the restaurant said the cold dishes were already set out: service ≠ wait_for_food","split":"train"}
+{"caseId":"review-1016bd13","ref":13,"got":13,"metric":"parts.amount","detail":"all hot dishes (15 plates each for 15 tables) came within j…: —  ≠ 5 minutes","split":"train"}
+{"caseId":"review-1016bd13","ref":16,"got":16,"metric":"parts.aspect","detail":"asked the manager to serve each dish as ready but got no ef…: complaint_handling ≠ wait_for_food","split":"train"}
+{"caseId":"review-1016bd13","ref":16,"got":16,"metric":"shortlist.recall","detail":"asked the manager to serve each dish as ready but got no ef…: complaint_handling not offered","split":"train"}
+{"caseId":"review-1016bd13","ref":17,"got":17,"metric":"parts.amount","detail":"asks why, if staff served dishes one at a time, all 8 hot d…: —  ≠ 5 minutes","split":"train"}
+{"caseId":"review-1016bd13","ref":23,"got":23,"metric":"parts.aspect","detail":"asks whether serving hot dishes earlier would really mean f…: pressure ≠ speed_of_service","split":"train"}
+{"caseId":"review-16bdd5e0","ref":3,"got":3,"metric":"parts.aspect","detail":"the halloumi was described as \"grilled cheese\", which was m…: menu_variety ≠ food","split":"test"}
+{"caseId":"review-170f36a3","ref":1,"got":1,"metric":"parts.aspect","detail":"the atmosphere has vibes: atmosphere ≠ vibe","split":"train"}
+{"caseId":"review-1798cc23","ref":2,"got":2,"metric":"parts.aspect","detail":"the Google listing is no longer accurate: other ≠ none","split":"train"}
+{"caseId":"review-1798cc23","ref":2,"got":2,"metric":"parts.kind","detail":"the Google listing is no longer accurate: opinion ≠ change","split":"train"}
+{"caseId":"review-1798cc23","ref":2,"got":2,"metric":"shortlist.recall","detail":"the Google listing is no longer accurate: other not offered","split":"train"}
+{"caseId":"review-1798cc23","ref":6,"got":6,"metric":"parts.aspect","detail":"the old listing including its reviews was simply continued: other ≠ none","split":"train"}
+{"caseId":"review-1798cc23","ref":6,"got":6,"metric":"shortlist.recall","detail":"the old listing including its reviews was simply continued: other not offered","split":"train"}
+{"caseId":"review-1798cc23","ref":12,"got":12,"metric":"parts.sentiment","detail":"one of the three Bier bottles looked different: negative ≠ neutral","split":"train"}
+{"caseId":"review-1798cc23","ref":12,"got":12,"metric":"parts.kind","detail":"one of the three Bier bottles looked different: opinion ≠ fact","split":"train"}
+{"caseId":"review-1798cc23","ref":15,"got":15,"metric":"parts.aspect","detail":"no information was given about the Weinen: advice ≠ drink_selection","split":"train"}
+{"caseId":"review-1798cc23","ref":15,"got":15,"metric":"shortlist.recall","detail":"no information was given about the Weinen: advice not offered","split":"train"}
+{"caseId":"review-1798cc23","metric":"change.false","ref":2,"got":2,"detail":"the Google listing is no longer accurate","split":"train"}
+{"caseId":"review-196641fc","ref":9,"got":9,"metric":"parts.aspect","detail":"the kebab experts ignore guests' questions: attentiveness ≠ service","split":"train"}
+{"caseId":"review-196641fc","ref":12,"got":12,"metric":"parts.aspect","detail":"eating on site is possible: space ≠ dining_area","split":"train"}
+{"caseId":"review-196641fc","ref":12,"got":12,"metric":"shortlist.recall","detail":"eating on site is possible: space not offered","split":"train"}
+{"caseId":"review-21c1bb10","ref":1,"got":1,"metric":"parts.aspect","detail":"young crowd: crowding ≠ occasion","split":"train"}
+{"caseId":"review-21de844d","ref":1,"got":1,"metric":"parts.amount","detail":"waited over half an hour before being served: 30 minutes ≠ —","split":"test"}
+{"caseId":"review-257f4791","ref":0,"got":0,"metric":"parts.aspect","detail":"we were a table of five French people: none ≠ occasion","split":"train"}
+{"caseId":"review-257f4791","ref":3,"got":3,"metric":"parts.aspect","detail":"perfect for the atmosphere: atmosphere ≠ vibe","split":"train"}
+{"caseId":"review-279b23c3","ref":4,"got":4,"metric":"parts.aspect","detail":"Justin is the most important and gets a 13/10: service ≠ none","split":"train"}
+{"caseId":"review-279b23c3","ref":4,"got":4,"metric":"shortlist.recall","detail":"Justin is the most important and gets a 13/10: service not offered","split":"train"}
+{"caseId":"review-2b737ce5","metric":"change.missed","ref":1,"detail":"before today the food was okay","split":"train"}
+{"caseId":"review-2c7253a2","ref":1,"got":1,"metric":"parts.sentiment","detail":"overall the burger joint was decent: mixed ≠ positive","split":"train"}
+{"caseId":"review-2d6d3829","ref":3,"got":3,"metric":"parts.aspect","detail":"the music inside is great: atmosphere ≠ noise","split":"train"}
+{"caseId":"review-3486a0a9","ref":2,"got":2,"metric":"parts.kind","detail":"try the Bangkok Burger for something rich and spicy: opinion ≠ verdict","split":"train"}
+{"caseId":"review-3486a0a9","ref":7,"got":7,"metric":"parts.aspect","detail":"would love to see gf buns on offer: dietary ≠ menu_variety","split":"train"}
+{"caseId":"review-3486a0a9","ref":7,"got":7,"metric":"shortlist.recall","detail":"would love to see gf buns on offer: dietary not offered","split":"train"}
+{"caseId":"review-356e149a","ref":1,"got":1,"metric":"parts.aspect","detail":"we have always been satisfied until now: none ≠ service","split":"train"}
+{"caseId":"review-356e149a","ref":1,"got":1,"metric":"parts.kind","detail":"we have always been satisfied until now: opinion ≠ change","split":"train"}
+{"caseId":"review-356e149a","ref":2,"got":2,"metric":"parts.aspect","detail":"won't spend another cent at this place as long as this empl…: none ≠ service","split":"train"}
+{"caseId":"review-356e149a","ref":3,"got":3,"metric":"parts.amount","detail":"stood at the counter for about five minutes without being g…: 5 minutes ≠ —","split":"train"}
+{"caseId":"review-356e149a","ref":4,"got":4,"metric":"parts.aspect","detail":"the first thing the employee said was asking if I was the d…: friendliness ≠ service","split":"train"}
+{"caseId":"review-356e149a","ref":4,"got":4,"metric":"shortlist.recall","detail":"the first thing the employee said was asking if I was the d…: friendliness not offered","split":"train"}
+{"caseId":"review-356e149a","ref":7,"got":7,"metric":"parts.kind","detail":"the employee suddenly asked where I'm from when I leaned on…: opinion ≠ question","split":"train"}
+{"caseId":"review-356e149a","ref":8,"got":8,"metric":"parts.aspect","detail":"the employee said she had never seen anyone lean like that: friendliness ≠ service","split":"train"}
+{"caseId":"review-356e149a","ref":8,"got":8,"metric":"shortlist.recall","detail":"the employee said she had never seen anyone lean like that: friendliness not offered","split":"train"}
+{"caseId":"review-356e149a","ref":12,"got":12,"metric":"parts.sentiment","detail":"friendly and respectful treatment of customers matters just…: negative ≠ positive","split":"train"}
+{"caseId":"review-356e149a","metric":"change.false","ref":1,"got":1,"detail":"we have always been satisfied until now","split":"train"}
+{"caseId":"review-36f2fac8","ref":0,"got":0,"metric":"parts.aspect","detail":"it takes a really, really long time: queue ≠ wait_for_food","split":"train"}
+{"caseId":"review-36f2fac8","ref":7,"got":7,"metric":"parts.aspect","detail":"the place is more of a tourist hype/trend: crowding ≠ none","split":"train"}
+{"caseId":"review-37016d87","ref":5,"got":5,"metric":"parts.aspect","detail":"the atmosphere was typical: atmosphere ≠ vibe","split":"test"}
+{"caseId":"review-37016d87","ref":8,"got":8,"metric":"parts.aspect","detail":"recommends it to those traveling in the area: none ≠ advice","split":"test"}
+{"caseId":"review-373ef9af","ref":1,"got":1,"metric":"parts.aspect","detail":"a nice, fun evening out: atmosphere ≠ occasion","split":"train"}
+{"caseId":"review-382cd7e9","ref":5,"got":5,"metric":"parts.aspect","detail":"the renovation reeks of greed: interior ≠ ownership","split":"train"}
+{"caseId":"review-382cd7e9","metric":"change.missed","ref":0,"detail":"the renovation is a real shame","split":"train"}
+{"caseId":"review-39bfa8dd","ref":1,"got":1,"metric":"parts.aspect","detail":"lovely brass band: atmosphere ≠ noise","split":"train"}
+{"caseId":"review-3bab8289","ref":0,"got":0,"metric":"parts.aspect","detail":"two people went for lunch: none ≠ occasion","split":"train"}
+{"caseId":"review-3e075e7e","ref":2,"got":2,"metric":"parts.aspect","detail":"the music playing in the place is cool too: atmosphere ≠ noise","split":"test"}
+{"caseId":"review-3e075e7e","ref":4,"got":4,"metric":"parts.aspect","detail":"doubts the gemuse kebab and wrap are really one of the best…: taste ≠ none","split":"test"}
+{"caseId":"review-436b38b2","ref":6,"got":6,"metric":"parts.aspect","detail":"will not eat here again: none ≠ service","split":"train"}
+{"caseId":"review-480994b6","ref":10,"got":10,"metric":"parts.aspect","detail":"the music selection was excellent: atmosphere ≠ noise","split":"train"}
+{"caseId":"review-4a46a87d","ref":8,"got":8,"metric":"parts.aspect","detail":"the new location isn't the same as the old one: food ≠ location","split":"test"}
+{"caseId":"review-4a46a87d","ref":9,"got":9,"metric":"parts.aspect","detail":"it has become a fast-food restaurant: menu_variety ≠ none","split":"test"}
+{"caseId":"review-4cd140a3","ref":11,"got":11,"metric":"parts.kind","detail":"it got fuller and therefore louder: opinion ≠ change","split":"train"}
+{"caseId":"review-4cd140a3","ref":12,"got":12,"metric":"parts.aspect","detail":"they had to leave because it was unbearable: atmosphere ≠ crowding","split":"train"}
+{"caseId":"review-4cd140a3","metric":"change.false","ref":11,"got":11,"detail":"it got fuller and therefore louder","split":"train"}
+{"caseId":"review-503d63e2","ref":1,"got":1,"metric":"parts.aspect","detail":"really wanted to try the Acai: none ≠ food","split":"train"}
+{"caseId":"review-503d63e2","ref":1,"got":1,"metric":"parts.kind","detail":"really wanted to try the Acai: fact ≠ opinion","split":"train"}
+{"caseId":"review-503d63e2","ref":7,"got":7,"metric":"parts.amount","detail":"waited at the table at least 30 minutes until the order was…: 30 minutes ≠ —","split":"train"}
+{"caseId":"review-503d63e2","ref":8,"got":8,"metric":"parts.sentiment","detail":"would have loved to try the Acai: neutral ≠ positive","split":"train"}
+{"caseId":"review-52ef0f64","ref":3,"got":3,"metric":"parts.sentiment","detail":"the vegan Ayran tastes like Carinthian cheese noodles (Kärn…: positive ≠ negative","split":"test"}
+{"caseId":"review-5582d6b8","ref":1,"got":1,"metric":"parts.aspect","detail":"had the shoyu and asari: none ≠ food","split":"test"}
+{"caseId":"review-5582d6b8","ref":7,"got":7,"metric":"parts.aspect","detail":"the table was terribly wobbly: interior ≠ dining_area","split":"test"}
+{"caseId":"review-5582d6b8","ref":7,"got":7,"metric":"shortlist.recall","detail":"the table was terribly wobbly: interior not offered","split":"test"}
+{"caseId":"review-5582d6b8","ref":8,"got":8,"metric":"parts.aspect","detail":"the friend barely touched the table and the spoons fell: interior ≠ dining_area","split":"test"}
+{"caseId":"review-5582d6b8","ref":8,"got":8,"metric":"shortlist.recall","detail":"the friend barely touched the table and the spoons fell: interior not offered","split":"test"}
+{"caseId":"review-5582d6b8","ref":14,"got":14,"metric":"parts.kind","detail":"skip the matcha latte: opinion ≠ verdict","split":"test"}
+{"caseId":"review-5582d6b8","ref":16,"got":16,"metric":"parts.kind","detail":"the place is really great: verdict ≠ opinion","split":"test"}
+{"caseId":"review-5582d6b8","ref":17,"got":17,"metric":"parts.aspect","detail":"had iced matcha latte: none ≠ drinks","split":"test"}
+{"caseId":"review-55fd7176","ref":0,"got":0,"metric":"parts.aspect","detail":"ordered Menü 3 with Baguette: none ≠ menu_variety","split":"train"}
+{"caseId":"review-5604a426","ref":0,"got":0,"metric":"parts.aspect","detail":"came yesterday expecting to enjoy a tasty broodje gemuse ke…: taste ≠ food","split":"train"}
+{"caseId":"review-5604a426","ref":2,"got":2,"metric":"parts.aspect","detail":"the kebab was swimming in a sea of sauce: seasoning ≠ presentation","split":"train"}
+{"caseId":"review-58540992","ref":10,"got":10,"metric":"parts.aspect","detail":"the owner behaved unacceptably: friendliness ≠ ownership","split":"test"}
+{"caseId":"review-5cd39af6","ref":4,"got":4,"metric":"parts.aspect","detail":"the ambience is very cool: atmosphere ≠ vibe","split":"train"}
+{"caseId":"review-5d173a89","ref":3,"got":3,"metric":"parts.aspect","detail":"went there around midnight: none ≠ occasion","split":"train"}
+{"caseId":"review-5d173a89","ref":7,"got":7,"metric":"parts.aspect","detail":"the staff spent a lot of time talking to customers or among…: attentiveness ≠ service","split":"train"}
+{"caseId":"review-5d173a89","ref":11,"got":11,"metric":"parts.amount","detail":"the döner is not worth €7.90: —  ≠ 7.9 money","split":"train"}
+{"caseId":"review-6217ec70","ref":9,"got":9,"metric":"parts.amount","detail":"probably wouldn't wait another hour in line for the kebab: 60 minutes ≠ —","split":"test"}
+{"caseId":"review-6752188e","ref":5,"got":5,"metric":"parts.aspect","detail":"the reviewer loved the cute Photo Booth: amenities ≠ interior","split":"train"}
+{"caseId":"review-6752188e","ref":7,"got":7,"metric":"parts.kind","detail":"the reviewer rates the market 10000/10: verdict ≠ opinion","split":"train"}
+{"caseId":"review-6b4df664","ref":10,"got":10,"metric":"parts.kind","detail":"overall still a lovely visit: verdict ≠ opinion","split":"test"}
+{"caseId":"review-6e97260b","ref":0,"got":0,"metric":"parts.aspect","detail":"the coca-cola sent in the delivery was warm: takeaway_handling ≠ temperature","split":"test"}
+{"caseId":"review-7483275e","ref":1,"got":1,"metric":"parts.kind","detail":"the place was highly recommended by friends and strangers: fact ≠ verdict","split":"train"}
+{"caseId":"review-7483275e","ref":4,"got":4,"metric":"parts.aspect","detail":"the long wait was due to the service, not the queue itself: speed_of_service ≠ service","split":"train"}
+{"caseId":"review-7483275e","ref":12,"got":12,"metric":"parts.aspect","detail":"the meat is a classic, basic chicken kebap: food ≠ menu_variety","split":"train"}
+{"caseId":"review-7483275e","ref":13,"got":13,"metric":"parts.kind","detail":"first-time kebap eaters can find a much better kebap elsewh…: verdict ≠ opinion","split":"train"}
+{"caseId":"review-7483275e","ref":14,"got":14,"metric":"parts.kind","detail":"experienced kebap eaters can also find a better kebap elsew…: verdict ≠ opinion","split":"train"}
+{"caseId":"review-7593dfff","ref":8,"got":8,"metric":"parts.kind","detail":"once the older gentleman showed up, everything went faster: opinion ≠ change","split":"test"}
+{"caseId":"review-7593dfff","ref":9,"got":9,"metric":"parts.aspect","detail":"there were few locals in the line, mostly tourists: crowding ≠ queue","split":"test"}
+{"caseId":"review-7593dfff","metric":"change.false","ref":8,"got":8,"detail":"once the older gentleman showed up, everything went faster","split":"test"}
+{"caseId":"review-75c84f72","ref":2,"got":2,"metric":"parts.aspect","detail":"the market was deserted at 09.30: crowding ≠ none","split":"test"}
+{"caseId":"review-78c08c78","ref":2,"got":2,"metric":"parts.aspect","detail":"the potato salad is definitely a highlight and worth trying: taste ≠ food","split":"test"}
+{"caseId":"review-78c08c78","ref":2,"got":2,"metric":"shortlist.recall","detail":"the potato salad is definitely a highlight and worth trying: taste not offered","split":"test"}
+{"caseId":"review-7a1ba6d7","ref":7,"got":7,"metric":"parts.aspect","detail":"the music choice is in very good taste: atmosphere ≠ noise","split":"train"}
+{"caseId":"review-7f3142f7","ref":1,"got":1,"metric":"parts.aspect","detail":"the venue needs to update its website: other ≠ none","split":"train"}
+{"caseId":"review-7f3142f7","ref":1,"got":1,"metric":"shortlist.recall","detail":"the venue needs to update its website: other not offered","split":"train"}
+{"caseId":"review-7f3142f7","ref":2,"got":2,"metric":"parts.aspect","detail":"the website says event tickets include 2 litres of beer per…: other ≠ value_for_money","split":"train"}
+{"caseId":"review-7f3142f7","ref":2,"got":2,"metric":"shortlist.recall","detail":"the website says event tickets include 2 litres of beer per…: other not offered","split":"train"}
+{"caseId":"review-7f3142f7","ref":4,"got":4,"metric":"parts.aspect","detail":"the website's ticket information is very misleading: other ≠ none","split":"train"}
+{"caseId":"review-7f3142f7","ref":4,"got":4,"metric":"shortlist.recall","detail":"the website's ticket information is very misleading: other not offered","split":"train"}
+{"caseId":"review-83cf47fa","ref":7,"got":7,"metric":"parts.kind","detail":"the 알밥 was served as a cold dish: opinion ≠ change","split":"train"}
+{"caseId":"review-83cf47fa","metric":"change.false","ref":7,"got":7,"detail":"the 알밥 was served as a cold dish","split":"train"}
+{"caseId":"review-866767df","ref":1,"got":1,"metric":"parts.aspect","detail":"the meal was peaceful: noise ≠ vibe","split":"test"}
+{"caseId":"review-866767df","ref":1,"got":1,"metric":"shortlist.recall","detail":"the meal was peaceful: noise not offered","split":"test"}
+{"caseId":"review-88fe4146","ref":4,"got":4,"metric":"parts.aspect","detail":"the server let the customer queuing behind the reviewer pay…: queue ≠ payment","split":"train"}
+{"caseId":"review-88fe4146","ref":6,"got":6,"metric":"parts.aspect","detail":"sarcastically: it was just great: none ≠ service","split":"train"}
+{"caseId":"review-89fa9bf2","ref":0,"got":0,"metric":"parts.aspect","detail":"a pleasant evening with a friend: none ≠ occasion","split":"train"}
+{"caseId":"review-90e99b19","ref":2,"got":2,"metric":"parts.sentiment","detail":"the atmosphere is ordinary: negative ≠ neutral","split":"test"}
+{"caseId":"review-90e99b19","ref":9,"got":9,"metric":"parts.aspect","detail":"staff clearing the reviewer's table left the dishcloth on t…: dining_area ≠ service","split":"test"}
+{"caseId":"review-90e99b19","ref":12,"got":12,"metric":"parts.sentiment","detail":"the place might be okay if passing nearby: mixed ≠ negative","split":"test"}
+{"caseId":"review-90e99b19","ref":13,"got":13,"metric":"parts.amount","detail":"the place is not worth more than 15 minutes of travel: 15 minutes ≠ —","split":"test"}
+{"caseId":"review-937ea9e9","ref":15,"got":15,"metric":"parts.aspect","detail":"anyone who loves delicious Desserts absolutely has to stop …: none ≠ food","split":"train"}
+{"caseId":"review-99fbc478","ref":0,"got":0,"metric":"parts.aspect","detail":"the place is like an industrial factory: atmosphere ≠ interior","split":"train"}
+{"caseId":"review-99fbc478","ref":7,"got":7,"metric":"parts.aspect","detail":"a pity the reviewer took no photo: none ≠ presentation","split":"train"}
+{"caseId":"review-99fbc478","ref":10,"got":10,"metric":"parts.aspect","detail":"cold mashed potatoes lay underneath: temperature ≠ cooking","split":"train"}
+{"caseId":"review-99fbc478","ref":10,"got":10,"metric":"shortlist.recall","detail":"cold mashed potatoes lay underneath: temperature not offered","split":"train"}
+{"caseId":"review-99fbc478","ref":11,"got":11,"metric":"parts.aspect","detail":"there was a piece of lemon: food ≠ presentation","split":"train"}
+{"caseId":"review-99fbc478","ref":15,"got":15,"metric":"parts.sentiment","detail":"when paying they offered a consolation drink: positive ≠ neutral","split":"train"}
+{"caseId":"review-99fbc478","ref":15,"got":15,"metric":"parts.kind","detail":"when paying they offered a consolation drink: opinion ≠ fact","split":"train"}
+{"caseId":"review-99fbc478","ref":16,"got":16,"metric":"parts.aspect","detail":"the consolation drink is why the review gives one star: none ≠ complaint_handling","split":"train"}
+{"caseId":"review-9accbc5b","ref":0,"got":0,"metric":"parts.aspect","detail":"had the Schnitzel: none ≠ food","split":"train"}
+{"caseId":"review-9f21ad40","ref":2,"got":2,"metric":"parts.aspect","detail":"a unique Berlin atmosphere: atmosphere ≠ vibe","split":"test"}
+{"caseId":"review-a088b847","ref":4,"got":4,"metric":"parts.aspect","detail":"the man at the Korean place makes an excellent kimchi “rame…: taste ≠ food","split":"train"}
+{"caseId":"review-a088b847","ref":4,"got":4,"metric":"shortlist.recall","detail":"the man at the Korean place makes an excellent kimchi “rame…: taste not offered","split":"train"}
+{"caseId":"review-a2c14088","ref":5,"got":5,"metric":"parts.aspect","detail":"the server brought the water as an open glass, not a sealed…: drinks ≠ service","split":"test"}
+{"caseId":"review-a6b69e2b","ref":1,"got":1,"metric":"parts.sentiment","detail":"the reviewer correctly provided address and phone number fo…: neutral ≠ positive","split":"train"}
+{"caseId":"review-a6b69e2b","ref":1,"got":1,"metric":"parts.kind","detail":"the reviewer correctly provided address and phone number fo…: fact ≠ opinion","split":"train"}
+{"caseId":"review-a6b69e2b","ref":4,"got":4,"metric":"parts.aspect","detail":"Burgermaister took the money and did not refund the order: complaint_handling ≠ payment","split":"train"}
+{"caseId":"review-a6b69e2b","ref":5,"got":5,"metric":"parts.aspect","detail":"the reviewer got scammed by Burgermaister: none ≠ delivery_platform","split":"train"}
+{"caseId":"review-a752e013","ref":2,"got":2,"metric":"parts.aspect","detail":"the atmosphere was very good: atmosphere ≠ vibe","split":"train"}
+{"caseId":"review-a753c04a","ref":0,"got":0,"metric":"parts.aspect","detail":"a typical Bavarian beer hall: atmosphere ≠ none","split":"train"}
+{"caseId":"review-a753c04a","ref":4,"got":4,"metric":"parts.aspect","detail":"there is live music inside: atmosphere ≠ noise","split":"train"}
+{"caseId":"review-af8dacaa","ref":2,"got":2,"metric":"parts.sentiment","detail":"the reviewer would like more locations throughout Germany: positive ≠ negative","split":"train"}
+{"caseId":"review-af8dacaa","ref":2,"got":2,"metric":"parts.aspect","detail":"the reviewer would like more locations throughout Germany: none ≠ location","split":"train"}
+{"caseId":"review-b31c1e48","ref":2,"got":2,"metric":"parts.aspect","detail":"except for one staff member, but everyone has a bad day: friendliness ≠ service","split":"test"}
+{"caseId":"review-b31c1e48","ref":4,"got":4,"metric":"parts.aspect","detail":"the live cooking with the island was beautifully done: presentation ≠ cooking","split":"test"}
+{"caseId":"review-b31c1e48","ref":5,"got":5,"metric":"parts.kind","detail":"the robot cat sang for the birthday: fact ≠ event","split":"test"}
+{"caseId":"review-b31c1e48","ref":12,"got":12,"metric":"parts.sentiment","detail":"the robot cat issue can't really be changed because of the …: neutral ≠ negative","split":"test"}
+{"caseId":"review-b871be75","ref":0,"got":0,"metric":"parts.aspect","detail":"the atmosphere was wonderful: atmosphere ≠ vibe","split":"train"}
+{"caseId":"review-b8f6f582","ref":5,"got":5,"metric":"parts.aspect","detail":"the Agepan is a bit difficult to eat: food ≠ cooking","split":"train"}
+{"caseId":"review-b9d9100a","ref":5,"got":5,"metric":"parts.sentiment","detail":"waiting in a line that moves is acceptable, as the establis…: neutral ≠ positive","split":"train"}
+{"caseId":"review-be1da4e0","ref":4,"got":4,"metric":"parts.sentiment","detail":"a bottle of Wasser was put out unprompted and handed to eve…: neutral ≠ positive","split":"train"}
+{"caseId":"review-be1da4e0","ref":4,"got":4,"metric":"parts.kind","detail":"a bottle of Wasser was put out unprompted and handed to eve…: fact ≠ opinion","split":"train"}
+{"caseId":"review-be1da4e0","ref":9,"got":9,"metric":"parts.aspect","detail":"the high drink prices did not encourage them to stay longer: price_level ≠ price","split":"train"}
+{"caseId":"review-be1da4e0","ref":9,"got":9,"metric":"shortlist.recall","detail":"the high drink prices did not encourage them to stay longer: price_level not offered","split":"train"}
+{"caseId":"review-be6da436","ref":7,"got":7,"metric":"parts.aspect","detail":"they had no cash with them: cash_only ≠ payment","split":"train"}
+{"caseId":"review-beb397cd","ref":1,"got":1,"metric":"parts.sentiment","detail":"the reviewer went in without expectations because they are …: neutral ≠ negative","split":"train"}
+{"caseId":"review-beb397cd","ref":1,"got":1,"metric":"parts.kind","detail":"the reviewer went in without expectations because they are …: fact ≠ opinion","split":"train"}
+{"caseId":"review-beb397cd","ref":6,"got":6,"metric":"parts.aspect","detail":"other burger restaurants do these ingredients fine, but thi…: food ≠ seasoning","split":"train"}
+{"caseId":"review-beb397cd","ref":7,"got":7,"metric":"parts.aspect","detail":"the friet was tough, as if made from old potatoes: cooking ≠ freshness","split":"train"}
+{"caseId":"review-bef6212c","ref":0,"got":0,"metric":"parts.aspect","detail":"the ambiance was great: atmosphere ≠ vibe","split":"train"}
+{"caseId":"review-bef6212c","ref":6,"got":6,"metric":"parts.aspect","detail":"the dishes ordered were not dishes by Tim Raue: menu_variety ≠ order_accuracy","split":"train"}
+{"caseId":"review-bf2322b7","ref":3,"got":3,"metric":"parts.aspect","detail":"there were even different marinades for the chicken: menu_variety ≠ seasoning","split":"test"}
+{"caseId":"review-bf2322b7","ref":3,"got":3,"metric":"shortlist.recall","detail":"there were even different marinades for the chicken: menu_variety not offered","split":"test"}
+{"caseId":"review-c117171d","metric":"change.missed","ref":0,"detail":"the place is degrading","split":"train"}
+{"caseId":"review-c513f76e","ref":0,"got":0,"metric":"parts.aspect","detail":"the ambiance is great because of the revolving tower: atmosphere ≠ interior","split":"test"}
+{"caseId":"review-c5e1a090","ref":2,"got":2,"metric":"parts.aspect","detail":"the reviewer and her friend ordered the same bowl: none ≠ order_accuracy","split":"train"}
+{"caseId":"review-c5e1a090","ref":4,"got":4,"metric":"parts.sentiment","detail":"the reviewer politely pointed out the fewer Erdbeeren and l…: neutral ≠ positive","split":"train"}
+{"caseId":"review-c5e1a090","ref":4,"got":4,"metric":"parts.aspect","detail":"the reviewer politely pointed out the fewer Erdbeeren and l…: complaint_handling ≠ service","split":"train"}
+{"caseId":"review-c5e1a090","ref":4,"got":4,"metric":"parts.kind","detail":"the reviewer politely pointed out the fewer Erdbeeren and l…: fact ≠ opinion","split":"train"}
+{"caseId":"review-c5e1a090","ref":4,"got":4,"metric":"shortlist.recall","detail":"the reviewer politely pointed out the fewer Erdbeeren and l…: complaint_handling not offered","split":"train"}
+{"caseId":"review-c5e1a090","ref":7,"got":7,"metric":"parts.aspect","detail":"the reviewer definitely won't come back: none ≠ complaint_handling","split":"train"}
+{"caseId":"review-c9cea664","ref":7,"got":7,"metric":"parts.aspect","detail":"the grandmother had the Leber mit Kartoffelpüree: none ≠ menu_variety","split":"train"}
+{"caseId":"review-c9cea664","ref":17,"got":17,"metric":"parts.sentiment","detail":"they would rather go to the restaurant at Orankesee: negative ≠ positive","split":"train"}
+{"caseId":"review-d77ecb53","ref":1,"got":1,"metric":"parts.sentiment","detail":"had the crispy pork knuckle: positive ≠ neutral","split":"train"}
+{"caseId":"review-d77ecb53","ref":1,"got":1,"metric":"parts.aspect","detail":"had the crispy pork knuckle: cooking ≠ menu_variety","split":"train"}
+{"caseId":"review-d77ecb53","ref":1,"got":1,"metric":"parts.kind","detail":"had the crispy pork knuckle: opinion ≠ fact","split":"train"}
+{"caseId":"review-dd166b0d","ref":8,"got":8,"metric":"parts.aspect","detail":"they will definitely try the Shakes and Açaí Bowls on their…: none ≠ food","split":"train"}
+{"caseId":"review-dd166b0d","ref":9,"got":9,"metric":"parts.kind","detail":"overall a lovely café: verdict ≠ opinion","split":"train"}
+{"caseId":"review-e12f5f74","ref":7,"got":7,"metric":"parts.amount","detail":"waited in line for at least twenty minutes: 20 minutes ≠ —","split":"test"}
+{"caseId":"review-e20b0c26","ref":0,"got":0,"metric":"parts.aspect","detail":"the Döner is the best they have ever eaten: taste ≠ food","split":"train"}
+{"caseId":"review-e39b92f3","ref":1,"got":1,"metric":"parts.aspect","detail":"the reviewer is not sure what happened: none ≠ food","split":"train"}
+{"caseId":"review-e8770468","ref":0,"got":0,"metric":"parts.aspect","detail":"the Burgermeister in Zehlendorf is good: none ≠ food","split":"test"}
+{"caseId":"review-e8770468","ref":1,"got":1,"metric":"parts.aspect","detail":"Burgermeister has now finally opened in Zehlendorf: none ≠ opening_hours","split":"test"}
+{"caseId":"review-eaba59cf","ref":8,"got":8,"metric":"parts.aspect","detail":"had the tuna tartare, steak & frites, bread and a fruit tar…: food ≠ menu_variety","split":"train"}
+{"caseId":"review-ec04d472","ref":3,"got":3,"metric":"parts.aspect","detail":"never order the tabla de entrantes: food ≠ advice","split":"test"}
+{"caseId":"review-ec04d472","ref":3,"got":3,"metric":"parts.kind","detail":"never order the tabla de entrantes: opinion ≠ verdict","split":"test"}
+{"caseId":"review-fa5b28b1","ref":0,"got":0,"metric":"parts.aspect","detail":"waited a full 74 minutes to get the döner: queue ≠ wait_for_food","split":"test"}
+{"caseId":"review-fa5b28b1","ref":1,"got":1,"metric":"parts.sentiment","detail":"the döner was very different: positive ≠ neutral","split":"test"}
+{"caseId":"review-fa5b28b1","ref":4,"got":4,"metric":"parts.aspect","detail":"the understaffing is a big failing of the shop owner: service ≠ ownership","split":"test"}
+{"caseId":"review-fa7daa61","ref":4,"got":4,"metric":"parts.aspect","detail":"everything has really gone downhill: none ≠ service","split":"train"}
+{"caseId":"review-fb1415dc","ref":7,"got":7,"metric":"parts.sentiment","detail":"the cleanliness and service issues are not that bad: mixed ≠ positive","split":"test"}
+{"caseId":"review-fb1415dc","ref":7,"got":7,"metric":"parts.aspect","detail":"the cleanliness and service issues are not that bad: none ≠ cleanliness","split":"test"}
+{"caseId":"review-fb792b39","ref":0,"got":0,"metric":"parts.aspect","detail":"half the tables are empty: crowding ≠ space","split":"train"}
+{"caseId":"review-feb41b4e","ref":0,"got":0,"metric":"parts.aspect","detail":"the reviewer has to agree with some of the criticism: none ≠ price","split":"train"}
+{"caseId":"review-feb41b4e","ref":9,"got":9,"metric":"parts.aspect","detail":"small mistakes were generously fixed: complaint_handling ≠ service","split":"train"}
+{"caseId":"review-feb41b4e","ref":9,"got":9,"metric":"shortlist.recall","detail":"small mistakes were generously fixed: complaint_handling not offered","split":"train"}
+{"caseId":"review-ff9ad17d","ref":4,"got":4,"metric":"parts.aspect","detail":"the mealy Pommes with the Cheesesauce were completely unacc…: cooking ≠ food","split":"train"}
+{"caseId":"review-ff9ad17d","ref":4,"got":4,"metric":"shortlist.recall","detail":"the mealy Pommes with the Cheesesauce were completely unacc…: cooking not offered","split":"train"}
+{"caseId":"review-ffc5c8e8","ref":0,"got":0,"metric":"parts.sentiment","detail":"the food is meat with meat with meat with meat with meat: neutral ≠ positive","split":"train"}
+{"caseId":"post-020c68fb","ref":2,"got":2,"metric":"parts.aspect","detail":"Markthalle Neun is a true temple of street food: menu_variety ≠ none","split":"train"}
+{"caseId":"post-047130f4","ref":4,"got":4,"metric":"parts.aspect","detail":"only a small handful of places in Berlin serve good pizza: taste ≠ availability","split":"train"}
+{"caseId":"post-047130f4","ref":5,"got":5,"metric":"parts.sentiment","detail":"Berlin likes pizza even when it is bad: neutral ≠ positive","split":"train"}
+{"caseId":"post-047130f4","ref":5,"got":5,"metric":"parts.aspect","detail":"Berlin likes pizza even when it is bad: none ≠ taste","split":"train"}
+{"caseId":"post-047130f4","ref":6,"got":6,"metric":"parts.aspect","detail":"the founders started making pizza for staff meals and reali…: none ≠ food","split":"train"}
+{"caseId":"post-047130f4","ref":7,"got":7,"metric":"parts.aspect","detail":"Salami Social Club's concept is good pizza, beer and music: menu_variety ≠ none","split":"train"}
+{"caseId":"post-047130f4","ref":12,"got":12,"metric":"parts.aspect","detail":"the craft beer scene is one of the most exciting things in …: none ≠ drinks","split":"train"}
+{"caseId":"post-047130f4","ref":13,"got":13,"metric":"parts.aspect","detail":"Berlin's craft beer community has been very welcoming of Sa…: none ≠ friendliness","split":"train"}
+{"caseId":"post-047130f4","ref":17,"got":17,"metric":"parts.aspect","detail":"Ben says the best pizza they sell is the plain old salami: taste ≠ food","split":"train"}
+{"caseId":"post-047130f4","ref":17,"got":17,"metric":"shortlist.recall","detail":"Ben says the best pizza they sell is the plain old salami: taste not offered","split":"train"}
+{"caseId":"post-047130f4","ref":20,"got":20,"metric":"parts.sentiment","detail":"Nudja, a spicy soft chili salami, is extremely hot on pizza: neutral ≠ positive","split":"train"}
+{"caseId":"post-047130f4","ref":23,"got":23,"metric":"parts.aspect","detail":"the black pudding/blutwurst pizza is still an absolute game…: taste ≠ food","split":"train"}
+{"caseId":"post-047130f4","ref":23,"got":23,"metric":"shortlist.recall","detail":"the black pudding/blutwurst pizza is still an absolute game…: taste not offered","split":"train"}
+{"caseId":"post-047130f4","ref":24,"got":24,"metric":"parts.aspect","detail":"salmon on pizza just doesn't work: taste ≠ food","split":"train"}
+{"caseId":"post-047130f4","ref":24,"got":24,"metric":"shortlist.recall","detail":"salmon on pizza just doesn't work: taste not offered","split":"train"}
+{"caseId":"post-047130f4","ref":25,"got":25,"metric":"parts.aspect","detail":"tuna fish should not be eaten on pizza: taste ≠ food","split":"train"}
+{"caseId":"post-088e18e6","ref":1,"got":1,"metric":"parts.aspect","detail":"The 1 euro Steak Döner is a limited offer for one week only…: price_level ≠ availability","split":"train"}
+{"caseId":"post-088e18e6","ref":2,"got":2,"metric":"parts.aspect","detail":"The flash deal is redeemed in the NeoTaste app and shown wh…: other ≠ price","split":"train"}
+{"caseId":"post-088e18e6","ref":2,"got":2,"metric":"parts.kind","detail":"The flash deal is redeemed in the NeoTaste app and shown wh…: deal ≠ fact","split":"train"}
+{"caseId":"post-088e18e6","ref":2,"got":2,"metric":"shortlist.recall","detail":"The flash deal is redeemed in the NeoTaste app and shown wh…: other not offered","split":"train"}
+{"caseId":"post-0a8f804b","ref":0,"got":0,"metric":"parts.aspect","detail":"People come by Cousins even before opening time: crowding ≠ opening_hours","split":"train"}
+{"caseId":"post-0a8f804b","ref":4,"got":4,"metric":"parts.amount","detail":"Early visitors are told to come back in an hour: 60 minutes ≠ —","split":"train"}
+{"caseId":"post-0a8f804b","ref":14,"got":14,"metric":"parts.aspect","detail":"Flavours range from Gochujang-Karamell to silky tofu with p…: menu_variety ≠ food","split":"train"}
+{"caseId":"post-0a8f804b","ref":14,"got":14,"metric":"shortlist.recall","detail":"Flavours range from Gochujang-Karamell to silky tofu with p…: menu_variety not offered","split":"train"}
+{"caseId":"post-0a8f804b","ref":16,"got":16,"metric":"parts.aspect","detail":"The Kaylin is a particular crowd favourite: taste ≠ drink_selection","split":"train"}
+{"caseId":"post-0a8f804b","ref":16,"got":16,"metric":"shortlist.recall","detail":"The Kaylin is a particular crowd favourite: taste not offered","split":"train"}
+{"caseId":"post-0a8f804b","ref":17,"got":17,"metric":"parts.aspect","detail":"The Kaylin is a tamarind slushie with cedar-lime-leaf ice c…: menu_variety ≠ drink_selection","split":"train"}
+{"caseId":"post-0a8f804b","ref":17,"got":17,"metric":"shortlist.recall","detail":"The Kaylin is a tamarind slushie with cedar-lime-leaf ice c…: menu_variety not offered","split":"train"}
+{"caseId":"post-0a8f804b","ref":22,"got":22,"metric":"parts.sentiment","detail":"The author will take his own cousin to Cousins: positive ≠ neutral","split":"train"}
+{"caseId":"post-0a8f804b","ref":22,"got":22,"metric":"parts.kind","detail":"The author will take his own cousin to Cousins: verdict ≠ fact","split":"train"}
+{"caseId":"post-0bf8447d","ref":1,"got":1,"metric":"parts.aspect","detail":"Pastaia's tip for Thursday evening: come as three, order ev…: occasion ≠ advice","split":"train"}
+{"caseId":"post-0d1e7abc","ref":12,"got":12,"metric":"parts.aspect","detail":"the author especially likes the Grilled Cheese mit Kimchi: taste ≠ food","split":"train"}
+{"caseId":"post-0d1e7abc","ref":12,"got":12,"metric":"shortlist.recall","detail":"the author especially likes the Grilled Cheese mit Kimchi: taste not offered","split":"train"}
+{"caseId":"post-0d1e7abc","ref":14,"got":14,"metric":"parts.aspect","detail":"in the courtyard you notice nothing of the bustling Hermann…: noise ≠ location","split":"train"}
+{"caseId":"post-0d484513","ref":0,"got":0,"metric":"parts.aspect","detail":"Berlin shows its artisanal side this week: none ≠ authenticity","split":"train"}
+{"caseId":"post-0d484513","ref":0,"got":0,"metric":"parts.kind","detail":"Berlin shows its artisanal side this week: opinion ≠ event","split":"train"}
+{"caseId":"post-0d484513","ref":1,"got":1,"metric":"parts.aspect","detail":"creators are discovering new places off the mainstream in B…: none ≠ location","split":"train"}
+{"caseId":"post-0d484513","ref":14,"got":14,"metric":"parts.aspect","detail":"Café Ploetz serves hand-laminated Croissants: ingredient_quality ≠ food","split":"train"}
+{"caseId":"post-0d484513","ref":22,"got":22,"metric":"parts.aspect","detail":"Paule’s Metal Eck has old-school rock bar chaos under red l…: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-0dde5eb7","ref":1,"got":1,"metric":"parts.aspect","detail":"the dish comes with tenderly melted Käse: cooking ≠ food","split":"train"}
+{"caseId":"post-0dde5eb7","ref":1,"got":1,"metric":"shortlist.recall","detail":"the dish comes with tenderly melted Käse: cooking not offered","split":"train"}
+{"caseId":"post-0dde5eb7","ref":2,"got":2,"metric":"parts.aspect","detail":"the dish comes with a dark, aromatic Soße: taste ≠ seasoning","split":"train"}
+{"caseId":"post-0dde5eb7","ref":2,"got":2,"metric":"shortlist.recall","detail":"the dish comes with a dark, aromatic Soße: taste not offered","split":"train"}
+{"caseId":"post-11f0057b","ref":2,"got":2,"metric":"parts.aspect","detail":"Magma is partly responsible for the street's legendary summ…: vibe ≠ location","split":"train"}
+{"caseId":"post-11f0057b","ref":3,"got":3,"metric":"parts.aspect","detail":"Magma is a day bar, wine bar and scene hangout at once: vibe ≠ none","split":"train"}
+{"caseId":"post-11f0057b","ref":5,"got":5,"metric":"parts.aspect","detail":"at the next table people talk about their last Berghain vis…: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-11f0057b","ref":5,"got":5,"metric":"shortlist.recall","detail":"at the next table people talk about their last Berghain vis…: atmosphere not offered","split":"train"}
+{"caseId":"post-11f0057b","ref":19,"got":19,"metric":"parts.aspect","detail":"whipped butter always works: taste ≠ consistency","split":"train"}
+{"caseId":"post-11f0057b","ref":24,"got":24,"metric":"parts.aspect","detail":"at Magma such evenings are now possible all year round: atmosphere ≠ outdoor_seating","split":"train"}
+{"caseId":"post-11f0057b","ref":24,"got":24,"metric":"parts.kind","detail":"at Magma such evenings are now possible all year round: opinion ≠ change","split":"train"}
+{"caseId":"post-11f0057b","ref":28,"got":28,"metric":"parts.sentiment","detail":"a date night at Magma is better without hearing about the l…: mixed ≠ positive","split":"train"}
+{"caseId":"post-11f0057b","metric":"change.false","ref":24,"got":24,"detail":"at Magma such evenings are now possible all year round","split":"train"}
+{"caseId":"post-14d4fc29","ref":0,"got":0,"metric":"parts.aspect","detail":"today home tastes like Streetfood at Markthalle Neun: menu_variety ≠ taste","split":"test"}
+{"caseId":"post-1b8b0789","ref":4,"got":4,"metric":"parts.sentiment","detail":"the owner of Doree 65 is a bit crazy: neutral ≠ negative","split":"test"}
+{"caseId":"post-1b8b0789","ref":5,"got":5,"metric":"parts.sentiment","detail":"the owner is the same in person as on the internet, no filt…: neutral ≠ negative","split":"test"}
+{"caseId":"post-1b8b0789","ref":7,"got":7,"metric":"parts.aspect","detail":"they had 2 Grillplatte: none ≠ portion_size","split":"test"}
+{"caseId":"post-1c0d4023","ref":0,"got":0,"metric":"parts.kind","detail":"these 20 restaurants are the greatest consensus of Berlin f…: fact ≠ verdict","split":"train"}
+{"caseId":"post-1c78d4ed","ref":0,"got":0,"metric":"parts.aspect","detail":"El Líbano is the roaster's favourite espresso in its curren…: drink_quality ≠ none","split":"test"}
+{"caseId":"post-1c78d4ed","ref":2,"got":2,"metric":"parts.aspect","detail":"The high-altitude, mineral-rich soils are perfect for coffee: drinks ≠ location","split":"test"}
+{"caseId":"post-1c78d4ed","ref":3,"got":3,"metric":"parts.aspect","detail":"The El Líbano beans are washed-processed: drinks ≠ ingredient_quality","split":"test"}
+{"caseId":"post-1c78d4ed","ref":4,"got":4,"metric":"parts.aspect","detail":"The El Líbano beans are a single-origin blend of four varie…: drinks ≠ ingredient_quality","split":"test"}
+{"caseId":"post-1c78d4ed","ref":6,"got":6,"metric":"parts.aspect","detail":"The El Líbano espresso is Arabica: drinks ≠ ingredient_quality","split":"test"}
+{"caseId":"post-1ca1ffee","ref":8,"got":8,"metric":"parts.aspect","detail":"elsewhere a steak ordered medium comes through or bloody an…: cooking ≠ order_accuracy","split":"train"}
+{"caseId":"post-1ca1ffee","ref":8,"got":8,"metric":"shortlist.recall","detail":"elsewhere a steak ordered medium comes through or bloody an…: cooking not offered","split":"train"}
+{"caseId":"post-1ca1ffee","ref":9,"got":9,"metric":"parts.aspect","detail":"the best Achos charmutas in all of Germany: none ≠ food","split":"train"}
+{"caseId":"post-1ca1ffee","ref":19,"got":19,"metric":"parts.kind","detail":"the creator celebrates Doree 65 more than any steakhouse: verdict ≠ opinion","split":"train"}
+{"caseId":"post-1d0aeaca","ref":2,"got":2,"metric":"parts.aspect","detail":"Die Eismacher is still serving from Körtestraße 10, verifie…: location ≠ none","split":"train"}
+{"caseId":"post-1d0aeaca","ref":2,"got":2,"metric":"shortlist.recall","detail":"Die Eismacher is still serving from Körtestraße 10, verifie…: location not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":3,"got":3,"metric":"parts.aspect","detail":"Die Eismacher's flavours change and may differ from the ori…: menu_variety ≠ consistency","split":"train"}
+{"caseId":"post-1d0aeaca","ref":3,"got":3,"metric":"parts.kind","detail":"Die Eismacher's flavours change and may differ from the ori…: fact ≠ change","split":"train"}
+{"caseId":"post-1d0aeaca","ref":7,"got":7,"metric":"parts.aspect","detail":"Miriam is Die Eismacher's ice cream maker: ownership ≠ none","split":"train"}
+{"caseId":"post-1d0aeaca","ref":7,"got":7,"metric":"shortlist.recall","detail":"Miriam is Die Eismacher's ice cream maker: ownership not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":11,"got":11,"metric":"parts.aspect","detail":"Miriam is a sweet-toothed, bright-eyed, impassioned ice cre…: ownership ≠ none","split":"train"}
+{"caseId":"post-1d0aeaca","ref":13,"got":13,"metric":"parts.aspect","detail":"the Ube flavor is a bestseller: menu_variety ≠ none","split":"train"}
+{"caseId":"post-1d0aeaca","ref":17,"got":17,"metric":"parts.aspect","detail":"the Ube ice cream is one you have to try: taste ≠ none","split":"train"}
+{"caseId":"post-1d0aeaca","ref":18,"got":18,"metric":"parts.aspect","detail":"Die Eismacher's other flavors are also strange: menu_variety ≠ food","split":"train"}
+{"caseId":"post-1d0aeaca","ref":20,"got":20,"metric":"parts.aspect","detail":"Die Eismacher has a near-sorbet mixing pineapple and mint: menu_variety ≠ food","split":"train"}
+{"caseId":"post-1d0aeaca","ref":20,"got":20,"metric":"shortlist.recall","detail":"Die Eismacher has a near-sorbet mixing pineapple and mint: menu_variety not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":21,"got":21,"metric":"parts.aspect","detail":"Die Eismacher has beetroot and orange ginger flavors: menu_variety ≠ food","split":"train"}
+{"caseId":"post-1d0aeaca","ref":21,"got":21,"metric":"shortlist.recall","detail":"Die Eismacher has beetroot and orange ginger flavors: menu_variety not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":22,"got":22,"metric":"parts.aspect","detail":"Miriam once churned white peach and violet flowers together: menu_variety ≠ food","split":"train"}
+{"caseId":"post-1d0aeaca","ref":22,"got":22,"metric":"shortlist.recall","detail":"Miriam once churned white peach and violet flowers together: menu_variety not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":27,"got":27,"metric":"parts.aspect","detail":"salted caramel is one of the top-selling flavors: menu_variety ≠ none","split":"train"}
+{"caseId":"post-1d0aeaca","ref":34,"got":34,"metric":"parts.aspect","detail":"Miriam considers a Club Mate flavor as the Berlin flavor: menu_variety ≠ food","split":"train"}
+{"caseId":"post-1d0aeaca","ref":34,"got":34,"metric":"parts.kind","detail":"Miriam considers a Club Mate flavor as the Berlin flavor: fact ≠ opinion","split":"train"}
+{"caseId":"post-1d0aeaca","ref":34,"got":34,"metric":"shortlist.recall","detail":"Miriam considers a Club Mate flavor as the Berlin flavor: menu_variety not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":36,"got":36,"metric":"parts.aspect","detail":"Miriam scrunched her nose at a cold doner flavor: menu_variety ≠ taste","split":"train"}
+{"caseId":"post-1d0aeaca","ref":36,"got":36,"metric":"shortlist.recall","detail":"Miriam scrunched her nose at a cold doner flavor: menu_variety not offered","split":"train"}
+{"caseId":"post-1d0aeaca","ref":37,"got":37,"metric":"parts.aspect","detail":"Miriam says the proper Berlin flavor is anything with beer: menu_variety ≠ food","split":"train"}
+{"caseId":"post-1d0aeaca","ref":37,"got":37,"metric":"shortlist.recall","detail":"Miriam says the proper Berlin flavor is anything with beer: menu_variety not offered","split":"train"}
+{"caseId":"post-1d0aeaca","metric":"change.false","ref":3,"got":3,"detail":"Die Eismacher's flavours change and may differ from the original review","split":"train"}
+{"caseId":"post-1e024518","ref":1,"got":1,"metric":"parts.aspect","detail":"the Masala Dosa is filled with spicy potato: seasoning ≠ food","split":"test"}
+{"caseId":"post-1e024518","ref":4,"got":4,"metric":"parts.aspect","detail":"orders can be placed directly at masalas.de: other ≠ service","split":"test"}
+{"caseId":"post-217c8e79","ref":6,"got":6,"metric":"parts.sentiment","detail":"Fischsoße is very popular in Vietnam: neutral ≠ positive","split":"train"}
+{"caseId":"post-217c8e79","ref":6,"got":6,"metric":"parts.aspect","detail":"Fischsoße is very popular in Vietnam: authenticity ≠ food","split":"train"}
+{"caseId":"post-217c8e79","ref":6,"got":6,"metric":"parts.kind","detail":"Fischsoße is very popular in Vietnam: fact ≠ opinion","split":"train"}
+{"caseId":"post-217c8e79","ref":13,"got":13,"metric":"parts.aspect","detail":"the dessert traditionally has Kokosmilch and Eis in it: authenticity ≠ food","split":"train"}
+{"caseId":"post-22c25ac1","ref":5,"got":5,"metric":"parts.kind","detail":"Mirsad Mujanovic and Anjelo Nguyen now open the Manufaktur: fact ≠ event","split":"test"}
+{"caseId":"post-22c25ac1","ref":7,"got":7,"metric":"parts.aspect","detail":"a charming street sale now offers a look behind the scenes: atmosphere ≠ none","split":"test"}
+{"caseId":"post-22c25ac1","ref":7,"got":7,"metric":"parts.kind","detail":"a charming street sale now offers a look behind the scenes: opinion ≠ event","split":"test"}
+{"caseId":"post-22c25ac1","ref":9,"got":9,"metric":"parts.aspect","detail":"the women cut, mix and season the Füllungen here in large q…: ingredient_quality ≠ seasoning","split":"test"}
+{"caseId":"post-22c25ac1","ref":10,"got":10,"metric":"parts.aspect","detail":"the women are supported by only one man: none ≠ ownership","split":"test"}
+{"caseId":"post-22c25ac1","ref":18,"got":18,"metric":"parts.aspect","detail":"word about the Manufaktur has already spread in Dunckerstra…: none ≠ location","split":"test"}
+{"caseId":"post-22c25ac1","ref":19,"got":19,"metric":"parts.aspect","detail":"the three tables in front of the street sale are constantly…: crowding ≠ outdoor_seating","split":"test"}
+{"caseId":"post-22c25ac1","ref":21,"got":21,"metric":"parts.aspect","detail":"even long-time locals can't resist the deliciously smelling…: taste ≠ food","split":"test"}
+{"caseId":"post-22c25ac1","ref":21,"got":21,"metric":"shortlist.recall","detail":"even long-time locals can't resist the deliciously smelling…: taste not offered","split":"test"}
+{"caseId":"post-22c25ac1","ref":24,"got":24,"metric":"parts.aspect","detail":"you can also walk with the Dumplings to the next park bench: takeaway_handling ≠ occasion","split":"test"}
+{"caseId":"post-22c25ac1","ref":31,"got":31,"metric":"parts.aspect","detail":"the Black Beef Dumplings are at least as famous as the Blue…: food ≠ none","split":"test"}
+{"caseId":"post-22c25ac1","ref":43,"got":43,"metric":"parts.kind","detail":"the frozen range adds White-Chicken, Pink-Lamb and Orange-P…: fact ≠ new_item","split":"test"}
+{"caseId":"post-22c25ac1","ref":48,"got":48,"metric":"parts.sentiment","detail":"the dumplings are steamed fresh and served with sauces: positive ≠ neutral","split":"test"}
+{"caseId":"post-22c25ac1","ref":48,"got":48,"metric":"parts.kind","detail":"the dumplings are steamed fresh and served with sauces: opinion ≠ fact","split":"test"}
+{"caseId":"post-233389f4","ref":1,"got":1,"metric":"parts.aspect","detail":"the Indian restaurant in Mitte was empty when they came in: crowding ≠ vibe","split":"train"}
+{"caseId":"post-233389f4","ref":1,"got":1,"metric":"shortlist.recall","detail":"the Indian restaurant in Mitte was empty when they came in: crowding not offered","split":"train"}
+{"caseId":"post-233389f4","ref":4,"got":4,"metric":"parts.aspect","detail":"tip: never go into a restaurant where business is slow and …: crowding ≠ vibe","split":"train"}
+{"caseId":"post-234f5f6a","ref":0,"got":0,"metric":"parts.aspect","detail":"the post is about Vietnamese food in Berlin: menu_variety ≠ food","split":"train"}
+{"caseId":"post-24601e6d","ref":3,"got":3,"metric":"parts.aspect","detail":"the €48 ticket includes three drinks: price_level ≠ drinks","split":"test"}
+{"caseId":"post-24601e6d","ref":4,"got":4,"metric":"parts.aspect","detail":"you get a cocktail and two drinks in the ice bar: drink_selection ≠ drinks","split":"test"}
+{"caseId":"post-24601e6d","ref":6,"got":6,"metric":"parts.amount","detail":"you get 45 minutes in the ice area: 45 minutes ≠ —","split":"test"}
+{"caseId":"post-24601e6d","ref":8,"got":8,"metric":"parts.aspect","detail":"you choose two drinks inside the ice bar and one outside: drink_selection ≠ drinks","split":"test"}
+{"caseId":"post-2672e9fe","ref":1,"got":1,"metric":"parts.sentiment","detail":"the Türkischer Mokka is traditional: positive ≠ neutral","split":"train"}
+{"caseId":"post-2672e9fe","ref":1,"got":1,"metric":"parts.kind","detail":"the Türkischer Mokka is traditional: opinion ≠ fact","split":"train"}
+{"caseId":"post-2672e9fe","ref":3,"got":3,"metric":"parts.aspect","detail":"the Türkischer Mokka is served with love: authenticity ≠ service","split":"train"}
+{"caseId":"post-27fe4363","ref":0,"got":0,"metric":"parts.aspect","detail":"Horváth is Sebastian Frank's restaurant: ownership ≠ none","split":"test"}
+{"caseId":"post-27fe4363","ref":0,"got":0,"metric":"shortlist.recall","detail":"Horváth is Sebastian Frank's restaurant: ownership not offered","split":"test"}
+{"caseId":"post-27fe4363","ref":3,"got":3,"metric":"parts.aspect","detail":"at Horváth celery gets the fine-dining treatment: menu_variety ≠ presentation","split":"test"}
+{"caseId":"post-2927e673","ref":0,"got":0,"metric":"parts.aspect","detail":"Lunch can be eaten on the roof of the Reichstag: location ≠ none","split":"train"}
+{"caseId":"post-2a8e9606","ref":0,"got":0,"metric":"parts.aspect","detail":"Berlin has a new casual and embracing coffeehouse culture: none ≠ vibe","split":"train"}
+{"caseId":"post-2a8e9606","ref":2,"got":2,"metric":"parts.aspect","detail":"the everyday character of Café Bravo appeals to its new ope…: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-2a8e9606","ref":9,"got":9,"metric":"parts.aspect","detail":"Tulus Lotrek is perhaps the most vibrant restaurant in the …: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-2a8e9606","ref":11,"got":11,"metric":"parts.aspect","detail":"in a real coffeehouse the Kaffee becomes a drink of pleasur…: none ≠ occasion","split":"train"}
+{"caseId":"post-2a8e9606","ref":12,"got":12,"metric":"parts.aspect","detail":"Mathias Brandweiner and Frederik Grieb run Hafenküche: ownership ≠ none","split":"train"}
+{"caseId":"post-2a8e9606","ref":12,"got":12,"metric":"shortlist.recall","detail":"Mathias Brandweiner and Frederik Grieb run Hafenküche: ownership not offered","split":"train"}
+{"caseId":"post-2a8e9606","ref":13,"got":13,"metric":"parts.sentiment","detail":"Hafenküche has no Kuchen: neutral ≠ negative","split":"train"}
+{"caseId":"post-2a8e9606","ref":13,"got":13,"metric":"parts.kind","detail":"Hafenküche has no Kuchen: fact ≠ opinion","split":"train"}
+{"caseId":"post-2a8e9606","ref":17,"got":17,"metric":"parts.aspect","detail":"Landmann serves a glass of Sekt or a Pfiff, a small Bier, f…: drink_selection ≠ availability","split":"train"}
+{"caseId":"post-2a8e9606","ref":18,"got":18,"metric":"parts.kind","detail":"Schwarzes Kamel serves a glass of Sekt or a Pfiff, a small …: fact ≠ deal","split":"train"}
+{"caseId":"post-2a8e9606","ref":21,"got":21,"metric":"parts.aspect","detail":"Café Benjamine is one of the two most beautiful cultural ca…: interior ≠ none","split":"train"}
+{"caseId":"post-2a8e9606","ref":22,"got":22,"metric":"parts.aspect","detail":"the Café im Haus am Waldsee is one of the two most beautifu…: interior ≠ none","split":"train"}
+{"caseId":"post-2a8e9606","ref":23,"got":23,"metric":"parts.aspect","detail":"Mahla and Hein were involved in conceiving the new Kulturca…: ownership ≠ none","split":"train"}
+{"caseId":"post-2a8e9606","ref":23,"got":23,"metric":"shortlist.recall","detail":"Mahla and Hein were involved in conceiving the new Kulturca…: ownership not offered","split":"train"}
+{"caseId":"post-2a8e9606","ref":30,"got":30,"metric":"parts.aspect","detail":"in late-1990s Berlin improvised cafés served homemade Kuche…: none ≠ drink_selection","split":"train"}
+{"caseId":"post-2a8e9606","ref":36,"got":36,"metric":"parts.aspect","detail":"Barlevain is a casual neighbourhood spot: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-2a8e9606","ref":38,"got":38,"metric":"parts.aspect","detail":"Sagma is wine bar, pub and Viennese Beisl at once: atmosphere ≠ none","split":"train"}
+{"caseId":"post-2a8e9606","ref":42,"got":42,"metric":"parts.aspect","detail":"the Kartoffelpüree at Nobelhardt & Schmutzig can hardly be …: taste ≠ food","split":"train"}
+{"caseId":"post-2a8e9606","ref":42,"got":42,"metric":"shortlist.recall","detail":"the Kartoffelpüree at Nobelhardt & Schmutzig can hardly be …: taste not offered","split":"train"}
+{"caseId":"post-2a8e9606","ref":44,"got":44,"metric":"parts.aspect","detail":"lunch at Volk is like in Marseille: authenticity ≠ food","split":"train"}
+{"caseId":"post-2a8e9606","ref":44,"got":44,"metric":"shortlist.recall","detail":"lunch at Volk is like in Marseille: authenticity not offered","split":"train"}
+{"caseId":"post-2a8e9606","ref":49,"got":49,"metric":"parts.aspect","detail":"at Kōji the Hand Rolls are picked up with the Nori-Blatt: none ≠ food","split":"train"}
+{"caseId":"post-2a8e9606","ref":50,"got":50,"metric":"parts.aspect","detail":"Goldies Bar in the KaDeWe practises the art of culinary exa…: food ≠ portion_size","split":"train"}
+{"caseId":"post-2a8e9606","ref":53,"got":53,"metric":"parts.aspect","detail":"Berlin restaurants span cuisines from Chile to Jamaica: none ≠ menu_variety","split":"train"}
+{"caseId":"post-2b231637","ref":0,"got":0,"metric":"parts.aspect","detail":"when Berlin sweats there is no way around a good Kugel of i…: none ≠ food","split":"train"}
+{"caseId":"post-2b231637","ref":7,"got":7,"metric":"parts.aspect","detail":"Cuore di Vetro is a Gelato manufactory: menu_variety ≠ none","split":"train"}
+{"caseId":"post-2b231637","ref":16,"got":16,"metric":"parts.aspect","detail":"Jones Ice Cream makes Craft Ice Cream: menu_variety ≠ food","split":"train"}
+{"caseId":"post-2b231637","ref":19,"got":19,"metric":"parts.aspect","detail":"Die Eismacher is an Italian ice cream manufactory: menu_variety ≠ none","split":"train"}
+{"caseId":"post-2b231637","ref":24,"got":24,"metric":"parts.aspect","detail":"Schöne & das Biest is a small ice cream manufactory: menu_variety ≠ none","split":"train"}
+{"caseId":"post-2b231637","ref":26,"got":26,"metric":"parts.aspect","detail":"Eiscafé Monheim is a classic ice cream café: menu_variety ≠ none","split":"train"}
+{"caseId":"post-2f9fab74","ref":0,"got":0,"metric":"parts.aspect","detail":"Where else in Berlin can you still find this, as offered at…: menu_variety ≠ availability","split":"train"}
+{"caseId":"post-31344bc5","ref":0,"got":0,"metric":"parts.kind","detail":"Berlin's gastro scene is reinventing itself: fact ≠ change","split":"train"}
+{"caseId":"post-31344bc5","ref":1,"got":1,"metric":"parts.sentiment","detail":"the biggest Berlin food trend of 2026 is casual fine dining: neutral ≠ positive","split":"train"}
+{"caseId":"post-31344bc5","ref":5,"got":5,"metric":"parts.sentiment","detail":"casual fine dining means a 7-course menu while wearing snea…: neutral ≠ positive","split":"train"}
+{"caseId":"post-31344bc5","ref":5,"got":5,"metric":"parts.aspect","detail":"casual fine dining means a 7-course menu while wearing snea…: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-31344bc5","ref":5,"got":5,"metric":"parts.kind","detail":"casual fine dining means a 7-course menu while wearing snea…: fact ≠ opinion","split":"train"}
+{"caseId":"post-31344bc5","ref":6,"got":6,"metric":"parts.kind","detail":"Berlin does casual fine dining better than any other city i…: opinion ≠ verdict","split":"train"}
+{"caseId":"post-31344bc5","ref":19,"got":19,"metric":"parts.aspect","detail":"Nouri has a Berlin-style casualness: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-31344bc5","ref":19,"got":19,"metric":"shortlist.recall","detail":"Nouri has a Berlin-style casualness: atmosphere not offered","split":"train"}
+{"caseId":"post-31344bc5","ref":21,"got":21,"metric":"parts.aspect","detail":"Kohle & Salz has an open fire kitchen: interior ≠ none","split":"train"}
+{"caseId":"post-31344bc5","ref":21,"got":21,"metric":"shortlist.recall","detail":"Kohle & Salz has an open fire kitchen: interior not offered","split":"train"}
+{"caseId":"post-31344bc5","ref":24,"got":24,"metric":"parts.aspect","detail":"Fukagawa is conceptually well thought out: menu_variety ≠ none","split":"train"}
+{"caseId":"post-31344bc5","ref":39,"got":39,"metric":"parts.aspect","detail":"Korean BBQ and Kimchi fermentation fit the gut-health trend…: none ≠ dietary","split":"train"}
+{"caseId":"post-31344bc5","metric":"change.false","ref":0,"got":0,"detail":"Berlin's gastro scene is reinventing itself","split":"train"}
+{"caseId":"post-33308126","ref":3,"got":3,"metric":"parts.aspect","detail":"the batter stays the same, only the fish is different: menu_variety ≠ food","split":"train"}
+{"caseId":"post-33308126","ref":3,"got":3,"metric":"parts.kind","detail":"the batter stays the same, only the fish is different: fact ≠ change","split":"train"}
+{"caseId":"post-33308126","metric":"change.false","ref":3,"got":3,"detail":"the batter stays the same, only the fish is different","split":"train"}
+{"caseId":"post-35092a94","ref":7,"got":7,"metric":"parts.aspect","detail":"Ömis is not a standard Döner: food ≠ authenticity","split":"train"}
+{"caseId":"post-35092a94","ref":9,"got":9,"metric":"parts.sentiment","detail":"come by and see for yourself: positive ≠ neutral","split":"train"}
+{"caseId":"post-38707924","ref":4,"got":4,"metric":"parts.aspect","detail":"The creator also bought Mezame's matcha to take home: none ≠ drinks","split":"train"}
+{"caseId":"post-388b4383","ref":8,"got":8,"metric":"parts.kind","detail":"their son Matthias now runs Zur Bratpfanne and the third ge…: fact ≠ change","split":"train"}
+{"caseId":"post-388b4383","ref":11,"got":11,"metric":"parts.aspect","detail":"Jörgs Curry Container is off the tourist paths: crowding ≠ accessibility","split":"train"}
+{"caseId":"post-388b4383","ref":11,"got":11,"metric":"shortlist.recall","detail":"Jörgs Curry Container is off the tourist paths: crowding not offered","split":"train"}
+{"caseId":"post-388b4383","ref":15,"got":15,"metric":"parts.kind","detail":"the quality at Jörgs Curry Container has remained: opinion ≠ change","split":"train"}
+{"caseId":"post-388b4383","ref":26,"got":26,"metric":"parts.aspect","detail":"the Knoblauch-Mayonnaise at Ketch’up 35 is a must with the …: taste ≠ advice","split":"train"}
+{"caseId":"post-388b4383","ref":27,"got":27,"metric":"parts.sentiment","detail":"they hope Ketch’up 35 expands to many neighbourhoods: positive ≠ neutral","split":"train"}
+{"caseId":"post-388b4383","ref":27,"got":27,"metric":"parts.aspect","detail":"they hope Ketch’up 35 expands to many neighbourhoods: none ≠ location","split":"train"}
+{"caseId":"post-388b4383","ref":30,"got":30,"metric":"parts.aspect","detail":"Konnopke’s Imbiß still serves the best taste over the count…: taste ≠ food","split":"train"}
+{"caseId":"post-388b4383","ref":30,"got":30,"metric":"shortlist.recall","detail":"Konnopke’s Imbiß still serves the best taste over the count…: taste not offered","split":"train"}
+{"caseId":"post-388b4383","ref":32,"got":32,"metric":"parts.sentiment","detail":"the cult snack bar under the U-Bahn has existed since 1960: neutral ≠ positive","split":"train"}
+{"caseId":"post-388b4383","ref":32,"got":32,"metric":"parts.kind","detail":"the cult snack bar under the U-Bahn has existed since 1960: fact ≠ opinion","split":"train"}
+{"caseId":"post-388b4383","ref":35,"got":35,"metric":"parts.aspect","detail":"Konnopke’s Imbiß is a popular photo motif again: interior ≠ presentation","split":"train"}
+{"caseId":"post-388b4383","ref":35,"got":35,"metric":"parts.kind","detail":"Konnopke’s Imbiß is a popular photo motif again: opinion ≠ change","split":"train"}
+{"caseId":"post-388b4383","ref":36,"got":36,"metric":"parts.kind","detail":"besides the Currywurst you should definitely try the Pommes…: opinion ≠ verdict","split":"train"}
+{"caseId":"post-388b4383","ref":48,"got":48,"metric":"parts.aspect","detail":"the beef variant at Cult Curry Mitte is highly recommended: food ≠ menu_variety","split":"train"}
+{"caseId":"post-388b4383","ref":49,"got":49,"metric":"parts.aspect","detail":"the scharfen Zwiebeln and Pommes with Trüffelmayo go well w…: food ≠ menu_variety","split":"train"}
+{"caseId":"post-388b4383","ref":51,"got":51,"metric":"parts.sentiment","detail":"Stern magazine headlined 'When men cry over sausages' after…: neutral ≠ positive","split":"train"}
+{"caseId":"post-388b4383","ref":51,"got":51,"metric":"parts.kind","detail":"Stern magazine headlined 'When men cry over sausages' after…: fact ≠ opinion","split":"train"}
+{"caseId":"post-388b4383","ref":52,"got":52,"metric":"parts.kind","detail":"Curry & Chili is Berlin's spiciest snack counter: fact ≠ verdict","split":"train"}
+{"caseId":"post-388b4383","ref":54,"got":54,"metric":"parts.sentiment","detail":"Frank Spieß and his team serve Chili-Variationen that cause…: neutral ≠ negative","split":"train"}
+{"caseId":"post-388b4383","ref":57,"got":57,"metric":"parts.sentiment","detail":"whoever withstands all chili variations at Curry & Chili ca…: neutral ≠ positive","split":"train"}
+{"caseId":"post-388b4383","ref":57,"got":57,"metric":"parts.aspect","detail":"whoever withstands all chili variations at Curry & Chili ca…: seasoning ≠ menu_variety","split":"train"}
+{"caseId":"post-388b4383","ref":57,"got":57,"metric":"parts.kind","detail":"whoever withstands all chili variations at Curry & Chili ca…: fact ≠ opinion","split":"train"}
+{"caseId":"post-388b4383","ref":58,"got":58,"metric":"parts.aspect","detail":"Curry & Chili's Saucen can be bought in the online shop: other ≠ availability","split":"train"}
+{"caseId":"post-388b4383","ref":58,"got":58,"metric":"parts.kind","detail":"Curry & Chili's Saucen can be bought in the online shop: fact ≠ question","split":"train"}
+{"caseId":"post-388b4383","ref":58,"got":58,"metric":"shortlist.recall","detail":"Curry & Chili's Saucen can be bought in the online shop: other not offered","split":"train"}
+{"caseId":"post-388b4383","ref":60,"got":60,"metric":"parts.aspect","detail":"Reina Lehmann's butchery secretly supplies many successful …: none ≠ ingredient_quality","split":"train"}
+{"caseId":"post-388b4383","ref":61,"got":61,"metric":"parts.aspect","detail":"eating anything other than the Currywurst at Curry Baude is…: food ≠ menu_variety","split":"train"}
+{"caseId":"post-388b4383","ref":62,"got":62,"metric":"parts.aspect","detail":"the other Wurstspezialitäten and Pommes at Curry Baude are …: food ≠ advice","split":"train"}
+{"caseId":"post-388b4383","ref":62,"got":62,"metric":"parts.kind","detail":"the other Wurstspezialitäten and Pommes at Curry Baude are …: opinion ≠ verdict","split":"train"}
+{"caseId":"post-388b4383","ref":67,"got":67,"metric":"parts.aspect","detail":"the secret sauce recipe came to the Curry Wolf boss on holi…: food ≠ seasoning","split":"train"}
+{"caseId":"post-388b4383","ref":72,"got":72,"metric":"parts.aspect","detail":"Curry Wolf sells supplies in jars online: other ≠ availability","split":"train"}
+{"caseId":"post-388b4383","ref":72,"got":72,"metric":"shortlist.recall","detail":"Curry Wolf sells supplies in jars online: other not offered","split":"train"}
+{"caseId":"post-388b4383","ref":80,"got":80,"metric":"parts.aspect","detail":"hearty Berliner Schnauze comes free with every order at Sch…: friendliness ≠ on_the_house","split":"train"}
+{"caseId":"post-388b4383","ref":80,"got":80,"metric":"parts.kind","detail":"hearty Berliner Schnauze comes free with every order at Sch…: opinion ≠ deal","split":"train"}
+{"caseId":"post-388b4383","ref":80,"got":80,"metric":"shortlist.recall","detail":"hearty Berliner Schnauze comes free with every order at Sch…: friendliness not offered","split":"train"}
+{"caseId":"post-388b4383","metric":"change.false","ref":8,"got":8,"detail":"their son Matthias now runs Zur Bratpfanne and the third generation is already involved","split":"train"}
+{"caseId":"post-388b4383","metric":"change.false","ref":15,"got":15,"detail":"the quality at Jörgs Curry Container has remained","split":"train"}
+{"caseId":"post-388b4383","metric":"change.false","ref":35,"got":35,"detail":"Konnopke’s Imbiß is a popular photo motif again","split":"train"}
+{"caseId":"post-3a0ad71a","ref":5,"got":5,"metric":"parts.aspect","detail":"etwas. kleines in Friedrichshain is now a place dedicated o…: menu_variety ≠ food","split":"train"}
+{"caseId":"post-3a0ad71a","ref":5,"got":5,"metric":"parts.kind","detail":"etwas. kleines in Friedrichshain is now a place dedicated o…: fact ≠ change","split":"train"}
+{"caseId":"post-3a0ad71a","ref":5,"got":5,"metric":"shortlist.recall","detail":"etwas. kleines in Friedrichshain is now a place dedicated o…: menu_variety not offered","split":"train"}
+{"caseId":"post-3a0ad71a","ref":6,"got":6,"metric":"parts.sentiment","detail":"is etwas. kleines, offering only croissants, one-dimensiona…: neutral ≠ negative","split":"train"}
+{"caseId":"post-3a0ad71a","ref":44,"got":44,"metric":"parts.kind","detail":"Yumcha Heroes opens a hatch in Dunckerstraße, Prenzlauer Be…: fact ≠ event","split":"train"}
+{"caseId":"post-3a0ad71a","ref":49,"got":49,"metric":"parts.kind","detail":"YOU opens in Hotel Luc in Mitte as a new concept of restaur…: fact ≠ event","split":"train"}
+{"caseId":"post-3a0ad71a","ref":50,"got":50,"metric":"parts.kind","detail":"YOU replaces the former Heritage: fact ≠ change","split":"train"}
+{"caseId":"post-3a0ad71a","ref":51,"got":51,"metric":"parts.aspect","detail":"Dufte Charlottenburg opens in the Kant-Garagenpalast withou…: none ≠ price","split":"train"}
+{"caseId":"post-3a0ad71a","ref":52,"got":52,"metric":"parts.aspect","detail":"Dufte Charlottenburg has four kitchens, two bars, a café, a…: menu_variety ≠ none","split":"train"}
+{"caseId":"post-3a0ad71a","ref":54,"got":54,"metric":"parts.aspect","detail":"Le Faubourg is a fine-dining restaurant: menu_variety ≠ none","split":"train"}
+{"caseId":"post-3a0ad71a","ref":54,"got":54,"metric":"shortlist.recall","detail":"Le Faubourg is a fine-dining restaurant: menu_variety not offered","split":"train"}
+{"caseId":"post-3a0ad71a","ref":65,"got":65,"metric":"parts.kind","detail":"@foodvergnuegen runs a giveaway for FúFú Bistro: deal ≠ fact","split":"train"}
+{"caseId":"post-3a0ad71a","ref":71,"got":71,"metric":"parts.aspect","detail":"Mibap test cooked the Taiwanese breakfast throughout summer: menu_variety ≠ cooking","split":"train"}
+{"caseId":"post-3a0ad71a","metric":"change.false","ref":5,"got":5,"detail":"etwas. kleines in Friedrichshain is now a place dedicated only to croissants","split":"train"}
+{"caseId":"post-3a0ad71a","metric":"change.false","ref":50,"got":50,"detail":"YOU replaces the former Heritage","split":"train"}
+{"caseId":"post-3d9147ff","ref":9,"got":9,"metric":"parts.sentiment","detail":"fueling is as important as running: neutral ≠ positive","split":"test"}
+{"caseId":"post-3e56e67d","ref":3,"got":3,"metric":"parts.aspect","detail":"Sandos now has all its equipment and packaging in place: none ≠ takeaway_handling","split":"train"}
+{"caseId":"post-40f86f07","ref":4,"got":4,"metric":"parts.aspect","detail":"went to Jan Burgerrestaurant only for the truffle fries: none ≠ menu_variety","split":"train"}
+{"caseId":"post-41f16ad4","ref":2,"got":2,"metric":"parts.aspect","detail":"the soup is nostalgic for the creator, who had it a lot as …: authenticity ≠ food","split":"train"}
+{"caseId":"post-41f16ad4","ref":5,"got":5,"metric":"parts.aspect","detail":"the creator will get the Peking duck next time: none ≠ food","split":"train"}
+{"caseId":"post-41f16ad4","ref":6,"got":6,"metric":"parts.aspect","detail":"Aroma has a bunch of really amazing mains: taste ≠ food","split":"train"}
+{"caseId":"post-41f16ad4","ref":7,"got":7,"metric":"parts.aspect","detail":"the prices at Aroma are great: price_level ≠ price","split":"train"}
+{"caseId":"post-41f16ad4","ref":8,"got":8,"metric":"parts.kind","detail":"get to Aroma early on a weekend: fact ≠ verdict","split":"train"}
+{"caseId":"post-45841578","ref":1,"got":1,"metric":"parts.kind","detail":"Aroma is one of the creator's absolute favourites: verdict ≠ opinion","split":"train"}
+{"caseId":"post-45841578","ref":18,"got":18,"metric":"parts.kind","detail":"Mr. Noodle Chen is the creator's favourite noodle shop: verdict ≠ opinion","split":"train"}
+{"caseId":"post-45841578","ref":19,"got":19,"metric":"parts.aspect","detail":"Mr. Noodle Chen is a chain from China: ownership ≠ none","split":"train"}
+{"caseId":"post-45841578","ref":19,"got":19,"metric":"shortlist.recall","detail":"Mr. Noodle Chen is a chain from China: ownership not offered","split":"train"}
+{"caseId":"post-4590c8ff","ref":3,"got":3,"metric":"parts.sentiment","detail":"You pick your favorite broth or sauce and the kitchen does …: neutral ≠ positive","split":"train"}
+{"caseId":"post-4590c8ff","ref":3,"got":3,"metric":"parts.kind","detail":"You pick your favorite broth or sauce and the kitchen does …: fact ≠ opinion","split":"train"}
+{"caseId":"post-4590c8ff","ref":5,"got":5,"metric":"parts.aspect","detail":"The meal at Mao Master is different every time you visit: menu_variety ≠ consistency","split":"train"}
+{"caseId":"post-45dafb41","ref":0,"got":0,"metric":"parts.aspect","detail":"Berliners are divided on whether pizza should be Neapolitan…: none ≠ menu_variety","split":"train"}
+{"caseId":"post-45dafb41","ref":1,"got":1,"metric":"parts.aspect","detail":"Berlin seems to have settled on Neapolitan pizza: none ≠ menu_variety","split":"train"}
+{"caseId":"post-45dafb41","ref":15,"got":15,"metric":"parts.aspect","detail":"Clara Dengg runs Monti as a welcoming neighbourhood restaur…: friendliness ≠ vibe","split":"train"}
+{"caseId":"post-45dafb41","ref":16,"got":16,"metric":"parts.kind","detail":"in Berlin even ambitiously started pizza projects now see t…: opinion ≠ change","split":"train"}
+{"caseId":"post-45dafb41","ref":28,"got":28,"metric":"parts.sentiment","detail":"the author asks whether a well-chilled Lambrusco would not …: neutral ≠ positive","split":"train"}
+{"caseId":"post-45dafb41","ref":32,"got":32,"metric":"parts.sentiment","detail":"the Roman pizza at Monti should be cut with scissors: neutral ≠ positive","split":"train"}
+{"caseId":"post-45dafb41","ref":32,"got":32,"metric":"parts.aspect","detail":"the Roman pizza at Monti should be cut with scissors: food ≠ advice","split":"train"}
+{"caseId":"post-45dafb41","metric":"change.false","ref":16,"got":16,"detail":"in Berlin even ambitiously started pizza projects now see themselves more as fast-food pl…","split":"train"}
+{"caseId":"post-483d6cc6","ref":3,"got":3,"metric":"parts.aspect","detail":"try the chicken and waffle at Love at First Bite: food ≠ advice","split":"train"}
+{"caseId":"post-483d6cc6","ref":9,"got":9,"metric":"parts.aspect","detail":"Love at First Bite just opened a second location in Mitte: none ≠ location","split":"train"}
+{"caseId":"post-48e30fa6","ref":4,"got":4,"metric":"parts.aspect","detail":"the truck is at Oranienpark / Kaufland Oranienburg on 18–19…: location ≠ none","split":"train"}
+{"caseId":"post-48e30fa6","ref":4,"got":4,"metric":"shortlist.recall","detail":"the truck is at Oranienpark / Kaufland Oranienburg on 18–19…: location not offered","split":"train"}
+{"caseId":"post-48e30fa6","ref":6,"got":6,"metric":"parts.aspect","detail":"the truck is at Trabrennbahn Karlshorst on 20–22 March: location ≠ none","split":"train"}
+{"caseId":"post-48e30fa6","ref":6,"got":6,"metric":"shortlist.recall","detail":"the truck is at Trabrennbahn Karlshorst on 20–22 March: location not offered","split":"train"}
+{"caseId":"post-4a742b09","ref":0,"got":0,"metric":"parts.aspect","detail":"Village House is a Nigerian restaurant: menu_variety ≠ none","split":"test"}
+{"caseId":"post-4a742b09","ref":0,"got":0,"metric":"shortlist.recall","detail":"Village House is a Nigerian restaurant: menu_variety not offered","split":"test"}
+{"caseId":"post-4a742b09","ref":3,"got":3,"metric":"parts.kind","detail":"invitation to make it a date this weekend at Village House: verdict ≠ event","split":"test"}
+{"caseId":"post-4c3e2a10","ref":0,"got":0,"metric":"parts.aspect","detail":"the snack stand is called the cell, built like a jail: interior ≠ none","split":"test"}
+{"caseId":"post-4c3e2a10","ref":0,"got":0,"metric":"shortlist.recall","detail":"the snack stand is called the cell, built like a jail: interior not offered","split":"test"}
+{"caseId":"post-4c3e2a10","ref":4,"got":4,"metric":"parts.aspect","detail":"at many kebab stores the spit just dries up: cooking ≠ freshness","split":"test"}
+{"caseId":"post-4c3e2a10","ref":7,"got":7,"metric":"parts.aspect","detail":"the owner set out to make the best kebab in Germany: ownership ≠ none","split":"test"}
+{"caseId":"post-4c3e2a10","ref":7,"got":7,"metric":"parts.kind","detail":"the owner set out to make the best kebab in Germany: fact ≠ verdict","split":"test"}
+{"caseId":"post-4c3e2a10","ref":10,"got":10,"metric":"parts.aspect","detail":"the owner fetches onions: none ≠ service","split":"test"}
+{"caseId":"post-4c3e2a10","ref":12,"got":12,"metric":"parts.aspect","detail":"the owner keeps a soft tomato apart so the other tomatoes d…: ingredient_quality ≠ cooking","split":"test"}
+{"caseId":"post-4cf0b88b","ref":1,"got":1,"metric":"parts.aspect","detail":"the halva is one of the Turkish desserts you have to try in…: taste ≠ none","split":"train"}
+{"caseId":"post-4d0d5ac0","ref":0,"got":0,"metric":"parts.aspect","detail":"Shinju serves fresh sushi: freshness ≠ menu_variety","split":"train"}
+{"caseId":"post-4d0d5ac0","ref":0,"got":0,"metric":"shortlist.recall","detail":"Shinju serves fresh sushi: freshness not offered","split":"train"}
+{"caseId":"post-4d0d5ac0","ref":7,"got":7,"metric":"parts.aspect","detail":"every meal at Shinju becomes an experience: none ≠ food","split":"train"}
+{"caseId":"post-4f942afd","ref":5,"got":5,"metric":"parts.aspect","detail":"Friedrichshain has plenty of Arabic Imbisses but had no rea…: none ≠ availability","split":"test"}
+{"caseId":"post-4f942afd","ref":7,"got":7,"metric":"parts.aspect","detail":"the author neither loves nor hates hummus: none ≠ food","split":"test"}
+{"caseId":"post-4f942afd","ref":8,"got":8,"metric":"parts.aspect","detail":"Akkawy does the shared-plates way of eating brilliantly: food ≠ occasion","split":"test"}
+{"caseId":"post-4f942afd","ref":17,"got":17,"metric":"parts.sentiment","detail":"Julian's hummus recipe is fixed and unchangeable: neutral ≠ positive","split":"test"}
+{"caseId":"post-4f942afd","ref":17,"got":17,"metric":"parts.kind","detail":"Julian's hummus recipe is fixed and unchangeable: fact ≠ opinion","split":"test"}
+{"caseId":"post-4f942afd","ref":19,"got":19,"metric":"parts.kind","detail":"the mushroom-hummus dish is the least traditional of their …: fact ≠ opinion","split":"test"}
+{"caseId":"post-4f942afd","ref":20,"got":20,"metric":"parts.aspect","detail":"the mushroom-hummus dish pairs mushrooms with sweet-sour ta…: menu_variety ≠ seasoning","split":"test"}
+{"caseId":"post-4f942afd","ref":23,"got":23,"metric":"parts.aspect","detail":"they ordered hummus with a sweet aubergine puree: menu_variety ≠ order_accuracy","split":"test"}
+{"caseId":"post-4f942afd","ref":25,"got":25,"metric":"parts.aspect","detail":"the Shakshuka is a rich, lightly-spiced, almost smoky tomat…: taste ≠ food","split":"test"}
+{"caseId":"post-4f942afd","ref":33,"got":33,"metric":"parts.sentiment","detail":"textures play an important role in Akkawy's cooking: positive ≠ neutral","split":"test"}
+{"caseId":"post-4f942afd","ref":41,"got":41,"metric":"parts.sentiment","detail":"the lemonades only just helped with digestion: mixed ≠ negative","split":"test"}
+{"caseId":"post-51a97d36","ref":2,"got":2,"metric":"parts.aspect","detail":"the Tiramisu goes down comfortably: taste ≠ food","split":"test"}
+{"caseId":"post-524765b0","ref":1,"got":1,"metric":"parts.aspect","detail":"Kírkē is a dream come true for everyone who likes savoury f…: menu_variety ≠ food","split":"test"}
+{"caseId":"post-524765b0","ref":3,"got":3,"metric":"parts.aspect","detail":"Tenia was bar chief at Primitiv and Jannis grill master at …: ownership ≠ none","split":"test"}
+{"caseId":"post-524765b0","ref":3,"got":3,"metric":"shortlist.recall","detail":"Tenia was bar chief at Primitiv and Jannis grill master at …: ownership not offered","split":"test"}
+{"caseId":"post-524765b0","ref":4,"got":4,"metric":"parts.aspect","detail":"Tenia grew up in Piraeus and Jannis in Thessaloniki; both h…: ownership ≠ none","split":"test"}
+{"caseId":"post-524765b0","ref":4,"got":4,"metric":"shortlist.recall","detail":"Tenia grew up in Piraeus and Jannis in Thessaloniki; both h…: ownership not offered","split":"test"}
+{"caseId":"post-524765b0","ref":5,"got":5,"metric":"parts.aspect","detail":"Kírkē is an intimate neighbourhood deli with a wine bar: atmosphere ≠ none","split":"test"}
+{"caseId":"post-524765b0","ref":6,"got":6,"metric":"parts.kind","detail":"Kírkē is a place to linger over good food and a few glasses…: opinion ≠ verdict","split":"test"}
+{"caseId":"post-524765b0","ref":11,"got":11,"metric":"parts.aspect","detail":"They recommend the sandwich with mushrooms and truffles: taste ≠ advice","split":"test"}
+{"caseId":"post-524765b0","ref":11,"got":11,"metric":"parts.kind","detail":"They recommend the sandwich with mushrooms and truffles: opinion ≠ verdict","split":"test"}
+{"caseId":"post-524765b0","ref":12,"got":12,"metric":"parts.aspect","detail":"The sardines with Greek saffron and the cheese platter are …: taste ≠ menu_variety","split":"test"}
+{"caseId":"post-524765b0","ref":16,"got":16,"metric":"parts.sentiment","detail":"The deli sandwiches are at the heart of the menu, with seaf…: neutral ≠ positive","split":"test"}
+{"caseId":"post-524765b0","ref":16,"got":16,"metric":"parts.kind","detail":"The deli sandwiches are at the heart of the menu, with seaf…: fact ≠ opinion","split":"test"}
+{"caseId":"post-524765b0","ref":23,"got":23,"metric":"parts.kind","detail":"Kírkē now invites sommeliers and winemakers for guest appea…: event ≠ change","split":"test"}
+{"caseId":"post-524765b0","metric":"change.false","ref":23,"got":23,"detail":"Kírkē now invites sommeliers and winemakers for guest appearances around Greek wine","split":"test"}
+{"caseId":"post-52eb53af","ref":2,"got":2,"metric":"parts.aspect","detail":"the samosa was one of the best things in his life: taste ≠ food","split":"train"}
+{"caseId":"post-52eb53af","ref":5,"got":5,"metric":"parts.aspect","detail":"the pastrami Sandwich is served with a small bowl of Gurken: menu_variety ≠ food","split":"train"}
+{"caseId":"post-52eb53af","ref":22,"got":22,"metric":"parts.sentiment","detail":"Softeis with hot Keksteig is an insane idea: positive ≠ negative","split":"train"}
+{"caseId":"post-52eb53af","ref":22,"got":22,"metric":"parts.aspect","detail":"Softeis with hot Keksteig is an insane idea: menu_variety ≠ temperature","split":"train"}
+{"caseId":"post-52eb53af","ref":22,"got":22,"metric":"shortlist.recall","detail":"Softeis with hot Keksteig is an insane idea: menu_variety not offered","split":"train"}
+{"caseId":"post-52eb53af","ref":23,"got":23,"metric":"parts.aspect","detail":"the Softeis all melted before he could try it: temperature ≠ freshness","split":"train"}
+{"caseId":"post-52eb53af","ref":23,"got":23,"metric":"shortlist.recall","detail":"the Softeis all melted before he could try it: temperature not offered","split":"train"}
+{"caseId":"post-5476133a","ref":3,"got":3,"metric":"parts.aspect","detail":"the tins' packaging is lovingly designed and tells stories …: presentation ≠ none","split":"train"}
+{"caseId":"post-5476133a","ref":3,"got":3,"metric":"shortlist.recall","detail":"the tins' packaging is lovingly designed and tells stories …: presentation not offered","split":"train"}
+{"caseId":"post-56bff2cf","ref":0,"got":0,"metric":"parts.aspect","detail":"Dro balances casualness and competence: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-56bff2cf","ref":6,"got":6,"metric":"parts.aspect","detail":"Sommelier Giorgi Silagadze followed Gugushvili from 8000 Vi…: service ≠ none","split":"train"}
+{"caseId":"post-56bff2cf","ref":13,"got":13,"metric":"parts.aspect","detail":"Amber wines pair perfectly with Georgian cuisine: drink_quality ≠ food","split":"train"}
+{"caseId":"post-56bff2cf","ref":19,"got":19,"metric":"parts.aspect","detail":"Jonjoli are pickled bladdernut flowers, a seasoning typical…: food ≠ seasoning","split":"train"}
+{"caseId":"post-56bff2cf","ref":21,"got":21,"metric":"parts.kind","detail":"Khachapuri is probably the best-known Georgian dish in Germ…: fact ≠ opinion","split":"train"}
+{"caseId":"post-56bff2cf","ref":23,"got":23,"metric":"parts.aspect","detail":"Dro's Khachapuri is more understated than the boat-shaped v…: menu_variety ≠ food","split":"train"}
+{"caseId":"post-57ab8313","ref":0,"got":0,"metric":"parts.aspect","detail":"Taco & Gringo is impossible to overlook: interior ≠ vibe","split":"test"}
+{"caseId":"post-57ab8313","ref":0,"got":0,"metric":"shortlist.recall","detail":"Taco & Gringo is impossible to overlook: interior not offered","split":"test"}
+{"caseId":"post-57ab8313","ref":1,"got":1,"metric":"parts.aspect","detail":"Taco & Gringo is bright pink with a memorable logo and two …: interior ≠ none","split":"test"}
+{"caseId":"post-57ab8313","ref":1,"got":1,"metric":"shortlist.recall","detail":"Taco & Gringo is bright pink with a memorable logo and two …: interior not offered","split":"test"}
+{"caseId":"post-57ab8313","ref":7,"got":7,"metric":"parts.sentiment","detail":"Like mole, birria is simmered for hours and specially seaso…: neutral ≠ positive","split":"test"}
+{"caseId":"post-57ab8313","ref":7,"got":7,"metric":"parts.kind","detail":"Like mole, birria is simmered for hours and specially seaso…: fact ≠ opinion","split":"test"}
+{"caseId":"post-57ab8313","ref":22,"got":22,"metric":"parts.aspect","detail":"The authors recommend the Quesabirria Vegana with vegan che…: dietary ≠ advice","split":"test"}
+{"caseId":"post-57ab8313","ref":22,"got":22,"metric":"parts.kind","detail":"The authors recommend the Quesabirria Vegana with vegan che…: opinion ≠ verdict","split":"test"}
+{"caseId":"post-57ab8313","ref":29,"got":29,"metric":"parts.kind","detail":"On the last Friday of every month there is an extra special: event ≠ fact","split":"test"}
+{"caseId":"post-57ab8313","ref":32,"got":32,"metric":"parts.aspect","detail":"Other specials such as a DJane or DJ are fun: atmosphere ≠ none","split":"test"}
+{"caseId":"post-57ab8313","ref":33,"got":33,"metric":"parts.aspect","detail":"In Mexico people understand good food and drink: none ≠ food","split":"test"}
+{"caseId":"post-57d1d04d","ref":2,"got":2,"metric":"parts.aspect","detail":"Hewrî is a Kurdish café: menu_variety ≠ none","split":"train"}
+{"caseId":"post-57d1d04d","ref":2,"got":2,"metric":"shortlist.recall","detail":"Hewrî is a Kurdish café: menu_variety not offered","split":"train"}
+{"caseId":"post-58a16831","ref":2,"got":2,"metric":"parts.aspect","detail":"the landlords did not want a café but were convinced by Ant…: ownership ≠ none","split":"test"}
+{"caseId":"post-58a16831","ref":23,"got":23,"metric":"parts.aspect","detail":"you should come to Pêle-Mêle very hungry: portion_size ≠ none","split":"test"}
+{"caseId":"post-58a16831","ref":24,"got":24,"metric":"parts.sentiment","detail":"Pêle-Mêle ends the era of the Avocadostulle: positive ≠ negative","split":"test"}
+{"caseId":"post-58a16831","ref":24,"got":24,"metric":"parts.aspect","detail":"Pêle-Mêle ends the era of the Avocadostulle: menu_variety ≠ availability","split":"test"}
+{"caseId":"post-58a16831","ref":24,"got":24,"metric":"parts.kind","detail":"Pêle-Mêle ends the era of the Avocadostulle: opinion ≠ change","split":"test"}
+{"caseId":"post-58a16831","ref":24,"got":24,"metric":"shortlist.recall","detail":"Pêle-Mêle ends the era of the Avocadostulle: menu_variety not offered","split":"test"}
+{"caseId":"post-58a16831","metric":"change.false","ref":24,"got":24,"detail":"Pêle-Mêle ends the era of the Avocadostulle","split":"test"}
+{"caseId":"post-59699006","ref":0,"got":0,"metric":"parts.aspect","detail":"Café Amano at Hotel Amano now opens its green window to ser…: other ≠ service","split":"test"}
+{"caseId":"post-59699006","ref":0,"got":0,"metric":"parts.kind","detail":"Café Amano at Hotel Amano now opens its green window to ser…: fact ≠ change","split":"test"}
+{"caseId":"post-59699006","ref":0,"got":0,"metric":"shortlist.recall","detail":"Café Amano at Hotel Amano now opens its green window to ser…: other not offered","split":"test"}
+{"caseId":"post-59699006","ref":2,"got":2,"metric":"parts.aspect","detail":"Café Amano serves Espresso uncomplicatedly through the wind…: drink_selection ≠ service","split":"test"}
+{"caseId":"post-59699006","ref":11,"got":11,"metric":"parts.aspect","detail":"Barlevain is a laid-back neighbourhood spot in Schöneberg: atmosphere ≠ vibe","split":"test"}
+{"caseId":"post-59699006","ref":12,"got":12,"metric":"parts.kind","detail":"Coffee houses are having a renaissance in Berlin: fact ≠ change","split":"test"}
+{"caseId":"post-59699006","metric":"change.false","ref":0,"got":0,"detail":"Café Amano at Hotel Amano now opens its green window to serve passers-by","split":"test"}
+{"caseId":"post-59699006","metric":"change.false","ref":12,"got":12,"detail":"Coffee houses are having a renaissance in Berlin","split":"test"}
+{"caseId":"post-5bdc34a6","ref":1,"got":1,"metric":"parts.sentiment","detail":"the goal is taste, smell and bite as close as possible to t…: neutral ≠ positive","split":"train"}
+{"caseId":"post-5bdc34a6","ref":1,"got":1,"metric":"parts.kind","detail":"the goal is taste, smell and bite as close as possible to t…: fact ≠ opinion","split":"train"}
+{"caseId":"post-5bdc34a6","ref":6,"got":6,"metric":"parts.aspect","detail":"Döner Pro is at Oranienstraße 190, 10999 Berlin-Kreuzberg: location ≠ none","split":"train"}
+{"caseId":"post-5bdc34a6","ref":6,"got":6,"metric":"shortlist.recall","detail":"Döner Pro is at Oranienstraße 190, 10999 Berlin-Kreuzberg: location not offered","split":"train"}
+{"caseId":"post-5bdc34a6","ref":10,"got":10,"metric":"parts.sentiment","detail":"the Fleisch is 100 percent vegan: neutral ≠ positive","split":"train"}
+{"caseId":"post-5bdc34a6","ref":10,"got":10,"metric":"parts.kind","detail":"the Fleisch is 100 percent vegan: fact ≠ opinion","split":"train"}
+{"caseId":"post-5bdc34a6","ref":14,"got":14,"metric":"parts.aspect","detail":"they did not just try to imitate meat: food ≠ dietary","split":"train"}
+{"caseId":"post-5db3b46a","ref":1,"got":1,"metric":"parts.aspect","detail":"Fine Bagels has the best bagel in Berlin: taste ≠ food","split":"train"}
+{"caseId":"post-5db3b46a","ref":1,"got":1,"metric":"shortlist.recall","detail":"Fine Bagels has the best bagel in Berlin: taste not offered","split":"train"}
+{"caseId":"post-5db3b46a","ref":3,"got":3,"metric":"parts.aspect","detail":"Fine Bagels has the best chocolate chip cookie: taste ≠ food","split":"train"}
+{"caseId":"post-5db3b46a","ref":3,"got":3,"metric":"shortlist.recall","detail":"Fine Bagels has the best chocolate chip cookie: taste not offered","split":"train"}
+{"caseId":"post-5db3b46a","ref":4,"got":4,"metric":"parts.aspect","detail":"Manello is a pizza place in Wedding: menu_variety ≠ none","split":"train"}
+{"caseId":"post-5db3b46a","ref":6,"got":6,"metric":"parts.aspect","detail":"Manello has stuffed crust pizza you cannot get anywhere else: menu_variety ≠ availability","split":"train"}
+{"caseId":"post-5db3b46a","ref":6,"got":6,"metric":"shortlist.recall","detail":"Manello has stuffed crust pizza you cannot get anywhere else: menu_variety not offered","split":"train"}
+{"caseId":"post-5db3b46a","ref":7,"got":7,"metric":"parts.sentiment","detail":"Pizza Hut probably no longer sells stuffed crust pizza: neutral ≠ negative","split":"train"}
+{"caseId":"post-5db3b46a","ref":7,"got":7,"metric":"parts.kind","detail":"Pizza Hut probably no longer sells stuffed crust pizza: fact ≠ change","split":"train"}
+{"caseId":"post-5db3b46a","ref":8,"got":8,"metric":"parts.aspect","detail":"for Digiorno-style 90s Pizza Hut pizza you have to go to Ma…: none ≠ food","split":"train"}
+{"caseId":"post-5db3b46a","ref":13,"got":13,"metric":"parts.amount","detail":"Manello costs about 15 bucks: 15 money ≠ —","split":"train"}
+{"caseId":"post-5db3b46a","ref":14,"got":14,"metric":"parts.aspect","detail":"Rebel Room is a burger place: menu_variety ≠ none","split":"train"}
+{"caseId":"post-5db3b46a","ref":17,"got":17,"metric":"parts.aspect","detail":"Burger Am's French fries are legit on fire: taste ≠ cooking","split":"train"}
+{"caseId":"post-5db3b46a","ref":17,"got":17,"metric":"shortlist.recall","detail":"Burger Am's French fries are legit on fire: taste not offered","split":"train"}
+{"caseId":"post-5db3b46a","ref":19,"got":19,"metric":"parts.aspect","detail":"which Berlin restaurants remind Americans of home or are ve…: none ≠ authenticity","split":"train"}
+{"caseId":"post-5db3b46a","metric":"change.false","ref":7,"got":7,"detail":"Pizza Hut probably no longer sells stuffed crust pizza","split":"train"}
+{"caseId":"post-5f073ec2","ref":0,"got":0,"metric":"parts.aspect","detail":"the first bar did not fit the creator's taste: none ≠ drink_quality","split":"train"}
+{"caseId":"post-5f073ec2","ref":5,"got":5,"metric":"parts.aspect","detail":"had bean noodle soup with shrimp sauce and Nha Trang grille…: none ≠ food","split":"train"}
+{"caseId":"post-606d88e9","ref":5,"got":5,"metric":"parts.aspect","detail":"took 3 different coffee cakes to go to try them: none ≠ food","split":"train"}
+{"caseId":"post-606d88e9","ref":7,"got":7,"metric":"parts.aspect","detail":"going back to Cafe Neue Liebe just for the coffee cake: none ≠ food","split":"train"}
+{"caseId":"post-60ff28c2","ref":11,"got":11,"metric":"parts.aspect","detail":"you must order the Matcha with Kokosmilch: drink_quality ≠ none","split":"test"}
+{"caseId":"post-60ff28c2","ref":11,"got":11,"metric":"parts.kind","detail":"you must order the Matcha with Kokosmilch: opinion ≠ verdict","split":"test"}
+{"caseId":"post-63b83025","ref":2,"got":2,"metric":"parts.aspect","detail":"a portion of creamy Zaziki: cooking ≠ portion_size","split":"test"}
+{"caseId":"post-63b83025","ref":2,"got":2,"metric":"shortlist.recall","detail":"a portion of creamy Zaziki: cooking not offered","split":"test"}
+{"caseId":"post-6577d6bd","ref":5,"got":5,"metric":"parts.aspect","detail":"The Espresso is the quick energy kick: drink_quality ≠ drinks","split":"train"}
+{"caseId":"post-6577d6bd","ref":7,"got":7,"metric":"parts.aspect","detail":"The Espresso Macchiato is small but mighty, with milk foam: drink_quality ≠ portion_size","split":"train"}
+{"caseId":"post-6577d6bd","ref":9,"got":9,"metric":"parts.aspect","detail":"The Milchkaffee is cosy coffee love in a big cup: drink_quality ≠ drinks","split":"train"}
+{"caseId":"post-6577d6bd","ref":13,"got":13,"metric":"parts.aspect","detail":"Eiscafeteufelchen is at Paulsborner Str. 94: location ≠ none","split":"train"}
+{"caseId":"post-6577d6bd","ref":13,"got":13,"metric":"shortlist.recall","detail":"Eiscafeteufelchen is at Paulsborner Str. 94: location not offered","split":"train"}
+{"caseId":"post-66f606db","ref":1,"got":1,"metric":"parts.aspect","detail":"Dufte is in Europe's oldest preserved multi-storey garage: location ≠ none","split":"train"}
+{"caseId":"post-66f606db","ref":3,"got":3,"metric":"parts.kind","detail":"the former car park now hosts culture instead of cars: fact ≠ change","split":"train"}
+{"caseId":"post-66f606db","ref":10,"got":10,"metric":"parts.aspect","detail":"everything at Dufte feels very urban: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-66f606db","ref":11,"got":11,"metric":"parts.aspect","detail":"Dufte's beer garden is right next to the S-Bahn, but that d…: atmosphere ≠ location","split":"train"}
+{"caseId":"post-66f606db","ref":13,"got":13,"metric":"parts.aspect","detail":"Dufte's four kitchens make every visit enjoyable: food ≠ menu_variety","split":"train"}
+{"caseId":"post-66f606db","ref":20,"got":20,"metric":"parts.aspect","detail":"Café Dufte serves the finest Sauerteigbrot from Domberger B…: ingredient_quality ≠ food","split":"train"}
+{"caseId":"post-66f606db","ref":21,"got":21,"metric":"parts.aspect","detail":"Dufte's two bars score in the evening: drinks ≠ drink_selection","split":"train"}
+{"caseId":"post-66f606db","ref":27,"got":27,"metric":"parts.aspect","detail":"food courts already exist in many parts of Berlin: none ≠ availability","split":"train"}
+{"caseId":"post-66f606db","ref":29,"got":29,"metric":"parts.aspect","detail":"guests at Dufte are not expected to consume anything: pressure ≠ none","split":"train"}
+{"caseId":"post-66f606db","ref":29,"got":29,"metric":"shortlist.recall","detail":"guests at Dufte are not expected to consume anything: pressure not offered","split":"train"}
+{"caseId":"post-66f606db","ref":36,"got":36,"metric":"parts.aspect","detail":"if it continues, the Kant-Garage will become the urban livi…: none ≠ vibe","split":"train"}
+{"caseId":"post-66f606db","metric":"change.false","ref":3,"got":3,"detail":"the former car park now hosts culture instead of cars","split":"train"}
+{"caseId":"post-674e7322","ref":6,"got":6,"metric":"parts.aspect","detail":"Ehli Kebap has the best Döner: none ≠ food","split":"test"}
+{"caseId":"post-674e7322","ref":14,"got":14,"metric":"parts.aspect","detail":"Yeni Adana is the best cheat day meal: none ≠ occasion","split":"test"}
+{"caseId":"post-674e7322","ref":17,"got":17,"metric":"parts.kind","detail":"Mrs. Robinsons is closed: fact ≠ change","split":"test"}
+{"caseId":"post-674e7322","metric":"change.false","ref":17,"got":17,"detail":"Mrs. Robinsons is closed","split":"test"}
+{"caseId":"post-67af1ad6","ref":0,"got":0,"metric":"parts.aspect","detail":"Waffle with fruits for 1€ this week Friday and Saturday fro…: price_level ≠ availability","split":"train"}
+{"caseId":"post-67af1ad6","ref":0,"got":0,"metric":"parts.amount","detail":"Waffle with fruits for 1€ this week Friday and Saturday fro…: 1 money ≠ —","split":"train"}
+{"caseId":"post-68b0cd44","ref":1,"got":1,"metric":"parts.aspect","detail":"the yu-xiang aubergine was well worth the trek: taste ≠ none","split":"test"}
+{"caseId":"post-68b0cd44","ref":2,"got":2,"metric":"parts.aspect","detail":"never skip the dumplings at Panda Meister: taste ≠ advice","split":"test"}
+{"caseId":"post-68b0cd44","ref":2,"got":2,"metric":"parts.kind","detail":"never skip the dumplings at Panda Meister: opinion ≠ verdict","split":"test"}
+{"caseId":"post-68b0cd44","ref":3,"got":3,"metric":"parts.aspect","detail":"Panda Meister is a Chinese place: menu_variety ≠ none","split":"test"}
+{"caseId":"post-68b0cd44","ref":7,"got":7,"metric":"parts.aspect","detail":"the dumpling in chili oil had a remarkable price: price_level ≠ price","split":"test"}
+{"caseId":"post-68b0cd44","ref":9,"got":9,"metric":"parts.sentiment","detail":"the creator had spicy bian bian hand pulled noodles: neutral ≠ positive","split":"test"}
+{"caseId":"post-68b0cd44","ref":9,"got":9,"metric":"parts.aspect","detail":"the creator had spicy bian bian hand pulled noodles: menu_variety ≠ seasoning","split":"test"}
+{"caseId":"post-68b0cd44","ref":9,"got":9,"metric":"parts.kind","detail":"the creator had spicy bian bian hand pulled noodles: fact ≠ opinion","split":"test"}
+{"caseId":"post-68b0cd44","ref":11,"got":11,"metric":"parts.amount","detail":"the bian bian noodles cost only 8.90: 8.9 money ≠ —","split":"test"}
+{"caseId":"post-68b0cd44","ref":15,"got":15,"metric":"parts.sentiment","detail":"the yu-xiang aubergine was the most unexpected dish: positive ≠ neutral","split":"test"}
+{"caseId":"post-68b0cd44","ref":15,"got":15,"metric":"parts.aspect","detail":"the yu-xiang aubergine was the most unexpected dish: taste ≠ food","split":"test"}
+{"caseId":"post-68b0cd44","ref":17,"got":17,"metric":"parts.aspect","detail":"the creator has thought of nothing but the aubergine dish s…: taste ≠ food","split":"test"}
+{"caseId":"post-68b0cd44","ref":17,"got":17,"metric":"shortlist.recall","detail":"the creator has thought of nothing but the aubergine dish s…: taste not offered","split":"test"}
+{"caseId":"post-68b0cd44","ref":18,"got":18,"metric":"parts.aspect","detail":"the creator ordered Boba for dessert: drink_selection ≠ drinks","split":"test"}
+{"caseId":"post-6b4377f6","ref":1,"got":1,"metric":"parts.kind","detail":"Hier returns to cooking craft and regional ingredients: opinion ≠ change","split":"train"}
+{"caseId":"post-6b4377f6","ref":3,"got":3,"metric":"parts.sentiment","detail":"Hier has a glossy, very clean online presence: neutral ≠ positive","split":"train"}
+{"caseId":"post-6b4377f6","ref":4,"got":4,"metric":"parts.aspect","detail":"Hier is not just another healthy lunch spot but a place wit…: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-6b4377f6","ref":6,"got":6,"metric":"parts.aspect","detail":"Hier has just opened on Schönhauser Allee: none ≠ location","split":"train"}
+{"caseId":"post-6b4377f6","ref":6,"got":6,"metric":"parts.kind","detail":"Hier has just opened on Schönhauser Allee: fact ≠ event","split":"train"}
+{"caseId":"post-6b4377f6","ref":13,"got":13,"metric":"parts.aspect","detail":"Jan Wichert, former head chef at Remi, cooks at Hier: other ≠ none","split":"train"}
+{"caseId":"post-6b4377f6","ref":13,"got":13,"metric":"shortlist.recall","detail":"Jan Wichert, former head chef at Remi, cooks at Hier: other not offered","split":"train"}
+{"caseId":"post-6b4377f6","ref":14,"got":14,"metric":"parts.aspect","detail":"Hier's co-founder Chiara Strobl is a trained chef: ownership ≠ none","split":"train"}
+{"caseId":"post-6b4377f6","ref":14,"got":14,"metric":"shortlist.recall","detail":"Hier's co-founder Chiara Strobl is a trained chef: ownership not offered","split":"train"}
+{"caseId":"post-6b4377f6","ref":15,"got":15,"metric":"parts.kind","detail":"Mraz & Sohn received its second star: fact ≠ change","split":"train"}
+{"caseId":"post-6b4377f6","metric":"change.false","ref":1,"got":1,"detail":"Hier returns to cooking craft and regional ingredients","split":"train"}
+{"caseId":"post-6b4377f6","metric":"change.false","ref":15,"got":15,"detail":"Mraz & Sohn received its second star","split":"train"}
+{"caseId":"post-6c0e92d2","ref":2,"got":2,"metric":"parts.aspect","detail":"François at La Buvette is a French restaurant: menu_variety ≠ none","split":"test"}
+{"caseId":"post-6c0e92d2","ref":2,"got":2,"metric":"shortlist.recall","detail":"François at La Buvette is a French restaurant: menu_variety not offered","split":"test"}
+{"caseId":"post-6c0e92d2","ref":3,"got":3,"metric":"parts.aspect","detail":"Kroque started as a small food bike at various markets and …: location ≠ none","split":"test"}
+{"caseId":"post-6c0e92d2","ref":3,"got":3,"metric":"shortlist.recall","detail":"Kroque started as a small food bike at various markets and …: location not offered","split":"test"}
+{"caseId":"post-6c0e92d2","ref":4,"got":4,"metric":"parts.aspect","detail":"Lukas's partner Josue Kashala has worked in gastronomy sinc…: ownership ≠ none","split":"test"}
+{"caseId":"post-6c0e92d2","ref":4,"got":4,"metric":"shortlist.recall","detail":"Lukas's partner Josue Kashala has worked in gastronomy sinc…: ownership not offered","split":"test"}
+{"caseId":"post-6c0e92d2","ref":5,"got":5,"metric":"parts.kind","detail":"Josue Kashala took over the bar at Kroque: fact ≠ change","split":"test"}
+{"caseId":"post-6c0e92d2","ref":14,"got":14,"metric":"parts.aspect","detail":"the secret sauce on the Le Classique is dangerously good: taste ≠ seasoning","split":"test"}
+{"caseId":"post-6c0e92d2","ref":20,"got":20,"metric":"parts.aspect","detail":"the Mousse au Chocolat with lemon zest and a pinch of sea s…: taste ≠ availability","split":"test"}
+{"caseId":"post-6c0e92d2","ref":22,"got":22,"metric":"parts.aspect","detail":"the freshly mixed raspberry daiquiri is worth trying with a…: drink_quality ≠ drinks","split":"test"}
+{"caseId":"post-6c0e92d2","ref":30,"got":30,"metric":"parts.aspect","detail":"Kroque is a bit sandwich shop, a bit cocktail bar, a bit in…: menu_variety ≠ none","split":"test"}
+{"caseId":"post-6c0e92d2","ref":31,"got":31,"metric":"parts.sentiment","detail":"the La Dindz has fresh lemon notes, feta and marinated anti…: positive ≠ neutral","split":"test"}
+{"caseId":"post-6c0e92d2","ref":32,"got":32,"metric":"parts.aspect","detail":"the mousse au chocolat disappeared within minutes, actually…: taste ≠ availability","split":"test"}
+{"caseId":"post-6c0e92d2","ref":32,"got":32,"metric":"parts.amount","detail":"the mousse au chocolat disappeared within minutes, actually…: 1 minutes ≠ —","split":"test"}
+{"caseId":"post-6c0e92d2","ref":33,"got":33,"metric":"parts.aspect","detail":"Kroque also serves drinks: drink_selection ≠ drinks","split":"test"}
+{"caseId":"post-6c0e92d2","metric":"change.false","ref":5,"got":5,"detail":"Josue Kashala took over the bar at Kroque","split":"test"}
+{"caseId":"post-6ddca88c","ref":1,"got":1,"metric":"parts.aspect","detail":"Pinci in Mitte quickly became the neighbourhood's social ho…: crowding ≠ occasion","split":"train"}
+{"caseId":"post-6ddca88c","ref":5,"got":5,"metric":"parts.kind","detail":"Breda is on the Landwehrkanal instead of the Gipsdreieck: fact ≠ change","split":"train"}
+{"caseId":"post-6ddca88c","ref":7,"got":7,"metric":"parts.sentiment","detail":"Pinci is a see-and-be-seen place: neutral ≠ negative","split":"train"}
+{"caseId":"post-6ddca88c","ref":7,"got":7,"metric":"parts.aspect","detail":"Pinci is a see-and-be-seen place: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-6ddca88c","ref":8,"got":8,"metric":"parts.aspect","detail":"Pinci is still a relatively simple day and aperitivo bar: menu_variety ≠ none","split":"train"}
+{"caseId":"post-6ddca88c","ref":8,"got":8,"metric":"parts.kind","detail":"Pinci is still a relatively simple day and aperitivo bar: fact ≠ opinion","split":"train"}
+{"caseId":"post-6ddca88c","ref":15,"got":15,"metric":"parts.sentiment","detail":"Breda looks different from all other restaurants: positive ≠ neutral","split":"train"}
+{"caseId":"post-6ddca88c","ref":16,"got":16,"metric":"parts.aspect","detail":"Looking different has lately been almost impossible for Ber…: none ≠ presentation","split":"train"}
+{"caseId":"post-6ddca88c","ref":18,"got":18,"metric":"parts.sentiment","detail":"The frittierte Zucchiniblüten are unusually unfilled and se…: neutral ≠ positive","split":"train"}
+{"caseId":"post-6ddca88c","ref":18,"got":18,"metric":"parts.aspect","detail":"The frittierte Zucchiniblüten are unusually unfilled and se…: presentation ≠ food","split":"train"}
+{"caseId":"post-6ddca88c","ref":18,"got":18,"metric":"parts.kind","detail":"The frittierte Zucchiniblüten are unusually unfilled and se…: fact ≠ opinion","split":"train"}
+{"caseId":"post-6ddca88c","ref":22,"got":22,"metric":"parts.aspect","detail":"The Ricotta-Gnocchi are spring-like with mint and peas: taste ≠ food","split":"train"}
+{"caseId":"post-6ddca88c","ref":22,"got":22,"metric":"shortlist.recall","detail":"The Ricotta-Gnocchi are spring-like with mint and peas: taste not offered","split":"train"}
+{"caseId":"post-6ddca88c","ref":26,"got":26,"metric":"parts.kind","detail":"The Garibaldi seems to have become Breda's signature drink …: opinion ≠ change","split":"train"}
+{"caseId":"post-6ddca88c","ref":30,"got":30,"metric":"parts.sentiment","detail":"The bill at Breda shows the prices of Berlin's new gastrono…: negative ≠ positive","split":"train"}
+{"caseId":"post-6ddca88c","metric":"change.false","ref":5,"got":5,"detail":"Breda is on the Landwehrkanal instead of the Gipsdreieck","split":"train"}
+{"caseId":"post-6ddca88c","metric":"change.false","ref":26,"got":26,"detail":"The Garibaldi seems to have become Breda's signature drink right after opening","split":"train"}
+{"caseId":"post-72365fdb","ref":0,"got":0,"metric":"parts.kind","detail":"@berlinfoodstories is probably the best resource for food i…: opinion ≠ verdict","split":"train"}
+{"caseId":"post-72365fdb","ref":7,"got":7,"metric":"parts.aspect","detail":"Tacos El Rey is an absolute feel-good place: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-72365fdb","ref":7,"got":7,"metric":"shortlist.recall","detail":"Tacos El Rey is an absolute feel-good place: atmosphere not offered","split":"train"}
+{"caseId":"post-73286ffe","ref":2,"got":2,"metric":"parts.aspect","detail":"the Heitlinger Brasserie has a new concept: other ≠ none","split":"test"}
+{"caseId":"post-7516d1de","ref":1,"got":1,"metric":"parts.aspect","detail":"Bahadur is at Sigmaringer Straße 36, 10713 Berlin-Wilmersdo…: location ≠ none","split":"train"}
+{"caseId":"post-7516d1de","ref":1,"got":1,"metric":"shortlist.recall","detail":"Bahadur is at Sigmaringer Straße 36, 10713 Berlin-Wilmersdo…: location not offered","split":"train"}
+{"caseId":"post-7516d1de","ref":2,"got":2,"metric":"parts.aspect","detail":"the article asks whether the hunt for good Indian food in B…: none ≠ food","split":"train"}
+{"caseId":"post-7516d1de","ref":4,"got":4,"metric":"parts.sentiment","detail":"Bahadur promises authentic Indian food: neutral ≠ positive","split":"train"}
+{"caseId":"post-7516d1de","ref":4,"got":4,"metric":"parts.kind","detail":"Bahadur promises authentic Indian food: fact ≠ opinion","split":"train"}
+{"caseId":"post-7516d1de","ref":5,"got":5,"metric":"parts.aspect","detail":"after five years in Berlin the author still could not find …: none ≠ food","split":"train"}
+{"caseId":"post-7516d1de","ref":6,"got":6,"metric":"parts.aspect","detail":"Bahadur is young, authentic and exciting: authenticity ≠ vibe","split":"train"}
+{"caseId":"post-7516d1de","ref":9,"got":9,"metric":"parts.kind","detail":"Bahadur has no cliché golden elephants or kitsch peacock st…: opinion ≠ change","split":"train"}
+{"caseId":"post-7516d1de","ref":11,"got":11,"metric":"parts.aspect","detail":"you have to try Bahadur's grilled dishes: food ≠ menu_variety","split":"train"}
+{"caseId":"post-7516d1de","ref":19,"got":19,"metric":"parts.aspect","detail":"the dipping sauces, mint for the lamb and chili for the chi…: taste ≠ seasoning","split":"train"}
+{"caseId":"post-7516d1de","ref":24,"got":24,"metric":"parts.aspect","detail":"the king prawns were the star: taste ≠ food","split":"train"}
+{"caseId":"post-7516d1de","ref":25,"got":25,"metric":"parts.sentiment","detail":"the king prawns were filled with something like spiced mash…: neutral ≠ positive","split":"train"}
+{"caseId":"post-7516d1de","ref":25,"got":25,"metric":"parts.aspect","detail":"the king prawns were filled with something like spiced mash…: food ≠ cooking","split":"train"}
+{"caseId":"post-7516d1de","ref":25,"got":25,"metric":"parts.kind","detail":"the king prawns were filled with something like spiced mash…: fact ≠ opinion","split":"train"}
+{"caseId":"post-7516d1de","ref":36,"got":36,"metric":"parts.sentiment","detail":"the thali had many different curries and pickles with pilau…: neutral ≠ positive","split":"train"}
+{"caseId":"post-7516d1de","ref":36,"got":36,"metric":"parts.kind","detail":"the thali had many different curries and pickles with pilau…: fact ≠ opinion","split":"train"}
+{"caseId":"post-7516d1de","ref":44,"got":44,"metric":"parts.aspect","detail":"90% of Berlin's Indian restaurants claim to have a tandoor …: none ≠ authenticity","split":"train"}
+{"caseId":"post-7516d1de","ref":47,"got":47,"metric":"parts.sentiment","detail":"Bahadur's curries are not like in the UK, not bombastic: neutral ≠ positive","split":"train"}
+{"caseId":"post-7516d1de","ref":47,"got":47,"metric":"parts.aspect","detail":"Bahadur's curries are not like in the UK, not bombastic: authenticity ≠ seasoning","split":"train"}
+{"caseId":"post-7516d1de","ref":50,"got":50,"metric":"parts.aspect","detail":"British curries are a separate beast altogether: none ≠ authenticity","split":"train"}
+{"caseId":"post-7516d1de","ref":51,"got":51,"metric":"parts.aspect","detail":"masala chai tea is the most sophisticated drink in the world: none ≠ drink_quality","split":"train"}
+{"caseId":"post-7516d1de","ref":53,"got":53,"metric":"parts.aspect","detail":"just-add-water powdered chai is crap: none ≠ drink_quality","split":"train"}
+{"caseId":"post-7516d1de","ref":60,"got":60,"metric":"parts.aspect","detail":"Berlin is waking up to Indian food: none ≠ food","split":"train"}
+{"caseId":"post-7516d1de","ref":60,"got":60,"metric":"parts.kind","detail":"Berlin is waking up to Indian food: opinion ≠ change","split":"train"}
+{"caseId":"post-7516d1de","ref":62,"got":62,"metric":"parts.sentiment","detail":"the author wishes Bahadur was closer: negative ≠ positive","split":"train"}
+{"caseId":"post-7516d1de","metric":"change.false","ref":9,"got":9,"detail":"Bahadur has no cliché golden elephants or kitsch peacock statues, only slight Indian touc…","split":"train"}
+{"caseId":"post-7516d1de","metric":"change.false","ref":60,"got":60,"detail":"Berlin is waking up to Indian food","split":"train"}
+{"caseId":"post-75c11d7c","ref":5,"got":5,"metric":"parts.aspect","detail":"Nichi Getsu is the sister restaurant of Shiori: ownership ≠ none","split":"test"}
+{"caseId":"post-75c11d7c","ref":5,"got":5,"metric":"shortlist.recall","detail":"Nichi Getsu is the sister restaurant of Shiori: ownership not offered","split":"test"}
+{"caseId":"post-75c11d7c","ref":10,"got":10,"metric":"parts.aspect","detail":"in the evening Nichi Getsu is an exclusive Edomae-style sus…: menu_variety ≠ none","split":"test"}
+{"caseId":"post-75c11d7c","ref":11,"got":11,"metric":"parts.sentiment","detail":"evening reservations at Nichi Getsu sometimes have to be pl…: neutral ≠ positive","split":"test"}
+{"caseId":"post-75c11d7c","ref":13,"got":13,"metric":"parts.sentiment","detail":"a classic Chirashi bowl arranges neat, flawless slices of r…: neutral ≠ positive","split":"test"}
+{"caseId":"post-75c11d7c","ref":13,"got":13,"metric":"parts.kind","detail":"a classic Chirashi bowl arranges neat, flawless slices of r…: fact ≠ opinion","split":"test"}
+{"caseId":"post-75c11d7c","ref":14,"got":14,"metric":"parts.aspect","detail":"in Bara Chirashi the fish is cut into small bite-sized piec…: menu_variety ≠ presentation","split":"test"}
+{"caseId":"post-75c11d7c","ref":18,"got":18,"metric":"parts.sentiment","detail":"the fish used just lacks the perfect shape or look a flawle…: neutral ≠ negative","split":"test"}
+{"caseId":"post-75c11d7c","ref":18,"got":18,"metric":"parts.kind","detail":"the fish used just lacks the perfect shape or look a flawle…: fact ≠ opinion","split":"test"}
+{"caseId":"post-75c11d7c","ref":21,"got":21,"metric":"parts.aspect","detail":"less perfectionism, more taste: taste ≠ presentation","split":"test"}
+{"caseId":"post-75c11d7c","ref":22,"got":22,"metric":"parts.aspect","detail":"the Bara Chirashi comes richly topped with various kinds of…: portion_size ≠ presentation","split":"test"}
+{"caseId":"post-75c11d7c","ref":36,"got":36,"metric":"parts.aspect","detail":"Nichi Getsu chooses the quieter path, which makes it so spe…: none ≠ noise","split":"test"}
+{"caseId":"post-7853ecf5","ref":5,"got":5,"metric":"parts.aspect","detail":"the author recommends the Patty Melt: food ≠ advice","split":"train"}
+{"caseId":"post-7853ecf5","ref":6,"got":6,"metric":"parts.aspect","detail":"the Patty Melt is a real insider tip among the burger varia…: food ≠ advice","split":"train"}
+{"caseId":"post-78e0e15a","ref":0,"got":0,"metric":"parts.aspect","detail":"Berlin is one of the best foodie cities: none ≠ food","split":"train"}
+{"caseId":"post-78e0e15a","ref":0,"got":0,"metric":"parts.kind","detail":"Berlin is one of the best foodie cities: opinion ≠ verdict","split":"train"}
+{"caseId":"post-78e0e15a","ref":4,"got":4,"metric":"parts.aspect","detail":"party sausages with delicious curry sauce: taste ≠ seasoning","split":"train"}
+{"caseId":"post-78e0e15a","ref":4,"got":4,"metric":"shortlist.recall","detail":"party sausages with delicious curry sauce: taste not offered","split":"train"}
+{"caseId":"post-78e0e15a","ref":5,"got":5,"metric":"parts.aspect","detail":"Zacharias Tagesbar is the cutest one: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-78e0e15a","ref":5,"got":5,"metric":"shortlist.recall","detail":"Zacharias Tagesbar is the cutest one: atmosphere not offered","split":"train"}
+{"caseId":"post-78e0e15a","ref":8,"got":8,"metric":"parts.aspect","detail":"Niko Izakaya feels like being in Tokyo: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-78e0e15a","ref":11,"got":11,"metric":"parts.aspect","detail":"they ordered pretty much the whole menu at Niko Izakaya: none ≠ menu_variety","split":"train"}
+{"caseId":"post-78e0e15a","ref":13,"got":13,"metric":"parts.aspect","detail":"get the grilled miso pork and the beef cutlet at Niko Izaka…: food ≠ advice","split":"train"}
+{"caseId":"post-78e0e15a","ref":13,"got":13,"metric":"parts.kind","detail":"get the grilled miso pork and the beef cutlet at Niko Izaka…: opinion ≠ verdict","split":"train"}
+{"caseId":"post-78e0e15a","ref":14,"got":14,"metric":"parts.kind","detail":"Bar Pluto was their favourite bar: verdict ≠ opinion","split":"train"}
+{"caseId":"post-78e0e15a","ref":20,"got":20,"metric":"parts.aspect","detail":"Gaffel Haus is the perfect spot to tick German food off the…: none ≠ menu_variety","split":"train"}
+{"caseId":"post-78e0e15a","ref":26,"got":26,"metric":"parts.aspect","detail":"get the breakfast sandwich at Annelies: food ≠ advice","split":"train"}
+{"caseId":"post-78e0e15a","ref":26,"got":26,"metric":"parts.kind","detail":"get the breakfast sandwich at Annelies: opinion ≠ verdict","split":"train"}
+{"caseId":"post-78e0e15a","ref":28,"got":28,"metric":"parts.aspect","detail":"Lap Coffee is a great spot to grab a quick coffee or a matc…: occasion ≠ drink_selection","split":"train"}
+{"caseId":"post-78e0e15a","ref":31,"got":31,"metric":"parts.aspect","detail":"do not miss Canal's pastries, especially the tiramisu: food ≠ none","split":"train"}
+{"caseId":"post-78e0e15a","ref":31,"got":31,"metric":"parts.kind","detail":"do not miss Canal's pastries, especially the tiramisu: opinion ≠ verdict","split":"train"}
+{"caseId":"post-78e0e15a","ref":32,"got":32,"metric":"parts.aspect","detail":"Canal has all the classic pastries and an apricot croissant: menu_variety ≠ availability","split":"train"}
+{"caseId":"post-78e0e15a","ref":32,"got":32,"metric":"shortlist.recall","detail":"Canal has all the classic pastries and an apricot croissant: menu_variety not offered","split":"train"}
+{"caseId":"post-78e0e15a","ref":34,"got":34,"metric":"parts.aspect","detail":"Sofi has everything you look for in baked goods: menu_variety ≠ food","split":"train"}
+{"caseId":"post-78e0e15a","ref":34,"got":34,"metric":"shortlist.recall","detail":"Sofi has everything you look for in baked goods: menu_variety not offered","split":"train"}
+{"caseId":"post-78e0e15a","ref":42,"got":42,"metric":"parts.aspect","detail":"you can't leave Berlin without having a kebab: none ≠ food","split":"train"}
+{"caseId":"post-78e0e15a","ref":42,"got":42,"metric":"parts.kind","detail":"you can't leave Berlin without having a kebab: opinion ≠ verdict","split":"train"}
+{"caseId":"post-7adcadc8","ref":4,"got":4,"metric":"parts.aspect","detail":"the Caesar-Salat combination always tastes good: taste ≠ consistency","split":"train"}
+{"caseId":"post-7e6e2acc","ref":5,"got":5,"metric":"parts.aspect","detail":"they had the lamb and cumin bian bian noodles at Wen Cheng: none ≠ food","split":"train"}
+{"caseId":"post-7e6e2acc","ref":17,"got":17,"metric":"parts.aspect","detail":"she had never had Jordan dumplings or acharuli before: none ≠ food","split":"train"}
+{"caseId":"post-812c90d9","ref":1,"got":1,"metric":"parts.aspect","detail":"the jjm at hängbok is hands down the best jjm the author ha…: taste ≠ food","split":"train"}
+{"caseId":"post-812c90d9","ref":1,"got":1,"metric":"shortlist.recall","detail":"the jjm at hängbok is hands down the best jjm the author ha…: taste not offered","split":"train"}
+{"caseId":"post-812c90d9","ref":4,"got":4,"metric":"parts.aspect","detail":"the seafood jjm is 3€ more, the author thinks: price_level ≠ price","split":"train"}
+{"caseId":"post-812c90d9","ref":5,"got":5,"metric":"parts.aspect","detail":"jjm jajangmyun is black bean noodles with pork: menu_variety ≠ food","split":"train"}
+{"caseId":"post-812c90d9","ref":6,"got":6,"metric":"parts.aspect","detail":"tangsuyuk is fried pork with sweet and sour sauce: menu_variety ≠ food","split":"train"}
+{"caseId":"post-816a40e7","ref":2,"got":2,"metric":"parts.aspect","detail":"it is a Syrian-Kurdish restaurant in Charlottenburg: menu_variety ≠ none","split":"test"}
+{"caseId":"post-816a40e7","ref":5,"got":5,"metric":"parts.aspect","detail":"the restaurant is at Wilmersdorfer Straße 104: location ≠ none","split":"test"}
+{"caseId":"post-816a40e7","ref":5,"got":5,"metric":"shortlist.recall","detail":"the restaurant is at Wilmersdorfer Straße 104: location not offered","split":"test"}
+{"caseId":"post-82422910","ref":3,"got":3,"metric":"parts.aspect","detail":"the Käsespätzle at Keyser Soze is the best the author has t…: taste ≠ food","split":"train"}
+{"caseId":"post-82422910","ref":3,"got":3,"metric":"shortlist.recall","detail":"the Käsespätzle at Keyser Soze is the best the author has t…: taste not offered","split":"train"}
+{"caseId":"post-82422910","ref":6,"got":6,"metric":"parts.aspect","detail":"asks viewers whether they have tried Käsespätzle: none ≠ food","split":"train"}
+{"caseId":"post-82422910","ref":7,"got":7,"metric":"parts.aspect","detail":"asks viewers which other German dishes they would recommend: none ≠ advice","split":"train"}
+{"caseId":"post-85b04bf2","ref":0,"got":0,"metric":"parts.aspect","detail":"the author asks what really makes a restaurant excellent: none ≠ service","split":"train"}
+{"caseId":"post-86502a88","ref":1,"got":1,"metric":"parts.aspect","detail":"the best seat at Fat Henry is at the chef's bar: vibe ≠ space","split":"train"}
+{"caseId":"post-86502a88","ref":1,"got":1,"metric":"parts.kind","detail":"the best seat at Fat Henry is at the chef's bar: opinion ≠ verdict","split":"train"}
+{"caseId":"post-86502a88","ref":5,"got":5,"metric":"parts.aspect","detail":"a smell too good to ignore made them ask the chef what it w…: food ≠ food_hygiene","split":"train"}
+{"caseId":"post-86502a88","ref":6,"got":6,"metric":"parts.aspect","detail":"the chef added a new sauce he was still working on to their…: service ≠ seasoning","split":"train"}
+{"caseId":"post-86502a88","ref":7,"got":7,"metric":"parts.aspect","detail":"that is exactly why they would sit at the counter of Fat He…: none ≠ space","split":"train"}
+{"caseId":"post-86502a88","ref":11,"got":11,"metric":"parts.aspect","detail":"tip: sit at the chef's bar of Fat Henry and ask what's cook…: vibe ≠ advice","split":"train"}
+{"caseId":"post-875be07a","ref":5,"got":5,"metric":"parts.kind","detail":"entry to the Berlin Chocolate Festival costs 5 €, free up t…: fact ≠ deal","split":"train"}
+{"caseId":"post-875be07a","ref":6,"got":6,"metric":"parts.aspect","detail":"the Spring Festival (Nouruz / Newroz) at the Humboldt Forum…: none ≠ food","split":"train"}
+{"caseId":"post-8901fb9b","ref":9,"got":9,"metric":"parts.aspect","detail":"the best burger is the Big Mac thing the Goldies boys do: taste ≠ none","split":"test"}
+{"caseId":"post-8901fb9b","ref":9,"got":9,"metric":"parts.kind","detail":"the best burger is the Big Mac thing the Goldies boys do: verdict ≠ opinion","split":"test"}
+{"caseId":"post-8901fb9b","ref":17,"got":17,"metric":"parts.aspect","detail":"Romeo's has the best sandwich: taste ≠ none","split":"test"}
+{"caseId":"post-8901fb9b","ref":24,"got":24,"metric":"parts.aspect","detail":"Ash from Chunky Chunky recommended Miss Saigon to him: none ≠ advice","split":"test"}
+{"caseId":"post-8901fb9b","ref":27,"got":27,"metric":"parts.kind","detail":"at Ming Dynasty you can get special dishes if you pre-order…: fact ≠ deal","split":"test"}
+{"caseId":"post-8901fb9b","ref":28,"got":28,"metric":"parts.aspect","detail":"if you know what to order, Ming Dynasty can be an absolute …: none ≠ advice","split":"test"}
+{"caseId":"post-8901fb9b","ref":30,"got":30,"metric":"parts.aspect","detail":"at Papaya he eats a classic red curry with duck: menu_variety ≠ food","split":"test"}
+{"caseId":"post-8901fb9b","ref":35,"got":35,"metric":"parts.aspect","detail":"Gotcha does fried pig ears: menu_variety ≠ food","split":"test"}
+{"caseId":"post-8901fb9b","ref":35,"got":35,"metric":"shortlist.recall","detail":"Gotcha does fried pig ears: menu_variety not offered","split":"test"}
+{"caseId":"post-8901fb9b","ref":36,"got":36,"metric":"parts.aspect","detail":"Gotcha does a paella served as a whole pan: menu_variety ≠ portion_size","split":"test"}
+{"caseId":"post-8901fb9b","ref":38,"got":38,"metric":"parts.kind","detail":"Mustafa's is the most overrated place in Berlin: verdict ≠ opinion","split":"test"}
+{"caseId":"post-8901fb9b","ref":41,"got":41,"metric":"parts.aspect","detail":"at Speicher Bowenhaus all the smoked eels come to the table…: menu_variety ≠ service","split":"test"}
+{"caseId":"post-8901fb9b","ref":42,"got":42,"metric":"parts.aspect","detail":"at Speicher Bowenhaus the smoked eel is eaten with dark rye…: menu_variety ≠ food","split":"test"}
+{"caseId":"post-8901fb9b","ref":43,"got":43,"metric":"parts.aspect","detail":"at Speicher Bowenhaus you wash your hands with a schnapps a…: none ≠ service","split":"test"}
+{"caseId":"post-8901fb9b","ref":52,"got":52,"metric":"parts.aspect","detail":"Common's pizza is amazing: taste ≠ food","split":"test"}
+{"caseId":"post-8901fb9b","ref":52,"got":52,"metric":"shortlist.recall","detail":"Common's pizza is amazing: taste not offered","split":"test"}
+{"caseId":"post-8c6bd842","ref":7,"got":7,"metric":"parts.sentiment","detail":"they forgot the Salat: neutral ≠ negative","split":"train"}
+{"caseId":"post-8c6bd842","ref":7,"got":7,"metric":"parts.kind","detail":"they forgot the Salat: fact ≠ opinion","split":"train"}
+{"caseId":"post-8d8803aa","ref":0,"got":0,"metric":"parts.kind","detail":"ORA is looking for a new Chef de Partie starting in Novembe…: fact ≠ change","split":"train"}
+{"caseId":"post-8d8803aa","metric":"change.false","ref":0,"got":0,"detail":"ORA is looking for a new Chef de Partie starting in November 2026","split":"train"}
+{"caseId":"post-8e94e7ea","ref":3,"got":3,"metric":"parts.aspect","detail":"With the Pommes, Grill, Brot and Salat, sharing is suddenly…: taste ≠ portion_size","split":"train"}
+{"caseId":"post-909ca5ee","ref":0,"got":0,"metric":"parts.aspect","detail":"Strolling up Vorbergstraße in Schöneberg feels like being i…: location ≠ vibe","split":"test"}
+{"caseId":"post-909ca5ee","ref":6,"got":6,"metric":"parts.aspect","detail":"The owners see Barlevain as a modern Wirtshaus: vibe ≠ none","split":"test"}
+{"caseId":"post-909ca5ee","ref":12,"got":12,"metric":"parts.aspect","detail":"The cutlery tied with ribbons is charming: interior ≠ dining_area","split":"test"}
+{"caseId":"post-909ca5ee","ref":20,"got":20,"metric":"parts.aspect","detail":"All dishes at Barlevain are meant for sharing: menu_variety ≠ portion_size","split":"test"}
+{"caseId":"post-909ca5ee","ref":21,"got":21,"metric":"parts.aspect","detail":"It is best to start with the Sauerteigbrot: food ≠ none","split":"test"}
+{"caseId":"post-909ca5ee","ref":21,"got":21,"metric":"parts.kind","detail":"It is best to start with the Sauerteigbrot: opinion ≠ verdict","split":"test"}
+{"caseId":"post-909ca5ee","ref":23,"got":23,"metric":"parts.aspect","detail":"The white giant beans with Chili Crunch are a recommended s…: food ≠ advice","split":"test"}
+{"caseId":"post-909ca5ee","ref":27,"got":27,"metric":"parts.kind","detail":"The Cavatelli are currently served as Pasta alla Norma: fact ≠ change","split":"test"}
+{"caseId":"post-909ca5ee","ref":34,"got":34,"metric":"parts.aspect","detail":"Barlevain is at Vorbergstr.10a, 10823 Berlin-Schöneberg: location ≠ none","split":"test"}
+{"caseId":"post-909ca5ee","ref":34,"got":34,"metric":"shortlist.recall","detail":"Barlevain is at Vorbergstr.10a, 10823 Berlin-Schöneberg: location not offered","split":"test"}
+{"caseId":"post-909ca5ee","metric":"change.false","ref":27,"got":27,"detail":"The Cavatelli are currently served as Pasta alla Norma","split":"test"}
+{"caseId":"post-91544b0a","ref":3,"got":3,"metric":"parts.aspect","detail":"the food culture in Peru completely blew the author's mind: none ≠ food","split":"train"}
+{"caseId":"post-91544b0a","ref":4,"got":4,"metric":"parts.aspect","detail":"Peruvian cuisine is one of the best cuisines in the world: none ≠ food","split":"train"}
+{"caseId":"post-91544b0a","ref":11,"got":11,"metric":"parts.sentiment","detail":"the ceviche is the ultimate test of any Peruvian spot: neutral ≠ positive","split":"train"}
+{"caseId":"post-91544b0a","ref":11,"got":11,"metric":"parts.aspect","detail":"the ceviche is the ultimate test of any Peruvian spot: none ≠ food","split":"train"}
+{"caseId":"post-91544b0a","ref":16,"got":16,"metric":"parts.aspect","detail":"not ordering the platter when visiting is a grave mistake: food ≠ advice","split":"train"}
+{"caseId":"post-91544b0a","ref":22,"got":22,"metric":"parts.aspect","detail":"the Lomo Saltado is highly addictive: taste ≠ food","split":"train"}
+{"caseId":"post-91544b0a","ref":22,"got":22,"metric":"shortlist.recall","detail":"the Lomo Saltado is highly addictive: taste not offered","split":"train"}
+{"caseId":"post-91544b0a","ref":29,"got":29,"metric":"parts.aspect","detail":"the author asks followers what their favorite Peruvian dish…: none ≠ menu_variety","split":"train"}
+{"caseId":"post-9223f335","ref":3,"got":3,"metric":"parts.aspect","detail":"Gercek Chicken is located at Turmstr. 82, 10551 Berlin: location ≠ none","split":"train"}
+{"caseId":"post-9223f335","ref":3,"got":3,"metric":"shortlist.recall","detail":"Gercek Chicken is located at Turmstr. 82, 10551 Berlin: location not offered","split":"train"}
+{"caseId":"post-92d82657","ref":10,"got":10,"metric":"parts.aspect","detail":"it was the creator's first time trying Burmese food at Burm…: none ≠ food","split":"train"}
+{"caseId":"post-92d82657","ref":12,"got":12,"metric":"parts.aspect","detail":"the food at Burma Bliss reminded the creator of a fusion be…: menu_variety ≠ food","split":"train"}
+{"caseId":"post-92d82657","ref":15,"got":15,"metric":"parts.aspect","detail":"Kin Za makes delicious Georgian food: taste ≠ food","split":"train"}
+{"caseId":"post-92d82657","ref":16,"got":16,"metric":"parts.sentiment","detail":"Kin Za's colorful decor makes it look more like a party pla…: positive ≠ negative","split":"train"}
+{"caseId":"post-93526d04","ref":7,"got":7,"metric":"parts.sentiment","detail":"the unnamed baklava shop has 4.8 stars: neutral ≠ positive","split":"test"}
+{"caseId":"post-93526d04","ref":7,"got":7,"metric":"parts.kind","detail":"the unnamed baklava shop has 4.8 stars: fact ≠ opinion","split":"test"}
+{"caseId":"post-93526d04","ref":15,"got":15,"metric":"parts.aspect","detail":"they had a Turkish breakfast at Kaffee Peri: none ≠ food","split":"test"}
+{"caseId":"post-93526d04","ref":19,"got":19,"metric":"parts.kind","detail":"they rate Kaffee Peri 7 out of 10: verdict ≠ opinion","split":"test"}
+{"caseId":"post-93526d04","ref":20,"got":20,"metric":"parts.aspect","detail":"they tried the Tortilla Wraps at Manches: none ≠ food","split":"test"}
+{"caseId":"post-93526d04","ref":24,"got":24,"metric":"parts.aspect","detail":"Sagros Gemüse Kebab is in Kreuzberg: location ≠ none","split":"test"}
+{"caseId":"post-93526d04","ref":24,"got":24,"metric":"shortlist.recall","detail":"Sagros Gemüse Kebab is in Kreuzberg: location not offered","split":"test"}
+{"caseId":"post-93ac6d3b","ref":2,"got":2,"metric":"parts.aspect","detail":"Birds in the Kitchen serves burgers that guests rate five s…: food ≠ none","split":"train"}
+{"caseId":"post-93ac6d3b","ref":3,"got":3,"metric":"parts.aspect","detail":"Neukölln is not short of burger joints: none ≠ menu_variety","split":"train"}
+{"caseId":"post-93ac6d3b","ref":8,"got":8,"metric":"parts.sentiment","detail":"Charlottenburg is often gastronomically underestimated: neutral ≠ positive","split":"train"}
+{"caseId":"post-93ac6d3b","ref":8,"got":8,"metric":"parts.aspect","detail":"Charlottenburg is often gastronomically underestimated: none ≠ food","split":"train"}
+{"caseId":"post-93ac6d3b","ref":11,"got":11,"metric":"parts.aspect","detail":"Beavis Bar proves Mitte can do more than tourist traps: none ≠ location","split":"train"}
+{"caseId":"post-93ac6d3b","ref":12,"got":12,"metric":"parts.aspect","detail":"Charlottenburg is experiencing a gastronomic revival: none ≠ food","split":"train"}
+{"caseId":"post-93ac6d3b","ref":12,"got":12,"metric":"parts.kind","detail":"Charlottenburg is experiencing a gastronomic revival: opinion ≠ change","split":"train"}
+{"caseId":"post-93ac6d3b","ref":14,"got":14,"metric":"parts.aspect","detail":"the area around Savignyplatz is regaining its old appeal, w…: none ≠ atmosphere","split":"train"}
+{"caseId":"post-93ac6d3b","ref":14,"got":14,"metric":"parts.kind","detail":"the area around Savignyplatz is regaining its old appeal, w…: opinion ≠ change","split":"train"}
+{"caseId":"post-93ac6d3b","ref":15,"got":15,"metric":"parts.aspect","detail":"artisan bakeries have become rare in Berlin: none ≠ availability","split":"train"}
+{"caseId":"post-93ac6d3b","metric":"change.false","ref":12,"got":12,"detail":"Charlottenburg is experiencing a gastronomic revival","split":"train"}
+{"caseId":"post-93ac6d3b","metric":"change.false","ref":14,"got":14,"detail":"the area around Savignyplatz is regaining its old appeal, without the stuffiness of the e…","split":"train"}
+{"caseId":"post-98771366","ref":2,"got":2,"metric":"parts.aspect","detail":"the slow-cooked Duroc pork at Katz Orange is recommended: food ≠ advice","split":"train"}
+{"caseId":"post-98771366","ref":2,"got":2,"metric":"parts.kind","detail":"the slow-cooked Duroc pork at Katz Orange is recommended: opinion ≠ verdict","split":"train"}
+{"caseId":"post-996efecb","ref":6,"got":6,"metric":"parts.aspect","detail":"the author ordered two hand brews: none ≠ drinks","split":"test"}
+{"caseId":"post-996efecb","ref":10,"got":10,"metric":"parts.aspect","detail":"the barista gave a thumbs up when the author said they unde…: friendliness ≠ service","split":"test"}
+{"caseId":"post-996efecb","ref":10,"got":10,"metric":"shortlist.recall","detail":"the barista gave a thumbs up when the author said they unde…: friendliness not offered","split":"test"}
+{"caseId":"post-99e89441","ref":8,"got":8,"metric":"parts.aspect","detail":"Yumcha Heroes Manufaktur is at Dunckerstraße 60 in Prenzlau…: location ≠ none","split":"train"}
+{"caseId":"post-99e89441","ref":8,"got":8,"metric":"shortlist.recall","detail":"Yumcha Heroes Manufaktur is at Dunckerstraße 60 in Prenzlau…: location not offered","split":"train"}
+{"caseId":"post-9a608e09","ref":4,"got":4,"metric":"parts.aspect","detail":"the food is served on point: cooking ≠ presentation","split":"train"}
+{"caseId":"post-9ea777e8","ref":3,"got":3,"metric":"parts.aspect","detail":"Smack Burger is the place to be for a seriously good burger…: none ≠ food","split":"test"}
+{"caseId":"post-9f93c25b","ref":2,"got":2,"metric":"parts.aspect","detail":"Club Kitchen is a super cool spot for lunch: occasion ≠ vibe","split":"test"}
+{"caseId":"post-9f93c25b","ref":3,"got":3,"metric":"parts.kind","detail":"Big Window is number 9, one of his favourite meat restauran…: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":4,"got":4,"metric":"parts.kind","detail":"Mondapaz is number 8 and he likes going there at lunchtime: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":7,"got":7,"metric":"parts.kind","detail":"The Catch is number 7 in his top 10: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":10,"got":10,"metric":"parts.kind","detail":"Borchardt is number 6 in his top 10: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":12,"got":12,"metric":"parts.aspect","detail":"Borchardt has one of the most delicious Schnitzel in all of…: taste ≠ food","split":"test"}
+{"caseId":"post-9f93c25b","ref":12,"got":12,"metric":"shortlist.recall","detail":"Borchardt has one of the most delicious Schnitzel in all of…: taste not offered","split":"test"}
+{"caseId":"post-9f93c25b","ref":15,"got":15,"metric":"parts.kind","detail":"Kulachino is one of his favourite places: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":16,"got":16,"metric":"parts.kind","detail":"Grill Royal is number 4 in his top 10: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":18,"got":18,"metric":"parts.kind","detail":"China Club is number 3 in his top 10: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":22,"got":22,"metric":"parts.kind","detail":"Mine is number 2, one of his favourite restaurants: verdict ≠ opinion","split":"test"}
+{"caseId":"post-9f93c25b","ref":25,"got":25,"metric":"parts.kind","detail":"Mine is really top: verdict ≠ opinion","split":"test"}
+{"caseId":"post-a3178d9e","ref":0,"got":0,"metric":"parts.kind","detail":"The Bun Society changed the creator's opinion of smashburge…: opinion ≠ change","split":"train"}
+{"caseId":"post-a3178d9e","ref":1,"got":1,"metric":"parts.kind","detail":"Come to The Bun Society before 17:00, then it is not too cr…: fact ≠ verdict","split":"train"}
+{"caseId":"post-a3178d9e","metric":"change.false","ref":0,"got":0,"detail":"The Bun Society changed the creator's opinion of smashburgers for the better","split":"train"}
+{"caseId":"post-a61ba144","ref":0,"got":0,"metric":"parts.aspect","detail":"asks which hyped food spots in Berlin people can recommend: none ≠ advice","split":"test"}
+{"caseId":"post-a73d3378","ref":2,"got":2,"metric":"parts.aspect","detail":"there is no photo of the Gemüsedöner because the hunger was…: none ≠ presentation","split":"train"}
+{"caseId":"post-a73d3378","ref":3,"got":3,"metric":"parts.aspect","detail":"ate Georgian food for the first time in Berlin: none ≠ food","split":"train"}
+{"caseId":"post-a7757925","ref":2,"got":2,"metric":"parts.aspect","detail":"HOMì is a Vietnamese café in the middle of Berlin: menu_variety ≠ none","split":"train"}
+{"caseId":"post-a7757925","ref":7,"got":7,"metric":"parts.aspect","detail":"they tried various drinks and both bermis: none ≠ food","split":"train"}
+{"caseId":"post-a7757925","ref":15,"got":15,"metric":"parts.aspect","detail":"the vegan bermi is also good but the mähnchen one is prefer…: taste ≠ food","split":"train"}
+{"caseId":"post-a7757925","ref":15,"got":15,"metric":"shortlist.recall","detail":"the vegan bermi is also good but the mähnchen one is prefer…: taste not offered","split":"train"}
+{"caseId":"post-a7757925","ref":21,"got":21,"metric":"parts.sentiment","detail":"the coffee has Kondensmilch in it, which you can taste: neutral ≠ positive","split":"train"}
+{"caseId":"post-a8f0603a","ref":0,"got":0,"metric":"parts.aspect","detail":"Halloween-themed spooky vibes have taken over UMAMI Ku’damm: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-a8f0603a","ref":0,"got":0,"metric":"parts.kind","detail":"Halloween-themed spooky vibes have taken over UMAMI Ku’damm: event ≠ change","split":"train"}
+{"caseId":"post-a8f0603a","ref":1,"got":1,"metric":"parts.kind","detail":"UMAMI Ku’damm's October specials are still available: new_item ≠ fact","split":"train"}
+{"caseId":"post-a8f0603a","ref":5,"got":5,"metric":"parts.sentiment","detail":"The GOLDEN LUCK special is a mango-passion fruit mousse cak…: neutral ≠ positive","split":"train"}
+{"caseId":"post-a8f0603a","ref":5,"got":5,"metric":"parts.aspect","detail":"The GOLDEN LUCK special is a mango-passion fruit mousse cak…: menu_variety ≠ food","split":"train"}
+{"caseId":"post-a8f0603a","ref":5,"got":5,"metric":"parts.kind","detail":"The GOLDEN LUCK special is a mango-passion fruit mousse cak…: new_item ≠ opinion","split":"train"}
+{"caseId":"post-a8f0603a","ref":5,"got":5,"metric":"shortlist.recall","detail":"The GOLDEN LUCK special is a mango-passion fruit mousse cak…: menu_variety not offered","split":"train"}
+{"caseId":"post-a8f0603a","metric":"change.false","ref":0,"got":0,"detail":"Halloween-themed spooky vibes have taken over UMAMI Ku’damm","split":"train"}
+{"caseId":"post-a92f9a04","ref":0,"got":0,"metric":"parts.aspect","detail":"Café KannVa offers tasty snacks: taste ≠ food","split":"train"}
+{"caseId":"post-aa137bfa","ref":4,"got":4,"metric":"parts.aspect","detail":"a DJ plays house and lounge sounds at the Main: atmosphere ≠ noise","split":"train"}
+{"caseId":"post-aa137bfa","ref":5,"got":5,"metric":"parts.aspect","detail":"cocktails are mixed at the bar: drink_selection ≠ drinks","split":"train"}
+{"caseId":"post-aa137bfa","ref":7,"got":7,"metric":"parts.aspect","detail":"the restaurant is in the TITANIC Gendarmenmarkt hotel: location ≠ none","split":"train"}
+{"caseId":"post-aa137bfa","ref":7,"got":7,"metric":"shortlist.recall","detail":"the restaurant is in the TITANIC Gendarmenmarkt hotel: location not offered","split":"train"}
+{"caseId":"post-aa137bfa","ref":9,"got":9,"metric":"parts.aspect","detail":"for over ten years the Beef Grill Club by Hasir was located…: ownership ≠ none","split":"train"}
+{"caseId":"post-aa137bfa","ref":9,"got":9,"metric":"shortlist.recall","detail":"for over ten years the Beef Grill Club by Hasir was located…: ownership not offered","split":"train"}
+{"caseId":"post-aa137bfa","ref":12,"got":12,"metric":"parts.aspect","detail":"the restaurant got a deliberately chosen new name: other ≠ none","split":"train"}
+{"caseId":"post-aa137bfa","ref":12,"got":12,"metric":"shortlist.recall","detail":"the restaurant got a deliberately chosen new name: other not offered","split":"train"}
+{"caseId":"post-aa137bfa","ref":13,"got":13,"metric":"parts.aspect","detail":"the brand has other locations: Beef Grill Club at Leipziger…: other ≠ location","split":"train"}
+{"caseId":"post-aa137bfa","ref":13,"got":13,"metric":"shortlist.recall","detail":"the brand has other locations: Beef Grill Club at Leipziger…: other not offered","split":"train"}
+{"caseId":"post-aa137bfa","ref":14,"got":14,"metric":"parts.aspect","detail":"the Main is meant to be the brand's mothership, where it al…: ownership ≠ none","split":"train"}
+{"caseId":"post-aa137bfa","ref":19,"got":19,"metric":"parts.aspect","detail":"the Tokyo-Style-Tatar with Ponzu, egg yolk cream and Nori b…: taste ≠ menu_variety","split":"train"}
+{"caseId":"post-aa137bfa","ref":25,"got":25,"metric":"parts.aspect","detail":"the old DNA has not entirely disappeared: menu_variety ≠ vibe","split":"train"}
+{"caseId":"post-aa137bfa","ref":25,"got":25,"metric":"parts.kind","detail":"the old DNA has not entirely disappeared: opinion ≠ change","split":"train"}
+{"caseId":"post-aa137bfa","ref":27,"got":27,"metric":"parts.aspect","detail":"large Angus cuts are presented, explained and carved at the…: presentation ≠ service","split":"train"}
+{"caseId":"post-aa137bfa","ref":30,"got":30,"metric":"parts.aspect","detail":"the steak needs nothing more: taste ≠ food","split":"train"}
+{"caseId":"post-aa137bfa","ref":33,"got":33,"metric":"parts.aspect","detail":"the Main is less classic fine dining than an evening experi…: occasion ≠ none","split":"train"}
+{"caseId":"post-aa137bfa","ref":34,"got":34,"metric":"parts.aspect","detail":"starters, mains and desserts are served for sharing: menu_variety ≠ service","split":"train"}
+{"caseId":"post-aa137bfa","ref":40,"got":40,"metric":"parts.aspect","detail":"for good steaks, strong drinks and a restaurant that doesn'…: none ≠ occasion","split":"train"}
+{"caseId":"post-aa137bfa","metric":"change.false","ref":25,"got":25,"detail":"the old DNA has not entirely disappeared","split":"train"}
+{"caseId":"post-ab190d78","ref":0,"got":0,"metric":"parts.aspect","detail":"Al Abdallah Chicken is a Lebanese restaurant in Berlin: menu_variety ≠ none","split":"train"}
+{"caseId":"post-ab190d78","ref":1,"got":1,"metric":"parts.aspect","detail":"the creator tested the Iftar-Menü, which costs 21 euros: price_level ≠ price","split":"train"}
+{"caseId":"post-ab190d78","ref":2,"got":2,"metric":"parts.sentiment","detail":"the Iftar-Menü includes a Dattel for breaking the fast, Lin…: neutral ≠ positive","split":"train"}
+{"caseId":"post-ab190d78","ref":2,"got":2,"metric":"parts.kind","detail":"the Iftar-Menü includes a Dattel for breaking the fast, Lin…: fact ≠ opinion","split":"train"}
+{"caseId":"post-ab190d78","ref":6,"got":6,"metric":"parts.aspect","detail":"the Hähnchen-Sandwich should definitely be tried with the S…: taste ≠ seasoning","split":"train"}
+{"caseId":"post-ab190d78","ref":6,"got":6,"metric":"parts.kind","detail":"the Hähnchen-Sandwich should definitely be tried with the S…: opinion ≠ verdict","split":"train"}
+{"caseId":"post-ab190d78","ref":10,"got":10,"metric":"parts.aspect","detail":"Al Abdallah Chicken is at Gotzkowskystraße 35, 10555 Berlin: location ≠ none","split":"train"}
+{"caseId":"post-ab190d78","ref":10,"got":10,"metric":"shortlist.recall","detail":"Al Abdallah Chicken is at Gotzkowskystraße 35, 10555 Berlin: location not offered","split":"train"}
+{"caseId":"post-ab4f0cb7","ref":6,"got":6,"metric":"parts.aspect","detail":"at Utopie you don't have to get up right after the last bite: pressure ≠ vibe","split":"train"}
+{"caseId":"post-ab4f0cb7","ref":6,"got":6,"metric":"shortlist.recall","detail":"at Utopie you don't have to get up right after the last bite: pressure not offered","split":"train"}
+{"caseId":"post-ab4f0cb7","ref":7,"got":7,"metric":"parts.aspect","detail":"guests may end up staying at Utopie longer than planned: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-ab4f0cb7","ref":7,"got":7,"metric":"shortlist.recall","detail":"guests may end up staying at Utopie longer than planned: atmosphere not offered","split":"train"}
+{"caseId":"post-ad6a11c0","ref":8,"got":8,"metric":"parts.aspect","detail":"Dot Tea Bar has a beautiful tea ceremony: drinks ≠ vibe","split":"train"}
+{"caseId":"post-ad6a11c0","ref":10,"got":10,"metric":"parts.aspect","detail":"make sure to try the cold noodles and main dishes at night …: menu_variety ≠ advice","split":"train"}
+{"caseId":"post-ad6a11c0","ref":10,"got":10,"metric":"parts.kind","detail":"make sure to try the cold noodles and main dishes at night …: opinion ≠ verdict","split":"train"}
+{"caseId":"post-ad6a11c0","ref":14,"got":14,"metric":"parts.kind","detail":"Bonanza is the creator's favourite coffee shop in Berlin: verdict ≠ opinion","split":"train"}
+{"caseId":"post-ad6a11c0","ref":21,"got":21,"metric":"parts.kind","detail":"Muschelbar is the creator's favourite spot in Prenzlauer Be…: verdict ≠ opinion","split":"train"}
+{"caseId":"post-ad6a11c0","ref":24,"got":24,"metric":"parts.aspect","detail":"Muschelbar felt like a little holiday trip to France: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-ad6a11c0","ref":24,"got":24,"metric":"shortlist.recall","detail":"Muschelbar felt like a little holiday trip to France: atmosphere not offered","split":"train"}
+{"caseId":"post-ae8f76f1","ref":4,"got":4,"metric":"parts.aspect","detail":"The creator had Menemen with warm Simit: menu_variety ≠ food","split":"train"}
+{"caseId":"post-ae8f76f1","ref":4,"got":4,"metric":"shortlist.recall","detail":"The creator had Menemen with warm Simit: menu_variety not offered","split":"train"}
+{"caseId":"post-ae8f76f1","ref":11,"got":11,"metric":"parts.aspect","detail":"The creator had never had the fried egg with spinach combin…: menu_variety ≠ food","split":"train"}
+{"caseId":"post-ae8f76f1","ref":11,"got":11,"metric":"shortlist.recall","detail":"The creator had never had the fried egg with spinach combin…: menu_variety not offered","split":"train"}
+{"caseId":"post-b41bb2f8","ref":1,"got":1,"metric":"parts.aspect","detail":"Buffet Sunday is already looking like a full house: crowding ≠ vibe","split":"test"}
+{"caseId":"post-b41bb2f8","ref":1,"got":1,"metric":"shortlist.recall","detail":"Buffet Sunday is already looking like a full house: crowding not offered","split":"test"}
+{"caseId":"post-b41bb2f8","ref":5,"got":5,"metric":"parts.aspect","detail":"The buffet is a batch dining experience for guests' comfort: crowding ≠ service","split":"test"}
+{"caseId":"post-b41bb2f8","ref":9,"got":9,"metric":"parts.aspect","detail":"Olayinka is the founder of Berlin Naija Foodie: ownership ≠ none","split":"test"}
+{"caseId":"post-b41bb2f8","ref":9,"got":9,"metric":"shortlist.recall","detail":"Olayinka is the founder of Berlin Naija Foodie: ownership not offered","split":"test"}
+{"caseId":"post-b5e879f0","ref":0,"got":0,"metric":"parts.sentiment","detail":"queuing is the new black on Bergmannstraße: negative ≠ positive","split":"test"}
+{"caseId":"post-b5e879f0","ref":1,"got":1,"metric":"parts.aspect","detail":"after the long wait the young man orders only a small Decaf…: none ≠ drink_selection","split":"test"}
+{"caseId":"post-b5e879f0","ref":5,"got":5,"metric":"parts.aspect","detail":"the city's society is drawn to hype: none ≠ vibe","split":"test"}
+{"caseId":"post-b5e879f0","ref":6,"got":6,"metric":"parts.aspect","detail":"Restaurant India is at Bergmannstraße 100: location ≠ none","split":"test"}
+{"caseId":"post-b5e879f0","ref":6,"got":6,"metric":"shortlist.recall","detail":"Restaurant India is at Bergmannstraße 100: location not offered","split":"test"}
+{"caseId":"post-b5e879f0","ref":7,"got":7,"metric":"parts.aspect","detail":"Restaurant India has closed after 31 years: other ≠ opening_hours","split":"test"}
+{"caseId":"post-b5e879f0","ref":10,"got":10,"metric":"parts.aspect","detail":"commercial rents on Bergmannstraße increased: none ≠ price_level","split":"test"}
+{"caseId":"post-b5e879f0","ref":10,"got":10,"metric":"parts.kind","detail":"commercial rents on Bergmannstraße increased: fact ≠ change","split":"test"}
+{"caseId":"post-b5e879f0","ref":18,"got":18,"metric":"parts.aspect","detail":"the author drank her Yogi-Tee at Restaurant India many time…: atmosphere ≠ vibe","split":"test"}
+{"caseId":"post-b5e879f0","ref":18,"got":18,"metric":"shortlist.recall","detail":"the author drank her Yogi-Tee at Restaurant India many time…: atmosphere not offered","split":"test"}
+{"caseId":"post-b5e879f0","ref":20,"got":20,"metric":"parts.aspect","detail":"owner Virender Aurora has friendly, soft features: ownership ≠ none","split":"test"}
+{"caseId":"post-b5e879f0","ref":26,"got":26,"metric":"parts.aspect","detail":"they shared a portion of Halwa and the author had to fight …: taste ≠ portion_size","split":"test"}
+{"caseId":"post-b5e879f0","ref":27,"got":27,"metric":"parts.aspect","detail":"Halwa is an Indian dessert of semolina, raisins, almonds an…: none ≠ food","split":"test"}
+{"caseId":"post-b5e879f0","ref":28,"got":28,"metric":"parts.aspect","detail":"on the last evening before closing the owner only reluctant…: on_the_house ≠ payment","split":"test"}
+{"caseId":"post-b5e879f0","ref":28,"got":28,"metric":"parts.kind","detail":"on the last evening before closing the owner only reluctant…: fact ≠ event","split":"test"}
+{"caseId":"post-b5e879f0","ref":29,"got":29,"metric":"parts.aspect","detail":"the new international deli supermarket opposite sells Halwa…: none ≠ ingredient_quality","split":"test"}
+{"caseId":"post-b5e879f0","metric":"change.false","ref":10,"got":10,"detail":"commercial rents on Bergmannstraße increased","split":"test"}
+{"caseId":"post-b8d2bcf3","ref":2,"got":2,"metric":"parts.aspect","detail":"Café Bravo was created with architect Johanne Nalbach and r…: interior ≠ none","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":3,"got":3,"metric":"parts.sentiment","detail":"Café Bravo is the newest and fourth venue of the team behin…: neutral ≠ positive","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":3,"got":3,"metric":"parts.aspect","detail":"Café Bravo is the newest and fourth venue of the team behin…: ownership ≠ none","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":3,"got":3,"metric":"parts.kind","detail":"Café Bravo is the newest and fourth venue of the team behin…: fact ≠ opinion","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":3,"got":3,"metric":"shortlist.recall","detail":"Café Bravo is the newest and fourth venue of the team behin…: ownership not offered","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":13,"got":13,"metric":"parts.aspect","detail":"Bravo is a museum café in the best sense: vibe ≠ none","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":14,"got":14,"metric":"parts.aspect","detail":"Bravo is a place where the world and the neighbourhood meet: atmosphere ≠ location","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":27,"got":27,"metric":"parts.aspect","detail":"the drinks are refreshing in the hot summer: drink_quality ≠ drinks","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":29,"got":29,"metric":"parts.aspect","detail":"Bravo is one of those rare Berlin places that feel as if th…: none ≠ vibe","split":"train"}
+{"caseId":"post-b8d2bcf3","ref":30,"got":30,"metric":"parts.kind","detail":"Bravo, Bravo!: verdict ≠ opinion","split":"train"}
+{"caseId":"post-b94a51a2","ref":2,"got":2,"metric":"parts.aspect","detail":"the dishes at Je Restaurant are delicious: taste ≠ food","split":"train"}
+{"caseId":"post-b94a51a2","ref":2,"got":2,"metric":"shortlist.recall","detail":"the dishes at Je Restaurant are delicious: taste not offered","split":"train"}
+{"caseId":"post-baac3611","ref":2,"got":2,"metric":"parts.aspect","detail":"giveaway of a 50 € voucher for 44 CHKN: none ≠ on_the_house","split":"train"}
+{"caseId":"post-baac3611","ref":2,"got":2,"metric":"parts.amount","detail":"giveaway of a 50 € voucher for 44 CHKN: 50 money ≠ —","split":"train"}
+{"caseId":"post-babe1142","ref":4,"got":4,"metric":"parts.aspect","detail":"Peggy Bee is committed to dynamic flavor and inventive reci…: taste ≠ food","split":"test"}
+{"caseId":"post-babe1142","ref":4,"got":4,"metric":"shortlist.recall","detail":"Peggy Bee is committed to dynamic flavor and inventive reci…: taste not offered","split":"test"}
+{"caseId":"post-babe1142","ref":12,"got":12,"metric":"parts.amount","detail":"Peggy Bee's Berlin Ice Cream Week 2021 offering is a one-eu…: 1 money ≠ —","split":"test"}
+{"caseId":"post-babe1142","ref":20,"got":20,"metric":"parts.aspect","detail":"in Italy buffalo ice cream is a trend growing in popularity: none ≠ food","split":"test"}
+{"caseId":"post-babe1142","ref":20,"got":20,"metric":"parts.kind","detail":"in Italy buffalo ice cream is a trend growing in popularity: fact ≠ change","split":"test"}
+{"caseId":"post-babe1142","ref":21,"got":21,"metric":"parts.aspect","detail":"Enrico is an advertising filmmaker who learned ice cream ma…: ownership ≠ none","split":"test"}
+{"caseId":"post-babe1142","ref":21,"got":21,"metric":"shortlist.recall","detail":"Enrico is an advertising filmmaker who learned ice cream ma…: ownership not offered","split":"test"}
+{"caseId":"post-babe1142","ref":22,"got":22,"metric":"parts.aspect","detail":"Enrico has an excellent knack for making ice cream: food ≠ cooking","split":"test"}
+{"caseId":"post-babe1142","ref":25,"got":25,"metric":"parts.aspect","detail":"Enrico does not want Peggy Bee to be only about Italian ice…: menu_variety ≠ none","split":"test"}
+{"caseId":"post-babe1142","ref":25,"got":25,"metric":"parts.kind","detail":"Enrico does not want Peggy Bee to be only about Italian ice…: fact ≠ opinion","split":"test"}
+{"caseId":"post-babe1142","ref":25,"got":25,"metric":"shortlist.recall","detail":"Enrico does not want Peggy Bee to be only about Italian ice…: menu_variety not offered","split":"test"}
+{"caseId":"post-babe1142","ref":27,"got":27,"metric":"parts.aspect","detail":"the Eis is certainly killer: taste ≠ none","split":"test"}
+{"caseId":"post-babe1142","ref":27,"got":27,"metric":"shortlist.recall","detail":"the Eis is certainly killer: taste not offered","split":"test"}
+{"caseId":"post-babe1142","ref":31,"got":31,"metric":"parts.sentiment","detail":"during Berlin Ice Cream Week, 6 to 12 May 2021, 31 of the c…: neutral ≠ positive","split":"test"}
+{"caseId":"post-babe1142","ref":32,"got":32,"metric":"parts.aspect","detail":"the exquisite buffalo ricotta with pear and spicy chocolate…: taste ≠ advice","split":"test"}
+{"caseId":"post-babe1142","ref":34,"got":34,"metric":"parts.aspect","detail":"the ice cream is dynamic: taste ≠ food","split":"test"}
+{"caseId":"post-babe1142","metric":"change.false","ref":20,"got":20,"detail":"in Italy buffalo ice cream is a trend growing in popularity","split":"test"}
+{"caseId":"post-bca0fe02","ref":1,"got":1,"metric":"parts.aspect","detail":"Stoke is a super cool yakitori / Japanese style spot: menu_variety ≠ none","split":"train"}
+{"caseId":"post-bca0fe02","ref":1,"got":1,"metric":"shortlist.recall","detail":"Stoke is a super cool yakitori / Japanese style spot: menu_variety not offered","split":"train"}
+{"caseId":"post-bca0fe02","ref":3,"got":3,"metric":"parts.aspect","detail":"the author enjoyed sashimi, negimi, potato and Ibérico pork…: taste ≠ menu_variety","split":"train"}
+{"caseId":"post-bca0fe02","ref":8,"got":8,"metric":"parts.aspect","detail":"the author loves this kind of eating at Stoke: none ≠ occasion","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":0,"got":0,"metric":"parts.aspect","detail":"Pêle-Mêle ends the era of the avocado bread: menu_variety ≠ food","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":0,"got":0,"metric":"parts.kind","detail":"Pêle-Mêle ends the era of the avocado bread: opinion ≠ change","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":0,"got":0,"metric":"shortlist.recall","detail":"Pêle-Mêle ends the era of the avocado bread: menu_variety not offered","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":2,"got":2,"metric":"parts.kind","detail":"Pêle-Mêle finally brings variety with Syrian specialities: opinion ≠ new_item","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":3,"got":3,"metric":"parts.aspect","detail":"the Syrian dish Demeter at Pêle-Mêle has no carbohydrates: menu_variety ≠ dietary","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":9,"got":9,"metric":"parts.aspect","detail":"mismatched sets of Gründerzeit chairs stand at old wooden t…: interior ≠ vibe","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":9,"got":9,"metric":"shortlist.recall","detail":"mismatched sets of Gründerzeit chairs stand at old wooden t…: interior not offered","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":10,"got":10,"metric":"parts.aspect","detail":"a wooden sideboard behind the counter holds water glasses, …: interior ≠ none","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":10,"got":10,"metric":"shortlist.recall","detail":"a wooden sideboard behind the counter holds water glasses, …: interior not offered","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":15,"got":15,"metric":"parts.sentiment","detail":"head chef Bahaa Saad Al Din waves friendly from the kitchen…: positive ≠ neutral","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":15,"got":15,"metric":"parts.kind","detail":"head chef Bahaa Saad Al Din waves friendly from the kitchen…: opinion ≠ fact","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":18,"got":18,"metric":"parts.aspect","detail":"Bahaa has outstanding cooking skills: food ≠ cooking","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":19,"got":19,"metric":"parts.aspect","detail":"Pêle-Mêle is a pioneer of vegan Berlin cuisine: dietary ≠ none","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":20,"got":20,"metric":"parts.kind","detail":"Pêle-Mêle looked for new management in the middle of last y…: change ≠ fact","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":21,"got":21,"metric":"parts.aspect","detail":"water damage and renovation delayed the reopening until Jan…: none ≠ opening_hours","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":31,"got":31,"metric":"parts.sentiment","detail":"the all-you-can-eat brunch buffet costs 18.50€: neutral ≠ positive","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":31,"got":31,"metric":"parts.kind","detail":"the all-you-can-eat brunch buffet costs 18.50€: fact ≠ opinion","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":34,"got":34,"metric":"parts.aspect","detail":"being filling plays a key role at Pêle-Mêle: portion_size ≠ food","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":34,"got":34,"metric":"shortlist.recall","detail":"being filling plays a key role at Pêle-Mêle: portion_size not offered","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":35,"got":35,"metric":"parts.aspect","detail":"as is classic in the Levant, the main dishes use hardly any…: menu_variety ≠ authenticity","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":36,"got":36,"metric":"parts.sentiment","detail":"the main dishes use lots of vegetables, protein-rich foods …: neutral ≠ positive","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":36,"got":36,"metric":"parts.kind","detail":"the main dishes use lots of vegetables, protein-rich foods …: fact ≠ opinion","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":42,"got":42,"metric":"parts.aspect","detail":"the Syrian dishes are especially recommended: food ≠ advice","split":"train"}
+{"caseId":"post-c0a7fdc2","ref":42,"got":42,"metric":"parts.kind","detail":"the Syrian dishes are especially recommended: opinion ≠ verdict","split":"train"}
+{"caseId":"post-c0a7fdc2","metric":"change.false","ref":0,"got":0,"detail":"Pêle-Mêle ends the era of the avocado bread","split":"train"}
+{"caseId":"post-c0a7fdc2","metric":"change.missed","ref":21,"detail":"water damage and renovation delayed the reopening until January","split":"train"}
+{"caseId":"post-c4e7c0a9","ref":1,"got":1,"metric":"parts.aspect","detail":"Sabon is a Mediterranean wine bistro run by Luca Simon and …: ownership ≠ none","split":"test"}
+{"caseId":"post-c4e7c0a9","ref":2,"got":2,"metric":"parts.aspect","detail":"Sabon revolves around good wines and uncomplicated food: menu_variety ≠ drinks","split":"test"}
+{"caseId":"post-c4e7c0a9","ref":6,"got":6,"metric":"parts.aspect","detail":"Sabon combines Mediterranean influences from Italy, Portuga…: menu_variety ≠ none","split":"test"}
+{"caseId":"post-c4e7c0a9","ref":6,"got":6,"metric":"shortlist.recall","detail":"Sabon combines Mediterranean influences from Italy, Portuga…: menu_variety not offered","split":"test"}
+{"caseId":"post-c4e7c0a9","ref":16,"got":16,"metric":"parts.aspect","detail":"every wine can be tasted beforehand: drink_selection ≠ service","split":"test"}
+{"caseId":"post-c4e7c0a9","ref":22,"got":22,"metric":"parts.kind","detail":"seasonal dishes on the menu change regularly: fact ≠ change","split":"test"}
+{"caseId":"post-c4e7c0a9","metric":"change.false","ref":22,"got":22,"detail":"seasonal dishes on the menu change regularly","split":"test"}
+{"caseId":"post-cb785d0b","ref":2,"got":2,"metric":"parts.aspect","detail":"the square spit is something never seen in Berlin before: menu_variety ≠ food","split":"train"}
+{"caseId":"post-cb785d0b","ref":2,"got":2,"metric":"shortlist.recall","detail":"the square spit is something never seen in Berlin before: menu_variety not offered","split":"train"}
+{"caseId":"post-cb785d0b","ref":5,"got":5,"metric":"parts.aspect","detail":"ordered only Fleisch and Zwiebel without Soße: food ≠ order_accuracy","split":"train"}
+{"caseId":"post-cb785d0b","ref":13,"got":13,"metric":"parts.sentiment","detail":"the meat is hardly seasoned: positive ≠ negative","split":"train"}
+{"caseId":"post-cb785d0b","ref":16,"got":16,"metric":"parts.aspect","detail":"the lammfett does not have an unpleasant smell: taste ≠ food_hygiene","split":"train"}
+{"caseId":"post-cb785d0b","ref":17,"got":17,"metric":"parts.aspect","detail":"whoever orders their steakdöner with Soße has lost control …: food ≠ seasoning","split":"train"}
+{"caseId":"post-cb785d0b","ref":18,"got":18,"metric":"parts.aspect","detail":"sauce on steakdöner is nonsense, a big scam: food ≠ seasoning","split":"train"}
+{"caseId":"post-cb785d0b","ref":21,"got":21,"metric":"parts.sentiment","detail":"the dish also has Kartoffel: neutral ≠ negative","split":"train"}
+{"caseId":"post-cb785d0b","ref":21,"got":21,"metric":"parts.aspect","detail":"the dish also has Kartoffel: food ≠ availability","split":"train"}
+{"caseId":"post-cb785d0b","ref":21,"got":21,"metric":"parts.kind","detail":"the dish also has Kartoffel: fact ≠ opinion","split":"train"}
+{"caseId":"post-cb785d0b","ref":25,"got":25,"metric":"parts.amount","detail":"tomorrow the Döner costs only one cent: 0.01 money ≠ —","split":"train"}
+{"caseId":"post-cb785d0b","ref":36,"got":36,"metric":"parts.aspect","detail":"Sagos opened exactly 2 years ago: none ≠ opening_hours","split":"train"}
+{"caseId":"post-cb785d0b","ref":36,"got":36,"metric":"parts.kind","detail":"Sagos opened exactly 2 years ago: fact ≠ event","split":"train"}
+{"caseId":"post-cb785d0b","ref":41,"got":41,"metric":"parts.aspect","detail":"the same price applies for Falafel: price_level ≠ price","split":"train"}
+{"caseId":"post-cb785d0b","ref":41,"got":41,"metric":"parts.kind","detail":"the same price applies for Falafel: deal ≠ fact","split":"train"}
+{"caseId":"post-cb785d0b","ref":44,"got":44,"metric":"parts.kind","detail":"for the 3 euro Döner you can choose Hähnchen, Falafel or Ha…: deal ≠ fact","split":"train"}
+{"caseId":"post-cb785d0b","ref":44,"got":44,"metric":"parts.amount","detail":"for the 3 euro Döner you can choose Hähnchen, Falafel or Ha…: 3 money ≠ —","split":"train"}
+{"caseId":"post-cb785d0b","ref":47,"got":47,"metric":"parts.aspect","detail":"the prep kitchen tiles are nice, clean and white: cleanliness ≠ interior","split":"train"}
+{"caseId":"post-cb785d0b","ref":48,"got":48,"metric":"parts.aspect","detail":"the prep kitchen will be finished around the same time as t…: other ≠ interior","split":"train"}
+{"caseId":"post-cb785d0b","ref":50,"got":50,"metric":"parts.sentiment","detail":"Schafskäse is already very salty on its own: neutral ≠ negative","split":"train"}
+{"caseId":"post-cb785d0b","ref":50,"got":50,"metric":"parts.kind","detail":"Schafskäse is already very salty on its own: fact ≠ opinion","split":"train"}
+{"caseId":"post-d057d8ef","ref":2,"got":2,"metric":"parts.sentiment","detail":"the steak is just a Rumsteak: neutral ≠ negative","split":"train"}
+{"caseId":"post-d057d8ef","ref":2,"got":2,"metric":"parts.aspect","detail":"the steak is just a Rumsteak: ingredient_quality ≠ food","split":"train"}
+{"caseId":"post-d057d8ef","ref":2,"got":2,"metric":"shortlist.recall","detail":"the steak is just a Rumsteak: ingredient_quality not offered","split":"train"}
+{"caseId":"post-d057d8ef","ref":4,"got":4,"metric":"parts.aspect","detail":"regular customers come in and greet endlessly: atmosphere ≠ friendliness","split":"train"}
+{"caseId":"post-d057d8ef","ref":4,"got":4,"metric":"shortlist.recall","detail":"regular customers come in and greet endlessly: atmosphere not offered","split":"train"}
+{"caseId":"post-d057d8ef","ref":7,"got":7,"metric":"parts.kind","detail":"he ordered both Nudeln and Steak, which is unorthodox: fact ≠ opinion","split":"train"}
+{"caseId":"post-d057d8ef","ref":13,"got":13,"metric":"parts.aspect","detail":"the Italian family really goes all out: service ≠ ownership","split":"train"}
+{"caseId":"post-d1ab7367","ref":1,"got":1,"metric":"parts.aspect","detail":"Vinos (Naturales) is a popular natural wine shop in the Wra…: location ≠ none","split":"train"}
+{"caseId":"post-d1ab7367","ref":5,"got":5,"metric":"parts.aspect","detail":"The shop has been renamed Vinos (Naturales): ownership ≠ none","split":"train"}
+{"caseId":"post-d1ab7367","ref":6,"got":6,"metric":"parts.kind","detail":"The new owners keep the shop's Eastern European focus: fact ≠ change","split":"train"}
+{"caseId":"post-d1ab7367","ref":9,"got":9,"metric":"parts.aspect","detail":"Two very different wine cultures are united under one roof: drink_selection ≠ drinks","split":"train"}
+{"caseId":"post-d1ab7367","ref":9,"got":9,"metric":"shortlist.recall","detail":"Two very different wine cultures are united under one roof: drink_selection not offered","split":"train"}
+{"caseId":"post-d1ab7367","ref":18,"got":18,"metric":"parts.kind","detail":"Josepha wants to bring more women winemakers into the range: fact ≠ change","split":"train"}
+{"caseId":"post-d1ab7367","ref":19,"got":19,"metric":"parts.aspect","detail":"Local DJs play at Vinos on Thursdays and weekends, curated …: atmosphere ≠ none","split":"train"}
+{"caseId":"post-d1ab7367","ref":20,"got":20,"metric":"parts.aspect","detail":"Vinos is not meant to be a club but a place to drink, liste…: atmosphere ≠ none","split":"train"}
+{"caseId":"post-d1ab7367","ref":24,"got":24,"metric":"parts.aspect","detail":"Vinos has inherited an existing community and already begun…: none ≠ vibe","split":"train"}
+{"caseId":"post-d1ab7367","ref":26,"got":26,"metric":"parts.aspect","detail":"The Berlin food scene constantly reinvents itself: none ≠ menu_variety","split":"train"}
+{"caseId":"post-d1ab7367","metric":"change.false","ref":6,"got":6,"detail":"The new owners keep the shop's Eastern European focus","split":"train"}
+{"caseId":"post-d1ab7367","metric":"change.false","ref":18,"got":18,"detail":"Josepha wants to bring more women winemakers into the range","split":"train"}
+{"caseId":"post-d220e97c","ref":0,"got":0,"metric":"parts.aspect","detail":"another delicious day in Berlin: none ≠ taste","split":"train"}
+{"caseId":"post-d220e97c","ref":5,"got":5,"metric":"parts.aspect","detail":"the people at Akkurat Café are even more beautiful: friendliness ≠ none","split":"train"}
+{"caseId":"post-d220e97c","ref":7,"got":7,"metric":"parts.aspect","detail":"Goldies Bar is from the same guys behind Goldies: ownership ≠ none","split":"train"}
+{"caseId":"post-d220e97c","ref":7,"got":7,"metric":"shortlist.recall","detail":"Goldies Bar is from the same guys behind Goldies: ownership not offered","split":"train"}
+{"caseId":"post-d220e97c","ref":16,"got":16,"metric":"parts.aspect","detail":"the creator wants 5 liters of the house lemonade at Gazzo P…: drink_quality ≠ drinks","split":"train"}
+{"caseId":"post-d220e97c","ref":16,"got":16,"metric":"shortlist.recall","detail":"the creator wants 5 liters of the house lemonade at Gazzo P…: drink_quality not offered","split":"train"}
+{"caseId":"post-d232f1ca","ref":0,"got":0,"metric":"parts.kind","detail":"ROY teamed up with BRLO again to bring back ROY Hops Kombuc…: new_item ≠ change","split":"test"}
+{"caseId":"post-d232f1ca","ref":1,"got":1,"metric":"parts.aspect","detail":"ROY Hops Kombucha is a lighter alternative to beer: drink_quality ≠ drinks","split":"test"}
+{"caseId":"post-d232f1ca","ref":5,"got":5,"metric":"parts.aspect","detail":"ROY Hops Kombucha is alcohol-free: drink_selection ≠ drinks","split":"test"}
+{"caseId":"post-d232f1ca","metric":"change.false","ref":0,"got":0,"detail":"ROY teamed up with BRLO again to bring back ROY Hops Kombucha","split":"test"}
+{"caseId":"post-d90ac864","ref":2,"got":2,"metric":"parts.aspect","detail":"the food was rated 10 out of 10: taste ≠ none","split":"test"}
+{"caseId":"post-d90ac864","ref":3,"got":3,"metric":"parts.kind","detail":"jalanche is offered to try: fact ≠ question","split":"test"}
+{"caseId":"post-db280ef6","ref":4,"got":4,"metric":"parts.sentiment","detail":"572Pasta ends overpriced lunch: positive ≠ negative","split":"test"}
+{"caseId":"post-de30c08d","ref":2,"got":2,"metric":"parts.kind","detail":"The Main is a new opening: fact ≠ event","split":"train"}
+{"caseId":"post-dfe2d586","ref":0,"got":0,"metric":"parts.aspect","detail":"bubble tea was a hype, then seemingly gone, and is now ever…: none ≠ availability","split":"test"}
+{"caseId":"post-dfe2d586","ref":0,"got":0,"metric":"parts.kind","detail":"bubble tea was a hype, then seemingly gone, and is now ever…: fact ≠ change","split":"test"}
+{"caseId":"post-dfe2d586","ref":1,"got":1,"metric":"parts.aspect","detail":"Milk Tea, Matcha, Brown Sugar Boba and co. are now part of …: none ≠ drink_selection","split":"test"}
+{"caseId":"post-dfe2d586","ref":7,"got":7,"metric":"parts.aspect","detail":"The Alley's two special limited flavours belong on your foo…: drink_quality ≠ drinks","split":"test"}
+{"caseId":"post-dfe2d586","ref":9,"got":9,"metric":"parts.aspect","detail":"recommended to go to The Alley with friends, order both dri…: none ≠ advice","split":"test"}
+{"caseId":"post-dfe2d586","metric":"change.false","ref":0,"got":0,"detail":"bubble tea was a hype, then seemingly gone, and is now everywhere","split":"test"}
+{"caseId":"post-e0cef8d9","ref":0,"got":0,"metric":"parts.kind","detail":"Usta Laso invites people to come by and convince themselves: verdict ≠ opinion","split":"train"}
+{"caseId":"post-e1c05dce","ref":0,"got":0,"metric":"parts.kind","detail":"the viral Japanese Sandos are finally available in Berlin a…: fact ≠ question","split":"train"}
+{"caseId":"post-e1c05dce","ref":1,"got":1,"metric":"parts.sentiment","detail":"Japanese sandos are the most popular desserts in Japan: neutral ≠ positive","split":"train"}
+{"caseId":"post-e1c05dce","ref":1,"got":1,"metric":"parts.kind","detail":"Japanese sandos are the most popular desserts in Japan: fact ≠ opinion","split":"train"}
+{"caseId":"post-e1c05dce","ref":8,"got":8,"metric":"parts.aspect","detail":"the matcha latte is a bit liquid: drink_quality ≠ drinks","split":"train"}
+{"caseId":"post-e1c05dce","ref":19,"got":19,"metric":"parts.aspect","detail":"the cream brulee sando gets 8 out of 10: taste ≠ none","split":"train"}
+{"caseId":"post-e2a421e9","ref":4,"got":4,"metric":"parts.sentiment","detail":"By the 1990s Lindner had grown from a business mainly at we…: neutral ≠ positive","split":"test"}
+{"caseId":"post-e2a421e9","ref":6,"got":6,"metric":"parts.aspect","detail":"Butter Lindner was renamed to just Lindner: other ≠ none","split":"test"}
+{"caseId":"post-e2a421e9","ref":6,"got":6,"metric":"shortlist.recall","detail":"Butter Lindner was renamed to just Lindner: other not offered","split":"test"}
+{"caseId":"post-e2a421e9","ref":8,"got":8,"metric":"parts.sentiment","detail":"Berliners stay stubborn when it comes to traditional shops: neutral ≠ negative","split":"test"}
+{"caseId":"post-e2a421e9","ref":10,"got":10,"metric":"parts.aspect","detail":"After about 20 years Lindner is returning to its old name B…: other ≠ none","split":"test"}
+{"caseId":"post-e2a421e9","ref":10,"got":10,"metric":"shortlist.recall","detail":"After about 20 years Lindner is returning to its old name B…: other not offered","split":"test"}
+{"caseId":"post-e2a421e9","ref":11,"got":11,"metric":"parts.aspect","detail":"Benjamin Strutz from Lindner's management calls the return …: other ≠ none","split":"test"}
+{"caseId":"post-e2a421e9","ref":12,"got":12,"metric":"parts.aspect","detail":"The slightly modified logo with Butter on all products and …: other ≠ none","split":"test"}
+{"caseId":"post-e2a421e9","ref":12,"got":12,"metric":"shortlist.recall","detail":"The slightly modified logo with Butter on all products and …: other not offered","split":"test"}
+{"caseId":"post-e62d3c39","ref":2,"got":2,"metric":"parts.aspect","detail":"the new operators made Bravo a feel-good place: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-e62d3c39","ref":2,"got":2,"metric":"parts.kind","detail":"the new operators made Bravo a feel-good place: opinion ≠ change","split":"train"}
+{"caseId":"post-e62d3c39","ref":2,"got":2,"metric":"shortlist.recall","detail":"the new operators made Bravo a feel-good place: atmosphere not offered","split":"train"}
+{"caseId":"post-e62d3c39","ref":3,"got":3,"metric":"parts.aspect","detail":"since mid-July Eva Alken, Clemens Roesch, Sören Zupke and V…: ownership ≠ none","split":"train"}
+{"caseId":"post-e62d3c39","ref":3,"got":3,"metric":"shortlist.recall","detail":"since mid-July Eva Alken, Clemens Roesch, Sören Zupke and V…: ownership not offered","split":"train"}
+{"caseId":"post-e62d3c39","ref":4,"got":4,"metric":"parts.aspect","detail":"Bravo is now a day café: other ≠ none","split":"train"}
+{"caseId":"post-e62d3c39","ref":4,"got":4,"metric":"parts.kind","detail":"Bravo is now a day café: fact ≠ change","split":"train"}
+{"caseId":"post-e62d3c39","ref":12,"got":12,"metric":"parts.aspect","detail":"Trio is a full-bodied neo-Wirtshaus: menu_variety ≠ none","split":"train"}
+{"caseId":"post-e62d3c39","ref":13,"got":13,"metric":"parts.aspect","detail":"at Trio, near the Volksbühne, culture and cuisine meet as e…: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-e62d3c39","ref":18,"got":18,"metric":"parts.aspect","detail":"Bravo serves Stullen: menu_variety ≠ food","split":"train"}
+{"caseId":"post-e62d3c39","ref":18,"got":18,"metric":"shortlist.recall","detail":"Bravo serves Stullen: menu_variety not offered","split":"train"}
+{"caseId":"post-e62d3c39","ref":19,"got":19,"metric":"parts.aspect","detail":"the team makes Bravo a spectacularly everyday place: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-e62d3c39","ref":19,"got":19,"metric":"shortlist.recall","detail":"the team makes Bravo a spectacularly everyday place: atmosphere not offered","split":"train"}
+{"caseId":"post-e62d3c39","ref":31,"got":31,"metric":"parts.aspect","detail":"the Würstl im Saft plate makes no fuss but is simply really…: taste ≠ food","split":"train"}
+{"caseId":"post-e62d3c39","ref":31,"got":31,"metric":"shortlist.recall","detail":"the Würstl im Saft plate makes no fuss but is simply really…: taste not offered","split":"train"}
+{"caseId":"post-e62d3c39","ref":32,"got":32,"metric":"parts.aspect","detail":"Bravo brings fresh wind to Auguststraße: none ≠ location","split":"train"}
+{"caseId":"post-e62d3c39","ref":37,"got":37,"metric":"parts.aspect","detail":"Sören Zupke says cafés open all day are where neighbourline…: none ≠ vibe","split":"train"}
+{"caseId":"post-e62d3c39","metric":"change.false","ref":2,"got":2,"detail":"the new operators made Bravo a feel-good place","split":"train"}
+{"caseId":"post-e62d3c39","metric":"change.false","ref":4,"got":4,"detail":"Bravo is now a day café","split":"train"}
+{"caseId":"post-e73f374d","ref":0,"got":0,"metric":"parts.aspect","detail":"Restaurant Boddensee is in Birkenwerder near Berlin: location ≠ none","split":"train"}
+{"caseId":"post-e73f374d","ref":0,"got":0,"metric":"shortlist.recall","detail":"Restaurant Boddensee is in Birkenwerder near Berlin: location not offered","split":"train"}
+{"caseId":"post-e8ff2f8c","ref":0,"got":0,"metric":"parts.aspect","detail":"Dalbhat is a charming little restaurant: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-e8ff2f8c","ref":0,"got":0,"metric":"shortlist.recall","detail":"Dalbhat is a charming little restaurant: atmosphere not offered","split":"train"}
+{"caseId":"post-e8ff2f8c","ref":2,"got":2,"metric":"parts.kind","detail":"the handmade momos are a must-try: opinion ≠ verdict","split":"train"}
+{"caseId":"post-ea13e9d3","ref":2,"got":2,"metric":"parts.sentiment","detail":"Binarai Forum has low lights: positive ≠ neutral","split":"train"}
+{"caseId":"post-ea13e9d3","ref":2,"got":2,"metric":"parts.kind","detail":"Binarai Forum has low lights: opinion ≠ fact","split":"train"}
+{"caseId":"post-ea13e9d3","ref":6,"got":6,"metric":"parts.sentiment","detail":"Market Prince is less polished and a bit more rusty: positive ≠ negative","split":"train"}
+{"caseId":"post-ea13e9d3","ref":6,"got":6,"metric":"parts.aspect","detail":"Market Prince is less polished and a bit more rusty: interior ≠ cleanliness","split":"train"}
+{"caseId":"post-ea13e9d3","ref":6,"got":6,"metric":"shortlist.recall","detail":"Market Prince is less polished and a bit more rusty: interior not offered","split":"train"}
+{"caseId":"post-ea13e9d3","ref":7,"got":7,"metric":"parts.aspect","detail":"Market Prince has an old school Berlin feeling: atmosphere ≠ vibe","split":"train"}
+{"caseId":"post-ea13e9d3","ref":10,"got":10,"metric":"parts.aspect","detail":"100 G is less mainstream than expected: crowding ≠ none","split":"train"}
+{"caseId":"post-ea13e9d3","ref":10,"got":10,"metric":"shortlist.recall","detail":"100 G is less mainstream than expected: crowding not offered","split":"train"}
+{"caseId":"post-ea13e9d3","ref":11,"got":11,"metric":"parts.sentiment","detail":"100 G is a little bit dark: positive ≠ negative","split":"train"}
+{"caseId":"post-ea13e9d3","ref":15,"got":15,"metric":"parts.aspect","detail":"Clerics is a random spot: atmosphere ≠ none","split":"train"}
+{"caseId":"post-ea13e9d3","ref":15,"got":15,"metric":"parts.kind","detail":"Clerics is a random spot: opinion ≠ verdict","split":"train"}
+{"caseId":"post-ea13e9d3","ref":17,"got":17,"metric":"parts.aspect","detail":"Clerics has a disco ball: interior ≠ vibe","split":"train"}
+{"caseId":"post-ea13e9d3","ref":17,"got":17,"metric":"shortlist.recall","detail":"Clerics has a disco ball: interior not offered","split":"train"}
+{"caseId":"post-ea13e9d3","ref":18,"got":18,"metric":"parts.aspect","detail":"Clerics is also a restaurant and cafe: other ≠ none","split":"train"}
+{"caseId":"post-ea13e9d3","ref":20,"got":20,"metric":"parts.aspect","detail":"Clerics is recommended if you have no plan but want to go o…: occasion ≠ advice","split":"train"}
+{"caseId":"post-ebc365f9","ref":0,"got":0,"metric":"parts.aspect","detail":"the creator asks for recommendations for new dinner spots i…: none ≠ advice","split":"train"}
+{"caseId":"post-ed056718","ref":0,"got":0,"metric":"parts.aspect","detail":"Tacos El Rey may have the best tacos in Berlin: none ≠ food","split":"train"}
+{"caseId":"post-ed056718","ref":1,"got":1,"metric":"parts.aspect","detail":"Mexicans living abroad miss their food: none ≠ food","split":"train"}
+{"caseId":"post-ed056718","ref":2,"got":2,"metric":"parts.aspect","detail":"Mexican food is an important part of Mexican culture: none ≠ food","split":"train"}
+{"caseId":"post-ed056718","ref":8,"got":8,"metric":"parts.aspect","detail":"at Tacos El Rey the food is the focus, not an overstaged in…: interior ≠ vibe","split":"train"}
+{"caseId":"post-ed056718","ref":8,"got":8,"metric":"shortlist.recall","detail":"at Tacos El Rey the food is the focus, not an overstaged in…: interior not offered","split":"train"}
+{"caseId":"post-ed056718","ref":13,"got":13,"metric":"parts.aspect","detail":"the Ribeye “El Rey” is the author's favourite: taste ≠ food","split":"train"}
+{"caseId":"post-ed056718","ref":13,"got":13,"metric":"shortlist.recall","detail":"the Ribeye “El Rey” is the author's favourite: taste not offered","split":"train"}
+{"caseId":"post-ed056718","ref":16,"got":16,"metric":"parts.aspect","detail":"the author's aunt, a critical eater, was thrilled with the …: taste ≠ food","split":"train"}
+{"caseId":"post-ed056718","ref":18,"got":18,"metric":"parts.sentiment","detail":"if the tortilla isn't good, the taco probably isn't good ei…: neutral ≠ negative","split":"train"}
+{"caseId":"post-ed056718","ref":18,"got":18,"metric":"parts.aspect","detail":"if the tortilla isn't good, the taco probably isn't good ei…: none ≠ ingredient_quality","split":"train"}
+{"caseId":"post-ed056718","ref":21,"got":21,"metric":"parts.aspect","detail":"the author tried margaritas, micheladas and a Paloma with P…: drink_selection ≠ drinks","split":"train"}
+{"caseId":"post-ed056718","ref":23,"got":23,"metric":"parts.aspect","detail":"Tacos El Rey is the author's go-to place when she is homesi…: none ≠ occasion","split":"train"}
+{"caseId":"post-ed4ad055","ref":1,"got":1,"metric":"parts.aspect","detail":"Monsieur Vuong's Pho is warming and hearty: taste ≠ temperature","split":"train"}
+{"caseId":"post-ed4ad055","ref":6,"got":6,"metric":"parts.aspect","detail":"the Pho warms the heart: food ≠ temperature","split":"train"}
+{"caseId":"post-eddeb88d","ref":5,"got":5,"metric":"parts.aspect","detail":"Reservations are recommended for the brunch: reservation_handling ≠ advice","split":"test"}
+{"caseId":"post-ef3b60ef","ref":0,"got":0,"metric":"parts.aspect","detail":"the Halligalli plate comes with 3 Currywürste: portion_size ≠ food","split":"train"}
+{"caseId":"post-ef3b60ef","ref":3,"got":3,"metric":"parts.aspect","detail":"the HALLIGALLI-Menü is hearty and crispy: cooking ≠ food","split":"train"}
+{"caseId":"post-ef3b60ef","ref":3,"got":3,"metric":"shortlist.recall","detail":"the HALLIGALLI-Menü is hearty and crispy: cooking not offered","split":"train"}
+{"caseId":"post-ef3b60ef","ref":4,"got":4,"metric":"parts.aspect","detail":"Ullas Currybude is in Berlin-Britz: location ≠ none","split":"train"}
+{"caseId":"post-ef3b60ef","ref":4,"got":4,"metric":"shortlist.recall","detail":"Ullas Currybude is in Berlin-Britz: location not offered","split":"train"}
+{"caseId":"post-f0fb51e5","ref":5,"got":5,"metric":"parts.sentiment","detail":"Neapolitan pizza: neutral ≠ positive","split":"train"}
+{"caseId":"post-f0fb51e5","ref":5,"got":5,"metric":"parts.aspect","detail":"Neapolitan pizza: menu_variety ≠ authenticity","split":"train"}
+{"caseId":"post-f0fb51e5","ref":5,"got":5,"metric":"parts.kind","detail":"Neapolitan pizza: fact ≠ new_item","split":"train"}
+{"caseId":"post-fb121f9c","ref":4,"got":4,"metric":"parts.aspect","detail":"the meat dish comes with potato cakes and fresh greens: menu_variety ≠ food","split":"train"}
+{"caseId":"post-fc96acff","ref":0,"got":0,"metric":"parts.aspect","detail":"Berlin refuses to properly accommodate the long, fine weekd…: none ≠ availability","split":"test"}
+{"caseId":"post-fc96acff","ref":1,"got":1,"metric":"parts.aspect","detail":"Berlin has never built a culture around the weekday lunch: none ≠ occasion","split":"test"}
+{"caseId":"post-fc96acff","ref":2,"got":2,"metric":"parts.sentiment","detail":"Berliners eat lunch quickly and without ceremony: neutral ≠ negative","split":"test"}
+{"caseId":"post-fc96acff","ref":2,"got":2,"metric":"parts.aspect","detail":"Berliners eat lunch quickly and without ceremony: none ≠ vibe","split":"test"}
+{"caseId":"post-fc96acff","ref":3,"got":3,"metric":"parts.sentiment","detail":"of Berlin's 19 Michelin-starred restaurants only one opens …: neutral ≠ negative","split":"test"}
+{"caseId":"post-fc96acff","ref":3,"got":3,"metric":"parts.kind","detail":"of Berlin's 19 Michelin-starred restaurants only one opens …: fact ≠ opinion","split":"test"}
+{"caseId":"post-fc96acff","ref":4,"got":4,"metric":"parts.sentiment","detail":"Facil is the only Michelin-starred restaurant in Berlin ope…: neutral ≠ positive","split":"test"}
+{"caseId":"post-fc96acff","ref":4,"got":4,"metric":"parts.aspect","detail":"Facil is the only Michelin-starred restaurant in Berlin ope…: opening_hours ≠ availability","split":"test"}
+{"caseId":"post-fc96acff","ref":4,"got":4,"metric":"parts.kind","detail":"Facil is the only Michelin-starred restaurant in Berlin ope…: fact ≠ opinion","split":"test"}
+{"caseId":"post-fc96acff","ref":13,"got":13,"metric":"parts.aspect","detail":"Facil is classic German fine dining with polished glass and…: menu_variety ≠ none","split":"test"}
+{"caseId":"post-fc96acff","ref":15,"got":15,"metric":"parts.kind","detail":"Facil's team has changed very little over the years: fact ≠ change","split":"test"}
+{"caseId":"post-fc96acff","ref":16,"got":16,"metric":"parts.aspect","detail":"Michael Kempf has been Facil's culinary director since 2003…: ownership ≠ none","split":"test"}
+{"caseId":"post-fc96acff","ref":16,"got":16,"metric":"shortlist.recall","detail":"Michael Kempf has been Facil's culinary director since 2003…: ownership not offered","split":"test"}
+{"caseId":"post-fc96acff","ref":17,"got":17,"metric":"parts.aspect","detail":"Chef Pâtissier Thomas Yoshida has been at Facil since the v…: ownership ≠ none","split":"test"}
+{"caseId":"post-fc96acff","ref":17,"got":17,"metric":"shortlist.recall","detail":"Chef Pâtissier Thomas Yoshida has been at Facil since the v…: ownership not offered","split":"test"}
+{"caseId":"post-fc96acff","ref":26,"got":26,"metric":"parts.aspect","detail":"Jonas Zörner, who came through Facil's kitchen, is now chef…: ownership ≠ none","split":"test"}
+{"caseId":"post-fc96acff","ref":26,"got":26,"metric":"parts.kind","detail":"Jonas Zörner, who came through Facil's kitchen, is now chef…: fact ≠ change","split":"test"}
+{"caseId":"post-fc96acff","ref":26,"got":26,"metric":"shortlist.recall","detail":"Jonas Zörner, who came through Facil's kitchen, is now chef…: ownership not offered","split":"test"}
+{"caseId":"post-fc96acff","ref":27,"got":27,"metric":"parts.aspect","detail":"Maximilian Kindel of Birds in the Kitchen came through Faci…: ownership ≠ none","split":"test"}
+{"caseId":"post-fc96acff","ref":27,"got":27,"metric":"shortlist.recall","detail":"Maximilian Kindel of Birds in the Kitchen came through Faci…: ownership not offered","split":"test"}
+{"caseId":"post-fc96acff","ref":28,"got":28,"metric":"parts.aspect","detail":"Ivano Pirolo of Cielo came through Facil's kitchen: ownership ≠ none","split":"test"}
+{"caseId":"post-fc96acff","ref":28,"got":28,"metric":"shortlist.recall","detail":"Ivano Pirolo of Cielo came through Facil's kitchen: ownership not offered","split":"test"}
+{"caseId":"post-fc96acff","ref":29,"got":29,"metric":"parts.kind","detail":"Wenzel Pankratz, who came through Facil's kitchen, now runs…: fact ≠ change","split":"test"}
+{"caseId":"post-fc96acff","ref":34,"got":34,"metric":"parts.aspect","detail":"the signature Brittany sole came as a roulade with oyster a…: menu_variety ≠ food","split":"test"}
+{"caseId":"post-fc96acff","ref":38,"got":38,"metric":"parts.aspect","detail":"nowhere else in Berlin can you eat a dish like the Brittany…: menu_variety ≠ food","split":"test"}
+{"caseId":"post-fc96acff","ref":39,"got":39,"metric":"parts.sentiment","detail":"the Austrian chicken dish comes with arancini, artichoke an…: neutral ≠ positive","split":"test"}
+{"caseId":"post-fc96acff","ref":46,"got":46,"metric":"parts.kind","detail":"the small-format bottles from prominent Burgundy producers …: opinion ≠ verdict","split":"test"}
+{"caseId":"post-fc96acff","ref":49,"got":49,"metric":"parts.sentiment","detail":"100 euros for the Vosne-Romanée is close to theft: positive ≠ negative","split":"test"}
+{"caseId":"post-fc96acff","ref":49,"got":49,"metric":"parts.amount","detail":"100 euros for the Vosne-Romanée is close to theft: —  ≠ 100 money","split":"test"}
+{"caseId":"post-fc96acff","ref":55,"got":55,"metric":"parts.kind","detail":"Facil has not lost its glamour at 25: opinion ≠ change","split":"test"}
+{"caseId":"post-fc96acff","ref":56,"got":56,"metric":"parts.aspect","detail":"Facil is cooking as well as it ever has, arguably better th…: food ≠ cooking","split":"test"}
+{"caseId":"post-fc96acff","ref":57,"got":57,"metric":"parts.aspect","detail":"Berlin has too many small shared plates and neo-bistros cop…: none ≠ menu_variety","split":"test"}
+{"caseId":"post-fc96acff","ref":58,"got":58,"metric":"parts.aspect","detail":"book a table at Facil and go eat serious craftsmanship: none ≠ food","split":"test"}
+{"caseId":"post-fc96acff","ref":61,"got":61,"metric":"parts.aspect","detail":"Berlin has no corporate expense accounts for that kind of l…: none ≠ payment","split":"test"}
+{"caseId":"post-fc96acff","metric":"change.false","ref":15,"got":15,"detail":"Facil's team has changed very little over the years","split":"test"}
+{"caseId":"post-fc96acff","metric":"change.false","ref":26,"got":26,"detail":"Jonas Zörner, who came through Facil's kitchen, is now chef de cuisine at Lorenz Adlon Es…","split":"test"}
+{"caseId":"post-fc96acff","metric":"change.false","ref":29,"got":29,"detail":"Wenzel Pankratz, who came through Facil's kitchen, now runs Forsthaus Strelitz","split":"test"}
+{"caseId":"post-fc96acff","metric":"change.false","ref":55,"got":55,"detail":"Facil has not lost its glamour at 25","split":"test"}
+{"caseId":"post-fe3794c9","ref":2,"got":2,"metric":"parts.kind","detail":"this year the SpreeWiesn moved from the Postbahnhof to the …: fact ≠ change","split":"train"}
+{"caseId":"post-fe3794c9","ref":3,"got":3,"metric":"parts.kind","detail":"a dedicated SpreeWiesn area was set up at the Hofbräu for t…: fact ≠ change","split":"train"}
+{"caseId":"post-fe3794c9","ref":4,"got":4,"metric":"parts.aspect","detail":"a Berlin event version cannot match the scale and history o…: vibe ≠ none","split":"train"}
+{"caseId":"post-fe3794c9","ref":7,"got":7,"metric":"parts.kind","detail":"there is even a vegan offer: fact ≠ new_item","split":"train"}
+{"caseId":"post-fe3794c9","ref":9,"got":9,"metric":"parts.kind","detail":"the upper floor of the building at Alexanderplatz is more w…: opinion ≠ change","split":"train"}
+{"caseId":"post-fe3794c9","ref":11,"got":11,"metric":"parts.aspect","detail":"everything now resembles a somewhat unfinished copy of the …: atmosphere ≠ none","split":"train"}
+{"caseId":"post-fe3794c9","ref":15,"got":15,"metric":"parts.sentiment","detail":"a table at the Hofbräu am Alex costs 39 euros per person in…: neutral ≠ negative","split":"train"}
+{"caseId":"post-fe3794c9","ref":15,"got":15,"metric":"parts.kind","detail":"a table at the Hofbräu am Alex costs 39 euros per person in…: fact ≠ opinion","split":"train"}
+{"caseId":"post-fe3794c9","ref":32,"got":32,"metric":"parts.aspect","detail":"the move only pressed the event into a more expensive, slic…: price_level ≠ price","split":"train"}
+{"caseId":"post-fe3794c9","ref":32,"got":32,"metric":"shortlist.recall","detail":"the move only pressed the event into a more expensive, slic…: price_level not offered","split":"train"}
+{"caseId":"post-fe3794c9","metric":"change.false","ref":2,"got":2,"detail":"this year the SpreeWiesn moved from the Postbahnhof to the upper floor of the Hofbräu Mün…","split":"train"}
+{"caseId":"post-fe3794c9","metric":"change.false","ref":3,"got":3,"detail":"a dedicated SpreeWiesn area was set up at the Hofbräu for the season","split":"train"}
+{"caseId":"post-fe3794c9","metric":"change.false","ref":9,"got":9,"detail":"the upper floor of the building at Alexanderplatz is more weatherproof and logistically o…","split":"train"}

@@ -1,0 +1,5 @@
+{
+  "reader": "split",
+  "labeller": "classifier",
+  "claims": "reference"
+}

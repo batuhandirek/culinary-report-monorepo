@@ -56,6 +56,7 @@ export class TermTopicAgent extends BaseMastraAgent<typeof termTopicSchema, Term
 		id: 'term-topic',
 		name: 'TermTopicAgent',
 		outputSchema: termTopicSchema,
+		ingestion: true,
 	};
 
 	// Thousands of short wordings: mini

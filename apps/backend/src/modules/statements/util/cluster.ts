@@ -44,7 +44,8 @@ export const normalize = (vector: ArrayLike<number>): Float32Array => {
 	return out;
 };
 
-const dot = (a: Float32Array, b: Float32Array): number => {
+/** Cosine of two unit-length vectors (`normalize`) */
+export const dot = (a: Float32Array, b: Float32Array): number => {
 	let sum = 0;
 	for (let i = 0; i < a.length; i++) sum += a[i] * b[i];
 	return sum;

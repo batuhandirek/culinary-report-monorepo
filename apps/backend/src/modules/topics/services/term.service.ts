@@ -97,6 +97,7 @@ export class TermService implements OnModuleInit {
 	onModuleInit() {
 		this.llmBacklogRegistry.register({
 			key: 'terms',
+			ingestion: true,
 			label: 'Topics for wordings',
 			priority: 25,
 			remaining: () => this.countPending(),

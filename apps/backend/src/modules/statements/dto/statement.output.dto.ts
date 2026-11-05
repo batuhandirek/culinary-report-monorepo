@@ -1,7 +1,7 @@
 import type { StatementKind } from '../constants/kind.constant.js';
 import type { Sentiment } from '../constants/sentiment.constant.js';
-import type { StatementPartRole } from '../entities/statement-part.entity.js';
 import type { StatementSubject, StatementUnit } from '../entities/statement.entity.js';
+import type { StatementPartRole } from '../entities/statement-part.entity.js';
 
 /** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
 export interface StatementTopicOutputDto {

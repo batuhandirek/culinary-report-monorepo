@@ -7,8 +7,17 @@ import {
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
+import {
+	CLAIM_AMOUNT_RULE,
+	CLAIM_FOODS_COACHING,
+	CLAIM_FOODS_RULE,
+} from 'src/modules/statements/constants/claim-copied.constant.js';
 
-/** One claim as agent A answers it: one thing said, in English, with the source's own words. Its parts and kind are agent B's. */
+/**
+ * One claim as agent A answers it: one thing said, in English, with the source's own words and the
+ * foods it names as spelled. Its sentiment, aspect, kind and number are agent B's (or the
+ * claim-labels classifier's)
+ */
 export const claimSchema = z.object({
 	text: z
 		.string()
@@ -21,6 +30,19 @@ export const claimSchema = z.object({
 		.describe(
 			'The exact words of the source this claim comes from, copied character for character in the source\'s language ("Die Pommes waren matschig"), the shortest span that says it; null when no span says it on its own',
 		),
+	foods: z
+		.array(z.string())
+		.describe(
+			'The dishes, drinks, ingredients or kinds of food the claim names, each spelled exactly as the source spells it, from the quote in its language, never translated; empty when it names none',
+		),
+	amount: z
+		.number()
+		.nullable()
+		.describe('The minutes waited or the price the claim states; null when it states none'),
+	unit: z
+		.enum(['minutes', 'money'])
+		.nullable()
+		.describe('What the amount measures: minutes waited, or a price; null with amount null'),
 });
 
 const reviewClaimsSchema = z.object({
@@ -34,8 +56,9 @@ const reviewClaimsSchema = z.object({
 /**
  * Agent A for reviews: splits one Google or TripAdvisor review (one a call) into claims
  * (one thing said each, neutral facts kept, every dish named kept), each with its quote in the
- * review's own words. No aspect, kind, dish or number here: agent B reads those from the claims; a
- * review's overall view is its stars.
+ * review's own words, its foods as spelled (`CLAIM_FOODS_RULE`) and the number it states (`CLAIM_AMOUNT_RULE`). No sentiment, aspect or kind
+ * here: agent B (or the claim-labels classifier) reads those from the claims; a review's
+ * overall view is its stars. Production stores B's foods and amounts until the user switches to A's.
  */
 @Injectable()
 export class ReviewClaimsAgent extends BaseMastraAgent<typeof reviewClaimsSchema> {
@@ -43,6 +66,7 @@ export class ReviewClaimsAgent extends BaseMastraAgent<typeof reviewClaimsSchema
 		id: 'review-claims',
 		name: 'ReviewClaimsAgent',
 		outputSchema: reviewClaimsSchema,
+		ingestion: true,
 	};
 
 	// Thousands of reviews a month: mini, whose daily complimentary allowance is 10M tokens (the
@@ -62,8 +86,11 @@ export class ReviewClaimsAgent extends BaseMastraAgent<typeof reviewClaimsSchema
 			'claim of its own when no other claim names it ("had the lahmacun"). A claim names what it is about: "the Gemüse kebab is ' +
 			'incredibly delicious", never "it is incredibly delicious"; "the dürüm and the box were delicious", never "both were". With ' +
 			"each claim give its quote: the exact words of the review it comes from, copied character for character in the review's " +
-			'language (the original text, not a translation), the shortest span that says it. Only what the review says: never add, ' +
-			'judge or summarise. Never drop a claim because it fits no category.'
+			'language (the original text, not a translation), the shortest span that says it. ' +
+			CLAIM_FOODS_RULE +
+			' ' +
+			CLAIM_AMOUNT_RULE +
+			' Only what the review says: never add, judge or summarise. Never drop a claim because it fits no category.'
 		);
 	}
 
@@ -86,7 +113,10 @@ export class ReviewClaimsAgent extends BaseMastraAgent<typeof reviewClaimsSchema
 			'"Top!"): one claim, "top" ("Top!"). What these show: one thing a claim, a judgement split from a price ("dry" and "18 €" ' +
 			'are two claims), a dish kept as the reviewer spells it (Pommes, Schnitzel, Lahmacun), the minutes and the price kept, a ' +
 			'neutral fact kept ("came on a Sunday"), a comparison with before kept ("it used to be better"), quotes in the review\'s own ' +
-			'language and never the translation\'s, and no claim the review does not make (no "the place is popular" from a wait).'
+			'language and never the translation\'s, and no claim the review does not make (no "the place is popular" from a wait). ' +
+			'Their foods: Pommes, then Schnitzel and Schnitzel; lamb tagine, gluten-free bread; Lahmacun; none for the wait, the ' +
+			'staff, the visit or "top". ' +
+			CLAIM_FOODS_COACHING
 		);
 	}
 }

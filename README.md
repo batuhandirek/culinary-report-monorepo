@@ -27,7 +27,7 @@ docker exec culinary-report-dev-db psql -U postgres -d munchwerk \
 
 ## Data
 
-The admin panel (`/admin`) has Venues, Posts, Reports and Pipeline. The pipeline scrapes through Apify (`APIFY_TOKEN`) and analyses with OpenAI (`OPENAI_API_KEYS`, one key per account, rotated); a monthly run starts by itself on the 2nd of each month for the month before, and any step can be started from `/admin/pipeline`.
+The admin panel (`/admin`) has Venues, Posts, Reports and Pipeline. The pipeline scrapes through Apify (`APIFY_TOKEN`) and analyses with OpenAI (`OPENAI_API_KEYS`, one key per account, rotated), then OpenRouter's free models once OpenAI's allowance is out (`OPENROUTER_AI_API_KEY`); a monthly run starts by itself on the 2nd of each month for the month before, and any step can be started from `/admin/pipeline`.
 
 Data collected by the earlier scripts repo was imported once with `python3 bin/import-culinary-sqlite.py <path to culinary.db>`.
 
@@ -81,7 +81,9 @@ Question:
 	- Where?
 - https://www.the-berliner.com/food/best-restaurants-berlin-101-places-to-eat/?utm_campaign=feed&utm_medium=referral&utm_source=later-linkinbio#Prenzlauer_Berg
 	- Can we really parse all of these?
-
+- "Won't come back" -> Is this a signal?
+- /admin/posts/5cef67dc-1ba9-430c-af46-ae494160fb00
+	-	why did this not find lucys?
 Report sections:
 - Upcoming "New Year's / Halloween etc." - what can be done kind of suggestion?
 
@@ -91,16 +93,18 @@ Creators:
 	- theberlinermag instagram/facebook
 	- https://www.the-berliner.com blog
 Notes:
-	- If a brand owned instagram post talks about another brand, FLAG THAT!!
+-	Can/Should we add a 'These venues said they are hiring' section?
+
+```
+- If a brand owned instagram post talks about another brand, FLAG THAT!!
 If we see a brand posting:
 📍Döberitzer Str. 1, 10557 Berlin
 📍Reichenberger Str. 176, 10999 Berlin
 📍Simon-Dach-Str. 13, 10245 Berlin
 📍Schönhauser Allee 43a, 10435 Berlin
 maybe use this as a signal to ensure they have 4 branches
+```
 
-
-- "Won't come back" -> Is this a signal?
 
 -http://localhost:5011/admin/posts/ad28b428-88e8-44bd-9e97-dc7f651be20b
 	- familiar ban mi flavours” is not tagged

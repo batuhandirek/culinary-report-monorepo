@@ -100,18 +100,13 @@ export class AdminExploreController {
 					wrap(statement).serialize({
 						skipNull: true,
 						forceObject: true,
-						populate: [
-							...STATEMENT_PARTS_POPULATE,
-							...STATEMENT_SOURCE_POPULATE,
-							'venue',
-						],
+						populate: [...STATEMENT_PARTS_POPULATE, ...STATEMENT_SOURCE_POPULATE],
 						exclude: [
 							'review.venue.brand',
 							'mention.brand.branches',
 							'mention.venue.brand',
 							'mention.post',
 							'post.account.creator',
-							'venue.brand',
 						],
 					}) as unknown as AdminStatementRowOutputDto,
 			),

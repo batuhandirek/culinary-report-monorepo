@@ -1,9 +1,8 @@
 <script lang="ts">
 	import type { AdminDigestedPostOutputDto, AdminDigestedReviewOutputDto, AdminDigestionRowOutputDto } from 'client';
 
-	import DigestedPostView from './DigestedPostView.svelte';
-	import DigestedReviewView from './DigestedReviewView.svelte';
-
+	import DigestedPostView from '#components/admin/digestion/DigestedPostView.svelte';
+	import DigestedReviewView from '#components/admin/digestion/DigestedReviewView.svelte';
 	import { api } from '#lib/api.js';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
 	import SkeletonText from '#ui/wrapped/SkeletonText.svelte';

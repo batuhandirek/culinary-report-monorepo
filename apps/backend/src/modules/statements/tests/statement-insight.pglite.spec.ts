@@ -7,8 +7,6 @@ import type { SocialAccount } from 'src/modules/social/entities/social-account.e
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
-import { Term } from 'src/modules/topics/entities/term.entity.js';
-import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
@@ -19,11 +17,8 @@ import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.j
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-
 import { AdminExploreController } from '../controllers/admin.explore.controller.js';
 import type { AdminExploreInputDto } from '../dto/admin-explore.dto.js';
-import { Statement } from '../entities/statement.entity.js';
-import { StatementPart } from '../entities/statement-part.entity.js';
 import { StatementInsightService } from '../services/statement-insight.service.js';
 
 import { addStatements, type TestClaim } from './factories/statement.factory.js';
@@ -73,7 +68,7 @@ describe('StatementInsightService (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 		controller = harness.moduleRef.get(AdminExploreController);
 		const em = harness.orm.em;
-		const topics = seedTopics(em, ['kebab', 'cafe', ...ASPECT_SEED.map(a => a.key)]);
+		seedTopics(em, ['kebab', 'cafe', ...ASPECT_SEED.map(a => a.key)]);
 		city = testCity(em);
 		const elsewhere = testCity(em, { name: 'Hamburg' });
 		doner = venueFactory.build(
@@ -178,29 +173,10 @@ describe('StatementInsightService (pglite)', () => {
 			wait('wait', 'Berlin restaurants make you wait', { subject: 'city' }),
 		]);
 
-		// Google's "waiting time" tag on the döner place: a wording linked to Waiting, all-time
-		const term = em.create(Term, {
-			key: 'waiting time',
-			name: 'waiting time',
-			decidedBy: 'match',
-			decidedAt: new Date(),
-		});
-		term.topics.add(em.create(TermTopic, { term, topic: topics.get('wait')!, rank: 0 }));
-		const tag = em.create(Statement, {
-			sourceKind: 'google_tag',
-			venue: doner,
-			subject: 'place',
-			city,
-			month: null,
-			saidAt: new Date('2026-10-01T00:00:00Z'),
-			text: 'waiting time',
-			count: 4098,
-		});
-		tag.parts.add(em.create(StatementPart, { statement: tag, role: 'food', term, rank: 0 }));
 		await em.flush();
 		// The places' stored food tags: a brand's kind of place is its places' main food
 		await linkTopics(em);
-		Object.assign(ids, { r1: r1.id, r3: r3.id, p1: p1.id, p4: p4.id, tag: tag.id });
+		Object.assign(ids, { r1: r1.id, r3: r3.id, p1: p1.id, p4: p4.id });
 
 		// Vectors for some of September's waiting claims: three close ones from three sources
 		const conn = em.getConnection();
@@ -219,7 +195,7 @@ describe('StatementInsightService (pglite)', () => {
 		await harness.stop();
 	});
 
-	it('counts who talked about Waiting: children, reviews, posts and a blog about the city, Google tags apart', async () => {
+	it('counts who talked about Waiting: children, reviews, posts and a blog about the city', async () => {
 		const head = await controller.getExploreHead(view({ node: 'wait' }));
 		expect(head.node).toMatchObject({
 			ref: 'wait',
@@ -237,8 +213,6 @@ describe('StatementInsightService (pglite)', () => {
 			reviews: 5,
 			posts: 2,
 			brands: 2,
-			tagVenues: 1,
-			tagMentions: 4098,
 			// Of September's sources with a claim: six reviews, two posts
 			base: { sources: 8, reviews: 6, posts: 2 },
 			share: 87.5,
@@ -325,8 +299,6 @@ describe('StatementInsightService (pglite)', () => {
 		expect(of('wait')).toMatchObject({
 			sources: 7,
 			complaints: 4,
-			tagVenues: 1,
-			tagMentions: 4098,
 		});
 		expect(of('wait_for_food')).toMatchObject({ sources: 2, parentKey: 'wait' });
 		expect(of('kebab')).toMatchObject({ sources: 2, label: 'Döner & kebab' });
@@ -337,34 +309,18 @@ describe('StatementInsightService (pglite)', () => {
 		expect(of('cafe')).toBeUndefined();
 	});
 
-	it('breaks down by brand, the city apart, and Google tags by brand', async () => {
+	it('breaks down by brand, the city apart', async () => {
 		const brands = await controller.getExploreBreakdown({
 			...view({ node: 'wait' }),
 			by: 'brand',
 		});
-		expect(brands.rows.map(r => [r.label, r.sources, r.tagVenues])).toEqual([
-			['Café Blau', 4, 0],
-			['Döner Eck', 2, 1],
-			['No brand: the city or nothing', 1, 0],
+		expect(brands.rows.map(r => [r.label, r.sources])).toEqual([
+			['Café Blau', 4],
+			['Döner Eck', 2],
+			['No brand: the city or nothing', 1],
 		]);
 		expect(brands.rows[0].key).toBe(cafe.brand.id);
 		expect(brands.rows[2].key).toBeUndefined();
-		// "Which brands' Google review tags mention Waiting"
-		const tags = await controller.getExploreBreakdown({
-			...view({ node: 'wait', source: 'google_tag' }),
-			by: 'brand',
-		});
-		expect(tags.rows).toEqual([
-			{
-				key: doner.brand.id,
-				label: 'Döner Eck',
-				sources: 0,
-				praise: 0,
-				complaints: 0,
-				tagVenues: 1,
-				tagMentions: 4098,
-			},
-		]);
 	});
 
 	it('breaks an aspect down into its children, and the rest by source, district, food, wording and month', async () => {
@@ -380,17 +336,16 @@ describe('StatementInsightService (pglite)', () => {
 			by: 'aspect',
 		});
 		expect(aspects.under).toEqual({ ref: 'wait', label: 'Waiting' });
-		expect(aspects.rows.map(r => [r.key, r.label, r.sources, r.tagVenues])).toEqual([
-			['wait', 'Waiting, nothing finer', 3, 1],
-			['wait_for_food', 'Wait for food', 2, 0],
-			['queue', 'Queue', 1, 0],
-			['wait_for_table', 'Wait for a table', 1, 0],
+		expect(aspects.rows.map(r => [r.key, r.label, r.sources])).toEqual([
+			['wait', 'Waiting, nothing finer', 3],
+			['wait_for_food', 'Wait for food', 2],
+			['queue', 'Queue', 1],
+			['wait_for_table', 'Wait for a table', 1],
 		]);
 		expect(await rows('source')).toEqual([
 			['google_review', 5],
 			['blog', 1],
 			['tiktok', 1],
-			['google_tag', 0],
 		]);
 		expect(await rows('place')).toEqual([
 			['cafe', 4],
@@ -409,11 +364,7 @@ describe('StatementInsightService (pglite)', () => {
 			['kebab', 1],
 			['turkish', 1],
 		]);
-		// Google's tag is a wording too, on a place, with no dated source
-		expect(await rows('term')).toEqual([
-			['term:doner', 1],
-			['term:waiting time', 0],
-		]);
+		expect(await rows('term')).toEqual([['term:doner', 1]]);
 		expect(await rows('month', { from: '2026-08' })).toEqual([
 			['2026-08', 1],
 			['2026-09', 7],
@@ -436,22 +387,18 @@ describe('StatementInsightService (pglite)', () => {
 		]);
 	});
 
-	it('lists the claims newest first with their sources, Google tags with their place', async () => {
+	it('lists the claims newest first with their sources', async () => {
 		const page = await controller.listExploreClaims({
 			...view({ node: 'wait' }),
 			page: 1,
-			size: 3,
+			size: 2,
 		});
-		expect(page.totalItems).toBe(8);
+		expect(page.totalItems).toBe(7);
 		expect(page.items.map(i => i.text)).toEqual([
-			'waiting time',
 			'Berlin restaurants make you wait',
 			'waits got shorter since spring',
 		]);
-		expect(page.items[0]).toMatchObject({
-			sourceKind: 'google_tag',
-			venue: { id: doner.id, name: 'Döner Eck' },
-		});
+		expect(page.items[0]).toMatchObject({ id: ids.p4, sourceKind: 'post', subject: 'city' });
 		const searched = await controller.listExploreClaims({
 			...view({ node: 'wait' }),
 			page: 1,

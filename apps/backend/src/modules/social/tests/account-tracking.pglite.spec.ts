@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
@@ -9,7 +9,10 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
-import { AccountSnapshotSourceEnum, SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
+import {
+	AccountSnapshotSourceEnum,
+	SocialAccountSnapshot,
+} from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import {
 	AccountScrapeService,
@@ -54,7 +57,12 @@ const instagramItem = (handle: string) => ({
 const tiktokItem = (handle: string) => ({
 	...TWIN_TIKTOK_ITEMS[1],
 	input: handle,
-	authorMeta: { ...TWIN_TIKTOK_ITEMS[1].authorMeta, id: `tt-${handle}`, name: handle, nickName: handle },
+	authorMeta: {
+		...TWIN_TIKTOK_ITEMS[1].authorMeta,
+		id: `tt-${handle}`,
+		name: handle,
+		nickName: handle,
+	},
 });
 
 /*
@@ -99,7 +107,14 @@ describe('AccountScrapeService.trackProfiles (pglite)', () => {
 	const brandIn = async (name: string, where: City, leadScore?: number, closed = false) => {
 		const em = harness.orm.em;
 		const brand = em.create(Brand, { name, key: `${name.toLowerCase()}${++n}`, leadScore });
-		em.create(Venue, { city: where, brand, placeId: `track-${n}`, name, category: 'Restaurant', closed });
+		em.create(Venue, {
+			city: where,
+			brand,
+			placeId: `track-${n}`,
+			name,
+			category: 'Restaurant',
+			closed,
+		});
 		await em.flush();
 		return brand;
 	};
@@ -166,10 +181,18 @@ describe('AccountScrapeService.trackProfiles (pglite)', () => {
 		} as SocialPost);
 		// Followers unknown and never asked: once; asked and not answered: not before 30 days
 		await accountOf(null, IG, 'unknownig');
-		await accountOf(null, IG, 'askedig', { followersAskedAt: new Date(NOW.getTime() - 5 * DAY) });
+		await accountOf(null, IG, 'askedig', {
+			followersAskedAt: new Date(NOW.getTime() - 5 * DAY),
+		});
 		// First seen in another city, profiled lately
-		await accountOf(null, TT, 'hamburgcreator', { followers: 90_000, city: other } as Partial<SocialAccount>);
-		await profiledDaysAgo(await accountOf(null, TT, 'recentcreator', { followers: 90_000 }), TRACK_PROFILE_EVERY_DAYS - 1);
+		await accountOf(null, TT, 'hamburgcreator', {
+			followers: 90_000,
+			city: other,
+		} as Partial<SocialAccount>);
+		await profiledDaysAgo(
+			await accountOf(null, TT, 'recentcreator', { followers: 90_000 }),
+			TRACK_PROFILE_EVERY_DAYS - 1,
+		);
 		await em.flush();
 		profiles = {
 			[`${IG}:soriramen`]: instagramItem('soriramen'),
@@ -198,14 +221,25 @@ describe('AccountScrapeService.trackProfiles (pglite)', () => {
 		em.clear();
 		const unknown = await em.findOneOrFail(SocialAccount, { handle: 'unknownig' });
 		expect(unknown.followersAskedAt?.toISOString()).toBe(NOW.toISOString());
-		const snapshots = await em.find(SocialAccountSnapshot, { source: AccountSnapshotSourceEnum.PROFILE, scrapedAt: { $gte: NOW } }, { populate: ['account'] });
+		const snapshots = await em.find(
+			SocialAccountSnapshot,
+			{ source: AccountSnapshotSourceEnum.PROFILE, scrapedAt: { $gte: NOW } },
+			{ populate: ['account'] },
+		);
 		// Followers and the post count, each a snapshot
-		const sorisIg = snapshots.find(s => s.account.handle === 'soriramen' && s.account.platform === IG);
+		const sorisIg = snapshots.find(
+			s => s.account.handle === 'soriramen' && s.account.platform === IG,
+		);
 		expect(sorisIg).toMatchObject({ followers: 16740, following: 279 });
 		expect(sorisIg?.posts).toEqual(expect.any(Number));
 
 		// Nothing due until two weeks have passed
-		expect(await service.trackProfiles(city, 1, NOW)).toEqual({ due: 0, brandAccounts: 0, asked: 0, profiles: 0 });
+		expect(await service.trackProfiles(city, 1, NOW)).toEqual({
+			due: 0,
+			brandAccounts: 0,
+			asked: 0,
+			profiles: 0,
+		});
 		// Two weeks after this run's snapshots (stamped when they were taken), every profile is due
 		// again: the five read now and the two that were fresh before
 		const later = new Date(Date.now() + TRACK_PROFILE_EVERY_DAYS * DAY);

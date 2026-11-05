@@ -31,6 +31,7 @@ export class CommentDisagreementAgent extends BaseMastraAgent<
 		id: 'comment-disagreement',
 		name: 'CommentDisagreementAgent',
 		outputSchema: commentDisagreementSchema,
+		ingestion: true,
 	};
 
 	protected getModel(): LlmModelChoice {

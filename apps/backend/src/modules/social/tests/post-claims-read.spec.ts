@@ -4,8 +4,8 @@ import type { PostClaimsAnswer } from '../agents/post-claims.agent.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import {
 	POST_PART_CHARS,
-	type PostClaimsSource,
 	postClaimsPlan,
+	type PostClaimsSource,
 	splitText,
 } from '../util/post-claims-input.js';
 import { mergePostParts } from '../util/post-claims-read.js';
@@ -23,6 +23,9 @@ const place = (venueName: string, extra: Partial<PostClaimsAnswer['places'][numb
 const claim = (text: string, place: string | null) => ({
 	text,
 	quote: null,
+	foods: [] as string[],
+	amount: null,
+	unit: null,
 	subject: place === null ? ('city' as const) : ('place' as const),
 	place,
 });

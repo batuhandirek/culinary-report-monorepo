@@ -8,30 +8,35 @@ import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-reg
 import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { TermService } from 'src/modules/topics/services/term.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
 import { runPool } from 'src/shared/util/pool.js';
 
-import { ClaimPartsAgent, ClaimPartsInputSource } from '../agents/claim-parts.agent.js';
+import { ClaimLabelsClassifier } from '../classifiers/claim-labels.classifier.js';
 import { Statement } from '../entities/statement.entity.js';
 import { StatementPart } from '../entities/statement-part.entity.js';
-import { claimPartsOf, MAX_FOODS, OTHER_ROOT } from '../util/claim-parts-answer.js';
-import { claimPartsQuestions } from '../util/claim-parts-input.js';
+import { claimLabelAspects, claimLabelsOf } from '../util/claim-labels.js';
+import { claimFoods } from '../util/claim-parts-answer.js';
+import { type ClaimPartsInputSource, claimPartsQuestions } from '../util/claim-parts-input.js';
 
-// Claims read side by side, one a call
+// Claims labelled side by side, one a call (a decision is one short call)
 const CONCURRENCY = 20;
-// Claims a daily-backlog batch reads (~6 agent calls)
+// Claims a daily-backlog batch labels
 const BACKLOG_BATCH_CLAIMS = 600;
 
-/** SQL: a statement (`s`) agent B has not read: a claim with text and no `parts_at` */
+/** SQL: a statement (`s`) not labelled yet: a claim with text and no `parts_at` */
 export const PARTS_PENDING_SQL = 's.text is not null and s.parts_at is null';
 
 /**
- * Agent B's writer: the parts of a claim (`StatementPart`), its sentiment, amount and kind,
- * read from the stored text alone (`ClaimPartsAgent`), never by extracting a source again. Runs
- * right after agent A over the step's new claims, and as the daily LLM backlog `statement-parts`
- * over any claim without `partsAt` (a prompt change clears `partsAt` and every claim is read again,
- * no source touched). Each food wording becomes a `Term` (`TermService.ensure`); its topics are
- * the term's links, joined at read time.
+ * The writer of a claim's parts (`StatementPart`), its sentiment, amount and kind: agent A's
+ * foods as food parts (`Statement.foodsFromA`, held in memory by `StatementService`; a `Term` each,
+ * `TermService.ensure`, once a batch), then the claim-labels classifier's sentiment, kind and aspect
+ * part (Jev, `ClaimLabelsClassifier`: the user's call of 2026-11-05), read from the claim and its
+ * neighbours alone, never a source read again. The number is agent A's, else the text parsed for
+ * the aspect's unit. Runs right after agent A over the step's new claims, and as the daily LLM
+ * backlog `statement-parts` over any claim without `partsAt` (clearing `partsAt` labels a claim
+ * again, its foods untouched: aspect discovery re-files claims that way). A food part's topics are
+ * its term's links, joined at read time.
  */
 @Injectable()
 export class StatementPartsService implements OnModuleInit {
@@ -39,7 +44,7 @@ export class StatementPartsService implements OnModuleInit {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly claimPartsAgent: ClaimPartsAgent,
+		private readonly claimLabelsClassifier: ClaimLabelsClassifier,
 		private readonly llmBacklogRegistry: LlmBacklogRegistry,
 		private readonly topicService: TopicService,
 		private readonly termService: TermService,
@@ -48,12 +53,14 @@ export class StatementPartsService implements OnModuleInit {
 	onModuleInit() {
 		this.llmBacklogRegistry.register({
 			key: 'statement-parts',
-			label: 'Parts of claims',
+			ingestion: true,
+			label: 'Labels of claims',
 			priority: 10,
 			remaining: () => this.countPending(),
 			runBatch: async () => {
 				const res = await this.read({ limit: BACKLOG_BATCH_CLAIMS });
-				return { done: res.read, tokens: res.tokens };
+				// Paid by the call (Jev), not OpenAI's allowance the day's token budget guards
+				return { done: res.read, tokens: 0 };
 			},
 		});
 	}
@@ -66,19 +73,20 @@ export class StatementPartsService implements OnModuleInit {
 	}
 
 	/**
-	 * Reads up to `limit` pending claims (or the given `ids` among them; newest month first) with
-	 * agent B and writes what it says: the sentiment, the aspect part (a key the table lacks settles
-	 * the claim with no aspect part, the keys logged per batch: a claim is never re-asked by itself,
-	 * and the claims without an aspect are what the discovery of new aspects reads), one food part per wording named (a `Term`, new ones
-	 * name-matched at once), the stated amount (the agent's, else the text parsed for the aspect's
-	 * unit), `kind` as the agent answers it (final: `KIND_RULES`). Flushes, also when the pool stops
-	 * on a provider failure, then rethrows.
+	 * Labels up to `limit` pending claims (or the given `ids` among them; newest month first):
+	 * first agent A's foods of the new ones become food parts (whatever the labeller does next, so a
+	 * classifier failing loses none), then one decision a claim, its source's other claims beside
+	 * it: the sentiment, the kind (final: `KIND_RULES`; a judging fact is an opinion), the aspect part
+	 * (replacing any older one; "no aspect" settles the claim with none, what aspect discovery groups),
+	 * the number (A's, else the text parsed). Flushes, also when the pool stops on a provider
+	 * failure (no key, switched off, no credit: the claims wait), then rethrows. `usd` is what the
+	 * decisions cost.
 	 */
 	async read(opts: {
 		ids?: number[];
 		limit?: number;
-	}): Promise<{ read: number; tokens: number }> {
-		if (opts.ids && !opts.ids.length) return { read: 0, tokens: 0 };
+	}): Promise<{ read: number; tokens: number; usd: number }> {
+		if (opts.ids && !opts.ids.length) return { read: 0, tokens: 0, usd: 0 };
 		const statements = await this.em.find(
 			Statement,
 			{ text: { $ne: null }, partsAt: null, ...(opts.ids && { id: { $in: opts.ids } }) },
@@ -88,15 +96,16 @@ export class StatementPartsService implements OnModuleInit {
 				populate: ['parts', 'review.venue', 'mention'],
 			},
 		);
-		if (!statements.length) return { read: 0, tokens: 0 };
+		if (!statements.length) return { read: 0, tokens: 0, usd: 0 };
 		const index = await this.topicService.index();
-		const legend = index.aspectLegend();
+		const aspects = claimLabelAspects(index);
 		const byId = new Map(statements.map(s => [String(s.id), s]));
 		const now = new Date();
 		let read = 0;
 		let tokens = 0;
-		const unknown = new Map<string, number>();
+		let usd = 0;
 		try {
+			await this.storeFoodsFromA(statements, index);
 			// One claim a call, its source's other claims beside it
 			await runPool(
 				this.calls(statements).flatMap(claimPartsQuestions),
@@ -104,58 +113,71 @@ export class StatementPartsService implements OnModuleInit {
 				async question => {
 					const statement = byId.get(question.id);
 					if (!statement || statement.partsAt) return;
-					const res = await this.claimPartsAgent.generate(question.message, { legend });
-					tokens += res.usage?.totalTokens ?? 0;
-					const answer = res.object;
-					const terms = await this.termService.ensure(answer.foods.slice(0, MAX_FOODS), index);
-					const parts = claimPartsOf(answer, statement.text!, index);
-					const aspect = parts.aspect;
-					if (answer.aspect && !aspect && answer.aspect !== OTHER_ROOT)
-						unknown.set(answer.aspect, (unknown.get(answer.aspect) ?? 0) + 1);
-					statement.sentiment = parts.sentiment;
-					// B's answer is final: it is told the kinds' rules (`KIND_RULES`), so re-reading a claim fixes its kind
-					statement.kind = parts.kind;
-					statement.amount = parts.amount;
-					statement.unit = parts.unit;
-					statement.parts.removeAll();
-					let rank = 0;
-					if (aspect?.id)
+					const res = await this.claimLabelsClassifier.decide(question.state, {
+						aspects,
+					});
+					tokens += res.usage.totalTokens ?? 0;
+					usd += res.usd;
+					const labels = claimLabelsOf(res.answers, statement.text!, index, {
+						amount: statement.amount ?? null,
+						unit: statement.unit ?? null,
+					});
+					statement.sentiment = labels.sentiment;
+					statement.kind = labels.kind;
+					statement.amount = labels.amount;
+					statement.unit = labels.unit;
+					for (const part of statement.parts.getItems().filter(p => p.role === 'aspect'))
+						statement.parts.remove(part);
+					if (labels.aspect?.id)
 						statement.parts.add(
 							this.em.create(StatementPart, {
 								statement,
 								role: 'aspect',
-								topic: this.em.getReference(Topic, aspect.id),
-								rank: rank++,
+								topic: this.em.getReference(Topic, labels.aspect.id),
+								rank: 0,
 							}),
 						);
-					for (const key of _.uniq(answer.foods.map(termKey).filter(Boolean))) {
-						const term = terms.get(key);
-						if (term)
-							statement.parts.add(
-								this.em.create(StatementPart, { statement, role: 'food', term, rank: rank++ }),
-							);
-					}
-					// A key the table lacks: the claim is kept and settled with no aspect part
 					statement.partsAt = now;
 					read++;
 				},
-				(question, e) => this.logger.warn(`Parts of claim ${question.id} failed: ${e.message}`),
+				(question, e) =>
+					this.logger.warn(`Labels of claim ${question.id} failed: ${e.message}`),
 			);
 		} finally {
 			// Kept also when the pool stops on a provider failure: what finished is applied
 			await this.em.flush();
 		}
-		if (unknown.size)
-			this.logger.warn(
-				`Aspect keys the table lacks (${_.sum([...unknown.values()])} claims): ${[
-					...unknown,
-				]
-					.sort((a, b) => b[1] - a[1])
-					.slice(0, 20)
-					.map(([k, n]) => `${k} (${n})`)
-					.join(', ')}`,
-			);
-		return { read, tokens };
+		if (read) this.logger.log(`Labelled ${read} claims on Jev, $${usd.toFixed(4)}`);
+		return { read, tokens, usd };
+	}
+
+	/**
+	 * Agent A's food wordings of claims it just wrote (`foodsFromA`) as food parts, after the
+	 * aspect's rank: one `Term` lookup for the whole batch, the wordings once per `termKey`
+	 */
+	private async storeFoodsFromA(statements: Statement[], index: TopicIndex): Promise<void> {
+		const withFoods = statements.filter(s => s.foodsFromA?.length);
+		if (!withFoods.length) return;
+		const terms = await this.termService.ensure(
+			_.uniq(withFoods.flatMap(s => claimFoods(s.foodsFromA!))),
+			index,
+		);
+		for (const statement of withFoods) {
+			let rank = 1;
+			for (const key of _.uniq(claimFoods(statement.foodsFromA!).map(termKey))) {
+				const term = terms.get(key);
+				if (term)
+					statement.parts.add(
+						this.em.create(StatementPart, {
+							statement,
+							role: 'food',
+							term,
+							rank: rank++,
+						}),
+					);
+			}
+			statement.foodsFromA = undefined;
+		}
 	}
 
 	/** The statements grouped by source, so each claim is read next to its siblings */
@@ -164,7 +186,7 @@ export class StatementPartsService implements OnModuleInit {
 			_.groupBy(statements, s =>
 				s.review ? `r:${s.review.id}`
 				: s.mention ? `m:${s.mention.id}`
-				: `${s.sourceKind}:${s.post?.id ?? s.comment?.id ?? s.webMention?.id ?? s.venue?.id}:${s.subject}`,
+				: `${s.sourceKind}:${s.post?.id ?? s.comment?.id ?? s.webMention?.id}:${s.subject}`,
 			),
 		).map((group): ClaimPartsInputSource => ({
 			kind: group[0].sourceKind,

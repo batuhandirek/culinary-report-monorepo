@@ -1,0 +1,6 @@
+{
+  "reader": "split",
+  "labeller": "classifier",
+  "aspectShortlist": 8,
+  "claims": "reference"
+}

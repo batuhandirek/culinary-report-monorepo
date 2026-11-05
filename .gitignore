@@ -13,7 +13,6 @@ backups
 # eval
 eval-report-*.json
 eval-fixtures/
-evals
 AuthKey*
 *.jks
 

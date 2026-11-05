@@ -14,7 +14,6 @@ import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.j
 import {
 	AccountScrapeService,
 	INSTAGRAM_PROFILE_ACTOR,
-	TIKTOK_PROFILE_ACTOR,
 } from '../services/account-scrape.service.js';
 import { HashtagService } from '../services/hashtag.service.js';
 import { SocialAccountService } from '../services/social-account.service.js';
@@ -52,7 +51,12 @@ const instagramItem = (handle: string) => ({
 const tiktokItem = (handle: string) => ({
 	...TWIN_TIKTOK_ITEMS[1],
 	input: handle,
-	authorMeta: { ...TWIN_TIKTOK_ITEMS[1].authorMeta, id: `tt-${handle}`, name: handle, nickName: handle },
+	authorMeta: {
+		...TWIN_TIKTOK_ITEMS[1].authorMeta,
+		id: `tt-${handle}`,
+		name: handle,
+		nickName: handle,
+	},
 });
 
 /*

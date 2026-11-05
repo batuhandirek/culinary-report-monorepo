@@ -29,7 +29,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ClaimPartsAgent } from '../agents/claim-parts.agent.js';
+import { ClaimLabelsClassifier } from '../classifiers/claim-labels.classifier.js';
 import { Statement } from '../entities/statement.entity.js';
 import { StatementPart } from '../entities/statement-part.entity.js';
 import { type Claim, StatementService } from '../services/statement.service.js';
@@ -43,9 +43,10 @@ import {
 	praiseOf,
 } from '../util/statement-views.js';
 
+import { labelsClassifier } from './factories/claim-labels.mock.js';
 import { addStatements } from './factories/statement.factory.js';
 
-/** Agent B's answer for a claim, by its text; a claim not listed is a neutral fact about nothing */
+/** The reading of a claim, by its text: Jev's labels, and the foods and number agent A copied out; a claim not listed is a neutral opinion about nothing */
 interface PartsAnswer {
 	sentiment: 'positive' | 'negative' | 'neutral' | 'mixed';
 	aspect: string | null;
@@ -125,24 +126,32 @@ describe('statements (pglite)', () => {
 	let postAnswer: object = { isPromotional: false, places: [], claims: [] };
 	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => 'job-id') };
 
+	const readingOf = (text: string): Partial<PartsAnswer> =>
+		partsOverride?.(text) ?? PARTS[text.trim()] ?? {};
+	// A claim as agent A answers it: with the foods and the number it copied out of the text
+	const copied = <C extends { text: string }>(claim: C) => {
+		const reading = readingOf(claim.text);
+		return {
+			foods: reading.foods ?? [],
+			amount: reading.amount ?? null,
+			unit: reading.unit ?? null,
+			...claim,
+		};
+	};
 	// Agent A reads one review a call
 	const reviewAgent = mockAgent((input: unknown) => {
 		const { text } = JSON.parse(input as string) as { text: string };
-		return { claims: reviewClaims?.(text) ?? REVIEW_CLAIMS[text] ?? [{ text, quote: text }] };
+		const claims = reviewClaims?.(text) ?? REVIEW_CLAIMS[text] ?? [{ text, quote: text }];
+		return { claims: claims.map(copied) };
 	});
-	const postAgent = mockAgent(() => postAnswer);
-	// Agent B reads one claim a call, its source's other claims beside it
-	const partsAgent = mockAgent((input: unknown) => {
-		const { claim } = JSON.parse(input as string) as { claim: { text: string } };
-		return {
-			sentiment: 'neutral',
-			aspect: null,
-			foods: [],
-			amount: null,
-			unit: null,
-			kind: 'opinion',
-			...(partsOverride?.(claim.text) ?? PARTS[claim.text]),
-		};
+	const postAgent = mockAgent(() => ({
+		...postAnswer,
+		claims: ((postAnswer as { claims?: { text: string }[] }).claims ?? []).map(copied),
+	}));
+	// The claim-labels classifier (Jev) reads one claim a call, its source's other claims beside it
+	const labels = labelsClassifier(text => {
+		const reading = readingOf(text);
+		return { sentiment: reading.sentiment, aspect: reading.aspect, kind: reading.kind };
 	});
 	// Agent C, one wording a call: every wording none, so the `terms` backlog settles whatever a drain hands it
 	const termAgent = mockAgent(() => ({ topics: [], suggestion: null }));
@@ -171,7 +180,7 @@ describe('statements (pglite)', () => {
 				{ provide: ReviewClaimsAgent, useValue: reviewAgent },
 				{ provide: PostClaimsAgent, useValue: postAgent },
 				{ provide: PostGateAgent, useValue: gateAgent() },
-				{ provide: ClaimPartsAgent, useValue: partsAgent },
+				{ provide: ClaimLabelsClassifier, useValue: labels },
 				{ provide: TermTopicAgent, useValue: termAgent },
 			],
 		});
@@ -207,7 +216,7 @@ describe('statements (pglite)', () => {
 		partsOverride = undefined;
 		postAnswer = { isPromotional: false, places: [], claims: [] };
 		reviewAgent.generate.mockClear();
-		partsAgent.generate.mockClear();
+		labels.decide.mockClear();
 		const ids = { city: city.id, venue: venue.id, other: other.id };
 		em().clear();
 		await em().nativeDelete(Statement, {});
@@ -278,7 +287,6 @@ describe('statements (pglite)', () => {
 			kind: 'opinion',
 			amount: 50,
 			unit: 'minutes',
-			count: 1,
 			partsAt: expect.any(Date),
 		});
 		expect([s.review?.id, s.post ?? null, s.mention ?? null, s.city.id]).toEqual([
@@ -681,7 +689,7 @@ describe('statements (pglite)', () => {
 		]);
 		await em().flush();
 		const backlog = harness.moduleRef.get(LlmBacklogRegistry).get('statement-parts')!;
-		expect([backlog.label, backlog.priority]).toEqual(['Parts of claims', 10]);
+		expect([backlog.label, backlog.priority]).toEqual(['Labels of claims', 10]);
 		expect(await backlog.remaining()).toBe(2);
 		expect(await parts().countPending()).toBe(2);
 
@@ -691,10 +699,13 @@ describe('statements (pglite)', () => {
 			['terms', 0, 'empty', 0],
 		]);
 		expect(reviewAgent.generate).not.toHaveBeenCalled();
-		// One claim a call, with the place it is about, the source's other claims beside it, and the aspects' legend
-		expect(partsAgent.generate).toHaveBeenCalledTimes(2);
-		const calls = partsAgent.generate.mock.calls as [string, { legend: string }][];
-		expect(calls.map(([input]) => JSON.parse(input))).toEqual([
+		// One claim a call, with the place it is about, the source's other claims beside it, and the aspects
+		expect(labels.decide).toHaveBeenCalledTimes(2);
+		const calls = labels.decide.mock.calls as unknown as [
+			unknown,
+			{ aspects: { key: string }[] },
+		][];
+		expect(calls.map(([state]) => state)).toEqual([
 			{
 				source: 'review',
 				place: 'Batu Burger',
@@ -709,16 +720,14 @@ describe('statements (pglite)', () => {
 			},
 		]);
 		const [, context] = calls[0];
-		expect(context.legend).toContain(
-			'wait: wait (about waiting, when nothing finer fits), queue (',
-		);
+		expect(context.aspects.map(a => a.key)).toEqual(expect.arrayContaining(['wait', 'queue']));
 		em().clear();
 		const rows = await rowsOf({ review: r.id });
 		expect(
 			rows.map(s => [s.text, s.sentiment, partsOf(s), s.amount, s.unit, !!s.partsAt]),
 		).toEqual([
 			['rude staff', 'negative', [['aspect', 'friendliness']], null, null, true],
-			// The agent gave no number: "an hour" read from the text for the wait aspect
+			// No number from agent A: "an hour" read from the text for the wait aspect
 			[
 				'waited an hour for the food',
 				'negative',
@@ -730,6 +739,25 @@ describe('statements (pglite)', () => {
 		]);
 		expect(await backlog.remaining()).toBe(0);
 		expect((await em().findOneOrFail(Review, r.id)).analysedAt ?? null).toBeNull();
+	});
+
+	it("keeps agent A's foods and numbers when the labeller can't serve: the claims wait unlabelled", async () => {
+		const r = review({ text: 'Damn good Doner, but man they were for 15 euros' });
+		await em().flush();
+		const down = async () => {
+			throw new Error('No model can serve typesafe-ai/jev-latest: TypeSafe is switched off');
+		};
+		labels.decide.mockImplementationOnce(down).mockImplementationOnce(down);
+		await expect(reviews().analyseMonth('2026-09')).rejects.toThrow('No model can serve');
+		em().clear();
+		const rows = await rowsOf({ review: r.id });
+		expect(
+			rows.map(s => [s.text, s.sentiment ?? null, partsOf(s), s.amount, !!s.partsAt]),
+		).toEqual([
+			['the döner was damn good', null, [['food', 'doner']], null, false],
+			['the döner cost 15 euros', null, [['food', 'doner']], 15, false],
+		]);
+		expect(await parts().countPending()).toBe(2);
 	});
 
 	it('settles a claim answered with an aspect key the table lacks: no aspect part, its sentiment and foods stored, never re-asked', async () => {
@@ -749,7 +777,7 @@ describe('statements (pglite)', () => {
 		expect(await em().count(Term, { key: 'sauce' })).toBe(1);
 	});
 
-	it("takes agent B's kind as final: a claim read again loses a kind it was wrongly given, and B reads the quote with the text", async () => {
+	it("takes the labeller's kind as final: a claim read again loses a kind it was wrongly given, and the quote is read with the text", async () => {
 		const r = review({ text: 'Lecker wie immer!' });
 		const [s] = statements().replaceForReview(r, [
 			{ text: 'delicious as always', quote: 'Lecker wie immer' },
@@ -757,7 +785,7 @@ describe('statements (pglite)', () => {
 		s.kind = 'change';
 		await em().flush();
 		partsOverride = () => ({ sentiment: 'positive', aspect: 'taste', kind: 'opinion' });
-		partsAgent.generate.mockClear();
+		labels.decide.mockClear();
 		await parts().read({ ids: [s.id] });
 		em().clear();
 		const [read] = await rowsOf({ review: r.id });
@@ -766,8 +794,8 @@ describe('statements (pglite)', () => {
 			'Lecker wie immer',
 			'positive',
 		]);
-		const [input] = partsAgent.generate.mock.calls[0] as [string];
-		expect(JSON.parse(input).claim).toEqual({
+		const [state] = labels.decide.mock.calls[0] as unknown as [{ claim: unknown }];
+		expect(state.claim).toEqual({
 			text: 'delicious as always',
 			quote: 'Lecker wie immer',
 		});

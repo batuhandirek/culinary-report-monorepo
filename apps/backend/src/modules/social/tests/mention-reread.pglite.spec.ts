@@ -4,11 +4,12 @@ import _ from 'lodash';
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { ClaimPartsAgent } from 'src/modules/statements/agents/claim-parts.agent.js';
+import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { POSTS_GATED_AT } from 'src/modules/statements/constants/statements-shipped.constant.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
+import { labelsClassifier } from 'src/modules/statements/tests/factories/claim-labels.mock.js';
 import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
 import { TermService } from 'src/modules/topics/services/term.service.js';
@@ -18,7 +19,6 @@ import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
-import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { PostClaimsAgent, type PostClaimsAnswer } from '../agents/post-claims.agent.js';
@@ -34,8 +34,18 @@ import { MentionExtractionService } from '../services/mention-extraction.service
 import { gateAgent } from './factories/post-gate.mock.js';
 import { ownAccount } from './factories/social-account.factory.js';
 
-/** Agent B's answer for a claim, by its text; a claim not listed is a neutral fact about nothing */
-const PARTS: Record<string, object> = {
+/** The reading of a claim, by its text: Jev's labels, and the foods and number agent A copied out; a claim not listed is a neutral opinion about nothing */
+const PARTS: Record<
+	string,
+	{
+		sentiment?: 'positive' | 'negative' | 'neutral' | 'mixed';
+		aspect?: string | null;
+		foods?: string[];
+		amount?: number;
+		unit?: 'minutes' | 'money';
+		kind?: string;
+	}
+> = {
 	'the broth was damn good': { sentiment: 'positive', aspect: 'taste', foods: ['broth'] },
 	'the döner cost 15 euros': {
 		sentiment: 'negative',
@@ -86,6 +96,10 @@ const claim = (
 ): AnswerClaim => ({
 	text,
 	quote,
+	// What agent A copies out of the text
+	foods: PARTS[text]?.foods ?? [],
+	amount: PARTS[text]?.amount ?? null,
+	unit: PARTS[text]?.unit ?? null,
 	subject,
 	place: placeName,
 });
@@ -121,19 +135,8 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			return { object: answers[marker], usage: { totalTokens: TOKENS } };
 		}),
 	};
-	const partsAgent = mockAgent((input: unknown) => {
-		// One claim a call
-		const { text } = (JSON.parse(input as string) as { claim: { text: string } }).claim;
-		return {
-			sentiment: 'neutral',
-			aspect: null,
-			foods: [],
-			amount: null,
-			unit: null,
-			kind: 'opinion',
-			...PARTS[text],
-		};
-	});
+	// The claim-labels classifier, one claim a call
+	const labels = labelsClassifier(text => PARTS[text]);
 
 	const em = () => harness.orm.em;
 	const sql = <T>(query: string, params: unknown[] = []): Promise<T[]> =>
@@ -153,7 +156,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 				LlmBacklogRegistry,
 				{ provide: PostClaimsAgent, useValue: postAgent },
 				{ provide: PostGateAgent, useValue: gate },
-				{ provide: ClaimPartsAgent, useValue: partsAgent },
+				{ provide: ClaimLabelsClassifier, useValue: labels },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -182,7 +185,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		skipFor = {};
 		postAgent.generate.mockClear();
 		gate.generate.mockClear();
-		partsAgent.generate.mockClear();
+		labels.decide.mockClear();
 		const ids = { city: city.id, pho: pho.id, kaffee: kaffee.id };
 		em().clear();
 		await em().nativeDelete(Statement, {});
@@ -405,7 +408,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			true,
 		]);
 		// Agent B read the new claims in the same batch, one call a claim
-		expect(partsAgent.generate).toHaveBeenCalledTimes(5);
+		expect(labels.decide).toHaveBeenCalledTimes(5);
 		expect(await registry().get('statement-parts')!.remaining()).toBe(0);
 	});
 
@@ -573,14 +576,14 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		);
 	});
 
-	it('is the `reread-posts` backlog: priority 45, `remaining()` the count, a batch reads and reports `done` and the tokens', async () => {
+	it('is the `reread-posts` backlog: priority 35 (before the re-read of reviews), `remaining()` the count, a batch reads and reports `done` and the tokens', async () => {
 		post('p10');
 		post('p11');
 		post('p12', { analysedAt: new Date(POSTS_GATED_AT.getTime() + 60_000) });
 		await em().flush();
 		answers = { '[p10]': NOTHING, '[p11]': NOTHING, '[p12]': NOTHING };
 		const backlog = registry().get('reread-posts')!;
-		expect([backlog.label, backlog.priority]).toEqual(['Re-read posts as claims', 45]);
+		expect([backlog.label, backlog.priority]).toEqual(['Re-read posts as claims', 35]);
 		expect(
 			registry()
 				.list()

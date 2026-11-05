@@ -41,6 +41,7 @@ const MATCHED_METHODS = [
 	MentionMatchMethodEnum.EXACT,
 	MentionMatchMethodEnum.FUZZY,
 	MentionMatchMethodEnum.LLM,
+	MentionMatchMethodEnum.ACCOUNT,
 ];
 const isAdminDecided = (mention: Mention) =>
 	!!mention.matchMethod && ADMIN_METHODS.includes(mention.matchMethod);
@@ -113,8 +114,11 @@ export class MentionExtractionService implements OnModuleInit {
 	onModuleInit() {
 		this.llmBacklogRegistry.register({
 			key: 'reread-posts',
+			ingestion: true,
 			label: 'Re-read posts as claims',
-			priority: 45,
+			// Before the reviews' re-read (40): the user wants posts read first (2026-11-05), and on
+			// OpenRouter's 1,000 free requests a day the reviews would hold them back a week
+			priority: 35,
 			remaining: () => this.countToReread(POSTS_GATED_AT),
 			runBatch: async () => {
 				const res = await this.reread({
@@ -168,7 +172,8 @@ export class MentionExtractionService implements OnModuleInit {
 					res.object.digest ? null : (res.object.reason ?? PostSkipReasonEnum.NOT_FOOD);
 				(res.object.digest ? digest : skipped).push(post);
 			},
-			(post, e) => this.logger.warn(`The gate failed on post ${post.externalId}: ${e.message}`),
+			(post, e) =>
+				this.logger.warn(`The gate failed on post ${post.externalId}: ${e.message}`),
 		);
 		return { digest, skipped, tokens };
 	}
@@ -331,7 +336,7 @@ export class MentionExtractionService implements OnModuleInit {
 		}
 		// One flush at the end: the posts run side by side on this entity manager
 		await this.em.flush();
-		// Agent B over the new claims in the same batch; what it misses, the `statement-parts` backlog reads
+		// A's foods stored and the labels read (Jev) over the new claims in the same batch; what it misses, the `statement-parts` backlog reads
 		const parts = await this.statementPartsService.read({ ids: created.map(s => s.id) });
 		result.tokens += parts.tokens;
 		if (added.length) {
@@ -417,7 +422,7 @@ export class MentionExtractionService implements OnModuleInit {
 		}
 		// One flush at the end: the posts run side by side on this entity manager
 		await this.em.flush();
-		// Agent B over the new claims in the same step; what it misses, the `statement-parts` backlog reads
+		// A's foods stored and the labels read (Jev) over the new claims in the same step; what it misses, the `statement-parts` backlog reads
 		await this.statementPartsService.read({ ids: claims.map(s => s.id) });
 		// What the new mentions are about, and their cities' venue tags by job
 		if (created.length) {

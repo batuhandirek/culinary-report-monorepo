@@ -18,6 +18,9 @@ export enum MentionMatchMethodEnum {
 	FUZZY = 'fuzzy',
 	// The LLM picked it among close candidates
 	LLM = 'llm',
+	// The post tags the brand's own account (@handle), named after the place the mention names
+	// (`taggedAccountPick`): what the brand calls itself, so no name similarity is needed
+	ACCOUNT = 'account',
 	// Nothing fits yet; retried after a Google Maps lookup adds venues
 	NONE = 'none',
 	// The venue is in another city

@@ -62,7 +62,9 @@ export class StatementEmbeddingService implements OnModuleInit {
 
 	/** Why the backfill must not run yet, or null */
 	async waitsFor(): Promise<string | null> {
-		return this.approvedAt ? null : 'The spend is not approved yet (STATEMENT_EMBEDDINGS_APPROVED_AT)';
+		return this.approvedAt ? null : (
+				'The spend is not approved yet (STATEMENT_EMBEDDINGS_APPROVED_AT)'
+			);
 	}
 
 	async countPending(): Promise<number> {

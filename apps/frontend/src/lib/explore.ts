@@ -99,7 +99,6 @@ export const SOURCE_LABELS: Record<string, string> = {
 	tiktok: 'TikTok',
 	instagram: 'Instagram',
 	blog: 'Blog articles',
-	google_tag: 'Google tags',
 	comment: 'Comments',
 	press: 'Press'
 };

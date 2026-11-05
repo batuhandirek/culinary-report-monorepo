@@ -130,7 +130,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T11:49:11.614Z",
     "usage": {
       "inputTokens": 11861,
@@ -378,6 +378,21 @@
         "at": "2026-11-02T12:44:05.876Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: true → true (Giveaway run together with 44 CHKN (\"Gemeinsam mit 44 CHKN verlosen wir einen 50 € Gutschein\") by creator account BeGuNa, not the venue's own post)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.256Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.714Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.185Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }

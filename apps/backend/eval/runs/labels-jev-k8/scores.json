@@ -1,0 +1,681 @@
+{
+  "label": "labels-jev-k8",
+  "at": "2026-11-05T15:42:12.348Z",
+  "cases": {
+    "review": 172,
+    "post": 199,
+    "term": 0
+  },
+  "unscored": 500,
+  "dropped": 0,
+  "byKind": {
+    "review": {
+      "parts.sentiment": [
+        1123,
+        1146
+      ],
+      "parts.aspect": [
+        1027,
+        1146
+      ],
+      "parts.aspect_root": [
+        1094,
+        1146
+      ],
+      "parts.kind_read": [
+        1146,
+        1146
+      ],
+      "parts.kind": [
+        1120,
+        1146
+      ],
+      "shortlist.recall": [
+        1122,
+        1146
+      ],
+      "sure.sentiment": [
+        850,
+        1146
+      ],
+      "parts.sentiment@sure": [
+        850,
+        850
+      ],
+      "sure.aspect": [
+        580,
+        1146
+      ],
+      "sure.kind": [
+        846,
+        1146
+      ],
+      "parts.kind@sure": [
+        839,
+        846
+      ],
+      "parts.aspect@sure": [
+        569,
+        580
+      ],
+      "parts.amount": [
+        29,
+        40
+      ],
+      "change.precision": [
+        13,
+        18
+      ],
+      "change.recall": [
+        13,
+        16
+      ]
+    },
+    "post": {
+      "parts.sentiment": [
+        2782,
+        2864
+      ],
+      "parts.aspect": [
+        2340,
+        2864
+      ],
+      "parts.aspect_root": [
+        2599,
+        2864
+      ],
+      "parts.kind_read": [
+        2864,
+        2864
+      ],
+      "parts.kind": [
+        2697,
+        2864
+      ],
+      "shortlist.recall": [
+        2721,
+        2864
+      ],
+      "sure.sentiment": [
+        1921,
+        2864
+      ],
+      "parts.sentiment@sure": [
+        1914,
+        1921
+      ],
+      "sure.aspect": [
+        1186,
+        2864
+      ],
+      "sure.kind": [
+        1740,
+        2864
+      ],
+      "parts.aspect@sure": [
+        1120,
+        1186
+      ],
+      "parts.kind@sure": [
+        1707,
+        1740
+      ],
+      "parts.amount": [
+        65,
+        76
+      ],
+      "change.precision": [
+        46,
+        94
+      ],
+      "change.recall": [
+        31,
+        32
+      ]
+    },
+    "term": {}
+  },
+  "bySplit": {
+    "train": {
+      "review": {
+        "parts.sentiment": [
+          781,
+          797
+        ],
+        "parts.aspect": [
+          711,
+          797
+        ],
+        "parts.aspect_root": [
+          762,
+          797
+        ],
+        "parts.kind_read": [
+          797,
+          797
+        ],
+        "parts.kind": [
+          778,
+          797
+        ],
+        "shortlist.recall": [
+          778,
+          797
+        ],
+        "sure.sentiment": [
+          600,
+          797
+        ],
+        "parts.sentiment@sure": [
+          600,
+          600
+        ],
+        "sure.aspect": [
+          397,
+          797
+        ],
+        "sure.kind": [
+          573,
+          797
+        ],
+        "parts.kind@sure": [
+          569,
+          573
+        ],
+        "parts.aspect@sure": [
+          389,
+          397
+        ],
+        "parts.amount": [
+          20,
+          26
+        ],
+        "change.precision": [
+          11,
+          15
+        ],
+        "change.recall": [
+          11,
+          14
+        ]
+      },
+      "post": {
+        "parts.sentiment": [
+          1935,
+          1990
+        ],
+        "parts.aspect": [
+          1629,
+          1990
+        ],
+        "parts.aspect_root": [
+          1814,
+          1990
+        ],
+        "parts.kind_read": [
+          1990,
+          1990
+        ],
+        "parts.kind": [
+          1879,
+          1990
+        ],
+        "shortlist.recall": [
+          1887,
+          1990
+        ],
+        "sure.sentiment": [
+          1349,
+          1990
+        ],
+        "parts.sentiment@sure": [
+          1344,
+          1349
+        ],
+        "sure.aspect": [
+          861,
+          1990
+        ],
+        "parts.aspect@sure": [
+          816,
+          861
+        ],
+        "sure.kind": [
+          1213,
+          1990
+        ],
+        "parts.kind@sure": [
+          1194,
+          1213
+        ],
+        "parts.amount": [
+          42,
+          48
+        ],
+        "change.precision": [
+          31,
+          63
+        ],
+        "change.recall": [
+          21,
+          22
+        ]
+      },
+      "term": {}
+    },
+    "test": {
+      "review": {
+        "parts.sentiment": [
+          342,
+          349
+        ],
+        "parts.aspect": [
+          316,
+          349
+        ],
+        "parts.aspect_root": [
+          332,
+          349
+        ],
+        "parts.kind_read": [
+          349,
+          349
+        ],
+        "parts.kind": [
+          342,
+          349
+        ],
+        "shortlist.recall": [
+          344,
+          349
+        ],
+        "sure.sentiment": [
+          250,
+          349
+        ],
+        "sure.aspect": [
+          183,
+          349
+        ],
+        "parts.aspect@sure": [
+          180,
+          183
+        ],
+        "sure.kind": [
+          273,
+          349
+        ],
+        "parts.sentiment@sure": [
+          250,
+          250
+        ],
+        "parts.kind@sure": [
+          270,
+          273
+        ],
+        "parts.amount": [
+          9,
+          14
+        ],
+        "change.precision": [
+          2,
+          3
+        ],
+        "change.recall": [
+          2,
+          2
+        ]
+      },
+      "post": {
+        "parts.sentiment": [
+          847,
+          874
+        ],
+        "parts.aspect": [
+          711,
+          874
+        ],
+        "parts.aspect_root": [
+          785,
+          874
+        ],
+        "parts.kind_read": [
+          874,
+          874
+        ],
+        "parts.kind": [
+          818,
+          874
+        ],
+        "shortlist.recall": [
+          834,
+          874
+        ],
+        "sure.sentiment": [
+          572,
+          874
+        ],
+        "parts.sentiment@sure": [
+          570,
+          572
+        ],
+        "sure.aspect": [
+          325,
+          874
+        ],
+        "sure.kind": [
+          527,
+          874
+        ],
+        "parts.kind@sure": [
+          513,
+          527
+        ],
+        "parts.aspect@sure": [
+          304,
+          325
+        ],
+        "parts.amount": [
+          23,
+          28
+        ],
+        "change.precision": [
+          15,
+          31
+        ],
+        "change.recall": [
+          10,
+          10
+        ]
+      },
+      "term": {}
+    }
+  },
+  "byTag": {
+    "lang:de": {
+      "parts.aspect": [
+        372,
+        416
+      ],
+      "parts.sentiment": [
+        406,
+        416
+      ]
+    },
+    "stars:4": {
+      "parts.aspect": [
+        214,
+        233
+      ],
+      "parts.sentiment": [
+        230,
+        233
+      ]
+    },
+    "platform:google": {
+      "parts.aspect": [
+        1027,
+        1146
+      ],
+      "parts.sentiment": [
+        1123,
+        1146
+      ]
+    },
+    "length:medium": {
+      "parts.aspect": [
+        644,
+        715
+      ],
+      "parts.sentiment": [
+        703,
+        715
+      ]
+    },
+    "stars:5": {
+      "parts.aspect": [
+        248,
+        269
+      ],
+      "parts.sentiment": [
+        265,
+        269
+      ]
+    },
+    "lang:other": {
+      "parts.aspect": [
+        319,
+        368
+      ],
+      "parts.sentiment": [
+        360,
+        368
+      ]
+    },
+    "stars:2": {
+      "parts.aspect": [
+        164,
+        186
+      ],
+      "parts.sentiment": [
+        181,
+        186
+      ]
+    },
+    "lang:tr": {
+      "parts.aspect": [
+        81,
+        85
+      ],
+      "parts.sentiment": [
+        82,
+        85
+      ]
+    },
+    "chain": {
+      "parts.aspect": [
+        419,
+        455
+      ],
+      "parts.sentiment": [
+        447,
+        455
+      ]
+    },
+    "lang:en": {
+      "parts.aspect": [
+        255,
+        277
+      ],
+      "parts.sentiment": [
+        275,
+        277
+      ]
+    },
+    "stars:1": {
+      "parts.aspect": [
+        172,
+        198
+      ],
+      "parts.sentiment": [
+        194,
+        198
+      ]
+    },
+    "length:long": {
+      "parts.aspect": [
+        328,
+        369
+      ],
+      "parts.sentiment": [
+        359,
+        369
+      ]
+    },
+    "length:short": {
+      "parts.aspect": [
+        55,
+        62
+      ],
+      "parts.sentiment": [
+        61,
+        62
+      ]
+    },
+    "stars:3": {
+      "parts.aspect": [
+        229,
+        260
+      ],
+      "parts.sentiment": [
+        253,
+        260
+      ]
+    },
+    "hard": {
+      "parts.aspect": [
+        111,
+        121
+      ],
+      "parts.sentiment": [
+        119,
+        121
+      ]
+    },
+    "platform:tiktok": {
+      "parts.aspect": [
+        796,
+        952
+      ],
+      "parts.sentiment": [
+        927,
+        952
+      ]
+    },
+    "places:none": {
+      "parts.aspect": [
+        7,
+        11
+      ],
+      "parts.sentiment": [
+        11,
+        11
+      ]
+    },
+    "no-transcript": {
+      "parts.aspect": [
+        554,
+        665
+      ],
+      "parts.sentiment": [
+        657,
+        665
+      ]
+    },
+    "size:small": {
+      "parts.aspect": [
+        366,
+        433
+      ],
+      "parts.sentiment": [
+        428,
+        433
+      ]
+    },
+    "platform:instagram": {
+      "parts.aspect": [
+        376,
+        451
+      ],
+      "parts.sentiment": [
+        446,
+        451
+      ]
+    },
+    "places:few": {
+      "parts.aspect": [
+        1669,
+        2060
+      ],
+      "parts.sentiment": [
+        1996,
+        2060
+      ]
+    },
+    "size:medium": {
+      "parts.aspect": [
+        860,
+        1053
+      ],
+      "parts.sentiment": [
+        1023,
+        1053
+      ]
+    },
+    "places:many": {
+      "parts.aspect": [
+        664,
+        793
+      ],
+      "parts.sentiment": [
+        775,
+        793
+      ]
+    },
+    "platform:blog": {
+      "parts.aspect": [
+        1168,
+        1461
+      ],
+      "parts.sentiment": [
+        1409,
+        1461
+      ]
+    },
+    "transcript": {
+      "parts.aspect": [
+        618,
+        738
+      ],
+      "parts.sentiment": [
+        716,
+        738
+      ]
+    },
+    "own": {
+      "parts.aspect": [
+        84,
+        100
+      ],
+      "parts.sentiment": [
+        99,
+        100
+      ]
+    },
+    "size:large": {
+      "parts.aspect": [
+        1114,
+        1378
+      ],
+      "parts.sentiment": [
+        1331,
+        1378
+      ]
+    }
+  },
+  "models": {
+    "claim-labels": {
+      "typesafe-ai/jev-latest": 369
+    }
+  },
+  "tokens": 8019729,
+  "cachedTokens": 0,
+  "usd": 0.298522686,
+  "reading": {
+    "reader": "split",
+    "labeller": "classifier",
+    "aspectShortlist": 8,
+    "claims": "reference"
+  },
+  "staleReferences": 0
+}

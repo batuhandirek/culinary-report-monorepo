@@ -123,8 +123,6 @@
 	const aboutOf = (row: AdminStatementRowOutputDto) =>
 		row.review
 			? row.review.venue.name
-			: row.venue
-				? row.venue.name
 			: row.mention
 				? (row.mention.brand?.name ?? row.mention.venueName)
 				: row.subject === 'city'
@@ -138,17 +136,13 @@
 			? `${row.review.platform === 'tripadvisor' ? 'TripAdvisor' : 'Google'} review${row.review.stars ? ` · ${row.review.stars}★` : ''}`
 			: row.post
 				? `${PLATFORM_LABELS[row.post.platform] ?? row.post.platform} · ${authorLabel(row.post.platform, row.post.author)}${isOwnPost(row) ? ' (own post)' : ''}`
-				: row.sourceKind === 'google_tag'
-					? `Google tag${row.count && row.count > 1 ? ` · ×${row.count.toLocaleString('en-GB')}` : ''}`
-					: '';
+				: '';
 	const sourceHref = (row: AdminStatementRowOutputDto) =>
 		row.post
 			? `/admin/posts/${row.post.id}`
 			: row.review
 				? `/admin/venues/${row.review.venue.id}?tab=reviews`
-				: row.venue
-					? `/admin/venues/${row.venue.id}`
-					: undefined;
+				: undefined;
 
 	const ALL_COLUMNS: Column<AdminStatementRowOutputDto>[] = [
 		{ type: 'date', name: 'Said', format: 'date', value: (row) => row.saidAt },

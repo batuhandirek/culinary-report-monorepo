@@ -47,6 +47,7 @@ export class CommentIntentAgent extends BaseMastraAgent<
 		id: 'comment-intent',
 		name: 'CommentIntentAgent',
 		outputSchema: commentIntentSchema,
+		ingestion: true,
 	};
 
 	protected getModel(): LlmModelChoice {

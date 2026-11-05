@@ -12,7 +12,7 @@ import {
 	SocialAccountSnapshot,
 } from '../../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from '../../entities/social-post.entity.js';
-import { type SnapshotFigures, snapshotDateParts } from '../../util/account-snapshots.js';
+import { snapshotDateParts, type SnapshotFigures } from '../../util/account-snapshots.js';
 
 export interface SocialAccountTransientParams {
 	em?: EntityManager;

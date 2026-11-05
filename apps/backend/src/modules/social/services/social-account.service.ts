@@ -17,15 +17,16 @@ import { SocialAccountHandleChange } from '../entities/social-account-handle-cha
 import { AccountSnapshotSourceEnum, SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
-import { normalizeHandle } from '../util/accounts.js';
 import {
 	followersChange,
 	latestFigures,
 	SNAPSHOT_FIGURES,
-	type SnapshotFigures,
 	snapshotDateParts,
+	type SnapshotFigures,
 } from '../util/account-snapshots.js';
+import { normalizeHandle } from '../util/accounts.js';
 import { CREATOR_KEY_SQL, creatorKeyOf } from '../util/creators.js';
+import type { ProfileFacts } from '../util/profile-proof.js';
 
 /**
  * Figures seen again this soon after the account's last snapshot (in the same unit of work)
@@ -75,6 +76,11 @@ export interface AccountSeen {
 	posts?: number | null;
 	/** What kind of scrape saw it; a post's item by default */
 	source?: AccountSnapshotSourceEnum;
+	/**
+	 * What a profile read gave (a profile scrape, the follower fill, the twin lookup): kept on the
+	 * account with `profileReadAt`, the bio and links as given (an empty bio is stored as none)
+	 */
+	profile?: Pick<ProfileFacts, 'bio' | 'links' | 'category' | 'isBusiness'>;
 }
 
 /**
@@ -242,6 +248,13 @@ export class SocialAccountService {
 			if (lost) lost.takenBy = account;
 		}
 		if (seen.displayName?.trim()) account.displayName = seen.displayName.trim();
+		if (seen.profile) {
+			account.bio = seen.profile.bio?.trim() || null;
+			account.bioLinks = seen.profile.links.length ? seen.profile.links : null;
+			account.businessCategory = seen.profile.category ?? null;
+			account.isBusiness = seen.profile.isBusiness ?? null;
+			account.profileReadAt = now;
+		}
 		if (typeof seen.followers === 'number' && seen.followers >= 0) {
 			account.followers = seen.followers;
 			account.followersAt = now;
@@ -316,6 +329,15 @@ export class SocialAccountService {
 		const figures = owner.followers != null ? owner : byHandle;
 		keep.followers = figures.followers;
 		keep.followersAt = figures.followersAt;
+		// The newest profile read's bio, links and category
+		const read = (owner.profileReadAt?.getTime() ?? 0) >= (byHandle.profileReadAt?.getTime() ?? 0) ? owner : byHandle;
+		Object.assign(keep, {
+			bio: read.bio,
+			bioLinks: read.bioLinks,
+			businessCategory: read.businessCategory,
+			isBusiness: read.isBusiness,
+			profileReadAt: read.profileReadAt,
+		});
 		if (!keep.brand && gone.brand) {
 			keep.brand = gone.brand;
 			keep.branch = gone.branch;

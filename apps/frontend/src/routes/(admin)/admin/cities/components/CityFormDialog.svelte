@@ -16,6 +16,7 @@
 		{ key: 'SCRAPE_ACCOUNTS', label: 'Watched accounts, monthly', fallback: 4 },
 		{ key: 'SCRAPE_ACCOUNTS_RECENT', label: 'Watched accounts, weekly', fallback: 2 },
 		{ key: 'FIND_OWN_ACCOUNTS', label: 'Own accounts on the other platform, weekly', fallback: 1 },
+		{ key: 'READ_MENTIONED_PROFILES', label: 'Mentioned profiles, weekly', fallback: 2 },
 		{ key: 'SCRAPE_COMMENTS', label: 'Scrape comments', fallback: 13 },
 		{ key: 'SCRAPE_PRESS', label: 'Scrape press', fallback: 3 },
 		{ key: 'SCRAPE_DELIVERY', label: 'Scrape delivery', fallback: 3 },

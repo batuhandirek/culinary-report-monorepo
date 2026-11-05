@@ -1,10 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { ClaimPartsAgent } from 'src/modules/statements/agents/claim-parts.agent.js';
+import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
+import { labelsClassifier } from 'src/modules/statements/tests/factories/claim-labels.mock.js';
 import { partTopicKeys } from 'src/modules/statements/util/statement-views.js';
 import { TermService } from 'src/modules/topics/services/term.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
@@ -45,6 +46,9 @@ describe('MentionExtractionService (pglite)', () => {
 			{
 				text: 'the broth at Pho House is something else',
 				quote: 'the broth at Pho House is something else',
+				foods: ['broth'],
+				amount: null,
+				unit: null,
 				subject: 'place',
 				place: 'Pho House',
 			},
@@ -52,6 +56,9 @@ describe('MentionExtractionService (pglite)', () => {
 			{
 				text: 'the pho cost 14 euros',
 				quote: 'die Pho kostet 14 Euro',
+				foods: ['pho'],
+				amount: 14,
+				unit: 'money',
 				subject: 'place',
 				place: 'Pho House',
 			},
@@ -59,32 +66,33 @@ describe('MentionExtractionService (pglite)', () => {
 			{
 				text: 'Neukölln has the best pho',
 				quote: 'The best pho in Neukölln',
+				foods: ['pho'],
+				amount: null,
+				unit: null,
 				subject: 'city',
 				place: null,
 			},
 			// A place name the answer has no place for: about nothing
-			{ text: 'went on a Tuesday', quote: null, subject: 'place', place: 'Nowhere Bar' },
+			{
+				text: 'went on a Tuesday',
+				quote: null,
+				foods: [],
+				amount: null,
+				unit: null,
+				subject: 'place',
+				place: 'Nowhere Bar',
+			},
 		],
 	});
-	// Agent B, as a function of the one claim it is sent
-	const partsAgent = mockAgent((input: unknown) => {
-		// One claim a call
-		const { text } = (JSON.parse(input as string) as { claim: { text: string } }).claim;
-		return {
-			sentiment: text.includes('cost') || text.includes('Tuesday') ? 'neutral' : 'positive',
-			aspect:
-				text.includes('cost') ? 'price_level'
-				: text.includes('broth') ? 'taste'
-				: null,
-			foods:
-				text.includes('broth') ? ['broth']
-				: text.includes('pho') ? ['pho']
-				: [],
-			amount: text.includes('cost') ? 14 : null,
-			unit: text.includes('cost') ? 'money' : null,
-			kind: text.includes('cost') || text.includes('Tuesday') ? 'fact' : 'opinion',
-		};
-	});
+	// The claim-labels classifier, one claim a call; foods and numbers are agent A's
+	const labels = labelsClassifier(text => ({
+		sentiment: text.includes('cost') || text.includes('Tuesday') ? 'neutral' : 'positive',
+		aspect:
+			text.includes('cost') ? 'price_level'
+			: text.includes('broth') ? 'taste'
+			: null,
+		kind: text.includes('cost') || text.includes('Tuesday') ? 'fact' : 'opinion',
+	}));
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -96,7 +104,7 @@ describe('MentionExtractionService (pglite)', () => {
 				StatementPartsService,
 				{ provide: PostClaimsAgent, useValue: agent },
 				{ provide: PostGateAgent, useValue: gateAgent() },
-				{ provide: ClaimPartsAgent, useValue: partsAgent },
+				{ provide: ClaimLabelsClassifier, useValue: labels },
 			],
 		});
 		service = harness.moduleRef.get(MentionExtractionService);
@@ -229,7 +237,7 @@ describe('MentionExtractionService (pglite)', () => {
 		]);
 		expect(statements.every(s => s.sourceKind === 'post' && s.partsAt)).toBe(true);
 		// One call a claim
-		expect(partsAgent.generate).toHaveBeenCalledTimes(4);
+		expect(labels.decide).toHaveBeenCalledTimes(4);
 	});
 
 	it('gives the agent a blog article as an article: the blog, its title and text', async () => {

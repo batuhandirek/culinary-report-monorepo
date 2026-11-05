@@ -1,0 +1,910 @@
+{
+  "label": "sq-sonnet",
+  "at": "2026-11-05T14:54:40.689Z",
+  "cases": {
+    "review": 51,
+    "post": 58,
+    "term": 0
+  },
+  "unscored": 762,
+  "dropped": 0,
+  "byKind": {
+    "review": {
+      "claims.recall": [
+        298,
+        298
+      ],
+      "claims.precision": [
+        350,
+        351
+      ],
+      "parts.sentiment": [
+        336,
+        347
+      ],
+      "parts.aspect": [
+        323,
+        347
+      ],
+      "parts.aspect_root": [
+        333,
+        347
+      ],
+      "parts.kind_read": [
+        347,
+        347
+      ],
+      "parts.kind": [
+        336,
+        347
+      ],
+      "parts.foods_recall": [
+        111,
+        126
+      ],
+      "parts.foods_precision": [
+        115,
+        133
+      ],
+      "parts.amount": [
+        13,
+        14
+      ],
+      "change.precision": [
+        2,
+        3
+      ],
+      "change.recall": [
+        2,
+        2
+      ]
+    },
+    "post": {
+      "claims.recall": [
+        563,
+        606
+      ],
+      "claims.precision": [
+        765,
+        817
+      ],
+      "parts.sentiment": [
+        726,
+        760
+      ],
+      "parts.aspect": [
+        653,
+        760
+      ],
+      "parts.aspect_root": [
+        690,
+        760
+      ],
+      "parts.kind_read": [
+        760,
+        760
+      ],
+      "parts.kind": [
+        715,
+        760
+      ],
+      "parts.foods_recall": [
+        433,
+        451
+      ],
+      "parts.foods_precision": [
+        449,
+        547
+      ],
+      "post.promotional": [
+        58,
+        58
+      ],
+      "claims.subject": [
+        824,
+        847
+      ],
+      "places.recall": [
+        102,
+        111
+      ],
+      "match.brand": [
+        91,
+        102
+      ],
+      "match.branch": [
+        72,
+        75
+      ],
+      "places.precision": [
+        102,
+        112
+      ],
+      "match_isolated.brand": [
+        100,
+        111
+      ],
+      "match_isolated.branch": [
+        81,
+        82
+      ],
+      "claims.place": [
+        679,
+        789
+      ],
+      "parts.amount": [
+        25,
+        31
+      ],
+      "change.precision": [
+        15,
+        22
+      ],
+      "change.recall": [
+        9,
+        10
+      ]
+    },
+    "term": {}
+  },
+  "bySplit": {
+    "train": {
+      "review": {},
+      "post": {},
+      "term": {}
+    },
+    "test": {
+      "review": {
+        "claims.recall": [
+          298,
+          298
+        ],
+        "claims.precision": [
+          350,
+          351
+        ],
+        "parts.sentiment": [
+          336,
+          347
+        ],
+        "parts.aspect": [
+          323,
+          347
+        ],
+        "parts.aspect_root": [
+          333,
+          347
+        ],
+        "parts.kind_read": [
+          347,
+          347
+        ],
+        "parts.kind": [
+          336,
+          347
+        ],
+        "parts.foods_recall": [
+          111,
+          126
+        ],
+        "parts.foods_precision": [
+          115,
+          133
+        ],
+        "parts.amount": [
+          13,
+          14
+        ],
+        "change.precision": [
+          2,
+          3
+        ],
+        "change.recall": [
+          2,
+          2
+        ]
+      },
+      "post": {
+        "claims.recall": [
+          563,
+          606
+        ],
+        "claims.precision": [
+          765,
+          817
+        ],
+        "parts.sentiment": [
+          726,
+          760
+        ],
+        "parts.aspect": [
+          653,
+          760
+        ],
+        "parts.aspect_root": [
+          690,
+          760
+        ],
+        "parts.kind_read": [
+          760,
+          760
+        ],
+        "parts.kind": [
+          715,
+          760
+        ],
+        "parts.foods_recall": [
+          433,
+          451
+        ],
+        "parts.foods_precision": [
+          449,
+          547
+        ],
+        "post.promotional": [
+          58,
+          58
+        ],
+        "claims.subject": [
+          824,
+          847
+        ],
+        "places.recall": [
+          102,
+          111
+        ],
+        "match.brand": [
+          91,
+          102
+        ],
+        "match.branch": [
+          72,
+          75
+        ],
+        "places.precision": [
+          102,
+          112
+        ],
+        "match_isolated.brand": [
+          100,
+          111
+        ],
+        "match_isolated.branch": [
+          81,
+          82
+        ],
+        "claims.place": [
+          679,
+          789
+        ],
+        "parts.amount": [
+          25,
+          31
+        ],
+        "change.precision": [
+          15,
+          22
+        ],
+        "change.recall": [
+          9,
+          10
+        ]
+      },
+      "term": {}
+    }
+  },
+  "byTag": {
+    "lang:other": {
+      "claims.recall": [
+        96,
+        96
+      ],
+      "claims.precision": [
+        112,
+        112
+      ],
+      "parts.aspect": [
+        106,
+        114
+      ],
+      "parts.sentiment": [
+        110,
+        114
+      ]
+    },
+    "stars:2": {
+      "claims.recall": [
+        27,
+        27
+      ],
+      "claims.precision": [
+        30,
+        30
+      ],
+      "parts.aspect": [
+        25,
+        29
+      ],
+      "parts.sentiment": [
+        29,
+        29
+      ]
+    },
+    "platform:google": {
+      "claims.recall": [
+        298,
+        298
+      ],
+      "claims.precision": [
+        350,
+        351
+      ],
+      "parts.aspect": [
+        323,
+        347
+      ],
+      "parts.sentiment": [
+        336,
+        347
+      ]
+    },
+    "length:medium": {
+      "claims.recall": [
+        194,
+        194
+      ],
+      "claims.precision": [
+        233,
+        234
+      ],
+      "parts.aspect": [
+        210,
+        222
+      ],
+      "parts.sentiment": [
+        217,
+        222
+      ]
+    },
+    "chain": {
+      "claims.recall": [
+        140,
+        140
+      ],
+      "claims.precision": [
+        159,
+        159
+      ],
+      "parts.aspect": [
+        149,
+        158
+      ],
+      "parts.sentiment": [
+        151,
+        158
+      ]
+    },
+    "lang:en": {
+      "claims.recall": [
+        71,
+        71
+      ],
+      "claims.precision": [
+        83,
+        83
+      ],
+      "parts.aspect": [
+        73,
+        81
+      ],
+      "parts.sentiment": [
+        80,
+        81
+      ]
+    },
+    "lang:tr": {
+      "claims.recall": [
+        44,
+        44
+      ],
+      "claims.precision": [
+        53,
+        54
+      ],
+      "parts.aspect": [
+        54,
+        56
+      ],
+      "parts.sentiment": [
+        53,
+        56
+      ]
+    },
+    "stars:1": {
+      "claims.recall": [
+        49,
+        49
+      ],
+      "claims.precision": [
+        54,
+        54
+      ],
+      "parts.aspect": [
+        56,
+        59
+      ],
+      "parts.sentiment": [
+        56,
+        59
+      ]
+    },
+    "length:long": {
+      "claims.recall": [
+        80,
+        80
+      ],
+      "claims.precision": [
+        92,
+        92
+      ],
+      "parts.aspect": [
+        88,
+        100
+      ],
+      "parts.sentiment": [
+        94,
+        100
+      ]
+    },
+    "lang:de": {
+      "claims.recall": [
+        87,
+        87
+      ],
+      "claims.precision": [
+        102,
+        102
+      ],
+      "parts.aspect": [
+        90,
+        96
+      ],
+      "parts.sentiment": [
+        93,
+        96
+      ]
+    },
+    "stars:4": {
+      "claims.recall": [
+        54,
+        54
+      ],
+      "claims.precision": [
+        65,
+        66
+      ],
+      "parts.aspect": [
+        60,
+        62
+      ],
+      "parts.sentiment": [
+        61,
+        62
+      ]
+    },
+    "length:short": {
+      "claims.recall": [
+        24,
+        24
+      ],
+      "claims.precision": [
+        25,
+        25
+      ],
+      "parts.aspect": [
+        25,
+        25
+      ],
+      "parts.sentiment": [
+        25,
+        25
+      ]
+    },
+    "stars:5": {
+      "claims.recall": [
+        83,
+        83
+      ],
+      "claims.precision": [
+        99,
+        99
+      ],
+      "parts.aspect": [
+        88,
+        92
+      ],
+      "parts.sentiment": [
+        89,
+        92
+      ]
+    },
+    "stars:3": {
+      "claims.recall": [
+        85,
+        85
+      ],
+      "claims.precision": [
+        102,
+        102
+      ],
+      "parts.aspect": [
+        94,
+        105
+      ],
+      "parts.sentiment": [
+        101,
+        105
+      ]
+    },
+    "platform:tiktok": {
+      "claims.recall": [
+        183,
+        202
+      ],
+      "claims.precision": [
+        239,
+        254
+      ],
+      "parts.aspect": [
+        213,
+        248
+      ],
+      "parts.sentiment": [
+        241,
+        248
+      ],
+      "places.recall": [
+        56,
+        64
+      ],
+      "match.brand": [
+        48,
+        56
+      ]
+    },
+    "places:none": {
+      "claims.recall": [
+        3,
+        5
+      ],
+      "claims.precision": [
+        3,
+        3
+      ],
+      "parts.aspect": [
+        3,
+        3
+      ],
+      "parts.sentiment": [
+        3,
+        3
+      ],
+      "places.recall": [
+        1,
+        1
+      ],
+      "match.brand": [
+        1,
+        1
+      ]
+    },
+    "no-transcript": {
+      "claims.recall": [
+        80,
+        106
+      ],
+      "claims.precision": [
+        98,
+        102
+      ],
+      "parts.aspect": [
+        88,
+        103
+      ],
+      "parts.sentiment": [
+        94,
+        103
+      ],
+      "places.recall": [
+        35,
+        36
+      ],
+      "match.brand": [
+        32,
+        35
+      ]
+    },
+    "size:small": {
+      "claims.recall": [
+        48,
+        59
+      ],
+      "claims.precision": [
+        64,
+        65
+      ],
+      "parts.aspect": [
+        54,
+        64
+      ],
+      "parts.sentiment": [
+        58,
+        64
+      ],
+      "places.recall": [
+        20,
+        21
+      ],
+      "match.brand": [
+        17,
+        20
+      ]
+    },
+    "platform:instagram": {
+      "claims.recall": [
+        50,
+        66
+      ],
+      "claims.precision": [
+        57,
+        58
+      ],
+      "parts.aspect": [
+        52,
+        62
+      ],
+      "parts.sentiment": [
+        56,
+        62
+      ],
+      "places.recall": [
+        15,
+        16
+      ],
+      "match.brand": [
+        13,
+        15
+      ]
+    },
+    "places:few": {
+      "claims.recall": [
+        484,
+        512
+      ],
+      "claims.precision": [
+        669,
+        710
+      ],
+      "parts.aspect": [
+        563,
+        656
+      ],
+      "parts.sentiment": [
+        623,
+        656
+      ],
+      "places.recall": [
+        60,
+        63
+      ],
+      "match.brand": [
+        56,
+        60
+      ]
+    },
+    "transcript": {
+      "claims.recall": [
+        153,
+        162
+      ],
+      "claims.precision": [
+        198,
+        210
+      ],
+      "parts.aspect": [
+        177,
+        207
+      ],
+      "parts.sentiment": [
+        203,
+        207
+      ],
+      "places.recall": [
+        36,
+        44
+      ],
+      "match.brand": [
+        29,
+        36
+      ]
+    },
+    "size:medium": {
+      "claims.recall": [
+        231,
+        255
+      ],
+      "claims.precision": [
+        309,
+        325
+      ],
+      "parts.aspect": [
+        268,
+        312
+      ],
+      "parts.sentiment": [
+        303,
+        312
+      ],
+      "places.recall": [
+        49,
+        53
+      ],
+      "match.brand": [
+        45,
+        49
+      ]
+    },
+    "platform:blog": {
+      "claims.recall": [
+        330,
+        338
+      ],
+      "claims.precision": [
+        469,
+        505
+      ],
+      "parts.aspect": [
+        388,
+        450
+      ],
+      "parts.sentiment": [
+        429,
+        450
+      ],
+      "places.recall": [
+        31,
+        31
+      ],
+      "match.brand": [
+        30,
+        31
+      ]
+    },
+    "size:large": {
+      "claims.recall": [
+        284,
+        292
+      ],
+      "claims.precision": [
+        392,
+        427
+      ],
+      "parts.aspect": [
+        331,
+        384
+      ],
+      "parts.sentiment": [
+        365,
+        384
+      ],
+      "places.recall": [
+        33,
+        37
+      ],
+      "match.brand": [
+        29,
+        33
+      ]
+    },
+    "own": {
+      "claims.recall": [
+        27,
+        28
+      ],
+      "claims.precision": [
+        35,
+        35
+      ],
+      "parts.aspect": [
+        32,
+        35
+      ],
+      "parts.sentiment": [
+        34,
+        35
+      ],
+      "places.recall": [
+        6,
+        6
+      ],
+      "match.brand": [
+        5,
+        6
+      ]
+    },
+    "places:many": {
+      "claims.recall": [
+        76,
+        89
+      ],
+      "claims.precision": [
+        93,
+        104
+      ],
+      "parts.aspect": [
+        87,
+        101
+      ],
+      "parts.sentiment": [
+        100,
+        101
+      ],
+      "places.recall": [
+        41,
+        47
+      ],
+      "match.brand": [
+        34,
+        41
+      ]
+    },
+    "hard": {
+      "claims.recall": [
+        17,
+        18
+      ],
+      "claims.precision": [
+        22,
+        22
+      ],
+      "parts.aspect": [
+        21,
+        23
+      ],
+      "parts.sentiment": [
+        23,
+        23
+      ],
+      "places.recall": [
+        2,
+        2
+      ],
+      "match.brand": [
+        2,
+        2
+      ]
+    }
+  },
+  "models": {
+    "review-claims": {
+      "anthropic/claude-sonnet-5-5": 51
+    },
+    "claim-parts": {
+      "anthropic/claude-sonnet-5-5": 103
+    },
+    "post-claims": {
+      "anthropic/claude-sonnet-5-5": 58
+    },
+    "venue-match": {
+      "anthropic/claude-haiku-5-5": 27
+    }
+  },
+  "tokens": 7368003,
+  "cachedTokens": 6491319,
+  "usd": 0,
+  "reading": {
+    "reader": "split",
+    "model": "anthropic/claude-sonnet-5-5"
+  },
+  "staleReferences": 0
+}

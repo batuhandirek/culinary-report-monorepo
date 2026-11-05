@@ -17,8 +17,8 @@ import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { type AspectSuggestion, AspectSuggestionAgent } from '../agents/aspect-suggestion.agent.js';
-import type { Statement } from '../entities/statement.entity.js';
 import { AspectDiscoveryCron } from '../crons/aspect-discovery.cron.js';
+import type { Statement } from '../entities/statement.entity.js';
 import { AspectDiscoveryJob } from '../jobs/aspect-discovery.job.js';
 import { AspectDiscoveryService } from '../services/aspect-discovery.service.js';
 import { StatementPartsService } from '../services/statement-parts.service.js';
@@ -48,7 +48,11 @@ describe('aspect discovery (pglite)', () => {
 	let music: AspectSuggestion;
 	let cash: AspectSuggestion;
 	const agent = mockAgent((input: unknown) =>
-		(JSON.parse(input as string) as { claims: string[] }).claims.some(c => c.includes('music')) ?
+		(
+			(JSON.parse(input as string) as { claims: string[] }).claims.some(c =>
+				c.includes('music'),
+			)
+		) ?
 			music
 		:	cash,
 	);
@@ -80,7 +84,9 @@ describe('aspect discovery (pglite)', () => {
 		service = harness.moduleRef.get(AspectDiscoveryService);
 		seedTopics(em, ['vibe', 'payment', 'price_level', 'burgers']);
 		city = testCity(em, { name: 'Berlin', aliases: [] });
-		const venues = [1, 2, 3].map(i => em.create(Venue, { city, placeId: `ad-${i}`, name: `Bar ${i}` }));
+		const venues = [1, 2, 3].map(i =>
+			em.create(Venue, { city, placeId: `ad-${i}`, name: `Bar ${i}` }),
+		);
 		await em.flush();
 		index = await harness.moduleRef.get(TopicService).index();
 
@@ -93,14 +99,21 @@ describe('aspect discovery (pglite)', () => {
 				reviewId: `ad-r${++n}`,
 				publishedAt: new Date('2026-10-12T12:00:00Z'),
 			});
-			const [s] = addStatements(em, review, [{ text, sentiment: 'negative', aspect }], { index });
+			const [s] = addStatements(em, review, [{ text, sentiment: 'negative', aspect }], {
+				index,
+			});
 			s.partsAt = new Date('2026-11-01');
 			vectors.set(s, vector);
 			buckets.push([bucket, s]);
 		};
 		// Twelve music claims from twelve reviews of three brands, at the root or under none
 		for (let i = 0; i < 12; i++)
-			add('music', `the music was far too loud ${i}`, i % 2 ? MUSIC_TOO : MUSIC, i % 3 ? 'vibe' : undefined);
+			add(
+				'music',
+				`the music was far too loud ${i}`,
+				i % 2 ? MUSIC_TOO : MUSIC,
+				i % 3 ? 'vibe' : undefined,
+			);
 		// Two words: left out of the groups, read again all the same (it is near the group)
 		add('music', 'loud music', MUSIC);
 		// Twelve cash claims: a second group
@@ -113,10 +126,10 @@ describe('aspect discovery (pglite)', () => {
 		for (const [s, vector] of vectors)
 			await em
 				.getConnection()
-				.execute(`update statements set embedding = ?::halfvec(1024), embedded_at = now() where id = ?`, [
-					toVectorLiteral(vector),
-					s.id,
-				]);
+				.execute(
+					`update statements set embedding = ?::halfvec(1024), embedded_at = now() where id = ?`,
+					[toVectorLiteral(vector), s.id],
+				);
 		em.clear();
 	});
 
@@ -127,8 +140,20 @@ describe('aspect discovery (pglite)', () => {
 	beforeEach(() => {
 		agent.generate.mockClear();
 		read.mockClear();
-		music = { isAspect: true, label: 'Music volume', hint: 'How loud the music is', root: 'vibe', fits: null };
-		cash = { isAspect: true, label: 'Cash only', hint: 'Whether cards are taken', root: 'payment', fits: null };
+		music = {
+			isAspect: true,
+			label: 'Music volume',
+			hint: 'How loud the music is',
+			root: 'vibe',
+			fits: null,
+		};
+		cash = {
+			isAspect: true,
+			label: 'Cash only',
+			hint: 'Whether cards are taken',
+			root: 'payment',
+			fits: null,
+		};
 	});
 
 	it('names the groups in a dry run and writes nothing', async () => {
@@ -180,14 +205,18 @@ describe('aspect discovery (pglite)', () => {
 			['created', 'music_volume'],
 			['joined', 'music_volume'],
 		]);
-		const topic = await em.findOneOrFail(Topic, { key: 'music_volume' }, { populate: ['parent'] });
-		expect([topic.label, topic.kind, topic.parent?.key, topic.hint, !!topic.discoveredAt]).toEqual([
-			'Music volume',
-			'aspect',
-			'vibe',
-			'How loud the music is',
-			true,
-		]);
+		const topic = await em.findOneOrFail(
+			Topic,
+			{ key: 'music_volume' },
+			{ populate: ['parent'] },
+		);
+		expect([
+			topic.label,
+			topic.kind,
+			topic.parent?.key,
+			topic.hint,
+			!!topic.discoveredAt,
+		]).toEqual(['Music volume', 'aspect', 'vibe', 'How loud the music is', true]);
 		// Every loose claim near the two groups, the short one too; never the finer-filed or the far one
 		const asked = read.mock.calls.flatMap(([opts]) => opts.ids ?? []).sort((a, b) => a - b);
 		expect(asked).toEqual([...ids.music, ...ids.cash].sort((a, b) => a - b));
@@ -215,7 +244,13 @@ describe('aspect discovery (pglite)', () => {
 			{ singletonKey: AspectDiscoveryJob.singletonKey },
 		);
 		expect(await service.runAll({ dryRun: true, cronOnly: true })).toEqual([]);
-		await em.getConnection().execute(`update cities set active = true, cron_enabled = true where id = ?`, [city.id]);
-		expect((await service.runAll({ dryRun: true, cronOnly: true })).map(r => r.cityId)).toEqual([city.id]);
+		await em
+			.getConnection()
+			.execute(`update cities set active = true, cron_enabled = true where id = ?`, [
+				city.id,
+			]);
+		expect((await service.runAll({ dryRun: true, cronOnly: true })).map(r => r.cityId)).toEqual(
+			[city.id],
+		);
 	});
 });

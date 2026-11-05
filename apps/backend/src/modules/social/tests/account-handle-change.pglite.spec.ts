@@ -49,7 +49,11 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 
 	let n = 0;
 	/** A post by `author` (with its user id when given), saved and flushed as a scrape does. */
-	const save = async (author: string, authorId?: string, extra: { authorFans?: number; at?: Date } = {}) => {
+	const save = async (
+		author: string,
+		authorId?: string,
+		extra: { authorFans?: number; at?: Date } = {},
+	) => {
 		const em = harness.orm.em;
 		await posts.upsert(
 			{
@@ -67,7 +71,8 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		await em.flush();
 		em.clear();
 	};
-	const account = (where: object) => harness.orm.em.findOne(SocialAccount, { platform: IG, ...where });
+	const account = (where: object) =>
+		harness.orm.em.findOne(SocialAccount, { platform: IG, ...where });
 	const changesOf = async (a: SocialAccount) =>
 		(
 			await harness.orm.em.find(
@@ -99,7 +104,11 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		await save('new_name', '201');
 		const after = (await account({ platformUserId: '201' }))!;
 		expect(after.id).toBe(before.id);
-		expect([after.handle, after.brand?.id, after.creator.id]).toEqual(['new_name', brand.id, before.creator.id]);
+		expect([after.handle, after.brand?.id, after.creator.id]).toEqual([
+			'new_name',
+			brand.id,
+			before.creator.id,
+		]);
 		expect(await account({ handle: 'old_name' })).toBeNull();
 		expect(await em.count(SocialPost, { account: after.id })).toBe(2);
 		expect(await changesOf(after)).toEqual([['old_name', 'new_name', null]]);
@@ -117,7 +126,10 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		const brand = em.create(Brand, { name: 'Second', key: 'second' });
 		byHandle.brand = brand;
 		byHandle.brandSource = AccountBrandSourceEnum.SITE;
-		em.create(AccountRejectedBrand, { account: byHandle, brand: em.create(Brand, { name: 'Nope', key: 'nope' }) });
+		em.create(AccountRejectedBrand, {
+			account: byHandle,
+			brand: em.create(Brand, { name: 'Nope', key: 'nope' }),
+		});
 		await em.flush();
 		const goneCreator = byHandle.creator.id;
 		em.clear();
@@ -125,12 +137,20 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		await save('second_handle', '301');
 		const merged = (await account({ platformUserId: '301' }))!;
 		expect(merged.handle).toBe('second_handle');
-		expect(await em.count(SocialAccount, { platform: IG, handle: { $in: ['first_handle', 'second_handle'] } })).toBe(1);
+		expect(
+			await em.count(SocialAccount, {
+				platform: IG,
+				handle: { $in: ['first_handle', 'second_handle'] },
+			}),
+		).toBe(1);
 		// Its posts, snapshots, rejections and the brand link are the merged account's now
 		expect(await em.count(SocialPost, { account: merged.id })).toBe(3);
 		expect(await em.count(SocialAccountSnapshot, { account: merged.id })).toBe(2);
 		expect(await em.count(AccountRejectedBrand, { account: merged.id })).toBe(1);
-		expect([merged.brand?.id, merged.brandSource]).toEqual([brand.id, AccountBrandSourceEnum.SITE]);
+		expect([merged.brand?.id, merged.brandSource]).toEqual([
+			brand.id,
+			AccountBrandSourceEnum.SITE,
+		]);
 		expect(await em.count(Creator, { id: goneCreator })).toBe(0);
 		expect(await changesOf(merged)).toEqual([['first_handle', 'second_handle', null]]);
 	});
@@ -173,7 +193,9 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		em.clear();
 		expect((await account({ platformUserId: '502' }))?.handle).toBe('alpha');
 		expect((await account({ platformUserId: '501' }))?.handle).toBe('gamma');
-		expect(await changesOf((await account({ platformUserId: '502' }))!)).toEqual([['beta', 'alpha', null]]);
+		expect(await changesOf((await account({ platformUserId: '502' }))!)).toEqual([
+			['beta', 'alpha', null],
+		]);
 		expect(await changesOf((await account({ platformUserId: '501' }))!)).toEqual([
 			['alpha', null, 'alpha'],
 			[null, 'gamma', null],
@@ -190,7 +212,10 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		await accounts.ensure(IG, 'seen_second', city, { platformUserId: '701' });
 		await em.flush();
 		em.clear();
-		const one = await em.find(SocialAccount, { platform: IG, handle: { $in: ['seen_first', 'seen_second'] } });
+		const one = await em.find(SocialAccount, {
+			platform: IG,
+			handle: { $in: ['seen_first', 'seen_second'] },
+		});
 		expect(one.map(a => [a.handle, a.platformUserId])).toEqual([['seen_second', '701']]);
 		expect(await em.count(SocialPost, { account: one[0].id })).toBe(2);
 		expect(await changesOf(one[0])).toEqual([['seen_first', 'seen_second', null]]);
@@ -208,14 +233,25 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 
 		// The renamed person: their account under the handle it last had, flagged as taken
 		const page = await controller.getCreator(old.creator.id, { month: '2026-10' });
-		expect(page.accounts.map(a => [a.handle, a.platformUserId, !!a.handleLostAt])).toEqual([['page_new', '801', true]]);
-		expect(page.handleChanges.map(c => [c.account.handle, c.fromHandle ?? null, c.toHandle ?? null, c.takenBy?.handle ?? null])).toEqual([
+		expect(page.accounts.map(a => [a.handle, a.platformUserId, !!a.handleLostAt])).toEqual([
+			['page_new', '801', true],
+		]);
+		expect(
+			page.handleChanges.map(c => [
+				c.account.handle,
+				c.fromHandle ?? null,
+				c.toHandle ?? null,
+				c.takenBy?.handle ?? null,
+			]),
+		).toEqual([
 			['page_new', 'page_new', null, 'page_new'],
 			['page_new', 'page_old', 'page_new', null],
 		]);
 		// The one who took the handle sees where it came from
 		const takerPage = await controller.getCreator(taker.creator.id, { month: '2026-10' });
-		expect(takerPage.handleChanges.map(c => [c.account.creator.id, c.takenBy?.id])).toEqual([[old.creator.id, taker.id]]);
+		expect(takerPage.handleChanges.map(c => [c.account.creator.id, c.takenBy?.id])).toEqual([
+			[old.creator.id, taker.id],
+		]);
 	});
 
 	it('keeps an account whose handle was taken out of scrapes by handle', async () => {

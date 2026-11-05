@@ -48,9 +48,13 @@ export const claimPartsOf = (
 		aspect,
 		amount: amount?.amount ?? null,
 		unit: amount?.unit ?? null,
-		foods: _.uniqBy(
-			answer.foods.slice(0, MAX_FOODS).filter(f => termKey(f)),
-			termKey,
-		),
+		foods: claimFoods(answer.foods),
 	};
 };
+
+/** The food wordings a claim keeps, whoever named them (agent B, or agent A): once per `termKey` as first spelled, `MAX_FOODS` at most */
+export const claimFoods = (foods: string[]): string[] =>
+	_.uniqBy(
+		foods.slice(0, MAX_FOODS).filter(f => termKey(f)),
+		termKey,
+	);

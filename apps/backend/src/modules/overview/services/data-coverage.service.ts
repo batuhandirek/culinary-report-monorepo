@@ -34,6 +34,7 @@ const RECURRING_STEPS = [
 	PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT,
 	PipelineStepEnum.SCRAPE_CREATORS,
 	PipelineStepEnum.FIND_OWN_ACCOUNTS,
+	PipelineStepEnum.READ_MENTIONED_PROFILES,
 	PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS,
 	PipelineStepEnum.SAMPLE_BUSYNESS,
 	PipelineStepEnum.SAMPLE_RESERVATIONS,
@@ -151,7 +152,7 @@ export class DataCoverageService {
 					unanalysed: _.sumBy(postRows, p => p.unanalysed),
 				},
 				mentions: {
-					matched: methodCount('exact', 'fuzzy', 'llm', 'manual'),
+					matched: methodCount('exact', 'fuzzy', 'llm', 'account', 'manual'),
 					unmatched: methodCount('none', null),
 					otherCity: methodCount('other_city'),
 				},

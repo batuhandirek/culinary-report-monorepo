@@ -202,6 +202,8 @@ describe('a profile proving itself a brand’s', () => {
 			following: 279,
 			bio: expect.stringContaining('Bergmannstraße 19'),
 			links: ['https://www.eatmunchies.de/home#ordernow'],
+			category: 'Restaurant',
+			isBusiness: false,
 		});
 		expect(tiktok).toEqual(
 			expect.objectContaining({

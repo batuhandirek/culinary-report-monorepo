@@ -73,6 +73,7 @@ export enum AdminAccountOutputDtoBrandSourceEnum {
 	Website = 'website',
 	Site = 'site',
 	Profile = 'profile',
+	Bio = 'bio',
 	Prospect = 'prospect',
 	Admin = 'admin',
 }
@@ -1610,6 +1611,7 @@ export enum AdminDataCoverageOutputDtoStepEnum {
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -1708,6 +1710,7 @@ export enum AdminDataStepOutputDtoStepEnum {
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -1889,6 +1892,7 @@ export enum AdminDigestionMentionOutputDtoMatchMethodEnum {
 	Exact = 'exact',
 	Fuzzy = 'fuzzy',
 	Llm = 'llm',
+	Account = 'account',
 	None = 'none',
 	OtherCity = 'other_city',
 	Manual = 'manual',
@@ -2030,8 +2034,8 @@ export enum AdminDigestionStatementOutputDtoKindEnum {
 
 /** Absent until agent B read it, and on a Google tag */
 export enum AdminDigestionStatementOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -2137,7 +2141,7 @@ export interface AdminExploreBreakdownInputDto {
 	 */
 	place?: string;
 	side?: AdminExploreBreakdownInputDtoSideEnum;
-	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 	source?: AdminExploreBreakdownInputDtoSourceEnum;
 	subject?: AdminExploreBreakdownInputDtoSubjectEnum;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -2184,7 +2188,7 @@ export enum AdminExploreBreakdownInputDtoSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum AdminExploreBreakdownInputDtoSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -2193,7 +2197,6 @@ export enum AdminExploreBreakdownInputDtoSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -2232,12 +2235,8 @@ export interface AdminExploreBreakdownRowOutputDto {
 	key?: string;
 	label: string;
 	praise: number;
-	/** Reviews, posts and other dated sources raising it, each once */
+	/** Reviews, posts and other sources raising it, each once */
 	sources: number;
-	/** Google's counts of those tags, summed */
-	tagMentions: number;
-	/** Places whose Google tags name it (all-time) */
-	tagVenues: number;
 }
 
 export interface AdminExploreClaimsInputDto {
@@ -2273,7 +2272,7 @@ export interface AdminExploreClaimsInputDto {
 	side?: AdminExploreClaimsInputDtoSideEnum;
 	/** @min 1 */
 	size: number;
-	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 	source?: AdminExploreClaimsInputDtoSourceEnum;
 	subject?: AdminExploreClaimsInputDtoSubjectEnum;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -2305,7 +2304,7 @@ export enum AdminExploreClaimsInputDtoSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum AdminExploreClaimsInputDtoSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -2314,7 +2313,6 @@ export enum AdminExploreClaimsInputDtoSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -2340,8 +2338,8 @@ export interface AdminExploreGroupOutputDto {
 }
 
 export enum AdminExploreGroupOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -2397,8 +2395,6 @@ export interface AdminExploreHeadOutputDto {
 		sources: number;
 	}[];
 	sources: number;
-	tagMentions: number;
-	tagVenues: number;
 	to: string;
 	venue?: {
 		id: string;
@@ -2445,7 +2441,7 @@ export interface AdminExploreInputDto {
 	 */
 	place?: string;
 	side?: AdminExploreInputDtoSideEnum;
-	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 	source?: AdminExploreInputDtoSourceEnum;
 	subject?: AdminExploreInputDtoSubjectEnum;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -2477,7 +2473,7 @@ export enum AdminExploreInputDtoSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum AdminExploreInputDtoSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -2486,7 +2482,6 @@ export enum AdminExploreInputDtoSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -2553,12 +2548,8 @@ export interface AdminExploreTreeNodeOutputDto {
 	label: string;
 	parentKey?: string;
 	praise: number;
-	/** Reviews, posts and other dated sources raising it, each once */
+	/** Reviews, posts and other sources raising it, each once */
 	sources: number;
-	/** Google's counts of those tags, summed */
-	tagMentions: number;
-	/** Places whose Google tags name it (all-time) */
-	tagVenues: number;
 }
 
 export interface AdminExploreTreeOutputDto {
@@ -3191,6 +3182,7 @@ export enum AdminListMentionsInputDtoMatchMethodEnum {
 	Exact = 'exact',
 	Fuzzy = 'fuzzy',
 	Llm = 'llm',
+	Account = 'account',
 	None = 'none',
 	OtherCity = 'other_city',
 	Manual = 'manual',
@@ -3656,10 +3648,14 @@ export interface AdminMatchAccountsInputDto {
 export interface AdminMatchAccountsOutputDto {
 	/** Accounts of the city looked at */
 	accounts: number;
+	/** Linked because their own profile names a branch's address or links its website (`profilePlaces`) */
+	fromProfiles: number;
 	/** Linked because the brand's own website links the profile */
 	fromSites: number;
-	/** Accounts created for handles posts about a brand tagged, named like that brand */
+	/** Accounts created for the Instagram handles the city's posts tag or its profiles' bios name (`addMentionedAccounts`) */
 	fromTags: number;
+	/** Places joined to an account's brand because its profile names them as its own */
+	joinedByProfiles: number;
 	/** Newly linked to a brand by their handle */
 	linked: number;
 	/** Suggested because the brand's own website links the profile */
@@ -3710,6 +3706,7 @@ export enum AdminMentionOutputDtoMatchMethodEnum {
 	Exact = 'exact',
 	Fuzzy = 'fuzzy',
 	Llm = 'llm',
+	Account = 'account',
 	None = 'none',
 	OtherCity = 'other_city',
 	Manual = 'manual',
@@ -3761,6 +3758,7 @@ export enum AdminMentionWithPostOutputDtoMatchMethodEnum {
 	Exact = 'exact',
 	Fuzzy = 'fuzzy',
 	Llm = 'llm',
+	Account = 'account',
 	None = 'none',
 	OtherCity = 'other_city',
 	Manual = 'manual',
@@ -4015,6 +4013,7 @@ export enum AdminPipelineRunOutputDtoNullableStepEnum {
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -4067,6 +4066,7 @@ export enum AdminPipelineRunOutputDtoStepEnum {
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -4912,6 +4912,7 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
@@ -4933,8 +4934,6 @@ export enum AdminStartPipelineRunInputDtoStepEnum {
 export interface AdminStatementRowOutputDto {
 	/** The number it states: minutes for a wait, the price for a price */
 	amount?: number;
-	/** Google's count for a tag; 1 otherwise */
-	count: number;
 	id: number;
 	/** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
 	kind?: AdminStatementRowOutputDtoKindEnum;
@@ -4984,11 +4983,6 @@ export interface AdminStatementRowOutputDto {
 	/** The claim, in English; absent on a dish-only statement */
 	text?: string;
 	unit?: AdminStatementRowOutputDtoUnitEnum;
-	/** A Google tag's place (served by Explore's claims only) */
-	venue?: {
-		id: string;
-		name: string;
-	};
 }
 
 /** What sort of thing it says (opinion, fact, change, new item, deal, event, question, verdict); absent until agent B read it */
@@ -5016,8 +5010,8 @@ export enum AdminStatementRowOutputDtoPlatformEnum1 {
 
 /** Absent until agent B read it, and on a Google tag */
 export enum AdminStatementRowOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -5027,7 +5021,6 @@ export enum AdminStatementRowOutputDtoSourceKindEnum {
 	Post = 'post',
 	Press = 'press',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 }
 
 export enum AdminStatementRowOutputDtoSubjectEnum {
@@ -5098,8 +5091,8 @@ export enum AdminStatementsInputDtoPartsEnum {
 }
 
 export enum AdminStatementsInputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 	Unread = 'unread',
@@ -7087,7 +7080,7 @@ export enum GetExploreBreakdownParamsSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum GetExploreBreakdownParamsSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -7096,7 +7089,6 @@ export enum GetExploreBreakdownParamsSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -7130,7 +7122,7 @@ export enum GetExploreGroupsParamsSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum GetExploreGroupsParamsSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -7139,7 +7131,6 @@ export enum GetExploreGroupsParamsSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -7173,7 +7164,7 @@ export enum GetExploreHeadParamsSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum GetExploreHeadParamsSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -7182,7 +7173,6 @@ export enum GetExploreHeadParamsSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -7216,7 +7206,7 @@ export enum GetExploreTreeParamsSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum GetExploreTreeParamsSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -7225,7 +7215,6 @@ export enum GetExploreTreeParamsSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -7893,7 +7882,7 @@ export enum ListExploreClaimsParamsSideEnum {
 	Unread = 'unread',
 }
 
-/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 export enum ListExploreClaimsParamsSourceEnum {
 	Comment = 'comment',
 	Post = 'post',
@@ -7902,7 +7891,6 @@ export enum ListExploreClaimsParamsSourceEnum {
 	Instagram = 'instagram',
 	Tiktok = 'tiktok',
 	Review = 'review',
-	GoogleTag = 'google_tag',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
 }
@@ -7921,6 +7909,7 @@ export enum ListMentionsParamsMatchMethodEnum {
 	Exact = 'exact',
 	Fuzzy = 'fuzzy',
 	Llm = 'llm',
+	Account = 'account',
 	None = 'none',
 	OtherCity = 'other_city',
 	Manual = 'manual',
@@ -8130,8 +8119,8 @@ export enum ListStatementsParamsPartsEnum {
 }
 
 export enum ListStatementsParamsSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 	Unread = 'unread',
@@ -8456,6 +8445,7 @@ export interface PartialRecordPipelineStepEnumnumber {
 	LOOKUP_VENUES?: number;
 	MATCH_MENTIONS?: number;
 	MONTHLY?: number;
+	READ_MENTIONED_PROFILES?: number;
 	REFRESH_POST_COUNTS?: number;
 	REFRESH_VENUE_DETAILS?: number;
 	SAMPLE_BUSYNESS?: number;
@@ -8549,6 +8539,11 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	MONTHLY?: number;
+	/**
+	 * @min 0
+	 * @max 100
+	 */
+	READ_MENTIONED_PROFILES?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -9120,8 +9115,8 @@ export enum PortalPostOutputDtoPlatformEnum {
 
 /** How the post came across about the brand, worked out from its claims */
 export enum PortalPostOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -9271,8 +9266,8 @@ export enum PortalReviewOutputDtoPlatformEnum {
 }
 
 export enum PortalReviewOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -10374,8 +10369,8 @@ export enum ReportObservationResolutionEnum {
 
 export enum ReportObservationUnitEnum {
 	Views = 'views',
-	Count = 'count',
 	Index = 'index',
+	Count = 'count',
 	Rank = 'rank',
 	Share = 'share',
 	Followers = 'followers',
@@ -10484,8 +10479,8 @@ export interface ReportPostDish {
 }
 
 export enum ReportPostDishSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -10498,8 +10493,8 @@ export enum ReportPostPlatformEnum {
 
 /** Worked out from its claims (`sentimentOf`) */
 export enum ReportPostSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -11108,8 +11103,8 @@ export enum StatementOutputDtoKindEnum {
 
 /** Absent until agent B read it, and on a Google tag */
 export enum StatementOutputDtoSentimentEnum {
-	Positive = 'positive',
 	Mixed = 'mixed',
+	Positive = 'positive',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -13376,7 +13371,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				place?: string;
 				side?: GetExploreTreeParamsSideEnum;
-				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 				source?: GetExploreTreeParamsSourceEnum;
 				subject?: GetExploreTreeParamsSubjectEnum;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -13423,7 +13418,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				place?: string;
 				side?: GetExploreHeadParamsSideEnum;
-				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 				source?: GetExploreHeadParamsSourceEnum;
 				subject?: GetExploreHeadParamsSubjectEnum;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -13471,7 +13466,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				place?: string;
 				side?: GetExploreBreakdownParamsSideEnum;
-				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 				source?: GetExploreBreakdownParamsSourceEnum;
 				subject?: GetExploreBreakdownParamsSubjectEnum;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -13532,7 +13527,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				side?: ListExploreClaimsParamsSideEnum;
 				/** @min 1 */
 				size: number;
-				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 				source?: ListExploreClaimsParamsSourceEnum;
 				subject?: ListExploreClaimsParamsSubjectEnum;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
@@ -13579,7 +13574,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				place?: string;
 				side?: GetExploreGroupsParamsSideEnum;
-				/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+				/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 				source?: GetExploreGroupsParamsSourceEnum;
 				subject?: GetExploreGroupsParamsSubjectEnum;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */

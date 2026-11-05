@@ -23,6 +23,9 @@ export enum AccountBrandSourceEnum {
 	// The same handle as the brand's account on the other platform, and the profile proves it:
 	// its link is on the brand's site, its bio names a branch's street or it links that account
 	PROFILE = 'profile',
+	// Its own profile says so: its bio names a branch's street and house number, or its link is on
+	// a branch's website, and it is named after the place (`profilePlaces`)
+	BIO = 'bio',
 	// Outreach's handle for the brand (`Prospect.instagram`)
 	PROSPECT = 'prospect',
 	// An admin linked it, or confirmed the matcher's suggestion
@@ -74,6 +77,35 @@ export class SocialAccount extends MikroOrmEntityAbstractClass<
 
 	@Property({ type: 'datetime', nullable: true })
 	followersAt?: Date | null;
+
+	// What its profile says, as the last profile read gave it (`profileReadAt`): the bio as written
+	// (addresses, hours, other handles), its website links, Instagram's business category
+	// ("Health Food Restaurant", "Bar") and whether it is a business account. Read by the account
+	// matcher (`profilePlaces`) and the venue lookup (`profileSearchName`)
+	@Property({ type: 'text', nullable: true })
+	bio?: string | null;
+
+	@Property({ type: 'json', nullable: true })
+	bioLinks?: string[] | null;
+
+	@Property({ type: 'text', nullable: true })
+	businessCategory?: string | null;
+
+	@Property({ type: 'boolean', nullable: true })
+	isBusiness?: boolean | null;
+
+	// When a profile read last gave the fields above; null: its profile was never read
+	@Property({ type: 'datetime', nullable: true })
+	profileReadAt?: Date | null;
+
+	// When a business profile whose bio address named none of our places was searched on Google
+	// Maps by its name and that address (`ProfilePlaceService.searchAddresses`): once each
+	@Property({ type: 'datetime', nullable: true })
+	placesSearchedAt?: Date | null;
+
+	// When `ProfilePlaceAgent` was asked which place at its bio's address it is: once each
+	@Property({ type: 'datetime', nullable: true })
+	placeAskedAt?: Date | null;
 
 	// The city whose scrape found it first: its venues are the ones it is matched against
 	@ManyToOne({ entity: () => City, index: true })

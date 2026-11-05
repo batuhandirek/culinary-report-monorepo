@@ -28,6 +28,7 @@ export class VenueMatchAgent extends BaseMastraAgent<typeof venueMatchSchema> {
 		id: 'venue-match',
 		name: 'VenueMatchAgent',
 		outputSchema: venueMatchSchema,
+		ingestion: true,
 	};
 
 	protected getModel(): LlmModelChoice {

@@ -8,6 +8,7 @@ export const ACCOUNT_SOURCE_LABELS: Record<string, string> = {
 	website: 'its Google website',
 	site: 'linked from its website',
 	profile: 'its profile names the brand',
+	bio: 'its bio names the place',
 	prospect: 'from outreach',
 	admin: 'set by an admin'
 };

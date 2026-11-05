@@ -39,6 +39,7 @@ export class PressClassificationAgent extends BaseMastraAgent<
 		id: 'press-classification',
 		name: 'PressClassificationAgent',
 		outputSchema: pressClassificationSchema,
+		ingestion: true,
 	};
 
 	protected getModel(): LlmModelChoice {

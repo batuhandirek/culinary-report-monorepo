@@ -7,6 +7,11 @@ import {
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
+import {
+	CLAIM_AMOUNT_RULE,
+	CLAIM_FOODS_COACHING,
+	CLAIM_FOODS_RULE,
+} from 'src/modules/statements/constants/claim-copied.constant.js';
 import { claimSchema } from 'src/modules/venues/agents/review-claims.agent.js';
 
 /** A's answer for one post: also the frame of the one-call post reader (`PostReaderAgent`), whose claims carry B's parts */
@@ -93,8 +98,10 @@ export interface PostClaimsContext {
 
 /**
  * Agent A for posts and articles: the places a post or blog article talks about (today's mention
- * fields) and its claims, each about one of those places, the city, or nothing. No aspect, dish
- * or number here: agent B reads those from the claims.
+ * fields) and its claims, each about one of those places, the city, or nothing, with its foods as
+ * spelled (`CLAIM_FOODS_RULE`) and the number it states (`CLAIM_AMOUNT_RULE`). No sentiment,
+ * aspect or kind here: agent B (or the claim-labels classifier) reads those from the claims.
+ * Production stores B's foods and amounts until the user switches to A's.
  */
 @Injectable()
 export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, PostClaimsContext> {
@@ -102,12 +109,14 @@ export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, Po
 		id: 'post-claims',
 		name: 'PostClaimsAgent',
 		outputSchema: postClaimsSchema,
+		ingestion: true,
 	};
 
-	// Hundreds of posts a month (~3,000 tokens each with transcripts): mini, whose daily complimentary
-	// allowance is 10M tokens; 641 posts used 0.9M of the full model's 1M
+	// The full model (the eval, 2026-11-05): copying out foods and numbers too, mini found fewer post
+	// claims (90% → 81%), gpt-5.4 kept them (92%). Berlin's ~170 posts a day are ~0.8M tokens, inside
+	// the two accounts' 2M a day; past it the reading waits for the next day
 	protected getModel(): LlmModelChoice {
-		return 'mini';
+		return 'full';
 	}
 
 	protected getInstructions(context?: PostClaimsContext): string {
@@ -128,6 +137,7 @@ export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, Po
 			`Not claims, leave them out: the creator's personal life and feelings unrelated to food ("she has to buy her mother flowers"), a recipe's steps, timings and quantities, the video's own narration ("link in bio", "part two tomorrow"), and anything about no food, drink, place or the city. ` +
 			`A claim names what it is about: "the Gemüse kebab is incredibly delicious", never "it is incredibly delicious"; "the dürüm and the box were delicious", never "both were". ` +
 			`With each claim give its quote: the exact words of the caption, transcript or article it comes from, copied character for character in their language (never translated), the shortest span that says it. ` +
+			`${CLAIM_FOODS_RULE} ${CLAIM_AMOUNT_RULE} ` +
 			`Only what the text says: never add, judge or summarise a claim; within that scope never drop one because it fits no category. ` +
 			`isPromotional is true only for a post by someone other than the venue, a creator or a blog, that a venue paid for, gifted or invited: a paid partnership, an ad, a gifted meal, "invited by", a collab or a giveaway with the venue. It is false for a venue's own post about itself (its menu, its offers, "come by": that is the venue's own post, counted apart), for a creator's own unpaid visit even with a disclosure such as "unpaid ad" or "not sponsored", and for a creator plugging their own guide, app or channel. ` +
 			`Mark a venue as a new opening only when the post itself says it is new or has just opened; a new dish, a new menu or a creator's first visit is not an opening. ` +
@@ -147,7 +157,8 @@ export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, Po
 			"claim's words name it: in a post about a visit to one place, every dish, drink, price, portion, wait and moment of " +
 			'that visit is about that place ("the broth was too salty" said at a ramen bar is that bar\'s). Subject none is only ' +
 			'food or drink with no place behind it: where a dish comes from or how it is made anywhere ("mochi are made from ' +
-			'rice"). A place\'s dish called the best in the city is still about that place.'
+			'rice"). A place\'s dish called the best in the city is still about that place. ' +
+			CLAIM_FOODS_COACHING
 		);
 	}
 }

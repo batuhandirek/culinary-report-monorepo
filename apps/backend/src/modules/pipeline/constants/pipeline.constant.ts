@@ -69,6 +69,12 @@ export enum PipelineStepEnum {
 	// Brands' own accounts on the platform they have none on: their other account's handle looked
 	// up there, linked when the profile proves it (the weekly cron, after matching)
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	// Every Instagram handle posts tag or bios name becomes an account, and the profiles never read
+	// are read (bio, links, business category); the accounts are matched by what their profile
+	// says (`profilePlaces`), a business profile's bio address that names none of our places is
+	// searched on Google Maps, `ProfilePlaceAgent` suggests which place at an address a profile
+	// is, and the mentions their tags place are matched (the weekly cron, before the lookup)
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	// Comments under each report venue's top TikTok posts of the month, then their intents
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
 	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
@@ -151,6 +157,7 @@ export const READ_GATED_STEPS: readonly PipelineStepEnum[] = [
 	PipelineStepEnum.SCRAPE_PRESS,
 	PipelineStepEnum.TRACK_SEARCH_RANKS,
 	PipelineStepEnum.FIND_OWN_ACCOUNTS,
+	PipelineStepEnum.READ_MENTIONED_PROFILES,
 ];
 
 /** Steps that read everything, the month's reviews included: they wait until it is read */
@@ -193,6 +200,9 @@ export const INGEST_EXTRACT_MAX_BATCHES = 20;
 export const INGEST_REVIEWS_PER_PASS = 1000;
 
 /** What a step spends on Apify at most, when the admin gives no budget. */
+// The share of a `READ_MENTIONED_PROFILES` budget the profile reads take first; the address searches get what is left
+export const MENTIONED_PROFILES_SHARE = 0.6;
+
 export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> = {
 	[PipelineStepEnum.SCRAPE_VENUES]: 20,
 	// Forty places a brand at ~$0.004 a place: about $0.16 a brand
@@ -238,6 +248,11 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// An Instagram profile at ~$0.003, a TikTok one (its latest video) at ~$0.004: ~300 lookups.
 	// Each account is looked up once, so the weekly run spends only on brands new to an account
 	[PipelineStepEnum.FIND_OWN_ACCOUNTS]: 1,
+	// Profiles first, at ~$0.003 an Instagram profile, on `MENTIONED_PROFILES_SHARE` of it; the
+	// rest searches bio addresses on Google Maps at ~$0.013 each (three places), from $0.50 a run.
+	// Berlin's backlog on 2026-11-05 was ~1,300 mentioned accounts (~$4) and a few hundred
+	// addresses (~$4–7) once; then cents a week
+	[PipelineStepEnum.READ_MENTIONED_PROFILES]: 2,
 	// A hundred comments under each of ~100 posts at $0.00125 a comment
 	[PipelineStepEnum.SCRAPE_COMMENTS]: 13,
 	[PipelineStepEnum.SCRAPE_PRESS]: 3,

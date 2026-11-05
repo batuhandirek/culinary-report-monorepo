@@ -18,6 +18,7 @@ import {
 	tiktokProfileFigures,
 } from '../util/accounts.js';
 import { accountFind } from '../util/post-sources.js';
+import { instagramProfileFacts, tiktokProfileFacts } from '../util/profile-proof.js';
 
 import { SocialAccountService } from './social-account.service.js';
 import { mergeFinds, type PostFields, SocialPostService } from './social-post.service.js';
@@ -79,6 +80,17 @@ export interface ProfileTrackResult {
 	asked: number;
 	/** Profiles that came back (each a snapshot with followers, following and post count) */
 	profiles: number;
+}
+
+export interface MentionedProfileResult {
+	/** Mentioned Instagram accounts of the city whose profile was never read */
+	unread: number;
+	/** Asked for in this run: as many as the budget covers, the most mentioned first */
+	asked: number;
+	/** Profiles that came back (stored with their bio, links and category, and a snapshot) */
+	profiles: number;
+	/** Of them, business accounts */
+	businesses: number;
 }
 
 export interface FollowerFillResult {
@@ -192,6 +204,7 @@ export class AccountScrapeService {
 			for (const item of instagramItems.value) {
 				const profile = instagramProfileFigures(item, now);
 				if (!profile) continue;
+				const facts = instagramProfileFacts(item);
 				const account = await this.socialAccountService.ensure(
 					SocialPlatformEnum.INSTAGRAM,
 					`${item.username}`,
@@ -200,6 +213,7 @@ export class AccountScrapeService {
 						platformUserId: item.id,
 						displayName: item.fullName,
 						followers: profile.followers,
+						...(facts?.exists && { profile: facts }),
 						source: AccountSnapshotSourceEnum.PROFILE,
 					},
 					now,
@@ -221,6 +235,7 @@ export class AccountScrapeService {
 			);
 			for (const [handle, videos] of Object.entries(byAuthor)) {
 				const author = videos[0].authorMeta;
+				const facts = tiktokProfileFacts(videos[0]);
 				const account = await this.socialAccountService.ensure(
 					SocialPlatformEnum.TIKTOK,
 					handle,
@@ -229,6 +244,7 @@ export class AccountScrapeService {
 						platformUserId: author.id,
 						displayName: author.nickName,
 						followers: typeof author.fans === 'number' ? author.fans : undefined,
+						...(facts?.exists && { profile: facts }),
 						source: AccountSnapshotSourceEnum.PROFILE,
 					},
 					now,
@@ -354,13 +370,77 @@ export class AccountScrapeService {
 	}
 
 	/**
+	 * The `READ_MENTIONED_PROFILES` step's read: the profile only (`profileOnly`) of every
+	 * Instagram account of the city that posts tag (caption @-mentions, co-authors, photo tags) or
+	 * a stored bio names, whose profile was never read, the most mentioned first (tags on posts the
+	 * gate skipped count last), as many as the budget covers. Each that comes back keeps its bio,
+	 * links, business category and followers (`ensure`), which the account matcher reads
+	 * (`profilePlaces`) and the address search starts from. An account that didn't come back
+	 * (gone, private, renamed) is stamped `followersAskedAt` and waits `FOLLOWERS_RETRY_DAYS`.
+	 * The accounts exist first (`AccountMatchingService.addMentionedAccounts`). Flushes.
+	 */
+	async readMentionedProfiles(city: City, budgetUsd: number, now = new Date()): Promise<MentionedProfileResult> {
+		const retryBefore = new Date(now.getTime() - FOLLOWERS_RETRY_DAYS * 24 * 3600 * 1000);
+		const rows: { id: string; handle: string }[] = await this.em.getConnection().execute(
+			`with mentioned as (
+				select rtrim(ltrim(lower(h.handle), '@'), '.') handle,
+					count(distinct p.id) filter (where p.skip_reason is null) food, count(distinct p.id) posts
+				from social_posts p
+				cross join lateral jsonb_array_elements_text(coalesce(p.tagged_handles, '[]'::jsonb)) as h(handle)
+				where p.city_id = ? and p.platform = ?
+				group by 1
+				union all
+				select rtrim(lower(m[1]), '.'), count(*), count(*)
+				from social_accounts b
+				cross join lateral regexp_matches(coalesce(b.bio, ''), ?, 'g') as m
+				where b.city_id = ? and b.platform = ?
+				group by 1
+			)
+			select a.id, a.handle from mentioned t
+			join social_accounts a on a.platform = ? and a.handle = t.handle
+			where a.profile_read_at is null and a.handle_lost_at is null
+			and (a.followers_asked_at is null or a.followers_asked_at < ?)
+			group by a.id, a.handle
+			order by sum(t.food) desc, sum(t.posts) desc, a.handle`,
+			[
+				city.id,
+				SocialPlatformEnum.INSTAGRAM,
+				// A bio's @handles, as `captionHandles` reads them (a placeholder: the pattern holds a "?")
+				'(?:^|[^\\w.@])@([A-Za-z0-9_.]{1,40})',
+				city.id,
+				SocialPlatformEnum.INSTAGRAM,
+				SocialPlatformEnum.INSTAGRAM,
+				retryBefore,
+			],
+		);
+		const { asked, accounts } = await this.profilesOnly(
+			city,
+			rows.map(r => ({ id: r.id, platform: SocialPlatformEnum.INSTAGRAM, handle: r.handle })),
+			budgetUsd,
+			'mentioned',
+			now,
+		);
+		const read = accounts.filter(a => a.profileReadAt?.getTime() === now.getTime());
+		const result = {
+			unread: rows.length,
+			asked,
+			profiles: read.length,
+			businesses: read.filter(a => a.isBusiness).length,
+		};
+		this.logger.log(
+			`Mentioned profiles in ${city.name}: ${result.profiles} of ${asked} asked (${rows.length} never read), ${result.businesses} businesses`,
+		);
+		return result;
+	}
+
+	/**
 	 * The profiles of `rows`, in their order, as many as the budget covers: profile only, no post
-	 * stored. An account asked for that came back without a follower count is stamped
-	 * `followersAskedAt`.
+	 * stored. An account asked for (known before, or made by this read) that came back without a
+	 * follower count is stamped `followersAskedAt`. Returns the asked accounts there are.
 	 */
 	private async profilesOnly(
 		city: City,
-		rows: { id: string; platform: ProfilePlatform; handle: string }[],
+		rows: { id: string | null; platform: ProfilePlatform; handle: string }[],
 		budgetUsd: number,
 		label: string,
 		now: Date,
@@ -380,7 +460,13 @@ export class AccountScrapeService {
 			label,
 			now,
 		});
-		const accounts = await this.em.find(SocialAccount, { id: { $in: picked.map(r => r.id) } });
+		const accounts: SocialAccount[] = [];
+		for (const chunk of _.chunk(picked, 500))
+			accounts.push(
+				...(await this.em.find(SocialAccount, {
+					$or: chunk.map(r => (r.id ? { id: r.id } : { platform: r.platform, handle: r.handle })),
+				})),
+			);
 		for (const account of accounts) if (account.followers == null) account.followersAskedAt = now;
 		await this.em.flush();
 		return { asked: picked.length, profiles: scraped.profiles, accounts };

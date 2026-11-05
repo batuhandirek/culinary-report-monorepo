@@ -27,6 +27,7 @@ export const MATCH_METHOD_LABELS: Record<string, string> = {
 	exact: 'exact name',
 	fuzzy: 'fuzzy name',
 	llm: 'picked by the LLM',
+	account: 'tagged own account',
 	none: 'no match',
 	other_city: 'another city',
 	manual: 'by an admin',
@@ -34,7 +35,7 @@ export const MATCH_METHOD_LABELS: Record<string, string> = {
 };
 
 export const matchMethodVariant = (method?: string): BadgeVariant =>
-	method === 'exact' || method === 'fuzzy' || method === 'llm'
+	method === 'exact' || method === 'fuzzy' || method === 'llm' || method === 'account'
 		? 'success'
 		: method === 'manual'
 			? 'primary'

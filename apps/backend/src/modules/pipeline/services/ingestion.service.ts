@@ -180,7 +180,12 @@ export class IngestionService {
 			pass.matched = Object.values(counts).reduce((a, b) => a + b, 0);
 			// Authors to the brands they are the own accounts of: the posts by others that rank
 			// brands leave those out. Free, but over every account of the city: only after a change
-			if (pass.matched > 0) pass.accounts = await this.accountMatchingService.match(city);
+			if (pass.matched > 0) {
+				pass.accounts = await this.accountMatchingService.match(city);
+				// An account linked just now (its own profile, a site) places mentions its tags name
+				const byTags = await this.mentionMatchingService.matchByTags(city.id);
+				pass.matched += Object.values(byTags).reduce((a, b) => a + b, 0);
+			}
 		});
 		await part(async () => {
 			pass.reviews = (await this.reviewService.analysePending(city.id, INGEST_REVIEWS_PER_PASS)).analysed;

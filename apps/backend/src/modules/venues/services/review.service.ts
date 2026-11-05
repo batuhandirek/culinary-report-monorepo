@@ -153,6 +153,7 @@ export class ReviewService implements OnModuleInit {
 	onModuleInit() {
 		this.llmBacklogRegistry.register({
 			key: 'reread-reviews',
+			ingestion: true,
 			label: 'Re-read reviews as claims',
 			priority: 40,
 			remaining: () => this.countToReread(REVIEWS_QUOTED_AT),
@@ -573,7 +574,7 @@ export class ReviewService implements OnModuleInit {
 		}
 		// One flush at the end: the reviews are read side by side on this entity manager
 		await this.em.flush();
-		// Agent B over the new claims in the same step; what it misses, the `statement-parts` backlog reads
+		// A's foods stored and the labels read (Jev) over the new claims in the same step; what it misses, the `statement-parts` backlog reads
 		const parts = await this.statementPartsService.read({ ids: created.map(s => s.id) });
 		return { analysed, tokens: tokens + parts.tokens };
 	}

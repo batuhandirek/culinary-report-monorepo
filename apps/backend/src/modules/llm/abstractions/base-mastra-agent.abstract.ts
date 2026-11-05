@@ -35,6 +35,12 @@ export type MastraAgentInput = string | MastraMessage[];
 // The AI SDK's own retry logic only kicks in once a call actually errors, so without this
 // a stalled socket blocks indefinitely.
 const DEFAULT_GENERATE_TIMEOUT_MS = 120_000;
+/**
+ * OpenRouter's free models answer slower and reason first: a long post took over two minutes
+ * (cut off, "finish reason aborted", 2026-11-05). Their calls are spaced to the minute's cap anyway,
+ * so a slow one only holds its own slot.
+ */
+const OPENROUTER_GENERATE_TIMEOUT_MS = 360_000;
 
 export type MastraExecutionOverrides<Output extends ZodObject> = Omit<
 	AgentExecutionOptions<z.infer<Output>>,
@@ -71,6 +77,12 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	 */
 	paidFallback?: boolean;
 	/**
+	 * Reads one source into stored facts (a post's places and claims, a review, a comment, a press
+	 * page, a wording's topics, a place's match): keeps running while `LLM_INGESTION_ONLY` pauses
+	 * the rest (reports, copy, discovery, the analyst).
+	 */
+	ingestion?: boolean;
+	/**
 	 * The answer is the model's own text (`res.text`), not an object: a conversational agent whose
 	 * answer is prose (the analyst). `outputSchema` is then unused; pass an empty object.
 	 */
@@ -79,6 +91,21 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 
 /** Claude's prompt cache, 5 minutes from each use (a read restarts it) */
 const EPHEMERAL = { cacheControl: { type: 'ephemeral' as const } };
+
+/** A run Mastra handed back without an object: its own error (a provider's, kept as is), else why */
+export const failedRunError = (
+	res: { error?: unknown; finishReason?: unknown; text?: unknown },
+	model: string,
+): Error => {
+	if (res.error instanceof Error) return res.error;
+	const why =
+		typeof res.error === 'string' ? res.error
+		: res.error && typeof res.error === 'object' && 'message' in res.error ?
+			String((res.error as { message: unknown }).message)
+		:	`finish reason ${String(res.finishReason ?? 'unknown')}`;
+	const text = typeof res.text === 'string' ? res.text.slice(0, 200) : '';
+	return new Error(`${model} gave no answer: ${why}${text ? `; it wrote: ${text}` : ''}`);
+};
 
 export abstract class BaseMastraAgent<
 	Output extends ZodObject,
@@ -154,11 +181,13 @@ export abstract class BaseMastraAgent<
 		const outputProcessors = this.getOutputProcessors(context);
 
 		const mergedOptions = _.merge({}, this.config.defaultExecutionOptions ?? {}, callOptions);
-		const callWith = (resolvedModel: { id: LlmModelId; apiKey: string }) => {
-			// Both providers cache the prompt's shared start: the instructions come first, the input
+		const callWith = async (resolvedModel: { id: LlmModelId; apiKey: string }) => {
+			// The providers cache the prompt's shared start: the instructions come first, the input
 			// after. OpenAI does it by itself (the key routes an agent's calls to the same cache);
-			// Claude only up to a marker, put at the end of the instructions
-			const claude = providerOf(resolvedModel.id) === 'anthropic';
+			// Claude only up to a marker, put at the end of the instructions; OpenRouter's free
+			// models as their own provider does, with nothing to pass
+			const provider = providerOf(resolvedModel.id);
+			const claude = provider === 'anthropic';
 			const system =
 				claude ?
 					{
@@ -172,7 +201,8 @@ export abstract class BaseMastraAgent<
 					this.config.cacheConversation ?
 						{ anthropic: EPHEMERAL }
 					:	{}
-				:	{ openai: { promptCacheKey: this.config.id } };
+				: provider === 'openai' ? { openai: { promptCacheKey: this.config.id } }
+				: {};
 			const agent = new Agent({
 				id: this.config.id,
 				name: this.config.name,
@@ -186,8 +216,12 @@ export abstract class BaseMastraAgent<
 			const abortSignal =
 				callOptions.abortSignal ??
 				this.config.defaultExecutionOptions?.abortSignal ??
-				AbortSignal.timeout(DEFAULT_GENERATE_TIMEOUT_MS);
-			return agent.generate<z.infer<Output>>(input, {
+				AbortSignal.timeout(
+					provider === 'openrouter' ?
+						OPENROUTER_GENERATE_TIMEOUT_MS
+					:	DEFAULT_GENERATE_TIMEOUT_MS,
+				);
+			const res = await agent.generate<z.infer<Output>>(input, {
 				...mergedOptions,
 				providerOptions: _.merge(
 					{},
@@ -202,12 +236,20 @@ export abstract class BaseMastraAgent<
 					undefined
 				:	{ schema: this.config.outputSchema as any }) as any,
 			});
+			// Mastra hands some failed runs back instead of throwing (an answer that doesn't fit the
+			// schema, a provider that broke off): `error` set, no object. Thrown here, so the roster
+			// sees a provider's limit in it and the caller a failed item, never an empty answer
+			if (!this.config.freeText && res.object == null)
+				throw failedRunError(res, resolvedModel.id);
+			return res;
 		};
 
 		const start = Date.now();
 		try {
 			const { result: res, model } = await this.llmModels.run(choice, callWith, {
 				paidFallback: this.config.paidFallback,
+				ingestion: this.config.ingestion,
+				agentId: this.config.id,
 			});
 			if (llmConfig.IS_LLM_VERBOSE || this.config.verbose) {
 				const usage = res.totalUsage ?? res.usage;

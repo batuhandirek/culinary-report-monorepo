@@ -16,18 +16,40 @@ import { toVectorLiteral } from 'src/shared/util/vector.js';
 import { STATEMENT_EMBEDDING_DIMENSIONS } from '../constants/embeddings.constant.js';
 import { STATEMENT_KINDS, type StatementKind } from '../constants/kind.constant.js';
 import type { Sentiment } from '../constants/sentiment.constant.js';
-import { Statement, type StatementSubject } from '../entities/statement.entity.js';
+import {
+	Statement,
+	type StatementSubject,
+	type StatementUnit,
+} from '../entities/statement.entity.js';
+import { statedAmount } from '../util/amounts.js';
 import { verbatimQuote } from '../util/quotes.js';
 import { STATEMENT_PARTS_POPULATE } from '../util/statement-populate.js';
 
 import { StatementEmbeddingService } from './statement-embedding.service.js';
 
-/** One claim as agent A answers it: one thing said, in English, and the source's own words for it */
+/**
+ * One claim as agent A answers it: one thing said, in English, the source's own words for it, and
+ * what A copied out of the text (`CLAIM_FOODS_RULE`, `CLAIM_AMOUNT_RULE`)
+ */
 export interface Claim {
 	text: string;
 	/** Kept only when it is verbatim in the source (`verbatimQuote`) */
 	quote?: string | null;
+	/** The food wordings as spelled: stored as food parts by `StatementPartsService.read` */
+	foods?: string[];
+	/** The number it states, with its unit: stored on the claim as written */
+	amount?: number | null;
+	unit?: StatementUnit | null;
 }
+
+/** What a new claim keeps of A's copies: its number now (the labeller may parse one later), its foods until they become parts */
+const copied = (claim: Claim) => {
+	const stated = statedAmount(claim.amount, claim.unit);
+	return {
+		...(stated && { amount: stated.amount, unit: stated.unit }),
+		...(claim.foods?.length && { foodsFromA: claim.foods }),
+	};
+};
 
 /** A post's or article's claim: who it is about (a place it names, by index into the places answered; the city; nothing) */
 export interface PostClaim extends Claim {
@@ -70,7 +92,8 @@ const uniqueClaims = <T extends Claim>(claims: T[]): T[] =>
 /**
  * What posts, articles and reviews say, one claim per row (`Statement`): the one writer. A
  * statement is written with its source, in the caller's unit of work, with no sentiment and no
- * parts: agent B (`StatementPartsService`) reads those right after, or the `statement-parts`
+ * labels, its number when agent A stated one: the labeller (`StatementPartsService`) reads the rest
+ * right after (A's foods kept in memory until then, `foodsFromA`), or the `statement-parts`
  * backlog does. Every reader joins brand and venue through the source, never copied here.
  */
 @Injectable()
@@ -104,6 +127,7 @@ export class StatementService {
 				saidAt: review.publishedAt,
 				text: claim.text,
 				quote: verbatimQuote(claim.quote, [review.text, review.textTranslated]),
+				...copied(claim),
 			}),
 		);
 	}
@@ -146,6 +170,7 @@ export class StatementService {
 				saidAt: post.postedAt,
 				text: claim.text,
 				quote: verbatimQuote(claim.quote, [post.text, post.subtitles]),
+				...copied(claim),
 			});
 		});
 	}

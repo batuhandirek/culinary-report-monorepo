@@ -242,7 +242,7 @@ describe('finding brands’ own accounts (pglite)', () => {
 			await em.flush();
 		};
 
-		it('makes an account of an Instagram tag holding the name of the brand the post was about, and links it', async () => {
+		it('makes an account of every Instagram tag, and links one holding the name of the brand the post was about', async () => {
 			const kanaan = await place('Kanaan');
 			const samurai = await place('Samurai Wagyu Yakiniku');
 			await post(IG, kanaan, ['eat.kanaan', 'lisas.friend']);
@@ -251,19 +251,22 @@ describe('finding brands’ own accounts (pglite)', () => {
 			// TikTok's tags are display names as the caption shows them, never handles
 			await post(TT, kanaan, ['@Kanaan Berlin', '@kanaan.official']);
 
+			// Every Instagram tag is an account; TikTok's display names make none
 			const result = await matching.match(city);
-			expect(result.fromTags).toBe(1);
+			expect(result.fromTags).toBe(3);
 			// Holding "kanaan" links only with the tag under a post about Kanaan as evidence
 			expect(await account(IG, 'eat.kanaan')).toMatchObject({
 				brand: { id: kanaan.brand.id },
 				brandSource: AccountBrandSourceEnum.HANDLE,
 			});
-			for (const [platform, handle] of [
-				[IG, 'lisas.friend'],
-				[IG, 'samurai'],
-				[TT, 'kanaan.official'],
-			] as const)
-				expect(await account(platform, handle)).toBeNull();
+			// A friend and a part of a name are accounts, linked to nobody and suggested nothing
+			for (const handle of ['lisas.friend', 'samurai']) {
+				const found = await account(IG, handle);
+				expect(found).toBeTruthy();
+				expect(found!.brand).toBeFalsy();
+				expect(found!.suggestedBrand).toBeFalsy();
+			}
+			expect(await account(TT, 'kanaan.official')).toBeNull();
 		});
 	});
 

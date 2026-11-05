@@ -190,7 +190,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T11:32:15.169Z",
     "usage": {
       "inputTokens": 11945,
@@ -731,6 +731,21 @@
         "at": "2026-11-02T12:42:33.506Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: false → false (Editorial blog feature on Cousins with no paid partnership, ad, gifted meal, invitation or giveaway disclosed; the closing address and @cousins.icecream handle are standard listing info)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.227Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.684Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.159Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }

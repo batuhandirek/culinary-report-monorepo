@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ExternalLink, Pencil } from '@lucide/svelte';
-	import type { AdminMentionOutputDto, AdminSocialPostOutputDto } from 'client';
+	import type { AdminDigestedPostOutputDto, AdminMentionOutputDto, AdminSocialPostOutputDto } from 'client';
 
 	import PostCommentsPanel from './components/PostCommentsPanel.svelte';
 
@@ -10,12 +10,10 @@
 	import AdminFacts, { type AdminFact } from '#components/admin/AdminFacts.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import AdminRawJson from '#components/admin/AdminRawJson.svelte';
-	import StatementNotes from '#components/admin/statements/StatementNotes.svelte';
+	import DigestedPostView from '#components/admin/digestion/DigestedPostView.svelte';
 	import ChangeMentionVenueDialog from '#dialogs/admin/ChangeMentionVenueDialog.svelte';
-	import { captionParts } from '#lib/caption-links.js';
-	import { compact, PLATFORM_LABELS, sentimentVariant, SKIP_REASON_LABELS } from '#lib/culinary.js';
+	import { compact, PLATFORM_LABELS } from '#lib/culinary.js';
 	import { findHref, findLabel } from '#lib/post-sources.js';
-	import { sentimentOf } from '#lib/statements.js';
 	import { topicHref } from '#lib/topic-format.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
@@ -23,12 +21,8 @@
 
 	let { data } = $props();
 	let post: AdminSocialPostOutputDto = $derived(data.post);
-	// The month a note's theme link opens the theme's page on
-	const postMonth = $derived(new Date(post.postedAt).toISOString().slice(0, 7));
-	const GENERAL_SUBJECTS = [
-		{ subject: 'city', title: 'About the city' },
-		{ subject: 'none', title: 'In general' }
-	] as const;
+	// What the pipeline made of it, drawn as the Digestion page draws an opened row
+	let digested: AdminDigestedPostOutputDto = $derived(data.digested);
 
 	// The mention whose venue is being corrected
 	let editing = $state<AdminMentionOutputDto | null>(null);
@@ -50,21 +44,6 @@
 	);
 	const isKept = (snapshot: { at: Date | string }) =>
 		!!post.countsFinalAt && new Date(snapshot.at).getTime() === new Date(post.countsFinalAt).getTime();
-
-	const matchLabel = (mention: AdminMentionOutputDto) =>
-		mention.matchMethod === 'other_city'
-			? `not in ${post.city.name} (${mention.city ?? 'elsewhere'})`
-			: mention.matchMethod === 'ignored'
-				? 'not a venue (by an admin)'
-				: mention.matchMethod === 'manual'
-					? mention.brand
-						? 'linked by an admin'
-						: 'unlinked by an admin'
-					: mention.brand
-						? mention.venue
-							? `matched: ${mention.matchMethod}`
-							: `matched: ${mention.matchMethod}, the brand (no branch named)`
-						: 'no venue matched';
 
 	const facts = $derived<AdminFact[]>([
 		{ label: 'Posted', value: at(post.postedAt) },
@@ -105,56 +84,49 @@
 </AdminPageHeader>
 
 <div class="flex min-w-0 flex-col gap-5 pb-12">
+	<AdminPanel>
+		<DigestedPostView post={digested} withPostLink={false}>
+			{#snippet mentionAction(mention)}
+				{@const editable = post.mentions.find((m) => m.id === mention.id)}
+				{#if editable}
+					<IconButton
+						icon={Pencil}
+						label={`Change the venue of ${mention.venueName}`}
+						variant="ghost"
+						onclick={() => {
+							editing = editable;
+							editOpen = true;
+						}} />
+				{/if}
+			{/snippet}
+			{#snippet mentionDetails(mention)}
+				{@const stored = post.mentions.find((m) => m.id === mention.id)}
+				{#if stored?.topics?.length}
+					<p class="m-0 flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-xs">
+						<span class="text-muted-foreground">Food</span>
+						{#each stored.topics as link (link.topic.key)}
+							<a
+								class="text-beet underline-offset-2 hover:underline"
+								href={topicHref(link.topic.key)}
+								title={link.source === 'category' ? "From the venue's Google category: the post named no cuisine" : undefined}>
+								{link.topic.label}
+							</a>
+						{/each}
+					</p>
+				{/if}
+				{#if stored?.statements.some((s) => s.text) && (!stored.brand || post.account?.brand?.id === stored.brand.id)}
+					<p class="text-muted-foreground m-0 text-xs">
+						{stored.brand
+							? "The brand's own post: theme pages leave these claims out."
+							: 'Matched to no brand: theme pages leave these claims out until it is.'}
+					</p>
+				{/if}
+			{/snippet}
+		</DigestedPostView>
+	</AdminPanel>
+
 	<div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
 		<div class="flex min-w-0 flex-col gap-5">
-			<AdminPanel title="Caption">
-				<p class="m-0 whitespace-pre-line break-words text-sm">
-					{#if post.text}{#each captionParts(post.text, post.platform) as part, i (i)}{#if part.href}<a
-								class="text-beet underline-offset-2 hover:underline"
-								href={part.href}
-								target={part.external ? '_blank' : undefined}
-								rel={part.external ? 'noopener noreferrer' : undefined}>{part.text}</a>{:else}{part.text}{/if}{/each}{:else}—{/if}
-				</p>
-			</AdminPanel>
-			{#if post.hashtagLinks.length}
-				<AdminPanel title="Hashtags" note="A tag opens the posts that carry it">
-					<ul class="m-0 flex list-none flex-wrap gap-x-4 gap-y-1.5 p-0 text-sm">
-						{#each post.hashtagLinks as { hashtag } (hashtag.id)}
-							<li>
-								<a class="underline-offset-2 hover:underline" href={`/admin/posts?hashtag=${encodeURIComponent(hashtag.tag)}`}>#{hashtag.tag}</a>{#if hashtag.topic}
-									<span class="text-muted-foreground"> → </span><a class="text-beet underline-offset-2 hover:underline" href={`/admin/trends/${encodeURIComponent(hashtag.topic.key)}`}>{hashtag.topic.label}</a>
-								{:else if hashtag.brand}
-									<span class="text-muted-foreground"> → </span><a class="text-beet underline-offset-2 hover:underline" href={`/admin/brands/${hashtag.brand.id}`}>{hashtag.brand.name}</a>
-								{/if}
-							</li>
-						{/each}
-					</ul>
-				</AdminPanel>
-			{/if}
-			{#if post.foundBy.length}
-				<AdminPanel title="Found by" note={post.foundBy.length > 1 ? `${post.foundBy.length} sources` : undefined}>
-					<ul class="m-0 flex list-none flex-col gap-1.5 p-0 text-sm">
-						{#each post.foundBy as find (`${find.kind} ${find.value}`)}
-							{@const href = findHref(find, post.city.id)}
-							<li class="flex flex-wrap items-baseline justify-between gap-x-3">
-								{#if href}
-									<a class="underline-offset-2 hover:underline" {href}>{findLabel(find)}</a>
-								{:else}
-									<span title="No longer one of the city's sources">{findLabel(find)}</span>
-								{/if}
-								<span class="text-muted-foreground text-xs">{onDay(find.foundAt)}</span>
-							</li>
-						{/each}
-					</ul>
-				</AdminPanel>
-			{/if}
-			{#if post.subtitles}
-				<AdminPanel title="Transcript" note={post.subtitlesLanguage}>
-					<p class="text-muted-foreground m-0 max-h-80 overflow-y-auto whitespace-pre-line text-sm">
-						{post.subtitles}
-					</p>
-				</AdminPanel>
-			{/if}
 			<AdminPanel title="Post">
 				<AdminFacts items={facts} />
 			</AdminPanel>
@@ -192,109 +164,28 @@
 				</AdminPanel>
 			{/if}
 		</div>
-
-		<AdminPanel title="Brands mentioned" note={post.mentions.length}>
-			{#if post.skipReason}
-				<p class="ink-strip m-0 mb-2 text-sm">
-					Not digested: {SKIP_REASON_LABELS[post.skipReason] ?? post.skipReason}. The gate judged it is not about eating or
-					drinking out in {post.city.name}, so it has no places and no claims{post.mentions.length
-						? ' (the places an admin decided stay)'
-						: ''}.
-				</p>
-			{/if}
-			{#if post.mentions.length}
-				<ul class="divide-line m-0 flex list-none flex-col divide-y p-0">
-					{#each post.mentions as mention (mention.id)}
-						<li class="flex flex-col gap-1.5 py-3 text-sm">
-							<div class="flex flex-wrap items-center gap-2">
-								{#if mention.brand}
-									<a href={`/admin/brands/${mention.brand.id}`} class="font-semibold hover:underline">
-										{mention.brand.name}
-									</a>
-									{#if mention.venue && mention.venue.name !== mention.brand.name}
-										<a href={`/admin/venues/${mention.venue.id}`} class="text-muted-foreground text-xs hover:underline">
-											{mention.venue.name}
-										</a>
-									{/if}
-								{:else if mention.venue}
-									<a href={`/admin/venues/${mention.venue.id}`} class="font-semibold hover:underline">
-										{mention.venue.name}
-									</a>
+		<div class="flex min-w-0 flex-col gap-5">
+			{#if post.foundBy.length}
+				<AdminPanel title="Found by" note={post.foundBy.length > 1 ? `${post.foundBy.length} sources` : undefined}>
+					<ul class="m-0 flex list-none flex-col gap-1.5 p-0 text-sm">
+						{#each post.foundBy as find (`${find.kind} ${find.value}`)}
+							{@const href = findHref(find, post.city.id)}
+							<li class="flex flex-wrap items-baseline justify-between gap-x-3">
+								{#if href}
+									<a class="underline-offset-2 hover:underline" {href}>{findLabel(find)}</a>
 								{:else}
-									<span class="font-semibold">{mention.venueName}</span>
+									<span title="No longer one of the city's sources">{findLabel(find)}</span>
 								{/if}
-								<Badge variant={sentimentVariant(sentimentOf(mention.statements))}>{sentimentOf(mention.statements)}</Badge>
-								<span class="text-muted-foreground text-xs" title={mention.matchNote}>
-									{matchLabel(mention)}
-								</span>
-								{#if mention.unconfirmedAt}
-									<Badge
-										variant="warning"
-										title="A new read of this post no longer names this place: link it again to confirm, or mark it as not a venue">
-										unconfirmed
-									</Badge>
-								{/if}
-								<IconButton
-									icon={Pencil}
-									label={`Change the venue of ${mention.venueName}`}
-									variant="ghost"
-									class="ml-auto"
-									onclick={() => {
-										editing = mention;
-										editOpen = true;
-									}} />
-							</div>
-							<StatementNotes statements={mention.statements} cityId={post.city.id} month={postMonth} />
-							{#if mention.statements.some((s) => s.text) && (!mention.brand || post.account?.brand?.id === mention.brand.id)}
-								<p class="text-muted-foreground m-0 text-xs">
-									{mention.brand
-										? "The brand's own post: theme pages leave these notes out."
-										: 'Matched to no brand: theme pages leave these notes out until it is.'}
-								</p>
-							{/if}
-							{#if mention.topics?.length}
-								<p class="m-0 flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 text-xs">
-									<span class="text-muted-foreground">Food</span>
-									{#each mention.topics as link (link.topic.key)}
-										<a
-											class="text-beet underline-offset-2 hover:underline"
-											href={topicHref(link.topic.key)}
-											title={link.source === 'category' ? "From the venue's Google category: the post named no cuisine" : undefined}>
-											{link.topic.label}
-										</a>
-									{/each}
-								</p>
-							{/if}
-						</li>
-					{/each}
-				</ul>
-			{:else if !post.skipReason}
-				<p class="text-muted-foreground m-0 text-sm">
-					{post.analysedAt ? 'No venue named in this post.' : 'Not analysed yet.'}
-				</p>
+								<span class="text-muted-foreground text-xs">{onDay(find.foundAt)}</span>
+							</li>
+						{/each}
+					</ul>
+				</AdminPanel>
 			{/if}
-		</AdminPanel>
-
-		{#if post.generalStatements.length}
-			<!-- What the post says that is about no place it names: the city, or food in general -->
-			<AdminPanel title="About the city and in general" note={post.generalStatements.length}>
-				<div class="divide-line flex flex-col divide-y">
-					{#each GENERAL_SUBJECTS as group (group.subject)}
-						{@const claims = post.generalStatements.filter((s) => s.subject === group.subject)}
-						{#if claims.length}
-							<div class="flex flex-col gap-1.5 py-3 text-sm">
-								<span class="font-semibold">{group.title}</span>
-								<StatementNotes statements={claims} cityId={post.city.id} month={postMonth} />
-							</div>
-						{/if}
-					{/each}
-				</div>
-			</AdminPanel>
-		{/if}
-
-		{#if post.platform === 'tiktok'}
-			<PostCommentsPanel postId={post.id} />
-		{/if}
+			{#if post.platform === 'tiktok'}
+				<PostCommentsPanel postId={post.id} />
+			{/if}
+		</div>
 	</div>
 
 	<AdminRawJson value={post} />

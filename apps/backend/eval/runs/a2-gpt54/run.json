@@ -1,0 +1,5 @@
+{
+  "reader": "split",
+  "claimsModel": "openai/gpt-5.4",
+  "labeller": "classifier"
+}

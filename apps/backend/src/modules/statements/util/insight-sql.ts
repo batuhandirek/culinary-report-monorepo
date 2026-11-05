@@ -29,7 +29,7 @@ export type InsightSide = (typeof INSIGHT_SIDES)[number];
 
 /**
  * Where a claim was said, one level finer than its source kind: a Google or TripAdvisor review, a
- * TikTok, Instagram or blog post, a Google tag (and the kinds with no writer yet: comment, press)
+ * TikTok, Instagram or blog post (and the kinds with no writer yet: comment, press)
  */
 export const INSIGHT_CHANNELS = [
 	'google_review',
@@ -37,13 +37,12 @@ export const INSIGHT_CHANNELS = [
 	'tiktok',
 	'instagram',
 	'blog',
-	'google_tag',
 	'comment',
 	'press',
 ] as const;
 export type InsightChannel = (typeof INSIGHT_CHANNELS)[number];
 
-/** A source filter: a source kind (`review`, `post`, `google_tag`, …) or a channel */
+/** A source filter: a source kind (`review`, `post`, …) or a channel */
 export type InsightSource = 'review' | 'post' | InsightChannel;
 
 /** Whose claims and when: a city, narrowed to a brand, a branch or a district; the months `from`..`to` (YYYY-MM) */
@@ -73,43 +72,39 @@ export interface InsightFilters {
 }
 
 /**
- * One row per claim of the city in the months (Google tags whatever the months: they are all-time),
- * with what every reader of the page needs. Out, as on the theme pages: reviews with no text, claims
+ * One row per claim of the city in the months, with what every reader of the page needs. Out, as on the theme pages: reviews with no text, claims
  * of a post about a place matched to no brand or made by that brand's own account; and a post's
  * claims about the city or nothing when a brand's own account made it (as aspect discovery
  * leave them out). Brand and place are joined through the source, never stored on the claim.
  */
 const claimRowsSql = (cityId: string, months: { from: string; to: string }): Sql =>
 	sql(
-		`select s.id, s.source_kind, s.subject, s.month, s.said_at, s.sentiment, s.kind, s.amount, s.unit, s.count, s.text,
-			s.source_kind <> 'google_tag' as dated,
+		`select s.id, s.source_kind, s.subject, s.month, s.said_at, s.sentiment, s.kind, s.amount, s.unit, s.text,
 			case when s.review_id is not null then 'review:' || s.review_id
 				when s.post_id is not null then 'post:' || s.post_id
 				when s.comment_id is not null then 'comment:' || s.comment_id
-				when s.web_mention_id is not null then 'press:' || s.web_mention_id
-				else 'tag:' || s.venue_id end as source,
+				else 'press:' || s.web_mention_id end as source,
 			case s.source_kind when 'review' then coalesce(r.platform::text, 'google') || '_review'
 				when 'post' then p.platform::text
 				else s.source_kind end as channel,
-			case when s.text is null or s.source_kind = 'google_tag' then null
+			case when s.text is null then null
 				when s.kind = 'change' then 'changes'
 				when s.kind = 'question' then 'noted'
 				when s.sentiment is null then 'unread'
 				when s.sentiment = 'positive' then 'praise'
 				when s.sentiment = 'negative' then 'complaints'
 				else 'noted' end as side,
-			coalesce(r.venue_id, m.venue_id, s.venue_id, wm.venue_id) as venue_id,
-			coalesce(rv.brand_id, m.brand_id, sv.brand_id, wv.brand_id) as brand_id
+			coalesce(r.venue_id, m.venue_id, wm.venue_id) as venue_id,
+			coalesce(rv.brand_id, m.brand_id, wv.brand_id) as brand_id
 		from statements s
 		left join reviews r on r.id = s.review_id
 		left join venues rv on rv.id = r.venue_id
 		left join social_posts p on p.id = s.post_id
 		left join mentions m on m.id = s.mention_id
-		left join venues sv on sv.id = s.venue_id
 		left join web_mentions wm on wm.id = s.web_mention_id
 		left join venues wv on wv.id = wm.venue_id
 		where s.city_id = ?
-			and (s.source_kind = 'google_tag' or (s.month >= ? and s.month <= ?))
+			and s.month >= ? and s.month <= ?
 			and (s.source_kind <> 'review' or coalesce(r.text_translated, r.text, '') <> '')
 			and (s.source_kind <> 'post' or case when s.mention_id is not null
 				then m.brand_id is not null and not ${ownPostSql('p', 'm.brand_id')}
@@ -203,7 +198,7 @@ export const narrowingSql = (
 	c = 'c',
 ): Sql[] => [
 	...(filters.side ? [sql(`${c}.side = ?`, [filters.side])] : []),
-	...(filters.kind === 'unread' ? [sql(`${c}.kind is null and ${c}.dated`)]
+	...(filters.kind === 'unread' ? [sql(`${c}.kind is null`)]
 	: filters.kind ? [sql(`${c}.kind = ?`, [filters.kind])]
 	: []),
 	...(filters.with ?? []).map(node => nodeSql(node, c)),
@@ -233,10 +228,6 @@ export const CLAIM_TOPICS_SQL = `select ap.statement_id, ap.topic_id from statem
 	select fp.statement_id, tt.topic_id from statement_parts fp join term_topics tt on tt.term_id = fp.term_id where fp.role = 'food'`;
 
 /** The counts every breakdown row and tree node carries, over claims `c` */
-export const COUNT_FIELDS = (
-	c = 'c',
-) => `count(distinct ${c}.source) filter (where ${c}.dated)::int as sources,
-	count(distinct ${c}.source) filter (where ${c}.dated and ${c}.side = 'praise')::int as praise,
-	count(distinct ${c}.source) filter (where ${c}.dated and ${c}.side = 'complaints')::int as complaints,
-	count(distinct ${c}.venue_id) filter (where not ${c}.dated)::int as "tagVenues",
-	coalesce(sum(${c}.count) filter (where not ${c}.dated), 0)::int as "tagMentions"`;
+export const COUNT_FIELDS = (c = 'c') => `count(distinct ${c}.source)::int as sources,
+	count(distinct ${c}.source) filter (where ${c}.side = 'praise')::int as praise,
+	count(distinct ${c}.source) filter (where ${c}.side = 'complaints')::int as complaints`;

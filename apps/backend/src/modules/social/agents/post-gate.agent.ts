@@ -60,6 +60,7 @@ export class PostGateAgent extends BaseMastraAgent<typeof postGateSchema, PostGa
 		id: 'post-gate',
 		name: 'PostGateAgent',
 		outputSchema: postGateSchema,
+		ingestion: true,
 	};
 
 	// Every post the scrapes find, a few hundred tokens each: mini

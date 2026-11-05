@@ -209,7 +209,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T14:22:47.436Z",
     "usage": {
       "inputTokens": 12048,
@@ -1015,6 +1015,21 @@
         "at": "2026-11-02T12:43:18.906Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: true → false (No disclosure of payment, gifted meal, invitation, ad, collab or giveaway. The glowing, press-release-like tone and the venue-credited photo ('Copyright: Taco& Gringo') do not by themselves show it was paid or gifted.)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.241Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.697Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.173Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }

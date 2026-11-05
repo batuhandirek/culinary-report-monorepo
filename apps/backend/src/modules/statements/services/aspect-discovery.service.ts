@@ -20,7 +20,12 @@ import {
 } from '../constants/aspect-discovery.constant.js';
 import { CLUSTER_DIMENSIONS, CLUSTER_SAMPLE_THRESHOLD } from '../constants/embeddings.constant.js';
 import { AspectDiscoveryJob } from '../jobs/aspect-discovery.job.js';
-import { type ClaimCluster, clusterClaims, type ClusterItem, diverseSamples } from '../util/cluster.js';
+import {
+	type ClaimCluster,
+	clusterClaims,
+	type ClusterItem,
+	diverseSamples,
+} from '../util/cluster.js';
 import { claimsOfCitySql, LOOSE_CLAIM_SQL } from '../util/loose-claims-sql.js';
 
 import { StatementPartsService } from './statement-parts.service.js';
@@ -112,9 +117,13 @@ export class AspectDiscoveryService {
 
 	/** Queues a run (the weekly cron): one waits at a time */
 	async queue(payload: { dryRun: boolean; cronOnly?: boolean }): Promise<void> {
-		await this.pgBossService.sendJob(AspectDiscoveryJob.jobName, new AspectDiscoveryJob(payload), {
-			singletonKey: AspectDiscoveryJob.singletonKey,
-		});
+		await this.pgBossService.sendJob(
+			AspectDiscoveryJob.jobName,
+			new AspectDiscoveryJob(payload),
+			{
+				singletonKey: AspectDiscoveryJob.singletonKey,
+			},
+		);
 	}
 
 	/** Every active city in turn, or only those whose cron is on */
@@ -145,7 +154,9 @@ export class AspectDiscoveryService {
 				claims: cluster.items.length,
 				sources: cluster.sources,
 				brands: cluster.brands,
-				samples: diverseSamples(cluster.items, SAMPLES, CLUSTER_SAMPLE_THRESHOLD).map(r => r.text),
+				samples: diverseSamples(cluster.items, SAMPLES, CLUSTER_SAMPLE_THRESHOLD).map(
+					r => r.text,
+				),
 				label: answer?.label.trim().split(/\s+/).slice(0, 4).join(' ') || undefined,
 				hint: answer?.hint.trim() || undefined,
 				root: answer?.root,
@@ -173,7 +184,10 @@ export class AspectDiscoveryService {
 			}
 			if (group.outcome === 'created') created.push(group.aspect!);
 			if (group.outcome === 'created' || group.outcome === 'joined')
-				centroids.set(group.aspect!, [...(centroids.get(group.aspect!) ?? []), cluster.centroid]);
+				centroids.set(group.aspect!, [
+					...(centroids.get(group.aspect!) ?? []),
+					cluster.centroid,
+				]);
 		}
 
 		const { refiled, filed } =
@@ -243,7 +257,11 @@ export class AspectDiscoveryService {
 				clusters.map((_cluster, i) => i),
 				CONCURRENCY,
 				async i => {
-					const samples = diverseSamples(clusters[i].items, SAMPLES, CLUSTER_SAMPLE_THRESHOLD);
+					const samples = diverseSamples(
+						clusters[i].items,
+						SAMPLES,
+						CLUSTER_SAMPLE_THRESHOLD,
+					);
 					const ids = new Set(samples.map(s => s.id));
 					const claims = [
 						...samples.map(s => s.text),
@@ -255,7 +273,10 @@ export class AspectDiscoveryService {
 					);
 					answers[i] = res.object;
 				},
-				(i, e) => this.logger.warn(`Naming a group of ${clusters[i].items.length} claims failed: ${e.message}`),
+				(i, e) =>
+					this.logger.warn(
+						`Naming a group of ${clusters[i].items.length} claims failed: ${e.message}`,
+					),
 			);
 		} catch (e) {
 			// Every account out of allowance: what was named still counts
@@ -270,7 +291,9 @@ export class AspectDiscoveryService {
 			const key = row.aspect ?? 'none';
 			counts.set(key, (counts.get(key) ?? 0) + 1);
 		}
-		return [...counts].map(([aspect, claims]) => ({ aspect, claims })).sort((a, b) => b.claims - a.claims);
+		return [...counts]
+			.map(([aspect, claims]) => ({ aspect, claims }))
+			.sort((a, b) => b.claims - a.claims);
 	}
 
 	/** The city's loose claims of `DISCOVERY_MIN_WORDS`+ words with a vector, a fixed sample */
@@ -280,7 +303,9 @@ export class AspectDiscoveryService {
 			and array_length(regexp_split_to_array(trim(s.text), '\\s+'), 1) >= ${DISCOVERY_MIN_WORDS}`,
 		);
 		const conn = this.em.getConnection();
-		const [count]: { n: number }[] = await conn.execute(`select count(*)::int as n ${from}`, [cityId]);
+		const [count]: { n: number }[] = await conn.execute(`select count(*)::int as n ${from}`, [
+			cityId,
+		]);
 		const raw: {
 			id: number;
 			text: string;
@@ -292,7 +317,7 @@ export class AspectDiscoveryService {
 		}[] = await conn.execute(
 			`select s.id, s.text, subvector(s.embedding, 1, ${CLUSTER_DIMENSIONS})::text as vector,
 				coalesce('r' || s.review_id::text, 'p' || s.post_id::text, 'c' || s.comment_id::text,
-					'w' || s.web_mention_id::text, 'v' || s.venue_id::text) as source,
+					'w' || s.web_mention_id::text) as source,
 				coalesce(rv.brand_id, m.brand_id)::text as "brandId", m.venue_name as "venueName", a.key as aspect
 			${from} order by md5(s.id::text) limit ?`,
 			[cityId, DISCOVERY_MAX_CLAIMS],
@@ -349,14 +374,17 @@ export class AspectDiscoveryService {
 		this.em.clear();
 		try {
 			for (let i = 0; i < list.length; i += DISCOVERY_READ_CHUNK)
-				await this.statementPartsService.read({ ids: list.slice(i, i + DISCOVERY_READ_CHUNK) });
+				await this.statementPartsService.read({
+					ids: list.slice(i, i + DISCOVERY_READ_CHUNK),
+				});
 		} catch (e) {
 			this.logger.warn(
 				`Agent B stopped re-reading: ${(e as Error).message}. The rest waits for the nightly statement-parts backlog`,
 			);
 		}
 		const keys = [...centroids.keys()];
-		const [row]: { n: number }[] = list.length ?
+		const [row]: { n: number }[] =
+			list.length ?
 				await conn.execute(
 					`select count(distinct ap.statement_id)::int as n from statement_parts ap
 					join topics a on a.id = ap.topic_id
@@ -379,7 +407,9 @@ export class AspectDiscoveryService {
 		this.logger.warn(
 			`Aspect discovery${res.dryRun ? ' (dry run)' : ''} for city ${res.cityId}: ${res.considered} of ${res.claims} loose claims grouped, ` +
 				`${res.groups.length} groups named (${res.more} more), ${res.created.length} aspects ${res.dryRun ? 'would be ' : ''}created` +
-				(res.dryRun ? '' : `, ${res.refiled} claims read again, ${res.filed} of them filed under a new aspect`) +
+				(res.dryRun ? '' : (
+					`, ${res.refiled} claims read again, ${res.filed} of them filed under a new aspect`
+				)) +
 				`\n${lines.join('\n')}`,
 		);
 	}

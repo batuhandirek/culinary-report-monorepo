@@ -30,7 +30,7 @@ export interface AdminExploreInputDto {
 	side?: InsightSide;
 	/** One kind, or `unread`: agent B gave none yet */
 	kind?: StatementKind | 'unread';
-	/** A source kind (review, post, google_tag) or a channel (google_review, tiktok, blog, …) */
+	/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 	source?: InsightSource;
 	subject?: StatementSubject;
 }
@@ -52,14 +52,10 @@ export interface AdminExploreTermsInputDto {
 
 /** The figures a tree node and a breakdown row carry */
 export interface AdminExploreCountsOutputDto {
-	/** Reviews, posts and other dated sources raising it, each once */
+	/** Reviews, posts and other sources raising it, each once */
 	sources: number;
 	praise: number;
 	complaints: number;
-	/** Places whose Google tags name it (all-time) */
-	tagVenues: number;
-	/** Google's counts of those tags, summed */
-	tagMentions: number;
 }
 
 export interface AdminExploreTreeNodeOutputDto extends AdminExploreCountsOutputDto {
@@ -114,8 +110,6 @@ export interface AdminExploreHeadOutputDto {
 	others: number;
 	brands: number;
 	claims: number;
-	tagVenues: number;
-	tagMentions: number;
 	base: { sources: number; reviews: number; posts: number };
 	share: number | null;
 	reviewShare: number | null;

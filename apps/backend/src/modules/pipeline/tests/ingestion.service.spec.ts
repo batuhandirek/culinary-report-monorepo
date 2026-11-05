@@ -31,6 +31,7 @@ describe('IngestionService', () => {
 	const matching = {
 		pendingCount: jest.fn(async (..._args: unknown[]) => 0),
 		match: jest.fn(async (..._args: unknown[]) => ({ exact: 3, fuzzy: 1, llm: 1, none: 0 })),
+		matchByTags: jest.fn(async (..._args: unknown[]) => ({ account: 0 })),
 	};
 	const accounts = { match: jest.fn(async (..._args: unknown[]) => ({ linked: 2 })) };
 	const reviews = {

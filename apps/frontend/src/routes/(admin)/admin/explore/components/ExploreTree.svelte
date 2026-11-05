@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronRight, Search, Tag } from '@lucide/svelte';
+	import { ChevronRight, Search } from '@lucide/svelte';
 	import type { AdminExploreTermOutputDto, AdminExploreTreeNodeOutputDto } from 'client';
 
 	import { SvelteSet } from 'svelte/reactivity';
@@ -8,7 +8,7 @@
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// Every topic the view's claims are about, aspects and kinds of food apart, each with its
-	// reviews and posts (a source once, what is under it counted in) and its Google tag places.
+	// reviews and posts (a source once, what is under it counted in).
 	// A search finds topics by label (and wordings by name, with `terms`); picking one picks it,
 	// "Any" picks none. The Explore bar shows the aspects in one picker and food in another.
 	interface Props {
@@ -25,7 +25,7 @@
 
 	const byKey = $derived(new Map((nodes ?? []).map((n) => [n.key, n])));
 	const order = (a: AdminExploreTreeNodeOutputDto, b: AdminExploreTreeNodeOutputDto) =>
-		b.sources - a.sources || b.tagVenues - a.tagVenues || a.label.localeCompare(b.label);
+		b.sources - a.sources || a.label.localeCompare(b.label);
 	// Each node's children, by its key; the roots under ''
 	const children = $derived.by(() => {
 		const out: Record<string, AdminExploreTreeNodeOutputDto[]> = {};
@@ -92,8 +92,8 @@
 </script>
 
 {#snippet count(node: AdminExploreTreeNodeOutputDto)}
-	<span class="text-muted-foreground shrink-0 text-xs tabular-nums" title="Reviews and posts raising it{node.tagVenues ? `; places whose Google tags name it` : ''}">
-		{node.sources ? n(node.sources) : '—'}{#if node.tagVenues}<span class="text-beet"> · {n(node.tagVenues)}<Tag class="ml-0.5 inline size-3 align-[-1px]" aria-label="Google tag places" /></span>{/if}
+	<span class="text-muted-foreground shrink-0 text-xs tabular-nums" title="Reviews and posts raising it">
+		{node.sources ? n(node.sources) : '—'}
 	</span>
 {/snippet}
 

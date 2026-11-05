@@ -5,12 +5,12 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import {
 	apifyRunContext,
 	processShutdown,
 	ShuttingDownError,
 } from 'src/modules/apify/util/apify-run-context.js';
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { stepBudgetUsd } from 'src/modules/cities/util/city.js';
@@ -20,7 +20,7 @@ import { ReportService } from 'src/modules/reports/services/report.service.js';
 import { AccountSnapshotSourceEnum } from 'src/modules/social/entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { AccountMatchingService } from 'src/modules/social/services/account-matching.service.js';
-import { AccountScrapeService } from 'src/modules/social/services/account-scrape.service.js';
+import { AccountScrapeService, PROFILE_ONLY_USD } from 'src/modules/social/services/account-scrape.service.js';
 import { AccountTwinService } from 'src/modules/social/services/account-twin.service.js';
 import { BlogScrapeService } from 'src/modules/social/services/blog-scrape.service.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
@@ -28,6 +28,7 @@ import { MentionMatchingService } from 'src/modules/social/services/mention-matc
 import { OwnAccountService } from 'src/modules/social/services/own-account.service.js';
 import { PostCommentService } from 'src/modules/social/services/post-comment.service.js';
 import { PostCountsService } from 'src/modules/social/services/post-counts.service.js';
+import { ProfilePlaceService } from 'src/modules/social/services/profile-place.service.js';
 import { SocialScrapeService } from 'src/modules/social/services/social-scrape.service.js';
 import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
@@ -58,6 +59,7 @@ import {
 } from '../constants/creator-watch.constant.js';
 import {
 	ALL_READ_STEPS,
+	MENTIONED_PROFILES_SHARE,
 	MONTHLY_STEPS,
 	PipelineStepEnum,
 	READ_GATED_STEPS,
@@ -144,6 +146,7 @@ export class PipelineService {
 		private readonly blogScrapeService: BlogScrapeService,
 		private readonly accountScrapeService: AccountScrapeService,
 		private readonly accountTwinService: AccountTwinService,
+		private readonly profilePlaceService: ProfilePlaceService,
 		private readonly accountWatchService: AccountWatchService,
 		private readonly postCountsService: PostCountsService,
 		private readonly ingestionService: IngestionService,
@@ -524,6 +527,36 @@ export class PipelineService {
 	 * `CREATOR_INSTAGRAM_EVERY_DAYS` old, its posts of the last week kept. Instagram's due profiles
 	 * are planned first, TikTok gets the rest of the budget as its cap.
 	 */
+	/**
+	 * `READ_MENTIONED_PROFILES`: every Instagram handle the city's posts tag or its bios name becomes
+	 * an account; the profiles never read are read on `MENTIONED_PROFILES_SHARE` of the budget,
+	 * most mentioned first. Then, inside the reading's lock: the accounts matched by what their
+	 * profiles say, the business profiles whose bio address names none of our places searched on
+	 * Google Maps on the rest (and matched again when anything was found), `ProfilePlaceAgent`
+	 * asked where places are at an address but none is named like the profile (its picks only
+	 * suggested), and the mentions their tags now place.
+	 */
+	private async readMentionedProfiles(city: City, budgetUsd: number) {
+		const created = await this.accountMatchingService.addMentionedAccounts(city);
+		const read = await this.accountScrapeService.readMentionedProfiles(city, budgetUsd * MENTIONED_PROFILES_SHARE);
+		const left = budgetUsd - read.asked * PROFILE_ONLY_USD[SocialPlatformEnum.INSTAGRAM];
+		return this.ingestionService.locked(city.id, async () => {
+			const accounts = await this.accountMatchingService.match(city);
+			const addresses = await this.profilePlaceService.searchAddresses(city, left);
+			const again = addresses.saved > 0 ? await this.accountMatchingService.match(city) : undefined;
+			const places = await this.profilePlaceService.askPlaces(city);
+			return {
+				created,
+				...read,
+				accounts,
+				addresses,
+				...(again && { accountsAfterSearch: again }),
+				places,
+				matched: await this.mentionMatchingService.matchByTags(city.id),
+			};
+		});
+	}
+
 	private async scrapeCreators(city: City, top: number, budgetUsd: number) {
 		const now = new Date();
 		const day = 86_400_000;
@@ -888,6 +921,9 @@ export class PipelineService {
 			case PipelineStepEnum.FILL_ACCOUNT_FOLLOWERS:
 				// The month is a label: the brand accounts with no follower count today
 				return this.accountScrapeService.fillFollowers(city, budgetUsd);
+			case PipelineStepEnum.READ_MENTIONED_PROFILES:
+				// The month is a label: every mentioned handle an account, the profiles never read
+				return this.readMentionedProfiles(city, budgetUsd);
 			case PipelineStepEnum.FIND_OWN_ACCOUNTS:
 				// What the brands' sites and the posts' tags give is linked free by every
 				// MATCH_MENTIONS (`AccountMatchingService`); this pays for the brands still missing

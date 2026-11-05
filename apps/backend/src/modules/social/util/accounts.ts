@@ -21,6 +21,21 @@ export const normalizeAccountHandle = (input: string | null | undefined): string
 	return /^[\w.]{1,40}$/.test(handle) ? handle : null;
 };
 
+/**
+ * The @handles a caption, transcript or bio writes out, each once, as `normalizeAccountHandle`
+ * keeps them. A handle is letters, digits, `.` and `_`: a token glued to a hyphen is no handle
+ * but a name or a site written after an @ ("@Frieda-Schlamassel.de"), and is dropped whole rather
+ * than cut to "@frieda", someone else's account. An e-mail address ("info@lucys.de") is none.
+ */
+export const captionHandles = (text: string | null | undefined): string[] => {
+	const out = new Set<string>();
+	for (const m of (text ?? '').matchAll(/(?<![\w.@])@([\w.]{1,40})(?![\w.])(?!-[\p{L}\p{N}])/gu)) {
+		const handle = normalizeAccountHandle(m[1]);
+		if (handle) out.add(handle);
+	}
+	return [...out];
+};
+
 /** A platform whose accounts are profiles a brand can own and we can scrape: never a blog. */
 export type ProfilePlatform = SocialPlatformEnum.INSTAGRAM | SocialPlatformEnum.TIKTOK;
 

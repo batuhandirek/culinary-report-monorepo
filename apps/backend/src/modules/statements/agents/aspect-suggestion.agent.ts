@@ -33,7 +33,7 @@ const aspectSuggestionSchema = z.object({
 		.string()
 		.nullable()
 		.describe(
-			'The key of an existing aspect that already covers these claims (they should have been filed there), a root\'s key when they are about that root as a whole; null when none does',
+			"The key of an existing aspect that already covers these claims (they should have been filed there), a root's key when they are about that root as a whole; null when none does",
 		),
 });
 

@@ -48,7 +48,7 @@
 	</div>
 {/snippet}
 
-<div class="bg-paper border-line divide-line grid grid-cols-2 rounded-md border sm:grid-cols-4 sm:divide-x">
+<div class="bg-paper border-line divide-line grid grid-cols-2 rounded-md border sm:grid-cols-3 sm:divide-x">
 		{@render figure(
 			'Reviews and posts',
 			head.sources ? n(head.sources) : '—',
@@ -61,12 +61,6 @@
 			head.reviewShare !== null || head.postShare !== null ? `reviews ${pct(head.reviewShare)} · posts ${pct(head.postShare)}` : undefined,
 			`Of the scope's ${n(head.base.sources)} reviews and posts ${baseWord}.${shareChange !== null ? ` ${change(shareChange)}.` : ''}`,
 			shareChange !== null && head.months.length > 1 ? { text: signed(shareChange), tone: tone(shareChange) } : undefined
-		)}
-		{@render figure(
-			'Google tags',
-			head.tagVenues ? plural(head.tagVenues, 'place') : '—',
-			head.tagVenues ? `×${n(head.tagMentions)} in Google's counts` : undefined,
-			'Places whose Google “people often mention” names it. All-time, whatever the months.'
 		)}
 		{#if head.amounts.length}
 			{@const a = head.amounts[0]}

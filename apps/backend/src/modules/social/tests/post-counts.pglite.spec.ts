@@ -8,7 +8,12 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { POST_COUNTS_AGE_DAYS } from '../constants/post-counts.constant.js';
-import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
+import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
+import {
+	PostSkipReasonEnum,
+	SocialPlatformEnum,
+	SocialPost,
+} from '../entities/social-post.entity.js';
 import { PostCountsService } from '../services/post-counts.service.js';
 import { SocialAccountService } from '../services/social-account.service.js';
 import { PostFields, SocialPostService } from '../services/social-post.service.js';
@@ -315,14 +320,75 @@ describe('Post counts at a fixed age (pglite)', () => {
 		const venue = em.create(Venue, { city, placeId: 'place-own-counts', name: 'Own counts' });
 		await em.flush();
 		const own = ownAccount(em, venue.brand, city, 'own_counts');
-		const creator = socialAccountFactory.build({ handle: 'a_creator' }, { associations: { city }, transient: { em } });
+		const creator = socialAccountFactory.build(
+			{ handle: 'a_creator' },
+			{ associations: { city }, transient: { em } },
+		);
 		const at = daysAgo(8);
-		seed(city, { externalId: '7400000000000000001', platform: SocialPlatformEnum.TIKTOK, url: 'https://t/1', postedAt: at, account: own });
-		seed(city, { externalId: '7400000000000000002', platform: SocialPlatformEnum.TIKTOK, url: 'https://t/2', postedAt: at, account: creator });
-		seed(city, { externalId: '7400000000000000003', platform: SocialPlatformEnum.TIKTOK, url: 'https://t/3', postedAt: at });
+		seed(city, {
+			externalId: '7400000000000000001',
+			platform: SocialPlatformEnum.TIKTOK,
+			url: 'https://t/1',
+			postedAt: at,
+			account: own,
+		});
+		seed(city, {
+			externalId: '7400000000000000002',
+			platform: SocialPlatformEnum.TIKTOK,
+			url: 'https://t/2',
+			postedAt: at,
+			account: creator,
+		});
+		seed(city, {
+			externalId: '7400000000000000003',
+			platform: SocialPlatformEnum.TIKTOK,
+			url: 'https://t/3',
+			postedAt: at,
+		});
 		await em.flush();
 
-		expect((await counts.due(city)).map(p => p.externalId).sort()).toEqual(['7400000000000000002', '7400000000000000003']);
+		expect((await counts.due(city)).map(p => p.externalId).sort()).toEqual([
+			'7400000000000000002',
+			'7400000000000000003',
+		]);
+	});
+
+	it('reads only posts about eating and drinking out: never one the gate skipped, an unread one, a pre-gate one only when it names a place', async () => {
+		const em = harness.orm.em;
+		const city = await cityFactory.create();
+		const at = daysAgo(8);
+		const read = new Date(at.getTime() + 3600_000);
+		const post = (n: number, fields: Partial<SocialPost> = {}) =>
+			seed(city, {
+				externalId: `75000000000000000${n}`,
+				platform: SocialPlatformEnum.TIKTOK,
+				url: `https://t/75${n}`,
+				postedAt: at,
+				...fields,
+			});
+		// Gated: digested (about food, naming no place) and skipped (a music video)
+		post(1, { analysedAt: read, gatedAt: read });
+		post(2, { analysedAt: read, gatedAt: read, skipReason: PostSkipReasonEnum.NOT_FOOD });
+		// Not read yet
+		post(3);
+		// Read before the gate: naming a place, naming none, naming only an ignored one
+		const named = post(4, { analysedAt: read });
+		post(5, { analysedAt: read });
+		const ignored = post(6, { analysedAt: read });
+		em.create(Mention, { post: named, venueName: 'Ramen Ichi', visited: true });
+		em.create(Mention, {
+			post: ignored,
+			venueName: 'Tempelhofer Feld',
+			visited: false,
+			matchMethod: MentionMatchMethodEnum.IGNORED,
+		});
+		await em.flush();
+
+		expect((await counts.due(city)).map(p => p.externalId).sort()).toEqual([
+			'750000000000000001',
+			'750000000000000003',
+			'750000000000000004',
+		]);
 	});
 
 	it("keeps one platform's reads when the other run fails, then fails", async () => {

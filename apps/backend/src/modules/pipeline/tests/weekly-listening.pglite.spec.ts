@@ -70,7 +70,7 @@ describe('Weekly listening (pglite)', () => {
 		return em.findOneOrFail(PipelineRun, { id: run.id });
 	};
 
-	it('queues the TikTok, reels, blog, own-account and brand-name runs, then the name lookup and the own-account lookup (both wait for the reading), per cron city with sources', async () => {
+	it('queues the TikTok, reels, blog, own-account and brand-name runs, then the tagged profiles, the name lookup and the own-account lookup (all wait for the reading), per cron city with sources', async () => {
 		const em = harness.orm.em;
 		const berlin = cityFactory.build({ name: 'Berlin', cronEnabled: true, instagramEnabled: true });
 		// Twenty hashtags and two searches: all searched
@@ -100,20 +100,23 @@ describe('Weekly listening (pglite)', () => {
 			['Berlin', PipelineStepEnum.SCRAPE_BLOGS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Berlin', PipelineStepEnum.READ_MENTIONED_PROFILES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Berlin', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_TIKTOK_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Wien', PipelineStepEnum.READ_MENTIONED_PROFILES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Wien', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 			// No sources on, but every city has profiles to watch (its brands' own accounts) and names to search
 			['Quiet', PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT, '2026-11', PipelineRunStatusEnum.QUEUED],
+			['Quiet', PipelineStepEnum.READ_MENTIONED_PROFILES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.LOOKUP_VENUES, '2026-11', PipelineRunStatusEnum.QUEUED],
 			['Quiet', PipelineStepEnum.FIND_OWN_ACCOUNTS, '2026-11', PipelineRunStatusEnum.QUEUED],
 		]);
-		expect(sendJob).toHaveBeenCalledTimes(16);
+		expect(sendJob).toHaveBeenCalledTimes(19);
 		await em.nativeDelete(PipelineRun, {});
 	});
 

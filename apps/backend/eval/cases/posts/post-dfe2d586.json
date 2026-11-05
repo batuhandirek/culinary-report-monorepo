@@ -71,7 +71,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T14:26:07.812Z",
     "usage": {
       "inputTokens": 12453,
@@ -372,6 +372,21 @@
         "at": "2026-11-02T12:44:22.009Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: true → false (The article has no disclosure of payment, gift, invitation or ad. The 'Kooperation' is between The Alley and Riot Games, not between the blog and the venue. The advertorial tone and Riot-credited images alone don't meet the rule.)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.259Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.717Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.189Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }

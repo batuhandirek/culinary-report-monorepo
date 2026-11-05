@@ -1,0 +1,106 @@
+{"caseId":"review-0541b749","ref":0,"got":0,"metric":"parts.sentiment","detail":"the frites were frozen: negative ≠ neutral","split":"test"}
+{"caseId":"review-0541b749","ref":6,"got":6,"metric":"parts.sentiment","detail":"the pain was quickly made, nothing special: negative ≠ positive","split":"test"}
+{"caseId":"review-0541b749","ref":6,"got":6,"metric":"parts.aspect","detail":"the pain was quickly made, nothing special: food ≠ wait_for_food","split":"test"}
+{"caseId":"review-0541b749","ref":3,"got":3,"metric":"parts.foods","detail":"the meat in the sandwich was chicken only: [poulet] ≠ [viande, poulet, sandwich]","split":"test"}
+{"caseId":"review-070860ca","metric":"claims.missed","ref":0,"detail":"the reviewer is not happy","split":"test"}
+{"caseId":"review-070860ca","ref":6,"got":7,"metric":"parts.amount","detail":"the correct order arrived 2 hours late: 120 minutes ≠ 2 money","split":"test"}
+{"caseId":"review-070860ca","ref":8,"got":10,"metric":"parts.aspect","detail":"not worth the hassle: none ≠ value_for_money","split":"test"}
+{"caseId":"review-0ac47c59","metric":"claims.extra","got":5,"detail":"the line was a sales tactic","split":"test"}
+{"caseId":"review-0ac47c59","ref":1,"got":1,"metric":"parts.sentiment","detail":"came because it was the most reviewed, highly rated kebab s…: neutral ≠ positive","split":"test"}
+{"caseId":"review-0ac47c59","ref":1,"got":1,"metric":"parts.kind","detail":"came because it was the most reviewed, highly rated kebab s…: fact ≠ opinion","split":"test"}
+{"caseId":"review-0ac47c59","ref":6,"got":6,"metric":"parts.aspect","detail":"orders deliberately not taken from the person at the front …: queue ≠ attentiveness","split":"test"}
+{"caseId":"review-0ac47c59","ref":12,"got":12,"metric":"parts.sentiment","detail":"the chicken meat was covered in lots of curry sauce, tastin…: negative ≠ neutral","split":"test"}
+{"caseId":"review-0ac47c59","ref":12,"got":12,"metric":"parts.kind","detail":"the chicken meat was covered in lots of curry sauce, tastin…: opinion ≠ fact","split":"test"}
+{"caseId":"review-0ac47c59","ref":16,"got":16,"metric":"parts.sentiment","detail":"complimentary tea is offered, the only thing earning 1 point: positive ≠ negative","split":"test"}
+{"caseId":"review-0ac47c59","ref":13,"got":13,"metric":"parts.foods","detail":"the salad of lettuce, tomato and onion was wilted and soggy: [marul, domates, soğan, salata] ≠ [marul, domates, soğan]","split":"test"}
+{"caseId":"review-13f72d12","ref":2,"got":2,"metric":"parts.foods","detail":"has had better kebsa elsewhere in Berlin: [kebsa] ≠ []","split":"test"}
+{"caseId":"review-16bdd5e0","ref":2,"got":2,"metric":"parts.amount","detail":"my sauce was only on 1/3 of the kebab: —  ≠ 1 money","split":"test"}
+{"caseId":"review-37016d87","metric":"claims.missed","ref":0,"detail":"everything was incredible","split":"test"}
+{"caseId":"review-37016d87","ref":1,"got":0,"metric":"parts.kind","detail":"went for dinner at the end of a 25th wedding anniversary tr…: fact ≠ event","split":"test"}
+{"caseId":"review-37016d87","ref":4,"got":3,"metric":"parts.aspect","detail":"the food was delicious: taste ≠ food","split":"test"}
+{"caseId":"review-37016d87","ref":4,"got":3,"metric":"parts.foods","detail":"the food was delicious: [] ≠ [comida]","split":"test"}
+{"caseId":"review-3e075e7e","ref":1,"got":1,"metric":"parts.aspect","detail":"the place has a street style: atmosphere ≠ none","split":"test"}
+{"caseId":"review-3e075e7e","ref":2,"got":2,"metric":"parts.aspect","detail":"the music playing in the place is cool too: atmosphere ≠ noise","split":"test"}
+{"caseId":"review-3f2a2713","ref":0,"got":0,"metric":"parts.kind","detail":"the venue should offer a vegan burger already: opinion ≠ new_item","split":"test"}
+{"caseId":"review-4a46a87d","ref":8,"got":8,"metric":"parts.aspect","detail":"the new location isn't the same as the old one: food ≠ location","split":"test"}
+{"caseId":"review-4a46a87d","ref":9,"got":9,"metric":"parts.aspect","detail":"it has become a fast-food restaurant: menu_variety ≠ none","split":"test"}
+{"caseId":"review-52ef0f64","ref":1,"got":1,"metric":"parts.aspect","detail":"the Vöner Döner was nothing outstanding: taste ≠ none","split":"test"}
+{"caseId":"review-52ef0f64","ref":3,"got":3,"metric":"parts.sentiment","detail":"the vegan Ayran tastes like Carinthian cheese noodles (Kärn…: positive ≠ negative","split":"test"}
+{"caseId":"review-52ef0f64","ref":1,"got":1,"metric":"parts.foods","detail":"the Vöner Döner was nothing outstanding: [Vöner Döner] ≠ []","split":"test"}
+{"caseId":"review-52ef0f64","ref":3,"got":3,"metric":"parts.foods","detail":"the vegan Ayran tastes like Carinthian cheese noodles (Kärn…: [Ayran] ≠ [Ayran, Kärntner Kaßnudeln]","split":"test"}
+{"caseId":"review-5582d6b8","metric":"claims.missed","ref":9,"detail":"don't eat outside","split":"test"}
+{"caseId":"review-5582d6b8","metric":"claims.missed","ref":14,"detail":"skip the matcha latte","split":"test"}
+{"caseId":"review-5582d6b8","ref":6,"got":5,"metric":"parts.aspect","detail":"staff placed the spoons on the edge of the table: service ≠ dining_area","split":"test"}
+{"caseId":"review-5582d6b8","ref":8,"got":7,"metric":"parts.aspect","detail":"the friend barely touched the table and the spoons fell: interior ≠ dining_area","split":"test"}
+{"caseId":"review-5582d6b8","ref":15,"got":13,"metric":"parts.sentiment","detail":"sit inside: positive ≠ neutral","split":"test"}
+{"caseId":"review-5582d6b8","ref":15,"got":13,"metric":"parts.kind","detail":"sit inside: opinion ≠ fact","split":"test"}
+{"caseId":"review-5582d6b8","ref":16,"got":12,"metric":"parts.kind","detail":"the place is really great: verdict ≠ opinion","split":"test"}
+{"caseId":"review-58540992","metric":"claims.missed","ref":4,"detail":"they were told they were supposedly late","split":"test"}
+{"caseId":"review-58540992","metric":"claims.missed","ref":6,"detail":"the reviewer does not want to be told off because someone else did not show up","split":"test"}
+{"caseId":"review-6217ec70","metric":"claims.missed","ref":7,"detail":"not sure they would repeat the experience","split":"test"}
+{"caseId":"review-6217ec70","metric":"claims.missed","ref":8,"detail":"would definitely get the kebab again if passing by and the line was short","split":"test"}
+{"caseId":"review-6217ec70","ref":5,"got":5,"metric":"parts.aspect","detail":"waited in line for about an hour: queue ≠ wait_for_food","split":"test"}
+{"caseId":"review-6217ec70","ref":9,"got":7,"metric":"parts.aspect","detail":"probably wouldn't wait another hour in line for the kebab: queue ≠ wait_for_food","split":"test"}
+{"caseId":"review-6217ec70","ref":1,"got":1,"metric":"parts.foods","detail":"the kebab had plenty of meat and vegetables: [kebab, meat, vegetables] ≠ [meat, vegetables]","split":"test"}
+{"caseId":"review-6217ec70","ref":4,"got":4,"metric":"parts.foods","detail":"the kebab portion was big: [kebab] ≠ []","split":"test"}
+{"caseId":"review-6b4df664","ref":2,"got":2,"metric":"parts.sentiment","detail":"had the Königsberger Klopse vom Kalb with Roter Bete and Ka…: neutral ≠ positive","split":"test"}
+{"caseId":"review-6b4df664","ref":2,"got":2,"metric":"parts.aspect","detail":"had the Königsberger Klopse vom Kalb with Roter Bete and Ka…: menu_variety ≠ taste","split":"test"}
+{"caseId":"review-6b4df664","ref":2,"got":2,"metric":"parts.kind","detail":"had the Königsberger Klopse vom Kalb with Roter Bete and Ka…: fact ≠ opinion","split":"test"}
+{"caseId":"review-6b4df664","ref":9,"got":6,"metric":"parts.aspect","detail":"the staff could be more attentive: attentiveness ≠ friendliness","split":"test"}
+{"caseId":"review-6b4df664","ref":10,"got":7,"metric":"parts.kind","detail":"overall still a lovely visit: verdict ≠ opinion","split":"test"}
+{"caseId":"review-6b4df664","ref":4,"got":3,"metric":"parts.foods","detail":"the Königsberger Klopse were nicely presented: [Königsberger Klopse] ≠ [Königsberger Klopse, Kalb, Roter Bete, Kartoffelpüree]","split":"test"}
+{"caseId":"review-6e97260b","metric":"claims.missed","ref":1,"detail":"never seen such terrible attitude towards a customer","split":"test"}
+{"caseId":"review-6e97260b","ref":0,"got":0,"metric":"parts.aspect","detail":"the coca-cola sent in the delivery was warm: takeaway_handling ≠ temperature","split":"test"}
+{"caseId":"review-703f425d","ref":2,"got":2,"metric":"parts.aspect","detail":"the burger has never arrived bad: consistency ≠ taste","split":"test"}
+{"caseId":"review-70467fba","ref":2,"got":2,"metric":"parts.foods","detail":"the taste of the kebab was good: [kebab] ≠ []","split":"test"}
+{"caseId":"review-71868223","metric":"claims.extra","got":4,"detail":"had to wait","split":"test"}
+{"caseId":"review-71868223","ref":7,"got":8,"metric":"parts.foods","detail":"a nice döner place whose taste still lingers in the mouth: [] ≠ [döner]","split":"test"}
+{"caseId":"review-7593dfff","metric":"claims.missed","ref":1,"detail":"the place is worth it if you have time to wait in line","split":"test"}
+{"caseId":"review-7593dfff","metric":"claims.missed","ref":5,"detail":"the overall vibe won't appeal to everyone","split":"test"}
+{"caseId":"review-7593dfff","ref":0,"got":0,"metric":"parts.amount","detail":"with about 12 people in line, the wait was about an hour: 60 minutes ≠ 1 minutes","split":"test"}
+{"caseId":"review-7593dfff","ref":4,"got":4,"metric":"parts.sentiment","detail":"the bread roll was average: negative ≠ neutral","split":"test"}
+{"caseId":"review-7593dfff","ref":8,"got":7,"metric":"parts.kind","detail":"once the older gentleman showed up, everything went faster: opinion ≠ change","split":"test"}
+{"caseId":"review-7593dfff","ref":9,"got":8,"metric":"parts.aspect","detail":"there were few locals in the line, mostly tourists: crowding ≠ queue","split":"test"}
+{"caseId":"review-7593dfff","metric":"change.false","ref":8,"got":7,"detail":"everything went faster once he showed up","split":"test"}
+{"caseId":"review-75c84f72","metric":"claims.missed","ref":0,"detail":"Markthalle Neun is a nice place","split":"test"}
+{"caseId":"review-75c84f72","ref":1,"got":0,"metric":"parts.sentiment","detail":"the reviewers were there at 09.30: neutral ≠ negative","split":"test"}
+{"caseId":"review-75c84f72","ref":1,"got":0,"metric":"parts.aspect","detail":"the reviewers were there at 09.30: none ≠ crowding","split":"test"}
+{"caseId":"review-75c84f72","ref":1,"got":0,"metric":"parts.kind","detail":"the reviewers were there at 09.30: fact ≠ opinion","split":"test"}
+{"caseId":"review-75c84f72","ref":3,"got":1,"metric":"parts.amount","detail":"the reviewers are used to marketplaces opening at 07.00 at …: —  ≠ 7 money","split":"test"}
+{"caseId":"review-75c84f72","ref":5,"got":3,"metric":"parts.foods","detail":"the reviewers had breakfast at a cafe next to Markthalle Ne…: [] ≠ [breakfast]","split":"test"}
+{"caseId":"review-78c08c78","ref":2,"got":2,"metric":"parts.aspect","detail":"the potato salad is definitely a highlight and worth trying: taste ≠ food","split":"test"}
+{"caseId":"review-866767df","ref":1,"got":0,"metric":"parts.aspect","detail":"the meal was peaceful: noise ≠ taste","split":"test"}
+{"caseId":"review-9a341bb6","ref":5,"got":6,"metric":"parts.foods","detail":"the food style was awkwardly between fusion and traditional: [] ≠ [fusion, tradition]","split":"test"}
+{"caseId":"review-a2c14088","ref":1,"got":1,"metric":"parts.aspect","detail":"sometimes the food is delicious, sometimes not: consistency ≠ taste","split":"test"}
+{"caseId":"review-a2c14088","ref":4,"got":5,"metric":"parts.amount","detail":"once ordered a 0.4L water: —  ≠ 0.4 money","split":"test"}
+{"caseId":"review-b31c1e48","ref":2,"got":2,"metric":"parts.aspect","detail":"except for one staff member, but everyone has a bad day: friendliness ≠ service","split":"test"}
+{"caseId":"review-b31c1e48","ref":5,"got":5,"metric":"parts.kind","detail":"the robot cat sang for the birthday: fact ≠ event","split":"test"}
+{"caseId":"review-b31c1e48","ref":10,"got":10,"metric":"parts.aspect","detail":"the robot cat occasionally stopped with the food in other s…: service ≠ food_hygiene","split":"test"}
+{"caseId":"review-b31c1e48","ref":11,"got":11,"metric":"parts.aspect","detail":"guests had to watch when the robot cat was at their area so…: service ≠ food_hygiene","split":"test"}
+{"caseId":"review-bf2322b7","metric":"claims.missed","ref":7,"detail":"keep up the great work","split":"test"}
+{"caseId":"review-bf2322b7","ref":1,"got":1,"metric":"parts.aspect","detail":"we were treated to the meal by the owner: on_the_house ≠ ownership","split":"test"}
+{"caseId":"review-bf2322b7","ref":3,"got":3,"metric":"parts.sentiment","detail":"there were even different marinades for the chicken: positive ≠ neutral","split":"test"}
+{"caseId":"review-bf2322b7","ref":5,"got":7,"metric":"parts.aspect","detail":"the Salat was fresh: freshness ≠ taste","split":"test"}
+{"caseId":"review-c513f76e","ref":0,"got":0,"metric":"parts.aspect","detail":"the ambiance is great because of the revolving tower: atmosphere ≠ interior","split":"test"}
+{"caseId":"review-c83e0a88","ref":0,"got":0,"metric":"parts.amount","detail":"waited in line for 1.5 hours: 90 minutes ≠ 1.5 minutes","split":"test"}
+{"caseId":"review-dcd4db39","metric":"claims.missed","ref":3,"detail":"the queue nonetheless moved relatively quickly","split":"test"}
+{"caseId":"review-dcd4db39","metric":"claims.missed","ref":10,"detail":"keep up the good work, dear team","split":"test"}
+{"caseId":"review-e12f5f74","ref":4,"got":4,"metric":"parts.aspect","detail":"the Tavuk döner was good: taste ≠ food","split":"test"}
+{"caseId":"review-e12f5f74","ref":6,"got":5,"metric":"parts.aspect","detail":"the salad (salatası) was plentiful: portion_size ≠ freshness","split":"test"}
+{"caseId":"review-e8770468","ref":0,"got":0,"metric":"parts.aspect","detail":"the Burgermeister in Zehlendorf is good: none ≠ food","split":"test"}
+{"caseId":"review-e8770468","ref":1,"got":0,"metric":"parts.aspect","detail":"Burgermeister has now finally opened in Zehlendorf: none ≠ food","split":"test"}
+{"caseId":"review-ec04d472","ref":3,"got":2,"metric":"parts.kind","detail":"never order the tabla de entrantes: opinion ≠ verdict","split":"test"}
+{"caseId":"review-f1e62446","ref":0,"got":0,"metric":"parts.aspect","detail":"the reviewer expected something better from the place: none ≠ food","split":"test"}
+{"caseId":"review-f1e62446","ref":2,"got":2,"metric":"parts.aspect","detail":"the reviewer doesn't see the \"wow\" factor of the place: none ≠ food","split":"test"}
+{"caseId":"review-fa5b28b1","ref":0,"got":0,"metric":"parts.aspect","detail":"waited a full 74 minutes to get the döner: queue ≠ wait_for_food","split":"test"}
+{"caseId":"review-fa5b28b1","ref":1,"got":1,"metric":"parts.sentiment","detail":"the döner was very different: positive ≠ neutral","split":"test"}
+{"caseId":"review-fa5b28b1","ref":4,"got":4,"metric":"parts.aspect","detail":"the understaffing is a big failing of the shop owner: service ≠ ownership","split":"test"}
+{"caseId":"review-fa5b28b1","ref":0,"got":0,"metric":"parts.foods","detail":"waited a full 74 minutes to get the döner: [döner] ≠ [dönerimi]","split":"test"}
+{"caseId":"review-fa5b28b1","ref":0,"got":0,"metric":"parts.foods","detail":"waited a full 74 minutes to get the döner: [döner] ≠ [dönerimi]","split":"test"}
+{"caseId":"review-fb1415dc","ref":2,"got":2,"metric":"parts.sentiment","detail":"many burger combinations are possible: positive ≠ neutral","split":"test"}
+{"caseId":"review-fb1415dc","ref":6,"got":6,"metric":"parts.sentiment","detail":"staff should spend less time on their phones: negative ≠ neutral","split":"test"}
+{"caseId":"review-fb1415dc","ref":6,"got":6,"metric":"parts.aspect","detail":"staff should spend less time on their phones: attentiveness ≠ none","split":"test"}
+{"caseId":"review-fb1415dc","ref":7,"got":7,"metric":"parts.sentiment","detail":"the cleanliness and service issues are not that bad: mixed ≠ positive","split":"test"}
+{"caseId":"review-fb1415dc","ref":8,"got":8,"metric":"parts.aspect","detail":"the service issues are only individual staff members: service ≠ none","split":"test"}
+{"caseId":"review-fd35af1d","ref":0,"got":0,"metric":"parts.sentiment","detail":"it is sad to see the place empty: negative ≠ neutral","split":"test"}
+{"caseId":"review-fd35af1d","ref":0,"got":0,"metric":"parts.kind","detail":"it is sad to see the place empty: opinion ≠ fact","split":"test"}

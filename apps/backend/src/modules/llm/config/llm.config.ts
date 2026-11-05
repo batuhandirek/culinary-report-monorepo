@@ -81,6 +81,37 @@ export class LLMConfig {
 	@IsOptional()
 	public ANTHROPIC_API_KEY?: string;
 
+	/**
+	 * OpenRouter, for its free models (`OPENROUTER_FREE_MODEL`, `<org>/<model>:free`: $0, 20 requests
+	 * a minute, 50 a day, 1,000 once $10 of credit was ever bought), which the roster falls to once
+	 * OpenAI's allowance is out; unset leaves them out
+	 */
+	@IsString()
+	@IsOptional()
+	public OPENROUTER_AI_API_KEY?: string;
+
+	/** OpenRouter's cap on free-model requests a minute: the roster spaces its calls to stay under it */
+	@IsNumber()
+	@Min(1)
+	@IsOptional()
+	@Transform(v => Number(v.value))
+	public OPENROUTER_REQUESTS_PER_MINUTE: number = 20;
+
+	/**
+	 * TypeSafe's decision models (Jev), which the classifiers (`*.classifier.ts`) run on: paid per
+	 * call (the claim-labels classifier in production, every other one only inside `llmPaid`);
+	 * unset, no classifier can run and the claims wait unlabelled
+	 */
+	@IsString()
+	@IsOptional()
+	public TYPESAFE_AI_API_KEY?: string;
+
+	/** Leaves TypeSafe's decision models out: no classifier runs (the pipeline waits, as with no LLM) */
+	@IsBoolean()
+	@IsOptional()
+	@Transform(v => v.value === true || v.value === 'true')
+	public LLM_DISABLE_TYPESAFE: boolean = false;
+
 	/** Leaves every OpenAI model out of the roster (agents only: embeddings stay on OpenAI) */
 	@IsBoolean()
 	@IsOptional()
@@ -94,9 +125,28 @@ export class LLMConfig {
 	public LLM_DISABLE_ANTHROPIC: boolean = false;
 
 	/**
+	 * Only the reading runs: the agents and classifiers marked `ingestion` (a post, a review, a
+	 * comment, a press page, a claim's labels, a wording's topics, a place's match) and the backlogs
+	 * marked so. Every other agent call fails at once as with no model left (reports keep their data
+	 * without the written part, the front page its fallback lines, the analyst says so), and the
+	 * other backlogs wait in their queue. Work started by hand inside `llmPaid` is not paused.
+	 */
+	@IsBoolean()
+	@IsOptional()
+	@Transform(v => v.value === true || v.value === 'true')
+	public LLM_INGESTION_ONLY: boolean = false;
+
+	/** Leaves OpenRouter's free models out of the roster */
+	@IsBoolean()
+	@IsOptional()
+	@Transform(v => v.value === true || v.value === 'true')
+	public LLM_DISABLE_OPENROUTER: boolean = false;
+
+	/**
 	 * Agents put on another tier or model than their own `getModel()`, by agent id
-	 * (`term-topic:full`). Free models only, as everywhere outside `llmPaid`: `high` runs on
-	 * gpt-5.4, and a Claude model alone serves nothing.
+	 * (`term-topic:full`, `post-claims:openrouter/nvidia/nemotron-3.5-super-vl:free`). Free models
+	 * only, as everywhere outside `llmPaid`: `high` runs on gpt-5.4, and a Claude model alone serves
+	 * nothing.
 	 */
 	@IsOptional()
 	@Transform(v => parseAgentModels(v.value))

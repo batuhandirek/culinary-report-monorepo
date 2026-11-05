@@ -3,11 +3,15 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { processShutdown } from 'src/modules/apify/util/apify-run-context.js';
+import { llmConfig } from 'src/modules/llm/config/llm.config.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { isFatalProviderError } from 'src/shared/util/pool.js';
 
 import { backlogConfig } from '../config/backlog.config.js';
-import { LLM_BACKLOG_MAX_MINUTES, LLM_BACKLOG_SINGLETON_KEY } from '../constants/backlog.constant.js';
+import {
+	LLM_BACKLOG_MAX_MINUTES,
+	LLM_BACKLOG_SINGLETON_KEY,
+} from '../constants/backlog.constant.js';
 import { BacklogRun, BacklogStopReason } from '../entities/backlog-run.entity.js';
 import type { LlmBacklog } from '../interfaces/llm-backlog.interface.js';
 import { LlmBacklogJob, LlmBacklogJobPayload } from '../jobs/llm-backlog.job.js';
@@ -69,8 +73,15 @@ export class LlmBacklogService {
 	 * after every batch so the Data page sees progress.
 	 */
 	async drain(
-		opts: { budget?: number; maxMinutes?: number; now?: () => Date } = {},
+		opts: {
+			budget?: number;
+			maxMinutes?: number;
+			now?: () => Date;
+			/** Only the reading backlogs drain (`LLM_INGESTION_ONLY`); the rest wait */
+			ingestionOnly?: boolean;
+		} = {},
 	): Promise<BacklogRun[]> {
+		const ingestionOnly = opts.ingestionOnly ?? llmConfig.LLM_INGESTION_ONLY;
 		const now = opts.now ?? (() => new Date());
 		const startedAt = now().getTime();
 		const deadline = startedAt + (opts.maxMinutes ?? LLM_BACKLOG_MAX_MINUTES) * 60_000;
@@ -85,8 +96,14 @@ export class LlmBacklogService {
 			runs.push(run);
 			run.error = null;
 			let reason = dayStop;
+			if (!reason && ingestionOnly && !backlog.ingestion) {
+				reason = 'waiting';
+				run.error = 'Paused: only the reading runs (LLM_INGESTION_ONLY)';
+			}
 			if (!reason && backlog.waitsFor) {
-				const waits = await backlog.waitsFor().catch((e: Error) => `Checking whether it may run failed: ${e.message}`);
+				const waits = await backlog
+					.waitsFor()
+					.catch((e: Error) => `Checking whether it may run failed: ${e.message}`);
 				if (waits) {
 					reason = 'waiting';
 					run.error = waits.slice(0, 1000);
@@ -111,7 +128,9 @@ export class LlmBacklogService {
 						reason = 'error';
 						run.error = (e as Error).message?.slice(0, 1000) ?? String(e);
 					}
-					this.logger.warn(`LLM backlog ${backlog.key} stopped (${reason}): ${(e as Error).message}`);
+					this.logger.warn(
+						`LLM backlog ${backlog.key} stopped (${reason}): ${(e as Error).message}`,
+					);
 					break;
 				}
 				run.batches++;
@@ -140,12 +159,20 @@ export class LlmBacklogService {
 	}
 
 	/** Each backlog with what is left, the last seven days and its newest run, in run order */
-	async status(now = new Date()): Promise<{ dailyTokens: number; spentToday: number; backlogs: LlmBacklogStatus[] }> {
+	async status(
+		now = new Date(),
+	): Promise<{ dailyTokens: number; spentToday: number; backlogs: LlmBacklogStatus[] }> {
 		const since = utcDay(new Date(now.getTime() - 6 * 24 * 60 * 60_000));
-		const rows = await this.em.find(BacklogRun, { day: { $gte: since } }, { orderBy: { day: 'desc' } });
-		const moved: { key: string; at: Date }[] = await this.em.getConnection().execute(
-			`select key, max(finished_at) as at from backlog_runs where done > 0 group by key`,
+		const rows = await this.em.find(
+			BacklogRun,
+			{ day: { $gte: since } },
+			{ orderBy: { day: 'desc' } },
 		);
+		const moved: { key: string; at: Date }[] = await this.em
+			.getConnection()
+			.execute(
+				`select key, max(finished_at) as at from backlog_runs where done > 0 group by key`,
+			);
 		const backlogs: LlmBacklogStatus[] = [];
 		for (const backlog of this.registry.list()) {
 			const own = rows.filter(row => row.key === backlog.key);
@@ -179,7 +206,9 @@ export class LlmBacklogService {
 	private async tokensOn(day: string): Promise<number> {
 		const [row]: { n: number }[] = await this.em
 			.getConnection()
-			.execute(`select coalesce(sum(tokens), 0)::int as n from backlog_runs where day = ?`, [day]);
+			.execute(`select coalesce(sum(tokens), 0)::int as n from backlog_runs where day = ?`, [
+				day,
+			]);
 		return row.n;
 	}
 

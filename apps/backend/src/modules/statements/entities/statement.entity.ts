@@ -8,7 +8,6 @@ import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { PostComment } from 'src/modules/social/entities/post-comment.entity.js';
 import { SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
-import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { WebMention } from 'src/modules/venues/entities/web-mention.entity.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
 
@@ -19,7 +18,7 @@ import type { Sentiment } from '../constants/sentiment.constant.js';
 import { StatementPart } from './statement-part.entity.js';
 
 /** Where a statement was said. A new source is a new kind and FK column, never a new shape. */
-export type StatementSourceKind = 'review' | 'post' | 'comment' | 'press' | 'google_tag';
+export type StatementSourceKind = 'review' | 'post' | 'comment' | 'press';
 
 /** Who a statement is about: the source's place (joined through the source), the statement's city, or nothing */
 export type StatementSubject = 'place' | 'city' | 'none';
@@ -33,7 +32,7 @@ export type StatementUnit = 'minutes' | 'money';
  * (`kind` change). Its parts (`StatementPart`) say what it is about: the aspect agent B chose
  * and the food wordings as the source spelled them, whose topics come through the terms. The
  * **subject is never copied**: a `place` is the review's venue, the mention's brand and venue, the
- * press article's venue or the Google tag's venue, so a re-match or a merge moves every statement
+ * press article's venue, so a re-match or a merge moves every statement
  * with no row rewritten. `StatementService` is the one writer of statements,
  * `StatementPartsService` of their parts.
  */
@@ -41,16 +40,15 @@ export type StatementUnit = 'minutes' | 'money';
 @Check({
 	name: 'statements_one_source_check',
 	expression:
-		'(review_id is not null)::int + (post_id is not null)::int + (comment_id is not null)::int + (web_mention_id is not null)::int + (venue_id is not null)::int = 1',
+		'(review_id is not null)::int + (post_id is not null)::int + (comment_id is not null)::int + (web_mention_id is not null)::int = 1',
 })
 @Index({ properties: ['city', 'month'] })
-@Index({ properties: ['venue', 'sourceKind'] })
 @Index({
 	name: 'statements_embedding_hnsw_index',
 	expression:
 		'create index "statements_embedding_hnsw_index" on "statements" using hnsw ("embedding" halfvec_cosine_ops)',
 })
-export class Statement extends MikroOrmSimpleEntityAbstractClass<'count' | 'parts'> {
+export class Statement extends MikroOrmSimpleEntityAbstractClass<'parts'> {
 	@Property({ type: 'text' })
 	sourceKind: StatementSourceKind;
 
@@ -72,10 +70,6 @@ export class Statement extends MikroOrmSimpleEntityAbstractClass<'count' | 'part
 	@ManyToOne({ entity: () => WebMention, nullable: true, deleteRule: 'cascade', index: true })
 	webMention?: Rel<WebMention> | null;
 
-	/** A Google "people often mention" tag's venue (phase `google-tags-as-statements`) */
-	@ManyToOne({ entity: () => Venue, nullable: true, deleteRule: 'cascade' })
-	venue?: Rel<Venue> | null;
-
 	@Property({ type: 'text' })
 	subject: StatementSubject;
 
@@ -83,11 +77,11 @@ export class Statement extends MikroOrmSimpleEntityAbstractClass<'count' | 'part
 	@ManyToOne({ entity: () => City, deleteRule: 'cascade' })
 	city: Rel<City>;
 
-	/** YYYY-MM (UTC) of `saidAt`; null for an all-time source (a Google tag) */
-	@Property({ type: 'text', nullable: true })
-	month?: string | null;
+	/** YYYY-MM (UTC) of `saidAt` */
+	@Property({ type: 'text' })
+	month: string;
 
-	/** The review's `publishedAt`, the post's `postedAt`, the article's date, the details scrape's */
+	/** The review's `publishedAt`, the post's `postedAt`, the article's date */
 	@Property({ type: 'datetime' })
 	saidAt: Date;
 
@@ -103,7 +97,7 @@ export class Statement extends MikroOrmSimpleEntityAbstractClass<'count' | 'part
 	@Property({ type: 'text', nullable: true })
 	quote?: string | null;
 
-	/** null = not judged (a Google tag) */
+	/** null = not labelled yet */
 	@Property({ type: 'text', nullable: true })
 	sentiment?: Sentiment | null;
 
@@ -122,13 +116,16 @@ export class Statement extends MikroOrmSimpleEntityAbstractClass<'count' | 'part
 	@Property({ type: 'text', nullable: true })
 	unit?: StatementUnit | null;
 
-	/** Google's count for a tag; 1 otherwise */
-	@Property({ type: 'int', default: 1 })
-	count: number = 1;
-
-	/** When agent B read it; null = the `statement-parts` backlog reads it */
+	/** When its labels were read (agent B, or the claim-labels classifier); null = the `statement-parts` backlog reads it */
 	@Property({ type: 'datetime', nullable: true })
 	partsAt?: Date | null;
+
+	/**
+	 * The food wordings agent A copied out for a claim it just wrote (`StatementService`), held in
+	 * memory until `StatementPartsService.read` stores them as food parts: never a column
+	 */
+	@Property({ type: 'json', persist: false, hidden: true })
+	foodsFromA?: string[];
 
 	/**
 	 * The claim's text as a vector (`text-embedding-3-large` at 1024 dimensions), for search by

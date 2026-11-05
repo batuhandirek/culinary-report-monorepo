@@ -96,7 +96,7 @@
   },
   "reference": {
     "model": "anthropic/claude-opus-5-5",
-    "specHash": "0bbeb3579796",
+    "specHash": "841b20c813da",
     "at": "2026-11-01T11:46:30.947Z",
     "usage": {
       "inputTokens": 5988,
@@ -194,6 +194,21 @@
         "at": "2026-11-02T12:43:55.477Z",
         "by": "promotional-relabel",
         "note": "promotional by the rule of 2026-11-02: true → false (A women's networking platform promotes its own KAYA brunch event; no venue paid, gifted or invited a creator.)"
+      },
+      {
+        "at": "2026-11-05T13:58:31.254Z",
+        "by": "restamp",
+        "note": "Agent A names each claim's foods (CLAIM_FOODS_RULE, saying what agent B's foods rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T15:59:52.711Z",
+        "by": "restamp",
+        "note": "Agent A gives each claim's amount and unit (CLAIM_AMOUNT_RULE, saying what agent B's amount rule says): no right answer moved"
+      },
+      {
+        "at": "2026-11-05T16:41:50.182Z",
+        "by": "restamp",
+        "note": "The labels' rules (sentiment, aspect, kind) are the claim-labels classifier's questions (claimLabelsRules) instead of agent B's text, B gone: no right answer moved"
       }
     ]
   }
