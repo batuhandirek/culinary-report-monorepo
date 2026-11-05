@@ -10,6 +10,7 @@ import {
 	processShutdown,
 	ShuttingDownError,
 } from 'src/modules/apify/util/apify-run-context.js';
+import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { stepBudgetUsd } from 'src/modules/cities/util/city.js';
@@ -146,6 +147,7 @@ export class PipelineService {
 		private readonly accountWatchService: AccountWatchService,
 		private readonly postCountsService: PostCountsService,
 		private readonly ingestionService: IngestionService,
+		private readonly apifyService: ApifyService,
 	) {}
 
 	/**
@@ -731,14 +733,17 @@ export class PipelineService {
 					ids,
 					new Date(new Date(`${since}T00:00:00Z`).getTime() + 86_400_000),
 				);
+				// A resumed run plans again: what its earlier attempts spent is off the budget
+				const spentBefore = (await this.apifyService.stepSpentUsd()) ?? 0;
 				return {
 					talked: ids.length,
 					withHistory: withHistory.size,
 					since,
+					spentBefore: Math.round(spentBefore * 100) / 100,
 					...(await this.reviewService.backfill(
 						ids.filter(id => !withHistory.has(id)),
 						since,
-						budgetUsd,
+						Math.max(0, budgetUsd - spentBefore),
 					)),
 				};
 			}

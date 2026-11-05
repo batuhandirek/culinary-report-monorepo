@@ -17,10 +17,8 @@ import { Review } from 'src/modules/venues/entities/review.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
-import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ClaimGroupTitleAgent } from '../agents/claim-group-title.agent.js';
 
 import { AdminExploreController } from '../controllers/admin.explore.controller.js';
 import type { AdminExploreInputDto } from '../dto/admin-explore.dto.js';
@@ -49,7 +47,6 @@ const vec = (...lead: number[]) => `[${[...lead, ...Array(1024 - lead.length).fi
  * Praise and complaints tab for the same selection.
  */
 describe('StatementInsightService (pglite)', () => {
-	const titleAgent = mockAgent({ title: 'Long wait for the food.' });
 	let harness: PgliteTestingModule;
 	let controller: AdminExploreController;
 	let city: City;
@@ -71,7 +68,6 @@ describe('StatementInsightService (pglite)', () => {
 				TopicService,
 				ThemeInsightService,
 				VenueTopicService,
-				{ provide: ClaimGroupTitleAgent, useValue: titleAgent },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -473,13 +469,6 @@ describe('StatementInsightService (pglite)', () => {
 		expect(res.groups).toHaveLength(1);
 		expect(res.groups[0]).toMatchObject({ claims: 3, sources: 3, complaints: 3, praise: 0 });
 		expect([ids.r1, ids.p1, ids.p4]).toContain(res.groups[0].samples[0].id);
-		// Titled once, the full stop dropped; the same group again is served from memory
-		expect(res.groups[0].title).toBe('Long wait for the food');
-		const asked = JSON.parse(titleAgent.generate.mock.calls[0][0] as string) as { claims: string[] };
-		expect(asked.claims).toHaveLength(3);
-		const again = await controller.getExploreGroups(view({ node: 'wait' }));
-		expect(again.groups[0].title).toBe('Long wait for the food');
-		expect(titleAgent.generate).toHaveBeenCalledTimes(1);
 	});
 
 	it('finds wordings by a part of their name', async () => {

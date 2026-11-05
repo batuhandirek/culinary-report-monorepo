@@ -65,8 +65,8 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	cacheConversation?: boolean;
 	/**
 	 * May move to its tier's Claude model when the free one is out, outside `llmPaid` too: only for
-	 * small agents the user allowed by name (2026-11-03: `aspect-suggestion`, `claim-group-title`,
-	 * a few dozen short calls when an admin opens a page or a run names its groups; `analyst`, whose
+	 * small agents the user allowed by name (2026-11-03: `aspect-suggestion`,
+	 * a few dozen short calls when a run names its groups; `analyst`, whose
 	 * choice puts Claude first: each answer is a question an admin asked), never a bulk one.
 	 */
 	paidFallback?: boolean;

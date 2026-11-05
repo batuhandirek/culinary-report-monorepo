@@ -265,6 +265,25 @@ export class ApifyService {
 	}
 
 	/**
+	 * What the current pipeline step's Apify runs (`apifyRunContext`) have cost so far, over every
+	 * attempt of it: a step a restart resumed starts its plan again, and a budget that counted only
+	 * its own attempt would pay a second budget (the review backfill, 2026-11-05). 0 outside a step.
+	 */
+	async stepSpentUsd(): Promise<number> {
+		const context = apifyRunContext.getStore();
+		if (!context) return 0;
+		const runs = await this.apifyRunRepository
+			.getEntityManager()
+			.fork()
+			.find(
+				ApifyRun,
+				{ pipelineRun: context.pipelineRunId, stepKey: context.stepKey },
+				{ fields: ['costUsd'] },
+			);
+		return runs.reduce((sum, run) => sum + (run.costUsd ?? 0), 0);
+	}
+
+	/**
 	 * Reads a finished run's cost from Apify again (the `settle-apify-run-cost` job queues it a
 	 * few minutes after the run). Pay-per-event charges are in `usageTotalUsd`.
 	 */

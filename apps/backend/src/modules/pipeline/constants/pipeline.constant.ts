@@ -41,8 +41,8 @@ export enum PipelineStepEnum {
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	// A one-off: the Google reviews since `params.since` of every open venue posts named in the
-	// last `params.talkedDays` that has none stored from then (queued once at boot by
-	// `PipelineBootService`, `ONE_OFF_RUNS`)
+	// last `params.talkedDays` that has none stored from then (started by hand, or an `ONE_OFF_RUNS`
+	// entry)
 	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
 	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	// Google Maps detail pages (hours, amenities, popular times) of report venues and competitors
@@ -218,7 +218,7 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// TripAdvisor, then of the $10.80 left the month takes 60 % ($6.48) and the backfill of
 	// venues new to the set 40 % ($4.32: ~7,200 reviews, ~22 venues at seven months of ~47)
 	[PipelineStepEnum.SCRAPE_REVIEWS]: 12,
-	// The one-off's own budget is in `ONE_OFF_RUNS`; this is what a run started by hand gets
+	// What a run started by hand gets, unless its `params.budgetUsd` says otherwise
 	[PipelineStepEnum.BACKFILL_REVIEWS]: 90,
 	[PipelineStepEnum.REFRESH_VENUE_DETAILS]: 2,
 	// Instagram profiles at ~$0.0026 each (twelve latest posts included), TikTok's latest ten
@@ -241,9 +241,10 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// A hundred comments under each of ~100 posts at $0.00125 a comment
 	[PipelineStepEnum.SCRAPE_COMMENTS]: 13,
 	[PipelineStepEnum.SCRAPE_PRESS]: 3,
-	// Up to three searches of twenty places per report branch, ~$0.06 a search (Berlin 2026-09:
-	// 42 searches for 20 branches, $2.42); every branch of a chain counts, about a third more
-	[PipelineStepEnum.TRACK_SEARCH_RANKS]: 4,
+	// Up to three searches of twenty places per report branch, one run each at ~$0.084 (twenty
+	// places at $0.0042); Berlin's October 2026 had ~102 queries, ~$8.60; every branch of a chain
+	// counts, about a third more
+	[PipelineStepEnum.TRACK_SEARCH_RANKS]: 10,
 	// A snapshot: up to ten places a search at ~$0.004, 47 dishes × 12 districts in Berlin is
 	// 564 searches, ~$24 at most; ~$15 in practice, since many searches find fewer than ten
 	[PipelineStepEnum.TRACK_DISH_SEARCHES]: 25,
@@ -294,19 +295,30 @@ export const REVIEW_BACKFILL_MONTHS = 6;
  */
 export const REVIEW_BACKFILL_BUDGET_SHARE = 0.4;
 
+export interface OneOffRun {
+	step: PipelineStepEnum;
+	key: string;
+	params: PipelineRunParams;
+	/** The run's month, `YYYY-MM`; the boot's month when absent */
+	month?: string;
+}
+
 /**
  * Runs queued once, at the first boot of a deploy that carries them (`PipelineBootService`), one
  * per city the monthly cron covers: never again once a run of the step with the same `key`
- * exists for the city, whatever became of it (a failed one is rerun from the Data page).
+ * exists for the city, whatever became of it (a failed one is rerun from the Data page). An entry
+ * goes once production has queued it: the key stops it running again anyway.
  */
-export const ONE_OFF_RUNS: { step: PipelineStepEnum; key: string; params: PipelineRunParams }[] = [
+export const ONE_OFF_RUNS: OneOffRun[] = [
 	{
-		// The user's call, 2026-11-04: six months of Google reviews of every venue posts named in
-		// the last 90 days (Berlin: ~1,960 venues, ~130,000 reviews at $0.0006, ~$80), for what
-		// changed in the city and to give aspect discovery more claims. The rest of the city's
-		// ~7,500 venues (~$150) is a later slice
-		step: PipelineStepEnum.BACKFILL_REVIEWS,
-		key: 'reviews-talked-2026-11',
-		params: { since: '2026-05-01', talkedDays: 90, budgetUsd: 90 },
+		// The user's call, 2026-11-05: October's ranks came from one shared Places run, which
+		// left out of each search the places an earlier one found
+		// (`Migration20261105100000_drop_shared_run_search_ranks` deleted them); searched again a
+		// run per query (~102 queries at twenty places, ~$8.60, the step's default). The dish
+		// searches need no one-off: with their rows gone the daily `DishSearchCron` finds the city due
+		step: PipelineStepEnum.TRACK_SEARCH_RANKS,
+		key: 'search-ranks-one-run-each',
+		month: '2026-10',
+		params: {},
 	},
 ];

@@ -101,7 +101,7 @@ describe('PipelineService: every branch of a report brand (pglite)', () => {
 		await run(PipelineStepEnum.TRACK_SEARCH_RANKS);
 		expect(names(track.mock.calls[0][2])).toEqual(OPEN);
 		// The default budget makes room for every branch
-		expect(track.mock.calls[0][3]).toBe(4);
+		expect(track.mock.calls[0][3]).toBe(10);
 
 		await run(PipelineStepEnum.SAMPLE_BUSYNESS);
 		expect(names(sample.mock.calls[0][0])).toEqual([...OPEN, 'Rival'].sort());

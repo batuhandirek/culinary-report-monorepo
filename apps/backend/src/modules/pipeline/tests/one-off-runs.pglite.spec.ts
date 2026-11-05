@@ -16,7 +16,7 @@ import { VenueService } from 'src/modules/venues/services/venue.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ONE_OFF_RUNS, PipelineStepEnum } from '../constants/pipeline.constant.js';
+import { type OneOffRun, PipelineStepEnum } from '../constants/pipeline.constant.js';
 import { CreatorWatchCron } from '../crons/creator-watch.cron.js';
 import { PipelineRun, PipelineRunStatusEnum } from '../entities/pipeline-run.entity.js';
 import { PipelineService } from '../services/pipeline.service.js';
@@ -25,6 +25,12 @@ import { PipelineBootService } from '../services/pipeline-boot.service.js';
 import { caughtUpIngestion } from './factories/ingestion.mock.js';
 
 const DAY = 86_400_000;
+
+const BACKFILL: OneOffRun = {
+	step: PipelineStepEnum.BACKFILL_REVIEWS,
+	key: 'reviews-test',
+	params: { since: '2026-05-01', talkedDays: 90, budgetUsd: 90 },
+};
 
 interface ReviewsInput {
 	placeIds: string[];
@@ -37,6 +43,8 @@ describe('One-off runs, the review backfill and the creator cron (pglite)', () =
 	const sendJob = jest.fn(async () => 'job-id');
 	// The Google reviews each place has; the actor returns those from the start date on
 	const onGoogle = new Map<string, { placeId: string; reviewId: string; publishedAtDate: string; stars: number }[]>();
+	// What the step's earlier attempts spent (none unless a test says so)
+	const stepSpentUsd = jest.fn(async () => 0);
 	const runActor = jest.fn(async (_actor: string, input: ReviewsInput, _opts: { maxCostUsd: number }) =>
 		input.placeIds.flatMap(id => (onGoogle.get(id) ?? []).filter(i => i.publishedAtDate.slice(0, 10) >= input.reviewsStartDate)),
 	);
@@ -54,7 +62,7 @@ describe('One-off runs, the review backfill and the creator cron (pglite)', () =
 				RatingSnapshotService,
 				VenueService,
 				{ provide: PgBossService, useValue: { sendJob } },
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: { runActor, stepSpentUsd } },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -71,12 +79,31 @@ describe('One-off runs, the review backfill and the creator cron (pglite)', () =
 	it('queues each one-off once per cron city, never again on a later boot', async () => {
 		const em = harness.orm.em;
 		const boot = harness.moduleRef.get(PipelineBootService);
-		expect(await boot.queueOneOffs()).toBe(ONE_OFF_RUNS.length);
-		expect(await boot.queueOneOffs()).toBe(0);
+		expect(await boot.queueOneOffs(new Date(), [BACKFILL])).toBe(1);
+		expect(await boot.queueOneOffs(new Date(), [BACKFILL])).toBe(0);
 		em.clear();
 		const runs = await em.find(PipelineRun, { step: PipelineStepEnum.BACKFILL_REVIEWS }, { populate: ['city'] });
 		expect(runs.map(r => [r.city.name, r.status, r.params])).toEqual([
-			['Berlin', PipelineRunStatusEnum.QUEUED, { ...ONE_OFF_RUNS[0].params, key: ONE_OFF_RUNS[0].key }],
+			['Berlin', PipelineRunStatusEnum.QUEUED, { ...BACKFILL.params, key: BACKFILL.key }],
+		]);
+		await em.nativeDelete(PipelineRun, {});
+	});
+
+	it('queues a one-off for its own month when it names one, else the boot month', async () => {
+		const em = harness.orm.em;
+		const boot = harness.moduleRef.get(PipelineBootService);
+		const ranks: OneOffRun = {
+			step: PipelineStepEnum.TRACK_SEARCH_RANKS,
+			key: 'ranks-test',
+			month: '2026-10',
+			params: { budgetUsd: 10 },
+		};
+		expect(await boot.queueOneOffs(new Date('2026-11-05T10:00:00Z'), [ranks, BACKFILL])).toBe(2);
+		em.clear();
+		const runs = await em.find(PipelineRun, {}, { orderBy: { step: 'asc' } });
+		expect(runs.map(r => [r.step, r.month])).toEqual([
+			[PipelineStepEnum.BACKFILL_REVIEWS, '2026-11'],
+			[PipelineStepEnum.TRACK_SEARCH_RANKS, '2026-10'],
 		]);
 		await em.nativeDelete(PipelineRun, {});
 	});
@@ -146,6 +173,38 @@ describe('One-off runs, the review backfill and the creator cron (pglite)', () =
 		const after = await em.findOneOrFail(Venue, { name: 'Named' });
 		expect(after.reviewsFetchedFrom?.toISOString().slice(0, 10)).toBe('2026-05-01');
 		expect(after.reviewsFetchedAt).toBeTruthy();
+	});
+
+	it('takes what earlier attempts of a resumed backfill spent off its budget', async () => {
+		const em = harness.orm.em;
+		// The venue fetched above is skipped now; a new one named lately is left
+		const fresh = em.create(Venue, { city: berlin, placeId: 'place-Fresh', name: 'Fresh', category: 'Restaurant', reviewsCount: 1_000 });
+		const p = em.create(SocialPost, {
+			city: berlin,
+			externalId: 'p-fresh',
+			platform: SocialPlatformEnum.TIKTOK,
+			url: 'https://tiktok.com/p-fresh',
+			postedAt: new Date(Date.now() - 5 * DAY),
+			author: 'creator-fresh',
+		});
+		em.create(Mention, { post: p, venueName: fresh.name, venue: fresh, brand: fresh.brand, matchMethod: MentionMatchMethodEnum.EXACT, visited: true });
+		const run = em.create(PipelineRun, {
+			city: berlin,
+			step: PipelineStepEnum.BACKFILL_REVIEWS,
+			month: '2026-11',
+			params: { since: '2026-05-01', talkedDays: 90, budgetUsd: 2, key: 'resumed' },
+			status: PipelineRunStatusEnum.QUEUED,
+		});
+		await em.flush();
+		runActor.mockClear();
+		// The attempt before the restart spent the whole budget
+		stepSpentUsd.mockResolvedValueOnce(2);
+
+		await harness.moduleRef.get(PipelineService).execute(run.id);
+		em.clear();
+		const done = await em.findOneOrFail(PipelineRun, { id: run.id });
+		expect(done.result?.['1. BACKFILL_REVIEWS']).toMatchObject({ spentBefore: 2, taken: 0, runs: 0 });
+		expect(runActor).not.toHaveBeenCalled();
 	});
 
 	it('queues the daily creator scrape once per cron city', async () => {

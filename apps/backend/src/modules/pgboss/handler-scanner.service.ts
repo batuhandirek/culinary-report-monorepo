@@ -4,6 +4,8 @@ import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper.js';
 
 import { JobWithMetadata, PgBoss, WorkOptions, WorkWithMetadataHandler } from 'pg-boss';
 
+import { mainConfig } from 'src/config/main.config.js';
+
 import { LOGGER, PGBOSS_TOKEN } from './constants/pgboss.constant.js';
 import { ON_BATCH_JOB_OPTIONS, ON_BATCH_JOB_QUEUE } from './decorators/on-batch-job.decorator.js';
 import {
@@ -273,6 +275,18 @@ export class HandlerScannerService {
 		const { workOptions, queueOptions } = splitOptions(handlerOptions);
 		const single = wrapSingleHandler(boundHandler as unknown as SingleHandlerFn);
 		const handler = wrapWithFailureLogging(single, this.logger, queueName, handlerLabel);
+
+		if (mainConfig.INGESTION_IS_DISABLED) {
+			// Not scheduled, so the orphan cleanup unschedules it; a job the schedule already queued is dropped
+			await this.pgBossService.registerWorker(
+				queueName,
+				async () => this.logger.warn(`Skipped ${queueName}: INGESTION_IS_DISABLED`),
+				{ workOptions: { ...workOptions, batchSize: 1 }, queueOptions },
+			);
+			this.expectedQueues.add(queueName);
+			this.logger.warn(`Cron not scheduled (INGESTION_IS_DISABLED): ${queueName}`);
+			return true;
+		}
 
 		await this.pgBossService.registerWorker(queueName, handler, {
 			workOptions: { ...workOptions, batchSize: 1 },

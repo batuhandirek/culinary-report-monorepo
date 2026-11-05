@@ -19,7 +19,7 @@ import {
 	dishSearches,
 	dishSearchTable,
 } from '../util/dish-searches.js';
-import { orderedPlaces, type SearchPlaceItem } from '../util/search-ranks.js';
+import { nearCity, orderedPlaces, type SearchPlaceItem } from '../util/search-ranks.js';
 import { calendarDay } from '../util/week.js';
 
 import { VenueScrapeService } from './venue-scrape.service.js';
@@ -55,9 +55,10 @@ export interface VenueDishSearches {
 /**
  * Who Google Maps puts first for each dish in each district ("pasta Mitte Berlin"): every dish
  * topic × every district of the city, the top ten each, kept as a dated snapshot of that day's
- * rankings (`TRACK_DISH_SEARCHES`, every `City.dishSearchEveryDays`). One Places run for all of
- * them; the places found are saved as venues (`saveFound`), which also writes each venue's rating
- * snapshot of the day.
+ * rankings (`TRACK_DISH_SEARCHES`, every `City.dishSearchEveryDays`). One Places run a search
+ * (`VenueScrapeService.searchEach`), from a map of the city; places far from it are left out
+ * (`nearCity`). The places found are saved as venues (`saveFound`), which also writes each venue's
+ * rating snapshot of the day.
  */
 @Injectable()
 export class DishSearchService {
@@ -89,6 +90,7 @@ export class DishSearchService {
 		places: number;
 		linked: number;
 		notCovered: number;
+		failed: number;
 	}> {
 		const day = calendarDay(now, city.timezone);
 		const districts = districtNames(city);
@@ -113,17 +115,24 @@ export class DishSearchService {
 			places: 0,
 			linked: 0,
 			notCovered: dishes.length - planned.length,
+			failed: 0,
 		};
 		if (!searches.length) return summary;
 
-		const { items } = await this.venueScrapeService.searchPlaces<SearchPlaceItem>(
+		// One run a search, from a map of the city: a shared run leaves out of each search the
+		// places an earlier one found (`searchEach`)
+		const { results: found, failed } = await this.venueScrapeService.searchEach<SearchPlaceItem>(
 			city,
 			searches.map(s => s.text),
 			DISH_SEARCH_DEPTH,
 			budgetUsd,
-			`google-places dish searches ${city.name} ${day.date}: ${searches.length} searches`,
+			`google-places dish searches ${city.name} ${day.date}`,
 		);
-		const byText = _.groupBy(items, i => i.searchString ?? '');
+		summary.failed = failed.length;
+		// Some failed runs leave their searches out of the snapshot; none coming back fails the step
+		if (failed.length && !found.size)
+			throw new Error(`Every dish search failed: ${failed[0].error}`);
+		const items = [...found.values()].flat();
 		const known = await this.em.find(
 			Venue,
 			{ placeId: { $in: _.uniq(items.map(i => i.placeId).filter(Boolean)) as string[] } },
@@ -135,7 +144,11 @@ export class DishSearchService {
 		const results = searches
 			.map(search => ({
 				search,
-				top: orderedPlaces(byText[search.text] ?? []).slice(0, DISH_SEARCH_DEPTH),
+				// Far-away places Google mixed in are no guest's in the city
+				top: orderedPlaces((found.get(search.text) ?? []).filter(i => nearCity(i, city))).slice(
+					0,
+					DISH_SEARCH_DEPTH,
+				),
 			}))
 			.filter(r => r.top.length);
 		if (results.length) {
@@ -179,7 +192,7 @@ export class DishSearchService {
 		}
 		await this.em.flush();
 		this.logger.log(
-			`Dish searches ${city.name} ${day.date}: ${summary.returned} of ${summary.searches} came back, ${summary.places} places (${summary.linked} our venues)`,
+			`Dish searches ${city.name} ${day.date}: ${summary.returned} of ${summary.searches} came back, ${summary.places} places (${summary.linked} our venues)${failed.length ? `, ${failed.length} runs failed (${failed[0].error})` : ''}`,
 		);
 		return summary;
 	}

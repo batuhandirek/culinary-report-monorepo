@@ -40,7 +40,8 @@
     "lint:backend:fix": "eslint --config apps/backend/eslint.config.mjs 'apps/backend/src/**/*.ts' --fix --debug",
     "lint:frontend": "eslint 'apps/frontend/**/*.{ts,tsx,js,jsx,svelte,svelte.ts}'",
     "SCRIPTS ************************************************************************": "",
-    "db:up": "docker compose --env-file env/server/.env.local -f docker/docker-compose.yml up -d postgres"
+    "db:up": "docker compose --env-file env/server/.env.local -f docker/docker-compose.yml up -d postgres",
+    "jaeger:up": "docker compose --env-file env/server/.env.local -f docker/docker-compose.yml up -d jaeger"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

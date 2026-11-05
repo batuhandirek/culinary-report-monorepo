@@ -10,6 +10,7 @@ import { VenueTopicService } from 'src/modules/topics/services/venue-topic.servi
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSearchRank } from '../entities/venue-search-rank.entity.js';
 import {
+	nearCity,
 	rankInResults,
 	SEARCH_RANK_DEPTH,
 	SearchPlaceItem,
@@ -20,8 +21,9 @@ import { VenueScrapeService } from './venue-scrape.service.js';
 
 /**
  * Where the report venues rank on the Google Maps searches a guest would type ("ramen Mitte"):
- * one Places run per month for every query (about eight cents a search of twenty places, ~$0.004
- * a place). The places found are saved as venues (`VenueScrapeService.saveFound`).
+ * one Places run per query and month (`VenueScrapeService.searchEach`: about eight cents a search
+ * of twenty places, ~$0.004 a place), from a map of the city; places far from it are left out
+ * (`nearCity`). The places found are saved as venues (`VenueScrapeService.saveFound`).
  */
 @Injectable()
 export class VenueSearchRankService {
@@ -43,7 +45,14 @@ export class VenueSearchRankService {
 		month: string,
 		venues: Venue[],
 		budgetUsd: number,
-	): Promise<{ venues: number; queries: number; ranked: number; notInTop: number }> {
+	): Promise<{
+		venues: number;
+		queries: number;
+		ranked: number;
+		notInTop: number;
+		notSearched: number;
+		failed: number;
+	}> {
 		const plan = new Map<Venue, string[]>();
 		const index = await this.topicService.index();
 		const tags = await this.venueTopicService.tags(venues);
@@ -52,23 +61,26 @@ export class VenueSearchRankService {
 			if (queries.length) plan.set(venue, queries);
 		}
 		const queries = [...new Set([...plan.values()].flat())];
-		if (!queries.length) return { venues: 0, queries: 0, ranked: 0, notInTop: 0 };
+		if (!queries.length)
+			return { venues: 0, queries: 0, ranked: 0, notInTop: 0, notSearched: 0, failed: 0 };
 
-		// The city goes into the search itself, as a guest types it: no map grid, Google's own order
+		// The city goes into the search itself, as a guest types it, on a map of the city: no map
+		// grid, Google's own order. One run a search: a shared run leaves out of each search the
+		// places an earlier one found (`searchEach`). Every place found is saved too (`saveFound`)
 		const searched = new Map(queries.map(q => [`${q} ${city.name}`, q]));
-		// Every place found is saved too (`saveFound`): a search is a free look at the city's venues
-		const { items } = await this.venueScrapeService.searchPlaces<SearchPlaceItem>(
+		const { results, failed, notSearched } = await this.venueScrapeService.searchEach<SearchPlaceItem>(
 			city,
 			[...searched.keys()],
 			SEARCH_RANK_DEPTH,
 			budgetUsd,
-			`google-places search ranks ${city.name} ${month}: ${queries.length} queries`,
+			`google-places search ranks ${city.name} ${month}`,
 		);
+		if (failed.length && !results.size) throw new Error(`Every search failed: ${failed[0].error}`);
 		const byQuery = new Map<string, SearchPlaceItem[]>();
-		for (const item of items) {
-			const query = searched.get(item.searchString ?? '');
-			if (query) byQuery.set(query, [...(byQuery.get(query) ?? []), item]);
-		}
+		for (const [text, found] of results)
+			// Far-away places Google mixed in are no guest's in the city
+			byQuery.set(searched.get(text)!, found.filter(i => nearCity(i, city)));
+		const items = [...byQuery.values()].flat();
 
 		const known = await this.em.find(
 			Venue,
@@ -106,9 +118,16 @@ export class VenueSearchRankService {
 		}
 		await this.em.flush();
 		this.logger.log(
-			`Search ranks ${city.name} ${month}: ${ranked} ranked, ${notInTop} not in the top ${SEARCH_RANK_DEPTH}`,
+			`Search ranks ${city.name} ${month}: ${ranked} ranked, ${notInTop} not in the top ${SEARCH_RANK_DEPTH}, ${notSearched.length} queries over the budget, ${failed.length} runs failed${failed.length ? ` (${failed[0].error})` : ''}`,
 		);
-		return { venues: plan.size, queries: queries.length, ranked, notInTop };
+		return {
+			venues: plan.size,
+			queries: queries.length,
+			ranked,
+			notInTop,
+			notSearched: notSearched.length,
+			failed: failed.length,
+		};
 	}
 
 	/** A venue's ranks, newest month first: the admin venue page and the report. */

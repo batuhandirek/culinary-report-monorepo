@@ -1,9 +1,8 @@
+import { GOOGLE_PLACE_USD } from './search-ranks.js';
 import { addDays } from './week.js';
 
 /** Places kept per dish search: Google Maps' first screen and a bit */
 export const DISH_SEARCH_DEPTH = 10;
-/** What a Google Maps list result costs on Apify's Free plan (Berlin, 2026-10: 6,722 places, $27.64) */
-export const DISH_SEARCH_PLACE_USD = 0.0042;
 
 /** One dish searched in one district: `text` is what goes into Google Maps. */
 export interface DishSearch {
@@ -31,7 +30,7 @@ export const dishSearches = (
 
 /** How many dishes a budget searches in every district, at `DISH_SEARCH_DEPTH` places a search. */
 export const dishesWithinBudget = (budgetUsd: number, districts: number): number =>
-	districts ? Math.floor(budgetUsd / (DISH_SEARCH_DEPTH * DISH_SEARCH_PLACE_USD * districts)) : 0;
+	districts ? Math.floor(budgetUsd / (DISH_SEARCH_DEPTH * GOOGLE_PLACE_USD * districts)) : 0;
 
 /**
  * Whether a city's next dish-search snapshot is due on `today` (its local `YYYY-MM-DD`): never

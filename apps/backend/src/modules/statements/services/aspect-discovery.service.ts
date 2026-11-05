@@ -1,8 +1,7 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
-import { llmConfig } from 'src/modules/llm/config/llm.config.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
@@ -97,10 +96,10 @@ const parseVector = (text: string): number[] => text.slice(1, -1).split(',').map
  * existing aspect fits are only logged: B saw that aspect and chose the root, and a re-read with
  * the same legend answers the same. Naming on gpt-5.4's allowance, else Sonnet (cents); B's re-read
  * on mini's; no review step (the user's call, 2026-11-03, as for food topics). Runs weekly over the
- * cron cities (`AspectDiscoveryCron`), and once at boot while `ASPECT_DISCOVERY_ON_BOOT` is set.
+ * cron cities (`AspectDiscoveryCron`).
  */
 @Injectable()
-export class AspectDiscoveryService implements OnApplicationBootstrap {
+export class AspectDiscoveryService {
 	private readonly logger = new Logger(AspectDiscoveryService.name);
 
 	constructor(
@@ -111,16 +110,7 @@ export class AspectDiscoveryService implements OnApplicationBootstrap {
 		private readonly pgBossService: PgBossService,
 	) {}
 
-	async onApplicationBootstrap(): Promise<void> {
-		const mode = llmConfig.ASPECT_DISCOVERY_ON_BOOT;
-		if (mode === 'off') return;
-		await this.queue({ dryRun: mode === 'dry' });
-		this.logger.warn(
-			`Queued aspect discovery (${mode}): remove ASPECT_DISCOVERY_ON_BOOT once it has run`,
-		);
-	}
-
-	/** Queues a run (the weekly cron, a boot run): one waits at a time */
+	/** Queues a run (the weekly cron): one waits at a time */
 	async queue(payload: { dryRun: boolean; cronOnly?: boolean }): Promise<void> {
 		await this.pgBossService.sendJob(AspectDiscoveryJob.jobName, new AspectDiscoveryJob(payload), {
 			singletonKey: AspectDiscoveryJob.singletonKey,

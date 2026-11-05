@@ -92,7 +92,12 @@ Creators:
 	- https://www.the-berliner.com blog
 Notes:
 	- If a brand owned instagram post talks about another brand, FLAG THAT!!
-
+If we see a brand posting:
+📍Döberitzer Str. 1, 10557 Berlin
+📍Reichenberger Str. 176, 10999 Berlin
+📍Simon-Dach-Str. 13, 10245 Berlin
+📍Schönhauser Allee 43a, 10435 Berlin
+maybe use this as a signal to ensure they have 4 branches
 
 
 - "Won't come back" -> Is this a signal?

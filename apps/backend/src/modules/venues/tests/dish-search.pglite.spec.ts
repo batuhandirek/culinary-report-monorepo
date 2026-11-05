@@ -20,6 +20,8 @@ import { VenueService } from '../services/venue.service.js';
 import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import type { SearchPlaceItem } from '../util/search-ranks.js';
 
+import { answerSearches, searchTextOf } from './factories/places-search.mock.js';
+
 /**
  * A `compass/crawler-google-places` search result as its dataset holds it: every item repeats
  * the search it came from in `searchString` and its place in `rank`.
@@ -79,7 +81,7 @@ describe('DishSearchService (pglite)', () => {
 		const em = harness.orm.em;
 		// Two dishes and their cuisine parent (Italian), which is no dish and never searched
 		seedTopics(em, ['pasta', 'pizza']);
-		city = await cityFactory.create();
+		city = await cityFactory.create({ lat: 52.52, lng: 13.405 });
 		trattoria = em.create(Venue, {
 			city,
 			placeId: 'trattoria',
@@ -103,10 +105,17 @@ describe('DishSearchService (pglite)', () => {
 
 	it("snapshots every dish in every district, each search's top ten in Google's order, dated the city's day", async () => {
 		const pastaMitte = 'pasta Mitte Berlin';
-		runActor.mockResolvedValueOnce([
+		answerSearches(runActor, [
 			// Out of order and twenty deep, as a dataset can be: `rank` is what counts, ten are kept
 			...results(pastaMitte, 20, rank =>
 				rank === 3 ? result(pastaMitte, rank, 'trattoria', 'Trattoria Uno')
+				: rank === 4 ?
+					// Google mixed in a place far away (the actor's map sat in the US): left out
+					result(pastaMitte, rank, 'chicago', 'Bliss Bowls', {
+						city: 'Chicago',
+						countryCode: 'US',
+						location: { lat: 41.88, lng: -87.63 },
+					})
 				: rank === 9 ?
 					result(pastaMitte, rank, 'shop', 'Pasta Markt', {
 						categoryName: 'Grocery store',
@@ -136,22 +145,29 @@ describe('DishSearchService (pglite)', () => {
 			places: 34,
 			linked: 32,
 			notCovered: 0,
+			failed: 0,
 		});
-		const [actor, input, options] = runActor.mock.calls[0] as [
+		// One run a search: the actor outputs a place once a run, so a shared run would leave the
+		// trattoria out of whichever pasta search came second
+		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual([
+			...DISTRICTS.map(d => `pasta ${d} Berlin`),
+			...DISTRICTS.map(d => `pizza ${d} Berlin`),
+		]);
+		const [actor, input, options] = runActor.mock.calls[2] as [
 			string,
 			Record<string, unknown>,
 			Record<string, unknown>,
 		];
 		expect(actor).toBe('compass/crawler-google-places');
+		// On a map of the city, as a guest there searches: no map grid, Google's own order
 		expect(input).toMatchObject({
-			searchStringsArray: [
-				...DISTRICTS.map(d => `pasta ${d} Berlin`),
-				...DISTRICTS.map(d => `pizza ${d} Berlin`),
-			],
+			startUrls: [{ url: 'https://www.google.com/maps/search/pasta+Mitte+Berlin/@52.52,13.405,12z?hl=en' }],
 			maxCrawledPlacesPerSearch: 10,
 		});
+		expect(input.searchStringsArray).toBeUndefined();
 		expect(input.locationQuery).toBeUndefined();
-		expect(options).toMatchObject({ maxCostUsd: 25 });
+		// The actor's lowest cap; ten places cost about four cents
+		expect(options).toMatchObject({ maxCostUsd: 0.5, memoryMbytes: 2048 });
 
 		const em = harness.orm.em.fork();
 		const mitte = await em.find(
@@ -160,6 +176,7 @@ describe('DishSearchService (pglite)', () => {
 			{ orderBy: { rank: 'asc' } },
 		);
 		expect(mitte.map(r => r.rank)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+		expect(mitte.map(r => r.placeId)).not.toContain('chicago');
 		expect(mitte[2]).toMatchObject({
 			placeId: 'trattoria',
 			name: 'Trattoria Uno',
@@ -177,19 +194,29 @@ describe('DishSearchService (pglite)', () => {
 			isoWeek: 43,
 			weekday: 7,
 		});
-		// Places we don't keep are still on the list, without a venue
-		expect(mitte.slice(8).map(r => [r.name, r.venue ?? null])).toEqual([
+		// Places we don't keep are still on the list, without a venue, one up for the one left out
+		expect(mitte.slice(7, 9).map(r => [r.name, r.venue ?? null])).toEqual([
 			['Pasta Markt', null],
 			['Pasta Potsdam', null],
 		]);
+		expect(mitte[9].name).toBe('Place 11');
 		expect(await em.count(DishSearchRank, { city: city.id, topic: { key: 'pizza' } })).toBe(10);
+		// The trattoria on two searches keeps its place on both
+		expect(
+			await em.findOneOrFail(DishSearchRank, {
+				searchedOn: '2026-10-25',
+				topic: { key: 'pasta' },
+				district: 'Neukölln',
+				placeId: 'trattoria',
+			}),
+		).toMatchObject({ rank: 1 });
 	});
 
 	it("saves the found places as the city's venues, with the day's rating, never as openings", async () => {
 		const em = harness.orm.em.fork();
 		const found = await em.findOneOrFail(Venue, { placeId: 'pasta Mitte Berlin-1' });
 		expect(found).toMatchObject({ name: 'Place 1', reviewsCount: 201, city: { id: city.id } });
-		expect(await em.count(Venue, { placeId: { $in: ['shop', 'potsdam'] } })).toBe(0);
+		expect(await em.count(Venue, { placeId: { $in: ['shop', 'potsdam', 'chicago'] } })).toBe(0);
 		// One snapshot a venue a day, however many searches found it
 		const today = new Date().toISOString().slice(0, 10);
 		expect(
@@ -228,25 +255,25 @@ describe('DishSearchService (pglite)', () => {
 		['closed-1', 'closed-2', 'closed-3'].forEach(id => tag(id, pasta, true));
 		await em.flush();
 
-		runActor.mockResolvedValueOnce([]);
+		answerSearches(runActor, []);
 		// $0.0042 × 10 × 3 districts = $0.126 a dish
 		const summary = await service.sweep(city, 0.2, on('2026-10-26'));
 		expect(summary).toMatchObject({ dishes: 1, searches: 3, returned: 0, notCovered: 1 });
-		expect(
-			(runActor.mock.calls[0][1] as { searchStringsArray: string[] }).searchStringsArray,
-		).toEqual(DISTRICTS.map(d => `pizza ${d} Berlin`));
+		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual(
+			DISTRICTS.map(d => `pizza ${d} Berlin`),
+		);
 		// Too little for one dish: no run
 		expect(await service.sweep(city, 0.1, on('2026-10-26'))).toMatchObject({
 			dishes: 0,
 			searches: 0,
 		});
-		expect(runActor).toHaveBeenCalledTimes(1);
+		expect(runActor).toHaveBeenCalledTimes(3);
 		// A search that came back empty stores nothing for that day
 		expect(await em.count(DishSearchRank, { searchedOn: '2026-10-26' })).toBe(0);
 	});
 
 	it("replaces the searches a rerun the same day got back and keeps the ones it didn't", async () => {
-		runActor.mockResolvedValueOnce([
+		answerSearches(runActor, [
 			result('pasta Mitte Berlin', 1, 'trattoria', 'Trattoria Uno'),
 		]);
 		await service.sweep(city, 25, new Date('2026-10-25T19:00:00Z'));
@@ -262,17 +289,37 @@ describe('DishSearchService (pglite)', () => {
 		expect(rows.filter(r => r.district === 'Neukölln')).toHaveLength(10);
 	});
 
+	it('keeps the searches whose runs came back when others failed, and fails only when none did', async () => {
+		const em = harness.orm.em;
+		runActor.mockImplementation(async (_actor, input) => {
+			if (searchTextOf(input) === 'pasta Mitte Berlin') throw new Error('Run failed');
+			return [result(searchTextOf(input), 1, `one-${searchTextOf(input)}`)];
+		});
+		expect(await service.sweep(city, 25, on('2026-10-27'))).toMatchObject({
+			searches: 6,
+			returned: 5,
+			failed: 1,
+		});
+		expect(
+			await em.count(DishSearchRank, { searchedOn: '2026-10-27', district: 'Mitte', topic: { key: 'pasta' } }),
+		).toBe(0);
+		expect(await em.count(DishSearchRank, { searchedOn: '2026-10-27' })).toBe(5);
+
+		runActor.mockRejectedValue(new Error('Run failed'));
+		await expect(service.sweep(city, 25, on('2026-10-28'))).rejects.toThrow('Every dish search failed: Run failed');
+	});
+
 	it("reads a dish's districts in a snapshot with each place's rank in the snapshot before", async () => {
 		const em = harness.orm.em;
 		await em.nativeDelete(DishSearchRank, {});
 		const pasta = 'pasta Mitte Berlin';
-		runActor.mockResolvedValueOnce([
+		answerSearches(runActor, [
 			result(pasta, 1, 'a', 'Alfredo'),
 			result(pasta, 2, 'trattoria', 'Trattoria Uno'),
 			result('pasta Neukölln Berlin', 1, 'n', 'Nonna'),
 		]);
 		await service.sweep(city, 25, on('2026-10-01'));
-		runActor.mockResolvedValueOnce([
+		answerSearches(runActor, [
 			result(pasta, 1, 'trattoria', 'Trattoria Uno'),
 			result(pasta, 2, 'b', 'Bellini'),
 			result('pasta Friedrichshain-Kreuzberg Berlin', 1, 'k', 'Kreuzpasta'),
@@ -326,7 +373,7 @@ describe('DishSearchService (pglite)', () => {
 
 		// In the 25th's Neukölln search but not the 1st's, which ran without it
 		const em = harness.orm.em;
-		runActor.mockResolvedValueOnce([
+		answerSearches(runActor, [
 			result('pasta Neukölln Berlin', 1, 'n', 'Nonna'),
 			result('pasta Neukölln Berlin', 2, 'trattoria', 'Trattoria Uno'),
 		]);

@@ -547,7 +547,8 @@ export class MentionMatchingService {
 					{ $or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }] },
 				],
 			},
-			{ populate: ['post', 'post.city'] },
+			// `matchOne` hands the LLM what each mention said
+			{ populate: ['post', 'post.city', 'statements'] },
 		);
 		for (const [, cityMentions] of Object.entries(_.groupBy(mentions, m => m.post.city.id))) {
 			const city = cityMentions[0].post.city;

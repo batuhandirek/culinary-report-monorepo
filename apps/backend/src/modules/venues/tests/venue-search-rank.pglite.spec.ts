@@ -25,6 +25,8 @@ import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import { VenueSearchRankService } from '../services/venue-search-rank.service.js';
 import { SearchPlaceItem, searchQueries } from '../util/search-ranks.js';
 
+import { answerSearches, searchTextOf } from './factories/places-search.mock.js';
+
 /**
  * A `compass/crawler-google-places` search result as its dataset holds it: every item repeats
  * the search it came from in `searchString` and its place in `rank`.
@@ -195,7 +197,7 @@ describe('VenueSearchRankService (pglite)', () => {
 	it('stores the rank and top ten per query, and null when the venue is not in the top twenty', async () => {
 		const ramen = 'ramen Mitte Berlin';
 		const japanese = 'japanese Mitte Berlin';
-		runActor.mockResolvedValueOnce([
+		answerSearches(runActor, [
 			// Out of order, as a dataset can be: `rank` is what counts
 			...Array.from({ length: 20 }, (_, i) => i + 1)
 				.reverse()
@@ -205,7 +207,10 @@ describe('VenueSearchRankService (pglite)', () => {
 					: result(ramen, rank),
 				),
 			...Array.from({ length: 20 }, (_, i) =>
-				i === 18 ?
+				i === 0 ?
+					// The rival on both searches: a shared run would have left it out of this one
+					result(japanese, 1, 'rival', 'Ramen Ni', { reviewsCount: 102 })
+				: i === 18 ?
 					// Places Google lists that aren't for us: a shop, and one across the border
 					result(japanese, i + 1, 'shop', 'Asia Markt', { categoryName: 'Grocery store' })
 				: i === 19 ?
@@ -216,24 +221,31 @@ describe('VenueSearchRankService (pglite)', () => {
 		]);
 
 		const summary = await service.track(city, '2026-09', [me, pizza, rival], 3);
-		expect(summary).toEqual({ venues: 2, queries: 4, ranked: 1, notInTop: 1 });
+		expect(summary).toEqual({
+			venues: 2,
+			queries: 4,
+			ranked: 1,
+			notInTop: 1,
+			notSearched: 0,
+			failed: 0,
+		});
+		// One run a search
+		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual([
+			ramen,
+			japanese,
+			'pizza Neukölln Berlin',
+			'italian Neukölln Berlin',
+		]);
 		const [actor, input, options] = runActor.mock.calls[0] as [
 			string,
 			Record<string, unknown>,
 			Record<string, unknown>,
 		];
 		expect(actor).toBe('compass/crawler-google-places');
-		expect(input).toMatchObject({
-			searchStringsArray: [
-				ramen,
-				japanese,
-				'pizza Neukölln Berlin',
-				'italian Neukölln Berlin',
-			],
-			maxCrawledPlacesPerSearch: 20,
-		});
+		// A city without coordinates has no map to search from: the bare text
+		expect(input).toMatchObject({ searchStringsArray: [ramen], maxCrawledPlacesPerSearch: 20 });
 		expect(input.locationQuery).toBeUndefined();
-		expect(options).toMatchObject({ maxCostUsd: 3 });
+		expect(options).toMatchObject({ maxCostUsd: 0.5 });
 
 		const em = harness.orm.em;
 		em.clear();
@@ -259,14 +271,15 @@ describe('VenueSearchRankService (pglite)', () => {
 			reviewsCount: 102,
 			venueId: rival.id,
 		});
+		expect(rows[0].top[0]).toMatchObject({ placeId: 'rival', venueId: rival.id });
 		expect(await em.count(VenueSearchRank, { venue: pizza.id })).toBe(0);
 	});
 
 	it('saves the places the searches found as venues of the city, never as openings', async () => {
 		const em = harness.orm.em.fork();
-		// 18 + 18 new food places in Berlin, plus the three known ones updated
+		// 18 + 17 new food places in Berlin, plus the known ones updated
 		const found = await em.find(Venue, { city: city.id, placeId: { $like: '% Berlin-%' } });
-		expect(found).toHaveLength(36);
+		expect(found).toHaveLength(35);
 		expect(found.find(v => v.placeId === 'ramen Mitte Berlin-1')).toMatchObject({
 			name: 'Place 1',
 			district: 'Mitte',
@@ -285,10 +298,23 @@ describe('VenueSearchRankService (pglite)', () => {
 	});
 
 	it("replaces the month's rows on a rerun", async () => {
-		runActor.mockResolvedValueOnce([result('ramen Mitte Berlin', 1, 'me', 'Ramen Ichi')]);
+		runActor.mockReset();
+		answerSearches(runActor, [result('ramen Mitte Berlin', 1, 'me', 'Ramen Ichi')]);
 		await service.track(city, '2026-09', [me], 1);
 		harness.orm.em.clear();
 		const rows = await service.forVenue(me.id);
 		expect(rows.map(r => [r.query, r.rank, r.results])).toEqual([['ramen Mitte', 1, 1]]);
+	});
+
+	it('searches as many queries as the budget covers at twenty places each, in order', async () => {
+		runActor.mockReset();
+		answerSearches(runActor, [result('ramen Mitte Berlin', 1, 'me', 'Ramen Ichi')]);
+		// $0.0042 × 20 = $0.084 a search: one of its two
+		expect(await service.track(city, '2026-10', [me], 0.1)).toMatchObject({
+			queries: 2,
+			ranked: 1,
+			notSearched: 1,
+		});
+		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual(['ramen Mitte Berlin']);
 	});
 });

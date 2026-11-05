@@ -57,6 +57,16 @@ export class EnvironmentVariables {
 	@Transform(v => v.value === 'true')
 	public OTEL_IS_ENABLED: boolean = false;
 
+	/**
+	 * Nothing scrapes, reads or fills by itself: no cron is scheduled (a cron job already queued is
+	 * dropped) and no reading pass is queued after a run. What an admin starts by hand still runs.
+	 * For a dev backend, above all one on a copy of the production database.
+	 */
+	@IsBoolean()
+	@IsOptional()
+	@Transform(v => v.value === true || v.value === 'true')
+	public INGESTION_IS_DISABLED: boolean = false;
+
 	@IsString()
 	@IsNotEmpty()
 	@ValidateIf((obj: EnvironmentVariables) => {

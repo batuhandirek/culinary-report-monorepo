@@ -9,17 +9,25 @@ import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { runPool } from 'src/shared/util/pool.js';
 
 import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueLookup } from '../entities/venue-lookup.entity.js';
 import { BrandAutoMergeJob } from '../jobs/brand-auto-merge.job.js';
 import { isBrandName } from '../util/brands.js';
+import { citySearchUrl, GOOGLE_PLACE_USD } from '../util/search-ranks.js';
 import { cityStopwords, isFoodVenue, isInCity, normalizeVenueName } from '../util/venue-names.js';
 
 import { GooglePlaceItem, VenueService } from './venue.service.js';
 
 const GOOGLE_PLACES_ACTOR = 'compass/crawler-google-places';
+/** The lowest cap the Places actor starts a run with (Apify refuses less) */
+const SEARCH_RUN_MIN_CAP_USD = 0.5;
+/** Search runs side by side: Free allows five actor jobs at once, one is left for other steps */
+const SEARCH_RUNS_AT_ONCE = 4;
+/** One search's run (2 GB was enough for a search of twenty, 2026-11-05) */
+const SEARCH_RUN_MEMORY_MB = 2048;
 
 // Google results kept per looked-up name; the matcher picks the right one
 const LOOKUP_RESULTS_PER_NAME = 3;
@@ -239,6 +247,56 @@ export class VenueScrapeService {
 			{ maxCostUsd: budgetUsd, purpose },
 		);
 		return { items, saved: await this.saveFound(items, city) };
+	}
+
+	/**
+	 * Searches Google Maps the way a guest in the city would, one actor run per search, for the
+	 * steps that read a search's order (dish searches, search ranks). The actor outputs each place
+	 * once per run, so a place an earlier search of the same run found is missing from every later
+	 * one; a run of its own gives each search its whole list. Each starts from a map centred on the
+	 * city (`citySearchUrl`). The searches run in the order given, `SEARCH_RUNS_AT_ONCE` side by
+	 * side, as many as the budget covers at `perSearch` places each (`GOOGLE_PLACE_USD`); the rest
+	 * are `notSearched`. A failed run is in `failed` and the others' results stay; the places found
+	 * are saved (`saveFound`).
+	 */
+	async searchEach<T extends GooglePlaceItem>(
+		city: City,
+		searches: string[],
+		perSearch: number,
+		budgetUsd: number,
+		purpose: string,
+	): Promise<{ results: Map<string, T[]>; failed: { search: string; error: string }[]; notSearched: string[]; saved: number }> {
+		const covered = Math.max(0, Math.floor(budgetUsd / (perSearch * GOOGLE_PLACE_USD)));
+		const planned = searches.slice(0, covered);
+		const results = new Map<string, T[]>();
+		const failed: { search: string; error: string }[] = [];
+		await runPool(
+			planned,
+			SEARCH_RUNS_AT_ONCE,
+			async search => {
+				const url = citySearchUrl(search, city);
+				const items = await this.apifyService.runActor<T>(
+					GOOGLE_PLACES_ACTOR,
+					{
+						...(url ? { startUrls: [{ url }] } : { searchStringsArray: [search] }),
+						maxCrawledPlacesPerSearch: perSearch,
+						language: 'en',
+						maxReviews: 0,
+						maxImages: 0,
+						maxQuestions: 0,
+					},
+					{
+						maxCostUsd: Math.max(SEARCH_RUN_MIN_CAP_USD, perSearch * GOOGLE_PLACE_USD * 1.5),
+						purpose: `${purpose}: ${search}`,
+						memoryMbytes: SEARCH_RUN_MEMORY_MB,
+					},
+				);
+				results.set(search, items);
+			},
+			(search, error) => failed.push({ search, error: error.message }),
+		);
+		const saved = await this.saveFound([...results.values()].flat(), city);
+		return { results, failed, notSearched: searches.slice(planned.length), saved };
 	}
 
 	/**

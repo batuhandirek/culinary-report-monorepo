@@ -140,8 +140,6 @@ export interface AdminExploreBreakdownOutputDto {
 }
 
 export interface AdminExploreGroupOutputDto {
-	/** What the group says, six words at most; absent when it could not be titled */
-	title?: string;
 	claims: number;
 	sources: number;
 	praise: number;

@@ -12,7 +12,6 @@ import { LLMModule } from '../llm/llm.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 
 import { AspectSuggestionAgent } from './agents/aspect-suggestion.agent.js';
-import { ClaimGroupTitleAgent } from './agents/claim-group-title.agent.js';
 import { ClaimPartsAgent } from './agents/claim-parts.agent.js';
 import { AdminExploreController } from './controllers/admin.explore.controller.js';
 import { AdminStatementsController } from './controllers/admin.statements.controller.js';
@@ -55,7 +54,6 @@ import { AspectDiscoveryCron } from './crons/aspect-discovery.cron.js';
 		AspectDiscoveryCron,
 		ClaimPartsAgent,
 		AspectSuggestionAgent,
-		ClaimGroupTitleAgent,
 	],
 	exports: [StatementService, StatementPartsService],
 })

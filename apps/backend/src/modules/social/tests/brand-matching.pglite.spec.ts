@@ -378,6 +378,8 @@ describe('MentionMatchingService with brands (pglite)', () => {
 			matchedAt: new Date(),
 		});
 		await em.flush();
+		// Loaded fresh, as the brand-changed worker does: the matcher reads each mention's claims
+		em.clear();
 
 		await service.rematchBrands([brand.id]);
 		em.clear();

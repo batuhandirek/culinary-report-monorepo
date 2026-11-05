@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 
+import { mainConfig } from 'src/config/main.config.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
@@ -76,8 +77,9 @@ export class IngestionService {
 		private readonly webMentionService: WebMentionService,
 	) {}
 
-	/** Queues a pass for the city: one waiting per city (the queue is `stately`) */
+	/** Queues a pass for the city: one waiting per city (the queue is `stately`). None while `INGESTION_IS_DISABLED` */
 	async queue(cityId: string): Promise<void> {
+		if (mainConfig.INGESTION_IS_DISABLED) return;
 		await this.pgBossService.sendJob(IngestCityJob.jobName, new IngestCityJob({ cityId }), {
 			singletonKey: cityId,
 		});

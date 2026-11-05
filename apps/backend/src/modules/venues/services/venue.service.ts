@@ -36,6 +36,8 @@ export interface GooglePlaceItem extends GooglePlaceDetailFields {
 	categoryName?: string;
 	categories?: string[];
 	location?: { lat: number; lng: number };
+	/** ISO 3166-1 alpha-2, "DE" */
+	countryCode?: string;
 	price?: string;
 	website?: string;
 	phone?: string;

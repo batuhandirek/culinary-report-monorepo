@@ -47,6 +47,8 @@ const BACKFILL_MONTHLY_SHARE = 0.0105;
 const BACKFILL_MIN_REVIEWS = 5;
 // Venues per actor run: a run the cap or a restart cuts loses only its own
 const BACKFILL_RUN_VENUES = 100;
+// Review ids a lookup query binds at most (Postgres allows 65,535 parameters)
+const STORED_REVIEWS_CHUNK = 5_000;
 // A run's cap over its plan, since busy places run above the average
 const BACKFILL_CAP_HEADROOM = 1.5;
 
@@ -362,6 +364,16 @@ export class ReviewService implements OnModuleInit {
 	}
 
 	/** The venues, in the order of the ids given */
+	/** The stored reviews of these Google review ids, by id, in a few queries. */
+	private async storedReviews(reviewIds: (string | undefined)[]): Promise<Map<string, Review>> {
+		const ids = _.uniq(reviewIds.filter((id): id is string => !!id));
+		const stored = new Map<string, Review>();
+		for (const chunk of _.chunk(ids, STORED_REVIEWS_CHUNK))
+			for (const review of await this.em.find(Review, { reviewId: { $in: chunk } }))
+				stored.set(review.reviewId, review);
+		return stored;
+	}
+
 	private async ordered(venueIds: string[]): Promise<Venue[]> {
 		const order = new Map(venueIds.map((id, i) => [id, i]));
 		return _.sortBy(await this.em.find(Venue, { id: { $in: venueIds } }), v => order.get(v.id));
@@ -404,8 +416,12 @@ export class ReviewService implements OnModuleInit {
 			);
 
 			const seen = new Set<string>();
-			// One row per Google review id (unique): looked up first, so a review fetched again is
-			// updated, never stored twice; this run's own new rows aren't in the database until the flush
+			// One row per Google review id (unique): the stored ones looked up first, so a review
+			// fetched again is updated, never stored twice. In one query a few thousand ids at a time,
+			// never one per item: before each query the entity manager checks every entity it holds
+			// for changes to flush, so a lookup per review was quadratic (a batch of 12,000 reviews
+			// held the CPU for hours, 2026-11-05). This run's own new rows are in `fresh` until the flush
+			const stored = await this.storedReviews(items.map(i => i.reviewId));
 			const fresh = new Map<string, Review>();
 			let last: Venue | undefined;
 			for (const item of items) {
@@ -422,7 +438,7 @@ export class ReviewService implements OnModuleInit {
 				if (!item.reviewId || !item.publishedAtDate || item.publishedAtDate.slice(0, 10) < day) continue;
 				const review =
 					fresh.get(item.reviewId) ??
-					(await this.em.findOne(Review, { reviewId: item.reviewId })) ??
+					stored.get(item.reviewId) ??
 					this.em.create(Review, {
 						reviewId: item.reviewId,
 						venue,

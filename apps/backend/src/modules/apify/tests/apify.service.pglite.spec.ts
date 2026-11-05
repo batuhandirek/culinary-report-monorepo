@@ -355,6 +355,21 @@ describe('ApifyService (pglite)', () => {
 		expect(client.started).toHaveLength(1);
 	});
 
+	it("sums what the current step's runs cost over every attempt, and nothing outside a step", async () => {
+		const context = { pipelineRunId: await pipelineRun(), stepKey: '1. BACKFILL_REVIEWS' };
+		const em = harness.orm.em.fork();
+		const base = { actorId: 'compass/Google-Maps-Reviews-Scraper', purpose: 'test', maxCostUsd: 10, pipelineRun: context.pipelineRunId };
+		// Two batches of an attempt a restart cut, one aborted, and one of another step
+		em.create(ApifyRun, { ...base, status: ApifyRunStatusEnum.SUCCEEDED, stepKey: context.stepKey, costUsd: 17.2 });
+		em.create(ApifyRun, { ...base, status: ApifyRunStatusEnum.PARTIAL, stepKey: context.stepKey, costUsd: 1.33 });
+		em.create(ApifyRun, { ...base, status: ApifyRunStatusEnum.RUNNING, stepKey: context.stepKey });
+		em.create(ApifyRun, { ...base, status: ApifyRunStatusEnum.SUCCEEDED, stepKey: '2. OTHER', costUsd: 5 });
+		await em.flush();
+
+		expect(await apifyRunContext.run(context, () => service.stepSpentUsd())).toBeCloseTo(18.53);
+		expect(await service.stepSpentUsd()).toBe(0);
+	});
+
 	it('never re-attaches to another step, another input or a failed run', async () => {
 		const context = { pipelineRunId: await pipelineRun(), stepKey: '1. SCRAPE_TIKTOK' };
 		const em = harness.orm.em.fork();

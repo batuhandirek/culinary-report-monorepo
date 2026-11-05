@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 
+import { mainConfig } from 'src/config/main.config.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { watchProcessShutdown } from 'src/modules/apify/util/apify-run-context.js';
 
@@ -36,6 +37,14 @@ export class PipelineRecoveryService implements OnApplicationBootstrap {
 	async onApplicationBootstrap(): Promise<void> {
 		if (process.env.NODE_ENV === 'test') return this.markReady();
 		watchProcessShutdown();
+		// On a copy of the production database a RUNNING run is production's own: resuming it here
+		// would pay Apify a second time beside it
+		if (mainConfig.INGESTION_IS_DISABLED) {
+			this.logger.warn(
+				'Pipeline runs left as they are (INGESTION_IS_DISABLED): nothing resumed',
+			);
+			return this.markReady();
+		}
 		try {
 			const { resumed, failed, apifySettled } = await this.recover();
 			if (resumed + failed + apifySettled > 0) {

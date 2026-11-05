@@ -36,8 +36,7 @@
 		{#each data.groups as group, i (i)}
 			<li class="flex flex-col gap-1.5 py-2.5">
 				<div class="flex flex-col gap-0.5">
-					{#if group.title}<p class="m-0 text-base font-medium">{group.title}</p>{/if}
-					<p class="m-0 text-sm {group.title ? 'text-muted-foreground' : 'font-medium'}">
+					<p class="m-0 text-sm font-medium">
 						{n(group.claims)} claims from {n(group.sources)} reviews and posts
 						<span class="text-muted-foreground font-normal">
 							· <span class="text-success">{n(group.praise)} praise</span> · <span class="text-destructive">{n(group.complaints)} complaints</span>
