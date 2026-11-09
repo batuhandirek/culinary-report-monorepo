@@ -3,8 +3,13 @@ import _ from 'lodash';
 import type { ClaimLabelAspect } from './claim-labels.js';
 import { dot, normalize } from './cluster.js';
 
-/** Aspects offered to the claim-labels classifier for one claim, before their roots are added */
-export const ASPECT_SHORTLIST_SIZE = 8;
+/**
+ * Aspects offered to the claim-labels classifier for one claim, before their roots are added (the
+ * user's call, 2026-11-09: 12, about half the full list's tokens; at 8 the right aspect was missing
+ * for 2% of review and 5% of post claims in the eval, almost always a finer aspect just past the
+ * 8, never for want of its root)
+ */
+export const ASPECT_SHORTLIST_SIZE = 12;
 
 /** The text an aspect is embedded by: what the classifier is told it is */
 export const aspectEmbeddingText = (aspect: ClaimLabelAspect): string =>

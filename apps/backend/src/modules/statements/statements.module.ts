@@ -18,6 +18,7 @@ import { Statement } from './entities/statement.entity.js';
 import { StatementPart } from './entities/statement-part.entity.js';
 import { AspectDiscoverySchedule } from './schedules/aspect-discovery.schedule.js';
 import { AspectDiscoveryService } from './services/aspect-discovery.service.js';
+import { AspectShortlistService } from './services/aspect-shortlist.service.js';
 import { StatementService } from './services/statement.service.js';
 import { StatementEmbeddingService } from './services/statement-embedding.service.js';
 import { StatementInsightService } from './services/statement-insight.service.js';
@@ -47,6 +48,7 @@ import { AspectDiscoveryWorkflow } from './workflows/aspect-discovery.workflow.j
 		StatementService,
 		StatementPartsService,
 		StatementEmbeddingService,
+		AspectShortlistService,
 		StatementInsightService,
 		AspectDiscoveryService,
 		AspectDiscoverySchedule,

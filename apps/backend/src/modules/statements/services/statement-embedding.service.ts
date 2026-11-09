@@ -8,7 +8,7 @@ import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-reg
 import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import { accountErrorReason, errorChain } from 'src/modules/llm/util/provider-errors.js';
 import { isFatalProviderError } from 'src/shared/util/pool.js';
-import { toVectorLiteral } from 'src/shared/util/vector.js';
+import { parseVectorLiteral, toVectorLiteral } from 'src/shared/util/vector.js';
 
 import {
 	EMBEDDING_BATCH_CLAIMS,
@@ -85,7 +85,41 @@ export class StatementEmbeddingService implements OnModuleInit {
 			order by s.month desc nulls last, s.id asc limit ?`,
 			[opts.limit],
 		);
-		let embedded = 0;
+		const { vectors, tokens } = await this.embedAndWrite(rows);
+		if (rows.length) this.logger.log(`Embedded ${vectors.size} claims (${tokens} tokens)`);
+		return { embedded: vectors.size, tokens };
+	}
+
+	/**
+	 * The claims' vectors by id: the stored one, else made now and stored, so a claim is paid for
+	 * once whoever needs its vector first (the labelling's aspect shortlist, right after agent A,
+	 * comes before the nightly backlog would)
+	 */
+	async vectorsOf(claims: { id: number; text: string }[]): Promise<Map<number, number[]>> {
+		const out = new Map<number, number[]>();
+		for (const chunk of _.chunk(claims, EMBEDDING_REQUEST_CLAIMS)) {
+			const stored: { id: number; embedding: string }[] = await this.em
+				.getConnection()
+				.execute(
+					`select id, embedding::text as embedding from statements
+					where embedding is not null and id in (${chunk.map(() => '?').join(', ')})`,
+					chunk.map(c => c.id),
+				);
+			for (const row of stored) out.set(row.id, parseVectorLiteral(row.embedding));
+		}
+		const { vectors } = await this.embedAndWrite(claims.filter(c => !out.has(c.id)));
+		for (const [id, vector] of vectors) out.set(id, vector);
+		return out;
+	}
+
+	/**
+	 * Embeds the claims in requests of `EMBEDDING_REQUEST_CLAIMS` and writes each request's vectors
+	 * as it returns, so a failure keeps what finished
+	 */
+	private async embedAndWrite(
+		rows: { id: number; text: string }[],
+	): Promise<{ vectors: Map<number, number[]>; tokens: number }> {
+		const vectors = new Map<number, number[]>();
 		let tokens = 0;
 		for (const chunk of _.chunk(rows, EMBEDDING_REQUEST_CLAIMS)) {
 			const res = await this.embeddingsService.embedMany(
@@ -93,11 +127,11 @@ export class StatementEmbeddingService implements OnModuleInit {
 				{ dimensions: STATEMENT_EMBEDDING_DIMENSIONS },
 			);
 			tokens += res.tokens;
-			await this.write(chunk.map((row, i) => ({ id: row.id, vector: res.embeddings[i] })));
-			embedded += chunk.length;
+			const written = chunk.map((row, i) => ({ id: row.id, vector: res.embeddings[i] }));
+			await this.write(written);
+			for (const row of written) vectors.set(row.id, row.vector);
 		}
-		if (rows.length) this.logger.log(`Embedded ${embedded} claims (${tokens} tokens)`);
-		return { embedded, tokens };
+		return { vectors, tokens };
 	}
 
 	/**

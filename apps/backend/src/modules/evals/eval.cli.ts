@@ -11,8 +11,9 @@
  *                                      model, the claim-labels classifier (Jev) for the labels; `--paid` lets an LLM
  *                                      call move to Claude once the allowance is out
  *             [--model <id>]       agent A on another model (`openai/gpt-5.4`, Claude with `--paid`)
- *             [--classifier-model typesafe-ai/jev-latest] [--aspect-shortlist 8]   the classifier's model; offer it only
- *                                      the 8 aspects closest to the claim (embedded) and their roots
+ *             [--classifier-model typesafe-ai/jev-latest] [--aspect-shortlist 12]  the classifier's model; offer it only
+ *                                      the 12 aspects closest to the claim (embedded) and their roots
+ *                                      (production offers `ASPECT_SHORTLIST_SIZE`, 12)
  *             [--claims agent|reference]   label agent A's claims (default) or the reference's own (no agent A, no
  *                                      matching, no pairing: the labeller scored alone)
  *   score     --label <name>           (the label `stored` scores what the DB holds)

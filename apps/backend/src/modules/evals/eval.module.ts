@@ -10,6 +10,7 @@ import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-cla
 import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
 import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
+import { AspectShortlistService } from 'src/modules/statements/services/aspect-shortlist.service.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 
@@ -43,6 +44,7 @@ import { EvalScoreService } from './services/eval-score.service.js';
 		PostClaimsAgent,
 		PostGateAgent,
 		ClaimLabelsClassifier,
+		AspectShortlistService,
 		TermTopicAgent,
 		VenueMatchAgent,
 		ReviewReferenceAgent,

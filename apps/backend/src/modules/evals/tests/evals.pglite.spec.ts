@@ -16,6 +16,7 @@ import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/revi
 import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
+import { AspectShortlistService } from 'src/modules/statements/services/aspect-shortlist.service.js';
 import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
@@ -146,6 +147,7 @@ describe('Ingestion eval', () => {
 				EvalCollectService,
 				EvalReferenceService,
 				EvalRunService,
+				AspectShortlistService,
 				EvalScoreService,
 				{ provide: PgBossService, useValue: {} },
 				{ provide: PostGateAgent, useValue: gateAgent() },

@@ -5,7 +5,6 @@ import _ from 'lodash';
 import type { DecisionModelId } from 'src/modules/llm/constants/decision-models.constant.js';
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 import { DecisionModelsService } from 'src/modules/llm/services/decision-models.service.js';
-import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import { VenueMatchAgent } from 'src/modules/pipeline/match-mentions/agents/venue-match.agent.js';
 import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
 import { readPostClaims } from 'src/modules/pipeline/read-posts/util/post-claims-read.js';
@@ -16,21 +15,9 @@ import {
 	type MatchInput,
 } from 'src/modules/social/services/mention-matching.service.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
-import {
-	EMBEDDING_REQUEST_CLAIMS,
-	STATEMENT_EMBEDDING_DIMENSIONS,
-} from 'src/modules/statements/constants/embeddings.constant.js';
 import type { StatementUnit } from 'src/modules/statements/entities/statement.entity.js';
-import {
-	aspectEmbeddingText,
-	aspectShortlist,
-	aspectVectors,
-} from 'src/modules/statements/util/aspect-shortlist.js';
-import {
-	type ClaimLabelAspect,
-	claimLabelAspects,
-	claimLabelsOf,
-} from 'src/modules/statements/util/claim-labels.js';
+import { AspectShortlistService } from 'src/modules/statements/services/aspect-shortlist.service.js';
+import { claimLabelAspects, claimLabelsOf } from 'src/modules/statements/util/claim-labels.js';
 import { claimFoods } from 'src/modules/statements/util/claim-parts-answer.js';
 import {
 	type ClaimPartsInputSource,
@@ -123,7 +110,7 @@ export class EvalRunService {
 		private readonly venueMatchAgent: VenueMatchAgent,
 		private readonly claimLabelsClassifier: ClaimLabelsClassifier,
 		private readonly decisionModels: DecisionModelsService,
-		private readonly embeddings: EmbeddingsService,
+		private readonly aspectShortlist: AspectShortlistService,
 	) {}
 
 	async run(
@@ -369,7 +356,7 @@ export class EvalRunService {
 				reading.classifierModel ? { model: reading.classifierModel } : undefined;
 			const offeredOf =
 				reading.aspectShortlist ?
-					await this.shortlists(aspects, questions, reading.aspectShortlist)
+					await this.aspectShortlist.forTexts(aspects, questions, reading.aspectShortlist)
 				:	undefined;
 			await runPool(
 				questions,
@@ -531,28 +518,6 @@ export class EvalRunService {
 	 * texts embedded at the claims' 1,024 values, a thousand a request (paid to OpenAI by the token,
 	 * cents a run)
 	 */
-	private async shortlists(
-		aspects: ClaimLabelAspect[],
-		questions: { id: string; text: string }[],
-		size: number,
-	): Promise<Map<string, string[]>> {
-		const embed = async (texts: string[]) => {
-			const out: number[][] = [];
-			for (const chunk of _.chunk(texts, EMBEDDING_REQUEST_CLAIMS))
-				out.push(
-					...(
-						await this.embeddings.embedMany(chunk, {
-							dimensions: STATEMENT_EMBEDDING_DIMENSIONS,
-						})
-					).embeddings,
-				);
-			return out;
-		};
-		const vectors = aspectVectors(aspects, await embed(aspects.map(aspectEmbeddingText)));
-		const claims = await embed(questions.map(q => q.text));
-		return new Map(questions.map((q, i) => [q.id, aspectShortlist(claims[i], vectors, size)]));
-	}
-
 	private async match(
 		c: PostCase,
 		city: EvalCity,

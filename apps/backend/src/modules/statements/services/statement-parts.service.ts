@@ -15,9 +15,12 @@ import { runPool } from 'src/shared/util/pool.js';
 import { ClaimLabelsClassifier } from '../classifiers/claim-labels.classifier.js';
 import { Statement } from '../entities/statement.entity.js';
 import { StatementPart } from '../entities/statement-part.entity.js';
-import { claimLabelAspects, claimLabelsOf } from '../util/claim-labels.js';
+import { type ClaimLabelAspect, claimLabelAspects, claimLabelsOf } from '../util/claim-labels.js';
 import { claimFoods } from '../util/claim-parts-answer.js';
 import { type ClaimPartsInputSource, claimPartsQuestions } from '../util/claim-parts-input.js';
+
+import { AspectShortlistService } from './aspect-shortlist.service.js';
+import { StatementEmbeddingService } from './statement-embedding.service.js';
 
 // Claims labelled side by side, one a call (a decision is one short call)
 const CONCURRENCY = 20;
@@ -32,7 +35,8 @@ export const PARTS_PENDING_SQL = 's.text is not null and s.parts_at is null';
  * foods as food parts (`Statement.foodsFromA`, held in memory by `StatementService`; a `Term` each,
  * `TermService.ensure`, once a batch), then the claim-labels classifier's sentiment, kind and aspect
  * part (Jev, `ClaimLabelsClassifier`: the user's call of 2026-11-05), read from the claim and its
- * neighbours alone, never a source read again. The number is agent A's, else the text parsed for
+ * neighbours alone, never a source read again, offered each claim's aspect shortlist (the closest
+ * aspects to its vector, `AspectShortlistService`; every aspect when its embedding fails). The number is agent A's, else the text parsed for
  * the aspect's unit. Runs right after agent A over the step's new claims, and as the daily LLM
  * backlog `statement-parts` over any claim without `partsAt` (clearing `partsAt` labels a claim
  * again, its foods untouched: aspect discovery re-files claims that way). A food part's topics are
@@ -48,6 +52,8 @@ export class StatementPartsService implements OnModuleInit {
 		private readonly llmBacklogRegistry: LlmBacklogRegistry,
 		private readonly topicService: TopicService,
 		private readonly termService: TermService,
+		private readonly statementEmbeddings: StatementEmbeddingService,
+		private readonly aspectShortlist: AspectShortlistService,
 	) {}
 
 	onModuleInit() {
@@ -105,6 +111,7 @@ export class StatementPartsService implements OnModuleInit {
 		let usd = 0;
 		try {
 			await this.storeFoodsFromA(statements, index);
+			const offeredOf = await this.shortlists(aspects, statements);
 			// One claim a call, its source's other claims beside it
 			await runPool(
 				this.calls(statements).flatMap(claimPartsQuestions),
@@ -112,8 +119,10 @@ export class StatementPartsService implements OnModuleInit {
 				async question => {
 					const statement = byId.get(question.id);
 					if (!statement || statement.partsAt) return;
+					const offered = offeredOf?.get(question.id);
 					const res = await this.claimLabelsClassifier.decide(question.state, {
 						aspects,
+						...(offered && { offered }),
 					});
 					tokens += res.usage.totalTokens ?? 0;
 					usd += res.usd;
@@ -176,6 +185,33 @@ export class StatementPartsService implements OnModuleInit {
 					);
 			}
 			statement.foodsFromA = undefined;
+		}
+	}
+
+	/**
+	 * Each claim's aspect shortlist by its id (the user's call, 2026-11-09: about half of Jev's
+	 * cost, `ASPECT_SHORTLIST_SIZE`), its vector the stored one or made and stored now. Undefined when
+	 * the embedding fails (no OpenAI credit, a wrong key): every aspect is offered then, at twice the
+	 * cost, rather than the claims waiting unlabelled.
+	 */
+	private async shortlists(
+		aspects: ClaimLabelAspect[],
+		statements: Statement[],
+	): Promise<Map<string, string[]> | undefined> {
+		try {
+			const vectors = await this.statementEmbeddings.vectorsOf(
+				statements.map(s => ({ id: s.id, text: s.text! })),
+			);
+			return await this.aspectShortlist.forVectors(
+				aspects,
+				statements.flatMap(s => {
+					const vector = vectors?.get(s.id);
+					return vector ? [{ id: String(s.id), vector }] : [];
+				}),
+			);
+		} catch (e) {
+			this.logger.warn(`No aspect shortlist, every aspect offered: ${(e as Error).message}`);
+			return undefined;
 		}
 	}
 
