@@ -9,11 +9,6 @@ import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
-import { Report } from 'src/modules/reports/entities/report.entity.js';
-import type {
-	ReportData,
-	ReportHighlights,
-} from 'src/modules/reports/interfaces/report-data.interface.js';
 import { ReportService } from 'src/modules/reports/services/report.service.js';
 import { ReportConfigService } from 'src/modules/reports/services/report-config.service.js';
 import { ReportTemplateService } from 'src/modules/reports/services/report-template.service.js';
@@ -146,7 +141,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 		let venue: Venue;
 		let critical: Review;
 		let answered: Review;
-		let drafted: Review;
+		let middling: Review;
 
 		beforeAll(async () => {
 			venue = newVenue('Review House');
@@ -157,7 +152,6 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				textTranslated: 'Cold and slow',
 				language: 'de',
 				complaints: [{ text: 'slow', aspect: 'service' }],
-				replyDraft: 'Danke, das schauen wir uns an.',
 			});
 			answered = newReview(venue, {
 				stars: 1,
@@ -166,7 +160,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				ownerResponse: 'Sorry!',
 				complaints: [{ text: 'rude', aspect: 'service' }],
 			});
-			drafted = newReview(venue, {
+			middling = newReview(venue, {
 				stars: 3,
 				text: 'Okay food',
 				language: 'en',
@@ -181,20 +175,6 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				praise: [{ text: 'great', aspect: 'taste' }],
 			});
 			newReview(other, { stars: 1, text: 'Not this venue', language: 'en' });
-			em().create(Report, {
-				brand: venue.brand,
-				city,
-				month: '2026-08',
-				data: {
-					reviews: {
-						replyDrafts: [
-							{ reviewId: drafted.reviewId, draft: 'Thanks for coming by!' },
-							{ reviewId: answered.reviewId, draft: 'Should not show: answered' },
-						],
-					},
-				} as unknown as ReportData,
-				highlights: { title: 't', headline: 'h' } as ReportHighlights,
-			});
 			await em().flush();
 		});
 
@@ -214,7 +194,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 		});
 
 		it('filters by month, stars, topic (an aspect root: a claim under it), answered and language', async () => {
-			expect((await list({ month: '2026-08' })).items.map(r => r.id)).toEqual([drafted.id]);
+			expect((await list({ month: '2026-08' })).items.map(r => r.id)).toEqual([middling.id]);
 			expect((await list({ stars: 2 })).items.map(r => r.id)).toEqual([critical.id]);
 			expect((await list({ topic: 'service' })).items.map(r => r.id).sort()).toEqual(
 				[critical.id, answered.id].sort(),
@@ -239,15 +219,10 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 			expect((await list({ language: 'de' })).items.map(r => r.id)).toEqual([critical.id]);
 		});
 
-		it('lists the reviews needing a reply, lowest stars first, with their drafts', async () => {
+		it('lists the reviews needing a reply, lowest stars first', async () => {
 			const { items } = await list({ needsReply: true });
-			expect(items.map(r => r.id)).toEqual([critical.id, drafted.id]);
-			// The alert's own draft, then a report's
-			expect(items[0].replyDraft).toBe('Danke, das schauen wir uns an.');
-			expect(items[1].replyDraft).toBe('Thanks for coming by!');
-			const answeredOut = (await list({ answered: true })).items[0];
-			expect(answeredOut).toMatchObject({ answered: true });
-			expect(answeredOut.replyDraft).toBeUndefined();
+			expect(items.map(r => r.id)).toEqual([critical.id, middling.id]);
+			expect((await list({ answered: true })).items[0]).toMatchObject({ answered: true });
 		});
 
 		it('gives the filter values and the to-do count', async () => {
@@ -272,12 +247,11 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 				replied: true,
 			});
 			expect(marked.answered).toBe(true);
-			expect(marked.replyDraft).toBeUndefined();
 			em().clear();
 			expect(
 				(await em().findOneOrFail(Review, { id: critical.id })).markedRepliedAt,
 			).toBeInstanceOf(Date);
-			expect((await list({ needsReply: true })).items.map(r => r.id)).toEqual([drafted.id]);
+			expect((await list({ needsReply: true })).items.map(r => r.id)).toEqual([middling.id]);
 
 			const unmarked = await controller.markPortalReviewReplied(venue.brand.id, critical.id, {
 				replied: false,

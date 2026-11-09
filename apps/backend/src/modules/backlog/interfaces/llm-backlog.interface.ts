@@ -17,11 +17,6 @@ export interface LlmBacklog {
 	label: string;
 	/** Smaller runs first (10 before 20) */
 	priority: number;
-	/**
-	 * Reading: what a source says, by the reading agents (claims, their labels, wordings' topics, a
-	 * re-read). Keeps draining while `LLM_INGESTION_ONLY` pauses the rest, which wait in their queue.
-	 */
-	ingestion?: boolean;
 	/** Items still to do; 0 ends the backlog for the day */
 	remaining(): Promise<number>;
 	/**

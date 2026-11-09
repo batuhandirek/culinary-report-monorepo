@@ -14,8 +14,6 @@ import { LLMModule } from '../llm/llm.module.js';
 import { StatementsModule } from '../statements/statements.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 
-import { PressClassificationAgent } from './agents/press-classification.agent.js';
-import { ReviewClaimsAgent } from './agents/review-claims.agent.js';
 import { AdminBrandsController } from './controllers/admin.brands.controller.js';
 import { AdminDishSearchesController } from './controllers/admin.dish-searches.controller.js';
 import { AdminReviewsController } from './controllers/admin.reviews.controller.js';
@@ -53,7 +51,6 @@ import { VenueScrapeService } from './services/venue-scrape.service.js';
 import { VenueStatusChangeService } from './services/venue-status-change.service.js';
 import { WebMentionService } from './services/web-mention.service.js';
 import { BrandAutoMergeWorker } from './workers/brand-auto-merge.worker.js';
-import { BrandSearchWorker } from './workers/brand-search.worker.js';
 
 @Module({
 	imports: [
@@ -88,11 +85,9 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 	providers: [
 		BrandService,
 		BrandAutoMergeWorker,
-		BrandSearchWorker,
 		VenueService,
 		WebMentionService,
 		TripadvisorReviewService,
-		PressClassificationAgent,
 		VenueScrapeService,
 		VenueStatusChangeService,
 		DishSearchService,
@@ -112,7 +107,6 @@ import { BrandSearchWorker } from './workers/brand-search.worker.js';
 		ReviewService,
 		ReviewDigestionService,
 		RatingSnapshotService,
-		ReviewClaimsAgent,
 	],
 	exports: [
 		BrandService,

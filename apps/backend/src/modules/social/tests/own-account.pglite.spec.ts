@@ -1,6 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
@@ -22,6 +21,8 @@ import {
 	type ProfilePlatform,
 	tiktokProfileFigures,
 } from '../util/accounts.js';
+
+import { profileRuns, profilesTotal } from '../util/profile-runs.js';
 
 import { accountSnapshot, ownAccount } from './factories/social-account.factory.js';
 
@@ -89,19 +90,15 @@ describe('OwnAccountService (pglite)', () => {
 	let venue: Venue;
 	let brand: Brand;
 	let instagramFollowers = 4200;
-	const runActor = jest.fn(
-		async (actor: string, _input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
-			if (actor === 'apify/instagram-profile-scraper')
-				return [instagramProfile(instagramFollowers, 120)];
-			if (actor === 'clockworks/tiktok-profile-scraper')
-				return [
-					tiktokVideo(1, 20_000, '2026-09-25T10:00:00.000Z'),
-					tiktokVideo(2, 4_000, '2026-09-10T10:00:00.000Z'),
-					{ error: 'Profile not found', input: 'gone_handle' },
-				];
-			return [];
-		},
-	);
+	/** What a profile run of the platform returns (its profile atom stores it; the save is tested here) */
+	const itemsOf = (platform: ProfilePlatform): any[] =>
+		platform === SocialPlatformEnum.INSTAGRAM ?
+			[instagramProfile(instagramFollowers, 120)]
+		:	[
+				tiktokVideo(1, 20_000, '2026-09-25T10:00:00.000Z'),
+				tiktokVideo(2, 4_000, '2026-09-10T10:00:00.000Z'),
+				{ error: 'Profile not found', input: 'gone_handle' },
+			];
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -112,7 +109,6 @@ describe('OwnAccountService (pglite)', () => {
 				SocialPostService,
 				HashtagService,
 				AdminBrandAccountsController,
-				{ provide: ApifyService, useValue: { runActor } },
 			],
 		});
 		service = harness.moduleRef.get(OwnAccountService);
@@ -173,38 +169,55 @@ describe('OwnAccountService (pglite)', () => {
 		});
 	});
 
-	// The monthly run's scrape of the brand's linked accounts (the watch list decides which)
+	// The monthly run's scrape of the brand's linked accounts (the watch list decides which): the
+	// plan's runs, each saved as its atom saves it
 	const scrapeMonth = async (month: string, now: Date) => {
 		const accounts = await harness.orm.em.find(SocialAccount, { brand: brand.id });
-		return harness.moduleRef.get(AccountScrapeService).scrape(
-			city,
+		const scrape = harness.moduleRef.get(AccountScrapeService);
+		const runs = profileRuns(
 			accounts.map(a => ({ platform: a.platform as ProfilePlatform, handle: a.handle })),
-			{
-				since: `${month}-01T00:00:00.000Z`,
-				budgetUsd: 2,
-				latestTen: true,
-				label: month,
-				now,
-			},
+			{ budgetUsd: 2, since: `${month}-01T00:00:00.000Z`, latestTen: true, label: month },
 		);
+		const instagram =
+			runs.instagram ?
+				await scrape.saveInstagramProfiles(
+					city,
+					runs.instagram,
+					itemsOf(SocialPlatformEnum.INSTAGRAM),
+					{ now, accounts: 'all' },
+				)
+			:	null;
+		const tiktok =
+			runs.tiktok ?
+				await scrape.saveTiktokProfiles(
+					city,
+					runs.tiktok,
+					itemsOf(SocialPlatformEnum.TIKTOK),
+					{
+						now,
+						accounts: 'all',
+					},
+				)
+			:	null;
+		return { runs, ...profilesTotal([instagram, tiktok]) };
 	};
 
 	it('scrapes a snapshot per run per account and reports the growth between month closes', async () => {
 		const em = harness.orm.em;
 		const first = await scrapeMonth('2026-08', new Date('2026-09-02T06:00:00Z'));
 		// The removed account is not scraped; the budget splits by paid items (1 vs 10)
-		expect(first).toMatchObject({ accounts: 2, profiles: 2, snapshots: 2 });
-		const [igCall, ttCall] = runActor.mock.calls;
-		expect(igCall[1]).toEqual({ usernames: ['chenche_berlin'] });
-		expect(igCall[2].maxCostUsd).toBeCloseTo(2 / 11);
-		// A snapshot run takes the latest ten videos whatever their date: the averages are over them
-		expect(ttCall[1]).toMatchObject({
-			profiles: ['chenche.berlin'],
-			resultsPerPage: 10,
-			profileSorting: 'latest',
+		expect(first).toMatchObject({ asked: 2, profiles: 2, snapshots: 2 });
+		expect(first.runs.instagram).toMatchObject({
+			handles: ['chenche_berlin'],
+			read: { mode: 'posts' },
 		});
-		expect(ttCall[1]).not.toHaveProperty('oldestPostDateUnified');
-		expect(ttCall[2].maxCostUsd).toBeCloseTo(20 / 11);
+		expect(first.runs.instagram!.maxCostUsd).toBeCloseTo(2 / 11);
+		// A snapshot run takes the latest ten videos whatever their date: the averages are over them
+		expect(first.runs.tiktok).toMatchObject({
+			handles: ['chenche.berlin'],
+			read: { mode: 'latest' },
+		});
+		expect(first.runs.tiktok!.maxCostUsd).toBeCloseTo(20 / 11);
 		// The accounts take the profile's name and followers
 		const ig = await em.findOneOrFail(SocialAccount, { handle: 'chenche_berlin' });
 		expect(ig).toMatchObject({ displayName: 'Chén Chè Teehaus', followers: 4200 });

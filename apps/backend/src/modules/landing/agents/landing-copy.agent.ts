@@ -6,9 +6,9 @@ import {
 	BaseMastraAgent,
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 import { LINE_WORDS } from '../util/landing-copy.js';
-import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 const landingCopySchema = z.object({
 	lede: z

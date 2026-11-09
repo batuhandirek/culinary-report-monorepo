@@ -1,6 +1,14 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import type { OpenTableItem } from 'src/modules/apify/actors/opentable.actor.js';
+import type { TheForkItem } from 'src/modules/apify/actors/thefork.actor.js';
+import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
+
+import { startActorCall } from 'src/modules/apify/actors/actor.js';
+import { type ActorRunRef, ApifyService } from 'src/modules/apify/services/apify.service.js';
+import type { City } from 'src/modules/cities/entities/city.entity.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
+import { settleHandles } from 'src/modules/durable-workflows/util/durable-steps.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -10,17 +18,15 @@ import {
 	ReservationPlatformEnum,
 	VenueReservationSample,
 } from '../entities/venue-reservation-sample.entity.js';
+import { GoogleReserveAvailabilityService } from '../services/google-reserve-availability.service.js';
 import {
-	OpenTableAvailabilityService,
 	openTableAvailability,
-	type OpenTableItem,
+	OpenTableAvailabilityService,
 } from '../services/opentable-availability.service.js';
 import {
-	TheForkAvailabilityService,
 	theForkAvailability,
-	type TheForkItem,
+	TheForkAvailabilityService,
 } from '../services/thefork-availability.service.js';
-import { GoogleReserveAvailabilityService } from '../services/google-reserve-availability.service.js';
 import { VenueReservationService } from '../services/venue-reservation.service.js';
 import {
 	bookedPercent,
@@ -198,14 +204,51 @@ describe('VenueReservationService (pglite)', () => {
 			grids: [quarterHours(fromHour, 'r')],
 		});
 	};
-	const runActor =
-		jest.fn<
-			(
-				actorId: string,
-				input: Record<string, unknown>,
-				opts: { maxCostUsd: number },
-			) => Promise<unknown[]>
-		>();
+	const apify = new FakeApify<any>();
+
+	/**
+	 * As the `sample-reservations` run does: the plan, the paid runs started as children, Google's
+	 * pages fetched meanwhile, every run awaited, the samples saved, then a failed platform fails
+	 * the run
+	 */
+	const sample = async (
+		venues: Venue[],
+		city: Pick<City, 'name' | 'timezone'>,
+		budgetUsd: number,
+		opts: { now: Date; maxVenues?: number },
+	) => {
+		const plan = service.planSample(venues, city, budgetUsd, opts);
+		const thefork = plan.thefork ? await startActorCall(apify, plan.thefork.call) : null;
+		const opentable: WorkflowHandle<ActorRunRef>[] = [];
+		for (const run of plan.opentable) opentable.push(await startActorCall(apify, run.call));
+		const google = await service.sampleGoogle(plan.google, plan.dates, opts.now);
+		const settledFork = thefork ? await settleHandles([thefork]) : [];
+		const settledTable = await settleHandles(opentable);
+		const failed = [
+			...(google.error ? [`google: ${google.error}`] : []),
+			...settledFork.flatMap(o => (o.ok ? [] : [`thefork: ${o.error}`])),
+			...settledTable.flatMap(o => (o.ok ? [] : [`opentable: ${o.error}`])),
+		];
+		const byPlatform = await service.saveSamples(
+			plan,
+			{
+				...(thefork && {
+					thefork: settledFork[0].ok ? settledFork[0].value.recordId : null,
+				}),
+				opentable: settledTable.map(o => (o.ok ? o.value.recordId : null)),
+			},
+			opts.now,
+		);
+		if (failed.length) throw new Error(`Reservation sampling failed (${failed.join('; ')})`);
+		const samples = { ...(plan.google.length && { google: google.found }), ...byPlatform };
+		return {
+			venues: plan.venues,
+			noPlatform: plan.noPlatform,
+			capped: plan.capped,
+			samples: Object.values(samples).reduce((n, v) => n + v, 0),
+			byPlatform: samples,
+		};
+	};
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -214,7 +257,7 @@ describe('VenueReservationService (pglite)', () => {
 				TheForkAvailabilityService,
 				OpenTableAvailabilityService,
 				GoogleReserveAvailabilityService,
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: apify },
 			],
 		});
 		service = harness.moduleRef.get(VenueReservationService);
@@ -252,7 +295,7 @@ describe('VenueReservationService (pglite)', () => {
 		});
 		const none = em.create(Venue, { city, placeId: 'p-none', name: 'Walk-in only' });
 		await em.flush();
-		runActor.mockImplementation(async (actorId, input) =>
+		apify.answer = (input, actorId) =>
 			actorId === 'clearpath/thefork-scraper' ?
 				[THEFORK_ITEM]
 			:	[
@@ -261,10 +304,9 @@ describe('VenueReservationService (pglite)', () => {
 						name: 'Grill Royal',
 						slots: input.date === '2026-10-16' ? ['18:00', '18:30'] : [],
 					},
-				],
-		);
+				];
 
-		const res = await service.sample([fork, ot, viaGoogle, none], city, 1, {
+		const res = await sample([fork, ot, viaGoogle, none], city, 1, {
 			now: new Date('2026-10-15T17:00:00Z'),
 		});
 
@@ -284,14 +326,14 @@ describe('VenueReservationService (pglite)', () => {
 		]);
 		// OpenTable: one run per date, for two, with the domain of the link; the budget split
 		// between the paid platforms, then across runs
-		const otCalls = runActor.mock.calls.filter(([actorId]) => actorId === 'canadesk/opentable');
+		const otCalls = apify.calls.filter(c => c.actor === 'canadesk/opentable');
 		expect(
-			otCalls.map(([, input]) => [input.date, input.people, input.country, input.queries]),
+			otCalls.map(({ input }) => [input.date, input.people, input.country, input.queries]),
 		).toEqual([
 			['2026-10-16', 2, 'de', ['Grill Royal, Berlin']],
 			['2026-10-17', 2, 'de', ['Grill Royal, Berlin']],
 		]);
-		expect(otCalls[0][2].maxCostUsd).toBe(0.25);
+		expect(otCalls[0].options.maxCostUsd).toBe(0.25);
 		em.clear();
 		const rows = await em.find(
 			VenueReservationSample,
@@ -301,12 +343,13 @@ describe('VenueReservationService (pglite)', () => {
 		expect(
 			rows.map(r => [r.venue.name, r.platform, r.forDate, r.slotsOpen, r.partySize]),
 		).toEqual([
+			// Google's pages are fetched while the paid runs go, so its samples are written first
+			['Booked via Google', 'google', '2026-10-16', 13, 2],
+			['Booked via Google', 'google', '2026-10-17', 0, 2],
 			['Trattoria Sample', 'thefork', '2026-10-16', 11, null],
 			['Trattoria Sample', 'thefork', '2026-10-17', 0, null],
 			['Grill Royal', 'opentable', '2026-10-16', 2, 2],
 			['Grill Royal', 'opentable', '2026-10-17', 0, 2],
-			['Booked via Google', 'google', '2026-10-16', 13, 2],
-			['Booked via Google', 'google', '2026-10-17', 0, 2],
 		]);
 		expect((await service.between(fork.id, '2026-10-01', '2026-11-01')).length).toBe(2);
 		const venues = await em.find(
@@ -338,11 +381,9 @@ describe('VenueReservationService (pglite)', () => {
 		venue.website = null;
 		await em.flush();
 
-		runActor.mockReset();
-		runActor.mockResolvedValue([THEFORK_ITEM]);
-		const res = await service.sample([venue], city, 1, {
-			now: new Date('2026-10-15T17:00:00Z'),
-		});
+		apify.reset();
+		apify.answer = () => [THEFORK_ITEM];
+		const res = await sample([venue], city, 1, { now: new Date('2026-10-15T17:00:00Z') });
 
 		expect(res).toEqual({
 			venues: 1,
@@ -351,7 +392,7 @@ describe('VenueReservationService (pglite)', () => {
 			samples: 2,
 			byPlatform: { thefork: 2 },
 		});
-		expect(runActor.mock.calls.map(([actorId, input]) => [actorId, input.startUrls])).toEqual([
+		expect(apify.calls.map(c => [c.actor, c.input.startUrls])).toEqual([
 			['clearpath/thefork-scraper', [THEFORK_TARGET.url]],
 		]);
 		expect((await em.findOneOrFail(Venue, { id: venue.id })).bookingUrl).toBe(
@@ -410,9 +451,9 @@ describe('VenueReservationService (pglite)', () => {
 		const walkIn = em.create(Venue, { city, placeId: 'p-cap-none', name: 'Capped walk-in' });
 		await em.flush();
 		googleLoad.mockClear();
-		runActor.mockClear();
+		apify.reset();
 
-		const res = await service.sample([walkIn, ...venues], city, 1, {
+		const res = await sample([walkIn, ...venues], city, 1, {
 			now: new Date('2026-10-15T17:00:00Z'),
 			maxVenues: 2,
 		});
@@ -428,7 +469,7 @@ describe('VenueReservationService (pglite)', () => {
 			new Set(googleLoad.mock.calls.map(([url]) => new URL(url).searchParams.get('c'))),
 		).toEqual(new Set(['m1', 'm2']));
 		// Google's page is free: no Apify run
-		expect(runActor).not.toHaveBeenCalled();
+		expect(apify.calls).toHaveLength(0);
 		em.clear();
 		expect((await em.findOneOrFail(Venue, { id: venues[0].id })).reservationPartner).toBe(
 			'OpenTable',
@@ -457,7 +498,7 @@ describe('VenueReservationService (pglite)', () => {
 		});
 
 		await expect(
-			service.sample(venues, city, 1, { now: new Date('2026-10-15T17:00:00Z') }),
+			sample(venues, city, 1, { now: new Date('2026-10-15T17:00:00Z') }),
 		).rejects.toThrow(/google: Stopped s2: Google answered with its captcha/);
 
 		// One load at most past the captcha: the pool stops picking up venues

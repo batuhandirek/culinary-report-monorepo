@@ -18,7 +18,6 @@
 
 	const reviews = $derived(data.reviews.list ?? []);
 	const hasTripadvisor = $derived(reviews.some((r) => r.platform === 'tripadvisor'));
-	const drafted = $derived(new Set((data.reviews.replyDrafts ?? []).map((d) => d.reviewId)));
 	const posts = $derived([
 		...data.posts.map((p) => ({ ...p, own: false })),
 		...data.ownPosts.map((p) => ({ ...p, own: true }))
@@ -199,8 +198,6 @@
 							<td class="py-1.5">
 								{#if review.replied}
 									Yes
-								{:else if drafted.has(review.reviewId)}
-									<span class="text-beet font-medium">Reply drafted</span>
 								{:else}
 									<span class="text-muted-foreground">No</span>
 								{/if}

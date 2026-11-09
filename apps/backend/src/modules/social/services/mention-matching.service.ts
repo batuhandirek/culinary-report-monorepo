@@ -23,9 +23,7 @@ import {
 	plain,
 	venueAliases,
 } from 'src/modules/venues/util/venue-names.js';
-import { isFatalProviderError, runPool } from 'src/shared/util/pool.js';
 
-import { VenueMatchAgent } from '../agents/venue-match.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPlatformEnum } from '../entities/social-post.entity.js';
 import { normalizeAccountHandle, ownPostSql } from '../util/accounts.js';
@@ -43,6 +41,8 @@ const MAX_CANDIDATES = 8;
 const ADMIN_METHODS = [MentionMatchMethodEnum.MANUAL, MentionMatchMethodEnum.IGNORED];
 // How far a brand's best branch must score ahead of its next one to be the branch the post means
 const BRANCH_LEAD = 0.05;
+// A code pass's candidates serve the per-mention plans after it this long (a city's are thousands of venues)
+const CANDIDATES_CACHE_MS = 10 * 60_000;
 
 export interface MatchCandidate {
 	id: string;
@@ -341,7 +341,9 @@ export const taggedAccountsOf = (
 		const handle = normalizeAccountHandle(name);
 		if (handle) handles.add(handle);
 	}
-	return [...handles].map(h => accounts.get(`${post.platform}:${h}`)).filter((a): a is TaggedAccount => !!a);
+	return [...handles]
+		.map(h => accounts.get(`${post.platform}:${h}`))
+		.filter((a): a is TaggedAccount => !!a);
 };
 
 export interface MatchDecision {
@@ -352,16 +354,191 @@ export interface MatchDecision {
 	score: number | null;
 }
 
+/** `VenueMatchAgent`'s answer */
+export interface MatchAnswer {
+	venueId: string | null;
+	branchId: string | null;
+}
+
 /** One `VenueMatchAgent` call: the input message in, its answer out */
-export type MatchAsk = (
-	message: string,
-) => Promise<{ venueId: string | null; branchId: string | null }>;
+export type MatchAsk = (message: string) => Promise<MatchAnswer>;
+
+/** A candidate the agent is offered, with what reading its answer needs */
+export interface OfferedCandidate {
+	id: string;
+	brandId: string;
+	score: number;
+	branchKnown: boolean;
+	/** A chain whose branch is unknown: its branches in the city (an answer naming one is the chain) */
+	branchIds: string[];
+	/** The hint names the streets of two or more of its branches: then no branch is taken */
+	severalBranches: boolean;
+}
+
+/**
+ * What matching asks `VenueMatchAgent` about one place: the message, and what reading the answer
+ * needs, as plain data (a mention's own run keeps it between its plan and its save). `pick`: the
+ * close calls, one of them or none; `branch`: a sure chain's branch, or none of its branches
+ * (another place of the same name).
+ */
+export interface MatchQuestion {
+	kind: 'pick' | 'branch';
+	message: string;
+	offered: OfferedCandidate[];
+	/** The sure pick's method, which a branch question keeps (exact or fuzzy) */
+	method: MentionMatchMethodEnum;
+	/** The best candidate's score: the decision's when nothing is picked */
+	topScore: number | null;
+}
+
+/** What matching decides for one place in code, or the one question it must ask first */
+export type MatchPlan = { decision: MatchDecision } | { question: MatchQuestion };
+
+/**
+ * What matching decides for one place without the LLM (`decideMatch` is the whole of it): another
+ * city's is `other_city`; else a tagged own account, else the ranked candidates, a sure name match
+ * accepted in code, the close calls a question for the LLM, and a sure chain whose hint the code
+ * couldn't place a question for the branch alone.
+ */
+export const planMatch = (
+	mention: MatchInput,
+	venues: CandidateVenue[],
+	names: string[],
+	words: ReadonlySet<string>,
+): MatchPlan => {
+	if (!isInCity(mention.city, names))
+		return {
+			decision: {
+				method: MentionMatchMethodEnum.OTHER_CITY,
+				brandId: null,
+				venueId: null,
+				score: null,
+			},
+		};
+
+	// The brand's own account, tagged and named after the place: what the brand calls itself
+	const tagged = taggedAccountPick(mention, venues, words);
+	if (tagged) return { decision: tagged };
+
+	const candidates = rankCandidates(mention, mention.taggedLocation, venues, words);
+	// A sure name the hint places elsewhere is the LLM's call, never the code's
+	const elsewhere = hintElsewhere(mention.locationHint, venues);
+	let picked = autoMatch(candidates);
+	if (picked && elsewhere(picked.brandId)) picked = null;
+	const method =
+		picked ?
+			picked.raw === 1 ?
+				MentionMatchMethodEnum.EXACT
+			:	MentionMatchMethodEnum.FUZZY
+		:	MentionMatchMethodEnum.NONE;
+	const topScore = candidates[0]?.score ?? null;
+
+	const question = (kind: MatchQuestion['kind'], offered: MatchCandidate[]): MatchQuestion => ({
+		kind,
+		message: JSON.stringify({
+			mention: {
+				name: mention.venueName,
+				author: mention.author,
+				locationHint: mention.locationHint,
+				cuisine: mention.cuisine,
+				said: mention.said.slice(0, 5),
+				taggedLocation: mention.taggedLocation,
+			},
+			// A chain whose branch is unknown is offered as the brand, with where its branches are
+			candidates: offered.map(c => ({
+				id: c.id,
+				name: !c.branchKnown ? c.brandName : c.name,
+				category: c.category,
+				...(!c.branchKnown ?
+					{ branches: c.branches, locations: branchLocations(venues, c.brandId) }
+				:	{ district: c.district, street: c.street }),
+			})),
+		}),
+		offered: offered.map(c => ({
+			id: c.id,
+			brandId: c.brandId,
+			score: c.score,
+			branchKnown: c.branchKnown,
+			branchIds:
+				c.branchKnown ? [] : venues.filter(v => v.brandId === c.brandId).map(v => v.id),
+			severalBranches:
+				!c.branchKnown && namesSeveralBranches(mention.locationHint, venues, c.brandId),
+		})),
+		method,
+		topScore,
+	});
+
+	if (!picked && candidates.length > 0) return { question: question('pick', candidates) };
+	if (
+		picked &&
+		!picked.branchKnown &&
+		hasHint(mention.locationHint) &&
+		!names.some(n => plain(n).trim() === plain(mention.locationHint!).trim()) &&
+		!namesSeveralBranches(mention.locationHint, venues, picked.brandId)
+	)
+		// The chain is sure but the code couldn't place the hint ("near Rosenthaler Platz",
+		// "Prenzlauer Berg"): the LLM picks the branch, or none
+		return { question: question('branch', [picked]) };
+
+	// A chain's branch only when the post says which: else the brand alone
+	return {
+		decision: {
+			method,
+			brandId: picked?.brandId ?? null,
+			venueId: picked?.branchKnown ? picked.id : null,
+			score: picked?.score ?? topScore,
+		},
+	};
+};
+
+/** The decision a question's answer gives: pure, from the question alone */
+export const settleMatch = (question: MatchQuestion, answer: MatchAnswer): MatchDecision => {
+	const { offered } = question;
+	// A chain is offered by one branch's id; a model may answer with another of its branches' ids:
+	// still the chain (the branch only from `branchId`, never a guess)
+	const chosen =
+		offered.find(c => c.id === answer.venueId) ??
+		offered.find(
+			c => !c.branchKnown && !!answer.venueId && c.branchIds.includes(answer.venueId),
+		) ??
+		null;
+	// The model sometimes picks one of several branches a post lists: the streets decide that
+	const branchId =
+		(
+			chosen &&
+			!chosen.branchKnown &&
+			answer.branchId &&
+			!chosen.severalBranches &&
+			chosen.branchIds.includes(answer.branchId)
+		) ?
+			answer.branchId
+		:	null;
+	if (question.kind === 'branch')
+		// None of the chain's branches is where the post says: another place of the same name
+		return chosen ?
+				{
+					method: question.method,
+					brandId: chosen.brandId,
+					venueId: branchId,
+					score: chosen.score,
+				}
+			:	{
+					method: MentionMatchMethodEnum.NONE,
+					brandId: null,
+					venueId: null,
+					score: question.topScore,
+				};
+	return {
+		method: chosen ? MentionMatchMethodEnum.LLM : MentionMatchMethodEnum.NONE,
+		brandId: chosen?.brandId ?? null,
+		venueId: chosen?.branchKnown ? chosen.id : branchId,
+		score: chosen?.score ?? question.topScore,
+	};
+};
 
 /**
  * What matching decides for one place (`MentionMatchingService` writes it on the mention, the eval
- * scores it): another city's is `other_city`; else the ranked candidates, a sure name match
- * accepted in code, the close calls asked of the LLM, and a sure chain whose hint the code
- * couldn't place asked for the branch alone (no branch fits: no match).
+ * scores it): `planMatch`, then, when it has a question, the agent's answer read by `settleMatch`.
  */
 export const decideMatch = async (
 	mention: MatchInput,
@@ -370,117 +547,44 @@ export const decideMatch = async (
 	words: ReadonlySet<string>,
 	askAgent: MatchAsk,
 ): Promise<MatchDecision> => {
-	if (!isInCity(mention.city, names))
-		return {
-			method: MentionMatchMethodEnum.OTHER_CITY,
-			brandId: null,
-			venueId: null,
-			score: null,
-		};
-
-	// The brand's own account, tagged and named after the place: what the brand calls itself
-	const tagged = taggedAccountPick(mention, venues, words);
-	if (tagged) return tagged;
-
-	const candidates = rankCandidates(mention, mention.taggedLocation, venues, words);
-	// A sure name the hint places elsewhere is the LLM's call, never the code's
-	const elsewhere = hintElsewhere(mention.locationHint, venues);
-	let picked = autoMatch(candidates);
-	if (picked && elsewhere(picked.brandId)) picked = null;
-	let method =
-		picked ?
-			picked.raw === 1 ?
-				MentionMatchMethodEnum.EXACT
-			:	MentionMatchMethodEnum.FUZZY
-		:	MentionMatchMethodEnum.NONE;
-	// The LLM's pick among a chain's branches, when the code couldn't tell
-	let branchId: string | null = null;
-
-	const ask = async (offered: MatchCandidate[]) => {
-		const answer = await askAgent(
-			JSON.stringify({
-				mention: {
-					name: mention.venueName,
-					author: mention.author,
-					locationHint: mention.locationHint,
-					cuisine: mention.cuisine,
-					said: mention.said.slice(0, 5),
-					taggedLocation: mention.taggedLocation,
-				},
-				// A chain whose branch is unknown is offered as the brand, with where its branches are
-				candidates: offered.map(c => ({
-					id: c.id,
-					name: !c.branchKnown ? c.brandName : c.name,
-					category: c.category,
-					...(!c.branchKnown ?
-						{ branches: c.branches, locations: branchLocations(venues, c.brandId) }
-					:	{ district: c.district, street: c.street }),
-				})),
-			}),
-		);
-		// A chain is offered by one branch's id; a model may answer with another of its branches' ids:
-		// still the chain (the branch only from `branchId`, never a guess)
-		const chosen =
-			offered.find(c => c.id === answer.venueId) ??
-			offered.find(
-				c =>
-					!c.branchKnown &&
-					venues.some(v => v.id === answer.venueId && v.brandId === c.brandId),
-			) ??
-			null;
-		// The model sometimes picks one of several branches a post lists: the streets decide that
-		const branch =
-			(
-				chosen &&
-				!chosen.branchKnown &&
-				answer.branchId &&
-				!namesSeveralBranches(mention.locationHint, venues, chosen.brandId)
-			) ?
-				venues.find(v => v.id === answer.branchId && v.brandId === chosen.brandId)
-			:	undefined;
-		return { chosen, branchId: branch?.id ?? null };
-	};
-
-	if (!picked && candidates.length > 0) {
-		const res = await ask(candidates);
-		picked = res.chosen;
-		branchId = res.branchId;
-		if (picked) method = MentionMatchMethodEnum.LLM;
-	} else if (
-		picked &&
-		!picked.branchKnown &&
-		hasHint(mention.locationHint) &&
-		!names.some(n => plain(n).trim() === plain(mention.locationHint!).trim()) &&
-		!namesSeveralBranches(mention.locationHint, venues, picked.brandId)
-	) {
-		// The chain is sure but the code couldn't place the hint ("near Rosenthaler Platz",
-		// "Prenzlauer Berg"): the LLM picks the branch, or none
-		const res = await ask([picked]);
-		if (res.chosen) branchId = res.branchId;
-		else {
-			// None of its branches is where the post says: another place of the same name
-			picked = null;
-			method = MentionMatchMethodEnum.NONE;
-		}
-	}
-
-	// A chain's branch only when the post says which: else the brand alone
-	if (picked?.branchKnown) branchId = picked.id;
-	return {
-		method,
-		brandId: picked?.brandId ?? null,
-		venueId: branchId,
-		score: picked?.score ?? candidates[0]?.score ?? null,
-	};
+	const plan = planMatch(mention, venues, names, words);
+	if ('decision' in plan) return plan.decision;
+	return settleMatch(plan.question, await askAgent(plan.question.message));
 };
+
+/** What a pass of matching in code did: the methods it settled, and the mentions only the agent can */
+export interface MatchPass {
+	counts: Record<MentionMatchMethodEnum, number>;
+	/** The close calls: each its own run (`match-mentions.mention`), the agent asked there */
+	asks: number[];
+}
+
+/** One mention's plan for its own run, with its city (the ledger files the agent's call under it) */
+export type MentionMatchPlan = { cityId: string } & MatchPlan;
+
+const emptyCounts = () =>
+	Object.fromEntries(Object.values(MentionMatchMethodEnum).map(m => [m, 0])) as Record<
+		MentionMatchMethodEnum,
+		number
+	>;
+
+const isCorrected = (mention: Mention) =>
+	!!mention.matchMethod && ADMIN_METHODS.includes(mention.matchMethod);
 
 @Injectable()
 export class MentionMatchingService {
 	private readonly logger = new Logger(MentionMatchingService.name);
 
+	/** Each city's candidates as the last code pass loaded them, for the mentions' own plans after it */
+	private readonly candidatesCache = new Map<
+		string,
+		{ at: number; venues: Promise<CandidateVenue[]> }
+	>();
+	private accountsCache: { at: number; accounts: Promise<Map<string, TaggedAccount>> } | null =
+		null;
+
 	constructor(
 		private readonly em: EntityManager,
-		private readonly venueMatchAgent: VenueMatchAgent,
 		private readonly cityService: CityService,
 		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
@@ -499,31 +603,26 @@ export class MentionMatchingService {
 
 	/**
 	 * Links mentions to venues of the post's city (of one city, or of every city without
-	 * `cityId`). Unmatched ones are only retried when the city got venues since their last
-	 * attempt (a Google Maps lookup); `rematch` redoes every mention except the ones an admin
-	 * corrected (`MANUAL`, `IGNORED`), which are never touched.
+	 * `cityId`), in code: what it settles is saved (`decideInCode`), and the close calls, which only
+	 * `VenueMatchAgent` can settle, are left as they were and listed in `asks` for their own runs
+	 * (`match-mentions.mention`: `planMention`, the agent, `saveMatch`). Unmatched ones are only
+	 * retried when the city got venues since their last attempt (a Google Maps lookup); `rematch`
+	 * redoes every mention except the ones an admin corrected (`MANUAL`, `IGNORED`), which are
+	 * never touched.
 	 */
-	async match(
-		opts: { cityId?: string; rematch?: boolean } = {},
-	): Promise<Record<MentionMatchMethodEnum, number>> {
-		const counts = Object.fromEntries(
-			Object.values(MentionMatchMethodEnum).map(m => [m, 0]),
-		) as Record<MentionMatchMethodEnum, number>;
+	async match(opts: { cityId?: string; rematch?: boolean } = {}): Promise<MatchPass> {
+		const pass: MatchPass = { counts: emptyCounts(), asks: [] };
 		const cities =
 			opts.cityId ?
 				[await this.cityService.getById(opts.cityId)]
 			:	await this.cityService.list();
-		for (const city of cities) await this.matchCity(city, !!opts.rematch, counts);
-		return counts;
+		for (const city of cities) await this.matchCity(city, !!opts.rematch, pass);
+		return pass;
 	}
 
-	private async matchCity(
-		city: City,
-		rematch: boolean,
-		counts: Record<MentionMatchMethodEnum, number>,
-	): Promise<void> {
+	private async matchCity(city: City, rematch: boolean, pass: MatchPass): Promise<void> {
 		const words = cityStopwords(city.nameStopwords);
-		const venues = await this.candidateVenues(city, words);
+		const venues = await this.candidateVenues(city, words, { fresh: true });
 		const mentions = await this.em.find(Mention, await this.toMatch(city, rematch), {
 			populate: ['post', 'statements'],
 		});
@@ -532,22 +631,44 @@ export class MentionMatchingService {
 		);
 
 		const names = cityNames(city);
-		const accounts = await this.brandAccounts();
-		await this.matchAll(mentions, venues, names, words, counts, accounts);
-		await this.sweepTags(city, venues, words, accounts, counts);
+		const accounts = await this.brandAccounts({ fresh: true });
+		await this.decideInCode(mentions, venues, names, words, accounts, pass);
+		await this.sweepTags(city, venues, words, accounts, pass.counts);
 	}
 
-	/** Every brand's own account on Instagram and TikTok, by `platform:handle`: what a post's tags can point at. */
-	private async brandAccounts(): Promise<Map<string, TaggedAccount>> {
-		const rows: { platform: string; handle: string; brand_id: string; branch_id: string | null }[] = await this.em
-			.getConnection()
-			.execute(
-				`select platform, handle, brand_id, branch_id from social_accounts
+	/**
+	 * Every brand's own account on Instagram and TikTok, by `platform:handle`: what a post's tags can
+	 * point at. A code pass reads them fresh; a mention's own plan takes the last pass's.
+	 */
+	private brandAccounts({ fresh = false } = {}): Promise<Map<string, TaggedAccount>> {
+		if (
+			!fresh &&
+			this.accountsCache &&
+			Date.now() - this.accountsCache.at < CANDIDATES_CACHE_MS
+		)
+			return this.accountsCache.accounts;
+		const accounts = this.readBrandAccounts();
+		this.accountsCache = { at: Date.now(), accounts };
+		accounts.catch(() => (this.accountsCache = null));
+		return accounts;
+	}
+
+	private async readBrandAccounts(): Promise<Map<string, TaggedAccount>> {
+		const rows: {
+			platform: string;
+			handle: string;
+			brand_id: string;
+			branch_id: string | null;
+		}[] = await this.em.getConnection().execute(
+			`select platform, handle, brand_id, branch_id from social_accounts
 				where brand_id is not null and handle_lost_at is null and platform in (?, ?)`,
-				[SocialPlatformEnum.INSTAGRAM, SocialPlatformEnum.TIKTOK],
-			);
+			[SocialPlatformEnum.INSTAGRAM, SocialPlatformEnum.TIKTOK],
+		);
 		return new Map(
-			rows.map(r => [`${r.platform}:${r.handle}`, { handle: r.handle, brandId: r.brand_id, branchId: r.branch_id }]),
+			rows.map(r => [
+				`${r.platform}:${r.handle}`,
+				{ handle: r.handle, brandId: r.brand_id, branchId: r.branch_id },
+			]),
 		);
 	}
 
@@ -571,8 +692,15 @@ export class MentionMatchingService {
 		);
 		if (!rows.length || !accounts.size) return;
 		const matched: Mention[] = [];
-		for (const ids of _.chunk(rows.map(r => r.id), 1000)) {
-			for (const mention of await this.em.find(Mention, { id: { $in: ids } }, { populate: ['post'] })) {
+		for (const ids of _.chunk(
+			rows.map(r => r.id),
+			1000,
+		)) {
+			for (const mention of await this.em.find(
+				Mention,
+				{ id: { $in: ids } },
+				{ populate: ['post'] },
+			)) {
 				const decision = taggedAccountPick(
 					{
 						venueName: mention.venueName,
@@ -596,7 +724,9 @@ export class MentionMatchingService {
 		}
 		if (!matched.length) return;
 		await this.em.flush();
-		this.logger.log(`Matched ${matched.length} unmatched mentions of ${city.name} by their tagged own accounts`);
+		this.logger.log(
+			`Matched ${matched.length} unmatched mentions of ${city.name} by their tagged own accounts`,
+		);
 		await this.relinkFood(matched);
 		await this.hashtagService.relink();
 	}
@@ -607,12 +737,17 @@ export class MentionMatchingService {
 	 * runs it too.
 	 */
 	async matchByTags(cityId: string): Promise<Record<MentionMatchMethodEnum, number>> {
-		const counts = Object.fromEntries(
-			Object.values(MentionMatchMethodEnum).map(m => [m, 0]),
-		) as Record<MentionMatchMethodEnum, number>;
+		const counts = emptyCounts();
 		const city = await this.cityService.getById(cityId);
 		const words = cityStopwords(city.nameStopwords);
-		await this.sweepTags(city, await this.candidateVenues(city, words), words, await this.brandAccounts(), counts);
+		// Fresh: the account matcher may have linked accounts since the city's code pass
+		await this.sweepTags(
+			city,
+			await this.candidateVenues(city, words, { fresh: true }),
+			words,
+			await this.brandAccounts({ fresh: true }),
+			counts,
+		);
 		return counts;
 	}
 
@@ -652,55 +787,54 @@ export class MentionMatchingService {
 
 	/** How many of the city's mentions the next `match` would take: the reading's "caught up" check */
 	async pendingCount(cityId: string): Promise<number> {
-		return this.em.count(Mention, await this.toMatch(await this.cityService.getById(cityId), false));
+		return this.em.count(
+			Mention,
+			await this.toMatch(await this.cityService.getById(cityId), false),
+		);
 	}
 
 	/**
-	 * Matches the mentions, 8 at a time, and flushes. When the LLM account is unusable (no
-	 * credits, a wrong key) the close calls are left for the next run (their `matchedAt` stays as it
-	 * was) while exact and fuzzy matches go on and are saved; then the provider's error is thrown,
-	 * so the step reads failed rather than done.
+	 * Decides each mention in code and saves what that settles (flushed; their food topics and the
+	 * tags relinked). A close call is left as it was, `matchedAt` too, so the next pass takes it
+	 * again until its own run settles it, and listed in `asks`; with `markDue` its `matchedAt` is
+	 * cleared, so the city's next matching run takes it (a rematch outside a city's run).
 	 */
-	private async matchAll(
+	private async decideInCode(
 		mentions: Mention[],
 		venues: CandidateVenue[],
 		names: string[],
 		words: ReadonlySet<string>,
-		counts: Record<MentionMatchMethodEnum, number>,
 		accounts: ReadonlyMap<string, TaggedAccount>,
+		pass: MatchPass,
+		{ markDue = false } = {},
 	): Promise<void> {
-		const llm: { down?: Error } = {};
-		await runPool(
-			mentions,
-			8,
-			async mention => {
-				const before = mention.matchedAt;
-				try {
-					counts[await this.matchOne(mention, venues, names, words, accounts, llm)]++;
-				} catch (e) {
-					mention.matchedAt = before;
-					if (!isFatalProviderError(e)) throw e;
-					llm.down ??= e as Error;
-				}
-			},
-			(mention, e) => this.logger.warn(`Mention ${mention.id} failed: ${e.message}`),
-		);
+		const decided: Mention[] = [];
+		for (const mention of mentions) {
+			const plan = planMatch(this.matchInput(mention, accounts), venues, names, words);
+			if ('question' in plan) {
+				pass.asks.push(mention.id);
+				if (markDue) mention.matchedAt = null;
+				continue;
+			}
+			this.apply(mention, plan.decision);
+			pass.counts[plan.decision.method]++;
+			decided.push(mention);
+		}
 		await this.em.flush();
-		await this.relinkFood(mentions);
+		await this.relinkFood(decided);
 		// A tag names a brand once a post carrying it is matched to it
-		if (mentions.length) await this.hashtagService.relink();
-		if (llm.down) throw llm.down;
+		if (decided.length) await this.hashtagService.relink();
 	}
 
 	/**
-	 * Matches again the mentions linked to these brands or their branches (brands before and after
-	 * an admin merged or split them), except the ones an admin corrected.
+	 * Matches again, in code, the mentions linked to these brands or their branches (brands before
+	 * and after an admin merged or split them), except the ones an admin corrected. A close call
+	 * keeps its match until the agent decides it: its `matchedAt` is cleared, so the city's next
+	 * matching run asks (`match-mentions.mention`).
 	 */
-	async rematchBrands(brandIds: string[]): Promise<Record<MentionMatchMethodEnum, number>> {
-		const counts = Object.fromEntries(
-			Object.values(MentionMatchMethodEnum).map(m => [m, 0]),
-		) as Record<MentionMatchMethodEnum, number>;
-		if (brandIds.length === 0) return counts;
+	async rematchBrands(brandIds: string[]): Promise<MatchPass> {
+		const pass: MatchPass = { counts: emptyCounts(), asks: [] };
+		if (brandIds.length === 0) return pass;
 		const mentions = await this.em.find(
 			Mention,
 			{
@@ -714,68 +848,118 @@ export class MentionMatchingService {
 					{ $or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }] },
 				],
 			},
-			// `matchOne` hands the LLM what each mention said
+			// The agent's question carries what each mention said
 			{ populate: ['post', 'post.city', 'statements'] },
 		);
+		const accounts = await this.brandAccounts({ fresh: true });
 		for (const [, cityMentions] of Object.entries(_.groupBy(mentions, m => m.post.city.id))) {
 			const city = cityMentions[0].post.city;
 			const words = cityStopwords(city.nameStopwords);
-			const venues = await this.candidateVenues(city, words);
-			const names = cityNames(city);
-			await this.matchAll(cityMentions, venues, names, words, counts, await this.brandAccounts());
+			const venues = await this.candidateVenues(city, words, { fresh: true });
+			await this.decideInCode(cityMentions, venues, cityNames(city), words, accounts, pass, {
+				markDue: true,
+			});
 		}
-		this.logger.log(`Rematched ${mentions.length} mentions of ${brandIds.length} brands`);
-		return counts;
+		this.logger.log(
+			`Rematched ${mentions.length} mentions of ${brandIds.length} brands, ${pass.asks.length} left for the agent`,
+		);
+		return pass;
 	}
 
-	/** The city's open food venues as matching candidates. */
-	private async candidateVenues(
+	/**
+	 * The city's open food venues as matching candidates. A code pass reads them fresh; a mention's
+	 * own plan takes the last pass's (`CANDIDATES_CACHE_MS`), so a hundred close calls don't read a
+	 * city's thousands of venues a hundred times.
+	 */
+	private candidateVenues(
 		city: City,
 		words: ReadonlySet<string>,
+		{ fresh = false } = {},
 	): Promise<CandidateVenue[]> {
-		return toCandidateVenues(
-			await this.em.find(Venue, { city, closed: false }, { populate: ['brand'] }),
-			words,
-		);
+		const cached = this.candidatesCache.get(city.id);
+		if (!fresh && cached && Date.now() - cached.at < CANDIDATES_CACHE_MS) return cached.venues;
+		const venues = this.em
+			.find(Venue, { city, closed: false }, { populate: ['brand'] })
+			.then(rows => toCandidateVenues(rows, words));
+		this.candidatesCache.set(city.id, { at: Date.now(), venues });
+		venues.catch(() => this.candidatesCache.delete(city.id));
+		return venues;
 	}
 
-	private async matchOne(
-		mention: Mention,
-		venues: CandidateVenue[],
-		names: string[],
-		words: ReadonlySet<string>,
-		accounts: ReadonlyMap<string, TaggedAccount>,
-		llm: { down?: Error } = {},
-	): Promise<MentionMatchMethodEnum> {
-		mention.matchedAt = new Date();
-		const decision = await decideMatch(
-			{
-				venueName: mention.venueName,
-				locationHint: mention.locationHint ?? null,
-				cuisine: mention.cuisine ?? null,
-				city: mention.city ?? null,
-				author: mention.post.author ?? null,
-				taggedLocation: mention.post.locationName ?? null,
-				taggedAccounts: taggedAccountsOf(mention.post, mention.venueName, accounts),
-				said: mention.statements
-					.getItems()
-					.map(s => s.text)
-					.filter((t): t is string => !!t),
-			},
-			venues,
-			names,
-			words,
-			async message => {
-				// The LLM account failed on another mention: this close call waits for the next run
-				if (llm.down) throw llm.down;
-				return (await this.venueMatchAgent.generate(message)).object;
-			},
-		);
+	/** One mention as matching reads it (its post and statements populated) */
+	private matchInput(mention: Mention, accounts: ReadonlyMap<string, TaggedAccount>): MatchInput {
+		return {
+			venueName: mention.venueName,
+			locationHint: mention.locationHint ?? null,
+			cuisine: mention.cuisine ?? null,
+			city: mention.city ?? null,
+			author: mention.post.author ?? null,
+			taggedLocation: mention.post.locationName ?? null,
+			taggedAccounts: taggedAccountsOf(mention.post, mention.venueName, accounts),
+			said: mention.statements
+				.getItems()
+				.map(s => s.text)
+				.filter((t): t is string => !!t),
+		};
+	}
+
+	private apply(mention: Mention, decision: MatchDecision): void {
 		mention.brand = decision.brandId ? this.em.getReference(Brand, decision.brandId) : null;
 		mention.venue = decision.venueId ? this.em.getReference(Venue, decision.venueId) : null;
 		mention.matchMethod = decision.method;
 		mention.matchScore = decision.score;
+		mention.matchedAt = new Date();
+	}
+
+	/**
+	 * One close call's plan, for its own run (`match-mentions.mention`): its decision in code, when
+	 * the venues changed since the pass that listed it, or the question for the agent. Null when the
+	 * mention is gone or an admin corrected it meanwhile. Writes nothing.
+	 */
+	async planMention(mentionId: number): Promise<MentionMatchPlan | null> {
+		const mention = await this.em.findOne(
+			Mention,
+			{ id: mentionId },
+			{ populate: ['post', 'post.city', 'statements'] },
+		);
+		if (!mention || isCorrected(mention)) return null;
+		const city = mention.post.city;
+		const words = cityStopwords(city.nameStopwords);
+		const plan = planMatch(
+			this.matchInput(mention, await this.brandAccounts()),
+			await this.candidateVenues(city, words),
+			cityNames(city),
+			words,
+		);
+		return { cityId: city.id, ...plan };
+	}
+
+	/**
+	 * A close call's decision on its mention, flushed; null, with nothing written, when the mention
+	 * is gone or an admin corrected it meanwhile. The relinks wait for the city's run
+	 * (`relinkMatched`), which settles its close calls together.
+	 */
+	async saveMatch(
+		mentionId: number,
+		decision: MatchDecision,
+	): Promise<MentionMatchMethodEnum | null> {
+		const mention = await this.em.findOne(Mention, { id: mentionId });
+		if (!mention || isCorrected(mention)) return null;
+		this.apply(mention, decision);
+		await this.em.flush();
 		return decision.method;
+	}
+
+	/** After a city's close calls were saved: their food topics, the cities' venue tags and the tags' brands */
+	async relinkMatched(mentionIds: number[]): Promise<void> {
+		if (!mentionIds.length) return;
+		const mentions = await this.em.find(
+			Mention,
+			{ id: { $in: mentionIds } },
+			{ populate: ['post'] },
+		);
+		await this.relinkFood(mentions);
+		await this.hashtagService.relink();
 	}
 
 	/**
@@ -823,7 +1007,7 @@ export class MentionMatchingService {
 	 * business profile's handle we read ("selocoffeeberlin") is searched as that profile's name and
 	 * the address its bio writes out ("SELO COFFEE Tempelhofer Damm 212, 12099",
 	 * `profileSearchName`), which Google Maps finds where the handle finds nothing. No limit here,
-	 * since `lookupNames` drops the names searched lately before it caps the run.
+	 * since `VenueScrapeService.planLookups` drops the names searched lately before it caps the run.
 	 */
 	async unmatchedNames(cityId: string): Promise<string[]> {
 		const rows: {
@@ -847,7 +1031,9 @@ export class MentionMatchingService {
 		);
 		return _.uniq(
 			rows.map(r =>
-				r.handle ? profileSearchName({ handle: r.handle, displayName: r.display_name, bio: r.bio }) : r.venue_name,
+				r.handle ?
+					profileSearchName({ handle: r.handle, displayName: r.display_name, bio: r.bio })
+				:	r.venue_name,
 			),
 		);
 	}

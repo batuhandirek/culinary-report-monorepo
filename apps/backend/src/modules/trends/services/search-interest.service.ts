@@ -4,12 +4,15 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import type { ActorCall } from 'src/modules/apify/actors/actor.js';
+import {
+	GOOGLE_TRENDS_ACTOR,
+	type GoogleTrendsInput,
+	type GoogleTrendsItem,
+} from 'src/modules/apify/actors/google-trends.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
-import {
-	Topic,
-	TopicKindEnum,
-} from 'src/modules/topics/entities/topic.entity.js';
+import { Topic, TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
@@ -22,7 +25,6 @@ import {
 } from '../entities/trend-search-interest.entity.js';
 import {
 	change,
-	GoogleTrendsItem,
 	lastDayOf,
 	monthlyInterest,
 	monthsUpTo,
@@ -39,10 +41,6 @@ import {
 	topicShares,
 } from '../util/topic-mentions.js';
 
-// Google's own JSON endpoints, no browser: about $0.004 a term. `apify/google-trends-scraper`
-// renders the page and takes countries only; for a German subdivision Google failed nine pages
-// in ten there, about $0.30 a term in retried proxy traffic
-export const GOOGLE_TRENDS_ACTOR = 'signalbench/google-trends-scraper';
 // The months a pull covers and the page shows, ending with the month asked for
 export const SEARCH_WINDOW_MONTHS = 12;
 // Google Trends' Food & Drink category. Topics are searched in it (it strips "thai massage"
@@ -98,6 +96,35 @@ interface PullTerm {
 	brand: Pick<Brand, 'id' | 'name'> | null;
 }
 
+/** A term as the plan stores it (plain JSON: the topic and brand by id) */
+export interface PlannedTerm {
+	kind: SearchTermKindEnum;
+	term: string;
+	query: string;
+	topicId: string | null;
+	brandId: string | null;
+}
+
+/** One of the pull's two runs: its terms (each its own query, so 100 is its own peak) and the call */
+export interface SearchInterestRun {
+	terms: PlannedTerm[];
+	call: ActorCall<GoogleTrendsInput, GoogleTrendsItem>;
+}
+
+/** What `plan` hands the `search-interest` workflow: the topics' run in Food & Drink, the won brands' in all categories */
+export interface SearchInterestPlan {
+	month: string;
+	months: string[];
+	topics: SearchInterestRun | null;
+	brands: SearchInterestRun | null;
+}
+
+/** The runs' records as the workflow hands them to `save`: null for a run that failed */
+export interface SearchInterestRecords {
+	topics?: string | null;
+	brands?: string | null;
+}
+
 export interface SearchInterestPullResult {
 	terms: number;
 	fetched: number;
@@ -132,73 +159,122 @@ export class SearchInterestService {
 	) {}
 
 	/**
-	 * Pulls the window ending with `month` for every searched food topic (`TopicService.searched`)
-	 * and the given brands (the pipeline passes the won prospects'), and stores one row per term and
-	 * month, overwriting an earlier pull. A term Google has no data for is stored as null; one the
-	 * run returned nothing for is left as it was.
+	 * The month's pull: every food topic with a Trends id (else its query) in Food & Drink, and the
+	 * won brands' names in all categories, each term its own query over the twelve months up to
+	 * the month in the city's region (a subdivision, DE-BE, where it has one), the budget split by
+	 * terms with each run at the actor's $1 floor (`splitTrendsBudget`).
 	 */
-	async pull(
+	async plan(
 		cityId: string,
 		month: string,
-		{
-			brands = [],
-			budgetUsd,
-		}: { brands?: Pick<Brand, 'id' | 'name'>[]; budgetUsd: number },
-	): Promise<SearchInterestPullResult> {
+		{ brands = [], budgetUsd }: { brands?: Pick<Brand, 'id' | 'name'>[]; budgetUsd: number },
+	): Promise<SearchInterestPlan> {
 		const city = await this.em.findOneOrFail(City, { id: cityId });
 		const months = monthsUpTo(month, SEARCH_WINDOW_MONTHS);
-		const topicTerms: PullTerm[] = (await this.topicService.searched()).map(topic => ({
+		const topicTerms: PlannedTerm[] = (await this.topicService.searched()).map(topic => ({
 			kind: SearchTermKindEnum.TOPIC,
 			term: topic.key,
 			query: topic.trendsTopicId || trendsQuery(topic.trendsQuery!),
-			topic,
-			brand: null,
+			topicId: topic.id,
+			brandId: null,
 		}));
-		const brandTerms: PullTerm[] = _.uniqBy(
+		const brandTerms: PlannedTerm[] = _.uniqBy(
 			brands.map(b => ({
 				kind: SearchTermKindEnum.BRAND,
 				term: searchName(b.name),
 				query: trendsQuery(searchName(b.name)),
-				topic: null,
-				brand: b,
+				topicId: null,
+				brandId: b.id,
 			})),
 			t => termKey(t.query),
 		);
 		const caps = splitTrendsBudget(budgetUsd, topicTerms.length, brandTerms.length);
-		const total: SearchInterestPullResult = { terms: 0, fetched: 0, withData: 0, related: 0 };
-
-		// Each term its own query, so 100 is its own peak; the region may be a subdivision (DE-BE)
-		for (const [terms, category, maxCostUsd, what] of [
-			[topicTerms, TRENDS_FOOD_CATEGORY, caps.topics, 'topics'],
-			[brandTerms, TRENDS_ALL_CATEGORIES, caps.brands, 'brands'],
-		] as const) {
-			if (!terms.length) continue;
-			const items = await this.apifyService.runActor<GoogleTrendsItem>(
-				GOOGLE_TRENDS_ACTOR,
+		const run = (
+			terms: PlannedTerm[],
+			category: string,
+			maxCostUsd: number,
+			what: string,
+		): SearchInterestRun | null =>
+			terms.length ?
 				{
-					searchTerms: terms.map(t => t.query),
-					geo: trendsGeo(city),
-					customTimeRange: `${months[0]}-01 ${lastDayOf(month)}`,
-					category,
-					includeInterestOverTime: true,
-					includeRelatedQueries: true,
-					includeInterestByRegion: false,
-					includeRelatedTopics: false,
-				},
-				{ maxCostUsd, purpose: `Google Trends ${what} ${city.slug} ${month}` },
-			);
+					terms,
+					call: {
+						actor: GOOGLE_TRENDS_ACTOR,
+						input: {
+							searchTerms: terms.map(t => t.query),
+							geo: trendsGeo(city),
+							customTimeRange: `${months[0]}-01 ${lastDayOf(month)}`,
+							category,
+							includeInterestOverTime: true,
+							includeRelatedQueries: true,
+							includeInterestByRegion: false,
+							includeRelatedTopics: false,
+						},
+						maxCostUsd,
+						purpose: `Google Trends ${what} ${city.slug} ${month}`,
+					},
+				}
+			:	null;
+		return {
+			month,
+			months,
+			topics: run(topicTerms, TRENDS_FOOD_CATEGORY, caps.topics, 'topics'),
+			brands: run(brandTerms, TRENDS_ALL_CATEGORIES, caps.brands, 'brands'),
+		};
+	}
+
+	/**
+	 * The runs' items read from their rows and stored (`store`): a term the actor returned nothing
+	 * for (the cap stopped it, Google failed it) is not known to have no data, so its stored months
+	 * and queries stay as they were; a failed run (`null`) stores nothing.
+	 */
+	async save(
+		cityId: string,
+		plan: SearchInterestPlan,
+		records: SearchInterestRecords,
+	): Promise<SearchInterestPullResult> {
+		const city = await this.em.findOneOrFail(City, { id: cityId });
+		const total: SearchInterestPullResult = { terms: 0, fetched: 0, withData: 0, related: 0 };
+		for (const [run, recordId, what] of [
+			[plan.topics, records.topics, 'topics'],
+			[plan.brands, records.brands, 'brands'],
+		] as const) {
+			if (!run) continue;
+			total.terms += run.terms.length;
+			if (!recordId) continue;
+			const items = await this.apifyService.storedItems<GoogleTrendsItem>(recordId);
 			const byQuery = new Map(items.map(item => [termKey(item.searchTerm ?? ''), item]));
-			// A term the actor returned nothing for (the cap stopped it, Google failed it) is not known
-			// to have no data: its stored months and queries stay as they were
-			const fetched = terms.flatMap(t => {
-				const item = byQuery.get(termKey(t.query));
-				return item ? [{ ...t, item }] : [];
-			});
-			const stored = await this.store(city, month, months, fetched);
-			this.logger.log(
-				`${city.name} ${month} ${what}: ${fetched.length} of ${terms.length} terms fetched, ${stored.withData} with data, ${stored.related} related queries`,
+			const topics = new Map(
+				(
+					await this.em.find(Topic, {
+						id: { $in: run.terms.flatMap(t => (t.topicId ? [t.topicId] : [])) },
+					})
+				).map(t => [t.id, t]),
 			);
-			total.terms += terms.length;
+			const brands = new Map(
+				(
+					await this.em.find(Brand, {
+						id: { $in: run.terms.flatMap(t => (t.brandId ? [t.brandId] : [])) },
+					})
+				).map(b => [b.id, b]),
+			);
+			const fetched = run.terms.flatMap(t => {
+				const item = byQuery.get(termKey(t.query));
+				if (!item) return [];
+				const term: PullTerm & { item: GoogleTrendsItem } = {
+					kind: t.kind,
+					term: t.term,
+					query: t.query,
+					topic: t.topicId ? (topics.get(t.topicId) ?? null) : null,
+					brand: t.brandId ? (brands.get(t.brandId) ?? null) : null,
+					item,
+				};
+				return [term];
+			});
+			const stored = await this.store(city, plan.month, plan.months, fetched);
+			this.logger.log(
+				`${city.name} ${plan.month} ${what}: ${fetched.length} of ${run.terms.length} terms fetched, ${stored.withData} with data, ${stored.related} related queries`,
+			);
 			total.fetched += fetched.length;
 			total.withData += stored.withData;
 			total.related += stored.related;

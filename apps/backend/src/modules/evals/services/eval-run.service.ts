@@ -2,17 +2,19 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { EmbeddingsService } from 'src/modules/embeddings/services/embeddings.service.js';
 import type { DecisionModelId } from 'src/modules/llm/constants/decision-models.constant.js';
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 import { DecisionModelsService } from 'src/modules/llm/services/decision-models.service.js';
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
-import { VenueMatchAgent } from 'src/modules/social/agents/venue-match.agent.js';
+import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
+import { VenueMatchAgent } from 'src/modules/pipeline/match-mentions/agents/venue-match.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { readPostClaims } from 'src/modules/pipeline/read-posts/util/post-claims-read.js';
+import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
+import { reviewClaimsInput } from 'src/modules/pipeline/read-reviews/util/review-claims-input.js';
 import {
 	decideMatch,
 	type MatchInput,
 } from 'src/modules/social/services/mention-matching.service.js';
-import { readPostClaims } from 'src/modules/social/util/post-claims-read.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import {
 	EMBEDDING_REQUEST_CLAIMS,
@@ -42,8 +44,6 @@ import {
 	termTopicInputTopics,
 } from 'src/modules/topics/util/term-topic-input.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
-import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
-import { reviewClaimsInput } from 'src/modules/venues/util/review-claims-input.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import type {
@@ -541,7 +541,7 @@ export class EvalRunService {
 			for (const chunk of _.chunk(texts, EMBEDDING_REQUEST_CLAIMS))
 				out.push(
 					...(
-						await this.embeddings.embedManyUncached(chunk, {
+						await this.embeddings.embedMany(chunk, {
 							dimensions: STATEMENT_EMBEDDING_DIMENSIONS,
 						})
 					).embeddings,

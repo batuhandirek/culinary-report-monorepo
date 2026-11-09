@@ -1,38 +1,29 @@
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
+
 import type {
-	OpeningHoursDay,
 	OrderPlatform,
 	PeopleAlsoSearchPlace,
-	PopularTimesHour,
-	ReviewsDistribution,
 	VenueDetails,
 } from '../interfaces/venue-details.interface.js';
 
 /** The `compass/crawler-google-places` fields `VenueDetails` is read from, as the actor sends them. */
-export interface GooglePlaceDetailFields {
-	openingHours?: OpeningHoursDay[] | null;
-	// `{ 'Service options': [{ 'Outdoor seating': true }, { Delivery: false }] }`
-	additionalInfo?: Record<string, Record<string, boolean>[]> | null;
-	reviewsDistribution?: ReviewsDistribution | null;
-	// `{ Mo: [{ hour: 6, occupancyPercent: 0 }, …], … }`; `{}` when Google shows none
-	popularTimesHistogram?: Record<string, PopularTimesHour[]> | null;
-	popularTimesLivePercent?: number | null;
-	popularTimesLiveText?: string | null;
-	imagesCount?: number | null;
-	menu?: string | null;
-	reserveTableUrl?: string | null;
-	orderBy?: { name?: string; url?: string; orderUrl?: string }[] | null;
-	temporarilyClosed?: boolean | null;
-	placesTags?: { title: string; count: number }[] | null;
-	reviewsTags?: { title?: string; count?: number }[] | null;
-	peopleAlsoSearch?:
-		| {
-				title?: string;
-				category?: string;
-				totalScore?: number | null;
-				reviewsCount?: number | null;
-		  }[]
-		| null;
-}
+export type GooglePlaceDetailFields = Pick<
+	GooglePlaceItem,
+	| 'openingHours'
+	| 'additionalInfo'
+	| 'reviewsDistribution'
+	| 'popularTimesHistogram'
+	| 'popularTimesLivePercent'
+	| 'popularTimesLiveText'
+	| 'imagesCount'
+	| 'menu'
+	| 'reserveTableUrl'
+	| 'orderBy'
+	| 'temporarilyClosed'
+	| 'placesTags'
+	| 'reviewsTags'
+	| 'peopleAlsoSearch'
+>;
 
 const POPULAR_TIMES_DAYS = new Set(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']);
 

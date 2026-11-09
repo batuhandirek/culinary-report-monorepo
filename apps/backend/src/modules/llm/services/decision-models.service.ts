@@ -1,6 +1,12 @@
 import { createTypeSafeAi, type TypeSafeAiProvider } from '@ai-sdk/typesafe-ai';
 import type { ClassifierModel } from '@mastra/core/classifier';
 
+import type {
+	LlmCallRecord,
+	LlmCallRecorder,
+} from 'src/modules/llm/interfaces/llm-call-record.interface.js';
+
+import type { ClassifierAccount } from '../accounts/classifier-account.js';
 import { type DecisionModelId, decisionProviderOf } from '../constants/decision-models.constant.js';
 import { isLlmPaid } from '../util/llm-scope.js';
 
@@ -27,22 +33,30 @@ export class DecisionModelsService {
 
 	constructor(
 		private readonly opts: {
-			typesafeAiApiKey?: string;
+			/** TypeSafe's account (`typesafe.classifier-account.ts`); without a key, no classifier runs */
+			typesafe?: ClassifierAccount;
 			disabled?: { typesafe?: boolean };
-			/** Only the reading classifiers run outside `llmPaid` (`LLM_INGESTION_ONLY`) */
-			ingestionOnly?: boolean;
+			/** Where every decision is filed (`LlmCallsService`); none, nothing is recorded */
+			recorder?: LlmCallRecorder;
 		},
 	) {}
 
-	model(
-		id: DecisionModelId,
-		call: { inProduction?: boolean; ingestion?: boolean } = {},
-	): ClassifierModel {
-		if (this.opts.ingestionOnly && !call.ingestion && !isLlmPaid())
-			throw new PaidDecisionModelError(
-				id,
-				'paused, only the reading runs (LLM_INGESTION_ONLY)',
-			);
+	/**
+	 * Files a decision in the ledger (`LlmCallsService`), whatever became of it, under TypeSafe's
+	 * account when a model answered; a no-op without a recorder
+	 */
+	recordCall(call: LlmCallRecord): void {
+		try {
+			this.opts.recorder?.record({
+				...call,
+				account: call.model ? (this.opts.typesafe?.id ?? null) : null,
+			});
+		} catch {
+			// Bookkeeping never fails a decision
+		}
+	}
+
+	model(id: DecisionModelId, call: { inProduction?: boolean } = {}): ClassifierModel {
 		if (!isLlmPaid() && !call.inProduction)
 			throw new PaidDecisionModelError(
 				id,
@@ -56,12 +70,13 @@ export class DecisionModelsService {
 						id,
 						'TypeSafe is switched off (LLM_DISABLE_TYPESAFE)',
 					);
-				if (!this.opts.typesafeAiApiKey)
+				const apiKey = this.opts.typesafe?.apiKey;
+				if (!apiKey)
 					throw new PaidDecisionModelError(
 						id,
 						'TYPESAFE_AI_API_KEY is not set (env/server/.env.local): TypeSafe classifiers need it',
 					);
-				this.typesafe ??= createTypeSafeAi({ apiKey: this.opts.typesafeAiApiKey });
+				this.typesafe ??= createTypeSafeAi({ apiKey });
 				return this.typesafe.decisionModel(modelId) as ClassifierModel;
 			}
 		}

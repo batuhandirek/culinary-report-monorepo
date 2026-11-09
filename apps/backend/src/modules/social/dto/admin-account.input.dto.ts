@@ -13,7 +13,8 @@ type Uuid = string & tags.Format<'uuid'>;
  */
 export type AdminAccountStatus = 'linked' | 'suggested';
 
-export type AdminAccountSort = `${'followers' | 'monthPosts' | 'monthViews' | 'score' | 'handle'}:${'asc' | 'desc'}`;
+export type AdminAccountSort =
+	`${'followers' | 'monthPosts' | 'monthViews' | 'score' | 'handle'}:${'asc' | 'desc'}`;
 
 export interface AdminListAccountsInputDto extends PaginationRequest {
 	/** The accounts first seen in this city; the first active city's without */

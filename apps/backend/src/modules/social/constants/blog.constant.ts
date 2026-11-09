@@ -29,4 +29,5 @@ export const BLOG_MAX_PAGE_BYTES = 3 * 1024 * 1024;
  * known readers through (FreshRSS, Feedbin, SimplePie), while Qiez and Berlin Food Stories refuse
  * FreshRSS and serve a browser. So a feed is asked for as a browser first, then as this.
  */
-export const BLOG_FEED_USER_AGENT = 'Mozilla/5.0 (compatible; FreshRSS/1.24.3; +https://freshrss.org)';
+export const BLOG_FEED_USER_AGENT =
+	'Mozilla/5.0 (compatible; FreshRSS/1.24.3; +https://freshrss.org)';

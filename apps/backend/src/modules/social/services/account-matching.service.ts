@@ -26,7 +26,12 @@ import {
 	matchAccount,
 	SUGGEST_MIN_SCORE,
 } from '../util/account-match.js';
-import { captionHandles, type LinkedProfile, normalizeAccountHandle, profileOf } from '../util/accounts.js';
+import {
+	captionHandles,
+	type LinkedProfile,
+	normalizeAccountHandle,
+	profileOf,
+} from '../util/accounts.js';
 import { placesAreOneBusiness, profilePlaceIndex, profilePlaces } from '../util/profile-places.js';
 import { siteProfileVerdicts } from '../util/site-profiles.js';
 
@@ -77,7 +82,11 @@ export interface AccountMatchResult {
  * near, or holding it: "eat.kanaan" for Kanaan), never a part of it: "@samurai" or "@garden" is
  * someone else's handle. What a link that only posts' tags back needs.
  */
-const tagsCarryName = (match: NonNullable<ReturnType<typeof matchAccount>>, handle: string, index: AccountMatchIndex): boolean => {
+const tagsCarryName = (
+	match: NonNullable<ReturnType<typeof matchAccount>>,
+	handle: string,
+	index: AccountMatchIndex,
+): boolean => {
 	if (match.matched.length < EXACT_MIN_LENGTH) return false;
 	const longest = Math.max(...handleForms(handle, index.cityWords).map(f => f.length));
 	return !(match.tier === AccountMatchTier.CONTAINS && longest <= match.matched.length);
@@ -103,19 +112,26 @@ export class AccountMatchingService {
 		const names: AccountMatchName[] = [];
 		for (const [brandId, branches] of Object.entries(_.groupBy(venues, v => v.brand.id))) {
 			names.push({ brandId, name: branches[0].brand.name });
-			for (const branch of branches) names.push({ brandId, branchId: branch.id, name: branch.name });
+			for (const branch of branches)
+				names.push({ brandId, branchId: branch.id, name: branch.name });
 		}
-		const index = accountMatchIndex(names, [...city.nameStopwords, ...cityNames(city), ...districtNames(city)]);
+		const index = accountMatchIndex(names, [
+			...city.nameStopwords,
+			...cityNames(city),
+			...districtNames(city),
+		]);
 
 		const tagged = await this.taggedBrands(city);
 		const fromTags = await this.addMentionedAccounts(city);
 
 		const postedAbout = new Map<string, Set<string>>();
-		const rows: { account_id: string; brand_id: string }[] = await this.em.getConnection().execute(
-			`select distinct p.account_id, m.brand_id from social_posts p join mentions m on m.post_id = p.id
+		const rows: { account_id: string; brand_id: string }[] = await this.em
+			.getConnection()
+			.execute(
+				`select distinct p.account_id, m.brand_id from social_posts p join mentions m on m.post_id = p.id
 			where p.city_id = ? and p.account_id is not null and m.brand_id is not null`,
-			[city.id],
-		);
+				[city.id],
+			);
 		for (const row of rows) {
 			let set = postedAbout.get(row.account_id);
 			if (!set) postedAbout.set(row.account_id, (set = new Set()));
@@ -151,20 +167,41 @@ export class AccountMatchingService {
 			]);
 			const rejected = rejectedOf.get(account.id) ?? new Set<string>();
 			let match = matchAccount(
-				{ handle: account.handle, displayName: account.displayName, postedAbout: evidence, rejected },
+				{
+					handle: account.handle,
+					displayName: account.displayName,
+					postedAbout: evidence,
+					rejected,
+				},
 				index,
 			);
 			// A link only the tags back must carry the brand's whole name: "@samurai" under a post
 			// about Samurai Wagyu Yakiniku is someone else
-			if (match && !postedAbout.get(account.id)?.has(match.brandId) && tagged.get(`${account.platform}:${account.handle}`)?.has(match.brandId)) {
+			if (
+				match &&
+				!postedAbout.get(account.id)?.has(match.brandId) &&
+				tagged.get(`${account.platform}:${account.handle}`)?.has(match.brandId)
+			) {
 				const alone = matchAccount(
-					{ handle: account.handle, displayName: account.displayName, postedAbout: new Set(postedAbout.get(account.id) ?? []), rejected },
+					{
+						handle: account.handle,
+						displayName: account.displayName,
+						postedAbout: new Set(postedAbout.get(account.id) ?? []),
+						rejected,
+					},
 					index,
 				);
-				if (!(alone?.brandId === match.brandId && alone.link) && !tagsCarryName(match, account.handle, index)) match = null;
+				if (
+					!(alone?.brandId === match.brandId && alone.link) &&
+					!tagsCarryName(match, account.handle, index)
+				)
+					match = null;
 			}
 			if (match?.link) {
-				if (account.brand?.id !== match.brandId || (account.branch?.id ?? undefined) !== match.branchId) {
+				if (
+					account.brand?.id !== match.brandId ||
+					(account.branch?.id ?? undefined) !== match.branchId
+				) {
 					await this.socialAccountService.setBrand(
 						account,
 						this.em.getReference(Brand, match.brandId),
@@ -176,7 +213,11 @@ export class AccountMatchingService {
 				continue;
 			}
 			if (account.brand) {
-				await this.socialAccountService.setBrand(account, null, AccountBrandSourceEnum.HANDLE);
+				await this.socialAccountService.setBrand(
+					account,
+					null,
+					AccountBrandSourceEnum.HANDLE,
+				);
 				result.unlinked++;
 			}
 			account.suggestedBrand = match ? this.em.getReference(Brand, match.brandId) : null;
@@ -202,18 +243,34 @@ export class AccountMatchingService {
 		let linked = 0;
 		const profiles = venues
 			.map(venue => ({ venue, profile: profileOf(venue.website) }))
-			.filter((x): x is { venue: Venue; profile: NonNullable<ReturnType<typeof profileOf>> } => !!x.profile);
+			.filter(
+				(x): x is { venue: Venue; profile: NonNullable<ReturnType<typeof profileOf>> } =>
+					!!x.profile,
+			);
 		const byBrand = _.groupBy(profiles, p => p.venue.brand.id);
 		for (const { venue, profile } of profiles) {
 			const brand = venue.brand;
-			const account = await this.socialAccountService.ensure(profile.platform, profile.handle, city);
-			if (!account || (await this.socialAccountService.isRejected(account, brand.id))) continue;
+			const account = await this.socialAccountService.ensure(
+				profile.platform,
+				profile.handle,
+				city,
+			);
+			if (!account || (await this.socialAccountService.isRejected(account, brand.id)))
+				continue;
 			// Only the matcher's own guess gives way; an admin's, outreach's or a website's link stays
 			if (account.brand && account.brandSource !== AccountBrandSourceEnum.HANDLE) continue;
 			const ownBranch = byBrand[brand.id].some(
-				p => p.venue.id !== venue.id && (p.profile.platform !== profile.platform || p.profile.handle !== profile.handle),
+				p =>
+					p.venue.id !== venue.id &&
+					(p.profile.platform !== profile.platform ||
+						p.profile.handle !== profile.handle),
 			);
-			await this.socialAccountService.setBrand(account, brand, AccountBrandSourceEnum.WEBSITE, ownBranch ? venue : null);
+			await this.socialAccountService.setBrand(
+				account,
+				brand,
+				AccountBrandSourceEnum.WEBSITE,
+				ownBranch ? venue : null,
+			);
 			linked++;
 		}
 		return linked;
@@ -226,9 +283,8 @@ export class AccountMatchingService {
 	 * names as the caption shows them ("@Friendly Fish - Berlin"), not handles.
 	 */
 	private async taggedBrands(city: City): Promise<Map<string, Set<string>>> {
-		const rows: { platform: SocialPlatformEnum; handle: string; brand_id: string }[] = await this.em
-			.getConnection()
-			.execute(
+		const rows: { platform: SocialPlatformEnum; handle: string; brand_id: string }[] =
+			await this.em.getConnection().execute(
 				`select distinct p.platform, h.handle, m.brand_id
 				from social_posts p
 				join mentions m on m.post_id = p.id
@@ -263,10 +319,12 @@ export class AccountMatchingService {
 			where p.city_id = ? and p.platform = ?`,
 			[city.id, SocialPlatformEnum.INSTAGRAM],
 		);
-		const bios: { bio: string }[] = await this.em.getConnection().execute(
-			`select bio from social_accounts where city_id = ? and platform = ? and bio like '%@%'`,
-			[city.id, SocialPlatformEnum.INSTAGRAM],
-		);
+		const bios: { bio: string }[] = await this.em
+			.getConnection()
+			.execute(
+				`select bio from social_accounts where city_id = ? and platform = ? and bio like '%@%'`,
+				[city.id, SocialPlatformEnum.INSTAGRAM],
+			);
 		const handles = new Set<string>();
 		for (const row of rows) {
 			const handle = normalizeAccountHandle(row.handle);
@@ -275,16 +333,19 @@ export class AccountMatchingService {
 		for (const { bio } of bios) for (const handle of captionHandles(bio)) handles.add(handle);
 		const known = new Set<string>();
 		for (const chunk of _.chunk([...handles], 1000)) {
-			const found: { handle: string }[] = await this.em.getConnection().execute(
-				`select handle from social_accounts where platform = ? and handle in (${chunk.map(() => '?').join(', ')})`,
-				[SocialPlatformEnum.INSTAGRAM, ...chunk],
-			);
+			const found: { handle: string }[] = await this.em
+				.getConnection()
+				.execute(
+					`select handle from social_accounts where platform = ? and handle in (${chunk.map(() => '?').join(', ')})`,
+					[SocialPlatformEnum.INSTAGRAM, ...chunk],
+				);
 			for (const row of found) known.add(row.handle);
 		}
 		let created = 0;
 		for (const handle of handles) {
 			if (known.has(handle)) continue;
-			if (await this.socialAccountService.ensure(SocialPlatformEnum.INSTAGRAM, handle, city)) created++;
+			if (await this.socialAccountService.ensure(SocialPlatformEnum.INSTAGRAM, handle, city))
+				created++;
 			if (created % 200 === 0) await this.em.flush();
 		}
 		await this.em.flush();
@@ -337,7 +398,12 @@ export class AccountMatchingService {
 			return (account: SocialAccount) => {
 				const rejected = rejectedOf.get(account.id) ?? new Set<string>();
 				const named = profilePlaces(
-					{ handle: account.handle, displayName: account.displayName, bio: account.bio, links: account.bioLinks },
+					{
+						handle: account.handle,
+						displayName: account.displayName,
+						bio: account.bio,
+						links: account.bioLinks,
+					},
 					index,
 					words,
 				)
@@ -351,11 +417,26 @@ export class AccountMatchingService {
 				const brandId =
 					decided ?
 						account.brand!.id
-					:	_.orderBy(named, [v => branchesOf[v.brand.id] ?? 0, v => v.reviewsCount ?? 0], ['desc', 'desc'])[0].brand.id;
+					:	_.orderBy(
+							named,
+							[v => branchesOf[v.brand.id] ?? 0, v => v.reviewsCount ?? 0],
+							['desc', 'desc'],
+						)[0].brand.id;
 				// Places of several brands are joined only when they are one business's branches
 				const brands = new Set(named.map(v => v.brand.id));
-				const oneBusiness = placesAreOneBusiness(account, named.map(v => v.name), words);
-				return { named, decided, brandId, branches: branchesOf[brandId] ?? 0, several: brands.size > 1, oneBusiness };
+				const oneBusiness = placesAreOneBusiness(
+					account,
+					named.map(v => v.name),
+					words,
+				);
+				return {
+					named,
+					decided,
+					brandId,
+					branches: branchesOf[brandId] ?? 0,
+					several: brands.size > 1,
+					oneBusiness,
+				};
 			};
 		};
 
@@ -364,14 +445,20 @@ export class AccountMatchingService {
 			const p = plan(account);
 			const others = p?.named.filter(v => v.brand.id !== p.brandId).map(v => v.id) ?? [];
 			if (!p || !others.length || !p.oneBusiness) continue;
-			const joined = await RequestContext.create(this.em.fork(), () => this.brandService.joinByProfile(p.brandId, others));
+			const joined = await RequestContext.create(this.em.fork(), () =>
+				this.brandService.joinByProfile(p.brandId, others),
+			);
 			out.joinedByProfiles += joined?.length ?? 0;
 		}
 		if (out.joinedByProfiles) {
 			// The joins moved venues, accounts and mentions to the brands that stayed
-			venues = (await this.em.find(Venue, { city: city.id, closed: false }, { populate: ['brand'], refresh: true })).filter(v =>
-				isFoodVenue(v.category),
-			);
+			venues = (
+				await this.em.find(
+					Venue,
+					{ city: city.id, closed: false },
+					{ populate: ['brand'], refresh: true },
+				)
+			).filter(v => isFoodVenue(v.category));
 			accounts = await this.em.find(SocialAccount, where, { refresh: true });
 			plan = read(venues);
 		}
@@ -389,8 +476,17 @@ export class AccountMatchingService {
 			}
 			const own = p.named.filter(v => v.brand.id === p.brandId);
 			const branch = own.length === 1 && p.branches > 1 ? own[0] : null;
-			if (account.brand?.id === p.brandId && (account.branch?.id ?? null) === (branch?.id ?? null)) continue;
-			await this.socialAccountService.setBrand(account, this.em.getReference(Brand, p.brandId), AccountBrandSourceEnum.BIO, branch);
+			if (
+				account.brand?.id === p.brandId &&
+				(account.branch?.id ?? null) === (branch?.id ?? null)
+			)
+				continue;
+			await this.socialAccountService.setBrand(
+				account,
+				this.em.getReference(Brand, p.brandId),
+				AccountBrandSourceEnum.BIO,
+				branch,
+			);
 			account.suggestedBrand = null;
 			account.suggestedScore = null;
 			out.fromProfiles++;
@@ -428,16 +524,15 @@ export class AccountMatchingService {
 			venues.filter(v => v.siteProfiles?.length && faviconSite(v.website)),
 			v => v.brand.id,
 		);
-		const candidates: { brand: Brand; branches: Venue[]; profiles: LinkedProfile[] }[] = Object.values(byBrand).map(
-			branches => ({
+		const candidates: { brand: Brand; branches: Venue[]; profiles: LinkedProfile[] }[] =
+			Object.values(byBrand).map(branches => ({
 				brand: branches[0].brand,
 				branches,
 				profiles: _.uniqBy(
 					branches.flatMap(v => v.siteProfiles ?? []),
 					p => `${p.platform}:${p.handle}`,
 				),
-			}),
-		);
+			}));
 		const accounts = new Map<string, SocialAccount>();
 		const allProfiles = _.uniqBy(
 			candidates.flatMap(c => c.profiles),
@@ -448,8 +543,12 @@ export class AccountMatchingService {
 				$or: chunk.map(p => ({ platform: p.platform, handle: p.handle })),
 			}))
 				accounts.set(`${account.platform}:${account.handle}`, account);
-		const rejectedOf = await this.socialAccountService.rejectedBrands([...accounts.values()].map(a => a.id));
-		const rejected = new Map([...accounts].map(([key, a]) => [key, rejectedOf.get(a.id) ?? new Set<string>()]));
+		const rejectedOf = await this.socialAccountService.rejectedBrands(
+			[...accounts.values()].map(a => a.id),
+		);
+		const rejected = new Map(
+			[...accounts].map(([key, a]) => [key, rejectedOf.get(a.id) ?? new Set<string>()]),
+		);
 
 		for (const { brand, branches, profiles } of candidates) {
 			const verdicts = siteProfileVerdicts(
@@ -463,9 +562,16 @@ export class AccountMatchingService {
 				const existing = accounts.get(key);
 				// An admin's, outreach's, a website's or a profile's link stays; so does another
 				// site's: two brands' sites linking one profile leave it with the first
-				if (existing?.brand && existing.brandSource !== AccountBrandSourceEnum.HANDLE) continue;
+				if (existing?.brand && existing.brandSource !== AccountBrandSourceEnum.HANDLE)
+					continue;
 				if (!verdict.link && existing?.brand) continue;
-				const account = existing ?? (await this.socialAccountService.ensure(verdict.platform, verdict.handle, city));
+				const account =
+					existing ??
+					(await this.socialAccountService.ensure(
+						verdict.platform,
+						verdict.handle,
+						city,
+					));
 				if (!account) continue;
 				accounts.set(key, account);
 				if (verdict.link) {

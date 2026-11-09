@@ -12,6 +12,7 @@
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
+	import { announceReportRun, followReportRun } from '#lib/report-runs.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import ReportView from '#views/report/ReportView.svelte';
@@ -19,27 +20,38 @@
 	let { data } = $props();
 	let report: AdminReportOutputDto = $derived(data.report);
 
+	// Runs in the background and is followed until done; one that waits for an LLM account goes on
+	// by itself, and the toast links its run
 	const rebuildAction = createAction(
-		() =>
-			api.admin.buildReport({
-				brandId: report.brand.id,
-				cityId: report.city?.id,
-				month: report.month,
-				// Its configuration's alone; a default report rebuilds as the brand's reports now are
-				...(report.config && { configId: report.config.id })
-			}),
+		async () =>
+			followReportRun(
+				await api.admin.buildReport({
+					brandId: report.brand.id,
+					cityId: report.city?.id,
+					month: report.month,
+					// Its configuration's alone; a default report rebuilds as the brand's reports now are
+					...(report.config && { configId: report.config.id })
+				})
+			),
 		{
-			onSuccess: (rebuilt) => goto(`/admin/reports/${rebuilt.id}`, { invalidateAll: true }),
-			successNotification: { title: 'Report rebuilt', text: 'With the data as it is now' }
+			onSuccess: (run) => {
+				if (announceReportRun(run, { title: 'Report rebuilt', text: 'With the data as it is now' }))
+					goto(`/admin/reports/${run.reportIds?.[0] ?? report.id}`, { invalidateAll: true });
+			}
 		}
 	);
 
 	// The analysis alone, on the stored data: the observations, their checks, the agent and the
 	// line check; the highlights stay (Rebuild rewrites them)
-	const analyseAction = createAction(() => api.admin.analyseReport(report.id), {
-		onSuccess: () => invalidate(`report:${report.id}`),
-		successNotification: { title: 'Analysed again', text: 'On the data as it was built' }
-	});
+	const analyseAction = createAction(
+		async () => followReportRun(await api.admin.analyseReport(report.id)),
+		{
+			onSuccess: (run) => {
+				if (announceReportRun(run, { title: 'Analysed again', text: 'On the data as it was built' }))
+					invalidate(`report:${report.id}`);
+			}
+		}
+	);
 
 	// The server prints the PDF in headless Chrome, so it matches this page
 	const pdfAction = createAction(

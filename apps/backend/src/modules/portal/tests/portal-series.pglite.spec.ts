@@ -61,7 +61,6 @@ const reviews = (count: number, avgStars: number) => ({
 	changes: [],
 	critical: [],
 	list: [],
-	replyDrafts: [],
 });
 
 // Competitors stored in a report name real venues by uuid; these two are never sampled

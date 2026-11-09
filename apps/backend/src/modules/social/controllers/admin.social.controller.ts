@@ -11,7 +11,10 @@ import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
-import { STATEMENT_PARTS_POPULATE, STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import {
+	STATEMENT_PARTS_POPULATE,
+	STATEMENT_POPULATE,
+} from 'src/modules/statements/util/statement-populate.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 
 import { AdminUpdateMentionInputDto } from '../dto/admin-mention.input.dto.js';
@@ -96,12 +99,16 @@ export class AdminSocialController {
 		else if (query.creatorId) filters.account = { creator: query.creatorId };
 		if (query.venueId) filters.mentions = { venue: query.venueId };
 		else if (query.brandId) filters.mentions = { brand: query.brandId };
-		else if (query.unmatchedOnly) filters.mentions = { matchMethod: MentionMatchMethodEnum.NONE };
+		else if (query.unmatchedOnly)
+			filters.mentions = { matchMethod: MentionMatchMethodEnum.NONE };
 		else if (query.unconfirmedOnly) filters.mentions = { unconfirmedAt: { $ne: null } };
 		if (query.skipReason) filters.skipReason = query.skipReason;
 		else if (query.matchedOnly) filters.mentions = { brand: { $ne: null } };
 
-		const [field, order] = (query.sort ?? 'postedAt:desc').split(':') as ['postedAt' | 'views', 'asc' | 'desc'];
+		const [field, order] = (query.sort ?? 'postedAt:desc').split(':') as [
+			'postedAt' | 'views',
+			'asc' | 'desc',
+		];
 		const [items, totalItems] = await this.em.findAndCount(SocialPost, filters, {
 			populate: [...MENTION_POPULATE],
 			orderBy: { [field]: order === 'asc' ? QueryOrder.ASC : QueryOrder.DESC },
@@ -125,8 +132,14 @@ export class AdminSocialController {
 	}
 
 	@TypedRoute.Get('/posts/:id')
-	async getPost(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminSocialPostOutputDto> {
-		const post = await this.em.findOneOrFail(SocialPost, { id }, { populate: [...POST_POPULATE, 'snapshots'] });
+	async getPost(
+		@TypedParam('id') id: string & tags.Format<'uuid'>,
+	): Promise<AdminSocialPostOutputDto> {
+		const post = await this.em.findOneOrFail(
+			SocialPost,
+			{ id },
+			{ populate: [...POST_POPULATE, 'snapshots'] },
+		);
 		const general = await this.em.find(
 			Statement,
 			{ post: post.id, mention: null },
@@ -140,13 +153,19 @@ export class AdminSocialController {
 				exclude: [...EXCLUDE, 'snapshots.post'],
 			}),
 			generalStatements: general.map(statement =>
-				wrap(statement).serialize({ skipNull: true, forceObject: true, populate: [...STATEMENT_PARTS_POPULATE] }),
+				wrap(statement).serialize({
+					skipNull: true,
+					forceObject: true,
+					populate: [...STATEMENT_PARTS_POPULATE],
+				}),
 			),
 		} as unknown as AdminSocialPostOutputDto;
 	}
 
 	@TypedRoute.Get('/mentions')
-	async listMentions(@TypedQuery() query: AdminListMentionsInputDto): Promise<AdminListMentionsOutputDto> {
+	async listMentions(
+		@TypedQuery() query: AdminListMentionsInputDto,
+	): Promise<AdminListMentionsOutputDto> {
 		const filters: FilterQuery<Mention> = {};
 		if (query.venueId) filters.venue = query.venueId;
 		if (query.brandId) filters.brand = query.brandId;

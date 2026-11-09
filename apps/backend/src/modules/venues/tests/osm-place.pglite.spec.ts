@@ -1,17 +1,19 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { OsmPlace } from '../entities/osm-place.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
 import { OsmPlaceService } from '../services/osm-place.service.js';
 import { OverpassService } from '../services/overpass.service.js';
-import { GooglePlaceItem, VenueService } from '../services/venue.service.js';
+import { VenueService } from '../services/venue.service.js';
 import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import type { OverpassElement } from '../util/osm-places.js';
 
@@ -57,10 +59,33 @@ const place = (
 describe('OsmPlaceService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: OsmPlaceService;
+	let scrapeService: VenueScrapeService;
 	let city: City;
 	let known: Venue;
 	const foodPlaces = jest.fn<(relationId: number) => Promise<OverpassElement[]>>();
-	const runActor = jest.fn<(...args: unknown[]) => Promise<GooglePlaceItem[]>>();
+
+	/**
+	 * The lookups as the `osm-places` workflow runs them: the plan, the run's places saved by the
+	 * atom's rule (`items` is what Google returned), the searched places stamped and linked
+	 */
+	const lookup = async (budgetUsd: number, items: GooglePlaceItem[], now?: Date) => {
+		const plan = await service.planLookups(city, budgetUsd);
+		const saved =
+			plan.queries.length ?
+				await scrapeService.savePlaces(items, {
+					city,
+					source: VenueScrapeSourceEnum.LOOKUP,
+					newPlaces: 'food-in-city',
+				})
+			:	{ saved: 0 };
+		const result = await service.saveLookups(
+			city,
+			plan.osmPlaceIds,
+			{ found: plan.queries.length ? items.length : 0, saved: saved.saved },
+			now,
+		);
+		return { plan, result };
+	};
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -69,10 +94,11 @@ describe('OsmPlaceService (pglite)', () => {
 				VenueScrapeService,
 				VenueService,
 				{ provide: OverpassService, useValue: { foodPlaces } },
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: {} },
 			],
 		});
 		service = harness.moduleRef.get(OsmPlaceService);
+		scrapeService = harness.moduleRef.get(VenueScrapeService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		city = await cityFactory.create({ osmRelationId: 62422 });
@@ -90,7 +116,6 @@ describe('OsmPlaceService (pglite)', () => {
 
 	beforeEach(() => {
 		foodPlaces.mockReset();
-		runActor.mockReset();
 	});
 
 	afterAll(async () => {
@@ -138,14 +163,24 @@ describe('OsmPlaceService (pglite)', () => {
 		expect(rows[0].tags).toMatchObject({ cuisine: 'pizza' });
 	});
 
-	it('searches the unlinked places by name and address, saves what Google has and links it', async () => {
-		runActor.mockResolvedValueOnce([
-			place('Faustus, Berlin', 'faustus', 'Faustus', 3, {
-				categoryName: 'German restaurant',
-			}),
-			place('Baba Pirzola, Wittenbergplatz 5, 10789 Berlin', 'baba', 'Baba Pirzola', 2),
+	it('plans the unlinked places by name and address, and links what Google had once it is saved', async () => {
+		const { plan, result } = await lookup(
+			10,
+			[
+				place('Faustus, Berlin', 'faustus', 'Faustus', 3, {
+					categoryName: 'German restaurant',
+				}),
+				place('Baba Pirzola, Wittenbergplatz 5, 10789 Berlin', 'baba', 'Baba Pirzola', 2),
+			],
+			new Date('2026-10-21T11:00:00Z'),
+		);
+		// Sit-down places first, the one OSM keeps up (a website) before the other; typed as a
+		// guest types them, one place each
+		expect(plan.queries).toEqual([
+			'Faustus, Berlin',
+			'Baba Pirzola, Wittenbergplatz 5, 10789 Berlin',
 		]);
-		const result = await service.lookup(city, 10, new Date('2026-10-21T11:00:00Z'));
+		expect(plan.osmPlaceIds).toHaveLength(2);
 		expect(result).toEqual({
 			searched: 2,
 			found: 2,
@@ -156,22 +191,6 @@ describe('OsmPlaceService (pglite)', () => {
 			notFound: 0,
 			toLookUp: 0,
 		});
-		const [actor, input, options] = runActor.mock.calls[0] as [
-			string,
-			Record<string, unknown>,
-			Record<string, unknown>,
-		];
-		expect(actor).toBe('compass/crawler-google-places');
-		// Sit-down places first, the one OSM keeps up (a website) before the other
-		expect(input).toMatchObject({
-			searchStringsArray: [
-				'Faustus, Berlin',
-				'Baba Pirzola, Wittenbergplatz 5, 10789 Berlin',
-			],
-			maxCrawledPlacesPerSearch: 1,
-		});
-		expect(input.locationQuery).toBeUndefined();
-		expect(options).toMatchObject({ maxCostUsd: 10 });
 
 		const em = harness.orm.em.fork();
 		const baba = await em.findOneOrFail(Venue, { placeId: 'baba' });
@@ -194,17 +213,14 @@ describe('OsmPlaceService (pglite)', () => {
 		expect(synced).toMatchObject({ added: 3, updated: 3, listed: 6, matched: 3, toLookUp: 3 });
 
 		// $0.01 at 80 % covers two searches at $0.004; Google finds a stranger and a shop for them
-		runActor.mockResolvedValueOnce([
+		const first = await lookup(0.01, [
 			place('Another Lost Place, Berlin', 'stranger', 'Grill Ecke', 900),
 			place('Lost Place, Berlin', 'shop', 'Späti Ecke', 500, {
 				categoryName: 'Convenience store',
 			}),
 		]);
-		const first = await service.lookup(city, 0.01);
-		expect(
-			(runActor.mock.calls[0][1] as { searchStringsArray: string[] }).searchStringsArray,
-		).toEqual(['Lost Place, Berlin', 'Another Lost Place, Berlin']);
-		expect(first).toMatchObject({
+		expect(first.plan.queries).toEqual(['Lost Place, Berlin', 'Another Lost Place, Berlin']);
+		expect(first.result).toMatchObject({
 			searched: 2,
 			found: 2,
 			saved: 1,
@@ -218,15 +234,13 @@ describe('OsmPlaceService (pglite)', () => {
 		// Saved, but not the OSM place: that stays unlinked
 		expect(await em.count(Venue, { placeId: 'stranger' })).toBe(1);
 
-		runActor.mockResolvedValueOnce([]);
-		const second = await service.lookup(city, 10);
-		expect(
-			(runActor.mock.calls[1][1] as { searchStringsArray: string[] }).searchStringsArray,
-		).toEqual(['Third Lost Place, Berlin']);
-		expect(second).toMatchObject({ searched: 1, found: 0, notFound: 3, toLookUp: 0 });
+		const second = await lookup(10, []);
+		expect(second.plan.queries).toEqual(['Third Lost Place, Berlin']);
+		expect(second.result).toMatchObject({ searched: 1, found: 0, notFound: 3, toLookUp: 0 });
 
-		expect(await service.lookup(city, 10)).toMatchObject({ searched: 0 });
-		expect(runActor).toHaveBeenCalledTimes(2);
+		const third = await lookup(10, []);
+		expect(third.plan).toEqual({ osmPlaceIds: [], queries: [] });
+		expect(third.result).toMatchObject({ searched: 0 });
 	});
 
 	it('counts only what the last sync listed, and keeps a gone place', async () => {

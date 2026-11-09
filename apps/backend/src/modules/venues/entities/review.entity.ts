@@ -69,10 +69,6 @@ export class Review extends MikroOrmEntityAbstractClass<'likes' | 'platform'> {
 	@Property({ type: 'datetime', nullable: true })
 	alertedAt?: Date | null;
 
-	// A reply the owner can post, drafted for the alert (the reports' drafts live in `ReportData`)
-	@Property({ type: 'text', nullable: true })
-	replyDraft?: string | null;
-
 
 
 	@Property({ type: 'datetime', nullable: true })

@@ -1,6 +1,8 @@
+import type { GoogleNewsItem } from 'src/modules/apify/actors/google-news.actor.js';
+import type { GoogleSearchPage } from 'src/modules/apify/actors/google-search.actor.js';
+
 // Press and web mentions: the search queries, the two search actors' item shapes and which
 // results can be press at all. Pure functions.
-
 import { WebMentionSourceEnum } from '../entities/web-mention.entity.js';
 
 import { plain, venueAliases } from './venue-names.js';
@@ -88,12 +90,15 @@ export const isPressCandidate = (
 	const text = ` ${plain(`${result.title} ${result.snippet ?? ''}`)} `;
 	const squashed = text.replace(/ /g, '');
 	return venueAliases(venue.name).some(
-		alias => alias.length >= 3 && (text.includes(` ${alias} `) || (alias.length >= 6 && squashed.includes(alias.replace(/ /g, '')))),
+		alias =>
+			alias.length >= 3 &&
+			(text.includes(` ${alias} `) ||
+				(alias.length >= 6 && squashed.includes(alias.replace(/ /g, '')))),
 	);
 };
 
 /** One item of `scrapewise/google-news-scraper`; null for an error row or an unusable one. */
-export const fromGoogleNewsItem = (item: any): WebResult | null => {
+export const fromGoogleNewsItem = (item: GoogleNewsItem): WebResult | null => {
 	if (!item || item.errorCode || item.type !== 'article' || !item.url || !item.title) return null;
 	const query = typeof item.searchQuery === 'string' ? item.searchQuery : null;
 	if (!query) return null;
@@ -109,19 +114,23 @@ export const fromGoogleNewsItem = (item: any): WebResult | null => {
 };
 
 /** The organic results of one page of `apify/google-search-scraper`. */
-export const fromGoogleSearchPage = (page: any): WebResult[] => {
+export const fromGoogleSearchPage = (page: GoogleSearchPage): WebResult[] => {
 	const query = page?.searchQuery?.term;
 	if (typeof query !== 'string') return [];
-	return ((page.organicResults ?? []) as any[])
-		.filter(r => r?.url && r.title)
+	return (page.organicResults ?? [])
+		.filter((r): r is typeof r & { url: string; title: string } => !!r?.url && !!r.title)
 		.map(r => ({
 			url: r.url,
-			title: `${r.title}`.trim(),
+			title: r.title.trim(),
 			snippet: r.description ?? null,
 			outlet: hostOf(r.url),
 			publishedAt: r.date ? new Date(r.date) : null,
 			source: WebMentionSourceEnum.WEB,
 			query,
 		}))
-		.map(r => (r.publishedAt && Number.isNaN(r.publishedAt.getTime()) ? { ...r, publishedAt: null } : r));
+		.map(r =>
+			r.publishedAt && Number.isNaN(r.publishedAt.getTime()) ?
+				{ ...r, publishedAt: null }
+			:	r,
+		);
 };

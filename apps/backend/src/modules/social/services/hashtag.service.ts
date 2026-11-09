@@ -29,22 +29,29 @@ export class HashtagService implements OnModuleInit {
 	) {}
 
 	onModuleInit() {
-		this.topicRelinkService.register({ key: 'hashtags', relink: index => this.relink({ index }) });
+		this.topicRelinkService.register({
+			key: 'hashtags',
+			relink: index => this.relink({ index }),
+		});
 	}
 
 	async relink(opts: { index?: TopicIndex } = {}): Promise<{ tags: number; changed: number }> {
 		const index = opts.index ?? (await this.topicService.index());
 		const conn = this.em.getConnection();
 		const [tags, brands, handles, cities, evidence] = await Promise.all([
-			conn.execute<{ id: number; tag: string; topic_id: string | null; brand_id: string | null }[]>(
-				`select id, tag, topic_id, brand_id from hashtags`,
+			conn.execute<
+				{ id: number; tag: string; topic_id: string | null; brand_id: string | null }[]
+			>(`select id, tag, topic_id, brand_id from hashtags`),
+			conn.execute<{ id: string; name: string }[]>(
+				`select id, name from brands where deleted_at is null`,
 			),
-			conn.execute<{ id: string; name: string }[]>(`select id, name from brands where deleted_at is null`),
 			conn.execute<{ brandId: string; handle: string }[]>(
 				`select a.brand_id as "brandId", a.handle from social_accounts a
 				join brands b on b.id = a.brand_id and b.deleted_at is null`,
 			),
-			conn.execute<{ name: string; aliases: string[] | null }[]>(`select name, aliases from cities`),
+			conn.execute<{ name: string; aliases: string[] | null }[]>(
+				`select name, aliases from cities`,
+			),
 			// A tag and a brand seen together: on a post with a mention matched to it, or by its own account
 			conn.execute<{ hashtag_id: number; brand_id: string }[]>(
 				`select ph.hashtag_id, m.brand_id from post_hashtags ph join mentions m on m.post_id = ph.post_id
@@ -63,7 +70,8 @@ export class HashtagService implements OnModuleInit {
 		const changed: [number, string | null, string | null][] = [];
 		for (const t of tags) {
 			const link = hashtagLinks(t, ctx);
-			if (link.topicId !== t.topic_id || link.brandId !== t.brand_id) changed.push([t.id, link.topicId, link.brandId]);
+			if (link.topicId !== t.topic_id || link.brandId !== t.brand_id)
+				changed.push([t.id, link.topicId, link.brandId]);
 		}
 		for (const chunk of _.chunk(changed, CHUNK))
 			await conn.execute(
@@ -72,7 +80,8 @@ export class HashtagService implements OnModuleInit {
 				where h.id = v.id`,
 				chunk.flat(),
 			);
-		if (changed.length) this.logger.log(`Hashtags re-linked: ${changed.length} of ${tags.length}`);
+		if (changed.length)
+			this.logger.log(`Hashtags re-linked: ${changed.length} of ${tags.length}`);
 		return { tags: tags.length, changed: changed.length };
 	}
 

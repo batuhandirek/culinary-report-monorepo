@@ -4,9 +4,16 @@ import { defineConfig, MikroORM, Options } from '@mikro-orm/postgresql';
 import { Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { jest } from '@jest/globals';
+import { describe, jest } from '@jest/globals';
 
 import ormConfig from 'src/mikro-orm.config.js';
+import { DurableWorkflowsModule } from 'src/modules/durable-workflows/durable-workflows.module.js';
+
+/** The Postgres DBOS runs on in a `durable: true` suite; unset, such suites skip (`describeWithDbos`) */
+export const DBOS_TEST_DATABASE_URL = process.env.DBOS_TEST_DATABASE_URL;
+/** `describe` for a suite that boots DBOS, skipped without `DBOS_TEST_DATABASE_URL` */
+export const describeWithDbos: typeof describe.skip =
+	DBOS_TEST_DATABASE_URL ? describe : describe.skip;
 
 import { mockAgent } from './mock-agent.js';
 import { buildSchemaSkippingIndexes, startPglite } from './pglite-orm.js';
@@ -58,9 +65,23 @@ export const createPgliteTestingModule = async (opts: {
 	imports?: Parameters<typeof Test.createTestingModule>[0]['imports'];
 	/** Extra raw SQL run before the schema build (migration-only objects). */
 	beforeSchemaSql?: string[];
+	/**
+	 * Boot DBOS (`DurableWorkflowsModule`) and run the module's init hooks, so `@DurableWorkflow`
+	 * methods are real workflows. DBOS needs a real Postgres: its background jobs hold a transaction
+	 * on one pool client while querying through another, which the PGlite bridge's one session
+	 * cannot serve. It connects to `DBOS_TEST_DATABASE_URL` (a database of its own, created when
+	 * missing; the dev Docker Postgres works) under an application name unique to the run; a suite
+	 * skips itself when the variable is unset (`describeWithDbos`). Without the option decorated
+	 * methods are plain methods and `DurableWorkflowsService` is auto-mocked unless provided.
+	 */
+	durable?: boolean;
 }): Promise<PgliteTestingModule> => {
 	const entities = opts.entities ?? ormConfig.entities!;
 	const pg = await startPglite();
+	if (opts.durable && !DBOS_TEST_DATABASE_URL)
+		throw new Error(
+			'A suite with `durable: true` needs DBOS_TEST_DATABASE_URL (a Postgres database for DBOS)',
+		);
 
 	const moduleRef = await Test.createTestingModule({
 		imports: [
@@ -74,6 +95,23 @@ export const createPgliteTestingModule = async (opts: {
 				}),
 			),
 			MikroOrmModule.forFeature(entities as Parameters<typeof MikroOrmModule.forFeature>[0]),
+			...(opts.durable ?
+				[
+					DurableWorkflowsModule.forRoot(
+						{
+							applicationName: `test-${process.pid}-${Date.now()}`,
+							applicationVersion: 'test',
+							systemDatabaseUrl: DBOS_TEST_DATABASE_URL!,
+							poolSize: 4,
+							useListenNotify: true,
+							disabled: false,
+							schedulesEnabled: true,
+							tracingEnabled: false,
+						},
+						{ minimal: true },
+					),
+				]
+			:	[]),
 			...(opts.imports ?? []),
 		],
 		providers: opts.providers,
@@ -86,6 +124,8 @@ export const createPgliteTestingModule = async (opts: {
 		orm,
 		opts.beforeSchemaSql ?? ['CREATE SEQUENCE IF NOT EXISTS listings_sequence_seq'],
 	);
+	// The module registers and launches DBOS in `onModuleInit`
+	if (opts.durable) await moduleRef.init();
 
 	return {
 		moduleRef,

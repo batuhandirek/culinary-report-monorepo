@@ -4,19 +4,19 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Logger, Module, OnApplicationShutdown, OnModuleInit } from '@nestjs/common';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
+import { DurableWorkflowsModule } from 'src/modules/durable-workflows/durable-workflows.module.js';
 import { PgBossModule } from 'src/modules/pgboss/pgboss.module.js';
 
 import { mainConfig } from './config/main.config.js';
+import { AnalystModule } from './modules/analyst/analyst.module.js';
 import { AuthModule } from './modules/auth/auth.module.js';
 import { BacklogModule } from './modules/backlog/backlog.module.js';
-import { StatementsModule } from './modules/statements/statements.module.js';
 import { BlogModule } from './modules/blog/blog.module.js';
 import { CitiesModule } from './modules/cities/cities.module.js';
 import { EmailModule } from './modules/email/email.module.js';
-import { EmbeddingsModule } from './modules/embeddings/embeddings.module.js';
 import { FoodTrendsModule } from './modules/food-trends/food-trends.module.js';
-import { HighlightsModule } from './modules/highlights/highlights.module.js';
 import { HealthCheckModule } from './modules/health-check/health-check.module.js';
+import { HighlightsModule } from './modules/highlights/highlights.module.js';
 import { LandingModule } from './modules/landing/landing.module.js';
 import { NewsletterModule } from './modules/newsletter/newsletter.module.js';
 import { NotificationsModule } from './modules/notification/notifications.module.js';
@@ -27,9 +27,9 @@ import { PipelineModule } from './modules/pipeline/pipeline.module.js';
 import { PortalModule } from './modules/portal/portal.module.js';
 import { ReportsModule } from './modules/reports/reports.module.js';
 import { S3Module } from './modules/s3/s3.module.js';
-import { AnalystModule } from './modules/analyst/analyst.module.js';
 import { SitemapModule } from './modules/sitemap/sitemap.module.js';
 import { SocialModule } from './modules/social/social.module.js';
+import { StatementsModule } from './modules/statements/statements.module.js';
 import { TopicsModule } from './modules/topics/topics.module.js';
 import { TrendsModule } from './modules/trends/trends.module.js';
 import { TurnstileModule } from './modules/turnstile/turnstile.module.js';
@@ -51,11 +51,12 @@ import sdk from './tracing.js';
 				ssl: mainConfig.DB_SSL ? { rejectUnauthorized: false } : undefined,
 			}),
 		}),
+		// Durable workflows (DBOS): every multi-step job that spends money or waits
+		DurableWorkflowsModule.forRoot(),
 
 		// Utility modules
 		EmailModule,
 		OtpModule,
-		EmbeddingsModule,
 		S3Module,
 		TurnstileModule,
 		// SimulationModule,

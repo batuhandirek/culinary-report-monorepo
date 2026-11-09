@@ -61,7 +61,10 @@ export const instagramProfileFacts = (item: any): ProfileFacts | null => {
 		links: [...new Set(links.map(decodeLink))],
 		// Instagram writes "None" for a business without a category
 		category:
-			typeof item.businessCategoryName === 'string' && !/^none$/i.test(item.businessCategoryName.trim()) ?
+			(
+				typeof item.businessCategoryName === 'string' &&
+				!/^none$/i.test(item.businessCategoryName.trim())
+			) ?
 				item.businessCategoryName.trim() || null
 			:	null,
 		isBusiness: typeof item.isBusinessAccount === 'boolean' ? item.isBusinessAccount : null,

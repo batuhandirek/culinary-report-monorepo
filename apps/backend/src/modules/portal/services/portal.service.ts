@@ -282,14 +282,13 @@ export class PortalService {
 		return this.settings(brandId);
 	}
 
-	/** One page of every branch's reviews, with the reply drafts for the unanswered ones. */
+	/** One page of every branch's reviews. */
 	async reviews(brandId: string, query: PortalListReviewsInputDto): Promise<PortalReviewsOutputDto> {
 		const { page, size, ...filters } = query;
 		const venues = await this.reviewVenues(brandId);
 		const { items, total } = await this.reviewService.listForVenue([...venues.keys()], filters, page, size);
-		const drafts = await this.reportService.replyDrafts(brandId);
 		return {
-			items: items.map(review => this.reviewOutput(review, drafts, venues)),
+			items: items.map(review => this.reviewOutput(review, venues)),
 			totalItems: total,
 			page,
 			pageSize: size,
@@ -308,7 +307,7 @@ export class PortalService {
 	): Promise<PortalReviewOutputDto> {
 		const venues = await this.reviewVenues(brandId);
 		const review = await this.reviewService.markReplied([...venues.keys()], reviewId, replied);
-		return this.reviewOutput(review, await this.reportService.replyDrafts(brandId), venues);
+		return this.reviewOutput(review, venues);
 	}
 
 	async posts(brandId: string, query: PortalListPostsInputDto): Promise<PortalPostsOutputDto> {
@@ -401,16 +400,9 @@ export class PortalService {
 	}
 
 	/** `venues`: the brand's branches by id; with more than one (a chain), each review names its branch. */
-	private reviewOutput(
-		review: Review,
-		drafts: Map<string, string>,
-		venues: Map<string, string>,
-	): PortalReviewOutputDto {
+	private reviewOutput(review: Review, venues: Map<string, string>): PortalReviewOutputDto {
 		const answered = !!review.ownerResponse || !!review.markedRepliedAt;
-		const written = !!(review.text || review.textTranslated);
-		// The alert's draft is newer than a report's
-		const replyDraft = !answered && written ? (review.replyDraft ?? drafts.get(review.reviewId)) : undefined;
-		const { replyDraft: _stored, ...fields } = wrap(review).serialize({
+		const fields = wrap(review).serialize({
 			skipNull: true,
 			forceObject: true,
 			populate: [...STATEMENT_POPULATE],
@@ -418,7 +410,6 @@ export class PortalService {
 		return {
 			...fields,
 			answered,
-			...(replyDraft && { replyDraft }),
 			...(venues.size > 1 && { branch: venues.get(review.venue.id) }),
 		};
 	}

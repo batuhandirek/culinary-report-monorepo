@@ -19,12 +19,11 @@ import { HashtagService } from '../services/hashtag.service.js';
 import { MentionMatchingService } from '../services/mention-matching.service.js';
 
 /**
- * Brands changed: their mentions are matched again (a chain's branch only when the post says
- * which), the cities' accounts too (a merge settles handles two brands shared), then the
- * cities' lead scores are worked out again for the last finished month, and hashtags' brands
- * checked again (a merge or rename moves which brand a tag names). Accounts, scores and tags
- * need no LLM, so they run even when the rematch fails (an LLM account out of credits leaves
- * its close calls for the retry); the job then fails with the rematch's error.
+ * Brands changed: their mentions are matched again in code (a chain's branch only when the post
+ * says which; a close call keeps its match until the city's next matching run asks the agent,
+ * `match-mentions.mention`), the cities' accounts too (a merge settles handles two brands
+ * shared), then the cities' lead scores are worked out again for the last finished month, and
+ * hashtags' brands checked again (a merge or rename moves which brand a tag names). No LLM.
  */
 @Injectable()
 export class BrandChangedWorker {
@@ -37,22 +36,16 @@ export class BrandChangedWorker {
 		private readonly hashtagService: HashtagService,
 	) {}
 
-	// Matching may call the LLM for a few mentions; a retry redoes the same work, never paid scrapes
+	// Free work: a retry redoes it, never a paid call
 	@OnJob(BrandChangedJob.jobName, { retryLimit: 2, retryDelay: 60 })
 	@EnsureRequestContext()
 	async onBrandChanged(job: JobWithMetadata<BrandChangedJobPayload>) {
-		let rematchError: unknown;
-		try {
-			await this.mentionMatchingService.rematchBrands(job.data.brandIds);
-		} catch (e) {
-			rematchError = e;
-		}
+		await this.mentionMatchingService.rematchBrands(job.data.brandIds);
 		const month = previousMonth();
 		for (const cityId of job.data.cityIds) {
 			await this.accountMatchingService.match(await this.cityService.getById(cityId));
 			await this.brandLeadScoreService.scoreAll(month, cityId);
 		}
 		await this.hashtagService.relink();
-		if (rematchError) throw rematchError;
 	}
 }

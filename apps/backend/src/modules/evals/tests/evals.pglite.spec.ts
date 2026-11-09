@@ -5,21 +5,21 @@ import path from 'node:path';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { EmbeddingsService } from 'src/modules/embeddings/services/embeddings.service.js';
 import { DecisionModelsService } from 'src/modules/llm/services/decision-models.service.js';
+import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
-import { PostGateAgent } from 'src/modules/social/agents/post-gate.agent.js';
-import { VenueMatchAgent } from 'src/modules/social/agents/venue-match.agent.js';
+import { VenueMatchAgent } from 'src/modules/pipeline/match-mentions/agents/venue-match.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { gateAgent } from 'src/modules/pipeline/read-posts/tests/factories/post-gate.mock.js';
+import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
 import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
-import { gateAgent } from 'src/modules/social/tests/factories/post-gate.mock.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
-import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
@@ -128,7 +128,7 @@ describe('Ingestion eval', () => {
 	const decisionModels = { model: jest.fn() };
 	// A made-up space: the wait for food on one axis, everything else on another
 	const embeddings = {
-		embedManyUncached: jest.fn(async (values: string[]) => ({
+		embedMany: jest.fn(async (values: string[]) => ({
 			embeddings: values.map(v => (/^Wait for food|waited/.test(v) ? [1, 0] : [0, 1])),
 			tokens: values.length,
 		})),
@@ -462,7 +462,7 @@ describe('Ingestion eval', () => {
 		});
 		expect(res).toMatchObject({ ran: 1, failed: 0 });
 		// The aspects' descriptions once, then the claims
-		expect(embeddings.embedManyUncached).toHaveBeenCalledTimes(2);
+		expect(embeddings.embedMany).toHaveBeenCalledTimes(2);
 		const offered = labelsClassifier.decide.mock.calls.map(
 			call => (call[1] as unknown as { offered?: string[] }).offered,
 		);

@@ -37,7 +37,9 @@ export class AdminBrandAccountsController {
 		@TypedParam('id') id: string & tags.Format<'uuid'>,
 		@TypedQuery() query: AdminBrandAccountsInputDto,
 	): Promise<AdminAccountOutputDto[]> {
-		return (await this.ownAccountService.forBrand(id, query.month ?? previousMonth())).map(accountOutput);
+		return (await this.ownAccountService.forBrand(id, query.month ?? previousMonth())).map(
+			accountOutput,
+		);
 	}
 
 	/** Adds a handle as the brand's own or one branch's: linked whoever had it, and no longer rejected. */
@@ -58,7 +60,10 @@ export class AdminBrandAccountsController {
 		@TypedBody() body: AdminUpdateBrandAccountInputDto,
 	): Promise<AdminAccountOutputDto[]> {
 		await this.ownAccountService.ensureOfBrand(id, accountId);
-		await this.socialAccountService.decide(accountId, { action: 'branch', branchId: body.branchId });
+		await this.socialAccountService.decide(accountId, {
+			action: 'branch',
+			branchId: body.branchId,
+		});
 		return this.listBrandAccounts(id, {});
 	}
 

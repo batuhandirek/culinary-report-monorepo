@@ -7,6 +7,7 @@ import { BrandLeadScoreService } from 'src/modules/venues/services/brand-lead-sc
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { AccountMatchingService } from '../services/account-matching.service.js';
+import { HashtagService } from '../services/hashtag.service.js';
 import { MentionMatchingService } from '../services/mention-matching.service.js';
 import { BrandChangedWorker } from '../workers/brand-changed.worker.js';
 
@@ -17,6 +18,8 @@ describe('BrandChangedWorker (pglite)', () => {
 	const match = jest.fn(async (..._args: unknown[]) => ({}));
 	const scoreAll = jest.fn(async (..._args: unknown[]) => 0);
 	const getById = jest.fn(async (id: string) => ({ id, name: 'Berlin' }));
+	const relink = jest.fn(async () => ({ tags: 0, changed: 0 }));
+	const order: string[] = [];
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -26,6 +29,7 @@ describe('BrandChangedWorker (pglite)', () => {
 				{ provide: AccountMatchingService, useValue: { match } },
 				{ provide: CityService, useValue: { getById } },
 				{ provide: BrandLeadScoreService, useValue: { scoreAll } },
+				{ provide: HashtagService, useValue: { relink } },
 			],
 		});
 		worker = harness.moduleRef.get(BrandChangedWorker);
@@ -39,11 +43,18 @@ describe('BrandChangedWorker (pglite)', () => {
 		data: { brandIds: ['b1'], cityIds: ['c1'] },
 	} as JobWithMetadata<BrandChangedJobPayload>;
 
-	it('matches accounts and scores the cities even when the rematch fails, then fails the job', async () => {
-		rematchBrands.mockRejectedValueOnce(new Error('You have no credits remaining'));
-		await expect(worker.onBrandChanged(job)).rejects.toThrow('no credits remaining');
+	it("rematches the brands' mentions in code first, then the cities' accounts, scores and tags", async () => {
+		for (const [name, fn] of Object.entries({ rematchBrands, match, scoreAll, relink }))
+			(fn as jest.Mock).mockImplementation((async () => {
+				order.push(name);
+				return {};
+			}) as never);
+
+		await worker.onBrandChanged(job);
 		expect(rematchBrands).toHaveBeenCalledWith(['b1']);
 		expect(match).toHaveBeenCalledWith(expect.objectContaining({ id: 'c1' }));
 		expect(scoreAll).toHaveBeenCalledWith(expect.any(String), 'c1');
+		// Scored on the rematched mentions: the close calls keep their match until the city's run asks
+		expect(order).toEqual(['rematchBrands', 'match', 'scoreAll', 'relink']);
 	});
 });

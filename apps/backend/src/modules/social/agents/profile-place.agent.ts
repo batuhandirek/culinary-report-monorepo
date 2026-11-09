@@ -12,7 +12,9 @@ const profilePlaceSchema = z.object({
 	venueId: z
 		.string()
 		.nullable()
-		.describe("The id of the candidate place this profile is the venue's own account of, or null"),
+		.describe(
+			"The id of the candidate place this profile is the venue's own account of, or null",
+		),
 });
 
 /**
@@ -27,7 +29,6 @@ export class ProfilePlaceAgent extends BaseMastraAgent<typeof profilePlaceSchema
 		id: 'profile-place',
 		name: 'ProfilePlaceAgent',
 		outputSchema: profilePlaceSchema,
-		ingestion: true,
 	};
 
 	protected getModel(): LlmModelChoice {
@@ -40,12 +41,12 @@ export class ProfilePlaceAgent extends BaseMastraAgent<typeof profilePlaceSchema
 			'places found at the address its bio writes out. Decide whether the profile is the own account of one of those places: the ' +
 			'business itself posting as itself. Answer its id, or null. ' +
 			'It is the place when the profile speaks as the business (opening hours, "book a table", "our menu", the address as its ' +
-			'own location, a category that fits the place) and its name can be the place\'s under another spelling, a shortening, the ' +
-			'owner\'s brand or the name before a rebrand. ' +
+			"own location, a category that fits the place) and its name can be the place's under another spelling, a shortening, the " +
+			"owner's brand or the name before a rebrand. " +
 			'Answer null when the profile recommends or reviews the place rather than being it (a food blogger, a guide, a fan page: ' +
 			'"fav spot", "my go-to", "where to eat"), when it is a supplier, an agency, an event or a person working there, when ' +
 			'several candidates fit equally, or when nothing in the profile ties it to one candidate. Never pick a place only because ' +
-			'it is the only candidate: a wrong answer makes one business another\'s account.'
+			"it is the only candidate: a wrong answer makes one business another's account."
 		);
 	}
 

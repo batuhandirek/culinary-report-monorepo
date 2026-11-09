@@ -1,11 +1,19 @@
 // Food blogs read through their feeds: finding the feed, reading RSS and Atom items, an
 // article's text out of its HTML. Pure functions, tested in `social/tests/blog-feed.spec.ts`.
 
-import { createHash } from 'node:crypto';
-
 import type { AnyNode, Document, Element } from 'domhandler';
-import { findAll, findOne, getAttributeValue, getChildren, isTag, isText, removeElement, textContent } from 'domutils';
+import {
+	findAll,
+	findOne,
+	getAttributeValue,
+	getChildren,
+	isTag,
+	isText,
+	removeElement,
+	textContent,
+} from 'domutils';
 import { parseDocument } from 'htmlparser2';
+import { createHash } from 'node:crypto';
 
 /** One article a feed lists. */
 export interface FeedItem {
@@ -31,14 +39,57 @@ const FEED_TYPES = new Set(['application/rss+xml', 'application/atom+xml', 'appl
 
 // Never part of an article's text
 const JUNK_TAGS = new Set([
-	'script', 'style', 'noscript', 'template', 'svg', 'iframe', 'form', 'button', 'nav', 'header', 'footer',
-	'aside', 'select', 'input', 'textarea', 'video', 'audio', 'picture', 'img',
+	'script',
+	'style',
+	'noscript',
+	'template',
+	'svg',
+	'iframe',
+	'form',
+	'button',
+	'nav',
+	'header',
+	'footer',
+	'aside',
+	'select',
+	'input',
+	'textarea',
+	'video',
+	'audio',
+	'picture',
+	'img',
 ]);
 
 // Text inside these starts on a line of its own
 const BLOCK_TAGS = new Set([
-	'p', 'div', 'section', 'article', 'main', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'ul', 'ol', 'br', 'tr',
-	'td', 'th', 'table', 'blockquote', 'figcaption', 'figure', 'dd', 'dt', 'dl', 'pre', 'address', 'hr',
+	'p',
+	'div',
+	'section',
+	'article',
+	'main',
+	'h1',
+	'h2',
+	'h3',
+	'h4',
+	'h5',
+	'h6',
+	'li',
+	'ul',
+	'ol',
+	'br',
+	'tr',
+	'td',
+	'th',
+	'table',
+	'blockquote',
+	'figcaption',
+	'figure',
+	'dd',
+	'dt',
+	'dl',
+	'pre',
+	'address',
+	'hr',
 ]);
 
 const name = (el: Element): string => el.name.toLowerCase();
@@ -46,7 +97,8 @@ const name = (el: Element): string => el.name.toLowerCase();
 /** The text of the first child element of `el` named one of `names` (namespaced names included). */
 const childText = (el: Element, ...names: string[]): string | null => {
 	for (const wanted of names) {
-		const child = getChildren(el).find(c => isTag(c) && name(c) === wanted) as Element | undefined;
+		const child = getChildren(el).find(c => isTag(c) && name(c) === wanted) as
+			Element | undefined;
 		if (child) {
 			const text = textContent(child).trim();
 			if (text) return text;
@@ -72,13 +124,16 @@ const absolute = (href: string | null | undefined, base: string): string | null 
 };
 
 /** Whether a body is an RSS, RDF or Atom document. */
-export const isFeed = (body: string): boolean => /<(rss|feed|rdf:RDF)[\s>]/i.test(body.trimStart().slice(0, 2000));
+export const isFeed = (body: string): boolean =>
+	/<(rss|feed|rdf:RDF)[\s>]/i.test(body.trimStart().slice(0, 2000));
 
 // Control characters XML never allows (tip Berlin's feed held a 0x08): dropped before parsing
-const cleanXml = (body: string): string => body.trimStart().replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
+const cleanXml = (body: string): string =>
+	body.trimStart().replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '');
 
 /** The longer of two texts: some feeds put the whole article in `description` and none in `content:encoded`. */
-const longer = (a: string | null, b: string | null): string | null => ((a?.length ?? 0) >= (b?.length ?? 0) ? a : b);
+const longer = (a: string | null, b: string | null): string | null =>
+	(a?.length ?? 0) >= (b?.length ?? 0) ? a : b;
 
 /**
  * An RSS 2.0, RSS 1.0 (RDF) or Atom document's title and items, links made absolute against
@@ -98,22 +153,33 @@ export const parseFeed = (body: string, feedUrl: string): ParsedFeed | null => {
 		if (atom) {
 			const links = getChildren(el).filter(c => isTag(c) && name(c) === 'link') as Element[];
 			const alternate =
-				links.find(l => (getAttributeValue(l, 'rel') ?? 'alternate') === 'alternate') ?? links[0];
+				links.find(l => (getAttributeValue(l, 'rel') ?? 'alternate') === 'alternate') ??
+				links[0];
 			link = absolute(alternate && getAttributeValue(alternate, 'href'), feedUrl);
 		} else {
-			const guid = getChildren(el).find(c => isTag(c) && name(c) === 'guid') as Element | undefined;
+			const guid = getChildren(el).find(c => isTag(c) && name(c) === 'guid') as
+				Element | undefined;
 			const permalink =
-				guid && getAttributeValue(guid, 'ispermalink') !== 'false' && getAttributeValue(guid, 'isPermaLink') !== 'false' ?
+				(
+					guid &&
+					getAttributeValue(guid, 'ispermalink') !== 'false' &&
+					getAttributeValue(guid, 'isPermaLink') !== 'false'
+				) ?
 					textContent(guid)
 				:	null;
-			link = absolute(childText(el, 'link') ?? getAttributeValue(el, 'rdf:about') ?? permalink, feedUrl);
+			link = absolute(
+				childText(el, 'link') ?? getAttributeValue(el, 'rdf:about') ?? permalink,
+				feedUrl,
+			);
 		}
 		if (!link) continue;
 		items.push({
 			url: link,
 			title: decodeTitle(childText(el, 'title') ?? ''),
 			publishedAt: parseDate(
-				atom ? childText(el, 'published', 'updated') : childText(el, 'pubdate', 'dc:date', 'published', 'updated'),
+				atom ?
+					childText(el, 'published', 'updated')
+				:	childText(el, 'pubdate', 'dc:date', 'published', 'updated'),
 			),
 			html:
 				(atom ?
@@ -125,7 +191,8 @@ export const parseFeed = (body: string, feedUrl: string): ParsedFeed | null => {
 };
 
 // A title may hold escaped HTML ("Tom &amp; Jerry" double escaped, or `<em>`): its plain text
-const decodeTitle = (title: string): string => (/[<&]/.test(title) ? htmlToText(title) : title).replace(/\s+/g, ' ').trim();
+const decodeTitle = (title: string): string =>
+	(/[<&]/.test(title) ? htmlToText(title) : title).replace(/\s+/g, ' ').trim();
 
 /**
  * The feeds a page announces (`<link rel="alternate" type="application/rss+xml">`), comment
@@ -141,7 +208,12 @@ export const feedLinksOf = (html: string, pageUrl: string): string[] => {
 		doc.children,
 	);
 	const urls = links
-		.filter(el => !/comment|kommentar/i.test(`${getAttributeValue(el, 'title') ?? ''} ${getAttributeValue(el, 'href') ?? ''}`))
+		.filter(
+			el =>
+				!/comment|kommentar/i.test(
+					`${getAttributeValue(el, 'title') ?? ''} ${getAttributeValue(el, 'href') ?? ''}`,
+				),
+		)
 		.map(el => absolute(getAttributeValue(el, 'href'), pageUrl))
 		.filter((u): u is string => !!u);
 	return [...new Set(urls)];
@@ -168,7 +240,8 @@ export const pagedFeedUrl = (feedUrl: string, page: number): string => {
 export const canonicalArticleUrl = (url: string): string => {
 	const parsed = new URL(url);
 	parsed.hash = '';
-	for (const key of [...parsed.searchParams.keys()]) if (/^utm_/i.test(key)) parsed.searchParams.delete(key);
+	for (const key of [...parsed.searchParams.keys()])
+		if (/^utm_/i.test(key)) parsed.searchParams.delete(key);
 	return parsed.href;
 };
 
@@ -179,7 +252,9 @@ export const blogExternalId = (url: string): string =>
 /** A blog's handle (`SocialAccount.handle`): its host, lowercased, without `www.`. */
 export const blogHandle = (url: string): string | null => {
 	try {
-		const host = new URL(/^https?:\/\//i.test(url.trim()) ? url.trim() : `https://${url.trim()}`).hostname
+		const host = new URL(
+			/^https?:\/\//i.test(url.trim()) ? url.trim() : `https://${url.trim()}`,
+		).hostname
 			.toLowerCase()
 			.replace(/^www\./, '');
 		return /^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(host) && host.length <= 80 ? host : null;
@@ -190,8 +265,29 @@ export const blogHandle = (url: string): string | null => {
 
 // Instagram and X paths that are no profile (a TikTok profile is always `/@handle`)
 const NOT_PROFILE_PATHS = new Set([
-	'p', 'reel', 'reels', 'tv', 'explore', 'stories', 'accounts', 'tags', 'direct', 'about', 'legal',
-	'home', 'i', 'intent', 'share', 'search', 'hashtag', 'settings', 'messages', 'notifications', 'compose', 'login', 'signup',
+	'p',
+	'reel',
+	'reels',
+	'tv',
+	'explore',
+	'stories',
+	'accounts',
+	'tags',
+	'direct',
+	'about',
+	'legal',
+	'home',
+	'i',
+	'intent',
+	'share',
+	'search',
+	'hashtag',
+	'settings',
+	'messages',
+	'notifications',
+	'compose',
+	'login',
+	'signup',
 ]);
 
 /**
@@ -213,8 +309,12 @@ export const profileLinkText = (href: string | null | undefined): string | null 
 		const handle = first.match(/^@([\w.]{1,40})$/)?.[1];
 		return handle ? `tiktok.com/@${handle.toLowerCase()}` : null;
 	}
-	const site = host === 'instagram.com' ? 'instagram.com' : host === 'x.com' || host === 'twitter.com' ? 'x.com' : null;
-	if (!site || !/^[\w.]{1,40}$/.test(first) || NOT_PROFILE_PATHS.has(first.toLowerCase())) return null;
+	const site =
+		host === 'instagram.com' ? 'instagram.com'
+		: host === 'x.com' || host === 'twitter.com' ? 'x.com'
+		: null;
+	if (!site || !/^[\w.]{1,40}$/.test(first) || NOT_PROFILE_PATHS.has(first.toLowerCase()))
+		return null;
 	return `${site}/${first.toLowerCase()}`;
 };
 
@@ -238,7 +338,8 @@ const nodesText = (nodes: AnyNode[]): string => {
 		const start = out.length;
 		for (const child of node.children) walk(child);
 		const profile = tag === 'a' ? profileLinkText(getAttributeValue(node, 'href')) : null;
-		if (profile && !out.slice(start).join('').toLowerCase().includes(profile)) out.push(` (${profile})`);
+		if (profile && !out.slice(start).join('').toLowerCase().includes(profile))
+			out.push(` (${profile})`);
 		if (block) out.push('\n');
 	};
 	for (const node of nodes) walk(node);
@@ -262,12 +363,18 @@ export const htmlToText = (html: string): string => nodesText(parseDocument(html
 export const articleText = (html: string): string => {
 	const doc: Document = parseDocument(html);
 	for (const el of findAll(e => JUNK_TAGS.has(name(e)), doc.children)) removeElement(el);
-	const articles = findAll(el => name(el) === 'article', doc.children).map(el => ({ el, text: nodesText([el]) }));
+	const articles = findAll(el => name(el) === 'article', doc.children).map(el => ({
+		el,
+		text: nodesText([el]),
+	}));
 	const best = articles.sort((a, b) => b.text.length - a.text.length)[0];
 	if (best && best.text.length >= 200) return best.text;
 	const main =
-		findOne(el => name(el) === 'main' || getAttributeValue(el, 'role') === 'main', doc.children, true) ??
-		findOne(el => name(el) === 'body', doc.children, true);
+		findOne(
+			el => name(el) === 'main' || getAttributeValue(el, 'role') === 'main',
+			doc.children,
+			true,
+		) ?? findOne(el => name(el) === 'body', doc.children, true);
 	return nodesText(main ? [main] : doc.children);
 };
 

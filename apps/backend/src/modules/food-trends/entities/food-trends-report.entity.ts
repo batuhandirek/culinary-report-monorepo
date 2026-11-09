@@ -12,7 +12,7 @@ import type {
 
 /**
  * A city's quarter of food trends as `/<city>/trends/<YYYY>-q<N>` shows it. The anchored search
- * pull is stored on it (`searchLevels`, written by `FoodTrendsReportService.pullSearches` only);
+ * pull is stored on it (`searchLevels`, written by `FoodTrendsReportService.savePull` only);
  * `data` is computed by `build` (a rebuild replaces it) and public only once an admin publishes it.
  */
 @Entity({ tableName: 'food_trends_reports' })

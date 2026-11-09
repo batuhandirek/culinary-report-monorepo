@@ -4,8 +4,15 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import {
+	GOOGLE_PLACES_MIN_CAP_USD,
+	type GooglePlaceItem,
+} from 'src/modules/apify/actors/google-places.actor.js';
+import { GOOGLE_PLACE_USD } from 'src/modules/apify/actors/google-places.actor.js';
+import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { districtNames } from 'src/modules/cities/util/city.js';
+import { nearCity, orderedPlaces } from 'src/modules/pipeline/atoms/places/util/places-search.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 
@@ -20,10 +27,7 @@ import {
 	dishSearchTable,
 	isSearchedTopic,
 } from '../util/dish-searches.js';
-import { nearCity, orderedPlaces, type SearchPlaceItem } from '../util/places-search.js';
-import { calendarDay } from '../util/week.js';
-
-import { VenueScrapeService } from './venue-scrape.service.js';
+import { type CalendarDay, calendarDay } from '../util/week.js';
 
 /** How many snapshots a dish's picker offers, newest first */
 const TOPIC_SNAPSHOTS = 36;
@@ -53,14 +57,50 @@ export interface VenueDishSearches {
 	}[];
 }
 
+/** What `planSweep` hands the `dish-searches` workflow: one Google Maps run a search, from a map of the city */
+export interface DishSweepPlan {
+	/** The city's local day the snapshot is dated */
+	searchedOn: string;
+	/** Its calendar parts, split out for the rows */
+	day: CalendarDay;
+	searches: { query: string; topicKey: string; district: string }[];
+	/** Places kept per search (`DISH_SEARCH_DEPTH`) */
+	perQuery: number;
+	/** One run's cap: the actor's floor, else half again what `perQuery` places cost */
+	capUsd: number;
+	dishes: number;
+	districts: number;
+	/** Topics the budget did not cover */
+	notCovered: number;
+}
+
+/** One search's run as the workflow hands it back: its stored items by `recordId` and the venues kept, or why it failed */
+export type DishSearchRunResult =
+	| { query: string; recordId: string; venueIds: Record<string, string> }
+	| { query: string; failed: string };
+
+export interface DishSweepSummary {
+	searchedOn: string;
+	dishes: number;
+	districts: number;
+	searches: number;
+	returned: number;
+	places: number;
+	linked: number;
+	notCovered: number;
+	failed: number;
+}
+
 /**
  * Who Google Maps puts first for each food in each district ("pasta Mitte Berlin", "vietnamese
  * food Mitte Berlin", "cafe Mitte Berlin"): every searched food topic (`isSearchedTopic`: dishes,
- * cuisines, kinds of place, meals, diets, drinks) × every district of the city, the top ten each, kept as a dated snapshot of that day's
- * rankings (`TRACK_DISH_SEARCHES`, every `City.dishSearchEveryDays`). One Places run a search
- * (`VenueScrapeService.searchEach`), from a map of the city; places far from it are left out
- * (`nearCity`). The places found are saved as venues (`saveFound`), which also writes each venue's
- * rating snapshot of the day.
+ * cuisines, kinds of place, meals, diets, drinks) × every district of the city, the top ten each,
+ * kept as a dated snapshot of that day's rankings (`TRACK_DISH_SEARCHES`, every
+ * `City.dishSearchEveryDays`). The `dish-searches` workflow plans the sweep here (`planSweep`),
+ * runs one `places.run` a search (the actor outputs a place once a run, so a shared run would
+ * leave a place out of every search after the first that found it; each from a map of the city,
+ * the places saved as venues with the day's rating) and stores the ranks here (`saveSweep`); places
+ * far from the city are left out (`nearCity`).
  */
 @Injectable()
 export class DishSearchService {
@@ -68,32 +108,18 @@ export class DishSearchService {
 
 	constructor(
 		private readonly em: EntityManager,
-		private readonly venueScrapeService: VenueScrapeService,
+		private readonly apifyService: ApifyService,
 		private readonly topicService: TopicService,
 		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/**
-	 * Takes today's snapshot (the city's local date): searches every searched topic in every
-	 * district of the city, as many topics as the budget covers (the ones most of the city's open
-	 * venues are tagged with first, whatever their kind), and stores each search's top ten, replacing that day's rows of each search that came
-	 * back. A search that came back empty (failed, or cut by the cap) stores nothing.
+	 * Today's snapshot planned (the city's local date): every searched topic in every district of
+	 * the city, as many topics as the budget covers (the ones most of the city's open venues are
+	 * tagged with first, whatever their kind) and never more searches than it covers at
+	 * `DISH_SEARCH_DEPTH` places each.
 	 */
-	async sweep(
-		city: City,
-		budgetUsd: number,
-		now = new Date(),
-	): Promise<{
-		searchedOn: string;
-		dishes: number;
-		districts: number;
-		searches: number;
-		returned: number;
-		places: number;
-		linked: number;
-		notCovered: number;
-		failed: number;
-	}> {
+	async planSweep(city: City, budgetUsd: number, now = new Date()): Promise<DishSweepPlan> {
 		const day = calendarDay(now, city.timezone);
 		const districts = districtNames(city);
 		const served = await this.venueTopicService.venueCounts(city.id);
@@ -103,94 +129,114 @@ export class DishSearchService {
 			['desc', 'asc'],
 		);
 		const planned = dishes.slice(0, dishesWithinBudget(budgetUsd, districts.length));
-		const searches = dishSearches(planned, districts, city.name);
-		const summary = {
+		const covered = Math.max(0, Math.floor(budgetUsd / (DISH_SEARCH_DEPTH * GOOGLE_PLACE_USD)));
+		const searches = dishSearches(planned, districts, city.name)
+			.slice(0, covered)
+			.map(s => ({ query: s.text, topicKey: s.topicKey, district: s.district }));
+		return {
 			searchedOn: day.date,
+			day,
+			searches,
+			perQuery: DISH_SEARCH_DEPTH,
+			capUsd: Math.max(GOOGLE_PLACES_MIN_CAP_USD, DISH_SEARCH_DEPTH * GOOGLE_PLACE_USD * 1.5),
 			dishes: planned.length,
 			districts: districts.length,
-			searches: searches.length,
+			notCovered: dishes.length - planned.length,
+		};
+	}
+
+	/**
+	 * The sweep's runs stored: each search's top ten in Google's order (each run's items read from
+	 * its row), replacing that day's rows of each search that came back. A search that came back
+	 * empty (failed, or cut by the cap) stores nothing; the step fails only when every run did.
+	 * Flushes.
+	 */
+	async saveSweep(
+		city: City,
+		plan: DishSweepPlan,
+		results: DishSearchRunResult[],
+		now = new Date(),
+	): Promise<DishSweepSummary> {
+		const summary: DishSweepSummary = {
+			searchedOn: plan.searchedOn,
+			dishes: plan.dishes,
+			districts: plan.districts,
+			searches: plan.searches.length,
 			returned: 0,
 			places: 0,
 			linked: 0,
-			notCovered: dishes.length - planned.length,
+			notCovered: plan.notCovered,
 			failed: 0,
 		};
-		if (!searches.length) return summary;
-
-		// One run a search, from a map of the city: a shared run leaves out of each search the
-		// places an earlier one found (`searchEach`)
-		const { results: found, failed } = await this.venueScrapeService.searchEach<SearchPlaceItem>(
-			city,
-			searches.map(s => s.text),
-			DISH_SEARCH_DEPTH,
-			budgetUsd,
-			`google-places dish searches ${city.name} ${day.date}`,
+		const failed = results.filter(
+			(r): r is Extract<DishSearchRunResult, { failed: string }> => 'failed' in r,
+		);
+		const came = results.filter(
+			(r): r is Extract<DishSearchRunResult, { recordId: string }> => 'recordId' in r,
 		);
 		summary.failed = failed.length;
 		// Some failed runs leave their searches out of the snapshot; none coming back fails the step
-		if (failed.length && !found.size)
-			throw new Error(`Every dish search failed: ${failed[0].error}`);
-		const items = [...found.values()].flat();
-		const known = await this.em.find(
-			Venue,
-			{ placeId: { $in: _.uniq(items.map(i => i.placeId).filter(Boolean)) as string[] } },
-			{ fields: ['placeId'] },
-		);
-		const venueIds = new Map(known.map(v => [v.placeId, v.id]));
-		const topics = new Map(planned.map(t => [t.key, t]));
+		if (failed.length && !came.length)
+			throw new Error(`Every dish search failed: ${failed[0].failed}`);
+		if (!plan.searches.length) return summary;
 
-		const results = searches
-			.map(search => ({
-				search,
-				// Far-away places Google mixed in are no guest's in the city
-				top: orderedPlaces((found.get(search.text) ?? []).filter(i => nearCity(i, city))).slice(
-					0,
-					DISH_SEARCH_DEPTH,
-				),
-			}))
-			.filter(r => r.top.length);
-		if (results.length) {
+		const topics = new Map((await this.topicService.all()).map(t => [t.key, t]));
+		const bySearch = new Map(plan.searches.map(s => [s.query, s]));
+		const rows: {
+			search: DishSweepPlan['searches'][number];
+			top: GooglePlaceItem[];
+			venueIds: Record<string, string>;
+		}[] = [];
+		for (const run of came) {
+			const search = bySearch.get(run.query);
+			if (!search) continue;
+			const items = await this.apifyService.storedItems<GooglePlaceItem>(run.recordId);
+			// Far-away places Google mixed in are no guest's in the city
+			const top = orderedPlaces(items.filter(i => nearCity(i, city))).slice(0, plan.perQuery);
+			if (top.length) rows.push({ search, top, venueIds: run.venueIds });
+		}
+		if (rows.length) {
 			await this.em.nativeDelete(DishSearchRank, {
 				city: city.id,
-				searchedOn: day.date,
-				$or: results.map(({ search }) => ({
+				searchedOn: plan.searchedOn,
+				$or: rows.map(({ search }) => ({
 					topic: topics.get(search.topicKey)!.id,
 					district: search.district,
 				})),
 			});
 		}
-		for (const { search, top } of results) {
+		for (const { search, top, venueIds } of rows) {
 			summary.returned++;
 			top.forEach((item, i) => {
-				const venue = venueIds.get(item.placeId!);
+				const venueId = venueIds[item.placeId!];
 				this.em.create(DishSearchRank, {
 					city,
 					topic: topics.get(search.topicKey)!,
 					district: search.district,
-					searchedOn: day.date,
-					year: day.year,
-					month: day.month,
-					monthOfYear: day.monthOfYear,
-					dayOfMonth: day.dayOfMonth,
-					dayOfYear: day.dayOfYear,
-					isoYear: day.isoYear,
-					isoWeek: day.isoWeek,
-					weekday: day.weekday,
+					searchedOn: plan.searchedOn,
+					year: plan.day.year,
+					month: plan.day.month,
+					monthOfYear: plan.day.monthOfYear,
+					dayOfMonth: plan.day.dayOfMonth,
+					dayOfYear: plan.day.dayOfYear,
+					isoYear: plan.day.isoYear,
+					isoWeek: plan.day.isoWeek,
+					weekday: plan.day.weekday,
 					rank: i + 1,
 					placeId: item.placeId!,
 					name: item.title ?? '',
 					rating: item.totalScore ?? null,
 					reviewsCount: item.reviewsCount ?? null,
-					venue: venue ?? null,
+					venue: venueId ?? null,
 					searchedAt: now,
 				});
 				summary.places++;
-				if (venue) summary.linked++;
+				if (venueId) summary.linked++;
 			});
 		}
 		await this.em.flush();
 		this.logger.log(
-			`Dish searches ${city.name} ${day.date}: ${summary.returned} of ${summary.searches} came back, ${summary.places} places (${summary.linked} our venues)${failed.length ? `, ${failed.length} runs failed (${failed[0].error})` : ''}`,
+			`Dish searches ${city.name} ${plan.searchedOn}: ${summary.returned} of ${summary.searches} came back, ${summary.places} places (${summary.linked} our venues)${failed.length ? `, ${failed.length} runs failed (${failed[0].failed})` : ''}`,
 		);
 		return summary;
 	}

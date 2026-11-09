@@ -29,13 +29,19 @@ const CHUNK = 500;
  * Written at once, outside the unit of work, so posts flushed later can point at them and two
  * scrapes saving the same new tag don't collide.
  */
-export const ensureHashtags = async (em: EntityManager, tags: string[]): Promise<Map<string, number>> => {
+export const ensureHashtags = async (
+	em: EntityManager,
+	tags: string[],
+): Promise<Map<string, number>> => {
 	const wanted = _.uniq(tags.map(normalizeHashtag).filter(Boolean));
 	const ids = new Map<string, number>();
 	const conn = em.getConnection();
 	for (const chunk of _.chunk(wanted, CHUNK)) {
 		const marks = chunk.map(() => '(?)').join(', ');
-		await conn.execute(`insert into hashtags (tag) values ${marks} on conflict (tag) do nothing`, chunk);
+		await conn.execute(
+			`insert into hashtags (tag) values ${marks} on conflict (tag) do nothing`,
+			chunk,
+		);
 		const rows: { id: number; tag: string }[] = await conn.execute(
 			`select id, tag from hashtags where tag in (${chunk.map(() => '?').join(', ')})`,
 			chunk,
@@ -86,5 +92,8 @@ export const hashtagLinks = (
 	// A tag that names a kind of food is never a brand (#smashburger, even with a place of that name)
 	if (topicKey) return { topicId: ctx.index.get(topicKey)?.id || null, brandId: null };
 	const brandId = ctx.brandOf.get(key) ?? null;
-	return { topicId: null, brandId: brandId && ctx.seenWith.has(`${tag.id} ${brandId}`) ? brandId : null };
+	return {
+		topicId: null,
+		brandId: brandId && ctx.seenWith.has(`${tag.id} ${brandId}`) ? brandId : null,
+	};
 };

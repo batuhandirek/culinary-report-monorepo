@@ -33,6 +33,7 @@ Factory usage example: `src/modules/auth/tests/services/update-me.pglite.spec.ts
 - Suites boot PGlite + full schema in `beforeAll` — slow is expected (global 120 s timeout). Prefer one harness per suite, not per test.
 - PGlite is single-connection: never run queries side by side inside a suite (pool pinned to 1). Suites run in parallel, each in its own worker with its own PGlite on an OS-assigned port (`maxWorkers: 4`), and Jest recycles a worker past `workerIdleMemoryLimit`: one process for every file (`--runInBand`, which `--detectOpenHandles` also forces) runs out of heap, since jest-ESM keeps each file's module graph. Don't add either flag to the script; pass `--detectOpenHandles` only to a single suite.
 - No fake timers — the PGlite socket bridge needs real ones (`apps/backend/jest.config.ts`).
+- **DBOS does not run on PGlite** (`durable-workflows` skill): a suite that needs real durable workflows passes `durable: true` and is declared with `describeWithDbos`, which skips it unless `DBOS_TEST_DATABASE_URL` names a Postgres (the dev Docker one works). Every other suite gets `DurableWorkflowsService` auto-mocked and `@DurableWorkflow` methods as plain methods; give a service that calls `durable.step` a passthrough `{ step: (_n, fn) => fn(), inWorkflow: () => false }`.
 
 ## Keeping suites current
 

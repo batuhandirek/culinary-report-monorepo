@@ -44,12 +44,20 @@ export class AdminAccountsController {
 	) {}
 
 	@TypedRoute.Get('/')
-	async listAccounts(@TypedQuery() query: AdminListAccountsInputDto): Promise<AdminListAccountsOutputDto> {
+	async listAccounts(
+		@TypedQuery() query: AdminListAccountsInputDto,
+	): Promise<AdminListAccountsOutputDto> {
 		const { items, totalItems, counts } = await this.socialAccountService.list({
 			...query,
 			month: query.month ?? previousMonth(),
 		});
-		return { items: items.map(accountOutput), totalItems, counts, page: query.page, pageSize: query.size };
+		return {
+			items: items.map(accountOutput),
+			totalItems,
+			counts,
+			page: query.page,
+			pageSize: query.size,
+		};
 	}
 
 	/** Links, confirms, rejects or re-branches one account. */
@@ -64,19 +72,27 @@ export class AdminAccountsController {
 
 	/** Runs the matcher for a city now (it runs after every mention matching anyway). */
 	@TypedRoute.Post('/match')
-	async matchAccounts(@TypedBody() body: AdminMatchAccountsInputDto): Promise<AdminMatchAccountsOutputDto> {
+	async matchAccounts(
+		@TypedBody() body: AdminMatchAccountsInputDto,
+	): Promise<AdminMatchAccountsOutputDto> {
 		return this.accountMatchingService.match(await this.cityService.getById(body.cityId));
 	}
 
 	/** Takes an account out of its creator: "not the same person". */
 	@TypedRoute.Post('/:id/split')
-	async splitAccount(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminSplitAccountOutputDto> {
+	async splitAccount(
+		@TypedParam('id') id: string & tags.Format<'uuid'>,
+	): Promise<AdminSplitAccountOutputDto> {
 		const creator = await this.socialAccountService.split(id);
 		return { creatorId: creator.id };
 	}
 
 	private async output(id: string): Promise<AdminAccountOutputDto> {
-		const account = await this.em.findOneOrFail(SocialAccount, { id }, { populate: [...ACCOUNT_POPULATE], refresh: true });
+		const account = await this.em.findOneOrFail(
+			SocialAccount,
+			{ id },
+			{ populate: [...ACCOUNT_POPULATE], refresh: true },
+		);
 		const [row] = await this.socialAccountService.withFigures([account], previousMonth());
 		return accountOutput(row);
 	}

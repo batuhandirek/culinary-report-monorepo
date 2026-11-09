@@ -152,6 +152,11 @@ export interface Sort {
 }
 
 // Props Types
+export type PaginatedDataTablePage<T> = { items: T[]; page: number; pageSize: number } & (
+	| { totalItems: number }
+	| { hasMore: boolean }
+);
+
 export interface PaginatedDataTableProps<
 	T = unknown,
 	F extends Record<string, unknown> = Record<string, unknown>
@@ -164,9 +169,9 @@ export interface PaginatedDataTableProps<
 	actions?: PaginatedDataTableAction<T>[];
 	// `never` accepts any generated client method: their query types use the endpoint's own
 	// enum twins (`…ParamsSortEnum`), which the DTO-typed `filters` can't be matched to.
-	api: (
-		params: never
-	) => Promise<{ items: T[]; page: number; pageSize: number; totalItems: number }>;
+	// A list that cannot count (DBOS's workflows) answers `hasMore` instead of `totalItems`:
+	// the pager then offers the next page while there is one and the footer gives no total.
+	api: (params: never) => Promise<PaginatedDataTablePage<T>>;
 	filters?: F;
 	// Rows per page to start with. A table that fills its page starts at 25 or more.
 	limit?: number;

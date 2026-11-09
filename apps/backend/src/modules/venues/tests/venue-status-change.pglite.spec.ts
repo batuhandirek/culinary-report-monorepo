@@ -1,11 +1,12 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
-import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
+import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
@@ -20,7 +21,7 @@ import { Review } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
-import { GooglePlaceItem, VenueService } from '../services/venue.service.js';
+import { VenueService } from '../services/venue.service.js';
 import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import { VenueStatusChangeService } from '../services/venue-status-change.service.js';
 import { quarterWindow, statusChangeKind, streetName } from '../util/venue-status.js';
@@ -71,7 +72,7 @@ describe('VenueStatusChange (pglite)', () => {
 	let scrapeService: VenueScrapeService;
 	let statusService: VenueStatusChangeService;
 	let city: City;
-	const runActor = jest.fn<(...args: unknown[]) => Promise<GooglePlaceItem[]>>();
+	const storedItems = jest.fn<(...args: unknown[]) => Promise<GooglePlaceItem[]>>();
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -81,7 +82,7 @@ describe('VenueStatusChange (pglite)', () => {
 				VenueStatusChangeService,
 				TopicService,
 				VenueTopicService,
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: { storedItems } },
 			],
 		});
 		venueService = harness.moduleRef.get(VenueService);
@@ -106,31 +107,29 @@ describe('VenueStatusChange (pglite)', () => {
 
 	it("takes the city's first list as the baseline, and records openings from the next one", async () => {
 		const em = harness.orm.em;
-		runActor.mockResolvedValueOnce([place('old-1'), place('old-2')]);
-		await scrapeService.scrapeCity({
-			city,
-			terms: ['restaurant'],
-			maxPerTerm: 10,
-			budgetUsd: 1,
-		});
+		// The city's own list, as the `places` atom saves it: openings only after the first
+		const cityList = async (list: City, items: GooglePlaceItem[]) => {
+			await scrapeService.savePlaces(items, {
+				city: list,
+				source: VenueScrapeSourceEnum.CITY,
+				newPlaces: 'all',
+				openings: !!list.venuesScrapedAt,
+			});
+			await scrapeService.markCityScraped(list);
+		};
+		await cityList(city, [place('old-1'), place('old-2')]);
 		expect(await changes('old-1')).toEqual([]);
 		expect((await em.findOneOrFail(Venue, { placeId: 'old-1' })).city.id).toBe(city.id);
 
 		const scraped = await em.findOneOrFail(City, { id: city.id });
 		expect(scraped.venuesScrapedAt).toBeInstanceOf(Date);
 
-		runActor.mockResolvedValueOnce([
+		await cityList(scraped, [
 			place('old-1'),
 			place('new-1', { neighborhood: 'Neukölln' }),
 			// An old place the last capped scrape missed: its reviews give it away
 			place('missed-1', { reviewsCount: 900 }),
 		]);
-		await scrapeService.scrapeCity({
-			city: scraped,
-			terms: ['restaurant'],
-			maxPerTerm: 10,
-			budgetUsd: 1,
-		});
 		expect(await changes('new-1')).toEqual([
 			[VenueStatusChangeKindEnum.OPENED, VenueScrapeSourceEnum.CITY],
 		]);

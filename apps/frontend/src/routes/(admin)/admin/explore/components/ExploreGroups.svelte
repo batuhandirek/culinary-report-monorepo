@@ -22,7 +22,7 @@
 	<p class="text-muted-foreground m-0 text-sm">
 		{#if data.notEmbedded}
 			None of these {n(data.notEmbedded)} claims has a vector yet, so they can't be grouped by meaning: the
-			<a class="text-beet" href="/admin/data?tab=runs">claim embeddings backlog</a> fills them once it is allowed to run. The table below lists them all.
+			<a class="text-beet" href="/admin/data?tab=backlogs">claim embeddings backlog</a> fills them once it is allowed to run. The table below lists them all.
 		{:else}
 			No claim to group.
 		{/if}

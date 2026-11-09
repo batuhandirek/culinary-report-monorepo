@@ -23,8 +23,6 @@ export interface BaseMastraClassifierConfig {
 	 * name (2026-11-05: `claim-labels`, after the eval). Every other one runs only in work started by hand.
 	 */
 	paidInProduction?: boolean;
-	/** Reads one source's facts (a claim's labels): keeps running while `LLM_INGESTION_ONLY` pauses the rest */
-	ingestion?: boolean;
 }
 
 /** A call's own options; `model` picks the model for this call over the classifier's `getModel()` */
@@ -79,7 +77,6 @@ export abstract class BaseMastraClassifier<
 			id: this.config.id,
 			model: this.decisionModels.model(model, {
 				inProduction: this.config.paidInProduction,
-				ingestion: this.config.ingestion,
 			}),
 		});
 		const start = Date.now();
@@ -90,6 +87,18 @@ export abstract class BaseMastraClassifier<
 				abortSignal: options?.abortSignal ?? AbortSignal.timeout(DEFAULT_DECIDE_TIMEOUT_MS),
 			});
 			const usd = decisionCostUsd(model, res.usage);
+			this.decisionModels.recordCall({
+				kind: 'decide',
+				agentId: this.config.id,
+				model,
+				usage: {
+					inputTokens: res.usage.inputTokens ?? 0,
+					outputTokens: res.usage.outputTokens ?? 0,
+				},
+				usd,
+				durationMs: Date.now() - start,
+				ok: true,
+			});
 			if (llmConfig.IS_LLM_VERBOSE || this.config.verbose)
 				this.logger.debug(
 					`Decided by ${model} in ${Date.now() - start}ms, ${res.usage.inputTokens ?? '?'} in, $${usd.toFixed(5)}, answers=${JSON.stringify(res.answers)}`,
@@ -97,6 +106,16 @@ export abstract class BaseMastraClassifier<
 			return Object.assign(res, { model, usd });
 		} catch (error) {
 			this.logger.error(`Error during decide: ${(error as Error).message}`);
+			this.decisionModels.recordCall({
+				kind: 'decide',
+				agentId: this.config.id,
+				model: null,
+				usage: { inputTokens: 0, outputTokens: 0 },
+				usd: 0,
+				durationMs: Date.now() - start,
+				ok: false,
+				error: (error as Error).message,
+			});
 			throw error;
 		}
 	}

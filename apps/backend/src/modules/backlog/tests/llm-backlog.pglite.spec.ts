@@ -1,13 +1,13 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
-import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { LLM_BACKLOG_SINGLETON_KEY } from '../constants/backlog.constant.js';
+import { LLM_BACKLOG_SINGLETON_KEY, LLM_BACKLOG_WORKFLOW } from '../constants/backlog.constant.js';
 import { BacklogRun } from '../entities/backlog-run.entity.js';
 import type { LlmBacklog } from '../interfaces/llm-backlog.interface.js';
-import { LlmBacklogJob } from '../jobs/llm-backlog.job.js';
+import { LLM_BACKLOG_QUEUE } from '../queues/llm-backlog.queue.js';
 import { LlmBacklogService } from '../services/llm-backlog.service.js';
 import { LlmBacklogRegistry } from '../services/llm-backlog-registry.service.js';
 
@@ -56,11 +56,11 @@ describe('LLM backlog (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: LlmBacklogService;
 	let registry: LlmBacklogRegistry;
-	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => undefined) };
+	const durable = { enqueue: jest.fn(async (..._args: unknown[]) => null) };
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [LlmBacklogService, { provide: PgBossService, useValue: pgBoss }],
+			providers: [LlmBacklogService, { provide: DurableWorkflowsService, useValue: durable }],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
 		service = harness.moduleRef.get(LlmBacklogService);
@@ -143,27 +143,6 @@ describe('LLM backlog (pglite)', () => {
 		).toEqual([
 			['a-first', 2, 15, 200, 'empty', 0],
 			['b-second', 1, 5, 100, 'empty', 0],
-		]);
-	});
-
-	it('under LLM_INGESTION_ONLY drains only the reading backlogs, the rest waiting with their items', async () => {
-		const analysis = fakeBacklog('a-discovery', 10, { items: 5, perBatch: 10, tokens: 100 });
-		const reading = fakeBacklog('b-reread', 20, { items: 5, perBatch: 10, tokens: 100 });
-		registry.register(analysis.backlog);
-		registry.register({ ...reading.backlog, ingestion: true });
-
-		await service.drain({
-			budget: 1_000_000,
-			now: at('2026-10-22T22:00:00Z'),
-			ingestionOnly: true,
-		});
-
-		expect(analysis.state.batches).toBe(0);
-		expect(
-			(await runs()).map(r => [r.key, r.done, r.stopReason, r.remaining, r.error]),
-		).toEqual([
-			['a-discovery', 0, 'waiting', 5, 'Paused: only the reading runs (LLM_INGESTION_ONLY)'],
-			['b-reread', 5, 'empty', 0, null],
 		]);
 	});
 
@@ -305,12 +284,15 @@ describe('LLM backlog (pglite)', () => {
 		expect(s.lastMovedAt).toBeInstanceOf(Date);
 	});
 
-	it('queues the drain on one singleton key', async () => {
+	it('queues the drain workflow on one singleton key', async () => {
 		await service.queue('admin');
-		expect(pgBoss.sendJob).toHaveBeenCalledWith(
-			LlmBacklogJob.jobName,
-			new LlmBacklogJob({ trigger: 'admin' }),
-			{ singletonKey: LLM_BACKLOG_SINGLETON_KEY },
+		expect(durable.enqueue).toHaveBeenCalledWith(
+			LLM_BACKLOG_WORKFLOW,
+			['admin'],
+			expect.objectContaining({
+				queue: LLM_BACKLOG_QUEUE,
+				dedupe: LLM_BACKLOG_SINGLETON_KEY,
+			}),
 		);
 	});
 

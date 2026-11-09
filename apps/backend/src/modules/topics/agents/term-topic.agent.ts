@@ -6,9 +6,9 @@ import {
 	BaseMastraAgent,
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
+import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 import { TERM_RELATIONS } from '../constants/term-relation.constant.js';
-import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 
 const termTopicSchema = z.object({
 	topics: z
@@ -17,7 +17,9 @@ const termTopicSchema = z.object({
 				key: z.string(),
 				relation: z
 					.enum(TERM_RELATIONS)
-					.describe('same: the wording is this topic (a spelling, a translation); kind_of: a more specific kind of it; with: it has or is made with it'),
+					.describe(
+						'same: the wording is this topic (a spelling, a translation); kind_of: a more specific kind of it; with: it has or is made with it',
+					),
 			}),
 		)
 		.describe('The topics the wording is or has, most specific first; empty when it is none'),
@@ -56,7 +58,6 @@ export class TermTopicAgent extends BaseMastraAgent<typeof termTopicSchema, Term
 		id: 'term-topic',
 		name: 'TermTopicAgent',
 		outputSchema: termTopicSchema,
-		ingestion: true,
 	};
 
 	// Thousands of short wordings: mini

@@ -2,6 +2,17 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
+import type { ActorCall } from 'src/modules/apify/actors/actor.js';
+import {
+	INSTAGRAM_SCRAPER_ACTOR,
+	type InstagramScraperInput,
+	type InstagramScraperItem,
+} from 'src/modules/apify/actors/instagram-scraper.actor.js';
+import {
+	TIKTOK_SCRAPER_ACTOR,
+	type TiktokScraperInput,
+	type TiktokScraperItem,
+} from 'src/modules/apify/actors/tiktok-scraper.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 
@@ -24,10 +35,9 @@ import {
 
 import { SocialPostService } from './social-post.service.js';
 
-// The same actors as the scrapes, given post URLs: one item a post, the counts as the scrapes
-// read them; a deleted or private post comes back as an item with `error` and its `url`
-const TIKTOK_ACTOR = 'clockworks/tiktok-scraper';
-const INSTAGRAM_ACTOR = 'apify/instagram-scraper';
+// The same actors as the scrapes, given post URLs (`TIKTOK_SCRAPER_ACTOR`, `INSTAGRAM_SCRAPER_ACTOR`):
+// one item a post, the counts as the scrapes read them; a deleted or private post comes back as an
+// item with `error` and its `url`
 
 const DAY_MS = 24 * 3600 * 1000;
 
@@ -46,10 +56,31 @@ export interface PostCountsRefreshResult {
 	waiting: number;
 }
 
+/** One platform's run of the refresh: the posts it reads, in the plan's order, and the call */
+export interface PostCountsRun<Input extends object, Item> {
+	postIds: string[];
+	call: ActorCall<Input, Item>;
+}
+
+/** What `plan` hands the `post-counts` workflow: the two runs (none for a platform without due posts) */
+export interface PostCountsPlan {
+	due: number;
+	waiting: number;
+	tiktok: PostCountsRun<TiktokScraperInput, TiktokScraperItem> | null;
+	instagram: PostCountsRun<InstagramScraperInput, InstagramScraperItem> | null;
+}
+
+/** The runs' records as the workflow hands them to `save`: null for a run that failed */
+export interface PostCountsRecords {
+	tiktok?: string | null;
+	instagram?: string | null;
+}
+
 /**
  * Reads posts' counts again at the age they are compared at (`POST_COUNTS_AGE_DAYS`): the daily
- * `REFRESH_POST_COUNTS` step. Every post a scrape found younger is read once more, so views and
- * likes compare across posts whatever day a scrape happened to see them.
+ * `post-counts` operation's `plan` and `save` around its two actor children. Every post a scrape
+ * found younger is read once more, so views and likes compare across posts whatever day a scrape
+ * happened to see them.
  */
 @Injectable()
 export class PostCountsService {
@@ -77,7 +108,10 @@ export class PostCountsService {
 			{
 				city: city.id,
 				platform: {
-					$in: [SocialPlatformEnum.TIKTOK, ...(city.instagramEnabled ? [SocialPlatformEnum.INSTAGRAM] : [])],
+					$in: [
+						SocialPlatformEnum.TIKTOK,
+						...(city.instagramEnabled ? [SocialPlatformEnum.INSTAGRAM] : []),
+					],
 				},
 				countsFinalAt: null,
 				skipReason: null,
@@ -112,58 +146,86 @@ export class PostCountsService {
 	}
 
 	/**
-	 * Reads the due posts once more, as many as the budget covers (oldest first, the rest wait for
-	 * the next day): TikTok and Instagram in one run each, side by side. Each read is final; a post
-	 * found deleted or private stays as last read, final. One run failing keeps the other's reads,
-	 * then the step fails.
+	 * The refresh's runs: the due posts, as many as the budget covers (oldest first, the rest wait
+	 * for the next day), TikTok's and Instagram's in one run each. Each run's cap is its share of
+	 * the budget, never under what it plans to spend; TikTok's at least the actor's floor (a cap,
+	 * not a spend).
 	 */
-	async refresh(city: City, budgetUsd: number, now = new Date()): Promise<PostCountsRefreshResult> {
+	async plan(city: City, budgetUsd: number, now: Date): Promise<PostCountsPlan> {
 		const due = await this.due(city, now);
 		const priceOf = (post: SocialPost) =>
-			post.platform === SocialPlatformEnum.TIKTOK ? TIKTOK_POST_COUNTS_USD : INSTAGRAM_POST_COUNTS_USD;
+			post.platform === SocialPlatformEnum.TIKTOK ?
+				TIKTOK_POST_COUNTS_USD
+			:	INSTAGRAM_POST_COUNTS_USD;
 		const plan = planCountsRefresh(due, priceOf, budgetUsd);
 		const tiktok = plan.posts.filter(p => p.platform === SocialPlatformEnum.TIKTOK);
 		const instagram = plan.posts.filter(p => p.platform === SocialPlatformEnum.INSTAGRAM);
-		// Each run's cap is its share of the budget, never under what it plans to spend; TikTok's
-		// at least the actor's floor (a cap, not a spend)
 		const capOf = (posts: SocialPost[]) => {
 			const spend = posts.reduce((sum, p) => sum + priceOf(p), 0);
 			return plan.spendUsd ? Math.max(spend, (budgetUsd * spend) / plan.spendUsd) : 0;
 		};
-
-		const [tiktokItems, instagramItems] = await Promise.allSettled([
-			tiktok.length ?
-				this.apifyService.runActor<any>(
-					TIKTOK_ACTOR,
+		return {
+			due: due.length,
+			waiting: plan.skipped,
+			tiktok:
+				tiktok.length ?
 					{
-						postURLs: tiktok.map(p => p.url),
-						shouldDownloadVideos: false,
-						shouldDownloadCovers: false,
-						shouldDownloadSubtitles: false,
-						shouldDownloadSlideshowImages: false,
-					},
+						postIds: tiktok.map(p => p.id),
+						call: {
+							actor: TIKTOK_SCRAPER_ACTOR,
+							input: {
+								postURLs: tiktok.map(p => p.url),
+								shouldDownloadVideos: false,
+								shouldDownloadCovers: false,
+								shouldDownloadSubtitles: false,
+								shouldDownloadSlideshowImages: false,
+							},
+							maxCostUsd: Math.max(CLOCKWORKS_MIN_CAP_USD, capOf(tiktok)),
+							purpose: `tiktok post counts ${city.name}: ${tiktok.length}`,
+						},
+					}
+				:	null,
+			instagram:
+				instagram.length ?
 					{
-						maxCostUsd: Math.max(CLOCKWORKS_MIN_CAP_USD, capOf(tiktok)),
-						purpose: `tiktok post counts ${city.name}: ${tiktok.length}`,
-					},
-				)
-			:	Promise.resolve([]),
-			instagram.length ?
-				this.apifyService.runActor<any>(
-					INSTAGRAM_ACTOR,
-					{ directUrls: instagram.map(p => p.url), resultsType: 'posts', resultsLimit: 1 },
-					{ maxCostUsd: capOf(instagram), purpose: `instagram post counts ${city.name}: ${instagram.length}` },
-				)
-			:	Promise.resolve([]),
-		]);
+						postIds: instagram.map(p => p.id),
+						call: {
+							actor: INSTAGRAM_SCRAPER_ACTOR,
+							input: {
+								directUrls: instagram.map(p => p.url),
+								resultsType: 'posts',
+								resultsLimit: 1,
+							},
+							maxCostUsd: capOf(instagram),
+							purpose: `instagram post counts ${city.name}: ${instagram.length}`,
+						},
+					}
+				:	null,
+		};
+	}
 
-		const at = new Date();
-		const byExternalId = new Map(plan.posts.map(p => [p.externalId, p]));
-		const byUrl = new Map(plan.posts.map(p => [p.url, p]));
+	/**
+	 * The runs' items read from their rows: each read is final; a post found deleted or private
+	 * stays as last read, final; a post a run didn't return waits for the next day. A failed run
+	 * (`null`) reads none of its posts, and the step fails after the other's are saved. Flushes.
+	 */
+	async save(
+		plan: PostCountsPlan,
+		records: PostCountsRecords,
+		at: Date,
+	): Promise<PostCountsRefreshResult> {
+		const ids = [...(plan.tiktok?.postIds ?? []), ...(plan.instagram?.postIds ?? [])];
+		const posts = ids.length ? await this.em.find(SocialPost, { id: { $in: ids } }) : [];
+		const byExternalId = new Map(posts.map(p => [p.externalId, p]));
+		const byUrl = new Map(posts.map(p => [p.url, p]));
 		const settled = new Set<SocialPost>();
 		let read = 0;
 		let gone = 0;
-		const take = (post: SocialPost | undefined, item: any, counts: () => PostCounts) => {
+		const take = (
+			post: SocialPost | undefined,
+			item: { error?: string },
+			counts: () => PostCounts,
+		) => {
 			if (!post || settled.has(post)) return;
 			settled.add(post);
 			if (item?.error) {
@@ -174,39 +236,48 @@ export class PostCountsService {
 			this.socialPostService.readCounts(post, counts(), at);
 			read++;
 		};
-		if (tiktokItems.status === 'fulfilled')
-			for (const item of tiktokItems.value)
+		if (records.tiktok)
+			for (const item of await this.apifyService.storedItems<TiktokScraperItem>(
+				records.tiktok,
+			))
 				take(
-					byExternalId.get(`${item?.id ?? tikTokVideoId(item?.submittedVideoUrl ?? item?.url)}`),
+					byExternalId.get(
+						`${item?.id ?? tikTokVideoId(item?.submittedVideoUrl ?? item?.url)}`,
+					),
 					item,
 					() => clockworksCounts(item),
 				);
-		if (instagramItems.status === 'fulfilled')
-			for (const item of instagramItems.value)
+		if (records.instagram)
+			for (const item of await this.apifyService.storedItems<InstagramScraperItem>(
+				records.instagram,
+			))
 				take(
-					(item?.id && byExternalId.get(`ig_${`${item.id}`.split('_')[0]}`)) || byUrl.get(item?.inputUrl ?? item?.url),
+					(item?.id && byExternalId.get(`ig_${`${item.id}`.split('_')[0]}`)) ||
+						byUrl.get(item?.inputUrl ?? item?.url ?? ''),
 					item,
 					() => instagramCounts(item),
 				);
 		await this.em.flush();
 
+		// A failed run's posts are no item's: the step fails and says why
+		const returned = (
+			run: PostCountsRun<object, unknown> | null,
+			record: string | null | undefined,
+		) =>
+			run && record ?
+				run.postIds.filter(id => !settled.has(posts.find(p => p.id === id)!)).length
+			:	0;
 		const result: PostCountsRefreshResult = {
-			due: due.length,
-			tiktok: tiktok.length,
-			instagram: instagram.length,
+			due: plan.due,
+			tiktok: plan.tiktok?.postIds.length ?? 0,
+			instagram: plan.instagram?.postIds.length ?? 0,
 			read,
 			gone,
-			// A failed run's posts are no item's: the step fails and says why
-			notReturned: plan.posts.filter(
-				p =>
-					!settled.has(p) &&
-					(p.platform === SocialPlatformEnum.TIKTOK ? tiktokItems : instagramItems).status === 'fulfilled',
-			).length,
-			waiting: plan.skipped,
+			notReturned:
+				returned(plan.tiktok, records.tiktok) + returned(plan.instagram, records.instagram),
+			waiting: plan.waiting,
 		};
-		this.logger.log(`Post counts of ${city.name}: ${JSON.stringify(result)}`);
-		const failed = [tiktokItems, instagramItems].find(r => r.status === 'rejected');
-		if (failed) throw (failed as PromiseRejectedResult).reason;
+		this.logger.log(`Post counts: ${JSON.stringify(result)}`);
 		return result;
 	}
 }

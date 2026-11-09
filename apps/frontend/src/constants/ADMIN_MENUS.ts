@@ -1,6 +1,8 @@
 import {
+	CircleDollarSign,
 	FileText,
 	GalleryHorizontalEnd,
+	GitBranch,
 	LayoutDashboard,
 	MapPin,
 	Megaphone,
@@ -148,6 +150,25 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		keywords: ['digested', 'ingestion', 'reviews', 'posts', 'gate', 'skipped', 'agent a', 'agent b', 'claims', 'statements', 'parts', 'mentions', 'matching', 'quotes'],
 		description:
 			'Every review and post we read, and what the pipeline turned it into: the gate, the places and their matches, the claims and their parts.'
+	}),
+
+	menu({
+		name: 'Workflows',
+		href: '/admin/workflows',
+		icon: GitBranch,
+		group: 'Operations',
+		keywords: ['dbos', 'durable', 'runs', 'steps', 'queues', 'schedules', 'cron', 'cancel', 'resume', 'fork', 'retry', 'failed', 'jobs', 'apify runs', 'llm calls'],
+		description:
+			'Every durable run: its status, queue and schedule, the steps it finished and what each stored; the queues and the schedules that start them.'
+	}),
+	menu({
+		name: 'Money',
+		href: '/admin/money',
+		icon: CircleDollarSign,
+		group: 'Operations',
+		keywords: ['spend', 'costs', 'budget', 'llm', 'tokens', 'usd', 'dollars', 'credit', 'credits', 'top-up', 'apify', 'openai', 'anthropic', 'openrouter', 'typesafe', 'ledger', 'calls'],
+		description:
+			'What the LLM calls cost, by agent, model, provider, day, city or purpose, the calls themselves, and what each provider\'s account has left.'
 	}),
 
 	menu({

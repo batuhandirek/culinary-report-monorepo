@@ -1,11 +1,11 @@
+import type { PostClaimsSource } from 'src/modules/pipeline/read-posts/util/post-claims-input.js';
+import type { ReviewClaimsSource } from 'src/modules/pipeline/read-reviews/util/review-claims-input.js';
 import type { MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
-import type { PostClaimsSource } from 'src/modules/social/util/post-claims-input.js';
 import type { StatementKind } from 'src/modules/statements/constants/kind.constant.js';
 import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
 import type { StatementUnit } from 'src/modules/statements/entities/statement.entity.js';
 import type { ClaimLabel } from 'src/modules/statements/util/claim-labels.js';
 import type { TermRelation } from 'src/modules/topics/constants/term-relation.constant.js';
-import type { ReviewClaimsSource } from 'src/modules/venues/util/review-claims-input.js';
 
 /** A claim with its parts, as stored, as an agent gave it, or as the reference says */
 export interface EvalClaim {

@@ -1,6 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
+import type { LieferandoItem } from 'src/modules/apify/actors/takeaway.actor.js';
+import type { WoltItem } from 'src/modules/apify/actors/wolt-menu.actor.js';
+import { runActorCallRef } from 'src/modules/apify/actors/actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
+import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -12,12 +17,7 @@ import {
 	VenueDeliveryListing,
 } from '../entities/venue-delivery-listing.entity.js';
 import { VenueDeliverySnapshot } from '../entities/venue-delivery-snapshot.entity.js';
-import {
-	type LieferandoItem,
-	matchLieferando,
-	VenueDeliveryService,
-	type WoltItem,
-} from '../services/venue-delivery.service.js';
+import { matchLieferando, VenueDeliveryService } from '../services/venue-delivery.service.js';
 import { deliveryPlatformOf, isMainCourse, itemsForDish, pricePosition } from '../util/delivery.js';
 
 // Follows the Wolt actor's published item schema (direct URL mode: listing-only fields empty)
@@ -166,18 +166,47 @@ describe('delivery helpers', () => {
 describe('VenueDeliveryService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: VenueDeliveryService;
-	const runActor =
-		jest.fn<
-			(
-				actorId: string,
-				input: Record<string, unknown>,
-				opts: { maxCostUsd: number },
-			) => Promise<unknown[]>
-		>();
+	const apify = new FakeApify<any>();
+
+	/** As the `scrape-delivery` run does: the Wolt runs as children, their save, then Lieferando's run and save */
+	const scrape = async (
+		venues: Venue[],
+		city: Pick<City, 'name'>,
+		month: string,
+		budgetUsd: number,
+		now = new Date(),
+	) => {
+		const wolt = service.planWolt(venues, budgetUsd);
+		const records: string[] = [];
+		for (const run of wolt.runs)
+			records.push((await runActorCallRef(apify, run.call)).recordId);
+		const saved = await service.saveWolt(wolt, records, month, now);
+		const lieferando = service.planLieferando(
+			venues.map(v => v.id).filter(id => !saved.onWolt.includes(id)),
+			city,
+			budgetUsd - wolt.runs.length * wolt.perRunUsd,
+		);
+		const listing = lieferando.call ? await runActorCallRef(apify, lieferando.call) : null;
+		return {
+			venues: venues.length,
+			wolt: {
+				linked: wolt.linked,
+				saved: saved.saved,
+				menuItems: saved.menuItems,
+				failed: saved.failed,
+			},
+			lieferando: await service.saveLieferando(
+				lieferando,
+				listing?.recordId ?? null,
+				month,
+				now,
+			),
+		};
+	};
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [VenueDeliveryService, { provide: ApifyService, useValue: { runActor } }],
+			providers: [VenueDeliveryService, { provide: ApifyService, useValue: apify }],
 		});
 		service = harness.moduleRef.get(VenueDeliveryService);
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -215,13 +244,12 @@ describe('VenueDeliveryService (pglite)', () => {
 			postalCode: '10115',
 		});
 		await em.flush();
-		runActor.mockImplementation(async actorId =>
+		apify.answer = (_input, actorId) =>
 			actorId === 'needy_hammock/wolt-restaurant-menu-scraper' ?
 				[WOLT_ITEM]
-			:	[lieferando('Pinoli Restaurant', '12355', 4.6), lieferando('Döner Pro', '10999', 3.9)],
-		);
+			:	[lieferando('Pinoli Restaurant', '12355', 4.6), lieferando('Döner Pro', '10999', 3.9)];
 
-		const res = await service.scrape(
+		const res = await scrape(
 			[doner, pinoli, nowhere],
 			city,
 			'2026-09',
@@ -234,10 +262,8 @@ describe('VenueDeliveryService (pglite)', () => {
 			wolt: { linked: 1, saved: 1, menuItems: 5, failed: 0 },
 			lieferando: { searched: 2, matched: 1 },
 		});
-		const lieferandoCall = runActor.mock.calls.find(
-			([id]) => id === 'studio-amba/takeaway-scraper',
-		)!;
-		expect(lieferandoCall[1]).toMatchObject({ location: city.name, scrapeMenus: false });
+		const lieferandoCall = apify.calls.find(c => c.actor === 'studio-amba/takeaway-scraper')!;
+		expect(lieferandoCall.input).toMatchObject({ location: city.name, scrapeMenus: false });
 		em.clear();
 		const listings = await em.find(
 			VenueDeliveryListing,
@@ -259,11 +285,9 @@ describe('VenueDeliveryService (pglite)', () => {
 		]);
 
 		// The same month again replaces its menu and snapshot; another month keeps both
-		await service.scrape([doner], city, '2026-09', 3);
-		runActor.mockImplementation(async () => [
-			{ ...WOLT_ITEM, ratingScore: 9.4, reviewCount: 430 },
-		]);
-		await service.scrape([doner], city, '2026-10', 3);
+		await scrape([doner], city, '2026-09', 3);
+		apify.answer = () => [{ ...WOLT_ITEM, ratingScore: 9.4, reviewCount: 430 }];
+		await scrape([doner], city, '2026-10', 3);
 		em.clear();
 		expect(await em.count(MenuItem, { month: '2026-09' })).toBe(5);
 		expect(await em.count(MenuItem, { month: '2026-10' })).toBe(5);

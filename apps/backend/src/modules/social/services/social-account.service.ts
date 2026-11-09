@@ -14,7 +14,10 @@ import { AccountRejectedBrand } from '../entities/account-rejected-brand.entity.
 import { Creator } from '../entities/creator.entity.js';
 import { AccountBrandSourceEnum, SocialAccount } from '../entities/social-account.entity.js';
 import { SocialAccountHandleChange } from '../entities/social-account-handle-change.entity.js';
-import { AccountSnapshotSourceEnum, SocialAccountSnapshot } from '../entities/social-account-snapshot.entity.js';
+import {
+	AccountSnapshotSourceEnum,
+	SocialAccountSnapshot,
+} from '../entities/social-account-snapshot.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { ACCOUNT_POPULATE } from '../util/account-output.js';
 import {
@@ -108,7 +111,11 @@ export class SocialAccountService {
 		sort?: string;
 		page: number;
 		size: number;
-	}): Promise<{ items: AccountWithFigures[]; totalItems: number; counts: { linked: number; suggested: number } }> {
+	}): Promise<{
+		items: AccountWithFigures[];
+		totalItems: number;
+		counts: { linked: number; suggested: number };
+	}> {
 		const where: FilterQuery<SocialAccount> = {};
 		if (query.cityId) where.city = query.cityId;
 		if (query.platform) where.platform = query.platform;
@@ -122,22 +129,37 @@ export class SocialAccountService {
 			];
 		}
 		const linked = { ...where, brand: { $ne: null } } as FilterQuery<SocialAccount>;
-		const suggested = { ...where, brand: null, suggestedBrand: { $ne: null } } as FilterQuery<SocialAccount>;
-		const counts = { linked: await this.em.count(SocialAccount, linked), suggested: await this.em.count(SocialAccount, suggested) };
+		const suggested = {
+			...where,
+			brand: null,
+			suggestedBrand: { $ne: null },
+		} as FilterQuery<SocialAccount>;
+		const counts = {
+			linked: await this.em.count(SocialAccount, linked),
+			suggested: await this.em.count(SocialAccount, suggested),
+		};
 		const accounts = await this.em.find(
 			SocialAccount,
-			query.status === 'linked' ? linked : query.status === 'suggested' ? suggested : where,
+			query.status === 'linked' ? linked
+			: query.status === 'suggested' ? suggested
+			: where,
 			{ populate: [...ACCOUNT_POPULATE] },
 		);
 		const rows = await this.withFigures(accounts, query.month);
-		const [field, order] = (query.sort ?? (query.status === 'suggested' ? 'score:desc' : 'followers:desc')).split(':');
+		const [field, order] = (
+			query.sort ?? (query.status === 'suggested' ? 'score:desc' : 'followers:desc')
+		).split(':');
 		const value = (r: AccountWithFigures): number | string =>
 			field === 'handle' ? r.account.handle
 			: field === 'score' ? (r.account.suggestedScore ?? -1)
 			: field === 'monthPosts' ? r.stats.monthPosts
 			: field === 'monthViews' ? r.stats.monthViews
 			: (r.latest?.followers ?? r.account.followers ?? -1);
-		const sorted = _.orderBy(rows, [value, r => r.account.handle], [order === 'asc' ? 'asc' : 'desc', 'asc']);
+		const sorted = _.orderBy(
+			rows,
+			[value, r => r.account.handle],
+			[order === 'asc' ? 'asc' : 'desc', 'asc'],
+		);
 		return {
 			items: sorted.slice((query.page - 1) * query.size, query.page * query.size),
 			totalItems: sorted.length,
@@ -157,15 +179,20 @@ export class SocialAccountService {
 			)
 		).map(s => ({ ...s, accountId: s.account.id }));
 		const { start, end } = monthRange(month);
-		const rows: { account_id: string; month_posts: string; month_views: string; posts: string; last_posted_at: Date | null }[] =
-			await this.em.getConnection().execute(
-				`select p.account_id,
+		const rows: {
+			account_id: string;
+			month_posts: string;
+			month_views: string;
+			posts: string;
+			last_posted_at: Date | null;
+		}[] = await this.em.getConnection().execute(
+			`select p.account_id,
 					count(*) filter (where p.posted_at >= ? and p.posted_at < ?) as month_posts,
 					coalesce(sum(p.views) filter (where p.posted_at >= ? and p.posted_at < ?), 0) as month_views,
 					count(*) as posts, max(p.posted_at) as last_posted_at
 				from social_posts p where p.account_id in (${marks(ids)}) group by p.account_id`,
-				[start, end, start, end, ...ids],
-			);
+			[start, end, start, end, ...ids],
+		);
 		const stats = new Map(rows.map(r => [r.account_id, r]));
 		return accounts.map(account => {
 			const own = snapshots.filter(s => s.accountId === account.id);
@@ -174,7 +201,14 @@ export class SocialAccountService {
 			return {
 				account,
 				// Newest first
-				latest: own.length ? { ...latestFigures(own), scrapedAt: own[0].scrapedAt, source: own[0].source } : null,
+				latest:
+					own.length ?
+						{
+							...latestFigures(own),
+							scrapedAt: own[0].scrapedAt,
+							source: own[0].source,
+						}
+					:	null,
 				...(change !== undefined && { followersChange: change }),
 				stats: {
 					monthPosts: Number(row?.month_posts ?? 0),
@@ -217,14 +251,18 @@ export class SocialAccountService {
 	): Promise<SocialAccount | null> {
 		const handle = normalizeHandle(platform, input);
 		if (!handle) return null;
-		const userId = seen.platformUserId != null && `${seen.platformUserId}`.trim() ? `${seen.platformUserId}`.trim() : null;
+		const userId =
+			seen.platformUserId != null && `${seen.platformUserId}`.trim() ?
+				`${seen.platformUserId}`.trim()
+			:	null;
 		const source = seen.source ?? AccountSnapshotSourceEnum.POST;
 		let account = await this.find(platform, 'handle', handle);
 		let lost: SocialAccountHandleChange | null = null;
 		if (userId) {
 			const owner = await this.find(platform, 'platformUserId', userId);
 			if (owner && owner !== account) {
-				if (account && !account.platformUserId) account = await this.absorb(account, owner, handle, source, now);
+				if (account && !account.platformUserId)
+					account = await this.absorb(account, owner, handle, source, now);
 				else {
 					if (account) await this.loseHandle(account, source, now, owner);
 					this.renameTo(owner, handle, source, now);
@@ -269,7 +307,12 @@ export class SocialAccountService {
 	}
 
 	/** The account takes `handle` (its user id came back under it), the change kept. */
-	private renameTo(account: SocialAccount, handle: string, source: AccountSnapshotSourceEnum, now: Date): void {
+	private renameTo(
+		account: SocialAccount,
+		handle: string,
+		source: AccountSnapshotSourceEnum,
+		now: Date,
+	): void {
 		this.em.create(SocialAccountHandleChange, {
 			account,
 			fromHandle: account.handleLostAt ? null : account.handle,
@@ -301,7 +344,11 @@ export class SocialAccountService {
 		});
 		const placeholder = `${account.handle}~${account.platformUserId}`;
 		if (account.id)
-			await this.em.nativeUpdate(SocialAccount, { id: account.id }, { handle: placeholder, handleLostAt: now });
+			await this.em.nativeUpdate(
+				SocialAccount,
+				{ id: account.id },
+				{ handle: placeholder, handleLostAt: now },
+			);
 		account.handle = placeholder;
 		account.handleLostAt = now;
 		return change;
@@ -330,7 +377,10 @@ export class SocialAccountService {
 		keep.followers = figures.followers;
 		keep.followersAt = figures.followersAt;
 		// The newest profile read's bio, links and category
-		const read = (owner.profileReadAt?.getTime() ?? 0) >= (byHandle.profileReadAt?.getTime() ?? 0) ? owner : byHandle;
+		const read =
+			(owner.profileReadAt?.getTime() ?? 0) >= (byHandle.profileReadAt?.getTime() ?? 0) ?
+				owner
+			:	byHandle;
 		Object.assign(keep, {
 			bio: read.bio,
 			bioLinks: read.bioLinks,
@@ -367,8 +417,15 @@ export class SocialAccountService {
 		if (gone.id) {
 			// What the database holds (both rows are stored here)
 			const conn = this.em.getConnection();
-			for (const table of ['social_posts', 'social_account_snapshots', 'social_account_handle_changes'])
-				await conn.execute(`update ${table} set account_id = ? where account_id = ?`, [keep.id, gone.id]);
+			for (const table of [
+				'social_posts',
+				'social_account_snapshots',
+				'social_account_handle_changes',
+			])
+				await conn.execute(`update ${table} set account_id = ? where account_id = ?`, [
+					keep.id,
+					gone.id,
+				]);
 			await conn.execute(
 				`update account_rejected_brands r set account_id = ? where r.account_id = ?
 				and not exists (select 1 from account_rejected_brands o where o.account_id = ? and o.brand_id = r.brand_id)`,
@@ -384,7 +441,13 @@ export class SocialAccountService {
 		keep.handle = handle;
 		keep.handleLostAt = null;
 		if (from !== handle)
-			this.em.create(SocialAccountHandleChange, { account: keep, fromHandle: from, toHandle: handle, seenAt: now, source });
+			this.em.create(SocialAccountHandleChange, {
+				account: keep,
+				fromHandle: from,
+				toHandle: handle,
+				seenAt: now,
+				source,
+			});
 		return keep;
 	}
 
@@ -435,15 +498,26 @@ export class SocialAccountService {
 		value: string,
 	): Promise<SocialAccount | null> {
 		const uow = this.em.getUnitOfWork();
-		const loaded = uow.getIdentityMap().getStore(this.em.getMetadata().get(SocialAccount)).values();
+		const loaded = uow
+			.getIdentityMap()
+			.getStore(this.em.getMetadata().get(SocialAccount))
+			.values();
 		for (const entity of [...uow.getPersistStack(), ...loaded])
-			if (entity instanceof SocialAccount && entity.platform === platform && entity[field] === value) return entity;
+			if (
+				entity instanceof SocialAccount &&
+				entity.platform === platform &&
+				entity[field] === value
+			)
+				return entity;
 		const found = await this.em.findOne(SocialAccount, { platform, [field]: value });
 		return found && found[field] === value ? found : null;
 	}
 
 	/** The creator of the one account on another platform with the same letters, if one. */
-	private async twinCreator(platform: SocialPlatformEnum, handle: string): Promise<Creator | null> {
+	private async twinCreator(
+		platform: SocialPlatformEnum,
+		handle: string,
+	): Promise<Creator | null> {
 		const key = creatorKeyOf(platform, handle);
 		if (!key) return null;
 		// One creator, even when it already has accounts on both other platforms
@@ -476,18 +550,25 @@ export class SocialAccountService {
 
 	/** Whether an admin said the account is not this brand's. */
 	async isRejected(account: SocialAccount, brandId: string): Promise<boolean> {
-		return !!account.id && !!(await this.em.count(AccountRejectedBrand, { account: account.id, brand: brandId }));
+		return (
+			!!account.id &&
+			!!(await this.em.count(AccountRejectedBrand, { account: account.id, brand: brandId }))
+		);
 	}
 
 	/** Records that the account is not the brand's, once. Does not flush. */
 	private async reject(account: SocialAccount, brand: Brand): Promise<void> {
-		if (!(await this.isRejected(account, brand.id))) this.em.create(AccountRejectedBrand, { account, brand });
+		if (!(await this.isRejected(account, brand.id)))
+			this.em.create(AccountRejectedBrand, { account, brand });
 	}
 
 	/** Takes back that the account is not the brand's. Does not flush. */
 	private async unreject(account: SocialAccount, brandId: string): Promise<void> {
 		if (!account.id) return;
-		const row = await this.em.findOne(AccountRejectedBrand, { account: account.id, brand: brandId });
+		const row = await this.em.findOne(AccountRejectedBrand, {
+			account: account.id,
+			brand: brandId,
+		});
 		if (row) this.em.remove(row);
 	}
 
@@ -503,11 +584,15 @@ export class SocialAccountService {
 		source: AccountBrandSourceEnum,
 		branch?: Venue | null,
 	): Promise<void> {
-		if (!brand && account.brand && source === AccountBrandSourceEnum.ADMIN) await this.reject(account, account.brand);
+		if (!brand && account.brand && source === AccountBrandSourceEnum.ADMIN)
+			await this.reject(account, account.brand);
 		if (brand) await this.unreject(account, brand.id);
 		account.brand = brand;
 		account.branch = brand ? (branch ?? null) : null;
-		account.brandSource = brand ? source : source === AccountBrandSourceEnum.ADMIN ? AccountBrandSourceEnum.ADMIN : null;
+		account.brandSource =
+			brand ? source
+			: source === AccountBrandSourceEnum.ADMIN ? AccountBrandSourceEnum.ADMIN
+			: null;
 		account.suggestedBrand = null;
 		account.suggestedScore = null;
 	}
@@ -525,13 +610,22 @@ export class SocialAccountService {
 			| { action: 'reject' }
 			| { action: 'branch'; branchId: string | null },
 	): Promise<SocialAccount> {
-		const account = await this.em.findOne(SocialAccount, { id: accountId }, { populate: ['brand', 'suggestedBrand'] });
+		const account = await this.em.findOne(
+			SocialAccount,
+			{ id: accountId },
+			{ populate: ['brand', 'suggestedBrand'] },
+		);
 		if (!account) throw new NotFoundException();
 		switch (decision.action) {
 			case 'link': {
 				const brand = await this.em.findOne(Brand, { id: decision.brandId });
 				if (!brand) throw new BadRequestException('Unknown brand');
-				await this.setBrand(account, brand, AccountBrandSourceEnum.ADMIN, await this.branchOf(brand.id, decision.branchId));
+				await this.setBrand(
+					account,
+					brand,
+					AccountBrandSourceEnum.ADMIN,
+					await this.branchOf(brand.id, decision.branchId),
+				);
 				break;
 			}
 			case 'confirm':
@@ -570,8 +664,13 @@ export class SocialAccountService {
 	async merge(creatorId: string, accountIds: string[]): Promise<Creator> {
 		const creator = await this.em.findOne(Creator, { id: creatorId });
 		if (!creator) throw new NotFoundException();
-		const accounts = await this.em.find(SocialAccount, { id: { $in: accountIds } }, { populate: ['creator'] });
-		if (accounts.length !== new Set(accountIds).size) throw new BadRequestException('Unknown account');
+		const accounts = await this.em.find(
+			SocialAccount,
+			{ id: { $in: accountIds } },
+			{ populate: ['creator'] },
+		);
+		if (accounts.length !== new Set(accountIds).size)
+			throw new BadRequestException('Unknown account');
 		const left = new Set(accounts.map(a => a.creator.id).filter(id => id !== creator.id));
 		for (const account of accounts) account.creator = creator;
 		await this.em.flush();

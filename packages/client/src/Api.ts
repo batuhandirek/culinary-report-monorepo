@@ -439,6 +439,41 @@ export interface AdminAnalystThreadsOutputDto {
 	total: number;
 }
 
+/** The account now: the cycle's limit, what it used, our running runs' caps, what is left */
+export interface AdminApifyCreditOutputDto {
+	/** @format date-time */
+	cycleEnd: string;
+	/** @format date-time */
+	cycleStart: string;
+	limitUsd: number;
+	/** @format date-time */
+	readAt: string;
+	/** What new runs may still spend: limit − used − running caps */
+	remainingUsd: number;
+	runningCapsUsd: number;
+	/** Our runs still going and their caps together, counted as spent until they end */
+	runningRuns: number;
+	usedUsd: number;
+	/** Actor runs waiting for credit (oldest first): woken by the refresher, `wake`, or the cycle's end */
+	waiting: AdminApifyCreditWaiterOutputDto[];
+}
+
+export interface AdminApifyCreditWaiterOutputDto {
+	/** Its cap: what it needs left on the account */
+	needUsd: number;
+	purpose: string;
+	/** @format date-time */
+	since: string;
+	/** The waiting actor-run workflow (`/admin/workflows/:id`) */
+	workflowId: string;
+}
+
+/** What `wake` did: the waiting runs, and those the account covers now (woken; each checks again) */
+export interface AdminApifyCreditWakeOutputDto {
+	waiting: number;
+	woken: number;
+}
+
 export interface AdminApifyRunOutputDto {
 	actorId: string;
 	apifyRunId?: string;
@@ -462,6 +497,33 @@ export enum AdminApifyRunOutputDtoStatusEnum {
 	FAILED = 'FAILED',
 }
 
+export interface AdminBackfillReviewsInputDto {
+	/**
+	 * The run's cap over all its attempts; the city's `BACKFILL_REVIEWS` budget without
+	 * @min 0
+	 * @max 200
+	 */
+	budgetUsd?: number;
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * The first day kept, `YYYY-MM-DD`; the first of the current month without
+	 * @pattern ^\d{4}-\d{2}-\d{2}$
+	 */
+	since?: string;
+	/**
+	 * The venues posts named in this many days; 90 without
+	 * @min 1
+	 * @max 365
+	 */
+	talkedDays?: number;
+}
+
+export interface AdminBackfillReviewsOutputDto {
+	/** The run on `/admin/workflows` */
+	workflowId: string;
+}
+
 /** One backlog's day (`BacklogRun`) */
 export interface AdminBacklogRunOutputDto {
 	batches: number;
@@ -478,11 +540,11 @@ export interface AdminBacklogRunOutputDto {
 
 export enum AdminBacklogRunOutputDtoStopReasonEnum {
 	Error = 'error',
+	Waiting = 'waiting',
+	Shutdown = 'shutdown',
 	Empty = 'empty',
 	Budget = 'budget',
 	Allowance = 'allowance',
-	Shutdown = 'shutdown',
-	Waiting = 'waiting',
 }
 
 export interface AdminBlogEntryAuthorOutputDto {
@@ -562,7 +624,6 @@ export interface AdminBranchReviewOutputDto {
 	platform: AdminBranchReviewOutputDtoPlatformEnum;
 	/** @format date-time */
 	publishedAt: string;
-	replyDraft?: string;
 	reviewId: string;
 	stars?: number;
 	/** What it says, one claim per row with its parts (none before it is analysed) */
@@ -833,8 +894,8 @@ export enum AdminBrandTodoOutputDtoTabEnum {
 
 export enum AdminBrandTodoOutputDtoToneEnum {
 	Info = 'info',
-	Urgent = 'urgent',
 	Todo = 'todo',
+	Urgent = 'urgent',
 }
 
 /** A post by someone else that named the brand. */
@@ -1564,74 +1625,17 @@ export interface AdminDataCoverageOutputDto {
 	/** Newest first */
 	months: AdminDataMonthOutputDto[];
 	/** Runs waiting or running now */
-	queue: {
-		/** @format date-time */
-		createdAt: string;
-		month: string;
-		runId: string;
-		state: AdminDataCoverageOutputDtoStateEnum;
-		step: AdminDataCoverageOutputDtoStepEnum;
-	}[];
+	queue: AdminDataQueuedRunOutputDto[];
 	/** Steps that run on their own schedule, whatever the month: their latest run */
 	recurring: AdminDataStepOutputDto[];
-	/** The month the monthly cron reports on now: the last finished one */
+	/** The month the monthly runs cover now: the last finished one */
 	reportMonth: string;
 }
 
-export enum AdminDataCoverageOutputDtoStateEnum {
-	Waiting = 'waiting',
-	Queued = 'queued',
-	Running = 'running',
-}
-
-export enum AdminDataCoverageOutputDtoStepEnum {
-	SCRAPE_VENUES = 'SCRAPE_VENUES',
-	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
-	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
-	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
-	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
-	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
-	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
-	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
-	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
-	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
-	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
-	MATCH_MENTIONS = 'MATCH_MENTIONS',
-	LOOKUP_VENUES = 'LOOKUP_VENUES',
-	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
-	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
-	FILL_COMPETITORS = 'FILL_COMPETITORS',
-	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
-	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
-	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
-	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
-	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
-	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
-	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
-	TRACK_PROFILES = 'TRACK_PROFILES',
-	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
-	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
-	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
-	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
-	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
-	SEARCH_INTEREST = 'SEARCH_INTEREST',
-	BUILD_REPORTS = 'BUILD_REPORTS',
-	SCORE_LEADS = 'SCORE_LEADS',
-	WATCH_REVIEWS = 'WATCH_REVIEWS',
-	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
-	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
-	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
-	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
-	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
-	MONTHLY = 'MONTHLY',
-}
-
 export interface AdminDataMonthOutputDto {
-	/** Apify spend of the month's pipeline runs (runs started before 2026-10-18 carry no run link) */
+	/** Apify spend of the month's runs of the month operations (the actor runs inside them and their direct children) */
 	apifyUsd: number;
-	/** Every step of the monthly run succeeded (or was skipped as done) */
+	/** Every step of the month succeeded */
 	complete: boolean;
 	/** The current month: still filling up */
 	inProgress: boolean;
@@ -1659,25 +1663,80 @@ export interface AdminDataMonthOutputDto {
 	steps: AdminDataStepOutputDto[];
 }
 
-/** One step's latest attempt for a month; no `state` when it never ran for it. */
+/** An operation's run waiting on its queue or running now */
+export interface AdminDataQueuedRunOutputDto {
+	/** @format date-time */
+	createdAt: string;
+	/** The month, week or day it covers */
+	period?: string;
+	state: AdminDataQueuedRunOutputDtoStateEnum;
+	/** The steps it runs (`STEP_RUNS_IN`) */
+	steps: AdminDataQueuedRunOutputDtoStepsEnum[];
+	/** The workflow's name, `scrape-reviews.month` */
+	workflow: string;
+	workflowId: string;
+}
+
+export enum AdminDataQueuedRunOutputDtoStateEnum {
+	Queued = 'queued',
+	Running = 'running',
+}
+
+export enum AdminDataQueuedRunOutputDtoStepsEnum {
+	SCRAPE_VENUES = 'SCRAPE_VENUES',
+	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
+	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
+	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
+	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
+	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
+	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
+	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
+	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
+	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
+	LOOKUP_VENUES = 'LOOKUP_VENUES',
+	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
+	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
+	FILL_COMPETITORS = 'FILL_COMPETITORS',
+	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
+	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
+	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
+	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
+	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
+	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
+	TRACK_PROFILES = 'TRACK_PROFILES',
+	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
+	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
+	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
+	SCRAPE_PRESS = 'SCRAPE_PRESS',
+	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
+	SEARCH_INTEREST = 'SEARCH_INTEREST',
+	SCORE_LEADS = 'SCORE_LEADS',
+	WATCH_REVIEWS = 'WATCH_REVIEWS',
+	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
+	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
+	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
+	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
+	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
+}
+
+/** One step's latest attempt for a period; no `state` when it never ran for it. */
 export interface AdminDataStepOutputDto {
 	/** @format date-time */
 	at?: string;
 	error?: string;
-	/** Spends on Apify: "finish the month" pays for it only when it has not succeeded */
+	/** Spends on Apify */
 	paid: boolean;
-	runId?: string;
 	state?: AdminDataStepOutputDtoStateEnum;
 	step: AdminDataStepOutputDtoStepEnum;
 	/** Its result's figures in a line, e.g. "found 2000 · saved 412" */
 	summary?: string;
+	/** The operation's run it is in (`/admin/workflows/<id>`) */
+	workflowId?: string;
 }
 
 export enum AdminDataStepOutputDtoStateEnum {
 	Failed = 'failed',
-	Waiting = 'waiting',
 	Queued = 'queued',
-	Skipped = 'skipped',
 	Running = 'running',
 	Succeeded = 'succeeded',
 }
@@ -1693,29 +1752,23 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
 	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
-	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
-	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
 	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
 	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
-	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
-	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
-	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
-	BUILD_REPORTS = 'BUILD_REPORTS',
 	SCORE_LEADS = 'SCORE_LEADS',
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
@@ -1723,7 +1776,6 @@ export enum AdminDataStepOutputDtoStepEnum {
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
-	MONTHLY = 'MONTHLY',
 }
 
 /** A post and every step of the pipeline over it: the gate, agent A's places and claims, agent B's parts */
@@ -1837,8 +1889,8 @@ export enum AdminDigestionInputDtoKindEnum {
 export enum AdminDigestionInputDtoPlatformEnum {
 	Blog = 'blog',
 	Google = 'google',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Tripadvisor = 'tripadvisor',
 }
 
@@ -2032,8 +2084,8 @@ export enum AdminDigestionStatementOutputDtoKindEnum {
 
 /** Absent until agent B read it, and on a Google tag */
 export enum AdminDigestionStatementOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -2192,8 +2244,8 @@ export enum AdminExploreBreakdownInputDtoSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -2308,8 +2360,8 @@ export enum AdminExploreClaimsInputDtoSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -2336,8 +2388,8 @@ export interface AdminExploreGroupOutputDto {
 }
 
 export enum AdminExploreGroupOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -2477,8 +2529,8 @@ export enum AdminExploreInputDtoSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -2578,30 +2630,6 @@ export interface AdminFillCityDaysOutputDto {
 	written: number;
 }
 
-export interface AdminFillCompetitorsInputDto {
-	/** @format uuid */
-	cityId: string;
-	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
-	month: string;
-	/**
-	 * How many of the month's most talked-about venues to cover.
-	 * @min 1
-	 * @max 200
-	 */
-	top?: number;
-}
-
-export interface AdminFillCompetitorsOutputDto {
-	/** Competitors added in all */
-	added: number;
-	/** The month's report brands looked at */
-	brands: number;
-	/** Brands that had none and got some */
-	filled: number;
-	/** Brands that already had competitors, left as they were */
-	skipped: number;
-}
-
 export interface AdminFoodTrendsOutputDto {
 	/** What an anchored pull would compare and roughly cost */
 	pull: {
@@ -2645,6 +2673,14 @@ export interface AdminFoodTrendsReportOutputDto {
 	searchPull?: FoodTrendsSearchPull;
 	/** @format date-time */
 	updatedAt: string;
+}
+
+export interface AdminForkWorkflowInputDto {
+	/**
+	 * The step the new run starts afresh from (0 = the first); the steps before it are copied
+	 * @min 0
+	 */
+	startStep: number;
 }
 
 export interface AdminGetBrandSummaryInputDto {
@@ -2918,10 +2954,10 @@ export enum AdminListAccountsInputDtoPlatformEnum {
 export enum AdminListAccountsInputDtoSortEnum {
 	ScoreAsc = 'score:asc',
 	ScoreDesc = 'score:desc',
-	FollowersAsc = 'followers:asc',
-	FollowersDesc = 'followers:desc',
 	HandleAsc = 'handle:asc',
 	HandleDesc = 'handle:desc',
+	FollowersAsc = 'followers:asc',
+	FollowersDesc = 'followers:desc',
 	MonthPostsAsc = 'monthPosts:asc',
 	MonthPostsDesc = 'monthPosts:desc',
 	MonthViewsAsc = 'monthViews:asc',
@@ -3159,6 +3195,27 @@ export interface AdminListCreatorsOutputDto {
 	totalItems: number;
 }
 
+export interface AdminListLlmCallsInputDto {
+	agentId?: string;
+	/** @format uuid */
+	cityId?: string;
+	/** Only the failed calls */
+	failed?: boolean;
+	/** @min 1 */
+	page: number;
+	purpose?: string;
+	/** @min 1 */
+	size: number;
+	workflowId?: string;
+}
+
+export interface AdminListLlmCallsOutputDto {
+	items: AdminLlmCallOutputDto[];
+	page: number;
+	pageSize: number;
+	totalItems: number;
+}
+
 export interface AdminListMentionsInputDto {
 	/**
 	 * The brand's mentions: of every branch and of the brand alone
@@ -3189,22 +3246,6 @@ export enum AdminListMentionsInputDtoMatchMethodEnum {
 
 export interface AdminListMentionsOutputDto {
 	items: AdminMentionWithPostOutputDto[];
-	page: number;
-	pageSize: number;
-	totalItems: number;
-}
-
-export interface AdminListPipelineRunsInputDto {
-	/** @format uuid */
-	cityId?: string;
-	/** @min 1 */
-	page: number;
-	/** @min 1 */
-	size: number;
-}
-
-export interface AdminListPipelineRunsOutputDto {
-	items: AdminPipelineRunOutputDto[];
 	page: number;
 	pageSize: number;
 	totalItems: number;
@@ -3553,6 +3594,49 @@ export interface AdminListVenuesOutputDto {
 	totalItems: number;
 }
 
+export interface AdminListWorkflowQueuesOutputDto {
+	items: AdminWorkflowQueueOutputDto[];
+}
+
+export interface AdminListWorkflowSchedulesOutputDto {
+	items: AdminWorkflowScheduleOutputDto[];
+}
+
+export interface AdminListWorkflowsInputDto {
+	/**
+	 * `key:value` of a workflow attribute, e.g. `cityId:<uuid>`
+	 * @pattern ^[^:]+:.+$
+	 */
+	attribute?: string;
+	/** The registered workflow name (the method's), e.g. `ingestCity` */
+	name?: string;
+	/** @min 1 */
+	page: number;
+	queue?: string;
+	schedule?: string;
+	/** @min 1 */
+	size: number;
+	status?: AdminListWorkflowsInputDtoStatusEnum;
+}
+
+export enum AdminListWorkflowsInputDtoStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
+export interface AdminListWorkflowsOutputDto {
+	/** DBOS counts nothing: there is a next page when this page is full */
+	hasMore: boolean;
+	items: AdminWorkflowOutputDto[];
+	page: number;
+	pageSize: number;
+}
+
 export interface AdminLlmBacklogOutputDto {
 	doneLast7Days: number;
 	tokensLast7Days: number;
@@ -3576,6 +3660,97 @@ export interface AdminLlmBacklogsOutputDto {
 	items: AdminLlmBacklogOutputDto[];
 	/** Reported by today's batches (UTC day) */
 	spentToday: number;
+}
+
+export interface AdminLlmCallOutputDto {
+	agentId: string;
+	cacheWriteTokens: number;
+	cachedInputTokens: number;
+	/** A city as a filter or a select offers it. */
+	city?: AdminCityRefOutputDto;
+	/** @format date-time */
+	createdAt: string;
+	durationMs?: number;
+	error?: string;
+	id: string;
+	inputTokens: number;
+	kind: AdminLlmCallOutputDtoKindEnum;
+	model?: string;
+	ok: boolean;
+	outputTokens: number;
+	provider?: AdminLlmCallOutputDtoProviderEnum;
+	purpose?: string;
+	usd: number;
+	workflowId?: string;
+}
+
+export enum AdminLlmCallOutputDtoKindEnum {
+	Generate = 'generate',
+	Decide = 'decide',
+	Embed = 'embed',
+}
+
+export enum AdminLlmCallOutputDtoProviderEnum {
+	Apify = 'apify',
+	Openai = 'openai',
+	Anthropic = 'anthropic',
+	Openrouter = 'openrouter',
+	Typesafe = 'typesafe',
+}
+
+export interface AdminLlmSpendInputDto {
+	/**
+	 * First day counted (UTC); the first of the current month without
+	 * @format date
+	 */
+	from?: string;
+	groupBy: AdminLlmSpendInputDtoGroupByEnum;
+	/**
+	 * First day left out (UTC); tomorrow without
+	 * @format date
+	 */
+	to?: string;
+}
+
+export enum AdminLlmSpendInputDtoGroupByEnum {
+	Day = 'day',
+	Model = 'model',
+	City = 'city',
+	Agent = 'agent',
+	Provider = 'provider',
+	Purpose = 'purpose',
+	Workflow = 'workflow',
+}
+
+export interface AdminLlmSpendOutputDto {
+	/** @format date-time */
+	from: string;
+	groupBy: AdminLlmSpendOutputDtoGroupByEnum;
+	rows: AdminLlmSpendRowOutputDto[];
+	/** @format date-time */
+	to: string;
+	total: AdminLlmSpendRowOutputDto;
+}
+
+export enum AdminLlmSpendOutputDtoGroupByEnum {
+	Day = 'day',
+	Model = 'model',
+	City = 'city',
+	Agent = 'agent',
+	Provider = 'provider',
+	Purpose = 'purpose',
+	Workflow = 'workflow',
+}
+
+export interface AdminLlmSpendRowOutputDto {
+	cachedInputTokens: number;
+	calls: number;
+	failed: number;
+	inputTokens: number;
+	/** The group's value: an agent id, a model, a day, a city id, a purpose, a workflow id */
+	key: string;
+	outputTokens: number;
+	usd: number;
 }
 
 export interface AdminLogOutreachTouchInputDto {
@@ -3904,12 +4079,12 @@ export interface AdminOverviewOutputDto {
 	apifyMonthlyCreditUsd: number;
 	/** Due by the end of today, the most overdue first */
 	dueFollowUps: AdminProspectListItemOutputDto[] | null;
-	/** The newest `MONTHLY` run; `null` when there is none (or it failed to load) */
-	lastMonthlyRun: AdminPipelineRunOutputDtoNullable;
-	/** The newest run of any step, for when the monthly one is old or missing */
-	lastRun: AdminPipelineRunOutputDtoNullable;
+	/** The newest run of a month operation; `null` when there is none (or it failed to load) */
+	lastMonthlyRun: AdminWorkflowRunOutputDtoNullable;
+	/** The newest run of any pipeline operation, for when the monthly ones are old or missing */
+	lastRun: AdminWorkflowRunOutputDtoNullable;
 	/**
-	 * When the cron queues the next monthly run
+	 * When the month operations start next
 	 * @format date-time
 	 */
 	nextMonthlyRunAt: string;
@@ -3922,162 +4097,6 @@ export interface AdminOverviewOutputDto {
 	suggestedProspects: AdminSuggestedProspectOutputDto[] | null;
 	/** Mentions no venue fits yet (match method `none`) */
 	unmatchedMentions: number | null;
-}
-
-export interface AdminPipelineRunOutputDto {
-	/** A city as a filter or a select offers it. */
-	city: AdminCityRefOutputDto;
-	/** @format date-time */
-	createdAt: string;
-	error?: string;
-	/** @format date-time */
-	finishedAt?: string;
-	id: string;
-	month: string;
-	params?: {
-		budgetUsd?: number;
-		onlyMissing?: boolean;
-		since?: string;
-		top?: number;
-	};
-	/** Construct a type with a set of properties K of type T */
-	result?: Recordstringunknown;
-	/** How often a backend restart cut it short and it went on where it stopped */
-	resumes: number;
-	/** @format date-time */
-	startedAt?: string;
-	status: AdminPipelineRunOutputDtoStatusEnum;
-	step: AdminPipelineRunOutputDtoStepEnum;
-}
-
-export type AdminPipelineRunOutputDtoNullable = {
-	/** A city as a filter or a select offers it. */
-	city: AdminCityRefOutputDto;
-	/** @format date-time */
-	createdAt: string;
-	error?: string;
-	/** @format date-time */
-	finishedAt?: string;
-	id: string;
-	month: string;
-	params?: {
-		budgetUsd?: number;
-		onlyMissing?: boolean;
-		since?: string;
-		top?: number;
-	};
-	/** Construct a type with a set of properties K of type T */
-	result?: Recordstringunknown;
-	/** How often a backend restart cut it short and it went on where it stopped */
-	resumes: number;
-	/** @format date-time */
-	startedAt?: string;
-	status: AdminPipelineRunOutputDtoNullableStatusEnum;
-	step: AdminPipelineRunOutputDtoNullableStepEnum;
-} | null;
-
-export enum AdminPipelineRunOutputDtoNullableStatusEnum {
-	QUEUED = 'QUEUED',
-	RUNNING = 'RUNNING',
-	WAITING = 'WAITING',
-	SUCCEEDED = 'SUCCEEDED',
-	FAILED = 'FAILED',
-}
-
-export enum AdminPipelineRunOutputDtoNullableStepEnum {
-	SCRAPE_VENUES = 'SCRAPE_VENUES',
-	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
-	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
-	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
-	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
-	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
-	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
-	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
-	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
-	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
-	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
-	MATCH_MENTIONS = 'MATCH_MENTIONS',
-	LOOKUP_VENUES = 'LOOKUP_VENUES',
-	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
-	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
-	FILL_COMPETITORS = 'FILL_COMPETITORS',
-	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
-	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
-	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
-	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
-	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
-	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
-	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
-	TRACK_PROFILES = 'TRACK_PROFILES',
-	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
-	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
-	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
-	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
-	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
-	SEARCH_INTEREST = 'SEARCH_INTEREST',
-	BUILD_REPORTS = 'BUILD_REPORTS',
-	SCORE_LEADS = 'SCORE_LEADS',
-	WATCH_REVIEWS = 'WATCH_REVIEWS',
-	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
-	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
-	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
-	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
-	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
-	MONTHLY = 'MONTHLY',
-}
-
-export enum AdminPipelineRunOutputDtoStatusEnum {
-	QUEUED = 'QUEUED',
-	RUNNING = 'RUNNING',
-	WAITING = 'WAITING',
-	SUCCEEDED = 'SUCCEEDED',
-	FAILED = 'FAILED',
-}
-
-export enum AdminPipelineRunOutputDtoStepEnum {
-	SCRAPE_VENUES = 'SCRAPE_VENUES',
-	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
-	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
-	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
-	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
-	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
-	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
-	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
-	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
-	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
-	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
-	MATCH_MENTIONS = 'MATCH_MENTIONS',
-	LOOKUP_VENUES = 'LOOKUP_VENUES',
-	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
-	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
-	FILL_COMPETITORS = 'FILL_COMPETITORS',
-	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
-	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
-	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
-	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
-	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
-	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
-	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
-	TRACK_PROFILES = 'TRACK_PROFILES',
-	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
-	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
-	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
-	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
-	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
-	SEARCH_INTEREST = 'SEARCH_INTEREST',
-	BUILD_REPORTS = 'BUILD_REPORTS',
-	SCORE_LEADS = 'SCORE_LEADS',
-	WATCH_REVIEWS = 'WATCH_REVIEWS',
-	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
-	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
-	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
-	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
-	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
-	MONTHLY = 'MONTHLY',
 }
 
 /** Someone who may open the brand's portal. */
@@ -4334,8 +4353,8 @@ export interface AdminProspectReportOutputDto {
 }
 
 export enum AdminProspectReportOutputDtoPlatformEnum {
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 }
 
 /** A brand's branch as outreach shows it: the address, website and phone to reach it by. */
@@ -4529,6 +4548,43 @@ export interface AdminReportOutputDto {
 	};
 	/** @format date-time */
 	updatedAt: string;
+}
+
+/** A report build or "Analyse again", which runs in the background (`ReportBuildWorkflow`) */
+export interface AdminReportRunOutputDto {
+	/** Failed: why */
+	error?: string;
+	/** Done: the reports it wrote, the first the one to open */
+	reportIds?: string[];
+	state: AdminReportRunOutputDtoStateEnum;
+	/** Waiting: no LLM account can serve one of its agents until the roster's reset */
+	wait?: AdminReportRunWaitOutputDto;
+	/** The run's id: its page is `/admin/workflows/<id>` */
+	workflowId: string;
+}
+
+export enum AdminReportRunOutputDtoStateEnum {
+	Done = 'done',
+	Failed = 'failed',
+	Queued = 'queued',
+	Running = 'running',
+	Waiting = 'waiting',
+}
+
+export interface AdminReportRunWaitOutputDto {
+	/** The agent no account can serve */
+	agentId: string;
+	reason: string;
+	/**
+	 * When the roster says it serves again; absent when it names no end
+	 * @format date-time
+	 */
+	until?: string;
+	/**
+	 * When the run looks again
+	 * @format date-time
+	 */
+	wakeAt: string;
 }
 
 /** A private link to a report, as the admin report page lists it. */
@@ -4725,6 +4781,18 @@ export interface AdminSetUserPasswordInputDto {
 	password: string;
 }
 
+export interface AdminSetWorkflowPriorityInputDto {
+	/** `high` takes it, and every live run under it, off its queue before the `normal` and `low` runs waiting */
+	priority: AdminSetWorkflowPriorityInputDtoPriorityEnum;
+}
+
+/** `high` takes it, and every live run under it, off its queue before the `normal` and `low` runs waiting */
+export enum AdminSetWorkflowPriorityInputDtoPriorityEnum {
+	High = 'high',
+	Normal = 'normal',
+	Low = 'low',
+}
+
 export interface AdminSocialPostListItemOutputDto {
 	/** Who posted it: the account, its creator, and the brand when it is a brand's own. */
 	account?: AdminPostAccountOutputDto;
@@ -4854,77 +4922,6 @@ export interface AdminSplitAccountOutputDto {
 	creatorId: string;
 }
 
-export interface AdminStartPipelineRunInputDto {
-	/**
-	 * Apify spending cap for the step, in USD. Ignored by the monthly run, which uses each step's default.
-	 * @min 0
-	 * @max 100
-	 */
-	budgetUsd?: number;
-	/** @format uuid */
-	cityId: string;
-	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
-	month: string;
-	/** `MONTHLY` only: skip the paid steps that already succeeded for the month */
-	onlyMissing?: boolean;
-	/**
-	 * `SCRAPE_REVIEWS` only: scrape from this day instead of the month's first (a backfill)
-	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
-	 */
-	since?: string;
-	step: AdminStartPipelineRunInputDtoStepEnum;
-	/**
-	 * How many of the month's most talked-about venues the step covers; the city's default otherwise.
-	 * @min 1
-	 * @max 200
-	 */
-	top?: number;
-}
-
-export enum AdminStartPipelineRunInputDtoStepEnum {
-	SCRAPE_VENUES = 'SCRAPE_VENUES',
-	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
-	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
-	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
-	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
-	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
-	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
-	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
-	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
-	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
-	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
-	MATCH_MENTIONS = 'MATCH_MENTIONS',
-	LOOKUP_VENUES = 'LOOKUP_VENUES',
-	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
-	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
-	FILL_COMPETITORS = 'FILL_COMPETITORS',
-	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
-	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
-	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
-	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
-	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
-	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
-	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
-	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
-	TRACK_PROFILES = 'TRACK_PROFILES',
-	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
-	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
-	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
-	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
-	SCRAPE_PRESS = 'SCRAPE_PRESS',
-	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
-	SEARCH_INTEREST = 'SEARCH_INTEREST',
-	BUILD_REPORTS = 'BUILD_REPORTS',
-	SCORE_LEADS = 'SCORE_LEADS',
-	WATCH_REVIEWS = 'WATCH_REVIEWS',
-	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
-	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
-	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
-	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
-	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
-	MONTHLY = 'MONTHLY',
-}
-
 /** One claim with where it was said: the review and its venue, or the post and the mention it is about */
 export interface AdminStatementRowOutputDto {
 	/** The number it states: minutes for a wait, the price for a price */
@@ -5005,8 +5002,8 @@ export enum AdminStatementRowOutputDtoPlatformEnum1 {
 
 /** Absent until agent B read it, and on a Google tag */
 export enum AdminStatementRowOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -5086,8 +5083,8 @@ export enum AdminStatementsInputDtoPartsEnum {
 }
 
 export enum AdminStatementsInputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 	Unread = 'unread',
@@ -5367,8 +5364,8 @@ export interface AdminTodoOutputDto {
 
 export enum AdminTodoOutputDtoToneEnum {
 	Info = 'info',
-	Urgent = 'urgent',
 	Todo = 'todo',
+	Urgent = 'urgent',
 }
 
 export interface AdminTopicBaseOutputDto {
@@ -5531,9 +5528,9 @@ export interface AdminTopicVenueOutputDto {
 export enum AdminTopicVenueOutputDtoSourceEnum {
 	Mentions = 'mentions',
 	Category = 'category',
+	Manual = 'manual',
 	Menu = 'menu',
 	Reviews = 'reviews',
-	Manual = 'manual',
 }
 
 export interface AdminTopicsOutputDto {
@@ -6159,9 +6156,9 @@ export enum AdminVenueTopicOutputDtoKindEnum {
 export enum AdminVenueTopicOutputDtoSourceEnum {
 	Mentions = 'mentions',
 	Category = 'category',
+	Manual = 'manual',
 	Menu = 'menu',
 	Reviews = 'reviews',
-	Manual = 'manual',
 }
 
 export interface AdminVenueTopicsOutputDto {
@@ -6241,7 +6238,221 @@ export interface AdminWatchRefOutputDto {
 	name: string;
 }
 
-export type AnalyseReportData = AdminReportOutputDto;
+/** What a cancel, resume, fork or trigger did */
+export interface AdminWorkflowActionOutputDto {
+	status?: AdminWorkflowActionOutputDtoStatusEnum;
+	/** The run acted on; for a fork or a trigger, the new run */
+	workflowId: string;
+}
+
+export enum AdminWorkflowActionOutputDtoStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
+export interface AdminWorkflowDetailOutputDto {
+	applicationVersion?: string;
+	/** The tags it was started with (`StartOptions.attributes`), each value as text; the priority is `priority` */
+	attributes?: Recordstringstring;
+	/** The service's class, e.g. `IngestionWorkflows` */
+	className: string;
+	/** @format date-time */
+	completedAt?: string;
+	/** @format date-time */
+	createdAt: string;
+	deduplicationId?: string;
+	/** @format date-time */
+	delayUntil?: string;
+	/** @format date-time */
+	dequeuedAt?: string;
+	/** Its error's message (ERROR only) */
+	error?: string;
+	id: string;
+	/** The arguments it was started with, as JSON */
+	input?: string;
+	/** The method's registered name, e.g. `ingestCity` */
+	name: string;
+	/** Its result, as JSON (SUCCESS only) */
+	output?: string;
+	parentWorkflowId?: string;
+	/** How soon its queue hands it out (`StartOptions.priority`); `normal` for a run started outside the facade */
+	priority: AdminWorkflowDetailOutputDtoPriorityEnum;
+	queue?: string;
+	/** How often a restart picked it up again */
+	recoveryAttempts?: number;
+	/** The schedule that fired it */
+	schedule?: string;
+	status: AdminWorkflowDetailOutputDtoStatusEnum;
+	steps: AdminWorkflowStepOutputDto[];
+	/** @format date-time */
+	updatedAt?: string;
+}
+
+/** How soon its queue hands it out (`StartOptions.priority`); `normal` for a run started outside the facade */
+export enum AdminWorkflowDetailOutputDtoPriorityEnum {
+	High = 'high',
+	Normal = 'normal',
+	Low = 'low',
+}
+
+export enum AdminWorkflowDetailOutputDtoStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
+export interface AdminWorkflowOutputDto {
+	applicationVersion?: string;
+	/** The tags it was started with (`StartOptions.attributes`), each value as text; the priority is `priority` */
+	attributes?: Recordstringstring;
+	/** The service's class, e.g. `IngestionWorkflows` */
+	className: string;
+	/** @format date-time */
+	completedAt?: string;
+	/** @format date-time */
+	createdAt: string;
+	deduplicationId?: string;
+	/** @format date-time */
+	delayUntil?: string;
+	/** @format date-time */
+	dequeuedAt?: string;
+	/** Its error's message (ERROR only) */
+	error?: string;
+	id: string;
+	/** The arguments it was started with, as JSON */
+	input?: string;
+	/** The method's registered name, e.g. `ingestCity` */
+	name: string;
+	/** Its result, as JSON (SUCCESS only) */
+	output?: string;
+	parentWorkflowId?: string;
+	/** How soon its queue hands it out (`StartOptions.priority`); `normal` for a run started outside the facade */
+	priority: AdminWorkflowOutputDtoPriorityEnum;
+	queue?: string;
+	/** How often a restart picked it up again */
+	recoveryAttempts?: number;
+	/** The schedule that fired it */
+	schedule?: string;
+	status: AdminWorkflowOutputDtoStatusEnum;
+	/** @format date-time */
+	updatedAt?: string;
+}
+
+/** How soon its queue hands it out (`StartOptions.priority`); `normal` for a run started outside the facade */
+export enum AdminWorkflowOutputDtoPriorityEnum {
+	High = 'high',
+	Normal = 'normal',
+	Low = 'low',
+}
+
+export enum AdminWorkflowOutputDtoStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
+export interface AdminWorkflowPriorityOutputDto {
+	/** The live runs set to it: the run and the runs under it still waiting or running */
+	changed: number;
+	priority: AdminWorkflowPriorityOutputDtoPriorityEnum;
+	workflowId: string;
+}
+
+export enum AdminWorkflowPriorityOutputDtoPriorityEnum {
+	High = 'high',
+	Normal = 'normal',
+	Low = 'low',
+}
+
+export interface AdminWorkflowQueueOutputDto {
+	globalConcurrency?: number;
+	name: string;
+	rateLimit?: {
+		limitPerPeriod: number;
+		periodSec: number;
+	};
+	/** Runs taken from the queue and running (PENDING) */
+	running: number;
+	/** Runs waiting on the queue (ENQUEUED or DELAYED) */
+	waiting: number;
+	workerConcurrency?: number;
+}
+
+/** An operation's run (a DBOS workflow), as the morning view names it */
+export interface AdminWorkflowRunOutputDto {
+	cityId?: string;
+	/** @format date-time */
+	createdAt: string;
+	error?: string;
+	/** The month, week or day it covers */
+	period?: string;
+	/** DBOS's status: SUCCESS, ERROR, PENDING, ENQUEUED, CANCELLED, MAX_RECOVERY_ATTEMPTS_EXCEEDED */
+	status: string;
+	/** @format date-time */
+	updatedAt?: string;
+	/** The workflow's name, `scrape-reviews.month` */
+	workflow: string;
+	workflowId: string;
+}
+
+/** An operation's run (a DBOS workflow), as the morning view names it */
+export type AdminWorkflowRunOutputDtoNullable = {
+	cityId?: string;
+	/** @format date-time */
+	createdAt: string;
+	error?: string;
+	/** The month, week or day it covers */
+	period?: string;
+	/** DBOS's status: SUCCESS, ERROR, PENDING, ENQUEUED, CANCELLED, MAX_RECOVERY_ATTEMPTS_EXCEEDED */
+	status: string;
+	/** @format date-time */
+	updatedAt?: string;
+	/** The workflow's name, `scrape-reviews.month` */
+	workflow: string;
+	workflowId: string;
+} | null;
+
+export interface AdminWorkflowScheduleOutputDto {
+	cron: string;
+	/** @format date-time */
+	lastFiredAt?: string;
+	name: string;
+	queue?: string;
+	/** `active` or `paused` */
+	status: string;
+	timezone?: string;
+	workflowClassName: string;
+	workflowName: string;
+}
+
+export interface AdminWorkflowStepOutputDto {
+	childWorkflowId?: string;
+	/** @format date-time */
+	completedAt?: string;
+	error?: string;
+	/** The step's position in the run; `fork` takes it */
+	functionId: number;
+	name: string;
+	/** The step's checkpointed result, as JSON */
+	output?: string;
+	/** @format date-time */
+	startedAt?: string;
+}
+
+export type AnalyseReportData = AdminReportRunOutputDto;
 
 export interface AnalystChart {
 	kind: AnalystChartKindEnum;
@@ -6398,7 +6609,7 @@ export type BuildFoodTrendsData = AdminFoodTrendsReportOutputDto;
 
 export type BuildLandingEditionData = any;
 
-export type BuildReportData = AdminReportOutputDto;
+export type BuildReportData = AdminReportRunOutputDto;
 
 export interface BuzzToReviews {
 	/** The usual new reviews a week, from the six months before */
@@ -6421,6 +6632,8 @@ export interface BuzzWeek {
 	/** The week's Monday, `YYYY-MM-DD` (city time) */
 	week: string;
 }
+
+export type CancelWorkflowData = AdminWorkflowActionOutputDto;
 
 export interface ChangeBlogEntryStateInputDto {
 	state: ChangeBlogEntryStateInputDtoStateEnum;
@@ -6810,8 +7023,6 @@ export enum ExportUsersCsvParamsRolesEnum {
 
 export type FillCityDaysData = AdminFillCityDaysOutputDto;
 
-export type FillCompetitorsData = AdminFillCompetitorsOutputDto;
-
 export interface FoodTrendsBreakout {
 	/** Rising past +5,000 % */
 	breakout?: boolean;
@@ -6988,11 +7199,15 @@ export interface ForgotPasswordInputDto {
 	mobileNumber?: string;
 }
 
+export type ForkWorkflowData = AdminWorkflowActionOutputDto;
+
 export type GetAdminOverviewData = AdminOverviewOutputDto;
 
 export type GetAdminTodayData = AdminTodayOutputDto;
 
 export type GetAnalystThreadData = AdminAnalystThreadDetailOutputDto;
+
+export type GetApifyCreditData = AdminApifyCreditOutputDto;
 
 export type GetBrandData = AdminBrandOutputDto;
 
@@ -7068,8 +7283,8 @@ export enum GetExploreBreakdownParamsSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -7110,8 +7325,8 @@ export enum GetExploreGroupsParamsSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -7152,8 +7367,8 @@ export enum GetExploreHeadParamsSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -7194,8 +7409,8 @@ export enum GetExploreTreeParamsSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -7289,6 +7504,8 @@ export type GetReportLeaveBehindPdfData = any;
 
 export type GetReportPdfData = any;
 
+export type GetReportRunData = AdminReportRunOutputDto;
+
 export type GetReportTemplateData = AdminReportTemplateOutputDto;
 
 export type GetSearchInterestData = AdminSearchInterestOutputDto;
@@ -7335,6 +7552,8 @@ export type GetVenueStatusChangesData = AdminVenueStatusChangesOutputDto;
 export type GetVenueTopicsData = AdminVenueTopicsOutputDto;
 
 export type GetWaitComplaintsData = AdminWaitComplaintsOutputDto;
+
+export type GetWorkflowData = AdminWorkflowDetailOutputDto;
 
 export interface HealthCheckResponseDto {
 	ok: boolean;
@@ -7650,10 +7869,10 @@ export enum ListAccountsParamsPlatformEnum {
 export enum ListAccountsParamsSortEnum {
 	ScoreAsc = 'score:asc',
 	ScoreDesc = 'score:desc',
-	FollowersAsc = 'followers:asc',
-	FollowersDesc = 'followers:desc',
 	HandleAsc = 'handle:asc',
 	HandleDesc = 'handle:desc',
+	FollowersAsc = 'followers:asc',
+	FollowersDesc = 'followers:desc',
 	MonthPostsAsc = 'monthPosts:asc',
 	MonthPostsDesc = 'monthPosts:desc',
 	MonthViewsAsc = 'monthViews:asc',
@@ -7792,8 +8011,8 @@ export enum ListDigestionParamsKindEnum {
 export enum ListDigestionParamsPlatformEnum {
 	Blog = 'blog',
 	Google = 'google',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Tripadvisor = 'tripadvisor',
 }
 
@@ -7870,8 +8089,8 @@ export enum ListExploreClaimsParamsSourceEnum {
 	Post = 'post',
 	Press = 'press',
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 	Review = 'review',
 	GoogleReview = 'google_review',
 	TripadvisorReview = 'tripadvisor_review',
@@ -7884,6 +8103,8 @@ export enum ListExploreClaimsParamsSubjectEnum {
 }
 
 export type ListLlmBacklogsData = AdminLlmBacklogsOutputDto;
+
+export type ListLlmCallsData = AdminListLlmCallsOutputDto;
 
 export type ListMentionsData = AdminListMentionsOutputDto;
 
@@ -7932,8 +8153,6 @@ export interface ListNotificationsOutputDto {
 	pageSize: number;
 	totalItems: number;
 }
-
-export type ListPipelineRunsData = AdminListPipelineRunsOutputDto;
 
 export type ListPortalBrandsData = PortalBrandsOutputDto;
 
@@ -8017,6 +8236,8 @@ export enum ListProspectsParamsStageEnum {
 	OPTED_OUT = 'OPTED_OUT',
 }
 
+export type ListQueuesData = AdminListWorkflowQueuesOutputDto;
+
 export type ListReportSharesData = AdminReportShareOutputDto[];
 
 export type ListReportTemplatesData = AdminReportTemplateOutputDto[];
@@ -8040,6 +8261,8 @@ export enum ListReviewsParamsPlatformEnum {
 	Google = 'google',
 	Tripadvisor = 'tripadvisor',
 }
+
+export type ListSchedulesData = AdminListWorkflowSchedulesOutputDto;
 
 export type ListSessionsData = ListSessionsOutputDto;
 
@@ -8101,8 +8324,8 @@ export enum ListStatementsParamsPartsEnum {
 }
 
 export enum ListStatementsParamsSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 	Unread = 'unread',
@@ -8168,6 +8391,30 @@ export enum ListVenuesParamsSortEnum {
 	RatingDesc = 'rating:desc',
 	ReviewsCountAsc = 'reviewsCount:asc',
 	ReviewsCountDesc = 'reviewsCount:desc',
+}
+
+export type ListWorkflowsData = AdminListWorkflowsOutputDto;
+
+export enum ListWorkflowsParamsStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
+export type LlmSpendData = AdminLlmSpendOutputDto;
+
+export enum LlmSpendParamsGroupByEnum {
+	Day = 'day',
+	Model = 'model',
+	City = 'city',
+	Agent = 'agent',
+	Provider = 'provider',
+	Purpose = 'purpose',
+	Workflow = 'workflow',
 }
 
 export type LogOutreachTouchData = AdminProspectOutputDto;
@@ -8369,7 +8616,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1220'?: PartialOmitCredentialVerificationRequestuserOptionalProps1220Enum;
+	'__@OptionalProps@1219'?: PartialOmitCredentialVerificationRequestuserOptionalProps1219Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -8395,7 +8642,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1220Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1219Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -8413,18 +8660,12 @@ export enum PartialOmitCredentialVerificationRequestuserTypeEnum {
 
 /** Make all properties in T optional */
 export interface PartialRecordPipelineStepEnumnumber {
-	ANALYSE_COMMENTS?: number;
-	ANALYSE_REVIEWS?: number;
 	BACKFILL_REVIEWS?: number;
-	BUILD_REPORTS?: number;
-	EXTRACT_MENTIONS?: number;
 	FILL_ACCOUNT_FOLLOWERS?: number;
 	FILL_COMPETITORS?: number;
 	FIND_OWN_ACCOUNTS?: number;
 	LOOKUP_OSM_PLACES?: number;
 	LOOKUP_VENUES?: number;
-	MATCH_MENTIONS?: number;
-	MONTHLY?: number;
 	READ_MENTIONED_PROFILES?: number;
 	REFRESH_POST_COUNTS?: number;
 	REFRESH_VENUE_DETAILS?: number;
@@ -8435,7 +8676,6 @@ export interface PartialRecordPipelineStepEnumnumber {
 	SCRAPE_ACCOUNTS_RECENT?: number;
 	SCRAPE_BLOGS?: number;
 	SCRAPE_COMMENTS?: number;
-	SCRAPE_CREATORS?: number;
 	SCRAPE_DELIVERY?: number;
 	SCRAPE_INSTAGRAM?: number;
 	SCRAPE_INSTAGRAM_RECENT?: number;
@@ -8462,27 +8702,7 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @min 0
 	 * @max 100
 	 */
-	ANALYSE_COMMENTS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	ANALYSE_REVIEWS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
 	BACKFILL_REVIEWS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	BUILD_REPORTS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	EXTRACT_MENTIONS?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -8508,16 +8728,6 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	LOOKUP_VENUES?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	MATCH_MENTIONS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	MONTHLY?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -8568,11 +8778,6 @@ export interface PartialRecordPipelineStepEnumnumberMinimum0Maximum100 {
 	 * @max 100
 	 */
 	SCRAPE_COMMENTS?: number;
-	/**
-	 * @min 0
-	 * @max 100
-	 */
-	SCRAPE_CREATORS?: number;
 	/**
 	 * @min 0
 	 * @max 100
@@ -8676,6 +8881,11 @@ export interface PartialRecordPopularTimesDayArrayPopularTimesHour {
 	We?: PopularTimesHour[];
 }
 
+export interface PauseScheduleData {
+	name: string;
+	status: string;
+}
+
 /** A place Google lists under "People also search for". It carries no place id. */
 export interface PeopleAlsoSearchPlace {
 	category?: string;
@@ -8691,7 +8901,7 @@ export interface PickReportDishCountnamecount {
 }
 
 /** From T, pick a set of properties whose keys are in the union K */
-export interface PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars {
+export interface PickReportReviewStatscountwrittenpraisecomplaintsreplyRateavgStars {
 	avgStars?: number;
 	/** Construct a type with a set of properties K of type T */
 	complaints: Recordstringnumber;
@@ -9089,8 +9299,8 @@ export enum PortalPostOutputDtoPlatformEnum {
 
 /** How the post came across about the brand, worked out from its claims */
 export enum PortalPostOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -9223,8 +9433,6 @@ export interface PortalReviewOutputDto {
 	platform: PortalReviewOutputDtoPlatformEnum;
 	/** @format date-time */
 	publishedAt: string;
-	/** A reply ready to post, in the review's language: unanswered written reviews only, when drafted */
-	replyDraft?: string;
 	sentiment?: PortalReviewOutputDtoSentimentEnum;
 	stars?: number;
 	/** What it says, one claim per row with its parts (none before it is analysed) */
@@ -9240,8 +9448,8 @@ export enum PortalReviewOutputDtoPlatformEnum {
 }
 
 export enum PortalReviewOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -9375,8 +9583,8 @@ export interface PortalSeriesOwnAccountOutputDto {
 }
 
 export enum PortalSeriesOwnAccountOutputDtoPlatformEnum {
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 }
 
 /** The month's Google reviews. */
@@ -9721,7 +9929,7 @@ export interface ReportBranch {
 	/** The last six months' closing snapshots up to the report month, oldest first */
 	ratingTrend: ReportRatingPoint[];
 	/** From T, pick a set of properties whose keys are in the union K */
-	reviews: PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars;
+	reviews: PickReportReviewStatscountwrittenpraisecomplaintsreplyRateavgStars;
 	reviewsCount?: number;
 	/** All-time Google review count per star, as of the build; absent when unknown */
 	reviewsDistribution?: ReviewsDistribution;
@@ -9941,7 +10149,7 @@ export interface ReportCompetitor {
 	/** All-time Google figures */
 	rating?: number;
 	/** From T, pick a set of properties whose keys are in the union K */
-	reviews: PickReportReviewStatscountpraisecomplaintswrittenreplyRateavgStars;
+	reviews: PickReportReviewStatscountwrittenpraisecomplaintsreplyRateavgStars;
 	reviewsCount?: number;
 	/** Whether we scrape its Google reviews at all: without, `reviews` is empty, not zero */
 	reviewsTracked: boolean;
@@ -9975,8 +10183,8 @@ export interface ReportCreator {
 
 export enum ReportCreatorPlatformEnum {
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 }
 
 /** The venue's kind of food and where it stands among the month's venues of that kind. */
@@ -10200,8 +10408,8 @@ export interface ReportNearbyCreator {
 
 export enum ReportNearbyCreatorPlatformEnum {
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 }
 
 export interface ReportNeighbour {
@@ -10320,8 +10528,8 @@ export enum ReportObservationMetricEnum {
 	Posts = 'posts',
 	Rating = 'rating',
 	Reviews = 'reviews',
-	Creators = 'creators',
 	Followers = 'followers',
+	Creators = 'creators',
 	Busyness = 'busyness',
 	WrittenReviews = 'written_reviews',
 	ReviewWeek = 'review_week',
@@ -10346,9 +10554,9 @@ export enum ReportObservationUnitEnum {
 	Index = 'index',
 	Count = 'count',
 	Rank = 'rank',
-	Share = 'share',
-	Followers = 'followers',
 	Stars = 'stars',
+	Followers = 'followers',
+	Share = 'share',
 	Points = 'points',
 }
 
@@ -10386,8 +10594,8 @@ export interface ReportOwnAccount {
 }
 
 export enum ReportOwnAccountPlatformEnum {
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 }
 
 /** Google's busiest hour, from the mean of the month's samples. */
@@ -10453,22 +10661,22 @@ export interface ReportPostDish {
 }
 
 export enum ReportPostDishSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
 
 export enum ReportPostPlatformEnum {
 	Blog = 'blog',
-	Instagram = 'instagram',
 	Tiktok = 'tiktok',
+	Instagram = 'instagram',
 }
 
 /** Worked out from its claims (`sentimentOf`) */
 export enum ReportPostSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -10611,12 +10819,6 @@ export interface ReportRatingTopicBenchmark {
 	venues: number;
 }
 
-/** A reply the owner can post under a review, in the review's language. */
-export interface ReportReplyDraft {
-	draft: string;
-	reviewId: string;
-}
-
 export interface ReportReviewGroup {
 	complaintDetails: ReportClaim[];
 	/** Construct a type with a set of properties K of type T */
@@ -10717,8 +10919,6 @@ export interface ReportReviewStats {
 	 * in reports built before themes
 	 */
 	praiseThemes?: Recordstringnumber;
-	/** Ready-to-post replies to unanswered written reviews, critical first; filled at build */
-	replyDrafts: ReportReplyDraft[];
 	/** Share of the month's reviews the owner answered, 0–1 */
 	replyRate?: number;
 	/** The same counts for 5-star reviews and the rest: what separates a 5 from a 4 */
@@ -10792,7 +10992,6 @@ export enum ReportSectionDtoKindEnum {
 	Media = 'media',
 	Creators = 'creators',
 	Reviews = 'reviews',
-	Replies = 'replies',
 	Dishes = 'dishes',
 	Places = 'places',
 	Patterns = 'patterns',
@@ -10865,6 +11064,13 @@ export interface ReportTrendRow {
 
 export type RequestLoginCodeData = VerificationTokenOutputDto;
 
+export interface ResumeScheduleData {
+	name: string;
+	status: string;
+}
+
+export type ResumeWorkflowData = AdminWorkflowActionOutputDto;
+
 /** All-time count of Google reviews per star. */
 export interface ReviewsDistribution {
 	fiveStar: number;
@@ -10927,6 +11133,8 @@ export type SendReportData = AdminReportOutputDto;
 export type SetDefaultReportTemplateData = AdminReportTemplateOutputDto;
 
 export type SetUserPasswordData = OkResponseO1;
+
+export type SetWorkflowPriorityData = AdminWorkflowPriorityOutputDto;
 
 /**
  * A report opened through a private link: the same document the admin sees, without its delivery
@@ -11044,7 +11252,7 @@ export type SplitAccountData = AdminSplitAccountOutputDto;
 
 export type SplitBrandData = AdminBrandOutputDto;
 
-export type StartPipelineRunData = AdminPipelineRunOutputDto;
+export type StartBackfillData = AdminBackfillReviewsOutputDto;
 
 /**
  * One claim a source makes (a `Statement` row). Praise is `positive`, a complaint `negative`, a
@@ -11082,8 +11290,8 @@ export enum StatementOutputDtoKindEnum {
 
 /** Absent until agent B read it, and on a Google tag */
 export enum StatementOutputDtoSentimentEnum {
-	Mixed = 'mixed',
 	Positive = 'positive',
+	Mixed = 'mixed',
 	Negative = 'negative',
 	Neutral = 'neutral',
 }
@@ -11203,6 +11411,8 @@ export interface TrendVenueRef {
 	id: string;
 	name: string;
 }
+
+export type TriggerScheduleData = AdminWorkflowActionOutputDto;
 
 export interface UAParserIBrowser {
 	major?: string;
@@ -11503,6 +11713,8 @@ export interface Visitor {
 	userAgent?: string;
 }
 
+export type WakeApifyCreditWaitersData = AdminApifyCreditWakeOutputDto;
+
 export type WriteProspectHookData = AdminProspectOutputDto;
 
 export type QueryParamsType = Record<string | number, any>;
@@ -11736,363 +11948,35 @@ credentials:"include",
  * CJS-scoped clone of apps/backend used to generate swagger.json and the API client. See bin/create-swagger.sh for the why.
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-	healthCheck = {
+	admin = {
 		/**
-		 * No description
+		 * @description Newest first; the arguments and result of each run come along (`loadInput`, `loadOutput`)
 		 *
-		 * @name CheckStatus
-		 * @request GET:/health-check
-		 * @response `200` `CheckStatusData`
+		 * @name ListWorkflows
+		 * @request GET:/admin/workflows
+		 * @response `200` `ListWorkflowsData`
 		 */
-		checkStatus: (params: RequestParams = {}) =>
-			this.request<CheckStatusData, any>({
-				path: `/health-check`,
-				method: 'GET',
-				format: 'json',
-				...params,
-			}),
-	};
-	auth = {
-		/**
-		 * No description
-		 *
-		 * @name GetMe
-		 * @request GET:/auth/me
-		 * @response `200` `GetMeData`
-		 */
-		getMe: (params: RequestParams = {}) =>
-			this.request<GetMeData, any>({
-				path: `/auth/me`,
-				method: 'GET',
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name UpdateMe
-		 * @request PATCH:/auth/me
-		 * @response `200` `UpdateMeData`
-		 */
-		updateMe: (data: UpdateMeInputDto, params: RequestParams = {}) =>
-			this.request<UpdateMeData, any>({
-				path: `/auth/me`,
-				method: 'PATCH',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name DeleteMe
-		 * @request DELETE:/auth/me
-		 * @response `200` `DeleteMeData`
-		 */
-		deleteMe: (params: RequestParams = {}) =>
-			this.request<DeleteMeData, any>({
-				path: `/auth/me`,
-				method: 'DELETE',
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * @description Mails a sign-in code to an existing account; no password involved (the venue portal).
-		 *
-		 * @name RequestLoginCode
-		 * @summary Mails a sign-in code to an existing account; no password involved (the venue portal)
-		 * @request POST:/auth/login/code
-		 * @response `201` `RequestLoginCodeData`
-		 */
-		requestLoginCode: (data: LoginCodeInputDto, params: RequestParams = {}) =>
-			this.request<RequestLoginCodeData, any>({
-				path: `/auth/login/code`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * @description Trades the code for a session, and accepts the person's open venue invites.
-		 *
-		 * @name LoginWithCode
-		 * @summary Trades the code for a session, and accepts the person's open venue invites
-		 * @request POST:/auth/login/code/verify
-		 * @response `201` `LoginWithCodeData`
-		 */
-		loginWithCode: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
-			this.request<LoginWithCodeData, any>({
-				path: `/auth/login/code/verify`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name LoginWithEmail
-		 * @request POST:/auth/login/email
-		 * @response `201` `LoginWithEmailData`
-		 */
-		loginWithEmail: (data: LoginEmailInputDto, params: RequestParams = {}) =>
-			this.request<LoginWithEmailData, any>({
-				path: `/auth/login/email`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name LoginWithMobileNumber
-		 * @request POST:/auth/login/phone
-		 * @response `201` `LoginWithMobileNumberData`
-		 */
-		loginWithMobileNumber: (data: LoginMobileNumberInputDto, params: RequestParams = {}) =>
-			this.request<LoginWithMobileNumberData, any>({
-				path: `/auth/login/phone`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name Logout
-		 * @request GET:/auth/logout
-		 * @response `200` `LogoutData`
-		 */
-		logout: (params: RequestParams = {}) =>
-			this.request<LogoutData, any>({
-				path: `/auth/logout`,
-				method: 'GET',
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name SignupWithEmail
-		 * @request POST:/auth/signup/email
-		 * @response `201` `SignupWithEmailData`
-		 */
-		signupWithEmail: (data: SignupEmailInputDto, params: RequestParams = {}) =>
-			this.request<SignupWithEmailData, any>({
-				path: `/auth/signup/email`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name SignupWithPhone
-		 * @request POST:/auth/signup/phone
-		 * @response `201` `SignupWithPhoneData`
-		 */
-		signupWithPhone: (data: SignupMobileInputDto, params: RequestParams = {}) =>
-			this.request<SignupWithPhoneData, any>({
-				path: `/auth/signup/phone`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name VerifySignup
-		 * @request POST:/auth/signup/verify
-		 * @response `201` `VerifySignupData`
-		 */
-		verifySignup: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
-			this.request<VerifySignupData, any>({
-				path: `/auth/signup/verify`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ForgotPassword
-		 * @request POST:/auth/forgot-password
-		 * @response `201` `ForgotPasswordData`
-		 */
-		forgotPassword: (data: ForgotPasswordInputDto, params: RequestParams = {}) =>
-			this.request<ForgotPasswordData, any>({
-				path: `/auth/forgot-password`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name VerifyForgotPassword
-		 * @request POST:/auth/forgot-password/verify
-		 * @response `201` `VerifyForgotPasswordData`
-		 */
-		verifyForgotPassword: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
-			this.request<VerifyForgotPasswordData, any>({
-				path: `/auth/forgot-password/verify`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ChangeForgottenPassword
-		 * @request POST:/auth/forgot-password/change
-		 * @response `201` `ChangeForgottenPasswordData`
-		 */
-		changeForgottenPassword: (
-			data: ChangeForgottenPasswordInputDto,
-			params: RequestParams = {},
-		) =>
-			this.request<ChangeForgottenPasswordData, any>({
-				path: `/auth/forgot-password/change`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ChangePassword
-		 * @request POST:/auth/change-password
-		 * @response `201` `ChangePasswordData`
-		 */
-		changePassword: (data: ChangePasswordInputDto, params: RequestParams = {}) =>
-			this.request<ChangePasswordData, any>({
-				path: `/auth/change-password`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ChangeMobileNumber
-		 * @request POST:/auth/change-mobile-number
-		 * @response `201` `ChangeMobileNumberData`
-		 */
-		changeMobileNumber: (data: ChangeMobileNumberInputDto, params: RequestParams = {}) =>
-			this.request<ChangeMobileNumberData, any>({
-				path: `/auth/change-mobile-number`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name VerifyChangeMobileNumber
-		 * @request POST:/auth/change-mobile-number/verify
-		 * @response `201` `VerifyChangeMobileNumberData`
-		 */
-		verifyChangeMobileNumber: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
-			this.request<VerifyChangeMobileNumberData, any>({
-				path: `/auth/change-mobile-number/verify`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ChangeEmail
-		 * @request POST:/auth/change-email
-		 * @response `201` `ChangeEmailData`
-		 */
-		changeEmail: (data: ChangeEmailInputDto, params: RequestParams = {}) =>
-			this.request<ChangeEmailData, any>({
-				path: `/auth/change-email`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name VerifyChangeEmail
-		 * @request POST:/auth/change-email/verify
-		 * @response `201` `VerifyChangeEmailData`
-		 */
-		verifyChangeEmail: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
-			this.request<VerifyChangeEmailData, any>({
-				path: `/auth/change-email/verify`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ListSessions
-		 * @request GET:/auth/sessions
-		 * @response `200` `ListSessionsData`
-		 */
-		listSessions: (
+		listWorkflows: (
 			query: {
+				/**
+				 * `key:value` of a workflow attribute, e.g. `cityId:<uuid>`
+				 * @pattern ^[^:]+:.+$
+				 */
+				attribute?: string;
+				/** The registered workflow name (the method's), e.g. `ingestCity` */
+				name?: string;
 				/** @min 1 */
 				page: number;
+				queue?: string;
+				schedule?: string;
 				/** @min 1 */
 				size: number;
+				status?: ListWorkflowsParamsStatusEnum;
 			},
 			params: RequestParams = {},
 		) =>
-			this.request<ListSessionsData, any>({
-				path: `/auth/sessions`,
+			this.request<ListWorkflowsData, any>({
+				path: `/admin/workflows`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -12100,17 +11984,46 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Every other session: the one asking stays signed in.
+		 * @description Every declared queue with its limits and how many runs wait on or run from it
 		 *
-		 * @name RevokeOtherSessions
-		 * @summary Every other session: the one asking stays signed in
-		 * @request DELETE:/auth/sessions
-		 * @response `200` `RevokeOtherSessionsData`
+		 * @name ListQueues
+		 * @request GET:/admin/workflows/queues
+		 * @response `200` `ListQueuesData`
 		 */
-		revokeOtherSessions: (params: RequestParams = {}) =>
-			this.request<RevokeOtherSessionsData, any>({
-				path: `/auth/sessions`,
-				method: 'DELETE',
+		listQueues: (params: RequestParams = {}) =>
+			this.request<ListQueuesData, any>({
+				path: `/admin/workflows/queues`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Every `@DurableSchedule`, as the database has it
+		 *
+		 * @name ListSchedules
+		 * @request GET:/admin/workflows/schedules
+		 * @response `200` `ListSchedulesData`
+		 */
+		listSchedules: (params: RequestParams = {}) =>
+			this.request<ListSchedulesData, any>({
+				path: `/admin/workflows/schedules`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Fires the schedule's workflow now; the run is tagged with the schedule like a cron firing
+		 *
+		 * @name TriggerSchedule
+		 * @request POST:/admin/workflows/schedules/{name}/trigger
+		 * @response `201` `TriggerScheduleData`
+		 */
+		triggerSchedule: (name: string, params: RequestParams = {}) =>
+			this.request<TriggerScheduleData, any>({
+				path: `/admin/workflows/schedules/${name}/trigger`,
+				method: 'POST',
 				format: 'json',
 				...params,
 			}),
@@ -12118,14 +12031,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * No description
 		 *
-		 * @name RevokeSession
-		 * @request DELETE:/auth/sessions/{id}
-		 * @response `200` `RevokeSessionData`
+		 * @name PauseSchedule
+		 * @request POST:/admin/workflows/schedules/{name}/pause
+		 * @response `201` `PauseScheduleData`
 		 */
-		revokeSession: (id: string, params: RequestParams = {}) =>
-			this.request<RevokeSessionData, any>({
-				path: `/auth/sessions/${id}`,
-				method: 'DELETE',
+		pauseSchedule: (name: string, params: RequestParams = {}) =>
+			this.request<PauseScheduleData, any>({
+				path: `/admin/workflows/schedules/${name}/pause`,
+				method: 'POST',
 				format: 'json',
 				...params,
 			}),
@@ -12133,21 +12046,101 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * No description
 		 *
-		 * @name RefreshToken
-		 * @request POST:/auth/refresh-token
-		 * @response `201` `RefreshTokenData`
+		 * @name ResumeSchedule
+		 * @request POST:/admin/workflows/schedules/{name}/resume
+		 * @response `201` `ResumeScheduleData`
 		 */
-		refreshToken: (data: RefreshTokenInputDto, params: RequestParams = {}) =>
-			this.request<RefreshTokenData, any>({
-				path: `/auth/refresh-token`,
+		resumeSchedule: (name: string, params: RequestParams = {}) =>
+			this.request<ResumeScheduleData, any>({
+				path: `/admin/workflows/schedules/${name}/resume`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description One run with every step it finished: what each stored, or how it failed
+		 *
+		 * @name GetWorkflow
+		 * @request GET:/admin/workflows/{id}
+		 * @response `200` `GetWorkflowData`
+		 */
+		getWorkflow: (id: string, params: RequestParams = {}) =>
+			this.request<GetWorkflowData, any>({
+				path: `/admin/workflows/${id}`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Stops it at its next step (and its children) and takes it off its queue; `resume` runs it on
+		 *
+		 * @name CancelWorkflow
+		 * @request POST:/admin/workflows/{id}/cancel
+		 * @response `201` `CancelWorkflowData`
+		 */
+		cancelWorkflow: (id: string, params: RequestParams = {}) =>
+			this.request<CancelWorkflowData, any>({
+				path: `/admin/workflows/${id}/cancel`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Runs a cancelled, failed or given-up run on from its last finished step
+		 *
+		 * @name ResumeWorkflow
+		 * @request POST:/admin/workflows/{id}/resume
+		 * @response `201` `ResumeWorkflowData`
+		 */
+		resumeWorkflow: (id: string, params: RequestParams = {}) =>
+			this.request<ResumeWorkflowData, any>({
+				path: `/admin/workflows/${id}/resume`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Sets the run's priority, and every live run's under it: `high` takes it and its children off their queues before everything `normal` waiting, and what it starts from now on is `high` too. A run already holding a queue's slot keeps it: nothing running is stopped.
+		 *
+		 * @name SetWorkflowPriority
+		 * @request POST:/admin/workflows/{id}/priority
+		 * @response `201` `SetWorkflowPriorityData`
+		 */
+		setWorkflowPriority: (
+			id: string,
+			data: AdminSetWorkflowPriorityInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<SetWorkflowPriorityData, any>({
+				path: `/admin/workflows/${id}/priority`,
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
 				format: 'json',
 				...params,
 			}),
-	};
-	admin = {
+
+		/**
+		 * @description A new run from `startStep`: the steps before it are copied from this one, the rest run again
+		 *
+		 * @name ForkWorkflow
+		 * @request POST:/admin/workflows/{id}/fork
+		 * @response `201` `ForkWorkflowData`
+		 */
+		forkWorkflow: (id: string, data: AdminForkWorkflowInputDto, params: RequestParams = {}) =>
+			this.request<ForkWorkflowData, any>({
+				path: `/admin/workflows/${id}/fork`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
 		/**
 		 * No description
 		 *
@@ -12641,6 +12634,68 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description The LLM call ledger summed by agent, model, provider, day, city, purpose or workflow
+		 *
+		 * @name LlmSpend
+		 * @request GET:/admin/llm/spend
+		 * @response `200` `LlmSpendData`
+		 */
+		llmSpend: (
+			query: {
+				/**
+				 * First day counted (UTC); the first of the current month without
+				 * @format date
+				 */
+				from?: string;
+				groupBy: LlmSpendParamsGroupByEnum;
+				/**
+				 * First day left out (UTC); tomorrow without
+				 * @format date
+				 */
+				to?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<LlmSpendData, any>({
+				path: `/admin/llm/spend`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The calls themselves, newest first
+		 *
+		 * @name ListLlmCalls
+		 * @request GET:/admin/llm/calls
+		 * @response `200` `ListLlmCallsData`
+		 */
+		listLlmCalls: (
+			query: {
+				agentId?: string;
+				/** @format uuid */
+				cityId?: string;
+				/** Only the failed calls */
+				failed?: boolean;
+				/** @min 1 */
+				page: number;
+				purpose?: string;
+				/** @min 1 */
+				size: number;
+				workflowId?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListLlmCallsData, any>({
+				path: `/admin/llm/calls`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * No description
 		 *
 		 * @name ListReviews
@@ -13087,27 +13142,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description "Find branches": queues one Google Maps search for the name in the city (about $0.20, half a minute); `branchesSearchedAt` moves when it is done.
-		 *
-		 * @name SearchBrandBranches
-		 * @request POST:/admin/brands/{id}/searches
-		 * @response `201` `SearchBrandBranchesData`
-		 */
-		searchBrandBranches: (
-			id: string,
-			data: AdminSearchBrandInputDto,
-			params: RequestParams = {},
-		) =>
-			this.request<SearchBrandBranchesData, any>({
-				path: `/admin/brands/${id}/searches`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
 		 * @description The places and brands this brand's reports compare it with.
 		 *
 		 * @name ListBrandCompetitors
@@ -13186,6 +13220,60 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<ListBrandCompetitorSuggestionsData, any>({
 				path: `/admin/brands/${id}/competitor-suggestions`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The account now: read from Apify's API on every call, our running runs' caps counted as spent, and the runs waiting for credit
+		 *
+		 * @name GetApifyCredit
+		 * @request GET:/admin/apify-credit
+		 * @response `200` `GetApifyCreditData`
+		 */
+		getApifyCredit: (params: RequestParams = {}) =>
+			this.request<GetApifyCreditData, any>({
+				path: `/admin/apify-credit`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description After buying credit or raising the limit: wakes the waiting runs the account covers now
+		 *
+		 * @name WakeApifyCreditWaiters
+		 * @request POST:/admin/apify-credit/wake
+		 * @response `201` `WakeApifyCreditWaitersData`
+		 */
+		wakeApifyCreditWaiters: (params: RequestParams = {}) =>
+			this.request<WakeApifyCreditWaitersData, any>({
+				path: `/admin/apify-credit/wake`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ListApifyRuns
+		 * @request GET:/admin/apify-runs
+		 * @response `200` `ListApifyRunsData`
+		 */
+		listApifyRuns: (
+			query: {
+				/** @min 1 */
+				page: number;
+				/** @min 1 */
+				size: number;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListApifyRunsData, any>({
+				path: `/admin/apify-runs`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -14269,23 +14357,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Reads a month's stored posts again for the "just opened" flag only (`MentionExtractionService.reflagOpenings`): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero.
-		 *
-		 * @name ReflagOpenings
-		 * @request POST:/admin/mentions/reflag-openings
-		 * @response `201` `ReflagOpeningsData`
-		 */
-		reflagOpenings: (data: AdminReflagOpeningsInputDto, params: RequestParams = {}) =>
-			this.request<ReflagOpeningsData, any>({
-				path: `/admin/mentions/reflag-openings`,
-				method: 'POST',
-				body: data,
-				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
 		 * No description
 		 *
 		 * @name ListReports
@@ -14330,7 +14401,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Builds (or rebuilds) a brand's reports on its branches in a city, or (no `cityId`) in all its cities, for a month: one per active configuration (or the default), or only `configId`'s. Returns the first. Takes a few seconds: LLM calls.
+		 * @description Starts building (or rebuilding) a brand's reports on its branches in a city, or (no `cityId`) in all its cities, for a month, in the background (`report-build` on the `reports` queue, one in flight per brand, city, month and configuration): one per active configuration (or the default), or only `configId`'s. Returns the run, which `GET /admin/reports/runs/:workflowId` follows until it names the reports; it waits for an LLM account when none can serve. 400 at once when the brand has no open branch there.
 		 *
 		 * @name BuildReport
 		 * @request POST:/admin/reports
@@ -14410,7 +14481,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Runs the analysis ("what moved, and why it might have") again on the report's stored data: the observations, their checks, the agent and the line check. Written on every report of that build (they share one data). The highlights are not rewritten: Rebuild does that. Takes up to a few minutes: an agent call with tools.
+		 * @description Starts the analysis ("what moved, and why it might have") again on the report's stored data, in the background (`report-analyse` on the `reports` queue, one in flight per report): the observations, their checks, the agent and the line check, written on every report of that build (they share one data). The highlights are not rewritten: Rebuild does that. Returns the run, which `GET /admin/reports/runs/:workflowId` follows; it waits for an LLM account when none can serve. 404 for an unknown report.
 		 *
 		 * @name AnalyseReport
 		 * @request POST:/admin/reports/{id}/analyse
@@ -14420,6 +14491,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<AnalyseReportData, any>({
 				path: `/admin/reports/${id}/analyse`,
 				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Where a report build or analysis is: queued, running, waiting for an LLM account (which agent, until when), done (the reports it wrote) or failed (why). 404 for any other run.
+		 *
+		 * @name GetReportRun
+		 * @request GET:/admin/reports/runs/{workflowId}
+		 * @response `200` `GetReportRunData`
+		 */
+		getReportRun: (workflowId: string, params: RequestParams = {}) =>
+			this.request<GetReportRunData, any>({
+				path: `/admin/reports/runs/${workflowId}`,
+				method: 'GET',
 				format: 'json',
 				...params,
 			}),
@@ -14798,40 +14884,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		/**
 		 * No description
 		 *
-		 * @name ListPipelineRuns
-		 * @request GET:/admin/pipeline-runs
-		 * @response `200` `ListPipelineRunsData`
+		 * @name StartBackfill
+		 * @request POST:/admin/backfill-reviews
+		 * @response `201` `StartBackfillData`
 		 */
-		listPipelineRuns: (
-			query: {
-				/** @format uuid */
-				cityId?: string;
-				/** @min 1 */
-				page: number;
-				/** @min 1 */
-				size: number;
-			},
-			params: RequestParams = {},
-		) =>
-			this.request<ListPipelineRunsData, any>({
-				path: `/admin/pipeline-runs`,
-				method: 'GET',
-				query: query,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * @description Queues a step (or the whole monthly run). It runs in the background, one run at a time.
-		 *
-		 * @name StartPipelineRun
-		 * @summary Queues a step (or the whole monthly run). It runs in the background, one run at a time
-		 * @request POST:/admin/pipeline-runs
-		 * @response `201` `StartPipelineRunData`
-		 */
-		startPipelineRun: (data: AdminStartPipelineRunInputDto, params: RequestParams = {}) =>
-			this.request<StartPipelineRunData, any>({
-				path: `/admin/pipeline-runs`,
+		startBackfill: (data: AdminBackfillReviewsInputDto, params: RequestParams = {}) =>
+			this.request<StartBackfillData, any>({
+				path: `/admin/backfill-reviews`,
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
@@ -14840,43 +14899,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Fills competitors for the month's report venues that have none. Free: SQL only.
+		 * @description "Find branches": starts the brand's search in the city (`brand-branch-search.brand`, about $0.20 and half a minute; one in flight per brand and city); `branchesSearchedAt` moves when it is done, which the page polls for. `high`: an admin waits on it, so its actor run passes the pipeline's on the `apify` queue.
 		 *
-		 * @name FillCompetitors
-		 * @summary Fills competitors for the month's report venues that have none. Free: SQL only
-		 * @request POST:/admin/pipeline/fill-competitors
-		 * @response `201` `FillCompetitorsData`
+		 * @name SearchBrandBranches
+		 * @request POST:/admin/brands/{id}/searches
+		 * @response `201` `SearchBrandBranchesData`
 		 */
-		fillCompetitors: (data: AdminFillCompetitorsInputDto, params: RequestParams = {}) =>
-			this.request<FillCompetitorsData, any>({
-				path: `/admin/pipeline/fill-competitors`,
+		searchBrandBranches: (
+			id: string,
+			data: AdminSearchBrandInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<SearchBrandBranchesData, any>({
+				path: `/admin/brands/${id}/searches`,
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
-				format: 'json',
-				...params,
-			}),
-
-		/**
-		 * No description
-		 *
-		 * @name ListApifyRuns
-		 * @request GET:/admin/apify-runs
-		 * @response `200` `ListApifyRunsData`
-		 */
-		listApifyRuns: (
-			query: {
-				/** @min 1 */
-				page: number;
-				/** @min 1 */
-				size: number;
-			},
-			params: RequestParams = {},
-		) =>
-			this.request<ListApifyRunsData, any>({
-				path: `/admin/apify-runs`,
-				method: 'GET',
-				query: query,
 				format: 'json',
 				...params,
 			}),
@@ -14903,6 +14941,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				path: `/admin/creators/${id}/watch`,
 				method: 'GET',
 				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Reads a month's stored posts again for the "just opened" flag only (`ReflagOpeningsWorkflow.reflagPage`, a workflow it awaits): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero. `high`: the admin waits on the request, so the page's agent calls pass the pipeline's on the `llm` queue.
+		 *
+		 * @name ReflagOpenings
+		 * @request POST:/admin/mentions/reflag-openings
+		 * @response `201` `ReflagOpeningsData`
+		 */
+		reflagOpenings: (data: AdminReflagOpeningsInputDto, params: RequestParams = {}) =>
+			this.request<ReflagOpeningsData, any>({
+				path: `/admin/mentions/reflag-openings`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
 				format: 'json',
 				...params,
 			}),
@@ -15911,6 +15966,417 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				...params,
 			}),
 	};
+	auth = {
+		/**
+		 * No description
+		 *
+		 * @name GetMe
+		 * @request GET:/auth/me
+		 * @response `200` `GetMeData`
+		 */
+		getMe: (params: RequestParams = {}) =>
+			this.request<GetMeData, any>({
+				path: `/auth/me`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name UpdateMe
+		 * @request PATCH:/auth/me
+		 * @response `200` `UpdateMeData`
+		 */
+		updateMe: (data: UpdateMeInputDto, params: RequestParams = {}) =>
+			this.request<UpdateMeData, any>({
+				path: `/auth/me`,
+				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name DeleteMe
+		 * @request DELETE:/auth/me
+		 * @response `200` `DeleteMeData`
+		 */
+		deleteMe: (params: RequestParams = {}) =>
+			this.request<DeleteMeData, any>({
+				path: `/auth/me`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Mails a sign-in code to an existing account; no password involved (the venue portal).
+		 *
+		 * @name RequestLoginCode
+		 * @summary Mails a sign-in code to an existing account; no password involved (the venue portal)
+		 * @request POST:/auth/login/code
+		 * @response `201` `RequestLoginCodeData`
+		 */
+		requestLoginCode: (data: LoginCodeInputDto, params: RequestParams = {}) =>
+			this.request<RequestLoginCodeData, any>({
+				path: `/auth/login/code`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Trades the code for a session, and accepts the person's open venue invites.
+		 *
+		 * @name LoginWithCode
+		 * @summary Trades the code for a session, and accepts the person's open venue invites
+		 * @request POST:/auth/login/code/verify
+		 * @response `201` `LoginWithCodeData`
+		 */
+		loginWithCode: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
+			this.request<LoginWithCodeData, any>({
+				path: `/auth/login/code/verify`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name LoginWithEmail
+		 * @request POST:/auth/login/email
+		 * @response `201` `LoginWithEmailData`
+		 */
+		loginWithEmail: (data: LoginEmailInputDto, params: RequestParams = {}) =>
+			this.request<LoginWithEmailData, any>({
+				path: `/auth/login/email`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name LoginWithMobileNumber
+		 * @request POST:/auth/login/phone
+		 * @response `201` `LoginWithMobileNumberData`
+		 */
+		loginWithMobileNumber: (data: LoginMobileNumberInputDto, params: RequestParams = {}) =>
+			this.request<LoginWithMobileNumberData, any>({
+				path: `/auth/login/phone`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name Logout
+		 * @request GET:/auth/logout
+		 * @response `200` `LogoutData`
+		 */
+		logout: (params: RequestParams = {}) =>
+			this.request<LogoutData, any>({
+				path: `/auth/logout`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name SignupWithEmail
+		 * @request POST:/auth/signup/email
+		 * @response `201` `SignupWithEmailData`
+		 */
+		signupWithEmail: (data: SignupEmailInputDto, params: RequestParams = {}) =>
+			this.request<SignupWithEmailData, any>({
+				path: `/auth/signup/email`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name SignupWithPhone
+		 * @request POST:/auth/signup/phone
+		 * @response `201` `SignupWithPhoneData`
+		 */
+		signupWithPhone: (data: SignupMobileInputDto, params: RequestParams = {}) =>
+			this.request<SignupWithPhoneData, any>({
+				path: `/auth/signup/phone`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name VerifySignup
+		 * @request POST:/auth/signup/verify
+		 * @response `201` `VerifySignupData`
+		 */
+		verifySignup: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
+			this.request<VerifySignupData, any>({
+				path: `/auth/signup/verify`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ForgotPassword
+		 * @request POST:/auth/forgot-password
+		 * @response `201` `ForgotPasswordData`
+		 */
+		forgotPassword: (data: ForgotPasswordInputDto, params: RequestParams = {}) =>
+			this.request<ForgotPasswordData, any>({
+				path: `/auth/forgot-password`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name VerifyForgotPassword
+		 * @request POST:/auth/forgot-password/verify
+		 * @response `201` `VerifyForgotPasswordData`
+		 */
+		verifyForgotPassword: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
+			this.request<VerifyForgotPasswordData, any>({
+				path: `/auth/forgot-password/verify`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ChangeForgottenPassword
+		 * @request POST:/auth/forgot-password/change
+		 * @response `201` `ChangeForgottenPasswordData`
+		 */
+		changeForgottenPassword: (
+			data: ChangeForgottenPasswordInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<ChangeForgottenPasswordData, any>({
+				path: `/auth/forgot-password/change`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ChangePassword
+		 * @request POST:/auth/change-password
+		 * @response `201` `ChangePasswordData`
+		 */
+		changePassword: (data: ChangePasswordInputDto, params: RequestParams = {}) =>
+			this.request<ChangePasswordData, any>({
+				path: `/auth/change-password`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ChangeMobileNumber
+		 * @request POST:/auth/change-mobile-number
+		 * @response `201` `ChangeMobileNumberData`
+		 */
+		changeMobileNumber: (data: ChangeMobileNumberInputDto, params: RequestParams = {}) =>
+			this.request<ChangeMobileNumberData, any>({
+				path: `/auth/change-mobile-number`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name VerifyChangeMobileNumber
+		 * @request POST:/auth/change-mobile-number/verify
+		 * @response `201` `VerifyChangeMobileNumberData`
+		 */
+		verifyChangeMobileNumber: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
+			this.request<VerifyChangeMobileNumberData, any>({
+				path: `/auth/change-mobile-number/verify`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ChangeEmail
+		 * @request POST:/auth/change-email
+		 * @response `201` `ChangeEmailData`
+		 */
+		changeEmail: (data: ChangeEmailInputDto, params: RequestParams = {}) =>
+			this.request<ChangeEmailData, any>({
+				path: `/auth/change-email`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name VerifyChangeEmail
+		 * @request POST:/auth/change-email/verify
+		 * @response `201` `VerifyChangeEmailData`
+		 */
+		verifyChangeEmail: (data: VerifyCredentialInputDto, params: RequestParams = {}) =>
+			this.request<VerifyChangeEmailData, any>({
+				path: `/auth/change-email/verify`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name ListSessions
+		 * @request GET:/auth/sessions
+		 * @response `200` `ListSessionsData`
+		 */
+		listSessions: (
+			query: {
+				/** @min 1 */
+				page: number;
+				/** @min 1 */
+				size: number;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<ListSessionsData, any>({
+				path: `/auth/sessions`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Every other session: the one asking stays signed in.
+		 *
+		 * @name RevokeOtherSessions
+		 * @summary Every other session: the one asking stays signed in
+		 * @request DELETE:/auth/sessions
+		 * @response `200` `RevokeOtherSessionsData`
+		 */
+		revokeOtherSessions: (params: RequestParams = {}) =>
+			this.request<RevokeOtherSessionsData, any>({
+				path: `/auth/sessions`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name RevokeSession
+		 * @request DELETE:/auth/sessions/{id}
+		 * @response `200` `RevokeSessionData`
+		 */
+		revokeSession: (id: string, params: RequestParams = {}) =>
+			this.request<RevokeSessionData, any>({
+				path: `/auth/sessions/${id}`,
+				method: 'DELETE',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * No description
+		 *
+		 * @name RefreshToken
+		 * @request POST:/auth/refresh-token
+		 * @response `201` `RefreshTokenData`
+		 */
+		refreshToken: (data: RefreshTokenInputDto, params: RequestParams = {}) =>
+			this.request<RefreshTokenData, any>({
+				path: `/auth/refresh-token`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+	};
+	healthCheck = {
+		/**
+		 * No description
+		 *
+		 * @name CheckStatus
+		 * @request GET:/health-check
+		 * @response `200` `CheckStatusData`
+		 */
+		checkStatus: (params: RequestParams = {}) =>
+			this.request<CheckStatusData, any>({
+				path: `/health-check`,
+				method: 'GET',
+				format: 'json',
+				...params,
+			}),
+	};
 	notifications = {
 		/**
 		 * No description
@@ -16269,7 +16735,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it says (`statements`); reply drafts under unanswered ones. The topic filter is any claim under the aspect root.
+		 * @description The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it says (`statements`). The topic filter is any claim under the aspect root.
 		 *
 		 * @name ListPortalReviews
 		 * @request GET:/portal/brands/{brandId}/reviews

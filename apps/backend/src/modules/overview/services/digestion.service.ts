@@ -185,7 +185,6 @@ export class DigestionService {
 					'text',
 					'textTranslated',
 					'ownerResponse',
-					'replyDraft',
 					...DIGESTED_REVIEW_EXCLUDE,
 				],
 			}) as unknown as AdminDigestionReviewRowOutputDto,

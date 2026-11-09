@@ -53,7 +53,6 @@ export const ANALYST_DENIED_TABLES = [
 	'newsletter_subscribers',
 	'brand_members',
 	'notifications',
-	'embeddings',
 	'migrations',
 	'analyst_threads',
 	'analyst_messages',

@@ -2,16 +2,11 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { ApifyRun, ApifyRunStatusEnum } from 'src/modules/apify/entities/apify-run.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
-import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
-import {
-	PipelineRun,
-	PipelineRunStatusEnum,
-} from 'src/modules/pipeline/entities/pipeline-run.entity.js';
-import { nextMonthlyRunAt } from 'src/modules/pipeline/util/monthly-schedule.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import type {
 	ReportData,
@@ -26,6 +21,9 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { OverviewService } from '../services/overview.service.js';
+import { nextMonthlyRunAt } from '../util/monthly-schedule.js';
+
+import { fakeDurable } from './fake-durable.js';
 
 describe('nextMonthlyRunAt', () => {
 	it('is the 2nd at 06:00 UTC, this month until it has passed', () => {
@@ -44,12 +42,14 @@ describe('nextMonthlyRunAt', () => {
 describe('OverviewService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: OverviewService;
+	const durable = fakeDurable();
 	const now = new Date('2026-10-17T09:00:00Z');
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				OverviewService,
+				{ provide: DurableWorkflowsService, useValue: durable },
 				OutreachService,
 				ProspectQueryService,
 				BrandLeadScoreService,
@@ -95,21 +95,25 @@ describe('OverviewService (pglite)', () => {
 		const later = venue('Later');
 		venue('Suggested', 80);
 
-		em.create(PipelineRun, {
-			city: testCity(em),
-			step: PipelineStepEnum.MONTHLY,
-			month: '2026-09',
-			status: PipelineRunStatusEnum.FAILED,
-			error: 'Apify said no',
-			createdAt: new Date('2026-10-02T06:00:00Z'),
-		});
-		em.create(PipelineRun, {
-			city: testCity(em),
-			step: PipelineStepEnum.SCORE_LEADS,
-			month: '2026-10',
-			status: PipelineRunStatusEnum.SUCCEEDED,
-			createdAt: new Date('2026-10-17T08:00:00Z'),
-		});
+		const cityId = 'city-1';
+		// The newest month run failed; a daily run since succeeded (DBOS's runs, faked)
+		durable.state.runs = [
+			{
+				workflowID: `scrape-reviews.month-${cityId}-2026-09`,
+				workflowName: 'scrape-reviews.month',
+				status: 'ERROR',
+				error: { message: 'Apify said no' },
+				attributes: { cityId, purpose: 'scrape-reviews', period: '2026-09' },
+				createdAt: '2026-10-02T06:00:00Z',
+			},
+			{
+				workflowID: `post-counts.day-${cityId}-2026-10-17`,
+				workflowName: 'post-counts.day',
+				status: 'SUCCESS',
+				attributes: { cityId, purpose: 'post-counts', period: '2026-10-17' },
+				createdAt: '2026-10-17T08:00:00Z',
+			},
+		];
 		const apifyRun = (costUsd: number, createdAt?: Date) =>
 			em.create(ApifyRun, {
 				actorId: 'actor',
@@ -170,13 +174,15 @@ describe('OverviewService (pglite)', () => {
 		const overview = await service.get(now);
 
 		expect(overview.lastMonthlyRun).toMatchObject({
-			step: PipelineStepEnum.MONTHLY,
-			status: PipelineRunStatusEnum.FAILED,
+			workflow: 'scrape-reviews.month',
+			status: 'ERROR',
+			period: '2026-09',
 			error: 'Apify said no',
 		});
 		expect(overview.lastRun).toMatchObject({
-			step: PipelineStepEnum.SCORE_LEADS,
-			city: { name: expect.any(String) },
+			workflow: 'post-counts.day',
+			status: 'SUCCESS',
+			cityId: expect.any(String),
 		});
 		expect(overview.apifyMonthCostUsd).toBeCloseTo(3.75);
 		expect(overview.reportsBuilt).toBe(1);

@@ -12,7 +12,9 @@ import { SocialPost } from './social-post.entity.js';
  */
 @Entity({ tableName: 'social_post_snapshots' })
 @Index({ properties: ['post', 'at'] })
-export class SocialPostSnapshot extends MikroOrmEntityAbstractClass<'views' | 'likes' | 'shares' | 'comments' | 'saves'> {
+export class SocialPostSnapshot extends MikroOrmEntityAbstractClass<
+	'views' | 'likes' | 'shares' | 'comments' | 'saves'
+> {
 	@ManyToOne({ entity: () => SocialPost, deleteRule: 'cascade' })
 	post: Rel<SocialPost>;
 

@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { Check, Copy, Undo2 } from '@lucide/svelte';
+	import { Check, Undo2 } from '@lucide/svelte';
 	import type { PortalReviewOutputDto } from 'client';
 
 	import { api } from '#lib/api.js';
 	import { rootsOf } from '#lib/statements.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
-	import { notificationManager } from '#ui/lib/notification-manager.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import Stars from '#views/report/Stars.svelte';
 
 	// One Google or TripAdvisor review: the words, the topics it raised, the owner's answer, and for an
-	// unanswered one the reply draft to copy and the "I answered it" mark.
+	// unanswered one the "I answered it" mark.
 	interface Props {
 		brandId: string;
 		review: PortalReviewOutputDto;
@@ -62,22 +61,6 @@
 		}
 	);
 
-	const copyDraft = async () => {
-		try {
-			await navigator.clipboard.writeText(review.replyDraft ?? '');
-			notificationManager.addNotification({
-				title: 'Reply copied',
-				text: `Paste it under the review on ${site}.`,
-				success: true
-			});
-		} catch {
-			notificationManager.addNotification({
-				title: "Couldn't copy",
-				text: 'Select the text and copy it by hand.',
-				error: true
-			});
-		}
-	};
 </script>
 
 <article class="flex flex-col gap-3 px-4 py-4 sm:px-5">
@@ -152,16 +135,6 @@
 			<p class="text-muted-foreground m-0 line-clamp-4 text-sm leading-snug">
 				{review.ownerResponse}
 			</p>
-		</div>
-	{/if}
-
-	{#if review.replyDraft}
-		<div class="bg-tint flex flex-col gap-2 rounded-md px-3.5 py-3">
-			<p class="eyebrow text-beet m-0">Reply draft</p>
-			<p class="text-ink m-0 text-sm leading-relaxed whitespace-pre-line">{review.replyDraft}</p>
-			<div class="flex flex-wrap gap-2">
-				<Button variant="outline" size="sm" icon={Copy} onclick={copyDraft}>Copy reply</Button>
-			</div>
 		</div>
 	{/if}
 

@@ -3,12 +3,12 @@ import { Injectable, Logger } from '@nestjs/common';
 import _ from 'lodash';
 import { createHash } from 'node:crypto';
 
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
 import { claimLabelAspects, claimLabelsRules } from 'src/modules/statements/util/claim-labels.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
-import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
 import {
 	nameSimilarity,
 	namesSameHead,

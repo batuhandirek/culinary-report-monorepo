@@ -3,6 +3,12 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 
+import _ from 'lodash';
+
+import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import type { ActorCall } from 'src/modules/apify/actors/actor.js';
+import type { TheForkInput, TheForkItem } from 'src/modules/apify/actors/thefork.actor.js';
+import type { OpenTableItem } from 'src/modules/apify/actors/opentable.actor.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 
 import { Venue } from '../entities/venue.entity.js';
@@ -13,13 +19,19 @@ import {
 import {
 	PartialAvailabilityError,
 	type ReservationAvailability,
-	type ReservationAvailabilityProvider,
 	type ReservationTarget,
 } from '../interfaces/reservation-availability.interface.js';
-import { comingWeekendEvenings, reservationPlatformOf, reservationUrlOf } from '../util/reservations.js';
+import {
+	comingWeekendEvenings,
+	reservationPlatformOf,
+	reservationUrlOf,
+} from '../util/reservations.js';
 
 import { GoogleReserveAvailabilityService } from './google-reserve-availability.service.js';
-import { OpenTableAvailabilityService } from './opentable-availability.service.js';
+import {
+	OpenTableAvailabilityService,
+	type OpenTableRun,
+} from './opentable-availability.service.js';
 import { TheForkAvailabilityService } from './thefork-availability.service.js';
 
 /** One venue's evening as `cityEvenings` reads it: booked out 0–100, from its latest sample. */
@@ -42,6 +54,27 @@ export interface ReservationSampleResult {
 	byPlatform: Record<string, number>;
 }
 
+/** What `planSample` hands the `sample-reservations` workflow: the targets per platform and the paid runs */
+export interface ReservationPlan {
+	/** The coming Friday and Saturday (`YYYY-MM-DD`) */
+	dates: string[];
+	venues: number;
+	noPlatform: number;
+	capped: number;
+	/** Google's own booking page: fetched in a step, free */
+	google: ReservationTarget[];
+	/** TheFork: one run for every target */
+	thefork: { targets: ReservationTarget[]; call: ActorCall<TheForkInput, TheForkItem> } | null;
+	/** OpenTable: one run per domain and date */
+	opentable: OpenTableRun[];
+}
+
+/** The paid runs' records, as the workflow hands them to `saveSamples`: null for a run that failed */
+export interface ReservationRecords {
+	thefork?: string | null;
+	opentable: (string | null)[];
+}
+
 /**
  * The one writer of `VenueReservationSample` (and of `Venue.reservationPartner`): open evening
  * tables on the coming Friday and Saturday, asked of the booking page a venue's hand-set
@@ -51,20 +84,14 @@ export interface ReservationSampleResult {
 @Injectable()
 export class VenueReservationService {
 	private readonly logger = new Logger(VenueReservationService.name);
-	private readonly providers: Map<ReservationPlatformEnum, ReservationAvailabilityProvider>;
 
 	constructor(
 		private readonly em: EntityManager,
-		theFork: TheForkAvailabilityService,
-		openTable: OpenTableAvailabilityService,
-		google: GoogleReserveAvailabilityService,
-	) {
-		this.providers = new Map<ReservationPlatformEnum, ReservationAvailabilityProvider>([
-			[theFork.platform, theFork],
-			[openTable.platform, openTable],
-			[google.platform, google],
-		]);
-	}
+		private readonly apifyService: ApifyService,
+		private readonly theFork: TheForkAvailabilityService,
+		private readonly openTable: OpenTableAvailabilityService,
+		private readonly google: GoogleReserveAvailabilityService,
+	) {}
 
 	/**
 	 * Where each venue books, if it is a platform we can sample, in the venues' order; at most
@@ -84,65 +111,166 @@ export class VenueReservationService {
 			if (count++ >= maxVenues) break;
 			byPlatform.set(platform, [
 				...(byPlatform.get(platform) ?? []),
-				{ venueId: venue.id, name: venue.name, url, cityName: city.name, timeZone: city.timezone },
+				{
+					venueId: venue.id,
+					name: venue.name,
+					url,
+					cityName: city.name,
+					timeZone: city.timezone,
+				},
 			]);
 		}
 		return byPlatform;
 	}
 
 	/**
-	 * Samples these venues (in priority order; the first `maxVenues` with a sampleable link) for
-	 * the coming Friday and Saturday evening, in the city's time zone. The budget is split evenly
-	 * between the paid platforms in use; Google's page costs nothing. Flushes.
+	 * The city's open venues in the order `sample`'s cap cuts them: the `won` brands' branches, the
+	 * month's other `report` brands' branches, their competitors (`competitorVenueIds`), then the
+	 * rest by their brand's lead score (in tens). Each band is shuffled, so Google sees no fixed
+	 * order from one run to the next. Venues without a booking link come last: the run counts them
+	 * as `noPlatform`.
 	 */
-	async sample(
+	async sampleOrder(
+		cityId: string,
+		bands: { won: string[]; report: string[]; competitorVenueIds: string[] },
+	): Promise<Venue[]> {
+		const venues = await this.em.find(
+			Venue,
+			{ city: cityId, closed: false },
+			{
+				orderBy: [
+					{ brand: { leadScore: QueryOrder.DESC_NULLS_LAST } },
+					{ id: QueryOrder.ASC },
+				],
+			},
+		);
+		const [linked, unlinked] = _.partition(venues, v => reservationUrlOf(v));
+		const band = (venue: Venue) =>
+			bands.won.includes(venue.brand.id) ? 0
+			: bands.report.includes(venue.brand.id) ? 1
+			: bands.competitorVenueIds.includes(venue.id) ? 2
+			: 3;
+		const byBand = _.groupBy(linked, band);
+		// The rest keep their lead-score order between groups of ten, shuffled inside each
+		return [
+			...[0, 1, 2, 3].flatMap(b =>
+				b < 3 ?
+					_.shuffle(byBand[b] ?? [])
+				:	_.chunk(byBand[b] ?? [], 10).flatMap(chunk => _.shuffle(chunk)),
+			),
+			...unlinked,
+		];
+	}
+
+	/**
+	 * The `sample-reservations` plan: where each venue books (a platform we can sample, in the
+	 * venues' order, at most `maxVenues`), the coming weekend's evenings, and the paid platforms'
+	 * runs, each on its share of the budget (the free Google page takes none).
+	 */
+	planSample(
 		venues: Venue[],
 		city: Pick<City, 'name' | 'timezone'>,
 		budgetUsd: number,
 		{ now = new Date(), maxVenues = Infinity }: { now?: Date; maxVenues?: number } = {},
-	): Promise<ReservationSampleResult> {
+	): ReservationPlan {
 		const linked = venues.filter(v => reservationUrlOf(v)).length;
 		const targets = this.targets(venues, city, maxVenues);
 		const taken = [...targets.values()].reduce((n, list) => n + list.length, 0);
 		const dates = comingWeekendEvenings(now, city.timezone);
-		const paid = [...targets.keys()].filter(p => !this.providers.get(p)?.free).length;
-		const byId = new Map(venues.map(v => [v.id, v]));
+		const thefork = targets.get(ReservationPlatformEnum.THEFORK) ?? [];
+		const opentable = targets.get(ReservationPlatformEnum.OPENTABLE) ?? [];
+		const paid = [thefork, opentable].filter(list => list.length).length;
+		return {
+			dates,
+			venues: venues.length,
+			noPlatform: venues.length - linked,
+			capped: linked - taken,
+			google: targets.get(ReservationPlatformEnum.GOOGLE) ?? [],
+			thefork:
+				thefork.length ?
+					{ targets: thefork, call: this.theFork.call(thefork, budgetUsd / paid) }
+				:	null,
+			opentable: this.openTable.calls(opentable, dates, budgetUsd / paid),
+		};
+	}
+
+	/**
+	 * Google's own booking pages, fetched (free, paced): the samples written, with each venue's
+	 * partner. A captcha or a failed load stops the fetch; the samples taken before it are kept
+	 * and the error returned, so the run can fail once the other platforms are saved. Flushes.
+	 */
+	async sampleGoogle(
+		targets: ReservationTarget[],
+		dates: string[],
+		now: Date,
+	): Promise<{ found: number; error?: string }> {
+		if (!targets.length) return { found: 0 };
+		let found: ReservationAvailability[];
+		let error: string | undefined;
+		try {
+			found = await this.google.availability(targets, dates);
+		} catch (e) {
+			found = e instanceof PartialAvailabilityError ? e.found : [];
+			error = (e as Error).message;
+			this.logger.error(`google availability failed: ${error}`);
+		}
+		await this.writeSamples(ReservationPlatformEnum.GOOGLE, found, now);
+		await this.em.flush();
+		return { found: found.length, ...(error && { error }) };
+	}
+
+	/**
+	 * The paid runs' items read from their rows and written as samples (a failed run, `null`,
+	 * contributes none); the samples per platform. Flushes.
+	 */
+	async saveSamples(
+		plan: ReservationPlan,
+		records: ReservationRecords,
+		now: Date,
+	): Promise<Record<string, number>> {
 		const byPlatform: Record<string, number> = {};
-		let samples = 0;
-		const errors: string[] = [];
-		for (const [platform, list] of targets) {
-			const provider = this.providers.get(platform);
-			if (!provider) continue;
-			let found: ReservationAvailability[];
-			try {
-				found = await provider.availability(list, dates, provider.free ? 0 : budgetUsd / paid);
-			} catch (e) {
-				// One platform failing keeps the other's samples (and its own, taken before it
-				// stopped), then fails the run
-				found = e instanceof PartialAvailabilityError ? e.found : [];
-				errors.push(`${platform}: ${(e as Error).message}`);
-				this.logger.error(`${platform} availability failed: ${(e as Error).message}`);
-			}
-			for (const a of found) {
-				const venue = byId.get(a.venueId) ?? this.em.getReference(Venue, a.venueId);
-				this.em.create(VenueReservationSample, {
-					venue,
-					platform,
-					sampledAt: now,
-					forDate: a.forDate,
-					slotsOpen: a.slotsOpen,
-					slotsAsked: a.slotsAsked,
-					partySize: a.partySize,
-				});
-				// Every Google sample rewrites the partner, so a venue that moves platform updates
-				if (a.partner !== undefined) venue.reservationPartner = a.partner;
-			}
-			byPlatform[platform] = found.length;
-			samples += found.length;
+		if (plan.thefork && records.thefork) {
+			const items = await this.apifyService.storedItems<TheForkItem>(records.thefork);
+			const found = this.theFork.read(plan.thefork.targets, items, plan.dates);
+			await this.writeSamples(ReservationPlatformEnum.THEFORK, found, now);
+			byPlatform[ReservationPlatformEnum.THEFORK] = found.length;
+		}
+		for (const [index, run] of plan.opentable.entries()) {
+			const recordId = records.opentable[index];
+			if (!recordId) continue;
+			const items = await this.apifyService.storedItems<OpenTableItem>(recordId);
+			const found = this.openTable.read(run, items);
+			await this.writeSamples(ReservationPlatformEnum.OPENTABLE, found, now);
+			byPlatform[ReservationPlatformEnum.OPENTABLE] =
+				(byPlatform[ReservationPlatformEnum.OPENTABLE] ?? 0) + found.length;
 		}
 		await this.em.flush();
-		if (errors.length) throw new Error(`Reservation sampling failed (${errors.join('; ')})`);
-		return { venues: venues.length, noPlatform: venues.length - linked, capped: linked - taken, samples, byPlatform };
+		return byPlatform;
+	}
+
+	/** One sample row per availability; every Google sample rewrites the partner, so a venue that moves platform updates */
+	private async writeSamples(
+		platform: ReservationPlatformEnum,
+		found: ReservationAvailability[],
+		now: Date,
+	): Promise<void> {
+		const venues = await this.em.find(Venue, {
+			id: { $in: _.uniq(found.map(a => a.venueId)) },
+		});
+		const byId = new Map(venues.map(v => [v.id, v]));
+		for (const a of found) {
+			const venue = byId.get(a.venueId) ?? this.em.getReference(Venue, a.venueId);
+			this.em.create(VenueReservationSample, {
+				venue,
+				platform,
+				sampledAt: now,
+				forDate: a.forDate,
+				slotsOpen: a.slotsOpen,
+				slotsAsked: a.slotsAsked,
+				partySize: a.partySize,
+			});
+			if (a.partner !== undefined) venue.reservationPartner = a.partner;
+		}
 	}
 
 	/**
@@ -164,11 +292,18 @@ export class VenueReservationService {
 	}
 
 	/** A venue's (or several venues') samples for evenings in `[fromDate, toDate)` (`YYYY-MM-DD`), oldest first. */
-	async between(venueIds: string | string[], fromDate: string, toDate: string): Promise<VenueReservationSample[]> {
+	async between(
+		venueIds: string | string[],
+		fromDate: string,
+		toDate: string,
+	): Promise<VenueReservationSample[]> {
 		if (Array.isArray(venueIds) && venueIds.length === 0) return [];
 		return this.em.find(
 			VenueReservationSample,
-			{ venue: Array.isArray(venueIds) ? { $in: venueIds } : venueIds, forDate: { $gte: fromDate, $lt: toDate } },
+			{
+				venue: Array.isArray(venueIds) ? { $in: venueIds } : venueIds,
+				forDate: { $gte: fromDate, $lt: toDate },
+			},
 			{ orderBy: { forDate: QueryOrder.ASC, sampledAt: QueryOrder.ASC } },
 		);
 	}
@@ -178,20 +313,33 @@ export class VenueReservationService {
 	 * evening (its latest sample), with the venue's district: what district and city medians are
 	 * taken over. One query. `excludeVenueId` leaves the venue being compared out.
 	 */
-	async cityEvenings(cityId: string, dates: string[], excludeVenueId?: string): Promise<CityEveningBooked[]> {
+	async cityEvenings(
+		cityId: string,
+		dates: string[],
+		excludeVenueId?: string,
+	): Promise<CityEveningBooked[]> {
 		if (dates.length === 0) return [];
-		const rows: { venue_id: string; district: string | null; for_date: string; booked: number }[] =
-			await this.em.getConnection().execute(
-				`select distinct on (s.venue_id, s.for_date)
+		const rows: {
+			venue_id: string;
+			district: string | null;
+			for_date: string;
+			booked: number;
+		}[] = await this.em.getConnection().execute(
+			`select distinct on (s.venue_id, s.for_date)
 					s.venue_id, v.district, s.for_date,
 					(1 - least(s.slots_open, s.slots_asked)::float / s.slots_asked) * 100 as booked
 				from venue_reservation_samples s join venues v on v.id = s.venue_id
 				where v.city_id = ? and s.slots_asked > 0 and s.for_date in (${dates.map(() => '?').join(', ')})
 					${excludeVenueId ? 'and v.id <> ?' : ''}
 				order by s.venue_id, s.for_date, s.sampled_at desc`,
-				[cityId, ...dates, ...(excludeVenueId ? [excludeVenueId] : [])],
-			);
-		return rows.map(r => ({ venueId: r.venue_id, district: r.district, forDate: r.for_date, booked: Number(r.booked) }));
+			[cityId, ...dates, ...(excludeVenueId ? [excludeVenueId] : [])],
+		);
+		return rows.map(r => ({
+			venueId: r.venue_id,
+			district: r.district,
+			forDate: r.for_date,
+			booked: Number(r.booked),
+		}));
 	}
 
 	/** A venue's latest samples, newest first. */

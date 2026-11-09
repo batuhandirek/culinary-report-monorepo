@@ -61,7 +61,7 @@ const context = (data: Partial<ReportData>, extra: Partial<PlaybookContext> = {}
 		social: { postCount: 4, views: 300_000, engagements: 0, creators: 3, promotional: 0, sentiment: { positive: 4, mixed: 0, neutral: 0, negative: 0 }, praise: {}, complaints: {} },
 		posts: [],
 		ownPosts: [],
-		reviews: { count: 20, written: 16, stars: [], praise: {}, complaints: {}, complaintThemes: {}, split: {} as never, changes: [], critical: [], list: [], replyDrafts: [] },
+		reviews: { count: 20, written: 16, stars: [], praise: {}, complaints: {}, complaintThemes: {}, split: {} as never, changes: [], critical: [], list: [] },
 		dishes: [],
 		competitors: [],
 		creators: [],
@@ -131,7 +131,7 @@ describe('runPlaybook', () => {
 		const competitor = { venueId: 'c1', name: 'Rival', social: { postCount: 1, views: 1, engagements: 0, creators: 1 }, reviewsTracked: true, reviews: { count: 10, written: 8, praise: {}, complaints: {} } };
 		const ctx = context(
 			{
-				reviews: { count: 12, written: 12, stars: [{ stars: 5, count: 5 }, { stars: 2, count: 7 }], praise: {}, complaints: {}, complaintThemes: { wait_for_food: 7 }, split: {} as never, changes: [], critical: [], list: [], replyDrafts: [] },
+				reviews: { count: 12, written: 12, stars: [{ stars: 5, count: 5 }, { stars: 2, count: 7 }], praise: {}, complaints: {}, complaintThemes: { wait_for_food: 7 }, split: {} as never, changes: [], critical: [], list: [] },
 				competitors: [competitor],
 				context: { month: '2026-09', weekends: 4, holidays: [], events: [{ name: 'Marathon', kind: 'event' as never, startDate: '2026-09-19', endDate: '2026-09-20' }] },
 			},
@@ -178,7 +178,6 @@ describe('runPlaybook', () => {
 					changeThemes: [{ theme: 'ownership', label: 'Ownership', reviews: 3, details: ['new owner since summer'] }],
 					critical: [],
 					list: [],
-					replyDrafts: [],
 				},
 				competitors: [competitor],
 			},

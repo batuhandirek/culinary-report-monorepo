@@ -54,14 +54,19 @@ export class BrandPostsService {
 		page: number,
 		size: number,
 	): Promise<{ items: BrandPost[]; total: number }> {
-		const [posts, total] = await this.em.findAndCount(SocialPost, this.where(brandId, filters), {
-			populate: ['account'],
-			orderBy: { postedAt: QueryOrder.DESC, id: QueryOrder.ASC },
-			offset: (page - 1) * size,
-			limit: size,
-		});
-		const mentions = posts.length
-			? await this.em.find(
+		const [posts, total] = await this.em.findAndCount(
+			SocialPost,
+			this.where(brandId, filters),
+			{
+				populate: ['account'],
+				orderBy: { postedAt: QueryOrder.DESC, id: QueryOrder.ASC },
+				offset: (page - 1) * size,
+				limit: size,
+			},
+		);
+		const mentions =
+			posts.length ?
+				await this.em.find(
 					Mention,
 					{ post: { $in: posts.map(p => p.id) }, brand: brandId },
 					{
@@ -69,7 +74,7 @@ export class BrandPostsService {
 						populate: [...STATEMENT_POPULATE],
 					},
 				)
-			: [];
+			:	[];
 		const byPost = new Map<string, Mention>();
 		for (const mention of mentions) {
 			if (!byPost.has(mention.post.id)) byPost.set(mention.post.id, mention);
@@ -88,7 +93,17 @@ export class BrandPostsService {
 	/** The accounts that posted about the brand, most viewed first. */
 	async creators(brandId: string, filters: BrandPostFilters): Promise<BrandCreator[]> {
 		const posts = await this.em.find(SocialPost, this.where(brandId, filters), {
-			fields: ['author', 'authorFans', 'platform', 'views', 'isAd', 'isPromotional', 'postedAt', 'url', 'account.brand'],
+			fields: [
+				'author',
+				'authorFans',
+				'platform',
+				'views',
+				'isAd',
+				'isPromotional',
+				'postedAt',
+				'url',
+				'account.brand',
+			],
 		});
 		const groups = _.groupBy(
 			posts.filter(p => p.author),

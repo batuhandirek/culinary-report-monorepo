@@ -2,14 +2,15 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { aspectKey, type TopicIndex } from 'src/modules/topics/util/topics.js';
-import { runPool } from 'src/shared/util/pool.js';
 import { toVectorLiteral } from 'src/shared/util/vector.js';
 
-import { type AspectSuggestion, AspectSuggestionAgent } from '../agents/aspect-suggestion.agent.js';
+import type {
+	AspectSuggestion,
+	AspectSuggestionContext,
+} from '../agents/aspect-suggestion.agent.js';
 import {
 	DISCOVERY_FLOORS,
 	DISCOVERY_MAX_CLAIMS,
@@ -19,7 +20,6 @@ import {
 	DISCOVERY_READ_CHUNK,
 } from '../constants/aspect-discovery.constant.js';
 import { CLUSTER_DIMENSIONS, CLUSTER_SAMPLE_THRESHOLD } from '../constants/embeddings.constant.js';
-import { AspectDiscoveryJob } from '../jobs/aspect-discovery.job.js';
 import {
 	type ClaimCluster,
 	clusterClaims,
@@ -75,12 +75,46 @@ export interface AspectDiscoveryResult {
 	filed: number;
 }
 
+/** One group as the plan hands it on: its figures, its samples, the agent's message and its centre */
+export interface PlannedGroup {
+	claims: number;
+	sources: number;
+	brands: number;
+	samples: string[];
+	/** `AspectSuggestionAgent`'s input for it */
+	message: string;
+	/** Its centroid's first `CLUSTER_DIMENSIONS` values, rounded: where the re-filing looks */
+	centroid: number[];
+}
+
+/**
+ * A city's discovery before any call: the loose claims grouped, the largest named groups, and the
+ * agent's context (the aspect legend and the roots). Plain data, kept by the run between its plan
+ * step and its saves: a city's ~100 groups with their centres, a few hundred kB once a week.
+ */
+export interface DiscoveryPlan {
+	cityId: string;
+	claims: number;
+	considered: number;
+	/** Groups past the floors beyond the named ones */
+	more: number;
+	groups: PlannedGroup[];
+	context: AspectSuggestionContext;
+}
+
+/** What the create step made of the named groups, before any claim is read again */
+export interface DiscoveryAspects {
+	groups: DiscoveredGroup[];
+	created: string[];
+	/** The planned groups (by index) whose claims go to the aspect they were created as or joined */
+	refile: { aspect: string; group: number }[];
+}
+
 interface Row extends ClusterItem {
 	text: string;
 	aspect: string | null;
 }
 
-const CONCURRENCY = 5;
 /** Claims the agent reads of a group: the samples, then others */
 const AGENT_CLAIMS = 12;
 const SAMPLES = 5;
@@ -91,17 +125,18 @@ const CATCH_ALL_LABEL = /^(overall|general|generic|total|in general)\b/i;
 const parseVector = (text: string): number[] => text.slice(1, -1).split(',').map(Number);
 
 /**
- * Aspect discovery, weekly and by itself. For a city, its loose claims (under
- * no aspect, or at a root because nothing finer fitted; own posts out; 3+ words) are grouped by
- * meaning at `DISCOVERY_FLOORS`, the largest `DISCOVERY_MAX_NAMED` named by
- * `AspectSuggestionAgent`, and each group that is an aspect and none that exists becomes one
- * (`TopicService.create`, `discovered`), under the root the agent gave, with its hint. Then the
- * loose claims closest to each new aspect's group (cosine at the floor, `DISCOVERY_MAX_REFILE` at
- * most) lose `partsAt` and agent B reads them again at once, so they move into it. Groups an
- * existing aspect fits are only logged: B saw that aspect and chose the root, and a re-read with
- * the same legend answers the same. Naming on gpt-5.4's allowance, else Sonnet (cents); B's re-read
- * on mini's; no review step (the user's call, 2026-11-03, as for food topics). Runs weekly over the
- * cron cities (`AspectDiscoveryCron`).
+ * Aspect discovery, weekly and by itself (`AspectDiscoveryWorkflow`). For a city, its loose claims
+ * (under no aspect, or at a root because nothing finer fitted; own posts out; 3+ words) are grouped
+ * by meaning at `DISCOVERY_FLOORS` and the largest `DISCOVERY_MAX_NAMED` planned for
+ * `AspectSuggestionAgent` (`plan`); the run asks the agent about each (a `DurableLlmService`
+ * child, waiting for an account); each group that is an aspect and none that exists becomes one
+ * (`createAspects`: `TopicService.create`, `discovered`), under the root the agent gave, with its
+ * hint. Then the loose claims closest to each new aspect's group (cosine at the floor,
+ * `DISCOVERY_MAX_REFILE` at most) lose `partsAt` and the labeller reads them again at once
+ * (`refile`), so they move into it. Groups an existing aspect fits are only logged: the labeller
+ * saw that aspect and chose the root, and a re-read with the same legend answers the same. Naming
+ * on gpt-5.4's allowance, else Sonnet (cents); no review step (the user's call, 2026-11-03, as for
+ * food topics). Weekly over the cron cities (`AspectDiscoverySchedule`).
  */
 @Injectable()
 export class AspectDiscoveryService {
@@ -111,61 +146,84 @@ export class AspectDiscoveryService {
 		private readonly em: EntityManager,
 		private readonly topicService: TopicService,
 		private readonly statementPartsService: StatementPartsService,
-		private readonly aspectSuggestionAgent: AspectSuggestionAgent,
-		private readonly pgBossService: PgBossService,
 	) {}
 
-	/** Queues a run (the weekly cron): one waits at a time */
-	async queue(payload: { dryRun: boolean; cronOnly?: boolean }): Promise<void> {
-		await this.pgBossService.sendJob(
-			AspectDiscoveryJob.jobName,
-			new AspectDiscoveryJob(payload),
-			{
-				singletonKey: AspectDiscoveryJob.singletonKey,
-			},
-		);
-	}
-
-	/** Every active city in turn, or only those whose cron is on */
-	async runAll(opts: { dryRun: boolean; cronOnly?: boolean }): Promise<AspectDiscoveryResult[]> {
-		const cities: { id: string; name: string }[] = await this.em
+	/** The active cities a run goes over, or only those whose cron is on */
+	async cityIds(opts: { cronOnly?: boolean } = {}): Promise<string[]> {
+		const cities: { id: string }[] = await this.em
 			.getConnection()
 			.execute(
-				`select id, name from cities where active${opts.cronOnly ? ' and cron_enabled' : ''} order by name`,
+				`select id from cities where active${opts.cronOnly ? ' and cron_enabled' : ''} order by name`,
 			);
-		const out: AspectDiscoveryResult[] = [];
-		for (const city of cities) out.push(await this.discover(city.id, opts));
-		return out;
+		return cities.map(c => c.id);
 	}
 
-	async discover(cityId: string, opts: { dryRun: boolean }): Promise<AspectDiscoveryResult> {
-		let index = await this.topicService.index();
+	/** The city's loose claims grouped and the largest groups planned for the agent; writes nothing */
+	async plan(cityId: string): Promise<DiscoveryPlan> {
+		const index = await this.topicService.index();
 		const { rows, claims } = await this.rows(cityId);
 		const found = clusterClaims(rows, DISCOVERY_FLOORS);
 		const named = found.slice(0, DISCOVERY_MAX_NAMED);
-		const answers = await this.name(named, index);
+		return {
+			cityId,
+			claims,
+			considered: rows.length,
+			more: found.length - named.length,
+			groups: named.map(cluster => {
+				const samples = diverseSamples(cluster.items, SAMPLES, CLUSTER_SAMPLE_THRESHOLD);
+				const ids = new Set(samples.map(s => s.id));
+				const agentClaims = [
+					...samples.map(s => s.text),
+					...cluster.items.filter(r => !ids.has(r.id)).map(r => r.text),
+				].slice(0, AGENT_CLAIMS);
+				return {
+					claims: cluster.items.length,
+					sources: cluster.sources,
+					brands: cluster.brands,
+					samples: samples.map(r => r.text),
+					message: JSON.stringify({
+						claims: agentClaims,
+						filedAt: this.filedAt(cluster),
+					}),
+					centroid: Array.from(cluster.centroid, v => Math.round(v * 1e5) / 1e5),
+				};
+			}),
+			context: {
+				legend: index.aspectLegend(),
+				roots: index.aspects.filter(t => !t.parentKey).map(t => t.key),
+			},
+		};
+	}
 
+	/**
+	 * The named groups decided in order (an answer missing, from a call that failed, leaves its group
+	 * unnamed) and each new aspect created, so a later group naming it joins it; with `dryRun`
+	 * nothing is written.
+	 */
+	async createAspects(
+		plan: DiscoveryPlan,
+		answers: (AspectSuggestion | null)[],
+		{ dryRun }: { dryRun: boolean },
+	): Promise<DiscoveryAspects> {
+		let index = await this.topicService.index();
 		const groups: DiscoveredGroup[] = [];
 		const created: string[] = [];
-		const centroids = new Map<string, Float32Array[]>();
-		for (const [i, cluster] of named.entries()) {
-			const answer = answers[i];
+		const refile: DiscoveryAspects['refile'] = [];
+		for (const [i, planned] of plan.groups.entries()) {
+			const answer = answers[i] ?? undefined;
 			const group: DiscoveredGroup = {
-				claims: cluster.items.length,
-				sources: cluster.sources,
-				brands: cluster.brands,
-				samples: diverseSamples(cluster.items, SAMPLES, CLUSTER_SAMPLE_THRESHOLD).map(
-					r => r.text,
-				),
+				claims: planned.claims,
+				sources: planned.sources,
+				brands: planned.brands,
+				samples: planned.samples,
 				label: answer?.label.trim().split(/\s+/).slice(0, 4).join(' ') || undefined,
 				hint: answer?.hint.trim() || undefined,
 				root: answer?.root,
 				outcome: 'unnamed',
 			};
 			groups.push(group);
-			const decision = this.decide(group, answer, index, created);
-			Object.assign(group, decision);
-			if (group.outcome === 'created' && !opts.dryRun) {
+			Object.assign(group, this.decide(group, answer, index, created));
+			if (group.outcome === 'created' && !dryRun) {
 				try {
 					await this.topicService.create({
 						label: group.label!,
@@ -184,27 +242,9 @@ export class AspectDiscoveryService {
 			}
 			if (group.outcome === 'created') created.push(group.aspect!);
 			if (group.outcome === 'created' || group.outcome === 'joined')
-				centroids.set(group.aspect!, [
-					...(centroids.get(group.aspect!) ?? []),
-					cluster.centroid,
-				]);
+				refile.push({ aspect: group.aspect!, group: i });
 		}
-
-		const { refiled, filed } =
-			opts.dryRun ? { refiled: 0, filed: 0 } : await this.refile(cityId, centroids);
-		const result: AspectDiscoveryResult = {
-			cityId,
-			dryRun: opts.dryRun,
-			claims,
-			considered: rows.length,
-			groups,
-			more: found.length - named.length,
-			created,
-			refiled,
-			filed,
-		};
-		this.report(result);
-		return result;
+		return { groups, created, refile };
 	}
 
 	/** What a named group comes to, before anything is written */
@@ -242,47 +282,6 @@ export class AspectDiscoveryService {
 		if (!group.root || !index.aspect(group.root) || !index.isRoot(group.root))
 			return { outcome: 'unnamed' };
 		return { outcome: 'created', aspect: key };
-	}
-
-	/** One suggestion call per group, side by side; a group the agent didn't answer stays unnamed */
-	private async name(
-		clusters: ClaimCluster<Row>[],
-		index: TopicIndex,
-	): Promise<(AspectSuggestion | undefined)[]> {
-		const roots = index.aspects.filter(t => !t.parentKey).map(t => t.key);
-		const legend = index.aspectLegend();
-		const answers: (AspectSuggestion | undefined)[] = clusters.map(() => undefined);
-		try {
-			await runPool(
-				clusters.map((_cluster, i) => i),
-				CONCURRENCY,
-				async i => {
-					const samples = diverseSamples(
-						clusters[i].items,
-						SAMPLES,
-						CLUSTER_SAMPLE_THRESHOLD,
-					);
-					const ids = new Set(samples.map(s => s.id));
-					const claims = [
-						...samples.map(s => s.text),
-						...clusters[i].items.filter(r => !ids.has(r.id)).map(r => r.text),
-					].slice(0, AGENT_CLAIMS);
-					const res = await this.aspectSuggestionAgent.generate(
-						JSON.stringify({ claims, filedAt: this.filedAt(clusters[i]) }),
-						{ legend, roots },
-					);
-					answers[i] = res.object;
-				},
-				(i, e) =>
-					this.logger.warn(
-						`Naming a group of ${clusters[i].items.length} claims failed: ${e.message}`,
-					),
-			);
-		} catch (e) {
-			// Every account out of allowance: what was named still counts
-			this.logger.warn(`Naming the groups stopped: ${(e as Error).message}`);
-		}
-		return answers;
 	}
 
 	private filedAt(cluster: ClaimCluster<Row>) {
@@ -338,16 +337,20 @@ export class AspectDiscoveryService {
 	 * within the floor of a new aspect's groups, the closest first: their parts are cleared and
 	 * agent B reads them again now, with the new aspects in its legend.
 	 */
-	private async refile(
-		cityId: string,
-		centroids: Map<string, Float32Array[]>,
+	async refile(
+		plan: DiscoveryPlan,
+		refile: DiscoveryAspects['refile'],
 	): Promise<{ refiled: number; filed: number }> {
-		if (!centroids.size) return { refiled: 0, filed: 0 };
+		if (!refile.length) return { refiled: 0, filed: 0 };
+		const { cityId } = plan;
+		const centroids = new Map<string, number[][]>();
+		for (const { aspect, group } of refile)
+			centroids.set(aspect, [...(centroids.get(aspect) ?? []), plan.groups[group].centroid]);
 		const conn = this.em.getConnection();
 		const ids = new Set<number>();
 		for (const list of centroids.values())
 			for (const centroid of list) {
-				const vector = `${toVectorLiteral(Array.from(centroid))}`;
+				const vector = `${toVectorLiteral(centroid)}`;
 				const near: { id: number }[] = await conn.execute(
 					`select s.id from statements s
 					left join statement_parts ap on ap.statement_id = s.id and ap.role = 'aspect'
@@ -396,7 +399,8 @@ export class AspectDiscoveryService {
 		return { refiled: list.length, filed: row.n };
 	}
 
-	private report(res: AspectDiscoveryResult): void {
+	/** The run's outcome in the log, a line per group */
+	report(res: AspectDiscoveryResult): void {
 		const lines = res.groups.map(
 			g =>
 				`  ${g.outcome.padEnd(10)} ${String(g.claims).padStart(4)} claims · ${g.label ?? '—'}` +

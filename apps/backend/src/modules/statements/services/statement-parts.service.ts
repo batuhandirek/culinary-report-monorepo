@@ -53,7 +53,6 @@ export class StatementPartsService implements OnModuleInit {
 	onModuleInit() {
 		this.llmBacklogRegistry.register({
 			key: 'statement-parts',
-			ingestion: true,
 			label: 'Labels of claims',
 			priority: 10,
 			remaining: () => this.countPending(),

@@ -69,10 +69,6 @@ export const SECTION_INFO: Record<Kind, { label: string; description: string }> 
 		label: 'Google reviews',
 		description: 'Stars, topics, noticed changes and the critical reviews.'
 	},
-	[Kind.Replies]: {
-		label: 'Replies to post',
-		description: 'Drafts for unanswered written reviews, critical first.'
-	},
 	[Kind.Dishes]: {
 		label: 'Dishes',
 		description: 'The dishes and drinks posts and reviews named.'

@@ -9,6 +9,7 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 
 import {
 	AdminBuildLandingEditionInputDto,
@@ -21,6 +22,10 @@ import {
 } from '../dto/landing.output.dto.js';
 import { LandingEdition } from '../entities/landing-edition.entity.js';
 import { LandingEditionService } from '../services/landing-edition.service.js';
+import {
+	LandingEditionWorkflow,
+	startLandingBuild,
+} from '../workflows/landing-edition.workflow.js';
 
 const editionDto = (edition: LandingEdition) =>
 	wrap(edition).serialize({
@@ -37,7 +42,11 @@ const editionDto = (edition: LandingEdition) =>
 @UseGuards(AuthenticationGuard, RolesGuard)
 @Roles(UserRoleEnum.ADMIN)
 export class AdminLandingController {
-	constructor(private readonly landingEditionService: LandingEditionService) {}
+	constructor(
+		private readonly landingEditionService: LandingEditionService,
+		private readonly durable: DurableWorkflowsService,
+		private readonly landingEditionWorkflow: LandingEditionWorkflow,
+	) {}
 
 	/** The city's editions, newest first, and which one the page shows. */
 	@TypedRoute.Get('/')
@@ -66,10 +75,13 @@ export class AdminLandingController {
 		return editionDto(await this.landingEditionService.get(id));
 	}
 
-	/** Queues a build of today's edition (it replaces one built earlier today and publishes itself). */
+	/**
+	 * Starts a build of today's edition (`LandingEditionWorkflow`, `high`; it replaces one built
+	 * earlier today and publishes itself), one in flight per city.
+	 */
 	@TypedRoute.Post('/build')
 	async buildLandingEdition(@TypedBody() body: AdminBuildLandingEditionInputDto): Promise<void> {
-		await this.landingEditionService.queueBuild(body.cityId);
+		await startLandingBuild(this.durable, this.landingEditionWorkflow, body.cityId);
 	}
 
 	@TypedRoute.Post('/:id/publish')

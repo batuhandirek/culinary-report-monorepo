@@ -1,8 +1,10 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import { FakePlacesApify } from 'src/modules/pipeline/atoms/places/tests/factories/places.mock.js';
 import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
@@ -11,16 +13,14 @@ import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js'
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { DishSearchRank } from '../entities/dish-search-rank.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
-import { DishSearchService } from '../services/dish-search.service.js';
+import { type DishSearchRunResult, DishSearchService } from '../services/dish-search.service.js';
 import { VenueService } from '../services/venue.service.js';
 import { VenueScrapeService } from '../services/venue-scrape.service.js';
-import type { SearchPlaceItem } from '../util/places-search.js';
-
-import { answerSearches, searchTextOf } from './factories/places-search.mock.js';
 
 /**
  * A `compass/crawler-google-places` search result as its dataset holds it: every item repeats
@@ -31,8 +31,8 @@ const result = (
 	rank: number,
 	placeId = `${searchString}-${rank}`,
 	title = `Place ${rank}`,
-	extra: Partial<SearchPlaceItem> = {},
-): SearchPlaceItem => ({
+	extra: Partial<GooglePlaceItem> = {},
+): GooglePlaceItem => ({
 	searchString,
 	rank,
 	placeId,
@@ -51,15 +51,16 @@ const result = (
 const results = (
 	searchString: string,
 	n: number,
-	at: (rank: number) => SearchPlaceItem | null = () => null,
+	at: (rank: number) => GooglePlaceItem | null = () => null,
 ) => Array.from({ length: n }, (_, i) => at(i + 1) ?? result(searchString, i + 1));
 
 describe('DishSearchService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: DishSearchService;
+	let scrapeService: VenueScrapeService;
 	let city: City;
 	let trattoria: Venue;
-	const runActor = jest.fn<(...args: unknown[]) => Promise<SearchPlaceItem[]>>();
+	const apify = new FakePlacesApify();
 
 	// The test city's districts, in its order
 	const DISTRICTS = ['Neukölln', 'Friedrichshain-Kreuzberg', 'Mitte'];
@@ -72,10 +73,11 @@ describe('DishSearchService (pglite)', () => {
 				VenueService,
 				TopicService,
 				VenueTopicService,
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: apify },
 			],
 		});
 		service = harness.moduleRef.get(DishSearchService);
+		scrapeService = harness.moduleRef.get(VenueScrapeService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		const em = harness.orm.em;
@@ -97,15 +99,44 @@ describe('DishSearchService (pglite)', () => {
 	});
 
 	beforeEach(() => {
-		runActor.mockReset();
+		apify.reset();
 	});
 
 	/** An instant on a Berlin day, mid-morning */
 	const on = (day: string) => new Date(`${day}T10:00:00Z`);
 
+	/**
+	 * The sweep as the `dish-searches` workflow runs it: the plan, then one run a search (its items
+	 * those of `items` for its search, a failing one its error), each run's places saved by the
+	 * atom's rule, then the ranks stored.
+	 */
+	const sweep = async (
+		budgetUsd: number,
+		now: Date,
+		items: GooglePlaceItem[],
+		failing: string[] = [],
+	) => {
+		const plan = await service.planSweep(city, budgetUsd, now);
+		const runs: DishSearchRunResult[] = [];
+		for (const search of plan.searches) {
+			if (failing.includes(search.query)) {
+				runs.push({ query: search.query, failed: 'Run failed' });
+				continue;
+			}
+			const found = items.filter(i => i.searchString === search.query);
+			const { venueIds } = await scrapeService.savePlaces(
+				found,
+				{ city, source: VenueScrapeSourceEnum.LOOKUP, newPlaces: 'food-in-city' },
+				now,
+			);
+			runs.push({ query: search.query, recordId: apify.store(found), venueIds });
+		}
+		return { plan, summary: await service.saveSweep(city, plan, runs, now) };
+	};
+
 	it("snapshots every food topic in every district, each search's top ten in Google's order, dated the city's day", async () => {
 		const pastaMitte = 'pasta Mitte Berlin';
-		answerSearches(runActor, [
+		const { plan, summary } = await sweep(25, on('2026-10-25'), [
 			// Out of order and twenty deep, as a dataset can be: `rank` is what counts, ten are kept
 			...results(pastaMitte, 20, rank =>
 				rank === 3 ? result(pastaMitte, rank, 'trattoria', 'Trattoria Uno')
@@ -135,7 +166,6 @@ describe('DishSearchService (pglite)', () => {
 			// "pizza Friedrichshain-Kreuzberg" and "pizza Mitte" came back empty (cut by the cap)
 		]);
 
-		const summary = await service.sweep(city, 25, on('2026-10-25'));
 		expect(summary).toEqual({
 			searchedOn: '2026-10-25',
 			dishes: 3,
@@ -147,29 +177,19 @@ describe('DishSearchService (pglite)', () => {
 			notCovered: 0,
 			failed: 0,
 		});
-		// One run a search: the actor outputs a place once a run, so a shared run would leave the
-		// trattoria out of whichever pasta search came second
-		// The cuisine typed with "food"; none of its searches came back here
-		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual([
+		// One run a search, in the plan's order: the cuisine typed with "food" first (none of its
+		// searches came back here); each ten deep at the actor's lowest cap
+		expect(plan.searches.map(s => s.query)).toEqual([
 			...DISTRICTS.map(d => `italian food ${d} Berlin`),
 			...DISTRICTS.map(d => `pasta ${d} Berlin`),
 			...DISTRICTS.map(d => `pizza ${d} Berlin`),
 		]);
-		const [actor, input, options] = runActor.mock.calls[5] as [
-			string,
-			Record<string, unknown>,
-			Record<string, unknown>,
-		];
-		expect(actor).toBe('compass/crawler-google-places');
-		// On a map of the city, as a guest there searches: no map grid, Google's own order
-		expect(input).toMatchObject({
-			startUrls: [{ url: 'https://www.google.com/maps/search/pasta+Mitte+Berlin/@52.52,13.405,12z?hl=en' }],
-			maxCrawledPlacesPerSearch: 10,
+		expect(plan).toMatchObject({ searchedOn: '2026-10-25', perQuery: 10, capUsd: 0.5 });
+		expect(plan.searches[5]).toEqual({
+			query: pastaMitte,
+			topicKey: 'pasta',
+			district: 'Mitte',
 		});
-		expect(input.searchStringsArray).toBeUndefined();
-		expect(input.locationQuery).toBeUndefined();
-		// The actor's lowest cap; ten places cost about four cents
-		expect(options).toMatchObject({ maxCostUsd: 0.5, memoryMbytes: 2048 });
 
 		const em = harness.orm.em.fork();
 		const mitte = await em.find(
@@ -220,19 +240,18 @@ describe('DishSearchService (pglite)', () => {
 		expect(found).toMatchObject({ name: 'Place 1', reviewsCount: 201, city: { id: city.id } });
 		expect(await em.count(Venue, { placeId: { $in: ['shop', 'potsdam', 'chicago'] } })).toBe(0);
 		// One snapshot a venue a day, however many searches found it
-		const today = new Date().toISOString().slice(0, 10);
 		expect(
 			await em.find(
 				VenueSnapshot,
 				{ venue: trattoria.id },
 				{ fields: ['snapshotDate', 'rating'] },
 			),
-		).toEqual([expect.objectContaining({ snapshotDate: today, rating: 4.4 })]);
+		).toEqual([expect.objectContaining({ snapshotDate: '2026-10-25', rating: 4.4 })]);
 		expect(await em.count(VenueSnapshot, { venue: found.id })).toBe(1);
 		expect(await em.count(VenueStatusChange, {})).toBe(0);
 	});
 
-	it('searches the dishes most open venues serve first, as many as the budget covers in every district', async () => {
+	it('plans the dishes most open venues serve first, as many as the budget covers in every district', async () => {
 		const em = harness.orm.em;
 		const topic = (key: string) => em.findOneOrFail(Topic, { key });
 		const [pasta, pizza] = [await topic('pasta'), await topic('pizza')];
@@ -257,28 +276,23 @@ describe('DishSearchService (pglite)', () => {
 		['closed-1', 'closed-2', 'closed-3'].forEach(id => tag(id, pasta, true));
 		await em.flush();
 
-		answerSearches(runActor, []);
 		// $0.0042 × 10 × 3 districts = $0.126 a dish
-		const summary = await service.sweep(city, 0.2, on('2026-10-26'));
+		const { plan, summary } = await sweep(0.2, on('2026-10-26'), []);
 		expect(summary).toMatchObject({ dishes: 1, searches: 3, returned: 0, notCovered: 2 });
-		expect(runActor.mock.calls.map(c => searchTextOf(c[1]))).toEqual(
-			DISTRICTS.map(d => `pizza ${d} Berlin`),
-		);
+		expect(plan.searches.map(s => s.query)).toEqual(DISTRICTS.map(d => `pizza ${d} Berlin`));
 		// Too little for one dish: no run
-		expect(await service.sweep(city, 0.1, on('2026-10-26'))).toMatchObject({
+		expect(await service.planSweep(city, 0.1, on('2026-10-26'))).toMatchObject({
 			dishes: 0,
-			searches: 0,
+			searches: [],
 		});
-		expect(runActor).toHaveBeenCalledTimes(3);
 		// A search that came back empty stores nothing for that day
 		expect(await em.count(DishSearchRank, { searchedOn: '2026-10-26' })).toBe(0);
 	});
 
 	it("replaces the searches a rerun the same day got back and keeps the ones it didn't", async () => {
-		answerSearches(runActor, [
+		await sweep(25, new Date('2026-10-25T19:00:00Z'), [
 			result('pasta Mitte Berlin', 1, 'trattoria', 'Trattoria Uno'),
 		]);
-		await service.sweep(city, 25, new Date('2026-10-25T19:00:00Z'));
 		const em = harness.orm.em.fork();
 		const rows = await em.find(DishSearchRank, {
 			city: city.id,
@@ -293,40 +307,40 @@ describe('DishSearchService (pglite)', () => {
 
 	it('keeps the searches whose runs came back when others failed, and fails only when none did', async () => {
 		const em = harness.orm.em;
-		runActor.mockImplementation(async (_actor, input) => {
-			if (searchTextOf(input) === 'pasta Mitte Berlin') throw new Error('Run failed');
-			return [result(searchTextOf(input), 1, `one-${searchTextOf(input)}`)];
-		});
-		expect(await service.sweep(city, 25, on('2026-10-27'))).toMatchObject({
-			searches: 9,
-			returned: 8,
-			failed: 1,
-		});
+		const queries = (await service.planSweep(city, 25, on('2026-10-27'))).searches.map(
+			s => s.query,
+		);
+		const items = queries.map(q => result(q, 1, `one-${q}`));
+		const { summary } = await sweep(25, on('2026-10-27'), items, ['pasta Mitte Berlin']);
+		expect(summary).toMatchObject({ searches: 9, returned: 8, failed: 1 });
 		expect(
-			await em.count(DishSearchRank, { searchedOn: '2026-10-27', district: 'Mitte', topic: { key: 'pasta' } }),
+			await em.count(DishSearchRank, {
+				searchedOn: '2026-10-27',
+				district: 'Mitte',
+				topic: { key: 'pasta' },
+			}),
 		).toBe(0);
 		expect(await em.count(DishSearchRank, { searchedOn: '2026-10-27' })).toBe(8);
 
-		runActor.mockRejectedValue(new Error('Run failed'));
-		await expect(service.sweep(city, 25, on('2026-10-28'))).rejects.toThrow('Every dish search failed: Run failed');
+		await expect(sweep(25, on('2026-10-28'), [], queries)).rejects.toThrow(
+			'Every dish search failed: Run failed',
+		);
 	});
 
 	it("reads a dish's districts in a snapshot with each place's rank in the snapshot before", async () => {
 		const em = harness.orm.em;
 		await em.nativeDelete(DishSearchRank, {});
 		const pasta = 'pasta Mitte Berlin';
-		answerSearches(runActor, [
+		await sweep(25, on('2026-10-01'), [
 			result(pasta, 1, 'a', 'Alfredo'),
 			result(pasta, 2, 'trattoria', 'Trattoria Uno'),
 			result('pasta Neukölln Berlin', 1, 'n', 'Nonna'),
 		]);
-		await service.sweep(city, 25, on('2026-10-01'));
-		answerSearches(runActor, [
+		await sweep(25, on('2026-10-25'), [
 			result(pasta, 1, 'trattoria', 'Trattoria Uno'),
 			result(pasta, 2, 'b', 'Bellini'),
 			result('pasta Friedrichshain-Kreuzberg Berlin', 1, 'k', 'Kreuzpasta'),
 		]);
-		await service.sweep(city, 25, on('2026-10-25'));
 
 		// The newest by default, against the one before, however far apart
 		const table = await service.forTopic(city.id, 'pasta');
@@ -375,11 +389,10 @@ describe('DishSearchService (pglite)', () => {
 
 		// In the 25th's Neukölln search but not the 1st's, which ran without it
 		const em = harness.orm.em;
-		answerSearches(runActor, [
+		await sweep(25, on('2026-10-25'), [
 			result('pasta Neukölln Berlin', 1, 'n', 'Nonna'),
 			result('pasta Neukölln Berlin', 2, 'trattoria', 'Trattoria Uno'),
 		]);
-		await service.sweep(city, 25, on('2026-10-25'));
 		em.clear();
 		const again = await service.forVenue(trattoria.id);
 		expect(again.searches.map(s => [s.district, s.ranks])).toEqual([
@@ -399,13 +412,21 @@ describe('DishSearchService (pglite)', () => {
 	});
 
 	it("reads one district's searches of some topics between two days, for a report", async () => {
-		const rows = await service.inDistrict(city.id, 'Neukölln', ['pasta', 'pizza'], '2026-10-02', '2026-10-31');
+		const rows = await service.inDistrict(
+			city.id,
+			'Neukölln',
+			['pasta', 'pizza'],
+			'2026-10-02',
+			'2026-10-31',
+		);
 		// Only the 25th's Neukölln pasta search is in the window
 		expect(rows.map(r => [r.searchedOn, r.topicKey, r.topicKind, r.rank, r.placeId])).toEqual([
 			['2026-10-25', 'pasta', 'dish', 1, 'n'],
 			['2026-10-25', 'pasta', 'dish', 2, 'trattoria'],
 		]);
-		expect(await service.inDistrict(city.id, 'Neukölln', [], '2026-10-01', '2026-10-31')).toEqual([]);
+		expect(
+			await service.inDistrict(city.id, 'Neukölln', [], '2026-10-01', '2026-10-31'),
+		).toEqual([]);
 	});
 
 	it("gives each city's newest snapshot for the cron", async () => {

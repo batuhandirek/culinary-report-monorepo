@@ -340,7 +340,6 @@ describe('reviews.list', () => {
 		expect(newest.excerpt!.endsWith('…')).toBe(true);
 		expect(mid.excerpt).toBe('Nice');
 		expect(old.excerpt).toBeUndefined();
-		expect(data.reviews.replyDrafts).toEqual([]);
 	});
 
 	it('leaves a short text alone and cuts a long one at a word', () => {

@@ -2,7 +2,14 @@ import { describe, expect, it } from '@jest/globals';
 
 import { isFatalProviderError } from 'src/shared/util/pool.js';
 
+import {
+	defineLlmAccount,
+	type LlmAccountLimit,
+	requestsPerDay,
+	tokensPerDay,
+} from '../accounts/llm-account.js';
 import { modelsFor } from '../constants/llm-models.constant.js';
+import { LlmAccountQuotas } from '../services/llm-account-quotas.service.js';
 import {
 	LlmModelKey,
 	LlmModelsOptions,
@@ -61,24 +68,49 @@ const busyUpstream = () =>
 		'x-openrouter-error-origin': 'provider',
 	});
 
-type SetupOptions = Pick<
-	LlmModelsOptions,
-	'anthropicApiKey' | 'openRouterApiKey' | 'disabled' | 'agentModels' | 'ingestionOnly'
->;
+type SetupOptions = Pick<LlmModelsOptions, 'disabled' | 'agentModels'> & {
+	/** The accounts' keys; unset leaves the provider out */
+	anthropicApiKey?: string;
+	openRouterApiKey?: string;
+	/** Each account's daily limits */
+	limits?: { openai?: LlmAccountLimit[]; openrouter?: LlmAccountLimit[] };
+};
 
 const setup = (opts: SetupOptions = { anthropicApiKey: 'sk-ant-xxxx' }) => {
 	let now = Date.parse('2026-11-01T12:00:00Z');
 	/** Every wait the service sat out; the clock moves by it instead of the test waiting */
 	const slept: number[] = [];
+	const { anthropicApiKey, openRouterApiKey, limits, ...rest } = opts;
+	const quotas = new LlmAccountQuotas({ now: () => now });
+	const openai = defineLlmAccount({
+		id: 'openai-a',
+		provider: 'openai',
+		apiKey: 'sk-aaaa',
+		limits: limits?.openai ?? [],
+	});
 	const openAIAccounts = new OpenAIAccountsService({
-		apiKeys: ['sk-aaaa'],
+		accounts: [{ ...openai, apiKey: 'sk-aaaa' }],
+		quotas,
 		rotateAfterRequests: 100,
 		blockMs: 24 * HOUR,
 		now: () => now,
 	});
 	const service = new LlmModelsService({
 		openAIAccounts,
-		...opts,
+		quotas,
+		anthropic: defineLlmAccount({
+			id: 'anthropic',
+			provider: 'anthropic',
+			apiKey: anthropicApiKey,
+			limits: [],
+		}),
+		openRouter: defineLlmAccount({
+			id: 'openrouter',
+			provider: 'openrouter',
+			apiKey: openRouterApiKey,
+			limits: limits?.openrouter ?? [],
+		}),
+		...rest,
 		blockMs: 24 * HOUR,
 		now: () => now,
 		sleep: async ms => {
@@ -93,19 +125,34 @@ const setup = (opts: SetupOptions = { anthropicApiKey: 'sk-ant-xxxx' }) => {
 	const call = async (
 		choice: Parameters<LlmModelsService['run']>[0],
 		fail: (model: LlmModelKey) => Error | null = () => null,
+		/** The tokens each answer counts against its account's day */
+		tokens = 0,
 	) => {
 		const tried: string[] = [];
-		const out = await llmPaid(() =>
-			service.run(choice, async model => {
-				tried.push(model.id);
-				const error = fail(model);
-				if (error) throw error;
-				return model;
-			}),
+		const served = await llmPaid(() =>
+			service.run(
+				choice,
+				async model => {
+					tried.push(model.id);
+					const error = fail(model);
+					if (error) throw error;
+					return model;
+				},
+				{ tokensOf: () => tokens },
+			),
 		).catch((e: Error) => e);
-		return { tried, out };
+		if (served instanceof Error) return { tried, out: served, account: undefined };
+		const { account, ...out } = served;
+		return { tried, out, account };
 	};
-	return { service, call, slept, advance: (ms: number) => (now += ms), now: () => now };
+	return {
+		service,
+		quotas,
+		call,
+		slept,
+		advance: (ms: number) => (now += ms),
+		now: () => now,
+	};
 };
 
 describe('modelsFor', () => {
@@ -280,43 +327,6 @@ describe('LlmModelsService', () => {
 	});
 });
 
-describe('LlmModelsService under LLM_INGESTION_ONLY', () => {
-	it('serves only the reading agents outside llmPaid, failing the rest fatally without a call', async () => {
-		const { service } = setup({ anthropicApiKey: 'sk-ant-xxxx', ingestionOnly: true });
-		const tried: string[] = [];
-		const served = await service.run(
-			'full',
-			async model => {
-				tried.push(model.id);
-				return model.id;
-			},
-			{ ingestion: true, agentId: 'post-claims' },
-		);
-		expect(served.model).toBe(FULL);
-
-		const paused = await service
-			.run(
-				'full',
-				async model => {
-					tried.push(model.id);
-					return model.id;
-				},
-				{ agentId: 'report-editor' },
-			)
-			.catch((e: Error) => e);
-		expect((paused as Error).message).toBe(
-			'No model can serve report-editor: paused, only the reading runs (LLM_INGESTION_ONLY)',
-		);
-		expect(isFatalProviderError(paused)).toBe(true);
-		expect(tried).toEqual([FULL]);
-
-		// Work started by hand is not paused
-		expect((await llmPaid(() => service.run('high', async model => model.id))).model).toBe(
-			OPUS,
-		);
-	});
-});
-
 describe('LlmModelsService on OpenRouter', () => {
 	const withKey = { anthropicApiKey: 'sk-ant-xxxx', openRouterApiKey: 'sk-or-xxxx' };
 	const openAIFails = (m: LlmModelKey) => (m.id.startsWith('openai/') ? openAIOut() : null);
@@ -331,7 +341,11 @@ describe('LlmModelsService on OpenRouter', () => {
 			return model;
 		});
 		expect(tried).toEqual([MINI, FREE]);
-		expect(out).toEqual({ result: { id: FREE, apiKey: 'sk-or-xxxx' }, model: FREE });
+		expect(out).toEqual({
+			result: { id: FREE, apiKey: 'sk-or-xxxx' },
+			model: FREE,
+			account: 'openrouter',
+		});
 	});
 
 	it('spaces its calls to the per-minute cap', async () => {
@@ -483,5 +497,128 @@ describe('openRouterLimitOf', () => {
 		expect(openRouterLimitOf(openRouterError(500, 'Internal'), NOW, BLOCK)).toBeNull();
 		expect(openRouterLimitOf(openAIOut(), NOW, BLOCK)).toBeNull();
 		expect(openRouterLimitOf(new Error('boom'), NOW, BLOCK)).toBeNull();
+	});
+});
+
+describe('LlmModelsService.availability', () => {
+	it('says a tier can be served while a free account is open', () => {
+		const { service } = setup();
+		expect(service.availability('mini')).toEqual({ available: true, until: 0, reason: '' });
+	});
+
+	it('names when the roster serves again once every model is blocked', async () => {
+		const { service, call } = setup({
+			anthropicApiKey: 'sk-ant-xxxx',
+			openRouterApiKey: 'sk-or-xxxx',
+		});
+		// OpenAI out of credit (an hour), OpenRouter's day used up (until its reset), Claude blocked (a day)
+		await call('mini', model =>
+			model.id === MINI ? openAIOut()
+			: model.id === FREE ? dayUsedUp()
+			: anthropicOut(),
+		);
+
+		const outside = service.availability('mini');
+		expect(outside.available).toBe(false);
+		expect(outside.until).toBe(Date.parse('2026-11-01T13:00:00Z'));
+		expect(outside.reason).toContain(MINI);
+		expect(outside.reason).toContain(FREE);
+		// Inside llmPaid Claude counts too, blocked the longest; the earliest end still wins
+		expect(await llmPaid(async () => service.availability('mini').until)).toBe(
+			Date.parse('2026-11-01T13:00:00Z'),
+		);
+	});
+
+	it('says nothing will ever serve when no model of the choice is configured', () => {
+		const { service } = setup({ disabled: { openai: true } });
+		// OpenRouter has no key, Claude is paid outside llmPaid
+		expect(service.availability('mini')).toEqual({
+			available: false,
+			until: null,
+			reason: expect.stringContaining('no OPENROUTER_AI_API_KEY'),
+		});
+		const none = setup({
+			disabled: { openai: true, anthropic: true, openrouter: true },
+		}).service;
+		expect(none.availability('mini')).toMatchObject({
+			available: false,
+			until: null,
+			reason: 'no model configured for mini',
+		});
+	});
+});
+
+describe('LlmModelsService with daily account limits', () => {
+	const NOON = Date.parse('2026-11-01T12:00:00Z');
+	const MIDNIGHT_AFTER = Date.parse('2026-11-02T00:00:00Z');
+
+	it('moves off an OpenAI account once its tokens for the day are used, back at 00:00 UTC', async () => {
+		const { call, advance } = setup({
+			openRouterApiKey: 'sk-or-xxxx',
+			limits: { openai: [tokensPerDay(1_000)] },
+		});
+		expect(await call('mini', undefined, 600)).toMatchObject({
+			tried: [MINI],
+			account: 'openai-a',
+		});
+		// Under the limit before the call, so it serves: calls in flight overshoot it
+		expect((await call('mini', undefined, 600)).account).toBe('openai-a');
+		expect(await call('mini')).toMatchObject({ tried: [FREE], account: 'openrouter' });
+
+		advance(MIDNIGHT_AFTER - NOON);
+		expect((await call('mini')).account).toBe('openai-a');
+	});
+
+	it('stops OpenRouter after its requests for the day, failed tries counted, and names the reset', async () => {
+		const { service, call } = setup({
+			openRouterApiKey: 'sk-or-xxxx',
+			disabled: { openai: true },
+			limits: { openrouter: [requestsPerDay(2)] },
+		});
+		// A busy free model is tried again: both tries are requests of the day
+		let tries = 0;
+		const first = await call('mini', m =>
+			m.id === FREE && tries++ === 0 ? busyUpstream() : null,
+		);
+		expect(first.tried).toEqual([FREE, FREE]);
+
+		const out = await call('mini');
+		expect(out.out).toBeInstanceOf(Error);
+		expect(isFatalProviderError(out.out)).toBe(true);
+		// Outside llmPaid only the free models count: what a waiting workflow sleeps on
+		expect(service.availability('mini')).toMatchObject({
+			available: false,
+			until: MIDNIGHT_AFTER,
+			reason: expect.stringContaining('openrouter used 2 of its 2 requests a day'),
+		});
+	});
+
+	it('says an OpenAI account out for the day serves again at 00:00 UTC', () => {
+		const { service, quotas } = setup({ limits: { openai: [tokensPerDay(1_000)] } });
+		quotas.merge([{ account: 'openai-a', model: MINI, requests: 3, tokens: 1_000 }]);
+		// OpenRouter has no key here: nothing else serves the free tier
+		expect(service.availability('mini')).toMatchObject({
+			available: false,
+			until: MIDNIGHT_AFTER,
+		});
+	});
+
+	it('counts a limit only on the models it names', async () => {
+		const { call } = setup({
+			openRouterApiKey: 'sk-or-xxxx',
+			limits: { openai: [tokensPerDay(100, { models: [MINI] })] },
+		});
+		await call('mini', undefined, 100);
+		expect((await call('mini')).account).toBe('openrouter');
+		expect((await call('full')).account).toBe('openai-a');
+	});
+
+	it('starts from what the ledger says the account used today', async () => {
+		const { quotas, call } = setup({
+			openRouterApiKey: 'sk-or-xxxx',
+			limits: { openai: [tokensPerDay(1_000)] },
+		});
+		quotas.merge([{ account: 'openai-a', model: MINI, requests: 3, tokens: 1_200 }]);
+		expect((await call('mini')).account).toBe('openrouter');
 	});
 });

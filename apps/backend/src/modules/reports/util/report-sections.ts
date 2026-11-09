@@ -45,7 +45,6 @@ export const FULL_REPORT_SECTIONS = (): AnyReportSection[] =>
 		Kind.MEDIA,
 		Kind.CREATORS,
 		Kind.REVIEWS,
-		Kind.REPLIES,
 		Kind.DISHES,
 		Kind.PLACES,
 		Kind.PATTERNS,
@@ -209,7 +208,7 @@ export const trimForSections = (
 		scope: {
 			social: !!posts || kpis.some(k => SOCIAL_KPIS.includes(k)),
 			reviews:
-				[Kind.REVIEWS, Kind.STARS, Kind.REPLIES].some(has) ||
+				[Kind.REVIEWS, Kind.STARS].some(has) ||
 				kpis.some(k => REVIEW_KPIS.includes(k)),
 			stars: has(Kind.STARS),
 			branches: has(Kind.BRANCHES),

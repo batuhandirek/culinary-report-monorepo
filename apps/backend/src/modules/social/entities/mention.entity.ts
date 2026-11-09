@@ -59,7 +59,6 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 
 	@Property({ type: 'boolean', default: false })
 	isNewOpening: boolean = false;
 
-
 	// The business it talks about; set whenever it is matched
 	@Index()
 	@ManyToOne({ entity: () => Brand, nullable: true, deleteRule: 'set null' })

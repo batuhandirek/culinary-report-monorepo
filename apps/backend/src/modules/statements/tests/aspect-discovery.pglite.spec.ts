@@ -4,7 +4,9 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@je
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
+import { fakeDurable } from 'src/modules/durable-workflows/tests/factories/durable.mock.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
@@ -17,11 +19,15 @@ import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { type AspectSuggestion, AspectSuggestionAgent } from '../agents/aspect-suggestion.agent.js';
-import { AspectDiscoveryCron } from '../crons/aspect-discovery.cron.js';
 import type { Statement } from '../entities/statement.entity.js';
-import { AspectDiscoveryJob } from '../jobs/aspect-discovery.job.js';
+import {
+	ASPECT_DISCOVERY_DEDUPE,
+	ASPECT_DISCOVERY_QUEUE,
+} from '../queues/aspect-discovery.queue.js';
+import { AspectDiscoverySchedule } from '../schedules/aspect-discovery.schedule.js';
 import { AspectDiscoveryService } from '../services/aspect-discovery.service.js';
 import { StatementPartsService } from '../services/statement-parts.service.js';
+import { AspectDiscoveryWorkflow } from '../workflows/aspect-discovery.workflow.js';
 
 import { addStatements } from './factories/statement.factory.js';
 
@@ -33,18 +39,32 @@ const CASH = vec(0, 0, 0, 1);
 const FAR = vec(0, 0, 0, 0, 1);
 
 /*
- * Aspect discovery: a city's loose claims grouped at the floors (10 claims, 6 sources, 3 brands),
- * each group named by the suggestion agent (mocked); a group that is an aspect and none that
- * exists becomes one under its root, and the loose claims near it are handed to agent B (mocked)
- * again. A dry run writes nothing; "not an aspect", a food's name and an existing aspect create
- * nothing.
+ * Aspect discovery as workflows, the facade faked to run a started workflow inline (DBOS can't run
+ * on PGlite) and the durable agent call faked to the plain one: a city's loose claims grouped at
+ * the floors (10 claims, 6 sources, 3 brands), each group named by the suggestion agent (mocked);
+ * a group that is an aspect and none that exists becomes one under its root, and the loose claims
+ * near it are handed to the labeller (mocked) again. A dry run writes nothing; "not an aspect", a
+ * food's name and an existing aspect create nothing; a call that failed leaves its group unnamed.
  */
 describe('aspect discovery (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let em: EntityManager;
 	let city: City;
 	let index: TopicIndex;
-	let service: AspectDiscoveryService;
+	let workflow: AspectDiscoveryWorkflow;
+	const durable = fakeDurable(() => [workflow]);
+	// The durable agent call faked to the plain one, behind a handle
+	const durableLlm = {
+		start: async (a: typeof agent, input: string, context: unknown) => {
+			const result = (
+				a.generate as unknown as (i: string, c: unknown) => Promise<{ object: unknown }>
+			)(input, context).then(res => ({ object: res.object }));
+			result.catch(() => undefined);
+			return { workflowID: '', getResult: () => result };
+		},
+	};
+	const discover = (cityId: string, { dryRun }: { dryRun: boolean }) =>
+		workflow.discoverCity(cityId, dryRun);
 	let music: AspectSuggestion;
 	let cash: AspectSuggestion;
 	const agent = mockAgent((input: unknown) =>
@@ -56,7 +76,6 @@ describe('aspect discovery (pglite)', () => {
 			music
 		:	cash,
 	);
-	const sendJob = jest.fn(async (..._args: unknown[]) => undefined);
 	const read = jest.fn(async (_opts: { ids?: number[] }) => ({ read: 0, tokens: 0 }));
 	const ids: Record<string, number[]> = { music: [], cash: [], filed: [], far: [] };
 
@@ -72,16 +91,18 @@ describe('aspect discovery (pglite)', () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				AspectDiscoveryService,
-				AspectDiscoveryCron,
+				AspectDiscoveryWorkflow,
+				AspectDiscoverySchedule,
 				TopicService,
 				{ provide: AspectSuggestionAgent, useValue: agent },
 				{ provide: StatementPartsService, useValue: { read } },
-				{ provide: PgBossService, useValue: { sendJob } },
+				{ provide: DurableWorkflowsService, useValue: durable },
+				{ provide: DurableLlmService, useValue: durableLlm },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
 		em = harness.orm.em as EntityManager;
-		service = harness.moduleRef.get(AspectDiscoveryService);
+		workflow = harness.moduleRef.get(AspectDiscoveryWorkflow);
 		seedTopics(em, ['vibe', 'payment', 'price_level', 'burgers']);
 		city = testCity(em, { name: 'Berlin', aliases: [] });
 		const venues = [1, 2, 3].map(i =>
@@ -157,7 +178,7 @@ describe('aspect discovery (pglite)', () => {
 	});
 
 	it('names the groups in a dry run and writes nothing', async () => {
-		const res = await service.discover(city.id, { dryRun: true });
+		const res = await discover(city.id, { dryRun: true });
 		// 12 music, 12 cash, the far one; the two-word claim and the finer-filed one out
 		expect([res.claims, res.considered, res.more]).toEqual([25, 25, 0]);
 		expect(res.groups.map(g => [g.label, g.outcome, g.claims])).toEqual([
@@ -173,14 +194,14 @@ describe('aspect discovery (pglite)', () => {
 	it("creates nothing for a group that is no aspect, a food's name or an aspect that exists", async () => {
 		music = { ...music, isAspect: false };
 		cash = { ...cash, label: 'Burgers', fits: null };
-		let res = await service.discover(city.id, { dryRun: false });
+		let res = await discover(city.id, { dryRun: false });
 		expect(res.groups.map(g => [g.outcome, g.aspect])).toEqual([
 			['not_aspect', undefined],
 			['food', 'burgers'],
 		]);
 		music = { ...music, isAspect: true, label: 'Price level' };
 		cash = { ...cash, label: 'Card payments', fits: 'price_level' };
-		res = await service.discover(city.id, { dryRun: false });
+		res = await discover(city.id, { dryRun: false });
 		expect(res.groups.map(g => [g.outcome, g.aspect])).toEqual([
 			['fits', 'price_level'],
 			['fits', 'price_level'],
@@ -188,7 +209,7 @@ describe('aspect discovery (pglite)', () => {
 		// About the root as a whole, or labelled as if it were: filed right, nothing created
 		music = { ...music, label: 'Music volume', fits: 'vibe' };
 		cash = { ...cash, label: 'Overall payment', fits: null };
-		res = await service.discover(city.id, { dryRun: false });
+		res = await discover(city.id, { dryRun: false });
 		expect(res.groups.map(g => [g.outcome, g.aspect])).toEqual([
 			['root', 'vibe'],
 			['root', 'payment'],
@@ -200,7 +221,7 @@ describe('aspect discovery (pglite)', () => {
 	it('creates the aspects under their roots and has agent B read the loose claims near each again', async () => {
 		// The cash group names the aspect the music group just made: it joins it
 		cash = { ...cash, label: 'Music volume' };
-		const res = await service.discover(city.id, { dryRun: false });
+		const res = await discover(city.id, { dryRun: false });
 		expect(res.groups.map(g => [g.outcome, g.aspect])).toEqual([
 			['created', 'music_volume'],
 			['joined', 'music_volume'],
@@ -229,28 +250,43 @@ describe('aspect discovery (pglite)', () => {
 		read.mockRejectedValueOnce(new Error('No OpenAI account can serve openai/gpt-5.4-mini'));
 		music = { ...music, label: 'Music volume again', hint: 'Loudness' };
 		cash = { ...cash, label: 'Card payments', hint: 'Cards taken or not' };
-		const res = await service.discover(city.id, { dryRun: false });
+		const res = await discover(city.id, { dryRun: false });
 		expect(res.created).toEqual(['music_volume_again', 'card_payments']);
 		expect(read).toHaveBeenCalledTimes(1);
 		// Every claim near the groups is pending for agent B, none was lost
 		expect((await parts([...ids.music, ...ids.cash])).every(r => !r.parts_at)).toBe(true);
 	});
 
-	it('queues the weekly run for the cron cities, and runs only those', async () => {
-		await harness.moduleRef.get(AspectDiscoveryCron).handleCron();
-		expect(sendJob).toHaveBeenCalledWith(
-			AspectDiscoveryJob.jobName,
-			{ payload: { dryRun: false, cronOnly: true } },
-			{ singletonKey: AspectDiscoveryJob.singletonKey },
-		);
-		expect(await service.runAll({ dryRun: true, cronOnly: true })).toEqual([]);
+	it('leaves a group unnamed when its call failed, and decides the others', async () => {
+		agent.generate.mockImplementationOnce(async () => {
+			throw new Error('The answer does not fit the schema');
+		});
+		const res = await discover(city.id, { dryRun: true });
+		expect(res.groups.map(g => g.outcome)).toEqual(['unnamed', 'created']);
+		expect(agent.generate).toHaveBeenCalledTimes(2);
+	});
+
+	it('starts the weekly run over the cron cities, one in flight, and runs only those', async () => {
+		durable.started.length = 0;
+		await harness.moduleRef.get(AspectDiscoverySchedule).weekly();
+		expect(durable.started.map(s => [s.args, s.options])).toEqual([
+			[
+				[{ dryRun: false, cronOnly: true }],
+				expect.objectContaining({
+					queue: ASPECT_DISCOVERY_QUEUE,
+					dedupe: ASPECT_DISCOVERY_DEDUPE,
+					onDuplicate: 'return-existing',
+				}),
+			],
+		]);
+		expect(await durable.started[0].result).toEqual({ dryRun: false, cities: [] });
 		await em
 			.getConnection()
 			.execute(`update cities set active = true, cron_enabled = true where id = ?`, [
 				city.id,
 			]);
-		expect((await service.runAll({ dryRun: true, cronOnly: true })).map(r => r.cityId)).toEqual(
-			[city.id],
-		);
+		expect(
+			(await workflow.runAll({ dryRun: true, cronOnly: true })).cities.map(c => c.cityId),
+		).toEqual([city.id]);
 	});
 });

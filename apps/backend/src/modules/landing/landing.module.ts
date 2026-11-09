@@ -7,16 +7,16 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { CitiesModule } from '../cities/cities.module.js';
-import { TopicsModule } from '../topics/topics.module.js';
 import { LLMModule } from '../llm/llm.module.js';
+import { TopicsModule } from '../topics/topics.module.js';
 
 import { LandingCopyAgent } from './agents/landing-copy.agent.js';
 import { AdminLandingController } from './controllers/admin.landing.controller.js';
 import { LandingController } from './controllers/landing.controller.js';
-import { LandingEditionCron } from './crons/landing-edition.cron.js';
 import { LandingEdition } from './entities/landing-edition.entity.js';
+import { LandingEditionSchedule } from './schedules/landing-edition.schedule.js';
 import { LandingEditionService } from './services/landing-edition.service.js';
-import { LandingBuildWorker } from './workers/landing-build.worker.js';
+import { LandingEditionWorkflow } from './workflows/landing-edition.workflow.js';
 
 /**
  * The front page's live edition of each city (`/`): the last 30 days of posts by others,
@@ -32,6 +32,11 @@ import { LandingBuildWorker } from './workers/landing-build.worker.js';
 		LLMModule,
 	],
 	controllers: [LandingController, AdminLandingController],
-	providers: [LandingEditionService, LandingCopyAgent, LandingEditionCron, LandingBuildWorker],
+	providers: [
+		LandingEditionService,
+		LandingCopyAgent,
+		LandingEditionWorkflow,
+		LandingEditionSchedule,
+	],
 })
 export class LandingModule {}

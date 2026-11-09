@@ -21,7 +21,7 @@
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// Every Google review of the venue, filterable, and on top the ones still waiting for an
-	// answer, each with a reply draft to copy when we have one.
+	// answer.
 	const brandId = $derived(page.params.brandId!);
 
 	let facets = $state<PortalReviewFiltersOutputDto | null>(null);
@@ -133,7 +133,7 @@
 	<Section title="Needs a reply" count={needsTotal} class="gap-3">
 		<p class="text-muted-foreground m-0 text-sm">
 			Written reviews of three stars or fewer that nobody has answered yet, the lowest first.
-			Copy the draft, change what you like and post it under the review on Google.
+			Answer them on Google, then mark them here.
 		</p>
 		<ul class="bg-paper border-line m-0 flex list-none flex-col rounded-md border p-0">
 			{#each needs as review, index (review.id)}

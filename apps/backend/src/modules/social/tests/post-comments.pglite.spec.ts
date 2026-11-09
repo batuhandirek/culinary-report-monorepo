@@ -1,16 +1,23 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
+
+import { startActorCall } from 'src/modules/apify/actors/actor.js';
+import { type ActorRunRef, ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
+import { settleHandles } from 'src/modules/durable-workflows/util/durable-steps.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import {
+	commentDisagreementMessage,
+	commentIntentMessage,
+} from 'src/modules/pipeline/read-comments/util/comment-messages.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { CommentDisagreementAgent } from '../agents/comment-disagreement.agent.js';
-import { CommentIntentAgent } from '../agents/comment-intent.agent.js';
 import { AdminPostCommentsController } from '../controllers/admin.post-comments.controller.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import {
@@ -19,7 +26,7 @@ import {
 	PostCommentQuestionTopicEnum,
 } from '../entities/post-comment.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
-import { PostCommentService } from '../services/post-comment.service.js';
+import { type CommentIntentFields, PostCommentService } from '../services/post-comment.service.js';
 import { SocialPostService } from '../services/social-post.service.js';
 import { SocialScrapeService } from '../services/social-scrape.service.js';
 import { plainIntent } from '../util/post-comments.js';
@@ -85,12 +92,23 @@ describe('Post comments (pglite)', () => {
 	let comments: PostCommentService;
 	let city: City;
 	let venue: Venue;
-	const runActor = jest.fn(
-		async (_actor: string, input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
-			const url: string = input.postURLs[0];
-			return ITEMS[url.split('/').at(-1)!] ?? [];
-		},
-	);
+	const apify = new FakeApify<any>();
+	apify.answer = (input: any) => {
+		const url: string = input.postURLs[0];
+		return ITEMS[url.split('/').at(-1)!] ?? [];
+	};
+	/** As the `scrape-comments` run does: one run per post started as a child, every run awaited, one save */
+	const scrapeComments = async (posts: SocialPost[], perPost: number, budgetUsd: number) => {
+		const plan = scrape.planComments(posts, perPost, budgetUsd);
+		const handles: WorkflowHandle<ActorRunRef>[] = [];
+		for (const call of plan.calls)
+			handles.push(await startActorCall(apify, call, { memoryMbytes: plan.memoryMbytes }));
+		const settled = await settleHandles(handles);
+		return scrape.saveComments(
+			plan,
+			settled.map(o => (o.ok ? o.value.recordId : null)),
+		);
+	};
 	/** The intent agent's reading of each comment the model is sent, by its text */
 	const READ: Record<
 		string,
@@ -126,6 +144,36 @@ describe('Post comments (pglite)', () => {
 	// One post a call, on its disagreeing comments
 	const disagreementAgent = mockAgent({ summary: ' One says the portions got smaller. ' });
 
+	/**
+	 * The pipeline's `read-comments` over every post of the city with unread comments, its pieces
+	 * run plainly (the workflow makes each agent call a child): what was read and how many calls
+	 */
+	const readComments = async () => {
+		let analysed = 0;
+		let calls = 0;
+		for (const postId of await comments.postsWithUnreadComments(city.id, 100)) {
+			const post = (await comments.commentsForReading(postId))!;
+			const context = { cityName: post.cityName };
+			const answers: { commentId: string; answer: CommentIntentFields }[] = [];
+			for (const c of post.ask) {
+				calls++;
+				const res = await agent.generate(commentIntentMessage(post, c), context);
+				answers.push({ commentId: c.commentId, answer: res.object as CommentIntentFields });
+			}
+			const disagreeing = await comments.saveCommentIntents(postId, post.plain, answers);
+			analysed += post.plain.length + answers.length;
+			if (disagreeing) {
+				calls++;
+				const res = await disagreementAgent.generate(
+					commentDisagreementMessage(disagreeing),
+					context,
+				);
+				await comments.saveDisagreement(postId, res.object.summary);
+			}
+		}
+		return { analysed, calls };
+	};
+
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
@@ -134,9 +182,7 @@ describe('Post comments (pglite)', () => {
 				PostCommentService,
 				AdminPostCommentsController,
 				CityService,
-				{ provide: ApifyService, useValue: { runActor } },
-				{ provide: CommentIntentAgent, useValue: agent },
-				{ provide: CommentDisagreementAgent, useValue: disagreementAgent },
+				{ provide: ApifyService, useValue: apify },
 			],
 		});
 		scrape = harness.moduleRef.get(SocialScrapeService);
@@ -207,13 +253,14 @@ describe('Post comments (pglite)', () => {
 	it('stores comments once per externalId, one run per post, without authors', async () => {
 		const em = harness.orm.em;
 		const posts = await comments.topPosts([venue.brand], city.id, '2026-09', 5);
-		expect(await scrape.scrapeComments(posts, 100, 10)).toEqual({
+		expect(await scrapeComments(posts, 100, 10)).toEqual({
 			posts: 2,
 			found: 11,
 			saved: 8,
+			failed: 0,
 		});
-		expect(runActor).toHaveBeenCalledTimes(2);
-		const [actor, input, opts] = runActor.mock.calls[0];
+		expect(apify.calls).toHaveLength(2);
+		const { actor, input, options } = apify.calls[0];
 		expect(actor).toBe('clockworks/tiktok-comments-scraper');
 		expect(input).toEqual({
 			postURLs: [expect.stringMatching(/\/video\/755000000000000000[12]$/)],
@@ -221,15 +268,16 @@ describe('Post comments (pglite)', () => {
 			commentsPerPost: 100,
 			maxRepliesPerComment: 0,
 		});
-		expect(opts.maxCostUsd).toBe(5);
+		// Each run in 1 GB, four at a time on the plan's memory
+		expect(options).toMatchObject({ maxCostUsd: 5, memoryMbytes: 1024 });
 
 		// A rescrape stores nothing new
 		const top = await em.findOneOrFail(SocialPost, { externalId: TOP });
-		runActor.mockClear();
-		await scrape.scrapeComments([top], 100, 0.05);
+		apify.calls.length = 0;
+		await scrapeComments([top], 100, 0.05);
 		expect(await em.count(PostComment, {})).toBe(8);
 		// $0.05 buys forty comments at $0.00125: the run ends before Apify's cap stops it
-		expect(runActor.mock.calls[0][1]).toMatchObject({
+		expect(apify.calls[0].input).toMatchObject({
 			topLevelCommentsPerPost: 40,
 			commentsPerPost: 40,
 		});
@@ -245,10 +293,10 @@ describe('Post comments (pglite)', () => {
 		expect(JSON.stringify(stored)).not.toContain('someone');
 	});
 
-	it('classifies the comments: tags and emoji without the model, the rest one a call, then each post’s disagreement', async () => {
+	it('reads the comments: tags and emoji without the model, the rest one a call, then each post’s disagreement', async () => {
 		const em = harness.orm.em;
 		// Six comments one a call, one post with a disagreeing comment
-		expect(await comments.analyse(city)).toEqual({ analysed: 8, calls: 7 });
+		expect(await readComments()).toEqual({ analysed: 8, calls: 7 });
 		// Told the venue the post is about, the caption and the comment; the city in the context
 		const asked = agent.generate.mock.calls.map(
 			([input]) =>
@@ -291,7 +339,7 @@ describe('Post comments (pglite)', () => {
 		const top = await em.findOneOrFail(SocialPost, { externalId: TOP });
 		expect(top.commentsDisagreement).toBe('One says the portions got smaller.');
 		// Nothing left to classify
-		expect(await comments.analyse(city)).toEqual({ analysed: 0, calls: 0 });
+		expect(await readComments()).toEqual({ analysed: 0, calls: 0 });
 	});
 
 	it('hands the report each post’s classified comments', async () => {

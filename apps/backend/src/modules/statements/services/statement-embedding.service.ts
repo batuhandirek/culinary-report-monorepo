@@ -5,7 +5,7 @@ import { Injectable, Logger, OnModuleInit, ServiceUnavailableException } from '@
 import _ from 'lodash';
 
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
-import { EmbeddingsService } from 'src/modules/embeddings/services/embeddings.service.js';
+import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import { accountErrorReason, errorChain } from 'src/modules/llm/util/provider-errors.js';
 import { isFatalProviderError } from 'src/shared/util/pool.js';
 import { toVectorLiteral } from 'src/shared/util/vector.js';
@@ -88,7 +88,7 @@ export class StatementEmbeddingService implements OnModuleInit {
 		let embedded = 0;
 		let tokens = 0;
 		for (const chunk of _.chunk(rows, EMBEDDING_REQUEST_CLAIMS)) {
-			const res = await this.embeddingsService.embedManyUncached(
+			const res = await this.embeddingsService.embedMany(
 				chunk.map(r => r.text),
 				{ dimensions: STATEMENT_EMBEDDING_DIMENSIONS },
 			);
@@ -114,7 +114,7 @@ export class StatementEmbeddingService implements OnModuleInit {
 			return cached;
 		}
 		const { embeddings } = await this.embeddingsService
-			.embedManyUncached([phrase.trim()], { dimensions: STATEMENT_EMBEDDING_DIMENSIONS })
+			.embedMany([phrase.trim()], { dimensions: STATEMENT_EMBEDDING_DIMENSIONS })
 			.catch((error: unknown) => {
 				if (!errorChain(error).some(e => isFatalProviderError(e))) throw error;
 				throw new ServiceUnavailableException(

@@ -13,9 +13,9 @@ export enum PostSourceKindEnum {
 	TIKTOK_SEARCH = 'tiktok_search',
 	INSTAGRAM_HASHTAG = 'instagram_hashtag',
 	BLOG = 'blog',
-	// TikTok's search for a venue's name (`scrapeVenueSocial`)
+	// TikTok's search for a venue's name (`SocialScrapeService.planVenueSearch`)
 	VENUE_SEARCH = 'venue_search',
-	// The Instagram page of a venue's place (`scrapeVenueSocial`)
+	// The Instagram page of a venue's place (`SocialScrapeService.planVenuePlaces`)
 	VENUE_PLACE = 'venue_place',
 	// The account's own profile (`AccountScrapeService`): a creator the city watches (a city
 	// source of the same kind and value) or a watched brand's own account (no city source)

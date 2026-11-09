@@ -3,16 +3,15 @@ import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
 
 import mikroOrmConfig from 'src/mikro-orm.config.js';
-import { EmbeddingsModule } from 'src/modules/embeddings/embeddings.module.js';
 import { LLMModule } from 'src/modules/llm/llm.module.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
-import { PostGateAgent } from 'src/modules/social/agents/post-gate.agent.js';
-import { VenueMatchAgent } from 'src/modules/social/agents/venue-match.agent.js';
+import { VenueMatchAgent } from 'src/modules/pipeline/match-mentions/agents/venue-match.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
 
 import { AspectReferenceAgent } from './agents/aspect-reference.agent.js';
 import { ClaimPairingAgent } from './agents/claim-pairing.agent.js';
@@ -36,7 +35,7 @@ import { EvalScoreService } from './services/eval-score.service.js';
  * its job queueing is never reached.
  */
 @Module({
-	imports: [MikroOrmModule.forRoot(mikroOrmConfig), LLMModule, EmbeddingsModule],
+	imports: [MikroOrmModule.forRoot(mikroOrmConfig), LLMModule],
 	providers: [
 		{ provide: PgBossService, useValue: {} },
 		TopicService,

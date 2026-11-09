@@ -16,7 +16,7 @@ import { AdminFoodTrendsController } from './controllers/admin.food-trends.contr
 import { FoodTrendsController } from './controllers/food-trends.controller.js';
 import { FoodTrendsReport } from './entities/food-trends-report.entity.js';
 import { FoodTrendsReportService } from './services/food-trends-report.service.js';
-import { FoodTrendsSearchPullWorker } from './workers/food-trends-search-pull.worker.js';
+import { FoodTrendsPullWorkflow } from './workflows/food-trends-pull.workflow.js';
 
 /**
  * A city's quarter of food trends in public (`/<city>/trends/<YYYY>-q<N>`): searches on one scale
@@ -34,6 +34,6 @@ import { FoodTrendsSearchPullWorker } from './workers/food-trends-search-pull.wo
 		VenuesModule,
 	],
 	controllers: [FoodTrendsController, AdminFoodTrendsController],
-	providers: [FoodTrendsReportService, FoodTrendsSearchPullWorker],
+	providers: [FoodTrendsReportService, FoodTrendsPullWorkflow],
 })
 export class FoodTrendsModule {}

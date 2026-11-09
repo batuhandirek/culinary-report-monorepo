@@ -17,7 +17,7 @@ const dummyEnv: Record<string, string> = {
 	PUBLIC_APP_URL: 'http://localhost',
 	OTEL_IS_ENABLED: 'false',
 	OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: 'http://localhost:4318/v1/traces',
-	OPENAI_API_KEYS: 'test',
+	OPENAI_KEY_PRIMARY: 'test',
 	ANTHROPIC_API_KEY: 'test',
 	OTA_MANIFEST_URL: 'http://localhost',
 	JWT_SECRET: 'test-secret',

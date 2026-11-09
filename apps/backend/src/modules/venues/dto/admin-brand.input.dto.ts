@@ -28,10 +28,6 @@ export interface AdminBrandVenueInputDto {
 	venueId: string & tags.Format<'uuid'>;
 }
 
-export interface AdminSearchBrandInputDto {
-	cityId: string & tags.Format<'uuid'>;
-}
-
 export interface AdminListBrandSuggestionsInputDto {
 	cityId: string & tags.Format<'uuid'>;
 }

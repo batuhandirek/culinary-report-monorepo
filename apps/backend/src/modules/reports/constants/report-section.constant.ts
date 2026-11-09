@@ -23,7 +23,6 @@ export enum ReportSectionKindEnum {
 	MEDIA = 'media',
 	CREATORS = 'creators',
 	REVIEWS = 'reviews',
-	REPLIES = 'replies',
 	DISHES = 'dishes',
 	// Each place's own figures, one place after another
 	PLACES = 'places',

@@ -2,11 +2,10 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
-import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
-import { PipelineRun, PipelineRunStatusEnum } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
 import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
@@ -17,9 +16,12 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { DataCoverageService } from '../services/data-coverage.service.js';
 import { TodayService } from '../services/today.service.js';
 
+import { fakeDurable } from './fake-durable.js';
+
 describe('TodayService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: TodayService;
+	const durable = fakeDurable();
 	const now = new Date('2026-10-18T12:00:00Z');
 
 	beforeAll(async () => {
@@ -27,9 +29,13 @@ describe('TodayService (pglite)', () => {
 			providers: [
 				TodayService,
 				CityService,
+				{ provide: DurableWorkflowsService, useValue: durable },
 				DataCoverageService,
 				{ provide: BrandService, useValue: { suggestions: async () => [{}, {}] } },
-				{ provide: ProspectQueryService, useValue: { due: async () => [], suggested: async () => [] } },
+				{
+					provide: ProspectQueryService,
+					useValue: { due: async () => [], suggested: async () => [] },
+				},
 			],
 		});
 		service = harness.moduleRef.get(TodayService);
@@ -42,25 +48,25 @@ describe('TodayService (pglite)', () => {
 
 	it('lists what waits on an admin, most pressing first, each with where it is done', async () => {
 		const em = harness.orm.em;
-		const city = await cityFactory.create({ name: 'Berlin' });
+		const city = await cityFactory.create({ name: 'Berlin', cronEnabled: true });
 		const replied = venueFactory.build({ name: 'Replied' }, { associations: { city } });
 		const customer = venueFactory.build({ name: 'Customer' }, { associations: { city } });
 		await em.flush();
 		em.create(Prospect, { brand: replied.brand, stage: ProspectStageEnum.REPLIED });
 		em.create(Prospect, { brand: customer.brand, stage: ProspectStageEnum.WON });
-		const run = (step: PipelineStepEnum, status: PipelineRunStatusEnum, at: string) =>
-			em.create(PipelineRun, {
-				city,
-				step,
-				month: '2026-09',
-				status,
-				createdAt: new Date(at),
-				finishedAt: new Date(at),
-			});
-		// A failure made good by a later run is history; one that wasn't is waiting
-		run(PipelineStepEnum.SCRAPE_TIKTOK, PipelineRunStatusEnum.FAILED, '2026-10-16T06:00:00Z');
-		run(PipelineStepEnum.SCRAPE_TIKTOK, PipelineRunStatusEnum.SUCCEEDED, '2026-10-16T07:00:00Z');
-		run(PipelineStepEnum.SCRAPE_REVIEWS, PipelineRunStatusEnum.FAILED, '2026-10-16T08:00:00Z');
+		// A failure a later run made good is history; one that wasn't is waiting (DBOS's runs, faked)
+		const run = (workflowName: string, status: string, period: string, at: string) => ({
+			workflowID: `${workflowName}-${city.id}-${period}-${at}`,
+			workflowName,
+			status,
+			attributes: { cityId: city.id, purpose: workflowName.split('.')[0], period },
+			createdAt: at,
+		});
+		durable.state.runs = [
+			run('post-counts.day', 'ERROR', '2026-10-16', '2026-10-16T05:30:00Z'),
+			run('post-counts.day', 'SUCCESS', '2026-10-17', '2026-10-17T05:30:00Z'),
+			run('scrape-reviews.month', 'ERROR', '2026-09', '2026-10-16T08:00:00Z'),
+		];
 		const post = em.create(SocialPost, {
 			city,
 			externalId: 'today-1',
@@ -88,8 +94,14 @@ describe('TodayService (pglite)', () => {
 			['unmatched', 'info'],
 			[`merges-${city.id}`, 'info'],
 		]);
-		expect(today.todos.find(t => t.key === 'failed-runs')?.text).toContain('1 pipeline run failed');
-		expect(today.todos.find(t => t.key === 'replies')?.href).toBe('/admin/brands?segment=prospects&stage=REPLIED');
+		const failed = today.todos.find(t => t.key === 'failed-runs');
+		expect(failed?.text).toContain('1 pipeline run failed');
+		expect(failed?.href).toBe(
+			`/admin/workflows/${encodeURIComponent(`scrape-reviews.month-${city.id}-2026-09-2026-10-16T08:00:00Z`)}`,
+		);
+		expect(today.todos.find(t => t.key === 'replies')?.href).toBe(
+			'/admin/brands?segment=prospects&stage=REPLIED',
+		);
 		expect(today.unmatchedPosts).toEqual([
 			expect.objectContaining({ name: 'Mystery Spot', views: 12000, postId: post.id }),
 		]);

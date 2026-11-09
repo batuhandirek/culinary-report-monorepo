@@ -1,7 +1,5 @@
-import type { Rel } from '@mikro-orm/core';
-import { Entity, Enum, Index, ManyToOne, Property } from '@mikro-orm/decorators/legacy';
+import { Entity, Enum, Index, Property } from '@mikro-orm/decorators/legacy';
 
-import { PipelineRun } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
 import { MikroOrmEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-entity.abstract-class.js';
 
 import { ApifyRunRepository } from '../repositories/apify-run.repository.js';
@@ -50,10 +48,25 @@ export class ApifyRun extends MikroOrmEntityAbstractClass {
 	@Property({ type: 'text', nullable: true })
 	inputHash?: string | null;
 
-	// The pipeline run and step that started it (`apifyRunContext`); none outside a pipeline run
-	@ManyToOne({ entity: () => PipelineRun, nullable: true, deleteRule: 'set null', index: true })
-	pipelineRun?: Rel<PipelineRun> | null;
-
+	// The durable workflow and the step in it that started the run: a resumed workflow re-attaches
+	// to the run its earlier attempt of the step started instead of paying again
+	@Index()
 	@Property({ type: 'text', nullable: true })
-	stepKey?: string | null;
+	workflowId?: string | null;
+
+	@Property({ type: 'int', nullable: true })
+	workflowStepId?: number | null;
+
+	// The workflow whose work the run is: the operation that asked for it (an atom's caller), else
+	// the workflow that called `runActor`. The Data page's spend per month sums by it, since a run
+	// started from an atom is a child's child of the operation's run
+	@Index()
+	@Property({ type: 'text', nullable: true })
+	ownerWorkflowId?: string | null;
+
+	// What the run returned, stored once here: the actor-run workflow's result is only the record's
+	// id, so DBOS never keeps the items. Lazy and hidden: read only by `ApifyService.storedItems`.
+	// Old runs' items can be pruned once their callers have saved them.
+	@Property({ type: 'json', nullable: true, lazy: true, hidden: true })
+	items?: unknown[] | null;
 }

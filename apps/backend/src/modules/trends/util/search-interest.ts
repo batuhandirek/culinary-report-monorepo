@@ -1,39 +1,10 @@
 // Pure helpers for Google search interest (`TrendSearchInterest`) and its comparison with the
 // share of social mentions.
 
-/** One weekly point of `signalbench/google-trends-scraper`'s `interestOverTime`. */
-export interface GoogleTrendsTimelinePoint {
-	/** Unix seconds of the week's start */
-	timestamp: number;
-	/** "Sep 28 – Oct 4, 2025" */
-	date?: string;
-	/** 0–100; 0 where Google has too little data */
-	value: number;
-	isPartial?: boolean;
-}
-
-/** One related query of an item, as Google's "Related queries" box lists it. */
-export interface GoogleTrendsRelatedQuery {
-	label: string;
-	/** Top: 0–100 against the most searched one. Rising: percent growth (250 = +250 %) */
-	value: number;
-	/** Rising: "Breakout" past +5,000 %, else "+250%" */
-	formattedValue?: string;
-	link?: string;
-}
-
-/**
- * One dataset item of `signalbench/google-trends-scraper`: one per search term, none for a term
- * Google failed for (a comma in it, say).
- */
-export interface GoogleTrendsItem {
-	searchTerm: string;
-	/** The region searched, as given (DE-BE) */
-	geo?: string;
-	interestOverTime?: GoogleTrendsTimelinePoint[];
-	/** Up to 25 each, over the item's whole window */
-	relatedQueries?: { top?: GoogleTrendsRelatedQuery[]; rising?: GoogleTrendsRelatedQuery[] };
-}
+import type {
+	GoogleTrendsItem,
+	GoogleTrendsTimelinePoint,
+} from 'src/modules/apify/actors/google-trends.actor.js';
 
 /** A related query ready to store: `rank` is its place in Google's list, from 1. */
 export interface RelatedQueryRow {

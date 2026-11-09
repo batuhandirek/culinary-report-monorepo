@@ -129,16 +129,19 @@ export const prospectStageVariant = (stage: string): BadgeVariant => {
 	}
 };
 
-/** Pipeline runs, on the pipeline page and the overview. */
-export const pipelineRunStatusVariant = (status: string): BadgeVariant => {
+/** Durable workflow runs, on the Workflows list, a run's page and its children. */
+export const workflowStatusVariant = (status: string): BadgeVariant => {
 	switch (status) {
-		case 'SUCCEEDED':
+		case 'SUCCESS':
 			return 'success';
-		case 'FAILED':
+		case 'ERROR':
+		case 'MAX_RECOVERY_ATTEMPTS_EXCEEDED':
 			return 'destructive';
-		case 'RUNNING':
-		case 'WAITING':
+		case 'PENDING':
 			return 'warning';
+		case 'ENQUEUED':
+		case 'DELAYED':
+			return 'outline';
 		default:
 			return 'secondary';
 	}

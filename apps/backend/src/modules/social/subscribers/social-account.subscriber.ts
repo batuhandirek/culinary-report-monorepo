@@ -12,7 +12,11 @@ import { SocialAccount } from '../entities/social-account.entity.js';
 export class SocialAccountSubscriber implements EventSubscriber {
 	onFlush({ em, uow }: FlushEventArgs): void {
 		for (const changeSet of uow.getChangeSets()) {
-			if (changeSet.type !== ChangeSetType.CREATE || !(changeSet.entity instanceof SocialAccount)) continue;
+			if (
+				changeSet.type !== ChangeSetType.CREATE ||
+				!(changeSet.entity instanceof SocialAccount)
+			)
+				continue;
 			const account = changeSet.entity;
 			if (account.creator) continue;
 			const creator = em.create(Creator, { name: account.displayName || account.handle });

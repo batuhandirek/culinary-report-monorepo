@@ -1,4 +1,4 @@
-import type { GooglePlaceItem } from '../../services/venue.service.js';
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 
 // Two `compass/crawler-google-places` items for one place. The list item is a real search
 // result from 2026-10-15 (trimmed): a list scrape fills hours, the star distribution and only

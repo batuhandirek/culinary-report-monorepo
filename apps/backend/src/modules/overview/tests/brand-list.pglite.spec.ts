@@ -1,22 +1,26 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
+import { ApifyRun, ApifyRunStatusEnum } from 'src/modules/apify/entities/apify-run.entity.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
+import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
+import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
+import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
+import { Report } from 'src/modules/reports/entities/report.entity.js';
+import type {
+	ReportData,
+	ReportHighlights,
+} from 'src/modules/reports/interfaces/report-data.interface.js';
+import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
+import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
+import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
+import { socialAccountFactory } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
 import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
 import { TermService } from 'src/modules/topics/services/term.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
-import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
-import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
-import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
-import { PipelineRun, PipelineRunStatusEnum } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
-import { Report } from 'src/modules/reports/entities/report.entity.js';
-import type { ReportData, ReportHighlights } from 'src/modules/reports/interfaces/report-data.interface.js';
-import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
-import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
-import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
-import { socialAccountFactory } from 'src/modules/social/tests/factories/social-account.factory.js';
 import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -29,6 +33,8 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { BrandListService } from '../services/brand-list.service.js';
 import { BrandSummaryService } from '../services/brand-summary.service.js';
 import { DataCoverageService } from '../services/data-coverage.service.js';
+
+import { fakeDurable } from './fake-durable.js';
 
 describe('Brand list, brand summary and data coverage (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -47,7 +53,10 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 	const accountOf = (author: string) => {
 		const account =
 			accounts.get(author) ??
-			socialAccountFactory.build({ handle: author }, { associations: { city }, transient: { em: harness.orm.em } });
+			socialAccountFactory.build(
+				{ handle: author },
+				{ associations: { city }, transient: { em: harness.orm.em } },
+			);
 		accounts.set(author, account);
 		return account;
 	};
@@ -73,7 +82,12 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			matchMethod: MentionMatchMethodEnum.EXACT,
 			matchedAt: new Date(),
 		});
-	const review = (venue: Venue, publishedAt: string, stars: number, extra: Partial<Review> = {}) =>
+	const review = (
+		venue: Venue,
+		publishedAt: string,
+		stars: number,
+		extra: Partial<Review> = {},
+	) =>
 		harness.orm.em.create(Review, {
 			venue,
 			reviewId: `r-${Math.random()}`,
@@ -83,9 +97,18 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			...extra,
 		});
 
+	const durable = fakeDurable();
+
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [BrandListService, BrandSummaryService, DataCoverageService, TermService, TopicService],
+			providers: [
+				BrandListService,
+				BrandSummaryService,
+				DataCoverageService,
+				TermService,
+				TopicService,
+				{ provide: DurableWorkflowsService, useValue: durable },
+			],
 		});
 		list = harness.moduleRef.get(BrandListService);
 		summary = harness.moduleRef.get(BrandSummaryService);
@@ -96,7 +119,12 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		city = await cityFactory.create({ name: 'Berlin' });
 		const topics = seedTopics(em, ['kebab', 'vegan']);
 		// The agent linked a wording no topic names as a whole
-		const chicken = em.create(Term, { key: termKey('Chicken Döner'), name: 'Chicken Döner', decidedBy: 'ai', decidedAt: new Date() });
+		const chicken = em.create(Term, {
+			key: termKey('Chicken Döner'),
+			name: 'Chicken Döner',
+			decidedBy: 'ai',
+			decidedAt: new Date(),
+		});
 		em.create(TermTopic, { term: chicken, topic: topics.get('kebab')!, rank: 0 });
 		doner = venueFactory.build(
 			{
@@ -117,11 +145,23 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		);
 		chain = brandFactory.build({ name: 'Burgermeister' });
 		venueFactory.build(
-			{ name: 'Burgermeister Kotti', reviewsCount: 900, rating: 4.5, district: 'Kreuzberg', category: 'Hamburger restaurant' },
+			{
+				name: 'Burgermeister Kotti',
+				reviewsCount: 900,
+				rating: 4.5,
+				district: 'Kreuzberg',
+				category: 'Hamburger restaurant',
+			},
 			{ associations: { city, brand: chain } },
 		);
 		venueFactory.build(
-			{ name: 'Burgermeister Zoo', reviewsCount: 100, rating: 3.5, district: 'Charlottenburg', category: 'Hamburger restaurant' },
+			{
+				name: 'Burgermeister Zoo',
+				reviewsCount: 100,
+				rating: 3.5,
+				district: 'Charlottenburg',
+				category: 'Hamburger restaurant',
+			},
 			{ associations: { city, brand: chain } },
 		);
 		quiet = venueFactory.build({ name: 'Quiet Café' }, { associations: { city } });
@@ -151,7 +191,12 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			city,
 			month: '2026-09',
 			data: {} as ReportData,
-			highlights: { title: 'Food wins', headline: 'Strong month', highlights: [], actions: [] } as ReportHighlights,
+			highlights: {
+				title: 'Food wins',
+				headline: 'Strong month',
+				highlights: [],
+				actions: [],
+			} as ReportHighlights,
 			postCount: 3,
 			reviewCount: 3,
 		});
@@ -168,16 +213,31 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		expect(res.segments).toEqual({ talked: 2, all: 3, prospects: 1, customers: 1, chains: 1 });
 		expect(res.items.map(i => i.name)).toEqual(['Döner Pro', 'Burgermeister']);
 		const [row] = res.items;
-		expect(row.month).toMatchObject({ posts: 3, views: 6200, creators: 2, ownPosts: 1, reviews: 3, unanswered: 1 });
+		expect(row.month).toMatchObject({
+			posts: 3,
+			views: 6200,
+			creators: 2,
+			ownPosts: 1,
+			reviews: 3,
+			unanswered: 1,
+		});
 		expect(row.month.stars).toBeCloseTo(2.67, 2);
 		expect(row.previous).toEqual({ posts: 1, views: 300 });
 		expect(row.prospect?.stage).toBe(ProspectStageEnum.TO_CONTACT);
 		expect(row.report?.id).toBeTruthy();
-		expect(row).toMatchObject({ districts: ['Kreuzberg'], category: 'Restaurant', rating: 4.8, reviewsCount: 333 });
+		expect(row).toMatchObject({
+			districts: ['Kreuzberg'],
+			category: 'Restaurant',
+			rating: 4.8,
+			reviewsCount: 333,
+		});
 	});
 
 	it('shows a chain as the brand: its branches, districts, shared category and stars over all their reviews', async () => {
-		const res = await list.list({ page: 1, size: 25, cityId: city.id, month: '2026-09', segment: 'chains' }, now);
+		const res = await list.list(
+			{ page: 1, size: 25, cityId: city.id, month: '2026-09', segment: 'chains' },
+			now,
+		);
 
 		expect(res.items).toHaveLength(1);
 		expect(res.items[0]).toMatchObject({
@@ -194,20 +254,44 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 	});
 
 	it('searches branch names, and pages every brand on "all"', async () => {
-		const byBranch = await list.list({ page: 1, size: 25, cityId: city.id, month: '2026-09', segment: 'all', q: 'zoo' }, now);
+		const byBranch = await list.list(
+			{ page: 1, size: 25, cityId: city.id, month: '2026-09', segment: 'all', q: 'zoo' },
+			now,
+		);
 		expect(byBranch.items.map(i => i.name)).toEqual(['Burgermeister']);
 
-		const all = await list.list({ page: 1, size: 2, cityId: city.id, month: '2026-09', segment: 'all', sort: 'name:asc' }, now);
+		const all = await list.list(
+			{
+				page: 1,
+				size: 2,
+				cityId: city.id,
+				month: '2026-09',
+				segment: 'all',
+				sort: 'name:asc',
+			},
+			now,
+		);
 		expect(all.totalItems).toBe(3);
 		expect(all.items.map(i => i.name)).toEqual(['Burgermeister', 'Döner Pro']);
 		expect(quiet.brand.id).toBeTruthy();
 	});
 
 	it("sums up a brand's month, its six months and what to do", async () => {
-		const res = await summary.summary(doner.brand.id, { cityId: city.id, month: '2026-09' }, now);
+		const res = await summary.summary(
+			doner.brand.id,
+			{ cityId: city.id, month: '2026-09' },
+			now,
+		);
 
 		expect(res.figures).toMatchObject({ posts: 3, ownPosts: 1, reviews: 3, unanswered: 1 });
-		expect(res.series.map(s => s.month)).toEqual(['2026-04', '2026-05', '2026-06', '2026-07', '2026-08', '2026-09']);
+		expect(res.series.map(s => s.month)).toEqual([
+			'2026-04',
+			'2026-05',
+			'2026-06',
+			'2026-07',
+			'2026-08',
+			'2026-09',
+		]);
 		expect(res.series.at(-2)).toMatchObject({ posts: 1, reviews: 1 });
 		// Most viewed first, its own account's post left out
 		expect(res.topPosts.map(p => p.author)).toEqual(['creator_b', 'creator_a', 'creator_a']);
@@ -235,24 +319,60 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		]);
 	});
 
-	it("reads each month's stored data and every monthly step's latest attempt", async () => {
+	it("reads each month's stored data and every month step's run", async () => {
 		const em = harness.orm.em;
-		em.create(PipelineRun, {
-			city,
-			step: PipelineStepEnum.SCRAPE_REVIEWS,
-			month: '2026-09',
-			status: PipelineRunStatusEnum.FAILED,
-			error: 'cap',
-			createdAt: new Date('2026-10-02T06:00:00Z'),
-		});
-		em.create(PipelineRun, {
-			city,
-			step: PipelineStepEnum.SCRAPE_TIKTOK,
-			month: '2026-09',
-			status: PipelineRunStatusEnum.SUCCEEDED,
-			result: { '1. SCRAPE_TIKTOK': { found: 20, saved: 5 } },
-			createdAt: new Date('2026-10-02T07:00:00Z'),
-		});
+		// September's runs (DBOS's, faked): the TikTok scrape done, the review scrape failed at its step
+		durable.state.runs = [
+			{
+				workflowID: `scrape-tiktok.month-${city.id}-2026-09`,
+				workflowName: 'scrape-tiktok.month',
+				status: 'SUCCESS',
+				output: { found: 20, saved: 5 },
+				attributes: { cityId: city.id, purpose: 'scrape-tiktok', period: '2026-09' },
+				createdAt: '2026-10-02T07:00:00Z',
+			},
+			{
+				workflowID: `scrape-reviews.month-${city.id}-2026-09`,
+				workflowName: 'scrape-reviews.month',
+				status: 'ERROR',
+				attributes: { cityId: city.id, purpose: 'scrape-reviews', period: '2026-09' },
+				createdAt: '2026-10-02T06:00:00Z',
+				steps: [
+					{ name: 'clock', output: '2026-10-02T06:00:00Z' },
+					{ name: PipelineStepEnum.SCRAPE_REVIEWS, error: new Error('cap') },
+				],
+			},
+			{
+				workflowID: 'apify-child',
+				workflowName: 'runActor',
+				status: 'SUCCESS',
+				parentWorkflowID: `scrape-tiktok.month-${city.id}-2026-09`,
+				createdAt: '2026-10-02T07:01:00Z',
+			},
+			{
+				workflowID: `post-counts.day-${city.id}-2026-10-17`,
+				workflowName: 'post-counts.day',
+				status: 'SUCCESS',
+				output: { read: 12 },
+				attributes: { cityId: city.id, purpose: 'post-counts', period: '2026-10-17' },
+				createdAt: '2026-10-17T05:30:00Z',
+			},
+		];
+		// Apify's spend: an actor run inside the review run's step, and the TikTok run's child (an
+		// actor child or an atom's run: its row names the operation as its owner)
+		const apifyRun = (workflowId: string, costUsd: number, ownerWorkflowId = workflowId) =>
+			em.create(ApifyRun, {
+				actorId: 'actor',
+				purpose: 'test',
+				status: ApifyRunStatusEnum.SUCCEEDED,
+				maxCostUsd: 10,
+				costUsd,
+				workflowId,
+				ownerWorkflowId,
+			});
+		apifyRun(`scrape-reviews.month-${city.id}-2026-09`, 1.5);
+		apifyRun('apify-child', 0.25, `scrape-tiktok.month-${city.id}-2026-09`);
+		apifyRun('someone-else', 9);
 		await em.flush();
 
 		const res = await coverage.coverage(city.id, 3, now);
@@ -271,10 +391,28 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			reviews: { total: 3, venues: 1 },
 			reports: { built: 1, sent: 0 },
 		});
+		expect(september.apifyUsd).toBeCloseTo(1.75);
 		const step = (name: PipelineStepEnum) => september.steps.find(s => s.step === name);
-		expect(step(PipelineStepEnum.SCRAPE_TIKTOK)).toMatchObject({ state: 'succeeded', summary: 'found 20 · saved 5', paid: true });
-		expect(step(PipelineStepEnum.SCRAPE_REVIEWS)).toMatchObject({ state: 'failed', error: 'cap' });
-		expect(step(PipelineStepEnum.BUILD_REPORTS)?.state).toBeUndefined();
-		expect(step(PipelineStepEnum.BUILD_REPORTS)?.paid).toBe(false);
+		expect(step(PipelineStepEnum.SCRAPE_TIKTOK)).toMatchObject({
+			state: 'succeeded',
+			summary: 'found 20 · saved 5',
+			paid: true,
+			workflowId: `scrape-tiktok.month-${city.id}-2026-09`,
+		});
+		expect(step(PipelineStepEnum.SCRAPE_REVIEWS)).toMatchObject({
+			state: 'failed',
+			error: 'cap',
+		});
+		// A step whose run never started has no state; a free one is not paid
+		expect(step(PipelineStepEnum.SCORE_LEADS)?.state).toBeUndefined();
+		expect(step(PipelineStepEnum.SCORE_LEADS)?.paid).toBe(false);
+		expect(september.steps.some(s => (s.step as string) === 'BUILD_REPORTS')).toBe(false);
+		expect(
+			res.recurring.find(r => r.step === PipelineStepEnum.REFRESH_POST_COUNTS),
+		).toMatchObject({
+			state: 'succeeded',
+			summary: 'read 12',
+		});
+		expect(res.queue).toEqual([]);
 	});
 });

@@ -16,7 +16,6 @@ import {
 import { cityStopwords } from '../util/venue-names.js';
 
 import { OverpassService } from './overpass.service.js';
-import { VenueScrapeService } from './venue-scrape.service.js';
 
 // What a Google Maps list result costs on Apify's Free plan (Berlin lookups, 2026-10-18/19)
 export const PLACE_RESULT_USD = 0.004;
@@ -39,8 +38,9 @@ export interface OsmCoverage {
 
 /**
  * OpenStreetMap's food places as a checklist for the venue list: the one writer of `OsmPlace`.
- * `sync` lists the city's places (free), links each to the venue it is, and `lookup` searches
- * Google Maps for the ones no venue is, so the venue list fills from Google, place by place.
+ * `sync` lists the city's places (free), links each to the venue it is, and the `osm-places`
+ * operation searches Google Maps for the ones no venue is (`planLookups`, the `places` atom,
+ * `saveLookups`), so the venue list fills from Google, place by place.
  */
 @Injectable()
 export class OsmPlaceService {
@@ -49,7 +49,6 @@ export class OsmPlaceService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly overpassService: OverpassService,
-		private readonly venueScrapeService: VenueScrapeService,
 	) {}
 
 	/**
@@ -128,44 +127,53 @@ export class OsmPlaceService {
 	}
 
 	/**
-	 * Searches Google Maps for the last sync's places no venue is and that were never searched
-	 * (`osmLookupOrder`, as many as `budgetUsd` covers at one result each: their name and
-	 * address, `osmSearchString`), saves what Google returns (`searchPlaces`), stamps
-	 * `lookedUpAt` and links them (`match`). Flushes.
+	 * The last sync's places no venue is and that were never searched (`osmLookupOrder`, as many
+	 * as `budgetUsd` covers at one result each), each as its Google Maps search (its name and
+	 * address, `osmSearchString`): the plan step of `osm-places`, before the `places.run` child
+	 * (typed searches, one place each); `saveLookups` the step after it.
 	 */
-	async lookup(
+	async planLookups(
 		city: City,
 		budgetUsd: number,
-		now = new Date(),
-	): Promise<{ searched: number; found: number; saved: number; linked: number } & OsmCoverage> {
+	): Promise<{ osmPlaceIds: string[]; queries: string[] }> {
 		const room = Math.floor((budgetUsd * BUDGET_HEADROOM) / PLACE_RESULT_USD);
 		const due = osmLookupOrder(
 			await this.em.find(OsmPlace, { ...this.listed(city), venue: null, lookedUpAt: null }),
 		).slice(0, room);
+		return {
+			osmPlaceIds: due.map(p => p.id),
+			queries: [...new Set(due.map(p => osmSearchString(p, city.name)))],
+		};
+	}
 
-		let found = 0;
-		let saved = 0;
+	/**
+	 * The searched places stamped `lookedUpAt` (never searched twice, even when Google had nothing
+	 * that close) and linked again (`match`) now that what Google returned is saved. Flushes.
+	 */
+	async saveLookups(
+		city: City,
+		osmPlaceIds: string[],
+		result: { found: number; saved: number },
+		now = new Date(),
+	): Promise<{ searched: number; found: number; saved: number; linked: number } & OsmCoverage> {
 		let linked = 0;
-		if (due.length) {
-			const searches = [...new Set(due.map(p => osmSearchString(p, city.name)))];
-			const result = await this.venueScrapeService.searchPlaces(
-				city,
-				searches,
-				1,
-				budgetUsd,
-				`google-places OSM gaps ${city.name}: ${searches.length} places`,
-			);
-			found = result.items.length;
-			saved = result.saved;
-			for (const place of due) place.lookedUpAt = now;
+		if (osmPlaceIds.length) {
+			for (const place of await this.em.find(OsmPlace, { id: { $in: osmPlaceIds } }))
+				place.lookedUpAt = now;
 			await this.em.flush();
 			linked = (await this.match(city)).matched;
 		}
 		const coverage = await this.coverage(city);
 		this.logger.log(
-			`OSM lookups ${city.name}: ${due.length} searched, ${linked} now matched, ${coverage.toLookUp} left`,
+			`OSM lookups ${city.name}: ${osmPlaceIds.length} searched, ${linked} now matched, ${coverage.toLookUp} left`,
 		);
-		return { searched: due.length, found, saved, linked, ...coverage };
+		return {
+			searched: osmPlaceIds.length,
+			found: result.found,
+			saved: result.saved,
+			linked,
+			...coverage,
+		};
 	}
 
 	/** How much of what OSM lists the venue list has: the last sync's places by state. */

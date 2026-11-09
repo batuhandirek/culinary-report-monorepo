@@ -137,7 +137,6 @@ export interface AdminBranchReviewOutputDto extends AdminReviewOutputDto {
 	platform: 'google' | 'tripadvisor';
 	branch: { id: string; name: string; street?: string; district?: string };
 	markedRepliedAt?: Date;
-	replyDraft?: string;
 }
 
 export interface AdminListReviewsOutputDto extends PaginatedResult<AdminBranchReviewOutputDto> {}

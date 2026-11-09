@@ -76,8 +76,23 @@
 	};
 	type Query = PaginationRequest & Record<string, unknown>;
 
-	const fetchPage = (params: Query): Promise<Page> =>
-		(api as unknown as (params: Query) => Promise<Page>)(params);
+	// A list that cannot count says only whether there is more: its total is what was seen
+	// so far, plus one while a next page exists, so the pager offers exactly that page.
+	let uncounted = $state(false);
+	let more = $state(false);
+	const fetchPage = async (params: Query): Promise<Page> => {
+		const result = await (
+			api as unknown as (params: Query) => Promise<Page | (Omit<Page, 'totalItems'> & { hasMore: boolean })>
+		)(params);
+		if ('totalItems' in result) {
+			uncounted = false;
+			return result;
+		}
+		uncounted = true;
+		more = result.hasMore;
+		const seen = (params.page - 1) * params.size + result.items.length;
+		return { ...result, totalItems: seen + (result.hasMore ? 1 : 0) };
+	};
 
 	// A table that has the page to itself shows a screenful, not a card's worth.
 	const limit = fill ? Math.max(requestedLimit, 25) : requestedLimit;
@@ -762,6 +777,9 @@
 					<!-- Everything is on screen: a range would only repeat the total. -->
 					<span class="text-ink font-medium">{count(total)}</span>
 					{nounFor(total)}
+				{:else if uncounted}
+					<span class="text-ink font-medium">{count(rangeStart)}–{count(rangeEnd)}</span>
+					{noun}{more ? ', more on the next page' : ''}
 				{:else}
 					<span class="text-ink font-medium">{count(rangeStart)}–{count(rangeEnd)}</span>
 					of {count(total)}

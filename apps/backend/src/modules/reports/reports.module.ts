@@ -15,7 +15,6 @@ import { VenuesModule } from '../venues/venues.module.js';
 
 import { ReportAnalysisAgent } from './agents/report-analysis.agent.js';
 import { ReportEditorAgent } from './agents/report-editor.agent.js';
-import { ReviewReplyAgent } from './agents/review-reply.agent.js';
 import { AdminReportSharesController } from './controllers/admin.report-shares.controller.js';
 import { AdminReportConfigsController } from './controllers/admin.report-configs.controller.js';
 import { AdminReportTemplatesController } from './controllers/admin.report-templates.controller.js';
@@ -33,7 +32,9 @@ import { ReportReachService } from './services/report-reach.service.js';
 import { ReportShareService } from './services/report-share.service.js';
 import { ReportSignalsService } from './services/report-signals.service.js';
 import { ReportConfigService } from './services/report-config.service.js';
+import { ReportRunsService } from './services/report-runs.service.js';
 import { ReportTemplateService } from './services/report-template.service.js';
+import { ReportBuildWorkflow } from './workflows/report-build.workflow.js';
 
 @Module({
 	imports: [
@@ -57,11 +58,12 @@ import { ReportTemplateService } from './services/report-template.service.js';
 		ReportTemplateService,
 		ReportConfigService,
 		ReportEditorAgent,
-		ReviewReplyAgent,
 		ReportAnalysisAgent,
 		ReportEvidenceService,
+		// An admin's builds and analyses run in the background (`reports` queue)
+		ReportBuildWorkflow,
+		ReportRunsService,
 	],
-	// The agent too: outreach's review alert drafts its reply with it
-	exports: [ReportService, ReportShareService, ReportPdfService, ReviewReplyAgent],
+	exports: [ReportService, ReportShareService, ReportPdfService],
 })
 export class ReportsModule {}

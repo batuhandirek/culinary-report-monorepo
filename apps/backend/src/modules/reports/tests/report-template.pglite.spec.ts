@@ -14,9 +14,9 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
-import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import {
 	ReportConfigStatusEnum,
 	ReportCoverKpiEnum,
@@ -45,11 +45,12 @@ describe('report templates and brand configurations (pglite)', () => {
 	let configs: ReportConfigService;
 	let reports: ReportService;
 	const highlightsAgent = mockAgent(HIGHLIGHTS);
-	const replyAgent = mockAgent({ replies: [] });
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
+				// Real: an agent call that finds no account waits for one
+				DurableLlmService,
 				ReportService,
 				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
 				TopicService,
@@ -59,7 +60,6 @@ describe('report templates and brand configurations (pglite)', () => {
 				BrandService,
 				CityService,
 				{ provide: ReportEditorAgent, useValue: highlightsAgent },
-				{ provide: ReviewReplyAgent, useValue: replyAgent },
 			],
 		});
 		templates = harness.moduleRef.get(ReportTemplateService);
@@ -79,7 +79,6 @@ describe('report templates and brand configurations (pglite)', () => {
 		await em.nativeDelete(ReportTemplate, {});
 		em.clear();
 		highlightsAgent.generate.mockClear();
-		replyAgent.generate.mockClear();
 	});
 
 	const brandIn = async (name: string) => {
@@ -161,7 +160,7 @@ describe('report templates and brand configurations (pglite)', () => {
 			});
 			await configs.update(config.id, {
 				name: 'Reviews only',
-				sections: [{ kind: Kind.COVER }, { kind: Kind.REVIEWS }, { kind: Kind.REPLIES }],
+				sections: [{ kind: Kind.COVER }, { kind: Kind.REVIEWS }, { kind: Kind.STARS }],
 			});
 			harness.orm.em.clear();
 			expect((await templates.get(template.id)).sections.map(s => s.kind)).toEqual([
@@ -170,7 +169,7 @@ describe('report templates and brand configurations (pglite)', () => {
 			]);
 			const stored = await configs.get(config.id);
 			expect(stored.name).toBe('Reviews only');
-			expect(stored.sections.map(s => s.kind)).toEqual(['cover', 'reviews', 'replies']);
+			expect(stored.sections.map(s => s.kind)).toEqual(['cover', 'reviews', 'stars']);
 
 			// A template counts the brands with a copy
 			expect((await templates.list()).find(t => t.template.id === template.id)?.brands).toBe(
@@ -243,7 +242,7 @@ describe('report templates and brand configurations (pglite)', () => {
 			);
 		});
 
-		it('builds a report per active configuration, the data and reply drafts once, each with its own highlights', async () => {
+		it('builds a report per active configuration, the data once, each with its own highlights', async () => {
 			const em = harness.orm.em;
 			const { city, brandId } = await brandIn('Ramen Ya');
 			const template = await reportTemplateFactory.create({ name: 'Full', isDefault: true });
@@ -262,7 +261,6 @@ describe('report templates and brand configurations (pglite)', () => {
 			expect(built.map(r => r.template?.id ?? null)).toEqual([template.id, null]);
 			expect(built[1].sections.map(s => s.kind)).toEqual(['cover', 'reviews']);
 			expect(highlightsAgent.generate).toHaveBeenCalledTimes(2);
-			expect(replyAgent.generate.mock.calls.length).toBeLessThanOrEqual(1);
 
 			// A rebuild replaces the rows; one configuration rebuilds alone, paused or not
 			await reports.buildAll(brandId, city.id, '2026-09');

@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { reflagOpeningsPlainly } from 'src/modules/pipeline/read-posts/tests/factories/read-posts.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
@@ -8,7 +10,6 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { PostClaimsAgent } from '../agents/post-claims.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { MentionExtractionService } from '../services/mention-extraction.service.js';
@@ -119,7 +120,7 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 
 	it('sets the flag on the matching stored mentions, most viewed first, page by page', async () => {
 		const scope = { month: '2026-10', analysedBefore: cutoff, limit: 2 };
-		const first = await service.reflagOpenings({ ...scope, offset: 0 });
+		const first = await reflagOpeningsPlainly(harness.moduleRef, { ...scope, offset: 0 });
 		expect(first).toMatchObject({
 			total: 3,
 			posts: 2,
@@ -130,7 +131,7 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 			cleared: 1,
 			unpaired: 0,
 		});
-		const second = await service.reflagOpenings({ ...scope, offset: 2 });
+		const second = await reflagOpeningsPlainly(harness.moduleRef, { ...scope, offset: 2 });
 		// "Tacos Loco" is the post's one unpaired mention, "Taco Loco"; "Lazy Bar" is ignored
 		expect(second).toMatchObject({
 			total: 3,
@@ -141,7 +142,9 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 			cleared: 0,
 			unpaired: 0,
 		});
-		expect(await service.reflagOpenings({ ...scope, offset: 3 })).toMatchObject({
+		expect(
+			await reflagOpeningsPlainly(harness.moduleRef, { ...scope, offset: 3 }),
+		).toMatchObject({
 			posts: 0,
 			read: 0,
 		});
@@ -191,7 +194,7 @@ describe('MentionExtractionService.reflagOpenings (pglite)', () => {
 	it('reads only the posts with a flagged mention when asked, whenever they were analysed', async () => {
 		agent.generate.mockClear();
 		// rf-1 and rf-3 carry a flag after the first pass; rf-2 and rf-6 none
-		const res = await service.reflagOpenings({
+		const res = await reflagOpeningsPlainly(harness.moduleRef, {
 			month: '2026-10',
 			onlyFlagged: true,
 			limit: 10,

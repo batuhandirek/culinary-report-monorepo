@@ -110,8 +110,7 @@
 		{/if}
 	{:else}
 		<p class="text-muted-foreground m-0 text-sm">
-			Not scored yet. Scores are computed at the end of the monthly run, or by starting
-			<a href="/admin/data?tab=runs" class="text-beet hover:underline">Score leads</a> on the Data page.
+			Not scored yet. Scores are computed at the end of the monthly run.
 		</p>
 	{/if}
 </AdminPanel>

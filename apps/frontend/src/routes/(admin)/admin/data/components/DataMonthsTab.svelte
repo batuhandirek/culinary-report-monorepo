@@ -1,28 +1,23 @@
 <script lang="ts">
-	import { Check, CircleDashed, Clock, Hourglass, Loader, Minus, Redo2, Wand2, X } from '@lucide/svelte';
+	import { Check, CircleDashed, Clock, Loader, Minus, X } from '@lucide/svelte';
 	import type { AdminDataCoverageOutputDto, AdminDataStepOutputDto } from 'client';
 
 	import { onMount, untrack } from 'svelte';
-
-	import { AdminStartPipelineRunInputDtoStepEnum as Step } from 'client';
 
 	import { ago, at } from '#components/admin/admin-format.js';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { compact, monthLabel } from '#lib/culinary.js';
 	import { PIPELINE_STEPS, stepLabel } from '#lib/pipeline-steps.js';
-	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import { cn } from '#ui/lib/utils.js';
 	import Badge from '#ui/wrapped/Badge.svelte';
-	import Button from '#ui/wrapped/Button.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
-	import PopConfirm from '#ui/wrapped/PopConfirm.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// Month by month: what is stored and what every step of the monthly run did, so a month half
-	// done shows as one. A cell runs that step for that month; "Finish" runs every step that has
-	// not succeeded (paid ones only when missing, the free ones again on the new data).
+	// Month by month: what is stored and what each month step's run did (every operation is a
+	// workflow of its own, one run a city and month), so a month half done shows as one. Read-only:
+	// a cell opens its run on /admin/workflows, where a failed one is resumed.
 	interface Props {
 		cityId: string;
 	}
@@ -54,11 +49,9 @@
 
 	const STATES = {
 		succeeded: { icon: Check, class: 'bg-success/15 text-success', label: 'Done' },
-		skipped: { icon: Redo2, class: 'bg-wash text-muted-foreground', label: 'Skipped: done before' },
 		failed: { icon: X, class: 'bg-destructive/10 text-destructive', label: 'Failed' },
 		running: { icon: Loader, class: 'bg-tint text-ink', label: 'Running' },
 		queued: { icon: Clock, class: 'bg-tint text-muted-foreground', label: 'Queued' },
-		waiting: { icon: Hourglass, class: 'bg-warning/15 text-warning', label: 'Waiting for the reading (no model answers)' },
 		never: { icon: Minus, class: 'text-faint', label: 'Never ran' }
 	} as const;
 	const stateOf = (cell?: AdminDataStepOutputDto) => STATES[(cell?.state ?? 'never') as keyof typeof STATES];
@@ -67,46 +60,10 @@
 			`${stepLabel(cell?.step ?? '')}, ${monthLabel(month)}: ${stateOf(cell).label}`,
 			cell?.at ? `${at(cell.at)} (${ago(cell.at)})` : '',
 			cell?.summary ?? '',
-			cell?.error ?? '',
-			'Click to run it again'
+			cell?.error ?? ''
 		]
 			.filter(Boolean)
 			.join('\n');
-
-	// One step for one month, or the whole month's missing steps
-	let pending = $state<{ step: Step; month: string } | null>(null);
-	let confirming = $state(false);
-	const ask = (step: Step, month: string) => {
-		pending = { step, month };
-		confirming = true;
-	};
-	const startAction = createAction(
-		(run: { step: Step; month: string }) =>
-			api.admin.startPipelineRun({
-				cityId,
-				step: run.step,
-				month: run.month,
-				...(run.step === Step.MONTHLY && { onlyMissing: true })
-			}),
-		{
-			onSuccess: () => loader.reload(),
-			successNotification: (_, [run]) => ({
-				title: 'Queued',
-				text: `${run.step === Step.MONTHLY ? 'Finishing' : stepLabel(run.step)} ${monthLabel(run.month)}`
-			})
-		}
-	);
-	const pendingText = $derived.by(() => {
-		if (!pending) return '';
-		if (pending.step === Step.MONTHLY) {
-			const month = months.find((m) => m.month === pending!.month);
-			const paid = month?.steps.filter((s) => s.paid && s.state !== 'succeeded' && s.state !== 'skipped') ?? [];
-			const cost = paid.reduce((sum, s) => sum + (budgetOf(s.step) ?? 0), 0);
-			return `Runs the monthly sequence for ${monthLabel(pending.month)}: the ${paid.length} paid steps that have not succeeded (up to $${cost} on their default budgets), and every free step again on the new data. It takes an hour or more.`;
-		}
-		const budget = budgetOf(pending.step);
-		return `${PIPELINE_STEPS.find((s) => s.value === pending!.step)?.note ?? ''}${budget ? ` Up to $${budget}.` : ' Free (LLM calls only).'}`;
-	});
 
 	const STORED = [
 		{ label: 'TikTok posts', value: (m: AdminDataCoverageOutputDto['months'][number]) => m.posts.tiktok },
@@ -121,10 +78,11 @@
 		{ label: 'Reports built', value: (m: AdminDataCoverageOutputDto['months'][number]) => m.reports.built },
 		{ label: 'Reports sent', value: (m: AdminDataCoverageOutputDto['months'][number]) => m.reports.sent }
 	];
-	const running = $derived(coverage?.queue.find((q) => q.state === 'running'));
+	const running = $derived(coverage?.queue.filter((q) => q.state === 'running') ?? []);
 	const queued = $derived(coverage?.queue.filter((q) => q.state === 'queued').length ?? 0);
-	// Runs that wait for the reading: a model refused, so a step that needs the posts read waits
-	const waiting = $derived(coverage?.queue.filter((q) => q.state === 'waiting') ?? []);
+	const runHref = (workflowId: string) => `/admin/workflows/${encodeURIComponent(workflowId)}`;
+	const runLabel = (run: AdminDataCoverageOutputDto['queue'][number]) =>
+		`${run.steps.length ? run.steps.map(stepLabel).join(', ') : run.workflow}${run.period ? `, ${/^\d{4}-\d{2}$/.test(run.period) ? monthLabel(run.period) : run.period}` : ''}`;
 </script>
 
 {#if loader.failed}
@@ -134,25 +92,21 @@
 {:else}
 	<div class="flex min-w-0 flex-col gap-5 pb-12">
 		<div class="border-line bg-paper flex flex-wrap items-center gap-x-4 gap-y-2 rounded-md border px-4 py-3 text-sm">
-			{#if running}
-				<span class="flex items-center gap-2 font-medium">
+			{#if running.length}
+				<span class="flex flex-wrap items-center gap-x-3 gap-y-1 font-medium">
 					<Loader class="size-4 animate-spin" />
-					{stepLabel(running.step)}, {monthLabel(running.month)}
+					{#each running as run (run.workflowId)}
+						<a href={runHref(run.workflowId)} class="hover:underline">{runLabel(run)}</a>
+					{/each}
 				</span>
-				<span class="text-muted-foreground">since {ago(running.createdAt)}{queued ? ` · ${queued} more queued` : ''}</span>
+				<span class="text-muted-foreground">since {ago(running[0].createdAt)}{queued ? ` · ${queued} more queued` : ''}</span>
 			{:else if queued}
 				<span class="text-muted-foreground">{queued} queued, starting</span>
 			{:else}
 				<span class="text-muted-foreground flex items-center gap-2"><CircleDashed class="size-4" /> Nothing running</span>
 			{/if}
-			{#if waiting.length}
-				<span class="text-warning flex items-center gap-2" title="No model answers, so they wait for the reading; each checks again hourly and goes on once the posts are read">
-					<Hourglass class="size-4" />
-					{waiting.length} waiting for the reading: {waiting.map((w) => `${stepLabel(w.step)}, ${monthLabel(w.month)}`).join(' · ')}
-				</span>
-			{/if}
 			<span class="text-muted-foreground ml-auto text-xs">
-				The monthly cron reports on {monthLabel(coverage.reportMonth)}. A cell's tooltip says what the step found.
+				The month operations cover {monthLabel(coverage.reportMonth)} now. A cell's tooltip says what the step found; it opens its run.
 			</span>
 		</div>
 
@@ -212,28 +166,26 @@
 								{@const cell = cellOf(m.month, step)}
 								{@const state = stateOf(cell)}
 								<td class="px-2 py-1 text-center">
-									<button
-										type="button"
-										title={titleOf(m.month, cell)}
-										aria-label={`${stepLabel(step)}, ${monthLabel(m.month)}: ${state.label}`}
-										class={cn('inline-flex h-7 w-10 cursor-pointer items-center justify-center rounded-md hover:ring-1 hover:ring-ink/30', state.class)}
-										onclick={() => ask(step as unknown as Step, m.month)}>
-										<state.icon class={cn('size-4', cell?.state === 'running' && 'animate-spin')} />
-									</button>
+									{#if cell?.workflowId}
+										<a
+											href={runHref(cell.workflowId)}
+											title={titleOf(m.month, cell)}
+											aria-label={`${stepLabel(step)}, ${monthLabel(m.month)}: ${state.label}`}
+											class={cn('inline-flex h-7 w-10 items-center justify-center rounded-md hover:ring-1 hover:ring-line', state.class)}>
+											<state.icon class={cn('size-4', cell.state === 'running' && 'animate-spin')} />
+										</a>
+									{:else}
+										<span
+											title={titleOf(m.month, cell)}
+											aria-label={`${stepLabel(step)}, ${monthLabel(m.month)}: ${state.label}`}
+											class={cn('inline-flex h-7 w-10 items-center justify-center rounded-md', state.class)}>
+											<state.icon class="size-4" />
+										</span>
+									{/if}
 								</td>
 							{/each}
 						</tr>
 					{/each}
-					<tr>
-						<td class="px-4 py-3"></td>
-						{#each months as m (m.month)}
-							<td class="px-2 py-3 text-center">
-								{#if !m.complete && !m.inProgress}
-									<Button size="sm" variant="outline" icon={Wand2} onclick={() => ask(Step.MONTHLY, m.month)}>Finish</Button>
-								{/if}
-							</td>
-						{/each}
-					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -246,11 +198,14 @@
 						<span class={cn('inline-flex h-6 w-8 shrink-0 items-center justify-center rounded-md', state.class)}>
 							<state.icon class="size-3.5" />
 						</span>
-						<span class="w-52 shrink-0 font-medium">{stepLabel(row.step)}</span>
+						{#if row.workflowId}
+							<a href={runHref(row.workflowId)} class="w-52 shrink-0 font-medium hover:underline">{stepLabel(row.step)}</a>
+						{:else}
+							<span class="w-52 shrink-0 font-medium">{stepLabel(row.step)}</span>
+						{/if}
 						<span class="text-muted-foreground min-w-0 flex-1 truncate">
 							{row.at ? `${ago(row.at)} · ` : 'Never ran'}{row.summary ?? row.error ?? ''}
 						</span>
-						<Button size="sm" variant="ghost" onclick={() => ask(row.step as unknown as Step, coverage!.reportMonth)}>Run now</Button>
 					</li>
 				{/each}
 			</ul>
@@ -258,9 +213,3 @@
 	</div>
 {/if}
 
-<PopConfirm
-	bind:open={confirming}
-	title={pending ? (pending.step === Step.MONTHLY ? `Finish ${monthLabel(pending.month)}?` : `Run ${stepLabel(pending.step)} for ${monthLabel(pending.month)}?`) : ''}
-	description={pendingText}
-	confirmText={pending?.step === Step.MONTHLY ? 'Finish the month' : 'Queue it'}
-	onConfirm={() => pending && startAction.execute(pending)} />

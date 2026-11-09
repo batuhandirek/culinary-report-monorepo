@@ -10,7 +10,6 @@ import { EmailService } from 'src/modules/email/services/email.service.js';
 import { renderEmail } from 'src/modules/email/util/render-email.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ReportEditorAgent } from 'src/modules/reports/agents/report-editor.agent.js';
-import { ReviewReplyAgent } from 'src/modules/reports/agents/review-reply.agent.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import { ReportShare } from 'src/modules/reports/entities/report-share.entity.js';
 import { ReportBuiltEvent } from 'src/modules/reports/persisted-events/report-built.persisted-event.js';
@@ -25,6 +24,7 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 
 import { OutreachTouchKindEnum, ProspectStageEnum } from '../constants/outreach.constant.js';
 import { OutreachTouch } from '../entities/outreach-touch.entity.js';
@@ -93,6 +93,8 @@ describe('Report e-mail delivery (pglite)', () => {
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
+				// Real: an agent call that finds no account waits for one
+				DurableLlmService,
 				BrandService,
 				CityService,
 				ReportService,
@@ -106,7 +108,6 @@ describe('Report e-mail delivery (pglite)', () => {
 				ReportDeliveryService,
 				EmailService,
 				{ provide: ReportEditorAgent, useValue: mockAgent(HIGHLIGHTS) },
-				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },
 				{ provide: PgBossService, useValue: pgBossService },
 			],
 		});

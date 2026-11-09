@@ -1,9 +1,11 @@
+import type { TripadvisorReviewItem } from 'src/modules/apify/actors/tripadvisor-reviews.actor.js';
+
 // TripAdvisor: finding a venue's page through a web search, and the review actor's item shape.
 // Pure functions.
-
 import { isInCity, isSameVenue } from './venue-names.js';
 
-const RESTAURANT_PAGE = /^https?:\/\/(?:[\w-]+\.)*tripadvisor\.[a-z.]+\/Restaurant_Review-g\d+-d(\d+)-/i;
+const RESTAURANT_PAGE =
+	/^https?:\/\/(?:[\w-]+\.)*tripadvisor\.[a-z.]+\/Restaurant_Review-g\d+-d(\d+)-/i;
 
 /** The TripAdvisor location id of a restaurant page URL (`…-d3896790-…`), or null. */
 export const tripadvisorLocationId = (url: string | null | undefined): string | null =>
@@ -58,9 +60,13 @@ export interface TripadvisorReviewFields {
  * `ownerResponse`, `placeUrl` / `placeLocationId`, `placeRating`, `placeReviewsCount`). The
  * `user` is never stored; the title leads the text, since reviewers put the verdict there.
  */
-export const fromTripadvisorItem = (item: any): TripadvisorReviewFields | null => {
+export const fromTripadvisorItem = (
+	item: TripadvisorReviewItem,
+): TripadvisorReviewFields | null => {
 	const locationId =
-		item?.placeLocationId != null ? `${item.placeLocationId}` : tripadvisorLocationId(item?.placeUrl);
+		item?.placeLocationId != null ?
+			`${item.placeLocationId}`
+		:	tripadvisorLocationId(item?.placeUrl);
 	if (!item?.id || !item.publishedDate || !locationId) return null;
 	const title = typeof item.title === 'string' ? item.title.trim() : '';
 	const body = typeof item.text === 'string' ? item.text.trim() : '';
@@ -73,9 +79,11 @@ export const fromTripadvisorItem = (item: any): TripadvisorReviewFields | null =
 		text,
 		language: item.language ?? null,
 		ownerResponse: item.ownerResponse?.text ?? null,
-		ownerResponseAt: item.ownerResponse?.publishedDate ? new Date(item.ownerResponse.publishedDate) : null,
+		ownerResponseAt:
+			item.ownerResponse?.publishedDate ? new Date(item.ownerResponse.publishedDate) : null,
 		likes: typeof item.helpfulVotes === 'number' ? item.helpfulVotes : 0,
 		placeRating: typeof item.placeRating === 'number' ? item.placeRating : null,
-		placeReviewsCount: typeof item.placeReviewsCount === 'number' ? item.placeReviewsCount : null,
+		placeReviewsCount:
+			typeof item.placeReviewsCount === 'number' ? item.placeReviewsCount : null,
 	};
 };

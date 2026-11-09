@@ -20,7 +20,12 @@ const noCredits = () =>
 const setup = (opts: { keys?: string[]; rotateAfter?: number } = {}) => {
 	let now = Date.parse('2026-10-19T12:00:00Z');
 	const service = new OpenAIAccountsService({
-		apiKeys: opts.keys ?? ['sk-aaaa', 'sk-bbbb'],
+		accounts: (opts.keys ?? ['sk-aaaa', 'sk-bbbb']).map((apiKey, i) => ({
+			id: `openai-${i + 1}`,
+			provider: 'openai' as const,
+			apiKey,
+			limits: [],
+		})),
 		rotateAfterRequests: opts.rotateAfter ?? 2,
 		blockMs: 24 * HOUR,
 		now: () => now,
@@ -52,7 +57,7 @@ describe('OpenAIAccountsService', () => {
 		expect(await keyFor(MINI)).toBe('sk-bbbb');
 		expect(await keyFor(FULL)).toBe('sk-aaaa');
 		expect(service.status()).toEqual([
-			expect.objectContaining({ account: '#1 (…aaaa)', model: MINI }),
+			expect.objectContaining({ account: 'openai-1', model: MINI }),
 		]);
 	});
 
@@ -125,7 +130,7 @@ describe('OpenAIAccountsService', () => {
 		expect((error as Error).message).toMatch(
 			/No OpenAI account can serve openai\/gpt-5.4-mini/,
 		);
-		expect((error as Error).message).toMatch(/#1 \(…aaaa\) until 2026-10-19T13:00:00.000Z/);
+		expect((error as Error).message).toMatch(/openai-1 until 2026-10-19T13:00:00.000Z/);
 		expect(isFatalProviderError(error)).toBe(true);
 	});
 

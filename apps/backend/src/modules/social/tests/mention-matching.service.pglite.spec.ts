@@ -7,18 +7,24 @@ import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { VenueMatchAgent } from '../agents/venue-match.agent.js';
 import { AdminSocialController } from '../controllers/admin.social.controller.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
-import { MentionMatchingService } from '../services/mention-matching.service.js';
+import { MentionMatchingService, settleMatch } from '../services/mention-matching.service.js';
+
+import { matchWithAgent } from './factories/match-with-agent.js';
 
 describe('MentionMatchingService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: MentionMatchingService;
 	let berlin: City;
 	let munich: City;
-	const generate = jest.fn(async () => ({ object: { venueId: null } }));
+	// `VenueMatchAgent`'s stand-in: every close call is put to it
+	const generate = jest.fn(async (_message: string) => ({
+		object: { venueId: null as string | null, branchId: null as string | null },
+	}));
+	const match = (opts: { cityId?: string; rematch?: boolean } = {}) =>
+		matchWithAgent(service, generate, opts);
 
 	const mention = (post: SocialPost, venueName: string, city: string | null = null) =>
 		harness.orm.em.create(Mention, {
@@ -30,12 +36,7 @@ describe('MentionMatchingService (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [
-				MentionMatchingService,
-				CityService,
-				AdminSocialController,
-				{ provide: VenueMatchAgent, useValue: { generate } },
-			],
+			providers: [MentionMatchingService, CityService, AdminSocialController],
 		});
 		service = harness.moduleRef.get(MentionMatchingService);
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -78,7 +79,7 @@ describe('MentionMatchingService (pglite)', () => {
 		mention(post, 'Noma');
 		await em.flush();
 
-		const counts = await service.match();
+		const counts = await match();
 		expect(counts).toMatchObject({
 			[MentionMatchMethodEnum.EXACT]: 1,
 			[MentionMatchMethodEnum.OTHER_CITY]: 1,
@@ -98,7 +99,8 @@ describe('MentionMatchingService (pglite)', () => {
 
 	it('only retries unmatched mentions once new venues arrive', async () => {
 		generate.mockClear();
-		expect(Object.values(await service.match()).reduce((a, b) => a + b, 0)).toBe(0);
+		expect(Object.values(await match()).reduce((a, b) => a + b, 0)).toBe(0);
+		expect(generate).not.toHaveBeenCalled();
 
 		harness.orm.em.create(Venue, {
 			city: berlin.id,
@@ -107,7 +109,7 @@ describe('MentionMatchingService (pglite)', () => {
 			category: 'Restaurant',
 		});
 		await harness.orm.em.flush();
-		const counts = await service.match();
+		const counts = await match();
 		expect(counts[MentionMatchMethodEnum.EXACT]).toBe(1);
 	});
 
@@ -128,7 +130,7 @@ describe('MentionMatchingService (pglite)', () => {
 		const ignored = mention(post, 'Hisar Fresh Food');
 		const unlinked = mention(post, 'Hisar Fresh Food');
 		await em.flush();
-		await service.match();
+		await match();
 
 		const out = await controller.updateMention(relinked.id, {
 			venueId: nhas.id,
@@ -143,7 +145,7 @@ describe('MentionMatchingService (pglite)', () => {
 		await controller.updateMention(ignored.id, { venueId: hisar.id, ignored: true });
 		await controller.updateMention(unlinked.id, { venueId: null });
 
-		const counts = await service.match({ rematch: true });
+		const counts = await match({ rematch: true });
 		expect(counts[MentionMatchMethodEnum.MANUAL]).toBe(0);
 		expect(counts[MentionMatchMethodEnum.IGNORED]).toBe(0);
 
@@ -181,7 +183,7 @@ describe('MentionMatchingService (pglite)', () => {
 		mention(post, 'Noma', 'Berlin');
 		await em.flush();
 
-		const counts = await service.match({ cityId: munich.id });
+		const counts = await match({ cityId: munich.id });
 		expect(counts).toMatchObject({
 			[MentionMatchMethodEnum.EXACT]: 1,
 			[MentionMatchMethodEnum.NONE]: 1,
@@ -196,9 +198,9 @@ describe('MentionMatchingService (pglite)', () => {
 		expect(after.map(m => m.venue?.placeId ?? null)).toEqual(['p-hisar-muc', null, null]);
 	});
 
-	it('saves the exact matches and leaves the close calls for later when the LLM account fails', async () => {
+	it('saves the sure matches in code and leaves a close call untouched for its own run', async () => {
 		const em = harness.orm.em;
-		em.create(Venue, {
+		const keller = em.create(Venue, {
 			city: munich.id,
 			placeId: 'p-augustiner',
 			name: 'Augustiner Keller',
@@ -206,27 +208,21 @@ describe('MentionMatchingService (pglite)', () => {
 		});
 		const post = em.create(SocialPost, {
 			city: munich.id,
-			externalId: 'v-llm-down',
+			externalId: 'v-close-call',
 			platform: SocialPlatformEnum.TIKTOK,
-			url: 'https://tiktok.com/v-llm-down',
+			url: 'https://tiktok.com/v-close-call',
 			postedAt: new Date('2026-09-12T00:00:00Z'),
 		});
 		mention(post, 'Augustiner Keller');
-		mention(post, 'Augustiner');
+		const close = mention(post, 'Augustiner');
 		await em.flush();
-		const noCredits = new Error(
-			'You have no credits remaining. Add credits to continue using the API',
-		);
-		generate.mockImplementation(async () => {
-			throw noCredits;
-		});
+		generate.mockClear();
 
-		try {
-			await expect(service.match({ cityId: munich.id })).rejects.toBe(noCredits);
-		} finally {
-			generate.mockImplementation(async () => ({ object: { venueId: null } }));
-		}
-
+		// The code pass: the exact name saved, the close call only listed
+		const pass = await service.match({ cityId: munich.id });
+		expect(pass.counts[MentionMatchMethodEnum.EXACT]).toBe(1);
+		expect(pass.asks).toEqual([close.id]);
+		expect(generate).not.toHaveBeenCalled();
 		em.clear();
 		const exact = await em.findOneOrFail(
 			Mention,
@@ -234,9 +230,54 @@ describe('MentionMatchingService (pglite)', () => {
 			{ populate: ['venue'] },
 		);
 		expect(exact.matchMethod).toBe(MentionMatchMethodEnum.EXACT);
-		// Never decided: picked up again by the next run
-		const close = await em.findOneOrFail(Mention, { venueName: 'Augustiner' });
-		expect(close.matchMethod ?? null).toBeNull();
-		expect(close.matchedAt ?? null).toBeNull();
+		const waiting = await em.findOneOrFail(Mention, { id: close.id });
+		expect(waiting.matchMethod ?? null).toBeNull();
+		expect(waiting.matchedAt ?? null).toBeNull();
+		// Listed again by the next pass until its own run saves it
+		expect((await service.match({ cityId: munich.id })).asks).toEqual([close.id]);
+
+		// Its own run: the question as plain data, the answer read from it alone, the save
+		const plan = await service.planMention(close.id);
+		if (!plan || !('question' in plan)) throw new Error('expected a question');
+		expect(plan).toMatchObject({ cityId: munich.id, question: { kind: 'pick' } });
+		expect(plan.question.offered.map(c => c.id)).toEqual([keller.id]);
+		const decision = settleMatch(plan.question, { venueId: keller.id, branchId: null });
+		expect(await service.saveMatch(close.id, decision)).toBe(MentionMatchMethodEnum.LLM);
+		em.clear();
+		expect(
+			await em.findOneOrFail(Mention, { id: close.id }, { populate: ['venue'] }),
+		).toMatchObject({ matchMethod: MentionMatchMethodEnum.LLM, venue: { id: keller.id } });
+		expect((await service.match({ cityId: munich.id })).asks).toEqual([]);
+	});
+
+	it("never saves a close call's answer over an admin's correction made meanwhile", async () => {
+		const em = harness.orm.em;
+		const controller = harness.moduleRef.get(AdminSocialController);
+		const post = em.create(SocialPost, {
+			city: munich.id,
+			externalId: 'v-corrected-meanwhile',
+			platform: SocialPlatformEnum.TIKTOK,
+			url: 'https://tiktok.com/v-corrected-meanwhile',
+			postedAt: new Date('2026-09-13T00:00:00Z'),
+		});
+		const close = mention(post, 'Augustiner');
+		await em.flush();
+		const plan = await service.planMention(close.id);
+		if (!plan || !('question' in plan)) throw new Error('expected a question');
+
+		await controller.updateMention(close.id, { venueId: null, ignored: true });
+		const keller = await em.findOneOrFail(Venue, { placeId: 'p-augustiner' });
+		expect(
+			await service.saveMatch(
+				close.id,
+				settleMatch(plan.question, { venueId: keller.id, branchId: null }),
+			),
+		).toBeNull();
+		expect(await service.planMention(close.id)).toBeNull();
+		em.clear();
+		expect(await em.findOneOrFail(Mention, { id: close.id })).toMatchObject({
+			matchMethod: MentionMatchMethodEnum.IGNORED,
+			venue: null,
+		});
 	});
 });

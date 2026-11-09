@@ -162,7 +162,7 @@ export class PortalController {
 	}
 	/**
 	 * The Google and TripAdvisor reviews of every branch, filtered, newest first, each with what it
-	 * says (`statements`); reply drafts under unanswered ones. The topic filter is any claim under the aspect root.
+	 * says (`statements`). The topic filter is any claim under the aspect root.
 	 */
 	@TypedRoute.Get('/brands/:brandId/reviews')
 	@UseGuards(BrandAccessGuard)

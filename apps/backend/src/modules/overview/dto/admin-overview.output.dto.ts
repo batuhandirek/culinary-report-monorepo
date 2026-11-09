@@ -3,7 +3,21 @@ import type {
 	AdminProspectListItemOutputDto,
 	AdminSuggestedProspectOutputDto,
 } from 'src/modules/outreach/dto/admin-outreach.output.dto.js';
-import type { AdminPipelineRunOutputDto } from 'src/modules/pipeline/dto/admin-pipeline.output.dto.js';
+
+/** An operation's run (a DBOS workflow), as the morning view names it */
+export interface AdminWorkflowRunOutputDto {
+	workflowId: string;
+	/** The workflow's name, `scrape-reviews.month` */
+	workflow: string;
+	/** DBOS's status: SUCCESS, ERROR, PENDING, ENQUEUED, CANCELLED, MAX_RECOVERY_ATTEMPTS_EXCEEDED */
+	status: string;
+	cityId?: string;
+	/** The month, week or day it covers */
+	period?: string;
+	createdAt: Date;
+	updatedAt?: Date;
+	error?: string;
+}
 
 /**
  * The morning view: did the run work, what did it cost, who to write to today. Every figure is
@@ -12,11 +26,11 @@ import type { AdminPipelineRunOutputDto } from 'src/modules/pipeline/dto/admin-p
 export interface AdminOverviewOutputDto {
 	/** The month the reports cover now: the one that just ended */
 	reportMonth: string;
-	/** The newest `MONTHLY` run; `null` when there is none (or it failed to load) */
-	lastMonthlyRun: AdminPipelineRunOutputDto | null;
-	/** The newest run of any step, for when the monthly one is old or missing */
-	lastRun: AdminPipelineRunOutputDto | null;
-	/** When the cron queues the next monthly run */
+	/** The newest run of a month operation; `null` when there is none (or it failed to load) */
+	lastMonthlyRun: AdminWorkflowRunOutputDto | null;
+	/** The newest run of any pipeline operation, for when the monthly ones are old or missing */
+	lastRun: AdminWorkflowRunOutputDto | null;
+	/** When the month operations start next */
 	nextMonthlyRunAt: Date;
 	/** Apify spend this calendar month (UTC) */
 	apifyMonthCostUsd: number | null;

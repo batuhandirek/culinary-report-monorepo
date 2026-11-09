@@ -1,15 +1,17 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import _ from 'lodash';
 
+import { runActorCallRef } from 'src/modules/apify/actors/actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { pressMessage } from 'src/modules/pipeline/classify-press/util/press-message.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { PressClassificationAgent } from '../agents/press-classification.agent.js';
 import { Brand } from '../entities/brand.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import {
@@ -63,8 +65,9 @@ describe('WebMentionService (pglite)', () => {
 	let city: City;
 	let frieda: Venue;
 	let zola: Venue;
-	const runActor = jest.fn(
-		async (actor: string, _input: any, _opts: { maxCostUsd: number }): Promise<any[]> => {
+	const apify = new FakeApify<any>();
+	apify.answer = (_input: any, actor: string) => {
+		{
 			if (actor === 'scrapewise/google-news-scraper')
 				return [
 					article(
@@ -106,9 +109,20 @@ describe('WebMentionService (pglite)', () => {
 				]),
 				searchPage(OTHER_QUERY, []),
 			];
-		},
-	);
-	// One page a call
+		}
+	};
+	/** As the `scrape-press` run does: the plan, the two searches as children, the save */
+	const searchMonth = async (venues: Venue[], month: string, budgetUsd: number, now: Date) => {
+		const plan = service.planMonth(city, venues, month, budgetUsd);
+		const news = plan.news ? await runActorCallRef(apify, plan.news) : null;
+		const web = plan.web ? await runActorCallRef(apify, plan.web) : null;
+		return service.saveMonth(
+			plan,
+			{ news: news?.recordId ?? null, web: web?.recordId ?? null },
+			now,
+		);
+	};
+	// The classifier, one page a call (the pipeline's `classify-press` calls it; here its pieces plainly)
 	const agent = mockAgent((input: unknown) => {
 		const { title } = JSON.parse(input as string) as { title: string };
 		return {
@@ -126,8 +140,7 @@ describe('WebMentionService (pglite)', () => {
 				WebMentionService,
 				BrandLeadScoreService,
 				CityService,
-				{ provide: ApifyService, useValue: { runActor } },
-				{ provide: PressClassificationAgent, useValue: agent },
+				{ provide: ApifyService, useValue: apify },
 			],
 		});
 		service = harness.moduleRef.get(WebMentionService);
@@ -185,29 +198,29 @@ describe('WebMentionService (pglite)', () => {
 	it('stores mentions once per URL and stamps the venues searched', async () => {
 		const em = harness.orm.em;
 		const now = new Date('2026-10-02T06:00:00Z');
-		expect(await service.searchMonth(city, [frieda, zola], '2026-09', 3, now)).toEqual({
+		expect(await searchMonth([frieda, zola], '2026-09', 3, now)).toEqual({
 			found: 7,
 			saved: 3,
 		});
-		const [news, web] = runActor.mock.calls;
-		expect(news[0]).toBe('scrapewise/google-news-scraper');
-		expect(news[1]).toMatchObject({
+		const [news, web] = apify.calls;
+		expect(news.actor).toBe('scrapewise/google-news-scraper');
+		expect(news.input).toMatchObject({
 			searchQueries: [QUERY, OTHER_QUERY],
 			language: 'de',
 			countries: ['DE'],
 			dateFrom: '2026-09-01',
 			dateTo: '2026-09-30',
 		});
-		expect(news[2].maxCostUsd).toBeCloseTo(1.8);
-		expect(web[1]).toMatchObject({
+		expect(news.options.maxCostUsd).toBeCloseTo(1.8);
+		expect(web.input).toMatchObject({
 			queries: `${QUERY}\n${OTHER_QUERY}`,
 			maxPagesPerQuery: 1,
 			countryCode: 'de',
 		});
-		expect(web[2].maxCostUsd).toBeCloseTo(1.2);
+		expect(web.options.maxCostUsd).toBeCloseTo(1.2);
 
 		// Found again next run: nothing new
-		expect(await service.searchMonth(city, [frieda, zola], '2026-09', 3, now)).toMatchObject({
+		expect(await searchMonth([frieda, zola], '2026-09', 3, now)).toMatchObject({
 			saved: 0,
 		});
 		em.clear();
@@ -229,8 +242,19 @@ describe('WebMentionService (pglite)', () => {
 		expect((await em.findOneOrFail(Venue, { id: zola.id })).pressSearchedAt).toEqual(now);
 	});
 
-	it('classifies a venue’s mentions one page a call and hands the report the press, features first', async () => {
-		expect(await service.classifyMonth(city, '2026-09')).toEqual({ classified: 3 });
+	it('hands each unclassified page over as the classifier reads it, stores its verdict, and gives the report the press, features first', async () => {
+		const ids = await service.unclassifiedIds(city.id, 10);
+		expect(ids).toHaveLength(3);
+		for (const id of ids) {
+			const page = (await service.pageForClassifying(id))!;
+			const res = await agent.generate(pressMessage(page), { cityName: page.cityName });
+			await service.saveClassification(
+				id,
+				res.object as { kind: WebMentionKindEnum; summary: string },
+			);
+		}
+		expect(await service.unclassifiedIds(city.id, 10)).toEqual([]);
+		expect(await service.pageForClassifying(ids[0])).toBeNull();
 		expect(agent.generate).toHaveBeenCalledTimes(3);
 		// Told the venue, its district and the page; the city in the context
 		const asked = agent.generate.mock.calls.map(([input]) => JSON.parse(input as string));
@@ -298,14 +322,14 @@ describe('WebMentionService (pglite)', () => {
 				}),
 		);
 		await em.flush();
-		runActor.mockClear();
+		apify.calls.length = 0;
 		const now = new Date('2026-10-03T06:00:00Z');
 
-		await service.searchMonth(city, [first, second], '2026-09', 3, now);
+		await searchMonth([first, second], '2026-09', 3, now);
 
-		const [news, web] = runActor.mock.calls;
-		expect(news[1].searchQueries).toEqual([pressQuery('Brammibal’s', city.name)]);
-		expect(web[1].queries).toBe(pressQuery('Brammibal’s', city.name));
+		const [news, web] = apify.calls;
+		expect(news.input.searchQueries).toEqual([pressQuery('Brammibal’s', city.name)]);
+		expect(web.input.queries).toBe(pressQuery('Brammibal’s', city.name));
 		em.clear();
 		for (const v of [first, second])
 			expect((await em.findOneOrFail(Venue, { id: v.id })).pressSearchedAt).toEqual(now);

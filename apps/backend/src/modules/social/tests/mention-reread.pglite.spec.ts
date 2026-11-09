@@ -4,6 +4,16 @@ import _ from 'lodash';
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import {
+	PostClaimsAgent,
+	type PostClaimsAnswer,
+} from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import {
+	PostGateAgent,
+	type PostGateInput,
+} from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { gateAgent } from 'src/modules/pipeline/read-posts/tests/factories/post-gate.mock.js';
+import { rereadPostsPlainly } from 'src/modules/pipeline/read-posts/tests/factories/read-posts.factory.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { POSTS_GATED_AT } from 'src/modules/statements/constants/statements-shipped.constant.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
@@ -21,8 +31,6 @@ import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.j
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { PostClaimsAgent, type PostClaimsAnswer } from '../agents/post-claims.agent.js';
-import { PostGateAgent, type PostGateInput } from '../agents/post-gate.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import {
 	PostSkipReasonEnum,
@@ -31,7 +39,6 @@ import {
 } from '../entities/social-post.entity.js';
 import { MentionExtractionService } from '../services/mention-extraction.service.js';
 
-import { gateAgent } from './factories/post-gate.mock.js';
 import { ownAccount } from './factories/social-account.factory.js';
 
 /** The reading of a claim, by its text: Jev's labels, and the foods and number agent A copied out; a claim not listed is a neutral opinion about nothing */
@@ -143,7 +150,7 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		em().getConnection().execute(query, params);
 	const service = () => harness.moduleRef.get(MentionExtractionService);
 	const registry = () => harness.moduleRef.get(LlmBacklogRegistry);
-	const reread = () => service().reread({ before: BEFORE, limit: 10 });
+	const reread = () => rereadPostsPlainly(harness.moduleRef, { before: BEFORE, limit: 10 });
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -160,9 +167,8 @@ describe('MentionExtractionService.reread (pglite)', () => {
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
-		// Registered as at module init: agent B's backlog and the re-read
+		// Registered as at module init: agent B's backlog
 		harness.moduleRef.get(StatementPartsService).onModuleInit();
-		service().onModuleInit();
 		seedTopics(em());
 		city = testCity(em());
 		pho = venueFactory.build({ name: 'Pho House' }, { associations: { city } });
@@ -554,7 +560,9 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		await em().flush();
 		answers = { '[p6]': NOTHING, '[p7]': NOTHING, '[p8]': NOTHING, '[p9]': NOTHING };
 		expect(await service().countToReread(BEFORE)).toBe(3);
-		expect(await service().reread({ before: BEFORE, limit: 2 })).toMatchObject({
+		expect(
+			await rereadPostsPlainly(harness.moduleRef, { before: BEFORE, limit: 2 }),
+		).toMatchObject({
 			posts: 2,
 			read: 2,
 			failed: 0,
@@ -576,23 +584,21 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		);
 	});
 
-	it('is the `reread-posts` backlog: priority 35 (before the re-read of reviews), `remaining()` the count, a batch reads and reports `done` and the tokens', async () => {
+	it('takes the posts read before the cutoff, as many as asked, and counts what is left', async () => {
 		post('p10');
 		post('p11');
 		post('p12', { analysedAt: new Date(POSTS_GATED_AT.getTime() + 60_000) });
 		await em().flush();
 		answers = { '[p10]': NOTHING, '[p11]': NOTHING, '[p12]': NOTHING };
-		const backlog = registry().get('reread-posts')!;
-		expect([backlog.label, backlog.priority]).toEqual(['Re-read posts as claims', 35]);
+		expect(await service().countToReread(POSTS_GATED_AT)).toBe(2);
 		expect(
-			registry()
-				.list()
-				.map(b => b.key),
-		).toEqual(['statement-parts', 'reread-posts']);
-		expect(await backlog.remaining()).toBe(2);
-		expect(await backlog.runBatch()).toEqual({ done: 2, tokens: 2 * TOKENS });
+			await rereadPostsPlainly(harness.moduleRef, { before: POSTS_GATED_AT, limit: 10 }),
+		).toMatchObject({
+			read: 2,
+			tokens: 2 * TOKENS,
+		});
 		expect(markersAsked().sort()).toEqual(['p10', 'p11']);
-		expect(await backlog.remaining()).toBe(0);
+		expect(await service().countToReread(POSTS_GATED_AT)).toBe(0);
 	});
 
 	it('counts a failing post as `failed`, keeps its statements and `analysedAt`, and writes the other posts of the batch', async () => {

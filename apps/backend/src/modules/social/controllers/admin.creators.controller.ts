@@ -37,8 +37,13 @@ export class AdminCreatorsController {
 	) {}
 
 	@TypedRoute.Get('/')
-	async listCreators(@TypedQuery() query: AdminListCreatorsInputDto): Promise<AdminListCreatorsOutputDto> {
-		const { items, totalItems } = await this.creatorService.list({ ...query, month: query.month ?? previousMonth() });
+	async listCreators(
+		@TypedQuery() query: AdminListCreatorsInputDto,
+	): Promise<AdminListCreatorsOutputDto> {
+		const { items, totalItems } = await this.creatorService.list({
+			...query,
+			month: query.month ?? previousMonth(),
+		});
 		return {
 			items: items.map(row => ({
 				id: row.creator.id,

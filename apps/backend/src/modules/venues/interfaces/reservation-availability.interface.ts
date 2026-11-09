@@ -34,18 +34,15 @@ export class PartialAvailabilityError extends Error {
 }
 
 /**
- * One booking platform's availability source. A paid one runs an Apify actor through
- * `ApifyService.runActor` (so the cost cap holds) and shares the step's budget with the other
- * paid ones; a `free` one (Google's booking page, fetched) takes no budget. A platform whose only
- * access is an API its terms reserve for partners gets no implementation.
+ * The free booking source, Google's own booking page, fetched in a step of the
+ * `sample-reservations` run; the paid platforms (TheFork, OpenTable) are actor runs the run starts
+ * as children, their services handing it the calls (`TheForkAvailabilityService.call`,
+ * `OpenTableAvailabilityService.calls`) and reading the stored items. A platform whose only access
+ * is an API its terms reserve for partners gets no implementation.
  */
 export interface ReservationAvailabilityProvider {
 	readonly platform: ReservationPlatformEnum;
 	/** Costs nothing per call: left out of the budget split */
 	readonly free?: boolean;
-	availability(
-		targets: ReservationTarget[],
-		dates: string[],
-		budgetUsd: number,
-	): Promise<ReservationAvailability[]>;
+	availability(targets: ReservationTarget[], dates: string[]): Promise<ReservationAvailability[]>;
 }

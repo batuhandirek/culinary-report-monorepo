@@ -4,50 +4,90 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import type { ActorCall } from 'src/modules/apify/actors/actor.js';
+import {
+	INSTAGRAM_LOCATION_ACTOR,
+	type InstagramLocationInput,
+	type InstagramLocationItem,
+} from 'src/modules/apify/actors/instagram-location.actor.js';
+import type { InstagramScraperItem } from 'src/modules/apify/actors/instagram-scraper.actor.js';
+import {
+	TIKTOK_COMMENTS_ACTOR,
+	type TiktokCommentItem,
+	type TiktokCommentsInput,
+} from 'src/modules/apify/actors/tiktok-comments.actor.js';
+import type { TiktokSearchItem } from 'src/modules/apify/actors/tiktok-search.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
+import {
+	type InstagramHashtagKind,
+	type InstagramHashtagsCall,
+	perHashtagWithin,
+} from 'src/modules/pipeline/atoms/instagram-hashtags/util/instagram-hashtags-input.js';
+import {
+	findsBy,
+	type TikTokSearchWindow,
+	type TiktokSearchCall,
+} from 'src/modules/pipeline/atoms/tiktok-search/util/tiktok-search-input.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueSearchName } from 'src/modules/venues/util/brands.js';
 import { isSameVenue, plain } from 'src/modules/venues/util/venue-names.js';
-import { runPool } from 'src/shared/util/pool.js';
 
-import { PostSourceKindEnum } from '../entities/post-source.entity.js';
-import type { SocialPost } from '../entities/social-post.entity.js';
-import { instagramTagUrl } from '../util/instagram-tags.js';
+import { SocialPost } from '../entities/social-post.entity.js';
 import { fromClockworksComment } from '../util/post-comments.js';
 
 import { PostCommentService } from './post-comment.service.js';
-import { mergeFinds, PostFields, SocialPostService, tikTokSearchFinds } from './social-post.service.js';
+import {
+	mergeFinds,
+	PostFields,
+	SocialPostService,
+	tikTokSearchFinds,
+} from './social-post.service.js';
 
-// Keyword search in the city's region, with subtitle links. `limit` is per keyword, so one run
-// covers every query; it refuses a cap under $4
-const TIKTOK_SEARCH_ACTOR = 'novi/advanced-search-tiktok-api';
-const INSTAGRAM_LOCATION_ACTOR = 'scraping_solutions/instagram-location-posts-local-creator-finder';
-// Tag URLs with a date filter; items name their tag (`inputUrl`), so one run covers every hashtag
-const INSTAGRAM_HASHTAG_ACTOR = 'apify/instagram-scraper';
-// Top-level comments, capped per post; items name their post (`videoWebUrl`)
-const TIKTOK_COMMENTS_ACTOR = 'clockworks/tiktok-comments-scraper';
-
-// Free-plan prices per result, to size a run inside its cap (Apify enforces the cap regardless)
-const INSTAGRAM_RESULT_USD = 0.0027;
+// Free-plan price per comment, to size a run inside its cap (Apify enforces the cap regardless)
 const TIKTOK_COMMENT_USD = 0.00125;
-// The search actor's smallest `limit`, and the smallest cap it accepts
-const TIKTOK_SEARCH_MIN_LIMIT = 30;
-const TIKTOK_SEARCH_MIN_CAP_USD = 4;
+// 1 GB is plenty for one post's comments, and four side by side leave room on the plan's 16 GB
+const COMMENTS_RUN_MEMORY_MB = 1024;
 
-/** `novi/advanced-search-tiktok-api`'s `publishTime`: how far back a search looks. */
-export type TikTokSearchWindow = 'WEEK' | 'MONTH' | 'THREE_MONTH';
+/** The comments scrape as the `scrape-comments` workflow runs it: one run per post */
+export interface CommentsPlan {
+	posts: { id: string; externalId: string }[];
+	/** One per post, in the posts' order */
+	calls: ActorCall<TiktokCommentsInput, TiktokCommentItem>[];
+	memoryMbytes: number;
+}
 
-/** `apify/instagram-scraper`'s `resultsType` on a tag URL: the feed's posts, or its top reels. */
-export type InstagramHashtagKind = 'posts' | 'reels';
+/** The venues' Instagram place pages as the `scrape-venue-social` workflow runs them: one run */
+export interface VenuePlacesPlan {
+	/** The place name searched → the venue it was for */
+	venues: Record<string, { id: string; name: string }>;
+	call: ActorCall<InstagramLocationInput, InstagramLocationItem> | null;
+}
 
 export interface ScrapeResult {
 	found: number;
 	saved: number;
 }
 
+/** What one search's or hashtag run's window is given */
+export interface CityScrapeOptions {
+	/** Posts older than this (ISO) are left out */
+	since: string;
+	/** Results per query or hashtag asked for */
+	perSource: number;
+	budgetUsd: number;
+}
+
+/**
+ * The city scrapes' plans and saves: the `tiktok-search` and `instagram-hashtags` atoms
+ * (`pipeline/atoms/`) run the actors and save their items here, so a found video or post becomes
+ * the city's post with the finds that found it (`PostSource`, linked to the city source it is);
+ * the comments scrape and the venues' Instagram place pages are plans and saves for their
+ * operations' own actor children (`planComments` / `saveComments`, `planVenuePlaces` /
+ * `saveVenuePlaces`).
+ */
 @Injectable()
 export class SocialScrapeService {
 	private readonly logger = new Logger(SocialScrapeService.name);
@@ -61,253 +101,256 @@ export class SocialScrapeService {
 	) {}
 
 	/**
-	 * The comments under these TikTok posts, `perPost` top-level ones at most each, stored without
-	 * their authors. One run per post on its share of the budget, its limit sized to that share so
-	 * Apify's cap never cuts it. A post is marked scraped even when it returned nothing, so it is
-	 * never paid for twice; one whose run failed is not.
+	 * The comments under these TikTok posts, `perPost` top-level ones at most each: one run per
+	 * post on its share of the budget, its limit sized to that share so Apify's cap never cuts it.
 	 */
-	async scrapeComments(
-		posts: SocialPost[],
-		perPost: number,
-		budgetUsd: number,
-	): Promise<{ posts: number; found: number; saved: number }> {
-		let found = 0;
-		let saved = 0;
+	planComments(posts: SocialPost[], perPost: number, budgetUsd: number): CommentsPlan {
 		const capUsd = budgetUsd / Math.max(posts.length, 1);
 		const limit = Math.max(1, Math.min(perPost, Math.floor(capUsd / TIKTOK_COMMENT_USD)));
-		await runPool(
-			posts,
-			4,
-			async post => {
-				const items = await this.apifyService.runActor<any>(
-					TIKTOK_COMMENTS_ACTOR,
-					{ postURLs: [post.url], topLevelCommentsPerPost: limit, commentsPerPost: limit, maxRepliesPerComment: 0 },
-					// 1 GB is plenty for one post, and four side by side leave room on the plan's 16 GB
-					{ maxCostUsd: capUsd, purpose: `tiktok comments: ${post.externalId}`, memoryMbytes: 1024 },
-				);
-				found += items.length;
-				const rows = items
-					// Only the post's own top-level comments
-					.filter(item => !item?.repliesToId && isSameVideo(item?.videoWebUrl, post.externalId))
-					.map(fromClockworksComment)
-					.filter(row => row !== null);
-				// Read before adding: `saved += await …` would lose the other workers' counts
-				const stored = await this.postCommentService.save(post, rows);
-				saved += stored;
-			},
-			(post, e) => this.logger.warn(`Comments of ${post.url} failed: ${e.message}`),
-		);
-		await this.em.flush();
-		return { posts: posts.length, found, saved };
-	}
-
-	/**
-	 * The city-wide TikTok scrape: the city's enabled searches and hashtag words, all through
-	 * TikTok's search in its region over `searchWindow` (three months without), in one run. A
-	 * hashtag's own feed (clockworks) has no date filter and came back half older than three months
-	 * at ~$0.004 an item, so its word is searched instead (~$0.0004 a result, as relevant: on Berlin's
-	 * first weeks 54 % of each named a matched place); a find of a hashtag's word keeps the hashtag's
-	 * kind, so the Sources tab's yield stays the source's. Videos older than `since` stay out.
-	 */
-	async scrapeCityTikTok(opts: {
-		city: City;
-		since: string;
-		perSource: number;
-		budgetUsd: number;
-		searchWindow?: TikTokSearchWindow;
-	}): Promise<ScrapeResult> {
-		const { city } = opts;
-		const [hashtags, searches] = await Promise.all([
-			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_HASHTAG),
-			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_SEARCH),
-		]);
-		const searchSet = new Set(searches.map(q => q.toLowerCase()));
-		const hashtagSet = new Set(hashtags.map(h => h.toLowerCase()));
-		const queries = _.uniqBy([...searches, ...hashtags], q => q.toLowerCase());
-		const search = await this.searchTikTok(city, queries, {
-			perQuery: opts.perSource,
-			budgetUsd: Math.max(opts.budgetUsd, TIKTOK_SEARCH_MIN_CAP_USD),
-			window: opts.searchWindow,
-			label: `tiktok search ${city.name}: ${searches.length} queries, ${hashtags.length} hashtags`,
-		});
-		const rows = search.rows
-			.filter(r => r.postedAt.toISOString() >= opts.since)
-			.map(r => ({
-				...r,
-				finds: (r.finds ?? []).map(f => {
-					const word = f.value.toLowerCase();
-					return hashtagSet.has(word) && !searchSet.has(word) ? { ...f, kind: PostSourceKindEnum.TIKTOK_HASHTAG } : f;
-				}),
-			}));
-		return { found: search.found, saved: await this.saveAll(rows, city) };
-	}
-
-	/**
-	 * The city-wide Instagram scrape: the city's enabled Instagram hashtags, in one run over all of
-	 * them per kind: the tag feed's posts and its top reels (the feed returns no reels). Reels get
-	 * a quarter of the budget when both run, as tags have few. Each run's per-hashtag limit is
-	 * sized to its share, so Apify's cap never stops it before the last hashtag. On the Free plan
-	 * the posts run stops after each tag's first page: the daily `SCRAPE_INSTAGRAM_RECENT` runs
-	 * posts only. Nothing runs for a city with Instagram turned off.
-	 */
-	async scrapeCityInstagram(opts: {
-		city: City;
-		since: string;
-		perSource: number;
-		budgetUsd: number;
-		kinds?: InstagramHashtagKind[];
-	}): Promise<ScrapeResult & { skipped?: string }> {
-		const { city } = opts;
-		if (!city.instagramEnabled) return { found: 0, saved: 0, skipped: 'Instagram is off for the city' };
-		const hashtags = await this.cityService.enabledValues(city.id, CitySourceKindEnum.INSTAGRAM_HASHTAG);
-		if (!hashtags.length) return { found: 0, saved: 0 };
-		const kinds = opts.kinds ?? ['posts', 'reels'];
-		const share = (kind: InstagramHashtagKind) => (kinds.length === 1 ? 1 : kind === 'posts' ? 0.75 : 0.25);
-		const runs = kinds.map(kind => ({ resultsType: kind, budgetUsd: opts.budgetUsd * share(kind) }));
-		const batches = await Promise.all(
-			runs.map(async run => {
-				const perHashtag = Math.min(
-					opts.perSource,
-					Math.floor(run.budgetUsd / (hashtags.length * INSTAGRAM_RESULT_USD)),
-				);
-				if (perHashtag < 1) return [];
-				return this.apifyService
-					.runActor<any>(
-						INSTAGRAM_HASHTAG_ACTOR,
-						{
-							directUrls: hashtags.map(instagramTagUrl),
-							resultsType: run.resultsType,
-							resultsLimit: perHashtag,
-							onlyPostsNewerThan: opts.since.slice(0, 10),
-						},
-						{
-							maxCostUsd: run.budgetUsd,
-							purpose: `instagram ${run.resultsType} ${city.name}: ${hashtags.length} hashtags`,
-						},
-					)
-					.catch((e: Error) => {
-						this.logger.warn(`Instagram ${run.resultsType} of ${city.name} failed: ${e.message}`);
-						return [];
-					});
-			}),
-		);
-		const items = batches.flat();
-		const rows = items
-			.map(item => this.socialPostService.fromInstagramHashtag(item))
-			// Pinned posts pass the actor's date filter
-			.filter((row): row is PostFields => !!row && row.postedAt.toISOString() >= opts.since);
-		return { found: items.length, saved: await this.saveAll(rows, city) };
-	}
-
-	/**
-	 * TikTok searches by venue name (with the city's name, in its region) and Instagram posts
-	 * tagged at the venue. The venues are the city's. With `tiktokOnly` (the weekly run) the
-	 * whole budget goes to the search over `window`, and no Instagram place is read.
-	 */
-	async scrapeVenueSocial(opts: {
-		city: City;
-		venues: Venue[];
-		since: string;
-		perVenue: number;
-		budgetUsd: number;
-		tiktokOnly?: boolean;
-		window?: TikTokSearchWindow;
-	}): Promise<ScrapeResult> {
-		const { city } = opts;
-		if (!opts.venues.length) return { found: 0, saved: 0 };
-		// The search actor refuses a cap under $4, hence the step's $8 default
-		const half = opts.tiktokOnly ? opts.budgetUsd : opts.budgetUsd / 2;
-
-		const byInput = new Map(opts.venues.map(v => [venueSearchQuery(v, city.name), v]));
-		const search = await this.searchTikTok(
-			city,
-			// A branch is searched under its brand's name
-			[...byInput.keys()],
-			{
-				perQuery: opts.perVenue,
-				budgetUsd: half,
-				window: opts.window,
-				label: `tiktok venue search ${city.name}: ${opts.venues.length} venues`,
-			},
-		);
-		// Found by a search for one venue, not by a city source
-		const tiktok = search.rows
-			.filter(r => r.postedAt.toISOString() >= opts.since)
-			.map(r => ({
-				...r,
-				finds: (r.finds ?? []).map(f => ({
-					kind: PostSourceKindEnum.VENUE_SEARCH,
-					value: f.value,
-					venueId: byInput.get(f.value)?.id,
-				})),
-			}));
-
-		if (opts.tiktokOnly) return { found: search.found, saved: await this.saveAll(tiktok, city) };
-
-		const instagramItems = await this.apifyService.runActor<any>(
-			INSTAGRAM_LOCATION_ACTOR,
-			{
-				locations: [...byInput.keys()],
-				resultsPerLocation: opts.perVenue,
-				matchStrategy: 'best',
-				maximumLocationsPerQuery: 1,
-				onlyPostsNewerThan: opts.since.slice(0, 10),
-				includeLocationInfo: true,
-			},
-			{ maxCostUsd: half, purpose: `instagram places: ${opts.venues.length} venues` },
-		);
-		// Name search sometimes resolves to a namesake place (another country, the city itself)
-		const instagram = instagramItems
-			.filter(row => {
-				const venue = byInput.get(row.input);
-				return venue && row.locationName && isSameVenue(row.locationName, venue.name);
-			})
-			.map(row => this.socialPostService.fromInstagramLocation(row, byInput.get(row.input)!))
-			.filter((row): row is PostFields => !!row && row.postedAt.toISOString() >= opts.since);
-
 		return {
-			found: search.found + instagramItems.length,
-			saved: await this.saveAll([...tiktok, ...instagram], city),
+			posts: posts.map(p => ({ id: p.id, externalId: p.externalId })),
+			calls: posts.map(post => ({
+				actor: TIKTOK_COMMENTS_ACTOR,
+				input: {
+					postURLs: [post.url],
+					topLevelCommentsPerPost: limit,
+					commentsPerPost: limit,
+					maxRepliesPerComment: 0,
+				},
+				maxCostUsd: capUsd,
+				purpose: `tiktok comments: ${post.externalId}`,
+			})),
+			memoryMbytes: COMMENTS_RUN_MEMORY_MB,
 		};
 	}
 
 	/**
-	 * TikTok's search for each query in the city's region over `window` (the last three months
-	 * without), by relevance, in one run (the actor's `limit` is per keyword). Rows keep
-	 * `search:<query>` from the item. A failed run is logged and yields nothing.
+	 * Each run's items read from its row and stored as its post's comments, without their
+	 * authors (`PostCommentService.save`); a post is marked scraped even when it returned nothing,
+	 * so it is never paid for twice, one whose run failed (`null`) is not. Flushes.
 	 */
-	private async searchTikTok(
-		city: City,
-		queries: string[],
-		opts: { perQuery: number; budgetUsd: number; label: string; window?: TikTokSearchWindow },
-	): Promise<{ found: number; rows: PostFields[] }> {
-		if (!queries.length) return { found: 0, rows: [] };
-		let items: any[];
-		try {
-			items = await this.apifyService.runActor<any>(
-				TIKTOK_SEARCH_ACTOR,
-				{
-					keywords: queries,
-					limit: Math.max(opts.perQuery, TIKTOK_SEARCH_MIN_LIMIT),
-					region: city.tiktokRegion,
-					publishTime: opts.window ?? 'THREE_MONTH',
-					// Relevance
-					sortType: 0,
-					includeSearchTerms: true,
-				},
-				{ maxCostUsd: opts.budgetUsd, purpose: opts.label },
-			);
-		} catch (e) {
-			this.logger.warn(`${opts.label} failed: ${(e as Error).message}`);
-			return { found: 0, rows: [] };
+	async saveComments(
+		plan: CommentsPlan,
+		recordIds: (string | null)[],
+	): Promise<{ posts: number; found: number; saved: number; failed: number }> {
+		const posts = await this.em.find(SocialPost, { id: { $in: plan.posts.map(p => p.id) } });
+		const byId = new Map(posts.map(p => [p.id, p]));
+		let found = 0;
+		let saved = 0;
+		let failed = 0;
+		for (const [index, planned] of plan.posts.entries()) {
+			const post = byId.get(planned.id);
+			const recordId = recordIds[index];
+			if (!post || !recordId) {
+				failed++;
+				continue;
+			}
+			const items = await this.apifyService.storedItems<TiktokCommentItem>(recordId);
+			found += items.length;
+			const rows = items
+				// Only the post's own top-level comments
+				.filter(
+					item => !item?.repliesToId && isSameVideo(item?.videoWebUrl, post.externalId),
+				)
+				.map(fromClockworksComment)
+				.filter(row => row !== null);
+			saved += await this.postCommentService.save(post, rows);
 		}
+		await this.em.flush();
+		return { posts: plan.posts.length, found, saved, failed };
+	}
+
+	/**
+	 * The city-wide TikTok search as one `tiktok-search.run`: the city's enabled searches and
+	 * hashtag words, all through TikTok's search in its region over `window`. A hashtag's own feed
+	 * (clockworks) has no date filter and came back half older than three months at ~$0.004 an item,
+	 * so its word is searched instead (~$0.0004 a result, as relevant: on Berlin's first weeks 54 %
+	 * of each named a matched place); a find of a hashtag's word keeps the hashtag's kind, so the
+	 * Sources tab's yield stays the source's. None without a source.
+	 */
+	async planCityTikTok(
+		city: City,
+		opts: CityScrapeOptions & { window: TikTokSearchWindow },
+	): Promise<TiktokSearchCall | null> {
+		const [hashtags, searches] = await Promise.all([
+			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_HASHTAG),
+			this.cityService.enabledValues(city.id, CitySourceKindEnum.TIKTOK_SEARCH),
+		]);
+		const queries = _.uniqBy([...searches, ...hashtags], q => q.toLowerCase());
+		if (!queries.length) return null;
+		const searchSet = new Set(searches.map(q => q.toLowerCase()));
+		return {
+			queries,
+			window: opts.window,
+			perQuery: opts.perSource,
+			since: opts.since,
+			// A word that is a search too is a search's find
+			finds: {
+				kind: 'city',
+				hashtagWords: hashtags.filter(h => !searchSet.has(h.toLowerCase())),
+			},
+			maxCostUsd: opts.budgetUsd,
+			purpose: `tiktok search ${city.name}: ${searches.length} queries, ${hashtags.length} hashtags`,
+		};
+	}
+
+	/**
+	 * TikTok searches by venue name (the brand's, with the city's name, in its region) as one
+	 * `tiktok-search.run`: each find is a `venue_search` of the venue that carried the name. None
+	 * without a venue.
+	 */
+	planVenueSearch(
+		city: City,
+		venues: Venue[],
+		opts: CityScrapeOptions & { window: TikTokSearchWindow },
+	): TiktokSearchCall | null {
+		if (!venues.length) return null;
+		const venueIds: Record<string, string> = {};
+		// A branch is searched under its brand's name
+		for (const venue of venues) venueIds[venueSearchQuery(venue, city.name)] ??= venue.id;
+		return {
+			queries: Object.keys(venueIds),
+			window: opts.window,
+			perQuery: opts.perSource,
+			since: opts.since,
+			finds: { kind: 'venue', venueIds },
+			maxCostUsd: opts.budgetUsd,
+			purpose: `tiktok venue search ${city.name}: ${venues.length} venues`,
+		};
+	}
+
+	/**
+	 * A search run's items saved as the city's posts: a video two queries found is downloaded
+	 * once, with both finds (recorded by the run's rule, `findsBy`); videos before `since` are
+	 * left out (the search's window is coarser). Flushes; the posts written.
+	 */
+	async saveTikTokSearch(
+		city: City,
+		items: TiktokSearchItem[],
+		call: Pick<TiktokSearchCall, 'since' | 'finds'>,
+	): Promise<number> {
 		const rows: PostFields[] = [];
-		// A video two queries found is downloaded once, with both finds
 		for (const group of Object.values(_.groupBy(items, i => `${i?.aweme_id}`))) {
 			const row = await this.socialPostService.fromTikTokSearch(group[0]);
-			if (row) rows.push({ ...row, finds: _.uniqBy(group.flatMap(tikTokSearchFinds), f => f.value) });
+			if (row && row.postedAt.toISOString() >= call.since)
+				rows.push({
+					...row,
+					finds: findsBy(
+						call.finds,
+						_.uniqBy(group.flatMap(tikTokSearchFinds), f => f.value),
+					),
+				});
 		}
-		return { found: items.length, rows };
+		return this.saveAll(rows, city);
+	}
+
+	/**
+	 * The city-wide Instagram scrape as `instagram-hashtags.run`s: the city's enabled Instagram
+	 * hashtags, one run per kind over all of them: the tag feeds' posts and their top reels (the
+	 * feed returns no reels). Reels get a quarter of the budget when both run, as tags have few.
+	 * Each run's per-hashtag limit is sized to its share, so Apify's cap never stops it before the
+	 * last hashtag; a share too small for one result a tag runs nothing. On the Free plan the posts
+	 * run stops after each tag's first page: the daily `scrape-instagram.day` runs posts only.
+	 * Nothing for a city with Instagram turned off (`skipped` says so).
+	 */
+	async planCityInstagram(
+		city: City,
+		opts: CityScrapeOptions & { kinds?: InstagramHashtagKind[] },
+	): Promise<{ calls: InstagramHashtagsCall[]; skipped?: string }> {
+		if (!city.instagramEnabled) return { calls: [], skipped: 'Instagram is off for the city' };
+		const hashtags = await this.cityService.enabledValues(
+			city.id,
+			CitySourceKindEnum.INSTAGRAM_HASHTAG,
+		);
+		if (!hashtags.length) return { calls: [] };
+		const kinds = opts.kinds ?? ['posts', 'reels'];
+		const share = (kind: InstagramHashtagKind) =>
+			kinds.length === 1 ? 1
+			: kind === 'posts' ? 0.75
+			: 0.25;
+		return {
+			calls: kinds.flatMap(kind => {
+				const budgetUsd = opts.budgetUsd * share(kind);
+				const perHashtag = perHashtagWithin(budgetUsd, hashtags.length, opts.perSource);
+				if (perHashtag < 1) return [];
+				return [
+					{
+						hashtags,
+						kind,
+						since: opts.since,
+						perHashtag,
+						maxCostUsd: budgetUsd,
+						purpose: `instagram ${kind} ${city.name}: ${hashtags.length} hashtags`,
+					},
+				];
+			}),
+		};
+	}
+
+	/**
+	 * A hashtag run's items saved as the city's posts, each a find of its tag (a post under two
+	 * tags once, with both); posts before `since` are left out (pinned posts pass the actor's
+	 * date filter). Flushes; the posts written.
+	 */
+	async saveInstagramHashtags(
+		city: City,
+		items: InstagramScraperItem[],
+		call: Pick<InstagramHashtagsCall, 'since'>,
+	): Promise<number> {
+		const rows = items
+			.map(item => this.socialPostService.fromInstagramHashtag(item))
+			.filter((row): row is PostFields => !!row && row.postedAt.toISOString() >= call.since);
+		return this.saveAll(rows, city);
+	}
+
+	/**
+	 * The Instagram posts tagged at each venue's place: one run of the location actor for every
+	 * venue's name with the city's. None without a venue.
+	 */
+	planVenuePlaces(city: City, venues: Venue[], opts: CityScrapeOptions): VenuePlacesPlan {
+		const byQuery: Record<string, { id: string; name: string }> = {};
+		for (const venue of venues)
+			byQuery[venueSearchQuery(venue, city.name)] ??= { id: venue.id, name: venue.name };
+		if (!venues.length) return { venues: byQuery, call: null };
+		return {
+			venues: byQuery,
+			call: {
+				actor: INSTAGRAM_LOCATION_ACTOR,
+				input: {
+					locations: Object.keys(byQuery),
+					resultsPerLocation: opts.perSource,
+					matchStrategy: 'best',
+					maximumLocationsPerQuery: 1,
+					onlyPostsNewerThan: opts.since.slice(0, 10),
+					includeLocationInfo: true,
+				},
+				maxCostUsd: opts.budgetUsd,
+				purpose: `instagram places: ${venues.length} venues`,
+			},
+		};
+	}
+
+	/**
+	 * The run's items read from its row and saved as the city's posts, each a `venue_place` find
+	 * of its venue. The actor's name search sometimes resolves to a namesake (another country,
+	 * the city itself): every place is checked against the venue it was asked for. Flushes.
+	 */
+	async saveVenuePlaces(
+		city: City,
+		plan: VenuePlacesPlan,
+		recordId: string | null,
+		since: string,
+	): Promise<ScrapeResult> {
+		if (!recordId) return { found: 0, saved: 0 };
+		const items = await this.apifyService.storedItems<InstagramLocationItem>(recordId);
+		const rows = items
+			.filter(row => {
+				const venue = plan.venues[row.input ?? ''];
+				return venue && row.locationName && isSameVenue(row.locationName, venue.name);
+			})
+			.map(row => this.socialPostService.fromInstagramLocation(row, plan.venues[row.input!]))
+			.filter((row): row is PostFields => !!row && row.postedAt.toISOString() >= since);
+		return { found: items.length, saved: await this.saveAll(rows, city) };
 	}
 
 	private async saveAll(rows: PostFields[], city: City): Promise<number> {

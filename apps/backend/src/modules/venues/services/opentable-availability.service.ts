@@ -2,42 +2,24 @@ import { Injectable } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import type { ActorCall } from 'src/modules/apify/actors/actor.js';
+import {
+	OPENTABLE_ACTOR,
+	type OpenTableInput,
+	type OpenTableItem,
+	type OpenTableSlot,
+} from 'src/modules/apify/actors/opentable.actor.js';
 
 import { ReservationPlatformEnum } from '../entities/venue-reservation-sample.entity.js';
 import type {
 	ReservationAvailability,
-	ReservationAvailabilityProvider,
 	ReservationTarget,
 } from '../interfaces/reservation-availability.interface.js';
 import { EVENING_SLOTS, openSlotsAtTimes, RESERVATION_PARTY_SIZE } from '../util/reservations.js';
 import { isSameVenue } from '../util/venue-names.js';
 
-const OPENTABLE_ACTOR = 'canadesk/opentable';
 // The middle of the evening window: OpenTable answers with slots around the asked time
 const OPENTABLE_ASK_TIME = '20:00';
-
-/** A slot as the actor may send it: a time, a local date-time, or an offset from the asked time. */
-export type OpenTableSlot =
-	| string
-	| {
-			time?: string;
-			dateTime?: string;
-			availableDate?: string;
-			timeOffsetMinutes?: number;
-			isAvailable?: boolean;
-	  };
-
-/** The `canadesk/opentable` availability row (`process: "ga"`): one per restaurant and day. */
-export interface OpenTableItem {
-	rowType?: string;
-	name?: string;
-	restaurantId?: string | number;
-	slots?: OpenTableSlot[] | null;
-	// The actor's placeholder rows (minimum-charge units) carry a message and no restaurant
-	message?: string;
-	code?: string;
-}
 
 /** OpenTable's domain for a profile link: `opentable.de` → `de`, `opentable.co.uk` → `co.uk`. */
 const openTableCountry = (url: string): string => {
@@ -62,36 +44,44 @@ export const openTableTimes = (slots: OpenTableSlot[], forDate: string): string[
 		if (slot.availableDate && slot.availableDate !== forDate) return [];
 		if (slot.time) return [slot.time];
 		if (slot.dateTime) return [slot.dateTime.split('T')[1] ?? ''];
-		if (slot.timeOffsetMinutes !== undefined) return [addMinutes(OPENTABLE_ASK_TIME, slot.timeOffsetMinutes)];
+		if (slot.timeOffsetMinutes !== undefined)
+			return [addMinutes(OPENTABLE_ASK_TIME, slot.timeOffsetMinutes)];
 		return [];
 	});
+
+/** One OpenTable run: the targets on one domain, for one date */
+export interface OpenTableRun {
+	country: string;
+	date: string;
+	targets: ReservationTarget[];
+	call: ActorCall<OpenTableInput, OpenTableItem>;
+}
 
 /**
  * OpenTable availability for two at 20:00 through the actor's `ga` process, which finds a
  * restaurant by its exact name. One run per date and OpenTable domain; each run is charged at
- * least 1,000 result units (~$0.26), so venues are batched into one run.
+ * least 1,000 result units (~$0.26), so venues are batched into one run. The runs are children
+ * of the `sample-reservations` run: `calls` is what it starts, `read` what it makes of a run's
+ * stored items.
  */
 @Injectable()
-export class OpenTableAvailabilityService implements ReservationAvailabilityProvider {
+export class OpenTableAvailabilityService {
 	readonly platform = ReservationPlatformEnum.OPENTABLE;
 
-	constructor(private readonly apifyService: ApifyService) {}
-
-	async availability(
-		targets: ReservationTarget[],
-		dates: string[],
-		budgetUsd: number,
-	): Promise<ReservationAvailability[]> {
+	/** One run per domain and date, the budget split evenly over them */
+	calls(targets: ReservationTarget[], dates: string[], budgetUsd: number): OpenTableRun[] {
 		if (targets.length === 0 || dates.length === 0) return [];
 		const groups = Object.entries(_.groupBy(targets, t => openTableCountry(t.url)));
 		const perRun = budgetUsd / (groups.length * dates.length);
-		const out: ReservationAvailability[] = [];
-		for (const [country, group] of groups)
-			for (const date of dates) {
-				const items = await this.apifyService.runActor<OpenTableItem>(
-					OPENTABLE_ACTOR,
-					{
-						process: 'ga',
+		return groups.flatMap(([country, group]) =>
+			dates.map(date => ({
+				country,
+				date,
+				targets: group,
+				call: {
+					actor: OPENTABLE_ACTOR,
+					input: {
+						process: 'ga' as const,
 						queries: group.map(t => `${t.name}, ${t.cityName}`),
 						date,
 						time: OPENTABLE_ASK_TIME,
@@ -100,11 +90,15 @@ export class OpenTableAvailabilityService implements ReservationAvailabilityProv
 						maximum: 1,
 						maxResults: group.length,
 					},
-					{ maxCostUsd: perRun, purpose: `opentable availability ${date}: ${group.length} venues` },
-				);
-				out.push(...openTableAvailability(group, items, date));
-			}
-		return out;
+					maxCostUsd: perRun,
+					purpose: `opentable availability ${date}: ${group.length} venues`,
+				},
+			})),
+		);
+	}
+
+	read(run: OpenTableRun, items: OpenTableItem[]): ReservationAvailability[] {
+		return openTableAvailability(run.targets, items, run.date);
 	}
 }
 

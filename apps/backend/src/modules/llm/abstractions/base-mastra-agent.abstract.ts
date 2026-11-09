@@ -10,7 +10,8 @@ import type { z, ZodObject } from 'zod/v4';
 
 import { llmConfig } from '../config/llm.config.js';
 import { LlmModelChoice, LlmModelId, providerOf } from '../constants/llm-models.constant.js';
-import { LlmModelsService } from '../services/llm-models.service.js';
+import { LlmAvailability, LlmModelsService } from '../services/llm-models.service.js';
+import { costUsd, usageOf } from '../util/llm-cost.js';
 
 // The inputs we pass: a plain string, or role-tagged messages; only a user message carries
 // image or file parts
@@ -77,12 +78,6 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	 */
 	paidFallback?: boolean;
 	/**
-	 * Reads one source into stored facts (a post's places and claims, a review, a comment, a press
-	 * page, a wording's topics, a place's match): keeps running while `LLM_INGESTION_ONLY` pauses
-	 * the rest (reports, copy, discovery, the analyst).
-	 */
-	ingestion?: boolean;
-	/**
 	 * The answer is the model's own text (`res.text`), not an object: a conversational agent whose
 	 * answer is prose (the analyst). `outputSchema` is then unused; pass an empty object.
 	 */
@@ -120,7 +115,27 @@ export abstract class BaseMastraAgent<
 	}
 
 	onModuleInit(): void {
-		this.llmModels.registerAgent(this.config.id);
+		this.llmModels.registerAgent(this.config.id, this);
+	}
+
+	/** The agent's id (`BaseMastraAgentConfig.id`): what the LLM call ledger files its calls under */
+	get id(): string {
+		return this.config.id;
+	}
+
+	/** The choice a call runs on: the call's own `model`, else the agent's `LLM_AGENT_MODELS` entry, else its `getModel()` */
+	modelChoice(context?: Context, options?: { model?: LlmModelChoice }): LlmModelChoice {
+		return options?.model ?? this.llmModels.choiceFor(this.config.id, this.getModel(context));
+	}
+
+	/**
+	 * Whether a call with this context would find a model now, and when the roster serves it again
+	 * if not (`LlmModelsService.availability`): what a workflow sleeps on when the allowance is out
+	 */
+	availability(context?: Context, options?: { model?: LlmModelChoice }): LlmAvailability {
+		return this.llmModels.availability(this.modelChoice(context, options), {
+			paidFallback: this.config.paidFallback,
+		});
 	}
 
 	/**
@@ -176,7 +191,7 @@ export abstract class BaseMastraAgent<
 		const instructions = this.instructionsFor(context);
 		const { model: chosen, ...callOptions } = options ?? ({} as MastraGenerateOptions<Output>);
 		// A call's own choice, else the agent's `LLM_AGENT_MODELS` entry, else its own
-		const choice = chosen ?? this.llmModels.choiceFor(this.config.id, this.getModel(context));
+		const choice = this.modelChoice(context, { model: chosen });
 		const tools = this.getTools(context);
 		const outputProcessors = this.getOutputProcessors(context);
 
@@ -246,10 +261,29 @@ export abstract class BaseMastraAgent<
 
 		const start = Date.now();
 		try {
-			const { result: res, model } = await this.llmModels.run(choice, callWith, {
+			const {
+				result: res,
+				model,
+				account,
+			} = await this.llmModels.run(choice, callWith, {
 				paidFallback: this.config.paidFallback,
-				ingestion: this.config.ingestion,
 				agentId: this.config.id,
+				// What the account's daily token limit counts
+				tokensOf: answer => {
+					const { inputTokens, outputTokens } = usageOf(answer);
+					return inputTokens + outputTokens;
+				},
+			});
+			const usage = usageOf(res);
+			this.llmModels.recordCall({
+				kind: 'generate',
+				agentId: this.config.id,
+				model,
+				account,
+				usage,
+				usd: costUsd(model, usage),
+				durationMs: Date.now() - start,
+				ok: true,
 			});
 			if (llmConfig.IS_LLM_VERBOSE || this.config.verbose) {
 				const usage = res.totalUsage ?? res.usage;
@@ -261,6 +295,17 @@ export abstract class BaseMastraAgent<
 		} catch (error) {
 			const err = error as Error;
 			this.logger.error(`Error during generate: ${err.message}`);
+			// The roster may have tried several models: none is the call's
+			this.llmModels.recordCall({
+				kind: 'generate',
+				agentId: this.config.id,
+				model: null,
+				usage: { inputTokens: 0, outputTokens: 0 },
+				usd: 0,
+				durationMs: Date.now() - start,
+				ok: false,
+				error: err.message,
+			});
 			throw err;
 		}
 	}

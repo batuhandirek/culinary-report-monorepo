@@ -5,13 +5,14 @@ import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
-import { PostGateAgent } from 'src/modules/social/agents/post-gate.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { gateAgent } from 'src/modules/pipeline/read-posts/tests/factories/post-gate.mock.js';
+import { readPostsPlainly } from 'src/modules/pipeline/read-posts/tests/factories/read-posts.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
 import { MentionMatchingService } from 'src/modules/social/services/mention-matching.service.js';
-import { gateAgent } from 'src/modules/social/tests/factories/post-gate.mock.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
@@ -196,7 +197,7 @@ describe('Food topic links (pglite)', () => {
 	});
 
 	it("links an extracted mention to every topic its cuisine names; readers count the topics' parents", async () => {
-		expect(await service(MentionExtractionService).extract({ limit: 10 })).toEqual({
+		expect(await readPostsPlainly(harness.moduleRef, { limit: 10 })).toEqual({
 			analysed: 1,
 			mentions: 2,
 			skipped: 0,

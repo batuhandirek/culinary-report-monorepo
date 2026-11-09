@@ -1,50 +1,46 @@
-import type { PipelineRunParams } from '../entities/pipeline-run.entity.js';
-
+/**
+ * The pipeline's steps: each one the work of an operation's workflow (`STEP_RUNS_IN` says which),
+ * the key of a city's budget for it (`City.stepBudgetsUsd`, `stepBudgetUsd`) and the name of the
+ * `@DurableStep` doing it, so the Data page finds its attempts on DBOS.
+ */
 export enum PipelineStepEnum {
 	SCRAPE_VENUES = 'SCRAPE_VENUES',
 	// Every confirmed brand's name on Google Maps in the city, for branches that opened since
-	// (the quarterly cron, after SCRAPE_VENUES); new ones are offered, never added
+	// (a quarter's `scrape-venues`, after SCRAPE_VENUES); new ones are offered, never added
 	SEARCH_BRANCHES = 'SEARCH_BRANCHES',
-	// OpenStreetMap's food places in the city, each linked to the venue it is (free; the
-	// monthly cron, before MONTHLY): the checklist the venue list is measured against
+	// OpenStreetMap's food places in the city, each linked to the venue it is (free, monthly): the
+	// checklist the venue list is measured against
 	SYNC_OSM_PLACES = 'SYNC_OSM_PLACES',
 	// The OSM places no venue is, searched on Google Maps by name and address, once each
 	LOOKUP_OSM_PLACES = 'LOOKUP_OSM_PLACES',
 	// The month-end TikTok pass: the city's searches and hashtag words searched over the last
 	// month, kept from the month's start; the weekly SCRAPE_TIKTOK_RECENT collects most of the month
 	SCRAPE_TIKTOK = 'SCRAPE_TIKTOK',
-	// The city's TikTok searches and hashtag words, searched over the last week (the weekly cron).
+	// The city's TikTok searches and hashtag words, searched over the last week (weekly).
 	// A hashtag's own feed has no date filter (half of it was over three months old), so its word
 	// is searched instead
 	SCRAPE_TIKTOK_RECENT = 'SCRAPE_TIKTOK_RECENT',
 	SCRAPE_INSTAGRAM = 'SCRAPE_INSTAGRAM',
-	// The newest page of each Instagram hashtag (the daily cron): on Apify's Free plan a hashtag
+	// The newest page of each Instagram hashtag (daily): on Apify's Free plan a hashtag
 	// gives one page a run, about a day of posts on a busy tag
 	SCRAPE_INSTAGRAM_RECENT = 'SCRAPE_INSTAGRAM_RECENT',
-	// Each Instagram hashtag's top reels of the last week (the weekly cron, with the TikTok one):
+	// Each Instagram hashtag's top reels of the last week (weekly):
 	// the posts feed returns no reels, and reels carry the views
 	SCRAPE_INSTAGRAM_REELS = 'SCRAPE_INSTAGRAM_REELS',
-	// The city's food blogs through their feeds: each new article a post (free; the weekly cron
-	// and the month end)
+	// The city's food blogs through their feeds: each new article a post (free; weekly and monthly)
 	SCRAPE_BLOGS = 'SCRAPE_BLOGS',
-	// The reading steps, for an admin's run: the crons and MONTHLY leave reading to
-	// `IngestionService` (the hourly pass and the one each scrape run queues)
-	EXTRACT_MENTIONS = 'EXTRACT_MENTIONS',
-	MATCH_MENTIONS = 'MATCH_MENTIONS',
 	LOOKUP_VENUES = 'LOOKUP_VENUES',
 	SCRAPE_VENUE_SOCIAL = 'SCRAPE_VENUE_SOCIAL',
-	// TikTok searches by brand name over the last week (the weekly cron): the last finished month's
+	// TikTok searches by brand name over the last week (weekly): the last finished month's
 	// report brands (customers included), their competitors and the open prospects
 	SCRAPE_VENUE_SOCIAL_RECENT = 'SCRAPE_VENUE_SOCIAL_RECENT',
 	// Report brands with no competitors get their best suggestions (free; before the review
 	// scrape, so the competitors' reviews come in the same run); brands with any are left alone
 	FILL_COMPETITORS = 'FILL_COMPETITORS',
 	SCRAPE_REVIEWS = 'SCRAPE_REVIEWS',
-	// A one-off: the Google reviews since `params.since` of every open venue posts named in the
-	// last `params.talkedDays` that has none stored from then (started by hand, or an `ONE_OFF_RUNS`
-	// entry)
+	// A one-off: the Google reviews since `since` of every open venue posts named in the last
+	// `talkedDays` that has none stored from then (started by hand: `POST /admin/backfill-reviews`)
 	BACKFILL_REVIEWS = 'BACKFILL_REVIEWS',
-	ANALYSE_REVIEWS = 'ANALYSE_REVIEWS',
 	// Google Maps detail pages (hours, amenities, popular times) of report venues and competitors
 	REFRESH_VENUE_DETAILS = 'REFRESH_VENUE_DETAILS',
 	// Every watched TikTok and Instagram account (`AccountWatchService`: the creators the city
@@ -52,154 +48,56 @@ export enum PipelineStepEnum {
 	// began and a profile snapshot (followers, reach per post over the latest ten)
 	SCRAPE_ACCOUNTS = 'SCRAPE_ACCOUNTS',
 	// Every brand's own accounts (a brand with an open branch in the city, the report brands and
-	// their rivals first): their posts of the last week (the weekly cron) and a snapshot
+	// their rivals first): their posts of the last week (weekly) and a snapshot
 	// (followers; TikTok's without averages, as only the week's videos come)
 	SCRAPE_ACCOUNTS_RECENT = 'SCRAPE_ACCOUNTS_RECENT',
-	// The watched creators (the city's creator sources and the self-kept creator list,
-	// `AccountWatchService`): TikTok's videos since the last run, every day; an Instagram profile's
-	// latest posts every `CREATOR_INSTAGRAM_EVERY_DAYS` (the daily creator cron)
-	SCRAPE_CREATORS = 'SCRAPE_CREATORS',
 	// Brands' own accounts with no follower count yet: their profiles only, no posts (the daily
 	// cron), so every brand account has followers within days of being linked
 	FILL_ACCOUNT_FOLLOWERS = 'FILL_ACCOUNT_FOLLOWERS',
 	// Every brand account with an open branch in the city and every creator account over
 	// `TRACK_CREATOR_MIN_FOLLOWERS` / `TRACK_CREATOR_MIN_VIEWS`: their profiles only (followers,
-	// following, post count), each again `TRACK_PROFILE_EVERY_DAYS` after its last (the weekly cron)
+	// following, post count), each again `TRACK_PROFILE_EVERY_DAYS` after its last (weekly)
 	TRACK_PROFILES = 'TRACK_PROFILES',
 	// Brands' own accounts on the platform they have none on: their other account's handle looked
-	// up there, linked when the profile proves it (the weekly cron, after matching)
+	// up there, linked when the profile proves it (weekly, after the week's lookups)
 	FIND_OWN_ACCOUNTS = 'FIND_OWN_ACCOUNTS',
 	// Every Instagram handle posts tag or bios name becomes an account, and the profiles never read
 	// are read (bio, links, business category); the accounts are matched by what their profile
 	// says (`profilePlaces`), a business profile's bio address that names none of our places is
 	// searched on Google Maps, `ProfilePlaceAgent` suggests which place at an address a profile
-	// is, and the mentions their tags place are matched (the weekly cron, before the lookup)
+	// is, and the mentions their tags place are matched (weekly, before the week's lookups)
 	READ_MENTIONED_PROFILES = 'READ_MENTIONED_PROFILES',
-	// Comments under each report venue's top TikTok posts of the month, then their intents
+	// Comments under each report venue's top TikTok posts of the month (their intents: `read-comments`)
 	SCRAPE_COMMENTS = 'SCRAPE_COMMENTS',
-	ANALYSE_COMMENTS = 'ANALYSE_COMMENTS',
 	// Google News and web search for the report venues' press and listicle mentions
 	SCRAPE_PRESS = 'SCRAPE_PRESS',
 	// A dated snapshot of every food topic a guest searches (dishes, cuisines, kinds of place,
 	// meals, diets, drinks) × every district on Google Maps ("pasta Mitte Berlin", "vietnamese
-	// food Mitte Berlin"), the top ten each (`DishSearchCron`, every `City.dishSearchEveryDays`;
-	// not part of MONTHLY). A report branch's place on those searches is read from the snapshot
+	// food Mitte Berlin"), the top ten each (`dish-searches`, every `City.dishSearchEveryDays`). A
+	// report branch's place on those searches is read from the snapshot
 	TRACK_DISH_SEARCHES = 'TRACK_DISH_SEARCHES',
 	// Google Trends: search interest per cuisine and won venue over twelve months, in the city's region
 	SEARCH_INTEREST = 'SEARCH_INTEREST',
-	BUILD_REPORTS = 'BUILD_REPORTS',
 	// Venue lead scores for outreach: SQL only, free
 	SCORE_LEADS = 'SCORE_LEADS',
 	// The weekly review watch: subscribers' reviews of the last ten days, alerts on critical ones
 	WATCH_REVIEWS = 'WATCH_REVIEWS',
-	// Google popular times of the report venues and competitors (the twice-weekly demand cron)
+	// Google popular times of the report venues and competitors (twice a week, `demand-sample`)
 	SAMPLE_BUSYNESS = 'SAMPLE_BUSYNESS',
 	// Open evening tables of every venue with a booking page (Google's own, TheFork, OpenTable),
-	// won prospects and report venues first (the Thursday demand cron)
+	// won prospects and report venues first (Thursdays, `demand-sample`)
 	SAMPLE_RESERVATIONS = 'SAMPLE_RESERVATIONS',
 	// Every open venue of the city: its Google reviews since the last fetch, its rating and review
-	// count, those posts named first (`RatingSnapshotService`, the weekly rating cron)
+	// count, those posts named first (`RatingSnapshotService`, weekly)
 	SNAPSHOT_RATINGS = 'SNAPSHOT_RATINGS',
 	// Wolt / Lieferando ratings, fees and menus of the report venues and competitors
 	SCRAPE_DELIVERY = 'SCRAPE_DELIVERY',
 	// Views, likes, shares and comments of every post that turned seven days old without a read
-	// at that age, read again and kept (`PostCountsService`, the daily cron)
+	// at that age, read again and kept (`PostCountsService`, daily)
 	REFRESH_POST_COUNTS = 'REFRESH_POST_COUNTS',
-	// Every step above but the venue list, in order, for one month
-	MONTHLY = 'MONTHLY',
 }
 
-// The monthly run, in order: the month-end passes over the city's posts and blogs, the names
-// they named looked up, the most talked-about brands' posts (searched by name, and the watched
-// accounts' own profiles), competitors for those without, their reviews, their Google Maps
-// details, delivery, comments and press, Google Trends, then their reports and
-// last the outreach lead scores. No reading step: the steps that need the posts read
-// (`READ_GATED_STEPS`) or everything read (`ALL_READ_STEPS`) read first and wait when no model
-// answers. A stored run's result is keyed by position ("<n>. <STEP>"), so reordering needs a
-// migration re-keying stored results (`Migration20261104150000_monthly_without_reading`)
-export const MONTHLY_STEPS: PipelineStepEnum[] = [
-	PipelineStepEnum.SCRAPE_TIKTOK,
-	PipelineStepEnum.SCRAPE_INSTAGRAM,
-	PipelineStepEnum.SCRAPE_BLOGS,
-	PipelineStepEnum.LOOKUP_VENUES,
-	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
-	PipelineStepEnum.SCRAPE_ACCOUNTS,
-	// The report brands are final once the profiles' posts are read: competitors, then the
-	// review scrape takes theirs too
-	PipelineStepEnum.FILL_COMPETITORS,
-	PipelineStepEnum.SCRAPE_REVIEWS,
-	PipelineStepEnum.REFRESH_VENUE_DETAILS,
-	// After the details: Google's "Order online" links say where each venue delivers
-	PipelineStepEnum.SCRAPE_DELIVERY,
-	PipelineStepEnum.SCRAPE_COMMENTS,
-	PipelineStepEnum.SCRAPE_PRESS,
-	// Before the reports: their city section quotes the search changes
-	PipelineStepEnum.SEARCH_INTEREST,
-	PipelineStepEnum.BUILD_REPORTS,
-	PipelineStepEnum.SCORE_LEADS,
-];
-
-/**
- * Steps that read what the reading found (the names posts gave, the month's top brands, the
- * accounts matching linked): a pass runs first, and with no model the run waits, at most
- * `READ_WAIT_HOURS`, then goes on with what is read.
- */
-export const READ_GATED_STEPS: readonly PipelineStepEnum[] = [
-	PipelineStepEnum.LOOKUP_VENUES,
-	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
-	PipelineStepEnum.SCRAPE_ACCOUNTS,
-	PipelineStepEnum.FILL_COMPETITORS,
-	PipelineStepEnum.SCRAPE_REVIEWS,
-	PipelineStepEnum.REFRESH_VENUE_DETAILS,
-	PipelineStepEnum.SCRAPE_DELIVERY,
-	PipelineStepEnum.SCRAPE_COMMENTS,
-	PipelineStepEnum.SCRAPE_PRESS,
-	PipelineStepEnum.FIND_OWN_ACCOUNTS,
-	PipelineStepEnum.READ_MENTIONED_PROFILES,
-];
-
-/** Steps that read everything, the month's reviews included: they wait until it is read */
-export const ALL_READ_STEPS: readonly PipelineStepEnum[] = [
-	PipelineStepEnum.BUILD_REPORTS,
-	PipelineStepEnum.SCORE_LEADS,
-];
-
-/** Steps that store something to read (posts, reviews, comments, press, venues to match against): a run of them queues a reading pass when it ends */
-export const SOURCE_STEPS: readonly PipelineStepEnum[] = [
-	PipelineStepEnum.SCRAPE_VENUES,
-	PipelineStepEnum.SEARCH_BRANCHES,
-	PipelineStepEnum.LOOKUP_OSM_PLACES,
-	PipelineStepEnum.SCRAPE_TIKTOK,
-	PipelineStepEnum.SCRAPE_TIKTOK_RECENT,
-	PipelineStepEnum.SCRAPE_INSTAGRAM,
-	PipelineStepEnum.SCRAPE_INSTAGRAM_RECENT,
-	PipelineStepEnum.SCRAPE_INSTAGRAM_REELS,
-	PipelineStepEnum.SCRAPE_BLOGS,
-	PipelineStepEnum.LOOKUP_VENUES,
-	PipelineStepEnum.SCRAPE_VENUE_SOCIAL,
-	PipelineStepEnum.SCRAPE_VENUE_SOCIAL_RECENT,
-	PipelineStepEnum.SCRAPE_ACCOUNTS,
-	PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT,
-	PipelineStepEnum.SCRAPE_CREATORS,
-	PipelineStepEnum.SCRAPE_REVIEWS,
-	PipelineStepEnum.BACKFILL_REVIEWS,
-	PipelineStepEnum.SCRAPE_COMMENTS,
-	PipelineStepEnum.SCRAPE_PRESS,
-	PipelineStepEnum.WATCH_REVIEWS,
-];
-
-// How a reading pass takes the city's unread posts: batches of this many, at most this many
-// batches a pass (a batch that reads nothing ends it)
-export const INGEST_EXTRACT_BATCH = 1000;
-export const INGEST_EXTRACT_MAX_BATCHES = 20;
-
-// The unread reviews a reading pass takes, newest first: a backfill's thousands are read over
-// several passes, so the posts of the hours between are never stuck behind them
-export const INGEST_REVIEWS_PER_PASS = 1000;
-
-/** What a step spends on Apify at most, when the admin gives no budget. */
-// The share of a `READ_MENTIONED_PROFILES` budget the profile reads take first; the address searches get what is left
-export const MENTIONED_PROFILES_SHARE = 0.6;
+/** What a step spends on Apify at most, when the city sets no budget for it (`City.stepBudgetsUsd`) */
 
 export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> = {
 	[PipelineStepEnum.SCRAPE_VENUES]: 20,
@@ -236,9 +134,6 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// at ~$0.0026 (~$7.40) and ~890 TikTok profiles paying only for the week's videos at ~$0.003
 	// (a quiet account costs nothing): ~$11 a week, ~$50 a month
 	[PipelineStepEnum.SCRAPE_ACCOUNTS_RECENT]: 16,
-	// ~300 creators: TikTok's new videos at ~$0.003 (~$0.50 a day), a third of the Instagram
-	// profiles a day at ~$0.003: ~$20 a month
-	[PipelineStepEnum.SCRAPE_CREATORS]: 3,
 	// An Instagram profile at ~$0.003, a TikTok one (its latest video) at ~$0.004: ~300 profiles a
 	// day. Berlin's backlog in 2026-10 was ~1,200 accounts (~$3.40, four days); then only the
 	// accounts linked since, cents a day
@@ -280,44 +175,3 @@ export const DEFAULT_STEP_BUDGET_USD: Partial<Record<PipelineStepEnum, number>> 
 	// post the cap leaves waits a day
 	[PipelineStepEnum.REFRESH_POST_COUNTS]: 2,
 };
-
-/** How many of the month's most talked-about venues get reviews, venue scrapes and reports. */
-export const DEFAULT_TOP_VENUES = 20;
-
-/**
- * How many venues one `SAMPLE_RESERVATIONS` run samples at most: Google's booking page is free
- * but paced (two dates × two loads a venue, ~1.5 s apart), so 600 venues take about an hour.
- */
-export const RESERVATION_SAMPLE_MAX_VENUES = 600;
-
-/** How far back the weekly review watch scrapes: a week plus slack for a late run. */
-export const REVIEW_WATCH_DAYS = 10;
-
-/**
- * How many months before the report month a venue's first `SCRAPE_REVIEWS` starts (a venue with
- * no Google review stored from before the month): the report's previous month and the
- * correlations' six-month window need them. Paid once per venue.
- */
-export const REVIEW_BACKFILL_MONTHS = 6;
-
-/**
- * The backfill's share of `SCRAPE_REVIEWS`' Google budget at most, so the month's own reviews
- * of the venues already tracked always fit. All of it when no venue is tracked yet.
- */
-export const REVIEW_BACKFILL_BUDGET_SHARE = 0.4;
-
-export interface OneOffRun {
-	step: PipelineStepEnum;
-	key: string;
-	params: PipelineRunParams;
-	/** The run's month, `YYYY-MM`; the boot's month when absent */
-	month?: string;
-}
-
-/**
- * Runs queued once, at the first boot of a deploy that carries them (`PipelineBootService`), one
- * per city the monthly cron covers: never again once a run of the step with the same `key`
- * exists for the city, whatever became of it (a failed one is rerun from the Data page). An entry
- * goes once production has queued it: the key stops it running again anyway.
- */
-export const ONE_OFF_RUNS: OneOffRun[] = [];

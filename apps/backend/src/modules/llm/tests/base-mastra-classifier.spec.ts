@@ -54,7 +54,10 @@ const fakeModel = (answers: Record<string, unknown>) => ({
 
 const classifierOn = (model: ReturnType<typeof fakeModel>) => {
 	const classifier = new RouteClassifier();
-	const decisionModels = { model: jest.fn((_id: DecisionModelId, _call?: unknown) => model) };
+	const decisionModels = {
+		model: jest.fn((_id: DecisionModelId, _call?: unknown) => model),
+		recordCall: jest.fn((_call: unknown) => undefined),
+	};
 	(classifier as unknown as { decisionModels: typeof decisionModels }).decisionModels =
 		decisionModels;
 	return { classifier, decisionModels };
@@ -78,6 +81,17 @@ describe('BaseMastraClassifier', () => {
 		expect(res.model).toBe('typesafe-ai/jev-latest');
 		// Input only, at TypeSafe's price
 		expect(res.usd).toBeCloseTo((1000 * 0.042) / 1_000_000, 10);
+		// Filed in the ledger with the model, its tokens and its price
+		expect(decisionModels.recordCall).toHaveBeenCalledWith(
+			expect.objectContaining({
+				kind: 'decide',
+				agentId: 'route',
+				model: 'typesafe-ai/jev-latest',
+				usage: { inputTokens: 1000, outputTokens: 10 },
+				usd: res.usd,
+				ok: true,
+			}),
+		);
 		const [options] = model.doDecide.mock.calls[0] as [{ questions: unknown; state: unknown }];
 		expect(options.questions).toEqual(JSON.parse(classifier.rulesFor()));
 		expect(JSON.stringify(options.state)).toContain('I was charged twice');
@@ -104,23 +118,12 @@ describe('BaseMastraClassifier', () => {
 
 describe('DecisionModelsService', () => {
 	it('serves a decision model only inside llmPaid: production never pays', async () => {
-		const service = new DecisionModelsService({ typesafeAiApiKey: 'key' });
+		const service = new DecisionModelsService({
+			typesafe: { id: 'typesafe', provider: 'typesafe', apiKey: 'key' },
+		});
 		expect(() => service.model('typesafe-ai/jev-latest')).toThrow(PaidDecisionModelError);
 		const model = await llmPaid(async () => service.model('typesafe-ai/jev-latest'));
 		expect(model).toMatchObject({ modelId: 'jev-latest' });
-	});
-
-	it('under LLM_INGESTION_ONLY serves only a reading classifier, but anything inside llmPaid', async () => {
-		const service = new DecisionModelsService({ typesafeAiApiKey: 'key', ingestionOnly: true });
-		expect(() =>
-			service.model('typesafe-ai/jev-latest', { inProduction: true, ingestion: true }),
-		).not.toThrow();
-		expect(() => service.model('typesafe-ai/jev-latest', { inProduction: true })).toThrow(
-			'paused, only the reading runs (LLM_INGESTION_ONLY)',
-		);
-		await expect(
-			llmPaid(async () => service.model('typesafe-ai/jev-latest')),
-		).resolves.toMatchObject({ modelId: 'jev-latest' });
 	});
 
 	it('needs the TypeSafe key', async () => {

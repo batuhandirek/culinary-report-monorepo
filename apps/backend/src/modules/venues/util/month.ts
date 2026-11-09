@@ -8,7 +8,11 @@ export const monthRange = (month: string): { start: Date; end: Date } => {
 
 /** `2026-08` → "August 2026". */
 export const monthName = (month: string): string =>
-	new Date(`${month}-01T00:00:00Z`).toLocaleString('en', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+	new Date(`${month}-01T00:00:00Z`).toLocaleString('en', {
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'UTC',
+	});
 
 /** The calendar month before `date`, as `YYYY-MM`. */
 export const previousMonth = (date = new Date()): string => {

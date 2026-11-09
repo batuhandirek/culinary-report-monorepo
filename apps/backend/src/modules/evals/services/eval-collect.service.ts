@@ -4,11 +4,12 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import { PostGateAgent } from 'src/modules/social/agents/post-gate.agent.js';
+import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { postClaimsSource } from 'src/modules/pipeline/read-posts/util/post-claims-input.js';
+import { gateInput, hasContent } from 'src/modules/pipeline/read-posts/util/post-gate-input.js';
 import type { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPost } from 'src/modules/social/entities/social-post.entity.js';
-import { gateInput, hasContent } from 'src/modules/social/services/mention-extraction.service.js';
-import { postClaimsSource } from 'src/modules/social/util/post-claims-input.js';
+import { postForReadingOf } from 'src/modules/social/util/post-for-reading.js';
 import type { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { runPool } from 'src/shared/util/pool.js';
@@ -357,7 +358,7 @@ export class EvalCollectService {
 				tags: tags.get(p.id) ?? [],
 				collectedAt: now,
 				source: {
-					...postClaimsSource(p),
+					...postClaimsSource(postForReadingOf(p)),
 					id: p.id,
 					externalId: p.externalId,
 					url: p.url ?? null,
@@ -386,9 +387,9 @@ export class EvalCollectService {
 		const posts = await em.find(
 			SocialPost,
 			{ id: { $in: ids } },
-			{ populate: ['city', 'account.brand'] },
+			{ populate: ['city', 'account.brand', 'hashtagLinks.hashtag'] },
 		);
-		const readable = posts.filter(p => hasContent(p));
+		const readable = posts.map(postForReadingOf).filter(p => hasContent(p));
 		const digest = new Set<string>();
 		// One post a call, as the pipeline's gate reads them; a post it fails on is not digested
 		await runPool(
@@ -396,11 +397,11 @@ export class EvalCollectService {
 			10,
 			async post => {
 				const res = await this.postGateAgent.generate(JSON.stringify(gateInput(post)), {
-					cityName: post.city.name,
+					cityName: post.cityName,
 				});
-				if (res.object.digest) digest.add(post.id);
+				if (res.object.digest) digest.add(post.postId);
 			},
-			(post, e) => this.logger.warn(`Gate on ${post.id} failed: ${e.message}`),
+			(post, e) => this.logger.warn(`Gate on ${post.postId} failed: ${e.message}`),
 		);
 		return digest;
 	}

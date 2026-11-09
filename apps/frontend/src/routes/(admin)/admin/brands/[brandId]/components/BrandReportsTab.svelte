@@ -14,6 +14,7 @@
 	import { downloadLeaveBehindPdf } from '#components/admin/outreach/report-pdf.js';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
+	import { announceReportRun, followReportRun } from '#lib/report-runs.js';
 	import { sectionsOutline } from '#lib/report-sections.js';
 	import type {
 		Column,
@@ -90,21 +91,28 @@
 	];
 
 	let version = $state(0);
+	// In the background, followed until done; a run waiting for an LLM account goes on by itself
 	const rebuildAction = createAction(
-		(row: AdminReportListItemOutputDto) =>
-			api.admin.buildReport({
-				brandId: brand.id,
-				cityId: row.city?.id,
-				month: row.month,
-				// Its configuration's alone; a default report rebuilds as the brand's reports now are
-				...(row.config && { configId: row.config.id })
-			}),
+		async (row: AdminReportListItemOutputDto) =>
+			followReportRun(
+				await api.admin.buildReport({
+					brandId: brand.id,
+					cityId: row.city?.id,
+					month: row.month,
+					// Its configuration's alone; a default report rebuilds as the brand's reports now are
+					...(row.config && { configId: row.config.id })
+				})
+			),
 		{
-			onSuccess: () => version++,
-			successNotification: (_, [row]) => ({
-				title: 'Report rebuilt',
-				text: `${row.name}, ${monthLabel(row.month)}`
-			})
+			onSuccess: (run, [row]) => {
+				if (
+					announceReportRun(run, {
+						title: 'Report rebuilt',
+						text: `${row.name}, ${monthLabel(row.month)}`
+					})
+				)
+					version++;
+			}
 		}
 	);
 	const leaveBehindAction = createAction(

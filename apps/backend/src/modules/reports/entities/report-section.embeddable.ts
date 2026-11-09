@@ -114,11 +114,6 @@ export class ReviewsReportSection extends ReportSection {
 	override kind = ReportSectionKindEnum.REVIEWS as const;
 }
 
-@Embeddable({ discriminatorValue: ReportSectionKindEnum.REPLIES })
-export class RepliesReportSection extends ReportSection {
-	override kind = ReportSectionKindEnum.REPLIES as const;
-}
-
 @Embeddable({ discriminatorValue: ReportSectionKindEnum.DISHES })
 export class DishesReportSection extends ReportSection {
 	override kind = ReportSectionKindEnum.DISHES as const;
@@ -166,7 +161,6 @@ export const REPORT_SECTION_CLASSES = {
 	[ReportSectionKindEnum.MEDIA]: MediaReportSection,
 	[ReportSectionKindEnum.CREATORS]: CreatorsReportSection,
 	[ReportSectionKindEnum.REVIEWS]: ReviewsReportSection,
-	[ReportSectionKindEnum.REPLIES]: RepliesReportSection,
 	[ReportSectionKindEnum.DISHES]: DishesReportSection,
 	[ReportSectionKindEnum.PLACES]: PlacesReportSection,
 	[ReportSectionKindEnum.PATTERNS]: PatternsReportSection,

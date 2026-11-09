@@ -42,7 +42,14 @@ export interface CreatorDetail {
 	/** Posts and views per month, the six months up to the one asked for, oldest first */
 	months: { month: string; posts: number; views: number }[];
 	/** The brands their posts named most, all time */
-	brands: { id: string; name: string; posts: number; views: number; lastPostedAt: Date; own: boolean }[];
+	brands: {
+		id: string;
+		name: string;
+		posts: number;
+		views: number;
+		lastPostedAt: Date;
+		own: boolean;
+	}[];
 	posts: number;
 	views: number;
 	/** What found their posts, the most posts first: a city source, a venue search or their own profile */
@@ -54,7 +61,12 @@ export interface CreatorDetail {
 	handleChanges: SocialAccountHandleChange[];
 }
 
-export const HANDLE_CHANGE_POPULATE = ['account', 'account.creator', 'takenBy', 'takenBy.creator'] as const;
+export const HANDLE_CHANGE_POPULATE = [
+	'account',
+	'account.creator',
+	'takenBy',
+	'takenBy.creator',
+] as const;
 
 /** One thing that found a creator's posts (`PostSource`), with how many of their posts. */
 export interface CreatorFind {
@@ -142,7 +154,9 @@ export class CreatorService {
 				const creator = byId.get(r.creator_id);
 				if (!creator) return null;
 				const accounts = creator.accounts.getItems();
-				const followers = _.max(accounts.map(a => a.followers ?? undefined).filter(n => n !== undefined));
+				const followers = _.max(
+					accounts.map(a => a.followers ?? undefined).filter(n => n !== undefined),
+				);
 				return {
 					creator,
 					own: accounts.length > 0 && accounts.every(a => !!a.brand),
@@ -162,7 +176,11 @@ export class CreatorService {
 				r =>
 					!q ||
 					r.creator.name.toLowerCase().includes(q) ||
-					r.creator.accounts.getItems().some(a => a.handle.includes(q) || a.displayName?.toLowerCase().includes(q)),
+					r.creator.accounts
+						.getItems()
+						.some(
+							a => a.handle.includes(q) || a.displayName?.toLowerCase().includes(q),
+						),
 			);
 		const [field, order] = (query.sort ?? 'views:desc').split(':');
 		const value = (r: CreatorRow): number | string =>
@@ -171,8 +189,15 @@ export class CreatorService {
 			: field === 'followers' ? (r.followers ?? -1)
 			: field === 'brands' ? r.month.brands
 			: r.month.views;
-		const sorted = _.orderBy(items, [value, r => r.creator.name], [order === 'asc' ? 'asc' : 'desc', 'asc']);
-		return { items: sorted.slice((query.page - 1) * query.size, query.page * query.size), totalItems: sorted.length };
+		const sorted = _.orderBy(
+			items,
+			[value, r => r.creator.name],
+			[order === 'asc' ? 'asc' : 'desc', 'asc'],
+		);
+		return {
+			items: sorted.slice((query.page - 1) * query.size, query.page * query.size),
+			totalItems: sorted.length,
+		};
 	}
 
 	/** One creator: their accounts with figures for the month, six months of posts, the brands they named. */
@@ -182,20 +207,31 @@ export class CreatorService {
 		const accounts = await this.em.find(
 			SocialAccount,
 			{ creator: id },
-			{ populate: [...ACCOUNT_POPULATE], orderBy: { platform: QueryOrder.ASC, handle: QueryOrder.ASC } },
+			{
+				populate: [...ACCOUNT_POPULATE],
+				orderBy: { platform: QueryOrder.ASC, handle: QueryOrder.ASC },
+			},
 		);
 		const ids = accounts.map(a => a.id);
 		const months = [month];
 		while (months.length < 6) months.unshift(monthBefore(months[0]));
 		const conn = this.em.getConnection();
-		const perMonth: { month: string; posts: string; views: string }[] = ids.length ?
+		const perMonth: { month: string; posts: string; views: string }[] =
+			ids.length ?
 				await conn.execute(
 					`select to_char(posted_at at time zone 'UTC', 'YYYY-MM') as month, count(*) as posts, coalesce(sum(views), 0) as views
 					from social_posts where account_id in (${marks(ids)}) group by 1`,
 					ids,
 				)
 			:	[];
-		const brands: { brand_id: string; name: string; posts: string; views: string; last_posted_at: Date }[] = ids.length ?
+		const brands: {
+			brand_id: string;
+			name: string;
+			posts: string;
+			views: string;
+			last_posted_at: Date;
+		}[] =
+			ids.length ?
 				await conn.execute(
 					`select x.brand_id, b.name, count(*) as posts, coalesce(sum(x.views), 0) as views, max(x.posted_at) as last_posted_at
 					from (
@@ -218,7 +254,8 @@ export class CreatorService {
 			venue_name: string | null;
 			posts: string;
 			last_posted_at: Date;
-		}[] = ids.length ?
+		}[] =
+			ids.length ?
 				await conn.execute(
 					`select ps.kind, ps.value, ps.source_id, cs.enabled as source_enabled, p.city_id, c.name as city_name,
 						ps.venue_id, v.name as venue_name, count(distinct ps.post_id) as posts, max(p.posted_at) as last_posted_at
@@ -234,11 +271,15 @@ export class CreatorService {
 				)
 			:	[];
 		const ownBrands = new Set(accounts.map(a => a.brand?.id).filter(Boolean));
-		const handleChanges = ids.length ?
+		const handleChanges =
+			ids.length ?
 				await this.em.find(
 					SocialAccountHandleChange,
 					{ $or: [{ account: { $in: ids } }, { takenBy: { $in: ids } }] },
-					{ populate: [...HANDLE_CHANGE_POPULATE], orderBy: { seenAt: QueryOrder.DESC, createdAt: QueryOrder.DESC } },
+					{
+						populate: [...HANDLE_CHANGE_POPULATE],
+						orderBy: { seenAt: QueryOrder.DESC, createdAt: QueryOrder.DESC },
+					},
 				)
 			:	[];
 		return {

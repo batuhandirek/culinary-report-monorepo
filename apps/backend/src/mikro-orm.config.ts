@@ -15,18 +15,17 @@ import { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityDay } from 'src/modules/cities/entities/city-day.entity.js';
 import { CityEvent } from 'src/modules/cities/entities/city-event.entity.js';
 import { CitySource } from 'src/modules/cities/entities/city-source.entity.js';
-import { Embedding } from 'src/modules/embeddings/entities/embedding.entity.js';
 import { FoodTrendsReport } from 'src/modules/food-trends/entities/food-trends-report.entity.js';
 import { FsmStateChange } from 'src/modules/fsm/entities/fsm-state-change.entity.js';
 import { CityHighlight } from 'src/modules/highlights/entities/city-highlight.entity.js';
 import { Image } from 'src/modules/image/entities/image.entity.js';
 import { LandingEdition } from 'src/modules/landing/entities/landing-edition.entity.js';
+import { LlmCall } from 'src/modules/llm/entities/llm-call.entity.js';
 import { NewsletterSubscriber } from 'src/modules/newsletter/entities/newsletter-subscriber.entity.js';
 import { Notification } from 'src/modules/notification/entities/notification.entity.js';
 import { NotificationPreference } from 'src/modules/notification-preferences/entities/notification-preference.entity.js';
 import { OutreachTouch } from 'src/modules/outreach/entities/outreach-touch.entity.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
-import { PipelineRun } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
 import { BrandReportConfig } from 'src/modules/reports/entities/brand-report-config.entity.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import { REPORT_SECTION_TYPES } from 'src/modules/reports/entities/report-section.embeddable.js';
@@ -84,7 +83,6 @@ export default defineConfig({
 		NotificationPreference,
 		CredentialVerificationRequest,
 		Notification,
-		Embedding,
 		FsmStateChange,
 		BlogEntry,
 		BlogTag,
@@ -138,8 +136,8 @@ export default defineConfig({
 		// Polymorphic embeddables: one class per section kind
 		...REPORT_SECTION_TYPES(),
 		ApifyRun,
-		PipelineRun,
 		BacklogRun,
+		LlmCall,
 		Statement,
 		StatementPart,
 		MentionTopic,
@@ -170,6 +168,9 @@ export default defineConfig({
 	schemaGenerator: {
 		// MikroORM v7 no longer adds `ON UPDATE CASCADE` to foreign keys by itself
 		defaultUpdateRule: 'cascade',
+		// Schemas other libraries own in the same database (DBOS's workflows, pg-boss's jobs): a
+		// generated migration would otherwise drop every table in them, having no entity for them
+		ignoreSchema: ['dbos', 'pgboss'],
 	},
 
 	migrations: {

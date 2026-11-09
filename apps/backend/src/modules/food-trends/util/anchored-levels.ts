@@ -6,6 +6,10 @@
 
 import _ from 'lodash';
 
+import type {
+	GoogleTrendsCompareItem,
+	GoogleTrendsComparePoint,
+} from 'src/modules/apify/actors/google-trends-compare.actor.js';
 import { termKey } from 'src/modules/trends/util/search-interest.js';
 
 import { COMPARE_GROUP_SIZE } from '../constants/food-trends.constant.js';
@@ -16,30 +20,10 @@ export interface CompareTerm {
 	query: string;
 }
 
-/** One weekly point of a compare run, on the group's shared 0–100 scale. */
-export interface ComparePoint {
-	/** Unix seconds of the week's start */
-	timestamp: number;
-	value: number;
-	isPartial?: boolean;
-}
-
-/**
- * One dataset row of `steadyfetch/google-trends-scraper`: one per keyword and surface; `notice`
- * and `summary` rows carry no keyword data.
- */
-export interface TrendsCompareItem {
-	surface: string;
-	keyword?: string;
-	sharedScale?: boolean;
-	comparedWith?: string[];
-	data?: { points?: ComparePoint[] };
-}
-
 /** A group's series by topic key, as the run returned them. */
 export interface CompareGroupResult {
 	terms: CompareTerm[];
-	series: Map<string, ComparePoint[]>;
+	series: Map<string, GoogleTrendsComparePoint[]>;
 }
 
 /** The anchor first, then up to four topics, every topic once; the anchor is not a topic of its own. */
@@ -59,8 +43,8 @@ export const compareGroups = (
 /** A run's interest-over-time rows by topic key, matched on the keyword the run echoes. */
 export const groupSeries = (
 	terms: CompareTerm[],
-	items: TrendsCompareItem[],
-): Map<string, ComparePoint[]> => {
+	items: GoogleTrendsCompareItem[],
+): Map<string, GoogleTrendsComparePoint[]> => {
 	const byQuery = new Map(
 		items
 			.filter(i => i.surface === 'interestOverTime' && i.keyword && i.data?.points?.length)
@@ -77,7 +61,7 @@ export const groupSeries = (
 const monthOf = (timestamp: number) => new Date(timestamp * 1000).toISOString().slice(0, 7);
 
 /** Complete weeks starting inside the window. */
-const windowPoints = (points: ComparePoint[], months: string[]) => {
+const windowPoints = (points: GoogleTrendsComparePoint[], months: string[]) => {
 	const inWindow = new Set(months);
 	return points.filter(
 		p =>
@@ -94,7 +78,7 @@ const windowPoints = (points: ComparePoint[], months: string[]) => {
  * a month with no week above 0 is null: below what the comparison resolves, never 0.
  */
 export const anchoredMonths = (
-	points: ComparePoint[],
+	points: GoogleTrendsComparePoint[],
 	months: string[],
 	anchorMean: number,
 ): (number | null)[] => {

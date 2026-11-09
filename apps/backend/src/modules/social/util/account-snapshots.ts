@@ -21,7 +21,14 @@ export interface SnapshotFigures {
 	postsLast30Days?: number | null;
 }
 
-export const SNAPSHOT_FIGURES = ['followers', 'following', 'posts', 'avgViews', 'avgLikes', 'postsLast30Days'] as const;
+export const SNAPSHOT_FIGURES = [
+	'followers',
+	'following',
+	'posts',
+	'avgViews',
+	'avgLikes',
+	'postsLast30Days',
+] as const;
 
 export interface SnapshotLike extends SnapshotFigures {
 	accountId: string;

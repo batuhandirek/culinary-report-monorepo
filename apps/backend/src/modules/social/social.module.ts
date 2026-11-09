@@ -14,17 +14,11 @@ import { StatementsModule } from '../statements/statements.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 import { VenuesModule } from '../venues/venues.module.js';
 
-import { CommentDisagreementAgent } from './agents/comment-disagreement.agent.js';
-import { CommentIntentAgent } from './agents/comment-intent.agent.js';
-import { PostClaimsAgent } from './agents/post-claims.agent.js';
-import { PostGateAgent } from './agents/post-gate.agent.js';
 import { ProfilePlaceAgent } from './agents/profile-place.agent.js';
-import { VenueMatchAgent } from './agents/venue-match.agent.js';
 import { AdminAccountsController } from './controllers/admin.accounts.controller.js';
 import { AdminBrandAccountsController } from './controllers/admin.brand-accounts.controller.js';
 import { AdminCreatorsController } from './controllers/admin.creators.controller.js';
 import { AdminHashtagsController } from './controllers/admin.hashtags.controller.js';
-import { AdminOpeningFlagsController } from './controllers/admin.opening-flags.controller.js';
 import { AdminPostCommentsController } from './controllers/admin.post-comments.controller.js';
 import { AdminSocialController } from './controllers/admin.social.controller.js';
 import { Creator } from './entities/creator.entity.js';
@@ -39,6 +33,7 @@ import { SocialPost } from './entities/social-post.entity.js';
 import { AccountMatchingService } from './services/account-matching.service.js';
 import { AccountScrapeService } from './services/account-scrape.service.js';
 import { AccountTwinService } from './services/account-twin.service.js';
+import { AccountWatchService } from './services/account-watch.service.js';
 import { BlogFetchService } from './services/blog-fetch.service.js';
 import { BlogScrapeService } from './services/blog-scrape.service.js';
 import { BrandPostsService } from './services/brand-posts.service.js';
@@ -87,7 +82,6 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		AdminAccountsController,
 		AdminBrandAccountsController,
 		AdminCreatorsController,
-		AdminOpeningFlagsController,
 	],
 	providers: [
 		SocialPostService,
@@ -101,6 +95,7 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		AccountScrapeService,
 		AccountMatchingService,
 		AccountTwinService,
+		AccountWatchService,
 		ProfilePlaceService,
 		CreatorService,
 		SocialScrapeService,
@@ -108,11 +103,6 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		MentionMatchingService,
 		BrandPostsService,
 		PostCommentService,
-		PostClaimsAgent,
-		PostGateAgent,
-		CommentIntentAgent,
-		CommentDisagreementAgent,
-		VenueMatchAgent,
 		ProfilePlaceAgent,
 		BrandChangedWorker,
 	],
@@ -126,6 +116,7 @@ import { BrandChangedWorker } from './workers/brand-changed.worker.js';
 		AccountScrapeService,
 		AccountMatchingService,
 		AccountTwinService,
+		AccountWatchService,
 		ProfilePlaceService,
 		PostCommentService,
 		MentionExtractionService,

@@ -1,9 +1,8 @@
+import type { WorkflowRef } from 'src/modules/durable-workflows/interfaces/durable-workflows.interface.js';
+
 // The anchored Google Trends pull behind a city's quarterly food trends page.
 
-// Compares 2–5 terms on one 0–100 scale (`compare: true`), takes a region code as typed and a
-// custom range; $0.009 a keyword report on Apify's Free plan, platform usage included.
-// `signalbench/google-trends-scraper` (the monthly pull) has no compare mode
-export const TRENDS_COMPARE_ACTOR = 'steadyfetch/google-trends-scraper';
+// The pull runs `GOOGLE_TRENDS_COMPARE_ACTOR` (`apify/actors/google-trends-compare.actor.ts`)
 
 // The topic every group carries, so groups can be put on one scale: always searched, steady
 // through the year, in every city
@@ -19,9 +18,6 @@ export const ANCHORED_WINDOW_MONTHS = 24;
 // Per group run: five reports at $0.009; the actor refuses a cap under $0.05
 export const COMPARE_GROUP_CAP_USD = 0.1;
 export const COMPARE_REPORT_USD = 0.009;
-
-// Runs side by side (Apify Free: five actor jobs at once, leave room for the pipeline)
-export const COMPARE_CONCURRENCY = 3;
 
 // A queued or running pull older than this is taken as lost (a restart), so it can be queued again
 export const PULL_STALE_MS = 60 * 60 * 1000;
@@ -69,3 +65,9 @@ export const NEGATIVE_QUERY_WORDS = [
 	'polizei',
 	'razzia',
 ];
+
+/** The pull's workflow, enqueued by name from `FoodTrendsReportService.queuePull` */
+export const FOOD_TRENDS_PULL_WORKFLOW: WorkflowRef = {
+	className: 'FoodTrendsPullWorkflow',
+	name: 'pull',
+};

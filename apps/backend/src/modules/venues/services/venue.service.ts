@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
 
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { districtNames } from 'src/modules/cities/util/city.js';
 
@@ -13,40 +14,13 @@ import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
 import { VenueRepository } from '../repositories/venue.repository.js';
-import {
-	GooglePlaceDetailFields,
-	mergeVenueDetails,
-	venueDetailsFromItem,
-} from '../util/venue-details.js';
+import { mergeVenueDetails, venueDetailsFromItem } from '../util/venue-details.js';
 import {
 	isOpening,
 	statusChangeKind,
 	VenueOpenState,
 	venueOpenState,
 } from '../util/venue-status.js';
-
-/** One item of `compass/crawler-google-places`. */
-export interface GooglePlaceItem extends GooglePlaceDetailFields {
-	placeId?: string;
-	title?: string;
-	city?: string;
-	neighborhood?: string;
-	street?: string;
-	postalCode?: string;
-	categoryName?: string;
-	categories?: string[];
-	location?: { lat: number; lng: number };
-	/** ISO 3166-1 alpha-2, "DE" */
-	countryCode?: string;
-	price?: string;
-	website?: string;
-	phone?: string;
-	url?: string;
-	permanentlyClosed?: boolean;
-	totalScore?: number;
-	reviewsCount?: number;
-	searchString?: string;
-}
 
 @Injectable()
 export class VenueService {
@@ -60,7 +34,9 @@ export class VenueService {
 	 * as a snapshot. A new venue belongs to `city`, the city whose scrape found it (without one
 	 * only known venues are updated); a known venue keeps its city. Records a `VenueStatusChange`
 	 * when a known venue's closed flags flip, and `opened` for a new place when `status.openings`
-	 * (a city-wide scrape after the city's first one) and `isOpening` say so. Does not flush.
+	 * (a city-wide scrape after the city's first one) and `isOpening` say so. `known` is the venue
+	 * the place is when the caller loaded the known venues in one query (`savePlaces`; null: none),
+	 * else it is looked up here. Does not flush.
 	 */
 	async saveGooglePlace(
 		item: GooglePlaceItem,
@@ -69,9 +45,11 @@ export class VenueService {
 		status: { source: VenueScrapeSourceEnum; openings?: boolean } = {
 			source: VenueScrapeSourceEnum.DETAILS,
 		},
+		known?: Venue | null,
 	): Promise<Venue | null> {
 		if (!item.placeId || !item.title) return null;
-		const known = await this.venueRepository.findOne({ placeId: item.placeId });
+		if (known === undefined)
+			known = await this.venueRepository.findOne({ placeId: item.placeId });
 		if (!known && !city) return null;
 		const venue =
 			known ??

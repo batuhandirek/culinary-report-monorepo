@@ -7,7 +7,6 @@ import { UserSession } from 'src/modules/auth/entities/user-session.entity.js';
 
 import { AuthModule } from '../auth/auth.module.js';
 import { BacklogModule } from '../backlog/backlog.module.js';
-import { EmbeddingsModule } from '../embeddings/embeddings.module.js';
 import { LLMModule } from '../llm/llm.module.js';
 import { TopicsModule } from '../topics/topics.module.js';
 
@@ -15,15 +14,15 @@ import { AspectSuggestionAgent } from './agents/aspect-suggestion.agent.js';
 import { ClaimLabelsClassifier } from './classifiers/claim-labels.classifier.js';
 import { AdminExploreController } from './controllers/admin.explore.controller.js';
 import { AdminStatementsController } from './controllers/admin.statements.controller.js';
-import { AspectDiscoveryCron } from './crons/aspect-discovery.cron.js';
 import { Statement } from './entities/statement.entity.js';
 import { StatementPart } from './entities/statement-part.entity.js';
+import { AspectDiscoverySchedule } from './schedules/aspect-discovery.schedule.js';
 import { AspectDiscoveryService } from './services/aspect-discovery.service.js';
 import { StatementService } from './services/statement.service.js';
 import { StatementEmbeddingService } from './services/statement-embedding.service.js';
 import { StatementInsightService } from './services/statement-insight.service.js';
 import { StatementPartsService } from './services/statement-parts.service.js';
-import { AspectDiscoveryWorker } from './workers/aspect-discovery.worker.js';
+import { AspectDiscoveryWorkflow } from './workflows/aspect-discovery.workflow.js';
 
 /**
  * What posts, articles and reviews say, one claim per row (`Statement`), and what each is about
@@ -42,7 +41,6 @@ import { AspectDiscoveryWorker } from './workers/aspect-discovery.worker.js';
 		BacklogModule,
 		TopicsModule,
 		LLMModule,
-		EmbeddingsModule,
 	],
 	controllers: [AdminStatementsController, AdminExploreController],
 	providers: [
@@ -51,8 +49,8 @@ import { AspectDiscoveryWorker } from './workers/aspect-discovery.worker.js';
 		StatementEmbeddingService,
 		StatementInsightService,
 		AspectDiscoveryService,
-		AspectDiscoveryWorker,
-		AspectDiscoveryCron,
+		AspectDiscoverySchedule,
+		AspectDiscoveryWorkflow,
 		ClaimLabelsClassifier,
 		AspectSuggestionAgent,
 	],

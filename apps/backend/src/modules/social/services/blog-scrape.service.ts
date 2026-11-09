@@ -21,9 +21,9 @@ import {
 	blogExternalId,
 	blogHandle,
 	canonicalArticleUrl,
+	FeedItem,
 	feedLinksOf,
 	feedPathCandidates,
-	FeedItem,
 	htmlToText,
 	pagedFeedUrl,
 	ParsedFeed,
@@ -83,13 +83,20 @@ export class BlogScrapeService {
 	 * articles. An excerpt-only item's text comes from its page. Flushes after each blog.
 	 */
 	async scrapeCity(city: City, now = new Date()): Promise<BlogScrapeResult> {
-		const sources = await this.cityService.sources(city.id, { kind: CitySourceKindEnum.BLOG, enabledOnly: true });
+		const sources = await this.cityService.sources(city.id, {
+			kind: CitySourceKindEnum.BLOG,
+			enabledOnly: true,
+		});
 		const since = new Date(now);
 		since.setUTCMonth(since.getUTCMonth() - BLOG_BACKFILL_MONTHS);
 		const details: BlogScrapeEntry[] = [];
 		for (const source of sources) {
 			const entry = await this.scrapeBlog(city, source, since, now);
-			this.cityService.recordBlogCheck(source, { feedUrl: entry.feedUrl, error: entry.error }, now);
+			this.cityService.recordBlogCheck(
+				source,
+				{ feedUrl: entry.feedUrl, error: entry.error },
+				now,
+			);
 			await this.em.flush();
 			if (entry.error) this.logger.warn(`Blog ${source.value}: ${entry.error}`);
 			details.push(entry);
@@ -103,7 +110,12 @@ export class BlogScrapeService {
 		};
 	}
 
-	private async scrapeBlog(city: City, source: CitySource, since: Date, now: Date): Promise<BlogScrapeEntry> {
+	private async scrapeBlog(
+		city: City,
+		source: CitySource,
+		since: Date,
+		now: Date,
+	): Promise<BlogScrapeEntry> {
 		const entry: BlogScrapeEntry = {
 			source: source.value,
 			feedUrl: null,
@@ -140,10 +152,17 @@ export class BlogScrapeService {
 					!known.has(blogExternalId(item.url)),
 			);
 			toSave.push(...wanted);
-			const dates = fresh.map(item => item.publishedAt?.getTime()).filter((t): t is number => t !== undefined);
+			const dates = fresh
+				.map(item => item.publishedAt?.getTime())
+				.filter((t): t is number => t !== undefined);
 			// Older pages only while this one still had articles to read and reaches into the window
 			if (!wanted.length || !dates.length || Math.min(...dates) < since.getTime()) break;
-			feed = page < BLOG_FEED_MAX_PAGES ? await this.readFeed(pagedFeedUrl(found.url, page + 1)).then(r => r?.feed ?? null) : null;
+			feed =
+				page < BLOG_FEED_MAX_PAGES ?
+					await this.readFeed(pagedFeedUrl(found.url, page + 1)).then(
+						r => r?.feed ?? null,
+					)
+				:	null;
 		}
 
 		const handle = blogHandle(source.value);
@@ -174,7 +193,10 @@ export class BlogScrapeService {
 					// Named by its site: a feed's title names a section ("Essen + Trinken Archives - Qiez")
 					author: handle,
 					finds: [{ kind: PostSourceKindEnum.BLOG, value: source.value }],
-					text: [item.title, text].filter(Boolean).join('\n\n').slice(0, BLOG_MAX_TEXT_CHARS),
+					text: [item.title, text]
+						.filter(Boolean)
+						.join('\n\n')
+						.slice(0, BLOG_MAX_TEXT_CHARS),
 				},
 				city,
 			);
@@ -213,7 +235,11 @@ export class BlogScrapeService {
 
 	private async storedIds(externalIds: string[]): Promise<Set<string>> {
 		if (!externalIds.length) return new Set();
-		const posts = await this.em.find(SocialPost, { externalId: { $in: externalIds } }, { fields: ['externalId'] });
+		const posts = await this.em.find(
+			SocialPost,
+			{ externalId: { $in: externalIds } },
+			{ fields: ['externalId'] },
+		);
 		return new Set(posts.map(p => p.externalId));
 	}
 }

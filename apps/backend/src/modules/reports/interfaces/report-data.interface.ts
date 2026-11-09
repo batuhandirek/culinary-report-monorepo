@@ -167,8 +167,6 @@ export interface ReportReviewStats {
 	critical: { stars?: number; branch?: string; text: string; replied: boolean }[];
 	/** Every review of the month, newest first: the appendix the counts can be checked against */
 	list: ReportReviewItem[];
-	/** Ready-to-post replies to unanswered written reviews, critical first; filled at build */
-	replyDrafts: ReportReplyDraft[];
 	/** Google and TripAdvisor side by side (the counts above cover both); absent without a TripAdvisor side */
 	byPlatform?: ReportReviewPlatform[];
 	/** Topics locals (Google) and visitors (TripAdvisor) see differently, biggest gap first */
@@ -192,12 +190,6 @@ export interface ReportReviewItem {
 	/** Topics the review praised / criticised */
 	praise: string[];
 	complaints: string[];
-}
-
-/** A reply the owner can post under a review, in the review's language. */
-export interface ReportReplyDraft {
-	reviewId: string;
-	draft: string;
 }
 
 /** One creator's posts about the venue this month. */

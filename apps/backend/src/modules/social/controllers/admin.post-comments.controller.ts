@@ -33,7 +33,10 @@ export class AdminPostCommentsController {
 			...(post.commentsDisagreement && { disagreement: post.commentsDisagreement }),
 			comments: comments.map(
 				c =>
-					wrap(c).serialize({ skipNull: true, forceObject: true }) as unknown as AdminPostCommentOutputDto,
+					wrap(c).serialize({
+						skipNull: true,
+						forceObject: true,
+					}) as unknown as AdminPostCommentOutputDto,
 			),
 		};
 	}

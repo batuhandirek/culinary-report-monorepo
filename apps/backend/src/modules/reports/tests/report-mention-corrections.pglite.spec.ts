@@ -18,6 +18,7 @@ import { CompetitorService } from 'src/modules/venues/services/competitor.servic
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
 import { ReportService } from '../services/report.service.js';
@@ -30,6 +31,8 @@ describe('Report input after an admin corrects mentions (pglite)', () => {
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
+				// Real: an agent call that finds no account waits for one
+				DurableLlmService,
 				ReportService,
 				ReportConfigService,
 				ReportTemplateService,

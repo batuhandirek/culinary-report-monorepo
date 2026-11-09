@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ApifyRunsTab from './components/ApifyRunsTab.svelte';
 	import DataMonthsTab from './components/DataMonthsTab.svelte';
-	import DataRunsTab from './components/DataRunsTab.svelte';
+	import LlmBacklogsPanel from './components/LlmBacklogsPanel.svelte';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -26,7 +26,7 @@
 
 	const TABS = [
 		{ value: 'months', label: 'Months' },
-		{ value: 'runs', label: 'Runs' },
+		{ value: 'backlogs', label: 'LLM backlogs' },
 		{ value: 'apify', label: 'Apify costs' }
 	];
 	let tab = $state('months');
@@ -48,8 +48,8 @@
 		{#key `${tab}:${cityId}`}
 			{#if tab === 'months'}
 				<DataMonthsTab {cityId} />
-			{:else if tab === 'runs'}
-				<DataRunsTab {cityId} />
+			{:else if tab === 'backlogs'}
+				<LlmBacklogsPanel />
 			{:else}
 				<ApifyRunsTab />
 			{/if}

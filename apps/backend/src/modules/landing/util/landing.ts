@@ -4,11 +4,11 @@
 
 import _ from 'lodash';
 
-import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
-import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { isDeniedCreator, isDeniedVenue } from 'src/modules/highlights/util/highlights.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import type { StatementFood } from 'src/modules/statements/util/statement-foods.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 
 import {
 	LANDING_DISH_MIN_POSTS,
@@ -232,7 +232,12 @@ interface DishRow {
 const dishRowsOf = (foods: StatementFood[]): DishRow[] =>
 	foods.flatMap((f): DishRow[] =>
 		f.topics.length ?
-			f.topics.map(t => ({ key: t.key, kind: t.kind as TopicKindEnum, topicLabel: t.label, spelling: f.name }))
+			f.topics.map(t => ({
+				key: t.key,
+				kind: t.kind as TopicKindEnum,
+				topicLabel: t.label,
+				spelling: f.name,
+			}))
 		:	[{ key: f.key, kind: null, topicLabel: null, spelling: f.name }],
 	);
 

@@ -233,8 +233,7 @@
 	{:else}
 		<p class="text-muted-foreground m-0 text-sm">
 			No Google Maps details yet. The monthly run refreshes them for report venues and their
-			competitors, or start <a href="/admin/data?tab=runs">Refresh venue details</a> on the Data
-			page.
+			competitors.
 		</p>
 	{/if}
 </AdminPanel>

@@ -1,15 +1,15 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
-import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 
 import type { LandingEditionData } from '../interfaces/landing-edition.interface.js';
 import {
 	computeLanding,
-	type LandingStatementRow,
 	type LandingInput,
 	type LandingMentionRow,
+	type LandingStatementRow,
 	type LandingVenueRow,
 	landingWindow,
 	streetLabel,
@@ -250,7 +250,11 @@ describe('computeLanding', () => {
 	it('picks dishes by the rise of their share, a drink apart, and lists the marquee by posts', () => {
 		const now = posts('A', 20);
 		const before = posts('A', 20, { postedAt: BEFORE });
-		const topic = (key: string, label: string, kind = TopicKindEnum.DISH) => ({ key, label, kind });
+		const topic = (key: string, label: string, kind = TopicKindEnum.DISH) => ({
+			key,
+			label,
+			kind,
+		});
 		const data = computeLanding(
 			input({
 				current: {
@@ -268,9 +272,7 @@ describe('computeLanding', () => {
 						// Tea, a drink
 						...now
 							.slice(0, 5)
-							.map(m =>
-								dishRow(m, 'tea', topic('tea', 'Tea', TopicKindEnum.DRINK)),
-							),
+							.map(m => dishRow(m, 'tea', topic('tea', 'Tea', TopicKindEnum.DRINK))),
 					],
 				},
 				previous: {

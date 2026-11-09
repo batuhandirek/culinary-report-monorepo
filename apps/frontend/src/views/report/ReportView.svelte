@@ -389,12 +389,6 @@
 	const creatorsNearby = $derived(
 		sectionOf(SectionKind.Creators)?.nearby === false ? [] : (data.creatorsNearby ?? [])
 	);
-	const replyDrafts = $derived(
-		(reviews.replyDrafts ?? []).flatMap((d) => {
-			const review = (reviews.list ?? []).find((r) => r.reviewId === d.reviewId);
-			return review ? [{ ...d, review }] : [];
-		})
-	);
 
 	// The competitors a place is compared with: the whole brand's and the ones picked for it
 	const competitorsOf = (branch: (typeof branches)[number]) =>
@@ -438,8 +432,6 @@
 				return !!(creators.length || creatorsNearby.length);
 			case SectionKind.Reviews:
 				return reviews.count > 0;
-			case SectionKind.Replies:
-				return replyDrafts.length > 0;
 			case SectionKind.Dishes:
 				return dishes.length > 0;
 			case SectionKind.Places:
@@ -479,7 +471,6 @@
 		[SectionKind.Media]: 'media',
 		[SectionKind.Creators]: 'creators',
 		[SectionKind.Reviews]: 'reviews',
-		[SectionKind.Replies]: 'replies',
 		[SectionKind.Dishes]: 'menu',
 		[SectionKind.Patterns]: 'patterns',
 		[SectionKind.City]: 'city'
@@ -1230,46 +1221,6 @@
 	{/if}
 {/snippet}
 
-{#snippet repliesSection()}
-	<!-- Reply drafts -->
-	{#if replyDrafts.length}
-		<section>
-			{@render sectionHead('replies', 'Google reviews', 'Replies ready to post')}
-			<p class="text-reading-ink m-0 mb-5 max-w-[62ch]">
-				{replyDrafts.length === 1 ? 'A reply' : `${replyDrafts.length} replies`} to this month’s
-				unanswered reviews, the critical ones first, in the language each guest wrote in. Read
-				them over, change what you like and post them under the reviews on Google.
-			</p>
-			<div class="grid grid-cols-1 gap-3">
-				{#each replyDrafts as item (item.reviewId)}
-					<figure
-						class="bg-paper border-line m-0 grid grid-cols-1 gap-3 rounded-md border p-4 break-inside-avoid sm:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
-						<div class="flex flex-col gap-1.5">
-							<span class="flex items-center gap-2">
-								{#if item.review.stars}<Stars value={item.review.stars} />{/if}
-								{#if item.review.language}<span
-										class="eyebrow text-muted-foreground"
-										>{item.review.language}</span
-									>{/if}
-							</span>
-							<blockquote
-								class="text-muted-foreground m-0 line-clamp-[7] text-[12.5px] leading-snug">
-								“{item.review.excerpt}”
-							</blockquote>
-						</div>
-						<div class="bg-tint rounded-sm px-3.5 py-2.5">
-							<p class="stamp text-beet m-0 mb-1">Your reply</p>
-							<p class="text-ink m-0 text-[13px] leading-snug whitespace-pre-line">
-								{item.draft}
-							</p>
-						</div>
-					</figure>
-				{/each}
-			</div>
-		</section>
-	{/if}
-{/snippet}
-
 {#snippet dishesSection()}
 	<!-- Dishes -->
 	{#if dishes.length}
@@ -1515,8 +1466,6 @@
 			{@render creatorsSection()}
 		{:else if section.kind === SectionKind.Reviews}
 			{@render reviewsSection()}
-		{:else if section.kind === SectionKind.Replies}
-			{@render repliesSection()}
 		{:else if section.kind === SectionKind.Dishes}
 			{@render dishesSection()}
 		{:else if section.kind === SectionKind.Places}

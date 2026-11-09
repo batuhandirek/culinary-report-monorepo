@@ -25,6 +25,7 @@ import {
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { AdminBrandsController } from '../controllers/admin.brands.controller.js';
 import { Brand, BrandReportScopeEnum } from '../entities/brand.entity.js';
 import { BrandCompetitor } from '../entities/brand-competitor.entity.js';
@@ -36,14 +37,12 @@ import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
 import { BrandAutoMergeJob } from '../jobs/brand-auto-merge.job.js';
 import { BrandChangedJob } from '../jobs/brand-changed.job.js';
-import { BrandSearchJob } from '../jobs/brand-search.job.js';
 import { BrandService } from '../services/brand.service.js';
 import { VenueService } from '../services/venue.service.js';
-import { BRAND_SEARCH_RESULTS, VenueScrapeService } from '../services/venue-scrape.service.js';
+import { VenueScrapeService } from '../services/venue-scrape.service.js';
 
 import { brandFactory } from './factories/brand.factory.js';
 import { venueFactory } from './factories/venue.factory.js';
-import { BURGERMEISTER_SEARCH_ITEMS } from './fixtures/brand-search-items.js';
 
 describe('BrandService (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -432,64 +431,6 @@ describe('BrandService (pglite)', () => {
 		);
 	});
 
-	it("finds branches with one Google Maps search, saves every place, and the ones on the brand's site join it", async () => {
-		const brand = await brandFactory.create({ name: 'Burgermeister' });
-		const first = branch(
-			berlin,
-			'Burgermeister',
-			2330,
-			{ placeId: BURGERMEISTER_SEARCH_ITEMS[10].placeId },
-			brand,
-		);
-		// Looked up before for an unmatched mention: the brand search runs anyway
-		harness.orm.em.create(VenueLookup, { city: berlin, query: 'burgermeister', results: 3 });
-		await harness.orm.em.flush();
-		runActor.mockResolvedValueOnce(BURGERMEISTER_SEARCH_ITEMS);
-
-		// "Find branches" only queues the search: it takes half a minute
-		await controller.searchBrandBranches(brand.id, { cityId: berlin.id });
-		expect(runActor).not.toHaveBeenCalled();
-		expect(sendJob).toHaveBeenCalledWith(
-			BrandSearchJob.jobName,
-			new BrandSearchJob({ brandId: brand.id, cityId: berlin.id }),
-		);
-
-		const result = await service.searchBranches(brand.id, berlin.id);
-		expect(runActor).toHaveBeenCalledWith(
-			'compass/crawler-google-places',
-			expect.objectContaining({
-				searchStringsArray: ['Burgermeister'],
-				locationQuery: 'Berlin, Germany',
-				maxCrawledPlacesPerSearch: BRAND_SEARCH_RESULTS,
-			}),
-			expect.objectContaining({ maxCostUsd: 1 }),
-		);
-		// Every Burgermeister on burgermeister.com joined: nothing is left to offer
-		expect(result).toEqual({ found: 40, saved: 40, candidates: 0 });
-
-		// One branch is no chain: the bigger branch's brand may be the one that stays
-		harness.orm.em.clear();
-		const detail = await controller.getBrand((await brandOf(first)).id);
-		const names = detail.branches.map(c => c.name);
-		expect(names).toHaveLength(15);
-		expect(names).toContain('Burgermeister Kottbusser Tor');
-		expect(names).not.toContain("Golt'z Burger");
-		expect(names).not.toContain('Peter Pane');
-		// A grocery store with the name is no food venue
-		expect(names).not.toContain('Burgermeister Produktion');
-		expect(detail.candidates).toEqual([]);
-		expect(Object.keys(detail.branchesSearchedAt)).toEqual([berlin.id]);
-		expect(await harness.orm.em.count(Venue, { city: berlin })).toBe(40);
-		// The scrape queued the city's merge too: it finds nothing left to do
-		expect(sendJob).toHaveBeenCalledWith(
-			BrandAutoMergeJob.jobName,
-			new BrandAutoMergeJob({ cityId: berlin.id }),
-			{
-				singletonKey: berlin.id,
-			},
-		);
-	});
-
 	it('changes the report scope and splits a chain back into brands of their own', async () => {
 		const brand = await brandFactory.create({ name: 'Nhas City Chicken' });
 		const torstr = branch(berlin, 'Nhas City Chicken', 2451, {}, brand);
@@ -693,13 +634,13 @@ describe('BrandService (pglite)', () => {
 		});
 
 		it('is queued for the city by every venue scrape', async () => {
-			runActor.mockResolvedValueOnce([
-				{ placeId: 'p1', title: 'Lily Burger', website: 'https://lily-burger.de/' },
-				{ placeId: 'p2', title: 'Lily Burger', website: 'https://lily-burger.de/' },
-			]);
-			await harness.moduleRef
-				.get(VenueScrapeService)
-				.scrapeCity({ city: berlin, terms: ['restaurant'], maxPerTerm: 10, budgetUsd: 1 });
+			await harness.moduleRef.get(VenueScrapeService).savePlaces(
+				[
+					{ placeId: 'p1', title: 'Lily Burger', website: 'https://lily-burger.de/' },
+					{ placeId: 'p2', title: 'Lily Burger', website: 'https://lily-burger.de/' },
+				],
+				{ city: berlin, source: VenueScrapeSourceEnum.CITY, newPlaces: 'all' },
+			);
 			expect(sendJob).toHaveBeenCalledWith(
 				BrandAutoMergeJob.jobName,
 				new BrandAutoMergeJob({ cityId: berlin.id }),

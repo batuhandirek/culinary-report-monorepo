@@ -42,7 +42,9 @@ export interface OwnAccountMonth {
 
 /** The brand's accounts a city reads: brand-wide ones, and its branches' there; all of them without a city. */
 const inCity = (brandId: string, cityId: string | null) =>
-	cityId ? { brand: brandId, $or: [{ branch: null }, { branch: { city: cityId } }] } : { brand: brandId };
+	cityId ?
+		{ brand: brandId, $or: [{ branch: null }, { branch: { city: cityId } }] }
+	:	{ brand: brandId };
 
 /**
  * A brand's own accounts (`SocialAccount.brand`): the brand page's panel, the Own accounts page,
@@ -63,9 +65,18 @@ export class OwnAccountService {
 		const branch = await this.em.findOne(
 			Venue,
 			branchId ? { id: branchId, brand: brandId } : { brand: brandId },
-			{ orderBy: { closed: QueryOrder.ASC, reviewsCount: QueryOrder.DESC_NULLS_LAST, id: QueryOrder.ASC } },
+			{
+				orderBy: {
+					closed: QueryOrder.ASC,
+					reviewsCount: QueryOrder.DESC_NULLS_LAST,
+					id: QueryOrder.ASC,
+				},
+			},
 		);
-		if (!branch) throw new BadRequestException(branchId ? 'That place is not a branch of the brand' : 'The brand has no branch');
+		if (!branch)
+			throw new BadRequestException(
+				branchId ? 'That place is not a branch of the brand' : 'The brand has no branch',
+			);
 		return branch;
 	}
 
@@ -73,17 +84,31 @@ export class OwnAccountService {
 	 * Outreach's handles (`Prospect.instagram`) as the brands' Instagram accounts: linked unless
 	 * an admin linked the account elsewhere or said it is not the brand's. Flushes.
 	 */
-	async addProspectHandles(rows: { brandId: string; instagram: string }[]): Promise<{ created: number }> {
+	async addProspectHandles(
+		rows: { brandId: string; instagram: string }[],
+	): Promise<{ created: number }> {
 		let created = 0;
 		for (const row of rows) {
 			if (!normalizeAccountHandle(row.instagram)) continue;
 			const branch = await this.brandCity(row.brandId).catch(() => null);
 			if (!branch) continue;
-			const account = await this.socialAccountService.ensure(SocialPlatformEnum.INSTAGRAM, row.instagram, branch.city);
-			if (!account || account.brand?.id === row.brandId || (await this.socialAccountService.isRejected(account, row.brandId)))
+			const account = await this.socialAccountService.ensure(
+				SocialPlatformEnum.INSTAGRAM,
+				row.instagram,
+				branch.city,
+			);
+			if (
+				!account ||
+				account.brand?.id === row.brandId ||
+				(await this.socialAccountService.isRejected(account, row.brandId))
+			)
 				continue;
 			if (account.brand && account.brandSource === AccountBrandSourceEnum.ADMIN) continue;
-			await this.socialAccountService.setBrand(account, this.em.getReference(Brand, row.brandId), AccountBrandSourceEnum.PROSPECT);
+			await this.socialAccountService.setBrand(
+				account,
+				this.em.getReference(Brand, row.brandId),
+				AccountBrandSourceEnum.PROSPECT,
+			);
 			created++;
 		}
 		await this.em.flush();
@@ -98,7 +123,10 @@ export class OwnAccountService {
 		const accounts = await this.em.find(
 			SocialAccount,
 			{ id: { $in: await this.idsOfBrand(brandId) } },
-			{ populate: [...ACCOUNT_POPULATE], orderBy: { platform: QueryOrder.ASC, handle: QueryOrder.ASC } },
+			{
+				populate: [...ACCOUNT_POPULATE],
+				orderBy: { platform: QueryOrder.ASC, handle: QueryOrder.ASC },
+			},
 		);
 		return this.socialAccountService.withFigures(accounts, month);
 	}
@@ -118,14 +146,24 @@ export class OwnAccountService {
 	 * An admin adds a handle as the brand's own or (`branchId`) one branch's: linked whoever it
 	 * was linked to, and no longer rejected. Flushes; a bad handle, or a branch of another brand, is a 400.
 	 */
-	async add(brandId: string, platform: SocialPlatformEnum, input: string, branchId?: string | null): Promise<SocialAccount> {
+	async add(
+		brandId: string,
+		platform: SocialPlatformEnum,
+		input: string,
+		branchId?: string | null,
+	): Promise<SocialAccount> {
 		if (!normalizeAccountHandle(input)) throw new BadRequestException('Not a handle');
 		const brand = await this.em.findOne(Brand, { id: brandId });
 		if (!brand) throw new NotFoundException();
 		const place = await this.brandCity(brandId, branchId);
 		const account = await this.socialAccountService.ensure(platform, input, place.city);
 		if (!account) throw new BadRequestException('Not a handle');
-		await this.socialAccountService.setBrand(account, brand, AccountBrandSourceEnum.ADMIN, branchId ? place : null);
+		await this.socialAccountService.setBrand(
+			account,
+			brand,
+			AccountBrandSourceEnum.ADMIN,
+			branchId ? place : null,
+		);
 		await this.em.flush();
 		return account;
 	}
@@ -160,7 +198,14 @@ export class OwnAccountService {
 		cityId: string | null,
 		months: string[],
 	): Promise<
-		{ month: string; platform: ProfilePlatform; handle: string; followers?: number | null; posts?: number | null; avgViews?: number | null }[]
+		{
+			month: string;
+			platform: ProfilePlatform;
+			handle: string;
+			followers?: number | null;
+			posts?: number | null;
+			avgViews?: number | null;
+		}[]
 	> {
 		if (!months.length) return [];
 		return (await this.closingSnapshots(brandId, cityId, months)).map(s => ({
@@ -180,18 +225,30 @@ export class OwnAccountService {
 	 * points for the report's analysis. Every scrape that gives a count writes a snapshot, so the
 	 * weekly profile run of a report brand gives a point a week; an account nothing saw has none.
 	 */
-	async followerPoints(brandId: string, cityId: string | null, month: string): Promise<Map<string, { date: string; followers: number }[]>> {
+	async followerPoints(
+		brandId: string,
+		cityId: string | null,
+		month: string,
+	): Promise<Map<string, { date: string; followers: number }[]>> {
 		const { start, end } = monthRange(month);
 		const rows = await this.em.find(
 			SocialAccountSnapshot,
-			{ account: inCity(brandId, cityId), scrapedAt: { $gte: start, $lt: end }, followers: { $ne: null } },
+			{
+				account: inCity(brandId, cityId),
+				scrapedAt: { $gte: start, $lt: end },
+				followers: { $ne: null },
+			},
 			{ orderBy: { scrapedAt: QueryOrder.ASC } },
 		);
 		const out = new Map<string, { date: string; followers: number }[]>();
 		for (const [accountId, snapshots] of Object.entries(_.groupBy(rows, r => r.account.id))) {
 			const byDay = new Map<string, number>();
-			for (const s of snapshots) byDay.set(s.scrapedAt.toISOString().slice(0, 10), s.followers!);
-			out.set(accountId, [...byDay].map(([date, followers]) => ({ date, followers })));
+			for (const s of snapshots)
+				byDay.set(s.scrapedAt.toISOString().slice(0, 10), s.followers!);
+			out.set(
+				accountId,
+				[...byDay].map(([date, followers]) => ({ date, followers })),
+			);
 		}
 		return out;
 	}
@@ -201,7 +258,11 @@ export class OwnAccountService {
 	 * the month's close, and the change since the month before's, and the month's daily follower
 	 * points: the report's "From your own account" box.
 	 */
-	async forReport(brandId: string, cityId: string | null, month: string): Promise<OwnAccountMonth[]> {
+	async forReport(
+		brandId: string,
+		cityId: string | null,
+		month: string,
+	): Promise<OwnAccountMonth[]> {
 		const before = previousMonth(new Date(`${month}-01T00:00:00Z`));
 		const snapshots = await this.closingSnapshots(brandId, cityId, [before, month]);
 		const current = snapshots.filter(s => s.month === month);

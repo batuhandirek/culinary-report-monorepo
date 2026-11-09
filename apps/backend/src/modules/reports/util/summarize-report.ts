@@ -378,7 +378,6 @@ export const summarizeReport = (input: {
 					replied: !!r.ownerResponse,
 				})),
 			list: _.orderBy(reviews, r => r.publishedAt.getTime(), 'desc').map(toReviewItem),
-			replyDrafts: [],
 		},
 		dishes,
 		competitors: input.competitors ?? [],

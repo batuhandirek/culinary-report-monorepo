@@ -6,12 +6,15 @@ import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-reg
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
-import { PostGateAgent } from 'src/modules/social/agents/post-gate.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { gateAgent } from 'src/modules/pipeline/read-posts/tests/factories/post-gate.mock.js';
+import { readPostsPlainly } from 'src/modules/pipeline/read-posts/tests/factories/read-posts.factory.js';
+import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
+import { readReviewsPlainly } from 'src/modules/pipeline/read-reviews/tests/factories/read-reviews.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
-import { gateAgent } from 'src/modules/social/tests/factories/post-gate.mock.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
@@ -20,7 +23,6 @@ import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { TopicRelinkService } from 'src/modules/topics/services/topic-relink.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
-import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { ReviewService } from 'src/modules/venues/services/review.service.js';
@@ -264,13 +266,12 @@ describe('statements (pglite)', () => {
 	const partsOf = (s: Statement) =>
 		s.parts.getItems().map(p => [p.role, p.role === 'aspect' ? p.topic!.key : p.term!.key]);
 	const foodPart = (s: Statement) => s.parts.getItems().find(p => p.role === 'food')!;
-	const extract = () =>
-		harness.moduleRef.get(MentionExtractionService).extract({ limit: 10, cityId: city.id });
+	const extract = () => readPostsPlainly(harness.moduleRef, { limit: 10, cityId: city.id });
 
 	it('scenario 1: "I waited darn 50 minutes" is one negative statement of the review, under waiting, 50 minutes', async () => {
 		const r = review({ text: 'I waited darn 50 minutes' });
 		await em().flush();
-		await reviews().analyseMonth('2026-09');
+		await readReviewsPlainly(harness.moduleRef, { month: '2026-09' });
 		em().clear();
 		const rows = await rowsOf({ review: r.id });
 		expect(rows).toHaveLength(1);
@@ -319,7 +320,7 @@ describe('statements (pglite)', () => {
 	it('scenario 2: "Damn good Doner, but 15 euros" is two statements naming one term, matched to Döner & kebab', async () => {
 		const r = review({ text: 'Damn good Doner, but man they were for 15 euros' });
 		await em().flush();
-		await reviews().analyseMonth('2026-09');
+		await readReviewsPlainly(harness.moduleRef, { month: '2026-09' });
 		em().clear();
 		const rows = await rowsOf({ review: r.id });
 		expect(rows.map(s => [s.text, s.sentiment, s.amount, s.unit, !!s.partsAt])).toEqual([
@@ -629,7 +630,7 @@ describe('statements (pglite)', () => {
 	it('replaces a review’s statements and their parts on a second analysis', async () => {
 		const r = review({ text: 'I waited darn 50 minutes' });
 		await em().flush();
-		await reviews().analyseMonth('2026-09');
+		await readReviewsPlainly(harness.moduleRef, { month: '2026-09' });
 		em().clear();
 		const old = await rowsOf({ review: r.id });
 		const oldIds = old.map(s => s.id);
@@ -638,7 +639,7 @@ describe('statements (pglite)', () => {
 
 		await em().nativeUpdate(Review, { id: r.id }, { analysedAt: null });
 		reviewClaims = () => [{ text: 'rude staff' }];
-		await reviews().analyseMonth('2026-09');
+		await readReviewsPlainly(harness.moduleRef, { month: '2026-09' });
 		em().clear();
 		const rows = await rowsOf({ review: r.id });
 		expect(rows.map(s => [s.text, s.sentiment, partsOf(s)])).toEqual([
@@ -748,7 +749,9 @@ describe('statements (pglite)', () => {
 			throw new Error('No model can serve typesafe-ai/jev-latest: TypeSafe is switched off');
 		};
 		labels.decide.mockImplementationOnce(down).mockImplementationOnce(down);
-		await expect(reviews().analyseMonth('2026-09')).rejects.toThrow('No model can serve');
+		await expect(readReviewsPlainly(harness.moduleRef, { month: '2026-09' })).rejects.toThrow(
+			'No model can serve',
+		);
 		em().clear();
 		const rows = await rowsOf({ review: r.id });
 		expect(
@@ -764,7 +767,7 @@ describe('statements (pglite)', () => {
 		const r = review({ text: 'The sauce was odd.' });
 		await em().flush();
 		partsOverride = () => ({ sentiment: 'negative', aspect: 'no_such_key', foods: ['sauce'] });
-		await reviews().analyseMonth('2026-09');
+		await readReviewsPlainly(harness.moduleRef, { month: '2026-09' });
 		em().clear();
 		const [s] = await rowsOf({ review: r.id });
 		expect([s.text, s.partsAt, s.sentiment, partsOf(s)]).toEqual([

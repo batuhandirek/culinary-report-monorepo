@@ -51,7 +51,6 @@ const data = (extra: Partial<ReportData> = {}, previous: Partial<NonNullable<Rep
 			changes: [],
 			critical: [],
 			list: [],
-			replyDrafts: [],
 		},
 		dishes: [],
 		competitors: [],

@@ -32,7 +32,7 @@
     "clone:remote:backup": "npm run load:remote:backup && npm run reset:remote:backup",
     "TEST ************************************************************************": "",
     "backend:test": "turbo run backend#test",
-    "eval": "cd apps/backend && NODE_ENV=development SKIP_MIGRATIONS=true LLM_DISABLE_OPENAI=false LLM_INGESTION_ONLY=false node dist/modules/evals/eval.cli.js",
+    "eval": "cd apps/backend && NODE_ENV=development SKIP_MIGRATIONS=true DURABLE_WORKFLOWS_DISABLED=true LLM_DISABLE_OPENAI=false LLM_INGESTION_ONLY=false node dist/modules/evals/eval.cli.js",
     "backend:test:integration": "./bin/run-integration-tests.sh",
     "backend:test:integration:local": "./bin/run-integration-tests.sh --local",
     "migration:up:test": "NODE_ENV=test turbo run --env-mode loose backend#migration:up:test",

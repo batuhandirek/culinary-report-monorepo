@@ -35,12 +35,19 @@ export interface Pglite {
 }
 
 /** Boot PGlite + the wire-protocol socket server (extension created). No MikroORM yet. */
-export const startPglite = async (): Promise<Pglite> => {
+export const startPglite = async (opts: { maxConnections?: number } = {}): Promise<Pglite> => {
 	const db = await PGlite.create({ extensions: { vector } });
 	// Loading the extension only makes it available; create it so pgvector types exist.
 	await db.exec('CREATE EXTENSION IF NOT EXISTS vector;');
 	const port = await freePort();
-	const server = new PGLiteSocketServer({ db, port, host: '127.0.0.1' });
+	// The bridge multiplexes several clients over the one PGlite connection when asked to
+	// (`maxConnections`): what a suite with DBOS needs, whose pool is a second client
+	const server = new PGLiteSocketServer({
+		db,
+		port,
+		host: '127.0.0.1',
+		...(opts.maxConnections && { maxConnections: opts.maxConnections }),
+	});
 	await server.start();
 	return {
 		db,

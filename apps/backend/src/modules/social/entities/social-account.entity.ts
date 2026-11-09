@@ -143,8 +143,9 @@ export class SocialAccount extends MikroOrmEntityAbstractClass<
 	@Property({ type: 'datetime', nullable: true })
 	twinCheckedAt?: Date | null;
 
-	// When the daily follower fill last asked for this brand account's profile
-	// (`AccountScrapeService.fillFollowers`): one that didn't come back is asked again a month on
+	// When a profile read alone (the follower fill, the tracking, the mentioned profiles) last asked
+	// for this account's profile and it came back without a count (`AccountScrapeService.saveProfiles`):
+	// asked again a month on
 	@Property({ type: 'datetime', nullable: true })
 	followersAskedAt?: Date | null;
 

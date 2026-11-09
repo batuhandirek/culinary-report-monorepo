@@ -6,7 +6,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { City } from '../entities/city.entity.js';
 import { CityDay } from '../entities/city-day.entity.js';
 import { CityEvent, CityEventKindEnum } from '../entities/city-event.entity.js';
-import { monthContext, MonthContext } from '../util/month-context.js';
+import { MonthContext, monthContext } from '../util/month-context.js';
 
 import { CityService } from './city.service.js';
 import { CityContextSourcesService } from './city-context-sources.service.js';
@@ -65,7 +65,10 @@ export class CityDayService {
 		}
 		const city = await this.cityService.getById(cityId);
 		const rows = new Map(
-			(await this.em.find(CityDay, { city, date: { $gte: from, $lte: to } })).map(d => [d.date, d]),
+			(await this.em.find(CityDay, { city, date: { $gte: from, $lte: to } })).map(d => [
+				d.date,
+				d,
+			]),
 		);
 		const day = (date: string) => {
 			let row = rows.get(date);
@@ -76,7 +79,12 @@ export class CityDayService {
 			return row;
 		};
 
-		if (city.lat !== null && city.lat !== undefined && city.lng !== null && city.lng !== undefined) {
+		if (
+			city.lat !== null &&
+			city.lat !== undefined &&
+			city.lng !== null &&
+			city.lng !== undefined
+		) {
 			const weather = await this.sources.weather(
 				{ lat: city.lat, lng: city.lng, timezone: city.timezone },
 				from,
@@ -117,7 +125,11 @@ export class CityDayService {
 		for (const city of await this.cityService.active()) {
 			const yesterday = addDays(localToday(city.timezone, now), -1);
 			try {
-				const written = await this.fill(city.id, addDays(yesterday, 1 - REFETCH_DAYS), yesterday);
+				const written = await this.fill(
+					city.id,
+					addDays(yesterday, 1 - REFETCH_DAYS),
+					yesterday,
+				);
 				this.logger.log(`${city.name}: ${written} days up to ${yesterday}`);
 			} catch (e) {
 				this.logger.error(`${city.name}: day context failed: ${(e as Error).message}`);

@@ -3,18 +3,22 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Injectable, Logger } from '@nestjs/common';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { Prospect } from 'src/modules/outreach/entities/prospect.entity.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
-import { PipelineRunStatusEnum } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
 import type { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { LEAD_PROSPECT_SCORE } from 'src/modules/venues/constants/lead-score.constant.js';
 import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
-import type { AdminTodayOutputDto, AdminTodoOutputDto, AdminUnmatchedPostOutputDto } from '../dto/admin-today.dto.js';
+import type {
+	AdminTodayOutputDto,
+	AdminTodoOutputDto,
+	AdminUnmatchedPostOutputDto,
+} from '../dto/admin-today.dto.js';
 
-import { DataCoverageService } from './data-coverage.service.js';
+import { DataCoverageService, PIPELINE_WORKFLOWS } from './data-coverage.service.js';
 
 const monthName = (month: string) =>
 	new Date(`${month}-01T00:00:00Z`).toLocaleString('en', { month: 'long', timeZone: 'UTC' });
@@ -46,6 +50,7 @@ export class TodayService {
 
 	constructor(
 		private readonly em: EntityManager,
+		private readonly durable: DurableWorkflowsService,
 		private readonly cityService: CityService,
 		private readonly brandService: BrandService,
 		private readonly prospectQueryService: ProspectQueryService,
@@ -119,7 +124,9 @@ export class TodayService {
 			}),
 			tryRead('suggested prospects', async () => {
 				const suggested = await this.prospectQueryService.suggested(100);
-				const good = suggested.filter(b => (b.leadScore ?? 0) >= LEAD_PROSPECT_SCORE).length;
+				const good = suggested.filter(
+					b => (b.leadScore ?? 0) >= LEAD_PROSPECT_SCORE,
+				).length;
 				if (good)
 					todos.push({
 						key: 'prospects',
@@ -130,28 +137,47 @@ export class TodayService {
 					});
 			}),
 			tryRead('failed runs', async () => {
-				// A failure a later run of the same step, city and month made good is history
-				const [{ failed }]: { failed: number }[] = await em()
-					.getConnection()
-					.execute(
-						`select count(*)::int as failed from pipeline_runs f
-						where f.status = ? and f.finished_at >= ?
-							and not exists (select 1 from pipeline_runs s where s.city_id = f.city_id and s.month = f.month
-								and s.step = f.step and s.created_at > f.created_at and s.status in (?, ?, ?))`,
-						[
-							PipelineRunStatusEnum.FAILED,
-							new Date(now.getTime() - 7 * 24 * 3600 * 1000),
-							PipelineRunStatusEnum.SUCCEEDED,
-							PipelineRunStatusEnum.RUNNING,
-							PipelineRunStatusEnum.QUEUED,
-						],
+				if (!this.durable.isLaunched()) return;
+				// A cron city's run that failed this week, unless a later run of the same workflow for
+				// the city (and period) succeeded: a month run has one id a period, so a resume makes
+				// it good in place, while a daily or weekly one is made good by the next period's
+				const cronCities = new Set(
+					(await this.cityService.forMonthlyCron()).map(c => c.id),
+				);
+				const since = new Date(now.getTime() - 7 * 24 * 3600 * 1000).toISOString();
+				const [failedRuns, succeeded] = await Promise.all([
+					this.durable.list({
+						workflowName: PIPELINE_WORKFLOWS,
+						status: ['ERROR', 'MAX_RECOVERY_ATTEMPTS_EXCEEDED'],
+						startTime: since,
+					}),
+					this.durable.list({
+						workflowName: PIPELINE_WORKFLOWS,
+						status: 'SUCCESS',
+						startTime: since,
+					}),
+				]);
+				const failed = failedRuns.filter(run => {
+					const cityId = run.attributes?.cityId;
+					if (typeof cityId !== 'string' || !cronCities.has(cityId)) return false;
+					const monthly = run.workflowName.endsWith('.month');
+					return !succeeded.some(
+						s =>
+							s.workflowName === run.workflowName &&
+							s.attributes?.cityId === cityId &&
+							s.createdAt > run.createdAt &&
+							(!monthly || s.attributes?.period === run.attributes?.period),
 					);
-				if (failed)
+				});
+				if (failed.length)
 					todos.push({
 						key: 'failed-runs',
 						tone: 'todo',
-						text: `${plural(failed, 'pipeline run', 'pipeline runs')} failed this week and ${failed === 1 ? 'was' : 'were'} not run again`,
-						href: '/admin/data?tab=runs',
+						text: `${plural(failed.length, 'pipeline run', 'pipeline runs')} failed this week and ${failed.length === 1 ? 'was' : 'were'} not made good`,
+						href:
+							failed.length === 1 ?
+								`/admin/workflows/${encodeURIComponent(failed[0].workflowID)}`
+							:	'/admin/workflows?status=ERROR',
 						cta: 'Check',
 					});
 			}),
@@ -194,7 +220,9 @@ export class TodayService {
 					const coverage = await this.dataCoverageService.coverage(city.id, 2, now);
 					const month = coverage.months.find(m => m.month === reportMonth);
 					if (!month || month.complete) return;
-					const busy = month.steps.filter(s => s.state === 'running' || s.state === 'queued').length;
+					const busy = month.steps.filter(
+						s => s.state === 'running' || s.state === 'queued',
+					).length;
 					const failed = month.steps.filter(s => s.state === 'failed').length;
 					const never = month.steps.filter(s => !s.state).length;
 					todos.push({
@@ -205,7 +233,7 @@ export class TodayService {
 								`${city.name}, ${name}: ${plural(busy, 'step', 'steps')} running or queued`
 							:	`${city.name}, ${name} is not complete: ${[failed && `${failed} failed`, never && `${never} never ran`].filter(Boolean).join(', ')}`,
 						href: `/admin/data?cityId=${city.id}`,
-						cta: busy ? 'Watch' : 'Finish',
+						cta: busy ? 'Watch' : 'Check',
 					});
 				}),
 			),
@@ -246,7 +274,8 @@ export class TodayService {
 		return {
 			reportMonth,
 			todos: todos.sort(
-				(a, b) => TONE_ORDER[a.tone] - TONE_ORDER[b.tone] || keyRank(a.key) - keyRank(b.key),
+				(a, b) =>
+					TONE_ORDER[a.tone] - TONE_ORDER[b.tone] || keyRank(a.key) - keyRank(b.key),
 			),
 			unmatchedPosts: await this.unmatchedPosts(reportMonth).catch(() => []),
 		};

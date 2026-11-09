@@ -1,5 +1,7 @@
 // Comments under TikTok posts: the scraper's item shape and the comments that need no LLM.
 
+import type { TiktokCommentItem } from 'src/modules/apify/actors/tiktok-comments.actor.js';
+
 import { PostCommentIntentEnum } from '../entities/post-comment.entity.js';
 
 /** What a stored comment takes from one item of `clockworks/tiktok-comments-scraper`. */
@@ -17,7 +19,7 @@ export interface CommentFields {
  * `replyCommentTotal`, `repliesToId` for a reply, `videoWebUrl` = the post). It gives no
  * language, so `language` stays null. The author (`uniqueId`, `uid`) is never stored.
  */
-export const fromClockworksComment = (item: any): CommentFields | null => {
+export const fromClockworksComment = (item: TiktokCommentItem): CommentFields | null => {
 	const text = typeof item?.text === 'string' ? item.text.trim() : '';
 	if (!item?.cid || !text) return null;
 	const count = (n: unknown) => (typeof n === 'number' && n > 0 ? n : 0);

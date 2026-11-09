@@ -7,7 +7,7 @@ import { LlmBacklogService } from 'src/modules/backlog/services/llm-backlog.serv
 import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-registry.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { EmbeddingsService } from 'src/modules/embeddings/services/embeddings.service.js';
+import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
@@ -51,7 +51,7 @@ describe('statement embeddings (pglite)', () => {
 	let controller: AdminStatementsController;
 	const registry = () => harness.moduleRef.get(LlmBacklogRegistry);
 	const embedder = {
-		embedManyUncached: jest.fn(async (values: string[], opts: { dimensions: number }) => ({
+		embedMany: jest.fn(async (values: string[], opts: { dimensions: number }) => ({
 			embeddings: values.map(v => VECTORS[v] ?? vec(0, 0, 0, 0, 1)),
 			tokens: values.length * 5,
 			opts,
@@ -149,7 +149,7 @@ describe('statement embeddings (pglite)', () => {
 	});
 
 	beforeEach(() => {
-		embedder.embedManyUncached.mockClear();
+		embedder.embedMany.mockClear();
 	});
 
 	it('is the `statement-embeddings` backlog: priority 60, the claims with text and no vector left', async () => {
@@ -179,7 +179,7 @@ describe('statement embeddings (pglite)', () => {
 			0,
 			5,
 		]);
-		expect(embedder.embedManyUncached).not.toHaveBeenCalled();
+		expect(embedder.embedMany).not.toHaveBeenCalled();
 
 		// Once approved it may run while posts are still being re-read
 		service.approvedAt = new Date('2026-11-02T00:00:00Z');
@@ -191,7 +191,7 @@ describe('statement embeddings (pglite)', () => {
 
 	it('embeds the newest month first, 1024 values a claim, and reports the tokens', async () => {
 		expect(await service.embedPending({ limit: 3 })).toEqual({ embedded: 3, tokens: 15 });
-		expect(embedder.embedManyUncached).toHaveBeenCalledWith(
+		expect(embedder.embedMany).toHaveBeenCalledWith(
 			['the fries arrived lukewarm', 'the soup was cold', 'friendly staff'],
 			{ dimensions: 1024 },
 		);
@@ -259,8 +259,8 @@ describe('statement embeddings (pglite)', () => {
 		]);
 
 		// The phrase was embedded once, at the claims' dimensions, whatever the page
-		expect(embedder.embedManyUncached).toHaveBeenCalledTimes(1);
-		expect(embedder.embedManyUncached).toHaveBeenCalledWith(['cold food'], {
+		expect(embedder.embedMany).toHaveBeenCalledTimes(1);
+		expect(embedder.embedMany).toHaveBeenCalledWith(['cold food'], {
 			dimensions: 1024,
 		});
 	});
@@ -274,6 +274,6 @@ describe('statement embeddings (pglite)', () => {
 			'the soup was cold',
 		]);
 		expect(res.notEmbedded).toBeUndefined();
-		expect(embedder.embedManyUncached).not.toHaveBeenCalled();
+		expect(embedder.embedMany).not.toHaveBeenCalled();
 	});
 });

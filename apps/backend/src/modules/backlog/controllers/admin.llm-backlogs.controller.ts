@@ -39,7 +39,9 @@ export class AdminLlmBacklogsController {
 				lastMovedAt: backlog.lastMovedAt,
 				lastRun:
 					backlog.lastRun ?
-						(wrap(backlog.lastRun).serialize({ skipNull: true }) as unknown as AdminBacklogRunOutputDto)
+						(wrap(backlog.lastRun).serialize({
+							skipNull: true,
+						}) as unknown as AdminBacklogRunOutputDto)
 					:	undefined,
 			})),
 		};

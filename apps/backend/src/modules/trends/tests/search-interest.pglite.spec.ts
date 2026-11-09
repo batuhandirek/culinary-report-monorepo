@@ -1,14 +1,20 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
+import {
+	GOOGLE_TRENDS_ACTOR,
+	type GoogleTrendsItem,
+} from 'src/modules/apify/actors/google-trends.actor.js';
+import { runActorCallRef } from 'src/modules/apify/actors/actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
+import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -19,9 +25,8 @@ import {
 	SearchTermKindEnum,
 	TrendSearchInterest,
 } from '../entities/trend-search-interest.entity.js';
-import { GOOGLE_TRENDS_ACTOR, SearchInterestService } from '../services/search-interest.service.js';
+import { SearchInterestService } from '../services/search-interest.service.js';
 import {
-	GoogleTrendsItem,
 	monthlyInterest,
 	queryTermKey,
 	splitTrendsBudget,
@@ -90,7 +95,23 @@ describe('SearchInterestService (pglite)', () => {
 	let city: City;
 	let pho: Venue;
 	let doner: Venue;
-	const apify = { runActor: jest.fn(async (..._args: unknown[]) => ITEMS) };
+	const apify = new FakeApify<any>();
+	apify.answer = () => ITEMS;
+
+	/** As the `search-interest` run does: the plan, its two runs as children, the save */
+	const pull = async (
+		cityId: string,
+		month: string,
+		opts: { brands: { id: string; name: string }[]; budgetUsd: number },
+	) => {
+		const plan = await service.plan(cityId, month, opts);
+		const topics = plan.topics ? await runActorCallRef(apify, plan.topics.call) : null;
+		const brands = plan.brands ? await runActorCallRef(apify, plan.brands.call) : null;
+		return service.save(cityId, plan, {
+			topics: topics?.recordId ?? null,
+			brands: brands?.recordId ?? null,
+		});
+	};
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -164,7 +185,10 @@ describe('SearchInterestService (pglite)', () => {
 	});
 
 	it('pulls the topics in Food & Drink and the won brands in all categories, twelve months in the city region', async () => {
-		const res = await service.pull(city.id, '2026-09', { brands: [pho.brand, doner.brand], budgetUsd: 1 });
+		const res = await pull(city.id, '2026-09', {
+			brands: [pho.brand, doner.brand],
+			budgetUsd: 1,
+		});
 		expect(res).toEqual({ terms: 6, fetched: 3, withData: 2, related: 4 });
 
 		const input = {
@@ -175,9 +199,9 @@ describe('SearchInterestService (pglite)', () => {
 			includeInterestByRegion: false,
 			includeRelatedTopics: false,
 		};
-		expect(apify.runActor.mock.calls).toEqual([
+		expect(apify.calls.map(c => [c.actor, c.input, c.options])).toEqual([
 			[
-				GOOGLE_TRENDS_ACTOR,
+				GOOGLE_TRENDS_ACTOR.id,
 				// Topic ids by key; each run capped at the actor's $1 floor
 				{
 					...input,
@@ -187,7 +211,7 @@ describe('SearchInterestService (pglite)', () => {
 				{ maxCostUsd: 1, purpose: `Google Trends topics ${city.slug} 2026-09` },
 			],
 			[
-				GOOGLE_TRENDS_ACTOR,
+				GOOGLE_TRENDS_ACTOR.id,
 				// The brand names without their tagline
 				{ ...input, searchTerms: ['Pho House', 'Döner X'], category: '0' },
 				{ maxCostUsd: 1, purpose: `Google Trends brands ${city.slug} 2026-09` },
@@ -226,14 +250,21 @@ describe('SearchInterestService (pglite)', () => {
 	});
 
 	it('a second pull overwrites the months it fetched and keeps the rest', async () => {
-		apify.runActor.mockResolvedValueOnce([
+		// The topics' run returns one term this time; the brands' run as before
+		let once: unknown[] | null = [
 			{
 				searchTerm: '/m/03k_qs',
 				interestOverTime: [week('2026-09-06', 30), week('2026-09-13', 30)],
 				relatedQueries: { top: [query('kebab berlin', 100)], rising: [] },
 			},
-		]);
-		await service.pull(city.id, '2026-09', { brands: [pho.brand, doner.brand], budgetUsd: 1 });
+		];
+		apify.answer = () => {
+			const items = once ?? ITEMS;
+			once = null;
+			return items;
+		};
+		await pull(city.id, '2026-09', { brands: [pho.brand, doner.brand], budgetUsd: 1 });
+		apify.answer = () => ITEMS;
 		harness.orm.em.clear();
 		const rows = await harness.orm.em.find(TrendSearchInterest, { city: city.id });
 		expect(rows).toHaveLength(36);
@@ -246,7 +277,7 @@ describe('SearchInterestService (pglite)', () => {
 	});
 
 	it('shows the search line next to the mention share, with both changes', async () => {
-		await service.pull(city.id, '2026-09', { brands: [pho.brand, doner.brand], budgetUsd: 1 });
+		await pull(city.id, '2026-09', { brands: [pho.brand, doner.brand], budgetUsd: 1 });
 
 		const table = await controller.getSearchInterest({ cityId: city.id, month: '2026-09' });
 		expect(table.months).toHaveLength(12);

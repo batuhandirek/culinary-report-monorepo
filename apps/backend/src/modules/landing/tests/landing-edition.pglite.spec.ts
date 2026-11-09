@@ -1,14 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
-import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
+import { fakeDurable } from 'src/modules/durable-workflows/tests/factories/durable.mock.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialAccount } from 'src/modules/social/entities/social-account.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
@@ -16,6 +15,9 @@ import {
 	ownAccount,
 	socialAccountFactory,
 } from 'src/modules/social/tests/factories/social-account.factory.js';
+import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
@@ -23,10 +25,18 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 
 import { LandingCopyAgent } from '../agents/landing-copy.agent.js';
 import { LandingEdition } from '../entities/landing-edition.entity.js';
-import { LandingBuildJob } from '../jobs/landing-build.job.js';
+import { LANDING_QUEUE } from '../queues/landing.queue.js';
+import { LandingEditionSchedule } from '../schedules/landing-edition.schedule.js';
 import { LandingEditionService } from '../services/landing-edition.service.js';
 import type { LandingCopyAnswer } from '../util/landing-copy.js';
+import { LandingEditionWorkflow } from '../workflows/landing-edition.workflow.js';
 
+/**
+ * The front page's edition, built as its workflow runs it (the facade faked to run steps plainly
+ * with a fixed clock, the durable agent call faked to the plain one): the counts, the model's
+ * lines checked, the plain lines when the call fails, the edition stored and published, the
+ * schedule starting a due city's build `high`.
+ */
 describe('LandingEditionService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: LandingEditionService;
@@ -34,7 +44,34 @@ describe('LandingEditionService (pglite)', () => {
 	let sori: Venue;
 	const NOW = new Date('2026-10-25T06:30:00Z');
 	const agent = mockAgent<LandingCopyAnswer | null>(null);
-	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => undefined) };
+	let workflow: LandingEditionWorkflow;
+	let clock = NOW;
+	const durable = fakeDurable(() => [workflow]);
+	const plainStep = durable.step;
+	durable.step = (<T>(name: string, fn: () => Promise<T>) =>
+		name === 'clock' ?
+			Promise.resolve(clock.toISOString() as T)
+		:	plainStep(name, fn)) as typeof durable.step;
+	// The durable agent call faked to the plain one
+	const durableLlm = {
+		generate: async (
+			a: typeof agent,
+			input: unknown,
+			context: unknown,
+		): Promise<{ object: unknown }> => {
+			const res = await (
+				a.generate as unknown as (i: unknown, c: unknown) => Promise<{ object: unknown }>
+			)(input, context);
+			return { object: res.object };
+		},
+	};
+	/** The city's build as of `now`, the stored edition read back */
+	const build = async (now: Date) => {
+		clock = now;
+		const { editionId } = await workflow.build(city.id);
+		harness.orm.em.clear();
+		return harness.orm.em.fork().findOneOrFail(LandingEdition, editionId);
+	};
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -42,11 +79,15 @@ describe('LandingEditionService (pglite)', () => {
 				LandingEditionService,
 				CityService,
 				TopicService,
+				LandingEditionWorkflow,
+				LandingEditionSchedule,
 				{ provide: LandingCopyAgent, useValue: agent },
-				{ provide: PgBossService, useValue: pgBoss },
+				{ provide: DurableWorkflowsService, useValue: durable },
+				{ provide: DurableLlmService, useValue: durableLlm },
 			],
 		});
 		service = harness.moduleRef.get(LandingEditionService);
+		workflow = harness.moduleRef.get(LandingEditionWorkflow);
 		entityManagerManager.setEntityManager(harness.orm.em);
 		const em = harness.orm.em;
 		// The dish the posts name, and the aspect their praise is filed under
@@ -151,7 +192,7 @@ describe('LandingEditionService (pglite)', () => {
 	beforeEach(async () => {
 		agent.generate.mockReset();
 		agent.generate.mockImplementation(async () => ({ object: null, usage: undefined }));
-		pgBoss.sendJob.mockClear();
+		durable.started.length = 0;
 		await harness.orm.em.nativeDelete(LandingEdition, {});
 		harness.orm.em.clear();
 	});
@@ -161,7 +202,7 @@ describe('LandingEditionService (pglite)', () => {
 	});
 
 	it('counts the last 30 days of posts by others: own, paid, denied and other cities out', async () => {
-		const edition = await service.build(city.id, NOW);
+		const edition = await build(NOW);
 		expect(edition.windowStart.toISOString()).toBe('2026-09-25T00:00:00.000Z');
 		expect(edition.windowEnd.toISOString()).toBe('2026-10-25T00:00:00.000Z');
 		const { data } = edition;
@@ -211,7 +252,7 @@ describe('LandingEditionService (pglite)', () => {
 			};
 			return { object: answer, usage: undefined };
 		});
-		const edition = await service.build(city.id, NOW);
+		const edition = await build(NOW);
 		const [[messages, context]] = agent.generate.mock.calls as unknown as [
 			[{ content: string }[], { cityName: string }],
 		];
@@ -232,12 +273,13 @@ describe('LandingEditionService (pglite)', () => {
 		expect((await service.published('berlin')).id).toBe(edition.id);
 	});
 
-	it('goes out with plain lines when the model fails, and says why', async () => {
+	it('goes out with plain lines when the call itself fails, and says why', async () => {
+		// No account free is a wait inside the durable call; this is the answer's own failure
 		agent.generate.mockImplementation(async () => {
-			throw new Error('every account is out of allowance');
+			throw new Error('The answer does not fit the schema');
 		});
-		const edition = await service.build(city.id, NOW);
-		expect(edition.copyError).toBe('every account is out of allowance');
+		const edition = await build(NOW);
+		expect(edition.copyError).toBe('The answer does not fit the schema');
 		expect(edition.copy.written).toBe(0);
 		expect(edition.copy.places[0].said).toBe(
 			'3 people posted about Sori Ramen in the last 30 days, 3 posts in all.',
@@ -246,9 +288,9 @@ describe('LandingEditionService (pglite)', () => {
 	});
 
 	it("replaces the same day's edition, keeps older ones, and shows the newest published", async () => {
-		const older = await service.build(city.id, new Date('2026-10-21T06:30:00Z'));
-		const first = await service.build(city.id, NOW);
-		const again = await service.build(city.id, new Date('2026-10-25T09:00:00Z'));
+		const older = await build(new Date('2026-10-21T06:30:00Z'));
+		const first = await build(NOW);
+		const again = await build(new Date('2026-10-25T09:00:00Z'));
 		expect(again.id).toBe(first.id);
 		expect((await service.list(city.id)).map(e => e.id)).toEqual([first.id, older.id]);
 		expect((await service.published('berlin')).id).toBe(first.id);
@@ -263,27 +305,34 @@ describe('LandingEditionService (pglite)', () => {
 	});
 
 	it('keeps an edition without places as a draft', async () => {
-		const edition = await service.build(city.id, new Date('2027-03-01T06:30:00Z'));
+		const edition = await build(new Date('2027-03-01T06:30:00Z'));
 		expect(edition.data.places).toEqual([]);
-		expect(edition.publishedAt).toBeUndefined();
+		expect(edition.publishedAt ?? null).toBeNull();
 		await expect(service.published('berlin')).rejects.toBeInstanceOf(NotFoundException);
 		expect(agent.generate).not.toHaveBeenCalled();
 	});
 
-	it('queues a build for a cron city five days after its newest edition', async () => {
+	it('starts a high build for a cron city five days after its newest edition', async () => {
 		expect((await service.dueCities(NOW)).map(c => c.slug)).toEqual(['berlin']);
-		await service.build(city.id, new Date('2026-10-20T06:31:00Z'));
+		await build(new Date('2026-10-20T06:31:00Z'));
 		// Four days later: not yet
 		expect(await service.dueCities(new Date('2026-10-24T06:30:00Z'))).toEqual([]);
-		// The fifth day's cron, a minute earlier in the day than the build: due
-		expect(await service.queueDue(new Date('2026-10-25T06:30:00Z'))).toEqual([city.id]);
-		expect(pgBoss.sendJob).toHaveBeenCalledWith(
-			LandingBuildJob.jobName,
-			new LandingBuildJob({ cityId: city.id }),
-			{
-				singletonKey: city.id,
-			},
-		);
+		// The fifth day's schedule, a minute earlier in the day than the build: due
+		clock = new Date('2026-10-25T06:30:00Z');
+		durable.started.length = 0;
+		await harness.moduleRef.get(LandingEditionSchedule).daily();
+		expect(durable.started.map(s => [s.args, s.options])).toEqual([
+			[
+				[city.id],
+				expect.objectContaining({
+					queue: LANDING_QUEUE,
+					dedupe: city.id,
+					onDuplicate: 'return-existing',
+					priority: 'high',
+				}),
+			],
+		]);
+		await durable.started[0].result;
 	});
 
 	it('answers 404 for an unknown city', async () => {

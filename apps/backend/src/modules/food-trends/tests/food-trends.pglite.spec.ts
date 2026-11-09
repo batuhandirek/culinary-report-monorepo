@@ -2,19 +2,25 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
+import {
+	GOOGLE_TRENDS_COMPARE_ACTOR,
+	type GoogleTrendsCompareItem,
+	type GoogleTrendsComparePoint,
+} from 'src/modules/apify/actors/google-trends-compare.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import type { Topic } from 'src/modules/topics/entities/topic.entity.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
-import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
-import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SitemapService } from 'src/modules/sitemap/services/sitemap.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
+import type { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { linkTopics, seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { TrendRelatedQuery } from 'src/modules/trends/entities/trend-related-query.entity.js';
 import {
 	SearchTermKindEnum,
@@ -26,16 +32,15 @@ import { VenueStatusChangeService } from 'src/modules/venues/services/venue-stat
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { TRENDS_COMPARE_ACTOR } from '../constants/food-trends.constant.js';
-import { FoodTrendsSearchPullJob } from '../jobs/food-trends-search-pull.job.js';
+import { FOOD_TRENDS_PULL_WORKFLOW } from '../constants/food-trends.constant.js';
+import { FOOD_TRENDS_PULL_QUEUE } from '../queues/food-trends-pull.queue.js';
 import { FoodTrendsReportService } from '../services/food-trends-report.service.js';
+import { FoodTrendsPullWorkflow } from '../workflows/food-trends-pull.workflow.js';
 import {
 	anchoredLevels,
 	compareGroups,
-	type ComparePoint,
 	groupSeries,
 	periodLevel,
-	type TrendsCompareItem,
 } from '../util/anchored-levels.js';
 import { computeBreakouts, isNegativeQuery } from '../util/food-trends.js';
 import {
@@ -77,7 +82,7 @@ const volume = (keyword: string, d: Date) => VOLUME[keyOf.get(keyword)!](d);
 
 // A compare run as `steadyfetch/google-trends-scraper` answers it: one interestOverTime row per
 // keyword, every value on the group's one scale (its biggest week is 100), then a summary row
-const compareRun = (terms: string[]): TrendsCompareItem[] => {
+const compareRun = (terms: string[]): GoogleTrendsCompareItem[] => {
 	const peak = Math.max(...terms.flatMap(t => WEEKS.map(w => volume(t, w))));
 	return [
 		...terms.map(keyword => ({
@@ -121,7 +126,7 @@ describe('Food trends quarters (pure)', () => {
 
 	it('rescales groups onto the anchor: one scale whatever the group peak was', () => {
 		const months = ['2026-07', '2026-08'];
-		const week = (date: string, value: number): ComparePoint => ({
+		const week = (date: string, value: number): GoogleTrendsComparePoint => ({
 			timestamp: Date.parse(`${date}T00:00:00Z`) / 1000,
 			value,
 		});
@@ -202,12 +207,10 @@ describe('FoodTrendsReportService (pglite)', () => {
 	let sitemap: SitemapService;
 	let city: City;
 	let topics: Map<string, Topic>;
-	const apify = {
-		runActor: jest.fn(async (_actor: string, input: { searchTerms: string[] }) =>
-			compareRun(input.searchTerms),
-		),
-	};
-	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => undefined) };
+	let workflow: FoodTrendsPullWorkflow;
+	const apify = new FakeApify<any>();
+	apify.answer = (input: any) => compareRun(input.searchTerms);
+	const durable = { enqueue: jest.fn(async (..._args: unknown[]) => undefined) };
 	const AFTER_Q3 = new Date('2026-10-05T08:00:00Z');
 
 	beforeAll(async () => {
@@ -220,11 +223,13 @@ describe('FoodTrendsReportService (pglite)', () => {
 				SearchInterestService,
 				VenueStatusChangeService,
 				SitemapService,
+				FoodTrendsPullWorkflow,
 				{ provide: ApifyService, useValue: apify },
-				{ provide: PgBossService, useValue: pgBoss },
+				{ provide: DurableWorkflowsService, useValue: durable },
 			],
 		});
 		service = harness.moduleRef.get(FoodTrendsReportService);
+		workflow = harness.moduleRef.get(FoodTrendsPullWorkflow);
 		sitemap = harness.moduleRef.get(SitemapService);
 		service.onModuleInit();
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -347,17 +352,19 @@ describe('FoodTrendsReportService (pglite)', () => {
 	});
 
 	it('pulls the topics in groups of five with pizza in each, two years in the city region', async () => {
-		const report = await service.pullSearches(city.id, '2026-q3');
-		expect(apify.runActor).toHaveBeenCalledTimes(2);
-		const inputs = apify.runActor.mock.calls.map(
-			c => c[1] as Record<string, unknown> & { searchTerms: string[] },
+		// The workflow's body, its steps plain: the plan, one run per group as a child, the save
+		await workflow.pull(city.id, '2026-q3');
+		const report = (await service.find(city.id, '2026-q3'))!;
+		expect(apify.calls).toHaveLength(2);
+		const inputs = apify.calls.map(
+			c => c.input as Record<string, unknown> & { searchTerms: string[] },
 		);
-		for (const [actor, input, opts] of apify.runActor.mock.calls as unknown as [
-			string,
-			Record<string, unknown> & { searchTerms: string[] },
-			{ maxCostUsd: number },
-		][]) {
-			expect(actor).toBe(TRENDS_COMPARE_ACTOR);
+		for (const { actor, input, options: opts } of apify.calls as unknown as {
+			actor: string;
+			input: Record<string, unknown> & { searchTerms: string[] };
+			options: { maxCostUsd: number };
+		}[]) {
+			expect(actor).toBe(GOOGLE_TRENDS_COMPARE_ACTOR.id);
 			expect(input).toMatchObject({
 				compare: true,
 				geo: 'DE-BE',
@@ -465,12 +472,19 @@ describe('FoodTrendsReportService (pglite)', () => {
 		await expect(service.queuePull(city.id, '2026-q4', AFTER_Q3)).rejects.toThrow(
 			'A quarter is pulled once it is over',
 		);
-		pgBoss.sendJob.mockClear();
+		durable.enqueue.mockClear();
 		const report = await service.queuePull(city.id, '2026-q2', AFTER_Q3);
 		expect(report.searchPull).toMatchObject({ state: 'queued' });
-		expect(pgBoss.sendJob).toHaveBeenCalledWith(
-			FoodTrendsSearchPullJob.jobName,
-			new FoodTrendsSearchPullJob({ cityId: city.id, quarter: '2026-q2' }),
+		// The pull workflow on its queue, one in flight per quarter
+		expect(durable.enqueue).toHaveBeenCalledWith(
+			FOOD_TRENDS_PULL_WORKFLOW,
+			[city.id, '2026-q2'],
+			{
+				queue: FOOD_TRENDS_PULL_QUEUE,
+				dedupe: `${city.id}:2026-q2`,
+				onDuplicate: 'return-existing',
+				priority: 'high',
+			},
 		);
 		await expect(service.queuePull(city.id, '2026-q2', AFTER_Q3)).rejects.toBeInstanceOf(
 			ConflictException,
@@ -483,12 +497,13 @@ describe('FoodTrendsReportService (pglite)', () => {
 
 	it('keeps the stored levels when no group comes back', async () => {
 		const before = (await service.find(city.id, '2026-q3'))!.searchLevels;
-		apify.runActor
-			.mockImplementationOnce(async () => [])
-			.mockImplementationOnce(async () => {
-				throw new Error('Google failed');
-			});
-		const report = await service.pullSearches(city.id, '2026-q3');
+		let runs = 0;
+		apify.answer = () => {
+			if (++runs === 1) return [];
+			throw new Error('Google failed');
+		};
+		await workflow.pull(city.id, '2026-q3');
+		const report = (await service.find(city.id, '2026-q3'))!;
 		expect(report.searchPull).toMatchObject({
 			state: 'failed',
 			note: "No group came back with pizza's searches, 1 runs failed",

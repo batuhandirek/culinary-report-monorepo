@@ -14,14 +14,14 @@ Monorepo (npm workspaces + Turborepo):
 
 The CLAUDE.md files hold only cross-cutting conventions. Everything about a domain — its entities, invariants, flows, quirks, which service is the one entry point — is in a skill. **Load the skill before working in its area**, and when a change alters one of its statements, fix the skill in the same change. A new domain gets its own `domain-*` skill.
 
-- Procedures: `backend-endpoint`, `backend-entity`, `pglite-test`, `integration-test`, `fsm-machine`, `run-app`, `task-workflow`, `ingestion-eval` (scoring the ingestion agents against Opus-written references: run it before and after changing one).
+- Procedures: `backend-endpoint`, `backend-entity`, `pglite-test`, `integration-test`, `fsm-machine`, `durable-workflows` (DBOS workflows, steps, schedules and queues; the LLM gateway that waits for an account; the LLM accounts and their daily limits; Apify runs inside a workflow; the LLM call ledger (`llm_calls`, in `modules/llm`); Apify's credit read live by its own module), `run-app`, `task-workflow`, `ingestion-eval` (scoring the ingestion agents against Opus-written references: run it before and after changing one).
 - Domains (backend + frontend together): `domain-venues-and-reports` (the product: scraping, matching, reports, the pipeline), `domain-outreach` (selling the report: prospects, the outreach log, follow-ups, email templates), `domain-identity-and-auth`, `domain-users-and-profile`, `domain-notifications-and-email`, `domain-blog` (the public blog and its admin editor), `domain-analyst` (`/admin/ask`: free questions about the data, answered by an agent querying Postgres read-only, live over a socket).
 - Brand: `brand` (name, voice, series names, title patterns, public guardrails), before writing any copy the public, a creator or a venue reads.
 - Frontend cross-cutting: `design-system`, `seo-and-ssr`, `admin-ui`.
 
 # Notes
 - Backend and frontend are served from one node process in production: `/api/*` goes to NestJS, everything else to SvelteKit (`apps/backend/src/main.ts`). In dev the frontend runs on Vite (:5011) and proxies `/api` to the backend (:3015).
-- Postgres runs in Docker (`docker/docker-compose.yml`, `npm run db:up`), with its password and port from `env/server/.env.local`.
+- Postgres runs in Docker (`docker/docker-compose.yml`, `npm run db:up`), with its password and port from `env/server/.env.local`. DBOS keeps its tables in the same database, schema `dbos`, filed under the application name `munchwerk-<NODE_ENV>` (`durable-workflows` skill).
 - Env files (gitignored, `.env.example` next to each): `env/server`, `env/web`.
 - **Questions for outside parties are `questions/<party>.md`** (`questions/README.md`): what a provider or vendor must answer, the answer once it comes, the follow-up task slugs. A task's own open questions are only the user's decisions.
 - **Plain-language docs for business and sales are `human-docs/`** (`human-docs/README.md`): derived from the skills, never the other way round; a change that makes a statement there wrong fixes it in the same change.

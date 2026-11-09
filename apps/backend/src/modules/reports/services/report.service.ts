@@ -7,11 +7,14 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityDayService } from 'src/modules/cities/services/city-day.service.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
+import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -24,9 +27,16 @@ import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 
 import { ReportAnalysisAgent } from '../agents/report-analysis.agent.js';
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
-import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
-import { ANALYSIS_MODEL, ANALYSIS_TIMEOUT_MS, MAX_INVESTIGATIONS } from '../constants/report-analysis.constant.js';
-import { EDITOR_MAX_TOOL_CALLS, EDITOR_MODEL, EDITOR_TIMEOUT_MS } from '../constants/report-editor.constant.js';
+import {
+	ANALYSIS_MODEL,
+	ANALYSIS_TIMEOUT_MS,
+	MAX_INVESTIGATIONS,
+} from '../constants/report-analysis.constant.js';
+import {
+	EDITOR_MAX_TOOL_CALLS,
+	EDITOR_MODEL,
+	EDITOR_TIMEOUT_MS,
+} from '../constants/report-editor.constant.js';
 import { Report } from '../entities/report.entity.js';
 import type {
 	ReportAnalysis,
@@ -41,7 +51,6 @@ import {
 	ReportEditorTrace,
 	ReportHighlights,
 	ReportNeighbour,
-	ReportReplyDraft,
 } from '../interfaces/report-data.interface.js';
 import type { EvidenceContext } from '../interfaces/report-evidence.interface.js';
 import { ReportBuiltEvent } from '../persisted-events/report-built.persisted-event.js';
@@ -51,8 +60,12 @@ import { editorPack } from '../util/editor-pack.js';
 import { checkHighlights, type EditorAnswer } from '../util/highlights-check.js';
 import { observe, pickInvestigated, type ReportHistoryMonth } from '../util/report-observations.js';
 import { runPlaybook } from '../util/report-playbooks.js';
-import { replyCandidates } from '../util/reply-drafts.js';
-import { type PromptScope, sectionsOutput, toSections, trimForSections } from '../util/report-sections.js';
+import {
+	type PromptScope,
+	sectionsOutput,
+	toSections,
+	trimForSections,
+} from '../util/report-sections.js';
 import {
 	articleTitle,
 	NeighbourPost,
@@ -67,10 +80,10 @@ import {
 } from '../util/summarize-report.js';
 
 import { ReportCityService } from './report-city.service.js';
+import { ReportConfigService } from './report-config.service.js';
 import { type EvidenceBuild, ReportEvidenceService } from './report-evidence.service.js';
 import { ReportReachService } from './report-reach.service.js';
 import { ReportSignalsService } from './report-signals.service.js';
-import { ReportConfigService } from './report-config.service.js';
 
 const creatorKey = (platform: string, author: string) => `${platform}:${author.toLowerCase()}`;
 
@@ -89,7 +102,6 @@ export class ReportService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly reportEditorAgent: ReportEditorAgent,
-		private readonly reviewReplyAgent: ReviewReplyAgent,
 		private readonly competitorService: CompetitorService,
 		private readonly pgBossService: PgBossService,
 		private readonly reportCityService: ReportCityService,
@@ -101,16 +113,20 @@ export class ReportService {
 		private readonly reportAnalysisAgent: ReportAnalysisAgent,
 		private readonly reportEvidenceService: ReportEvidenceService,
 		private readonly topicService: TopicService,
+		private readonly mentionTopicService: MentionTopicService,
+		private readonly venueTopicService: VenueTopicService,
+		private readonly durableLlm: DurableLlmService,
 	) {}
 
 	/**
 	 * Builds (or rebuilds) a brand's reports on its branches in a city (or, `cityId` null, in
 	 * every city: `Brand.reportScope` `all`) for a month, flushed: one per active configuration of
 	 * the brand, or the default template's when it has none (`ReportConfigService.targets`), and
-	 * only `configId`'s when given. The data and the reply drafts are computed once and stored
-	 * whole on each; each report keeps a copy of its sections and gets its own highlights, written
-	 * from only the data those sections show (`trimForSections`). LLM calls side by side: one
-	 * highlights call per report and one reply-drafts call. `peerBrandIds` are the month's report
+	 * only `configId`'s when given. The data is computed once and stored whole on each; each
+	 * report keeps a copy of its sections and gets its own highlights, written from only the data
+	 * those sections show (`trimForSections`): one editor call per report, side by side. An agent
+	 * call that finds no LLM account waits for one (`DurableLlmService.whenServed`): run by
+	 * `ReportBuildWorkflow`, the build is a step of a durable run. `peerBrandIds` are the month's report
 	 * brands the city section compares it with (the pipeline passes them; else the month's
 	 * reports). Posts, reviews and the other brand-wide sections cover every open branch covered;
 	 * each branch's place figures (busyness, open tables, prices, search ranks, neighbourhood,
@@ -120,7 +136,8 @@ export class ReportService {
 	 * written part; the editor reads it with the rest of the month's material (`editorPack`) and
 	 * the same read tools, once per configuration, over only the data its sections show. Neither
 	 * fails the build: a failing editor leaves the code-written fallback and the trace says why.
-	 * 400 when there is no open branch.
+	 * The cities' stored topic links are brought up to date first (the mentions' topics, then the
+	 * venue tags), so a report never reads stale tags. 400 when there is no open branch.
 	 */
 	async buildAll(
 		brandId: string,
@@ -128,8 +145,16 @@ export class ReportService {
 		month: string,
 		{ peerBrandIds, configId }: { peerBrandIds?: string[]; configId?: string } = {},
 	): Promise<Report[]> {
+		for (const id of cityId ?
+			[cityId]
+		:	(await this.brandService.citiesOf(brandId)).map(c => c.id)) {
+			await this.mentionTopicService.relink({ cityId: id });
+			await this.venueTopicService.refreshCity(id);
+		}
 		const targets = await this.reportConfigService.targets(brandId, configId);
-		const { data, branches, city, cityNames } = await this.compute(brandId, cityId, month, { peerBrandIds });
+		const { data, branches, city, cityNames } = await this.compute(brandId, cityId, month, {
+			peerBrandIds,
+		});
 		const [first] = branches;
 		const { brand } = first;
 		const cityName = cityNames.join(', ');
@@ -138,20 +163,22 @@ export class ReportService {
 		const analysis = await this.analyse(build, ctx, cityName);
 		// The vocabulary the editor names themes with: the context's, read again only when it failed
 		const aspects = ctx?.aspects ?? (await this.topicService.index());
-		const [replyDrafts, ...written] = await Promise.all([
-			this.draftReplies(branches, month, data),
-			...targets.map(target => {
+		const written = await Promise.all(
+			targets.map(target => {
 				const trimmed = trimForSections(data, target.sections);
 				return this.write(trimmed.data, trimmed.scope, analysis, ctx, cityName, aspects);
 			}),
-		]);
-		data.reviews.replyDrafts = replyDrafts;
+		);
 
 		const reports: Report[] = [];
 		for (const [i, target] of targets.entries()) {
 			const report =
-				(await this.em.findOne(Report, { brand, city: city ?? null, month, config: target.config ?? null })) ??
-				this.em.create(Report, { brand, city, month, data, highlights: written[i] });
+				(await this.em.findOne(Report, {
+					brand,
+					city: city ?? null,
+					month,
+					config: target.config ?? null,
+				})) ?? this.em.create(Report, { brand, city, month, data, highlights: written[i] });
 			report.data = data;
 			report.config = target.config;
 			report.template = target.template;
@@ -170,7 +197,10 @@ export class ReportService {
 		);
 		// The outreach side mails each to a brand that subscribed
 		for (const report of reports)
-			await this.pgBossService.publish(ReportBuiltEvent.eventName, new ReportBuiltEvent({ reportId: report.id }));
+			await this.pgBossService.publish(
+				ReportBuiltEvent.eventName,
+				new ReportBuiltEvent({ reportId: report.id }),
+			);
 		return reports;
 	}
 
@@ -180,8 +210,8 @@ export class ReportService {
 	}
 
 	/**
-	 * A report's data as a build would compute it now, without the two LLM calls (no highlights,
-	 * no reply drafts) and without saving: what a rebuild would show, and how a change to the
+	 * A report's data as a build would compute it now, without the LLM calls (no analysis, no
+	 * highlights) and without saving: what a rebuild would show, and how a change to the
 	 * readers is checked against the stored data. 400 when there is no open branch.
 	 */
 	async compute(
@@ -190,10 +220,7 @@ export class ReportService {
 		month: string,
 		{ peerBrandIds }: { peerBrandIds?: string[] } = {},
 	): Promise<{ data: ReportData; branches: Venue[]; city: City | null; cityNames: string[] }> {
-		const branches =
-			cityId ? await this.brandService.branchesIn(brandId, cityId) : await this.brandService.openBranches(brandId);
-		if (!branches.length)
-			throw new BadRequestException(cityId ? 'The brand has no open branch in the city' : 'The brand has no open branch');
+		const branches = await this.reportBranches(brandId, cityId);
 		await this.em.populate(branches, ['city', 'brand', 'brand.branches']);
 		const [first] = branches;
 		const city = cityId ? first.city : null;
@@ -202,14 +229,24 @@ export class ReportService {
 		const index = await this.topicService.index();
 		const data = await this.collect(branches, month, city, index);
 		if (city) data.city = await this.reportCityService.section(branches, month, peerBrandIds);
-		if (cityNames.length === 1) data.context = await this.cityDayService.month(first.city.id, month);
+		if (cityNames.length === 1)
+			data.context = await this.cityDayService.month(first.city.id, month);
 		// The relations over every branch's reviews, and the competitors' open tables and busyness
-		const correlations = await this.reportSignalsService.correlations(branches, month, first.city.timezone, data);
+		const correlations = await this.reportSignalsService.correlations(
+			branches,
+			month,
+			first.city.timezone,
+			data,
+		);
 		if (correlations) data.correlations = correlations;
-		const competitors = await this.reportSignalsService.competitorSignals(data.competitors, month);
+		const competitors = await this.reportSignalsService.competitorSignals(
+			data.competitors,
+			month,
+		);
 		if (competitors) data.competitors = competitors;
 		// Each branch's place figures, read one after another (they share the entity manager)
-		for (const [i, branch] of branches.entries()) await this.placeFigures(branch, data.branches[i], month, data);
+		for (const [i, branch] of branches.entries())
+			await this.placeFigures(branch, data.branches[i], month, data);
 		// Each branch's all-time rating against its district's and its kind of food's venues
 		const benchmarks = await this.reportCityService.ratingBenchmarks(branches);
 		for (const [i, branch] of branches.entries()) {
@@ -221,6 +258,26 @@ export class ReportService {
 		return { data, branches, city, cityNames };
 	}
 
+	/** The open branches a build reports on (in the city, or every city for `cityId` null); 400 when there is none. */
+	private async reportBranches(brandId: string, cityId: string | null): Promise<Venue[]> {
+		const branches =
+			cityId ?
+				await this.brandService.branchesIn(brandId, cityId)
+			:	await this.brandService.openBranches(brandId);
+		if (!branches.length)
+			throw new BadRequestException(
+				cityId ?
+					'The brand has no open branch in the city'
+				:	'The brand has no open branch',
+			);
+		return branches;
+	}
+
+	/** What a build checks first, for a caller that starts one in the background: 400 when the brand has no open branch to report on. */
+	async assertBuildable(brandId: string, cityId: string | null): Promise<void> {
+		await this.reportBranches(brandId, cityId);
+	}
+
 	/** A brand's newest report (of any city), or null when it has none. */
 	async latest(brandId: string): Promise<Report | null> {
 		return this.em.findOne(
@@ -230,17 +287,6 @@ export class ReportService {
 		);
 	}
 
-	/** Every reply draft a brand's reports hold, by Google review id (the newest report's wins). */
-	async replyDrafts(brandId: string): Promise<Map<string, string>> {
-		const rows: { review_id: string; draft: string }[] = await this.em.getConnection().execute(
-			`select d->>'reviewId' as review_id, d->>'draft' as draft
-			from reports r, jsonb_array_elements(coalesce(r.data->'reviews'->'replyDrafts', '[]'::jsonb)) d
-			where r.brand_id = ? order by r.month asc`,
-			[brandId],
-		);
-		return new Map(rows.filter(r => r.review_id && r.draft).map(r => [r.review_id, r.draft]));
-	}
-
 	/**
 	 * A brand's reports, newest month first: of one city (`cityId`), the reports across all its
 	 * cities (`cityId: null`), or every one (absent): the portal's archive and its trend series.
@@ -248,7 +294,11 @@ export class ReportService {
 	 */
 	async forBrand(
 		brandId: string,
-		{ withData = true, fromMonth, cityId }: { withData?: boolean; fromMonth?: string; cityId?: string | null } = {},
+		{
+			withData = true,
+			fromMonth,
+			cityId,
+		}: { withData?: boolean; fromMonth?: string; cityId?: string | null } = {},
 	): Promise<Report[]> {
 		return (await this.em.find(
 			Report,
@@ -277,16 +327,32 @@ export class ReportService {
 	 * does that. 404 for an unknown report, 400 when the brand has no open branch any more.
 	 */
 	async analyseAgain(reportId: string): Promise<Report> {
-		const report = await this.em.findOneOrFail(Report, { id: reportId }, { populate: ['brand', 'city'] });
+		const report = await this.em.findOneOrFail(
+			Report,
+			{ id: reportId },
+			{ populate: ['brand', 'city'] },
+		);
 		const cityId = report.city?.id ?? null;
 		const branches =
-			cityId ? await this.brandService.branchesIn(report.brand.id, cityId) : await this.brandService.openBranches(report.brand.id);
-		if (!branches.length) throw new BadRequestException('The brand has no open branch to analyse');
+			cityId ?
+				await this.brandService.branchesIn(report.brand.id, cityId)
+			:	await this.brandService.openBranches(report.brand.id);
+		if (!branches.length)
+			throw new BadRequestException('The brand has no open branch to analyse');
 		await this.em.populate(branches, ['city', 'brand']);
 		const cityNames = _.uniq(branches.map(b => b.city.name)).join(', ');
-		const build = await this.evidenceBuild(branches, report.city ?? null, report.month, report.data);
+		const build = await this.evidenceBuild(
+			branches,
+			report.city ?? null,
+			report.month,
+			report.data,
+		);
 		const analysis = await this.analyse(build, await this.evidenceContext(build), cityNames);
-		const siblings = await this.em.find(Report, { brand: report.brand, city: cityId, month: report.month });
+		const siblings = await this.em.find(Report, {
+			brand: report.brand,
+			city: cityId,
+			month: report.month,
+		});
 		for (const sibling of siblings) sibling.analysis = analysis;
 		report.analysis = analysis;
 		await this.em.flush();
@@ -294,12 +360,28 @@ export class ReportService {
 	}
 
 	/** The build's inputs for the analysis: the data, the month before's stored report and the months before it. */
-	private async evidenceBuild(branches: Venue[], city: City | null, month: string, data: ReportData): Promise<EvidenceBuild> {
+	private async evidenceBuild(
+		branches: Venue[],
+		city: City | null,
+		month: string,
+		data: ReportData,
+	): Promise<EvidenceBuild> {
 		const { brand } = branches[0];
 		const before = previousMonth(monthRange(month).start);
-		const beforeReport = await this.em.findOne(Report, { brand, city: city ?? null, month: before });
+		const beforeReport = await this.em.findOne(Report, {
+			brand,
+			city: city ?? null,
+			month: before,
+		});
 		const history = await this.history(brand.id, city?.id ?? null, before);
-		return { branches, city, month, data, ...(beforeReport && { previousData: beforeReport.data }), history };
+		return {
+			branches,
+			city,
+			month,
+			data,
+			...(beforeReport && { previousData: beforeReport.data }),
+			history,
+		};
 	}
 
 	/**
@@ -307,21 +389,34 @@ export class ReportService {
 	 * first, `count` at most before `beforeMonth`: the figures the observations draw as a series.
 	 * One row per month (every configuration's report carries the same data).
 	 */
-	async history(brandId: string, cityId: string | null, beforeMonth: string, count = 5): Promise<ReportHistoryMonth[]> {
-		const rows: { month: string; social: ReportData['social'] | null; reviews: ReportData['reviews'] | null; own_accounts: ReportData['ownAccounts'] | null }[] =
-			await this.em.getConnection().execute(
-				`select distinct on (month) month, data->'social' as social, data->'reviews' as reviews, data->'ownAccounts' as own_accounts
+	async history(
+		brandId: string,
+		cityId: string | null,
+		beforeMonth: string,
+		count = 5,
+	): Promise<ReportHistoryMonth[]> {
+		const rows: {
+			month: string;
+			social: ReportData['social'] | null;
+			reviews: ReportData['reviews'] | null;
+			own_accounts: ReportData['ownAccounts'] | null;
+		}[] = await this.em.getConnection().execute(
+			`select distinct on (month) month, data->'social' as social, data->'reviews' as reviews, data->'ownAccounts' as own_accounts
 				from reports where brand_id = ? and city_id is not distinct from ? and month < ?
 				order by month desc, updated_at desc limit ?`,
-				[brandId, cityId, beforeMonth, count],
-			);
+			[brandId, cityId, beforeMonth, count],
+		);
 		return rows.reverse().map(r => ({
 			month: r.month,
 			...(r.social && { social: _.pick(r.social, ['postCount', 'views', 'creators']) }),
-			...(r.reviews?.count && { reviews: _.pick(r.reviews, ['count', 'written', 'avgStars', 'replyRate']) }),
+			...(r.reviews?.count && {
+				reviews: _.pick(r.reviews, ['count', 'written', 'avgStars', 'replyRate']),
+			}),
 			...(r.own_accounts?.length && {
 				followers: r.own_accounts.flatMap(a =>
-					a.followers === undefined ? [] : [{ platform: a.platform, handle: a.handle, followers: a.followers }],
+					a.followers === undefined ?
+						[]
+					:	[{ platform: a.platform, handle: a.handle, followers: a.followers }],
 				),
 			}),
 		}));
@@ -335,7 +430,9 @@ export class ReportService {
 		try {
 			return await this.reportEvidenceService.context(build);
 		} catch (e) {
-			this.logger.warn(`Evidence for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`);
+			this.logger.warn(
+				`Evidence for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`,
+			);
 			return null;
 		}
 	}
@@ -354,26 +451,44 @@ export class ReportService {
 		aspects: ReportAspects,
 	): Promise<ReportHighlights> {
 		const started = Date.now();
-		const trace: ReportEditorTrace = { model: EDITOR_MODEL, steps: [], toolCalls: 0, problems: [], durationMs: 0 };
+		const trace: ReportEditorTrace = {
+			model: EDITOR_MODEL,
+			steps: [],
+			toolCalls: 0,
+			problems: [],
+			durationMs: 0,
+		};
 		const pack = editorPack(data, scope, aspects, analysis);
-		const run = new ToolRun(EDITOR_MAX_TOOL_CALLS);
-		const tools = ctx ? this.reportEvidenceService.tools(ctx, run) : {};
+		let run = new ToolRun(EDITOR_MAX_TOOL_CALLS);
 		let answer: EditorAnswer | null = null;
 		try {
-			const res = await this.reportEditorAgent.generate(
-				JSON.stringify(pack),
-				{ cityName, tools },
-				{ abortSignal: AbortSignal.timeout(EDITOR_TIMEOUT_MS) },
-			);
+			// No account free waits for one; each try starts its tool budget and its timeout afresh
+			const res = await this.durableLlm.whenServed(this.reportEditorAgent, () => {
+				run = new ToolRun(EDITOR_MAX_TOOL_CALLS);
+				const tools = ctx ? this.reportEvidenceService.tools(ctx, run) : {};
+				return this.reportEditorAgent.generate(
+					JSON.stringify(pack),
+					{ cityName, tools },
+					{ abortSignal: AbortSignal.timeout(EDITOR_TIMEOUT_MS) },
+				);
+			});
 			answer = (res.object as EditorAnswer | undefined) ?? null;
 			trace.model = res.model;
 			const full = res as FullGenerate;
 			const usage = full.totalUsage ?? full.usage;
-			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'cachedInputTokens', 'outputTokens', 'totalTokens']);
+			if (usage)
+				trace.usage = _.pick(usage, [
+					'inputTokens',
+					'cachedInputTokens',
+					'outputTokens',
+					'totalTokens',
+				]);
 			if (full.steps?.length) trace.modelSteps = full.steps.length;
 		} catch (e) {
 			trace.error = (e as Error).message;
-			this.logger.warn(`The editor for ${data.brand.name} ${data.month} failed: ${trace.error}`);
+			this.logger.warn(
+				`The editor for ${data.brand.name} ${data.month} failed: ${trace.error}`,
+			);
 		}
 		trace.steps = run.calls;
 		trace.toolCalls = run.ran;
@@ -389,15 +504,27 @@ export class ReportService {
 	 * A failing agent never fails the build: the investigations fall back to the observations'
 	 * own sentences and the trace says why.
 	 */
-	private async analyse(build: EvidenceBuild, ctx: EvidenceContext | null, cityName: string): Promise<ReportAnalysis> {
+	private async analyse(
+		build: EvidenceBuild,
+		ctx: EvidenceContext | null,
+		cityName: string,
+	): Promise<ReportAnalysis> {
 		const started = Date.now();
-		const trace: ReportAnalysisTrace = { model: ANALYSIS_MODEL, steps: [], toolCalls: 0, problems: [], durationMs: 0 };
+		const trace: ReportAnalysisTrace = {
+			model: ANALYSIS_MODEL,
+			steps: [],
+			toolCalls: 0,
+			problems: [],
+			durationMs: 0,
+		};
 		try {
 			if (!ctx) throw new Error('The evidence could not be read');
 			return await this.investigate(build, ctx, cityName, trace, started);
 		} catch (e) {
 			// Reading the evidence or finding the moves failed: the report still builds
-			this.logger.warn(`Analysis for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`);
+			this.logger.warn(
+				`Analysis for ${build.data.brand.name} ${build.month} failed: ${(e as Error).message}`,
+			);
 			return {
 				builtAt: new Date().toISOString(),
 				observations: [],
@@ -436,31 +563,46 @@ export class ReportService {
 		// The top moves, one of each sibling group (posts, views and creators rising together are one story)
 		const asked = pickInvestigated(observations, MAX_INVESTIGATIONS);
 		const input = this.analysisInput(data, asked);
-		const run = new ToolRun();
-		const tools = this.reportEvidenceService.tools(ctx, run);
+		let run = new ToolRun();
 		let answer: ReportAnalysisAnswer | null = null;
 		try {
-			const res = await this.reportAnalysisAgent.generate(
-				JSON.stringify(input),
-				{ cityName, tools },
-				{ abortSignal: AbortSignal.timeout(ANALYSIS_TIMEOUT_MS) },
-			);
+			// No account free waits for one; each try starts its tool budget and its timeout afresh
+			const res = await this.durableLlm.whenServed(this.reportAnalysisAgent, () => {
+				run = new ToolRun();
+				const tools = this.reportEvidenceService.tools(ctx, run);
+				return this.reportAnalysisAgent.generate(
+					JSON.stringify(input),
+					{ cityName, tools },
+					{ abortSignal: AbortSignal.timeout(ANALYSIS_TIMEOUT_MS) },
+				);
+			});
 			answer = res.object ?? null;
 			trace.model = res.model;
 			const full = res as FullGenerate;
 			const usage = full.totalUsage ?? full.usage;
-			if (usage) trace.usage = _.pick(usage, ['inputTokens', 'cachedInputTokens', 'outputTokens', 'totalTokens']);
+			if (usage)
+				trace.usage = _.pick(usage, [
+					'inputTokens',
+					'cachedInputTokens',
+					'outputTokens',
+					'totalTokens',
+				]);
 			if (full.reasoningText) trace.reasoning = full.reasoningText.slice(0, 4_000);
 			if (full.steps?.length) trace.modelSteps = full.steps.length;
 			if (answer?.notes) trace.notes = answer.notes;
 		} catch (e) {
 			trace.error = (e as Error).message;
-			this.logger.warn(`Analysis for ${data.brand.name} ${data.month} failed: ${trace.error}`);
+			this.logger.warn(
+				`Analysis for ${data.brand.name} ${data.month} failed: ${trace.error}`,
+			);
 		}
 		trace.steps = run.calls;
 		trace.toolCalls = run.ran;
-		const investigations = checkAnalysis(answer, asked, [input, ...run.given], (where, problem) =>
-			trace.problems.push({ where, problem }),
+		const investigations = checkAnalysis(
+			answer,
+			asked,
+			[input, ...run.given],
+			(where, problem) => trace.problems.push({ where, problem }),
 		);
 		return done(investigations);
 	}
@@ -473,7 +615,12 @@ export class ReportService {
 				name: data.brand.name,
 				category: data.brand.category,
 				...(!chain && { district: data.branches[0].district }),
-				places: data.branches.map(b => ({ id: b.venueId, name: b.name, street: b.street, district: b.district })),
+				places: data.branches.map(b => ({
+					id: b.venueId,
+					name: b.name,
+					street: b.street,
+					district: b.district,
+				})),
 			},
 			month: monthName(data.month),
 			previousMonth: data.previous ? monthName(data.previous.month) : undefined,
@@ -485,7 +632,12 @@ export class ReportService {
 		};
 	}
 
-	private async collect(branches: Venue[], month: string, city: City | null, index: TopicIndex): Promise<ReportData> {
+	private async collect(
+		branches: Venue[],
+		month: string,
+		city: City | null,
+		index: TopicIndex,
+	): Promise<ReportData> {
 		const [first] = branches;
 		const brand = first.brand;
 		const cityIds = _.uniq(branches.map(b => b.city.id));
@@ -503,7 +655,9 @@ export class ReportService {
 				aspects: index,
 			});
 			const reviewsTracked =
-				(await this.em.count(Review, { venue: { $in: competitor.venues.map(v => v.id) } })) > 0;
+				(await this.em.count(Review, {
+					venue: { $in: competitor.venues.map(v => v.id) },
+				})) > 0;
 			const branch = competitor.branch;
 			competitors.push({
 				...summarizeCompetitor(data, reviewsTracked),
@@ -517,19 +671,31 @@ export class ReportService {
 
 		// The month before, on the same pure summary: its numbers cost no LLM call
 		const before = previousMonth(new Date(`${month}-01T00:00:00Z`));
-		const beforeReport = await this.em.findOne(Report, { brand, city: city ?? null, month: before });
+		const beforeReport = await this.em.findOne(Report, {
+			brand,
+			city: city ?? null,
+			month: before,
+		});
 		const previous = summarizePrevious(
-			summarizeReport({ ...(await this.monthInput(first, before, { branches, brandWide: true })), aspects: index }),
+			summarizeReport({
+				...(await this.monthInput(first, before, { branches, brandWide: true })),
+				aspects: index,
+			}),
 			beforeReport?.highlights.actions,
 		);
 
 		const input = await this.monthInput(first, month, { branches, brandWide: true });
-		const brandAuthors = new Set(input.mentions.filter(m => m.author).map(m => creatorKey(m.platform, m.author!)));
+		const brandAuthors = new Set(
+			input.mentions.filter(m => m.author).map(m => creatorKey(m.platform, m.author!)),
+		);
 		const { venue: _subject, ...summary } = summarizeReport({
 			...input,
 			aspects: index,
 			competitors,
-			creatorsNearby: selectNearbyCreators(await this.nearbyPosts(branches, month), brandAuthors),
+			creatorsNearby: selectNearbyCreators(
+				await this.nearbyPosts(branches, month),
+				brandAuthors,
+			),
 			previous,
 		});
 		// Posts by others in the brand's figures that named no branch
@@ -554,10 +720,18 @@ export class ReportService {
 	 * its reviews, cut down like a competitor), where it is, its Google details, its rating trend
 	 * and its district's neighbours. The place sections come after (`placeFigures`).
 	 */
-	private async branchRows(branches: Venue[], month: string, acrossCities: boolean, index: TopicIndex): Promise<ReportBranch[]> {
+	private async branchRows(
+		branches: Venue[],
+		month: string,
+		acrossCities: boolean,
+		index: TopicIndex,
+	): Promise<ReportBranch[]> {
 		const rows: ReportBranch[] = [];
 		for (const branch of branches) {
-			const own = summarizeReport({ ...(await this.monthInput(branch, month, { branches: [branch] })), aspects: index });
+			const own = summarizeReport({
+				...(await this.monthInput(branch, month, { branches: [branch] })),
+				aspects: index,
+			});
 			const figures = _.pick(summarizeCompetitor(own, true), [
 				'venueId',
 				'name',
@@ -579,7 +753,9 @@ export class ReportService {
 				...(acrossCities && { city: branch.city.name }),
 				...(branch.googleUrl && { googleUrl: branch.googleUrl }),
 				...(branch.details?.amenities && { amenities: offeredAmenities(branch.details) }),
-				...(branch.details?.reviewsDistribution && { reviewsDistribution: branch.details.reviewsDistribution }),
+				...(branch.details?.reviewsDistribution && {
+					reviewsDistribution: branch.details.reviewsDistribution,
+				}),
 				ratingTrend: ratingTrend(snapshots, month),
 				neighbours: branch.district ? await this.neighbours(branch, month) : [],
 			});
@@ -591,7 +767,12 @@ export class ReportService {
 	 * A branch's place sections, in place: its busyness, open tables and prices (against the
 	 * competitors picked for the whole brand or for it), its search ranks and neighbourhood.
 	 */
-	private async placeFigures(branch: Venue, row: ReportBranch, month: string, data: ReportData): Promise<void> {
+	private async placeFigures(
+		branch: Venue,
+		row: ReportBranch,
+		month: string,
+		data: ReportData,
+	): Promise<void> {
 		Object.assign(
 			row,
 			await this.reportSignalsService.placeSections(branch, month, {
@@ -616,52 +797,6 @@ export class ReportService {
 		))
 			posts.push(...(await this.neighbourPosts(district, month)));
 		return _.uniqBy(posts, p => `${p.postId}:${p.venueName}`);
-	}
-
-	/**
-	 * Replies to the month's unanswered written reviews, critical first. A failed call leaves
-	 * the report without drafts rather than failing it.
-	 */
-	private async draftReplies(
-		branches: Venue[],
-		month: string,
-		data: ReportData,
-	): Promise<ReportReplyDraft[]> {
-		const { start, end } = monthRange(month);
-		const candidates = replyCandidates(
-			await this.em.find(Review, {
-				venue: { $in: branches.map(b => b.id) },
-				publishedAt: { $gte: start, $lt: end },
-			}),
-		);
-		if (!candidates.length) return [];
-		try {
-			const res = await this.reviewReplyAgent.generate(
-				JSON.stringify({
-					venue: {
-						name: data.brand.name,
-						category: data.brand.category,
-						...(data.branches.length === 1 && { district: data.branches[0].district }),
-					},
-					praisedThisMonth: Object.keys(data.reviews.praise).filter(t => t !== 'other'),
-					topDishes: data.dishes.slice(0, 5).map(d => d.name),
-					reviews: candidates.map(r => ({
-						reviewId: r.reviewId,
-						stars: r.stars,
-						language: r.language,
-						// The original words: the reply goes in the guest's language
-						text: r.text || r.textTranslated,
-					})),
-				}),
-			);
-			const byId = new Map(res.object.replies.map(r => [r.reviewId, r.reply.trim()]));
-			return candidates
-				.filter(r => byId.get(r.reviewId))
-				.map(r => ({ reviewId: r.reviewId, draft: byId.get(r.reviewId)! }));
-		} catch (e) {
-			this.logger.warn(`Reply drafts for ${data.brand.name} failed: ${(e as Error).message}`);
-			return [];
-		}
 	}
 
 	/**
@@ -713,7 +848,11 @@ export class ReportService {
 	private async monthInput(
 		venue: Venue,
 		month: string,
-		{ branches = [venue], brandWide = false, name }: { branches?: Venue[]; brandWide?: boolean; name?: string } = {},
+		{
+			branches = [venue],
+			brandWide = false,
+			name,
+		}: { branches?: Venue[]; brandWide?: boolean; name?: string } = {},
 	) {
 		const { start, end } = monthRange(month);
 		const ids = branches.map(b => b.id);
@@ -721,9 +860,12 @@ export class ReportService {
 			Mention,
 			brandWide ?
 				{
-						brand: venue.brand.id,
-						post: { city: { $in: _.uniq(branches.map(b => b.city.id)) }, postedAt: { $gte: start, $lt: end } },
-					}
+					brand: venue.brand.id,
+					post: {
+						city: { $in: _.uniq(branches.map(b => b.city.id)) },
+						postedAt: { $gte: start, $lt: end },
+					},
+				}
 			:	{ venue: { $in: ids }, post: { postedAt: { $gte: start, $lt: end } } },
 			{ populate: ['post', 'post.account', ...STATEMENT_POPULATE] },
 		);
@@ -734,7 +876,9 @@ export class ReportService {
 			{ populate: [...STATEMENT_POPULATE], orderBy: { publishedAt: 'desc', id: 'asc' } },
 		);
 		// A chain's reviews say which branch (its street, else its name), as the view labels places
-		const branchLabels = new Map(branches.length > 1 ? branches.map(b => [b.id, b.street ?? b.name]) : []);
+		const branchLabels = new Map(
+			branches.length > 1 ? branches.map(b => [b.id, b.street ?? b.name]) : [],
+		);
 
 		return {
 			venue: {
@@ -766,19 +910,17 @@ export class ReportService {
 				statements: m.statements.getItems(),
 				brandOnly: !m.venue,
 			})),
-			reviews: reviews.map(
-				(r): SummaryReview => ({
-					reviewId: r.reviewId,
-					publishedAt: r.publishedAt,
-					language: r.language,
-					stars: r.stars,
-					text: r.text,
-					textTranslated: r.textTranslated,
-					ownerResponse: r.ownerResponse,
-					statements: r.statements.getItems(),
-					...(branchLabels.has(r.venue.id) && { branch: branchLabels.get(r.venue.id) }),
-				}),
-			),
+			reviews: reviews.map((r): SummaryReview => ({
+				reviewId: r.reviewId,
+				publishedAt: r.publishedAt,
+				language: r.language,
+				stars: r.stars,
+				text: r.text,
+				textTranslated: r.textTranslated,
+				ownerResponse: r.ownerResponse,
+				statements: r.statements.getItems(),
+				...(branchLabels.has(r.venue.id) && { branch: branchLabels.get(r.venue.id) }),
+			})),
 		};
 	}
 

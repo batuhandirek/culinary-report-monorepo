@@ -4,33 +4,23 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
-import { runPool } from 'src/shared/util/pool.js';
 
 import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueLookup } from '../entities/venue-lookup.entity.js';
 import { BrandAutoMergeJob } from '../jobs/brand-auto-merge.job.js';
-import { isBrandName } from '../util/brands.js';
-import { citySearchUrl, GOOGLE_PLACE_USD } from '../util/places-search.js';
 import { cityStopwords, isFoodVenue, isInCity, normalizeVenueName } from '../util/venue-names.js';
 
-import { GooglePlaceItem, VenueService } from './venue.service.js';
+import { VenueService } from './venue.service.js';
 
-const GOOGLE_PLACES_ACTOR = 'compass/crawler-google-places';
-/** The lowest cap the Places actor starts a run with (Apify refuses less) */
-const SEARCH_RUN_MIN_CAP_USD = 0.5;
-/** Search runs side by side: Free allows five actor jobs at once, one is left for other steps */
-const SEARCH_RUNS_AT_ONCE = 4;
-/** One search's run (2 GB was enough for a search of twenty, 2026-11-05) */
-const SEARCH_RUN_MEMORY_MB = 2048;
-
-// Google results kept per looked-up name; the matcher picks the right one
-const LOOKUP_RESULTS_PER_NAME = 3;
+/** Google results kept per looked-up name; the matcher picks the right one */
+export const LOOKUP_RESULTS_PER_NAME = 3;
 
 // A name still unmatched this long after its last lookup is searched again: creators post about
 // a place in its first weeks, often before Google lists it
@@ -45,10 +35,32 @@ export const lookupStale = (lookedUpAt: Date, now = new Date()): boolean => {
 	return due <= now;
 };
 
-// Places kept per brand search: Berlin's Burgermeister came back as 15 branches and 25
-// look-alikes, Brammibal's as 9 and 3 (2026-10-18)
-export const BRAND_SEARCH_RESULTS = 40;
+/**
+ * Which new places a save may add: `none` (the detail pages of known places), `food-in-city` (a
+ * search: known venues updated, a new place added when Google puts it in the city and it serves
+ * food or drink), `all` (the city's own list, a brand search: every place).
+ */
+export type NewPlacesRule = 'none' | 'food-in-city' | 'all';
 
+export interface SavePlacesOptions {
+	/** The city a new place joins (needed for any rule but `none`); a known venue keeps its own */
+	city?: City;
+	source: VenueScrapeSourceEnum;
+	newPlaces: NewPlacesRule;
+	/** A new place is an opening: only the city's own list, after its first (`VenueService.saveGooglePlace`) */
+	openings?: boolean;
+}
+
+export interface SavePlacesResult {
+	saved: number;
+	/** Place id → venue id of the places saved */
+	venueIds: Record<string, string>;
+}
+
+/**
+ * The venue side of a Google Maps places run (the `places` atom): the one save path for what the
+ * actor returns, and the pieces a lookup run plans and records. It runs no actor itself.
+ */
 @Injectable()
 export class VenueScrapeService {
 	private readonly logger = new Logger(VenueScrapeService.name);
@@ -61,57 +73,79 @@ export class VenueScrapeService {
 		private readonly venueTopicService: VenueTopicService,
 	) {}
 
-	/** The venue master list: every place Google Maps finds for these terms in the city. */
-	async scrapeCity(opts: {
-		city: City;
-		terms: string[];
-		maxPerTerm: number;
-		budgetUsd: number;
-	}): Promise<{ saved: number; districtsFilled: number }> {
-		const items = await this.apifyService.runActor<GooglePlaceItem>(
-			GOOGLE_PLACES_ACTOR,
-			{
-				searchStringsArray: opts.terms,
-				locationQuery: opts.city.locationQuery,
-				maxCrawledPlacesPerSearch: opts.maxPerTerm,
-				language: 'en',
-				maxReviews: 0,
-				maxImages: 0,
-			},
-			{
-				maxCostUsd: opts.budgetUsd,
-				purpose: `google-places ${opts.city.name}: ${opts.terms.join(', ')}`,
-			},
-		);
-		// The city's first city-wide list is the baseline: what it finds is not new
-		const saved = await this.saveAll(items, opts.city, {
-			source: VenueScrapeSourceEnum.CITY,
-			openings: !!opts.city.venuesScrapedAt,
+	/**
+	 * Saves a run's places: known venues are updated from their item whatever the rule, and a new
+	 * place joins `city` by `newPlaces` (never one without a city). Each venue's rating snapshot of
+	 * the day is written with it. The known venues are loaded in one query; flushes in chunks;
+	 * fills the city's districts and queues the cities' brand merges and topic refresh once.
+	 */
+	async savePlaces(
+		items: GooglePlaceItem[],
+		opts: SavePlacesOptions,
+		now = new Date(),
+	): Promise<SavePlacesResult> {
+		const ids = _.uniq(items.map(i => i.placeId).filter((id): id is string => !!id));
+		const known = new Map<string, Venue>();
+		for (const chunk of _.chunk(ids, 2000))
+			for (const venue of await this.em.find(Venue, { placeId: { $in: chunk } }))
+				known.set(venue.placeId, venue);
+		const names = opts.city ? cityNames(opts.city) : [];
+		const kept = items.filter(item => {
+			if (!item.placeId) return false;
+			if (known.has(item.placeId)) return true;
+			if (!opts.city || opts.newPlaces === 'none') return false;
+			return (
+				opts.newPlaces === 'all' ||
+				(isInCity(item.city, names) && isFoodVenue(item.categoryName))
+			);
 		});
-		opts.city.venuesScrapedAt = new Date();
+
+		const status = { source: opts.source, openings: opts.openings };
+		const venueIds: Record<string, string> = {};
+		const cityIds = new Set<string>();
+		let saved = 0;
+		for (const item of kept) {
+			const venue = await this.venueService.saveGooglePlace(
+				item,
+				now,
+				opts.city,
+				status,
+				known.get(item.placeId!) ?? null,
+			);
+			if (!venue) continue;
+			// A place two searches of the run found is updated by each, a venue once
+			known.set(item.placeId!, venue);
+			saved++;
+			cityIds.add(venue.city.id);
+			// Flush in chunks: thousands of places in one unit of work get slow
+			if (saved % 200 === 0) await this.em.flush();
+		}
 		await this.em.flush();
-		return { saved, districtsFilled: await this.venueService.fillDistricts(opts.city) };
+		for (const item of kept) {
+			const venue = known.get(item.placeId!);
+			if (venue?.id) venueIds[item.placeId!] = venue.id;
+		}
+		if (opts.city) await this.venueService.fillDistricts(opts.city);
+		await this.queueAutoMerge([...cityIds]);
+		this.logger.log(`Saved ${saved} of ${items.length} places (${opts.newPlaces})`);
+		return { saved, venueIds };
 	}
 
 	/**
-	 * Searches Google Maps in the city for venue names that mentions named but nothing matched.
-	 * A name searched there within `LOOKUP_RETRY_MONTHS` is skipped, so it is not paid for
-	 * twice; one still unmatched after that is searched again (its row is updated, never
-	 * doubled), since a place named before Google listed it is there by then. `names` come most
-	 * important first and the cap applies to what is left to search, so the names searched lately
-	 * never take the run's room.
+	 * The names to search on Google Maps: those not looked up within `LOOKUP_RETRY_MONTHS` (a name
+	 * searched lately is not paid for twice; one still unmatched after that is searched again,
+	 * since a place named before Google listed it is there by then), most important first, and
+	 * `maxNames` at most once the recent ones are dropped, so they never take the run's room. The
+	 * plan step of `lookup-venues`; `recordLookups` the step after its run.
 	 */
-	async lookupNames(
+	async planLookups(
 		city: City,
 		names: string[],
-		budgetUsd: number,
 		now = new Date(),
 		maxNames = LOOKUP_MAX_NAMES,
-	): Promise<{ lookedUp: number; retried: number; saved: number }> {
+	): Promise<{ queries: string[] }> {
 		const words = cityStopwords(city.nameStopwords);
-		const lookups = new Map(
-			(await this.em.find(VenueLookup, { city })).map(l => [l.query, l]),
-		);
+		const lookups = new Map((await this.em.find(VenueLookup, { city })).map(l => [l.query, l]));
 		const queries = new Map<string, string>();
 		for (const name of names) {
 			if (queries.size >= maxNames) break;
@@ -121,288 +155,55 @@ export class VenueScrapeService {
 			if (earlier && !lookupStale(earlier.lookedUpAt, now)) continue;
 			queries.set(key, name);
 		}
-		if (queries.size === 0) return { lookedUp: 0, retried: 0, saved: 0 };
+		return { queries: [...queries.values()] };
+	}
 
-		const items = await this.apifyService.runActor<GooglePlaceItem>(
-			GOOGLE_PLACES_ACTOR,
-			{
-				searchStringsArray: [...queries.values()],
-				locationQuery: city.locationQuery,
-				maxCrawledPlacesPerSearch: LOOKUP_RESULTS_PER_NAME,
-				language: 'en',
-				maxReviews: 0,
-				maxImages: 0,
-			},
-			{
-				maxCostUsd: budgetUsd,
-				purpose: `google-places lookup ${city.name}: ${queries.size} names`,
-			},
-		);
-
-		const found = new Map<string, number>();
-		for (const item of items) {
-			const key = normalizeVenueName(item.searchString ?? '', words);
-			found.set(key, (found.get(key) ?? 0) + 1);
-		}
+	/**
+	 * The searched names stamped (`VenueLookup`: a row per normalized name with how many places its
+	 * search returned, a retried name's row updated, never doubled). Flushes.
+	 */
+	async recordLookups(
+		city: City,
+		queries: string[],
+		byQuery: Record<string, string[]>,
+		now = new Date(),
+	): Promise<{ lookedUp: number; retried: number }> {
+		const words = cityStopwords(city.nameStopwords);
+		const lookups = new Map((await this.em.find(VenueLookup, { city })).map(l => [l.query, l]));
 		let retried = 0;
-		for (const key of queries.keys()) {
+		for (const name of queries) {
+			const key = normalizeVenueName(name, words);
+			const results = byQuery[name]?.length ?? 0;
 			const earlier = lookups.get(key);
 			if (earlier) {
-				earlier.results = found.get(key) ?? 0;
+				earlier.results = results;
 				earlier.lookedUpAt = now;
 				retried++;
 			} else {
-				this.em.create(VenueLookup, { city, query: key, results: found.get(key) ?? 0, lookedUpAt: now });
-			}
-		}
-		// Known places are updated; a new one joins only when it serves food in the city
-		const saved = await this.saveFound(items, city);
-		return { lookedUp: queries.size, retried, saved };
-	}
-
-	/**
-	 * Searches Google Maps in the city for each brand's name, `BRAND_SEARCH_RESULTS` places a
-	 * name, in one run: Google lists a chain's branches together, look-alikes after them. Every
-	 * place is saved like a lookup (never an opening, so matching gets the look-alikes too); the
-	 * result gives, per brand key, the open food venues whose name is a branch name of it
-	 * (`isBrandName`). Unlike `lookupNames`, a name can be searched again: new branches open.
-	 */
-	async searchBrands(
-		city: City,
-		brands: { name: string; key: string }[],
-		budgetUsd: number,
-	): Promise<{ found: number; saved: number; branches: Map<string, Venue[]> }> {
-		const branches = new Map(brands.map(b => [b.key, [] as Venue[]]));
-		if (brands.length === 0) return { found: 0, saved: 0, branches };
-		const items = await this.apifyService.runActor<GooglePlaceItem>(
-			GOOGLE_PLACES_ACTOR,
-			{
-				searchStringsArray: brands.map(b => b.name),
-				locationQuery: city.locationQuery,
-				maxCrawledPlacesPerSearch: BRAND_SEARCH_RESULTS,
-				language: 'en',
-				maxReviews: 0,
-				maxImages: 0,
-			},
-			{
-				maxCostUsd: budgetUsd,
-				purpose: `google-places brands ${city.name}: ${brands.map(b => b.name).join(', ')}`,
-			},
-		);
-
-		const words = cityStopwords(city.nameStopwords);
-		const bySearch = new Map(brands.map(b => [b.name.trim().toLowerCase(), b]));
-		const now = new Date();
-		let saved = 0;
-		for (const item of items) {
-			const venue = await this.venueService.saveGooglePlace(item, now, city, {
-				source: VenueScrapeSourceEnum.LOOKUP,
-			});
-			if (!venue) continue;
-			saved++;
-			const brand = bySearch.get((item.searchString ?? '').trim().toLowerCase());
-			if (
-				brand &&
-				!venue.closed &&
-				isFoodVenue(venue.category) &&
-				isBrandName(venue.name, brand.key, words)
-			) {
-				const list = branches.get(brand.key)!;
-				if (!list.includes(venue)) list.push(venue);
-			}
-		}
-		await this.em.flush();
-		await this.venueService.fillDistricts(city);
-		if (saved) await this.queueAutoMerge([city.id]);
-		this.logger.log(
-			`Brand search in ${city.name}: ${items.length} places for ${brands.length} brands`,
-		);
-		return { found: items.length, saved, branches };
-	}
-
-	/**
-	 * Google Maps searches typed as a guest types them, the city in the text (no `locationQuery`:
-	 * no map grid, Google's own order), `perSearch` places each, list data only. What comes back
-	 * is saved like `saveFound`; the items are returned for the caller to read (`searchString`,
-	 * `rank`).
-	 */
-	async searchPlaces<T extends GooglePlaceItem>(
-		city: City,
-		searches: string[],
-		perSearch: number,
-		budgetUsd: number,
-		purpose: string,
-	): Promise<{ items: T[]; saved: number }> {
-		if (searches.length === 0) return { items: [], saved: 0 };
-		const items = await this.apifyService.runActor<T>(
-			GOOGLE_PLACES_ACTOR,
-			{
-				searchStringsArray: searches,
-				maxCrawledPlacesPerSearch: perSearch,
-				language: 'en',
-				maxReviews: 0,
-				maxImages: 0,
-				maxQuestions: 0,
-			},
-			{ maxCostUsd: budgetUsd, purpose },
-		);
-		return { items, saved: await this.saveFound(items, city) };
-	}
-
-	/**
-	 * Searches Google Maps the way a guest in the city would, one actor run per search, for the
-	 * steps that read a search's order (the dish searches). The actor outputs each place
-	 * once per run, so a place an earlier search of the same run found is missing from every later
-	 * one; a run of its own gives each search its whole list. Each starts from a map centred on the
-	 * city (`citySearchUrl`). The searches run in the order given, `SEARCH_RUNS_AT_ONCE` side by
-	 * side, as many as the budget covers at `perSearch` places each (`GOOGLE_PLACE_USD`); the rest
-	 * are `notSearched`. A failed run is in `failed` and the others' results stay; the places found
-	 * are saved (`saveFound`).
-	 */
-	async searchEach<T extends GooglePlaceItem>(
-		city: City,
-		searches: string[],
-		perSearch: number,
-		budgetUsd: number,
-		purpose: string,
-	): Promise<{ results: Map<string, T[]>; failed: { search: string; error: string }[]; notSearched: string[]; saved: number }> {
-		const covered = Math.max(0, Math.floor(budgetUsd / (perSearch * GOOGLE_PLACE_USD)));
-		const planned = searches.slice(0, covered);
-		const results = new Map<string, T[]>();
-		const failed: { search: string; error: string }[] = [];
-		await runPool(
-			planned,
-			SEARCH_RUNS_AT_ONCE,
-			async search => {
-				const url = citySearchUrl(search, city);
-				const items = await this.apifyService.runActor<T>(
-					GOOGLE_PLACES_ACTOR,
-					{
-						...(url ? { startUrls: [{ url }] } : { searchStringsArray: [search] }),
-						maxCrawledPlacesPerSearch: perSearch,
-						language: 'en',
-						maxReviews: 0,
-						maxImages: 0,
-						maxQuestions: 0,
-					},
-					{
-						maxCostUsd: Math.max(SEARCH_RUN_MIN_CAP_USD, perSearch * GOOGLE_PLACE_USD * 1.5),
-						purpose: `${purpose}: ${search}`,
-						memoryMbytes: SEARCH_RUN_MEMORY_MB,
-					},
+				lookups.set(
+					key,
+					this.em.create(VenueLookup, { city, query: key, results, lookedUpAt: now }),
 				);
-				results.set(search, items);
-			},
-			(search, error) => failed.push({ search, error: error.message }),
-		);
-		const saved = await this.saveFound([...results.values()].flat(), city);
-		return { results, failed, notSearched: searches.slice(planned.length), saved };
-	}
-
-	/**
-	 * Saves what a search returned besides what it was run for: known venues are updated, and a
-	 * new place joins `city` when Google places it there (`item.city`, a search can cross the
-	 * border) and it serves food or drinks. Never an opening: a search finds old places too.
-	 */
-	async saveFound(items: GooglePlaceItem[], city: City): Promise<number> {
-		const ids = [...new Set(items.map(i => i.placeId).filter(Boolean))] as string[];
-		if (ids.length === 0) return 0;
-		const known = new Set(
-			(await this.em.find(Venue, { placeId: { $in: ids } }, { fields: ['placeId'] })).map(
-				v => v.placeId,
-			),
-		);
-		const names = cityNames(city);
-		const kept = items.filter(
-			item =>
-				known.has(item.placeId!) ||
-				(isInCity(item.city, names) && isFoodVenue(item.categoryName)),
-		);
-		const saved = await this.saveAll(kept, city, { source: VenueScrapeSourceEnum.LOOKUP });
-		await this.venueService.fillDistricts(city);
-		return saved;
-	}
-
-	/**
-	 * Re-scrapes these places' Google Maps detail pages (by place id: about $3.50 per 1,000) for
-	 * what a list scrape lacks — popular times, every amenity section, menu, delivery platforms,
-	 * "people also search" — and saves them through `saveGooglePlace`, which also records the
-	 * day's rating snapshot.
-	 */
-	async refreshDetails(
-		placeIds: string[],
-		budgetUsd: number,
-	): Promise<{ requested: number; saved: number; withPopularTimes: number }> {
-		const ids = [...new Set(placeIds)];
-		if (ids.length === 0) return { requested: 0, saved: 0, withPopularTimes: 0 };
-		const { items, saved } = await this.scrapeDetailPages(
-			ids,
-			budgetUsd,
-			`google-places details: ${ids.length} venues`,
-		);
-		const withPopularTimes = items.filter(
-			item => Object.keys(item.popularTimesHistogram ?? {}).length > 0,
-		).length;
-		return { requested: ids.length, saved, withPopularTimes };
-	}
-
-	/**
-	 * Scrapes these places' detail pages and saves them (known venues only), returning the raw
-	 * items for callers that read more from them, e.g. the busyness sample's live percent.
-	 */
-	async scrapeDetailPages(
-		placeIds: string[],
-		budgetUsd: number,
-		purpose: string,
-	): Promise<{ items: GooglePlaceItem[]; saved: number }> {
-		const ids = [...new Set(placeIds)];
-		if (ids.length === 0) return { items: [], saved: 0 };
-		const items = await this.apifyService.runActor<GooglePlaceItem>(
-			GOOGLE_PLACES_ACTOR,
-			{
-				placeIds: ids,
-				scrapePlaceDetailPage: true,
-				// Google's "Order online" section (Wolt, Lieferando links): its own flag since 2026
-				scrapeOrderOnline: true,
-				language: 'en',
-				maxReviews: 0,
-				maxImages: 0,
-				// Questions and answers carry personal data and are out of scope
-				maxQuestions: 0,
-			},
-			{ maxCostUsd: budgetUsd, purpose },
-		);
-		return {
-			items,
-			saved: await this.saveAll(items, undefined, { source: VenueScrapeSourceEnum.DETAILS }),
-		};
-	}
-
-	/**
-	 * Saves the items; new places join `city`, and without one only known venues are updated.
-	 * The cities saved in get their brands merged (`queueAutoMerge`).
-	 */
-	private async saveAll(
-		items: GooglePlaceItem[],
-		city: City | undefined,
-		status: { source: VenueScrapeSourceEnum; openings?: boolean },
-	): Promise<number> {
-		const now = new Date();
-		let saved = 0;
-		const cityIds = new Set<string>();
-		for (const item of items) {
-			const venue = await this.venueService.saveGooglePlace(item, now, city, status);
-			if (venue) {
-				saved++;
-				cityIds.add(venue.city.id);
 			}
-			// Flush in chunks: thousands of places in one unit of work get slow
-			if (saved % 200 === 0) await this.em.flush();
 		}
 		await this.em.flush();
-		await this.queueAutoMerge([...cityIds]);
-		this.logger.log(`Saved ${saved} venues`);
-		return saved;
+		return { lookedUp: queries.length, retried };
+	}
+
+	/** The city's own list taken: `venuesScrapedAt` stamped (the next list records openings; a quarter later it is due again). Flushes. */
+	async markCityScraped(city: City, now = new Date()): Promise<void> {
+		city.venuesScrapedAt = now;
+		await this.em.flush();
+	}
+
+	/** What a detail-page run brought: how many places came with popular times (Google often shows none) */
+	async detailsSummary(recordId: string): Promise<{ withPopularTimes: number }> {
+		const items = await this.apifyService.storedItems<GooglePlaceItem>(recordId);
+		return {
+			withPopularTimes: items.filter(
+				item => Object.keys(item.popularTimesHistogram ?? {}).length > 0,
+			).length,
+		};
 	}
 
 	/**

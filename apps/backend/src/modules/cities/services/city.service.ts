@@ -91,7 +91,9 @@ export class CityService {
 	}
 
 	/** Per city id: its venues, its sources and how many of those are enabled. */
-	async counts(): Promise<Map<string, { venues: number; sources: number; enabledSources: number }>> {
+	async counts(): Promise<
+		Map<string, { venues: number; sources: number; enabledSources: number }>
+	> {
 		const rows: { id: string; venues: number; sources: number; enabled_sources: number }[] =
 			await this.em.getConnection().execute(
 				`select c.id,
@@ -101,7 +103,10 @@ export class CityService {
 				from cities c`,
 			);
 		return new Map(
-			rows.map(r => [r.id, { venues: r.venues, sources: r.sources, enabledSources: r.enabled_sources }]),
+			rows.map(r => [
+				r.id,
+				{ venues: r.venues, sources: r.sources, enabledSources: r.enabled_sources },
+			]),
 		);
 	}
 
@@ -151,9 +156,13 @@ export class CityService {
 		return this.em.find(
 			CitySource,
 			{
-				kind: { $in: [CitySourceKindEnum.TIKTOK_ACCOUNT, CitySourceKindEnum.INSTAGRAM_ACCOUNT] },
+				kind: {
+					$in: [CitySourceKindEnum.TIKTOK_ACCOUNT, CitySourceKindEnum.INSTAGRAM_ACCOUNT],
+				},
 				...(opts.cityId && { city: opts.cityId }),
-				...(opts.handles && { $or: opts.handles.map(h => ({ kind: h.kind, value: h.handle })) }),
+				...(opts.handles && {
+					$or: opts.handles.map(h => ({ kind: h.kind, value: h.handle })),
+				}),
 			},
 			{ populate: ['city'], orderBy: { createdAt: QueryOrder.ASC, id: QueryOrder.ASC } },
 		);
@@ -185,7 +194,8 @@ export class CityService {
 		const value = normalizeSourceValue(input.kind, input.value);
 		if (!value) throw new BadRequestException('Not a usable source');
 		const city = await this.getById(cityId);
-		const hashtags = isHashtagKind(input.kind) ? await ensureHashtags(this.em, [value]) : undefined;
+		const hashtags =
+			isHashtagKind(input.kind) ? await ensureHashtags(this.em, [value]) : undefined;
 		const source = this.em.create(CitySource, {
 			city,
 			kind: input.kind,
@@ -260,7 +270,11 @@ export class CityService {
 	 * What `SCRAPE_BLOGS` found reading a blog source: the feed it read (kept for the next run)
 	 * and what went wrong, null when nothing did. Does not flush.
 	 */
-	recordBlogCheck(source: CitySource, check: { feedUrl: string | null; error: string | null }, now = new Date()): void {
+	recordBlogCheck(
+		source: CitySource,
+		check: { feedUrl: string | null; error: string | null },
+		now = new Date(),
+	): void {
 		source.feedUrl = check.feedUrl;
 		source.error = check.error;
 		source.checkedAt = now;
@@ -331,13 +345,21 @@ export class CityService {
 		const city = await this.getById(cityId);
 		// The city's own name is no source (#berlin is every post about the city)
 		const ownNames = _.uniq(
-			[city.name, ...(city.aliases ?? [])].flatMap(name => [normalizeHashtag(name), hashtagKey(name)]).filter(Boolean),
+			[city.name, ...(city.aliases ?? [])]
+				.flatMap(name => [normalizeHashtag(name), hashtagKey(name)])
+				.filter(Boolean),
 		);
 		const since = new Date(now);
 		since.setUTCMonth(since.getUTCMonth() - YIELD_MONTHS);
-		const rows: { id: number; tag: string; kind: CityHashtagSuggestion['kind']; matched_posts: number; brands: number; sample: string[] }[] =
-			await this.em.getConnection().execute(
-				`select h.id, h.tag, k.kind, count(distinct p.id)::int as matched_posts,
+		const rows: {
+			id: number;
+			tag: string;
+			kind: CityHashtagSuggestion['kind'];
+			matched_posts: number;
+			brands: number;
+			sample: string[];
+		}[] = await this.em.getConnection().execute(
+			`select h.id, h.tag, k.kind, count(distinct p.id)::int as matched_posts,
 					count(distinct m.brand_id)::int as brands,
 					(array_agg(distinct b.name order by b.name))[1:3] as sample
 				from post_hashtags ph
@@ -358,8 +380,15 @@ export class CityService {
 				having count(distinct m.brand_id) >= ? and count(distinct p.id) >= ?
 				order by matched_posts desc, brands desc, h.tag
 				limit ?`,
-				[cityId, since, ...ownNames, HASHTAG_SUGGESTION_MIN_BRANDS, HASHTAG_SUGGESTION_MIN_POSTS, HASHTAG_SUGGESTIONS_SHOWN],
-			);
+			[
+				cityId,
+				since,
+				...ownNames,
+				HASHTAG_SUGGESTION_MIN_BRANDS,
+				HASHTAG_SUGGESTION_MIN_POSTS,
+				HASHTAG_SUGGESTIONS_SHOWN,
+			],
+		);
 		return rows.map(r => ({
 			hashtagId: r.id,
 			tag: r.tag,
@@ -374,7 +403,8 @@ export class CityService {
 		try {
 			await this.em.flush();
 		} catch (e) {
-			if (e instanceof UniqueConstraintViolationException) throw new ConflictException(message);
+			if (e instanceof UniqueConstraintViolationException)
+				throw new ConflictException(message);
 			throw e;
 		}
 	}

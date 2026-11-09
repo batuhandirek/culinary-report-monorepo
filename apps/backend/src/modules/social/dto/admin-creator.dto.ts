@@ -12,7 +12,8 @@ import type { AdminAccountOutputDto } from './admin-account.output.dto.js';
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
 type Uuid = string & tags.Format<'uuid'>;
 
-export type AdminCreatorSort = `${'views' | 'posts' | 'followers' | 'brands' | 'name'}:${'asc' | 'desc'}`;
+export type AdminCreatorSort =
+	`${'views' | 'posts' | 'followers' | 'brands' | 'name'}:${'asc' | 'desc'}`;
 
 export interface AdminListCreatorsInputDto extends PaginationRequest {
 	/** Posts found in this city; every city's without */
@@ -74,7 +75,14 @@ export interface AdminCreatorOutputDto {
 	/** Posts and views per month, six months up to the one asked for, oldest first */
 	months: { month: string; posts: number; views: number }[];
 	/** The brands their posts named most, all time; `own` when it is their own account's brand */
-	brands: { id: string; name: string; posts: number; views: number; lastPostedAt: Date; own: boolean }[];
+	brands: {
+		id: string;
+		name: string;
+		posts: number;
+		views: number;
+		lastPostedAt: Date;
+		own: boolean;
+	}[];
 	/** Every post of theirs we stored, and their views */
 	posts: number;
 	views: number;

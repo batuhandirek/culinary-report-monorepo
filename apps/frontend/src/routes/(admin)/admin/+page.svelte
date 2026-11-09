@@ -4,13 +4,12 @@
 
 	import { onMount } from 'svelte';
 
-	import { ago, at, onDay, pipelineRunStatusVariant, prospectStageVariant } from '#components/admin/admin-format.js';
+	import { ago, at, onDay, prospectStageVariant, workflowStatusVariant } from '#components/admin/admin-format.js';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import { api } from '#lib/api.js';
 	import { compact, leadScoreVariant, monthLabel, PLATFORM_LABELS } from '#lib/culinary.js';
 	import { isDueToday, stageLabel } from '#lib/outreach-status.js';
-	import { stepLabel } from '#lib/pipeline-steps.js';
-	import { enumToName } from '#lib/util.js';
+	import { workflowStatusLabel } from '#lib/workflow-status.js';
 	import { cn } from '#ui/lib/utils.js';
 	import { Badge } from '#ui/primitives-new/badge/index.js';
 	import { Button } from '#ui/primitives-new/button/index.js';
@@ -253,18 +252,20 @@
 				{#if overview === null}
 					<Skeleton class="h-5 w-72 rounded-sm" />
 				{:else}
-					{#each [overview.lastMonthlyRun, overview.lastRun].filter((r, i, all) => r && all.findIndex((x) => x?.id === r.id) === i) as run (run!.id)}
+					{#each [overview.lastMonthlyRun, overview.lastRun].filter((r, i, all) => r && all.findIndex((x) => x?.workflowId === r.workflowId) === i) as run (run!.workflowId)}
 						<span class="flex flex-wrap items-center gap-x-3 gap-y-1">
-							<Badge variant={pipelineRunStatusVariant(run!.status)}>{enumToName(run!.status)}</Badge>
-							<span class="font-medium">{stepLabel(run!.step)}, {monthLabel(run!.month)}</span>
-							<span class="text-muted-foreground tabular-nums" title={at(run!.startedAt ?? run!.createdAt)}>
-								{ago(run!.startedAt ?? run!.createdAt)}
+							<Badge variant={workflowStatusVariant(run!.status)}>{workflowStatusLabel(run!.status)}</Badge>
+							<a href={`/admin/workflows/${encodeURIComponent(run!.workflowId)}`} class="font-medium hover:underline">
+								{run!.workflow}{run!.period ? `, ${/^\d{4}-\d{2}$/.test(run!.period) ? monthLabel(run!.period) : run!.period}` : ''}
+							</a>
+							<span class="text-muted-foreground tabular-nums" title={at(run!.updatedAt ?? run!.createdAt)}>
+								{ago(run!.updatedAt ?? run!.createdAt)}
 							</span>
 						</span>
 						{#if run!.error}<span class="text-destructive line-clamp-2 text-xs">{run!.error}</span>{/if}
 					{/each}
 					<span class="text-muted-foreground text-xs">
-						Next monthly run {at(overview.nextMonthlyRunAt)}, {ago(overview.nextMonthlyRunAt)}
+						The month operations start next {at(overview.nextMonthlyRunAt)}, {ago(overview.nextMonthlyRunAt)}
 					</span>
 				{/if}
 			</div>

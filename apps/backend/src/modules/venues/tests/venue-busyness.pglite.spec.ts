@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
+import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
@@ -7,8 +8,6 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 import { Venue } from '../entities/venue.entity.js';
 import { VenueBusyness } from '../entities/venue-busyness.entity.js';
 import { VenueBusynessService } from '../services/venue-busyness.service.js';
-import { VenueScrapeService } from '../services/venue-scrape.service.js';
-import type { GooglePlaceItem } from '../services/venue.service.js';
 import { busiestHour, busynessIndex, meanHistogram } from '../util/busyness.js';
 import { monthWeeks, weekStart } from '../util/week.js';
 
@@ -65,21 +64,11 @@ describe('busyness index', () => {
 describe('VenueBusynessService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: VenueBusynessService;
-	const scrapeDetailPages =
-		jest.fn<
-			(
-				placeIds: string[],
-				budgetUsd: number,
-				purpose: string,
-			) => Promise<{ items: GooglePlaceItem[]; saved: number }>
-		>();
+	const storedItems = jest.fn(async (..._args: unknown[]): Promise<unknown[]> => []);
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [
-				VenueBusynessService,
-				{ provide: VenueScrapeService, useValue: { scrapeDetailPages } },
-			],
+			providers: [VenueBusynessService, { provide: ApifyService, useValue: { storedItems } }],
 		});
 		service = harness.moduleRef.get(VenueBusynessService);
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -89,31 +78,24 @@ describe('VenueBusynessService (pglite)', () => {
 		await harness.stop();
 	});
 
-	it('records a sample per returned venue, a null histogram where Google shows none', async () => {
+	it("records a sample per venue the run returned, read from the run's items, a null histogram where Google shows none", async () => {
 		const em = harness.orm.em;
 		const city = testCity(em);
 		const busy = em.create(Venue, { city, placeId: 'place-busy', name: 'Busy' });
 		const quiet = em.create(Venue, { city, placeId: 'place-quiet', name: 'Quiet' });
 		const missing = em.create(Venue, { city, placeId: 'place-missing', name: 'Missing' });
 		await em.flush();
-		scrapeDetailPages.mockResolvedValue({
-			items: [
-				{ ...DETAIL_ITEM, placeId: 'place-busy', title: 'Busy' },
-				// A detail page without popular times: `{}` and no live figure
-				{ ...LIST_ITEM, placeId: 'place-quiet', title: 'Quiet' },
-			],
-			saved: 2,
-		});
+		storedItems.mockResolvedValueOnce([
+			{ ...DETAIL_ITEM, placeId: 'place-busy', title: 'Busy' },
+			// A detail page without popular times: `{}` and no live figure
+			{ ...LIST_ITEM, placeId: 'place-quiet', title: 'Quiet' },
+		]);
 		const now = new Date('2026-10-15T17:00:00Z');
 
-		const res = await service.sample([busy, quiet, missing], 1, now);
+		const res = await service.saveSample([busy, quiet, missing], 'run-1', now);
 
 		expect(res).toEqual({ requested: 3, sampled: 2, withPopularTimes: 1, withLive: 1 });
-		expect(scrapeDetailPages.mock.calls[0][0].sort()).toEqual([
-			'place-busy',
-			'place-missing',
-			'place-quiet',
-		]);
+		expect(storedItems).toHaveBeenCalledWith('run-1');
 		em.clear();
 		const rows = await em.find(
 			VenueBusyness,

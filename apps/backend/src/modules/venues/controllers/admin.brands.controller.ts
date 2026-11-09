@@ -17,7 +17,6 @@ import {
 	AdminConfirmBrandInputDto,
 	AdminDismissBrandInputDto,
 	AdminListBrandSuggestionsInputDto,
-	AdminSearchBrandInputDto,
 	AdminUpdateBrandInputDto,
 } from '../dto/admin-brand.input.dto.js';
 import {
@@ -101,7 +100,9 @@ export class AdminBrandsController {
 
 	/** Undoes a chain: every branch but the most reviewed becomes a brand of its own again. */
 	@TypedRoute.Post('/:id/split')
-	async splitBrand(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminBrandOutputDto> {
+	async splitBrand(
+		@TypedParam('id') id: string & tags.Format<'uuid'>,
+	): Promise<AdminBrandOutputDto> {
 		return this.detail(await this.brandService.split(id));
 	}
 
@@ -130,18 +131,6 @@ export class AdminBrandsController {
 		return this.detail(await this.brandService.removeBranch(id, body.venueId, true));
 	}
 
-	/**
-	 * "Find branches": queues one Google Maps search for the name in the city (about $0.20,
-	 * half a minute); `branchesSearchedAt` moves when it is done.
-	 */
-	@TypedRoute.Post('/:id/searches')
-	async searchBrandBranches(
-		@TypedParam('id') id: string & tags.Format<'uuid'>,
-		@TypedBody() body: AdminSearchBrandInputDto,
-	): Promise<void> {
-		await this.brandService.queueSearch(id, body.cityId);
-	}
-
 	/** The places and brands this brand's reports compare it with. */
 	@TypedRoute.Get('/:id/competitors')
 	async listBrandCompetitors(
@@ -161,7 +150,8 @@ export class AdminBrandsController {
 		@TypedParam('id') id: string & tags.Format<'uuid'>,
 		@TypedBody() body: AdminAddCompetitorInputDto,
 	): Promise<AdminCompetitorOutputDto[]> {
-		if (!body.venueId === !body.brandId) throw new BadRequestException('Give a venue or a brand');
+		if (!body.venueId === !body.brandId)
+			throw new BadRequestException('Give a venue or a brand');
 		await this.competitorService.add(
 			id,
 			body.venueId ? { venueId: body.venueId } : { brandId: body.brandId! },
@@ -186,7 +176,12 @@ export class AdminBrandsController {
 		@TypedParam('id') id: string & tags.Format<'uuid'>,
 		@TypedQuery() query: AdminListCompetitorSuggestionsInputDto,
 	): Promise<AdminCompetitorSuggestionOutputDto[]> {
-		const suggestions = await this.competitorService.suggest(id, query.cityId, 5, query.branchId);
+		const suggestions = await this.competitorService.suggest(
+			id,
+			query.cityId,
+			5,
+			query.branchId,
+		);
 		await this.em.populate(
 			suggestions.map(s => s.venue),
 			['favicon', 'brand', 'brand.branches'],
@@ -215,7 +210,11 @@ export class AdminBrandsController {
 			...(link.venue && {
 				venue: {
 					...this.venueItem(link.venue),
-					city: { id: link.venue.city.id, name: link.venue.city.name, slug: link.venue.city.slug },
+					city: {
+						id: link.venue.city.id,
+						name: link.venue.city.name,
+						slug: link.venue.city.slug,
+					},
 				} as AdminCompetitorVenueOutputDto,
 			}),
 			...(rival && {
@@ -223,7 +222,9 @@ export class AdminBrandsController {
 					id: rival.id,
 					name: rival.name,
 					branches: open.length,
-					cities: Object.values(Object.fromEntries(open.map(v => [v.city.id, v.city]))).map(c => ({
+					cities: Object.values(
+						Object.fromEntries(open.map(v => [v.city.id, v.city])),
+					).map(c => ({
 						id: c.id,
 						name: c.name,
 						slug: c.slug,

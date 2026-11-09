@@ -11,9 +11,9 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
-import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
 import { ReportTemplateService } from '../services/report-template.service.js';
@@ -25,6 +25,8 @@ describe('ReportData.venue Google Maps details (pglite)', () => {
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
+				// Real: an agent call that finds no account waits for one
+				DurableLlmService,
 				ReportService,
 				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
 				TopicService,
@@ -37,7 +39,6 @@ describe('ReportData.venue Google Maps details (pglite)', () => {
 					provide: ReportEditorAgent,
 					useValue: mockAgent({ title: 'T', headline: 'H', highlights: [], actions: [] }),
 				},
-				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },
 			],
 		});
 		service = harness.moduleRef.get(ReportService);

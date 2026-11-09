@@ -104,8 +104,6 @@ export interface PortalReviewOutputDto {
 	statements: StatementOutputDto[];
 	/** Answered on Google, or marked answered here */
 	answered: boolean;
-	/** A reply ready to post, in the review's language: unanswered written reviews only, when drafted */
-	replyDraft?: string;
 	/** The branch it is about, for a chain's portal (which shows every branch's reviews) */
 	branch?: string;
 }

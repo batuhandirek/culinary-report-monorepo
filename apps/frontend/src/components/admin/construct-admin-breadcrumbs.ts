@@ -29,6 +29,7 @@ const DETAIL_NAMES: Record<string, (segment: string) => string | undefined> = {
 		page.data.report ? `${page.data.report.brand.name} · ${page.data.report.month}` : undefined,
 	'/admin/blog': (segment) => (segment === 'new' ? 'New article' : page.data.entry?.title),
 	'/admin/instagram': () => page.data.designName,
+	'/admin/workflows': () => page.data.workflow?.name,
 	// A topic's page loads its own data per city: its key reads well enough
 	'/admin/trends': (segment) => sentence(decodeURIComponent(segment)),
 	'/admin/ui-kit': (segment) => sentence(segment)

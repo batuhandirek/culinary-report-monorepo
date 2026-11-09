@@ -37,7 +37,6 @@ export class ClaimLabelsClassifier extends BaseMastraClassifier<
 		name: 'ClaimLabelsClassifier',
 		// The user's call (2026-11-05): the claims' labels on Jev in production, ~$22 a month for Berlin
 		paidInProduction: true,
-		ingestion: true,
 	};
 
 	protected getModel(): DecisionModelId {

@@ -16,9 +16,9 @@ import { VenueStatusChangeService } from 'src/modules/venues/services/venue-stat
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
-import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportCityService } from '../services/report-city.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
@@ -39,6 +39,8 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 		highlights = mockAgent({ title: 'T', headline: 'H', highlights: [], actions: [] });
 		harness = await createPgliteTestingModule({
 			providers: [
+				// Real: an agent call that finds no account waits for one
+				DurableLlmService,
 				ReportService,
 				ReportConfigService,
 				ReportTemplateService,
@@ -47,7 +49,6 @@ describe('ReportCityService.ratingBenchmarks (pglite)', () => {
 				CityService,
 				DishSearchService,
 				{ provide: ReportEditorAgent, useValue: highlights },
-				{ provide: ReviewReplyAgent, useValue: mockAgent({ replies: [] }) },
 				ReportCityService,
 				TrendService,
 				VenueStatusChangeService,

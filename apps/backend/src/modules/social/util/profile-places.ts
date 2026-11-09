@@ -46,7 +46,9 @@ const MIN_STREET_LETTERS = 5;
 
 /** A text in the form `streetKey` compares, house numbers kept: "Torstraße 116" → "torstr 116". */
 const addressForm = (s: string): string =>
-	plain(s).replace(/strasse\b/g, 'str').replace(/\bplatz\b/g, 'pl');
+	plain(s)
+		.replace(/strasse\b/g, 'str')
+		.replace(/\bplatz\b/g, 'pl');
 
 /** A street's key and its house number's digits: "Torstraße 116a" → ["torstr", "116"]. */
 const streetParts = (street: string): { key: string; number: string | null } => ({
@@ -80,9 +82,18 @@ const profileDomains = (profile: ProfileToRead): Set<string> => {
 };
 
 /** Whether the profile is named after the place: its handle or display name is the place's or its brand's name. */
-const namedAfter = (profile: ProfileToRead, venue: ProfilePlaceVenue, cityWords: ReadonlySet<string>): boolean => {
-	const forms = [profile.handle, ...(profile.displayName ? [profile.displayName.replace(/\s+/g, '')] : [])];
-	return forms.some(form => [venue.name, venue.brandName].some(name => siteNamedAfter(form, name, cityWords)));
+const namedAfter = (
+	profile: ProfileToRead,
+	venue: ProfilePlaceVenue,
+	cityWords: ReadonlySet<string>,
+): boolean => {
+	const forms = [
+		profile.handle,
+		...(profile.displayName ? [profile.displayName.replace(/\s+/g, '')] : []),
+	];
+	return forms.some(form =>
+		[venue.name, venue.brandName].some(name => siteNamedAfter(form, name, cityWords)),
+	);
 };
 
 /** The city's venues, indexed once for many profiles: by their street key's first word, and by their own website's domain. */
@@ -116,12 +127,16 @@ export const profilePlaceIndex = (venues: readonly ProfilePlaceVenue[]): Profile
  * otherwise than its account. What `ProfilePlaceAgent` picks from; `profilePlaces` keeps only
  * those named after the profile.
  */
-export const addressPlaces = (profile: ProfileToRead, index: ProfilePlaceIndex): ProfilePlaceVenue[] => {
+export const addressPlaces = (
+	profile: ProfileToRead,
+	index: ProfilePlaceIndex,
+): ProfilePlaceVenue[] => {
 	if (!profile.bio) return [];
 	const out = new Map<string, ProfilePlaceVenue>();
 	for (const word of new Set(addressForm(profile.bio).split(' ')))
 		for (const venue of index.byStreetWord.get(word) ?? [])
-			if (!out.has(venue.id) && textNamesAddress(profile.bio, venue.street!)) out.set(venue.id, venue);
+			if (!out.has(venue.id) && textNamesAddress(profile.bio, venue.street!))
+				out.set(venue.id, venue);
 	return [...out.values()];
 };
 
@@ -155,7 +170,9 @@ export const MAX_PROFILE_BRANCHES = 3;
 
 /** A name's first distinctive word, letters only: "Lucy's The Deli" and "Lucy's. A healthy Deli Concept." both "lucy". */
 const nameHead = (name: string, cityWords: ReadonlySet<string>): string =>
-	normalizeVenueName(brandHead(name), cityWords).split(' ').find(w => w.length >= 3) ?? '';
+	normalizeVenueName(brandHead(name), cityWords)
+		.split(' ')
+		.find(w => w.length >= 3) ?? '';
 
 /**
  * Whether the places a profile names (`profilePlaces`, each already named after it) are one
@@ -169,7 +186,8 @@ export const placesAreOneBusiness = (
 	names: readonly string[],
 	cityWords: ReadonlySet<string>,
 ): boolean => {
-	if (profile.isBusiness !== true || names.length < 2 || names.length > MAX_PROFILE_BRANCHES) return false;
+	if (profile.isBusiness !== true || names.length < 2 || names.length > MAX_PROFILE_BRANCHES)
+		return false;
 	const heads = new Set(names.map(n => nameHead(n, cityWords)));
 	return heads.size === 1 && !heads.has('');
 };
@@ -195,7 +213,12 @@ export const bioAddresses = (bio: string | null | undefined): string[] => {
 			if (!/^\d{1,4}[a-z]?$/i.test(tokens[i]) || !STREET_END.test(tokens[i - 1])) continue;
 			// The words of the name before its last: capitalised ones, two at most ("Tempelhofer Damm")
 			let start = i - 1;
-			while (start > 0 && i - start < 3 && /^\p{Lu}/u.test(tokens[start - 1]) && !STREET_END.test(tokens[start - 1]))
+			while (
+				start > 0 &&
+				i - start < 3 &&
+				/^\p{Lu}/u.test(tokens[start - 1]) &&
+				!STREET_END.test(tokens[start - 1])
+			)
 				start--;
 			// A lone "Damm 212" or "Str. 5" names no street; "Torstraße 116" does
 			if (start === i - 1 && tokens[i - 1].replace(STREET_END, '').length < 3) continue;
@@ -213,7 +236,11 @@ export const bioAddresses = (bio: string | null | undefined): string[] => {
  * and the first address its bio writes out ("SELO COFFEE Tempelhofer Damm 212, 12099").
  */
 export const profileSearchName = (profile: ProfileToRead): string => {
-	const shown = profile.displayName?.split(/\s[|\-–·•]\s|[|]/)[0].replace(/_/g, ' ').replace(/\s+/g, ' ').trim();
+	const shown = profile.displayName
+		?.split(/\s[|\-–·•]\s|[|]/)[0]
+		.replace(/_/g, ' ')
+		.replace(/\s+/g, ' ')
+		.trim();
 	const name = shown || profile.handle.replace(/[._]+/g, ' ').trim();
 	const [address] = bioAddresses(profile.bio);
 	return address ? `${name} ${address}` : name;

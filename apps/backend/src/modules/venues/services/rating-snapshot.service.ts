@@ -10,7 +10,7 @@ import {
 	RATING_SNAPSHOT_USD,
 } from '../constants/rating-snapshot.constant.js';
 
-import { ReviewService } from './review.service.js';
+import { ReviewService, type SnapshotPlan } from './review.service.js';
 
 export interface RatingSnapshotTarget {
 	id: string;
@@ -19,10 +19,19 @@ export interface RatingSnapshotTarget {
 	reviewsCount: number | null;
 }
 
+/** The weekly fetch's plan: the city's due venues as the budget plans for, their runs, the check's reserve */
+export interface RatingSnapshotPlan extends SnapshotPlan {
+	/** The city's open venues */
+	due: number;
+	/** Of them, those posts named in the window */
+	talked: number;
+}
+
 /**
  * The weekly fetch of every open venue (`SNAPSHOT_RATINGS`): its Google reviews since the last
- * fetch and today's rating snapshot (`ReviewService.snapshotRatings`), so reviews, a rating and a
- * review-count trend exist for any venue before its brand is in a report.
+ * fetch and today's rating snapshot, so reviews, a rating and a review-count trend exist for any
+ * venue before its brand is in a report. `plan` is the operation's plan step; the fetches are
+ * the `reviews` atom's, saved through `ReviewService.saveReviews`.
  */
 @Injectable()
 export class RatingSnapshotService {
@@ -36,12 +45,16 @@ export class RatingSnapshotService {
 	 * named in the last `talkedDays` (`RATING_SNAPSHOT_TALKED_DAYS` by default) most first
 	 * (directly, or a branch of a brand a post named without one), then the most reviewed.
 	 */
-	async due(city: City, now = new Date(), talkedDays = RATING_SNAPSHOT_TALKED_DAYS): Promise<RatingSnapshotTarget[]> {
+	async due(
+		city: City,
+		now = new Date(),
+		talkedDays = RATING_SNAPSHOT_TALKED_DAYS,
+	): Promise<RatingSnapshotTarget[]> {
 		const since = new Date(now.getTime() - talkedDays * 86_400_000);
-		const rows = await this.em.getConnection().execute<
-			{ id: string; posts: number; reviews_count: number | null }[]
-		>(
-			`with talked as (
+		const rows = await this.em
+			.getConnection()
+			.execute<{ id: string; posts: number; reviews_count: number | null }[]>(
+				`with talked as (
 				select m.venue_id, m.post_id from mentions m
 				join social_posts p on p.id = m.post_id
 				where m.venue_id is not null and p.posted_at >= ?
@@ -57,32 +70,22 @@ export class RatingSnapshotService {
 			left join counts c on c.venue_id = v.id
 			where v.city_id = ? and not v.closed
 			order by coalesce(c.posts, 0) desc, v.reviews_count desc nulls last, v.id`,
-			[since, city.id, since, city.id],
-		);
+				[since, city.id, since, city.id],
+			);
 		return rows.map(r => ({ id: r.id, posts: r.posts, reviewsCount: r.reviews_count }));
 	}
 
-	/** Snapshots the city's due venues, as many as the budget plans for. */
-	async snapshot(
-		city: City,
-		budgetUsd: number,
-		now = new Date(),
-	): Promise<{
-		due: number;
-		talked: number;
-		requested: number;
-		saved: number;
-		snapshots: number;
-		upToDate: number;
-		missed: number;
-	}> {
+	/** The city's due venues, as many as the budget plans for (`RATING_SNAPSHOT_BUDGET_HEADROOM`), as the atom's runs */
+	async plan(city: City, budgetUsd: number, now = new Date()): Promise<RatingSnapshotPlan> {
 		const due = await this.due(city, now);
-		const room = Math.floor((budgetUsd * RATING_SNAPSHOT_BUDGET_HEADROOM) / RATING_SNAPSHOT_USD);
-		const result = await this.reviewService.snapshotRatings(
+		const room = Math.floor(
+			(budgetUsd * RATING_SNAPSHOT_BUDGET_HEADROOM) / RATING_SNAPSHOT_USD,
+		);
+		const plan = await this.reviewService.planSnapshot(
 			due.slice(0, room).map(v => v.id),
 			budgetUsd,
 			now,
 		);
-		return { due: due.length, talked: due.filter(v => v.posts > 0).length, ...result };
+		return { due: due.length, talked: due.filter(v => v.posts > 0).length, ...plan };
 	}
 }

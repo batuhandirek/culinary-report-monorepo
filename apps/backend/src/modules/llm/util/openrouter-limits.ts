@@ -1,4 +1,4 @@
-import { nextUtcMidnight } from '../services/openai-accounts.service.js';
+import { nextUtcMidnight } from '../services/llm-account-quotas.service.js';
 
 import { errorChain } from './provider-errors.js';
 

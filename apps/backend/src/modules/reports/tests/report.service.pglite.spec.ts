@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
@@ -13,13 +13,15 @@ import { BrandService } from 'src/modules/venues/services/brand.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { MOCK_AGENT_MODEL, mockAgent } from 'src/tests/mock-agent.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
+import { NoModelError } from 'src/modules/llm/services/llm-models.service.js';
+import { MIN_LLM_WAIT_MS } from 'src/modules/llm/workflows/llm.workflow.js';
 import { ASPECT_SEED } from 'src/modules/topics/constants/aspect-seed.constant.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
-import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { Report } from '../entities/report.entity.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportConfigService } from '../services/report-config.service.js';
@@ -45,13 +47,15 @@ const HIGHLIGHTS = {
 describe('ReportService.build (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: ReportService;
-	const highlightsAgent = mockAgent(ANSWER);
-	// Answers every review it is given, in a made-up voice the test can recognise
-	const replyAgent = mockAgent((input: unknown) => ({
-		replies: (JSON.parse(input as string) as { reviews: { reviewId: string }[] }).reviews.map(
-			r => ({ reviewId: r.reviewId, reply: `Thanks ${r.reviewId}` }),
-		),
-	}));
+	// The roster's answer when no account serves: back in an hour
+	const highlightsAgent = Object.assign(mockAgent(ANSWER), {
+		id: 'report-editor',
+		availability: jest.fn(() => ({
+			available: false,
+			until: Date.now() + 3_600_000,
+			reason: 'every account is out of its day',
+		})),
+	});
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -64,8 +68,9 @@ describe('ReportService.build (pglite)', () => {
 				CompetitorService,
 				BrandService,
 				CityService,
+				// Real: an agent call that finds no account waits for one (its facade auto-mocked: a timer)
+				DurableLlmService,
 				{ provide: ReportEditorAgent, useValue: highlightsAgent },
-				{ provide: ReviewReplyAgent, useValue: replyAgent },
 			],
 		});
 		service = harness.moduleRef.get(ReportService);
@@ -115,7 +120,7 @@ describe('ReportService.build (pglite)', () => {
 			...extra,
 		});
 
-	it('builds the trend, the previous month, nearby creators and reply drafts', async () => {
+	it('builds the trend, the previous month and nearby creators', async () => {
 		const em = harness.orm.em;
 		seedTopics(em, ASPECT_SEED.map(a => a.key));
 		const city = testCity(em);
@@ -210,13 +215,6 @@ describe('ReportService.build (pglite)', () => {
 		expect(data.reviews.list).toHaveLength(14);
 		expect(data.reviews.list[0].reviewId).toBe('five-10');
 
-		// Unanswered written reviews only, the critical one first, ten at most
-		expect(data.reviews.replyDrafts).toHaveLength(10);
-		expect(data.reviews.replyDrafts[0]).toEqual({ reviewId: 'one-star', draft: 'Thanks one-star' });
-		const drafted = data.reviews.replyDrafts.map(d => d.reviewId);
-		expect(drafted).not.toContain('answered');
-		expect(drafted).not.toContain('stars-only');
-
 		// The editor got the month before (by name, so the letter never quotes a key or a YYYY-MM), last month's actions and the creators
 		const input = JSON.parse(highlightsAgent.generate.mock.calls.at(-1)![0] as string);
 		expect(input.inNumbers.monthBefore).toMatchObject({ month: 'August 2026', postsByOthers: 1, reviews: 2 });
@@ -228,7 +226,7 @@ describe('ReportService.build (pglite)', () => {
 		// Stored as built
 		harness.orm.em.clear();
 		const stored = await harness.orm.em.findOneOrFail(Report, { id: report.id });
-		expect(stored.data.reviews.replyDrafts).toHaveLength(10);
+		expect(stored.data.reviews.list).toHaveLength(14);
 	});
 
 	it("counts a neighbour's posts by others, each once, as its own report does", async () => {
@@ -266,18 +264,49 @@ describe('ReportService.build (pglite)', () => {
 		expect(its.data.branches[0].social).toMatchObject({ postCount: 2, views: 500 });
 	});
 
-	it('leaves previous out for a first report and keeps the report when drafting fails', async () => {
+	it('leaves previous out for a first report', async () => {
 		const em = harness.orm.em;
 		const venue = em.create(Venue, { city: testCity(em), placeId: 'p-new', name: 'Neu', category: 'Cafe' });
 		review(venue, 'n-1', '2026-09-05T12:00:00Z', { stars: 2, text: 'Slow' });
 		await em.flush();
-		replyAgent.generate.mockRejectedValueOnce(new Error('LLM down'));
 
 		const report = await service.build(venue.brand.id, venue.city.id, '2026-09');
 		expect(report.data.previous).toBeUndefined();
 		expect(report.data.creatorsNearby).toEqual([]);
 		expect(report.data.branches[0].ratingTrend).toEqual([]);
-		expect(report.data.reviews.replyDrafts).toEqual([]);
+	});
+
+	it('waits for an LLM account when none can serve the editor, then writes with it', async () => {
+		const em = harness.orm.em;
+		const venue = em.create(Venue, { city: testCity(em), placeId: 'p-wait', name: 'Warte', category: 'Cafe' });
+		review(venue, 'w-1', '2026-09-05T12:00:00Z', { stars: 4, text: 'Good' });
+		await em.flush();
+		// The wait is instant here; its length is what the roster named
+		const sleep = jest
+			.spyOn(harness.moduleRef.get(DurableLlmService) as unknown as { sleep: (ms: number) => Promise<void> }, 'sleep')
+			.mockResolvedValue(undefined);
+		highlightsAgent.generate.mockRejectedValueOnce(new NoModelError('No model can serve full: every account is out of its day'));
+
+		const report = await service.build(venue.brand.id, venue.city.id, '2026-09');
+		expect(sleep).toHaveBeenCalledTimes(1);
+		expect(sleep.mock.calls[0][0]).toBeGreaterThanOrEqual(MIN_LLM_WAIT_MS);
+		expect(highlightsAgent.availability).toHaveBeenCalled();
+		// The agent's answer, not the code-written fallback, and no error in the trace
+		expect(report.highlights).toMatchObject({ ...HIGHLIGHTS, kind: 'story', letter: ANSWER.letter });
+		expect(report.highlights.trace?.error).toBeUndefined();
+		sleep.mockRestore();
+	});
+
+	it("falls back to the code-written part when the editor's call fails for another reason", async () => {
+		const em = harness.orm.em;
+		const venue = em.create(Venue, { city: testCity(em), placeId: 'p-fail', name: 'Kaputt', category: 'Cafe' });
+		review(venue, 'f-1', '2026-09-05T12:00:00Z', { stars: 4, text: 'Good' });
+		await em.flush();
+		highlightsAgent.generate.mockRejectedValueOnce(new Error('The answer did not fit the schema'));
+
+		const report = await service.build(venue.brand.id, venue.city.id, '2026-09');
+		expect(report.highlights.trace?.error).toBe('The answer did not fit the schema');
+		expect(report.highlights.letter).not.toEqual(ANSWER.letter);
 	});
 
 	it("keeps a blog article's headline on its post, for the media coverage section", async () => {

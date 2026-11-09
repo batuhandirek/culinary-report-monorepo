@@ -4,6 +4,8 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import type { InstagramProfileItem } from 'src/modules/apify/actors/instagram-profile.actor.js';
+import type { TiktokProfileItem } from 'src/modules/apify/actors/tiktok-profile.actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityNames, districtNames } from 'src/modules/cities/util/city.js';
@@ -24,8 +26,8 @@ import {
 	profileProof,
 	tiktokProfileFacts,
 } from '../util/profile-proof.js';
+import { PROFILE_ONLY_USD, type ProfileRuns, profilesPurpose } from '../util/profile-runs.js';
 
-import { INSTAGRAM_PROFILE_ACTOR, PROFILE_ONLY_USD, TIKTOK_PROFILE_ACTOR } from './account-scrape.service.js';
 import { SocialAccountService } from './social-account.service.js';
 
 const otherPlatform = (platform: ProfilePlatform): ProfilePlatform =>
@@ -48,12 +50,26 @@ export interface AccountTwinResult {
 	proofs: Record<string, number>;
 }
 
+/** What `planLookup` hands the `find-own-accounts` workflow: the lookups and their runs (one profile-only run a platform) */
+export interface AccountTwinPlan extends ProfileRuns {
+	candidates: number;
+	/** Each lookup (`<platform>:<handle>`, the handle on the other platform) → the ids of the brand accounts whose handle it is (two brands' accounts of one handle are one lookup) */
+	wanted: Record<string, string[]>;
+}
+
+/** The runs' records, one a platform the plan had a run for */
+export interface AccountTwinRecords {
+	instagram?: string;
+	tiktok?: string;
+}
+
 /**
  * Finds a brand's account on the platform it has none on: its account's handle on the other
- * platform (`@munchiesde` on TikTok → `@munchiesde` on Instagram), looked up with the profile
- * actors. A profile that proves itself the brand's (`profileProof`: its link is on the brand's
- * site, its bio names a branch's street, or it links the brand's account) is linked (source
- * `profile`); one named after the brand is suggested. Each account is looked up once
+ * platform (`@munchiesde` on TikTok → `@munchiesde` on Instagram), looked up through the
+ * profile atoms (`planLookup` the runs, `saveLookup` the reading of their stored items). A
+ * profile that proves itself the brand's (`profileProof`: its link is on the brand's site, its bio
+ * names a branch's street, or it links the brand's account) is linked (source `profile`); one
+ * named after the brand is suggested. Each account is looked up once
  * (`SocialAccount.twinCheckedAt`), found or not; one a run didn't return stays to look up.
  */
 @Injectable()
@@ -68,14 +84,14 @@ export class AccountTwinService {
 
 	/**
 	 * The city's brands' accounts to look up, highest lead score first, then most followed, as
-	 * many as the budget covers. Both platforms' runs go side by side; one failing keeps the
-	 * other's results, then the call fails with its error. Flushes.
+	 * many as the budget covers at `PROFILE_ONLY_USD` each: the runs the atom makes, their
+	 * accounts saved with `accounts: 'known'` (a stranger with the same handle gets no account).
 	 */
-	async lookup(city: City, budgetUsd: number, now = new Date()): Promise<AccountTwinResult> {
-		const rows: { id: string; platform: ProfilePlatform }[] = await this.em
+	async planLookup(city: City, budgetUsd: number): Promise<AccountTwinPlan> {
+		const rows: { id: string; platform: ProfilePlatform; handle: string }[] = await this.em
 			.getConnection()
 			.execute(
-				`select a.id, a.platform from social_accounts a
+				`select a.id, a.platform, a.handle from social_accounts a
 			join brands b on b.id = a.brand_id
 			where a.platform in (?, ?) and a.twin_checked_at is null and a.handle_lost_at is null
 			and exists (select 1 from venues v where v.brand_id = a.brand_id and v.city_id = ? and not v.closed)
@@ -92,14 +108,6 @@ export class AccountTwinService {
 					SocialPlatformEnum.TIKTOK,
 				],
 			);
-		const result: AccountTwinResult = {
-			candidates: rows.length,
-			lookedUp: 0,
-			found: 0,
-			linked: 0,
-			suggested: 0,
-			proofs: {},
-		};
 		let left = budgetUsd;
 		const picked = rows.filter(row => {
 			const cost = PROFILE_ONLY_USD[otherPlatform(row.platform)];
@@ -107,69 +115,77 @@ export class AccountTwinService {
 			left -= cost;
 			return true;
 		});
-		if (!picked.length) return result;
-		const sources = await this.em.find(
-			SocialAccount,
-			{ id: { $in: picked.map(r => r.id) } },
-			{ populate: ['brand'] },
-		);
-		// One source a handle on each platform: two brands' accounts of one handle are one lookup
-		const wanted = _.groupBy(
-			sources,
-			s => `${otherPlatform(s.platform as ProfilePlatform)}:${s.handle}`,
-		);
-		const handlesOn = (platform: ProfilePlatform) =>
-			Object.keys(wanted)
+		// One lookup a handle on each platform: two brands' accounts of one handle are one
+		const wanted: Record<string, string[]> = {};
+		for (const row of picked) {
+			const key = `${otherPlatform(row.platform)}:${row.handle}`;
+			wanted[key] = [...(wanted[key] ?? []), row.id];
+		}
+		const run = (platform: ProfilePlatform) => {
+			const handles = Object.keys(wanted)
 				.filter(key => key.startsWith(`${platform}:`))
 				.map(key => key.slice(platform.length + 1));
-		const instagram = handlesOn(SocialPlatformEnum.INSTAGRAM);
-		const tiktok = handlesOn(SocialPlatformEnum.TIKTOK);
-		result.lookedUp = instagram.length + tiktok.length;
+			return handles.length ?
+					{
+						handles,
+						read: { mode: 'profile' } as const,
+						maxCostUsd: handles.length * PROFILE_ONLY_USD[platform],
+						purpose: profilesPurpose(platform, `twins ${city.name}`, handles.length),
+					}
+				:	null;
+		};
+		return {
+			candidates: rows.length,
+			wanted,
+			instagram: run(SocialPlatformEnum.INSTAGRAM),
+			tiktok: run(SocialPlatformEnum.TIKTOK),
+		};
+	}
 
-		const [instagramItems, tiktokItems] = await Promise.allSettled([
-			instagram.length ?
-				this.apifyService.runActor<any>(
-					INSTAGRAM_PROFILE_ACTOR,
-					{ usernames: instagram },
-					{
-						maxCostUsd: Math.max(instagram.length * PROFILE_ONLY_USD.instagram, 0.05),
-						purpose: `instagram twins ${city.name}: ${instagram.length}`,
-					},
-				)
-			:	Promise.resolve([]),
-			tiktok.length ?
-				this.apifyService.runActor<any>(
-					TIKTOK_PROFILE_ACTOR,
-					{
-						profiles: tiktok,
-						resultsPerPage: 1,
-						profileSorting: 'latest',
-						shouldDownloadVideos: false,
-						shouldDownloadCovers: false,
-						shouldDownloadSlideshowImages: false,
-						shouldDownloadAvatars: false,
-					},
-					{
-						maxCostUsd: Math.max(tiktok.length * PROFILE_ONLY_USD.tiktok, 0.05),
-						purpose: `tiktok twins ${city.name}: ${tiktok.length}`,
-					},
-				)
-			:	Promise.resolve([]),
-		]);
-
-		const facts: ProfileFacts[] = [
-			...(instagramItems.status === 'fulfilled' ?
-				instagramItems.value.map(instagramProfileFacts)
-			:	[]),
-			...(tiktokItems.status === 'fulfilled' ?
-				tiktokItems.value.map(tiktokProfileFacts)
-			:	[]),
-		].filter((f): f is ProfileFacts => !!f);
+	/**
+	 * The lookups read from the runs' stored items (`records`, one a platform): each looked-up
+	 * account stamped `twinCheckedAt` (one not returned stays to look up), each profile that exists
+	 * judged for the first owner it proves itself for (linked), else the first it is named after
+	 * (suggested); a stranger gets no account from us. Flushes.
+	 */
+	async saveLookup(
+		city: City,
+		plan: AccountTwinPlan,
+		records: AccountTwinRecords,
+		now: Date,
+	): Promise<AccountTwinResult> {
+		const result: AccountTwinResult = {
+			candidates: plan.candidates,
+			lookedUp: Object.keys(plan.wanted).length,
+			found: 0,
+			linked: 0,
+			suggested: 0,
+			proofs: {},
+		};
 		const byKey = new Map<string, ProfileFacts>();
+		const facts: (ProfileFacts | null)[] = [
+			...(records.instagram ?
+				(await this.apifyService.storedItems<InstagramProfileItem>(records.instagram)).map(
+					instagramProfileFacts,
+				)
+			:	[]),
+			...(records.tiktok ?
+				(await this.apifyService.storedItems<TiktokProfileItem>(records.tiktok)).map(
+					tiktokProfileFacts,
+				)
+			:	[]),
+		];
 		// A TikTok profile comes once per video: its first item is enough
 		for (const f of facts)
-			if (!byKey.has(`${f.platform}:${f.handle}`)) byKey.set(`${f.platform}:${f.handle}`, f);
+			if (f && !byKey.has(`${f.platform}:${f.handle}`))
+				byKey.set(`${f.platform}:${f.handle}`, f);
 
+		const sources = await this.em.find(
+			SocialAccount,
+			{ id: { $in: _.uniq(Object.values(plan.wanted).flat()) } },
+			{ populate: ['brand'] },
+		);
+		const sourceById = new Map(sources.map(s => [s.id, s]));
 		const brandIds = _.uniq(sources.map(s => s.brand!.id));
 		const branches = await this.em.find(Venue, { brand: { $in: brandIds }, closed: false });
 		const branchesOf = _.groupBy(branches, b => b.brand.id);
@@ -179,13 +195,15 @@ export class AccountTwinService {
 			...districtNames(city),
 		]);
 
-		for (const [key, owners] of Object.entries(wanted)) {
+		for (const [key, ownerIds] of Object.entries(plan.wanted)) {
+			const owners = ownerIds.map(id => sourceById.get(id)).filter(s => !!s);
 			const profile = byKey.get(key);
 			// Not returned (the run failed or its cap stopped it): looked up next time
 			if (!profile) continue;
 			for (const source of owners) source.twinCheckedAt = now;
 			if (!profile.exists) continue;
 			result.found++;
+			// The atom updated a known account with the profile's name and followers already
 			const existing = await this.em.findOne(SocialAccount, {
 				platform: profile.platform,
 				handle: profile.handle,
@@ -233,28 +251,11 @@ export class AccountTwinService {
 						followers: profile.followers,
 						following: profile.following,
 						profile,
-						source: AccountSnapshotSourceEnum.LOOKUP,
+						source: AccountSnapshotSourceEnum.PROFILE,
 					},
 					now,
 				));
 			if (!account) continue;
-			if (existing) {
-				// A known account takes the profile's name and followers too
-				await this.socialAccountService.ensure(
-					profile.platform,
-					profile.handle,
-					city,
-					{
-						platformUserId: profile.platformUserId,
-						displayName: profile.displayName,
-						followers: profile.followers,
-						following: profile.following,
-						profile,
-						source: AccountSnapshotSourceEnum.LOOKUP,
-					},
-					now,
-				);
-			}
 			if (verdict.proof) {
 				await this.socialAccountService.setBrand(
 					account,
@@ -273,9 +274,6 @@ export class AccountTwinService {
 		this.logger.log(
 			`Account twins ${city.name}: ${result.lookedUp} looked up, ${result.found} found, ${result.linked} linked, ${result.suggested} suggested`,
 		);
-
-		const failed = [instagramItems, tiktokItems].find(r => r.status === 'rejected');
-		if (failed) throw (failed as PromiseRejectedResult).reason;
 		return result;
 	}
 }

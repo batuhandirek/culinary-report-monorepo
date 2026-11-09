@@ -3,39 +3,37 @@ import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable } from '@nestjs/common';
 
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
+import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+
 import { Venue } from '../entities/venue.entity.js';
 import { VenueBusyness } from '../entities/venue-busyness.entity.js';
 import { busynessIndex } from '../util/busyness.js';
 import { venueDetailsFromItem } from '../util/venue-details.js';
-
-import { VenueScrapeService } from './venue-scrape.service.js';
 
 /** The one writer of `VenueBusyness`: Google popular times sampled twice a week. */
 @Injectable()
 export class VenueBusynessService {
 	constructor(
 		private readonly em: EntityManager,
-		private readonly venueScrapeService: VenueScrapeService,
+		private readonly apifyService: ApifyService,
 	) {}
 
 	/**
-	 * Scrapes these venues' Google Maps detail pages (which also refreshes `Venue.details` and the
-	 * day's rating snapshot) and records one sample per venue the scrape returned: the histogram,
-	 * its index and the live percent, or a null histogram when Google showed no popular times.
-	 * Flushes.
+	 * The sample of a detail-page run (`places.run`, which refreshed `Venue.details` and the day's
+	 * rating snapshot as it saved): its items read from the run's row, one row per venue the run
+	 * returned with the histogram, its index and the live percent, or a null histogram when Google
+	 * showed no popular times. The save step of `sample-busyness`. Flushes.
 	 */
-	async sample(
+	async saveSample(
 		venues: Pick<Venue, 'id' | 'placeId'>[],
-		budgetUsd: number,
+		recordId: string,
 		now = new Date(),
 	): Promise<{ requested: number; sampled: number; withPopularTimes: number; withLive: number }> {
 		const byPlace = new Map(venues.map(venue => [venue.placeId, venue.id]));
-		if (byPlace.size === 0) return { requested: 0, sampled: 0, withPopularTimes: 0, withLive: 0 };
-		const { items } = await this.venueScrapeService.scrapeDetailPages(
-			[...byPlace.keys()],
-			budgetUsd,
-			`google-places busyness: ${byPlace.size} venues`,
-		);
+		if (byPlace.size === 0)
+			return { requested: 0, sampled: 0, withPopularTimes: 0, withLive: 0 };
+		const items = await this.apifyService.storedItems<GooglePlaceItem>(recordId);
 
 		let sampled = 0;
 		let withPopularTimes = 0;
@@ -68,7 +66,10 @@ export class VenueBusynessService {
 		if (Array.isArray(venueIds) && venueIds.length === 0) return [];
 		return this.em.find(
 			VenueBusyness,
-			{ venue: Array.isArray(venueIds) ? { $in: venueIds } : venueIds, sampledAt: { $gte: from, $lt: to } },
+			{
+				venue: Array.isArray(venueIds) ? { $in: venueIds } : venueIds,
+				sampledAt: { $gte: from, $lt: to },
+			},
 			{ orderBy: { sampledAt: QueryOrder.ASC } },
 		);
 	}

@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { Button } from '../components/Button';
 import { Layout } from '../components/Layout';
-import { Note } from '../components/Note';
 import { Quote } from '../components/Quote';
 import { B, P, Small, TextLink, Title } from '../components/Typography';
 import { DEFAULT_APP_URL } from '../format';
@@ -21,8 +20,6 @@ export interface ReviewAlertEmailProps {
 	text: string;
 	/** Google's English translation, shown under an English mail when the review is in another language */
 	translation?: string | null;
-	/** A reply to post, in the review's language; the mail goes without one when drafting failed */
-	draft?: string | null;
 	/** The venue's Google Maps page, where the reply is posted */
 	googleUrl?: string | null;
 	/** The portal's Reviews tab */
@@ -51,10 +48,8 @@ const COPY = {
 		),
 		from: (stars: number, day: string) => `${'★'.repeat(stars)}${'☆'.repeat(5 - stars)} · ${day}`,
 		translation: 'In English:',
-		draft: 'A reply you could post',
-		draftHint: 'Change what you like, then post it under the review on Google.',
 		button: 'Answer on Google',
-		portal: 'All your reviews, with a draft for each unanswered one:',
+		portal: 'All your reviews in one place:',
 		portalLink: 'open your portal',
 		stop: 'No longer want these alerts? Reply “stop” and we won’t send them again.',
 		reason: (venue: string) =>
@@ -73,10 +68,8 @@ const COPY = {
 		),
 		from: (stars: number, day: string) => `${'★'.repeat(stars)}${'☆'.repeat(5 - stars)} · ${day}`,
 		translation: null,
-		draft: 'Eine Antwort, die Sie posten könnten',
-		draftHint: 'Ändern Sie, was Sie möchten, und posten Sie sie unter der Bewertung auf Google.',
 		button: 'Auf Google antworten',
-		portal: 'Alle Ihre Bewertungen, mit einem Entwurf für jede unbeantwortete:',
+		portal: 'Alle Ihre Bewertungen an einem Ort:',
 		portalLink: 'Portal öffnen',
 		stop: 'Sie möchten keine Hinweise mehr? Antworten Sie mit „Stopp“, dann schicken wir keine mehr.',
 		reason: (venue: string) =>
@@ -90,7 +83,7 @@ export const reviewAlertSubject = (
 ) => COPY[props.language].subject(props.venueName, props.stars);
 
 // The weekly review watch found a critical review (three stars or fewer) of a venue that
-// subscribed: the review, a reply draft and where to post it. A business contact with no
+// subscribed: the review and where to answer it. A business contact with no
 // account, like the report mail: replying "stop" opts them out by hand.
 export const ReviewAlertEmail = ({
 	language,
@@ -100,7 +93,6 @@ export const ReviewAlertEmail = ({
 	publishedAt,
 	text,
 	translation,
-	draft,
 	googleUrl,
 	portalUrl,
 	appUrl = DEFAULT_APP_URL,
@@ -117,15 +109,6 @@ export const ReviewAlertEmail = ({
 				<P muted>
 					{copy.translation} {translation}
 				</P>
-			)}
-			{draft && (
-				<>
-					<P>
-						<B>{copy.draft}</B>
-					</P>
-					<Note>{draft}</Note>
-					<Small>{copy.draftHint}</Small>
-				</>
 			)}
 			{googleUrl && <Button href={googleUrl}>{copy.button}</Button>}
 			<Small>
@@ -144,8 +127,6 @@ ReviewAlertEmail.PreviewProps = {
 	publishedAt: '2026-10-14T18:20:00Z',
 	text: 'Das Fleisch war trocken und wir haben 25 Minuten gewartet.',
 	translation: 'The meat was dry and we waited 25 minutes.',
-	draft:
-		'Danke für Ihre ehrliche Rückmeldung. 25 Minuten sind zu lang, und trockenes Fleisch soll bei uns nicht passieren. Wir schauen uns das in der Küche an und würden uns freuen, Sie bald wieder zu sehen.',
 	googleUrl: 'https://maps.google.com/?cid=1',
 	portalUrl: 'https://munchwerk.com/portal/venue-id/reviews',
 } satisfies ReviewAlertEmailProps;

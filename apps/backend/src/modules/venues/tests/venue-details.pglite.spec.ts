@@ -6,9 +6,10 @@ import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js'
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { Venue } from '../entities/venue.entity.js';
-import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import { VenueService } from '../services/venue.service.js';
+import { VenueScrapeService } from '../services/venue-scrape.service.js';
 import { offeredAmenities, venueDetailsFromItem } from '../util/venue-details.js';
 
 import { DETAIL_ITEM, LIST_ITEM } from './fixtures/google-place-items.js';
@@ -68,14 +69,14 @@ describe('Venue details (pglite)', () => {
 	let venueService: VenueService;
 	let scrapeService: VenueScrapeService;
 	let city: City;
-	const runActor = jest.fn<(...args: unknown[]) => Promise<unknown[]>>();
+	const storedItems = jest.fn<(...args: unknown[]) => Promise<unknown[]>>();
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
 				VenueService,
 				VenueScrapeService,
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: { storedItems } },
 			],
 		});
 		venueService = harness.moduleRef.get(VenueService);
@@ -145,31 +146,27 @@ describe('Venue details (pglite)', () => {
 		expect(venue.detailsAt).toEqual(detailsAt);
 	});
 
-	it('refreshes detail pages by place id, once each, with no reviews or images', async () => {
+	it('saves detail pages of known places only, and counts the ones with popular times', async () => {
 		const em = harness.orm.em;
 		em.create(Venue, { city: city.id, placeId: 'ChIJother', name: 'Other' });
 		await em.flush();
-		runActor.mockResolvedValueOnce([
+		const items = [
 			DETAIL_ITEM,
 			{ placeId: 'ChIJother', title: 'Other', popularTimesHistogram: {} },
-		]);
+			{ placeId: 'ChIJnew', title: 'New', popularTimesHistogram: {} },
+		];
 
-		const result = await scrapeService.refreshDetails(
-			[LIST_ITEM.placeId!, 'ChIJother', LIST_ITEM.placeId!],
-			2,
-		);
-
-		expect(result).toEqual({ requested: 2, saved: 2, withPopularTimes: 1 });
-		const [actor, input, opts] = runActor.mock.calls[0];
-		expect(actor).toBe('compass/crawler-google-places');
-		expect(input).toMatchObject({
-			placeIds: [LIST_ITEM.placeId, 'ChIJother'],
-			scrapePlaceDetailPage: true,
-			scrapeOrderOnline: true,
-			maxReviews: 0,
-			maxImages: 0,
+		const result = await scrapeService.savePlaces(items, {
+			source: VenueScrapeSourceEnum.DETAILS,
+			newPlaces: 'none',
 		});
-		expect(opts).toMatchObject({ maxCostUsd: 2 });
+		expect(result.saved).toBe(2);
+		expect(Object.keys(result.venueIds).sort()).toEqual(
+			['ChIJother', LIST_ITEM.placeId].sort(),
+		);
+		storedItems.mockResolvedValueOnce(items);
+		expect(await scrapeService.detailsSummary('run-1')).toEqual({ withPopularTimes: 1 });
+
 		em.clear();
 		const venue = await em.findOneOrFail(Venue, { placeId: LIST_ITEM.placeId! });
 		expect(venue.details?.popularTimesHistogram?.Fr).toHaveLength(6);
@@ -178,17 +175,8 @@ describe('Venue details (pglite)', () => {
 			{ title: 'vegan meat', count: 12 },
 			{ title: 'dürüm', count: 7 },
 		]);
-		// An item that carries no details sets none
+		// An item that carries no details sets none; a place we don't know is never added
 		expect((await em.findOneOrFail(Venue, { placeId: 'ChIJother' })).details).toBeNull();
-	});
-
-	it('asks for nothing when there are no venues', async () => {
-		runActor.mockClear();
-		expect(await scrapeService.refreshDetails([], 2)).toEqual({
-			requested: 0,
-			saved: 0,
-			withPopularTimes: 0,
-		});
-		expect(runActor).not.toHaveBeenCalled();
+		expect(await em.count(Venue, { placeId: 'ChIJnew' })).toBe(0);
 	});
 });

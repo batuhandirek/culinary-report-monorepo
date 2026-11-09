@@ -1,5 +1,11 @@
 import { Logger, OnApplicationBootstrap } from '@nestjs/common';
 
+import type {
+	LlmCallRecord,
+	LlmCallRecorder,
+} from 'src/modules/llm/interfaces/llm-call-record.interface.js';
+
+import { isKeyed, type KeyedLlmAccount, type LlmAccount } from '../accounts/llm-account.js';
 import {
 	isPaidModel,
 	LlmModelChoice,
@@ -12,6 +18,7 @@ import { isLlmPaid } from '../util/llm-scope.js';
 import { OpenRouterLimit, openRouterLimitOf } from '../util/openrouter-limits.js';
 import { accountErrorReason, isProviderAccountError } from '../util/provider-errors.js';
 
+import { LlmAccountQuotas } from './llm-account-quotas.service.js';
 import {
 	isOpenAIAccountError,
 	NoOpenAIAccountError,
@@ -20,6 +27,12 @@ import {
 
 /** A model whose provider can't serve now (no key, blocked): the next model is tried */
 const SKIPPED = Symbol('skipped');
+
+/** A call's answer and the account that gave it */
+interface Served<T> {
+	result: T;
+	account: KeyedLlmAccount;
+}
 
 /** A block this short (the minute's cap, a model busy upstream) is waited out; a longer one skips OpenRouter */
 export const OPENROUTER_MAX_WAIT_MS = 2 * 60_000;
@@ -37,24 +50,45 @@ export interface LlmModelKey {
 	apiKey: string;
 }
 
+/** OpenRouter's free-model requests a minute when its account file names none */
+const OPENROUTER_DEFAULT_PER_MINUTE = 20;
+
 export interface LlmModelsOptions {
 	openAIAccounts: OpenAIAccountsService;
-	/** Unset: the roster's Claude models are left out */
-	anthropicApiKey?: string;
-	/** Unset: OpenRouter's free model is left out (`OPENROUTER_AI_API_KEY`) */
-	openRouterApiKey?: string;
-	/** OpenRouter's cap on free-model requests a minute: its calls are spaced to stay under it */
-	openRouterPerMinute?: number;
+	/** Claude's account (`anthropic.llm-account.ts`); unset or without a key, Claude is left out */
+	anthropic?: LlmAccount;
+	/** OpenRouter's account (`openrouter.llm-account.ts`); unset or without a key, its free model is left out */
+	openRouter?: LlmAccount;
+	/** What each account used of its daily limits (shared with `OpenAIAccountsService`) */
+	quotas?: LlmAccountQuotas;
 	/** Providers left out of the roster (`LLM_DISABLE_OPENAI`, `…_ANTHROPIC`, `…_OPENROUTER`) */
 	disabled?: Partial<Record<LlmProvider, boolean>>;
 	/** Agents put on another choice than their own, by agent id (`LLM_AGENT_MODELS`) */
 	agentModels?: Record<string, LlmModelChoice>;
-	/** Only the reading agents run outside `llmPaid` (`LLM_INGESTION_ONLY`) */
-	ingestionOnly?: boolean;
 	blockMs: number;
 	now?: () => number;
 	/** How a wait is spent (a test moves its clock instead) */
 	sleep?: (ms: number) => Promise<void>;
+	/** Where every call is filed (`LlmCallsService`); none, nothing is recorded */
+	recorder?: LlmCallRecorder;
+}
+
+/**
+ * What `LlmWorkflows.generate` needs of an agent, found by id: `BaseMastraAgent` registers itself
+ * at init (`registerAgent`), since a workflow's arguments must be plain data, never the agent
+ */
+export interface RegisteredAgent {
+	readonly id: string;
+	generate(input: unknown, context?: unknown, options?: unknown): Promise<unknown>;
+	availability(context?: unknown, options?: unknown): LlmAvailability;
+}
+
+/** Whether a choice can be served now, and if not, when the roster serves it again */
+export interface LlmAvailability {
+	available: boolean;
+	/** When the first blocked model serves again (ms since the epoch); null when none ever will here: none configured, disabled, paused or paid outside `llmPaid` */
+	until: number | null;
+	reason: string;
 }
 
 /**
@@ -87,17 +121,18 @@ export const isAnthropicAccountError = (error: unknown): boolean =>
 export class LlmModelsService implements OnApplicationBootstrap {
 	private readonly logger = new Logger(LlmModelsService.name);
 	private readonly openAIAccounts: OpenAIAccountsService;
-	private readonly anthropicApiKey?: string;
-	private readonly openRouterApiKey?: string;
+	private readonly anthropic?: KeyedLlmAccount;
+	private readonly openRouter?: KeyedLlmAccount;
+	private readonly quotas: LlmAccountQuotas;
 	/** Between two OpenRouter calls' starts */
 	private readonly openRouterSpacingMs: number;
 	private readonly disabled: Record<LlmProvider, boolean>;
 	private readonly agentModels: Record<string, LlmModelChoice>;
-	private readonly ingestionOnly: boolean;
-	private readonly agents = new Set<string>();
+	private readonly agents = new Map<string, RegisteredAgent | null>();
 	private readonly blockMs: number;
 	private readonly now: () => number;
 	private readonly sleep: (ms: number) => Promise<void>;
+	private readonly recorder?: LlmCallRecorder;
 	private anthropicBlock: Block | null = null;
 	/** The OpenRouter account's block (its daily or minute cap, credit, key) */
 	private openRouterBlock: Block | null = null;
@@ -110,37 +145,110 @@ export class LlmModelsService implements OnApplicationBootstrap {
 
 	constructor(options: LlmModelsOptions) {
 		this.openAIAccounts = options.openAIAccounts;
-		this.anthropicApiKey = options.anthropicApiKey || undefined;
-		this.openRouterApiKey = options.openRouterApiKey || undefined;
+		this.anthropic =
+			options.anthropic && isKeyed(options.anthropic) ? options.anthropic : undefined;
+		this.openRouter =
+			options.openRouter && isKeyed(options.openRouter) ? options.openRouter : undefined;
 		// 5% under the cap: OpenRouter counts the minute on its side of the network
-		this.openRouterSpacingMs = Math.ceil((60_000 / (options.openRouterPerMinute ?? 20)) * 1.05);
+		this.openRouterSpacingMs = Math.ceil(
+			(60_000 / (this.openRouter?.requestsPerMinute ?? OPENROUTER_DEFAULT_PER_MINUTE)) * 1.05,
+		);
 		this.disabled = {
 			openai: options.disabled?.openai ?? false,
 			anthropic: options.disabled?.anthropic ?? false,
 			openrouter: options.disabled?.openrouter ?? false,
 		};
 		this.agentModels = options.agentModels ?? {};
-		this.ingestionOnly = options.ingestionOnly ?? false;
 		this.blockMs = options.blockMs;
 		this.now = options.now ?? Date.now;
 		this.sleep = options.sleep ?? (ms => new Promise(resolve => setTimeout(resolve, ms)));
+		this.recorder = options.recorder;
+		this.quotas = options.quotas ?? new LlmAccountQuotas({ now: this.now });
 	}
 
-	/** An agent's id, so the boot log can say which `LLM_AGENT_MODELS` entry names no agent */
-	registerAgent(id: string): void {
-		this.agents.add(id);
+	/** Files a call in the ledger (`LlmCallsService`), whatever became of it; a no-op without a recorder */
+	recordCall(call: LlmCallRecord): void {
+		try {
+			this.recorder?.record(call);
+		} catch (e) {
+			this.logger.warn(`LLM call of ${call.agentId} not recorded: ${(e as Error).message}`);
+		}
+	}
+
+	/**
+	 * Whether `run(choice)` would find a model now, without calling anything, and when the roster
+	 * serves the choice again if not: the earliest end of its models' blocks (an OpenAI account's
+	 * allowance back at 00:00 UTC, OpenRouter's reset, Anthropic's block). A workflow waiting for
+	 * the allowance sleeps until then (`DurableLlmService`).
+	 */
+	availability(choice: LlmModelChoice, opts: { paidFallback?: boolean } = {}): LlmAvailability {
+		const freeOnly = !isLlmPaid() && !opts.paidFallback;
+		const models = modelsFor(choice).filter(
+			model => !this.disabled[providerOf(model)] && !(freeOnly && isPaidModel(model)),
+		);
+		const untils: number[] = [];
+		const reasons: string[] = [];
+		const blockedUntil = (model: LlmModelId, until: number, reason: string) => {
+			untils.push(until);
+			reasons.push(`${model} until ${new Date(until).toISOString()}: ${reason}`);
+		};
+		for (const model of models) {
+			const provider = providerOf(model);
+			if (provider === 'openai') {
+				const at = this.openAIAccounts.nextAvailableAt(model);
+				if (at === 0) return { available: true, until: 0, reason: '' };
+				blockedUntil(
+					model,
+					at,
+					'every OpenAI account is blocked for it or out of its daily limit',
+				);
+			} else if (provider === 'anthropic') {
+				if (!this.anthropic) {
+					reasons.push(`${model}: no ANTHROPIC_API_KEY`);
+					continue;
+				}
+				const block = this.blockOfAnthropic(model);
+				if (!block) return { available: true, until: 0, reason: '' };
+				blockedUntil(model, block.until, block.reason);
+			} else {
+				if (!this.openRouter) {
+					reasons.push(`${model}: no OPENROUTER_AI_API_KEY`);
+					continue;
+				}
+				const block = this.openRouterBlockOf(model);
+				if (!block) return { available: true, until: 0, reason: '' };
+				blockedUntil(model, block.until, block.reason);
+			}
+		}
+		return {
+			available: false,
+			until: untils.length ? Math.min(...untils) : null,
+			reason: reasons.length ? reasons.join('; ') : `no model configured for ${choice}`,
+		};
+	}
+
+	/**
+	 * An agent, by its id: so the boot log can say which `LLM_AGENT_MODELS` entry names no agent, and
+	 * so a workflow given an agent id finds the instance (`LlmWorkflows.generate`)
+	 */
+	registerAgent(id: string, agent: RegisteredAgent | null = null): void {
+		this.agents.set(id, agent);
+	}
+
+	/** The registered agent with this id, or undefined */
+	agent(id: string): RegisteredAgent | undefined {
+		return this.agents.get(id) ?? undefined;
 	}
 
 	onApplicationBootstrap(): void {
 		const off = (['openai', 'anthropic', 'openrouter'] as const).filter(p => this.disabled[p]);
 		if (off.length) this.logger.warn(`Left out of the roster: ${off.join(', ')}`);
-		if (this.ingestionOnly)
-			this.logger.warn(
-				'LLM_INGESTION_ONLY: only the reading agents run, the rest are paused',
-			);
-		if (!this.anthropicApiKey) this.logger.log('No ANTHROPIC_API_KEY: Claude is left out');
-		if (!this.openRouterApiKey)
+		if (!this.anthropic) {
+			this.logger.log('No ANTHROPIC_API_KEY: Claude is left out');
+		}
+		if (!this.openRouter) {
 			this.logger.log('No OPENROUTER_AI_API_KEY: OpenRouter is left out');
+		}
 		for (const [agent, choice] of Object.entries(this.agentModels)) {
 			if (!this.agents.has(agent))
 				this.logger.error(`LLM_AGENT_MODELS names ${agent}, which is no agent`);
@@ -160,19 +268,21 @@ export class LlmModelsService implements OnApplicationBootstrap {
 	/**
 	 * Runs `fn` on the first model of `choice` that can serve it; says which one did. `paidFallback`
 	 * (an agent's `BaseMastraAgentConfig.paidFallback`) lets the choice's Claude models serve
-	 * outside `llmPaid` too, behind its free ones. Under `ingestionOnly` a call that is not
-	 * `ingestion` (an agent's `BaseMastraAgentConfig.ingestion`) fails at once, as with no model
-	 * left, so its step stops and its items wait.
+	 * outside `llmPaid` too, behind its free ones. Every call is held by its account's daily limits
+	 * (`accounts/*.llm-account.ts`, `LlmAccountQuotas`): an account out of one is skipped as if
+	 * blocked until the next 00:00 UTC, and the call is counted against the account that served it
+	 * (a request as it starts, `tokensOf` its answer's tokens once it answers). Says which account
+	 * served it, for the ledger.
 	 */
 	async run<T>(
 		choice: LlmModelChoice,
 		fn: (model: LlmModelKey) => Promise<T>,
-		opts: { paidFallback?: boolean; ingestion?: boolean; agentId?: string } = {},
-	): Promise<{ result: T; model: LlmModelId }> {
-		if (this.ingestionOnly && !opts.ingestion && !isLlmPaid())
-			throw new NoModelError(
-				`No model can serve ${opts.agentId ?? choice}: paused, only the reading runs (LLM_INGESTION_ONLY)`,
-			);
+		opts: {
+			paidFallback?: boolean;
+			agentId?: string;
+			tokensOf?: (result: T) => number;
+		} = {},
+	): Promise<{ result: T; model: LlmModelId; account: string }> {
 		const freeOnly = !isLlmPaid() && !opts.paidFallback;
 		const models = modelsFor(choice).filter(
 			model => !this.disabled[providerOf(model)] && !(freeOnly && isPaidModel(model)),
@@ -180,10 +290,12 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		let lastError: unknown;
 		for (const model of models) {
 			try {
-				const result = await this.runOn(model, fn);
-				if (result === SKIPPED) continue;
+				const served = await this.runOn(model, fn);
+				if (served === SKIPPED) continue;
 				this.noteServedBy(choice, model);
-				return { result, model };
+				if (opts.tokensOf)
+					this.quotas.addTokens(served.account, model, opts.tokensOf(served.result));
+				return { result: served.result, model, account: served.account.id };
 			} catch (error) {
 				if (!this.isUnavailable(model, error)) throw error;
 				lastError = error;
@@ -195,23 +307,24 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		);
 	}
 
+	/** Why each model of the choice is left out, so the fatal error says what to fix or wait for */
 	private whyNone(choice: LlmModelChoice, freeOnly: boolean): string {
+		const blocked = (block: Block | null): string | null => block && `blocked: ${block.reason}`;
 		return modelsFor(choice)
 			.map(model => {
 				const provider = providerOf(model);
-				const openRouterBlock =
-					provider === 'openrouter' ? this.openRouterBlockOf(model) : null;
 				const why =
 					this.disabled[provider] ? 'disabled'
 					: freeOnly && isPaidModel(model) ?
 						'paid, and only free models run outside llmPaid'
-					: provider === 'anthropic' && !this.anthropicApiKey ? 'no ANTHROPIC_API_KEY'
-					: provider === 'anthropic' && this.anthropicBlock ?
-						`blocked: ${this.anthropicBlock.reason}`
-					: provider === 'openrouter' && !this.openRouterApiKey ?
-						'no OPENROUTER_AI_API_KEY'
-					: openRouterBlock ? `blocked: ${openRouterBlock.reason}`
-					: 'unavailable';
+					: provider === 'openai' ?
+						'every OpenAI account is blocked for it or out of its daily limit'
+					: provider === 'anthropic' ?
+						!this.anthropic ?
+							'no ANTHROPIC_API_KEY'
+						:	(blocked(this.blockOfAnthropic(model)) ?? 'unavailable')
+					: !this.openRouter ? 'no OPENROUTER_AI_API_KEY'
+					: (blocked(this.openRouterBlockOf(model)) ?? 'unavailable');
 				return `${model} ${why}`;
 			})
 			.join('; ');
@@ -225,22 +338,33 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		const shown = (block: Block | null) =>
 			block && { until: new Date(block.until), reason: block.reason };
 		return {
-			anthropic: shown(this.blockOfAnthropic()),
+			anthropic: shown(this.anthropicBlockNow()),
 			openrouter: shown(this.activeBlock(this.openRouterBlock)),
 		};
+	}
+
+	/** Every account's daily limits with what it used today */
+	quotaUsage(accounts: readonly LlmAccount[]): ReturnType<LlmAccountQuotas['usage']> {
+		return this.quotas.usage(accounts);
 	}
 
 	private async runOn<T>(
 		model: LlmModelId,
 		fn: (model: LlmModelKey) => Promise<T>,
-	): Promise<T | typeof SKIPPED> {
-		if (model.startsWith('openai/'))
-			return this.openAIAccounts.run(model, account =>
-				fn({ id: model, apiKey: account.apiKey }),
-			);
+	): Promise<Served<T> | typeof SKIPPED> {
+		if (model.startsWith('openai/')) {
+			let served: KeyedLlmAccount | undefined;
+			const result = await this.openAIAccounts.run(model, account => {
+				served = account;
+				return fn({ id: model, apiKey: account.apiKey });
+			});
+			return { result, account: served! };
+		}
 		if (model.startsWith('anthropic/')) {
-			if (!this.anthropicApiKey || this.blockOfAnthropic()) return SKIPPED;
-			return fn({ id: model, apiKey: this.anthropicApiKey });
+			const account = this.anthropic;
+			if (!account || this.blockOfAnthropic(model)) return SKIPPED;
+			this.quotas.begin(account, model);
+			return { result: await fn({ id: model, apiKey: account.apiKey }), account };
 		}
 		if (model.startsWith('openrouter/')) return this.runOnOpenRouter(model, fn);
 		throw new Error(`No provider for ${model}`);
@@ -249,14 +373,16 @@ export class LlmModelsService implements OnApplicationBootstrap {
 	/**
 	 * One call on OpenRouter: spaced to the per-minute cap, a short block waited out and the call
 	 * tried again (up to `OPENROUTER_TRIES`), a long one (the day's free requests used up) skipped.
-	 * The limit an error names is recorded here; `isUnavailable` then moves the call on.
+	 * The limit an error names is recorded here; `isUnavailable` then moves the call on. Every try
+	 * counts as a request of the account's day: OpenRouter counts failed ones too.
 	 */
 	private async runOnOpenRouter<T>(
 		model: LlmModelId,
 		fn: (model: LlmModelKey) => Promise<T>,
-	): Promise<T | typeof SKIPPED> {
-		const apiKey = this.openRouterApiKey;
-		if (!apiKey) return SKIPPED;
+	): Promise<Served<T> | typeof SKIPPED> {
+		const account = this.openRouter;
+		if (!account) return SKIPPED;
+		const apiKey = account.apiKey;
 		for (let attempt = 1; ; attempt++) {
 			const block = this.openRouterBlockOf(model);
 			if (block) {
@@ -265,8 +391,11 @@ export class LlmModelsService implements OnApplicationBootstrap {
 				await this.sleep(wait);
 			}
 			await this.openRouterTurn();
+			// Its day may have run out while the call waited for its turn
+			if (this.quotas.blockOf(account, model)) return SKIPPED;
+			this.quotas.begin(account, model);
 			try {
-				return await fn({ id: model, apiKey });
+				return { result: await fn({ id: model, apiKey }), account };
 			} catch (error) {
 				const limit = openRouterLimitOf(error, this.now(), this.blockMs);
 				if (!limit) throw error;
@@ -306,13 +435,17 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		this.openRouterBlock = block;
 	}
 
-	/** The block an OpenRouter model is under: the account's or its own, whichever ends later */
+	/**
+	 * The block an OpenRouter model is under: the account's (its own daily limit, or a limit
+	 * OpenRouter answered with) or the model's, whichever ends latest
+	 */
 	private openRouterBlockOf(model: LlmModelId): Block | null {
-		const account = this.activeBlock(this.openRouterBlock);
-		const own = this.activeBlock(this.openRouterModelBlocks.get(model) ?? null);
-		if (!account) return own;
-		if (!own) return account;
-		return own.until > account.until ? own : account;
+		const blocks = [
+			this.activeBlock(this.openRouterBlock),
+			this.activeBlock(this.openRouterModelBlocks.get(model) ?? null),
+			this.openRouter ? this.quotas.blockOf(this.openRouter, model) : null,
+		].filter((b): b is Block => b !== null);
+		return blocks.reduce<Block | null>((a, b) => (!a || b.until > a.until ? b : a), null);
 	}
 
 	private activeBlock(block: Block | null): Block | null {
@@ -330,14 +463,22 @@ export class LlmModelsService implements OnApplicationBootstrap {
 		const reason = accountErrorReason(error);
 		const until = this.now() + this.blockMs;
 		// Calls in flight fail together; log the first
-		if (!this.blockOfAnthropic()) {
+		if (!this.anthropicBlockNow()) {
 			this.logger.warn(`Anthropic blocked until ${new Date(until).toISOString()}: ${reason}`);
 		}
 		this.anthropicBlock = { until, reason };
 		return true;
 	}
 
-	private blockOfAnthropic(): Block | null {
+	/** Claude's block for `model`: the one Anthropic answered with, else its account's daily limit */
+	private blockOfAnthropic(model: LlmModelId): Block | null {
+		return (
+			this.anthropicBlockNow() ??
+			(this.anthropic ? this.quotas.blockOf(this.anthropic, model) : null)
+		);
+	}
+
+	private anthropicBlockNow(): Block | null {
 		if (!this.anthropicBlock) return null;
 		if (this.anthropicBlock.until > this.now()) return this.anthropicBlock;
 		this.anthropicBlock = null;

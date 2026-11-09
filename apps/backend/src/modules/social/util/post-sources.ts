@@ -30,7 +30,10 @@ export const CITY_SOURCE_KINDS = [
 
 /** A post found on its author's own profile: linked to the city's account source when it has one. */
 export const accountFind = (platform: SocialPlatformEnum, handle: string): PostFind => ({
-	kind: platform === SocialPlatformEnum.TIKTOK ? PostSourceKindEnum.TIKTOK_ACCOUNT : PostSourceKindEnum.INSTAGRAM_ACCOUNT,
+	kind:
+		platform === SocialPlatformEnum.TIKTOK ?
+			PostSourceKindEnum.TIKTOK_ACCOUNT
+		:	PostSourceKindEnum.INSTAGRAM_ACCOUNT,
 	value: handle,
 });
 

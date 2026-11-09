@@ -1,6 +1,6 @@
+import { GOOGLE_PLACE_USD } from 'src/modules/apify/actors/google-places.actor.js';
 import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
 
-import { GOOGLE_PLACE_USD } from './places-search.js';
 import { addDays } from './week.js';
 
 /** Places kept per dish search: Google Maps' first screen and a bit */
@@ -39,8 +39,10 @@ export const isSearchedTopic = (topic: { key: string; kind: TopicKindEnum }): bo
 	SEARCHED_TOPIC_KINDS.has(topic.kind) && !UNSEARCHED_TOPICS.has(topic.key);
 
 /** What a guest types for the topic in the district, without the city: "vietnamese food Mitte". */
-export const searchWords = (topic: { key: string; kind: TopicKindEnum }, district: string): string =>
-	`${topic.key}${WITH_FOOD.has(topic.kind) ? ' food' : ''} ${district}`;
+export const searchWords = (
+	topic: { key: string; kind: TopicKindEnum },
+	district: string,
+): string => `${topic.key}${WITH_FOOD.has(topic.kind) ? ' food' : ''} ${district}`;
 
 /** One place of one district's search in one snapshot, with the topic searched: the report's read. */
 export interface DishSearchSnapshotRow {

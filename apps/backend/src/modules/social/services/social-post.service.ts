@@ -4,6 +4,9 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import _ from 'lodash';
 
+import type { InstagramLocationItem } from 'src/modules/apify/actors/instagram-location.actor.js';
+import type { InstagramScraperItem } from 'src/modules/apify/actors/instagram-scraper.actor.js';
+import type { TiktokSearchItem } from 'src/modules/apify/actors/tiktok-search.actor.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 
 import { PostHashtag } from '../entities/post-hashtag.entity.js';
@@ -13,7 +16,14 @@ import { SocialPostSnapshot } from '../entities/social-post-snapshot.entity.js';
 import { captionHandles } from '../util/accounts.js';
 import { captionHashtags, ensureHashtags, normalizeHashtag } from '../util/hashtags.js';
 import { hashtagOfTagUrl } from '../util/instagram-tags.js';
-import { clockworksCounts, COUNT_FIELDS, countsOf, instagramCounts, isFinalAge, type PostCounts } from '../util/post-counts.js';
+import {
+	clockworksCounts,
+	COUNT_FIELDS,
+	countsOf,
+	instagramCounts,
+	isFinalAge,
+	type PostCounts,
+} from '../util/post-counts.js';
 import { linkPostSources, type PostFind } from '../util/post-sources.js';
 
 import { HashtagService } from './hashtag.service.js';
@@ -46,7 +56,9 @@ export type PostFields = Omit<
 
 /** A platform's user id as text, or null for none. */
 export const idOf = (id: unknown): string | null =>
-	(typeof id === 'string' && id.trim()) || (typeof id === 'number' && Number.isFinite(id)) ? `${id}`.trim() : null;
+	(typeof id === 'string' && id.trim()) || (typeof id === 'number' && Number.isFinite(id)) ?
+		`${id}`.trim()
+	:	null;
 
 /** What found a `clockworks/tiktok-scraper` item: the hashtag or the query it came from. */
 export const clockworksFinds = (row: any): PostFind[] => {
@@ -54,13 +66,14 @@ export const clockworksFinds = (row: any): PostFind[] => {
 	const tag = normalizeHashtag(typeof hashtag === 'object' ? hashtag?.name : hashtag);
 	return (
 		tag ? [{ kind: PostSourceKindEnum.TIKTOK_HASHTAG, value: tag }]
-		: row?.searchQuery ? [{ kind: PostSourceKindEnum.TIKTOK_SEARCH, value: `${row.searchQuery}` }]
-		: []
+		: row?.searchQuery ?
+			[{ kind: PostSourceKindEnum.TIKTOK_SEARCH, value: `${row.searchQuery}` }]
+		:	[]
 	);
 };
 
 /** What found a `novi/advanced-search-tiktok-api` item: the query (`__search_terms.keyword`). */
-export const tikTokSearchFinds = (row: any): PostFind[] => {
+export const tikTokSearchFinds = (row: TiktokSearchItem): PostFind[] => {
 	const keyword = row?.__search_terms?.keyword;
 	return keyword ? [{ kind: PostSourceKindEnum.TIKTOK_SEARCH, value: `${keyword}` }] : [];
 };
@@ -141,7 +154,13 @@ export class SocialPostService {
 		);
 		const now = new Date();
 		for (const find of _.uniqBy(finds ?? [], f => `${f.kind} ${f.value}`))
-			this.em.create(PostSource, { post, kind: find.kind, value: find.value, venue: find.venueId ?? null, foundAt: now });
+			this.em.create(PostSource, {
+				post,
+				kind: find.kind,
+				value: find.value,
+				venue: find.venueId ?? null,
+				foundAt: now,
+			});
 		return true;
 	}
 
@@ -154,7 +173,13 @@ export class SocialPostService {
 		const now = new Date();
 		for (const find of _.uniqBy(finds, f => `${f.kind} ${f.value}`))
 			if (!known.has(`${find.kind} ${find.value}`))
-				this.em.create(PostSource, { post, kind: find.kind, value: find.value, venue: find.venueId ?? null, foundAt: now });
+				this.em.create(PostSource, {
+					post,
+					kind: find.kind,
+					value: find.value,
+					venue: find.venueId ?? null,
+					foundAt: now,
+				});
 	}
 
 	/**
@@ -166,7 +191,11 @@ export class SocialPostService {
 	readCounts(post: SocialPost, fields: Partial<PostCounts>, at = new Date()): void {
 		if (post.platform === SocialPlatformEnum.BLOG) return;
 		const read = _.pick(fields, COUNT_FIELDS);
-		this.em.create(SocialPostSnapshot, { post, at, ...countsOf({ ...countsOf(post), ...read }) });
+		this.em.create(SocialPostSnapshot, {
+			post,
+			at,
+			...countsOf({ ...countsOf(post), ...read }),
+		});
 		if (post.countsFinalAt) return;
 		Object.assign(post, read);
 		post.countsAt = at;
@@ -184,7 +213,10 @@ export class SocialPostService {
 	/** One item of `clockworks/tiktok-scraper` (hashtags) or `clockworks/tiktok-hashtag-scraper`. */
 	async fromClockworks(row: any): Promise<PostFields | null> {
 		if (!row?.id || !row.webVideoUrl || !row.createTimeISO || row.error) return null;
-		const subs = row.videoMeta?.subtitleLinks?.length ? await this.downloadSubtitles(row.videoMeta.subtitleLinks) : null;
+		const subs =
+			row.videoMeta?.subtitleLinks?.length ?
+				await this.downloadSubtitles(row.videoMeta.subtitleLinks)
+			:	null;
 		return {
 			externalId: `${row.id}`,
 			platform: SocialPlatformEnum.TIKTOK,
@@ -211,7 +243,7 @@ export class SocialPostService {
 	 * `__search_terms.keyword` (`includeSearchTerms`). Subtitle links are in the video's
 	 * `cla_info.caption_infos`, the tagged place in an `anchor_poi` anchor.
 	 */
-	async fromTikTokSearch(row: any): Promise<PostFields | null> {
+	async fromTikTokSearch(row: TiktokSearchItem): Promise<PostFields | null> {
 		const handle = row?.author?.unique_id;
 		if (!row?.aweme_id || !handle || !row.create_time) return null;
 		const links: SubtitleLink[] = (row.video?.cla_info?.caption_infos ?? [])
@@ -224,7 +256,9 @@ export class SocialPostService {
 		const subs = links.length ? await this.downloadSubtitles(links) : null;
 		const stats = row.statistics ?? {};
 		const text: string = row.desc ?? '';
-		const tags: string[] = (row.text_extra ?? []).map((t: any) => t?.hashtag_name).filter(Boolean);
+		const tags: string[] = (row.text_extra ?? [])
+			.map((t: any) => t?.hashtag_name)
+			.filter(Boolean);
 		const place = (row.anchors ?? []).find((a: any) => a?.component_key === 'anchor_poi');
 		return {
 			externalId: `${row.aweme_id}`,
@@ -233,9 +267,9 @@ export class SocialPostService {
 			postedAt: new Date(row.create_time * 1000),
 			author: handle,
 			// TikTok's uid: the clockworks actors' `authorMeta.id`
-			authorId: idOf(row.author.uid),
-			authorName: row.author.nickname ?? null,
-			authorFans: row.author.follower_count ?? null,
+			authorId: idOf(row.author?.uid),
+			authorName: row.author?.nickname ?? null,
+			authorFans: row.author?.follower_count ?? null,
 			views: stats.play_count ?? 0,
 			likes: stats.digg_count ?? 0,
 			shares: stats.share_count ?? 0,
@@ -254,7 +288,10 @@ export class SocialPostService {
 	}
 
 	/** One item of `scraping_solutions/instagram-location-posts-local-creator-finder`, run for a venue's place. */
-	fromInstagramLocation(row: any, venue: { id: string; name: string }): PostFields | null {
+	fromInstagramLocation(
+		row: InstagramLocationItem,
+		venue: { id: string; name: string },
+	): PostFields | null {
 		if (!row?.postId || !row.postUrl || !row.publishedAt) return null;
 		const caption: string = row.caption ?? '';
 		return {
@@ -285,7 +322,7 @@ export class SocialPostService {
 	 * `inputUrl` names the hashtag. Hidden like counts come back as -1, a tag with nothing to show
 	 * as an item with `error` only. Items carry no follower count.
 	 */
-	fromInstagramHashtag(row: any): PostFields | null {
+	fromInstagramHashtag(row: InstagramScraperItem): PostFields | null {
 		const hashtag = hashtagOfTagUrl(row?.inputUrl);
 		if (!row?.id || !row.url || !row.timestamp || !hashtag) return null;
 		const caption: string = row.caption ?? '';
@@ -303,8 +340,13 @@ export class SocialPostService {
 			authorFans: null,
 			...instagramCounts(row),
 			isAd: !!(row.paidPartnership || row.isSponsored),
-			locationName: typeof row.locationName === 'string' && row.locationName.trim() ? row.locationName.trim() : null,
-			finds: [{ kind: PostSourceKindEnum.INSTAGRAM_HASHTAG, value: normalizeHashtag(hashtag) }],
+			locationName:
+				typeof row.locationName === 'string' && row.locationName.trim() ?
+					row.locationName.trim()
+				:	null,
+			finds: [
+				{ kind: PostSourceKindEnum.INSTAGRAM_HASHTAG, value: normalizeHashtag(hashtag) },
+			],
 			text: caption,
 			hashtags: captionHashtags(caption),
 			// Caption @-mentions, co-authors and people tagged in the photo
@@ -333,7 +375,9 @@ export class SocialPostService {
 		const profileOwn =
 			post.ownerId != null && profile?.id != null ?
 				`${post.ownerId}` === `${profile.id}`
-			:	!post.ownerUsername || `${post.ownerUsername}`.toLowerCase() === `${profile?.username ?? ''}`.toLowerCase();
+			:	!post.ownerUsername ||
+				`${post.ownerUsername}`.toLowerCase() ===
+					`${profile?.username ?? ''}`.toLowerCase();
 		return {
 			externalId: `ig_${`${post.id}`.split('_')[0]}`,
 			platform: SocialPlatformEnum.INSTAGRAM,
@@ -342,10 +386,16 @@ export class SocialPostService {
 			author,
 			authorId: idOf(post.ownerId) ?? (profileOwn ? idOf(profile?.id) : null),
 			authorName: profileOwn ? (profile?.fullName ?? null) : (post.ownerFullName ?? null),
-			authorFans: profileOwn && typeof profile?.followersCount === 'number' ? profile.followersCount : null,
+			authorFans:
+				profileOwn && typeof profile?.followersCount === 'number' ?
+					profile.followersCount
+				:	null,
 			...instagramCounts(post),
 			isAd: !!(post.paidPartnership || post.isSponsored),
-			locationName: typeof post.locationName === 'string' && post.locationName.trim() ? post.locationName.trim() : null,
+			locationName:
+				typeof post.locationName === 'string' && post.locationName.trim() ?
+					post.locationName.trim()
+				:	null,
 			text: caption,
 			hashtags: captionHashtags(caption),
 			taggedHandles: _.uniq([
@@ -361,7 +411,9 @@ export class SocialPostService {
 	): Promise<{ language: string; subtitles: string } | null> {
 		// Machine translations (source "MT") garble venue names; the original language is better
 		const link =
-			links.find(l => l.source !== 'MT') ?? links.find(l => l.language === 'eng-US') ?? links[0];
+			links.find(l => l.source !== 'MT') ??
+			links.find(l => l.language === 'eng-US') ??
+			links[0];
 		if (!link?.downloadLink) return null;
 		try {
 			const res = await fetch(link.downloadLink, { signal: AbortSignal.timeout(15_000) });

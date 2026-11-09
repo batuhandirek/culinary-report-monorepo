@@ -5,22 +5,24 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { SocialPlatformEnum } from 'src/modules/social/entities/social-post.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { FOODS_SQL, type StatementFood } from 'src/modules/statements/util/statement-foods.js';
+import {
+	judgingSql,
+	mentionSaidSql,
+	mentionSentimentSql,
+} from 'src/modules/statements/util/statement-sql.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { mentionTopicsSql } from 'src/modules/trends/util/topic-mentions.js';
 
-import { LandingCopyAgent } from '../agents/landing-copy.agent.js';
 import {
 	LANDING_PROMPT_PHRASES,
 	LANDING_PROMPT_SUMMARIES,
 	LANDING_REFRESH_DAYS,
 } from '../constants/landing.constant.js';
 import { LandingEdition } from '../entities/landing-edition.entity.js';
-import type { LandingCopy, LandingEditionData } from '../interfaces/landing-edition.interface.js';
-import { LandingBuildJob } from '../jobs/landing-build.job.js';
+import type { LandingEditionData } from '../interfaces/landing-edition.interface.js';
 import {
 	computeLanding,
 	type LandingMentionRow,
@@ -30,11 +32,52 @@ import {
 	landingWindow,
 	promptMaterial,
 } from '../util/landing.js';
-import { checkCopy, type LandingCopyAnswer } from '../util/landing-copy.js';
+import { checkCopy, type LandingCopyAnswer, type LandingCopyInputs } from '../util/landing-copy.js';
 import { landingPrompt } from '../util/landing-prompt.js';
-import { judgingSql, mentionSaidSql, mentionSentimentSql } from 'src/modules/statements/util/statement-sql.js';
 
 const DAY_MS = 24 * 3600 * 1000;
+
+/** `LandingCopyInputs` as stored by a run between its plan and its save: the maps as entry lists */
+export interface StoredLandingCopyInputs {
+	all: unknown;
+	places: [string, unknown][];
+	dishes: [string, unknown][];
+	openings: [string, unknown][];
+	stories: [string, unknown][];
+}
+
+/**
+ * A city's edition before the model writes it (`LandingEditionService.plan`): the counts, the
+ * model's message (null when the edition lists no place: no call) and the numbers each line may
+ * state. Plain data, kept by the run (`LandingEditionWorkflow`) between its plan and its save.
+ */
+export interface LandingPlan {
+	cityId: string;
+	cityName: string;
+	/** The build's time (ISO): the window and the stamps */
+	now: string;
+	windowStart: string;
+	windowEnd: string;
+	data: LandingEditionData;
+	input: Record<string, unknown> | null;
+	inputs: StoredLandingCopyInputs;
+}
+
+const storeInputs = (inputs: LandingCopyInputs): StoredLandingCopyInputs => ({
+	all: inputs.all,
+	places: [...inputs.places],
+	dishes: [...inputs.dishes],
+	openings: [...inputs.openings],
+	stories: [...inputs.stories],
+});
+
+const readInputs = (stored: StoredLandingCopyInputs): LandingCopyInputs => ({
+	all: stored.all,
+	places: new Map(stored.places),
+	dishes: new Map(stored.dishes),
+	openings: new Map(stored.openings),
+	stories: new Map(stored.stories),
+});
 // The daily cron runs at one hour; an edition built a little later than it on day 0 is still due on day 5
 const DUE_SLACK_MS = 3 * 3600 * 1000;
 
@@ -45,10 +88,12 @@ const COUNTS = `p.city_id = ? and p.posted_at >= ? and p.posted_at < ?
 	and not ${ownPostSql('p', 'm.brand_id')}`;
 
 /**
- * The one entry point for the front page's live edition of a city: `build` counts the last 30
- * days of posts by others, has `LandingCopyAgent` write the lines, checks each, stores the edition
- * and publishes it. The cron builds every city's edition once its newest is five days old;
- * `unpublish` is an admin's way to take one down.
+ * The one entry point for the front page's live edition of a city: `plan` counts the last 30 days
+ * of posts by others and writes the model's message, `save` checks the lines `LandingCopyAgent`
+ * wrote (each failing one, or every one without an answer, its plain fallback), stores the
+ * edition and publishes it; `LandingEditionWorkflow` runs the two around the agent's call. The
+ * daily schedule builds every city's edition once its newest is five days old; `unpublish` is an
+ * admin's way to take one down.
  */
 @Injectable()
 export class LandingEditionService {
@@ -58,8 +103,6 @@ export class LandingEditionService {
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
 		private readonly topicService: TopicService,
-		private readonly landingCopyAgent: LandingCopyAgent,
-		private readonly pgBossService: PgBossService,
 	) {}
 
 	/** The newest published edition of the city with this slug; 404 without one. */
@@ -92,15 +135,10 @@ export class LandingEditionService {
 	}
 
 	/**
-	 * Counts the 30 days before `now`'s day and writes them up, replacing an edition of the same
-	 * window. Publishes it when it lists any place (`publish: false` keeps it a draft); an
-	 * edition with no places stays unpublished, so the page keeps the one before. Flushes.
+	 * Counts the 30 days before `now`'s day and plans the model's lines: the counts, the message
+	 * (none when the edition lists no place) and the numbers each line may state. Writes nothing.
 	 */
-	async build(
-		cityId: string,
-		now = new Date(),
-		opts: { publish?: boolean } = {},
-	): Promise<LandingEdition> {
+	async plan(cityId: string, now: Date): Promise<LandingPlan> {
 		const city = await this.cityService.getById(cityId);
 		const { start, end, previousStart } = landingWindow(now);
 		const current = {
@@ -122,7 +160,55 @@ export class LandingEditionService {
 			index: await this.topicService.index(),
 			doNotList: { venues: city.doNotListVenues, creators: city.doNotListCreators },
 		});
-		const { copy, copyError } = await this.writeCopy(city, data, current, start, end);
+		const material = promptMaterial(current, {
+			phrases: LANDING_PROMPT_PHRASES,
+			summaries: LANDING_PROMPT_SUMMARIES,
+		});
+		const { input, inputs } = landingPrompt(data, material, {
+			cityName: city.name,
+			windowStart: start,
+			windowEnd: end,
+		});
+		return {
+			cityId: city.id,
+			cityName: city.name,
+			now: now.toISOString(),
+			windowStart: start.toISOString(),
+			windowEnd: end.toISOString(),
+			data,
+			input: data.places.length ? input : null,
+			inputs: storeInputs(inputs),
+		};
+	}
+
+	/**
+	 * The planned edition with the model's lines, checked (`checkCopy`): without an answer (the
+	 * call failed: `copyError` says why, or no place to write about) every line is its plain
+	 * fallback, so the edition still goes out. Replaces an edition of the same window; publishes it
+	 * when it lists any place (`publish: false` keeps it a draft); an edition with no places stays
+	 * unpublished, so the page keeps the one before. Flushes.
+	 */
+	async save(
+		plan: LandingPlan,
+		answer: LandingCopyAnswer | null,
+		copyError?: string,
+		opts: { publish?: boolean } = {},
+	): Promise<LandingEdition> {
+		const city = await this.cityService.getById(plan.cityId);
+		const now = new Date(plan.now);
+		const start = new Date(plan.windowStart);
+		const end = new Date(plan.windowEnd);
+		const { data } = plan;
+		if (copyError)
+			this.logger.error(`${city.name}: the front page's lines fell back: ${copyError}`);
+		const onProblem = (where: string, problem: string) =>
+			this.logger.warn(`${city.name}: fallback for ${where}: ${problem}`);
+		const copy = checkCopy(
+			data,
+			answer,
+			readInputs(plan.inputs),
+			answer ? onProblem : undefined,
+		);
 
 		const existing = await this.em.findOne(LandingEdition, { city: city.id, windowEnd: end });
 		const edition =
@@ -161,13 +247,6 @@ export class LandingEditionService {
 		return edition;
 	}
 
-	/** Queues a build of the city's edition (`LandingBuildJob`, one waiting per city). */
-	async queueBuild(cityId: string): Promise<void> {
-		await this.pgBossService.sendJob(LandingBuildJob.jobName, new LandingBuildJob({ cityId }), {
-			singletonKey: cityId,
-		});
-	}
-
 	/**
 	 * The cities whose newest edition is `LANDING_REFRESH_DAYS` old or that have none: every
 	 * city with the monthly cron on, since only those keep being scraped.
@@ -191,47 +270,9 @@ export class LandingEditionService {
 		return due;
 	}
 
-	/** The cron's work: a build queued for every due city. */
-	async queueDue(now = new Date()): Promise<string[]> {
-		const due = await this.dueCities(now);
-		for (const city of due) await this.queueBuild(city.id);
-		return due.map(c => c.id);
-	}
-
-	/**
-	 * The model's lines, checked (`checkCopy`). A failed call (no allowance left, a timeout)
-	 * leaves every line its plain fallback and says why, so the edition still goes out.
-	 */
-	private async writeCopy(
-		city: City,
-		data: LandingEditionData,
-		current: { mentions: LandingMentionRow[]; statements: LandingStatementRow[] },
-		windowStart: Date,
-		windowEnd: Date,
-	): Promise<{ copy: LandingCopy; copyError?: string }> {
-		const material = promptMaterial(current, {
-			phrases: LANDING_PROMPT_PHRASES,
-			summaries: LANDING_PROMPT_SUMMARIES,
-		});
-		const { input, inputs } = landingPrompt(data, material, {
-			cityName: city.name,
-			windowStart,
-			windowEnd,
-		});
-		const onProblem = (where: string, problem: string) =>
-			this.logger.warn(`${city.name}: fallback for ${where}: ${problem}`);
-		if (!data.places.length) return { copy: checkCopy(data, null, inputs) };
-		try {
-			const res = await this.landingCopyAgent.generate(
-				[{ role: 'user', content: JSON.stringify(input) }],
-				{ cityName: city.name },
-			);
-			return { copy: checkCopy(data, res.object as LandingCopyAnswer, inputs, onProblem) };
-		} catch (error) {
-			const message = (error as Error).message ?? String(error);
-			this.logger.error(`${city.name}: the front page's lines fell back: ${message}`);
-			return { copy: checkCopy(data, null, inputs), copyError: message.slice(0, 500) };
-		}
+	/** The due cities' ids, for the daily schedule */
+	async dueCityIds(now = new Date()): Promise<string[]> {
+		return (await this.dueCities(now)).map(c => c.id);
 	}
 
 	private async mentionRows(

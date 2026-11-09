@@ -22,11 +22,13 @@ import {
 	AdminReportListItemOutputDto,
 	AdminReportOutputDto,
 } from '../dto/admin-report.output.dto.js';
+import type { AdminReportRunOutputDto } from '../dto/admin-report-run.output.dto.js';
 import { SharedReportOutputDto } from '../dto/report-share.output.dto.js';
 import { Report } from '../entities/report.entity.js';
 import type { ReportData } from '../interfaces/report-data.interface.js';
 import { ReportService } from '../services/report.service.js';
 import { ReportPdfService } from '../services/report-pdf.service.js';
+import { ReportRunsService } from '../services/report-runs.service.js';
 import { ReportShareService, shareUrl } from '../services/report-share.service.js';
 import { leaveBehindData } from '../util/leave-behind.js';
 import { sectionsOutput } from '../util/report-sections.js';
@@ -94,6 +96,7 @@ export class AdminReportsController {
 		private readonly reportService: ReportService,
 		private readonly reportPdfService: ReportPdfService,
 		private readonly reportShareService: ReportShareService,
+		private readonly reportRunsService: ReportRunsService,
 	) {}
 
 	@TypedRoute.Get('/')
@@ -205,29 +208,42 @@ export class AdminReportsController {
 	}
 
 	/**
-	 * Runs the analysis ("what moved, and why it might have") again on the report's stored data:
-	 * the observations, their checks, the agent and the line check. Written on every report of
-	 * that build (they share one data). The highlights are not rewritten: Rebuild does that.
-	 * Takes up to a few minutes: an agent call with tools.
+	 * Starts the analysis ("what moved, and why it might have") again on the report's stored data,
+	 * in the background (`report-analyse` on the `reports` queue, one in flight per report): the
+	 * observations, their checks, the agent and the line check, written on every report of that
+	 * build (they share one data). The highlights are not rewritten: Rebuild does that. Returns
+	 * the run, which `GET /admin/reports/runs/:workflowId` follows; it waits for an LLM account
+	 * when none can serve. 404 for an unknown report.
 	 */
 	@TypedRoute.Post('/:id/analyse')
-	async analyseReport(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminReportOutputDto> {
-		const report = await this.reportService.analyseAgain(id);
-		await this.em.populate(report, ['brand', 'city', 'config', 'template']);
-		return toOutput(report);
+	async analyseReport(@TypedParam('id') id: string & tags.Format<'uuid'>): Promise<AdminReportRunOutputDto> {
+		return this.reportRunsService.analyse(id);
 	}
 
 	/**
-	 * Builds (or rebuilds) a brand's reports on its branches in a city, or (no `cityId`) in all
-	 * its cities, for a month: one per active configuration (or the default), or only
-	 * `configId`'s. Returns the first. Takes a few seconds: LLM calls.
+	 * Starts building (or rebuilding) a brand's reports on its branches in a city, or (no
+	 * `cityId`) in all its cities, for a month, in the background (`report-build` on the `reports`
+	 * queue, one in flight per brand, city, month and configuration): one per active
+	 * configuration (or the default), or only `configId`'s. Returns the run, which
+	 * `GET /admin/reports/runs/:workflowId` follows until it names the reports; it waits for an
+	 * LLM account when none can serve. 400 at once when the brand has no open branch there.
 	 */
 	@TypedRoute.Post('/')
-	async buildReport(@TypedBody() body: AdminBuildReportInputDto): Promise<AdminReportOutputDto> {
-		const report = await this.reportService.build(body.brandId, body.cityId ?? null, body.month, {
-			...(body.configId && { configId: body.configId }),
+	async buildReport(@TypedBody() body: AdminBuildReportInputDto): Promise<AdminReportRunOutputDto> {
+		return this.reportRunsService.build({
+			brandId: body.brandId,
+			cityId: body.cityId ?? null,
+			month: body.month,
+			configId: body.configId ?? null,
 		});
-		await this.em.populate(report, ['brand', 'city', 'config', 'template']);
-		return toOutput(report);
+	}
+
+	/**
+	 * Where a report build or analysis is: queued, running, waiting for an LLM account (which
+	 * agent, until when), done (the reports it wrote) or failed (why). 404 for any other run.
+	 */
+	@TypedRoute.Get('/runs/:workflowId')
+	async getReportRun(@TypedParam('workflowId') workflowId: string): Promise<AdminReportRunOutputDto> {
+		return this.reportRunsService.get(workflowId);
 	}
 }

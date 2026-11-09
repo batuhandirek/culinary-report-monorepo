@@ -1,16 +1,12 @@
 import { EntityManager } from '@mikro-orm/postgresql';
 
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import _ from 'lodash';
 
-import type { City } from 'src/modules/cities/entities/city.entity.js';
 import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
-import { runPool } from 'src/shared/util/pool.js';
 
-import { CommentDisagreementAgent } from '../agents/comment-disagreement.agent.js';
-import { CommentIntentAgent } from '../agents/comment-intent.agent.js';
 import {
 	PostComment,
 	PostCommentIntentEnum,
@@ -19,9 +15,6 @@ import {
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { ownPostSql } from '../util/accounts.js';
 import { type CommentFields, plainIntent } from '../util/post-comments.js';
-
-// Comments read side by side, one a call
-const CONCURRENCY = 10;
 
 /** A post about the venue whose comments were scraped, with what they say. */
 export interface PostWithComments {
@@ -40,18 +33,43 @@ export interface PostWithComments {
 }
 
 /**
- * Comments under the report venues' top TikTok posts: which posts, storing them and their
- * analysis by `CommentIntentAgent`. The scrape itself is `SocialScrapeService.scrapeComments`.
+ * One post's unread comments as the intent agent reads them, as plain data (a workflow stores it;
+ * the pipeline builds the messages): the ones a model need not read with their intent
+ * (`plainIntent`), the others' text and likes, and the post they are under
+ */
+export interface CommentsForReading {
+	postId: string;
+	cityId: string;
+	cityName: string;
+	/** The venue the post is about: its first matched mention's branch, else brand */
+	venue: string;
+	caption: string | null;
+	plain: { commentId: string; intent: PostCommentIntentEnum }[];
+	ask: { commentId: string; text: string; likes: number }[];
+}
+
+/** What the intent agent answers on one comment */
+export interface CommentIntentFields {
+	intent: PostCommentIntentEnum;
+	questionTopic?: PostCommentQuestionTopicEnum | null;
+	question?: string | null;
+}
+
+/** A post's disagreeing comments, for the disagreement agent's one sentence */
+export interface DisagreeingComments {
+	venue: string;
+	caption: string | null;
+	comments: string[];
+}
+
+/**
+ * Comments under the report venues' top TikTok posts: which posts, storing them, and storing what
+ * the reading (the pipeline's `read-comments`) made of them. The scrape itself is
+ * `SocialScrapeService.scrapeComments`.
  */
 @Injectable()
 export class PostCommentService {
-	private readonly logger = new Logger(PostCommentService.name);
-
-	constructor(
-		private readonly em: EntityManager,
-		private readonly commentIntentAgent: CommentIntentAgent,
-		private readonly commentDisagreementAgent: CommentDisagreementAgent,
-	) {}
+	constructor(private readonly em: EntityManager) {}
 
 	/**
 	 * Each brand's most viewed TikTok posts of the month in the city by others, with comments,
@@ -107,116 +125,112 @@ export class PostCommentService {
 		return unique.length;
 	}
 
-	/** The city's comments not classified yet: what the next `analyse` takes */
+	/** The city's comments not classified yet */
 	countUnread(cityId: string): Promise<number> {
 		return this.em.count(PostComment, { analysedAt: null, post: { city: cityId } });
 	}
 
-	/**
-	 * Classifies the city's comments that have none yet, one post at a time (the agent is told
-	 * the venue the post is about). Tags-only and emoji-only comments need no model. Flushes once.
-	 */
-	async analyse(city: City, limit = 20_000): Promise<{ analysed: number; calls: number }> {
+	/** The city's posts with comments not read yet: what the reading takes, one post a workflow */
+	async postsWithUnreadComments(cityId: string, limit: number): Promise<string[]> {
+		const rows = await this.em.getConnection().execute<{ post_id: string }[]>(
+			`select distinct c.post_id from post_comments c join social_posts p on p.id = c.post_id
+			where c.analysed_at is null and p.city_id = ? order by c.post_id limit ?`,
+			[cityId, limit],
+		);
+		return rows.map(r => r.post_id);
+	}
+
+	/** The post's unread comments as the intent agent reads them (`CommentsForReading`); null when none is left unread */
+	async commentsForReading(postId: string): Promise<CommentsForReading | null> {
 		const comments = await this.em.find(
 			PostComment,
-			{ analysedAt: null, post: { city } },
-			{ populate: ['post'], limit },
+			{ analysedAt: null, post: postId },
+			{ populate: ['post', 'post.city'] },
 		);
-		let analysed = 0;
-		const now = new Date();
-		const rest: PostComment[] = [];
+		if (!comments.length) return null;
+		const post = comments[0].post;
+		const plain: CommentsForReading['plain'] = [];
+		const ask: CommentsForReading['ask'] = [];
 		for (const comment of comments) {
 			const intent = plainIntent(comment.text);
-			if (!intent) {
-				rest.push(comment);
-				continue;
-			}
+			if (intent) plain.push({ commentId: comment.id, intent });
+			else ask.push({ commentId: comment.id, text: comment.text, likes: comment.likes });
+		}
+		return {
+			postId: post.id,
+			cityId: post.city.id,
+			cityName: post.city.name,
+			venue: ask.length ? await this.venueNameOf(post) : '',
+			caption: post.text ?? null,
+			plain,
+			ask,
+		};
+	}
+
+	/**
+	 * The post's comments' intents stored: the plain ones and the agent's answers (a question with
+	 * its topic, "other" when none, and its wording). Flushes; the disagreeing comments when any,
+	 * for the disagreement agent, else null.
+	 */
+	async saveCommentIntents(
+		postId: string,
+		plain: CommentsForReading['plain'],
+		answers: { commentId: string; answer: CommentIntentFields }[],
+	): Promise<DisagreeingComments | null> {
+		const comments = await this.em.find(
+			PostComment,
+			{
+				post: postId,
+				id: { $in: [...plain.map(p => p.commentId), ...answers.map(a => a.commentId)] },
+			},
+			{ populate: ['post'] },
+		);
+		const byId = new Map(comments.map(c => [c.id, c]));
+		const now = new Date();
+		for (const { commentId, intent } of plain) {
+			const comment = byId.get(commentId);
+			if (!comment) continue;
 			comment.intent = intent;
 			comment.analysedAt = now;
-			analysed++;
 		}
-
-		// The venue each post is about, for the prompt: its matched mention's (the branch, else the brand)
-		const postIds = _.uniq(rest.map(c => c.post.id));
-		const venueRows: { post_id: string; name: string }[] =
-			postIds.length ?
-				await this.em.getConnection().execute(
-					`select distinct on (m.post_id) m.post_id, coalesce(v.name, b.name) as name
-					from mentions m join brands b on b.id = m.brand_id left join venues v on v.id = m.venue_id
-					where m.post_id in (${postIds.map(() => '?').join(', ')})
-					order by m.post_id, m.created_at`,
-					postIds,
-				)
-			:	[];
-		const venueOf = new Map(venueRows.map(r => [r.post_id, r.name]));
-
-		let calls = 0;
-		const venueName = (post: SocialPost) =>
-			venueOf.get(post.id) ?? post.locationName ?? 'the venue';
-		const context = { cityName: city.name };
-		// A provider failure (no credits) stops the pool: keep what was finished before it
-		try {
-			// One comment a call
-			await runPool(
-				rest,
-				CONCURRENCY,
-				async comment => {
-					calls++;
-					const res = await this.commentIntentAgent.generate(
-						JSON.stringify({
-							venue: venueName(comment.post),
-							caption: comment.post.text?.slice(0, 500) ?? null,
-							comment: { text: comment.text.slice(0, 400), likes: comment.likes },
-						}),
-						context,
-					);
-					comment.intent = res.object.intent;
-					const isQuestion = res.object.intent === PostCommentIntentEnum.QUESTION;
-					comment.questionTopic =
-						isQuestion ?
-							(res.object.questionTopic ?? PostCommentQuestionTopicEnum.OTHER)
-						:	null;
-					comment.question = isQuestion ? res.object.question?.trim() || null : null;
-					comment.analysedAt = now;
-					analysed++;
-				},
-				(comment, e) =>
-					this.logger.warn(`Comment ${comment.externalId} failed: ${e.message}`),
-			);
-			// Then one call a post on what its disagreeing comments say
-			const disagreeing = Object.values(
-				_.groupBy(
-					rest.filter(c => c.intent === PostCommentIntentEnum.DISAGREEMENT),
-					c => c.post.id,
-				),
-			);
-			await runPool(
-				disagreeing,
-				CONCURRENCY,
-				async group => {
-					calls++;
-					const res = await this.commentDisagreementAgent.generate(
-						JSON.stringify({
-							venue: venueName(group[0].post),
-							caption: group[0].post.text?.slice(0, 500) ?? null,
-							comments: group.map(c => c.text.slice(0, 400)),
-						}),
-						context,
-					);
-					group[0].post.commentsDisagreement = res.object.summary.trim() || null;
-				},
-				(group, e) =>
-					this.logger.warn(
-						`Disagreement of post ${group[0].post.externalId} failed: ${e.message}`,
-					),
-			);
-		} catch (e) {
-			await this.em.flush();
-			throw e;
+		const disagreeing: PostComment[] = [];
+		for (const { commentId, answer } of answers) {
+			const comment = byId.get(commentId);
+			if (!comment) continue;
+			comment.intent = answer.intent;
+			const isQuestion = answer.intent === PostCommentIntentEnum.QUESTION;
+			comment.questionTopic =
+				isQuestion ? (answer.questionTopic ?? PostCommentQuestionTopicEnum.OTHER) : null;
+			comment.question = isQuestion ? answer.question?.trim() || null : null;
+			comment.analysedAt = now;
+			if (answer.intent === PostCommentIntentEnum.DISAGREEMENT) disagreeing.push(comment);
 		}
-		// One flush at the end: the batches run side by side on this entity manager
 		await this.em.flush();
-		return { analysed, calls };
+		if (!disagreeing.length) return null;
+		const post = disagreeing[0].post;
+		return {
+			venue: await this.venueNameOf(post),
+			caption: post.text ?? null,
+			comments: disagreeing.map(c => c.text),
+		};
+	}
+
+	/** The disagreement agent's line on the post stored. Flushes. */
+	async saveDisagreement(postId: string, summary: string): Promise<void> {
+		const post = await this.em.findOneOrFail(SocialPost, postId);
+		post.commentsDisagreement = summary.trim() || null;
+		await this.em.flush();
+	}
+
+	/** The venue the post is about, for the prompts: its first matched mention's branch, else brand */
+	private async venueNameOf(post: SocialPost): Promise<string> {
+		const [row] = await this.em.getConnection().execute<{ name: string }[]>(
+			`select coalesce(v.name, b.name) as name
+			from mentions m join brands b on b.id = m.brand_id left join venues v on v.id = m.venue_id
+			where m.post_id = ? order by m.created_at limit 1`,
+			[post.id],
+		);
+		return row?.name ?? post.locationName ?? 'the venue';
 	}
 
 	/** A post and its comments, most liked first; 404 for an unknown post. */

@@ -1,167 +1,197 @@
-import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
+import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
-import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { StatementService } from 'src/modules/statements/services/statement.service.js';
-import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
+import type { City } from 'src/modules/cities/entities/city.entity.js';
+import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
+import type { ReviewsFetch } from 'src/modules/pipeline/atoms/reviews/util/reviews-input.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { ReviewClaimsAgent } from '../agents/review-claims.agent.js';
 import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
 import { ReviewService } from '../services/review.service.js';
 import { VenueService } from '../services/venue.service.js';
 
-describe('ReviewService.scrapeMonth (pglite)', () => {
+/**
+ * What the `reviews` atom is asked for: the month scrape's split and start days, the watch's and
+ * the weekly fetch's start days, a backfill's plan; and what a fetch's save keeps.
+ */
+describe('ReviewService plans and save (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: ReviewService;
-	const runActor = jest.fn<(...args: unknown[]) => Promise<unknown[]>>();
-	const generate = jest.fn<(prompt: string) => Promise<unknown>>();
+	let city: City;
 
 	beforeAll(async () => {
-		harness = await createPgliteTestingModule({
-			providers: [
-				ReviewService,
-				VenueService,
-				StatementService,
-				{ provide: ApifyService, useValue: { runActor } },
-				{ provide: ReviewClaimsAgent, useValue: { generate } },
-				// Agent B is not under test here: the claims stay without parts
-				{
-					provide: StatementPartsService,
-					useValue: { read: async () => ({ read: 0, tokens: 0 }) },
-				},
-			],
-		});
+		harness = await createPgliteTestingModule({ providers: [ReviewService, VenueService] });
 		service = harness.moduleRef.get(ReviewService);
 		entityManagerManager.setEntityManager(harness.orm.em);
+		city = await cityFactory.create();
 	});
 
 	afterAll(async () => {
 		await harness.stop();
 	});
 
-	it("saves the month's reviews and the later ones, and snapshots each venue's all-time rating from the items", async () => {
+	const venue = (placeId: string, params: Partial<Venue> = {}) =>
+		harness.orm.em.create(Venue, { city, placeId, name: placeId, ...params } as Venue);
+	const stretch = (from: string, at: string) => ({
+		reviewsFetchedFrom: new Date(`${from}T00:00:00Z`),
+		reviewsFetchedAt: new Date(`${at}T06:00:00Z`),
+	});
+	const googleReview = (venue: Venue, reviewId: string, publishedAt: string) =>
+		harness.orm.em.create(Review, { venue, reviewId, publishedAt: new Date(publishedAt) });
+
+	it("plans the month: the tracked venues from the month's first day or their last fetch when later, one run a start day; the rest from six months earlier on the backfill's share; all in the order given", async () => {
 		const em = harness.orm.em;
-		const a = em.create(Venue, {
-			city: testCity(em),
-			placeId: 'pa',
-			name: 'A',
-			rating: 4.0,
-			reviewsCount: 100,
-		});
-		const b = em.create(Venue, {
-			city: testCity(em),
-			placeId: 'pb',
-			name: 'B',
-			rating: 4.5,
-			reviewsCount: 50,
-		});
-		const quiet = em.create(Venue, {
-			city: testCity(em),
-			placeId: 'pq',
-			name: 'Quiet',
-			rating: 3.9,
-		});
+		const plain = venue('m-plain');
+		googleReview(plain, 'm1', '2026-01-15T10:00:00Z');
+		// Its stretch covers the month's first day: it starts at its last fetch
+		const later = venue('m-later', stretch('2026-02-01', '2026-09-20'));
+		// Only the weekly fetch's last week: no history
+		const weekly = venue('m-weekly', stretch('2026-09-20', '2026-09-27'));
+		const fresh = venue('m-fresh');
+		const old = venue('m-old');
+		googleReview(old, 'm2', '2026-03-31T21:00:00Z');
 		await em.flush();
 
-		const item = (placeId: string, reviewId: string, date: string, totalScore: number) => ({
-			placeId,
-			reviewId,
-			publishedAtDate: date,
-			stars: 5,
-			text: 'Good',
-			totalScore,
-			reviewsCount: totalScore === 4.2 ? 130 : 60,
+		const plan = await service.planReportMonth(
+			'2026-09',
+			[plain.id, weekly.id, old.id, fresh.id, later.id, plain.id],
+			10,
+		);
+		expect(plan).toEqual({
+			month: [
+				{
+					fetch: { mode: 'since', placeIds: ['m-plain', 'm-old'], since: '2026-09-01' },
+					maxCostUsd: 4,
+					purpose: 'google-reviews 2026-09 from 2026-09-01: 2 venues',
+				},
+				{
+					fetch: { mode: 'since', placeIds: ['m-later'], since: '2026-09-20' },
+					maxCostUsd: 2,
+					purpose: 'google-reviews 2026-09 from 2026-09-20: 1 venues',
+				},
+			],
+			backfill: [
+				{
+					fetch: {
+						mode: 'since',
+						placeIds: ['m-weekly', 'm-fresh'],
+						since: '2026-03-01',
+					},
+					maxCostUsd: 4,
+					purpose: 'google-reviews 2026-09 backfill from 2026-03-01: 2 venues',
+				},
+			],
+			backfilled: 2,
+			backfillSince: '2026-03-01',
 		});
-		runActor.mockResolvedValueOnce([
-			item('pa', 'r1', '2026-09-03T10:00:00Z', 4.2),
-			item('pa', 'r2', '2026-09-20T10:00:00Z', 4.2),
-			// A review from after the month: paid for too, so it is kept as October's
-			item('pb', 'r3', '2026-10-01T10:00:00Z', 4.6),
-			// One from before the start date (the actor rounds to days): left out
-			item('pb', 'r0', '2026-08-31T23:00:00Z', 4.6),
-		]);
-
-		const now = new Date('2026-10-02T06:30:00Z');
-		const saved = await service.scrapeMonth('2026-09', [a.id, b.id, quiet.id], 5, now);
-		expect(saved).toBe(3);
-		em.clear();
-
-		const snapshots = await em.find(VenueSnapshot, {}, { populate: ['venue'] });
-		expect(
-			snapshots.map(s => [s.venue.name, s.snapshotDate, s.rating, s.reviewsCount]).sort(),
-		).toEqual([
-			['A', '2026-10-02', 4.2, 130],
-			['B', '2026-10-02', 4.6, 60],
-		]);
-		expect(await em.findOneOrFail(Venue, { placeId: 'pa' })).toMatchObject({
-			rating: 4.2,
-			reviewsCount: 130,
-		});
-		// No item, no snapshot, rating left as it was
-		expect((await em.findOneOrFail(Venue, { placeId: 'pq' })).rating).toBe(3.9);
-		expect(await em.count(Review, {})).toBe(3);
 	});
 
-	it('starts earlier for a backfill', async () => {
+	it('gives the backfill the whole budget when nothing is tracked yet, and no run when nothing is new', async () => {
 		const em = harness.orm.em;
-		const a = em.create(Venue, { city: testCity(em), placeId: 'pc', name: 'C' });
+		const a = venue('n-a');
+		const b = venue('n-b');
+		const tracked = venue('n-t');
+		googleReview(tracked, 'n1', '2026-01-01T00:00:00Z');
 		await em.flush();
-		runActor.mockResolvedValueOnce([
+		expect(await service.planReportMonth('2026-09', [a.id, b.id], 5)).toEqual({
+			month: [],
+			backfill: [
+				{
+					fetch: { mode: 'since', placeIds: ['n-a', 'n-b'], since: '2026-03-01' },
+					maxCostUsd: 5,
+					purpose: 'google-reviews 2026-09 backfill from 2026-03-01: 2 venues',
+				},
+			],
+			backfilled: 2,
+			backfillSince: '2026-03-01',
+		});
+		expect(await service.planReportMonth('2026-09', [tracked.id], 5)).toEqual({
+			month: [
+				{
+					fetch: { mode: 'since', placeIds: ['n-t'], since: '2026-09-01' },
+					maxCostUsd: 5,
+					purpose: 'google-reviews 2026-09 from 2026-09-01: 1 venues',
+				},
+			],
+			backfill: [],
+			backfilled: 0,
+		});
+	});
+
+	it("plans the watch from the day given, or from a venue's last fetch when its stretch covers the day", async () => {
+		const em = harness.orm.em;
+		const covered = venue('w-c', stretch('2026-10-01', '2026-10-20'));
+		const bare = venue('w-b');
+		await em.flush();
+		expect(
+			await service.planRecent([covered.id, bare.id], new Date('2026-10-15T05:00:00Z'), 1),
+		).toEqual([
 			{
-				placeId: 'pc',
-				reviewId: 'r-aug',
-				publishedAtDate: '2026-08-12T10:00:00Z',
-				totalScore: 4.2,
-				reviewsCount: 130,
+				fetch: { mode: 'since', placeIds: ['w-b'], since: '2026-10-15' },
+				maxCostUsd: 0.5,
+				purpose: 'google-reviews since 2026-10-15 from 2026-10-15: 1 venues',
+			},
+			{
+				fetch: { mode: 'since', placeIds: ['w-c'], since: '2026-10-20' },
+				maxCostUsd: 0.5,
+				purpose: 'google-reviews since 2026-10-15 from 2026-10-20: 1 venues',
 			},
 		]);
-		await service.scrapeMonth(
-			'2026-09',
-			[a.id],
-			5,
-			new Date('2026-10-18T09:00:00Z'),
-			'2026-08-01',
-		);
-		expect(
-			(runActor.mock.calls.at(-1)?.[1] as { reviewsStartDate: string }).reviewsStartDate,
-		).toBe('2026-08-01');
-		expect(await em.count(Review, { reviewId: 'r-aug' })).toBe(1);
 	});
 
-	it('sends the places in the order given, so a capped run covers the first ones', async () => {
+	it("plans the weekly fetch: a venue never fetched from a week back, a fetched one from its last fetch, on the budget less the check's reserve", async () => {
 		const em = harness.orm.em;
-		const venues = ['pz', 'py', 'px'].map(placeId =>
-			em.create(Venue, { city: testCity(em), placeId, name: placeId }),
+		const never = venue('s-n');
+		const fetched = venue('s-f', stretch('2026-10-13', '2026-10-20'));
+		await em.flush();
+		const now = new Date('2026-10-25T04:30:00Z');
+		const plan = await service.planSnapshot([never.id, fetched.id], 3, now);
+		// Two newest reviews at $0.0006, planned on 80 %
+		expect(plan.reserveUsd).toBeCloseTo(0.0015, 6);
+		expect(plan).toMatchObject({
+			requested: 2,
+			runs: [
+				{ fetch: { mode: 'since', placeIds: ['s-n'], since: '2026-10-18' } },
+				{ fetch: { mode: 'since', placeIds: ['s-f'], since: '2026-10-20' } },
+			],
+		});
+		expect(plan.runs[0].maxCostUsd).toBeCloseTo((3 - 0.0015) / 2, 6);
+		expect(await service.planSnapshot([], 3, now)).toEqual({
+			requested: 0,
+			runs: [],
+			reserveUsd: 0,
+		});
+	});
+
+	it('plans a backfill: each venue at a share of its review count a month back, five reviews at least, taken while the plan fits the budget', async () => {
+		const em = harness.orm.em;
+		const busy = venue('b-busy', { reviewsCount: 10_000 });
+		const [a, b, c, d] = ['b-a', 'b-b', 'b-c', 'b-d'].map(id =>
+			venue(id, { reviewsCount: null }),
 		);
 		await em.flush();
-		runActor.mockResolvedValueOnce([]);
-		await service.scrapeMonth('2026-09', [venues[2].id, venues[0].id, venues[1].id], 5);
-		expect((runActor.mock.calls.at(-1)?.[1] as { placeIds: string[] }).placeIds).toEqual([
-			'px',
-			'pz',
-			'py',
-		]);
+		// Six months back: 10,000 × 1.05 % × 6.04 months ≈ 635 reviews ≈ $0.38; the others $0.003 each
+		const plan = await service.planBackfill(
+			[busy.id, a.id, b.id, c.id, d.id],
+			'2026-05-01',
+			0.39,
+			new Date('2026-11-01T00:00:00Z'),
+		);
+		expect(plan).toMatchObject({ venues: 5, taken: 4, left: 1, plannedUsd: 0.39 });
+		expect(plan.runs).toHaveLength(1);
+		expect(plan.runs[0].placeIds).toEqual(['b-busy', 'b-a', 'b-b', 'b-c']);
+		expect(plan.runs[0].plannedUsd).toBeCloseTo(0.3898, 3);
 	});
 
 	it('tells the venues with a Google review from before a date: TripAdvisor and the reviews from the date on are no history', async () => {
 		const em = harness.orm.em;
 		const [old, recent, tourist, none] = ['h-old', 'h-recent', 'h-ta', 'h-none'].map(placeId =>
-			em.create(Venue, { city: testCity(em), placeId, name: placeId }),
+			venue(placeId),
 		);
-		em.create(Review, {
-			venue: old,
-			reviewId: 'h1',
-			publishedAt: new Date('2026-08-31T21:00:00Z'),
-		});
-		em.create(Review, {
-			venue: recent,
-			reviewId: 'h2',
-			publishedAt: new Date('2026-09-01T00:00:00Z'),
-		});
+		googleReview(old, 'h1', '2026-08-31T21:00:00Z');
+		googleReview(recent, 'h2', '2026-09-01T00:00:00Z');
 		em.create(Review, {
 			venue: tourist,
 			reviewId: 'ta_h3',
@@ -176,59 +206,39 @@ describe('ReviewService.scrapeMonth (pglite)', () => {
 		// A stored stretch from before the date is history too, a review or not
 		none.reviewsFetchedFrom = new Date('2026-08-01T00:00:00Z');
 		await em.flush();
-		expect([...(await service.venuesWithHistory(ids, before))].sort()).toEqual([old.id, none.id].sort());
-	});
-
-	it('updates the day’s snapshot when the step runs twice', async () => {
-		const em = harness.orm.em;
-		const a = await em.findOneOrFail(Venue, { placeId: 'pa' });
-		runActor.mockResolvedValueOnce([
-			{
-				placeId: 'pa',
-				reviewId: 'r1',
-				publishedAtDate: '2026-09-03T10:00:00Z',
-				totalScore: 4.3,
-				reviewsCount: 131,
-			},
-		]);
-		await service.scrapeMonth('2026-09', [a.id], 5, new Date('2026-10-02T09:00:00Z'));
-		em.clear();
-		const snapshots = await em.find(VenueSnapshot, { venue: a.id });
-		expect(snapshots.map(s => [s.snapshotDate, s.rating])).toEqual([['2026-10-02', 4.3]]);
-	});
-
-	it('keeps the batches analysed before the LLM account ran out, and fails', async () => {
-		const em = harness.orm.em;
-		const venue = em.create(Venue, {
-			city: testCity(em),
-			placeId: 'p-llm',
-			name: 'Out of credits',
-		});
-		await em.flush();
-		for (let i = 0; i < 12; i++) {
-			em.create(Review, {
-				venue,
-				reviewId: `llm-${i}`,
-				publishedAt: new Date('2026-07-10T10:00:00Z'),
-				stars: 4,
-				text: `Review ${i}`,
-			});
-		}
-		await em.flush();
-		const noCredits = new Error(
-			'You have no credits remaining. Add credits to continue using the API',
+		expect([...(await service.venuesWithHistory(ids, before))].sort()).toEqual(
+			[old.id, none.id].sort(),
 		);
-		// One review a call: the first ten go through, the eleventh hits the empty account
-		let calls = 0;
-		generate.mockImplementation(async () => {
-			calls++;
-			if (calls > 10) throw noCredits;
-			return { object: { claims: [] } };
+	});
+
+	it("updates the day's snapshot and the review when a fetch is saved twice", async () => {
+		const em = harness.orm.em;
+		const a = venue('t-a');
+		await em.flush();
+		const fetch: ReviewsFetch = { mode: 'since', placeIds: ['t-a'], since: '2026-09-01' };
+		const now = new Date('2026-10-02T09:00:00Z');
+		const item = (totalScore: number, reviewsCount: number, text: string) => ({
+			placeId: 't-a',
+			reviewId: 'r1',
+			publishedAtDate: '2026-09-03T10:00:00Z',
+			text,
+			totalScore,
+			reviewsCount,
 		});
-
-		await expect(service.analyseMonth('2026-07')).rejects.toBe(noCredits);
-
+		await service.saveReviews([item(4.2, 130, 'Good')], fetch, { capped: false, now });
+		const again = await service.saveReviews([item(4.3, 131, 'Good, edited')], fetch, {
+			capped: false,
+			now,
+		});
+		expect(again).toEqual({ saved: 1, rated: 1, returned: ['t-a'], upToDate: 0, missed: 0 });
 		em.clear();
-		expect(await em.count(Review, { venue: venue.id, analysedAt: { $ne: null } })).toBe(10);
+		expect(
+			(await em.find(VenueSnapshot, { venue: a.id })).map(s => [
+				s.snapshotDate,
+				s.rating,
+				s.reviewsCount,
+			]),
+		).toEqual([['2026-10-02', 4.3, 131]]);
+		expect((await em.find(Review, { venue: a.id })).map(r => r.text)).toEqual(['Good, edited']);
 	});
 });

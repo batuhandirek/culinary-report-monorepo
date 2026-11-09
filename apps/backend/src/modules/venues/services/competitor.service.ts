@@ -56,7 +56,9 @@ export const googleAlsoSearched = (
 	const listed = (from: Pick<Venue, 'details'>, name: string) => {
 		const ours = venueAliases(name, cityWords);
 		return (from.details?.peopleAlsoSearch ?? []).some(place =>
-			venueAliases(place.title, cityWords).some(x => ours.some(y => nameSimilarity(x, y) >= 0.85)),
+			venueAliases(place.title, cityWords).some(x =>
+				ours.some(y => nameSimilarity(x, y) >= 0.85),
+			),
 		);
 	};
 	return listed(a, b.name) || listed(b, a.name);
@@ -110,9 +112,14 @@ export class CompetitorService {
 		pickedBy: CompetitorPickedByEnum = CompetitorPickedByEnum.ADMIN,
 		branchId?: string | null,
 	): Promise<void> {
-		const brand = await this.em.findOneOrFail(Brand, { id: brandId }, { populate: ['branches'] });
+		const brand = await this.em.findOneOrFail(
+			Brand,
+			{ id: brandId },
+			{ populate: ['branches'] },
+		);
 		const branch = branchId ? brand.branches.getItems().find(v => v.id === branchId) : null;
-		if (branchId && !branch) throw new BadRequestException(`That place is not a branch of ${brand.name}`);
+		if (branchId && !branch)
+			throw new BadRequestException(`That place is not a branch of ${brand.name}`);
 		const cities = new Set((branch ? [branch] : brand.branches.getItems()).map(v => v.city.id));
 		const owner = pickedBy === CompetitorPickedByEnum.OWNER;
 		const refuseOwner = () => {
@@ -121,16 +128,27 @@ export class CompetitorService {
 
 		if ('venueId' in target) {
 			const venue = await this.em.findOneOrFail(Venue, { id: target.venueId });
-			if (venue.brand.id === brandId) throw new BadRequestException(`${venue.name} is one of your own branches`);
+			if (venue.brand.id === brandId)
+				throw new BadRequestException(`${venue.name} is one of your own branches`);
 			if (await this.em.count(BrandCompetitor, { brand: brandId, venue })) return;
-			if (owner && (!cities.has(venue.city.id) || venue.closed || !isFoodVenue(venue.category))) refuseOwner();
+			if (
+				owner &&
+				(!cities.has(venue.city.id) || venue.closed || !isFoodVenue(venue.category))
+			)
+				refuseOwner();
 			await this.checkRoom(brandId, branch);
 			this.em.create(BrandCompetitor, { brand, branch, venue, pickedBy });
 		} else {
-			if (target.brandId === brandId) throw new BadRequestException('A brand cannot compete with itself');
-			const rival = await this.em.findOneOrFail(Brand, { id: target.brandId }, { populate: ['branches'] });
+			if (target.brandId === brandId)
+				throw new BadRequestException('A brand cannot compete with itself');
+			const rival = await this.em.findOneOrFail(
+				Brand,
+				{ id: target.brandId },
+				{ populate: ['branches'] },
+			);
 			if (await this.em.count(BrandCompetitor, { brand: brandId, rival })) return;
-			if (owner && !rival.branches.getItems().some(v => cities.has(v.city.id) && !v.closed)) refuseOwner();
+			if (owner && !rival.branches.getItems().some(v => cities.has(v.city.id) && !v.closed))
+				refuseOwner();
 			await this.checkRoom(brandId, branch);
 			this.em.create(BrandCompetitor, { brand, branch, rival, pickedBy });
 		}
@@ -139,7 +157,10 @@ export class CompetitorService {
 
 	/** Removes a competitor by its id on the list; another brand's is a 404. */
 	async remove(brandId: string, competitorId: number): Promise<void> {
-		const removed = await this.em.nativeDelete(BrandCompetitor, { id: competitorId, brand: brandId });
+		const removed = await this.em.nativeDelete(BrandCompetitor, {
+			id: competitorId,
+			brand: brandId,
+		});
 		if (!removed) throw new NotFoundException();
 	}
 
@@ -157,7 +178,11 @@ export class CompetitorService {
 				city: { $in: _.uniq(own.map(v => v.city.id)) },
 				closed: false,
 				brand: { $ne: brandId },
-				$or: [{ name: { $ilike: term } }, { street: { $ilike: term } }, { district: { $ilike: term } }],
+				$or: [
+					{ name: { $ilike: term } },
+					{ street: { $ilike: term } },
+					{ district: { $ilike: term } },
+				],
 			},
 			{
 				populate: ['brand', 'brand.branches'],
@@ -194,7 +219,8 @@ export class CompetitorService {
 				[v => v.reviewsCount ?? -1],
 				['desc'],
 			);
-			if (branches.length) out.push({ link, name: link.rival!.name, venues: branches, ...branch });
+			if (branches.length)
+				out.push({ link, name: link.rival!.name, venues: branches, ...branch });
 		}
 		return out;
 	}
@@ -207,12 +233,20 @@ export class CompetitorService {
 		if (brandIds.length === 0) return [];
 		const ids: string[] = [];
 		for (const brandId of _.uniq(brandIds))
-			for (const competitor of await this.inCity(brandId, cityId)) ids.push(...competitor.venues.map(v => v.id));
+			for (const competitor of await this.inCity(brandId, cityId))
+				ids.push(...competitor.venues.map(v => v.id));
 		const own = await this.em.find(Venue, { brand: { $in: brandIds } }, { fields: ['id'] });
 		return _.difference(
 			_.uniq(ids),
 			own.map(v => v.id),
 		);
+	}
+
+	/** The competing places of these brands in the city (`competitorVenueIdsOf`), each with its brand */
+	async competitorVenuesOf(brandIds: string[], cityId: string): Promise<Venue[]> {
+		const ids = await this.competitorVenueIdsOf(brandIds, cityId);
+		if (!ids.length) return [];
+		return this.em.find(Venue, { id: { $in: ids } }, { populate: ['brand'] });
 	}
 
 	/**
@@ -231,21 +265,28 @@ export class CompetitorService {
 		limit = 5,
 		branchId?: string,
 	): Promise<CompetitorSuggestion[]> {
-		const branches = await this.em.find(Venue, { brand: brandId, closed: false }, { populate: ['city'] });
+		const branches = await this.em.find(
+			Venue,
+			{ brand: brandId, closed: false },
+			{ populate: ['city'] },
+		);
 		const city =
 			cityId ??
-			_.maxBy(
-				Object.entries(_.countBy(branches, v => v.city.id)),
-				([, n]) => n,
-			)?.[0];
+			_.maxBy(Object.entries(_.countBy(branches, v => v.city.id)), ([, n]) => n)?.[0];
 		const venue =
-			branchId ? branches.find(v => v.id === branchId) : busiestBranch(branches.filter(v => v.city.id === city));
+			branchId ?
+				branches.find(v => v.id === branchId)
+			:	busiestBranch(branches.filter(v => v.city.id === city));
 		if (!venue) return [];
-		const taken = new Set((await this.inCity(brandId, venue.city.id)).flatMap(c => c.venues.map(v => v.id)));
+		const taken = new Set(
+			(await this.inCity(brandId, venue.city.id)).flatMap(c => c.venues.map(v => v.id)),
+		);
 
 		const rows: { venue_id: string; n: number }[] = await this.em
 			.getConnection()
-			.execute(`select venue_id, count(*)::int as n from mentions where venue_id is not null group by venue_id`);
+			.execute(
+				`select venue_id, count(*)::int as n from mentions where venue_id is not null group by venue_id`,
+			);
 		const mentions = new Map(rows.map(r => [r.venue_id, r.n]));
 
 		const cityWords = cityStopwords(venue.city.nameStopwords ?? []);
@@ -283,7 +324,10 @@ export class CompetitorService {
 				if (candidate.district === venue.district) {
 					score += 2;
 					reasons.push('same district');
-				} else if (candidate.district && areNeighbourDistricts(venue.city, venue.district, candidate.district)) {
+				} else if (
+					candidate.district &&
+					areNeighbourDistricts(venue.city, venue.district, candidate.district)
+				) {
 					score += 1;
 					reasons.push('neighbouring district');
 				} else if (!alsoSearched) continue;
@@ -298,7 +342,12 @@ export class CompetitorService {
 			}
 			const n = mentions.get(candidate.id) ?? 0;
 			score += 0.5 * Math.log1p(n);
-			scored.push({ venue: candidate, score: Math.round(score * 100) / 100, mentions: n, reasons });
+			scored.push({
+				venue: candidate,
+				score: Math.round(score * 100) / 100,
+				mentions: n,
+				reasons,
+			});
 		}
 		return _.orderBy(scored, ['score', 'mentions'], ['desc', 'desc']).slice(0, limit);
 	}
@@ -338,7 +387,10 @@ export class CompetitorService {
 
 	/** The brand-wide list, and each branch's, holds `MAX_COMPETITORS` at most. */
 	private async checkRoom(brandId: string, branch?: Venue | null): Promise<void> {
-		if ((await this.em.count(BrandCompetitor, { brand: brandId, branch: branch ?? null })) >= MAX_COMPETITORS)
+		if (
+			(await this.em.count(BrandCompetitor, { brand: brandId, branch: branch ?? null })) >=
+			MAX_COMPETITORS
+		)
 			throw new BadRequestException({
 				code: ExceptionCodes.TOO_MANY_COMPETITORS,
 				message: `${branch ? 'A branch' : 'A brand'} has ${MAX_COMPETITORS} competitors at most: remove one first`,

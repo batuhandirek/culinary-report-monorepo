@@ -7,9 +7,11 @@ import { SocialAccount } from './social-account.entity.js';
 
 /** What scrape saw the account's figures. */
 export enum AccountSnapshotSourceEnum {
-	// A profile scrape (`AccountScrapeService`): the profile and its latest posts
+	// A profile read (the profile atoms, saved by `AccountScrapeService`): the profile, with
+	// or without its latest posts
 	PROFILE = 'profile',
-	// A profile looked up for its handle on the other platform (`AccountTwinService`)
+	// Rows written before 2026-11-08 by the twin lookup (`AccountTwinService`), which reads
+	// profiles through the atom now, as `profile`
 	LOOKUP = 'lookup',
 	// A post's item, which repeats its author's follower count
 	POST = 'post',

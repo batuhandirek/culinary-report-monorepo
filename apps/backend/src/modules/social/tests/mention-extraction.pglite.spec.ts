@@ -1,6 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
+import { gateAgent } from 'src/modules/pipeline/read-posts/tests/factories/post-gate.mock.js';
+import { readPostsPlainly } from 'src/modules/pipeline/read-posts/tests/factories/read-posts.factory.js';
 import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-labels.classifier.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
@@ -14,13 +18,9 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { PostClaimsAgent } from '../agents/post-claims.agent.js';
-import { PostGateAgent } from '../agents/post-gate.agent.js';
 import { Mention } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { MentionExtractionService } from '../services/mention-extraction.service.js';
-
-import { gateAgent } from './factories/post-gate.mock.js';
 
 /* Extraction is told the food topics' labels, so a mention's cuisine uses the words reports group by,
    and stores whether the post said the place had just opened. Agent A answers the places (mentions)
@@ -129,7 +129,7 @@ describe('MentionExtractionService (pglite)', () => {
 	});
 
 	it("gives the agent the topics' labels and stores the cuisine it answers", async () => {
-		expect(await service.extract({ limit: 10 })).toEqual({
+		expect(await readPostsPlainly(harness.moduleRef, { limit: 10 })).toEqual({
 			analysed: 1,
 			mentions: 1,
 			skipped: 0,
@@ -254,7 +254,7 @@ describe('MentionExtractionService (pglite)', () => {
 		});
 		await em.flush();
 
-		expect(await service.extract({ limit: 10 })).toEqual({
+		expect(await readPostsPlainly(harness.moduleRef, { limit: 10 })).toEqual({
 			analysed: 1,
 			mentions: 1,
 			skipped: 0,
@@ -332,7 +332,7 @@ describe('MentionExtractionService (pglite)', () => {
 		});
 		await em.flush();
 		try {
-			expect(await service.extract({ limit: 10 })).toEqual({
+			expect(await readPostsPlainly(harness.moduleRef, { limit: 10 })).toEqual({
 				analysed: 1,
 				mentions: 2,
 				skipped: 0,

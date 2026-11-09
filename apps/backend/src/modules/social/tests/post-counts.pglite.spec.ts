@@ -1,6 +1,8 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 
+import { runActorCallRef } from 'src/modules/apify/actors/actor.js';
 import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -34,7 +36,29 @@ describe('Post counts at a fixed age (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let posts: SocialPostService;
 	let counts: PostCountsService;
-	const runActor = jest.fn<(actor: string, input: any, opts: any) => Promise<any[]>>();
+	const apify = new FakeApify<any>();
+
+	/** As the `post-counts` run does: the plan, each platform's run as a child, the save; one failing keeps the other's reads, then fails */
+	const refresh = async (city: City, budgetUsd: number, now = new Date()) => {
+		const plan = await counts.plan(city, budgetUsd, now);
+		const records: { tiktok?: string | null; instagram?: string | null } = {};
+		const failed: string[] = [];
+		for (const [key, run] of [
+			['tiktok', plan.tiktok],
+			['instagram', plan.instagram],
+		] as const) {
+			if (!run) continue;
+			try {
+				records[key] = (await runActorCallRef(apify, run.call)).recordId;
+			} catch (e) {
+				records[key] = null;
+				failed.push((e as Error).message);
+			}
+		}
+		const result = await counts.save(plan, records, now);
+		if (failed.length) throw new Error(failed.join('; '));
+		return result;
+	};
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
@@ -42,7 +66,7 @@ describe('Post counts at a fixed age (pglite)', () => {
 				SocialPostService,
 				PostCountsService,
 				{ provide: SocialAccountService, useValue: { ensure: async () => null } },
-				{ provide: ApifyService, useValue: { runActor } },
+				{ provide: ApifyService, useValue: apify },
 			],
 		});
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -55,7 +79,7 @@ describe('Post counts at a fixed age (pglite)', () => {
 	});
 
 	beforeEach(() => {
-		runActor.mockReset();
+		apify.reset();
 		harness.orm.em.clear();
 	});
 
@@ -204,13 +228,12 @@ describe('Post counts at a fixed age (pglite)', () => {
 			postedAt: daysAgo(8),
 		});
 		await em.flush();
-		runActor.mockImplementation(async actor =>
+		apify.answer = (_input, actor) =>
 			actor === 'clockworks/tiktok-scraper' ?
 				[tiktokGoneItem, tiktokPostItem]
-			:	[instagramGoneItem, instagramPhotoItem],
-		);
+			:	[instagramGoneItem, instagramPhotoItem];
 
-		const result = await counts.refresh(city, 2);
+		const result = await refresh(city, 2);
 
 		expect(result).toEqual({
 			due: 5,
@@ -222,10 +245,7 @@ describe('Post counts at a fixed age (pglite)', () => {
 			waiting: 0,
 		});
 		const calls = Object.fromEntries(
-			runActor.mock.calls.map(([actor, input, opts]) => [
-				actor,
-				{ input, cap: opts.maxCostUsd },
-			]),
+			apify.calls.map(c => [c.actor, { input: c.input, cap: c.options.maxCostUsd }]),
 		);
 		expect(calls['clockworks/tiktok-scraper'].input).toEqual({
 			postURLs: [
@@ -291,19 +311,19 @@ describe('Post counts at a fixed age (pglite)', () => {
 			postedAt: daysAgo(8),
 		});
 		await em.flush();
-		runActor.mockResolvedValue([]);
+		apify.answer = () => [];
 
-		const result = await counts.refresh(city, 2 * 0.0039);
+		const result = await refresh(city, 2 * 0.0039);
 
-		expect(runActor).toHaveBeenCalledTimes(1);
-		const [actor, input, opts] = runActor.mock.calls[0];
+		expect(apify.calls).toHaveLength(1);
+		const { actor, input, options } = apify.calls[0];
 		expect(actor).toBe('clockworks/tiktok-scraper');
 		expect(input.postURLs).toEqual([
 			'https://www.tiktok.com/@someone/video/7200000000000000002',
 			'https://www.tiktok.com/@someone/video/7200000000000000003',
 		]);
 		// Clockworks refuses a cap under $0.50: a cap, not a spend
-		expect(opts.maxCostUsd).toBe(0.5);
+		expect(options.maxCostUsd).toBe(0.5);
 		expect(result).toMatchObject({
 			due: 3,
 			tiktok: 2,
@@ -407,12 +427,12 @@ describe('Post counts at a fixed age (pglite)', () => {
 			postedAt: daysAgo(8),
 		});
 		await em.flush();
-		runActor.mockImplementation(async actor => {
+		apify.answer = (_input, actor) => {
 			if (actor === 'clockworks/tiktok-scraper') throw new Error('actor failed');
 			return [instagramReelItem];
-		});
+		};
 
-		await expect(counts.refresh(city, 2)).rejects.toThrow('actor failed');
+		await expect(refresh(city, 2)).rejects.toThrow('actor failed');
 
 		const reel = await stored(`ig_${instagramReelItem.id}`);
 		expect(reel).toMatchObject({ views: 51211, likes: 1123, comments: 16 });

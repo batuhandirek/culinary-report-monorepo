@@ -31,6 +31,7 @@
 	import { lastMonth, leadScoreVariant, monthLabel, recentMonths } from '#lib/culinary.js';
 	import { exploreHref } from '#lib/explore.js';
 	import { stageLabel } from '#lib/outreach-status.js';
+	import { announceReportRun, followReportRun } from '#lib/report-runs.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import * as DropdownMenu from '#ui/primitives-new/dropdown-menu/index.js';
@@ -146,22 +147,27 @@
 	});
 	const activeConfigs = $derived(configs?.filter((c) => (c.status as string) === 'active') ?? []);
 
-	// LLM calls over the month's data: a few seconds. A configuration builds that one report,
-	// none builds every active configuration's (the default template's while none is active).
+	// LLM calls over the month's data, run in the background and followed until done (a run that
+	// waits for an LLM account goes on by itself; the toast links it). A configuration builds that
+	// one report, none builds every active configuration's (the default template's while none is active).
 	const buildAction = createAction(
-		(config?: AdminReportConfigOutputDto) =>
-			api.admin.buildReport({
-				brandId: brand.id,
-				cityId: brand.reportScope === 'all' ? undefined : cityId,
-				month,
-				...(config && { configId: config.id })
-			}),
+		async (config?: AdminReportConfigOutputDto) =>
+			followReportRun(
+				await api.admin.buildReport({
+					brandId: brand.id,
+					cityId: brand.reportScope === 'all' ? undefined : cityId,
+					month,
+					...(config && { configId: config.id })
+				})
+			),
 		{
-			onSuccess: (report) => goto(`/admin/reports/${report.id}`),
-			successNotification: (_, [config]) => ({
-				title: 'Report built',
-				text: `${config ? `${config.name}, ` : ''}${brand.name}, ${monthLabel(month)}`
-			})
+			onSuccess: (run, [config]) => {
+				const built = announceReportRun(run, {
+					title: 'Report built',
+					text: `${config ? `${config.name}, ` : ''}${brand.name}, ${monthLabel(month)}`
+				});
+				if (built && run.reportIds?.[0]) goto(`/admin/reports/${run.reportIds[0]}`);
+			}
 		}
 	);
 	const addToSales = async () => {

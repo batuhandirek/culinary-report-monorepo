@@ -7,7 +7,7 @@ description: Launch the full stack locally (Postgres, backend, frontend) to veri
 
 Prereqs: `env/server/.env.local` must exist (env is validated at import — boot fails loudly if vars are missing). After a fresh `npm install`, run `npm run typia:setup` once.
 
-1. Infra: `docker compose -f docker/docker-compose.yml up -d` — Postgres (pgvector) on :5440, Jaeger UI on :16686. From-scratch reset: `npm run rebuild:dev` (destroys the volume, rebuilds, migrates).
+1. Infra: `docker compose -f docker/docker-compose.yml up -d` — Postgres (pgvector) on `DB_PORT` from `env/server/.env.local` (:5441; the container `culinary-report-dev-db`), Jaeger UI on :16686. The backend's database is `DB_NAME` there (`postgres` today): `docker exec culinary-report-dev-db psql -U postgres -d postgres`; the container also holds a `munchwerk` database without the current schema, which is not it. From-scratch reset: `npm run rebuild:dev` (destroys the volume, rebuilds, migrates).
 2. Migrations: `npm run migration:up:dev` (also auto-run on backend boot).
 3. Start both apps: `npm run start:dev` (root, via turbo) — backend API on **:3015** (`PORT` in `env/server/.env.local`; the Vite proxy in `apps/frontend/vite.config.ts` targets it), SvelteKit dev server on **:5011** (proxied dev; in production one node process serves both).
 4. Verify: UI at `http://localhost:5011`, API at `http://localhost:3015/api/...` (e.g. `/api/health-check`). Traces: `npm run jaeger:up` (the `db:up` script starts Postgres only), set `OTEL_IS_ENABLED=true` in `env/server/.env.local`, restart the backend (env is read at boot), open `http://localhost:16686` and pick service `Munchwerk`.

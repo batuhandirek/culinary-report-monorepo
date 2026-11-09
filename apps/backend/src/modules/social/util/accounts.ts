@@ -17,7 +17,12 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 export const normalizeAccountHandle = (input: string | null | undefined): string | null => {
 	if (!input) return null;
 	const fromUrl = input.trim().match(/(?:instagram\.com|tiktok\.com)\/@?([\w.]+)/i)?.[1];
-	const handle = (fromUrl ?? input).trim().replace(/^@/, '').replace(/\/+$/, '').replace(/\.+$/, '').toLowerCase();
+	const handle = (fromUrl ?? input)
+		.trim()
+		.replace(/^@/, '')
+		.replace(/\/+$/, '')
+		.replace(/\.+$/, '')
+		.toLowerCase();
 	return /^[\w.]{1,40}$/.test(handle) ? handle : null;
 };
 
@@ -29,7 +34,9 @@ export const normalizeAccountHandle = (input: string | null | undefined): string
  */
 export const captionHandles = (text: string | null | undefined): string[] => {
 	const out = new Set<string>();
-	for (const m of (text ?? '').matchAll(/(?<![\w.@])@([\w.]{1,40})(?![\w.])(?!-[\p{L}\p{N}])/gu)) {
+	for (const m of (text ?? '').matchAll(
+		/(?<![\w.@])@([\w.]{1,40})(?![\w.])(?!-[\p{L}\p{N}])/gu,
+	)) {
 		const handle = normalizeAccountHandle(m[1]);
 		if (handle) out.add(handle);
 	}
@@ -40,8 +47,14 @@ export const captionHandles = (text: string | null | undefined): string[] => {
 export type ProfilePlatform = SocialPlatformEnum.INSTAGRAM | SocialPlatformEnum.TIKTOK;
 
 /** A handle on its platform: a blog's is its host (`blogHandle`), the others' `normalizeAccountHandle`. */
-export const normalizeHandle = (platform: SocialPlatformEnum, input: string | null | undefined): string | null =>
-	platform === SocialPlatformEnum.BLOG ? (input ? blogHandle(input) : null) : normalizeAccountHandle(input);
+export const normalizeHandle = (
+	platform: SocialPlatformEnum,
+	input: string | null | undefined,
+): string | null =>
+	platform === SocialPlatformEnum.BLOG ?
+		input ? blogHandle(input)
+		:	null
+	:	normalizeAccountHandle(input);
 
 // Instagram and TikTok paths that are not a profile: posts, embeds, the CDN's `/o1/v/…`, the
 // apps' own pages
@@ -106,13 +119,20 @@ const PLACEHOLDER_HANDLES = new Set([
 export const profileOf = (
 	url: string | null | undefined,
 ): { platform: SocialPlatformEnum; handle: string } | null => {
-	const match = url?.trim().match(/^(?:https?:\/\/)?(?:www\.|m\.)?(instagram\.com|tiktok\.com)\/(@?)([\w.]+)/i);
+	const match = url
+		?.trim()
+		.match(/^(?:https?:\/\/)?(?:www\.|m\.)?(instagram\.com|tiktok\.com)\/(@?)([\w.]+)/i);
 	if (!match) return null;
-	const platform = match[1].toLowerCase() === 'tiktok.com' ? SocialPlatformEnum.TIKTOK : SocialPlatformEnum.INSTAGRAM;
+	const platform =
+		match[1].toLowerCase() === 'tiktok.com' ?
+			SocialPlatformEnum.TIKTOK
+		:	SocialPlatformEnum.INSTAGRAM;
 	// A TikTok profile is `/@handle`; without the @ it is some other page
 	if (platform === SocialPlatformEnum.TIKTOK && !match[2]) return null;
 	const handle = normalizeAccountHandle(match[3]);
-	return handle && !NOT_PROFILES.has(handle) && !PLACEHOLDER_HANDLES.has(handle) ? { platform, handle } : null;
+	return handle && !NOT_PROFILES.has(handle) && !PLACEHOLDER_HANDLES.has(handle) ?
+			{ platform, handle }
+		:	null;
 };
 
 /** A profile a website links: Instagram or TikTok, never a blog. */
@@ -132,12 +152,14 @@ export const profileLinks = (html: string): LinkedProfile[] => {
 	// app's deep link "instagram.com/_u/cafepaula" like the profile
 	const text = html.replace(/\\\//g, '/').replace(/instagram\.com\/_u\//gi, 'instagram.com/');
 	// Not inside another host's name ("notinstagram.com")
-	const links = /(?<![\w-])(?:https?:\/\/)?(?:www\.|m\.)?(?:instagram\.com|tiktok\.com)\/@?[\w.]+/gi;
+	const links =
+		/(?<![\w-])(?:https?:\/\/)?(?:www\.|m\.)?(?:instagram\.com|tiktok\.com)\/@?[\w.]+/gi;
 	for (const [url] of text.matchAll(links)) {
 		const profile = profileOf(url.replace(/\.+$/, ''));
 		if (!profile || profile.platform === SocialPlatformEnum.BLOG) continue;
 		const key = `${profile.platform}:${profile.handle}`;
-		if (!out.has(key)) out.set(key, { platform: profile.platform as ProfilePlatform, handle: profile.handle });
+		if (!out.has(key))
+			out.set(key, { platform: profile.platform as ProfilePlatform, handle: profile.handle });
 	}
 	return [...out.values()];
 };

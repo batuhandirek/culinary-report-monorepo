@@ -14,7 +14,6 @@ import { BrandDismissal } from '../entities/brand-dismissal.entity.js';
 import { BrandExcludedVenue } from '../entities/brand-excluded-venue.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { BrandChangedJob } from '../jobs/brand-changed.job.js';
-import { BrandSearchJob } from '../jobs/brand-search.job.js';
 import {
 	brandKey,
 	type BrandSuggestionGroup,
@@ -28,10 +27,21 @@ import {
 } from '../util/brands.js';
 import { cityStopwords, isFoodVenue } from '../util/venue-names.js';
 
-import { VenueScrapeService } from './venue-scrape.service.js';
+/** One brand a branch search is planned for (plain data: a step's result). Its first branch says which brand it is in after a merge. */
+export interface BranchSearchBrand {
+	id: string;
+	name: string;
+	key: string;
+	branchId: string | null;
+}
 
-/** What one brand search may spend when an admin runs it ("Find branches"). */
-export const BRAND_SEARCH_BUDGET_USD = 1;
+/** What a brand search's `places.run` hands back: every place saved as a lookup, the ids per name */
+export interface BranchSearchFound {
+	found: number;
+	saved: number;
+	byQuery: Record<string, string[]>;
+	venueIds: Record<string, string>;
+}
 
 /** Placeholders for `ids` in raw SQL: one `?` each (`em.execute` never binds an array to one). */
 const marks = (ids: readonly unknown[]) => ids.map(() => '?').join(', ');
@@ -50,7 +60,6 @@ export class BrandService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
-		private readonly venueScrapeService: VenueScrapeService,
 		private readonly pgBossService: PgBossService,
 	) {}
 
@@ -100,6 +109,47 @@ export class BrandService {
 			{ brand: brandId, closed: false },
 			{ orderBy: { reviewsCount: QueryOrder.DESC_NULLS_LAST, id: QueryOrder.ASC } },
 		);
+	}
+
+	/**
+	 * The open branches in a city of these brands, each with its brand (and the brand's branches),
+	 * the most Google reviews first: what the month's report brands are scraped and reported for.
+	 */
+	async openBranchesIn(brandIds: string[], cityId: string): Promise<Venue[]> {
+		if (!brandIds.length) return [];
+		return this.em.find(
+			Venue,
+			{ brand: { $in: _.uniq(brandIds) }, city: cityId, closed: false },
+			{
+				populate: ['brand', 'brand.branches'],
+				orderBy: { reviewsCount: QueryOrder.DESC_NULLS_LAST, id: QueryOrder.ASC },
+			},
+		);
+	}
+
+	/**
+	 * Each of these brands' busiest open branch in the city (`busiestBranch`), its brand loaded:
+	 * the one that carries a search by the brand's name (`venueSearchQuery`). A brand with no open
+	 * branch there is left out.
+	 */
+	async busiestBranchesIn(brandIds: string[], cityId: string): Promise<Venue[]> {
+		const branches = await this.openBranchesIn(brandIds, cityId);
+		return Object.values(_.groupBy(branches, v => v.brand.id)).map(group => group[0]);
+	}
+
+	/** These brands, those with an open branch in the city only */
+	async withBranchIn(brandIds: string[], cityId: string): Promise<Brand[]> {
+		if (!brandIds.length) return [];
+		return this.em.find(Brand, {
+			id: { $in: _.uniq(brandIds) },
+			branches: { city: cityId, closed: false },
+		});
+	}
+
+	/** Brands by id, their names only (a list that names them) */
+	async names(brandIds: string[]): Promise<{ id: string; name: string }[]> {
+		if (!brandIds.length) return [];
+		return this.em.find(Brand, { id: { $in: _.uniq(brandIds) } }, { fields: ['id', 'name'] });
 	}
 
 	/** The cities a brand has open branches in, the most branches first. */
@@ -179,10 +229,7 @@ export class BrandService {
 	 * venue's; the others' records move onto it (`absorb`). 409 when another chain has the
 	 * name's key (add the branches to it instead), or when two of the brands have a prospect.
 	 */
-	async merge(input: {
-		name: string;
-		venueIds: string[];
-	}): Promise<Brand> {
+	async merge(input: { name: string; venueIds: string[] }): Promise<Brand> {
 		const { keep, venues } = await this.combine(input.name, input.venueIds);
 		await this.changed([keep.id], venues);
 		return this.get(keep.id);
@@ -314,12 +361,24 @@ export class BrandService {
 		const brand = await this.get(brandId);
 		const excluded = (await this.excludedVenues([brandId])).get(brandId) ?? new Set<string>();
 		const venues = (
-			await this.em.find(Venue, { id: { $in: _.uniq(venueIds) } }, { populate: ['brand', 'brand.branches'] })
-		).filter(v => v.brand.id !== brandId && !excluded.has(v.id) && v.brand.branches.length === 1);
+			await this.em.find(
+				Venue,
+				{ id: { $in: _.uniq(venueIds) } },
+				{ populate: ['brand', 'brand.branches'] },
+			)
+		).filter(
+			v => v.brand.id !== brandId && !excluded.has(v.id) && v.brand.branches.length === 1,
+		);
 		if (!venues.length) return [];
 		const keys = [brand.key, ...venues.map(v => v.brand.key)];
 		const dismissed = new Set(
-			(await this.em.find(BrandDismissal, { key: { $in: _.uniq(keys) } }, { fields: ['key'] })).map(d => d.key),
+			(
+				await this.em.find(
+					BrandDismissal,
+					{ key: { $in: _.uniq(keys) } },
+					{ fields: ['key'] },
+				)
+			).map(d => d.key),
 		);
 		if (dismissed.has(brand.key)) return [];
 		const joined: Venue[] = [];
@@ -327,11 +386,15 @@ export class BrandService {
 			try {
 				joined.push(...(await this.join(brandId, [venue.id])));
 			} catch (e) {
-				this.logger.warn(`${venue.name} not joined to ${brand.name} by its profile: ${(e as Error).message}`);
+				this.logger.warn(
+					`${venue.name} not joined to ${brand.name} by its profile: ${(e as Error).message}`,
+				);
 			}
 		}
 		if (joined.length) {
-			this.logger.log(`Joined ${joined.map(v => v.name).join(', ')} to ${brand.name}: its profile names them`);
+			this.logger.log(
+				`Joined ${joined.map(v => v.name).join(', ')} to ${brand.name}: its profile names them`,
+			);
 			await this.changed([brandId], [...joined, ...brand.branches.getItems()]);
 		}
 		return joined.map(v => v.id);
@@ -401,72 +464,113 @@ export class BrandService {
 		await this.em.flush();
 	}
 
-	/** Queues "Find branches" (`BrandSearchJob`): the search takes about half a minute. */
-	async queueSearch(id: string, cityId: string): Promise<void> {
-		await this.get(id);
-		await this.cityService.getById(cityId);
-		await this.pgBossService.sendJob(
-			BrandSearchJob.jobName,
-			new BrandSearchJob({ brandId: id, cityId }),
-		);
-	}
-
 	/**
-	 * "Find branches": searches Google Maps in the city for the brand's name and saves what it
-	 * finds (`VenueScrapeService.searchBrands`). Places that give the brand's site join it now
-	 * (`autoMerge`); the other places of its name show up in `candidates` for an admin.
+	 * The brands a branch search covers: every chain with a branch in the city (`brandIds` null:
+	 * the quarter's `SEARCH_BRANCHES`), or the given ones ("Find branches" on a brand's page). The
+	 * plan step of `brand-branch-search`: the search is one `places.run` for their names
+	 * (`BRAND_SEARCH_RESULTS` places each, every place saved as a lookup, never an opening, so
+	 * matching gets the look-alikes too; unlike a name lookup it is repeated every time, as new
+	 * branches open), `saveBranchSearch` the step after it.
 	 */
-	async searchBranches(
-		id: string,
-		cityId: string,
-		budgetUsd = BRAND_SEARCH_BUDGET_USD,
-	): Promise<{ found: number; saved: number; candidates: number }> {
-		const brand = await this.get(id);
-		const city = await this.cityService.getById(cityId);
-		const result = await this.venueScrapeService.searchBrands(city, [brand], budgetUsd);
-		// Branches with the brand's site join now, before the page stops waiting. A brand of one
-		// branch may itself be merged into a chain: the search counts for the brand it is in now
-		const branchId = brand.branches[0].id;
-		await this.autoMerge(city.id);
-		const now = await this.em.findOneOrFail(Venue, { id: branchId });
-		const searched = await this.get(now.brand.id);
-		searched.branchesSearchedAt = {
-			...searched.branchesSearchedAt,
-			[city.id]: new Date().toISOString(),
-		};
-		await this.em.flush();
-		const branchIds = new Set(searched.branches.getItems().map(v => v.id));
-		const candidates = (result.branches.get(brand.key) ?? []).filter(
-			v => !branchIds.has(v.id),
-		).length;
-		return { found: result.found, saved: result.saved, candidates };
-	}
-
-	/**
-	 * The quarterly brand search (`SEARCH_BRANCHES`, after the city's `SCRAPE_VENUES`): every
-	 * chain with a branch in the city, in one run.
-	 */
-	async searchCity(
+	async planBranchSearch(
 		city: City,
-		budgetUsd: number,
+		brandIds: string[] | null,
+	): Promise<{ brands: BranchSearchBrand[] }> {
+		const brands =
+			brandIds ?
+				await this.em.find(Brand, { id: { $in: brandIds } }, { populate: ['branches'] })
+			:	(await this.list()).filter(b =>
+					b.branches.getItems().some(v => v.city.id === city.id),
+				);
+		return {
+			brands: brands.map(b => ({
+				id: b.id,
+				name: b.name,
+				key: b.key,
+				branchId: b.branches.getItems()[0]?.id ?? null,
+			})),
+		};
+	}
+
+	/**
+	 * What the brands' name searches found: the places are saved already; the ones whose site is
+	 * the brand's join it now (`autoMerge`, so the brand page shows them when its polling ends),
+	 * and the other open food venues named like the brand (`isBrandName`), minus the ones an admin
+	 * said are not its branches, are counted as `candidates` for an admin. Every searched brand is
+	 * stamped `branchesSearchedAt` for the city: the brand it is in now, since a brand of one branch
+	 * may itself have been merged into a chain. Flushes.
+	 */
+	async saveBranchSearch(
+		city: City,
+		brands: BranchSearchBrand[],
+		result: BranchSearchFound,
+		now = new Date(),
 	): Promise<{ brands: number; found: number; saved: number; candidates: number }> {
-		const brands = (await this.list()).filter(b =>
-			b.branches.getItems().some(v => v.city.id === city.id),
+		if (brands.length === 0)
+			return { brands: 0, found: result.found, saved: result.saved, candidates: 0 };
+		await this.autoMerge(city.id);
+
+		const words = cityStopwords(city.nameStopwords);
+		const byQuery = new Map(
+			Object.entries(result.byQuery).map(([query, ids]) => [query.trim().toLowerCase(), ids]),
 		);
-		if (brands.length === 0) return { brands: 0, found: 0, saved: 0, candidates: 0 };
-		const result = await this.venueScrapeService.searchBrands(city, brands, budgetUsd);
-		const now = new Date().toISOString();
-		let candidates = 0;
-		const exclusions = await this.excludedVenues(brands.map(b => b.id));
+		const foundFor = (brand: BranchSearchBrand): string[] =>
+			(byQuery.get(brand.name.trim().toLowerCase()) ?? [])
+				.map(placeId => result.venueIds[placeId])
+				.filter((id): id is string => !!id);
+		const venues = new Map(
+			(
+				await this.em.find(
+					Venue,
+					{ id: { $in: _.uniq(brands.flatMap(foundFor)) } },
+					{ populate: ['brand'] },
+				)
+			).map(v => [v.id, v]),
+		);
+		// Each searched brand as it is now: a brand of one branch may have joined a chain
+		const branches = new Map(
+			(
+				await this.em.find(
+					Venue,
+					{ id: { $in: brands.map(b => b.branchId).filter((id): id is string => !!id) } },
+					{ populate: ['brand'] },
+				)
+			).map(v => [v.id, v.brand]),
+		);
+		const stillThere = new Map(
+			(await this.em.find(Brand, { id: { $in: brands.map(b => b.id) } })).map(b => [b.id, b]),
+		);
+		const current = new Map<string, Brand>();
 		for (const brand of brands) {
-			brand.branchesSearchedAt = { ...brand.branchesSearchedAt, [city.id]: now };
-			candidates += (result.branches.get(brand.key) ?? []).filter(
-				v => v.brand.id !== brand.id && !exclusions.get(brand.id)?.has(v.id),
-			).length;
+			const searched =
+				(brand.branchId && branches.get(brand.branchId)) || stillThere.get(brand.id);
+			if (searched) current.set(brand.id, searched);
+		}
+		const exclusions = await this.excludedVenues(_.uniq([...current.values()].map(b => b.id)));
+
+		let candidates = 0;
+		for (const brand of brands) {
+			const searched = current.get(brand.id);
+			if (!searched) continue;
+			searched.branchesSearchedAt = {
+				...searched.branchesSearchedAt,
+				[city.id]: now.toISOString(),
+			};
+			candidates += foundFor(brand).filter(id => {
+				const v = venues.get(id);
+				return (
+					!!v &&
+					!v.closed &&
+					isFoodVenue(v.category) &&
+					isBrandName(v.name, brand.key, words) &&
+					v.brand.id !== searched.id &&
+					!exclusions.get(searched.id)?.has(v.id)
+				);
+			}).length;
 		}
 		await this.em.flush();
 		this.logger.log(
-			`Searched ${brands.length} brands in ${city.name}: ${candidates} possible new branches`,
+			`Searched ${brands.length} brands in ${city.name}: ${result.found} places, ${candidates} possible new branches`,
 		);
 		return { brands: brands.length, found: result.found, saved: result.saved, candidates };
 	}
@@ -537,7 +641,10 @@ export class BrandService {
 			{ populate: ['brand'] },
 		);
 		const keep = await this.absorb(brand, [brand, ...venues.map(v => v.brand)]);
-		await this.em.nativeDelete(BrandExcludedVenue, { brand: keep.id, venue: { $in: _.uniq(venueIds) } });
+		await this.em.nativeDelete(BrandExcludedVenue, {
+			brand: keep.id,
+			venue: { $in: _.uniq(venueIds) },
+		});
 		await this.em.flush();
 		return venues;
 	}
@@ -545,9 +652,7 @@ export class BrandService {
 	/** Venues that are a brand of their own (one branch), with their brand and city. */
 	private async loneVenues(where: { city?: string; closed?: boolean }): Promise<Venue[]> {
 		const params: unknown[] = [];
-		const conditions = [
-			'(select count(*) from venues o where o.brand_id = b.id) = 1',
-		];
+		const conditions = ['(select count(*) from venues o where o.brand_id = b.id) = 1'];
 		if (where.city) {
 			conditions.push('v.city_id = ?');
 			params.push(where.city);
@@ -577,7 +682,10 @@ export class BrandService {
 			if (!ids.length) continue;
 			const rows: { brand_id: string; venue_id: string }[] = await this.em
 				.getConnection()
-				.execute(`select brand_id, venue_id from brand_excluded_venues where brand_id in (${marks(ids)})`, ids);
+				.execute(
+					`select brand_id, venue_id from brand_excluded_venues where brand_id in (${marks(ids)})`,
+					ids,
+				);
 			for (const r of rows) {
 				const set = out.get(r.brand_id) ?? new Set<string>();
 				set.add(r.venue_id);
@@ -589,7 +697,8 @@ export class BrandService {
 
 	/** Records that the venue is not the brand's branch, once. Does not flush. */
 	private async exclude(brand: Brand, venue: Venue): Promise<void> {
-		if (!(await this.em.findOne(BrandExcludedVenue, { brand, venue }))) this.em.create(BrandExcludedVenue, { brand, venue });
+		if (!(await this.em.findOne(BrandExcludedVenue, { brand, venue })))
+			this.em.create(BrandExcludedVenue, { brand, venue });
 	}
 
 	/** Gives each venue a brand of its own, named like it; its own mentions follow it. Flushes. */

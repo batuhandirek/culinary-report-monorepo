@@ -1,60 +1,56 @@
 import { Injectable } from '@nestjs/common';
 
-import { ApifyService } from 'src/modules/apify/services/apify.service.js';
+import type { ActorCall } from 'src/modules/apify/actors/actor.js';
+import {
+	THEFORK_ACTOR,
+	type TheForkInput,
+	type TheForkItem,
+} from 'src/modules/apify/actors/thefork.actor.js';
 
 import { ReservationPlatformEnum } from '../entities/venue-reservation-sample.entity.js';
 import type {
 	ReservationAvailability,
-	ReservationAvailabilityProvider,
 	ReservationTarget,
 } from '../interfaces/reservation-availability.interface.js';
 import { EVENING_SLOTS, openSlotsInIntervals } from '../util/reservations.js';
 import { isSameVenue } from '../util/venue-names.js';
 
-const THEFORK_ACTOR = 'clearpath/thefork-scraper';
-
-/** The `clearpath/thefork-scraper` fields we read (one item per restaurant, 100+ fields). */
-export interface TheForkItem {
-	id?: string | number;
-	url?: string;
-	name?: string;
-	is_bookable?: boolean;
-	// The next seven days' bookable windows, minutes after midnight, both ends bookable
-	bookable_intervals?: { date: string; isToday?: boolean; intervals: { start: number; end: number }[] }[] | null;
-}
-
 /** TheFork's restaurant id, the `r12345` that ends its URLs. */
-const theForkId = (url: string | undefined): string | null => /-r(\d+)(?:[/?#]|$)/.exec(url ?? '')?.[1] ?? null;
+const theForkId = (url: string | undefined): string | null =>
+	/-r(\d+)(?:[/?#]|$)/.exec(url ?? '')?.[1] ?? null;
 
 /**
  * TheFork availability from its restaurant pages (`startUrls`), reviews and photos off
  * (~$0.006 a restaurant). `bookable_intervals` covers the next seven days and carries no party
  * size; a date the platform lists with no window counts as fully booked, a date it doesn't
- * list is not sampled.
+ * list is not sampled. The run is a child of the `sample-reservations` run: `call` is what it
+ * starts, `read` what it makes of the stored items.
  */
 @Injectable()
-export class TheForkAvailabilityService implements ReservationAvailabilityProvider {
+export class TheForkAvailabilityService {
 	readonly platform = ReservationPlatformEnum.THEFORK;
 
-	constructor(private readonly apifyService: ApifyService) {}
-
-	async availability(
-		targets: ReservationTarget[],
-		dates: string[],
-		budgetUsd: number,
-	): Promise<ReservationAvailability[]> {
-		if (targets.length === 0) return [];
-		const items = await this.apifyService.runActor<TheForkItem>(
-			THEFORK_ACTOR,
-			{
+	/** One run for every target, capped at the platform's share of the budget */
+	call(targets: ReservationTarget[], budgetUsd: number): ActorCall<TheForkInput, TheForkItem> {
+		return {
+			actor: THEFORK_ACTOR,
+			input: {
 				startUrls: targets.map(t => t.url),
 				maxRestaurants: targets.length,
 				maxReviews: 0,
 				maxPhotos: 0,
 				language: 'en',
 			},
-			{ maxCostUsd: budgetUsd, purpose: `thefork availability: ${targets.length} venues` },
-		);
+			maxCostUsd: budgetUsd,
+			purpose: `thefork availability: ${targets.length} venues`,
+		};
+	}
+
+	read(
+		targets: ReservationTarget[],
+		items: TheForkItem[],
+		dates: string[],
+	): ReservationAvailability[] {
 		return theForkAvailability(targets, items, dates);
 	}
 }

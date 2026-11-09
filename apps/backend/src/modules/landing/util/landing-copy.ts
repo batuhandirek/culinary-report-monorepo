@@ -6,12 +6,7 @@
 
 import _ from 'lodash';
 
-import {
-	isGiven,
-	numbersOf,
-	statedNumbers,
-	wordCount,
-} from 'src/shared/util/stated-numbers.js';
+import { isGiven, numbersOf, statedNumbers, wordCount } from 'src/shared/util/stated-numbers.js';
 
 import { LANDING_TICKER, LANDING_TRENDS } from '../constants/landing.constant.js';
 import type {

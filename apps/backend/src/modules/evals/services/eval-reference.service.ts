@@ -4,17 +4,17 @@ import _ from 'lodash';
 import { createHash } from 'node:crypto';
 
 import type { LlmModelId } from 'src/modules/llm/constants/llm-models.constant.js';
-import { PostClaimsAgent } from 'src/modules/social/agents/post-claims.agent.js';
-import { VenueMatchAgent } from 'src/modules/social/agents/venue-match.agent.js';
-import { postClaimsPrompt } from 'src/modules/social/util/post-claims-input.js';
+import { VenueMatchAgent } from 'src/modules/pipeline/match-mentions/agents/venue-match.agent.js';
+import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
+import { postClaimsPrompt } from 'src/modules/pipeline/read-posts/util/post-claims-input.js';
+import { ReviewClaimsAgent } from 'src/modules/pipeline/read-reviews/agents/review-claims.agent.js';
+import { reviewClaimsInput } from 'src/modules/pipeline/read-reviews/util/review-claims-input.js';
 import { claimLabelAspects, claimLabelsRules } from 'src/modules/statements/util/claim-labels.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { termAnswerLinks, termTopicInputTopics } from 'src/modules/topics/util/term-topic-input.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
-import { ReviewClaimsAgent } from 'src/modules/venues/agents/review-claims.agent.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
-import { reviewClaimsInput } from 'src/modules/venues/util/review-claims-input.js';
 import {
 	nameSimilarity,
 	normalizeVenueName,

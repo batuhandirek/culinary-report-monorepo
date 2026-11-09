@@ -1,33 +1,47 @@
-import { QueryOrder, wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
+import type { WorkflowStatus } from '@dbos-inc/dbos-sdk';
+
 import { APIFY_MONTHLY_CREDIT_USD } from 'src/modules/apify/constants/apify.constant.js';
+import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import { OutreachService } from 'src/modules/outreach/services/outreach.service.js';
 import { ProspectQueryService } from 'src/modules/outreach/services/prospect-query.service.js';
 import { prospectItem, suggestedProspect } from 'src/modules/outreach/util/prospect-output.js';
-import { PipelineStepEnum } from 'src/modules/pipeline/constants/pipeline.constant.js';
-import type { AdminPipelineRunOutputDto } from 'src/modules/pipeline/dto/admin-pipeline.output.dto.js';
-import { PipelineRun } from 'src/modules/pipeline/entities/pipeline-run.entity.js';
-import { nextMonthlyRunAt } from 'src/modules/pipeline/util/monthly-schedule.js';
 import { Report } from 'src/modules/reports/entities/report.entity.js';
 import { Mention, MentionMatchMethodEnum } from 'src/modules/social/entities/mention.entity.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
 
-import type { AdminOverviewOutputDto } from '../dto/admin-overview.output.dto.js';
+import type {
+	AdminOverviewOutputDto,
+	AdminWorkflowRunOutputDto,
+} from '../dto/admin-overview.output.dto.js';
+import { nextMonthlyRunAt } from '../util/monthly-schedule.js';
+import { errorText } from '../util/workflow-runs.js';
+
+import { PIPELINE_WORKFLOWS } from './data-coverage.service.js';
 
 // How many due follow-ups and suggestions the overview lists
 const LIST_SIZE = 5;
 
-const serializeRun = (run: PipelineRun | null) =>
-	run ?
-		(wrap(run).serialize({
-			skipNull: true,
-			forceObject: true,
-			populate: ['city'],
-		}) as unknown as AdminPipelineRunOutputDto)
-	:	null;
+/** A run as the overview names it */
+export const workflowRunDto = (run: WorkflowStatus): AdminWorkflowRunOutputDto => {
+	const error = errorText(run.error);
+	return {
+		workflowId: run.workflowID,
+		workflow: run.workflowName,
+		status: run.status,
+		...(typeof run.attributes?.cityId === 'string' && { cityId: run.attributes.cityId }),
+		...(typeof run.attributes?.period === 'string' && { period: run.attributes.period }),
+		createdAt: new Date(run.createdAt),
+		...(run.updatedAt && { updatedAt: new Date(run.updatedAt) }),
+		...(error && { error }),
+	};
+};
+
+// The month operations' workflows (`scrape-reviews.month`)
+const MONTH_WORKFLOWS = PIPELINE_WORKFLOWS.filter(name => name.endsWith('.month'));
 
 /** The figures `/admin` opens with, each read on its own so one failed query blanks only itself. */
 @Injectable()
@@ -36,6 +50,7 @@ export class OverviewService {
 
 	constructor(
 		private readonly em: EntityManager,
+		private readonly durable: DurableWorkflowsService,
 		private readonly outreachService: OutreachService,
 		private readonly prospectQueryService: ProspectQueryService,
 	) {}
@@ -51,14 +66,12 @@ export class OverviewService {
 				return null;
 			}
 		};
-		const lastRun = (em: EntityManager, step?: PipelineStepEnum) =>
-			em
-				.find(PipelineRun, step ? { step } : {}, {
-					orderBy: { createdAt: QueryOrder.DESC },
-					limit: 1,
-					populate: ['city'],
-				})
-				.then(([run]) => serializeRun(run ?? null));
+		// The newest run of these workflows, from DBOS
+		const lastRun = async (workflowName: string[]) => {
+			if (!this.durable.isLaunched()) return null;
+			const [run] = await this.durable.list({ workflowName, sortDesc: true, limit: 1 });
+			return run ? workflowRunDto(run) : null;
+		};
 
 		const [
 			lastMonthlyRun,
@@ -70,8 +83,8 @@ export class OverviewService {
 			dueFollowUps,
 			suggestedProspects,
 		] = await Promise.all([
-			settle('last monthly run', em => lastRun(em, PipelineStepEnum.MONTHLY)),
-			settle('last run', em => lastRun(em)),
+			settle('last monthly run', () => lastRun(MONTH_WORKFLOWS)),
+			settle('last run', () => lastRun(PIPELINE_WORKFLOWS)),
 			settle('Apify spend', async em => {
 				const [{ total }]: { total: string | null }[] = await em
 					.getConnection()

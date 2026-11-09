@@ -2,7 +2,7 @@
 // 2026-10-18 (maxCrawledPlacesPerSearch 40), cut to the fields `saveGooglePlace` reads: 15
 // branches, then look-alikes (Golt'z Burger, Peter Pane, …) and "Burgermeister Produktion", a
 // grocery store.
-import type { GooglePlaceItem } from '../../services/venue.service.js';
+import type { GooglePlaceItem } from 'src/modules/apify/actors/google-places.actor.js';
 
 export const BURGERMEISTER_SEARCH_ITEMS: GooglePlaceItem[] = [
 	{

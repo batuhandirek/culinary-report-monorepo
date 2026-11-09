@@ -1,7 +1,6 @@
 import { tags } from 'typia';
 
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
-import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
 import type { StatementOutputDto } from 'src/modules/statements/dto/statement.output.dto.js';
 import { PaginatedResult } from 'src/shared/interfaces/paginated-result.interface.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';

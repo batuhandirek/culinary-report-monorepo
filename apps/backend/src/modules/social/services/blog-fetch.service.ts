@@ -41,7 +41,11 @@ export class BlogFetchService {
 		return asReader && isFeed(asReader.body) ? asReader : res;
 	}
 
-	private async fetch(url: string, kind: 'feed' | 'page', userAgent?: string): Promise<FetchedText | null> {
+	private async fetch(
+		url: string,
+		kind: 'feed' | 'page',
+		userAgent?: string,
+	): Promise<FetchedText | null> {
 		await new Promise(resolve => setTimeout(resolve, BLOG_REQUEST_PAUSE_MS));
 		try {
 			const res = await fetchPublic(url, {
@@ -62,7 +66,10 @@ export class BlogFetchService {
 const decode = (body: Buffer, contentType: string | null): string => {
 	const declared =
 		contentType?.match(/charset=["']?([\w-]+)/i)?.[1] ??
-		body.subarray(0, 200).toString('latin1').match(/<\?xml[^>]*encoding=["']([\w-]+)/i)?.[1];
+		body
+			.subarray(0, 200)
+			.toString('latin1')
+			.match(/<\?xml[^>]*encoding=["']([\w-]+)/i)?.[1];
 	try {
 		return new TextDecoder(declared ?? 'utf-8').decode(body);
 	} catch {

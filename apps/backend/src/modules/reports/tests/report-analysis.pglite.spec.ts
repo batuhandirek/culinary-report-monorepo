@@ -14,10 +14,10 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { MOCK_AGENT_MODEL, mockAgent } from 'src/tests/mock-agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
+import { DurableLlmService } from 'src/modules/llm/services/durable-llm.service.js';
 
 import { ReportAnalysisAgent } from '../agents/report-analysis.agent.js';
 import { ReportEditorAgent } from '../agents/report-editor.agent.js';
-import { ReviewReplyAgent } from '../agents/review-reply.agent.js';
 import { ReportSectionKindEnum as Kind } from '../constants/report-section.constant.js';
 import { toOutput, toPublicOutput } from '../controllers/admin.reports.controller.js';
 import { Report } from '../entities/report.entity.js';
@@ -57,12 +57,13 @@ describe('report analysis (pglite)', () => {
 	let reports: ReportService;
 	let configs: ReportConfigService;
 	const highlightsAgent = mockAgent(HIGHLIGHTS);
-	const replyAgent = mockAgent({ replies: [] });
 	const analysisAgent = mockAgent((input: unknown) => answerFor(input as string));
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
 			providers: [
+				// Real: an agent call that finds no account waits for one
+				DurableLlmService,
 				ReportService,
 				// Real: the report keeps the aspect vocabulary it was built with (the auto-mock has no index)
 				TopicService,
@@ -73,7 +74,6 @@ describe('report analysis (pglite)', () => {
 				BrandService,
 				CityService,
 				{ provide: ReportEditorAgent, useValue: highlightsAgent },
-				{ provide: ReviewReplyAgent, useValue: replyAgent },
 				{ provide: ReportAnalysisAgent, useValue: analysisAgent },
 			],
 		});

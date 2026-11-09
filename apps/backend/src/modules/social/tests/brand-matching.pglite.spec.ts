@@ -11,10 +11,11 @@ import { cityStopwords, venueAliases } from 'src/modules/venues/util/venue-names
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { VenueMatchAgent } from '../agents/venue-match.agent.js';
 import { Mention, MentionMatchMethodEnum } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { MentionMatchingService, rankCandidates } from '../services/mention-matching.service.js';
+
+import { matchWithAgent } from './factories/match-with-agent.js';
 
 const words = cityStopwords(['berlin']);
 
@@ -175,11 +176,7 @@ describe('MentionMatchingService with brands (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [
-				MentionMatchingService,
-				CityService,
-				{ provide: VenueMatchAgent, useValue: { generate } },
-			],
+			providers: [MentionMatchingService, CityService],
 		});
 		service = harness.moduleRef.get(MentionMatchingService);
 		entityManagerManager.setEntityManager(harness.orm.em);
@@ -230,7 +227,7 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		const lone = mention(post(berlin), 'Hisar');
 		await em.flush();
 
-		await service.match();
+		await matchWithAgent(service, generate);
 		em.clear();
 		const read = (m: Mention) => em.findOneOrFail(Mention, { id: m.id });
 		expect(await read(brandOnly)).toMatchObject({ brand: { id: brand.id }, venue: null });
@@ -264,7 +261,7 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		});
 		await em.flush();
 
-		await service.match();
+		await matchWithAgent(service, generate);
 		expect(generate).toHaveBeenCalledTimes(1);
 		const input = JSON.parse((generate.mock.calls[0] as unknown as [string])[0]);
 		expect(input.mention).toMatchObject({
@@ -307,7 +304,7 @@ describe('MentionMatchingService with brands (pglite)', () => {
 			};
 		});
 
-		await service.match();
+		await matchWithAgent(service, generate);
 		// Once per hinted mention; never for "/"
 		expect(generate).toHaveBeenCalledTimes(2);
 		generate.mockImplementation(async () => ({ object: { venueId: null, branchId: null } }));
@@ -332,7 +329,7 @@ describe('MentionMatchingService with brands (pglite)', () => {
 		});
 		await em.flush();
 
-		await service.match();
+		await matchWithAgent(service, generate);
 		expect(generate).not.toHaveBeenCalled();
 		em.clear();
 		expect(await em.findOneOrFail(Mention, { id: both.id })).toMatchObject({
@@ -351,7 +348,7 @@ describe('MentionMatchingService with brands (pglite)', () => {
 			object: { venueId: JSON.parse(input).candidates[0].id, branchId: hisar.id },
 		}));
 
-		await service.match();
+		await matchWithAgent(service, generate);
 		const input = JSON.parse(generate.mock.calls[0][0]);
 		expect(input.candidates).toHaveLength(1);
 		expect(input.candidates[0].locations.map((l: { id: string }) => l.id)).toContain(pankow.id);
