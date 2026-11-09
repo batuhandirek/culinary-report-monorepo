@@ -48,7 +48,7 @@ interface PostPlan {
 /**
  * The reading of posts. `readPost` is one post as a workflow of its own: the gate, then agent A
  * (its places and claims), the claims' labels, the mentions' food topics. Each agent call is a
- * child on the `llm` queue that waits until an account can serve it, so a post waiting for the
+ * child on its tier's LLM queue that waits until an account can serve it, so a post waiting for the
  * allowance never holds the others back, a resume never asks a finished call again, and the
  * ledger files each call under the post's run. `readCity` is a city's unread posts, each started
  * under its one id (`readPostRunId`) and awaited: the hourly `ReadPostsSchedule` and any

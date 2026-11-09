@@ -106,6 +106,7 @@ export class AdminWorkflowsController {
 				scheduleName: this.durable.qualifiedScheduleName(query.schedule),
 			}),
 			...(key && { attributes: { [key]: rest.join(':') } }),
+			...(query.rootsOnly && { hasParent: false }),
 			limit: query.size,
 			offset: (query.page - 1) * query.size,
 			sortDesc: true,

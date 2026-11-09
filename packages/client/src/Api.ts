@@ -3613,6 +3613,8 @@ export interface AdminListWorkflowsInputDto {
 	/** @min 1 */
 	page: number;
 	queue?: string;
+	/** Only the runs nothing started as a child: a schedule's firing, a service's or an admin's start, a fork */
+	rootsOnly?: boolean;
 	schedule?: string;
 	/** @min 1 */
 	size: number;
@@ -11968,6 +11970,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				/** @min 1 */
 				page: number;
 				queue?: string;
+				/** Only the runs nothing started as a child: a schedule's firing, a service's or an admin's start, a fork */
+				rootsOnly?: boolean;
 				schedule?: string;
 				/** @min 1 */
 				size: number;
@@ -15588,10 +15592,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Queues a build of today's edition (it replaces one built earlier today and publishes itself).
+		 * @description Starts a build of today's edition (`LandingEditionWorkflow`, `high`; it replaces one built earlier today and publishes itself), one in flight per city.
 		 *
 		 * @name BuildLandingEdition
-		 * @summary Queues a build of today's edition (it replaces one built earlier today and publishes itself)
 		 * @request POST:/admin/landing-editions/build
 		 * @response `201` `BuildLandingEditionData`
 		 */

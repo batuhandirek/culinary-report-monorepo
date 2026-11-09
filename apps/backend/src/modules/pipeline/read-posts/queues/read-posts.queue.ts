@@ -2,7 +2,7 @@ import { defineDurableQueue } from 'src/modules/durable-workflows/queues/define-
 
 /**
  * One workflow per post (`ReadPostsWorkflow.readPost`). A post's agent calls are children on the
- * `llm` queue, which holds the providers' limits, so this queue only bounds how many posts are
+ * LLM queues, which hold the providers' limits, so this queue only bounds how many posts are
  * open at once.
  */
 export const READ_POSTS_QUEUE = defineDurableQueue('read-posts', { workerConcurrency: 8 });

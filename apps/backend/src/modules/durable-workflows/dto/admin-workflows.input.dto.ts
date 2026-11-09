@@ -14,6 +14,8 @@ export interface AdminListWorkflowsInputDto extends PaginationRequest {
 	schedule?: string;
 	/** `key:value` of a workflow attribute, e.g. `cityId:<uuid>` */
 	attribute?: string & tags.Pattern<'^[^:]+:.+$'>;
+	/** Only the runs nothing started as a child: a schedule's firing, a service's or an admin's start, a fork */
+	rootsOnly?: boolean;
 }
 
 export interface AdminSetWorkflowPriorityInputDto {

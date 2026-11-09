@@ -9,6 +9,7 @@ import {
 	PgliteTestingModule,
 } from 'src/tests/testing-module.js';
 
+import { AdminWorkflowsController } from '../controllers/admin.workflows.controller.js';
 import { BeforeDurableLaunch } from '../decorators/before-durable-launch.decorator.js';
 import { DurableSchedule } from '../decorators/durable-schedule.decorator.js';
 import { DurableStep } from '../decorators/durable-step.decorator.js';
@@ -318,6 +319,20 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 				1,
 				{ priority: 'high' },
 			]);
+		});
+
+		it('lists only the top-level runs when asked, leaving the children out (the admin)', async () => {
+			const parent = await durable.start(sample.parent, ['roots']);
+			await parent.getResult();
+			const admin = new AdminWorkflowsController(durable);
+			const list = async (rootsOnly?: boolean) =>
+				(await admin.listWorkflows({ page: 1, size: 200, rootsOnly })).items
+					.filter(
+						r => r.id === parent.workflowID || r.parentWorkflowId === parent.workflowID,
+					)
+					.map(r => r.name);
+			expect((await list()).sort()).toEqual(['hold', 'parent']);
+			expect(await list(true)).toEqual(['parent']);
 		});
 
 		it('raises a waiting run a high start is handed through its dedupe key', async () => {

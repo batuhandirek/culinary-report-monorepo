@@ -59,7 +59,8 @@
 			options: scheduleNames.map((name) => ({ name, value: name }))
 		},
 		cityFilter(adminCitiesStore.list),
-		{ key: 'attribute', name: 'Tag', type: 'text', placeholder: 'key:value, e.g. purpose:ingest' }
+		{ key: 'attribute', name: 'Tag', type: 'text', placeholder: 'key:value, e.g. purpose:ingest' },
+		{ key: 'rootsOnly', name: 'Top-level runs only', type: 'toggle' }
 	]);
 
 	// A select filter hands over a one-item array; the city is a tag like any other
@@ -74,7 +75,9 @@
 			name: first(query.name)?.trim() || undefined,
 			queue: first(query.queue),
 			schedule: first(query.schedule),
-			attribute: tag || (cityId ? `cityId:${cityId}` : undefined)
+			attribute: tag || (cityId ? `cityId:${cityId}` : undefined),
+			// From the URL it comes back as text
+			rootsOnly: query.rootsOnly === true || first(query.rootsOnly) === 'true' || undefined
 		});
 	};
 
