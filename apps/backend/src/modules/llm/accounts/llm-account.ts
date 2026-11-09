@@ -1,4 +1,4 @@
-import type { LlmProvider } from '../constants/llm-models.constant.js';
+import type { LlmModelId, LlmProvider } from '../constants/llm-models.constant.js';
 
 /**
  * A limit an account keeps to over the UTC day (00:00 UTC to 00:00 UTC): its agent calls
@@ -9,8 +9,11 @@ import type { LlmProvider } from '../constants/llm-models.constant.js';
 export interface LlmAccountLimit {
 	kind: 'requests' | 'tokens';
 	max: number;
-	/** Model ids or prefixes the limit counts and holds (`openai/gpt-5.4-mini`); unset: every model */
-	models?: readonly string[];
+	/**
+	 * The models the limit counts and holds, by exact id (`openai/gpt-5.4` leaves
+	 * `openai/gpt-5.4-mini` alone); several share one pool. Unset: every model of the account
+	 */
+	models?: readonly LlmModelId[];
 }
 
 export const requestsPerDay = (
@@ -48,4 +51,4 @@ export const isKeyed = (account: LlmAccount): account is KeyedLlmAccount => !!ac
 
 /** Whether a limit counts and holds calls on `model` */
 export const limitCovers = (limit: LlmAccountLimit, model: string): boolean =>
-	!limit.models || limit.models.some(m => model === m || model.startsWith(m));
+	!limit.models || limit.models.includes(model as LlmModelId);

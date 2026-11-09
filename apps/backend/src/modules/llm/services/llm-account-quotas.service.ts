@@ -30,7 +30,7 @@ export interface LlmQuotaBlock {
 export interface LlmQuotaUsage {
 	account: string;
 	kind: LlmAccountLimit['kind'];
-	models?: readonly string[];
+	models?: LlmAccountLimit['models'];
 	used: number;
 	max: number;
 	/** When it counts from zero again (the next 00:00 UTC) */

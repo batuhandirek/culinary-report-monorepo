@@ -241,4 +241,31 @@ describe('ReviewService plans and save (pglite)', () => {
 		).toEqual([['2026-10-02', 4.3, 131]]);
 		expect((await em.find(Review, { venue: a.id })).map(r => r.text)).toEqual(['Good, edited']);
 	});
+
+	it('stores a stars-only review without text, so the reading never takes it', async () => {
+		const em = harness.orm.em;
+		venue('t-blank');
+		await em.flush();
+		const fetch: ReviewsFetch = { mode: 'since', placeIds: ['t-blank'], since: '2026-09-01' };
+		const item = (reviewId: string, text: string, textTranslated?: string) => ({
+			placeId: 't-blank',
+			reviewId,
+			publishedAtDate: '2026-09-03T10:00:00Z',
+			stars: 5,
+			text,
+			textTranslated,
+		});
+		await service.saveReviews(
+			[item('blank', ''), item('spaces', '  ', ' '), item('written', ' Tasty ')],
+			fetch,
+			{ capped: false, now: new Date('2026-10-02T09:00:00Z') },
+		);
+		em.clear();
+		const stored = await em.find(Review, { reviewId: { $in: ['blank', 'spaces', 'written'] } });
+		expect(
+			Object.fromEntries(stored.map(r => [r.reviewId, [r.text ?? null, r.textTranslated ?? null]])),
+		).toEqual({ blank: [null, null], spaces: [null, null], written: ['Tasty', null] });
+		const unread = new Set(await service.unreadReviewIds(city.id, 1000));
+		expect(stored.filter(r => unread.has(r.id)).map(r => r.reviewId)).toEqual(['written']);
+	});
 });

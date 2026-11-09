@@ -7,5 +7,8 @@ export const OPENAI_SECONDARY_ACCOUNT = defineLlmAccount({
 	id: 'openai-secondary',
 	provider: 'openai',
 	apiKey: llmConfig.OPENAI_KEY_SECONDARY,
-	limits: [tokensPerDay(3_000_000)],
+	limits: [
+		tokensPerDay(2_000_000, { models: ['openai/gpt-5.4-mini'] }),
+		tokensPerDay(200_000, { models: ['openai/gpt-5.4'] }),
+	],
 });

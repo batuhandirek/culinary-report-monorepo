@@ -44,34 +44,34 @@ const errorText = (error: unknown): string | undefined =>
 export const workflowDto = (status: WorkflowStatus): AdminWorkflowOutputDto => {
 	const { [DURABLE_PRIORITY_ATTRIBUTE]: level, ...attributes } = status.attributes ?? {};
 	return {
-	id: status.workflowID,
-	status: status.status as DurableWorkflowStatus,
-	name: status.workflowName,
-	className: status.workflowClassName,
-	queue: status.queueName ?? undefined,
-	schedule: status.scheduleName ?? undefined,
-	parentWorkflowId: status.parentWorkflowID ?? undefined,
-	createdAt: new Date(status.createdAt),
-	updatedAt: date(status.updatedAt),
-	dequeuedAt: date(status.dequeuedAt),
-	completedAt: date(status.completedAt),
-	delayUntil: date(status.delayUntilEpochMS),
-	deduplicationId: status.deduplicationID ?? undefined,
-	priority: isDurablePriority(level) ? level : DEFAULT_DURABLE_PRIORITY,
-	applicationVersion: status.applicationVersion ?? undefined,
-	recoveryAttempts: status.recoveryAttempts ?? undefined,
-	attributes:
-		Object.keys(attributes).length ?
-			Object.fromEntries(
-				Object.entries(attributes).map(([k, v]) => [
-					k,
-					typeof v === 'string' ? v : JSON.stringify(v),
-				]),
-			)
-		:	undefined,
-	input: json(status.input),
-	output: json(status.output),
-	error: errorText(status.error),
+		id: status.workflowID,
+		status: status.status as DurableWorkflowStatus,
+		name: status.workflowName,
+		className: status.workflowClassName,
+		queue: status.queueName ?? undefined,
+		schedule: status.scheduleName ?? undefined,
+		parentWorkflowId: status.parentWorkflowID ?? undefined,
+		createdAt: new Date(status.createdAt),
+		updatedAt: date(status.updatedAt),
+		dequeuedAt: date(status.dequeuedAt),
+		completedAt: date(status.completedAt),
+		delayUntil: date(status.delayUntilEpochMS),
+		deduplicationId: status.deduplicationID ?? undefined,
+		priority: isDurablePriority(level) ? level : DEFAULT_DURABLE_PRIORITY,
+		applicationVersion: status.applicationVersion ?? undefined,
+		recoveryAttempts: status.recoveryAttempts ?? undefined,
+		attributes:
+			Object.keys(attributes).length ?
+				Object.fromEntries(
+					Object.entries(attributes).map(([k, v]) => [
+						k,
+						typeof v === 'string' ? v : JSON.stringify(v),
+					]),
+				)
+			:	undefined,
+		input: json(status.input),
+		output: json(status.output),
+		error: errorText(status.error),
 	};
 };
 

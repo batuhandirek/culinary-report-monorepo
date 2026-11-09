@@ -376,8 +376,9 @@ export class ReviewService {
 				});
 			fresh.set(item.reviewId, review);
 			review.stars = item.stars ?? null;
-			review.text = item.text ?? null;
-			review.textTranslated = item.textTranslated ?? null;
+			// A stars-only review comes back as text '' (not null): null keeps it out of the reading
+			review.text = item.text?.trim() || null;
+			review.textTranslated = item.textTranslated?.trim() || null;
 			review.language = item.originalLanguage ?? null;
 			review.likes = item.likesCount ?? 0;
 			review.ownerResponse = item.responseFromOwnerText ?? null;

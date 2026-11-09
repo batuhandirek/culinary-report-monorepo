@@ -603,6 +603,21 @@ describe('LlmModelsService with daily account limits', () => {
 		});
 	});
 
+	it('holds a model only by a limit naming its exact id', async () => {
+		const { call } = setup({
+			openRouterApiKey: 'sk-or-xxxx',
+			limits: {
+				openai: [
+					tokensPerDay(1_000, { models: [MINI] }),
+					tokensPerDay(100, { models: [FULL] }),
+				],
+			},
+		});
+		await call('full', undefined, 100);
+		expect((await call('full')).account).toBe('openrouter');
+		expect((await call('mini')).account).toBe('openai-a');
+	});
+
 	it('counts a limit only on the models it names', async () => {
 		const { call } = setup({
 			openRouterApiKey: 'sk-or-xxxx',
