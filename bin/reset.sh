@@ -34,6 +34,11 @@ read_dump() {
 	esac
 }
 
+# Index builds run without parallel workers: a parallel build keeps its working memory in /dev/shm,
+# which Docker caps at 64 MB, and the HNSW index on statements.embedding outgrew it ("could not
+# resize shared memory segment"). A serial build uses the server's own memory instead.
+RESTORE_PGOPTIONS='-c max_parallel_maintenance_workers=0 -c maintenance_work_mem=512MB'
+
 # 2. Restore into $TARGET.
 #    Coolify's backup is a pg_dumpall: roles (it would set the local postgres password to the
 #    remote one), then template1, then the app's tables in the "postgres" database. Only that
@@ -41,15 +46,15 @@ read_dump() {
 #    A custom-format dump (.dmp) goes through pg_restore.
 case "$BACKUP_FILE" in
 	*.dmp)
-		docker exec -i "$CONTAINER" pg_restore -U postgres -d "$TARGET" --no-owner < "$BACKUP_FILE"
+		docker exec -i -e PGOPTIONS="$RESTORE_PGOPTIONS" "$CONTAINER" pg_restore -U postgres -d "$TARGET" --no-owner < "$BACKUP_FILE"
 		;;
 	*)
 		if read_dump | grep -cx '\\connect postgres' >/dev/null; then
 			read_dump | awk -v db="$TARGET" '
 				/^\\connect / { on = ($0 == "\\connect postgres"); if (on) print "\\connect \"" db "\""; next }
-				on' | docker exec -i "$CONTAINER" psql -U postgres -d "$TARGET" -q -v ON_ERROR_STOP=1
+				on' | docker exec -i -e PGOPTIONS="$RESTORE_PGOPTIONS" "$CONTAINER" psql -U postgres -d "$TARGET" -q -v ON_ERROR_STOP=1
 		else
-			read_dump | docker exec -i "$CONTAINER" psql -U postgres -d "$TARGET" -q -v ON_ERROR_STOP=1
+			read_dump | docker exec -i -e PGOPTIONS="$RESTORE_PGOPTIONS" "$CONTAINER" psql -U postgres -d "$TARGET" -q -v ON_ERROR_STOP=1
 		fi
 		;;
 esac

@@ -1,57 +1,45 @@
 <script lang="ts">
 	import '@xyflow/svelte/dist/style.css';
 
+	import { RefreshCw } from '@lucide/svelte';
 	import { Background, Controls, type Edge, type Node, SvelteFlow } from '@xyflow/svelte';
 	import type { AdminWorkflowTreeGroupDto, AdminWorkflowTreeOutputDto, AdminWorkflowTreeRunDto } from 'client';
 
-	import { onMount } from 'svelte';
-
-	import { layoutTree, TREE_NODE_HEIGHT } from './run-tree-layout.js';
+	import { layoutTree, TREE_NODE_HEIGHT, TREE_NODE_WIDTH } from './run-tree-layout.js';
 	import RunTreeGroupNode from './RunTreeGroupNode.svelte';
 	import RunTreeRunNode from './RunTreeRunNode.svelte';
 
 	import { goto } from '$app/navigation';
 	import { api } from '#lib/api.js';
-	import { isWorkflowLive, workflowHref, workflowStatusLabel } from '#lib/workflow-status.js';
+	import { workflowHref, workflowStatusLabel } from '#lib/workflow-status.js';
+	import Button from '#ui/wrapped/Button.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 
 	// Who started whom under this run, drawn left to right; a parent's many runs of one workflow
-	// are one node with their counts, which opens them in the list. Read again every few seconds
-	// while anything in it is still to finish.
+	// are one node with their counts, which opens them in the list. Read once, and again on Refresh.
 	let { runId }: { runId: string } = $props();
 
 	let tree = $state<AdminWorkflowTreeOutputDto | null>(null);
 	let failed = $state(false);
+	let loading = $state(false);
 
-	const load = async () => {
+	const load = async (id: string) => {
+		loading = true;
 		try {
-			tree = (await api.admin.getWorkflowTree(runId)) as AdminWorkflowTreeOutputDto;
+			tree = (await api.admin.getWorkflowTree(id)) as AdminWorkflowTreeOutputDto;
 			failed = false;
 		} catch {
 			failed = true;
+		} finally {
+			loading = false;
 		}
 	};
 
-	const live = $derived(
-		!!tree?.nodes.some((n) =>
-			n.kind === 'run'
-				? isWorkflowLive(n.status)
-				: (n as AdminWorkflowTreeGroupDto).statuses.some((s) => isWorkflowLive(s.status))
-		)
-	);
-
-	onMount(() => {
-		const timer = setInterval(() => {
-			if (live) load();
-		}, 5000);
-		return () => clearInterval(timer);
-	});
-
 	// A new run id (a link to another run) draws its tree
 	$effect(() => {
-		void runId;
+		const id = runId;
 		tree = null;
-		load();
+		load(id);
 	});
 
 	// `group` is a node type Svelte Flow styles itself, so the folded runs are `fold`
@@ -66,6 +54,9 @@
 			id: n.id,
 			type: n.kind === 'run' ? 'run' : 'fold',
 			position: positions.get(n.id) ?? { x: 0, y: 0 },
+			// A known size: Svelte Flow hides a node until it has measured it, which blinks on a reload
+			width: TREE_NODE_WIDTH,
+			height: TREE_NODE_HEIGHT,
 			data:
 				n.kind === 'run'
 					? { run: n as AdminWorkflowTreeRunDto, current: n.id === tree!.id }
@@ -89,15 +80,20 @@
 	);
 </script>
 
-{#if tree?.ancestors.length}
-	<nav class="text-muted-foreground mb-3 flex flex-wrap items-center gap-1 text-xs">
-		<span>Started by</span>
-		{#each tree.ancestors as a, i (a.id)}
-			{#if i > 0}<span aria-hidden="true">›</span>{/if}
-			<a class="text-foreground hover:underline" href={workflowHref(a.id)} title={workflowStatusLabel(a.status)}>{a.name}</a>
-		{/each}
+<div class="mb-3 flex items-center justify-between gap-3">
+	<nav class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-1 text-xs">
+		{#if tree?.ancestors.length}
+			<span>Started by</span>
+			{#each tree.ancestors as a, i (a.id)}
+				{#if i > 0}<span aria-hidden="true">›</span>{/if}
+				<a class="text-foreground hover:underline" href={workflowHref(a.id)} title={workflowStatusLabel(a.status)}>{a.name}</a>
+			{/each}
+		{:else if tree}
+			<span>Nothing started it: a schedule's firing, a button or a service</span>
+		{/if}
 	</nav>
-{/if}
+	<Button size="sm" variant="outline" icon={RefreshCw} {loading} onclick={() => load(runId)}>Refresh</Button>
+</div>
 
 {#if failed && !tree}
 	<EmptyState title="The tree could not be read" hint="Try the page again in a moment." ground="none" size="sm" />

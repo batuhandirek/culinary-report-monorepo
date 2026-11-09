@@ -14,6 +14,7 @@ import {
 	LlmModelKey,
 	LlmModelsOptions,
 	LlmModelsService,
+	NoModelError,
 	OPENROUTER_TRIES,
 } from '../services/llm-models.service.js';
 import { OpenAIAccountsService } from '../services/openai-accounts.service.js';
@@ -156,9 +157,9 @@ const setup = (opts: SetupOptions = { anthropicApiKey: 'sk-ant-xxxx' }) => {
 };
 
 describe('modelsFor', () => {
-	it('gives a tier its roster, free first', () => {
+	it('gives a tier its roster, OpenAI first, Sonnet before the free model on full', () => {
 		expect(modelsFor('mini')).toEqual([MINI, FREE, HAIKU]);
-		expect(modelsFor('full')).toEqual([FULL, FREE, SONNET]);
+		expect(modelsFor('full')).toEqual([FULL, SONNET, FREE]);
 		expect(modelsFor('high')).toEqual([OPUS, FULL, FREE]);
 	});
 
@@ -270,6 +271,33 @@ describe('LlmModelsService', () => {
 			})
 			.catch((e: Error) => e);
 		expect(isFatalProviderError(refused)).toBe(true);
+	});
+
+	it('moves a paying agent on full from gpt-5.4 to Sonnet, past the free model', async () => {
+		const keys = { anthropicApiKey: 'sk-ant-xxxx', openRouterApiKey: 'sk-or-xxxx' };
+		const { service } = setup(keys);
+		const tried: string[] = [];
+		const paying = await service.run(
+			'full',
+			async model => {
+				tried.push(model.id);
+				if (model.id.startsWith('openai/')) throw openAIOut();
+				return model.id;
+			},
+			{ paidFallback: true },
+		);
+		expect(tried).toEqual([FULL, SONNET]);
+		expect(paying.model).toBe(SONNET);
+
+		// Without paidFallback, Sonnet is left out and the free model serves
+		tried.length = 0;
+		const free = await setup(keys).service.run('full', async model => {
+			tried.push(model.id);
+			if (model.id.startsWith('openai/')) throw openAIOut();
+			return model.id;
+		});
+		expect(tried).toEqual([FULL, FREE]);
+		expect(free.model).toBe(FREE);
 	});
 
 	it('rethrows any other error without moving on', async () => {
@@ -391,9 +419,13 @@ describe('LlmModelsService on OpenRouter', () => {
 				})
 				.catch((e: Error) => e);
 
+		// The first refusal is already "no model can serve", with OpenRouter's words: a durable
+		// call waits on it for the reset instead of failing (production, 2026-11-09)
 		const first = await run();
 		expect(tried).toEqual([MINI, FREE]);
-		expect((first as Error).message).toBe('Mastra: generate failed');
+		expect(first).toBeInstanceOf(NoModelError);
+		expect(isFatalProviderError(first)).toBe(true);
+		expect((first as Error).message).toMatch(/last answer: Rate limit exceeded: free-models-per-day/);
 		expect(service.status().openrouter).toEqual({
 			until: new Date(MIDNIGHT),
 			reason: expect.stringMatching(/free-models-per-day/),
@@ -425,7 +457,8 @@ describe('LlmModelsService on OpenRouter', () => {
 				return model.id;
 			})
 			.catch((e: Error) => e);
-		expect((first as Error).message).toBe('Mastra: generate failed');
+		expect(first).toBeInstanceOf(NoModelError);
+		expect((first as Error).message).toMatch(/last answer: No endpoints found/);
 
 		const again = await service.run(GONE, async model => model.id).catch((e: Error) => e);
 		expect((again as Error).message).toMatch(

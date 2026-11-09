@@ -16,7 +16,7 @@ import {
 } from '../constants/llm-models.constant.js';
 import { isLlmPaid } from '../util/llm-scope.js';
 import { OpenRouterLimit, openRouterLimitOf } from '../util/openrouter-limits.js';
-import { accountErrorReason, isProviderAccountError } from '../util/provider-errors.js';
+import { accountErrorReason, errorChain, isProviderAccountError } from '../util/provider-errors.js';
 
 import { LlmAccountQuotas } from './llm-account-quotas.service.js';
 import {
@@ -94,10 +94,18 @@ export interface LlmAvailability {
 }
 
 /**
- * Every model of the choice is left out (disabled, no key, blocked, or paid outside `llmPaid`);
- * `isFatalProviderError` matches the message, so a step stops instead of failing item by item.
+ * Every model of the choice is left out (disabled, no key, blocked, or paid outside `llmPaid`) or
+ * refused the call for its account (out of its day, its credit, its cap; the provider's answer is
+ * its `cause`). `isFatalProviderError` matches the message, so a step stops instead of failing
+ * item by item, and a durable call waits for the roster's reset instead of failing.
  */
 export class NoModelError extends Error {}
+
+/** What the provider itself answered: the first message in the chain from a provider's URL */
+const providerWords = (error: unknown): string =>
+	errorChain(error).find(e => typeof e.url === 'string' && e.message)?.message ??
+	(error as Error)?.message ??
+	String(error);
 
 /** Anthropic answered that the account has no credit, its spend limit is reached or its key is wrong */
 export const isAnthropicAccountError = (error: unknown): boolean =>
@@ -112,8 +120,9 @@ export const isAnthropicAccountError = (error: unknown): boolean =>
  * reset) or its key is refused. OpenRouter's calls are spaced to its per-minute cap, and a short
  * block (the minute's cap hit anyway, a free model busy at its provider) is waited out and the
  * call tried again, so a busy free model slows a step down instead of stopping it. Any other
- * error is rethrown as is. When no model is left, the last provider's error is thrown, which
- * `isFatalProviderError` matches.
+ * error is rethrown as is. When no model is left, `NoModelError` is thrown, saying why for each
+ * model and what the last provider answered; `isFatalProviderError` matches it, and a durable call
+ * waits on it for the roster's reset.
  *
  * A disabled provider is left out, and so are the paid models (Claude) except inside `llmPaid`
  * or for an agent with `paidFallback`: production never pays, except for the few small agents the
@@ -303,10 +312,12 @@ export class LlmModelsService implements OnApplicationBootstrap {
 				lastError = error;
 			}
 		}
-		throw (
-			lastError ??
-			new NoModelError(`No model can serve ${choice}: ${this.whyNone(choice, freeOnly)}`)
-		);
+		// Always `NoModelError`, never the last provider's own error: a durable call waits on it,
+		// whatever words the provider used (OpenRouter's daily cap matches nothing else)
+		const why = `No model can serve ${choice}: ${this.whyNone(choice, freeOnly)}`;
+		throw new NoModelError(lastError ? `${why} (last answer: ${providerWords(lastError)})` : why, {
+			cause: lastError,
+		});
 	}
 
 	/** Why each model of the choice is left out, so the fatal error says what to fix or wait for */

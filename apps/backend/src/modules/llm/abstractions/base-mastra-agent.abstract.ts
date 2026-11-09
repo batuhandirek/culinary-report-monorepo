@@ -72,9 +72,10 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	cacheConversation?: boolean;
 	/**
 	 * May move to its tier's Claude model when the free one is out, outside `llmPaid` too: only for
-	 * small agents the user allowed by name (2026-11-03: `aspect-suggestion`,
-	 * a few dozen short calls when a run names its groups; `analyst`, whose
-	 * choice puts Claude first: each answer is a question an admin asked), never a bulk one.
+	 * agents the user allowed by name (2026-11-03: `aspect-suggestion`, a few dozen short calls
+	 * when a run names its groups; `analyst`, whose choice puts Claude first: each answer is a
+	 * question an admin asked; 2026-11-09: `post-claims`, the one bulk agent, since gpt-5.4's
+	 * allowance reads fewer posts a day than arrive). The spend is capped in the Anthropic Console.
 	 */
 	paidFallback?: boolean;
 	/**

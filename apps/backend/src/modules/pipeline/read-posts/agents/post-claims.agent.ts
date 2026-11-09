@@ -109,11 +109,14 @@ export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, Po
 		id: 'post-claims',
 		name: 'PostClaimsAgent',
 		outputSchema: postClaimsSchema,
+		// Sonnet once gpt-5.4's allowance is out, ahead of the free model (the user's call,
+		// 2026-11-09): the allowance reads ~180 posts a day, fewer than arrive
+		paidFallback: true,
 	};
 
 	// The full model (the eval, 2026-11-05): copying out foods and numbers too, mini found fewer post
-	// claims (90% → 81%), gpt-5.4 kept them (92%). Berlin's ~170 posts a day are ~0.8M tokens, inside
-	// the two accounts' 2M a day; past it the reading waits for the next day
+	// claims (90% → 81%), gpt-5.4 kept them (92%). A post that passes the gate takes ~5,700 tokens
+	// (1.35 calls); the two accounts' 1M gpt-5.4 tokens a day read ~180, and the rest go to Sonnet
 	protected getModel(): LlmModelChoice {
 		return 'full';
 	}
