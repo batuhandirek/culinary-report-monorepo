@@ -117,7 +117,21 @@ export class WorkflowScannerService {
 			throw new Error(
 				`Workflow ${workflowKey(ref)} is registered twice: two providers of the same class, or two methods with one name`,
 			);
-		const body = methodRef.bind(instance) as AnyFn;
+		const method = methodRef.bind(instance) as AnyFn;
+		// A schedule's firing stays running until every run it started has ended, so the admin
+		// sees what a firing still has under way (its children, not runs it was handed back)
+		const body =
+			schedule ?
+				(((...args: never[]) =>
+					method(...args).then(async result => {
+						const { children, failed } = await this.service.awaitChildren();
+						if (failed)
+							this.logger.warn(
+								`Schedule ${schedule.name}: ${failed} of the ${children} run(s) it started failed`,
+							);
+						return result;
+					})) as AnyFn)
+			:	method;
 		// The body runs with its run's priority level at hand, which the children it starts inherit
 		const bound = ((...args: never[]) =>
 			this.priority.runAs(DBOS.workflowID ?? '', () => body(...args))) as AnyFn;

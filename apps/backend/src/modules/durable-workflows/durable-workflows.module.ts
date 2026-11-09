@@ -29,6 +29,7 @@ import { definedDurableQueues } from './queues/define-durable-queue.js';
 import { DurablePriorityService } from './services/durable-priority.service.js';
 import { DurableQueueMovesService } from './services/durable-queue-moves.service.js';
 import { DurableRegistry } from './services/durable-registry.service.js';
+import { DurableRunTreeService } from './services/durable-run-tree.service.js';
 import { DurableWorkflowsService } from './services/durable-workflows.service.js';
 import { WorkflowScannerService } from './services/workflow-scanner.service.js';
 
@@ -96,6 +97,7 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 		private readonly service: DurableWorkflowsService,
 		private readonly priority: DurablePriorityService,
 		private readonly registry: DurableRegistry,
+		private readonly runTree: DurableRunTreeService,
 	) {}
 
 	/**
@@ -118,6 +120,7 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 				DurableRegistry,
 				DurablePriorityService,
 				DurableQueueMovesService,
+				DurableRunTreeService,
 				WorkflowScannerService,
 				DurableWorkflowsService,
 			],
@@ -194,5 +197,6 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 			this.logger.error(`DBOS shutdown threw: ${(e as Error).message}`);
 		}
 		await this.priority.close().catch(() => undefined);
+		await this.runTree.close().catch(() => undefined);
 	}
 }

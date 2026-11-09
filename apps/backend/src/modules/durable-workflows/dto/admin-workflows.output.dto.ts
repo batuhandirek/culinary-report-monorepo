@@ -109,3 +109,44 @@ export interface AdminWorkflowActionOutputDto {
 	workflowId: string;
 	status?: DurableWorkflowStatus;
 }
+
+/** A run in the tree of who started whom */
+export interface AdminWorkflowTreeRunDto {
+	kind: 'run';
+	id: string;
+	/** The node it hangs under (a run's id); none for the tree's top */
+	parentKey?: string;
+	name: string;
+	className: string;
+	status: DurableWorkflowStatus;
+	/** Its declared queue name */
+	queue?: string;
+	createdAt: Date;
+	completedAt?: Date;
+	cityId?: string;
+	purpose?: string;
+}
+
+/** Several runs of one workflow under one parent, folded into one node */
+export interface AdminWorkflowTreeGroupDto {
+	kind: 'group';
+	/** `<parent id>/<className>.<name>` */
+	id: string;
+	parentKey: string;
+	/** The run that started them, for the list of them (`?parent=<id>&name=<name>`) */
+	parentId: string;
+	name: string;
+	className: string;
+	count: number;
+	statuses: { status: DurableWorkflowStatus; count: number }[];
+}
+
+export interface AdminWorkflowTreeOutputDto {
+	/** The run the tree is drawn from */
+	id: string;
+	/** The runs above it, the top first */
+	ancestors: AdminWorkflowTreeRunDto[];
+	nodes: (AdminWorkflowTreeRunDto | AdminWorkflowTreeGroupDto)[];
+	/** More runs were under it than were read */
+	truncated: boolean;
+}

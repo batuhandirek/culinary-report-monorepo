@@ -27,9 +27,13 @@ import {
 	AdminWorkflowOutputDto,
 	AdminWorkflowPriorityOutputDto,
 	AdminWorkflowStepOutputDto,
+	AdminWorkflowTreeOutputDto,
+	AdminWorkflowTreeRunDto,
 	DurableWorkflowStatus,
 } from '../dto/admin-workflows.output.dto.js';
+import { DurableRunTreeService, type RunTreeRow } from '../services/durable-run-tree.service.js';
 import { DurableStepInfo, DurableWorkflowsService } from '../services/durable-workflows.service.js';
+import { buildRunTree } from '../util/run-tree.js';
 
 const json = (value: unknown): string | undefined =>
 	value === undefined || value === null ? undefined : JSON.stringify(value);
@@ -75,6 +79,9 @@ export const workflowDto = (status: WorkflowStatus): AdminWorkflowOutputDto => {
 	};
 };
 
+/** The most runs one tree reads: a city's month with every post's agent calls fits */
+const RUN_TREE_READ_LIMIT = 20_000;
+
 const stepDto = (step: DurableStepInfo): AdminWorkflowStepOutputDto => ({
 	functionId: step.functionID,
 	name: step.name,
@@ -90,7 +97,10 @@ const stepDto = (step: DurableStepInfo): AdminWorkflowStepOutputDto => ({
 @UseGuards(AuthenticationGuard, RolesGuard)
 @Roles(UserRoleEnum.ADMIN)
 export class AdminWorkflowsController {
-	constructor(private readonly durable: DurableWorkflowsService) {}
+	constructor(
+		private readonly durable: DurableWorkflowsService,
+		private readonly runTree: DurableRunTreeService,
+	) {}
 
 	/** Newest first; the arguments and result of each run come along (`loadInput`, `loadOutput`) */
 	@TypedRoute.Get('/')
@@ -107,6 +117,7 @@ export class AdminWorkflowsController {
 			}),
 			...(key && { attributes: { [key]: rest.join(':') } }),
 			...(query.rootsOnly && { hasParent: false }),
+			...(query.parent && { parentWorkflowID: query.parent }),
 			limit: query.size,
 			offset: (query.page - 1) * query.size,
 			sortDesc: true,
@@ -184,6 +195,48 @@ export class AdminWorkflowsController {
 		return { name, status: 'active' };
 	}
 
+	/**
+	 * Who started whom under a run: the run, the runs it started, theirs, and so on, with a
+	 * parent's many runs of one workflow folded into one node with their statuses' counts; and the
+	 * runs above it
+	 */
+	@TypedRoute.Get('/:id/tree')
+	async getWorkflowTree(@TypedParam('id') id: string): Promise<AdminWorkflowTreeOutputDto> {
+		const [{ rows, truncated }, ancestors] = await Promise.all([
+			this.runTree.descendants(id, RUN_TREE_READ_LIMIT),
+			this.runTree.ancestors(id),
+		]);
+		if (!rows.length) throw new NotFoundException(`No workflow ${id}`);
+		return {
+			id,
+			ancestors: ancestors.map((row, i) => ({
+				...this.treeRun(row),
+				...(i > 0 && { parentKey: ancestors[i - 1].id }),
+			})),
+			nodes: buildRunTree(id, rows).map(node =>
+				node.kind === 'run' ?
+					{
+						...this.treeRun(node.row),
+						...(node.parentKey && { parentKey: node.parentKey }),
+					}
+				:	{
+						kind: 'group' as const,
+						id: node.key,
+						parentKey: node.parentKey,
+						parentId: node.parentId,
+						name: node.name,
+						className: node.className,
+						count: node.count,
+						statuses: node.statuses.map(s => ({
+							status: s.status as DurableWorkflowStatus,
+							count: s.count,
+						})),
+					},
+			),
+			truncated,
+		};
+	}
+
 	/** One run with every step it finished: what each stored, or how it failed */
 	@TypedRoute.Get('/:id')
 	async getWorkflow(@TypedParam('id') id: string): Promise<AdminWorkflowDetailOutputDto> {
@@ -232,6 +285,22 @@ export class AdminWorkflowsController {
 	}
 
 	/** The run as the admin sees it, its queue under the name it was declared with */
+	private treeRun(row: RunTreeRow): AdminWorkflowTreeRunDto {
+		const { cityId, purpose } = row.attributes;
+		return {
+			kind: 'run',
+			id: row.id,
+			name: row.name,
+			className: row.className,
+			status: row.status as DurableWorkflowStatus,
+			...(row.queue && { queue: this.durable.declaredQueueName(row.queue) }),
+			createdAt: new Date(row.createdAt),
+			...(row.completedAt !== undefined && { completedAt: new Date(row.completedAt) }),
+			...(typeof cityId === 'string' && { cityId }),
+			...(typeof purpose === 'string' && { purpose }),
+		};
+	}
+
 	private toDto(status: WorkflowStatus): AdminWorkflowOutputDto {
 		return {
 			...workflowDto(status),

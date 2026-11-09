@@ -16,6 +16,7 @@ import { DurableStep } from '../decorators/durable-step.decorator.js';
 import { DurableWorkflow } from '../decorators/durable-workflow.decorator.js';
 import { defineDurableQueue } from '../queues/define-durable-queue.js';
 import { DurableRegistry } from '../services/durable-registry.service.js';
+import { DurableRunTreeService } from '../services/durable-run-tree.service.js';
 import { DurableWorkflowsService } from '../services/durable-workflows.service.js';
 import { WorkflowScannerService } from '../services/workflow-scanner.service.js';
 
@@ -79,6 +80,12 @@ class SampleWorkflows {
 	@DurableSchedule('sample-tick', '*/5 * * * *')
 	async tick(at: Date): Promise<void> {
 		this.calls.push(`tick ${at.toISOString()}`);
+		// One run in flight at a time: a firing while it runs is handed that one back
+		await this.durable.start(this.hold, ['tick child', 1_500], {
+			queue: SAMPLE_QUEUE,
+			dedupe: 'tick-child',
+			onDuplicate: 'return-existing',
+		});
 	}
 }
 
@@ -199,6 +206,38 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 		expect((await durable.get(id))?.scheduleName).toBe(
 			durable.qualifiedScheduleName('sample-tick'),
 		);
+	});
+
+	it("keeps a schedule's firing running until the runs it started end, not one it was handed back", async () => {
+		const first = await durable.triggerSchedule('sample-tick');
+		const [child] = await until(
+			async () => (await durable.list({ parentWorkflowID: first })).length > 0,
+		).then(() => durable.list({ parentWorkflowID: first }));
+		const second = await durable.triggerSchedule('sample-tick');
+		// The second firing was handed the first's run: it ends at once, the first waits for it
+		await until(async () => (await durable.get(second))?.status === 'SUCCESS');
+		expect((await durable.get(first))?.status).toBe('PENDING');
+		expect(await durable.list({ parentWorkflowID: second })).toEqual([]);
+		await until(async () => (await durable.get(first))?.status === 'SUCCESS');
+		expect((await durable.get(child.workflowID))?.status).toBe('SUCCESS');
+	});
+
+	it('draws who started whom: the run, its children, and the runs above', async () => {
+		const parent = await durable.start(sample.parent, ['tree']);
+		await parent.getResult();
+		const admin = new AdminWorkflowsController(
+			durable,
+			harness.moduleRef.get(DurableRunTreeService),
+		);
+		const tree = await admin.getWorkflowTree(parent.workflowID);
+		expect(tree.nodes.map(n => [n.kind, n.name, n.parentKey])).toEqual([
+			['run', 'parent', undefined],
+			['run', 'hold', parent.workflowID],
+		]);
+		const childId = tree.nodes[1].id;
+		const fromChild = await admin.getWorkflowTree(childId);
+		expect(fromChild.ancestors.map(a => a.id)).toEqual([parent.workflowID]);
+		expect(fromChild.nodes.map(n => n.id)).toEqual([childId]);
 	});
 
 	it('removes a schedule no decorator names any more', async () => {
@@ -324,7 +363,10 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 		it('lists only the top-level runs when asked, leaving the children out (the admin)', async () => {
 			const parent = await durable.start(sample.parent, ['roots']);
 			await parent.getResult();
-			const admin = new AdminWorkflowsController(durable);
+			const admin = new AdminWorkflowsController(
+				durable,
+				harness.moduleRef.get(DurableRunTreeService),
+			);
 			const list = async (rootsOnly?: boolean) =>
 				(await admin.listWorkflows({ page: 1, size: 200, rootsOnly })).items
 					.filter(
@@ -333,6 +375,14 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 					.map(r => r.name);
 			expect((await list()).sort()).toEqual(['hold', 'parent']);
 			expect(await list(true)).toEqual(['parent']);
+			const started = await admin.listWorkflows({
+				page: 1,
+				size: 50,
+				parent: parent.workflowID,
+			});
+			expect(started.items.map(r => [r.name, r.parentWorkflowId])).toEqual([
+				['hold', parent.workflowID],
+			]);
 		});
 
 		it('raises a waiting run a high start is handed through its dedupe key', async () => {

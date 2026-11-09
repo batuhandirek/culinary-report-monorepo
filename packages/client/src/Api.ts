@@ -3612,6 +3612,8 @@ export interface AdminListWorkflowsInputDto {
 	name?: string;
 	/** @min 1 */
 	page: number;
+	/** Only the runs this run started */
+	parent?: string;
 	queue?: string;
 	/** Only the runs nothing started as a child: a schedule's firing, a service's or an admin's start, a fork */
 	rootsOnly?: boolean;
@@ -3718,10 +3720,10 @@ export enum AdminLlmSpendInputDtoGroupByEnum {
 	Day = 'day',
 	Model = 'model',
 	City = 'city',
-	Agent = 'agent',
-	Provider = 'provider',
 	Purpose = 'purpose',
 	Workflow = 'workflow',
+	Agent = 'agent',
+	Provider = 'provider',
 }
 
 export interface AdminLlmSpendOutputDto {
@@ -3738,10 +3740,10 @@ export enum AdminLlmSpendOutputDtoGroupByEnum {
 	Day = 'day',
 	Model = 'model',
 	City = 'city',
-	Agent = 'agent',
-	Provider = 'provider',
 	Purpose = 'purpose',
 	Workflow = 'workflow',
+	Agent = 'agent',
+	Provider = 'provider',
 }
 
 export interface AdminLlmSpendRowOutputDto {
@@ -6454,6 +6456,80 @@ export interface AdminWorkflowStepOutputDto {
 	startedAt?: string;
 }
 
+/** Several runs of one workflow under one parent, folded into one node */
+export interface AdminWorkflowTreeGroupDto {
+	className: string;
+	count: number;
+	/** `<parent id>/<className>.<name>` */
+	id: string;
+	kind: AdminWorkflowTreeGroupDtoKindEnum;
+	name: string;
+	/** The run that started them, for the list of them (`?parent=<id>&name=<name>`) */
+	parentId: string;
+	parentKey: string;
+	statuses: {
+		count: number;
+		status: AdminWorkflowTreeGroupDtoStatusEnum;
+	}[];
+}
+
+export enum AdminWorkflowTreeGroupDtoKindEnum {
+	Group = 'group',
+}
+
+export enum AdminWorkflowTreeGroupDtoStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
+export interface AdminWorkflowTreeOutputDto {
+	/** The runs above it, the top first */
+	ancestors: AdminWorkflowTreeRunDto[];
+	/** The run the tree is drawn from */
+	id: string;
+	nodes: (AdminWorkflowTreeRunDto | AdminWorkflowTreeGroupDto)[];
+	/** More runs were under it than were read */
+	truncated: boolean;
+}
+
+/** A run in the tree of who started whom */
+export interface AdminWorkflowTreeRunDto {
+	cityId?: string;
+	className: string;
+	/** @format date-time */
+	completedAt?: string;
+	/** @format date-time */
+	createdAt: string;
+	id: string;
+	kind: AdminWorkflowTreeRunDtoKindEnum;
+	name: string;
+	/** The node it hangs under (a run's id); none for the tree's top */
+	parentKey?: string;
+	purpose?: string;
+	/** Its declared queue name */
+	queue?: string;
+	status: AdminWorkflowTreeRunDtoStatusEnum;
+}
+
+export enum AdminWorkflowTreeRunDtoKindEnum {
+	Run = 'run',
+}
+
+export enum AdminWorkflowTreeRunDtoStatusEnum {
+	PENDING = 'PENDING',
+	SUCCESS = 'SUCCESS',
+	ERROR = 'ERROR',
+	MAX_RECOVERY_ATTEMPTS_EXCEEDED = 'MAX_RECOVERY_ATTEMPTS_EXCEEDED',
+	CANCELLED = 'CANCELLED',
+	ENQUEUED = 'ENQUEUED',
+	DELAYED = 'DELAYED',
+}
+
 export type AnalyseReportData = AdminReportRunOutputDto;
 
 export interface AnalystChart {
@@ -7557,6 +7633,8 @@ export type GetWaitComplaintsData = AdminWaitComplaintsOutputDto;
 
 export type GetWorkflowData = AdminWorkflowDetailOutputDto;
 
+export type GetWorkflowTreeData = AdminWorkflowTreeOutputDto;
+
 export interface HealthCheckResponseDto {
 	ok: boolean;
 	/** @format date-time */
@@ -8413,10 +8491,10 @@ export enum LlmSpendParamsGroupByEnum {
 	Day = 'day',
 	Model = 'model',
 	City = 'city',
-	Agent = 'agent',
-	Provider = 'provider',
 	Purpose = 'purpose',
 	Workflow = 'workflow',
+	Agent = 'agent',
+	Provider = 'provider',
 }
 
 export type LogOutreachTouchData = AdminProspectOutputDto;
@@ -11969,6 +12047,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				name?: string;
 				/** @min 1 */
 				page: number;
+				/** Only the runs this run started */
+				parent?: string;
 				queue?: string;
 				/** Only the runs nothing started as a child: a schedule's firing, a service's or an admin's start, a fork */
 				rootsOnly?: boolean;
@@ -12058,6 +12138,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<ResumeScheduleData, any>({
 				path: `/admin/workflows/schedules/${name}/resume`,
 				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Who started whom under a run: the run, the runs it started, theirs, and so on, with a parent's many runs of one workflow folded into one node with their statuses' counts; and the runs above it
+		 *
+		 * @name GetWorkflowTree
+		 * @request GET:/admin/workflows/{id}/tree
+		 * @response `200` `GetWorkflowTreeData`
+		 */
+		getWorkflowTree: (id: string, params: RequestParams = {}) =>
+			this.request<GetWorkflowTreeData, any>({
+				path: `/admin/workflows/${id}/tree`,
+				method: 'GET',
 				format: 'json',
 				...params,
 			}),
@@ -14950,7 +15045,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Reads a month's stored posts again for the "just opened" flag only (`ReflagOpeningsWorkflow.reflagPage`, a workflow it awaits): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero. `high`: the admin waits on the request, so the page's agent calls pass the pipeline's on the `llm` queue.
+		 * @description Reads a month's stored posts again for the "just opened" flag only (`ReflagOpeningsWorkflow.reflagPage`, a workflow it awaits): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero. `high`: the admin waits on the request, so the page's agent calls pass the pipeline's on their tier's LLM queue.
 		 *
 		 * @name ReflagOpenings
 		 * @request POST:/admin/mentions/reflag-openings

@@ -29,7 +29,7 @@ export class AdminReflagOpeningsController {
 	 * mentions already stored, adds none, and leaves matches and admins' corrections as they are.
 	 * Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again
 	 * with `nextOffset` until `remaining` is zero. `high`: the admin waits on the request, so the
-	 * page's agent calls pass the pipeline's on the `llm` queue.
+	 * page's agent calls pass the pipeline's on their tier's LLM queue.
 	 */
 	@TypedRoute.Post('/reflag-openings')
 	async reflagOpenings(

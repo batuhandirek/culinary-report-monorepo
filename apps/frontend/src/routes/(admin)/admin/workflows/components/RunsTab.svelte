@@ -60,6 +60,7 @@
 		},
 		cityFilter(adminCitiesStore.list),
 		{ key: 'attribute', name: 'Tag', type: 'text', placeholder: 'key:value, e.g. purpose:ingest' },
+		{ key: 'parent', name: 'Started by', type: 'text', placeholder: 'A run id' },
 		{ key: 'rootsOnly', name: 'Top-level runs only', type: 'toggle' }
 	]);
 
@@ -76,6 +77,7 @@
 			queue: first(query.queue),
 			schedule: first(query.schedule),
 			attribute: tag || (cityId ? `cityId:${cityId}` : undefined),
+			parent: first(query.parent)?.trim() || undefined,
 			// From the URL it comes back as text
 			rootsOnly: query.rootsOnly === true || first(query.rootsOnly) === 'true' || undefined
 		});

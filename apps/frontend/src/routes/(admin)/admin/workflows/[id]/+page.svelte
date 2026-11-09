@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { ChevronsUp, CircleStop, GitFork, Play } from '@lucide/svelte';
+
+	import { onMount } from 'svelte';
+
 	import {
 		AdminSetWorkflowPriorityInputDtoPriorityEnum as Priority,
 		type AdminWorkflowDetailOutputDto,
 		type AdminWorkflowStepOutputDto
 	} from 'client';
 
-	import { onMount } from 'svelte';
-
 	import ForkDialog from './components/ForkDialog.svelte';
+	import RunTree from './components/RunTree.svelte';
 	import StepList from './components/StepList.svelte';
 
 	import { goto, invalidateAll } from '$app/navigation';
@@ -160,6 +162,10 @@
 
 	<AdminPanel title="Run">
 		<AdminFacts items={facts} />
+	</AdminPanel>
+
+	<AdminPanel title="What it started">
+		<RunTree runId={run.id} />
 	</AdminPanel>
 
 	<div class="grid grid-cols-1 gap-3">

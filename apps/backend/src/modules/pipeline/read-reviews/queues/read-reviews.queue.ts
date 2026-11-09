@@ -2,7 +2,7 @@ import { defineDurableQueue } from 'src/modules/durable-workflows/queues/define-
 
 /**
  * One workflow per review (`ReadReviewsWorkflow.readReview`). Its agent call is a child on the
- * `llm` queue, which holds the provider's limits, so this queue only bounds how many are open.
+ * mini LLM queue (`llm`), which holds the provider's limits, so this queue only bounds how many are open.
  */
 export const READ_REVIEWS_QUEUE = defineDurableQueue('read-reviews', { workerConcurrency: 8 });
 

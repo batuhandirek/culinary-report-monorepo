@@ -30,6 +30,7 @@ import type {
 import { DurablePriorityService } from './durable-priority.service.js';
 import { DurableQueueMovesService, type QueuedRun } from './durable-queue-moves.service.js';
 import { DurableRegistry, workflowKey } from './durable-registry.service.js';
+import { DurableRunTreeService } from './durable-run-tree.service.js';
 
 export type DurableStepInfo = NonNullable<
 	Awaited<ReturnType<typeof DBOS.listWorkflowSteps>>
@@ -64,6 +65,7 @@ export class DurableWorkflowsService {
 		private readonly registry: DurableRegistry,
 		private readonly priority: DurablePriorityService,
 		private readonly queueMoves: DurableQueueMovesService,
+		private readonly runTree: DurableRunTreeService,
 		@Inject(DURABLE_WORKFLOWS_OPTIONS) private readonly options: DurableWorkflowsModuleOptions,
 	) {}
 
@@ -401,6 +403,27 @@ export class DurableWorkflowsService {
 					));
 		}
 		return moved;
+	}
+
+	/**
+	 * From a workflow's body: waits for every run this one started (its children, oldest first),
+	 * whatever their end, and says how many failed. A run it was handed back (a dedupe key's or a
+	 * fixed id's, started by someone else) is not its child and is not waited for.
+	 */
+	async awaitChildren(): Promise<{ children: number; failed: number }> {
+		const id = this.inWorkflow() ? DBOS.workflowID : undefined;
+		if (!id) return { children: 0, failed: 0 };
+		// Read straight from the table, not recorded: a replay lists the same children, as only this body starts them
+		const childIds = await this.runTree.childIds(id);
+		let failed = 0;
+		for (const childId of childIds) {
+			try {
+				await DBOS.retrieveWorkflow(childId).getResult();
+			} catch {
+				failed++;
+			}
+		}
+		return { children: childIds.length, failed };
 	}
 
 	/** Every workflow the scanner registered, by `className/name` */
