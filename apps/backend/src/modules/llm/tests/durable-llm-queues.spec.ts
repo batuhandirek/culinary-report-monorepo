@@ -12,14 +12,15 @@ import {
 	OPENROUTER_FREE_MODEL,
 	tierOf,
 } from '../constants/llm-models.constant.js';
-import { LLM_QUEUES } from '../queues/llm.queue.js';
+import { LLM_PAID_QUEUES, LLM_QUEUES } from '../queues/llm.queue.js';
 import { DurableLlmService } from '../services/durable-llm.service.js';
 import type { LlmModelsService } from '../services/llm-models.service.js';
 import type { LlmWorkflows } from '../workflows/llm.workflow.js';
 
-/** An agent whose calls run on `choice` unless the call names a model */
-const agent = (id: string, choice: LlmModelChoice) => ({
+/** An agent whose calls run on `choice` unless the call names a model; `paidFallback` when it may pay */
+const agent = (id: string, choice: LlmModelChoice, paidFallback = false) => ({
 	id,
+	paidFallback,
 	modelChoice: (_context?: unknown, options?: { model?: LlmModelChoice }) =>
 		options?.model ?? choice,
 	availability: () => ({ available: true, until: null, reason: '' }),
@@ -28,7 +29,9 @@ const agent = (id: string, choice: LlmModelChoice) => ({
 
 const AGENTS = {
 	'review-claims': agent('review-claims', 'mini'),
-	'post-claims': agent('post-claims', 'full'),
+	'post-gate': agent('post-gate', 'mini', true),
+	'post-claims': agent('post-claims', 'full', true),
+	'report-editor': agent('report-editor', 'full'),
 	reference: agent('reference', 'high'),
 };
 
@@ -93,19 +96,41 @@ describe('LLM queues per tier', () => {
 		]);
 	});
 
+	it('gives the agents that may pay queues of their own, one per tier', () => {
+		expect([LLM_PAID_QUEUES.mini.name, LLM_PAID_QUEUES.full.name, LLM_PAID_QUEUES.high.name]).toEqual(
+			['llm-paid', 'llm-full-paid', 'llm-high-paid'],
+		);
+	});
+
 	it("starts a call on its agent's tier queue, or the tier of the model the call names, tagged with it", async () => {
 		const { llm, enqueue } = service();
-		const post = AGENTS['post-claims'] as unknown as BaseMastraAgent<never, object>;
-		await llm.start(post, 'a post');
-		await llm.start(post, 'a post', undefined, { model: 'openai/gpt-5.4-mini' });
+		const as = (id: keyof typeof AGENTS) => AGENTS[id] as unknown as BaseMastraAgent<never, object>;
+		await llm.start(as('report-editor'), 'a report');
+		await llm.start(as('report-editor'), 'a report', undefined, { model: 'openai/gpt-5.4-mini' });
+		await llm.start(as('review-claims'), 'a review');
 
 		const calls = enqueue.mock.calls as unknown as [
 			unknown,
 			unknown,
 			{ queue: DurableQueue; attributes: Record<string, unknown> },
 		][];
-		expect(calls.map(c => c[2].queue.name)).toEqual(['llm-full', 'llm']);
-		expect(calls.map(c => c[2].attributes.model)).toEqual([undefined, 'openai/gpt-5.4-mini']);
+		expect(calls.map(c => c[2].queue.name)).toEqual(['llm-full', 'llm', 'llm']);
+		expect(calls.map(c => c[2].attributes.model)).toEqual([
+			undefined,
+			'openai/gpt-5.4-mini',
+			undefined,
+		]);
+	});
+
+	it('starts a paying agent\'s call on its tier\'s paid queue, never behind the free-only calls that sleep until the reset', async () => {
+		const { llm, enqueue } = service();
+		const as = (id: keyof typeof AGENTS) => AGENTS[id] as unknown as BaseMastraAgent<never, object>;
+		await llm.start(as('post-gate'), 'a post');
+		await llm.start(as('post-claims'), 'a post');
+		await llm.start(as('post-claims'), 'a post', undefined, { model: 'openai/gpt-5.4-mini' });
+
+		const calls = enqueue.mock.calls as unknown as [unknown, unknown, { queue: DurableQueue }][];
+		expect(calls.map(c => c[2].queue.name)).toEqual(['llm-paid', 'llm-full-paid', 'llm-paid']);
 	});
 
 	it('moves each live call to its tier at boot: by agent, by the tagged model, never an unknown agent', async () => {
@@ -114,6 +139,8 @@ describe('LLM queues per tier', () => {
 			run('review-claims'),
 			run('post-claims'),
 			run('reference'),
+			run('post-gate'),
+			run('report-editor'),
 			run('post-claims', {
 				attributes: { agentId: 'post-claims', model: 'openai/gpt-5.4-mini' },
 			}),
@@ -122,12 +149,22 @@ describe('LLM queues per tier', () => {
 		]);
 		await llm.moveCallsToTheirTier();
 
-		expect(moves.map(m => m.from)).toEqual(['llm', 'llm-full', 'llm-high']);
-		expect(moves[0].picked).toEqual([
+		expect(moves.map(m => m.from)).toEqual([
 			'llm',
 			'llm-full',
 			'llm-high',
+			'llm-paid',
+			'llm-full-paid',
+			'llm-high-paid',
+		]);
+		// A paying agent's calls move to its paid queue (the post gate's waiting on `llm` included)
+		expect(moves[0].picked).toEqual([
 			'llm',
+			'llm-full-paid',
+			'llm-high',
+			'llm-paid',
+			'llm-full',
+			'llm-paid',
 			undefined,
 			undefined,
 		]);

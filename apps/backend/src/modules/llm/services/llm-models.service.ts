@@ -83,6 +83,8 @@ export interface RegisteredAgent {
 	availability(context?: unknown, options?: unknown): LlmAvailability;
 	/** The choice a call runs on (`BaseMastraAgent.modelChoice`): the call's `model`, else the agent's */
 	modelChoice(context?: unknown, options?: { model?: LlmModelChoice }): LlmModelChoice;
+	/** It may move to Claude when the free models are out (`BaseMastraAgent.paidFallback`) */
+	readonly paidFallback?: boolean;
 }
 
 /** Whether a choice can be served now, and if not, when the roster serves it again */

@@ -74,8 +74,9 @@ export interface BaseMastraAgentConfig<Output extends ZodObject> {
 	 * May move to its tier's Claude model when the free one is out, outside `llmPaid` too: only for
 	 * agents the user allowed by name (2026-11-03: `aspect-suggestion`, a few dozen short calls
 	 * when a run names its groups; `analyst`, whose choice puts Claude first: each answer is a
-	 * question an admin asked; 2026-11-09: `post-claims`, the one bulk agent, since gpt-5.4's
-	 * allowance reads fewer posts a day than arrive). The spend is capped in the Anthropic Console.
+	 * question an admin asked; 2026-11-09: `post-claims` on Sonnet and `post-gate` on Haiku, the
+	 * post reading, since the free allowance reads fewer posts a day than arrive). Its calls wait on
+	 * queues of their own (`LLM_PAID_QUEUES`). The spend is capped in the Anthropic Console.
 	 */
 	paidFallback?: boolean;
 	/**
@@ -131,6 +132,11 @@ export abstract class BaseMastraAgent<
 	/** The agent's id (`BaseMastraAgentConfig.id`): what the LLM call ledger files its calls under */
 	get id(): string {
 		return this.config.id;
+	}
+
+	/** Whether it may move to Claude when the free models are out (`BaseMastraAgentConfig.paidFallback`): it then has queues of its own */
+	get paidFallback(): boolean {
+		return this.config.paidFallback ?? false;
 	}
 
 	/** The choice a call runs on: the call's own `model`, else the agent's `LLM_AGENT_MODELS` entry, else its `getModel()` */

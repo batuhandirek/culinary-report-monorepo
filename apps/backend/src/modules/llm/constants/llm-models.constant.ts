@@ -21,14 +21,13 @@ export const OPENROUTER_FREE_MODEL: LlmModelId = 'openrouter/nvidia/nemotron-3.5
  * Each tier's free models are OpenAI's daily complimentary allowance (each account's daily limits
  * in `accounts/*.llm-account.ts`), then OpenRouter's free model (`OPENROUTER_FREE_MODEL`). Its
  * Claude models, paid from the Anthropic credit, serve only inside `llmPaid` (work the user starts
- * by hand) and for an agent with `paidFallback`: there `mini` moves to Claude once the free ones
- * are out, `full` once OpenAI is out, before OpenRouter's free model, which reads posts worse
- * (the eval, 2026-11-05: 72% of post claims against gpt-5.4's 92%), and `high` asks Claude's top
- * model first. Outside them every tier runs on its free models alone, `high` on gpt-5.4. Per million tokens, input/output: Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10, Opus 5.5
+ * by hand) and for an agent with `paidFallback`: there `mini` and `full` move to Claude once
+ * OpenAI is out, before OpenRouter's free model, which reads posts worse (the eval, 2026-11-05:
+ * 72% of post claims against gpt-5.4's 92%), and `high` asks Claude's top model first. Outside them every tier runs on its free models alone, `high` on gpt-5.4. Per million tokens, input/output: Haiku 5.5 $0.10/$0.50, Sonnet 5.5 $2/$10, Opus 5.5
  * $4/$20.
  */
 export const LLM_ROSTER: Record<LlmTier, LlmModelId[]> = {
-	mini: ['openai/gpt-5.4-mini', OPENROUTER_FREE_MODEL, 'anthropic/claude-haiku-5-5'],
+	mini: ['openai/gpt-5.4-mini', 'anthropic/claude-haiku-5-5', OPENROUTER_FREE_MODEL],
 	full: ['openai/gpt-5.4', 'anthropic/claude-sonnet-5-5', OPENROUTER_FREE_MODEL],
 	high: ['anthropic/claude-opus-5-5', 'openai/gpt-5.4', OPENROUTER_FREE_MODEL],
 };

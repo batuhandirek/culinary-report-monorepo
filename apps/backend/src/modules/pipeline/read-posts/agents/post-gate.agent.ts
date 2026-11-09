@@ -62,6 +62,9 @@ export class PostGateAgent extends BaseMastraAgent<typeof postGateSchema, PostGa
 		id: 'post-gate',
 		name: 'PostGateAgent',
 		outputSchema: postGateSchema,
+		// Haiku once mini's allowance is out (the user's call, 2026-11-09): review reading uses the
+		// day's mini, and a post waiting at the gate waits for its whole reading (~$0.0001 a post)
+		paidFallback: true,
 	};
 
 	// Every post the scrapes find, a few hundred tokens each: mini

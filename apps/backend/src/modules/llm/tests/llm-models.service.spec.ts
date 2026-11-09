@@ -157,8 +157,8 @@ const setup = (opts: SetupOptions = { anthropicApiKey: 'sk-ant-xxxx' }) => {
 };
 
 describe('modelsFor', () => {
-	it('gives a tier its roster, OpenAI first, Sonnet before the free model on full', () => {
-		expect(modelsFor('mini')).toEqual([MINI, FREE, HAIKU]);
+	it("gives a tier its roster, OpenAI first, Claude before the free model on mini and full", () => {
+		expect(modelsFor('mini')).toEqual([MINI, HAIKU, FREE]);
 		expect(modelsFor('full')).toEqual([FULL, SONNET, FREE]);
 		expect(modelsFor('high')).toEqual([OPUS, FULL, FREE]);
 	});
@@ -335,7 +335,7 @@ describe('LlmModelsService', () => {
 		const out = await call('mini');
 		expect(out.tried).toEqual([]);
 		expect((out.out as Error).message).toBe(
-			`No model can serve mini: openai/gpt-5.4-mini disabled; ${FREE} no OPENROUTER_AI_API_KEY; anthropic/claude-haiku-5-5 disabled`,
+			`No model can serve mini: openai/gpt-5.4-mini disabled; anthropic/claude-haiku-5-5 disabled; ${FREE} no OPENROUTER_AI_API_KEY`,
 		);
 		expect(isFatalProviderError(out.out)).toBe(true);
 	});
@@ -389,10 +389,10 @@ describe('LlmModelsService on OpenRouter', () => {
 	it('waits out a model busy upstream and tries it again, without blocking the account', async () => {
 		const { call, service, slept } = setup(withKey);
 		let failures = 1;
-		const out = await call('mini', m =>
+		const out = await call(FREE, m =>
 			m.id === FREE && failures-- > 0 ? busyUpstream() : openAIFails(m),
 		);
-		expect(out.tried).toEqual([MINI, FREE, FREE]);
+		expect(out.tried).toEqual([FREE, FREE]);
 		expect(out.out).toMatchObject({ model: FREE });
 		expect(slept).toContain(OPENROUTER_UPSTREAM_WAIT_MS);
 		expect(service.status().openrouter).toBeNull();
@@ -400,8 +400,8 @@ describe('LlmModelsService on OpenRouter', () => {
 
 	it(`moves on after ${OPENROUTER_TRIES} tries of a model that stays busy`, async () => {
 		const { call } = setup(withKey);
-		const out = await call('mini', m => (m.id === FREE ? busyUpstream() : openAIFails(m)));
-		expect(out.tried).toEqual([MINI, ...Array(OPENROUTER_TRIES).fill(FREE), HAIKU]);
+		const out = await call(FREE, m => (m.id === FREE ? busyUpstream() : openAIFails(m)));
+		expect(out.tried).toEqual([...Array(OPENROUTER_TRIES).fill(FREE), MINI, HAIKU]);
 		expect(out.out).toMatchObject({ model: HAIKU });
 	});
 

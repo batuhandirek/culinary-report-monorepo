@@ -17,7 +17,7 @@ import { isFatalProviderError } from 'src/shared/util/pool.js';
 
 import { type LlmModelChoice, tierOf } from '../constants/llm-models.constant.js';
 import { LLM_GENERATE_WORKFLOW } from '../constants/llm-workflows.constant.js';
-import { LLM_QUEUES } from '../queues/llm.queue.js';
+import { ALL_LLM_QUEUES, llmQueueOf } from '../queues/llm.queue.js';
 import {
 	type LlmAvailability,
 	LlmModelsService,
@@ -39,6 +39,7 @@ export interface LlmServed {
 /** What picking a call's queue needs of an agent: the choice its calls run on */
 interface LlmChooser {
 	modelChoice(context?: never, options?: { model?: LlmModelChoice }): LlmModelChoice;
+	readonly paidFallback?: boolean;
 }
 
 /** A wait for an account, as `untilServed` tells it (an event a page reads) */
@@ -80,22 +81,29 @@ export class DurableLlmService {
 				if (wrapper.instance instanceof BaseMastraAgent) wrapper.instance.register();
 	}
 
-	/** The queue a call waits on: its tier's (`LLM_QUEUES`), from the call's own `model` or the agent's choice */
+	/**
+	 * The queue a call waits on: its tier's, from the call's own `model` or the agent's choice, the
+	 * paying agents' (`LLM_PAID_QUEUES`) for an agent with `paidFallback`, else the free-only one
+	 * (`LLM_QUEUES`)
+	 */
 	queueFor(agent: LlmChooser, model?: LlmModelChoice): DurableQueue {
-		return LLM_QUEUES[tierOf(agent.modelChoice(undefined, model ? { model } : undefined))];
+		return llmQueueOf(
+			tierOf(agent.modelChoice(undefined, model ? { model } : undefined)),
+			agent.paidFallback ?? false,
+		);
 	}
 
 	/**
-	 * At boot, before DBOS recovers anything: every live call on a tier's queue that belongs on
-	 * another moves there (the runs from before the queues were split, and an agent moved to another
-	 * tier by `LLM_AGENT_MODELS` or its `getModel`). A sleeping run keeps its wake-up time. A run
+	 * At boot, before DBOS recovers anything: every live call on an agent call queue that belongs on
+	 * another moves there (the runs from before the queues were split, an agent moved to another
+	 * tier by `LLM_AGENT_MODELS` or its `getModel`, an agent allowed to pay or no longer). A sleeping run keeps its wake-up time. A run
 	 * whose agent is not registered stays. The agents are registered here first: Nest runs the
 	 * global durable module's init before theirs.
 	 */
 	@BeforeDurableLaunch()
 	async moveCallsToTheirTier(): Promise<void> {
 		this.registerAgents();
-		for (const queue of Object.values(LLM_QUEUES)) {
+		for (const queue of ALL_LLM_QUEUES) {
 			const moved = await this.durable.moveRuns(queue, run => {
 				if (run.className !== LLM_GENERATE_WORKFLOW.className) return undefined;
 				if (run.workflowName !== LLM_GENERATE_WORKFLOW.name) return undefined;
