@@ -20,6 +20,7 @@ import {
 	DURABLE_WORKFLOWS_OPTIONS,
 } from '../constants/durable-workflows.constant.js';
 import type {
+	DurableQueue,
 	DurableStepOptions,
 	DurableWorkflowsModuleOptions,
 	StartOptions,
@@ -27,6 +28,7 @@ import type {
 } from '../interfaces/durable-workflows.interface.js';
 
 import { DurablePriorityService } from './durable-priority.service.js';
+import { DurableQueueMovesService, type QueuedRun } from './durable-queue-moves.service.js';
 import { DurableRegistry, workflowKey } from './durable-registry.service.js';
 
 export type DurableStepInfo = NonNullable<
@@ -61,6 +63,7 @@ export class DurableWorkflowsService {
 	constructor(
 		private readonly registry: DurableRegistry,
 		private readonly priority: DurablePriorityService,
+		private readonly queueMoves: DurableQueueMovesService,
 		@Inject(DURABLE_WORKFLOWS_OPTIONS) private readonly options: DurableWorkflowsModuleOptions,
 	) {}
 
@@ -267,7 +270,9 @@ export class DurableWorkflowsService {
 			await this.priority
 				.set(handle.workflowID, level, { onlyRaise: true })
 				.catch((e: Error) =>
-					this.logger.warn(`Could not raise ${handle.workflowID} to ${level}: ${e.message}`),
+					this.logger.warn(
+						`Could not raise ${handle.workflowID} to ${level}: ${e.message}`,
+					),
 				);
 		return handle;
 	}
@@ -363,6 +368,39 @@ export class DurableWorkflowsService {
 	queues(): Promise<WorkflowQueue[]> {
 		this.ensureLaunched('queues');
 		return DBOS.listQueues();
+	}
+
+	/**
+	 * Moves the live runs of `from` (waiting, delayed or running) to the queue `pick` names for
+	 * each; `undefined` or `from` leaves it. For a `@BeforeDurableLaunch` method: DBOS has not
+	 * recovered the runs yet, so a run that was running resumes on its new queue, its stored steps
+	 * and a sleep's wake-up kept. A run with a dedupe key stays. Returns the moves per declared
+	 * queue name.
+	 */
+	async moveRuns(
+		from: DurableQueue,
+		pick: (run: QueuedRun) => DurableQueue | undefined,
+	): Promise<Record<string, number>> {
+		const source = this.qualifiedQueueName(from.name);
+		const byTarget = new Map<string, string[]>();
+		for (const run of await this.queueMoves.liveRuns(source)) {
+			const target = pick(run);
+			if (!target || target.name === from.name) continue;
+			byTarget.set(target.name, [...(byTarget.get(target.name) ?? []), run.workflowId]);
+		}
+		const moved: Record<string, number> = {};
+		for (const [name, ids] of byTarget) {
+			// A few thousand ids a statement at most
+			for (let i = 0; i < ids.length; i += 2_000)
+				moved[name] =
+					(moved[name] ?? 0) +
+					(await this.queueMoves.move(
+						ids.slice(i, i + 2_000),
+						source,
+						this.qualifiedQueueName(name),
+					));
+		}
+		return moved;
 	}
 
 	/** Every workflow the scanner registered, by `className/name` */

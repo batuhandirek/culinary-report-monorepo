@@ -9,6 +9,7 @@ import {
 	PgliteTestingModule,
 } from 'src/tests/testing-module.js';
 
+import { BeforeDurableLaunch } from '../decorators/before-durable-launch.decorator.js';
 import { DurableSchedule } from '../decorators/durable-schedule.decorator.js';
 import { DurableStep } from '../decorators/durable-step.decorator.js';
 import { DurableWorkflow } from '../decorators/durable-workflow.decorator.js';
@@ -20,6 +21,8 @@ import { WorkflowScannerService } from '../services/workflow-scanner.service.js'
 const SAMPLE_QUEUE = defineDurableQueue('sample', { workerConcurrency: 1 });
 /** One slot, so a run holding it makes the rest wait in priority order */
 const ONE_SLOT_QUEUE = defineDurableQueue('one-slot', { workerConcurrency: 1 });
+/** Where a run waiting on the one-slot queue is moved to */
+const OTHER_SLOT_QUEUE = defineDurableQueue('other-slot', { workerConcurrency: 1 });
 
 /** A service with every kind of durable method, as a module's `workflows/*.workflow.ts` has them */
 @Injectable()
@@ -65,6 +68,11 @@ class SampleWorkflows {
 			queue: ONE_SLOT_QUEUE,
 		});
 		return child.getResult();
+	}
+
+	@BeforeDurableLaunch()
+	async beforeLaunch(): Promise<void> {
+		this.calls.push(`before launch, launched: ${this.durable.isLaunched()}`);
 	}
 
 	@DurableSchedule('sample-tick', '*/5 * * * *')
@@ -218,6 +226,40 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 	it('runs a step plainly outside a workflow', async () => {
 		expect(durable.inWorkflow()).toBe(false);
 		expect(await durable.step('plain', async () => 42)).toBe(42);
+	});
+
+	it('runs the before-launch methods before DBOS launches', () => {
+		expect(sample.calls).toContain('before launch, launched: false');
+	});
+
+	it('moves the live runs a pick names to another queue, where they run while the old slot is held', async () => {
+		const blocker = await durable.start(sample.hold, ['move blocker', 3_000], {
+			queue: ONE_SLOT_QUEUE,
+		});
+		await until(async () => (await durable.get(blocker.workflowID))?.status === 'PENDING');
+		const waiting = await durable.start(sample.hold, ['move waiting', 10], {
+			queue: ONE_SLOT_QUEUE,
+			attributes: { move: 'yes' },
+		});
+		const keyed = await durable.start(sample.hold, ['move keyed', 10], {
+			queue: ONE_SLOT_QUEUE,
+			dedupe: 'move-keyed',
+			attributes: { move: 'yes' },
+		});
+
+		const moved = await durable.moveRuns(ONE_SLOT_QUEUE, run =>
+			run.attributes.move === 'yes' ? OTHER_SLOT_QUEUE : undefined,
+		);
+
+		// The waiting run moved; the running one (no tag) and the one with a dedupe key stayed
+		expect(moved).toEqual({ 'other-slot': 1 });
+		await waiting.getResult();
+		expect((await durable.get(blocker.workflowID))?.status).toBe('PENDING');
+		expect((await durable.get(waiting.workflowID))?.queueName).toBe(
+			durable.qualifiedQueueName(OTHER_SLOT_QUEUE.name),
+		);
+		expect((await durable.get(keyed.workflowID))?.status).toBe('ENQUEUED');
+		await Promise.all([blocker.getResult(), keyed.getResult()]);
 	});
 
 	it('cancels a queued run and resumes it', async () => {

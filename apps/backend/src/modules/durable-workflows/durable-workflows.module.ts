@@ -27,6 +27,7 @@ import { AdminWorkflowsController } from './controllers/admin.workflows.controll
 import type { DurableWorkflowsModuleOptions } from './interfaces/durable-workflows.interface.js';
 import { definedDurableQueues } from './queues/define-durable-queue.js';
 import { DurablePriorityService } from './services/durable-priority.service.js';
+import { DurableQueueMovesService } from './services/durable-queue-moves.service.js';
 import { DurableRegistry } from './services/durable-registry.service.js';
 import { DurableWorkflowsService } from './services/durable-workflows.service.js';
 import { WorkflowScannerService } from './services/workflow-scanner.service.js';
@@ -78,8 +79,8 @@ export const durableWorkflowsOptionsFromEnv = (): DurableWorkflowsModuleOptions 
  * `DurableWorkflowsService` anywhere; pg-boss keeps the fire-and-forget side effects (an e-mail,
  * a notification).
  *
- * At `onModuleInit` (which Nest runs for a global module after every other module's, with every
- * provider built) the scanner registers every decorated method with DBOS, DBOS is launched
+ * At `onModuleInit` (every provider built; Nest runs a global module's init before the other
+ * modules', so their own `onModuleInit` has not run yet) the scanner registers every decorated method with DBOS, DBOS is launched
  * (recovering the runs a restart cut short), the declared queues are registered and the
  * `@DurableSchedule`s written. So: never start a workflow from an `onModuleInit`; from
  * `onApplicationBootstrap` on is fine.
@@ -94,6 +95,7 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 		private readonly scanner: WorkflowScannerService,
 		private readonly service: DurableWorkflowsService,
 		private readonly priority: DurablePriorityService,
+		private readonly registry: DurableRegistry,
 	) {}
 
 	/**
@@ -115,6 +117,7 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 				},
 				DurableRegistry,
 				DurablePriorityService,
+				DurableQueueMovesService,
 				WorkflowScannerService,
 				DurableWorkflowsService,
 			],
@@ -128,6 +131,7 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 			return;
 		}
 		this.scanner.scan();
+		await this.runBeforeLaunch();
 		// A version name must be unique across every application sharing a system database (a dev
 		// database cloned from production carries production's application too), so it carries the name
 		const applicationVersion = `${this.options.applicationName}-${this.options.applicationVersion}`;
@@ -164,6 +168,17 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 		this.logger.log(
 			`DBOS launched as ${this.options.applicationName} (${applicationVersion}): ${this.service.registered().length} workflow(s), ${definedDurableQueues().length} queue(s)`,
 		);
+	}
+
+	/** The `@BeforeDurableLaunch()` methods, one after the other; a failed one is logged, never stops the boot */
+	private async runBeforeLaunch(): Promise<void> {
+		for (const hook of this.registry.beforeLaunch) {
+			try {
+				await hook.run();
+			} catch (e) {
+				this.logger.error(`${hook.name} (before launch) failed: ${(e as Error).message}`);
+			}
+		}
 	}
 
 	async beforeApplicationShutdown(signal?: string): Promise<void> {

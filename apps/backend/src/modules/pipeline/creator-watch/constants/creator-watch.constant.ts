@@ -1,10 +1,11 @@
-import type { OperationRun } from '../../shared/util/operations.js';
+import { POST_STREAM_PRIORITY, type OperationRun } from '../../shared/util/operations.js';
 import { CREATOR_WATCH_QUEUE } from '../queues/creator-watch.queue.js';
 
 export const CREATOR_WATCH_DAY: OperationRun = {
 	operation: 'creator-watch',
 	cadence: 'day',
 	queue: CREATOR_WATCH_QUEUE,
+	priority: POST_STREAM_PRIORITY,
 };
 
 // The watched creators' scrape (`CreatorWatchSchedule`): daily, 04:20 UTC

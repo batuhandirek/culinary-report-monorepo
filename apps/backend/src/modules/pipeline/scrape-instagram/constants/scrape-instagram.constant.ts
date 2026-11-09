@@ -1,4 +1,4 @@
-import type { OperationRun } from '../../shared/util/operations.js';
+import { POST_STREAM_PRIORITY, type OperationRun } from '../../shared/util/operations.js';
 import { SCRAPE_INSTAGRAM_QUEUE } from '../queues/scrape-instagram.queue.js';
 
 export const SCRAPE_INSTAGRAM_MONTH: OperationRun = {
@@ -10,11 +10,13 @@ export const SCRAPE_INSTAGRAM_WEEK: OperationRun = {
 	operation: 'scrape-instagram',
 	cadence: 'week',
 	queue: SCRAPE_INSTAGRAM_QUEUE,
+	priority: POST_STREAM_PRIORITY,
 };
 export const SCRAPE_INSTAGRAM_DAY: OperationRun = {
 	operation: 'scrape-instagram',
 	cadence: 'day',
 	queue: SCRAPE_INSTAGRAM_QUEUE,
+	priority: POST_STREAM_PRIORITY,
 };
 
 export {

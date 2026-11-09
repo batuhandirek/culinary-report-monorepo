@@ -4,6 +4,7 @@ import { ModulesContainer, Reflector } from '@nestjs/core';
 import { DBOS } from '@dbos-inc/dbos-sdk';
 
 import {
+	DURABLE_BEFORE_LAUNCH,
 	DURABLE_SCHEDULE_OPTIONS,
 	DURABLE_STEP_OPTIONS,
 	DURABLE_WORKFLOW_OPTIONS,
@@ -22,7 +23,7 @@ import { DurableWorkflowsService } from './durable-workflows.service.js';
 type AnyFn = (...args: never[]) => Promise<unknown>;
 
 /**
- * Finds every `@DurableWorkflow`, `@DurableStep` and `@DurableSchedule` method on the providers
+ * Finds every `@DurableWorkflow`, `@DurableStep`, `@DurableSchedule` and `@BeforeDurableLaunch` method on the providers
  * Nest built and registers it with DBOS, the way `HandlerScannerService` registers pg-boss
  * handlers. Must run before `DBOS.launch()` (DBOS refuses registrations after it) and after Nest
  * instantiated every provider (true in any `onModuleInit`).
@@ -78,6 +79,11 @@ export class WorkflowScannerService {
 				DURABLE_STEP_OPTIONS,
 				methodRef,
 			);
+			if (this.reflector.get<boolean | undefined>(DURABLE_BEFORE_LAUNCH, methodRef))
+				this.registry.addBeforeLaunch({
+					name: `${className}.${methodName}`,
+					run: () => (methodRef as () => Promise<unknown>).call(instance),
+				});
 			try {
 				if (workflow || schedule)
 					this.registerWorkflow(

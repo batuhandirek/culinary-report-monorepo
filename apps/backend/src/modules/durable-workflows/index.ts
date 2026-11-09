@@ -1,5 +1,6 @@
 export * from './constants/durable-priority.constant.js';
 export * from './constants/durable-workflows.constant.js';
+export * from './decorators/before-durable-launch.decorator.js';
 export * from './decorators/durable-schedule.decorator.js';
 export * from './decorators/durable-step.decorator.js';
 export * from './decorators/durable-workflow.decorator.js';

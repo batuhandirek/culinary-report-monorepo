@@ -81,6 +81,8 @@ export interface RegisteredAgent {
 	readonly id: string;
 	generate(input: unknown, context?: unknown, options?: unknown): Promise<unknown>;
 	availability(context?: unknown, options?: unknown): LlmAvailability;
+	/** The choice a call runs on (`BaseMastraAgent.modelChoice`): the call's `model`, else the agent's */
+	modelChoice(context?: unknown, options?: { model?: LlmModelChoice }): LlmModelChoice;
 }
 
 /** Whether a choice can be served now, and if not, when the roster serves it again */

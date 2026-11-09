@@ -115,6 +115,15 @@ export abstract class BaseMastraAgent<
 	}
 
 	onModuleInit(): void {
+		this.register();
+	}
+
+	/**
+	 * Files the agent under its id (`LlmModelsService.agent`), where `LlmWorkflows.generate` finds
+	 * it. Also called before DBOS launches (`DurableLlmService.moveCallsToTheirTier`): the global
+	 * durable module's init runs before this one, and a recovered run needs its agent.
+	 */
+	register(): void {
 		this.llmModels.registerAgent(this.config.id, this);
 	}
 

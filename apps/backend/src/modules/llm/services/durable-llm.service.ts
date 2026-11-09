@@ -1,21 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { ModulesContainer } from '@nestjs/core';
 
 import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
 import type { z, ZodObject } from 'zod/v4';
 
 import { DURABLE_WORKFLOWS_LOGGER } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
+import { BeforeDurableLaunch } from 'src/modules/durable-workflows/decorators/before-durable-launch.decorator.js';
+import type { DurableQueue } from 'src/modules/durable-workflows/interfaces/durable-workflows.interface.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
-import type {
+import {
 	BaseMastraAgent,
-	MastraAgentInput,
+	type MastraAgentInput,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 import { currentLlmCallContext } from 'src/modules/llm/util/llm-call-context.js';
 import { isFatalProviderError } from 'src/shared/util/pool.js';
 
-import type { LlmModelChoice } from '../constants/llm-models.constant.js';
+import { type LlmModelChoice, tierOf } from '../constants/llm-models.constant.js';
 import { LLM_GENERATE_WORKFLOW } from '../constants/llm-workflows.constant.js';
-import { LLM_QUEUE } from '../queues/llm.queue.js';
-import { type LlmAvailability, NoModelError } from '../services/llm-models.service.js';
+import { LLM_QUEUES } from '../queues/llm.queue.js';
+import {
+	type LlmAvailability,
+	LlmModelsService,
+	NoModelError,
+} from '../services/llm-models.service.js';
 import {
 	type DurableGenerateResult,
 	type LlmCallOptions,
@@ -29,6 +36,11 @@ export interface LlmServed {
 	availability(context?: unknown, options?: { model?: LlmModelChoice }): LlmAvailability;
 }
 
+/** What picking a call's queue needs of an agent: the choice its calls run on */
+interface LlmChooser {
+	modelChoice(context?: never, options?: { model?: LlmModelChoice }): LlmModelChoice;
+}
+
 /** A wait for an account, as `untilServed` tells it (an event a page reads) */
 export interface LlmWait {
 	/** The first agent of the list no account can serve */
@@ -40,9 +52,12 @@ export interface LlmWait {
 	wakeAt: string;
 }
 
+/** The tag a call's own `model` is kept under, so a boot can tell which tier's queue the run belongs on */
+const MODEL_ATTRIBUTE = 'model';
+
 /**
- * An agent call as a durable workflow: `generate` starts `LlmWorkflows.generate` on the `llm`
- * queue (one step to a calling workflow, a run of its own to anyone else) and awaits its result,
+ * An agent call as a durable workflow: `generate` starts `LlmWorkflows.generate` on its tier's
+ * queue (`LLM_QUEUES`: one step to a calling workflow, a run of its own to anyone else) and awaits its result,
  * which always comes: where the plain call throws "no model can serve", this one waits until an
  * account can. The caller's call context travels with the run, so the ledger files the call
  * right. Without DBOS (the eval CLI) or inside a step it is the plain call, waiting on a timer.
@@ -54,7 +69,48 @@ export class DurableLlmService {
 	constructor(
 		private readonly durable: DurableWorkflowsService,
 		private readonly llmWorkflows: LlmWorkflows,
+		private readonly llmModels: LlmModelsService,
+		private readonly modules: ModulesContainer,
 	) {}
+
+	/** Every agent Nest built, filed under its id now (each does it again in its own `onModuleInit`) */
+	private registerAgents(): void {
+		for (const module of this.modules.values())
+			for (const wrapper of module.providers.values())
+				if (wrapper.instance instanceof BaseMastraAgent) wrapper.instance.register();
+	}
+
+	/** The queue a call waits on: its tier's (`LLM_QUEUES`), from the call's own `model` or the agent's choice */
+	queueFor(agent: LlmChooser, model?: LlmModelChoice): DurableQueue {
+		return LLM_QUEUES[tierOf(agent.modelChoice(undefined, model ? { model } : undefined))];
+	}
+
+	/**
+	 * At boot, before DBOS recovers anything: every live call on a tier's queue that belongs on
+	 * another moves there (the runs from before the queues were split, and an agent moved to another
+	 * tier by `LLM_AGENT_MODELS` or its `getModel`). A sleeping run keeps its wake-up time. A run
+	 * whose agent is not registered stays. The agents are registered here first: Nest runs the
+	 * global durable module's init before theirs.
+	 */
+	@BeforeDurableLaunch()
+	async moveCallsToTheirTier(): Promise<void> {
+		this.registerAgents();
+		for (const queue of Object.values(LLM_QUEUES)) {
+			const moved = await this.durable.moveRuns(queue, run => {
+				if (run.className !== LLM_GENERATE_WORKFLOW.className) return undefined;
+				if (run.workflowName !== LLM_GENERATE_WORKFLOW.name) return undefined;
+				const agent = this.llmModels.agent(String(run.attributes.agentId ?? ''));
+				if (!agent) return undefined;
+				const model = run.attributes[MODEL_ATTRIBUTE];
+				return this.queueFor(
+					agent,
+					typeof model === 'string' ? (model as LlmModelChoice) : undefined,
+				);
+			});
+			for (const [to, count] of Object.entries(moved))
+				this.logger.log(`Moved ${count} agent call(s) from queue ${queue.name} to ${to}`);
+		}
+	}
 
 	/**
 	 * Starts the call as a workflow and hands back its handle, for a caller that fans out (start
@@ -77,9 +133,10 @@ export class DurableLlmService {
 			LLM_GENERATE_WORKFLOW,
 			[agent.id, input, context, request],
 			{
-				queue: LLM_QUEUE,
+				queue: this.queueFor(agent, options.model),
 				attributes: {
 					agentId: agent.id,
+					...(options.model && { [MODEL_ATTRIBUTE]: options.model }),
 					...(ledger.cityId && { cityId: ledger.cityId }),
 					...(ledger.purpose && { purpose: ledger.purpose }),
 				},

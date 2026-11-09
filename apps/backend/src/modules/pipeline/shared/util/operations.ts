@@ -1,4 +1,5 @@
 import type { CityService } from 'src/modules/cities/services/city.service.js';
+import type { DurablePriority } from 'src/modules/durable-workflows/constants/durable-priority.constant.js';
 import type { DurableQueue } from 'src/modules/durable-workflows/interfaces/durable-workflows.interface.js';
 import type { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 
@@ -16,7 +17,16 @@ export interface OperationRun {
 	operation: string;
 	cadence: Cadence;
 	queue: DurableQueue;
+	/**
+	 * Set only where a late run loses data for good: the post streams, whose sources only show
+	 * recent posts (`POST_STREAM_PRIORITY`). Every start of the run passes it, its schedule's and a
+	 * dependent operation's alike; without it a run takes its starter's level.
+	 */
+	priority?: DurablePriority;
 }
+
+/** The post streams' level: a run that waits behind others can miss posts that are gone the next day */
+export const POST_STREAM_PRIORITY: DurablePriority = 'high';
 
 /** The workflow's registered name: `scrape-reviews.month` */
 export const workflowName = (operation: string, cadence: Cadence) => `${operation}.${cadence}`;
@@ -65,6 +75,7 @@ export const runOperation = async <R>(
 		queue: run.queue,
 		workflowId: operationRunId(run, cityId, period),
 		attributes: { cityId, purpose: run.operation, period },
+		...(run.priority && { priority: run.priority }),
 	});
 	return handle.getResult();
 };
@@ -87,6 +98,7 @@ export const startForCronCities = async <R>(
 			queue: run.queue,
 			workflowId: operationRunId(run, city.id, period),
 			attributes: { cityId: city.id, purpose: run.operation, period },
+			...(run.priority && { priority: run.priority }),
 		});
 	}
 };

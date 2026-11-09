@@ -8,3 +8,6 @@ export const DURABLE_WORKFLOWS_LOGGER = 'DurableWorkflows';
 
 /** How long a shutdown waits for the workflows running in this process before it lets go of them (the next process resumes them) */
 export const SHUTDOWN_DRAIN_MS = 30_000;
+
+/** Metadata key of `@BeforeDurableLaunch()` */
+export const DURABLE_BEFORE_LAUNCH = 'DURABLE_BEFORE_LAUNCH';

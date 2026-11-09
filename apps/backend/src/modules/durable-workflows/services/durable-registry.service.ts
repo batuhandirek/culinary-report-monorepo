@@ -20,6 +20,13 @@ export interface RegisteredSchedule extends DurableScheduleMetadata {
 	invoker: AnyFn;
 }
 
+/** A `@BeforeDurableLaunch()` method, bound to its instance */
+export interface BeforeLaunchHook {
+	/** `ClassName.method`, for the logs */
+	name: string;
+	run: () => Promise<unknown>;
+}
+
 export const workflowKey = (ref: WorkflowRef): string => `${ref.className}/${ref.name}`;
 
 /** What the scanner registered: workflows by name (and by the function callers hold), schedules */
@@ -28,10 +35,15 @@ export class DurableRegistry {
 	private readonly workflows = new Map<string, RegisteredWorkflow>();
 	private readonly byExposed = new WeakMap<object, RegisteredWorkflow>();
 	readonly schedules: RegisteredSchedule[] = [];
+	readonly beforeLaunch: BeforeLaunchHook[] = [];
 
 	addWorkflow(registration: RegisteredWorkflow): void {
 		this.workflows.set(workflowKey(registration.ref), registration);
 		this.byExposed.set(registration.exposed, registration);
+	}
+
+	addBeforeLaunch(hook: BeforeLaunchHook): void {
+		this.beforeLaunch.push(hook);
 	}
 
 	addSchedule(schedule: RegisteredSchedule): void {

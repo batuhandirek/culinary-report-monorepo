@@ -55,6 +55,15 @@ export const isOpenRouterFree = (model: LlmModelId): boolean =>
 export const isPaidModel = (model: LlmModelId): boolean =>
 	!model.startsWith('openai/') && !isOpenRouterFree(model);
 
+/**
+ * The tier a choice runs in: the tier itself, or the first tier listing the model (a model no
+ * tier lists counts as `full`)
+ */
+export const tierOf = (choice: LlmModelChoice): LlmTier =>
+	choice in LLM_ROSTER ?
+		(choice as LlmTier)
+	:	(LLM_TIERS.find(t => LLM_ROSTER[t].includes(choice as LlmModelId)) ?? 'full');
+
 /** The models to try, in order: a tier's roster, or the chosen model then the rest of its tier */
 export const modelsFor = (choice: LlmModelChoice): LlmModelId[] => {
 	if (choice in LLM_ROSTER) return LLM_ROSTER[choice as LlmTier];
