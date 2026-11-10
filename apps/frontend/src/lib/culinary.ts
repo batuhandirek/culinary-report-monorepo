@@ -7,7 +7,7 @@ export const TOPIC_LABELS: Record<string, string> = {
 	food: 'Food',
 	drinks: 'Drinks',
 	service: 'Service',
-	vibe: 'Atmosphere',
+	vibe: 'Vibe & setting',
 	price: 'Price',
 	payment: 'Payment',
 	wait: 'Waiting time',

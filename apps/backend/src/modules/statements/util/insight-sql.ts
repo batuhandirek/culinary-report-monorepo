@@ -69,6 +69,8 @@ export interface InsightFilters {
 	subject?: StatementSubject;
 	/** Every claim must be about each of these too (a breakdown's click: price × döner) */
 	with?: NodeMatch[];
+	/** Only claims under no aspect or filed at a root (no aspect part at a child aspect) */
+	loose?: boolean;
 }
 
 /**
@@ -192,7 +194,7 @@ export const populationSql = (
 	...(filters.subject ? [sql(`${c}.subject = ?`, [filters.subject])] : []),
 ];
 
-/** The filters that narrow what is counted: side, kind and the further nodes */
+/** The filters that narrow what is counted: side, kind, the further nodes and `loose` */
 export const narrowingSql = (
 	filters: Omit<InsightFilters, 'source' | 'subject'>,
 	c = 'c',
@@ -202,6 +204,12 @@ export const narrowingSql = (
 	: filters.kind ? [sql(`${c}.kind = ?`, [filters.kind])]
 	: []),
 	...(filters.with ?? []).map(node => nodeSql(node, c)),
+	...(filters.loose ?
+		[
+			sql(`not exists (select 1 from statement_parts xp join topics xt on xt.id = xp.topic_id
+				where xp.statement_id = ${c}.id and xp.role = 'aspect' and xt.parent_id is not null)`),
+		]
+	:	[]),
 ];
 
 /**

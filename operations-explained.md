@@ -9,9 +9,9 @@ All times are UTC. Everything runs for every city whose cron is on. When an oper
   - The gate first decides whether the post is about eating or drinking out in the city.
   - If it is, agent A writes down the places it names and what it says about them.
   - Then each claim gets its sentiment, aspect and kind, and each mention its food topics.
+  - Last, the post's places are matched to venues: the sure ones at once, and each close call is queued on its own to ask the matching agent, so one waiting for the day's allowance holds nothing else up.
 - **every :20**: we read the written reviews nobody has read yet, one review at a time, newest first (up to 1,000 per city). Agent A writes down each review's claims, then each claim is labelled.
 - **every :30**: we read the TikTok comments nobody has read yet, one post's comments at a time. Each comment gets its intent (a question and its topic, a disagreement, praise…). When comments disagree with the post, we write one line on what they say.
-- **every :40**: we match the mentions nobody has matched yet to venues and brands, after reading any posts still unread. Then, if anything matched, we link accounts to the brands they belong to, and place mentions by the accounts their posts tag.
 - **every :50**: we classify the press pages nobody has classified yet, one page at a time: a feature, a list, a passing mention, or unrelated.
 
 ## Every day
@@ -22,6 +22,7 @@ All times are UTC. Everything runs for every city whose cron is on. When an oper
   - An Instagram profile is scraped when it hasn't been for three days.
 - **05:15**: for each city whose last dish-search snapshot is old enough (`dishSearchEveryDays`), we search Google Maps for every dish and cuisine in every district and store the top ten of each.
 - **05:30**: we read the views, likes and comments of every post that has just turned seven days old, so all posts are compared at the same age.
+- **05:40**: the matching sweep. Everything still unmatched gets another go: names that found no venue (once the city has new venues), brand changes, places from the night's re-read. Close calls go to the matching agent, then we relink which brand each hashtag names, link accounts to the brands they belong to, and place mentions by the accounts their posts tag. The lookups, competitors and lead scores run this sweep first, so they always see everything matched.
 - **05:45**: we fetch the follower count of every brand account that doesn't have one yet.
 - **22:00**: we re-read up to 200 posts that were read before the current way of reading posts, most viewed first.
 - **22:00**: the LLM backlogs run with whatever is left of the day's free allowance. Among them is the re-read of reviews that were read the old way.

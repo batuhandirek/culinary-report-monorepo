@@ -72,6 +72,8 @@ export interface InsightSelection extends Omit<InsightScope, 'from' | 'to'> {
 	kind?: StatementKind | 'unread';
 	source?: InsightSource;
 	subject?: StatementSubject;
+	/** Only claims filed under no aspect or at a root (nothing finer fitted): the Aspects page's unfiled ones */
+	loose?: boolean;
 }
 
 export const INSIGHT_DIMENSIONS = [
@@ -896,6 +898,7 @@ export class StatementInsightService {
 				source: selection.source,
 				subject: selection.subject,
 				with: matches.slice(selection.node ? 1 : 0),
+				...(selection.loose && { loose: true }),
 			},
 			node: selection.node ? matches[0] : undefined,
 			refs,

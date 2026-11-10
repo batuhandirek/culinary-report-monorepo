@@ -18,14 +18,17 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { ReadPostsWorkflow } from '../../read-posts/workflows/read-posts.workflow.js';
+import { MATCH_MENTION_WORKFLOW } from '../constants/match-mentions.constant.js';
 import { MATCH_MENTION_QUEUE } from '../queues/match-mentions.queue.js';
+import { queueCloseCalls } from '../util/close-calls.js';
 import { MatchMentionsWorkflow } from '../workflows/match-mentions.workflow.js';
 
 /**
- * A city's matching as workflows, the facade faked to run a started workflow inline (DBOS can't
- * run on PGlite) and the durable agent call faked to `ask`: the sure matches are saved by the code
- * pass, every close call is its own run on its own queue, one waiting on its agent call holds no
- * other back, and a failed one is counted while the rest are saved.
+ * The matching as workflows, the facade faked to run a started workflow inline (DBOS can't run on
+ * PGlite) and the durable agent call faked to `ask`: a post's places matched in code right after its
+ * reading, its close calls queued one run in flight per mention; the city's sweep saving the sure
+ * matches, every close call its own run on its own queue, one waiting on its agent call holding no
+ * other back, a failed one counted while the rest are saved, the tags relinked once.
  */
 describe('MatchMentionsWorkflow (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -144,9 +147,18 @@ describe('MatchMentionsWorkflow (pglite)', () => {
 		const pending = await read(waiting.id);
 		expect(pending.matchMethod ?? null).toBeNull();
 		expect(pending.matchedAt ?? null).toBeNull();
-		// Each close call its own run, on the queue of its own (the city's run holds the city queue's slot)
+		// Each close call its own run, on the queue of its own (the sweep holds the city queue's slot),
+		// one in flight per mention: a post's reading may have queued it already
 		expect(durable.started.map(s => s.args)).toEqual([[waiting.id], [quick.id]]);
-		expect(durable.started.every(s => s.options?.queue === MATCH_MENTION_QUEUE)).toBe(true);
+		expect(durable.started.map(s => s.options)).toEqual(
+			[waiting.id, quick.id].map(id =>
+				expect.objectContaining({
+					queue: MATCH_MENTION_QUEUE,
+					dedupe: `mention-${id}`,
+					onDuplicate: 'return-existing',
+				}),
+			),
+		);
 
 		release();
 		const result = await run;
@@ -159,7 +171,8 @@ describe('MatchMentionsWorkflow (pglite)', () => {
 			matchMethod: MentionMatchMethodEnum.LLM,
 			venue: { id: keller.id },
 		});
-		// The code pass relinked its own; the close calls are relinked once, together
+		// The code pass relinked the tags for what it decided, the sweep once more at its end; the
+		// close calls never (each relinks only its own food topics)
 		expect(relink).toHaveBeenCalledTimes(2);
 	});
 
@@ -196,5 +209,58 @@ describe('MatchMentionsWorkflow (pglite)', () => {
 			method: MentionMatchMethodEnum.OTHER_CITY,
 		});
 		expect(ask).not.toHaveBeenCalled();
+	});
+
+	it("matches a post's places in code and lists its close calls, leaving the tags to the sweep", async () => {
+		const em = harness.orm.em;
+		const exact = mention('Augustiner Keller');
+		const close = mention('Augustiner');
+		const settled = mention('Hofbräuhaus am Platzl');
+		const corrected = mention('Hofbräuhaus');
+		await em.flush();
+		await em.nativeUpdate(
+			Mention,
+			{ id: settled.id },
+			{ matchMethod: MentionMatchMethodEnum.EXACT, matchedAt: new Date(), venue: hofbraeu.id },
+		);
+		await em.nativeUpdate(
+			Mention,
+			{ id: corrected.id },
+			{ matchMethod: MentionMatchMethodEnum.IGNORED, matchedAt: null },
+		);
+		em.clear();
+
+		const service = harness.moduleRef.get(MentionMatchingService);
+		const pass = await service.matchMentions([exact.id, close.id, settled.id, corrected.id]);
+
+		expect(pass.asks).toEqual([close.id]);
+		expect(pass.counts[MentionMatchMethodEnum.EXACT]).toBe(1);
+		expect(await read(exact.id)).toMatchObject({
+			matchMethod: MentionMatchMethodEnum.EXACT,
+			venue: { id: keller.id },
+		});
+		// Left for its own run, an admin's word left alone
+		expect((await read(close.id)).matchedAt ?? null).toBeNull();
+		expect((await read(corrected.id)).matchMethod).toBe(MentionMatchMethodEnum.IGNORED);
+		// One post is no city-wide pass: every tag is relinked by the sweep, not here
+		expect(relink).not.toHaveBeenCalled();
+		expect(ask).not.toHaveBeenCalled();
+	});
+
+	it('queues a post\'s close calls by name, one run in flight per mention, none awaited', async () => {
+		const enqueue = jest.fn(async () => ({}));
+		await queueCloseCalls({ enqueue } as never, [11, 12], city.id);
+		expect(enqueue.mock.calls).toEqual(
+			[11, 12].map(id => [
+				MATCH_MENTION_WORKFLOW,
+				[id],
+				{
+					queue: MATCH_MENTION_QUEUE,
+					dedupe: `mention-${id}`,
+					onDuplicate: 'return-existing',
+					attributes: { cityId: city.id, purpose: 'match-mentions' },
+				},
+			]),
+		);
 	});
 });

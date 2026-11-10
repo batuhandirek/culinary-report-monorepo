@@ -1,10 +1,12 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 
 import mikroOrmConfig from 'src/mikro-orm.config.js';
+import { DurableWorkflowsModule } from 'src/modules/durable-workflows/durable-workflows.module.js';
 import { LLMModule } from 'src/modules/llm/llm.module.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
+import { TurnstileService } from 'src/modules/turnstile/services/turnstile.service.js';
 import { VenueMatchAgent } from 'src/modules/pipeline/match-mentions/agents/venue-match.agent.js';
 import { PostClaimsAgent } from 'src/modules/pipeline/read-posts/agents/post-claims.agent.js';
 import { PostGateAgent } from 'src/modules/pipeline/read-posts/agents/post-gate.agent.js';
@@ -30,15 +32,34 @@ import { EvalRunService } from './services/eval-run.service.js';
 import { EvalScoreService } from './services/eval-score.service.js';
 
 /**
+ * What `LLMModule`'s admin side pulls in through `AuthModule` stood in for, for every module: the
+ * eval queues no job and serves no request
+ */
+@Global()
+@Module({
+	providers: [
+		{ provide: PgBossService, useValue: {} },
+		{ provide: TurnstileService, useValue: {} },
+	],
+	exports: [PgBossService, TurnstileService],
+})
+class EvalPgBossStubModule {}
+
+/**
  * The ingestion eval, booted on its own by `eval.cli.ts` (never by `AppModule`): the pipeline's
  * agents, the classifiers a run may label with, the reference and pairing agents, the dev DB read
- * through MikroORM (no migrations, no pg-boss, no crons). `TopicService` only reads the index here;
+ * through MikroORM (no migrations, no pg-boss, no crons, durable workflows not launched). `TopicService` only reads the index here;
  * its job queueing is never reached.
  */
 @Module({
-	imports: [MikroOrmModule.forRoot(mikroOrmConfig), LLMModule],
+	imports: [
+		MikroOrmModule.forRoot(mikroOrmConfig),
+		EvalPgBossStubModule,
+		// The engine alone, never launched (the CLI sets `DURABLE_WORKFLOWS_DISABLED`): `LLMModule`'s workflows inject its facade
+		DurableWorkflowsModule.forRoot(undefined, { minimal: true }),
+		LLMModule,
+	],
 	providers: [
-		{ provide: PgBossService, useValue: {} },
 		TopicService,
 		ReviewClaimsAgent,
 		PostClaimsAgent,

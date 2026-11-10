@@ -46,6 +46,9 @@ export class Term extends MikroOrmSimpleEntityAbstractClass<'topics'> {
 	groupedAt?: Date | null;
 
 	/** The topics it is, in the order given (`rank`); empty for "none" or not decided yet */
-	@OneToMany(() => TermTopic, link => link.term, { orderBy: { rank: 'asc' }, orphanRemoval: true })
+	@OneToMany(() => TermTopic, link => link.term, {
+		orderBy: { rank: 'asc' },
+		orphanRemoval: true,
+	})
 	topics = new Collection<TermTopic>(this);
 }

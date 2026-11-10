@@ -13,6 +13,7 @@ import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testin
 
 import { TOPIC_SEED } from '../constants/topic-seed.constant.js';
 import { AdminTopicsController } from '../controllers/admin.topics.controller.js';
+import { Term } from '../entities/term.entity.js';
 import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
 import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
 import { TermService } from '../services/term.service.js';
@@ -133,6 +134,15 @@ describe('TopicService (pglite)', () => {
 		expect(byKey.get('vegan')?.mentions).toBe(1);
 		expect(byKey.get('kebab')?.mentions).toBe(1);
 		expect(byKey.get('bar')?.trendsTopicId).toBeUndefined();
+		// Every wording linked to it, any city: the seed's aliases of kebab
+		const [{ n }] = await harness.orm.em
+			.fork()
+			.getConnection()
+			.execute<{ n: number }[]>(
+				`select count(*)::int as n from term_topics tt join topics t on t.id = tt.topic_id where t.key = 'kebab'`,
+			);
+		expect(n).toBeGreaterThan(0);
+		expect(byKey.get('kebab')?.terms).toBe(n);
 	});
 
 	it("stores the food words nothing resolves as terms for the agent: a mention's cuisine and a food venue's category, in every city", async () => {
@@ -155,7 +165,7 @@ describe('TopicService (pglite)', () => {
 		expect(await terms.sync(index)).toEqual({ added: 0, matched: 0 });
 	});
 
-	it('creates a topic keyed by its label and makes a waiting word its other name', async () => {
+	it('creates a topic keyed by its label, and an admin links a waiting word to it', async () => {
 		const created = await controller.createTopic({
 			label: 'Philly Cheesesteak',
 			kind: TopicKindEnum.DISH,
@@ -165,7 +175,6 @@ describe('TopicService (pglite)', () => {
 		expect(created).toMatchObject({
 			key: 'philly cheesesteak',
 			parentKey: 'sandwiches',
-			aliases: [],
 		});
 		await expect(
 			controller.createTopic({
@@ -183,12 +192,12 @@ describe('TopicService (pglite)', () => {
 			controller.createTopic({ label: 'Restaurant', kind: TopicKindEnum.FORMAT }),
 		).rejects.toThrow(BadRequestException);
 
-		// A waiting word made the topic's other name: it joins the aliases, trimmed and once
-		const updated = await controller.updateTopic(created.id, {
-			aliases: [' cheesesteaks', 'Cheesesteaks', 'philly cheesesteak'],
-		});
-		// The waiting term keeps the spelling it was stored with
-		expect(updated.aliases).toEqual(['Cheesesteaks']);
+		// The admin links the waiting word to the new topic: it keeps the spelling it was stored with
+		const waiting = await harness.orm.em.fork().findOneOrFail(Term, { name: 'Cheesesteaks' });
+		const decided = await harness.moduleRef
+			.get(TermService)
+			.change(waiting.id, { topicKeys: [created.key] });
+		expect(decided).toMatchObject({ name: 'Cheesesteaks', decidedBy: 'admin' });
 		const res = await controller.getTopics({ cityId: city.id });
 		expect(res.topics.find(t => t.key === 'philly cheesesteak')?.mentions).toBe(2);
 		// Decided, so the cuisine resolves and nothing is stored again
@@ -199,12 +208,8 @@ describe('TopicService (pglite)', () => {
 		});
 	});
 
-	it("refuses another topic's admin word, an unknown parent and a parent under the topic", async () => {
+	it('refuses an unknown parent and a parent under the topic', async () => {
 		const ramen = (await service.all()).find(t => t.key === 'ramen')!;
-		// "durum" is the seed's alias of kebab: an admin's term, and one admin's word stands
-		await expect(controller.updateTopic(ramen.id, { aliases: ['Dürüm'] })).rejects.toThrow(
-			'"Dürüm" already means "Döner & kebab"',
-		);
 		await expect(controller.updateTopic(ramen.id, { parentKey: 'nope' })).rejects.toThrow(
 			BadRequestException,
 		);
@@ -250,7 +255,6 @@ describe('TopicService (pglite)', () => {
 			kind: 'aspect',
 			parentKey: 'payment',
 			hint: 'a tip asked for on the card terminal',
-			aliases: [],
 		});
 		expect(created.trendsTopicId).toBeUndefined();
 		expect(relinkQueued()).toBe(1);
@@ -328,27 +332,18 @@ describe('TopicService (pglite)', () => {
 			"can't become an aspect",
 		);
 
-		// An aspect takes other names like any topic (a Google tag's wording): an admin term, named as a
-		// whole only, never a kind of food in the cuisine lookup
-		expect((await controller.updateTopic(taste.id, { aliases: ['flavour'] })).aliases).toEqual([
-			'flavour',
-		]);
-		const withAlias = await service.index();
-		expect(withAlias.exactAll('flavour')).toEqual(['taste']);
-		expect(withAlias.resolve('taste')).toEqual([]);
-		expect(withAlias.food.some(t => t.key === 'taste')).toBe(false);
+		// An aspect is never a kind of food in the cuisine lookup
+		const index = await service.index();
+		expect(index.resolve('taste')).toEqual([]);
+		expect(index.food.some(t => t.key === 'taste')).toBe(false);
 
-		// Empty aliases drop them; the hint is trimmed, and blank clears it
-		expect(
-			await controller.updateTopic(taste.id, { aliases: [], hint: '  how it tasted  ' }),
-		).toMatchObject({
+		// The hint is trimmed, and blank clears it
+		expect(await controller.updateTopic(taste.id, { hint: '  how it tasted  ' })).toMatchObject({
 			key: 'taste',
 			kind: 'aspect',
 			parentKey: 'food',
 			hint: 'how it tasted',
-			aliases: [],
 		});
-		expect((await service.index()).exactAll('flavour')).toEqual([]);
 		expect((await controller.updateTopic(taste.id, { hint: '  ' })).hint).toBeUndefined();
 		expect((await service.index()).aspectLegend()).toContain(', taste, ');
 	});

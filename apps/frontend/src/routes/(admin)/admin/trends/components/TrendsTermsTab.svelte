@@ -7,7 +7,7 @@
 	import { page } from '$app/state';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
-	import { topicHref } from '#lib/topic-format.js';
+	import { topicPageHref } from '#lib/topic-format.js';
 	import { KIND_ITEMS, kindLabel } from '#lib/topic-kinds.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
@@ -20,20 +20,18 @@
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// Every wording the city has seen — a dish named in a review or a post, one of Google's
-	// "people often mention" tags, an alias — kept as said and linked to zero, one or many topics
-	// of any kind (food and aspects alike): decided once, by its name when it is a topic or one of
-	// its aliases, else by the AI in the nightly pass, else here (an admin's choice is never
+	// "people often mention" tags — kept as said and linked to zero, one or many topics of any
+	// kind (food and aspects alike): decided once, by its name when it is a topic's, else by the
+	// AI in the nightly pass, else here (an admin's choice is never
 	// changed). The AI's suggested topics for wordings no topic fits are the topics missing;
 	// creating one links those wordings at once. A link may open it on a status, a search, a topic
-	// or a suggestion (`?status=linked&topic=pasta`, `?status=all&q=carbonara`: a topic page's wordings)
+	// or a suggestion (`?status=linked&topic=pasta`, `?status=all&q=carbonara`: a topic page's wordings).
+	// "Create topic" opens the Topics page's new-topic form filled with the suggestion
 	interface Props {
 		cityId: string;
-		/** Bumped by the page after a topic is saved, to reload */
-		version: number;
-		onNewTopic: (label: string, kind: 'dish' | 'drink') => void;
 	}
 
-	let { cityId, version, onNewTopic }: Props = $props();
+	let { cityId }: Props = $props();
 
 	const PAGE = 50;
 	const STATUSES = [
@@ -70,7 +68,6 @@
 	);
 	let offset = 0;
 	$effect(() => {
-		void version;
 		offset = 0;
 		loader.load(query);
 	});
@@ -123,6 +120,7 @@
 		}
 	);
 
+	const newTopicHref = (label: string) => `/admin/topics?${new URLSearchParams({ new: label, kind: 'dish' })}`;
 	const DECIDED: Record<string, string> = { match: 'by its name', ai: 'by the AI', admin: 'by an admin' };
 	const plural = (n: number, one: string, many = `${one}s`) => `${n.toLocaleString('en-GB')} ${n === 1 ? one : many}`;
 	const share = $derived(data?.summary.uses ? Math.round((data.summary.linkedUses / data.summary.uses) * 100) : 0);
@@ -144,7 +142,7 @@
 			<p class="text-muted-foreground m-0 mb-3 text-sm">
 				{plural(data.summary.linkedUses, 'use')} of {data.summary.uses.toLocaleString('en-GB')} — a note naming a wording, a
 				venue's Google tag carrying it — count for a topic ({share} %). Each wording is sorted once: by its name when it is
-				a topic or one of its aliases, else by the AI in the nightly pass. Topics you pick here stay.
+				a topic's name, else by the AI in the nightly pass. Topics you pick here stay.
 			</p>
 			{#if data.summary.pendingTerms}
 				<p class="ink-strip m-0 mb-3 text-sm">
@@ -188,7 +186,7 @@
 									{#if row.topics.length}
 										·
 										{#each row.topics as t, i (t.key)}
-											{i ? ', ' : ''}<a class="text-beet underline-offset-2 hover:underline" href={topicHref(t.key)}>{t.label}</a>
+											{i ? ', ' : ''}<a class="text-beet underline-offset-2 hover:underline" href={topicPageHref(t.key, t.kind)}>{t.label}</a>
 										{/each}
 										{row.decidedBy ? DECIDED[row.decidedBy] : ''}
 									{:else if row.decidedBy}
@@ -278,7 +276,7 @@
 								}}>
 								Wordings
 							</Button>
-							<Button size="sm" variant="outline" onclick={() => onNewTopic(s.label, 'dish')}>Create topic</Button>
+							<Button size="sm" variant="outline" href={newTopicHref(s.label)}>Create topic</Button>
 						</div>
 					</li>
 				{/each}

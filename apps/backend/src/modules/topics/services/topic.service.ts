@@ -15,6 +15,8 @@ export interface TopicCounts {
 	mentions: number;
 	/** The city's venues whose Google category resolves to it */
 	venues: number;
+	/** The wordings linked to it (`term_topics`), any city */
+	terms: number;
 }
 
 export interface TopicOverview {
@@ -46,7 +48,7 @@ export class TopicService {
 
 	/**
 	 * Queues the re-link of everything stored against topics (`TopicRelinkService`): after every
-	 * change to a topic or its aliases, so a new alias reaches every page the way matching on read did.
+	 * change to a topic, so a change reaches every page the way matching on read did.
 	 * One runs and one waits.
 	 */
 	async queueRelink(): Promise<void> {
@@ -171,10 +173,7 @@ export class TopicService {
 	/**
 	 * Sets the input's fields. A parent must exist, not sit under the topic, and be of the same side
 	 * of the tree (an aspect under an aspect, a kind of food under a kind of food; 400); a stored
-	 * topic never crosses that border (400). An alias that already names another topic as a whole is
-	 * refused (400), since the first topic would keep it; aspects have no aliases and no Trends
-	 * fields (400 when given). Aliases are trimmed and kept once; one that is the topic's own key is
-	 * dropped.
+	 * topic never crosses that border (400). Aspects have no Trends fields (400 when given).
 	 */
 	private async apply(topic: Topic, input: TopicInput): Promise<void> {
 		const others = (await this.all()).filter(t => t.key !== topic.key);
@@ -228,7 +227,7 @@ export class TopicService {
 		const [topics, terms] = await Promise.all([this.all(), this.decidedTerms()]);
 		const index = toIndex(topics, terms);
 		const conn = this.em.getConnection();
-		const [mentionRows, venueRows] = await Promise.all([
+		const [mentionRows, venueRows, termRows] = await Promise.all([
 			conn.execute<{ cuisine: string | null; category: string | null; n: number }[]>(
 				`select m.cuisine, v.category, count(*)::int as n from mentions m
 					join venues v on v.id = m.venue_id
@@ -239,7 +238,11 @@ export class TopicService {
 				`select category, count(*)::int as n from venues where city_id = ? group by 1`,
 				[cityId],
 			),
+			conn.execute<{ topic_id: string; n: number }[]>(
+				`select topic_id, count(*)::int as n from term_topics group by 1`,
+			),
 		]);
+		const termCounts = new Map(termRows.map(r => [r.topic_id, r.n]));
 		const mentions = new Map<string, number>();
 		const venues = new Map<string, number>();
 		for (const r of mentionRows)
@@ -252,6 +255,7 @@ export class TopicService {
 				topic,
 				mentions: mentions.get(topic.key) ?? 0,
 				venues: venues.get(topic.key) ?? 0,
+				terms: termCounts.get(topic.id) ?? 0,
 			})),
 		};
 	}

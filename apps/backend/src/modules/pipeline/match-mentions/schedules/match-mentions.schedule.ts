@@ -11,7 +11,10 @@ import { cronCities } from '../../shared/util/cron-cities.js';
 import { MATCH_MENTIONS_CRON } from '../constants/match-mentions.constant.js';
 import { matchCityNow, MatchMentionsWorkflow } from '../workflows/match-mentions.workflow.js';
 
-/** Hourly: each cron city's mentions matched (`MatchMentionsWorkflow.matchCity`), one run in flight per city */
+/**
+ * Daily: each cron city's matching sweep (`MatchMentionsWorkflow.matchCity`), one run in flight per
+ * city. A post's own places are matched by its reading; the sweep takes what that leaves.
+ */
 @Injectable()
 export class MatchMentionsSchedule {
 	constructor(

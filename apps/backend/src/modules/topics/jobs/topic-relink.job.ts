@@ -1,7 +1,7 @@
 export type TopicRelinkJobPayload = Record<string, never>;
 
 /**
- * A food topic or its aliases changed: everything linked to topics by matching text is re-resolved
+ * A food topic changed: everything linked to topics by matching text is re-resolved
  * (`TopicRelinkService.relinkAll`). A `stately` queue with one `singletonKey`.
  */
 export class TopicRelinkJob {

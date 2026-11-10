@@ -13,7 +13,7 @@
 	import { api } from '#lib/api.js';
 	import { authorLabel, monthLabel, PLATFORM_LABELS, recentMonths, sentimentVariant } from '#lib/culinary.js';
 	import { amountLabel, aspectOf, foodPartsOf, KIND_LABELS } from '#lib/statements.js';
-	import { topicHref } from '#lib/topic-format.js';
+	import { aspectPageHref } from '#lib/topic-format.js';
 	import type { Column, Filter } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
 
@@ -32,13 +32,15 @@
 		scopeLabel?: string;
 		/** An Explore view's query: the table lists its claims (`listExploreClaims`) */
 		explore?: Parameters<typeof api.admin.listExploreClaims>[0];
+		/** Fixed to one aspect's claims (its children's included): an aspect's page. No strip then, since the strip is the whole scope's */
+		aspect?: string;
 	}
 
-	let { scope, topicsCityId, scopeLabel = 'Every review and post here, whatever the table below filters', explore }: Props = $props();
+	let { scope, topicsCityId, scopeLabel = 'Every review and post here, whatever the table below filters', explore, aspect }: Props = $props();
 
 	let summary = $state<AdminStatementsSummaryOutputDto | null>(null);
 	$effect(() => {
-		if (!explore) api.admin.getStatementsSummary(scope).then((res) => (summary = res));
+		if (!explore && !aspect) api.admin.getStatementsSummary(scope).then((res) => (summary = res));
 	});
 
 	// The aspects to filter by, each root followed by the aspects under it
@@ -96,7 +98,7 @@
 				{ name: 'Not read yet', value: ListStatementsParamsSentimentEnum.Unread }
 			]
 		},
-		{ key: 'aspect', name: 'Aspect', type: 'select', options: aspectOptions },
+		...(aspect ? [] : [{ key: 'aspect', name: 'Aspect', type: 'select', options: aspectOptions } satisfies Filter]),
 		{
 			key: 'parts',
 			name: 'Parts',
@@ -170,7 +172,7 @@
 			name: 'Aspect',
 			truncate: 32,
 			if: (row) => !!aspectOf(row),
-			href: (row) => topicHref(aspectOf(row)!.key),
+			href: (row) => aspectPageHref(aspectOf(row)!.key),
 			value: (row) => {
 				const a = aspectOf(row)!;
 				return a.root !== a.key ? `${a.rootLabel} › ${a.label}` : a.label;
@@ -206,7 +208,7 @@
 	const COLUMNS = $derived(ALL_COLUMNS.filter((c) => !(scope.venueId && c.name === 'About')));
 
 	// The scope is fixed: the page mounts the table again when it changes
-	const filters = $derived(explore ? { ...explore } : { ...scope });
+	const filters = $derived(explore ? { ...explore } : { ...scope, ...(aspect && { aspect }) });
 
 	const listStatements = (params: Parameters<typeof api.admin.listStatements>[0]) =>
 		explore
@@ -230,7 +232,7 @@
 </script>
 
 <div class="flex flex-col gap-5 pb-12">
-	{#if !explore}
+	{#if !explore && !aspect}
 	<AdminPanel title="Claims" note={scopeLabel}>
 		{#if summary}
 			<dl class="m-0 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-5">

@@ -59,7 +59,7 @@ The friend who always knows where everyone's eating, and can prove it.
 
 ## Public guardrails
 
-These hold for every automated post too. Full reasoning: `human-docs/13-public-reports-and-marketing-content.md`.
+These hold for every automated post too.
 
 - **Never republish review texts or Google ratings** in public. Public content uses our own counts.
 - **Never a negative list about named venues** ("falling", "worst", "most complained about"). Negatives stay in the venue's private report; public data stories about complaints name no venue.

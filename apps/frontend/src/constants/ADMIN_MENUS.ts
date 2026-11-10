@@ -4,6 +4,7 @@ import {
 	GalleryHorizontalEnd,
 	GitBranch,
 	LayoutDashboard,
+	ListTree,
 	MapPin,
 	Megaphone,
 	MessageSquareText,
@@ -13,6 +14,7 @@ import {
 	ScanText,
 	Sparkles,
 	Store,
+	Tags,
 	Telescope,
 	TrendingUp,
 	Users,
@@ -94,9 +96,27 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/trends',
 		icon: TrendingUp,
 		group: 'Market',
-		keywords: ['topics', 'cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'terms', 'wordings'],
+		keywords: ['cuisines', 'dishes', 'food', 'districts', 'creators', 'rising', 'google trends', 'searches', 'openings', 'praise', 'complaints', 'themes', 'what guests say', 'terms', 'wordings'],
 		description:
 			'What the city eats and talks about: each kind of food with its venues, posts and Google searches, and how the month moved against the last.'
+	}),
+	menu({
+		name: 'Topics',
+		href: '/admin/topics',
+		icon: ListTree,
+		group: 'Market',
+		keywords: ['food topics', 'cuisines', 'dishes', 'drinks', 'diets', 'ingredients', 'tree', 'terms', 'wordings', 'aliases', 'new topic', 'google trends id'],
+		description:
+			'The kinds of food and drink, as one tree: each with what it sits under, what sits under it and the wordings that count for it.'
+	}),
+	menu({
+		name: 'Aspects',
+		href: '/admin/aspects',
+		icon: Tags,
+		group: 'Market',
+		keywords: ['aspects', 'themes', 'what guests say', 'hints', 'labeller', 'jev', 'claims', 'unfiled', 'waiting', 'price', 'service', 'vibe'],
+		description:
+			'What a claim is about at a place (Taste, Price level, Staffing): each with its hint, which is what the claim labeller is told, and the city\'s claims under it.'
 	}),
 	menu({
 		name: 'Explore',

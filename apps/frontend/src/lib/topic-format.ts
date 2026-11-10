@@ -1,7 +1,13 @@
 // How the topic pages write their changes and where a topic lives.
 
-/** A topic's page; keys hold spaces ("fried chicken"). */
-export const topicHref = (key: string) => `/admin/trends/${encodeURIComponent(key)}`;
+/** A kind of food's page; keys hold spaces ("fried chicken"). An aspect's key opens its own page from there. */
+export const topicHref = (key: string) => `/admin/topics/${encodeURIComponent(key)}`;
+
+/** An aspect's page (what a claim is about at a place: Queue, Price level) */
+export const aspectPageHref = (key: string) => `/admin/aspects/${encodeURIComponent(key)}`;
+
+/** A topic's page by its kind: an aspect's under Aspects, a kind of food's under Topics */
+export const topicPageHref = (key: string, kind: string) => (kind === 'aspect' ? aspectPageHref(key) : topicHref(key));
 
 /** A ratio change: 0.4 → "+40%", 1.2 → "2.2×"; "—" when unknown. */
 export const change = (c: number | null | undefined) =>

@@ -20,7 +20,7 @@
 
 	import { quoteFound } from '#lib/digestion.js';
 	import { amountLabel, aspectOf, foodPartsOf, KIND_LABELS } from '#lib/statements.js';
-	import { topicHref } from '#lib/topic-format.js';
+	import { aspectPageHref, topicPageHref } from '#lib/topic-format.js';
 
 	// A list of claims as agent A split them, one card each: agent B's sentiment as the icon and the
 	// rule on the left, the claim, the source's own words under it, then B's parts as small chips
@@ -88,7 +88,7 @@
 				{:else if aspect || KindIcon || foods.length}
 					<div class="flex flex-wrap items-center gap-1 text-xs leading-5">
 						{#if aspect}
-							<a href={topicHref(aspect.key)} class="bg-wash text-ink rounded px-1.5 underline-offset-2 hover:underline" title="Aspect">
+							<a href={aspectPageHref(aspect.key)} class="bg-wash text-ink rounded px-1.5 underline-offset-2 hover:underline" title="Aspect">
 								{aspect.root !== aspect.key ? `${aspect.rootLabel} › ${aspect.label}` : aspect.label}
 							</a>
 						{:else}
@@ -107,7 +107,7 @@
 								<span class="text-ink font-medium">{food.name}</span>
 								{#if food.topics.length}
 									<span class="text-faint">→</span>
-									{#each food.topics as topic, i (topic.key)}{#if i}<span class="text-faint">,</span>{/if}<a href={topicHref(topic.key)} class="text-beet underline-offset-2 hover:underline">{topic.label}</a>{/each}
+									{#each food.topics as topic, i (topic.key)}{#if i}<span class="text-faint">,</span>{/if}<a href={topicPageHref(topic.key, topic.kind)} class="text-beet underline-offset-2 hover:underline">{topic.label}</a>{/each}
 								{:else}
 									<span class="text-faint">(not linked yet)</span>
 								{/if}

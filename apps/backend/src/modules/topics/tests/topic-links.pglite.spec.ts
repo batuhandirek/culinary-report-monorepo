@@ -33,7 +33,9 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { AdminTopicsController } from '../controllers/admin.topics.controller.js';
+import { AdminTermsController } from '../controllers/admin.terms.controller.js';
+
+import { Term } from '../entities/term.entity.js';
 import { Topic } from '../entities/topic.entity.js';
 import { VenueTopic } from '../entities/venue-topic.entity.js';
 import { TopicCityRefreshJob } from '../jobs/topic-city-refresh.job.js';
@@ -151,7 +153,7 @@ describe('Food topic links (pglite)', () => {
 				StatementService,
 				StatementPartsService,
 				TermService,
-				AdminTopicsController,
+				AdminTermsController,
 				MentionExtractionService,
 				MentionMatchingService,
 				{ provide: PgBossService, useValue: pgBoss },
@@ -346,13 +348,10 @@ describe('Food topic links (pglite)', () => {
 		expect(before).toEqual([[expect.any(Number), []]]);
 		expect(await tagKeys()).toEqual([]);
 
-		// The admin adds "pide" to kebab's other names: an admin term of kebab, set through the topic's PATCH
+		// The admin links the wording "pide" to kebab (the topic page's or the Terms tab's decision)
 		pgBoss.sendJob.mockClear();
-		const kebab = topics.get('kebab')!;
-		const aliases = (await service(TermService).aliasesOf([kebab.id])).get(kebab.id)!;
-		await service(AdminTopicsController).updateTopic(kebab.id, {
-			aliases: [...aliases, 'pide'],
-		});
+		const pide = await em.fork().findOneOrFail(Term, { key: 'pide' });
+		await service(AdminTermsController).changeTerm(pide.id, { topicKeys: ['kebab'] });
 		expect(pgBoss.sendJob).toHaveBeenCalledWith(TopicRelinkJob.jobName, expect.anything(), {
 			singletonKey: 'all',
 		});

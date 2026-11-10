@@ -12,7 +12,6 @@ export interface AdminCreateTopicInputDto {
 	/** Defaults to the label's `normalizeCuisine` key; must be one */
 	key?: string & tags.MaxLength<80>;
 	parentKey?: string;
-	aliases?: (string & tags.MaxLength<80>)[] & tags.MaxItems<100>;
 	trendsTopicId?: string & tags.Pattern<'^/(m|g)/[0-9A-Za-z_]+$'>;
 	trendsQuery?: string & tags.MaxLength<100>;
 	/** An aspect's: what it covers, told to the agents */
@@ -24,7 +23,6 @@ export interface AdminUpdateTopicInputDto {
 	label?: string & tags.MinLength<1> & tags.MaxLength<80>;
 	kind?: TopicKindEnum;
 	parentKey?: string | null;
-	aliases?: (string & tags.MaxLength<80>)[] & tags.MaxItems<100>;
 	trendsTopicId?: (string & tags.Pattern<'^/(m|g)/[0-9A-Za-z_]+$'>) | null;
 	trendsQuery?: (string & tags.MaxLength<100>) | null;
 	hint?: (string & tags.MaxLength<300>) | null;
@@ -55,7 +53,6 @@ export interface AdminTopicBaseOutputDto {
 	kind: TopicKindEnum;
 	/** The parent topic's key: a child counts for it too */
 	parentKey?: string;
-	aliases: string[];
 	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
 	trendsTopicId?: string;
 	trendsQuery?: string;
@@ -68,6 +65,8 @@ export interface AdminTopicOutputDto extends AdminTopicBaseOutputDto {
 	mentions: number;
 	/** The city's venues whose Google category resolves to it */
 	venues: number;
+	/** The wordings linked to it, in any city */
+	terms: number;
 }
 
 export interface AdminTopicsOutputDto {

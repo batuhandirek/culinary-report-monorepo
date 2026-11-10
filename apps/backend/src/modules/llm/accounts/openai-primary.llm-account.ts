@@ -11,7 +11,7 @@ export const OPENAI_PRIMARY_ACCOUNT = defineLlmAccount({
 	provider: 'openai',
 	apiKey: llmConfig.OPENAI_KEY_PRIMARY,
 	limits: [
-		tokensPerDay(8_000_000, { models: ['openai/gpt-5.4-mini'] }),
-		tokensPerDay(800_000, { models: ['openai/gpt-5.4'] }),
+		tokensPerDay(9_200_000, { models: ['openai/gpt-5.4-mini'] }),
+		tokensPerDay(920_000, { models: ['openai/gpt-5.4'] }),
 	],
 });

@@ -1,5 +1,6 @@
 import { tags } from 'typia';
 
+import type { TermRelation } from '../constants/term-relation.constant.js';
 import type { TermDecider } from '../entities/term.entity.js';
 
 /** Which terms the list shows: `unlinked` = decided with no topic, `linked`, `pending` = not decided yet */
@@ -22,6 +23,8 @@ export interface AdminTermTopicOutputDto {
 	key: string;
 	label: string;
 	kind: string;
+	/** How strongly the wording is it: `same` (a spelling), `kind_of` (a finer kind), `with` (an attribute or ingredient) */
+	relation: TermRelation;
 }
 
 /** One wording, with its links and how many of the city's statements and venues' Google tags carry it */
@@ -65,8 +68,13 @@ export interface AdminTermsOutputDto {
 /** A term after an admin's decision: the list carries the counts, this answer doesn't */
 export type AdminUpdatedTermOutputDto = Omit<AdminTermOutputDto, 'notes' | 'tagVenues'>;
 
-/** An admin's decision: the topics the wording is (`topicKeys`, empty = none), or `auto` for the name match and the agent */
+/**
+ * An admin's decision: the topics the wording is (`topicKeys`, empty = none), or `auto` for the
+ * name match and the agent. A topic's relation is `relations[key]`, else the one its link has now,
+ * else `same`.
+ */
 export interface AdminChangeTermInputDto {
 	topicKeys?: (string & tags.MaxLength<80>)[] & tags.MaxItems<10>;
+	relations?: Record<string, TermRelation>;
 	auto?: boolean;
 }

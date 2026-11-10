@@ -1,6 +1,8 @@
 <script lang="ts" module>
 	import type { AnalystMention, AnalystMessagePayload, AnalystPartPayload } from 'sdk';
 
+	import { aspectPageHref, topicHref } from '#lib/topic-format.js';
+
 	/** Where a mentioned row lives in the admin */
 	export const mentionHref = (m: AnalystMention): string | undefined => {
 		if (!m.found || !m.id) return undefined;
@@ -10,9 +12,11 @@
 			case 'brand':
 				return `/admin/brands/${m.id}`;
 			case 'aspect':
-			case 'topic':
+			case 'topic': {
 				// A topic's page is by key; a mention by id has no key to hand
-				return /^[0-9a-f-]{36}$/i.test(m.ref) ? undefined : `/admin/trends/${encodeURIComponent(m.ref)}`;
+				if (/^[0-9a-f-]{36}$/i.test(m.ref)) return undefined;
+				return m.type === 'aspect' ? aspectPageHref(m.ref) : topicHref(m.ref);
+			}
 			case 'creator':
 				return `/admin/creators/${m.id}`;
 			case 'post':

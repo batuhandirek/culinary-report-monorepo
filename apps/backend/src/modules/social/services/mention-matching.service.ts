@@ -620,6 +620,45 @@ export class MentionMatchingService {
 		return pass;
 	}
 
+	/**
+	 * These mentions matched in code, the ones never matched and not corrected: one post's places
+	 * right after its reading (`read-posts.post`). What is sure is saved and its food topics relinked;
+	 * the close calls are listed in `asks` for their own runs. Against the last pass's venues and
+	 * accounts (cached): a post is no city-wide pass, so the tags' brands are left to the city's run
+	 * (`HashtagService.relink` reads every tag).
+	 */
+	async matchMentions(mentionIds: number[]): Promise<MatchPass> {
+		const pass: MatchPass = { counts: emptyCounts(), asks: [] };
+		if (!mentionIds.length) return pass;
+		const mentions = await this.em.find(
+			Mention,
+			{
+				$and: [
+					{ id: { $in: mentionIds } },
+					{ matchedAt: null },
+					{ $or: [{ matchMethod: null }, { matchMethod: { $nin: ADMIN_METHODS } }] },
+				],
+			},
+			{ populate: ['post', 'post.city', 'statements'] },
+		);
+		if (!mentions.length) return pass;
+		const accounts = await this.brandAccounts();
+		for (const group of Object.values(_.groupBy(mentions, m => m.post.city.id))) {
+			const city = group[0].post.city;
+			const words = cityStopwords(city.nameStopwords);
+			await this.decideInCode(
+				group,
+				await this.candidateVenues(city, words),
+				cityNames(city),
+				words,
+				accounts,
+				pass,
+				{ relinkTags: false },
+			);
+		}
+		return pass;
+	}
+
 	private async matchCity(city: City, rematch: boolean, pass: MatchPass): Promise<void> {
 		const words = cityStopwords(city.nameStopwords);
 		const venues = await this.candidateVenues(city, words, { fresh: true });
@@ -797,7 +836,8 @@ export class MentionMatchingService {
 	 * Decides each mention in code and saves what that settles (flushed; their food topics and the
 	 * tags relinked). A close call is left as it was, `matchedAt` too, so the next pass takes it
 	 * again until its own run settles it, and listed in `asks`; with `markDue` its `matchedAt` is
-	 * cleared, so the city's next matching run takes it (a rematch outside a city's run).
+	 * cleared, so the city's next matching run takes it (a rematch outside a city's run). Without
+	 * `relinkTags` the tags' brands wait for the city's run.
 	 */
 	private async decideInCode(
 		mentions: Mention[],
@@ -806,7 +846,7 @@ export class MentionMatchingService {
 		words: ReadonlySet<string>,
 		accounts: ReadonlyMap<string, TaggedAccount>,
 		pass: MatchPass,
-		{ markDue = false } = {},
+		{ markDue = false, relinkTags = true } = {},
 	): Promise<void> {
 		const decided: Mention[] = [];
 		for (const mention of mentions) {
@@ -823,7 +863,7 @@ export class MentionMatchingService {
 		await this.em.flush();
 		await this.relinkFood(decided);
 		// A tag names a brand once a post carrying it is matched to it
-		if (decided.length) await this.hashtagService.relink();
+		if (relinkTags && decided.length) await this.hashtagService.relink();
 	}
 
 	/**
@@ -936,8 +976,8 @@ export class MentionMatchingService {
 
 	/**
 	 * A close call's decision on its mention, flushed; null, with nothing written, when the mention
-	 * is gone or an admin corrected it meanwhile. The relinks wait for the city's run
-	 * (`relinkMatched`), which settles its close calls together.
+	 * is gone or an admin corrected it meanwhile. Its run relinks its food topics after
+	 * (`relinkMatched`); the tags' brands wait for the city's run (`relinkTags`).
 	 */
 	async saveMatch(
 		mentionId: number,
@@ -950,7 +990,7 @@ export class MentionMatchingService {
 		return decision.method;
 	}
 
-	/** After a city's close calls were saved: their food topics, the cities' venue tags and the tags' brands */
+	/** After close calls were saved: their food topics and their cities' venue tags */
 	async relinkMatched(mentionIds: number[]): Promise<void> {
 		if (!mentionIds.length) return;
 		const mentions = await this.em.find(
@@ -959,6 +999,14 @@ export class MentionMatchingService {
 			{ populate: ['post'] },
 		);
 		await this.relinkFood(mentions);
+	}
+
+	/**
+	 * Every tag's brand again (`HashtagService.relink`, over every tag): once a city's run, as a tag
+	 * names a brand once a post carrying it is matched to it, and the posts' own matches and the
+	 * close calls skip it
+	 */
+	async relinkTags(): Promise<void> {
 		await this.hashtagService.relink();
 	}
 

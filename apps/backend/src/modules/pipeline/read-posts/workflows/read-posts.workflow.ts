@@ -16,9 +16,14 @@ import type {
 	PostReadingAnswer,
 } from 'src/modules/social/interfaces/post-reading.interface.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
+import {
+	type MatchPass,
+	MentionMatchingService,
+} from 'src/modules/social/services/mention-matching.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 
+import { queueCloseCalls } from '../../match-mentions/util/close-calls.js';
 import { PostClaimsAgent } from '../agents/post-claims.agent.js';
 import { PostGateAgent } from '../agents/post-gate.agent.js';
 import { READ_POSTS_PER_RUN, readPostRunId } from '../constants/read-posts.constant.js';
@@ -29,7 +34,9 @@ import { gateInput, hasContent } from '../util/post-gate-input.js';
 
 /** What reading one post did: the workflow's result */
 export type ReadPostResult =
-	{ read: false } | { skipped: string } | { places: number; claims: number; calls: number };
+	| { read: false }
+	| { skipped: string }
+	| { places: number; claims: number; calls: number; matched: number; asked: number };
 
 /** What reading a city's unread posts did */
 export interface ReadCityResult {
@@ -47,7 +54,10 @@ interface PostPlan {
 
 /**
  * The reading of posts. `readPost` is one post as a workflow of its own: the gate, then agent A
- * (its places and claims), the claims' labels, the mentions' food topics. Each agent call is a
+ * (its places and claims), the claims' labels, the mentions' food topics, then its places matched:
+ * what the code is sure of saved, each close call queued as a run of its own
+ * (`match-mentions.mention`, not awaited, so a call waiting for the allowance never holds the
+ * reading). Each agent call is a
  * child on its tier's LLM queue that waits until an account can serve it, so a post waiting for the
  * allowance never holds the others back, a resume never asks a finished call again, and the
  * ledger files each call under the post's run. `readCity` is a city's unread posts, each started
@@ -63,6 +73,7 @@ export class ReadPostsWorkflow {
 		private readonly postGateAgent: PostGateAgent,
 		private readonly postClaimsAgent: PostClaimsAgent,
 		private readonly extraction: MentionExtractionService,
+		private readonly mentionMatchingService: MentionMatchingService,
 		private readonly statementPartsService: StatementPartsService,
 		private readonly topicService: TopicService,
 	) {}
@@ -135,10 +146,16 @@ export class ReadPostsWorkflow {
 		// 3. The claims' labels (Jev) and the mentions' food topics
 		await this.labelClaims(saved.claimIds);
 		await this.linkTopics(post.cityId, saved.mentionIds);
+
+		// 4. Its places matched: the sure ones saved now, each close call queued, never awaited
+		const pass = await this.matchPlaces(saved.mentionIds);
+		await queueCloseCalls(this.durable, pass.asks, post.cityId);
 		return {
 			places: saved.mentionIds.length,
 			claims: saved.claimIds.length,
 			calls: reading.calls + 1,
+			matched: Object.values(pass.counts).reduce((a, b) => a + b, 0),
+			asked: pass.asks.length,
 		};
 	}
 
@@ -177,5 +194,10 @@ export class ReadPostsWorkflow {
 	@DurableStep({ name: 'link topics' })
 	private async linkTopics(cityId: string, mentionIds: number[]): Promise<void> {
 		await this.extraction.linkTopics(cityId, mentionIds);
+	}
+
+	@DurableStep({ name: 'match places' })
+	private async matchPlaces(mentionIds: number[]): Promise<MatchPass> {
+		return this.mentionMatchingService.matchMentions(mentionIds);
 	}
 }

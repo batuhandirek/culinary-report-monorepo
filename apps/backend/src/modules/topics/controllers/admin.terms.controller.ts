@@ -43,7 +43,14 @@ export class AdminTermsController {
 		@TypedParam('id') id: number,
 		@TypedBody() body: AdminChangeTermInputDto,
 	): Promise<AdminUpdatedTermOutputDto> {
-		return toDto(await this.termService.change(id, body.auto ? { auto: true } : { topicKeys: body.topicKeys ?? [] }));
+		return toDto(
+			await this.termService.change(
+				id,
+				body.auto ?
+					{ auto: true }
+				:	{ topicKeys: body.topicKeys ?? [], relations: body.relations },
+			),
+		);
 	}
 }
 
@@ -54,7 +61,12 @@ const toDto = (term: Term): AdminUpdatedTermOutputDto => ({
 	topics: term.topics
 		.getItems()
 		.filter(l => !l.topic.deletedAt)
-		.map(l => ({ key: l.topic.key, label: l.topic.label, kind: l.topic.kind })),
+		.map(l => ({
+			key: l.topic.key,
+			label: l.topic.label,
+			kind: l.topic.kind,
+			relation: l.relation,
+		})),
 	...(term.decidedBy && { decidedBy: term.decidedBy }),
 	...(term.suggestion && { suggestion: term.suggestion }),
 });

@@ -30,8 +30,9 @@ const DETAIL_NAMES: Record<string, (segment: string) => string | undefined> = {
 	'/admin/blog': (segment) => (segment === 'new' ? 'New article' : page.data.entry?.title),
 	'/admin/instagram': () => page.data.designName,
 	'/admin/workflows': () => page.data.workflow?.name,
-	// A topic's page loads its own data per city: its key reads well enough
-	'/admin/trends': (segment) => sentence(decodeURIComponent(segment)),
+	// A topic's and an aspect's page load their own data per city: the key reads well enough
+	'/admin/topics': (segment) => sentence(decodeURIComponent(segment)),
+	'/admin/aspects': (segment) => sentence(decodeURIComponent(segment).replaceAll('_', ' ')),
 	'/admin/ui-kit': (segment) => sentence(segment)
 };
 

@@ -6,7 +6,6 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
-import { TermService } from 'src/modules/topics/services/term.service.js';
 
 import {
 	AdminGetTopicInsightsInputDto,
@@ -19,10 +18,7 @@ import { TopicInsightService } from '../services/topic-insight.service.js';
 @UseGuards(AuthenticationGuard, RolesGuard)
 @Roles(UserRoleEnum.ADMIN)
 export class AdminTopicInsightsController {
-	constructor(
-		private readonly topicInsightService: TopicInsightService,
-		private readonly termService: TermService,
-	) {}
+	constructor(private readonly topicInsightService: TopicInsightService) {}
 
 	/** The city's food topics with venues, the month's posts and Google searches, most posted about first. */
 	@TypedRoute.Get('/')
@@ -39,12 +35,9 @@ export class AdminTopicInsightsController {
 		@TypedQuery() query: AdminGetTopicInsightsInputDto,
 	): Promise<AdminTopicInsightOutputDto> {
 		const d = await this.topicInsightService.detail(query.cityId, key, query.month);
-		// The topic's other names: its admin terms (`TermService.setAliases`)
-		const aliases = (await this.termService.aliasesOf([d.topic.id])).get(d.topic.id) ?? [];
 		return {
 			id: d.topic.id,
 			row: d.row,
-			aliases,
 			...(d.topic.trendsTopicId && { trendsTopicId: d.topic.trendsTopicId }),
 			...(d.topic.trendsQuery && { trendsQuery: d.topic.trendsQuery }),
 			...(d.parent && { parent: d.parent }),

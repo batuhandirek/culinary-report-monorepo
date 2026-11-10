@@ -8,7 +8,10 @@
 // dialog, and the agents read the legend from the table on every call.
 // An aspect never says "it changed": that is the claim's kind (`change`), so the change-only leaves
 // (price increase, quality, staff and ownership change, renovation) were folded into the aspect a claim
-// is about by `Migration20261031180000_claim_model_v2`, which added `ownership`.
+// is about by `Migration20261031180000_claim_model_v2`, which added `ownership`. The six aspects the
+// claims' vectors showed missing (hype & reputation, events & entertainment, concept & character,
+// ordering system, professionalism & organisation, staffing) came with
+// `Migration20261110130000_aspects_from_vectors`, which renamed the root `vibe` "Vibe & setting".
 import { TopicKindEnum } from '../entities/topic.entity.js';
 
 import type { TopicSeed } from './topic-seed.constant.js';
@@ -137,7 +140,7 @@ export const ASPECT_SEED: TopicSeed[] = [
 		'friendliness',
 		'service',
 		'Friendliness',
-		'warm, welcoming, or rude, unfriendly, arrogant, and guests treated differently for being tourists or for who they are',
+		'warm, welcoming, hospitable, or rude, unfriendly, arrogant, and guests treated differently for being tourists or for who they are',
 	),
 	leaf(
 		'attentiveness',
@@ -156,6 +159,24 @@ export const ASPECT_SEED: TopicSeed[] = [
 		'service',
 		'Order accuracy',
 		'got what was ordered, or wrong, forgotten or missing items',
+	),
+	leaf(
+		'ordering_system',
+		'service',
+		'Ordering system',
+		'how ordering works: at the counter, a kiosk or screen, a QR code or app, self-service, easy or confusing (wrong or missing items are order accuracy)',
+	),
+	leaf(
+		'professionalism_organisation',
+		'service',
+		'Professionalism & organisation',
+		'competent, well trained and organised, a team working together, or unprofessional, chaotic, disorganised (warmth is friendliness, speed is speed of service)',
+	),
+	leaf(
+		'staffing',
+		'service',
+		'Staffing',
+		'enough staff or too few: understaffed, staff overwhelmed, one person working everything (slow service itself is speed of service)',
 	),
 	leaf(
 		'advice',
@@ -200,7 +221,7 @@ export const ASPECT_SEED: TopicSeed[] = [
 		'rushed to order or to leave, a time limit at the table, pushed to order more or to tip, upselling',
 	),
 
-	root('vibe', 'Atmosphere', 'about the atmosphere, when nothing finer fits'),
+	root('vibe', 'Vibe & setting', 'about the vibe and the setting as a whole, when nothing finer fits'),
 	leaf(
 		'atmosphere',
 		'vibe',
@@ -208,6 +229,24 @@ export const ASPECT_SEED: TopicSeed[] = [
 		'cosy, a nice vibe, romantic, or unpleasant, cold; a room too hot, stuffy or cold',
 	),
 	leaf('noise', 'vibe', 'Noise', 'quiet, or loud, noisy music'),
+	leaf(
+		'hype_reputation',
+		'vibe',
+		'Hype & reputation',
+		'whether it lives up to its hype or name: overhyped, worth the hype, a legend, a tourist trap, reviews that look fake or get deleted (a recommendation or a rating is no aspect)',
+	),
+	leaf(
+		'events_entertainment',
+		'vibe',
+		'Events & entertainment',
+		'live music, DJs, shows, quiz or ladies nights, events and their dates, entry tickets and what they cost (a new dish is a new item, not an event)',
+	),
+	leaf(
+		'concept_character',
+		'vibe',
+		'Concept & character',
+		'the idea behind the place and what makes it different: its concept, its character, a meal as an experience, grilling at the table, an open kitchen (the decor is interior, the mood atmosphere)',
+	),
 	leaf(
 		'space',
 		'vibe',
@@ -235,7 +274,7 @@ export const ASPECT_SEED: TopicSeed[] = [
 		'price_level',
 		'price',
 		'Price level',
-		'expensive, pricey, or cheap, affordable, for what it is, and the prices stated ("the döner costs 8 €")',
+		'expensive, pricey, or cheap, affordable, for what it is, and the prices stated ("the döner costs 8 €"; an entry ticket is events & entertainment)',
 	),
 	leaf(
 		'value_for_money',

@@ -3,7 +3,7 @@ import type { Sentiment } from '../constants/sentiment.constant.js';
 import type { StatementSubject, StatementUnit } from '../entities/statement.entity.js';
 import type { StatementPartRole } from '../entities/statement-part.entity.js';
 
-/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 export interface StatementTopicOutputDto {
 	key: string;
 	label: string;

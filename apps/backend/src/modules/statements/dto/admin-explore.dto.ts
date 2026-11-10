@@ -33,6 +33,8 @@ export interface AdminExploreInputDto {
 	/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 	source?: InsightSource;
 	subject?: StatementSubject;
+	/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+	loose?: boolean;
 }
 
 export interface AdminExploreBreakdownInputDto extends AdminExploreInputDto {

@@ -59,7 +59,6 @@ export interface AdminTopicVenueOutputDto {
 export interface AdminTopicInsightOutputDto {
 	id: string;
 	row: AdminTopicInsightRowOutputDto;
-	aliases: string[];
 	trendsTopicId?: string;
 	trendsQuery?: string;
 	parent?: { key: string; label: string };

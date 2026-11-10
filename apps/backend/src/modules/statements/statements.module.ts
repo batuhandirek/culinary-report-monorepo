@@ -12,12 +12,14 @@ import { TopicsModule } from '../topics/topics.module.js';
 
 import { AspectSuggestionAgent } from './agents/aspect-suggestion.agent.js';
 import { ClaimLabelsClassifier } from './classifiers/claim-labels.classifier.js';
+import { AdminAspectsController } from './controllers/admin.aspects.controller.js';
 import { AdminExploreController } from './controllers/admin.explore.controller.js';
 import { AdminStatementsController } from './controllers/admin.statements.controller.js';
 import { Statement } from './entities/statement.entity.js';
 import { StatementPart } from './entities/statement-part.entity.js';
 import { AspectDiscoverySchedule } from './schedules/aspect-discovery.schedule.js';
 import { AspectDiscoveryService } from './services/aspect-discovery.service.js';
+import { AspectOverviewService } from './services/aspect-overview.service.js';
 import { AspectShortlistService } from './services/aspect-shortlist.service.js';
 import { StatementService } from './services/statement.service.js';
 import { StatementEmbeddingService } from './services/statement-embedding.service.js';
@@ -31,7 +33,8 @@ import { AspectDiscoveryWorkflow } from './workflows/aspect-discovery.workflow.j
  * number come with the claim; the claim-labels classifier (Jev, `ClaimLabelsClassifier`) gives its
  * sentiment, kind and aspect right after agent A and as the `statement-parts` backlog.
  * Each claim gets a vector (`statement-embeddings` backlog) for search by meaning, Explore's groups and
- * aspect discovery (`AspectDiscoveryService`). The Explore page reads them (`StatementInsightService`).
+ * aspect discovery (`AspectDiscoveryService`). The Explore page reads them (`StatementInsightService`),
+ * the Aspects pages count them per aspect (`AspectOverviewService`).
  * Imports no module whose entities it points at (venues, social): entity references need none,
  * and both import this one to write their sources' claims.
  */
@@ -43,13 +46,14 @@ import { AspectDiscoveryWorkflow } from './workflows/aspect-discovery.workflow.j
 		TopicsModule,
 		LLMModule,
 	],
-	controllers: [AdminStatementsController, AdminExploreController],
+	controllers: [AdminStatementsController, AdminExploreController, AdminAspectsController],
 	providers: [
 		StatementService,
 		StatementPartsService,
 		StatementEmbeddingService,
 		AspectShortlistService,
 		StatementInsightService,
+		AspectOverviewService,
 		AspectDiscoveryService,
 		AspectDiscoverySchedule,
 		AspectDiscoveryWorkflow,

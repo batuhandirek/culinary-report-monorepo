@@ -17,11 +17,9 @@
 	interface Props {
 		cityId: string;
 		month: string;
-		/** Bumped after a topic was saved */
-		version: number;
 	}
 
-	let { cityId, month, version }: Props = $props();
+	let { cityId, month }: Props = $props();
 
 	let data = $state<AdminTopicInsightsOutputDto | null>(null);
 	const loader = createLoader(
@@ -29,7 +27,6 @@
 		{ onSuccess: (res) => (data = res) }
 	);
 	$effect(() => {
-		void version;
 		data = null;
 		if (cityId) loader.load({ cityId, month });
 	});

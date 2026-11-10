@@ -497,6 +497,51 @@ export enum AdminApifyRunOutputDtoStatusEnum {
 	FAILED = 'FAILED',
 }
 
+/** One aspect with the city's claims filed under it */
+export interface AdminAspectOutputDto {
+	/** All time, filed at it with nothing finer */
+	atItself: number;
+	/** Per month of `months`, filed at it with nothing finer */
+	atItselfByMonth: number[];
+	/** Per month of `months`, its children's included */
+	byMonth: number[];
+	/** All time, its children's claims included */
+	claims: number;
+	/**
+	 * When aspect discovery created it
+	 * @format date-time
+	 */
+	discoveredAt?: string;
+	/** What it covers: exactly what the claim labeller (Jev) is told */
+	hint?: string;
+	id: string;
+	key: string;
+	label: string;
+	/** Its root's key; absent for a root */
+	parentKey?: string;
+}
+
+export interface AdminAspectsInputDto {
+	/** @format uuid */
+	cityId: string;
+	/**
+	 * The last month of the window; the last whole month by default
+	 * @pattern ^[0-9]{4}-[0-9]{2}$
+	 */
+	month?: string;
+}
+
+export interface AdminAspectsOutputDto {
+	aspects: AdminAspectOutputDto[];
+	month: string;
+	/** The window the per-month counts follow, oldest first, ending with `month` */
+	months: string[];
+	/** Labelled and filed under no aspect */
+	noAspect: AdminLooseClaimsOutputDto;
+	/** Not labelled yet */
+	unread: AdminLooseClaimsOutputDto;
+}
+
 export interface AdminBackfillReviewsInputDto {
 	/**
 	 * The run's cap over all its attempts; the city's `BACKFILL_REVIEWS` budget without
@@ -963,9 +1008,15 @@ export interface AdminBuildReportInputDto {
 	month: string;
 }
 
-/** An admin's decision: the topics the wording is (`topicKeys`, empty = none), or `auto` for the name match and the agent */
+/**
+ * An admin's decision: the topics the wording is (`topicKeys`, empty = none), or `auto` for the
+ * name match and the agent. A topic's relation is `relations[key]`, else the one its link has now,
+ * else `same`.
+ */
 export interface AdminChangeTermInputDto {
 	auto?: boolean;
+	/** Construct a type with a set of properties K of type T */
+	relations?: RecordstringwithsamekindOf;
 	/** @maxItems 10 */
 	topicKeys?: string[];
 }
@@ -1403,8 +1454,6 @@ export interface AdminCreateReportTemplateInputDto {
 }
 
 export interface AdminCreateTopicInputDto {
-	/** @maxItems 100 */
-	aliases?: string[];
 	/**
 	 * An aspect's: what it covers, told to the agents
 	 * @maxLength 300
@@ -2183,6 +2232,8 @@ export interface AdminExploreBreakdownInputDto {
 	from?: string;
 	/** One kind, or `unread`: agent B gave none yet */
 	kind?: AdminExploreBreakdownInputDtoKindEnum;
+	/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+	loose?: boolean;
 	/** @maxLength 200 */
 	node?: string;
 	/**
@@ -2233,9 +2284,9 @@ export enum AdminExploreBreakdownInputDtoKindEnum {
 export enum AdminExploreBreakdownInputDtoSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -2305,6 +2356,8 @@ export interface AdminExploreClaimsInputDto {
 	 * @maxLength 200
 	 */
 	like?: string;
+	/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+	loose?: boolean;
 	/** @maxLength 200 */
 	node?: string;
 	/** @min 1 */
@@ -2349,9 +2402,9 @@ export enum AdminExploreClaimsInputDtoKindEnum {
 export enum AdminExploreClaimsInputDtoSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -2456,9 +2509,9 @@ export interface AdminExploreHeadOutputDto {
 export enum AdminExploreHeadOutputDtoSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 export enum AdminExploreHeadOutputDtoUnitEnum {
@@ -2483,6 +2536,8 @@ export interface AdminExploreInputDto {
 	from?: string;
 	/** One kind, or `unread`: agent B gave none yet */
 	kind?: AdminExploreInputDtoKindEnum;
+	/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+	loose?: boolean;
 	/** @maxLength 200 */
 	node?: string;
 	/**
@@ -2518,9 +2573,9 @@ export enum AdminExploreInputDtoKindEnum {
 export enum AdminExploreInputDtoSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -3815,6 +3870,11 @@ export enum AdminLogOutreachTouchInputDtoOutcomeEnum {
 	SpokeToStaff = 'spoke_to_staff',
 	Closed = 'closed',
 	Nobody = 'nobody',
+}
+
+export interface AdminLooseClaimsOutputDto {
+	byMonth: number[];
+	claims: number;
 }
 
 export interface AdminMatchAccountsInputDto {
@@ -5227,6 +5287,15 @@ export interface AdminTermTopicOutputDto {
 	key: string;
 	kind: string;
 	label: string;
+	/** How strongly the wording is it: `same` (a spelling), `kind_of` (a finer kind), `with` (an attribute or ingredient) */
+	relation: AdminTermTopicOutputDtoRelationEnum;
+}
+
+/** How strongly the wording is it: `same` (a spelling), `kind_of` (a finer kind), `with` (an attribute or ingredient) */
+export enum AdminTermTopicOutputDtoRelationEnum {
+	With = 'with',
+	Same = 'same',
+	KindOf = 'kind_of',
 }
 
 export interface AdminTermsOutputDto {
@@ -5373,7 +5442,6 @@ export enum AdminTodoOutputDtoToneEnum {
 }
 
 export interface AdminTopicBaseOutputDto {
-	aliases: string[];
 	/** An aspect's: what it covers, told to the agents */
 	hint?: string;
 	id: string;
@@ -5399,7 +5467,6 @@ export enum AdminTopicBaseOutputDtoKindEnum {
 }
 
 export interface AdminTopicInsightOutputDto {
-	aliases: string[];
 	children: AdminTopicInsightRowOutputDto[];
 	id: string;
 	/**
@@ -5481,7 +5548,6 @@ export interface AdminTopicMenuOutputDto {
 }
 
 export interface AdminTopicOutputDto {
-	aliases: string[];
 	/** An aspect's: what it covers, told to the agents */
 	hint?: string;
 	id: string;
@@ -5492,6 +5558,8 @@ export interface AdminTopicOutputDto {
 	mentions: number;
 	/** The parent topic's key: a child counts for it too */
 	parentKey?: string;
+	/** The wordings linked to it, in any city */
+	terms: number;
 	trendsQuery?: string;
 	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
 	trendsTopicId?: string;
@@ -5839,8 +5907,6 @@ export interface AdminUpdateReportTemplateInputDto {
 
 /** Only the fields given change; null clears a parent, a Trends id or a query. The key never changes. */
 export interface AdminUpdateTopicInputDto {
-	/** @maxItems 100 */
-	aliases?: string[];
 	/** @maxLength 300 */
 	hint?: string | null;
 	kind?: AdminUpdateTopicInputDtoKindEnum;
@@ -7287,6 +7353,8 @@ export type GetAnalystThreadData = AdminAnalystThreadDetailOutputDto;
 
 export type GetApifyCreditData = AdminApifyCreditOutputDto;
 
+export type GetAspectsData = AdminAspectsOutputDto;
+
 export type GetBrandData = AdminBrandOutputDto;
 
 export type GetBrandSummaryData = AdminBrandSummaryOutputDto;
@@ -7350,9 +7418,9 @@ export enum GetExploreBreakdownParamsKindEnum {
 export enum GetExploreBreakdownParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -7392,9 +7460,9 @@ export enum GetExploreGroupsParamsKindEnum {
 export enum GetExploreGroupsParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -7434,9 +7502,9 @@ export enum GetExploreHeadParamsKindEnum {
 export enum GetExploreHeadParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -7476,9 +7544,9 @@ export enum GetExploreTreeParamsKindEnum {
 export enum GetExploreTreeParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -8158,9 +8226,9 @@ export enum ListExploreClaimsParamsKindEnum {
 export enum ListExploreClaimsParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
+	Unread = 'unread',
 	Noted = 'noted',
 	Changes = 'changes',
-	Unread = 'unread',
 }
 
 /** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
@@ -9845,6 +9913,15 @@ export type Recordstringstringnumberbooleannull = Record<
 /** Construct a type with a set of properties K of type T */
 export type Recordstringunknown = Record<string, any>;
 
+/** Construct a type with a set of properties K of type T */
+export type RecordstringwithsamekindOf = Record<string, RecordstringwithsamekindOfEnum>;
+
+export enum RecordstringwithsamekindOfEnum {
+	With = 'with',
+	Same = 'same',
+	KindOf = 'kind_of',
+}
+
 export type ReflagOpeningsData = AdminReflagOpeningsOutputDto;
 
 export type RefreshTokenData = RefreshTokenOutputDto;
@@ -11400,11 +11477,11 @@ export interface StatementPartOutputDto {
 		name: string;
 		topics: {
 			rank: number;
-			/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+			/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 			topic: StatementTopicOutputDto;
 		}[];
 	};
-	/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+	/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 	topic?: StatementTopicOutputDto;
 }
 
@@ -11413,7 +11490,7 @@ export enum StatementPartOutputDtoRoleEnum {
 	Food = 'food',
 }
 
-/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/trends/<key>` */
+/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 export interface StatementTopicOutputDto {
 	key: string;
 	/** `Topic.kind`: aspect, dish, cuisine, … */
@@ -13503,6 +13580,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				from?: string;
 				/** One kind, or `unread`: agent B gave none yet */
 				kind?: GetExploreTreeParamsKindEnum;
+				/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+				loose?: boolean;
 				/** @maxLength 200 */
 				node?: string;
 				/**
@@ -13550,6 +13629,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				from?: string;
 				/** One kind, or `unread`: agent B gave none yet */
 				kind?: GetExploreHeadParamsKindEnum;
+				/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+				loose?: boolean;
 				/** @maxLength 200 */
 				node?: string;
 				/**
@@ -13598,6 +13679,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				from?: string;
 				/** One kind, or `unread`: agent B gave none yet */
 				kind?: GetExploreBreakdownParamsKindEnum;
+				/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+				loose?: boolean;
 				/** @maxLength 200 */
 				node?: string;
 				/**
@@ -13650,6 +13733,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @maxLength 200
 				 */
 				like?: string;
+				/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+				loose?: boolean;
 				/** @maxLength 200 */
 				node?: string;
 				/** @min 1 */
@@ -13706,6 +13791,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				from?: string;
 				/** One kind, or `unread`: agent B gave none yet */
 				kind?: GetExploreGroupsParamsKindEnum;
+				/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+				loose?: boolean;
 				/** @maxLength 200 */
 				node?: string;
 				/**
@@ -13753,6 +13840,33 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<SearchExploreTermsData, any>({
 				path: `/admin/explore/terms`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Every aspect with its claims in the city: all time, per month of a twelve-month window, at itself
+		 *
+		 * @name GetAspects
+		 * @request GET:/admin/aspects
+		 * @response `200` `GetAspectsData`
+		 */
+		getAspects: (
+			query: {
+				/** @format uuid */
+				cityId: string;
+				/**
+				 * The last month of the window; the last whole month by default
+				 * @pattern ^[0-9]{4}-[0-9]{2}$
+				 */
+				month?: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetAspectsData, any>({
+				path: `/admin/aspects`,
 				method: 'GET',
 				query: query,
 				format: 'json',
@@ -13813,10 +13927,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description A new topic; 409 when its key exists. Its `aliases` become admin terms linked to it.
+		 * @description A new topic; 409 when its key exists.
 		 *
 		 * @name CreateTopic
-		 * @summary A new topic; 409 when its key exists. Its `aliases` become admin terms linked to it
+		 * @summary A new topic; 409 when its key exists
 		 * @request POST:/admin/topics
 		 * @response `201` `CreateTopicData`
 		 */
@@ -13831,7 +13945,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions, menu items, then every city's venue tags). A topic or alias change queues it on its own; this is for a first fill or after a change made outside the admin.
+		 * @description Queues the re-link of everything stored against food topics (`TopicRelinkJob`: mentions, menu items, then every city's venue tags). A topic change queues it on its own; this is for a first fill or after a change made outside the admin.
 		 *
 		 * @name RelinkTopics
 		 * @request POST:/admin/topics/relink
@@ -13872,10 +13986,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Changes the fields given; `aliases` are the topic's other names (admin terms linked to it alone).
+		 * @description Changes the fields given; the key stays. Its wordings are terms (`PATCH /admin/terms/:id`).
 		 *
 		 * @name UpdateTopic
-		 * @summary Changes the fields given; `aliases` are the topic's other names (admin terms linked to it alone)
+		 * @summary Changes the fields given; the key stays. Its wordings are terms (`PATCH /admin/terms/:id`)
 		 * @request PATCH:/admin/topics/{id}
 		 * @response `200` `UpdateTopicData`
 		 */

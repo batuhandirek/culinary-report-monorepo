@@ -242,7 +242,6 @@ describe('TermService (pglite)', () => {
 		);
 	};
 	const termId = async (key: string) => (await em().fork().findOneOrFail(Term, { key })).id;
-	const aliasesOf = async (t: Topic) => (await service().aliasesOf([t.id])).get(t.id)!;
 
 	it("stores each wording once — a statement's as first spelled, a tag as Google writes it — decided by a name match where it is a topic as a whole, the rest waiting", async () => {
 		const index = await topicService().index();
@@ -514,8 +513,8 @@ describe('TermService (pglite)', () => {
 			key: 'nudelsalat',
 			name: 'nudelsalat',
 			topics: [
-				{ key: 'pasta', label: 'Pasta', kind: 'dish' },
-				{ key: 'italian', label: 'Italian', kind: 'cuisine' },
+				{ key: 'pasta', label: 'Pasta', kind: 'dish', relation: 'same' },
+				{ key: 'italian', label: 'Italian', kind: 'cuisine', relation: 'same' },
 			],
 			decidedBy: 'admin',
 		});
@@ -649,81 +648,41 @@ describe('TermService (pglite)', () => {
 		);
 	});
 
-	it("keeps a topic's other names as admin terms linked to it alone: new ones created, another topic's refused, dropped ones reopened", async () => {
-		const kebab = await topic('kebab');
-		expect(await aliasesOf(kebab)).toEqual([
-			'adana',
-			'durum',
-			'gemuse kebab',
-			'iskender',
-			'shish kebab',
-		]);
-
-		// Trimmed and once; the topic's own key dropped
-		await service().setAliases(kebab, [
-			' Dönerbox ',
-			'dönerbox',
-			'kebab',
-			...(await aliasesOf(kebab)),
-		]);
-		expect([...(await aliasesOf(kebab))].sort()).toEqual(
-			['Dönerbox', 'adana', 'durum', 'gemuse kebab', 'iskender', 'shish kebab'].sort(),
-		);
-		expect(await decisions(['donerbox'])).toEqual({ donerbox: [['kebab'], 'admin', null] });
-		expect((await topicService().index()).exactAll('Dönerbox')).toEqual(['kebab']);
-
-		// One admin's word stands: a name that is another topic's admin term is refused
-		const pasta = await topic('pasta');
-		await expect(service().setAliases(pasta, ['Durum'])).rejects.toThrow(BadRequestException);
-		await expect(service().setAliases(pasta, ['Durum'])).rejects.toThrow(
-			'"Durum" already means "Döner & kebab"',
-		);
-		// An admin term of two topics ("nudelsalat": pasta, italian) is no alias of either
-		expect(await aliasesOf(pasta)).toEqual([]);
-		expect((await service().aliasesOf([])).size).toBe(0);
-
-		// A name not listed any more is reopened, never deleted ("Dönerbox" stays a term, pending: a food part may point at it)
-		await service().setAliases(kebab, [
-			'adana',
-			'durum',
-			'iskender',
-			'shish kebab',
-			'gemuse kebab',
-		]);
-		expect(await aliasesOf(kebab)).toEqual([
-			'adana',
-			'durum',
-			'gemuse kebab',
-			'iskender',
-			'shish kebab',
-		]);
-		expect(await decisions(['donerbox'])).toEqual({ donerbox: [[], null, null] });
-		expect((await terms()).get('durum')).toMatchObject({
-			name: 'durum',
-			topics: ['kebab'],
-			decidedBy: 'admin',
-		});
-	});
-
-	it("lets an admin keep one of a wording's current topics, and make a decided wording a topic's other name", async () => {
+	it("lets an admin keep one of a wording's current topics, each link it keeps keeping its relation, and decide a wording the agent decided", async () => {
 		// The agent's "vegan döner" is kebab and vegan; the admin narrows it to kebab (the Terms tab's edit)
 		const veganDoner = await termId('vegan doner');
+		const relationOf = async (topicKey: string) =>
+			(
+				await harness.orm.em
+					.fork()
+					.getConnection()
+					.execute<{ relation: string }[]>(
+						`select tt.relation from term_topics tt join topics t on t.id = tt.topic_id
+						where tt.term_id = ? and t.key = ?`,
+						[veganDoner, topicKey],
+					)
+			)[0]?.relation;
+		await service().change(veganDoner, {
+			topicKeys: ['kebab', 'vegan'],
+			relations: { kebab: 'kind_of', vegan: 'with' },
+		});
+		expect([await relationOf('kebab'), await relationOf('vegan')]).toEqual(['kind_of', 'with']);
+		// Unlinking one keeps the other's relation; a topic added without one is `same`
 		expect(await service().change(veganDoner, { topicKeys: ['kebab'] })).toMatchObject({
 			decidedBy: 'admin',
 		});
+		expect(await relationOf('kebab')).toBe('kind_of');
 		expect(await decisions(['vegan doner'])).toEqual({
 			'vegan doner': [['kebab'], 'admin', null],
 		});
 		expect((await topicService().index()).exactAll('vegan döner')).toEqual(['kebab']);
 		expect((await topicsOfParts())['vegan doner']).toEqual(['kebab']);
 
-		// A wording the agent decided pasta becomes the admin's other name of pasta
-		const pasta = await topic('pasta');
-		await service().setAliases(pasta, [...(await aliasesOf(pasta)), 'Spaghettiiiossso']);
+		// A wording the agent decided pasta becomes the admin's: final, the same thing
+		await service().change(await termId('spaghettiiiossso'), { topicKeys: ['pasta'] });
 		expect(await decisions(['spaghettiiiossso'])).toEqual({
 			spaghettiiiossso: [['pasta'], 'admin', null],
 		});
-		expect(await aliasesOf(pasta)).toEqual(['Spaghettiiiossso']);
 	});
 
 	it('asks the agent again about a wording whose linked aspect an admin deleted', async () => {

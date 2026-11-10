@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { Plus } from '@lucide/svelte';
-
 	import SearchInterestPanel from './components/SearchInterestPanel.svelte';
 	import TrendsClaimsTab from './components/TrendsClaimsTab.svelte';
 	import TrendsPostsTab from './components/TrendsPostsTab.svelte';
@@ -13,21 +11,17 @@
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
-	import TopicFormDialog from '#components/admin/topics/TopicFormDialog.svelte';
 	import { findAdminMenu } from '#constants/ADMIN_MENUS.js';
 	import { cityItems } from '#lib/admin-cities.js';
-	import { api } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
-	import { topicHref } from '#lib/topic-format.js';
-	import { type TopicOption, toTopicOption } from '#lib/topic-kinds.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
-	import Button from '#ui/wrapped/Button.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
 	// What the city eats and talks about. Topics first: each kind of food with its venues (supply),
 	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, every claim the month was split into, the aspects the tree lacks (its claims no aspect fits, grouped by meaning), searches,
 	// openings and closures, and the terms (every wording reviews, posts, Google's tags and
-	// categories use, linked to its topics).
+	// categories use, linked to its topics). Topics and aspects are edited on their own pages
+	// (`/admin/topics`, `/admin/aspects`).
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
 	const cityId = $derived(
@@ -52,26 +46,6 @@
 		{ value: 'terms', label: 'Terms' }
 	];
 	let tab = $state('topics');
-
-	let dialogOpen = $state(false);
-	let newLabel = $state('');
-	let newKind = $state<string>('cuisine');
-	let newParent = $state<string | undefined>(undefined);
-	let newHint = $state('');
-	let version = $state(0);
-	// Every topic, as the new one's possible parents (its own side of the tree)
-	let topics = $state<TopicOption[]>([]);
-	const newTopic = async (label = '', kind: string = 'cuisine', parent?: string, hint = '') => {
-		newLabel = label;
-		newKind = kind;
-		newParent = parent;
-		newHint = hint;
-		dialogOpen = true;
-		if (!topics.length && cityId) {
-			const res = await api.admin.getTopics({ cityId });
-			topics = res.topics.map(toTopicOption);
-		}
-	};
 </script>
 
 <AdminPageHeader description={findAdminMenu(page.url.pathname)?.description}>
@@ -85,7 +59,6 @@
 			<div class="w-44">
 				<Select items={MONTHS} value={month} aria-label="Month" size="sm" onValueChange={(v) => setParam('month', v === lastMonth() ? undefined : v)} />
 			</div>
-			<Button size="sm" icon={Plus} onclick={() => newTopic()}>New topic</Button>
 		</div>
 	{/snippet}
 </AdminPageHeader>
@@ -95,7 +68,7 @@
 	{#if cityId}
 		{#key `${tab}:${cityId}:${month}`}
 			{#if tab === 'topics'}
-				<TrendsTopicsTab {cityId} {month} {version} />
+				<TrendsTopicsTab {cityId} {month} />
 			{:else if tab === 'posts'}
 				<TrendsPostsTab {cityId} {month} />
 			{:else if tab === 'themes'}
@@ -107,20 +80,8 @@
 			{:else if tab === 'openings'}
 				<div class="pb-12"><VenueOpeningsPanel {cityId} {month} /></div>
 			{:else if tab === 'terms'}
-				<TrendsTermsTab {cityId} {version} onNewTopic={newTopic} />
+				<TrendsTermsTab {cityId} />
 			{/if}
 		{/key}
 	{/if}
 </div>
-
-<TopicFormDialog
-	bind:active={dialogOpen}
-	label={newLabel}
-	kind={newKind}
-	parent={newParent}
-	aspectHint={newHint}
-	{topics}
-	onSaved={(saved) => {
-		version++;
-		goto(topicHref(saved.key));
-	}} />

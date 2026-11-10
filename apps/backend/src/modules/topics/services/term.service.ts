@@ -47,7 +47,7 @@ export interface TermListRow {
 	id: number;
 	key: string;
 	name: string;
-	topics: { key: string; label: string; kind: string }[];
+	topics: { key: string; label: string; kind: string; relation: TermRelation }[];
 	decidedBy?: TermDecider;
 	suggestion?: string;
 	/** The city's statements naming it (food parts) */
@@ -69,8 +69,13 @@ export interface TermList {
 	total: number;
 }
 
-/** An admin's decision on a term: the topics it is (empty = none), or back to the name match and the agent */
-export type TermChange = { topicKeys: string[] } | { auto: true };
+/**
+ * An admin's decision on a term: the topics it is (empty = none), each with its relation from
+ * `relations`, else the relation its link has now, else `same`; or back to the name match and the agent
+ */
+export type TermChange =
+	| { topicKeys: string[]; relations?: Partial<Record<string, TermRelation>> }
+	| { auto: true };
 
 /**
  * Every wording ever seen (`Term`) and the topics each is (`TermTopic`): the one writer of both. A
@@ -441,7 +446,12 @@ export class TermService implements OnModuleInit {
 			topics: t.topics
 				.getItems()
 				.filter(l => !l.topic.deletedAt)
-				.map(l => ({ key: l.topic.key, label: l.topic.label, kind: l.topic.kind })),
+				.map(l => ({
+					key: l.topic.key,
+					label: l.topic.label,
+					kind: l.topic.kind,
+					relation: l.relation,
+				})),
 			decidedBy: t.decidedBy ?? undefined,
 			suggestion: t.suggestion ?? undefined,
 			notes: notes.get(t.key) ?? 0,
@@ -520,98 +530,27 @@ export class TermService implements OnModuleInit {
 		} else {
 			const unknown = change.topicKeys.find(k => !index.get(k));
 			if (unknown) throw new BadRequestException(`No topic "${unknown}"`);
-			this.setLinks(term, _.uniq(change.topicKeys).slice(0, MAX_LINKS), index, 'admin', now);
+			// Unlinking one topic must not flatten the others: a link kept keeps its relation
+			const current = new Map(term.topics.getItems().map(l => [l.topic.key, l.relation]));
+			const relations = new Map<string, TermRelation>(
+				change.topicKeys.map(k => [k, change.relations?.[k] ?? current.get(k) ?? 'same']),
+			);
+			this.setLinks(
+				term,
+				_.uniq(change.topicKeys).slice(0, MAX_LINKS),
+				index,
+				'admin',
+				now,
+				relations,
+			);
 			term.suggestion = null;
 		}
 		await this.em.flush();
+		// What resolves text through the index (mention cuisines, menus, hashtags, venue tags) learns
+		// the decision from the re-link; statements read the links at once
+		await this.topicService.queueRelink();
 		await this.em.populate(term, ['topics', 'topics.topic'], { refresh: true });
 		return term;
-	}
-
-	/**
-	 * A topic's other names as an admin keeps them (its "aliases"): the admin terms linked to it
-	 * alone, by topic id.
-	 */
-	async aliasesOf(topicIds: string[]): Promise<Map<string, string[]>> {
-		const out = new Map<string, string[]>(topicIds.map(id => [id, []]));
-		if (!topicIds.length) return out;
-		const rows: { topic_id: string; name: string }[] = await this.em.getConnection().execute(
-			`select tt.topic_id, t.name from terms t join term_topics tt on tt.term_id = t.id
-			where t.decided_by = 'admin' and tt.topic_id in (${topicIds.map(() => '?').join(', ')})
-				and (select count(*) from term_topics x where x.term_id = t.id) = 1
-			order by t.name`,
-			topicIds,
-		);
-		for (const r of rows) out.get(r.topic_id)!.push(r.name);
-		return out;
-	}
-
-	/**
-	 * Sets a topic's other names: each becomes an admin term linked to the topic alone (a wording
-	 * already an admin's for another topic is refused, 400, since one admin's word stands); an admin
-	 * name of the topic not listed any more is reopened, not deleted (a term is never deleted: the
-	 * statements' food parts point at it): its link goes and the match and the agent decide it again.
-	 * A name that is the topic's own key is dropped. Flushes.
-	 */
-	async setAliases(topic: Topic, names: string[]): Promise<void> {
-		const wanted = new Map<string, string>();
-		for (const raw of names) {
-			const name = raw.trim();
-			const key = termKey(name);
-			if (!name || !key || normalizeCuisine(name) === topic.key) continue;
-			if (!wanted.has(key)) wanted.set(key, name);
-		}
-		const current = await this.em.find(
-			Term,
-			{ decidedBy: 'admin', topics: { topic } },
-			{ populate: ['topics', 'topics.topic'] },
-		);
-		const index = await this.topicService.index();
-		const bare = this.bare(index);
-		const now = new Date();
-		for (const term of current) {
-			const alone = term.topics.count() === 1;
-			if (alone && !wanted.has(term.key)) {
-				const matched = this.matchKeys(bare, term);
-				this.setLinks(
-					term,
-					matched,
-					index,
-					matched.length ? 'match' : null,
-					matched.length ? now : null,
-				);
-			}
-		}
-		// A wording that is another topic's key or label as a whole stays that topic's ("Döner" is never ramen's other name)
-		for (const [, name] of wanted) {
-			const taken = bare.exactAll(name).filter(k => k !== topic.key);
-			if (taken.length)
-				throw new BadRequestException(`"${name}" already means "${index.label(taken[0])}"`);
-		}
-		const existing =
-			wanted.size ?
-				await this.em.find(
-					Term,
-					{ key: { $in: [...wanted.keys()] } },
-					{ populate: ['topics', 'topics.topic'] },
-				)
-			:	[];
-		const byKey = new Map(existing.map(t => [t.key, t]));
-		for (const [key, name] of wanted) {
-			const term = byKey.get(key);
-			if (term?.decidedBy === 'admin') {
-				const others = term.topics.getItems().filter(l => l.topic.id !== topic.id);
-				if (others.length)
-					throw new BadRequestException(
-						`"${name}" already means "${others[0].topic.label}"`,
-					);
-				continue;
-			}
-			const row = term ?? this.em.create(Term, { key, name });
-			this.setLinks(row, [topic.key], index, 'admin', now);
-			row.suggestion = null;
-		}
-		await this.em.flush();
 	}
 
 	/** The topics alone (their keys and labels), for a name match: a wording never matches itself or another term */

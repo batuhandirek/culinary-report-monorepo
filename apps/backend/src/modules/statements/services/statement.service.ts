@@ -294,39 +294,58 @@ export class StatementService {
 		else if (query.parts === 'no_aspect') and.push({ parts: { $none: { role: 'aspect' } } });
 		else if (query.parts === 'food') and.push({ parts: { $some: { role: 'food' } } });
 		const like = query.like?.trim();
+		const offset = query.offset ?? 0;
+		const limit = query.limit ?? 50;
 		if (!like) {
-			const [items, total] = await this.em.findAndCount(
+			const [page, total] = await this.em.findAndCount(
 				Statement,
 				{ $and: [where, ...and] },
 				{
-					populate: [...STATEMENT_PARTS_POPULATE, ...STATEMENT_SOURCE_POPULATE],
+					fields: ['id'],
 					orderBy: { saidAt: QueryOrder.DESC, id: QueryOrder.DESC },
-					offset: query.offset ?? 0,
-					limit: query.limit ?? 50,
+					offset,
+					limit,
 				},
 			);
-			return { total, items };
+			return { total, items: await this.loadPage(page.map(s => s.id)) };
 		}
 		const vector = toVectorLiteral(await this.statementEmbeddingService.phraseVector(like));
 		const distance = raw(
 			alias => `${alias}.embedding <=> ?::halfvec(${STATEMENT_EMBEDDING_DIMENSIONS})`,
 			[vector],
 		);
-		const [items, total] = await this.em.findAndCount(
+		const [page, total] = await this.em.findAndCount(
 			Statement,
 			{ $and: [where, ...and, { embeddedAt: { $ne: null } }] },
 			{
-				populate: [...STATEMENT_PARTS_POPULATE, ...STATEMENT_SOURCE_POPULATE],
+				fields: ['id'],
 				// A raw key goes in its own object: MikroORM refuses one mixed with fields
 				orderBy: [{ [distance]: QueryOrder.ASC }, { id: QueryOrder.DESC }],
-				offset: query.offset ?? 0,
-				limit: query.limit ?? 50,
+				offset,
+				limit,
 			},
 		);
+		const items = await this.loadPage(page.map(s => s.id));
 		const notEmbedded = await this.em.count(Statement, {
 			$and: [where, ...and, { text: { $ne: null }, embeddedAt: null }],
 		});
 		return { total, items, notEmbedded };
+	}
+
+	/**
+	 * A page's claims with their parts and sources, in the order of `ids`. The page is picked by
+	 * ids first: one query joining every source table over a whole city's claims before its limit
+	 * ran as a parallel hash join that outgrew Postgres' shared memory (Docker's 64 MB).
+	 */
+	private async loadPage(ids: number[]): Promise<Statement[]> {
+		if (!ids.length) return [];
+		const rows = await this.em.find(
+			Statement,
+			{ id: { $in: ids } },
+			{ populate: [...STATEMENT_PARTS_POPULATE, ...STATEMENT_SOURCE_POPULATE] },
+		);
+		const byId = new Map(rows.map(r => [r.id, r]));
+		return ids.map(id => byId.get(id)).filter(s => s !== undefined) as Statement[];
 	}
 
 	/** How a scope's claims (a city's, a brand's, a branch's; a month or all) were split and read, whatever a list filters */

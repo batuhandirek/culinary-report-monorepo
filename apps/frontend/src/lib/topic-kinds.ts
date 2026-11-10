@@ -21,17 +21,17 @@ export const isSearchedKind = (kind: string) => kind !== 'ingredient' && kind !=
 /** An aspect against the kinds of food: the two sides of the topic tree never mix */
 export const isAspectKind = (kind: string) => kind === 'aspect';
 
-/** A topic as the form dialog's parent picker and delete rule read it (`AdminTopicOutputDto` cut down) */
-export interface TopicOption {
-	key: string;
-	label: string;
-	kind: string;
-	parentKey?: string;
-}
+/** The kinds of food, without the aspects: what the Topics pages list and a food topic's type picker offers */
+export const FOOD_KIND_ITEMS = KIND_ITEMS.filter((k) => k.value !== 'aspect');
 
-export const toTopicOption = (t: TopicOption): TopicOption => ({
-	key: t.key,
-	label: t.label,
-	kind: t.kind,
-	...(t.parentKey && { parentKey: t.parentKey })
-});
+/** How strongly a wording is a topic (`TermTopic.relation`) */
+export const RELATION_ITEMS = [
+	{ value: 'same', label: 'Same', hint: 'A spelling or a translation: "Pommes" is Fries' },
+	{ value: 'kind_of', label: 'Kind of', hint: 'A finer kind: "garlic parmesan fries" is a kind of Fries' },
+	{ value: 'with', label: 'With', hint: 'An attribute or an ingredient: "vegan döner" is with Vegan' }
+] as const;
+
+export const relationLabel = (relation: string) => RELATION_ITEMS.find((r) => r.value === relation)?.label ?? relation;
+
+/** Who decided a wording's topics */
+export const DECIDED_LABELS: Record<string, string> = { match: 'name match', ai: 'AI', admin: 'admin' };

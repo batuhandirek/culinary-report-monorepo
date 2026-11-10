@@ -27,7 +27,7 @@ export enum TopicKindEnum {
  * One thing people talk about, in every city, in one tree: a kind of food (what a mention's cuisine
  * or a Google category resolves to (`TopicIndex`), and what Google Trends is searched for) or an
  * aspect (what a praise or complaint point is about). A food topic's `key` is a `normalizeCuisine`
- * key; its other names are terms linked to it (`Term`, an admin's "aliases" among them); an
+ * key; its other names are terms linked to it (`Term`); an
  * aspect's key is a snake_case code key (`wait_for_food`), never in the cuisine lookup, and its
  * `hint` is what the agents are told it covers. A child counts for its parent too (ramen for Japanese, a queue for
  * Waiting). Google Trends searches the topic id when set (language independent, one meaning), else
