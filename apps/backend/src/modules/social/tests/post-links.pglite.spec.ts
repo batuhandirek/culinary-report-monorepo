@@ -8,8 +8,6 @@ import { CitySourceKindEnum } from 'src/modules/cities/entities/city-source.enti
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
-import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
-import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -239,23 +237,16 @@ describe('Post sources and hashtags (pglite)', () => {
 		const list = await social.listPosts({ page: 1, size: 10, hashtag: '#linktest' });
 		expect(list.items.map(p => p.externalId)).toEqual([tagged.externalId]);
 
-		// A mention's stored food topics come with the post's page
+		// A mention's claims come with the post's page, each food wording with its topics
 		const post = await em.findOneOrFail(SocialPost, { externalId: tagged.externalId });
 		const mention = em.create(Mention, {
 			post,
 			venue: venues['Kiez Kebab'],
 			venueName: 'Kiez Kebab',
 			matchMethod: MentionMatchMethodEnum.EXACT,
-			cuisine: 'Burgers',
 			visited: true,
 		});
 		await em.flush();
-		em.create(MentionTopic, {
-			mention,
-			topic: await em.findOneOrFail(Topic, { key: 'burgers' }),
-			source: 'cuisine',
-			rank: 0,
-		});
 		// A claim naming a dish: the wording's topic comes with its parent, which the DTO types
 		// and a claim about the city, which no mention holds: the page lists it on its own
 		addStatements(
@@ -274,13 +265,7 @@ describe('Post sources and hashtags (pglite)', () => {
 		await em.flush();
 		em.clear();
 		const page = await social.getPost(post.id);
-		expect(page.mentions[0].topics).toEqual([
-			expect.objectContaining({
-				source: 'cuisine',
-				topic: expect.objectContaining({ key: 'burgers', label: 'Burgers' }),
-			}),
-		]);
-		expect(page.mentions[0].statements[0].parts[0].term?.topics[0].topic).toMatchObject({
+		expect(page.mentions[0].statements[0].parts[0].term?.topic).toMatchObject({
 			key: 'pasta',
 			parent: { key: 'italian', label: 'Italian' },
 		});

@@ -88,7 +88,6 @@ interface Answer {
 const place = (venueName: string, extra: Partial<Record<string, unknown>> = {}) => ({
 	venueName,
 	locationHint: null,
-	cuisine: null,
 	city: 'Berlin',
 	visited: true,
 	isNewOpening: false,
@@ -315,9 +314,10 @@ describe('MentionExtractionService.reread (pglite)', () => {
 		expect(await service().countToReread(BEFORE)).toBe(0);
 		const [, context] = postAgent.generate.mock.calls[0] as unknown as [
 			string,
-			{ cityName: string; topics: string[] },
+			Record<string, unknown>,
 		];
-		expect([context.cityName, context.topics.length > 0]).toEqual(['Berlin', true]);
+		// The city alone: agent A is told no topic list
+		expect(context).toEqual({ cityName: 'Berlin' });
 
 		em().clear();
 		// The new place is a mention of its own, unmatched until the next matching run, with its claim

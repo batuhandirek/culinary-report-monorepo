@@ -19,7 +19,7 @@ export const said = (index: TopicIndex, claims: TestClaim[]): StatementLike[] =>
 		if (claim.aspect) {
 			const topic = index.get(claim.aspect);
 			if (!topic || !index.isAspect(claim.aspect)) throw new Error(`No aspect "${claim.aspect}" in the index`);
-			const parent = topic.parentKey ? index.get(topic.parentKey) : undefined;
+			const parent = topic.isA.length ? index.get(topic.isA[0]) : undefined;
 			parts.push({
 				role: 'aspect',
 				topic: { key: topic.key, label: topic.label, parent: parent ? { key: parent.key, label: parent.label } : null },
@@ -33,10 +33,7 @@ export const said = (index: TopicIndex, claims: TestClaim[]): StatementLike[] =>
 				term: {
 					key,
 					name: name.trim(),
-					topics: index
-						.exactAll(name)
-						.filter(k => !index.isAspect(k))
-						.map(k => ({ topic: { key: k, label: index.label(k) } })),
+					...foodTopics(index, name),
 				},
 			});
 		}
@@ -50,3 +47,12 @@ export const said = (index: TopicIndex, claims: TestClaim[]): StatementLike[] =>
 			parts,
 		};
 	});
+
+/** A wording's main topic and modifiers as the index knows it as a whole (kinds of food only) */
+const foodTopics = (index: TopicIndex, name: string) => {
+	const [first, ...rest] = index
+		.exactAll(name)
+		.filter(k => !index.isAspect(k))
+		.map(k => ({ key: k, label: index.label(k) }));
+	return { topic: first ?? null, modifiers: rest.map(topic => ({ topic })) };
+};

@@ -141,7 +141,7 @@ export class TopicInsightService {
 		const data = await this.cityData(cityId, month);
 		const topic = data.topics.find(t => t.key === key);
 		if (!topic) throw new NotFoundException(`No topic "${key}"`);
-		const parentKey = data.index.get(key)?.parentKey;
+		const parentKey = data.index.parentOf(key);
 		const related = await this.em.find(
 			TrendRelatedQuery,
 			{ city: cityId, kind: SearchTermKindEnum.TOPIC, term: key, month },
@@ -179,7 +179,7 @@ export class TopicInsightService {
 			}),
 			row: this.row(topic, data),
 			children: byBuzz(
-				data.topics.filter(t => t.parent?.id === topic.id).map(t => this.row(t, data)),
+				data.topics.filter(t => isKindOf(t, topic)).map(t => this.row(t, data)),
 			),
 			months: data.months,
 			postsByMonth: data.months.map(m => data.counts.byTopic.get(key)?.get(m) ?? 0),
@@ -208,13 +208,13 @@ export class TopicInsightService {
 			const primary = tags.find(t => t.primary);
 			if (primary && index.withParents([primary.key]).includes(topic.key)) primaryVenues++;
 		}
-		const parentKey = index.get(topic.key)?.parentKey;
+		const parentKey = index.parentOf(topic.key);
 		return {
 			key: topic.key,
 			label: topic.label,
 			kind: topic.kind,
 			...(parentKey && { parentKey }),
-			children: data.topics.filter(t => t.parent?.id === topic.id).length,
+			children: data.topics.filter(t => isKindOf(t, topic)).length,
 			venues,
 			primaryVenues,
 			posts: counts.byTopic.get(topic.key)?.get(months[last]) ?? 0,
@@ -266,3 +266,7 @@ export class TopicInsightService {
 		};
 	}
 }
+
+/** `topic` is a kind of `of` (an `is_a` edge, one step): its row under it in a tree. `edges` must be loaded */
+const isKindOf = (topic: Topic, of: Topic): boolean =>
+	topic.edges.getItems().some(e => e.type === 'is_a' && e.to.id === of.id);

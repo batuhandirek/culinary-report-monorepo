@@ -2,10 +2,12 @@ import type { EntityManager } from '@mikro-orm/postgresql';
 
 import type { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
-import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
+import { defaultEdgeType } from 'src/modules/topics/constants/topic-edge.constant.js';
+import { TermModifier } from 'src/modules/topics/entities/term-modifier.entity.js';
 import { Topic } from 'src/modules/topics/entities/topic.entity.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import type { Review } from 'src/modules/venues/entities/review.entity.js';
+import { seedIndex } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
 
 import type { StatementKind } from '../../constants/kind.constant.js';
@@ -109,7 +111,8 @@ const created = new WeakMap<EntityManager, Map<string, Term>>();
 /**
  * The term of a wording for a test: the one already in the unit of work (created here, or loaded
  * before), else a new one, decided by a name match when the index knows the wording as a whole
- * (every topic it is), so a food part gets its topics without the backlog.
+ * (its first topic its main one, exact when the wording is that topic; the rest its modifiers), so
+ * a food part gets its topics without the backlog.
  */
 export const ensureTerm = (
 	em: EntityManager,
@@ -130,11 +133,20 @@ export const ensureTerm = (
 	if (known) return known;
 	const term = em.create(Term, { key, name: name.trim() });
 	const keys = index.exactAll(name).filter(k => !index.isAspect(k));
-	keys.forEach((topicKey, rank) => {
-		const id = index.get(topicKey)?.id;
-		if (id)
-			term.topics.add(
-				em.create(TermTopic, { term, topic: em.getReference(Topic, id), rank }),
+	keys.forEach((topicKey, i) => {
+		const topic = index.get(topicKey);
+		if (!topic?.id) return;
+		if (i === 0) {
+			term.topic = em.getReference(Topic, topic.id);
+			term.exact = index.exact(name) === topicKey;
+		} else
+			term.modifiers.add(
+				em.create(TermModifier, {
+					term,
+					topic: em.getReference(Topic, topic.id),
+					type: defaultEdgeType(topic.kind),
+					rank: i - 1,
+				}),
 			);
 	});
 	if (keys.length) {
@@ -143,4 +155,82 @@ export const ensureTerm = (
 	}
 	map.set(key, term);
 	return term;
+};
+
+/** The seed's index (its keys, labels and `TEST_ALIASES`), built once: what `addFoods` resolves wordings with */
+let seededIndex: TopicIndex | undefined;
+
+/**
+ * Gives a mention one claim naming `foods`, as agent A, the labeller and agent C would leave it:
+ * each wording a term linked to the seeded topics it names (`seedIndex`: as a whole by a key, a
+ * label or a `TEST_ALIASES` name, else by its known words, "Vegan Döner" → vegan, kebab), the
+ * first its main topic, the rest its modifiers; a wording naming none stays undecided; no foods,
+ * no claim. What a spec counting mentions by kind of food seeds. The topics must be in the unit of work (`seedTopics`).
+ * Persisted with the next flush.
+ */
+export const addFoods = (
+	em: EntityManager,
+	mention: Mention,
+	foods: string[],
+): Statement | undefined => {
+	if (!foods.length) return undefined;
+	seededIndex ??= seedIndex();
+	const index = seededIndex;
+	// Flushed or not: what the unit of work holds
+	const uow = em.getUnitOfWork();
+	const held = [...uow.getIdentityMap().values(), ...uow.getPersistStack()];
+	const topics = new Map(
+		held.filter((e): e is Topic => e instanceof Topic).map(t => [t.key, t]),
+	);
+	const saidAt = mention.post.postedAt;
+	const statement = em.create(Statement, {
+		sourceKind: 'post',
+		post: mention.post,
+		mention,
+		city: mention.post.city,
+		subject: 'place',
+		month: monthOf(saidAt),
+		saidAt,
+		text: `had the ${foods.join(' and ')}`,
+		sentiment: 'positive',
+		partsAt: new Date(),
+	});
+	const map = created.get(em) ?? new Map<string, Term>();
+	created.set(em, map);
+	foods.forEach((name, rank) => {
+		const key = termKey(name);
+		if (!key) return;
+		// One row a wording: the factory's, else one in the unit of work (a seeded alias)
+		let term =
+			map.get(key) ?? held.find((e): e is Term => e instanceof Term && e.key === key);
+		if (!term) {
+			term = em.create(Term, { key, name: name.trim() });
+			const whole = index.exactAll(name);
+			const keys = (whole.length ? whole : index.resolve(name)).filter(
+				k => !index.isAspect(k) && topics.has(k),
+			);
+			keys.forEach((topicKey, i) => {
+				const topic = topics.get(topicKey)!;
+				if (i === 0) {
+					term!.topic = topic;
+					term!.exact = index.exact(name) === topicKey;
+				} else
+					term!.modifiers.add(
+						em.create(TermModifier, {
+							term: term!,
+							topic,
+							type: defaultEdgeType(topic.kind),
+							rank: i - 1,
+						}),
+					);
+			});
+			if (keys.length) {
+				term.decidedBy = 'match';
+				term.decidedAt = new Date();
+			}
+			map.set(key, term);
+		}
+		statement.parts.add(em.create(StatementPart, { statement, role: 'food', term, rank }));
+	});
+	return statement;
 };

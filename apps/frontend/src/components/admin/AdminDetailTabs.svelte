@@ -8,10 +8,16 @@
 		disabled?: boolean;
 		/** Why it is disabled, as a tooltip. */
 		disabledReason?: string;
+		/** Drawn before the label */
+		icon?: Component;
+		/** Reachable by its URL (or a key elsewhere on the page) but not drawn in the row */
+		hidden?: boolean;
 	}
 </script>
 
 <script lang="ts">
+	import type { Component, Snippet } from 'svelte';
+
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { cn } from '#ui/lib/utils.js';
@@ -37,6 +43,10 @@
 		 * second level and nothing for the first.
 		 */
 		keeps?: string[];
+		/** The detail pages' compact row: 13px labels, counts in Onest */
+		dense?: boolean;
+		/** Right of the row, on the hairline: the tab's scope, when it was updated */
+		end?: Snippet;
 		class?: string;
 	}
 
@@ -46,8 +56,12 @@
 		param = 'tab',
 		variant = 'underline',
 		keeps,
+		dense = false,
+		end,
 		class: className = ''
 	}: Props = $props();
+
+	const drawn = $derived(tabs.filter((tab) => !tab.hidden));
 
 	const usable = $derived(tabs.filter((tab) => !tab.disabled));
 	const fallback = $derived(usable[0]?.value ?? '');
@@ -78,7 +92,7 @@
 	{#if tab.count !== undefined}
 		<span
 			class={cn(
-				'eyebrow tabular-nums',
+				dense ? 'text-[11px] font-semibold tabular-nums' : 'eyebrow tabular-nums',
 				variant === 'pills'
 					? 'opacity-70'
 					: tab.count > 0
@@ -91,7 +105,7 @@
 {#if variant === 'pills'}
 	<Tabs.Root value={fromUrl} onValueChange={select} class={cn('min-w-0', className)}>
 		<Tabs.List>
-			{#each tabs as tab (tab.value)}
+			{#each drawn as tab (tab.value)}
 				<Tabs.Trigger
 					value={tab.value}
 					disabled={tab.disabled}
@@ -104,16 +118,25 @@
 	</Tabs.Root>
 {:else}
 	<UnderlineTabs.Root value={fromUrl} onValueChange={select} class={cn('min-w-0', className)}>
-		<UnderlineTabs.List>
-			{#each tabs as tab (tab.value)}
-				<UnderlineTabs.Trigger
-					value={tab.value}
-					disabled={tab.disabled}
-					title={tab.disabled ? tab.disabledReason : undefined}>
-					{tab.label}
-					{@render count(tab)}
-				</UnderlineTabs.Trigger>
-			{/each}
-		</UnderlineTabs.List>
+		<div class={cn('flex min-w-0 items-end gap-3', dense && 'border-line border-b')}>
+			<UnderlineTabs.List class={cn('w-auto min-w-0 flex-1', dense && 'gap-0.5 border-b-0')}>
+				{#each drawn as tab (tab.value)}
+					<UnderlineTabs.Trigger
+						value={tab.value}
+						disabled={tab.disabled}
+						title={tab.disabled ? tab.disabledReason : undefined}
+						class={dense
+							? 'mb-0 h-[33px] gap-1.5 border-b-2 px-2.5 text-[13px] font-medium data-[state=active]:font-medium [&_svg:not([class*=size-])]:size-3.5'
+							: undefined}>
+						{#if tab.icon}<tab.icon strokeWidth={1.8} />{/if}
+						{tab.label}
+						{@render count(tab)}
+					</UnderlineTabs.Trigger>
+				{/each}
+			</UnderlineTabs.List>
+			{#if end}
+				<div class="text-muted-foreground flex shrink-0 items-center gap-2 pb-1 text-[11.5px]">{@render end()}</div>
+			{/if}
+		</div>
 	</UnderlineTabs.Root>
 {/if}

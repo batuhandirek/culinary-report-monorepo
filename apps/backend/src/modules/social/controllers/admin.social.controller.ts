@@ -15,7 +15,7 @@ import {
 	STATEMENT_PARTS_POPULATE,
 	STATEMENT_POPULATE,
 } from 'src/modules/statements/util/statement-populate.js';
-import { monthRange } from 'src/modules/venues/util/month.js';
+import { dayRange, monthRange } from 'src/modules/venues/util/month.js';
 
 import { AdminUpdateMentionInputDto } from '../dto/admin-mention.input.dto.js';
 import {
@@ -38,8 +38,9 @@ const MENTION_POPULATE = [
 	'mentions',
 	'mentions.venue',
 	'mentions.brand',
-	'mentions.statements.parts.topic.parent',
-	'mentions.statements.parts.term.topics.topic.parent',
+	'mentions.statements.parts.topic.edges.to',
+	'mentions.statements.parts.term.topic.edges.to',
+	'mentions.statements.parts.term.modifiers.topic',
 	'account',
 	'account.creator',
 	'account.brand',
@@ -50,8 +51,6 @@ const MENTION_POPULATE = [
 // A post's page also lists its hashtags with what they name
 const POST_POPULATE = [
 	...MENTION_POPULATE,
-	'mentions.topics',
-	'mentions.topics.topic',
 	'city',
 	'hashtagLinks',
 	'hashtagLinks.hashtag',
@@ -63,8 +62,6 @@ const EXCLUDE = [
 	'account.brand.branches',
 	'mentions.brand.branches',
 	'hashtagLinks.hashtag.brand.branches',
-	'mentions.topics.mention',
-	'mentions.topics.topic.parent',
 ] as const;
 
 @Controller('/admin')
@@ -85,6 +82,8 @@ export class AdminSocialController {
 			const { start, end } = monthRange(query.month);
 			filters.postedAt = { $gte: start, $lt: end };
 		}
+		const days = dayRange(query.from, query.to);
+		if (days) filters.postedAt = { ...(filters.postedAt as object | undefined), ...days };
 		if (query.q) {
 			filters.$or = [
 				{ text: { $ilike: `%${query.q}%` } },
@@ -174,6 +173,8 @@ export class AdminSocialController {
 			const { start, end } = monthRange(query.month);
 			filters.post = { postedAt: { $gte: start, $lt: end } };
 		}
+		const days = dayRange(query.from, query.to);
+		if (days) filters.post = { postedAt: { ...(filters.post as { postedAt?: object } | undefined)?.postedAt, ...days } };
 		const populate = ['post', 'venue', 'brand', ...STATEMENT_POPULATE] as const;
 		const [items, totalItems] = await this.em.findAndCount(Mention, filters, {
 			populate: [...populate],

@@ -47,9 +47,15 @@
 				? api.admin.updateTopic(aspect.id, {
 						label: label.trim(),
 						hint: hint.trim() || null,
-						...(!isRoot && parentKey && { parentKey })
+						// An aspect sits under one root: its one "is a" edge
+						...(!isRoot && parentKey && { edges: [{ to: parentKey }] })
 					})
-				: api.admin.createTopic({ label: label.trim(), kind: AdminCreateTopicInputDtoKindEnum.Aspect, parentKey, ...(hint.trim() && { hint: hint.trim() }) }),
+				: api.admin.createTopic({
+						label: label.trim(),
+						kind: AdminCreateTopicInputDtoKindEnum.Aspect,
+						edges: [{ to: parentKey }],
+						...(hint.trim() && { hint: hint.trim() })
+					}),
 		{
 			successNotification: () => ({
 				title: aspect ? 'Saved' : 'Aspect created',

@@ -1,18 +1,22 @@
 <script lang="ts">
+	import { Radar } from '@lucide/svelte';
 	import type { AdminSocialPostListItemOutputDto } from 'client';
 
 	import { ListPostsParamsPlatformEnum, ListPostsParamsSkipReasonEnum, ListPostsParamsSortEnum } from 'client';
 
-	import PostBrandsCell from './PostBrandsCell.svelte';
-
+	import DigestionDetail from '#components/admin/digestion/DigestionDetail.svelte';
+	import { postColumns } from '#components/admin/posts/post-columns.js';
+	import PostBrandsCell from '#components/admin/posts/PostBrandsCell.svelte';
 	import { cityFilter } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
-	import { monthLabel, PLATFORM_LABELS, recentMonths, SKIP_REASON_LABELS, viewsLabel } from '#lib/culinary.js';
+	import { monthLabel, recentMonths, SKIP_REASON_LABELS } from '#lib/culinary.js';
 	import { findLabel } from '#lib/post-sources.js';
+	import { tallyOf } from '#lib/statements.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import type { Column, Filter, Sort } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
 	import Button from '#ui/wrapped/Button.svelte';
+	import Tooltip from '#ui/wrapped/Tooltip.svelte';
 
 	const SORTS: Sort[] = [
 		{ value: ListPostsParamsSortEnum.PostedAtDesc, name: 'Newest first' },
@@ -53,50 +57,56 @@
 		}
 	]);
 
-
-	const COLUMNS: Column<AdminSocialPostListItemOutputDto>[] = [
+	type Row = AdminSocialPostListItemOutputDto;
+	const statusOf = (row: Row) => (row.skipReason ? 'skipped' : row.analysedAt ? 'digested' : 'unread');
+	const COLUMNS: Column<Row>[] = postColumns<Row>(
+		(row) => ({
+			postId: row.id,
+			postedAt: row.postedAt,
+			platform: row.platform,
+			author: row.author ?? undefined,
+			authorHref: row.account ? `/admin/creators/${row.account.creator.id}` : undefined,
+			ownAccount: !!row.account?.brand,
+			text: row.text ?? undefined,
+			views: row.views,
+			status: statusOf(row),
+			skipReason: row.skipReason ?? undefined,
+			sentiments: tallyOf(row.mentions.flatMap((m) => m.statements ?? []))
+		}),
 		{
-			type: 'date',
-			name: 'Posted',
-			format: 'date',
-			value: (row) => row.postedAt,
-			sort: { asc: ListPostsParamsSortEnum.PostedAtAsc, desc: ListPostsParamsSortEnum.PostedAtDesc }
-		},
-		{ type: 'value', name: 'Platform', value: (row) => PLATFORM_LABELS[row.platform] ?? row.platform },
-		{
-			type: 'link',
-			name: 'Creator',
-			truncate: 22,
-			href: (row) => (row.account ? `/admin/creators/${row.account.creator.id}` : ''),
-			value: (row) =>
-				row.account?.brand
-					? { value: `@${row.author}`, class: 'text-muted-foreground' }
-					: row.author
-						? `@${row.author}`
-						: ''
-		},
-		{ type: 'value', name: 'Caption', truncate: 60, value: (row) => row.text ?? '' },
-		{
-			type: 'component',
-			name: 'Names',
-			label: 'Brands named',
-			component: PostBrandsCell,
-			props: (row) => ({ mentions: row.mentions })
-		},
-		{
-			type: 'value',
-			name: 'Views',
-			numeric: true,
-			value: (row) => viewsLabel(row.platform, row.views),
-			sort: { asc: ListPostsParamsSortEnum.ViewsAsc, desc: ListPostsParamsSortEnum.ViewsDesc }
-		},
-		{ type: 'value', name: 'Found by', truncate: 24, value: (row) => row.foundBy.map(findLabel).join(', ') }
-	];
+			sort: {
+				posted: { asc: ListPostsParamsSortEnum.PostedAtAsc, desc: ListPostsParamsSortEnum.PostedAtDesc },
+				views: { asc: ListPostsParamsSortEnum.ViewsAsc, desc: ListPostsParamsSortEnum.ViewsDesc }
+			},
+			afterText: [
+				{
+					type: 'component',
+					name: 'Names',
+					label: 'Brands named',
+					component: PostBrandsCell,
+					props: (row) => ({ mentions: row.mentions })
+				}
+			],
+			end: [{ type: 'snippet', name: 'Found by', label: '', snippet: foundCell }]
+		}
+	);
 
 	const filters = { sort: ListPostsParamsSortEnum.PostedAtDesc, q: undefined };
 </script>
 
-<!-- The Social page's "Posts" tab: everything we listened to, and the brands each post names. -->
+<!-- The Social page's "Posts" tab: everything we listened to, and the brands each post names. A
+     row is every post table's row (`post-columns.ts`), opening in place on the post and what the
+     pipeline made of it. -->
+
+{#snippet foundCell(row: Row)}
+	{#if row.foundBy.length}
+		<Tooltip text={`Found by ${row.foundBy.map(findLabel).join(', ')}`}><Radar class="text-muted-foreground size-3.5" aria-label="How we found it" /></Tooltip>
+	{/if}
+{/snippet}
+
+{#snippet details(row: Row)}
+	<DigestionDetail postId={row.id} />
+{/snippet}
 
 <PaginatedDataTable
 	syncWithSearchParams
@@ -106,7 +116,8 @@
 	availableFilters={FILTERS}
 	availableSorts={SORTS}
 	columns={COLUMNS}
-	rowHref={(row) => `/admin/posts/${row.id}`}>
+	expand={details}
+	rowKey={(row) => row.id}>
 	{#snippet toolbar()}
 		<Button
 			size="sm"

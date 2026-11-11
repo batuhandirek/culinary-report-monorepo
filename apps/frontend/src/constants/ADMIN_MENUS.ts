@@ -74,8 +74,8 @@ export const ADMIN_MENUS: AdminMenu[] = [
 		href: '/admin/brands',
 		icon: Store,
 		group: 'Market',
-		// A venue is a brand's branch
-		also: ['/admin/venues'],
+		// A venue is a brand's branch, and a review is about one
+		also: ['/admin/venues', '/admin/reviews'],
 		keywords: ['venues', 'restaurants', 'bars', 'cafes', 'places', 'chains', 'branches', 'prospects', 'outreach', 'sales', 'customers', 'leads'],
 		description:
 			"Every business in the city: the month's posts by others and reviews, its lead score, where it stands with us and its report."

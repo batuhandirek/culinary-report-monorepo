@@ -250,7 +250,7 @@ Because each box has one id per city and month (or week), `lookup-venues.month` 
 | `VenueMatchAgent` | mini | `match-mentions.city` (`match mentions` step) | Which candidate venue or branch a mentioned name is | **inline in the step** (no wait for an account) |
 | Jev `ClaimLabelsClassifier` | decision model, paid per call | `label claims` steps | Each claim's sentiment, aspect and kind | inline in the step; what it misses, the `statement-parts` backlog reads |
 
-Outside the pipeline: `ReportAnalysisAgent`, `ReportEditorAgent` and `ReviewReplyAgent` (report build, by hand), `LandingCopyAgent` (landing cron), `TermTopicAgent` and the topic and aspect discovery agents (backlogs, weekly cron).
+Outside the pipeline: `ReportAnalysisAgent`, `ReportEditorAgent` and `ReviewReplyAgent` (report build, by hand), `LandingCopyAgent` (landing cron), `TermTopicAgent` (the `terms` backlog; frequent narrower wordings become topics in code, no agent) and the aspect discovery agent (weekly cron).
 
 ---
 

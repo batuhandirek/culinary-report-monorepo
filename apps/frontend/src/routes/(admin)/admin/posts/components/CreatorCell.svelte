@@ -1,23 +1,22 @@
 <script lang="ts">
 	import type { AdminCreatorRowOutputDto } from 'client';
 
-	import { PLATFORM_LABELS } from '#lib/culinary.js';
+	import PlatformIcon from '#components/admin/detail/PlatformIcon.svelte';
 
-	// A creator in the list: the name, then each of their accounts (a venue's own says whose).
+	// A creator in the list, on one line: the name, then a glyph per account with its handle on
+	// hover (a venue's own says whose).
 	interface Props {
 		row: AdminCreatorRowOutputDto;
 	}
 
 	let { row }: Props = $props();
-
-	const accounts = $derived(
-		row.accounts
-			.map((a) => `${PLATFORM_LABELS[a.platform]} @${a.handle}${a.brand ? ` (${a.brand.name}'s own)` : ''}`)
-			.join(' · ')
-	);
 </script>
 
-<a href={`/admin/creators/${row.id}`} class="flex min-w-0 flex-col py-0.5 leading-tight">
-	<span class="max-w-[22rem] truncate font-medium hover:underline" title={row.name}>{row.name}</span>
-	<span class="text-muted-foreground max-w-[22rem] truncate text-xs" title={accounts}>{accounts}</span>
-</a>
+<span class="flex min-w-0 items-center gap-2">
+	<a href={`/admin/creators/${row.id}`} class="max-w-[18rem] truncate font-medium hover:underline" title={row.name}>{row.name}</a>
+	<span class="text-muted-foreground flex shrink-0 items-center gap-1">
+		{#each row.accounts as account (account.handle + account.platform)}
+			<PlatformIcon platform={account.platform} tip={`@${account.handle}${account.brand ? ` · ${account.brand.name}'s own` : ''}`} class={account.brand ? 'text-beet' : ''} />
+		{/each}
+	</span>
+</span>

@@ -1,11 +1,13 @@
-// Pure: the topic tree — resolving raw cuisine strings (a mention's, a Google category) to food
-// topics, and the aspects (what is said about a place) the agents file points under.
+// Pure: the topic graph — resolving raw food text (a Google category, a menu item, a hashtag) to food
+// topics, walking what a topic is and has (its edges), and the aspects (what is said about a
+// place) the agents file claims under.
 
 import { cuisineWords, normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { isMainCourse } from 'src/modules/venues/util/delivery.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
 
 import { ASPECT_ROOTS } from '../constants/aspect-seed.constant.js';
+import type { CountMode, EdgeType } from '../constants/topic-edge.constant.js';
 import { TopicKindEnum } from '../entities/topic.entity.js';
 
 const DISH_KINDS = new Set([TopicKindEnum.DISH, TopicKindEnum.DRINK]);
@@ -17,17 +19,39 @@ export interface IndexedTopic {
 	key: string;
 	label: string;
 	kind: TopicKindEnum;
-	parentKey: string | null;
+	/** The topics it is a kind of (`is_a` edges), by rank: the first is its display parent. Empty for a root */
+	isA: string[];
+	/** The topics it has (`has` edges: a diet, an ingredient, an attribute), by rank */
+	has: string[];
 	/** An aspect's: what it covers, for the agents' legend */
 	hint?: string | null;
 }
 
-/** What the index needs of a decided `Term`: the wording and the topics it is (empty: "none") */
+/** A topic as a caller hands it to the index: its edges may be left out (none) */
+export type IndexedTopicInput = Omit<IndexedTopic, 'isA' | 'has'> & {
+	isA?: string[];
+	has?: string[];
+};
+
+/**
+ * What the index needs of a decided `Term`: the wording, its main topic (null: none), whether it
+ * is that topic (`exact`) or something narrower under it, and what else a narrower one is or has
+ * (`modifiers`).
+ */
 export interface IndexedTerm {
 	key: string;
 	name: string;
-	topicKeys: string[];
+	topicKey: string | null;
+	exact: boolean;
+	modifiers: { topicKey: string; type: EdgeType }[];
 }
+
+/** Which edges a walk follows: both (broad, the default) or `is_a` alone (`strict`) */
+export interface WalkOptions {
+	strict?: boolean;
+}
+
+export const walkOptions = (mode?: CountMode): WalkOptions => ({ strict: mode === 'strict' });
 
 /** An aspect as the writers resolve an agent's answer: the row to link, its key and its root */
 export interface AspectRef {
@@ -59,11 +83,13 @@ export const aspectKey = (raw: string | null | undefined): string | null => {
 };
 
 /**
- * Every topic by key, and two lookups. Whole-wording matches (`exactAll`, `exact`, `dishTopic`):
- * every food topic by its key's and its label's normalized forms, every decided term by its wording's
- * forms (as said and as its key), each form pointing at the topics the wording is — one for most,
- * several for a compound ("vegan döner": kebab, vegan) — an aspect among them only through a decided
- * term ("waiting time" → Waiting), never through its own key or label ("food", "service" are words). The cuisine lookup (`resolve`, word runs over a cuisine string, a
+ * Every topic by key with its edges, and two lookups. Whole-wording matches (`exactAll`, `exact`,
+ * `dishTopic`): every food topic by its key's and its label's normalized forms, every decided term
+ * by its wording's forms (as said and as its key), each form pointing at the topics the wording
+ * evokes — its main topic, then its modifiers ("vegan döner": kebab, vegan) — an aspect among them
+ * only through a decided term ("waiting time" → Waiting), never through its own key or label
+ * ("food", "service" are words). `exact` answers a term's topic only when the wording is that topic
+ * (`IndexedTerm.exact`): "kumpir", a narrower thing under Turkish, names no topic as a whole. The cuisine lookup (`resolve`, word runs over a cuisine string, a
  * category, a menu item): kinds of food only — topic keys and decided terms' food topics; so "Vegan
  * Food" is vegan, not the root `food`, "#service" names no aspect, and "waiting time döner" is kebab
  * alone. A key wins over a label and over a term for the same form; between terms, the first given
@@ -75,36 +101,61 @@ export class TopicIndex {
 	private readonly lookup = new Map<string, string[]>();
 	/** Whole-wording matches: every topic by its key and label forms, every decided term by its forms, aspects included (`exactAll`) */
 	private readonly whole = new Map<string, string[]>();
+	/** The forms that are a topic as a whole: its key, its label, an exact term's wording (`exact`) */
+	private readonly same = new Map<string, string>();
+	/** Reverse `is_a` edges: the topics that are a kind of the key */
 	private readonly children = new Map<string, IndexedTopic[]>();
+	/** Reverse `has` edges: the topics that have the key */
+	private readonly havers = new Map<string, IndexedTopic[]>();
 	// The longest form in words, so a span longer than it is never tried
 	private readonly maxWords: number;
 
-	constructor(topics: IndexedTopic[], terms: IndexedTerm[] = []) {
+	constructor(given: IndexedTopicInput[], terms: IndexedTerm[] = []) {
+		const known = new Set(given.map(t => t.key));
+		// An edge to a topic the index doesn't hold (a partial seed, a deleted row) is no edge
+		const topics: IndexedTopic[] = given.map(t => ({
+			...t,
+			isA: (t.isA ?? []).filter(k => known.has(k) && k !== t.key),
+			has: (t.has ?? []).filter(k => known.has(k) && k !== t.key),
+		}));
 		for (const t of topics) this.byKey.set(t.key, t);
 		for (const t of topics) {
-			if (!t.parentKey) continue;
-			this.children.set(t.parentKey, [...(this.children.get(t.parentKey) ?? []), t]);
+			for (const to of t.isA) this.children.set(to, [...(this.children.get(to) ?? []), t]);
+			for (const to of t.has) this.havers.set(to, [...(this.havers.get(to) ?? []), t]);
 		}
 		const isFood = (key: string) => this.byKey.get(key)?.kind !== TopicKindEnum.ASPECT;
 		const food = topics.filter(t => isFood(t.key));
 		// Keys first, then labels: a key wins over another topic's label for the same form. An aspect's
 		// key or label is no match ("food", "service", "drinks" are words a dish list or a hashtag uses):
 		// an aspect is reached only through a decided term ("waiting time", "Cash only" → the agent or an admin)
-		for (const t of food) for (const form of lookupForms(t.key)) this.whole.set(form, [t.key]);
+		for (const t of food)
+			for (const form of lookupForms(t.key)) {
+				this.whole.set(form, [t.key]);
+				this.same.set(form, t.key);
+			}
 		for (const t of food)
 			for (const form of lookupForms(t.label))
-				if (!this.whole.has(form)) this.whole.set(form, [t.key]);
+				if (!this.whole.has(form)) {
+					this.whole.set(form, [t.key]);
+					this.same.set(form, t.key);
+				}
 		for (const t of food) for (const form of lookupForms(t.key)) this.lookup.set(form, [t.key]);
-		// A label resolves to its topic too (extraction writes cuisines as labels: "Desserts" is `dessert`), never over a key
+		// A label resolves to its topic too ("Desserts" is `dessert`), never over a key
 		for (const t of food)
 			for (const form of lookupForms(t.label))
 				if (!this.lookup.has(form)) this.lookup.set(form, [t.key]);
 		for (const term of terms) {
-			const keys = term.topicKeys.filter(k => this.byKey.has(k));
+			const keys = [
+				...new Set([term.topicKey, ...term.modifiers.map(m => m.topicKey)]),
+			].filter((k): k is string => !!k && this.byKey.has(k));
 			if (!keys.length) continue;
 			const food = keys.filter(isFood);
+			const same = term.exact && term.topicKey && this.byKey.has(term.topicKey);
 			for (const form of [...lookupForms(term.name), ...lookupForms(term.key)]) {
-				if (!this.whole.has(form)) this.whole.set(form, keys);
+				if (!this.whole.has(form)) {
+					this.whole.set(form, keys);
+					if (same) this.same.set(form, term.topicKey!);
+				}
 				if (food.length && !this.lookup.has(form)) this.lookup.set(form, food);
 			}
 		}
@@ -130,7 +181,7 @@ export class TopicIndex {
 		const rootOrder = new Map<string, number>(ASPECT_ROOTS.map((key, i) => [key, i]));
 		const byLabel = (a: IndexedTopic, b: IndexedTopic) => a.label.localeCompare(b.label);
 		const roots = this.topics
-			.filter(t => t.kind === TopicKindEnum.ASPECT && !t.parentKey)
+			.filter(t => t.kind === TopicKindEnum.ASPECT && !t.isA.length)
 			.sort(
 				(a, b) =>
 					(rootOrder.get(a.key) ?? ASPECT_ROOTS.length) -
@@ -149,37 +200,69 @@ export class TopicIndex {
 		return this.byKey.get(key)?.kind === TopicKindEnum.ASPECT;
 	}
 
-	/** A root has no parent: a point filed at it is "about X, nothing finer" (what readers used to call a catch-all) */
+	/** A root is a kind of nothing (no `is_a` edge): a claim filed at an aspect root is "about X, nothing finer" */
 	isRoot(key: string): boolean {
 		const topic = this.byKey.get(key);
-		return !!topic && !topic.parentKey;
+		return !!topic && !topic.isA.length;
 	}
 
-	/** The topmost ancestor's key (the key itself for a root); undefined for an unknown key */
+	/** The display parent: the topic's first `is_a` (a dish's cuisine, an aspect's root); null for a root or an unknown key */
+	parentOf(key: string): string | null {
+		return this.byKey.get(key)?.isA[0] ?? null;
+	}
+
+	/** The topics that are a kind of the key (`is_a`, one step), by label: its rows in a tree. A topic with several parents is under each */
+	childrenOf(key: string): IndexedTopic[] {
+		return [...(this.children.get(key) ?? [])].sort((a, b) => a.label.localeCompare(b.label));
+	}
+
+	/** The topmost ancestor's key along the display parents (the key itself for a root); undefined for an unknown key */
 	rootOf(key: string): string | undefined {
 		let topic = this.byKey.get(key);
 		if (!topic) return undefined;
 		const seen = new Set<string>();
-		while (topic.parentKey && !seen.has(topic.key)) {
+		while (topic.isA.length && !seen.has(topic.key)) {
 			seen.add(topic.key);
-			const parent = this.byKey.get(topic.parentKey);
+			const parent = this.byKey.get(topic.isA[0]);
 			if (!parent) break;
 			topic = parent;
 		}
 		return topic.key;
 	}
 
-	/** The key and every key under it, each once: what "who talked about X" matches. Empty for an unknown key */
-	descendants(key: string): string[] {
+	/**
+	 * The key and every topic that counts for it, each once: what "who talked about X" matches. By
+	 * default those that are a kind of it or have it, at any depth (broad: Vegan gathers Vegan
+	 * döner); `strict` follows `is_a` alone. Empty for an unknown key.
+	 */
+	descendants(key: string, opts: WalkOptions = {}): string[] {
 		if (!this.byKey.has(key)) return [];
 		const out: string[] = [];
 		const walk = (k: string) => {
 			if (out.includes(k)) return;
 			out.push(k);
 			for (const child of this.children.get(k) ?? []) walk(child.key);
+			if (!opts.strict) for (const haver of this.havers.get(k) ?? []) walk(haver.key);
 		};
 		walk(key);
 		return out;
+	}
+
+	/**
+	 * The keys and every topic each counts for, each once, as `topic_closure` holds them: by default
+	 * along `is_a` and `has` (broad); `strict` follows `is_a` alone, so what a thing has never counts.
+	 */
+	ancestors(keys: string[], opts: WalkOptions = {}): string[] {
+		const out = new Set<string>();
+		const walk = (key: string) => {
+			const topic = this.byKey.get(key);
+			if (!topic || out.has(key)) return;
+			out.add(key);
+			topic.isA.forEach(walk);
+			if (!opts.strict) topic.has.forEach(walk);
+		};
+		keys.forEach(walk);
+		return [...out];
 	}
 
 	/** The label, the key itself for an unknown one */
@@ -209,7 +292,7 @@ export class TopicIndex {
 	aspectLegend(): string {
 		const hint = (t: IndexedTopic) => (t.hint ? ` (${t.hint})` : '');
 		return this.aspects
-			.filter(t => !t.parentKey)
+			.filter(t => !t.isA.length)
 			.map(root => {
 				const under = this.descendants(root.key).map(k => this.byKey.get(k)!);
 				return `${root.key}: ${under.map(t => `${t.key}${hint(t)}`).join(', ')}`;
@@ -218,8 +301,9 @@ export class TopicIndex {
 	}
 
 	/**
-	 * The topics a spelling names as a whole (a topic's key, or a decided term's wording), without
-	 * splitting it into words: one for most, several for a compound term. Empty for none.
+	 * The topics a spelling evokes as a whole (a topic's key or label, or a decided term's main
+	 * topic and modifiers), without splitting it into words: one for most, several for a narrower
+	 * wording with modifiers. Empty for none.
 	 */
 	exactAll(raw: string): string[] {
 		for (const form of lookupForms(raw)) {
@@ -229,9 +313,16 @@ export class TopicIndex {
 		return [];
 	}
 
-	/** The first topic a spelling names as a whole (`exactAll`): what a single-topic reader takes. */
+	/**
+	 * The topic a spelling **is** as a whole: a topic's key or label, or an exact term's topic
+	 * ("Pommes" → fries). A narrower wording ("kumpir" under Turkish, "vegan döner") is no topic as a
+	 * whole: undefined, though `exactAll` gives what it evokes.
+	 */
 	exact(raw: string): string | undefined {
-		return this.exactAll(raw)[0];
+		for (const form of lookupForms(raw)) {
+			if (this.whole.has(form)) return this.same.get(form);
+		}
+		return undefined;
 	}
 
 	/**
@@ -280,15 +371,6 @@ export class TopicIndex {
 		return found;
 	}
 
-	/** A mention's topics: its own cuisine's, else its venue's Google category's. */
-	resolveMention(
-		cuisine: string | null | undefined,
-		category: string | null | undefined,
-	): string[] {
-		const own = this.resolve(cuisine);
-		return own.length ? own : this.resolve(category);
-	}
-
 	/**
 	 * A delivery menu item's topics: its name's, else its menu section's ("Tonkotsu" under
 	 * "Ramen"). A kind of place never comes from a menu ("Bistro Salat" is no bistro), and an item
@@ -306,16 +388,8 @@ export class TopicIndex {
 		return own.length ? own : keep(this.resolve(item.category));
 	}
 
-	/** The keys and every ancestor of each, each once: a child counts for its parent too. */
-	withParents(keys: string[]): string[] {
-		const out = new Set<string>();
-		for (const key of keys) {
-			let topic = this.byKey.get(key);
-			while (topic && !out.has(topic.key)) {
-				out.add(topic.key);
-				topic = topic.parentKey ? this.byKey.get(topic.parentKey) : undefined;
-			}
-		}
-		return [...out];
+	/** The keys and everything each counts for (`ancestors`): a topic counts for what it is and has too. */
+	withParents(keys: string[], opts: WalkOptions = {}): string[] {
+		return this.ancestors(keys, opts);
 	}
 }

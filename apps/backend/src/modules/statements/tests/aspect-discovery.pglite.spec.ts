@@ -229,7 +229,7 @@ describe('aspect discovery (pglite)', () => {
 		const topic = await em.findOneOrFail(
 			Topic,
 			{ key: 'music_volume' },
-			{ populate: ['parent'] },
+			{ populate: ['edges.to'] },
 		);
 		expect([
 			topic.label,

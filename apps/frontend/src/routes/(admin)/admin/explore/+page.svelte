@@ -6,7 +6,6 @@
 	} from 'client';
 
 	import ExploreFilters, { type TopicPick } from './components/ExploreFilters.svelte';
-	import ExploreGroups from './components/ExploreGroups.svelte';
 	import ExploreHead from './components/ExploreHead.svelte';
 	import ExploreOverTime from './components/ExploreOverTime.svelte';
 	import ExploreSection from './components/ExploreSection.svelte';
@@ -15,6 +14,7 @@
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
+	import ClaimGroups from '#components/admin/statements/ClaimGroups.svelte';
 	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
 	import { findAdminMenu } from '#constants/ADMIN_MENUS.js';
 	import { cityItems } from '#lib/admin-cities.js';
@@ -83,7 +83,9 @@
 	let groups = $state<AdminExploreGroupsOutputDto | null>(null);
 	const treeLoader = createLoader((q: Query) => api.admin.getExploreTree(q as never), { onSuccess: (res) => (tree = res.nodes) });
 	const headLoader = createLoader((q: Query) => api.admin.getExploreHead(q as never), { onSuccess: (res) => (head = res) });
-	const groupsLoader = createLoader((q: Query) => api.admin.getExploreGroups(q as never), { onSuccess: (res) => (groups = res) });
+	// The grouping's bar (cosine, claims a group needs), moved on the groups tab; unset is the API's default
+	let groupBar = $state<{ similarity?: number; minClaims?: number }>({});
+	const groupsLoader = createLoader((q: Query & typeof groupBar) => api.admin.getExploreGroups(q as never), { onSuccess: (res) => (groups = res) });
 
 	// The tree's counts don't depend on X: reloaded only when the rest of the view moves
 	const treeKey = $derived(query ? JSON.stringify({ ...query, node: undefined }) : '');
@@ -99,9 +101,13 @@
 		if (!viewKey) return;
 		const q = JSON.parse(viewKey) as Query;
 		head = null;
-		groups = null;
 		headLoader.load(q);
-		groupsLoader.load(q);
+	});
+	const groupsKey = $derived(query ? JSON.stringify({ ...query, ...groupBar }) : '');
+	$effect(() => {
+		if (!groupsKey) return;
+		groups = null;
+		groupsLoader.load(JSON.parse(groupsKey));
 	});
 
 	let claimsOpen = $state<boolean | undefined>(undefined);
@@ -114,9 +120,13 @@
 		!ref.startsWith('term:') && (treeByKey.get(ref)?.kind ?? (head?.node?.ref === ref ? head.node.kind : undefined)) === 'aspect' ? 'aspect' : 'food';
 	const pickOf = (ref: string): TopicPick => {
 		const node = head?.node?.ref === ref ? head.node : undefined;
+		// Its parents, top first: the node's own path, else the tree's display parents
+		const path: string[] = node?.path.map((p) => p.label) ?? [];
+		if (!node) for (let up = treeByKey.get(treeByKey.get(ref)?.parentKey ?? ''); up; up = treeByKey.get(up.parentKey ?? '')) path.unshift(up.label);
 		return {
 			ref,
 			label: node?.label ?? treeByKey.get(ref)?.label ?? head?.with.find((w) => w.ref === ref)?.label ?? ref.replace(/^term:/, ''),
+			path,
 			hint: node?.hint
 		};
 	};
@@ -203,9 +213,9 @@
 			{/snippet}
 			{#if claimsTab === 'groups'}
 				{#if groupsLoader.error && !groups}
-					<ErrorState onRetry={() => query && groupsLoader.load(query)} />
+					<ErrorState onRetry={() => groupsKey && groupsLoader.load(JSON.parse(groupsKey))} />
 				{:else}
-					<ExploreGroups data={groups} />
+					<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} />
 				{/if}
 			{:else if cityId && query}
 				{#key viewKey}

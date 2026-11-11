@@ -699,6 +699,7 @@ export interface AdminBrandBranchOutputDto {
 	district?: string;
 	/** Its website's icon; absent until found */
 	favicon?: ImageOutputDto;
+	googleUrl?: string;
 	id: string;
 	/** Mentions linked to it (its branch known), of any month */
 	mentions: number;
@@ -707,9 +708,11 @@ export interface AdminBrandBranchOutputDto {
 	rating?: number;
 	reviewsCount?: number;
 	street?: string;
+	/** Its website on Google: the brand page's website key takes the first open branch's */
+	website?: string;
 }
 
-/** What social media and Google reviews said about a brand in one month. */
+/** What social media and Google reviews said about a brand in one month (or one window: the brand page). */
 export interface AdminBrandMonthFiguresOutputDto {
 	/** Distinct authors of those posts */
 	creators: number;
@@ -748,6 +751,15 @@ export interface AdminBrandOutputDto {
 export enum AdminBrandOutputDtoReportScopeEnum {
 	City = 'city',
 	All = 'all',
+}
+
+/** The brand's all-time Google rating on one day */
+export interface AdminBrandRatingPointOutputDto {
+	/** `YYYY-MM-DD` */
+	date: string;
+	/** All-time Google reviews over its places */
+	reviews?: number;
+	stars?: number;
 }
 
 /** A brand as other pages name it. */
@@ -790,7 +802,7 @@ export interface AdminBrandRowOutputDto {
 	favicon?: ImageOutputDto;
 	id: string;
 	leadScore?: number;
-	/** What social media and Google reviews said about a brand in one month. */
+	/** What social media and Google reviews said about a brand in one month (or one window: the brand page). */
 	month: AdminBrandMonthFiguresOutputDto;
 	name: string;
 	/** Posts and views the month before */
@@ -829,7 +841,7 @@ export enum AdminBrandRowOutputDtoStageEnum {
 	OPTED_OUT = 'OPTED_OUT',
 }
 
-/** One month of a brand's figures, for the six-month strip. */
+/** One month of a brand's figures: the trend drawn under each of the Overview's figures. */
 export interface AdminBrandSeriesPointOutputDto {
 	/** Distinct authors of those posts */
 	creators: number;
@@ -863,13 +875,13 @@ export enum AdminBrandSuggestionOutputDtoReasonEnum {
 }
 
 export interface AdminBrandSummaryOutputDto {
-	/** Posts of the month naming the brand but no branch (a chain) */
+	/** Posts of the window naming the brand but no branch (a chain) */
 	brandOnlyPosts: number;
 	competitors: number;
-	/** What social media and Google reviews said about a brand in one month. */
+	/** The window's figures */
 	figures: AdminBrandMonthFiguresOutputDto;
 	month: string;
-	/** What social media and Google reviews said about a brand in one month. */
+	/** The same length just before the window */
 	previous: AdminBrandMonthFiguresOutputDto;
 	prospect?: {
 		id: string;
@@ -880,6 +892,11 @@ export interface AdminBrandSummaryOutputDto {
 		outreachCount: number;
 		stage: AdminBrandSummaryOutputDtoStageEnum;
 	};
+	/**
+	 * Its Google rating as each read saw it, oldest first, over its open places (in the city): a
+	 * place's last read carried forward to every later date, stars weighted by review count
+	 */
+	ratings: AdminBrandRatingPointOutputDto[];
 	/** The month's report, else the newest one */
 	report?: {
 		headline?: string;
@@ -897,11 +914,13 @@ export interface AdminBrandSummaryOutputDto {
 	 * detail-page refresh.
 	 */
 	reviewTags: AdminBrandReviewTagOutputDto[];
-	/** The six months up to `month`, oldest first */
+	/** The twelve months up to `month`, oldest first */
 	series: AdminBrandSeriesPointOutputDto[];
 	todos: AdminBrandTodoOutputDto[];
-	/** The month's most viewed posts by others, up to five */
+	/** The window's most viewed posts by others, up to five */
 	topPosts: AdminBrandTopPostOutputDto[];
+	/** The window the figures cover, up to the moment asked, against the same length before it */
+	window: AdminBrandSummaryWindowOutputDto;
 }
 
 export enum AdminBrandSummaryOutputDtoStageEnum {
@@ -912,6 +931,29 @@ export enum AdminBrandSummaryOutputDtoStageEnum {
 	WON = 'WON',
 	LOST = 'LOST',
 	OPTED_OUT = 'OPTED_OUT',
+}
+
+/** The window the figures cover, up to the moment asked, against the same length before it */
+export interface AdminBrandSummaryWindowOutputDto {
+	/**
+	 * Its first moment
+	 * @format date-time
+	 */
+	from: string;
+	/** "30 days", "12 months": how a page says it */
+	label: string;
+	period: AdminBrandSummaryWindowOutputDtoPeriodEnum;
+	/**
+	 * The moment asked (exclusive)
+	 * @format date-time
+	 */
+	to: string;
+}
+
+export enum AdminBrandSummaryWindowOutputDtoPeriodEnum {
+	Value30D = '30d',
+	Value90D = '90d',
+	Value12Mo = '12mo',
 }
 
 /**
@@ -927,14 +969,13 @@ export interface AdminBrandTodoOutputDto {
 
 export enum AdminBrandTodoOutputDtoTabEnum {
 	Posts = 'posts',
-	Reports = 'reports',
-	Branches = 'branches',
 	Signals = 'signals',
+	History = 'history',
 	Reviews = 'reviews',
 	Settings = 'settings',
+	Places = 'places',
 	Competitors = 'competitors',
 	Overview = 'overview',
-	Sales = 'sales',
 }
 
 export enum AdminBrandTodoOutputDtoToneEnum {
@@ -952,6 +993,8 @@ export interface AdminBrandTopPostOutputDto {
 		name: string;
 	};
 	id: string;
+	/** Its mention of the brand: the one an admin moves to a branch */
+	mentionId: number;
 	platform: AdminBrandTopPostOutputDtoPlatformEnum;
 	/** @format date-time */
 	postedAt: string;
@@ -1009,16 +1052,18 @@ export interface AdminBuildReportInputDto {
 }
 
 /**
- * An admin's decision: the topics the wording is (`topicKeys`, empty = none), or `auto` for the
- * name match and the agent. A topic's relation is `relations[key]`, else the one its link has now,
- * else `same`.
+ * An admin's decision: the wording's main topic (`topicKey`, null = none), whether it is that topic
+ * (`exact`; the default with a topic and no modifiers) and what else a narrower one is or has
+ * (`modifiers`, a type left out defaults from the target's kind); or `auto` for the name match and
+ * the agent.
  */
 export interface AdminChangeTermInputDto {
 	auto?: boolean;
-	/** Construct a type with a set of properties K of type T */
-	relations?: RecordstringwithsamekindOf;
-	/** @maxItems 10 */
-	topicKeys?: string[];
+	exact?: boolean;
+	/** @maxItems 5 */
+	modifiers?: AdminTermModifierInputDto[];
+	/** @maxLength 80 */
+	topicKey?: string | null;
 }
 
 export interface AdminChangeVenueTopicInputDto {
@@ -1455,6 +1500,11 @@ export interface AdminCreateReportTemplateInputDto {
 
 export interface AdminCreateTopicInputDto {
 	/**
+	 * What it is and has, in order: the first `is_a` is its display parent
+	 * @maxItems 20
+	 */
+	edges?: AdminTopicEdgeInputDto[];
+	/**
 	 * An aspect's: what it covers, told to the agents
 	 * @maxLength 300
 	 */
@@ -1470,7 +1520,6 @@ export interface AdminCreateTopicInputDto {
 	 * @maxLength 80
 	 */
 	label: string;
-	parentKey?: string;
 	/** @maxLength 100 */
 	trendsQuery?: string;
 	/** @pattern ^/(m|g)/[0-9A-Za-z_]+$ */
@@ -1603,6 +1652,8 @@ export interface AdminCreatorMonthOutputDto {
 
 export interface AdminCreatorOutputDto {
 	accounts: AdminAccountOutputDto[];
+	/** Every brand their posts named (`brands` holds the first 12) */
+	brandCount: number;
 	/** The brands their posts named most, all time; `own` when it is their own account's brand */
 	brands: {
 		id: string;
@@ -1629,6 +1680,16 @@ export interface AdminCreatorOutputDto {
 	name: string;
 	/** Every post of theirs we stored, and their views */
 	posts: number;
+	/** Their posts over the last 30 and 90 days, to now */
+	recent: {
+		/** Of the 90 days' posts, those naming a brand (a mention matched to one) */
+		named90: number;
+		posts30: number;
+		posts90: number;
+		views30: number;
+		/** @format date-time */
+		lastNamedAt?: string;
+	};
 	views: number;
 }
 
@@ -1642,6 +1703,11 @@ export interface AdminCreatorRowOutputDto {
 	name: string;
 	/** Every account is a brand's own */
 	own: boolean;
+}
+
+/** A started scrape of one creator's profiles: the run to follow; absent when they have no profile */
+export interface AdminCreatorScrapeOutputDto {
+	workflowId?: string;
 }
 
 export interface AdminCreatorWatchInputDto {
@@ -1967,7 +2033,6 @@ export interface AdminDigestionMentionOutputDto {
 		name: string;
 	};
 	city?: string;
-	cuisine?: string;
 	id: number;
 	isNewOpening: boolean;
 	locationHint?: string;
@@ -2340,6 +2405,10 @@ export interface AdminExploreBreakdownRowOutputDto {
 	sources: number;
 }
 
+/**
+ * The Claims table's own filters on top of the view: the ones the page's pickers don't hold
+ * (sentiment, parts), as the Claims tabs filter them
+ */
 export interface AdminExploreClaimsInputDto {
 	/** @format uuid */
 	brandId?: string;
@@ -2362,6 +2431,8 @@ export interface AdminExploreClaimsInputDto {
 	node?: string;
 	/** @min 1 */
 	page: number;
+	/** Under no aspect, no part at all, or naming a food */
+	parts?: AdminExploreClaimsInputDtoPartsEnum;
 	/**
 	 * The brands of one kind of place (their main food in the city), a topic's key
 	 * @maxLength 80
@@ -2372,6 +2443,8 @@ export interface AdminExploreClaimsInputDto {
 	 * @maxLength 200
 	 */
 	q?: string;
+	/** One sentiment, or `unread`: agent B gave none yet */
+	sentiment?: AdminExploreClaimsInputDtoSentimentEnum;
 	side?: AdminExploreClaimsInputDtoSideEnum;
 	/** @min 1 */
 	size: number;
@@ -2396,6 +2469,22 @@ export enum AdminExploreClaimsInputDtoKindEnum {
 	Event = 'event',
 	Question = 'question',
 	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+/** Under no aspect, no part at all, or naming a food */
+export enum AdminExploreClaimsInputDtoPartsEnum {
+	None = 'none',
+	Food = 'food',
+	NoAspect = 'no_aspect',
+}
+
+/** One sentiment, or `unread`: agent B gave none yet */
+export enum AdminExploreClaimsInputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
 	Unread = 'unread',
 }
 
@@ -2447,12 +2536,100 @@ export enum AdminExploreGroupOutputDtoSentimentEnum {
 	Neutral = 'neutral',
 }
 
+/** The grouping's bar, each defaulting to `INSIGHT_GROUP_FLOORS` */
+export interface AdminExploreGroupsInputDto {
+	/** @format uuid */
+	brandId?: string;
+	/** @format uuid */
+	cityId: string;
+	/** @maxLength 120 */
+	district?: string;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	from?: string;
+	/** One kind, or `unread`: agent B gave none yet */
+	kind?: AdminExploreGroupsInputDtoKindEnum;
+	/** Only claims filed under no aspect or at a root (nothing finer fitted) */
+	loose?: boolean;
+	/**
+	 * Claims a group needs to be listed (from two sources at least, whatever this is)
+	 * @min 2
+	 * @max 100
+	 */
+	minClaims?: number;
+	/** @maxLength 200 */
+	node?: string;
+	/**
+	 * The brands of one kind of place (their main food in the city), a topic's key
+	 * @maxLength 80
+	 */
+	place?: string;
+	side?: AdminExploreGroupsInputDtoSideEnum;
+	/**
+	 * Cosine a claim needs with a group's centroid to join it: lower groups looser paraphrases
+	 * @min 0.5
+	 * @max 0.98
+	 */
+	similarity?: number;
+	/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
+	source?: AdminExploreGroupsInputDtoSourceEnum;
+	subject?: AdminExploreGroupsInputDtoSubjectEnum;
+	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
+	to?: string;
+	/** @format uuid */
+	venueId?: string;
+	/** @maxLength 1000 */
+	with?: string;
+}
+
+/** One kind, or `unread`: agent B gave none yet */
+export enum AdminExploreGroupsInputDtoKindEnum {
+	Opinion = 'opinion',
+	Fact = 'fact',
+	Change = 'change',
+	NewItem = 'new_item',
+	Deal = 'deal',
+	Event = 'event',
+	Question = 'question',
+	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+export enum AdminExploreGroupsInputDtoSideEnum {
+	Praise = 'praise',
+	Complaints = 'complaints',
+	Unread = 'unread',
+	Noted = 'noted',
+	Changes = 'changes',
+}
+
+/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
+export enum AdminExploreGroupsInputDtoSourceEnum {
+	Comment = 'comment',
+	Post = 'post',
+	Press = 'press',
+	Blog = 'blog',
+	Tiktok = 'tiktok',
+	Instagram = 'instagram',
+	Review = 'review',
+	GoogleReview = 'google_review',
+	TripadvisorReview = 'tripadvisor_review',
+}
+
+export enum AdminExploreGroupsInputDtoSubjectEnum {
+	None = 'none',
+	City = 'city',
+	Place = 'place',
+}
+
 export interface AdminExploreGroupsOutputDto {
 	considered: number;
 	embedded: number;
 	groups: AdminExploreGroupOutputDto[];
+	minClaims: number;
 	more: number;
 	notEmbedded: number;
+	/** The bar the groups were made at */
+	similarity: number;
 }
 
 export interface AdminExploreHeadOutputDto {
@@ -2648,9 +2825,12 @@ export interface AdminExploreTermsOutputDto {
 
 export interface AdminExploreTreeNodeOutputDto {
 	complaints: number;
+	/** Every topic it is a kind of, by rank: the tree draws it under each */
+	isA: string[];
 	key: string;
 	kind: string;
 	label: string;
+	/** Its display parent: the first topic it is a kind of */
 	parentKey?: string;
 	praise: number;
 	/** Reviews, posts and other sources raising it, each once */
@@ -2745,10 +2925,19 @@ export interface AdminGetBrandSummaryInputDto {
 	 */
 	cityId?: string;
 	/**
-	 * The last finished month without
+	 * Where the twelve months of `series` end and whose report the to-dos ask about; the last finished month without
 	 * @pattern ^[0-9]{4}-[0-9]{2}$
 	 */
 	month?: string;
+	/** The window of `figures`, `topPosts` and `brandOnlyPosts`; `30d` without */
+	period?: AdminGetBrandSummaryInputDtoPeriodEnum;
+}
+
+/** The window of `figures`, `topPosts` and `brandOnlyPosts`; `30d` without */
+export enum AdminGetBrandSummaryInputDtoPeriodEnum {
+	Value30D = '30d',
+	Value90D = '90d',
+	Value12Mo = '12mo',
 }
 
 export interface AdminGetCityHighlightsInputDto {
@@ -2809,18 +2998,18 @@ export interface AdminGetTermsInputDto {
 	/** @min 0 */
 	offset?: number;
 	/**
+	 * Only narrower terms proposed as this topic of their own (`proposedLabel`)
+	 * @maxLength 80
+	 */
+	proposal?: string;
+	/**
 	 * A search in the wording or its key
 	 * @maxLength 80
 	 */
 	q?: string;
 	status?: AdminGetTermsInputDtoStatusEnum;
 	/**
-	 * Only terms the agent suggested this label for
-	 * @maxLength 80
-	 */
-	suggestion?: string;
-	/**
-	 * Only terms linked to this topic
+	 * Only terms whose main topic or a modifier is this topic
 	 * @maxLength 80
 	 */
 	topicKey?: string;
@@ -3277,6 +3466,11 @@ export interface AdminListMentionsInputDto {
 	 * @format uuid
 	 */
 	brandId?: string;
+	/**
+	 * Posted on or after this UTC day
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	from?: string;
 	matchMethod?: AdminListMentionsInputDtoMatchMethodEnum;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month?: string;
@@ -3284,6 +3478,11 @@ export interface AdminListMentionsInputDto {
 	page: number;
 	/** @min 1 */
 	size: number;
+	/**
+	 * Posted on or before this UTC day (inclusive)
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	to?: string;
 	/** @format uuid */
 	venueId?: string;
 }
@@ -3325,6 +3524,11 @@ export interface AdminListPostsInputDto {
 	 */
 	creatorId?: string;
 	/**
+	 * Posted on or after this UTC day
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	from?: string;
+	/**
 	 * Only posts whose caption carries this hashtag (with or without #, any case)
 	 * @maxLength 200
 	 */
@@ -3342,6 +3546,11 @@ export interface AdminListPostsInputDto {
 	/** Only posts the gate didn't digest, for this reason */
 	skipReason?: AdminListPostsInputDtoSkipReasonEnum;
 	sort?: AdminListPostsInputDtoSortEnum;
+	/**
+	 * Posted on or before this UTC day (inclusive)
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	to?: string;
 	/** Only posts with a matched mention a re-read no longer named (`Mention.unconfirmedAt`): to confirm or ignore. */
 	unconfirmedOnly?: boolean;
 	/** Only posts with a mention nothing matched (`none`): to link by hand. */
@@ -3490,6 +3699,11 @@ export interface AdminListReviewsInputDto {
 	 */
 	cityId?: string;
 	/**
+	 * Published on or after this UTC day, `2026-09-01`
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	from?: string;
+	/**
 	 * YYYY-MM
 	 * @pattern ^[0-9]{4}-[0-9]{2}$
 	 */
@@ -3506,6 +3720,11 @@ export interface AdminListReviewsInputDto {
 	 * @max 5
 	 */
 	stars?: number;
+	/**
+	 * Published on or before this UTC day (inclusive)
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	to?: string;
 	/** @format uuid */
 	venueId?: string;
 }
@@ -3912,7 +4131,6 @@ export interface AdminMentionOutputDto {
 		name: string;
 	};
 	city?: string;
-	cuisine?: string;
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionOutputDtoMatchMethodEnum;
@@ -3920,14 +4138,6 @@ export interface AdminMentionOutputDto {
 	matchScore?: number;
 	/** What the post says about this place, one claim per row with its parts (its sentiment is worked out from them) */
 	statements: StatementOutputDto[];
-	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
-	topics?: {
-		source: AdminMentionOutputDtoSourceEnum;
-		topic: {
-			key: string;
-			label: string;
-		};
-	}[];
 	/**
 	 * When a re-read of the post no longer named it while it was matched: confirm (link it again) or ignore it
 	 * @format date-time
@@ -3950,11 +4160,6 @@ export enum AdminMentionOutputDtoMatchMethodEnum {
 	Ignored = 'ignored',
 }
 
-export enum AdminMentionOutputDtoSourceEnum {
-	Category = 'category',
-	Cuisine = 'cuisine',
-}
-
 export interface AdminMentionWithPostOutputDto {
 	/** The brand it was matched to */
 	brand?: {
@@ -3962,7 +4167,6 @@ export interface AdminMentionWithPostOutputDto {
 		name: string;
 	};
 	city?: string;
-	cuisine?: string;
 	id: number;
 	locationHint?: string;
 	matchMethod?: AdminMentionWithPostOutputDtoMatchMethodEnum;
@@ -3972,14 +4176,6 @@ export interface AdminMentionWithPostOutputDto {
 	post: OmitAdminSocialPostListItemOutputDtomentionsfoundByaccount;
 	/** What the post says about this place, one claim per row with its parts (its sentiment is worked out from them) */
 	statements: StatementOutputDto[];
-	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
-	topics?: {
-		source: AdminMentionWithPostOutputDtoSourceEnum;
-		topic: {
-			key: string;
-			label: string;
-		};
-	}[];
 	/**
 	 * When a re-read of the post no longer named it while it was matched: confirm (link it again) or ignore it
 	 * @format date-time
@@ -4000,11 +4196,6 @@ export enum AdminMentionWithPostOutputDtoMatchMethodEnum {
 	OtherCity = 'other_city',
 	Manual = 'manual',
 	Ignored = 'ignored',
-}
-
-export enum AdminMentionWithPostOutputDtoSourceEnum {
-	Category = 'category',
-	Cuisine = 'cuisine',
 }
 
 /** Accounts that are this creator's too: they move under it, and creators left empty go. */
@@ -4277,6 +4468,11 @@ export interface AdminPostHashtagOutputDto {
 	hashtag: AdminHashtagOutputDto;
 }
 
+/** A started re-read of one post: the run to follow on `/admin/workflows/:id` */
+export interface AdminPostRereadOutputDto {
+	workflowId: string;
+}
+
 /** One read of a post's counts: a scrape that found it, or the refresh at seven days. */
 export interface AdminPostSnapshotOutputDto {
 	/** @format date-time */
@@ -4287,6 +4483,27 @@ export interface AdminPostSnapshotOutputDto {
 	saves: number;
 	shares: number;
 	views: number;
+}
+
+/** "Make it a topic of its own": the label and kind override what the agent proposed (a dish named after the wording by default) */
+export interface AdminPromoteTermInputDto {
+	kind?: AdminPromoteTermInputDtoKindEnum;
+	/**
+	 * @minLength 1
+	 * @maxLength 80
+	 */
+	label?: string;
+}
+
+export enum AdminPromoteTermInputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Format = 'format',
+	Meal = 'meal',
+	Ingredient = 'ingredient',
+	Aspect = 'aspect',
 }
 
 /** The business a prospect is. */
@@ -4688,6 +4905,48 @@ export interface AdminReportTemplateOutputDto {
 	sections: ReportSectionDto[];
 	/** @format date-time */
 	updatedAt: string;
+}
+
+/** One review on its own page: the branch, its brand and city, what it says and its claims */
+export interface AdminReviewDetailOutputDto {
+	/** @format date-time */
+	analysedAt?: string;
+	branch: {
+		district?: string;
+		id: string;
+		name: string;
+		street?: string;
+	};
+	brand: {
+		id: string;
+		name: string;
+	};
+	city: {
+		id: string;
+		name: string;
+	};
+	id: string;
+	language?: string;
+	likes: number;
+	/** @format date-time */
+	markedRepliedAt?: string;
+	ownerResponse?: string;
+	/** @format date-time */
+	ownerResponseAt?: string;
+	platform: AdminReviewDetailOutputDtoPlatformEnum;
+	/** @format date-time */
+	publishedAt: string;
+	reviewId: string;
+	stars?: number;
+	/** What it says, one claim per row with its parts (none before it is analysed) */
+	statements: StatementOutputDto[];
+	text?: string;
+	textTranslated?: string;
+}
+
+export enum AdminReviewDetailOutputDtoPlatformEnum {
+	Google = 'google',
+	Tripadvisor = 'tripadvisor',
 }
 
 export interface AdminReviewOutputDto {
@@ -5101,6 +5360,11 @@ export interface AdminStatementsInputDto {
 	brandId?: string;
 	/** @format uuid */
 	cityId?: string;
+	/**
+	 * Said on or after this UTC day, `2026-09-01`
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	from?: string;
 	/** One kind (`STATEMENT_KINDS`), or `unread`: not read by agent B yet */
 	kind?: AdminStatementsInputDtoKindEnum;
 	/**
@@ -5123,6 +5387,11 @@ export interface AdminStatementsInputDto {
 	size: number;
 	sourceKind?: AdminStatementsInputDtoSourceKindEnum;
 	subject?: AdminStatementsInputDtoSubjectEnum;
+	/**
+	 * Said on or before this UTC day (inclusive)
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	to?: string;
 	/** @format uuid */
 	venueId?: string;
 }
@@ -5185,8 +5454,18 @@ export interface AdminStatementsScopeInputDto {
 	brandId?: string;
 	/** @format uuid */
 	cityId?: string;
+	/**
+	 * Said on or after this UTC day, `2026-09-01`
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	from?: string;
 	/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 	month?: string;
+	/**
+	 * Said on or before this UTC day (inclusive)
+	 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+	 */
+	to?: string;
 	/** @format uuid */
 	venueId?: string;
 }
@@ -5254,18 +5533,48 @@ export interface AdminSuggestedProspectOutputDto {
 	website?: string;
 }
 
-/** One wording, with its links and how many of the city's statements and venues' Google tags carry it */
+export interface AdminTermModifierInputDto {
+	/** @maxLength 80 */
+	topicKey: string;
+	type?: AdminTermModifierInputDtoTypeEnum;
+}
+
+export enum AdminTermModifierInputDtoTypeEnum {
+	IsA = 'is_a',
+	Has = 'has',
+}
+
+/** What a narrower wording is (`is_a`) or has (`has`) beside its main topic */
+export interface AdminTermModifierOutputDto {
+	key: string;
+	kind: string;
+	label: string;
+	type: AdminTermModifierOutputDtoTypeEnum;
+}
+
+export enum AdminTermModifierOutputDtoTypeEnum {
+	IsA = 'is_a',
+	Has = 'has',
+}
+
+/** One wording, with its topic and how many of the city's statements and venues' Google tags carry it */
 export interface AdminTermOutputDto {
 	decidedBy?: AdminTermOutputDtoDecidedByEnum;
+	/** True: the wording is `topic`, spelled or translated. False: something narrower under it */
+	exact: boolean;
 	id: number;
 	key: string;
+	modifiers: AdminTermModifierOutputDto[];
 	name: string;
 	/** The city's statements naming it (food parts) */
 	notes: number;
-	suggestion?: string;
+	proposedKind?: string;
+	/** The label and kind a narrower wording would have as a topic of its own: what promotion groups by */
+	proposedLabel?: string;
 	/** The city's venues whose Google "people often mention" tags carry it */
 	tagVenues: number;
-	topics: AdminTermTopicOutputDto[];
+	/** Its main topic; absent for none, or while not decided */
+	topic?: AdminTermTopicOutputDto;
 }
 
 export enum AdminTermOutputDtoDecidedByEnum {
@@ -5274,10 +5583,10 @@ export enum AdminTermOutputDtoDecidedByEnum {
 	Ai = 'ai',
 }
 
-export interface AdminTermSuggestionOutputDto {
+export interface AdminTermProposalOutputDto {
 	examples: string[];
 	label: string;
-	/** Wordings the agent suggested it for */
+	/** Narrower wordings proposed as it */
 	terms: number;
 	/** Their statements and tag venues together */
 	uses: number;
@@ -5287,20 +5596,11 @@ export interface AdminTermTopicOutputDto {
 	key: string;
 	kind: string;
 	label: string;
-	/** How strongly the wording is it: `same` (a spelling), `kind_of` (a finer kind), `with` (an attribute or ingredient) */
-	relation: AdminTermTopicOutputDtoRelationEnum;
-}
-
-/** How strongly the wording is it: `same` (a spelling), `kind_of` (a finer kind), `with` (an attribute or ingredient) */
-export enum AdminTermTopicOutputDtoRelationEnum {
-	With = 'with',
-	Same = 'same',
-	KindOf = 'kind_of',
 }
 
 export interface AdminTermsOutputDto {
-	/** The agent's suggested topics for the city's wordings without one, most used first */
-	suggestions: AdminTermSuggestionOutputDto[];
+	/** What the city's narrower wordings would be as topics of their own, most used first: a group becomes a topic at 15 uses from 5 sources */
+	proposals: AdminTermProposalOutputDto[];
 	/** The city's wordings and their uses, and how many point at a topic */
 	summary: {
 		linkedTerms: number;
@@ -5442,13 +5742,15 @@ export enum AdminTodoOutputDtoToneEnum {
 }
 
 export interface AdminTopicBaseOutputDto {
+	/** What it is (`is_a`) and has (`has`): `is_a` first, each type by rank */
+	edges: AdminTopicEdgeOutputDto[];
 	/** An aspect's: what it covers, told to the agents */
 	hint?: string;
 	id: string;
 	key: string;
 	kind: AdminTopicBaseOutputDtoKindEnum;
 	label: string;
-	/** The parent topic's key: a child counts for it too */
+	/** Its display parent's key: its first `is_a` edge. A topic counts for everything its edges reach */
 	parentKey?: string;
 	trendsQuery?: string;
 	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
@@ -5464,6 +5766,38 @@ export enum AdminTopicBaseOutputDtoKindEnum {
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
+}
+
+/** One thing a topic is (`is_a`) or has (`has`): the other topic's key; a type left out defaults from that topic's kind */
+export interface AdminTopicEdgeInputDto {
+	/** @maxLength 80 */
+	to: string;
+	type?: AdminTopicEdgeInputDtoTypeEnum;
+}
+
+export enum AdminTopicEdgeInputDtoTypeEnum {
+	IsA = 'is_a',
+	Has = 'has',
+}
+
+export interface AdminTopicEdgeOutputDto {
+	decidedBy: AdminTopicEdgeOutputDtoDecidedByEnum;
+	rank: number;
+	/** The other topic's key */
+	to: string;
+	type: AdminTopicEdgeOutputDtoTypeEnum;
+}
+
+export enum AdminTopicEdgeOutputDtoDecidedByEnum {
+	Match = 'match',
+	Admin = 'admin',
+	Seed = 'seed',
+	Ai = 'ai',
+}
+
+export enum AdminTopicEdgeOutputDtoTypeEnum {
+	IsA = 'is_a',
+	Has = 'has',
 }
 
 export interface AdminTopicInsightOutputDto {
@@ -5548,17 +5882,19 @@ export interface AdminTopicMenuOutputDto {
 }
 
 export interface AdminTopicOutputDto {
+	/** What it is (`is_a`) and has (`has`): `is_a` first, each type by rank */
+	edges: AdminTopicEdgeOutputDto[];
 	/** An aspect's: what it covers, told to the agents */
 	hint?: string;
 	id: string;
 	key: string;
 	kind: AdminTopicOutputDtoKindEnum;
 	label: string;
-	/** The city's matched mentions resolving to it, all time */
+	/** The city's matched mentions whose claims name it, all time */
 	mentions: number;
-	/** The parent topic's key: a child counts for it too */
+	/** Its display parent's key: its first `is_a` edge. A topic counts for everything its edges reach */
 	parentKey?: string;
-	/** The wordings linked to it, in any city */
+	/** The wordings whose main topic it is, in any city */
 	terms: number;
 	trendsQuery?: string;
 	/** Google Trends topic id, e.g. "/m/01xw9"; searched before `trendsQuery` */
@@ -5905,8 +6241,13 @@ export interface AdminUpdateReportTemplateInputDto {
 	sections?: ReportSectionDto[];
 }
 
-/** Only the fields given change; null clears a parent, a Trends id or a query. The key never changes. */
+/**
+ * Only the fields given change; null clears a Trends id or a query. `edges` is the whole list (an
+ * edge left out is removed, `[]` makes the topic a root). The key never changes.
+ */
 export interface AdminUpdateTopicInputDto {
+	/** @maxItems 20 */
+	edges?: AdminTopicEdgeInputDto[];
 	/** @maxLength 300 */
 	hint?: string | null;
 	kind?: AdminUpdateTopicInputDtoKindEnum;
@@ -5915,7 +6256,6 @@ export interface AdminUpdateTopicInputDto {
 	 * @maxLength 80
 	 */
 	label?: string;
-	parentKey?: string | null;
 	/** @maxLength 100 */
 	trendsQuery?: string | null;
 	/** @pattern ^/(m|g)/[0-9A-Za-z_]+$ */
@@ -5956,11 +6296,17 @@ export interface AdminUpdateVenueInputDto {
 /** A term after an admin's decision: the list carries the counts, this answer doesn't */
 export interface AdminUpdatedTermOutputDto {
 	decidedBy?: AdminUpdatedTermOutputDtoDecidedByEnum;
+	/** True: the wording is `topic`, spelled or translated. False: something narrower under it */
+	exact: boolean;
 	id: number;
 	key: string;
+	modifiers: AdminTermModifierOutputDto[];
 	name: string;
-	suggestion?: string;
-	topics: AdminTermTopicOutputDto[];
+	proposedKind?: string;
+	/** The label and kind a narrower wording would have as a topic of its own: what promotion groups by */
+	proposedLabel?: string;
+	/** Its main topic; absent for none, or while not decided */
+	topic?: AdminTermTopicOutputDto;
 }
 
 export enum AdminUpdatedTermOutputDtoDecidedByEnum {
@@ -6160,6 +6506,11 @@ export interface AdminVenueRefOutputDto {
 	district?: string;
 	id: string;
 	name: string;
+}
+
+/** A started refresh of one venue's Google details: the run to follow on `/admin/workflows/:id` */
+export interface AdminVenueRefreshOutputDto {
+	workflowId: string;
 }
 
 /** Open evening slots on a booking platform for one date. */
@@ -7359,6 +7710,13 @@ export type GetBrandData = AdminBrandOutputDto;
 
 export type GetBrandSummaryData = AdminBrandSummaryOutputDto;
 
+/** The window of `figures`, `topPosts` and `brandOnlyPosts`; `30d` without */
+export enum GetBrandSummaryParamsPeriodEnum {
+	Value30D = '30d',
+	Value90D = '90d',
+	Value12Mo = '12mo',
+}
+
 export type GetCityData = AdminCityOutputDto;
 
 export type GetCityHighlightData = CityHighlightOutputDto;
@@ -7653,6 +8011,8 @@ export type GetReportPdfData = any;
 export type GetReportRunData = AdminReportRunOutputDto;
 
 export type GetReportTemplateData = AdminReportTemplateOutputDto;
+
+export type GetReviewData = AdminReviewDetailOutputDto;
 
 export type GetSearchInterestData = AdminSearchInterestOutputDto;
 
@@ -8223,6 +8583,22 @@ export enum ListExploreClaimsParamsKindEnum {
 	Unread = 'unread',
 }
 
+/** Under no aspect, no part at all, or naming a food */
+export enum ListExploreClaimsParamsPartsEnum {
+	None = 'none',
+	Food = 'food',
+	NoAspect = 'no_aspect',
+}
+
+/** One sentiment, or `unread`: agent B gave none yet */
+export enum ListExploreClaimsParamsSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+	Unread = 'unread',
+}
+
 export enum ListExploreClaimsParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
@@ -8764,7 +9140,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1219'?: PartialOmitCredentialVerificationRequestuserOptionalProps1219Enum;
+	'__@OptionalProps@1221'?: PartialOmitCredentialVerificationRequestuserOptionalProps1221Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -8790,7 +9166,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1219Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1221Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -9857,6 +10233,8 @@ export type PreviewEntryData = BlogEntryOutputDto;
 
 export type PreviewReportDataData = ReportData;
 
+export type PromoteTermData = AdminUpdatedTermOutputDto;
+
 export type PublishCityHighlightData = AdminCityHighlightOutputDto;
 
 export type PublishFoodTrendsData = AdminFoodTrendsReportOutputDto;
@@ -9913,15 +10291,6 @@ export type Recordstringstringnumberbooleannull = Record<
 /** Construct a type with a set of properties K of type T */
 export type Recordstringunknown = Record<string, any>;
 
-/** Construct a type with a set of properties K of type T */
-export type RecordstringwithsamekindOf = Record<string, RecordstringwithsamekindOfEnum>;
-
-export enum RecordstringwithsamekindOfEnum {
-	With = 'with',
-	Same = 'same',
-	KindOf = 'kind_of',
-}
-
 export type ReflagOpeningsData = AdminReflagOpeningsOutputDto;
 
 export type RefreshTokenData = RefreshTokenOutputDto;
@@ -9939,6 +10308,8 @@ export interface RefreshTokenOutputDto {
 	/** @format date-time */
 	accessTokenExpiresAt: string;
 }
+
+export type RefreshVenueData = AdminVenueRefreshOutputDto;
 
 export type RegisterViewData = OkResponse;
 
@@ -11221,6 +11592,8 @@ export interface ReportTrendRow {
 
 export type RequestLoginCodeData = VerificationTokenOutputDto;
 
+export type RereadPostData = AdminPostRereadOutputDto;
+
 export interface ResumeScheduleData {
 	name: string;
 	status: string;
@@ -11249,6 +11622,8 @@ export type RevokeReportShareData = AdminReportShareOutputDto;
 export type RevokeSessionData = OkResponse;
 
 export type RunLlmBacklogsData = AdminRunLlmBacklogsOutputDto;
+
+export type ScrapeCreatorData = AdminCreatorScrapeOutputDto;
 
 export type SearchAnalystMentionsData = AdminAnalystMentionsOutputDto;
 
@@ -11466,20 +11841,25 @@ export enum StatementOutputDtoUnitEnum {
 
 /**
  * One thing a statement is about (a `StatementPart` row): an `aspect` part has `topic`; a `food`
- * part has `term` (the wording as the source spelled it) whose `topics` are the wording's links,
- * empty until decided. Every route serving statements populates `STATEMENT_POPULATE` (`parts.topic.parent` and
- * `parts.term.topics.topic.parent`): a topic serialized without its parent loaded fails the DTO.
+ * part has `term` (the wording as the source spelled it) with its main `topic` (absent until
+ * decided, and for a wording that is none), whether the wording is that topic (`exact`) or
+ * something narrower, and what else a narrower one is or has (`modifiers`). Every route serving
+ * statements populates `STATEMENT_POPULATE`.
  */
 export interface StatementPartOutputDto {
 	role: StatementPartOutputDtoRoleEnum;
 	term?: {
+		exact: boolean;
 		key: string;
-		name: string;
-		topics: {
+		modifiers: {
 			rank: number;
 			/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 			topic: StatementTopicOutputDto;
+			type: StatementPartOutputDtoTypeEnum;
 		}[];
+		name: string;
+		/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
+		topic?: StatementTopicOutputDto;
 	};
 	/** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 	topic?: StatementTopicOutputDto;
@@ -11490,13 +11870,18 @@ export enum StatementPartOutputDtoRoleEnum {
 	Food = 'food',
 }
 
+export enum StatementPartOutputDtoTypeEnum {
+	IsA = 'is_a',
+	Has = 'has',
+}
+
 /** A topic a part is about: an aspect, or one of a wording's topics. Its page is `/admin/aspects/<key>` for an aspect, `/admin/topics/<key>` for a kind of food */
 export interface StatementTopicOutputDto {
 	key: string;
 	/** `Topic.kind`: aspect, dish, cuisine, … */
 	kind: string;
 	label: string;
-	/** The topic above it, when loaded (an aspect's root); absent for a root */
+	/** Its display parent, the topic its first `is_a` edge points at (an aspect's root, a dish's cuisine); absent for a root */
 	parent?: {
 		key: string;
 		label: string;
@@ -12891,6 +13276,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				cityId?: string;
 				/**
+				 * Published on or after this UTC day, `2026-09-01`
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				from?: string;
+				/**
 				 * YYYY-MM
 				 * @pattern ^[0-9]{4}-[0-9]{2}$
 				 */
@@ -12907,6 +13297,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @max 5
 				 */
 				stars?: number;
+				/**
+				 * Published on or before this UTC day (inclusive)
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				to?: string;
 				/** @format uuid */
 				venueId?: string;
 			},
@@ -12916,6 +13311,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				path: `/admin/reviews`,
 				method: 'GET',
 				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description One review with its branch, brand and city and every claim it made (`/admin/reviews/[id]`)
+		 *
+		 * @name GetReview
+		 * @request GET:/admin/reviews/{id}
+		 * @response `200` `GetReviewData`
+		 */
+		getReview: (id: string, params: RequestParams = {}) =>
+			this.request<GetReviewData, any>({
+				path: `/admin/reviews/${id}`,
+				method: 'GET',
 				format: 'json',
 				...params,
 			}),
@@ -13474,6 +13884,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				brandId?: string;
 				/** @format uuid */
 				cityId?: string;
+				/**
+				 * Said on or after this UTC day, `2026-09-01`
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				from?: string;
 				/** One kind (`STATEMENT_KINDS`), or `unread`: not read by agent B yet */
 				kind?: ListStatementsParamsKindEnum;
 				/**
@@ -13496,6 +13911,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				size: number;
 				sourceKind?: ListStatementsParamsSourceKindEnum;
 				subject?: ListStatementsParamsSubjectEnum;
+				/**
+				 * Said on or before this UTC day (inclusive)
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				to?: string;
 				/** @format uuid */
 				venueId?: string;
 			},
@@ -13522,8 +13942,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				brandId?: string;
 				/** @format uuid */
 				cityId?: string;
+				/**
+				 * Said on or after this UTC day, `2026-09-01`
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				from?: string;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 				month?: string;
+				/**
+				 * Said on or before this UTC day (inclusive)
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				to?: string;
 				/** @format uuid */
 				venueId?: string;
 			},
@@ -13739,6 +14169,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				node?: string;
 				/** @min 1 */
 				page: number;
+				/** Under no aspect, no part at all, or naming a food */
+				parts?: ListExploreClaimsParamsPartsEnum;
 				/**
 				 * The brands of one kind of place (their main food in the city), a topic's key
 				 * @maxLength 80
@@ -13749,6 +14181,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @maxLength 200
 				 */
 				q?: string;
+				/** One sentiment, or `unread`: agent B gave none yet */
+				sentiment?: ListExploreClaimsParamsSentimentEnum;
 				side?: ListExploreClaimsParamsSideEnum;
 				/** @min 1 */
 				size: number;
@@ -13793,6 +14227,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				kind?: GetExploreGroupsParamsKindEnum;
 				/** Only claims filed under no aspect or at a root (nothing finer fitted) */
 				loose?: boolean;
+				/**
+				 * Claims a group needs to be listed (from two sources at least, whatever this is)
+				 * @min 2
+				 * @max 100
+				 */
+				minClaims?: number;
 				/** @maxLength 200 */
 				node?: string;
 				/**
@@ -13801,6 +14241,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				place?: string;
 				side?: GetExploreGroupsParamsSideEnum;
+				/**
+				 * Cosine a claim needs with a group's centroid to join it: lower groups looser paraphrases
+				 * @min 0.5
+				 * @max 0.98
+				 */
+				similarity?: number;
 				/** A source kind (review, post) or a channel (google_review, tiktok, blog, …) */
 				source?: GetExploreGroupsParamsSourceEnum;
 				subject?: GetExploreGroupsParamsSubjectEnum;
@@ -14004,10 +14450,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description Deletes an aspect (400 for a kind of food, a root, or one with children); its points move to its parent.
+		 * @description Deletes an aspect (400 for a kind of food, a root, or one with children); its claims move to its root.
 		 *
 		 * @name DeleteTopic
-		 * @summary Deletes an aspect (400 for a kind of food, a root, or one with children); its points move to its parent
+		 * @summary Deletes an aspect (400 for a kind of food, a root, or one with children); its claims move to its root
 		 * @request DELETE:/admin/topics/{id}
 		 * @response `200` `DeleteTopicData`
 		 */
@@ -14039,18 +14485,18 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				/** @min 0 */
 				offset?: number;
 				/**
+				 * Only narrower terms proposed as this topic of their own (`proposedLabel`)
+				 * @maxLength 80
+				 */
+				proposal?: string;
+				/**
 				 * A search in the wording or its key
 				 * @maxLength 80
 				 */
 				q?: string;
 				status?: GetTermsParamsStatusEnum;
 				/**
-				 * Only terms the agent suggested this label for
-				 * @maxLength 80
-				 */
-				suggestion?: string;
-				/**
-				 * Only terms linked to this topic
+				 * Only terms whose main topic or a modifier is this topic
 				 * @maxLength 80
 				 */
 				topicKey?: string;
@@ -14066,10 +14512,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description An admin's decision on a wording: its topics (empty for none), or back to the match and the agent.
+		 * @description An admin's decision on a wording: its main topic (null for none), exact or narrower with modifiers, or back to the match and the agent.
 		 *
 		 * @name ChangeTerm
-		 * @summary An admin's decision on a wording: its topics (empty for none), or back to the match and the agent
+		 * @summary An admin's decision on a wording: its main topic (null for none), exact or narrower with modifiers, or back to the match and the agent
 		 * @request PATCH:/admin/terms/{id}
 		 * @response `200` `ChangeTermData`
 		 */
@@ -14077,6 +14523,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			this.request<ChangeTermData, any>({
 				path: `/admin/terms/${id}`,
 				method: 'PATCH',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description "Make it a topic of its own": the wording's group becomes a topic now, whatever its uses, and the wording is it.
+		 *
+		 * @name PromoteTerm
+		 * @summary "Make it a topic of its own": the wording's group becomes a topic now, whatever its uses, and the wording is it
+		 * @request POST:/admin/terms/{id}/promotion
+		 * @response `201` `PromoteTermData`
+		 */
+		promoteTerm: (id: number, data: AdminPromoteTermInputDto, params: RequestParams = {}) =>
+			this.request<PromoteTermData, any>({
+				path: `/admin/terms/${id}/promotion`,
+				method: 'POST',
 				body: data,
 				type: ContentType.Json,
 				format: 'json',
@@ -14149,6 +14613,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				creatorId?: string;
 				/**
+				 * Posted on or after this UTC day
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				from?: string;
+				/**
 				 * Only posts whose caption carries this hashtag (with or without #, any case)
 				 * @maxLength 200
 				 */
@@ -14166,6 +14635,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				/** Only posts the gate didn't digest, for this reason */
 				skipReason?: ListPostsParamsSkipReasonEnum;
 				sort?: ListPostsParamsSortEnum;
+				/**
+				 * Posted on or before this UTC day (inclusive)
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				to?: string;
 				/** Only posts with a matched mention a re-read no longer named (`Mention.unconfirmedAt`): to confirm or ignore. */
 				unconfirmedOnly?: boolean;
 				/** Only posts with a mention nothing matched (`none`): to link by hand. */
@@ -14215,6 +14689,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @format uuid
 				 */
 				brandId?: string;
+				/**
+				 * Posted on or after this UTC day
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				from?: string;
 				matchMethod?: ListMentionsParamsMatchMethodEnum;
 				/** @pattern ^[0-9]{4}-[0-9]{2}$ */
 				month?: string;
@@ -14222,6 +14701,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				page: number;
 				/** @min 1 */
 				size: number;
+				/**
+				 * Posted on or before this UTC day (inclusive)
+				 * @pattern ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+				 */
+				to?: string;
 				/** @format uuid */
 				venueId?: string;
 			},
@@ -15133,6 +15617,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description "Refresh from Google": starts the venue's detail-page run (`refresh-venue-details.venue`, under a cent and half a minute; one in flight per venue) and answers its run, which the page follows until it ends. `high`: an admin waits on it, so its actor run passes the pipeline's.
+		 *
+		 * @name RefreshVenue
+		 * @request POST:/admin/venues/{id}/refresh
+		 * @response `201` `RefreshVenueData`
+		 */
+		refreshVenue: (id: string, params: RequestParams = {}) =>
+			this.request<RefreshVenueData, any>({
+				path: `/admin/venues/${id}/refresh`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * No description
 		 *
 		 * @name GetCreatorWatch
@@ -15159,6 +15658,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description "Scrape now": their profiles read now (`creator-watch.creator`, a few cents; one in flight per creator), the run to follow. `high`: an admin waits on it, so its actor runs pass the pipeline's. A creator without a TikTok or Instagram profile has no run.
+		 *
+		 * @name ScrapeCreator
+		 * @request POST:/admin/creators/{id}/scrape
+		 * @response `201` `ScrapeCreatorData`
+		 */
+		scrapeCreator: (id: string, params: RequestParams = {}) =>
+			this.request<ScrapeCreatorData, any>({
+				path: `/admin/creators/${id}/scrape`,
+				method: 'POST',
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * @description Reads a month's stored posts again for the "just opened" flag only (`ReflagOpeningsWorkflow.reflagPage`, a workflow it awaits): sets `isNewOpening` on the mentions already stored, adds none, and leaves matches and admins' corrections as they are. Most viewed first, `limit` posts a call (LLM allowance, ~3,000 tokens a post); call again with `nextOffset` until `remaining` is zero. `high`: the admin waits on the request, so the page's agent calls pass the pipeline's on their tier's LLM queue.
 		 *
 		 * @name ReflagOpenings
@@ -15171,6 +15685,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description "Re-analyse" on a post row: the gate and agent A read the post again (~3 agent calls, the post reading's own models), its mentions paired as the nightly re-read pairs them; one in flight per post. `high`: an admin waits on it.
+		 *
+		 * @name RereadPost
+		 * @request POST:/admin/posts/{id}/reread
+		 * @response `201` `RereadPostData`
+		 */
+		rereadPost: (id: string, params: RequestParams = {}) =>
+			this.request<RereadPostData, any>({
+				path: `/admin/posts/${id}/reread`,
+				method: 'POST',
 				format: 'json',
 				...params,
 			}),
@@ -15463,10 +15992,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description One brand's month in numbers, six months of them, its best posts and what to do about it.
+		 * @description One brand in numbers over a rolling window (the last 30 or 90 days, or twelve months) against the one before, six months of them, the window's best posts (each with its mention, to move to a branch) and what to do about it.
 		 *
 		 * @name GetBrandSummary
-		 * @summary One brand's month in numbers, six months of them, its best posts and what to do about it
 		 * @request GET:/admin/brands/{id}/summary
 		 * @response `200` `GetBrandSummaryData`
 		 */
@@ -15479,10 +16007,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 */
 				cityId?: string;
 				/**
-				 * The last finished month without
+				 * Where the twelve months of `series` end and whose report the to-dos ask about; the last finished month without
 				 * @pattern ^[0-9]{4}-[0-9]{2}$
 				 */
 				month?: string;
+				/** The window of `figures`, `topPosts` and `brandOnlyPosts`; `30d` without */
+				period?: GetBrandSummaryParamsPeriodEnum;
 			},
 			params: RequestParams = {},
 		) =>

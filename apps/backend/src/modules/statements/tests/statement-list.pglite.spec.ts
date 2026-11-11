@@ -167,11 +167,11 @@ describe('statement list (pglite)', () => {
 			sentiment: 'positive',
 			review: { stars: 2, venue: { name: 'Pasta Bar' } },
 		});
-		expect(pasta.parts.map(p => p.topic?.key ?? p.term?.topics[0].topic.key)).toEqual([
+		expect(pasta.parts.map(p => p.topic?.key ?? p.term?.topic?.key)).toEqual([
 			'taste',
 			'pasta',
 		]);
-		expect(pasta.parts[1].term?.topics[0].topic.parent).toMatchObject({ key: 'italian' });
+		expect(pasta.parts[1].term?.topic?.parent).toMatchObject({ key: 'italian' });
 		const city = res.items.find(s => s.subject === 'city')!;
 		expect(city).toMatchObject({
 			sourceKind: 'post',
@@ -278,6 +278,17 @@ describe('statement list (pglite)', () => {
 			ours.filter(t => t !== 'august claim'),
 		);
 		expect(await scoped({ venueId: other.id })).toEqual(['the kebab was dry']);
+		// Days, either side inclusive: September's claims, August's from its days alone
+		expect(await scoped({ venueId: venue.id, from: '2026-09-01', to: '2026-09-30' })).toEqual(
+			ours.filter(t => t !== 'august claim'),
+		);
+		expect(await scoped({ venueId: venue.id, to: '2026-08-31' })).toEqual(['august claim']);
+		const days = await controller.getStatementsSummary({
+			venueId: venue.id,
+			from: '2026-09-01',
+			to: '2026-09-30',
+		});
+		expect(days.statements).toBe(5);
 		const summary = await controller.getStatementsSummary({ brandId: venue.brand.id });
 		expect([
 			summary.statements,

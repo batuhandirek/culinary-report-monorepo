@@ -22,8 +22,8 @@ import { Mention } from '../entities/mention.entity.js';
 import { SocialPlatformEnum, SocialPost } from '../entities/social-post.entity.js';
 import { MentionExtractionService } from '../services/mention-extraction.service.js';
 
-/* Extraction is told the food topics' labels, so a mention's cuisine uses the words reports group by,
-   and stores whether the post said the place had just opened. Agent A answers the places (mentions)
+/* Extraction is told the post's city, never a topic list (what a mention is about is what its claims
+   name), and stores whether the post said the place had just opened. Agent A answers the places (mentions)
    and the claims (statements: about a place, the city or nothing); agent B reads each claim's parts
    right after. */
 describe('MentionExtractionService (pglite)', () => {
@@ -35,7 +35,6 @@ describe('MentionExtractionService (pglite)', () => {
 			{
 				venueName: 'Pho House',
 				locationHint: 'Neukölln',
-				cuisine: 'Pho, Vietnamese',
 				city: 'Berlin',
 				visited: true,
 				isNewOpening: true,
@@ -128,7 +127,7 @@ describe('MentionExtractionService (pglite)', () => {
 		await harness.stop();
 	});
 
-	it("gives the agent the topics' labels and stores the cuisine it answers", async () => {
+	it('gives the agent the city alone and stores the opening it answers', async () => {
 		expect(await readPostsPlainly(harness.moduleRef, { limit: 10 })).toEqual({
 			analysed: 1,
 			mentions: 1,
@@ -136,17 +135,10 @@ describe('MentionExtractionService (pglite)', () => {
 		});
 		const [, context] = agent.generate.mock.calls[0] as [
 			string,
-			{ cityName: string; topics: string[] },
+			Record<string, unknown>,
 		];
-		expect(context.cityName).toBe('Berlin');
-		expect([...context.topics].sort()).toEqual([
-			'Döner & kebab',
-			'Pho',
-			'Turkish',
-			'Vietnamese',
-		]);
+		expect(context).toEqual({ cityName: 'Berlin' });
 		const mention = await harness.orm.em.findOneOrFail(Mention, { venueName: 'Pho House' });
-		expect(mention.cuisine).toBe('Pho, Vietnamese');
 		// The post said the place had just opened
 		expect(mention.isNewOpening).toBe(true);
 	});
@@ -159,7 +151,7 @@ describe('MentionExtractionService (pglite)', () => {
 			{ post },
 			{
 				orderBy: { id: 'asc' },
-				populate: ['mention', 'parts.topic.parent', 'parts.term.topics.topic'],
+				populate: ['mention', 'parts.topic.edges.to', 'parts.term.topic', 'parts.term.modifiers.topic'],
 			},
 		);
 		expect(
@@ -271,7 +263,6 @@ describe('MentionExtractionService (pglite)', () => {
 		const place = (venueName: string) => ({
 			venueName,
 			locationHint: null,
-			cuisine: null,
 			city: 'Berlin',
 			visited: true,
 			isNewOpening: false,

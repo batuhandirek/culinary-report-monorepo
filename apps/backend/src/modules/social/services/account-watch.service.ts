@@ -464,6 +464,27 @@ export class AccountWatchService {
 		}));
 	}
 
+	/**
+	 * One creator's profiles for a scrape an admin asked for ("Scrape now" on the creator page):
+	 * every TikTok and Instagram account of theirs that still has its handle, and the city a new
+	 * post joins (the city whose scrape found their first account). None without a profile.
+	 */
+	async creatorTargets(
+		creatorId: string,
+	): Promise<{ cityId: string; targets: AccountToScrape[] } | null> {
+		if (!(await this.em.count(Creator, { id: creatorId }))) throw new NotFoundException();
+		const accounts = await this.em.find(
+			SocialAccount,
+			{ creator: creatorId, platform: { $in: PROFILE_PLATFORMS }, handleLostAt: null },
+			{ orderBy: { createdAt: 'asc' } },
+		);
+		if (!accounts.length) return null;
+		return {
+			cityId: accounts[0].city.id,
+			targets: accounts.map(a => ({ platform: a.platform as ProfilePlatform, handle: a.handle })),
+		};
+	}
+
 	/** The profiles a run scrapes: the watched accounts with an active reason of these kinds (any without). */
 	targets(watched: WatchedAccount[], kinds?: WatchReasonKindEnum[]): AccountToScrape[] {
 		return watched

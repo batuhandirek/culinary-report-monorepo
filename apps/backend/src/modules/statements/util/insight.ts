@@ -71,12 +71,12 @@ export const termRef = (key: string) => `${TERM_REF}${key}`;
  */
 export const foldParent = (
 	refs: string[],
-	index: Pick<TopicIndex, 'get' | 'isAspect'>,
+	index: Pick<TopicIndex, 'get' | 'isAspect' | 'parentOf'>,
 	aspects: boolean,
 ): string | undefined => {
 	const depth = (key: string) => {
 		let d = 0;
-		for (let t = index.get(key); t?.parentKey && d < 20; t = index.get(t.parentKey)) d++;
+		for (let k = index.parentOf(key); k && d < 20; k = index.parentOf(k)) d++;
 		return d;
 	};
 	const onSide = refs.filter(r => !isTermRef(r) && index.get(r) && index.isAspect(r) === aspects);

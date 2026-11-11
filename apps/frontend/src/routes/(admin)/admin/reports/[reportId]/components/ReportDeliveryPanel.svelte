@@ -65,7 +65,7 @@
 			{:else if won}
 				<span class="text-muted-foreground">
 					{report.brand.name} subscribed but has no e-mail address:
-					<a class="underline" href={`/admin/brands/${report.brand.id}?tab=sales`}
+					<a class="underline" href={`/admin/brands/${report.brand.id}?tab=history`}
 						>add one</a
 					>.
 				</span>

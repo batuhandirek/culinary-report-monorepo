@@ -26,7 +26,7 @@
 	// they were built with.
 	let { data } = $props();
 	const brand = $derived(data.brand);
-	const back = $derived(`/admin/brands/${data.brand.id}?tab=reports`);
+	const back = $derived(`/admin/brands/${data.brand.id}?tab=history`);
 
 	// The output's status enum is a twin of the input's: compare by value
 	const isActive = (c: AdminReportConfigOutputDto) => (c.status as string) === Status.Active;

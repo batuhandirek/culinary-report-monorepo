@@ -7,6 +7,7 @@ import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { SearchInterestService } from 'src/modules/trends/services/search-interest.service.js';
 import { TrendService } from 'src/modules/trends/services/trend.service.js';
@@ -59,7 +60,7 @@ describe('ReportCityService (pglite)', () => {
 		pizza = venue('pizza', 'Pizza Tre', 'Pizza restaurant');
 
 		let n = 0;
-		const mention = (v: Venue, date: string, cuisine: string, views: number) => {
+		const mention = (v: Venue, date: string, food: string, views: number) => {
 			const post = em.create(SocialPost, {
 				city: v.city,
 				externalId: `post-${n++}`,
@@ -69,14 +70,14 @@ describe('ReportCityService (pglite)', () => {
 				views,
 				postedAt: new Date(`${date}T12:00:00Z`),
 			});
-			em.create(Mention, {
+			const m = em.create(Mention, {
 				post,
 				venue: v,
 				brand: (v.brand ??= em.create(Brand, { name: v.name, key: v.name.toLowerCase() })),
 				venueName: v.name,
-				cuisine,
 				visited: true,
 			});
+			addFoods(em, m, [food]);
 		};
 		// August: ramen is a tenth of the talk; September: a fifth, out of 200 mentions
 		for (let i = 0; i < 10; i++) mention(rival, '2026-08-05', 'Ramen', 100);

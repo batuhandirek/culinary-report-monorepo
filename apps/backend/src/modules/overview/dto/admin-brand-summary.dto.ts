@@ -7,21 +7,48 @@ import type { AdminBrandMonthFiguresOutputDto } from './admin-brand-list.dto.js'
 
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
 
+/** The rolling window the figures cover: the last 30 or 90 days, or the last twelve months */
+export type AdminBrandSummaryPeriod = '30d' | '90d' | '12mo';
+
 export interface AdminGetBrandSummaryInputDto {
 	/** Figures in this city only; every city without */
 	cityId?: string & tags.Format<'uuid'>;
-	/** The last finished month without */
+	/** Where the twelve months of `series` end and whose report the to-dos ask about; the last finished month without */
 	month?: Month;
+	/** The window of `figures`, `topPosts` and `brandOnlyPosts`; `30d` without */
+	period?: AdminBrandSummaryPeriod;
 }
 
-/** One month of a brand's figures, for the six-month strip. */
+/** The window the figures cover, up to the moment asked, against the same length before it */
+export interface AdminBrandSummaryWindowOutputDto {
+	period: AdminBrandSummaryPeriod;
+	/** Its first moment */
+	from: Date;
+	/** The moment asked (exclusive) */
+	to: Date;
+	/** "30 days", "12 months": how a page says it */
+	label: string;
+}
+
+/** One month of a brand's figures: the trend drawn under each of the Overview's figures. */
 export interface AdminBrandSeriesPointOutputDto extends AdminBrandMonthFiguresOutputDto {
 	month: string;
+}
+
+/** The brand's all-time Google rating on one day */
+export interface AdminBrandRatingPointOutputDto {
+	/** `YYYY-MM-DD` */
+	date: string;
+	stars?: number;
+	/** All-time Google reviews over its places */
+	reviews?: number;
 }
 
 /** A post by someone else that named the brand. */
 export interface AdminBrandTopPostOutputDto {
 	id: string;
+	/** Its mention of the brand: the one an admin moves to a branch */
+	mentionId: number;
 	platform: SocialPlatformEnum;
 	url: string;
 	author?: string;
@@ -43,18 +70,26 @@ export interface AdminBrandTodoOutputDto {
 	key: string;
 	tone: 'urgent' | 'todo' | 'info';
 	text: string;
-	tab: 'overview' | 'posts' | 'reviews' | 'branches' | 'competitors' | 'signals' | 'reports' | 'sales' | 'settings';
+	tab: 'overview' | 'posts' | 'reviews' | 'places' | 'competitors' | 'signals' | 'history' | 'settings';
 }
 
 export interface AdminBrandSummaryOutputDto {
 	month: string;
+	window: AdminBrandSummaryWindowOutputDto;
+	/** The window's figures */
 	figures: AdminBrandMonthFiguresOutputDto;
+	/** The same length just before the window */
 	previous: AdminBrandMonthFiguresOutputDto;
-	/** The six months up to `month`, oldest first */
+	/** The twelve months up to `month`, oldest first */
 	series: AdminBrandSeriesPointOutputDto[];
-	/** The month's most viewed posts by others, up to five */
+	/**
+	 * Its Google rating as each read saw it, oldest first, over its open places (in the city): a
+	 * place's last read carried forward to every later date, stars weighted by review count
+	 */
+	ratings: AdminBrandRatingPointOutputDto[];
+	/** The window's most viewed posts by others, up to five */
 	topPosts: AdminBrandTopPostOutputDto[];
-	/** Posts of the month naming the brand but no branch (a chain) */
+	/** Posts of the window naming the brand but no branch (a chain) */
 	brandOnlyPosts: number;
 	/** The month's report, else the newest one */
 	report?: {

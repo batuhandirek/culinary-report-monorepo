@@ -417,11 +417,10 @@ export class EvalCollectService {
 			topics: { key: string; relation: string }[] | null;
 		};
 		const rows: Row[] = await em.getConnection().execute(
-			`select t.id, t.key, t.name, coalesce(p.n, 0)::int as uses, t.decided_by, t.suggestion,
-				case when t.decided_by is null then null else coalesce(
-					(select json_agg(json_build_object('key', x.key, 'relation', tt.relation) order by tt.rank)
-					from term_topics tt join topics x on x.id = tt.topic_id and x.deleted_at is null where tt.term_id = t.id),
-					'[]'::json) end as topics
+			// TODO(topic-graph): new term cases store no decision (`topics` null: nothing to score). The
+			// stored shape is one main topic, `exact` and modifiers now; remade with the eval's term part
+			`select t.id, t.key, t.name, coalesce(p.n, 0)::int as uses, t.decided_by, null::text as suggestion,
+				null::json as topics
 			from terms t
 			left join (select term_id, count(*) as n from statement_parts where role = 'food' group by term_id) p on p.term_id = t.id`,
 		);

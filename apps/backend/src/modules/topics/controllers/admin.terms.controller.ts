@@ -10,11 +10,11 @@ import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
 import {
 	AdminChangeTermInputDto,
 	AdminGetTermsInputDto,
+	AdminPromoteTermInputDto,
 	AdminTermsOutputDto,
 	AdminUpdatedTermOutputDto,
 } from '../dto/admin-terms.dto.js';
-import { Term } from '../entities/term.entity.js';
-import { TermService } from '../services/term.service.js';
+import { termRow, TermService } from '../services/term.service.js';
 
 const DEFAULT_LIMIT = 50;
 
@@ -31,42 +31,34 @@ export class AdminTermsController {
 			status: query.status,
 			q: query.q,
 			topicKey: query.topicKey,
-			suggestion: query.suggestion,
+			proposal: query.proposal,
 			offset: query.offset ?? 0,
 			limit: query.limit ?? DEFAULT_LIMIT,
 		});
 	}
 
-	/** An admin's decision on a wording: its topics (empty for none), or back to the match and the agent. */
+	/** An admin's decision on a wording: its main topic (null for none), exact or narrower with modifiers, or back to the match and the agent. */
 	@TypedRoute.Patch('/:id')
 	async changeTerm(
 		@TypedParam('id') id: number,
 		@TypedBody() body: AdminChangeTermInputDto,
 	): Promise<AdminUpdatedTermOutputDto> {
-		return toDto(
+		return termRow(
 			await this.termService.change(
 				id,
 				body.auto ?
 					{ auto: true }
-				:	{ topicKeys: body.topicKeys ?? [], relations: body.relations },
+				:	{ topicKey: body.topicKey ?? null, exact: body.exact, modifiers: body.modifiers },
 			),
 		);
 	}
-}
 
-const toDto = (term: Term): AdminUpdatedTermOutputDto => ({
-	id: term.id,
-	key: term.key,
-	name: term.name,
-	topics: term.topics
-		.getItems()
-		.filter(l => !l.topic.deletedAt)
-		.map(l => ({
-			key: l.topic.key,
-			label: l.topic.label,
-			kind: l.topic.kind,
-			relation: l.relation,
-		})),
-	...(term.decidedBy && { decidedBy: term.decidedBy }),
-	...(term.suggestion && { suggestion: term.suggestion }),
-});
+	/** "Make it a topic of its own": the wording's group becomes a topic now, whatever its uses, and the wording is it. */
+	@TypedRoute.Post('/:id/promotion')
+	async promoteTerm(
+		@TypedParam('id') id: number,
+		@TypedBody() body: AdminPromoteTermInputDto,
+	): Promise<AdminUpdatedTermOutputDto> {
+		return termRow(await this.termService.promoteTerm(id, body));
+	}
+}

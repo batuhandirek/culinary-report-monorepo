@@ -46,12 +46,14 @@ import { SocialPostSnapshot } from 'src/modules/social/entities/social-post-snap
 import { SocialAccountSubscriber } from 'src/modules/social/subscribers/social-account.subscriber.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { StatementPart } from 'src/modules/statements/entities/statement-part.entity.js';
-import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
 import { MenuItemTopic } from 'src/modules/topics/entities/menu-item-topic.entity.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
-import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
+import { TermModifier } from 'src/modules/topics/entities/term-modifier.entity.js';
 import { Topic } from 'src/modules/topics/entities/topic.entity.js';
+import { TopicClosure } from 'src/modules/topics/entities/topic-closure.entity.js';
+import { TopicEdge } from 'src/modules/topics/entities/topic-edge.entity.js';
 import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
+import { TopicClosureSubscriber } from 'src/modules/topics/subscribers/topic-closure.subscriber.js';
 import { TrendRelatedQuery } from 'src/modules/trends/entities/trend-related-query.entity.js';
 import { TrendSearchInterest } from 'src/modules/trends/entities/trend-search-interest.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
@@ -98,7 +100,9 @@ export default defineConfig({
 		Topic,
 		VenueTopic,
 		Term,
-		TermTopic,
+		TermModifier,
+		TopicEdge,
+		TopicClosure,
 		TrendRelatedQuery,
 		Venue,
 		VenueSnapshot,
@@ -140,7 +144,6 @@ export default defineConfig({
 		LlmCall,
 		Statement,
 		StatementPart,
-		MentionTopic,
 		MenuItemTopic,
 		Prospect,
 		OutreachTouch,
@@ -163,7 +166,11 @@ export default defineConfig({
 		ssl: mainConfig.DB_SSL ? { rejectUnauthorized: false } : false,
 	},
 
-	subscribers: [new VenueBrandSubscriber(), new SocialAccountSubscriber()],
+	subscribers: [
+		new VenueBrandSubscriber(),
+		new SocialAccountSubscriber(),
+		new TopicClosureSubscriber(),
+	],
 
 	schemaGenerator: {
 		// MikroORM v7 no longer adds `ON UPDATE CASCADE` to foreign keys by itself

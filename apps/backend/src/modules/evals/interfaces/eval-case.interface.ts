@@ -5,7 +5,12 @@ import type { StatementKind } from 'src/modules/statements/constants/kind.consta
 import type { Sentiment } from 'src/modules/statements/constants/sentiment.constant.js';
 import type { StatementUnit } from 'src/modules/statements/entities/statement.entity.js';
 import type { ClaimLabel } from 'src/modules/statements/util/claim-labels.js';
-import type { TermRelation } from 'src/modules/topics/constants/term-relation.constant.js';
+/**
+ * TODO(topic-graph): the term cases on disk still carry the old term × topic links (`same`, a
+ * spelling; `kind_of`, a finer kind; `with`, an attribute or ingredient). Their scoring is off
+ * until the eval's term part is remade for one main topic, `exact` and modifiers.
+ */
+export type TermRelation = 'same' | 'kind_of' | 'with';
 
 /** A claim with its parts, as stored, as an agent gave it, or as the reference says */
 export interface EvalClaim {

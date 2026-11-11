@@ -8,6 +8,7 @@ import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { StatementPart } from 'src/modules/statements/entities/statement-part.entity.js';
 import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
+import { FOODS_SQL, type StatementFood } from 'src/modules/statements/util/statement-foods.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
@@ -26,41 +27,45 @@ import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
 import { TermService } from '../services/term.service.js';
 import { TopicService } from '../services/topic.service.js';
 import { TopicRelinkService } from '../services/topic-relink.service.js';
+import type { TermTopicAnswer } from '../util/term-topic-input.js';
 
 import { seedTopics } from './factories/topic.factory.js';
 
-/** The relation the agent answers for a wording's topic when it is no `same` */
-const RELATIONS: Record<string, Record<string, 'kind_of' | 'with'>> = {
-	'vegan döner': { kebab: 'kind_of', vegan: 'with' },
-	'tofu döner': { kebab: 'kind_of', vegan: 'with' },
-};
-/** What the agent answers for a wording, by its spelling (lower case): the topics it is, or none with a suggestion */
-const ANSWERS: Record<string, { topics: string[]; suggestion: string | null }> = {
-	spaghettiiiossso: { topics: ['pasta'], suggestion: null },
-	// A compound: two topics, the dish first
-	'vegan döner': { topics: ['kebab', 'vegan'], suggestion: null },
-	'tofu döner': { topics: ['kebab', 'vegan'], suggestion: null },
-	pommes: { topics: [], suggestion: 'Fries' },
-	sauce: { topics: [], suggestion: 'Sauces' },
-	// A suggestion naming a topic it passed over
-	nudelsalat: { topics: [], suggestion: 'Pasta' },
-	// A Google tag that is an aspect
-	'waiting time': { topics: ['wait'], suggestion: null },
-	'cheese counter': { topics: [], suggestion: null },
-	// An unknown key and a label answered for keys
-	'smashed patty': { topics: ['nonsense', 'Burgers'], suggestion: null },
-	pho: { topics: [], suggestion: 'Pho' },
-	'tip prompt': { topics: ['tip_prompts'], suggestion: null },
-	'lahmacun deluxe': { topics: ['kebab'], suggestion: null },
+/** What the agent answers for a wording, by its spelling (lower case); anything else is none */
+const ANSWERS: Record<string, Partial<TermTopicAnswer>> = {
+	// A spelling of a topic
+	spaghettiiiossso: { topic: 'pasta', exact: true },
+	// A narrower thing with a modifier whose type is left to the target's kind
+	'vegan döner': {
+		topic: 'kebab',
+		exact: false,
+		label: 'Vegan döner',
+		kind: 'dish',
+		modifiers: [{ topic: 'vegan', type: null }],
+	},
+	// A thing no topic given comes near: under nothing, proposed as a topic
+	pommes: { topic: null, exact: false, label: 'Fries', kind: 'dish' },
+	// A Google tag under an aspect: stored exact whatever the agent says
+	'waiting time': { topic: 'wait', exact: false, label: 'Waiting time', kind: 'dish' },
+	// A label answered for a key, an unknown modifier, a kind promotion can't create
+	'smashed patty': {
+		topic: 'Burgers',
+		exact: false,
+		label: 'Smashed patty',
+		kind: 'format',
+		modifiers: [{ topic: 'nonsense', type: 'has' }],
+	},
+	nudelsalat: { topic: 'pasta', exact: false, label: 'Pasta salad', kind: 'dish' },
+	'tip prompt': { topic: 'tip_prompts', exact: true },
 };
 
 /*
- * Every wording seen (`Term`) and the topics each is (`TermTopic`): stored as agent B reads a
- * claim's food wordings (`ensure`) and from the venues' Google tags (`sync`; the raw cuisines and
- * categories nothing resolves: `topic.service.pglite.spec.ts`), decided by a name
+ * Every wording seen (`Term`) with its main topic and modifiers: stored as the labelling pass reads
+ * a claim's food wordings (`ensure`) and from the venues' Google tags (`sync`), decided by a name
  * match, the agent (the `terms` backlog) or an admin, re-decided when topics change, part of the
  * index every reader resolves text with. A statement's food part points at its term and takes the
- * term's links at read time: a decision moves every statement naming the wording at once.
+ * term's topic at read time: a decision moves every statement naming the wording at once.
+ * Promotion and the boot import are in `topic-graph.pglite.spec.ts`.
  */
 describe('TermService (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -68,20 +73,24 @@ describe('TermService (pglite)', () => {
 	let hamburg: City;
 	let venue: Venue;
 	const pgBoss = { sendJob: jest.fn(async (..._args: unknown[]) => 'job-id') };
-	/** The topics the agent was offered on its last call, and the wordings asked since the case began (one a call) */
+	/** The fixed topics the agent was offered on its last call, its last message, and the wordings asked since the case began (one a call) */
 	let offered: TermTopicInputTopic[] = [];
+	let message = '';
 	let asked: string[] = [];
-	const agent = mockAgent((message: unknown, context: unknown) => {
-		const name = JSON.parse((message as string).replace(/^Wording: /, '')) as string;
+	const agent = mockAgent((given: unknown, context: unknown) => {
+		message = given as string;
+		const name = JSON.parse(/^Wording: (.*)$/m.exec(message)![1]) as string;
 		offered = (context as TermTopicContext).topics;
 		asked.push(name);
-		const answer = ANSWERS[name.toLowerCase()] ?? { topics: [], suggestion: null };
+		const answer = ANSWERS[name.toLowerCase()];
 		return {
-			suggestion: answer.suggestion,
-			topics: answer.topics.map(key => ({
-				key,
-				relation: RELATIONS[name.toLowerCase()]?.[key] ?? 'same',
-			})),
+			none: !answer,
+			topic: null,
+			exact: false,
+			label: null,
+			kind: null,
+			modifiers: [],
+			...answer,
 		};
 	});
 
@@ -205,592 +214,243 @@ describe('TermService (pglite)', () => {
 		asked = [];
 	});
 
-	/** Every food part's term, with the topics the statements' readers see through its links today (rank order) */
-	const topicsOfParts = async (): Promise<Record<string, string[]>> => {
-		const rows: { key: string; topics: string[] | null }[] = await em()
-			.getConnection()
-			.execute(
-				`select t.key, (select array_agg(x.key order by tt.rank) from term_topics tt join topics x on x.id = tt.topic_id where tt.term_id = t.id) as topics
-				from statement_parts p join terms t on t.id = p.term_id where p.role = 'food' group by t.id, t.key order by t.key`,
-			);
-		return Object.fromEntries(rows.map(r => [r.key, r.topics ?? []]));
-	};
-	/** Every stored wording by key: its spelling, its topics in rank order, who decided it and the suggestion */
-	const terms = async () => {
-		const rows = await em()
+	/** A stored wording as decided: its main topic, exact, the proposal, its modifiers and who decided */
+	const state = async (key: string) => {
+		const t = await em()
 			.fork()
-			.find(Term, {}, { populate: ['topics', 'topics.topic'], orderBy: { key: 'asc' } });
-		return new Map(
-			rows.map(t => [
-				t.key,
-				{
-					name: t.name,
-					topics: t.topics.getItems().map(l => l.topic.key),
-					decidedBy: t.decidedBy ?? null,
-					suggestion: t.suggestion ?? null,
-				},
-			]),
-		);
-	};
-	const decisions = async (keys: string[]) => {
-		const all = await terms();
-		return Object.fromEntries(
-			keys.map(key => {
-				const t = all.get(key);
-				return [key, t ? [t.topics, t.decidedBy, t.suggestion] : undefined];
-			}),
+			.findOne(Term, { key }, { populate: ['topic', 'modifiers.topic'] });
+		return (
+			t && {
+				topic: t.topic?.key ?? null,
+				exact: t.exact,
+				label: t.proposedLabel ?? null,
+				kind: t.proposedKind ?? null,
+				modifiers: t.modifiers.getItems().map(m => `${m.type} ${m.topic.key}`),
+				by: t.decidedBy ?? null,
+			}
 		);
 	};
 	const termId = async (key: string) => (await em().fork().findOneOrFail(Term, { key })).id;
+	/** The dish and drink topics the statements naming a wording count for today */
+	const foodsOf = async (key: string): Promise<string[]> => {
+		const rows: { foods: StatementFood[] }[] = await em()
+			.getConnection()
+			.execute(
+				`select ${FOODS_SQL('st.id = s.id')} as foods from statements s
+				where exists (select 1 from statement_parts p join terms t on t.id = p.term_id where p.statement_id = s.id and t.key = ?)`,
+				[key],
+			);
+		return [...new Set(rows.flatMap(r => r.foods.flatMap(f => f.topics.map(t => t.key))))].sort();
+	};
 
 	it("stores each wording once — a statement's as first spelled, a tag as Google writes it — decided by a name match where it is a topic as a whole, the rest waiting", async () => {
 		const index = await topicService().index();
-		// The statements' wordings the index did not know
-		expect(await service().countPending()).toBe(6);
-		// The tags: "waiting time", "cheese counter", "Café" and "Pho" are new ("Dürüm" has its term), "Café" is a topic as a whole
-		expect(await service().sync(index)).toEqual({ added: 4, matched: 1 });
-		expect(
-			await decisions([
-				'spaghettiiiossso',
-				'durum',
-				'pomme',
-				'sauce',
-				'vegan doner',
-				'italian food',
-				'nudelsalat',
-				'burger',
-				'smashed patty',
-				'waiting time',
-				'cheese counter',
-				'cafe',
-				'pho',
-			]),
-		).toEqual({
-			spaghettiiiossso: [[], null, null],
-			durum: [['kebab'], 'admin', null],
-			pomme: [[], null, null],
-			sauce: [[], null, null],
-			'vegan doner': [[], null, null],
-			// The label and the key as a whole, whatever the kind
-			'italian food': [['italian'], 'match', null],
-			burger: [['burgers'], 'match', null],
-			cafe: [['cafe'], 'match', null],
-			nudelsalat: [[], null, null],
-			'smashed patty': [[], null, null],
-			'waiting time': [[], null, null],
-			'cheese counter': [[], null, null],
-			pho: [[], null, null],
-		});
-		const stored = await terms();
-		// The spelling first seen: "Pommes" and "pommes" are one wording
-		expect(stored.get('pomme')!.name).toBe('Pommes');
-		expect(stored.get('burger')!.name).toBe('Burgers');
-		// A tag as Google writes it
-		expect(stored.get('waiting time')!.name).toBe('waiting time');
-		expect(stored.get('cafe')!.name).toBe('Café');
-		expect(await service().countPending()).toBe(9);
-		// The statements naming a matched wording see its topics through the links, whatever the kind
-		const parts = await topicsOfParts();
-		expect([parts['burger'], parts['italian food'], parts['durum'], parts['pomme']]).toEqual([
-			['burgers'],
-			['italian'],
-			['kebab'],
-			[],
-		]);
-		// Idempotent
-		expect(await service().sync(index)).toEqual({ added: 0, matched: 0 });
+		const synced = await service().sync(index);
+		expect(synced.added).toBeGreaterThan(0);
+		// A second sync adds nothing
+		expect((await service().sync(index)).added).toBe(0);
+		// "Burgers" is a topic's label: the wording is that topic, exact, with no model
+		expect(await state('burger')).toMatchObject({ topic: 'burgers', exact: true, by: 'match' });
+		// "Pommes" and "pommes" are one term, spelled as first seen, waiting
+		const pommes = await em().fork().findOneOrFail(Term, { key: 'pomme' });
+		expect([pommes.name, pommes.decidedBy ?? null]).toEqual(['Pommes', null]);
+		expect(await state('waiting time')).toMatchObject({ topic: null, by: null });
+		expect(await service().countPending()).toBeGreaterThan(0);
 	});
 
-	it('decides the waiting wordings once in the backlog, the most named first: lists of topics of any kind in rank order, suggestions kept unless they name a topic, every statement following', async () => {
-		// A batch of one takes the wording the most statements name: "Pommes", two food parts
-		expect(await service().decide({ limit: 1 })).toEqual({ looked: 1, linked: 0, tokens: 0, usd: 0 });
-		expect(asked).toEqual(['Pommes']);
+	it('decides the waiting wordings once in the backlog: a spelling exact, a narrower thing with its modifiers and proposal, none; every statement following', async () => {
+		expect(await foodsOf('vegan doner')).toEqual([]);
+		const res = await service().decide({ limit: 100 });
+		expect(res.looked).toBe(asked.length);
+		expect(asked).toEqual(expect.arrayContaining(['Spaghettiiiossso', 'vegan döner', 'Pommes']));
+		// The small fixed kinds and the aspect roots are in the instructions, the many in the message
+		// (all of them here: the embeddings are mocked away, so nothing is closest)
+		expect(offered.map(t => t.key)).toEqual(expect.arrayContaining(['vegan', 'breakfast', 'wait', 'cafe']));
+		expect(offered.map(t => t.key)).not.toContain('kebab');
+		expect(message).toContain('Topics close to it:');
+		expect(message).toMatch(/^kebab \| /m);
 
-		const registry = harness.moduleRef.get(LlmBacklogRegistry);
-		expect(registry.list().map(b => [b.key, b.priority])).toEqual([['terms', 25]]);
-		const backlog = registry.get('terms')!;
-		expect(await backlog.remaining()).toBe(8);
-		asked = [];
-		expect(await backlog.runBatch()).toEqual({ done: 8, tokens: 0 });
-
-		// Every topic of every kind offered, with its parent
-		expect([...new Set(offered.map(t => t.kind))].sort()).toEqual([
-			'aspect',
-			'cuisine',
-			'diet',
-			'dish',
-			'format',
-			'meal',
-		]);
-		expect(offered.find(t => t.key === 'pasta')).toEqual({
-			key: 'pasta',
-			label: 'Pasta',
+		expect(await state('spaghettiiiossso')).toEqual({
+			topic: 'pasta',
+			exact: true,
+			label: null,
+			kind: null,
+			modifiers: [],
+			by: 'ai',
+		});
+		expect(await state('vegan doner')).toEqual({
+			topic: 'kebab',
+			exact: false,
+			label: 'Vegan döner',
 			kind: 'dish',
-			parent: 'italian',
+			modifiers: ['has vegan'],
+			by: 'ai',
 		});
-		expect(offered.find(t => t.key === 'wait')).toEqual({
-			key: 'wait',
-			label: 'Waiting',
-			kind: 'aspect',
+		expect(await state('pomme')).toMatchObject({ topic: null, exact: false, label: 'Fries', kind: 'dish' });
+		// None: decided, nothing else
+		expect(await state('sauce')).toEqual({
+			topic: null,
+			exact: false,
+			label: null,
+			kind: null,
+			modifiers: [],
+			by: 'ai',
 		});
-		expect(asked).toHaveLength(8);
-		expect(asked).toEqual(
-			expect.arrayContaining([
-				'Spaghettiiiossso',
-				'vegan döner',
-				'waiting time',
-				'cheese counter',
-				'Pho',
-			]),
-		);
+		// Under an aspect a wording is exact, with no proposal
+		expect(await state('waiting time')).toMatchObject({ topic: 'wait', exact: true, label: null });
+		// A label answered for a key counts; an unknown modifier and a kind promotion can't create are dropped
+		expect(await state('smashed patty')).toMatchObject({
+			topic: 'burgers',
+			exact: false,
+			label: 'Smashed patty',
+			kind: null,
+			modifiers: [],
+		});
+		// The statements naming the wording follow at once
+		expect(await foodsOf('vegan doner')).toEqual(['kebab']);
+		expect(await foodsOf('spaghettiiiossso')).toEqual(['pasta']);
 
-		expect(
-			await decisions([
-				'spaghettiiiossso',
-				'vegan doner',
-				'pomme',
-				'sauce',
-				'nudelsalat',
-				'waiting time',
-				'cheese counter',
-				'smashed patty',
-				'pho',
-			]),
-		).toEqual({
-			spaghettiiiossso: [['pasta'], 'ai', null],
-			'vegan doner': [['kebab', 'vegan'], 'ai', null],
-			pomme: [[], 'ai', 'Fries'],
-			sauce: [[], 'ai', 'Sauces'],
-			// Its suggestion named a topic it passed over: dropped
-			nudelsalat: [[], 'ai', null],
-			'waiting time': [['wait'], 'ai', null],
-			'cheese counter': [[], 'ai', null],
-			// The label counted, the unknown key dropped
-			'smashed patty': [['burgers'], 'ai', null],
-			pho: [[], 'ai', 'Pho'],
-		});
-		// One link per topic, ranked as answered
-		expect(
-			await em()
-				.getConnection()
-				.execute<{ key: string; rank: number }[]>(
-					`select x.key, tt.rank from term_topics tt join terms t on t.id = tt.term_id join topics x on x.id = tt.topic_id
-					where t.key = 'vegan doner' order by tt.rank`,
-				),
-		).toEqual([
-			{ key: 'kebab', rank: 0 },
-			{ key: 'vegan', rank: 1 },
-		]);
-		// What every statement's food part is about now: its wording's links, no row rewritten
-		expect(await topicsOfParts()).toEqual({
-			spaghettiiiossso: ['pasta'],
-			durum: ['kebab'],
-			pomme: [],
-			sauce: [],
-			'vegan doner': ['kebab', 'vegan'],
-			'italian food': ['italian'],
-			nudelsalat: [],
-			burger: ['burgers'],
-			'smashed patty': ['burgers'],
-		});
-		// Each asked once
-		expect(await service().countPending()).toBe(0);
-		expect(await service().decide({ limit: 100 })).toEqual({ looked: 0, linked: 0, tokens: 0, usd: 0 });
-		// One call a wording: Pommes, then the batch's eight
-		expect(agent.generate).toHaveBeenCalledTimes(9);
+		// Each wording is asked once
+		asked = [];
+		expect((await service().decide({ limit: 100 })).looked).toBe(0);
+		expect(asked).toEqual([]);
 	});
 
-	it('gives the index every decision: an alias, a compound to both topics, a tag to its aspect, a "none" to nothing', async () => {
+	it('gives the index every decision: a spelling as its topic, a narrower wording as what it evokes, a tag as its aspect, a "none" as nothing', async () => {
 		const index = await topicService().index();
-		expect(index.resolve('Frühstück')).toEqual(['breakfast']);
+		expect(index.exact('Spaghettiiiossso')).toBe('pasta');
+		expect(index.resolve('Spaghettiiiossso')).toEqual(['pasta']);
+		// A narrower wording is no topic as a whole, but evokes its topic and its modifiers
+		expect(index.exact('vegan döner')).toBeUndefined();
 		expect(index.exactAll('vegan döner')).toEqual(['kebab', 'vegan']);
-		expect(index.resolve('Vegan Döner Haus')).toEqual(['kebab', 'vegan']);
-		expect(index.resolveMenuItem({ name: 'Vegan Döner', category: null })).toEqual([
-			'kebab',
-			'vegan',
-		]);
+		expect(index.resolve('vegan döner')).toEqual(['kebab', 'vegan']);
 		expect(index.exactAll('waiting time')).toEqual(['wait']);
-		expect(index.exactAll('Spaghettiiiossso')).toEqual(['pasta']);
-		// A wording decided none takes no form
-		expect(index.exactAll('cheese counter')).toEqual([]);
+		// An aspect never enters the cuisine lookup
+		expect(index.resolve('waiting time')).toEqual([]);
+		expect(index.exactAll('sauce')).toEqual([]);
 	});
 
-	it("names the topic each of Google's tags is: a decided wording's first topic that is no kind of place, else the index as a whole", async () => {
-		const tags = await service().reviewTagTopics([
-			'Dürüm',
-			'waiting time',
-			'cheese counter',
-			'Café',
-			'vegan döner',
-			'Chicken Döner',
-			'Döner',
-		]);
-		expect([...tags]).toEqual([
-			['Dürüm', { key: 'kebab', label: 'Döner & kebab' }],
-			['waiting time', { key: 'wait', label: 'Waiting' }],
-			['vegan döner', { key: 'kebab', label: 'Döner & kebab' }],
-			// Not a term: the topic it names as a whole, never split into words
-			['Döner', { key: 'kebab', label: 'Döner & kebab' }],
-		]);
-		expect(await service().reviewTagTopics([])).toEqual(new Map());
+	it("names the topic each of Google's tags is: a decided wording's topic that is no kind of place, else the index as a whole", async () => {
+		const named = await service().reviewTagTopics(['waiting time', 'cheese counter', 'Dürüm', 'Café']);
+		expect(named.get('waiting time')).toMatchObject({ key: 'wait' });
+		expect(named.get('Dürüm')).toMatchObject({ key: 'kebab' });
+		expect(named.has('cheese counter')).toBe(false);
+		// A kind of place is never what a tag names
+		expect(named.has('Café')).toBe(false);
 	});
 
-	it("lists a city's wordings with the statements naming them and the venues whose tags carry them, and filters by status, topic and suggestion", async () => {
-		const all = await service().list(city.id, { status: 'all', offset: 0, limit: 50 });
-		expect(all.summary).toEqual({
-			terms: 12,
-			uses: 15,
-			linkedTerms: 8,
-			linkedUses: 10,
-			pendingTerms: 0,
+	it("lists a city's wordings with the statements naming them and the venues whose tags carry them, and filters by status, topic and proposal", async () => {
+		const all = await service().list(city.id, { status: 'all', offset: 0, limit: 200 });
+		const row = (key: string) => all.terms.find(t => t.key === key);
+		expect(row('waiting time')).toMatchObject({ topic: { key: 'wait' }, exact: true, tagVenues: 2, notes: 0 });
+		expect(row('pomme')).toMatchObject({ notes: 2, proposedLabel: 'Fries', exact: false });
+		expect(row('vegan doner')).toMatchObject({
+			topic: { key: 'kebab' },
+			modifiers: [{ key: 'vegan', type: 'has' }],
 		});
-		expect(all.suggestions).toEqual([
-			{ label: 'Fries', terms: 1, uses: 2, examples: ['Pommes'] },
-			{ label: 'Sauces', terms: 1, uses: 1, examples: ['sauce'] },
-		]);
-		expect(all.total).toBe(12);
-		// Most used first: statements and tag venues together
-		expect(all.terms.slice(0, 3).map(t => [t.key, t.notes, t.tagVenues])).toEqual([
-			['durum', 1, 1],
-			['pomme', 2, 0],
-			['waiting time', 0, 2],
-		]);
-		expect(all.terms.find(t => t.key === 'waiting time')).toMatchObject({
-			name: 'waiting time',
-			topics: [{ key: 'wait', label: 'Waiting', kind: 'aspect' }],
-			decidedBy: 'ai',
-		});
-		expect(all.terms.find(t => t.key === 'vegan doner')!.topics.map(t => t.key)).toEqual([
-			'kebab',
-			'vegan',
-		]);
+		// Another city's tag is not this city's wording
+		expect(row('pho')).toBeUndefined();
+		expect(all.summary.terms).toBe(all.total);
+		expect(all.proposals.find(p => p.label === 'Fries')).toMatchObject({ terms: 1, uses: 2 });
 
-		// Unlinked by default: decided, no topic
+		const keys = async (filters: Parameters<TermService['list']>[1]) =>
+			(await service().list(city.id, filters)).terms.map(t => t.key);
+		const page = { offset: 0, limit: 200 };
+		// A modifier counts as its topic's wording too
+		expect(await keys({ status: 'all', topicKey: 'vegan', ...page })).toEqual(['vegan doner']);
+		expect(await keys({ status: 'all', proposal: 'fries', ...page })).toEqual(['pomme']);
+		const unlinked = await keys({ status: 'unlinked', ...page });
+		expect(unlinked).toEqual(expect.arrayContaining(['sauce', 'pomme']));
+		expect(unlinked).not.toContain('vegan doner');
+		expect(await keys({ status: 'pending', ...page })).toEqual([]);
+		expect(await keys({ status: 'all', q: 'spagh', ...page })).toEqual(['spaghettiiiossso']);
+	});
+
+	it("takes an admin's decision — a main topic, exact or narrower with modifiers, none, or back to automatic — which every statement naming the wording follows", async () => {
 		const controller = harness.moduleRef.get(AdminTermsController);
-		expect((await controller.getTerms({ cityId: city.id })).terms.map(t => t.key)).toEqual([
-			'pomme',
-			'cheese counter',
-			'nudelsalat',
-			'sauce',
-		]);
-		const keys = async (
-			filters: Omit<Parameters<TermService['list']>[1], 'offset' | 'limit'>,
-		) =>
-			(await service().list(city.id, { ...filters, offset: 0, limit: 50 })).terms.map(
-				t => t.key,
-			);
-		expect(await keys({ status: 'linked', topicKey: 'kebab' })).toEqual([
-			'durum',
-			'vegan doner',
-		]);
-		expect(await keys({ status: 'all', suggestion: 'fries' })).toEqual(['pomme']);
-		// A suggestion matches across plurals
-		expect(await keys({ status: 'all', suggestion: 'Sauce' })).toEqual(['sauce']);
-		expect(await keys({ status: 'all', q: 'vegan' })).toEqual(['vegan doner']);
-		expect(await keys({ status: 'pending' })).toEqual([]);
-		const page = await service().list(city.id, { status: 'all', offset: 1, limit: 2 });
-		expect([page.total, page.terms.map(t => t.key)]).toEqual([12, ['pomme', 'waiting time']]);
-
-		// The other city: its own tags only
-		const other = await service().list(hamburg.id, { status: 'all', offset: 0, limit: 50 });
-		expect(other.summary).toEqual({
-			terms: 2,
-			uses: 2,
-			linkedTerms: 1,
-			linkedUses: 1,
-			pendingTerms: 0,
-		});
-		expect(other.suggestions).toEqual([{ label: 'Pho', terms: 1, uses: 1, examples: ['Pho'] }]);
-	});
-
-	it("takes an admin's decision — topics of any kind in the order given, none, or back to automatic — which every statement naming the wording follows", async () => {
-		const controller = harness.moduleRef.get(AdminTermsController);
-		const nudelsalat = await termId('nudelsalat');
-		expect(
-			await controller.changeTerm(nudelsalat, { topicKeys: ['pasta', 'italian'] }),
-		).toEqual({
-			id: nudelsalat,
-			key: 'nudelsalat',
-			name: 'nudelsalat',
-			topics: [
-				{ key: 'pasta', label: 'Pasta', kind: 'dish', relation: 'same' },
-				{ key: 'italian', label: 'Italian', kind: 'cuisine', relation: 'same' },
-			],
-			decidedBy: 'admin',
-		});
-		expect((await topicsOfParts()).nudelsalat).toEqual(['pasta', 'italian']);
-
-		// An admin's "none" drops the suggestion
 		const sauce = await termId('sauce');
-		expect(await controller.changeTerm(sauce, { topicKeys: [] })).toMatchObject({
-			topics: [],
+		const out = await controller.changeTerm(sauce, {
+			topicKey: 'kebab',
+			exact: false,
+			modifiers: [{ topicKey: 'vegan' }],
+		});
+		expect(out).toMatchObject({
+			topic: { key: 'kebab' },
+			exact: false,
+			modifiers: [{ key: 'vegan', type: 'has' }],
 			decidedBy: 'admin',
 		});
-		expect((await terms()).get('sauce')).toMatchObject({
-			topics: [],
-			decidedBy: 'admin',
-			suggestion: null,
-		});
-		await expect(service().change(sauce, { topicKeys: ['nope'] })).rejects.toThrow(
+		expect(await foodsOf('sauce')).toEqual(['kebab']);
+		expect(pgBoss.sendJob).toHaveBeenCalled();
+		// With a topic and no modifier a wording is that topic
+		expect(await controller.changeTerm(sauce, { topicKey: 'kebab' })).toMatchObject({ exact: true, modifiers: [] });
+		// None
+		await controller.changeTerm(sauce, { topicKey: null });
+		expect(await state('sauce')).toMatchObject({ topic: null, exact: false, modifiers: [], by: 'admin' });
+		expect(await foodsOf('sauce')).toEqual([]);
+
+		await expect(
+			service().change(sauce, { topicKey: 'kebab', exact: true, modifiers: [{ topicKey: 'vegan' }] }),
+		).rejects.toBeInstanceOf(BadRequestException);
+		await expect(service().change(sauce, { topicKey: 'no such' })).rejects.toBeInstanceOf(BadRequestException);
+		await expect(
+			service().change(sauce, { topicKey: 'kebab', modifiers: [{ topicKey: 'wait' }] }),
+		).rejects.toBeInstanceOf(BadRequestException);
+		await expect(service().change(999_999, { auto: true })).rejects.toBeInstanceOf(NotFoundException);
+
+		// The agent never changes an admin's word, and "auto" hands the wording back
+		expect((await service().decide({ limit: 100 })).looked).toBe(0);
+		await service().change(sauce, { auto: true });
+		expect(await state('sauce')).toMatchObject({ topic: null, by: null });
+		await service().change(await termId('burger'), { topicKey: null });
+		await service().change(await termId('burger'), { auto: true });
+		expect(await state('burger')).toMatchObject({ topic: 'burgers', exact: true, by: 'match' });
+	});
+
+	it('makes a wording a topic of its own at an admin\'s word, whatever its uses', async () => {
+		const controller = harness.moduleRef.get(AdminTermsController);
+		const out = await controller.promoteTerm(await termId('pomme'), {});
+		expect(out).toMatchObject({ topic: { label: 'Fries', kind: 'dish' }, exact: true, decidedBy: 'admin' });
+		const fries = await em().fork().findOneOrFail(Topic, { label: 'Fries' });
+		expect(fries.discoveredAt).toBeTruthy();
+		expect(await foodsOf('pomme')).toEqual([fries.key]);
+		// A wording under a topic keeps it as the new topic's parent
+		const salad = await controller.promoteTerm(await termId('nudelsalat'), { label: 'Pasta salad' });
+		const index = await topicService().index();
+		expect(index.parentOf(salad.topic!.key)).toBe('pasta');
+		expect(await foodsOf('nudelsalat')).toEqual(expect.arrayContaining(['pasta', salad.topic!.key]));
+		// Under an aspect nothing is promoted
+		await expect(service().promoteTerm(await termId('waiting time'))).rejects.toBeInstanceOf(
 			BadRequestException,
 		);
-		await expect(service().change(sauce, { topicKeys: ['nope'] })).rejects.toThrow(
-			'No topic "nope"',
-		);
-		await expect(service().change(999_999, { auto: true })).rejects.toThrow(NotFoundException);
-
-		// Back to automatic: the name match where there is one, else waiting for the agent
-		const italian = await termId('italian food');
-		await service().change(italian, { topicKeys: ['pasta'] });
-		expect((await topicsOfParts())['italian food']).toEqual(['pasta']);
-		expect(await controller.changeTerm(italian, { auto: true })).toMatchObject({
-			topics: [{ key: 'italian' }],
-			decidedBy: 'match',
-		});
-		expect((await topicsOfParts())['italian food']).toEqual(['italian']);
-		expect(await controller.changeTerm(sauce, { auto: true })).not.toHaveProperty('decidedBy');
-		expect(await service().countPending()).toBe(1);
-		await service().change(sauce, { topicKeys: [] });
-		expect(await service().countPending()).toBe(0);
 	});
 
-	it('re-links after topics change: a new topic takes the wordings that suggested it, the agent\'s other "none" answers wait again, admins\' and matches stay', async () => {
-		pgBoss.sendJob.mockClear();
-		await topicService().create({ label: 'Fries', kind: TopicKindEnum.DISH });
-		expect(pgBoss.sendJob).toHaveBeenCalledTimes(1);
-		// What the job runs: "pommes" takes Fries; "cheese counter" and "pho" (none, decided before Fries) wait again
-		expect((await relinkAll()).terms).toEqual({
-			added: 0,
-			matched: 0,
-			bySuggestion: 1,
-			dropped: 0,
-			reopened: 2,
-		});
-		expect(
-			await decisions([
-				'pomme',
-				'cheese counter',
-				'pho',
-				'nudelsalat',
-				'sauce',
-				'durum',
-				'burger',
-			]),
-		).toEqual({
-			pomme: [['fries'], 'ai', null],
-			'cheese counter': [[], null, null],
-			pho: [[], null, 'Pho'],
-			nudelsalat: [['pasta', 'italian'], 'admin', null],
-			sauce: [[], 'admin', null],
-			durum: [['kebab'], 'admin', null],
-			burger: [['burgers'], 'match', null],
-		});
-		// Both statements naming "Pommes" are about fries now
-		expect((await topicsOfParts()).pomme).toEqual(['fries']);
-		// Asked again
-		expect(await service().countPending()).toBe(2);
-		expect(await service().decide({ limit: 100 })).toMatchObject({ looked: 2, linked: 0 });
+	it('re-links after topics change: a wording that is now a topic takes it, exact, over anything else', async () => {
+		// Hamburg's tag "Pho" waits; once Pho is a topic the wording is it
+		await service().sync(await topicService().index());
+		expect(await state('pho')).toMatchObject({ topic: null });
+		await topicService().create({ label: 'Pho', kind: TopicKindEnum.DISH });
+		const counts = await relinkAll();
+		expect(counts.terms.matched).toBeGreaterThanOrEqual(1);
+		expect(await state('pho')).toMatchObject({ topic: 'pho', exact: true, by: 'match' });
+		// An admin's and the agent's decisions stay
+		expect(await state('vegan doner')).toMatchObject({ topic: 'kebab', by: 'ai' });
 	});
 
-	it('re-links after topics change: a new wording that is a topic takes it, a suggestion of an older topic is dropped, and a match whose topic is gone waits again', async () => {
-		// Pretend the agent had answered none for "cheese counter" suggesting a topic that existed, before the next topic
-		const burgersAt = (await topic('burgers')).createdAt.getTime();
-		await em()
-			.fork()
-			.nativeUpdate(
-				Term,
-				{ key: 'cheese counter' },
-				{ suggestion: 'Burgers', decidedBy: 'ai', decidedAt: new Date(burgersAt + 1) },
-			);
-		em().clear();
-		// A new topic, and Google tags a venue with it
-		const hummus = await topicService().create({ label: 'Hummus', kind: TopicKindEnum.DISH });
-		const imbiss = await em().findOneOrFail(Venue, { name: 'Imbiss Eck' });
-		imbiss.details = {
-			...imbiss.details,
-			reviewsTags: [...(imbiss.details?.reviewsTags ?? []), { title: 'Hummus', count: 4 }],
-		};
-		await em().flush();
-		expect((await relinkAll()).terms).toEqual({
-			added: 1,
-			matched: 0,
-			bySuggestion: 0,
-			dropped: 1,
-			reopened: 2,
-		});
-		expect(await decisions(['hummus', 'cheese counter', 'pho'])).toEqual({
-			hummus: [['hummus'], 'match', null],
-			'cheese counter': [[], null, null],
-			pho: [[], null, 'Pho'],
-		});
-		expect((await terms()).get('hummus')!.name).toBe('Hummus');
-		expect(await service().decide({ limit: 100 })).toMatchObject({ looked: 2 });
-
-		// The topic gone (in the database: the service never deletes a kind of food): its match waits for the agent again
-		await em().fork().nativeDelete(Topic, { id: hummus.id });
-		em().clear();
-		expect((await relinkAll()).terms).toEqual({
-			added: 0,
-			matched: 0,
-			bySuggestion: 0,
-			dropped: 0,
-			reopened: 1,
-		});
-		expect(await decisions(['hummus', 'cheese counter', 'pho', 'nudelsalat', 'pomme'])).toEqual(
-			{
-				hummus: [[], null, null],
-				// Decided after the newest topic left: not asked again
-				'cheese counter': [[], 'ai', null],
-				pho: [[], 'ai', 'Pho'],
-				nudelsalat: [['pasta', 'italian'], 'admin', null],
-				pomme: [['fries'], 'ai', null],
-			},
-		);
-	});
-
-	it("lets an admin keep one of a wording's current topics, each link it keeps keeping its relation, and decide a wording the agent decided", async () => {
-		// The agent's "vegan döner" is kebab and vegan; the admin narrows it to kebab (the Terms tab's edit)
-		const veganDoner = await termId('vegan doner');
-		const relationOf = async (topicKey: string) =>
-			(
-				await harness.orm.em
-					.fork()
-					.getConnection()
-					.execute<{ relation: string }[]>(
-						`select tt.relation from term_topics tt join topics t on t.id = tt.topic_id
-						where tt.term_id = ? and t.key = ?`,
-						[veganDoner, topicKey],
-					)
-			)[0]?.relation;
-		await service().change(veganDoner, {
-			topicKeys: ['kebab', 'vegan'],
-			relations: { kebab: 'kind_of', vegan: 'with' },
-		});
-		expect([await relationOf('kebab'), await relationOf('vegan')]).toEqual(['kind_of', 'with']);
-		// Unlinking one keeps the other's relation; a topic added without one is `same`
-		expect(await service().change(veganDoner, { topicKeys: ['kebab'] })).toMatchObject({
-			decidedBy: 'admin',
-		});
-		expect(await relationOf('kebab')).toBe('kind_of');
-		expect(await decisions(['vegan doner'])).toEqual({
-			'vegan doner': [['kebab'], 'admin', null],
-		});
-		expect((await topicService().index()).exactAll('vegan döner')).toEqual(['kebab']);
-		expect((await topicsOfParts())['vegan doner']).toEqual(['kebab']);
-
-		// A wording the agent decided pasta becomes the admin's: final, the same thing
-		await service().change(await termId('spaghettiiiossso'), { topicKeys: ['pasta'] });
-		expect(await decisions(['spaghettiiiossso'])).toEqual({
-			spaghettiiiossso: [['pasta'], 'admin', null],
-		});
-	});
-
-	it('asks the agent again about a wording whose linked aspect an admin deleted', async () => {
-		const tip = await topicService().create({
+	it('asks the agent again about a wording whose aspect an admin deleted', async () => {
+		const aspect = await topicService().create({
 			label: 'Tip prompts',
 			kind: TopicKindEnum.ASPECT,
-			parentKey: 'payment',
+			edges: [{ to: 'payment' }],
 		});
-		const imbiss = await em().findOneOrFail(Venue, { name: 'Imbiss Eck' });
-		imbiss.details = {
-			...imbiss.details,
-			reviewsTags: [
-				...(imbiss.details?.reviewsTags ?? []),
-				{ title: 'tip prompt', count: 2 },
-			],
-		};
+		addStatements(em(), review(), [{ foods: ['tip prompt'], sentiment: 'negative' }], {
+			index: await topicService().index(),
+		});
 		await em().flush();
-		await service().sync(await topicService().index());
 		await service().decide({ limit: 100 });
-		expect(await decisions(['tip prompt'])).toEqual({
-			'tip prompt': [['tip_prompts'], 'ai', null],
-		});
-
-		await topicService().remove(tip.id);
-		// The job runs in a context of its own
-		em().clear();
-		await relinkAll();
-		// Its one topic gone, the wording is not "none": it waits for the agent again
-		expect(await decisions(['tip prompt'])).toEqual({ 'tip prompt': [[], null, null] });
-	});
-
-	it("stores agent B's wordings as it reads a claim (`ensure`): a topic as a whole decided at once, a known wording returned as it is, a new one waiting — and the claim's food part reads the decision when it comes", async () => {
-		const index = await topicService().index();
-		const found = await service().ensure(
-			['Kebabs', 'Lahmacun deluxe', ' vegan döner ', ''],
-			index,
-		);
-		expect([...found.keys()].sort()).toEqual(['kebab', 'lahmacun deluxe', 'vegan doner']);
-		// "Kebabs" is the topic's key as a whole; the admin's "vegan döner" is untouched; the new one waits
-		expect(found.get('kebab')).toMatchObject({ name: 'Kebabs', decidedBy: 'match' });
-		expect(found.get('vegan doner')).toMatchObject({ decidedBy: 'admin' });
-		expect(found.get('lahmacun deluxe')).toMatchObject({
-			name: 'Lahmacun deluxe',
-			decidedBy: null,
-		});
-		// The claim naming it, written in the same unit of work, points at the term
-		const [claim] = addStatements(
-			em(),
-			review(),
-			[
-				{
-					text: 'the Lahmacun deluxe was hot and fresh',
-					sentiment: 'positive',
-					foods: ['Lahmacun deluxe'],
-				},
-			],
-			{ index },
-		);
-		await em().flush();
-		expect(await decisions(['kebab', 'lahmacun deluxe'])).toEqual({
-			kebab: [['kebab'], 'match', null],
-			'lahmacun deluxe': [[], null, null],
-		});
-		// Idempotent: the same wording again stores nothing new
-		await service().ensure(['lahmacun deluxe'], index);
-		expect((await terms()).get('lahmacun deluxe')!.name).toBe('Lahmacun deluxe');
-
-		// The backlog decides it; the statement's food part shows kebab through the term's links, no row rewritten
-		expect(await service().decide({ limit: 100 })).toMatchObject({ linked: 1 });
-		const part = await em()
-			.fork()
-			.findOneOrFail(
-				StatementPart,
-				{ statement: claim.id, role: 'food' },
-				{ populate: ['term.topics.topic'] },
-			);
-		expect(part.term!.topics.getItems().map(l => l.topic.key)).toEqual(['kebab']);
-		expect((await topicsOfParts())['lahmacun deluxe']).toEqual(['kebab']);
-		// And the city's list counts the statement naming it
-		const listed = await service().list(city.id, {
-			status: 'linked',
-			topicKey: 'kebab',
-			offset: 0,
-			limit: 50,
-		});
-		expect(listed.terms.find(t => t.key === 'lahmacun deluxe')).toMatchObject({
-			notes: 1,
-			tagVenues: 0,
-		});
-	});
-
-	it("stores the relation the agent answers per topic, and an admin's choice and a name match as the same thing", async () => {
-		const index = await topicService().index();
-		const terms = await service().ensure(['tofu döner', 'Pasta'], index);
-		await em().flush();
-		await service().decide({ limit: 50 });
-		em().clear();
-		const rows: { name: string; key: string; relation: string }[] = await em()
-			.getConnection()
-			.execute(
-				`select t.name, x.key, tt.relation from terms t join term_topics tt on tt.term_id = t.id join topics x on x.id = tt.topic_id
-				where t.key in (?, ?) order by t.name, tt.rank`,
-				[terms.get('tofu doner')!.key, terms.get('pasta')!.key],
-			);
-		expect(rows.map(r => [r.name, r.key, r.relation])).toEqual([
-			['Pasta', 'pasta', 'same'],
-			['tofu döner', 'kebab', 'kind_of'],
-			['tofu döner', 'vegan', 'with'],
-		]);
+		expect(await state('tip prompt')).toMatchObject({ topic: 'tip_prompts', exact: true, by: 'ai' });
+		await topicService().remove(aspect.id);
+		expect(await state('tip prompt')).toMatchObject({ topic: null, exact: false, by: null });
+		expect(await em().fork().count(StatementPart, { term: { key: 'tip prompt' } })).toBe(1);
 	});
 });

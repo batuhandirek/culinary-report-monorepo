@@ -50,6 +50,10 @@ export interface AdminStatementsScopeInputDto {
 	brandId?: string & tags.Format<'uuid'>;
 	venueId?: string & tags.Format<'uuid'>;
 	month?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
+	/** Said on or after this UTC day, `2026-09-01` */
+	from?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'>;
+	/** Said on or before this UTC day (inclusive) */
+	to?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'>;
 }
 
 /** The Claims tables (Trends, a brand, a branch): the scope, narrowed by any of the rest, a page at a time */

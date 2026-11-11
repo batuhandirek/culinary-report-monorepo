@@ -410,12 +410,39 @@ describe('StatementInsightService (pglite)', () => {
 		]);
 	});
 
+	it("filters the claims as the Claims tabs do: by sentiment, unread included, and by parts", async () => {
+		const list = async (extra: { sentiment?: 'neutral' | 'unread'; parts?: 'food' }) =>
+			(await controller.listExploreClaims({ ...view({ node: 'wait' }), page: 1, size: 20, ...extra })).items.map(i => i.text);
+		// A noticed change is neutral too
+		expect(await list({ sentiment: 'neutral' })).toEqual(['waits got shorter since spring', 'waits are normal']);
+		expect(await list({ sentiment: 'unread' })).toEqual(['no table ready']);
+		const food = await list({ parts: 'food' });
+		expect(food).toContain('waited 50 minutes');
+		expect(food).not.toContain('long line');
+	});
+
 	it('groups the claims by meaning once they have vectors', async () => {
 		const res = await controller.getExploreGroups(view({ node: 'wait' }));
 		expect(res).toMatchObject({ embedded: 4, notEmbedded: 3, considered: 4, more: 0 });
 		expect(res.groups).toHaveLength(1);
 		expect(res.groups[0]).toMatchObject({ claims: 3, sources: 3, complaints: 3, praise: 0 });
 		expect([ids.r1, ids.p1, ids.p4]).toContain(res.groups[0].samples[0].id);
+		expect(res).toMatchObject({ similarity: 0.82, minClaims: 3 });
+	});
+
+	it('groups at the bar the page asks for', async () => {
+		const strict = await controller.getExploreGroups({
+			...view({ node: 'wait' }),
+			minClaims: 4,
+		});
+		expect(strict).toMatchObject({ groups: [], similarity: 0.82, minClaims: 4 });
+		const loose = await controller.getExploreGroups({
+			...view({ node: 'wait' }),
+			similarity: 0.5,
+			minClaims: 2,
+		});
+		expect(loose).toMatchObject({ similarity: 0.5, minClaims: 2 });
+		expect(loose.groups[0].claims).toBeGreaterThanOrEqual(3);
 	});
 
 	it('finds wordings by a part of their name', async () => {

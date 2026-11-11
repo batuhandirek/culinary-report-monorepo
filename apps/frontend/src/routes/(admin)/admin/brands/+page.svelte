@@ -187,7 +187,7 @@
 			type: 'link',
 			name: 'Report',
 			href: (row) =>
-				row.report ? `/admin/reports/${row.report.id}` : `/admin/brands/${row.id}?tab=reports`,
+				row.report ? `/admin/reports/${row.report.id}` : `/admin/brands/${row.id}?tab=history`,
 			value: (row) =>
 				row.report
 					? {

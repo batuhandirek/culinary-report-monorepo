@@ -19,3 +19,10 @@ export const CREATOR_WATCH_BUDGET_USD = 3;
 
 /** How far back a TikTok creator scrape reaches when the city has no earlier finished run, and at most */
 export const CREATOR_TIKTOK_MAX_DAYS = 8;
+
+/**
+ * "Scrape now" on a creator's page: their profiles' latest posts (TikTok's latest ten at ~$0.003,
+ * an Instagram profile ~$0.003), the last 30 days' kept: a few cents
+ */
+export const CREATOR_SCRAPE_NOW_USD = 0.1;
+export const CREATOR_SCRAPE_NOW_DAYS = 30;

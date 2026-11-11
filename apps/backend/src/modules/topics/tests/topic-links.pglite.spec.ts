@@ -17,8 +17,10 @@ import { ClaimLabelsClassifier } from 'src/modules/statements/classifiers/claim-
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
 import { labelsClassifier } from 'src/modules/statements/tests/factories/claim-labels.mock.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import {
 	countTopicMentions,
+	mentionTopicsSql,
 	TOPIC_MENTIONS_SQL,
 	type TopicMentionRow,
 } from 'src/modules/trends/util/topic-mentions.js';
@@ -40,7 +42,6 @@ import { Topic } from '../entities/topic.entity.js';
 import { VenueTopic } from '../entities/venue-topic.entity.js';
 import { TopicCityRefreshJob } from '../jobs/topic-city-refresh.job.js';
 import { TopicRelinkJob } from '../jobs/topic-relink.job.js';
-import { MentionTopicService } from '../services/mention-topic.service.js';
 import { MenuTopicService } from '../services/menu-topic.service.js';
 import { TermService } from '../services/term.service.js';
 import { TopicService } from '../services/topic.service.js';
@@ -50,8 +51,9 @@ import { venueTopics } from '../util/venue-topics.js';
 
 import { seedTopics } from './factories/topic.factory.js';
 
-/* The stored links to food topics: a mention's (its cuisine's, else its venue's category's), a menu
- * item's and a venue's computed tags, their writers, and the re-link job after a topic change. */
+/* The links to food topics: what a mention is about (the kinds of food its claims name, read through
+ * their terms at read time, never stored), a menu item's stored topics and a venue's computed tags,
+ * their writers, and the re-link job after a topic change. */
 describe('Food topic links (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let em: EntityManager;
@@ -61,14 +63,14 @@ describe('Food topic links (pglite)', () => {
 		sendJob: jest.fn(async (..._args: unknown[]) => 'job'),
 		publish: jest.fn(async (..._args: unknown[]) => 'job'),
 	};
-	// Agent A: one post naming a vegan döner place (with a claim about the pide there) and a place without a cuisine
+	// Agent A: one post naming a vegan döner place (its claims about the vegan döner and the pide
+	// there) and a place it says nothing about
 	const agent = mockAgent({
 		isPromotional: false,
 		places: [
 			{
 				venueName: 'Vöner',
 				locationHint: null,
-				cuisine: 'Vegan Döner',
 				city: 'Berlin',
 				visited: true,
 				isNewOpening: false,
@@ -76,14 +78,22 @@ describe('Food topic links (pglite)', () => {
 			{
 				venueName: 'Mystery Spot',
 				locationHint: null,
-				cuisine: null,
 				city: 'Berlin',
 				visited: true,
 				isNewOpening: false,
 			},
 		],
-		// The claim names "Pide", a wording no topic knows yet
+		// "Vegan Döner" and "Pide": wordings no topic knows as a whole yet
 		claims: [
+			{
+				text: 'the vegan döner is the best in Kreuzberg',
+				quote: null,
+				foods: ['Vegan Döner'],
+				amount: null,
+				unit: null,
+				subject: 'place',
+				place: 'Vöner',
+			},
 			{
 				text: 'the pide there is great too',
 				quote: null,
@@ -91,7 +101,7 @@ describe('Food topic links (pglite)', () => {
 				amount: null,
 				unit: null,
 				subject: 'place',
-				place: 0,
+				place: 'Vöner',
 			},
 		],
 	});
@@ -100,14 +110,15 @@ describe('Food topic links (pglite)', () => {
 	const venues: Record<string, Venue> = {};
 
 	const service = <T>(type: new (...args: never[]) => T) => harness.moduleRef.get(type);
-	const linksOf = async (mentionId: number) =>
+	// What a mention is about, as every reader selects it
+	const aboutOf = async (mentionId: number) =>
 		(
-			await em.getConnection().execute<{ key: string; source: string; rank: number }[]>(
-				`select t.key, mt.source, mt.rank from mention_topics mt join topics t on t.id = mt.topic_id
-					where mt.mention_id = ? order by mt.rank`,
-				[mentionId],
-			)
-		).map(r => [r.key, r.source, r.rank]);
+			await em
+				.getConnection()
+				.execute<{ keys: string[] }[]>(`select ${mentionTopicsSql('m')} as keys from mentions m where m.id = ?`, [
+					mentionId,
+				])
+		)[0].keys;
 	const mentionNamed = (venueName: string) => em.fork().findOneOrFail(Mention, { venueName });
 
 	let n = 0;
@@ -122,14 +133,11 @@ describe('Food topic links (pglite)', () => {
 			text: 'The best vegan döner in Kreuzberg, and the pide there is great too #berlinfood',
 			postedAt: new Date('2026-09-10T12:00:00Z'),
 		});
-	const mention = (venue: Venue, cuisine: string | null) =>
-		em.create(Mention, {
-			post: post(),
-			venue,
-			venueName: venue.name,
-			cuisine,
-			visited: true,
-		});
+	const mention = (venue: Venue, foods: string[]) => {
+		const m = em.create(Mention, { post: post(), venue, venueName: venue.name, visited: true });
+		addFoods(em, m, foods);
+		return m;
+	};
 	const menu = (venue: Venue, names: string[]) => {
 		const listing = em.create(VenueDeliveryListing, {
 			venue,
@@ -147,7 +155,6 @@ describe('Food topic links (pglite)', () => {
 			providers: [
 				TopicService,
 				TopicRelinkService,
-				MentionTopicService,
 				MenuTopicService,
 				VenueTopicService,
 				StatementService,
@@ -165,7 +172,6 @@ describe('Food topic links (pglite)', () => {
 		entityManagerManager.setEntityManager(harness.orm.em);
 		em = harness.orm.em as EntityManager;
 		// The re-linkers register as at module init
-		service(MentionTopicService).onModuleInit();
 		service(MenuTopicService).onModuleInit();
 		service(TermService).onModuleInit();
 		topics = seedTopics(em);
@@ -198,19 +204,19 @@ describe('Food topic links (pglite)', () => {
 		await harness.stop();
 	});
 
-	it("links an extracted mention to every topic its cuisine names; readers count the topics' parents", async () => {
+	it('reads what a mention is about from its claims, and a term decision moves it at once', async () => {
 		expect(await readPostsPlainly(harness.moduleRef, { limit: 10 })).toEqual({
 			analysed: 1,
 			mentions: 2,
 			skipped: 0,
 		});
 		const vegan = await mentionNamed('Vöner');
-		expect(await linksOf(vegan.id)).toEqual([
-			['vegan', 'cuisine', 0],
-			['kebab', 'cuisine', 1],
-		]);
-		// No cuisine and no venue yet: nothing to link
-		expect(await linksOf((await mentionNamed('Mystery Spot')).id)).toEqual([]);
+		// Its wordings wait for agent C: about nothing yet
+		expect(await aboutOf(vegan.id)).toEqual([]);
+		// No claim about it: about nothing, wherever it is matched
+		const mystery = await mentionNamed('Mystery Spot');
+		await service(MentionMatchingService).correct(mystery.id, { venueId: venues['Sushi Ya'].id });
+		expect(await aboutOf(mystery.id)).toEqual([]);
 		// The city's venue tags follow by job
 		expect(pgBoss.sendJob).toHaveBeenCalledWith(
 			TopicCityRefreshJob.jobName,
@@ -219,6 +225,14 @@ describe('Food topic links (pglite)', () => {
 				singletonKey: city.id,
 			},
 		);
+
+		// "Vegan Döner" decided (as agent C would): a döner that has vegan. Nothing is re-linked: the reader follows the term
+		const term = await em.fork().findOneOrFail(Term, { key: 'vegan doner' });
+		await service(AdminTermsController).changeTerm(term.id, {
+			topicKey: 'kebab',
+			modifiers: [{ topicKey: 'vegan' }],
+		});
+		expect(await aboutOf(vegan.id)).toEqual(['kebab', 'vegan']);
 
 		// Matched to its branch, the topic readers count it as Turkish through kebab's parent
 		await service(MentionMatchingService).correct(vegan.id, { venueId: venues['Vöner'].id });
@@ -237,27 +251,11 @@ describe('Food topic links (pglite)', () => {
 		).toEqual([1, 1, 1, 0]);
 	});
 
-	it("follows a mention without a cuisine to the venue it is re-matched to, and to a brand's busiest branch", async () => {
-		const matching = service(MentionMatchingService);
-		const id = (await mentionNamed('Mystery Spot')).id;
-		await matching.correct(id, { venueId: venues['Sushi Ya'].id });
-		expect(await linksOf(id)).toEqual([['japanese', 'category', 0]]);
-
-		await matching.correct(id, { venueId: venues['Kaffee Eck'].id });
-		expect(await linksOf(id)).toEqual([['cafe', 'category', 0]]);
-
-		// The brand without a branch: its most reviewed branch in the post's city
-		await matching.correct(id, { venueId: null, brandId: venues['Sushi Ya'].brand.id });
-		expect(await linksOf(id)).toEqual([['japanese', 'category', 0]]);
-
-		await matching.correct(id, { venueId: null });
-		expect(await linksOf(id)).toEqual([]);
-	});
-
 	it("stores a venue's computed tags with one primary, as the old on-read computation gave them, and leaves the admin's rows alone", async () => {
 		const pho = venues['Pho Sang'];
-		const cuisines = ['Pho, Vietnamese', 'Pho', 'Pho', 'Burger', null];
-		for (const cuisine of cuisines) mention(pho, cuisine);
+		// What its posts' claims name, one post each (the last names no food)
+		const named = [['Pho', 'Vietnamese'], ['Pho'], ['Pho'], ['Burger'], []];
+		for (const foods of named) mention(pho, foods);
 		const items = menu(pho, ['Pho Bo', 'Pho Ga', 'Pho Chay', 'Bun Cha', 'Sommerrollen']);
 		const index = await service(TopicService).index();
 		service(MenuTopicService).linkItems(items, index);
@@ -265,7 +263,6 @@ describe('Food topic links (pglite)', () => {
 		em.create(VenueTopic, { venue: pho, topic: topics.get('noodles')! });
 		em.create(VenueTopic, { venue: pho, topic: topics.get('asian')!, excluded: true });
 		await em.flush();
-		await service(MentionTopicService).relink({ cityId: city.id });
 
 		const tagger = service(VenueTopicService);
 		await tagger.refresh([pho.id]);
@@ -287,12 +284,12 @@ describe('Food topic links (pglite)', () => {
 		]);
 		expect(rows.filter(r => r.computed && r.primary)).toHaveLength(1);
 
-		// What the tags were when worked out on read: the texts resolved against the index
+		// What the tags were when worked out on read: the wordings resolved against the index
 		const onRead = venueTopics(
 			{
 				category: pho.category,
 				categories: pho.categories,
-				mentionTopics: cuisines.map(cuisine => ({ keys: index.resolve(cuisine), n: 1 })),
+				mentionTopics: named.map(foods => ({ keys: foods.flatMap(f => index.resolve(f)), n: 1 })),
 				menuItems: items.map(item => ({ keys: index.resolveMenuItem(item) })),
 				reviewTags: pho.details?.reviewsTags ?? [],
 				manual: [
@@ -313,15 +310,16 @@ describe('Food topic links (pglite)', () => {
 		expect(await stored()).toEqual(rows);
 	});
 
-	it('re-links mentions and menu items through the job when a topic gains an alias, then refreshes the tags; a statement naming the wording follows through its term', async () => {
+	it('re-links menu items through the job when a wording is decided, then refreshes the tags; the claims naming it follow through its term', async () => {
 		const salon = venues['Pide Salonu'];
-		const pides = [mention(salon, 'Pide'), mention(salon, 'Pide')];
+		// The wording agent A stored with the first post: the same row
+		await em.findOneOrFail(Term, { key: 'pide' });
+		const pides = [mention(salon, ['Pide']), mention(salon, ['Pide'])];
 		const items = menu(salon, ['Pide mit Käse', 'Pide Sucuk', 'Pide Spinat', 'Ayran']);
 		await em.flush();
 		const index = await service(TopicService).index();
 		service(MenuTopicService).linkItems(items, index);
 		await em.flush();
-		await service(MentionTopicService).relink({ mentionIds: pides.map(m => m.id) });
 		await service(VenueTopicService).refresh([salon.id]);
 		const itemTopics = async () =>
 			(
@@ -331,47 +329,50 @@ describe('Food topic links (pglite)', () => {
 					items.map(i => i.id),
 				)
 			).map(r => [r.name, r.key]);
-		// The post's claim about the pide (agent B stored the wording as a term): its food part's topics, read through the term's links
+		// The claims about the pide (the wording stored once as a term): their food parts' topic, read through the term
 		const pideParts = async () =>
 			(
 				await em.getConnection().execute<{ id: number; topics: string[] | null }[]>(
-					`select p.id, (select array_agg(x.key order by tt.rank) from term_topics tt join topics x on x.id = tt.topic_id where tt.term_id = t.id) as topics
+					`select p.id, (select array_agg(x.key) from topics x where x.id = t.topic_id) as topics
 						from statement_parts p join terms t on t.id = p.term_id where p.role = 'food' and t.key = 'pide'`,
 				)
 			).map(r => [r.id, r.topics ?? []]);
 		const tagKeys = async () =>
 			((await service(VenueTopicService).tags([salon])).get(salon.id) ?? []).map(t => t.key);
 		// "Pide" names no topic yet
-		expect(await linksOf(pides[0].id)).toEqual([]);
+		expect(await aboutOf(pides[0].id)).toEqual([]);
 		expect(await itemTopics()).toEqual([]);
 		const before = await pideParts();
-		expect(before).toEqual([[expect.any(Number), []]]);
+		expect(before).toHaveLength(3);
+		expect(before.every(([, keys]) => (keys as string[]).length === 0)).toBe(true);
 		expect(await tagKeys()).toEqual([]);
 
 		// The admin links the wording "pide" to kebab (the topic page's or the Terms tab's decision)
 		pgBoss.sendJob.mockClear();
 		const pide = await em.fork().findOneOrFail(Term, { key: 'pide' });
-		await service(AdminTermsController).changeTerm(pide.id, { topicKeys: ['kebab'] });
+		await service(AdminTermsController).changeTerm(pide.id, { topicKey: 'kebab' });
 		expect(pgBoss.sendJob).toHaveBeenCalledWith(TopicRelinkJob.jobName, expect.anything(), {
 			singletonKey: 'all',
 		});
 
+		// The claims follow at once
+		for (const m of pides) expect(await aboutOf(m.id)).toEqual(['kebab']);
+
 		// What the job runs: the terms first, so the others resolve with the new decision
 		const counts = await service(TopicRelinkService).relinkAll();
-		expect(counts['mention-topics']).toMatchObject({ changed: 2 });
+		expect(counts['mention-topics']).toBeUndefined();
 		expect(counts['menu-item-topics']).toMatchObject({ changed: 3 });
 		// The admin's term stands as it is; nothing to re-decide for it
 		expect(counts['terms']).toMatchObject({ matched: 0, reopened: 0 });
 		expect(counts['venue-tags'].venues).toBeGreaterThanOrEqual(5);
 
-		for (const m of pides) expect(await linksOf(m.id)).toEqual([['kebab', 'cuisine', 0]]);
 		expect(await itemTopics()).toEqual([
 			['Pide Spinat', 'kebab'],
 			['Pide Sucuk', 'kebab'],
 			['Pide mit Käse', 'kebab'],
 		]);
-		// The same part row, now about kebab: the decision reached it through the term, no statement rewritten
-		expect(await pideParts()).toEqual([[before[0][0], ['kebab']]]);
+		// The same part rows, now about kebab: the decision reached them through the term, no statement rewritten
+		expect(await pideParts()).toEqual(before.map(([id]) => [id, ['kebab']]));
 		expect(await tagKeys()).toEqual(['kebab']);
 	});
 });

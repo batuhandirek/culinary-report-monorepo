@@ -196,6 +196,12 @@ export class VenueScrapeService {
 		await this.em.flush();
 	}
 
+	/** One venue's place id, name and city: what a by-hand refresh of its detail page needs (404 for none) */
+	async detailsTarget(venueId: string): Promise<{ placeId: string; name: string; cityId: string }> {
+		const venue = await this.em.findOneOrFail(Venue, venueId, { fields: ['placeId', 'name', 'city'] });
+		return { placeId: venue.placeId, name: venue.name, cityId: venue.city.id };
+	}
+
 	/** What a detail-page run brought: how many places came with popular times (Google often shows none) */
 	async detailsSummary(recordId: string): Promise<{ withPopularTimes: number }> {
 		const items = await this.apifyService.storedItems<GooglePlaceItem>(recordId);

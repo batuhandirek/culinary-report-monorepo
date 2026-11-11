@@ -76,6 +76,7 @@ Everything below starts at the same moment; each one waits for what it needs.
 - **Backfill reviews** (`POST /admin/backfill-reviews`): we fetch the reviews since a given day of every venue posts talked about lately that has none stored from then, within a budget.
 - **Re-flag openings** (`POST /admin/mentions/reflag-openings`): we re-read a month's posts only to decide again which places they call new.
 - **Find branches** (brand page): we search Google Maps for the brand's name in the city, keep every place it returns, and join the ones on the brand's own website to it; the page shows them when the search is done (about half a minute).
+- **Refresh from Google** (branch page): we read that one place's Google Maps page again (rating, review count, hours, details), for under a cent; the page reloads the place when it is done.
 - **Build report** (brand page): we build the brand's report for a month. No schedule ever does this.
 - **Trigger a schedule** (`/admin/workflows` → Schedules): any of the above, now, for every city.
 - **Resume a failed run** (`/admin/workflows`): it goes on from where it failed. Nothing is paid again for the steps already done.

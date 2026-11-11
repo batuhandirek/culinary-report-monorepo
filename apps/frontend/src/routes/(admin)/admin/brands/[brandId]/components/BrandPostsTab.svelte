@@ -2,73 +2,62 @@
 	import { Pencil } from '@lucide/svelte';
 	import type { AdminBrandOutputDto, AdminMentionWithPostOutputDto } from 'client';
 
-	import AdminDetailTabs from '#components/admin/AdminDetailTabs.svelte';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
+	import DateRangeFilter from '#components/admin/DateRangeFilter.svelte';
+	import DigestionDetail from '#components/admin/digestion/DigestionDetail.svelte';
+	import { mentionPostRow, postColumns } from '#components/admin/posts/post-columns.js';
 	import ChangeMentionVenueDialog from '#dialogs/admin/ChangeMentionVenueDialog.svelte';
 	import { api } from '#lib/api.js';
-	import { compact, monthLabel, PLATFORM_LABELS, sentimentVariant } from '#lib/culinary.js';
-	import { saidOf, sentimentOf } from '#lib/statements.js';
-	import type {
-		Column,
-		PaginatedDataTableAction
-	} from '#ui/components/paginated-data-table/index.js';
+	import { MATCH_METHOD_LABELS } from '#lib/digestion.js';
+	import type { Column, PaginatedDataTableAction } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
+	import Tooltip from '#ui/wrapped/Tooltip.svelte';
 
-	// Every post naming the brand: any branch, or the brand alone. A wrong match is fixed here.
+	// Every post naming the brand (any branch, or the brand alone), as every post table shows one
+	// (`post-columns.ts`): one line each, opening in place on the post and what the pipeline made of it. The
+	// dates are the table's own filter (`?from=&to=`, every day without). A wrong match is fixed here.
 	interface Props {
 		brand: AdminBrandOutputDto;
-		month: string;
 	}
 
-	let { brand, month }: Props = $props();
+	let { brand }: Props = $props();
 	const chain = $derived(brand.branches.length > 1);
 
-	// The page's month, or every month
-	const VIEWS = [
-		{ value: 'month', label: monthLabel(month) },
-		{ value: 'all', label: 'All months' }
-	];
-	let view = $state('month');
-	const COLUMNS: Column<AdminMentionWithPostOutputDto>[] = $derived([
-		{ type: 'date', name: 'Posted', format: 'date', value: (row) => row.post.postedAt },
-		{
-			type: 'value',
-			name: 'Platform',
-			value: (row) => PLATFORM_LABELS[row.post.platform] ?? row.post.platform
-		},
-		{
-			type: 'link',
-			name: 'Creator',
-			truncate: 22,
-			href: (row) => `/admin/posts/${row.post.id}`,
-			value: (row) => `@${row.post.author ?? '—'}`
-		},
-		...(chain
-			? [
-					{
-						type: 'value' as const,
-						name: 'Branch',
-						truncate: 26,
-						value: (row: AdminMentionWithPostOutputDto) =>
-							row.venue?.name ?? { value: 'the brand', class: 'text-muted-foreground' }
-					}
-				]
-			: []),
-		{ type: 'value', name: 'What they said', truncate: 70, value: (row) => saidOf(row.statements).join(' · ') },
-		{
-			type: 'badge',
-			name: 'Sentiment',
-			value: (row) => sentimentOf(row.statements),
-			variant: (row) => sentimentVariant(sentimentOf(row.statements))
-		},
-		{ type: 'value', name: 'Views', numeric: true, value: (row) => compact(row.post.views) },
-		{ type: 'value', name: 'Matched', value: (row) => row.matchMethod ?? '' }
-	]);
+	const isDay = (v: string | null) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
+	const from = $derived(isDay(page.url.searchParams.get('from')));
+	const to = $derived(isDay(page.url.searchParams.get('to')));
+	const setRange = (range: { from?: string; to?: string }) => {
+		const url = new URL(page.url.href);
+		for (const key of ['from', 'to'] as const) {
+			if (range[key]) url.searchParams.set(key, range[key]!);
+			else url.searchParams.delete(key);
+		}
+		goto(url, { replace: true, reset: false });
+	};
+
+	type Row = AdminMentionWithPostOutputDto;
+	// A chain's branches share its name: a branch is its street (or district)
+	const branchLabel = (row: Row) => {
+		if (!row.venue) return 'the brand';
+		const branch = brand.branches.find((b) => b.id === row.venue!.id);
+		return branch?.street ?? row.venue.district ?? row.venue.name;
+	};
+	const matchLabel = (row: Row) =>
+		row.matchMethod ? `Matched: ${MATCH_METHOD_LABELS[row.matchMethod] ?? row.matchMethod}` : 'Not matched yet';
+	const COLUMNS: Column<Row>[] = $derived(
+		postColumns<Row>(mentionPostRow, {
+			text: 'What they said',
+			empty: 'nothing kept',
+			afterCreator: chain ? [{ type: 'snippet', name: 'Branch', class: 'max-w-[12rem]', snippet: branchCell }] : []
+		})
+	);
 
 	// A wrong match is relinked, unlinked or ignored here; the table refetches after
-	let editing = $state<AdminMentionWithPostOutputDto | null>(null);
+	let editing = $state<Row | null>(null);
 	let editOpen = $state(false);
 	let version = $state(0);
-	const ACTIONS: PaginatedDataTableAction<AdminMentionWithPostOutputDto>[] = [
+	const ACTIONS: PaginatedDataTableAction<Row>[] = [
 		{
 			icon: Pencil,
 			label: 'Change venue',
@@ -84,23 +73,36 @@
 			page: query.page,
 			size: query.size,
 			brandId: brand.id,
-			...(view === 'month' && { month })
+			...(from && { from }),
+			...(to && { to })
 		});
 </script>
 
-<div class="flex flex-col gap-3">
-	<AdminDetailTabs tabs={VIEWS} bind:value={view} param="posts" variant="pills" keeps={['tab', 'month', 'cityId']} />
-	<PaginatedDataTable
-		api={listMentions}
-		noun="mentions"
-		columns={COLUMNS}
-		actions={ACTIONS}
-		key={`${version}:${month}:${view}`}
-		emptyDescription={view === 'month'
-			? `No post named ${brand.name} in ${monthLabel(month)}. Pick another month above, or all months.`
-			: `No post named ${brand.name} yet.`}
-		rowHref={(row) => `/admin/posts/${row.post.id}`} />
-</div>
+{#snippet branchCell(row: Row)}
+	<Tooltip text={matchLabel(row)} class="max-w-full">
+		<span class={['block truncate', !row.venue && 'text-muted-foreground']}>{branchLabel(row)}</span>
+	</Tooltip>
+{/snippet}
+
+{#snippet details(row: Row)}
+	<DigestionDetail postId={row.post.id} />
+{/snippet}
+
+{#snippet toolbar()}
+	<DateRangeFilter {from} {to} onChange={setRange} />
+{/snippet}
+
+<PaginatedDataTable
+	api={listMentions}
+	noun="posts"
+	columns={COLUMNS}
+	actions={ACTIONS}
+	key={`${version}:${from}:${to}`}
+	limit={25}
+	{toolbar}
+	expand={details}
+	rowKey={(row) => String(row.id)}
+	emptyDescription={from || to ? `No post named ${brand.name} in these dates.` : `No post named ${brand.name} yet.`} />
 
 {#if editing}
 	<ChangeMentionVenueDialog mention={editing} bind:active={editOpen} onChanged={() => version++} />

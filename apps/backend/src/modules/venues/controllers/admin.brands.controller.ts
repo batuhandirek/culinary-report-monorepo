@@ -273,7 +273,7 @@ export class AdminBrandsController {
 		};
 	}
 
-	/** Venues as branch rows, with their mention counts. */
+	/** Venues as branch rows, with their mention counts, websites and Google Maps links. */
 	private async branches(venues: Venue[]): Promise<Map<string, AdminBrandBranchOutputDto>> {
 		const counts = await this.brandService.mentionCounts(venues.map(v => v.id));
 		return new Map(

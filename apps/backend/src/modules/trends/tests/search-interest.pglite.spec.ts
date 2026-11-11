@@ -10,6 +10,7 @@ import { FakeApify } from 'src/modules/apify/tests/factories/fake-apify.js';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { TopicKindEnum } from 'src/modules/topics/entities/topic.entity.js';
@@ -146,7 +147,7 @@ describe('SearchInterestService (pglite)', () => {
 		await em.flush();
 		const own = ownAccount(em, pho.brand, city, 'phohouse');
 		let n = 0;
-		const mention = (venue: Venue, date: string, cuisine: string | null, author = `c${n}`) => {
+		const mention = (venue: Venue, date: string, food: string, author = `c${n}`) => {
 			const post = em.create(SocialPost, {
 				city,
 				externalId: `si-${n++}`,
@@ -157,18 +158,12 @@ describe('SearchInterestService (pglite)', () => {
 				views: 10,
 				postedAt: new Date(`${date}T12:00:00Z`),
 			});
-			em.create(Mention, {
-				post,
-				venue,
-				venueName: venue.name,
-				cuisine,
-				visited: true,
-			});
+			addFoods(em, em.create(Mention, { post, venue, venueName: venue.name, visited: true }), [food]);
 		};
 		// August: 1 Vietnamese, 3 döner; September: 2 and 2. The venue's own post never counts.
 		mention(pho, '2026-08-10', 'Viet');
 		mention(doner, '2026-08-11', 'Döner');
-		mention(doner, '2026-08-12', null); // the venue's Google category: kebab
+		mention(doner, '2026-08-12', 'Doner kebab');
 		mention(doner, '2026-08-13', 'Kebap');
 		mention(pho, '2026-09-10', 'Vietnamese');
 		mention(pho, '2026-09-11', 'Vietnamese');

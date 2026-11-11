@@ -36,6 +36,16 @@ export interface CreatorRow {
 	month: CreatorMonth;
 }
 
+/** A creator's posts over the last 30 and 90 days, to now */
+export interface CreatorRecent {
+	posts30: number;
+	views30: number;
+	posts90: number;
+	/** Of the 90 days' posts, those with a mention matched to a brand */
+	named90: number;
+	lastNamedAt?: Date;
+}
+
 export interface CreatorDetail {
 	creator: Creator;
 	accounts: AccountWithFigures[];
@@ -50,8 +60,11 @@ export interface CreatorDetail {
 		lastPostedAt: Date;
 		own: boolean;
 	}[];
+	/** Every brand their posts named */
+	brandCount: number;
 	posts: number;
 	views: number;
+	recent: CreatorRecent;
 	/** What found their posts, the most posts first: a city source, a venue search or their own profile */
 	foundBy: CreatorFind[];
 	/**
@@ -224,16 +237,41 @@ export class CreatorService {
 					ids,
 				)
 			:	[];
+		const [recent]: {
+			posts30: string;
+			views30: string;
+			posts90: string;
+			named90: string;
+			last_named_at: Date | null;
+		}[] =
+			ids.length ?
+				await conn.execute(
+					`select count(*) filter (where p.posted_at >= now() - interval '30 days') as posts30,
+						coalesce(sum(p.views) filter (where p.posted_at >= now() - interval '30 days'), 0) as views30,
+						count(*) as posts90,
+						count(*) filter (where p.named) as named90,
+						max(p.posted_at) filter (where p.named) as last_named_at
+					from (
+						select sp.posted_at, sp.views,
+							exists (select 1 from mentions m where m.post_id = sp.id and m.brand_id is not null) as named
+						from social_posts sp
+						where sp.account_id in (${marks(ids)}) and sp.posted_at >= now() - interval '90 days'
+					) p`,
+					ids,
+				)
+			:	[];
 		const brands: {
 			brand_id: string;
 			name: string;
 			posts: string;
 			views: string;
 			last_posted_at: Date;
+			total: string;
 		}[] =
 			ids.length ?
 				await conn.execute(
-					`select x.brand_id, b.name, count(*) as posts, coalesce(sum(x.views), 0) as views, max(x.posted_at) as last_posted_at
+					`select x.brand_id, b.name, count(*) as posts, coalesce(sum(x.views), 0) as views, max(x.posted_at) as last_posted_at,
+						count(*) over () as total
 					from (
 						select distinct m.brand_id, p.id, p.views, p.posted_at
 						from mentions m join social_posts p on p.id = m.post_id
@@ -298,6 +336,14 @@ export class CreatorService {
 				lastPostedAt: new Date(b.last_posted_at),
 				own: ownBrands.has(b.brand_id),
 			})),
+			brandCount: Number(brands[0]?.total ?? 0),
+			recent: {
+				posts30: Number(recent?.posts30 ?? 0),
+				views30: Number(recent?.views30 ?? 0),
+				posts90: Number(recent?.posts90 ?? 0),
+				named90: Number(recent?.named90 ?? 0),
+				...(recent?.last_named_at && { lastNamedAt: new Date(recent.last_named_at) }),
+			},
 			posts: _.sumBy(perMonth, r => Number(r.posts)),
 			views: _.sumBy(perMonth, r => Number(r.views)),
 			foundBy: finds.map(f => ({

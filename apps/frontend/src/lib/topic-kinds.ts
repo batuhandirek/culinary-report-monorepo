@@ -24,14 +24,18 @@ export const isAspectKind = (kind: string) => kind === 'aspect';
 /** The kinds of food, without the aspects: what the Topics pages list and a food topic's type picker offers */
 export const FOOD_KIND_ITEMS = KIND_ITEMS.filter((k) => k.value !== 'aspect');
 
-/** How strongly a wording is a topic (`TermTopic.relation`) */
-export const RELATION_ITEMS = [
-	{ value: 'same', label: 'Same', hint: 'A spelling or a translation: "Pommes" is Fries' },
-	{ value: 'kind_of', label: 'Kind of', hint: 'A finer kind: "garlic parmesan fries" is a kind of Fries' },
-	{ value: 'with', label: 'With', hint: 'An attribute or an ingredient: "vegan döner" is with Vegan' }
-] as const;
+/** How one topic relates to another, and a narrower wording's modifier to its topic (`TopicEdge.type`, `TermModifier.type`) */
+export type EdgeType = 'is_a' | 'has';
 
-export const relationLabel = (relation: string) => RELATION_ITEMS.find((r) => r.value === relation)?.label ?? relation;
+export const EDGE_ITEMS: { value: EdgeType; label: string; hint: string }[] = [
+	{ value: 'is_a', label: 'Is a', hint: 'A kind of it: Menemen is a Turkish dish, is a breakfast. Counts always.' },
+	{ value: 'has', label: 'Has', hint: 'A diet, an ingredient or an attribute of it: Vegan döner has Vegan. Counts in broad mode only.' }
+];
 
-/** Who decided a wording's topics */
-export const DECIDED_LABELS: Record<string, string> = { match: 'name match', ai: 'AI', admin: 'admin' };
+export const edgeLabel = (type: string) => EDGE_ITEMS.find((e) => e.value === type)?.label.toLowerCase() ?? type;
+
+/** The type an edge or a modifier gets from what it points at, as the backend defaults it: a diet or an ingredient is had, anything else is a kind */
+export const defaultEdgeType = (toKind: string): EdgeType => (toKind === 'diet' || toKind === 'ingredient' ? 'has' : 'is_a');
+
+/** Who decided a wording's topic, or stated an edge */
+export const DECIDED_LABELS: Record<string, string> = { match: 'name match', ai: 'AI', admin: 'admin', seed: 'seed' };

@@ -105,7 +105,10 @@ export interface InsightTreeNode extends InsightCounts {
 	key: string;
 	label: string;
 	kind: string;
+	/** Its display parent: the first topic it is a kind of */
 	parentKey?: string;
+	/** Every topic it is a kind of, by rank: a tree draws it under each */
+	isA: string[];
 }
 
 /** What X is: a topic with its place in the tree, or a wording with its links */
@@ -209,6 +212,15 @@ export interface InsightGroups {
 	groups: InsightGroup[];
 	/** Groups past the floors beyond those listed */
 	more: number;
+	/** The bar they were made at */
+	similarity: number;
+	minClaims: number;
+}
+
+/** The grouping's bar an admin may move; what is not given is `INSIGHT_GROUP_FLOORS`' */
+export interface InsightGroupBar {
+	similarity?: number;
+	minClaims?: number;
 }
 
 export interface InsightTermHit {
@@ -219,7 +231,12 @@ export interface InsightTermHit {
 	topics: string[];
 }
 
-/** Explore's grouping floors: smaller than aspect discovery's, since the view is already one topic's */
+/**
+ * Explore's default grouping floors: smaller than aspect discovery's, since the view is already
+ * one topic's. The page can move the cosine and the claims (`InsightGroupBar`): a brand's short
+ * claims rarely meet 0.82 even when they say one thing (dev, Hōmu Matcha's complaints: plain
+ * paraphrases at 0.70–0.80).
+ */
 export const INSIGHT_GROUP_FLOORS = { threshold: 0.82, minClaims: 3, minSources: 2, minBrands: 1 };
 export const INSIGHT_GROUPS = 12;
 const INSIGHT_GROUP_SAMPLES = 3;
@@ -294,7 +311,7 @@ export class StatementInsightService {
 		]);
 		const query = joinSql(
 			[
-				sql(`with recursive anc(id, anc_id) as (${ANCESTORS_SQL}), claims as (`),
+				sql(`with anc(id, anc_id) as (${ANCESTORS_SQL}), claims as (`),
 				cte,
 				sql(`) select t.key, ${COUNT_FIELDS('c')} from (
 					select distinct anc.anc_id as topic_id, c.* from claims c
@@ -314,7 +331,8 @@ export class StatementInsightService {
 						key: r.key,
 						label: topic.label,
 						kind: topic.kind,
-						...(topic.parentKey && { parentKey: topic.parentKey }),
+						...(topic.isA.length && { parentKey: topic.isA[0] }),
+						isA: topic.isA,
 						sources: r.sources,
 						praise: r.praise,
 						complaints: r.complaints,
@@ -553,8 +571,8 @@ export class StatementInsightService {
 			const parent = foldParent(refs, index, by === 'aspect');
 			const keys =
 				parent ?
-					[parent, ...index.topics.filter(t => t.parentKey === parent).map(t => t.key)]
-				: by === 'aspect' ? index.aspects.filter(t => !t.parentKey).map(t => t.key)
+					[parent, ...index.childrenOf(parent).map(t => t.key)]
+				: by === 'aspect' ? index.aspects.filter(t => !t.isA.length).map(t => t.key)
 				: index.food.map(t => t.key);
 			if (parent) under = { ref: parent, label: index.label(parent) };
 			recursive = true;
@@ -597,7 +615,7 @@ export class StatementInsightService {
 		const query = joinSql(
 			[
 				sql(
-					`with ${recursive ? `recursive anc(id, anc_id) as (${ANCESTORS_SQL}), ` : ''}claims as (`,
+					`with ${recursive ? `anc(id, anc_id) as (${ANCESTORS_SQL}), ` : ''}claims as (`,
 				),
 				cte,
 				sql(
@@ -656,7 +674,16 @@ export class StatementInsightService {
 	 */
 	async claims(
 		selection: InsightSelection,
-		page: { offset: number; limit: number; q?: string; like?: string },
+		page: {
+			offset: number;
+			limit: number;
+			q?: string;
+			like?: string;
+			/** A sentiment, or `unread` (none yet): the Claims table's filter */
+			sentiment?: string;
+			/** `none` (no part), `no_aspect`, `food` (names a food): the Claims table's filter */
+			parts?: 'none' | 'no_aspect' | 'food';
+		},
 	): Promise<{ total: number; items: Statement[]; notEmbedded?: number }> {
 		const { scope, filters, node } = await this.resolve(selection);
 		const cte = claimsCte(scope.cityId, scope);
@@ -668,6 +695,13 @@ export class StatementInsightService {
 			...narrowingSql(filters),
 			...(node ? [nodeSql(node)] : []),
 			...(q ? [sql(`c.text ilike ?`, [`%${q.replace(/[\\%_]/g, ch => `\\${ch}`)}%`])] : []),
+			...(page.sentiment === 'unread' ? [sql('exists (select 1 from statements xs where xs.id = c.id and xs.sentiment is null)')]
+			: page.sentiment ? [sql('exists (select 1 from statements xs where xs.id = c.id and xs.sentiment = ?)', [page.sentiment])]
+			: []),
+			...(page.parts === 'none' ? [sql('not exists (select 1 from statement_parts xp where xp.statement_id = c.id)')]
+			: page.parts === 'no_aspect' ? [sql(`not exists (select 1 from statement_parts xp where xp.statement_id = c.id and xp.role = 'aspect')`)]
+			: page.parts === 'food' ? [sql(`exists (select 1 from statement_parts xp where xp.statement_id = c.id and xp.role = 'food')`)]
+			: []),
 		];
 		const withCte = (body: Sql) => joinSql([sql('with claims as ('), cte, sql(')'), body], ' ');
 		let ids: number[];
@@ -754,9 +788,16 @@ export class StatementInsightService {
 	 * X's claims in the view grouped by meaning (aspect discovery's greedy cosine pass over
 	 * the vectors' first `CLUSTER_DIMENSIONS`, at `INSIGHT_GROUP_FLOORS`), largest first. Nothing is
 	 * stored or named: each group shows its most central claims, and its count is a reading aid,
-	 * never a figure a report quotes. Empty until the claims have vectors.
+	 * never a figure a report quotes. Empty until the claims have vectors. `bar` moves the cosine and
+	 * the claims a group needs; the sources (two) and brands stay.
 	 */
-	async groups(selection: InsightSelection): Promise<InsightGroups> {
+	async groups(selection: InsightSelection, bar: InsightGroupBar = {}): Promise<InsightGroups> {
+		const floors = {
+			...INSIGHT_GROUP_FLOORS,
+			threshold: bar.similarity ?? INSIGHT_GROUP_FLOORS.threshold,
+			minClaims: bar.minClaims ?? INSIGHT_GROUP_FLOORS.minClaims,
+		};
+		const used = { similarity: floors.threshold, minClaims: floors.minClaims };
 		const { scope, filters, node } = await this.resolve(selection);
 		const cte = claimsCte(scope.cityId, scope);
 		const conditions = [
@@ -780,7 +821,7 @@ export class StatementInsightService {
 				),
 			),
 		);
-		if (!counts.embedded) return { ...counts, considered: 0, groups: [], more: 0 };
+		if (!counts.embedded) return { ...counts, considered: 0, groups: [], more: 0, ...used };
 		const raw = await this.run<{
 			id: number;
 			text: string;
@@ -814,7 +855,7 @@ export class StatementInsightService {
 			side: r.side,
 			brandName: r.brand_name,
 		})) satisfies ClusterItem[];
-		const found = clusterClaims(items, INSIGHT_GROUP_FLOORS);
+		const found = clusterClaims(items, floors);
 		const sourcesOf = (list: typeof items, side: string) =>
 			new Set(list.filter(i => i.side === side).map(i => i.source)).size;
 		const listed = found.slice(0, INSIGHT_GROUPS);
@@ -843,6 +884,7 @@ export class StatementInsightService {
 			considered: items.length,
 			groups,
 			more: Math.max(0, found.length - groups.length),
+			...used,
 		};
 	}
 
@@ -856,8 +898,11 @@ export class StatementInsightService {
 			.execute<{ key: string; name: string; uses: number; topics: string[] | null }[]>(
 				`select tm.key, tm.name,
 				(select count(*) from statement_parts fp where fp.term_id = tm.id)::int as uses,
-				(select array_agg(t.label order by tt.rank) from term_topics tt join topics t on t.id = tt.topic_id
-					where tt.term_id = tm.id and t.deleted_at is null) as topics
+				(select array_agg(x.label order by x.rank) from (
+					select t.label, 0 as rank from topics t where t.id = tm.topic_id and t.deleted_at is null
+					union all
+					select t.label, md.rank + 1 from term_modifiers md join topics t on t.id = md.topic_id
+						where md.term_id = tm.id and t.deleted_at is null) x) as topics
 			from terms tm where tm.name ilike ? or tm.key ilike ?
 			order by uses desc, tm.name limit 12`,
 				[pattern, pattern],
@@ -926,10 +971,14 @@ export class StatementInsightService {
 			const rows = await this.em
 				.getConnection()
 				.execute<{ name: string; topic: string | null }[]>(
-					`select tm.name, t.key as topic from terms tm
-					left join term_topics tt on tt.term_id = tm.id
-					left join topics t on t.id = tt.topic_id and t.deleted_at is null
-				where tm.key = ? order by tt.rank`,
+					`select tm.name, x.key as topic from terms tm
+					left join lateral (
+						select t.key, 0 as rank from topics t where t.id = tm.topic_id and t.deleted_at is null
+						union all
+						select t.key, md.rank + 1 from term_modifiers md join topics t on t.id = md.topic_id
+							where md.term_id = tm.id and t.deleted_at is null
+					) x on true
+				where tm.key = ? order by x.rank`,
 					[key],
 				);
 			return {
@@ -945,10 +994,11 @@ export class StatementInsightService {
 		}
 		const topic = index.get(ref)!;
 		const path: { ref: string; label: string }[] = [];
+		// The way up along the display parents (each topic's first `is_a`)
 		for (
-			let t = topic.parentKey ? index.get(topic.parentKey) : undefined;
+			let t = topic.isA.length ? index.get(topic.isA[0]) : undefined;
 			t && path.length < 20;
-			t = t.parentKey ? index.get(t.parentKey) : undefined
+			t = t.isA.length ? index.get(t.isA[0]) : undefined
 		)
 			path.unshift({ ref: t.key, label: t.label });
 		return {
@@ -957,10 +1007,7 @@ export class StatementInsightService {
 			kind: topic.kind,
 			path,
 			...(topic.hint && { hint: topic.hint }),
-			children: index.topics
-				.filter(t => t.parentKey === ref)
-				.sort((a, b) => a.label.localeCompare(b.label))
-				.map(t => ({ ref: t.key, label: t.label })),
+			children: index.childrenOf(ref).map(t => ({ ref: t.key, label: t.label })),
 			topics: [],
 		};
 	}

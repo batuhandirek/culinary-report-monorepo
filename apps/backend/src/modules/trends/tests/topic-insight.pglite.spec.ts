@@ -9,6 +9,7 @@ import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -81,8 +82,8 @@ describe('TopicInsightService (pglite)', () => {
 			closed: true,
 		});
 		let n = 0;
-		const mention = (venue: Venue, cuisine: string, date: string) =>
-			em.create(Mention, {
+		const mention = (venue: Venue, food: string, date: string) => {
+			const m = em.create(Mention, {
 				post: em.create(SocialPost, {
 					city,
 					externalId: `ti-${n++}`,
@@ -93,9 +94,10 @@ describe('TopicInsightService (pglite)', () => {
 				}),
 				venue,
 				venueName: venue.name,
-				cuisine,
 				visited: true,
 			});
+			addFoods(em, m, [food]);
+		};
 		// August: 1 Japanese of 4; September: 4 of 6
 		mention(ramen, 'Ramen', '2026-08-10');
 		for (let i = 0; i < 3; i++) mention(doner, 'Döner', '2026-08-11');

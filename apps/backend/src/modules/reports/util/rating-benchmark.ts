@@ -41,8 +41,8 @@ export const ratingBenchmark = (input: {
 			rating: p.rating!,
 			keys: new Set(index.withParents((input.tags.get(p.id) ?? []).map(t => t.key))),
 		}));
-		// The topic, else its parent, its parent's parent, … until one has enough venues
-		for (let key: string | null | undefined = primary; key && !topic; key = index.get(key)?.parentKey) {
+		// The topic, else its display parent (its first `is_a`), that one's, … until one has enough venues
+		for (let key: string | null | undefined = primary; key && !topic; key = index.get(key)?.isA[0]) {
 			const ratings = peerTopics.filter(p => p.keys.has(key!)).map(p => p.rating);
 			if (ratings.length < RATING_BENCHMARK_MIN_VENUES) continue;
 			const standing = ratingStanding(rating, ratings);

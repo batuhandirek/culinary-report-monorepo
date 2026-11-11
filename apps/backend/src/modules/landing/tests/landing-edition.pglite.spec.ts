@@ -156,7 +156,6 @@ describe('LandingEditionService (pglite)', () => {
 					venue: v,
 					brand: v.brand,
 					venueName: v.name,
-					cuisine: 'Ramen',
 					visited: true,
 					isNewOpening: opts.isNew ?? false,
 				}),

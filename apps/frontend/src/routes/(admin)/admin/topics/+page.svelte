@@ -143,7 +143,7 @@
 								<th class="py-1.5 pr-3 text-right font-normal" title="Topics directly under it, any type">Topics under it</th>
 								<th class="py-1.5 pr-3 text-right font-normal" title="Wordings linked to it">Wordings</th>
 								<th class="py-1.5 pr-3 text-right font-normal" title="The city's venues whose Google category resolves to it">Venues</th>
-								<th class="py-1.5 text-right font-normal" title="The city's matched mentions resolving to it, all time">Mentions</th>
+								<th class="py-1.5 text-right font-normal" title="The city's matched posts whose claims name it, all time">Mentions</th>
 							</tr>
 						</thead>
 						<tbody>

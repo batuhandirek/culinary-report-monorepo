@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 
 import type { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { StatementService } from 'src/modules/statements/services/statement.service.js';
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { monthRange } from 'src/modules/venues/util/month.js';
 import { normalizeVenueName, plain } from 'src/modules/venues/util/venue-names.js';
@@ -64,7 +63,6 @@ export class MentionExtractionService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly statementService: StatementService,
-		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
 	) {}
 
@@ -351,10 +349,8 @@ export class MentionExtractionService {
 		return saved;
 	}
 
-	/** What the new mentions are about (their stored food topics), and their city's venue tags by job */
-	async linkTopics(cityId: string, mentionIds: number[]): Promise<void> {
-		if (!mentionIds.length) return;
-		await this.mentionTopicService.relink({ mentionIds });
+	/** A post's new claims move its city's venue tags (what a venue's posts' claims name), by job */
+	async queueVenueTags(cityId: string): Promise<void> {
 		await this.venueTopicService.queueCityRefresh([cityId]);
 	}
 }

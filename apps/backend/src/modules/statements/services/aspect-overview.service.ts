@@ -68,11 +68,10 @@ export class AspectOverviewService {
 			[cityId],
 		);
 		const counts = foldAspectCounts(
-			aspects.map(a => ({ id: a.id, parentId: a.parent?.id ?? null })),
+			aspects.map(a => ({ id: a.id, parentId: rootIdOf(a) })),
 			filed,
 			months,
 		);
-		const keyById = new Map(aspects.map(a => [a.id, a.key]));
 		const looseOf = (field: 'noAspect' | 'unread'): LooseClaimCounts => {
 			const byMonth = new Map(loose.map(r => [r.month, r[field]]));
 			return {
@@ -84,7 +83,7 @@ export class AspectOverviewService {
 			month,
 			months,
 			aspects: aspects.map(topic => {
-				const parentKey = topic.parent ? keyById.get(topic.parent.id) : undefined;
+				const parentKey = topic.parent?.key;
 				return { topic, ...(parentKey && { parentKey }), ...counts.get(topic.id)! };
 			}),
 			noAspect: looseOf('noAspect'),
@@ -92,3 +91,7 @@ export class AspectOverviewService {
 		};
 	}
 }
+
+/** The id of an aspect's root (its one `is_a` edge's target); null for a root. `edges` must be loaded */
+const rootIdOf = (aspect: Topic): string | null =>
+	aspect.edges.getItems().find(e => e.type === 'is_a')?.to.id ?? null;

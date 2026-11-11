@@ -8,6 +8,8 @@ import type { StatementSubject, StatementUnit } from '../entities/statement.enti
 import type { InsightDimension } from '../services/statement-insight.service.js';
 import type { InsightSide, InsightSource } from '../util/insight-sql.js';
 
+import type { AdminStatementPartsFilter, AdminStatementSentimentFilter } from './admin-statements.dto.js';
+
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
 
 /**
@@ -41,11 +43,27 @@ export interface AdminExploreBreakdownInputDto extends AdminExploreInputDto {
 	by: InsightDimension;
 }
 
+/**
+ * The Claims table's own filters on top of the view: the ones the page's pickers don't hold
+ * (sentiment, parts), as the Claims tabs filter them
+ */
 export interface AdminExploreClaimsInputDto extends AdminExploreInputDto, PaginationRequest {
 	/** Words in the claim */
 	q?: string & tags.MaxLength<200>;
+	/** One sentiment, or `unread`: agent B gave none yet */
+	sentiment?: AdminStatementSentimentFilter;
+	/** Under no aspect, no part at all, or naming a food */
+	parts?: AdminStatementPartsFilter;
 	/** A phrase: closest in meaning first; claims without a vector are left out */
 	like?: string & tags.MaxLength<200>;
+}
+
+/** The grouping's bar, each defaulting to `INSIGHT_GROUP_FLOORS` */
+export interface AdminExploreGroupsInputDto extends AdminExploreInputDto {
+	/** Cosine a claim needs with a group's centroid to join it: lower groups looser paraphrases */
+	similarity?: number & tags.Minimum<0.5> & tags.Maximum<0.98>;
+	/** Claims a group needs to be listed (from two sources at least, whatever this is) */
+	minClaims?: number & tags.Type<'uint32'> & tags.Minimum<2> & tags.Maximum<100>;
 }
 
 export interface AdminExploreTermsInputDto {
@@ -64,7 +82,10 @@ export interface AdminExploreTreeNodeOutputDto extends AdminExploreCountsOutputD
 	key: string;
 	label: string;
 	kind: string;
+	/** Its display parent: the first topic it is a kind of */
 	parentKey?: string;
+	/** Every topic it is a kind of, by rank: the tree draws it under each */
+	isA: string[];
 }
 
 export interface AdminExploreTreeOutputDto {
@@ -150,6 +171,9 @@ export interface AdminExploreGroupsOutputDto {
 	notEmbedded: number;
 	groups: AdminExploreGroupOutputDto[];
 	more: number;
+	/** The bar the groups were made at */
+	similarity: number;
+	minClaims: number;
 }
 
 export interface AdminExploreTermOutputDto extends AdminExploreRefOutputDto {

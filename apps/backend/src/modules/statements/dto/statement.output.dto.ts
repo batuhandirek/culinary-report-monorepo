@@ -1,3 +1,5 @@
+import type { EdgeType } from 'src/modules/topics/constants/topic-edge.constant.js';
+
 import type { StatementKind } from '../constants/kind.constant.js';
 import type { Sentiment } from '../constants/sentiment.constant.js';
 import type { StatementSubject, StatementUnit } from '../entities/statement.entity.js';
@@ -9,15 +11,16 @@ export interface StatementTopicOutputDto {
 	label: string;
 	/** `Topic.kind`: aspect, dish, cuisine, … */
 	kind: string;
-	/** The topic above it, when loaded (an aspect's root); absent for a root */
+	/** Its display parent, the topic its first `is_a` edge points at (an aspect's root, a dish's cuisine); absent for a root */
 	parent?: { key: string; label: string };
 }
 
 /**
  * One thing a statement is about (a `StatementPart` row): an `aspect` part has `topic`; a `food`
- * part has `term` (the wording as the source spelled it) whose `topics` are the wording's links,
- * empty until decided. Every route serving statements populates `STATEMENT_POPULATE` (`parts.topic.parent` and
- * `parts.term.topics.topic.parent`): a topic serialized without its parent loaded fails the DTO.
+ * part has `term` (the wording as the source spelled it) with its main `topic` (absent until
+ * decided, and for a wording that is none), whether the wording is that topic (`exact`) or
+ * something narrower, and what else a narrower one is or has (`modifiers`). Every route serving
+ * statements populates `STATEMENT_POPULATE`.
  */
 export interface StatementPartOutputDto {
 	role: StatementPartRole;
@@ -25,7 +28,9 @@ export interface StatementPartOutputDto {
 	term?: {
 		key: string;
 		name: string;
-		topics: { rank: number; topic: StatementTopicOutputDto }[];
+		exact: boolean;
+		topic?: StatementTopicOutputDto;
+		modifiers: { type: EdgeType; rank: number; topic: StatementTopicOutputDto }[];
 	};
 }
 

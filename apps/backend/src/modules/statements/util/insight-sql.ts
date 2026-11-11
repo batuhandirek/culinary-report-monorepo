@@ -3,6 +3,7 @@
 // and everything under it, or a wording), filters and further nodes, then counted by source.
 
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import type { CountMode } from 'src/modules/topics/constants/topic-edge.constant.js';
 
 import type { StatementKind } from '../constants/kind.constant.js';
 import type { StatementSubject } from '../entities/statement.entity.js';
@@ -148,16 +149,22 @@ export const claimsCte = (cityId: string, months: { from: string; to: string }):
 	);
 };
 
-/** The claim (`c.id`) is about one of these topics, through its aspect part or a food wording's links */
+/**
+ * The claim (`c.id`) is about one of these topics, through its aspect part, a food wording's main
+ * topic or one of the wording's modifiers. `keys` are a topic with everything that counts for it
+ * (`TopicIndex.descendants`), so the walk through the edges is already in them.
+ */
 export const aboutTopicsSql = (keys: string[], c = 'c'): Sql => {
 	if (!keys.length) return sql('false');
 	const list = placeholders(keys);
 	return sql(
 		`(exists (select 1 from statement_parts xp join topics xt on xt.id = xp.topic_id
 				where xp.statement_id = ${c}.id and xp.role = 'aspect' and xt.deleted_at is null and xt.key in (${list}))
-			or exists (select 1 from statement_parts xp join term_topics xtt on xtt.term_id = xp.term_id join topics xt on xt.id = xtt.topic_id
+			or exists (select 1 from statement_parts xp join terms xm on xm.id = xp.term_id join topics xt on xt.id = xm.topic_id
+				where xp.statement_id = ${c}.id and xp.role = 'food' and xt.deleted_at is null and xt.key in (${list}))
+			or exists (select 1 from statement_parts xp join term_modifiers xtm on xtm.term_id = xp.term_id join topics xt on xt.id = xtm.topic_id
 				where xp.statement_id = ${c}.id and xp.role = 'food' and xt.deleted_at is null and xt.key in (${list})))`,
-		[...keys, ...keys],
+		[...keys, ...keys, ...keys],
 	);
 };
 
@@ -206,8 +213,8 @@ export const narrowingSql = (
 	...(filters.with ?? []).map(node => nodeSql(node, c)),
 	...(filters.loose ?
 		[
-			sql(`not exists (select 1 from statement_parts xp join topics xt on xt.id = xp.topic_id
-				where xp.statement_id = ${c}.id and xp.role = 'aspect' and xt.parent_id is not null)`),
+			sql(`not exists (select 1 from statement_parts xp join topic_edges xe on xe.from_id = xp.topic_id and xe.type = 'is_a'
+				where xp.statement_id = ${c}.id and xp.role = 'aspect')`),
 		]
 	:	[]),
 ];
@@ -225,15 +232,31 @@ export const baseSideSql = (side: InsightSide | undefined, c = 'c'): Sql =>
 export const whereSql = (parts: Sql[]): Sql =>
 	parts.length ? joinSql([sql('where'), joinSql(parts, ' and ')], ' ') : sql('where true');
 
-/** The topics with every ancestor of each, as (id, ancestor id) pairs, a topic its own ancestor. Use as `with recursive anc(id, anc_id) as (…)` */
-export const ANCESTORS_SQL = `select id, id from topics where deleted_at is null
-	union all
-	select anc.id, t.parent_id from anc join topics t on t.id = anc.anc_id where t.parent_id is not null`;
+/**
+ * The topics with every topic each counts for (`topic_closure`), as (id, ancestor id) pairs, a
+ * topic its own ancestor: through `is_a` and `has` edges by default (broad), through `is_a` alone
+ * when `strict`. Use as `with anc(id, anc_id) as (…)`.
+ */
+export const ancestorsSql = (mode: CountMode = 'broad') =>
+	`select topic_id, ancestor_id from topic_closure${mode === 'strict' ? ' where has_edge = false' : ''}`;
 
-/** Every topic a claim is about directly: its aspect, and its food wordings' links (any kind, an aspect too: "waiting time" → Waiting) */
-export const CLAIM_TOPICS_SQL = `select ap.statement_id, ap.topic_id from statement_parts ap where ap.role = 'aspect'
+export const ANCESTORS_SQL = ancestorsSql();
+
+/**
+ * Every topic a claim is about directly: its aspect, its food wordings' main topics (any kind, an
+ * aspect too: "waiting time" → Waiting) and their modifiers; `strict` leaves out what a wording
+ * only has (`has` modifiers).
+ */
+export const claimTopicsSql = (mode: CountMode = 'broad') =>
+	`select ap.statement_id, ap.topic_id from statement_parts ap where ap.role = 'aspect'
 	union
-	select fp.statement_id, tt.topic_id from statement_parts fp join term_topics tt on tt.term_id = fp.term_id where fp.role = 'food'`;
+	select fp.statement_id, tm.topic_id from statement_parts fp join terms tm on tm.id = fp.term_id
+		where fp.role = 'food' and tm.topic_id is not null
+	union
+	select fp.statement_id, md.topic_id from statement_parts fp join term_modifiers md on md.term_id = fp.term_id
+		where fp.role = 'food'${mode === 'strict' ? " and md.type = 'is_a'" : ''}`;
+
+export const CLAIM_TOPICS_SQL = claimTopicsSql();
 
 /** The counts every breakdown row and tree node carries, over claims `c` */
 export const COUNT_FIELDS = (c = 'c') => `count(distinct ${c}.source)::int as sources,

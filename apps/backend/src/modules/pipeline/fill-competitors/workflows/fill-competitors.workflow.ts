@@ -7,7 +7,6 @@ import { CityService } from 'src/modules/cities/services/city.service.js';
 import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-step.decorator.js';
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { CompetitorService } from 'src/modules/venues/services/competitor.service.js';
 
@@ -38,7 +37,6 @@ export class FillCompetitorsWorkflow {
 		private readonly cityService: CityService,
 		private readonly reportBrands: ReportBrandsService,
 		private readonly competitorService: CompetitorService,
-		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
 		private readonly scrapeVenueSocial: ScrapeVenueSocialWorkflow,
 		private readonly scrapeAccounts: ScrapeAccountsWorkflow,
@@ -67,10 +65,9 @@ export class FillCompetitorsWorkflow {
 		return this.fill(cityId, month);
 	}
 
-	/** The city's mentions' topics, then its venue tags: suggestions read the tags */
+	/** The city's venue tags: suggestions read them */
 	@DurableStep({ name: 'refresh topics' })
 	private async refreshTopics(cityId: string): Promise<void> {
-		await this.mentionTopicService.relink({ cityId });
 		await this.venueTopicService.refreshCity(cityId);
 	}
 

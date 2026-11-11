@@ -3,6 +3,7 @@
 		amountLabel,
 		aspectHref,
 		aspectOf,
+		aspectPath,
 		foodPartsOf,
 		foodsOf,
 		linkTopicOf,
@@ -50,7 +51,7 @@
 						<a
 							class={['shrink-0 text-xs font-medium underline-offset-2 hover:underline', s.tone]}
 							href={aspectHref(aspect.key, themeSideOf(s.side), { cityId, month })}
-							title="Every sentence filed under this aspect this month">
+							title={`${aspectPath(aspect)}: every sentence filed under it this month`}>
 							{aspect.label}
 						</a>
 					{:else if s.side !== 'unread'}

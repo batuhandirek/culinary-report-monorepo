@@ -6,9 +6,13 @@
 // that no claim names. One with text and no sentiment has not been read by agent B yet. Every
 // label comes from the statement's parts: the frontend holds no copy of the vocabulary.
 
-import { exploreHref } from '#lib/explore.js';
+import { BadgePercent, CalendarDays, CircleHelp, Gavel, PackagePlus, RefreshCw } from '@lucide/svelte';
+import type { Component } from 'svelte';
 
-/** A topic a part is about: an aspect (with its root as `parent`), or one of a wording's topics */
+import { exploreHref } from '#lib/explore.js';
+import type { EdgeType } from '#lib/topic-kinds.js';
+
+/** A topic a part is about: an aspect (with its root as `parent`), or a wording's main topic or modifier (`parent`: its first "is a", a dish's cuisine) */
 export interface StatementTopic {
 	key: string;
 	label: string;
@@ -21,7 +25,18 @@ export interface StatementTopic {
 export interface StatementPart {
 	role: string;
 	topic?: StatementTopic;
-	term?: { key: string; name: string; topics: { rank: number; topic: StatementTopic }[] };
+	/**
+	 * A food wording: its main `topic` (absent until decided, or for none), `exact` when the wording
+	 * is that topic and false when it is something narrower under it, and what else a narrower one is
+	 * (`is_a`) or has (`has`)
+	 */
+	term?: {
+		key: string;
+		name: string;
+		exact: boolean;
+		topic?: StatementTopic;
+		modifiers: { type: EdgeType; rank: number; topic: StatementTopic }[];
+	};
 }
 
 /** The fields a page reads of a statement; what every `statements` route serves fits it */
@@ -100,6 +115,9 @@ export const aspectOf = (s: Pick<Statement, 'parts'>): AspectRef | undefined => 
 	};
 };
 
+/** An aspect's full path, for its tooltip wherever only its own name shows: "Service › Advice" */
+export const aspectPath = (a: AspectRef) => (a.root !== a.key ? `${a.rootLabel} › ${a.label}` : a.label);
+
 /** A noticed change as a table cell says it: "Portion size: made smaller" */
 export const changeLabel = (s: Statement): string => {
 	const aspect = aspectOf(s);
@@ -112,10 +130,12 @@ export interface FoodTopic {
 	kind: string;
 }
 
-/** A food or drink wording as the source spelled it (a term), with the topics it is linked to, by rank */
+/** A food or drink wording as the source spelled it (a term), with the topics it evokes: its main topic first, then its modifiers by rank */
 export interface FoodRef {
 	key: string;
 	name: string;
+	/** True when the wording is its main topic, spelled or translated; false for something narrower (or undecided) */
+	exact: boolean;
 	/** Empty until the wording is decided */
 	topics: FoodTopic[];
 }
@@ -128,7 +148,11 @@ export const foodPartsOf = (s: Pick<Statement, 'parts'>): FoodRef[] =>
 					{
 						key: p.term.key,
 						name: p.term.name,
-						topics: [...p.term.topics].sort((a, b) => a.rank - b.rank).map((t) => t.topic)
+						exact: p.term.exact,
+						topics: [
+							...(p.term.topic ? [p.term.topic] : []),
+							...[...p.term.modifiers].sort((a, b) => a.rank - b.rank).map((m) => m.topic)
+						]
 					}
 				]
 			: []
@@ -257,7 +281,7 @@ export const themeRowHref = (
 export const amountLabel = (amount: number, unit: string) =>
 	unit === 'minutes'
 		? `${Number.isInteger(amount) ? amount : amount.toFixed(1)} min`
-		: `€${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;
+		: `€${amount.toLocaleString('en-GB', { maximumFractionDigits: Number.isInteger(amount) ? 0 : 2, minimumFractionDigits: Number.isInteger(amount) ? 0 : 2 })}`;
 
 /** A claim's kind as a page names it */
 export const KIND_LABELS: Record<string, string> = {
@@ -292,3 +316,56 @@ export const saidOf = (statements: Pick<Statement, 'text' | 'quote' | 'sentiment
 	return [...new Set([...judging, ...said].map((s) => s.quote || s.text!))].slice(0, limit);
 };
 
+
+/**
+ * A claim's sentiment at a glance, the same in every list of claims: a dot (green praise, red
+ * complaint, amber mixed, grey neutral, hollow while agent B has not read it) and a faint tint
+ * for its row (none for neutral and unread).
+ */
+export const sentimentLook = (sentiment?: string | null): { label: string; dot: string; tint: string } =>
+	sentiment === 'positive'
+		? { label: 'Positive', dot: 'bg-success', tint: 'bg-success/[0.06]' }
+		: sentiment === 'negative'
+			? { label: 'Negative', dot: 'bg-destructive', tint: 'bg-destructive/[0.06]' }
+			: sentiment === 'mixed'
+				? { label: 'Mixed', dot: 'bg-warning', tint: 'bg-warning/10' }
+				: sentiment
+					? { label: 'Neutral', dot: 'bg-faint', tint: '' }
+					: { label: 'Not read yet', dot: 'border-faint border bg-transparent', tint: '' };
+
+/** A claim's kind worth seeing at a glance, as an icon before it; opinions and facts have none */
+export const KIND_ICONS: Record<string, Component> = {
+	change: RefreshCw,
+	new_item: PackagePlus,
+	deal: BadgePercent,
+	event: CalendarDays,
+	question: CircleHelp,
+	verdict: Gavel
+};
+
+/**
+ * A claim about a named place, said without the place when it opens with it: agent A writes the
+ * subject out ("Pasta Factory Berlin offers a lunch deal", "Coda's menu is all sweet"), which a list
+ * of that place's claims repeats on every row. "Offers a lunch deal", "Its menu is all sweet";
+ * undefined when the claim doesn't open with the name.
+ */
+export const withoutPlace = (text: string, place: string): string | undefined => {
+	const name = place.trim();
+	if (name.length < 2) return undefined;
+	const pattern = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+	const match = text.match(new RegExp(`^${pattern}(['’]s)?\\s+(?=\\p{L})`, 'iu'));
+	if (!match) return undefined;
+	const rest = text.slice(match[0].length);
+	return match[1] ? `Its ${rest}` : rest.charAt(0).toUpperCase() + rest.slice(1);
+};
+
+/** A source's claims by sentiment, as the Digestion rows count them: those without one not read yet */
+export const tallyOf = (statements: Pick<Statement, 'text' | 'sentiment'>[] | undefined) => {
+	const tally = { positive: 0, negative: 0, neutral: 0, mixed: 0, unread: 0 };
+	for (const s of statements ?? []) {
+		if (!s.text) continue;
+		const key = (s.sentiment ?? 'unread') as keyof typeof tally;
+		tally[key in tally ? key : 'neutral']++;
+	}
+	return tally;
+};

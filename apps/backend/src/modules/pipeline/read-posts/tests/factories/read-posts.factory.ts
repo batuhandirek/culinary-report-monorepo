@@ -9,7 +9,6 @@ import type {
 } from 'src/modules/social/interfaces/post-reading.interface.js';
 import { MentionExtractionService } from 'src/modules/social/services/mention-extraction.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 
 import { PostClaimsAgent } from '../../agents/post-claims.agent.js';
 import { PostGateAgent } from '../../agents/post-gate.agent.js';
@@ -36,7 +35,6 @@ const parts = (moduleRef: TestingModule) => ({
 	get statementParts() {
 		return moduleRef.get(StatementPartsService);
 	},
-	topics: moduleRef.get(TopicService),
 });
 
 const gateOf = async (
@@ -56,11 +54,7 @@ const claimsOf = async (
 	post: PostForReading,
 ): Promise<PostClaimsRead> => {
 	const p = parts(moduleRef);
-	const index = await p.topics.index();
-	return readPostClaims(p.claims, postClaimsSource(post), {
-		cityName: post.cityName,
-		topics: index.food.map(t => t.label),
-	});
+	return readPostClaims(p.claims, postClaimsSource(post), { cityName: post.cityName });
 };
 
 /** The unread posts (of a city, or all), most viewed first, read: what `extract` did */
@@ -94,7 +88,7 @@ export const readPostsPlainly = async (
 				tokens: reading.usage.totalTokens,
 			});
 			await p.statementParts.read({ ids: saved.claimIds });
-			await extraction.linkTopics(post.cityId, saved.mentionIds);
+			if (saved.mentionIds.length) await extraction.queueVenueTags(post.cityId);
 			result.analysed++;
 			result.mentions += saved.mentionIds.length;
 		} catch {
@@ -144,7 +138,7 @@ export const rereadPostsPlainly = async (
 			});
 			result.tokens += reading.usage.totalTokens;
 			result.tokens += (await p.statementParts.read({ ids: claimIds })).tokens ?? 0;
-			await extraction.linkTopics(post.cityId, addedMentionIds);
+			await extraction.queueVenueTags(post.cityId);
 			result.read++;
 			result.paired += saved.paired;
 			result.added += saved.added;

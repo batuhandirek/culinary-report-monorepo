@@ -6,6 +6,7 @@ import _ from 'lodash';
 
 import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { FOOD_TOPIC_KEYS_SQL } from 'src/modules/statements/util/statement-foods.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import type { VenueDetails } from 'src/modules/venues/interfaces/venue-details.interface.js';
 
@@ -24,8 +25,8 @@ const CHUNK = 500;
 
 /**
  * Venues' food topics: the one writer of `VenueTopic`. The admin's rows (a tag or an
- * exclusion) are inputs; the computed tags (`venueTopics` over the venue's Google categories, its
- * posts by others' stored cuisine topics, its latest delivery menu's stored item topics, Google's
+ * exclusion) are inputs; the computed tags (`venueTopics` over the venue's Google categories, the
+ * kinds of food its posts by others' claims name, its latest delivery menu's stored item topics, Google's
  * review tags and the admin's rows) are stored by `refresh`, and every reader reads them
  * (`tags`), so "all burger places" is a query. Refreshed per city by `TopicCityRefreshJob`
  * whenever an input changes, for one venue at once after an admin's change, and for every city by
@@ -88,14 +89,11 @@ export class VenueTopicService {
 				conn.execute<
 					{ id: string; category: string | null; categories: string[] | null; review_tags: VenueDetails['reviewsTags'] | null }[]
 				>(`select id, category, categories, details->'reviewsTags' as review_tags from venues where id in (${marks})`, ids),
-				// A venue's own posts don't say what others call its food; a mention's cuisine topics only
+				// A venue's own posts don't say what others call its food: each mention by others, the kinds of food its claims name
 				conn.execute<{ venue_id: string; keys: string[] }[]>(
-					`select m.venue_id, array_agg(t.key order by mt.rank) as keys from mention_topics mt
-					join mentions m on m.id = mt.mention_id
+					`select m.venue_id, ${FOOD_TOPIC_KEYS_SQL('st.mention_id = m.id')} as keys from mentions m
 					join social_posts p on p.id = m.post_id
-					join topics t on t.id = mt.topic_id
-					where m.venue_id in (${marks}) and mt.source = 'cuisine' and not ${ownPostSql('p', 'm.brand_id')}
-					group by m.venue_id, m.id`,
+					where m.venue_id in (${marks}) and not ${ownPostSql('p', 'm.brand_id')}`,
 					ids,
 				),
 				// Each listing's latest menu: what the venue sells now

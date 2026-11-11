@@ -105,7 +105,7 @@ export const resolvePlaces = <C extends AnswerClaim>(answer: PostAnswer<C>): Pos
 /**
  * The answers to a long post's parts as one: the places of the first pass, then each part's places
  * not on it yet (`placeIndex`), each part's claims on the place they name; a known place gains a
- * hint or a cuisine a later part gives, and keeps the first pass's call on whether it is a new
+ * hint or a city a later part gives, and keeps the first pass's call on whether it is a new
  * opening (it read the whole text; every part re-lists every place, so a part's call would be one
  * more chance of a false one), as the post keeps it on whether it is promotional.
  */
@@ -122,7 +122,6 @@ export const mergePostParts = <C extends AnswerClaim>(
 			else {
 				const known = places[i];
 				known.locationHint ??= p.locationHint;
-				known.cuisine ??= p.cuisine;
 				known.city ??= p.city;
 			}
 		}

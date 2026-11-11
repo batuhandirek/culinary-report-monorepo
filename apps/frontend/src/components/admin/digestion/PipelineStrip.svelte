@@ -17,9 +17,11 @@
 
 	interface Props {
 		steps: Step[];
+		/** No pill around each step, a step that only got partly marked by a ground: inside a card (the post page) */
+		flat?: boolean;
 	}
 
-	let { steps }: Props = $props();
+	let { steps, flat = false }: Props = $props();
 
 	const LOOK = {
 		done: { icon: CircleCheck, class: 'text-success' },
@@ -29,13 +31,19 @@
 	};
 </script>
 
-<ol class="m-0 flex list-none flex-wrap items-center gap-x-1 gap-y-1 p-0 text-xs">
+<ol class={['m-0 flex list-none flex-wrap items-center p-0 text-xs', flat ? 'gap-0' : 'gap-x-1 gap-y-1']}>
 	{#each steps as step, i (step.label)}
 		{@const look = LOOK[step.state]}
 		{#if i}<li aria-hidden="true" class="text-faint"><ChevronRight class="size-3.5" /></li>{/if}
-		<li class="bg-paper border-line inline-flex items-center gap-1.5 rounded-full border py-0.5 pr-2.5 pl-1.5" title={step.hint}>
-			<look.icon class={['size-3.5 shrink-0', look.class]} aria-label={step.state} />
-			<span class="font-medium">{step.label}</span>
+		<li
+			class={[
+				'inline-flex items-center gap-1.5',
+				flat ? ['h-6 rounded-md px-2', step.state === 'partly' && 'bg-warning/15', step.state === 'skipped' && 'bg-destructive/10'] : 'bg-paper border-line rounded-full border py-0.5 pr-2.5 pl-1.5'
+			]}
+			title={step.hint}>
+			<!-- On the amber ground the warning colour fades: the badge's darker amber there -->
+			<look.icon class={['size-3.5 shrink-0', flat && step.state === 'partly' ? 'text-[hsl(30_85%_30%)]' : look.class]} aria-label={step.state} />
+			<span class={flat ? 'font-semibold' : 'font-medium'}>{step.label}</span>
 			{#if step.result}<span class="text-muted-foreground tabular-nums">{step.result}</span>{/if}
 		</li>
 	{/each}

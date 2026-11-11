@@ -6,15 +6,14 @@
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import VenueDemandPanel from '#components/admin/venues/VenueDemandPanel.svelte';
 	import VenueDishSearchesPanel from '#components/admin/venues/VenueDishSearchesPanel.svelte';
-	import VenueRatingPanel from '#components/admin/venues/VenueRatingPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// The data points beyond posts and reviews: open tables, foot traffic, delivery, where it
-	// ranks on Google Maps searches and its rating over time (its own accounts are on the
+	// The data points beyond posts and reviews: open tables, foot traffic, delivery and where it
+	// ranks on Google Maps searches (its rating over time and its own accounts are on the
 	// Overview). Each branch has its own: pick any of the city's open branches (the most
 	// reviewed first), as the report shows each one.
 	interface Props {
@@ -66,10 +65,7 @@
 		{#key venue.id}
 			<div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-2">
 				<VenueDemandPanel {venue} />
-				<div class="flex min-w-0 flex-col gap-5">
-					<VenueDishSearchesPanel {venue} />
-					<VenueRatingPanel {venue} />
-				</div>
+				<VenueDishSearchesPanel {venue} />
 			</div>
 		{/key}
 	{/if}

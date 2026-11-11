@@ -7,7 +7,8 @@ import {
 	BaseMastraAgentConfig,
 } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
-import { TERM_RELATIONS } from 'src/modules/topics/constants/term-relation.constant.js';
+// TODO(topic-graph): the old term × topic relations, kept only so the references on disk still parse
+const TERM_RELATIONS = ['same', 'kind_of', 'with'] as const;
 
 import { REFERENCE_MODEL } from '../constants/eval.constant.js';
 

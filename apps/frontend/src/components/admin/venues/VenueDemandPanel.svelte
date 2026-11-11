@@ -5,12 +5,9 @@
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
-	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createAutoLoader } from '#ui/lib/loader.svelte.js';
-	import Button from '#ui/wrapped/Button.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
-	import Input from '#ui/wrapped/Input.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// Demand signals: Google popular times sampled twice a week (the latest histogram as a
@@ -39,79 +36,12 @@
 		google: 'Google'
 	};
 
-	// The hand-set booking page: open tables are sampled from it before Google's reservation
-	// link and the website. TheFork, OpenTable or Google's own booking page (google.com/maps/reserve/…).
-	// svelte-ignore state_referenced_locally
-	let savedBookingUrl = $state(venue.bookingUrl ?? '');
-	// svelte-ignore state_referenced_locally
-	let bookingUrl = $state(venue.bookingUrl ?? '');
-	const BOOKING_HOST = /(^|\.)(thefork|lafourchette|eltenedor|opentable)\.[a-z.]+$/i;
-	const GOOGLE_HOST = /(^|\.)google\.[a-z.]+$/i;
-	const bookingValid = $derived.by(() => {
-		const url = bookingUrl.trim();
-		if (!url) return true;
-		try {
-			const parsed = new URL(url);
-			return (
-				/^https?:$/.test(parsed.protocol) &&
-				(BOOKING_HOST.test(parsed.hostname) ||
-					(GOOGLE_HOST.test(parsed.hostname) && parsed.pathname.startsWith('/maps/reserve')))
-			);
-		} catch {
-			return false;
-		}
-	});
-	const bookingAction = createAction(
-		(url: string | null) => api.admin.updateVenue(venue.id, { bookingUrl: url }),
-		{
-			onSuccess: (res) => {
-				savedBookingUrl = res.bookingUrl ?? '';
-				bookingUrl = savedBookingUrl;
-			},
-			successNotification: (res) => ({
-				title: res.bookingUrl ? 'Booking link saved' : 'Booking link removed',
-				text: venue.name
-			})
-		}
-	);
-
 	const empty = $derived(
 		demand && !demand.busyness.length && !demand.reservations.length && !demand.delivery.length
 	);
 </script>
 
 <AdminPanel title="Demand and delivery">
-	<form
-		class="mb-4 flex flex-col gap-1.5 text-sm"
-		onsubmit={(e) => {
-			e.preventDefault();
-			if (bookingValid) bookingAction.execute(bookingUrl.trim() || null);
-		}}>
-		<label for="venue-booking-url" class="font-semibold">Booking page</label>
-		<div class="flex flex-wrap items-center gap-2">
-			<div class="min-w-48 flex-1">
-				<Input
-					id="venue-booking-url"
-					type="url"
-					bind:value={bookingUrl}
-					placeholder="https://www.google.com/maps/reserve/…, TheFork or OpenTable"
-					aria-invalid={!bookingValid || undefined}
-					aria-describedby="venue-booking-url-hint" />
-			</div>
-			<Button
-				type="submit"
-				variant="outline"
-				loading={bookingAction.executing}
-				disabled={!bookingValid || bookingUrl.trim() === savedBookingUrl}
-				>{bookingUrl.trim() || !savedBookingUrl ? 'Save' : 'Remove'}</Button>
-		</div>
-		<p id="venue-booking-url-hint" class={['m-0 text-xs', bookingValid ? 'text-muted-foreground' : 'text-destructive']}>
-			{bookingValid
-				? 'Its Google booking page (from Maps’ “Reserve a table”), TheFork or OpenTable page. Open tables are sampled from it first, before Google’s reservation link and the website.'
-				: 'Only a Google booking page, TheFork or OpenTable page (https://…) can be sampled.'}
-		</p>
-	</form>
-
 	{#if loader.error && !demand}
 		<ErrorState onRetry={() => loader.load(venue.id)} />
 	{:else if !demand}

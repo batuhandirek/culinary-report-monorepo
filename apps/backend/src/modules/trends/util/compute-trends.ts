@@ -20,7 +20,7 @@ export interface TrendMention {
 	brandName: string;
 	district: string | null;
 	category: string | null;
-	/** Its stored food topics (`MentionTopic`: its cuisine's, else its venue's category's), in order */
+	/** The kinds of food its claims name (`mentionTopicsSql`), in the order named */
 	topics: string[];
 	/** The foods and drinks its statements name (their food parts), each with its wording's dish or drink topics */
 	dishes: StatementFood[];
@@ -174,8 +174,8 @@ const FOOD_KINDS = new Set([TopicKindEnum.CUISINE, TopicKindEnum.DISH]);
 
 /**
  * The one topic a mention counts for in the trend tables (each sums to 100): the first cuisine or
- * dish of its stored topics ("Vegan Döner": döner; a mention whose cuisine names none has its
- * venue's Google category's), else its first topic of any kind; null for none.
+ * dish its claims name ("vegan döner": döner), else its first topic of any kind; null for none (a
+ * mention whose claims name no food is in no table row).
  */
 export const mentionTopic = (m: Pick<TrendMention, 'topics'>, index: TopicIndex): string | null => {
 	const keys = m.topics.filter(k => index.get(k));

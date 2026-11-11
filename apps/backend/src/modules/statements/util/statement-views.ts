@@ -6,16 +6,17 @@ import type { StatementKind } from '../constants/kind.constant.js';
 import type { Sentiment } from '../constants/sentiment.constant.js';
 import type { StatementPartRole } from '../entities/statement-part.entity.js';
 
-/** What a reader needs of a part: the entity (populated `topic.parent`, `term.topics.topic`), or a row read by SQL */
+/** What a reader needs of a part: the entity (populated `topic.edges.to`, `term.topic`, `term.modifiers.topic`), or a row read by SQL */
 export interface PartLike {
 	role: StatementPartRole | string;
 	/** An aspect part's topic, with its parent when loaded (a root has none) */
 	topic?: { key: string; label?: string; parent?: { key: string; label?: string } | null } | null;
-	/** A food part's wording, with its links when loaded */
+	/** A food part's wording, with its main topic and modifiers when loaded */
 	term?: {
 		key: string;
 		name: string;
-		topics?: Iterable<{ topic: { key: string; label?: string } }>;
+		topic?: { key: string; label?: string } | null;
+		modifiers?: Iterable<{ topic: { key: string; label?: string } }>;
 	} | null;
 }
 
@@ -58,14 +59,18 @@ export const aspectPart = (s: StatementLike): PartLike | undefined =>
 export const rootOf = (topic: NonNullable<PartLike['topic']>): string =>
 	topic.parent?.key ?? topic.key;
 
-/** The topic keys a part is about: an aspect's own, a food wording's links (empty until decided) */
+/** The topic keys a part is about: an aspect's own, a food wording's main topic then its modifiers (empty until decided) */
 export const partTopicKeys = (p: PartLike): string[] =>
 	p.role === 'aspect' ?
 		p.topic ?
 			[p.topic.key]
 		:	[]
-	: p.term?.topics ? [...p.term.topics].map(l => l.topic.key)
-	: [];
+	: p.term ?
+		[
+			...(p.term.topic ? [p.term.topic.key] : []),
+			...(p.term.modifiers ? [...p.term.modifiers].map(m => m.topic.key) : []),
+		]
+	:	[];
 
 /** A noticed change (kind `change`): no praise or complaint whatever its sentiment */
 export const isChange = (s: StatementLike): boolean => s.kind === 'change';
@@ -123,7 +128,7 @@ export interface SourceFood {
 	key: string;
 	/** The dish-only statement's sentiment, else its claims' (praised and criticised: `mixed`) */
 	sentiment: Sentiment;
-	/** The wording's topics (`term_topics`, when loaded; empty until decided) */
+	/** The wording's main topic and modifiers (when loaded; empty until decided) */
 	topics: string[];
 }
 
@@ -158,7 +163,7 @@ export const foodsOf = (list: StatementLike[]): SourceFood[] => {
 	});
 };
 
-/** Every topic key a source's statements are about (aspects and foods' links), each once */
+/** Every topic key a source's statements are about (aspects, the foods' topics and modifiers), each once */
 export const topicKeysOf = (list: StatementLike[]): string[] =>
 	_.uniq(list.flatMap(s => partsOf(s).flatMap(partTopicKeys)));
 

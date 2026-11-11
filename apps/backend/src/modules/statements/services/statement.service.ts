@@ -10,7 +10,7 @@ import { SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
-import { monthRange } from 'src/modules/venues/util/month.js';
+import { dayRange, monthRange } from 'src/modules/venues/util/month.js';
 import { toVectorLiteral } from 'src/shared/util/vector.js';
 
 import { STATEMENT_EMBEDDING_DIMENSIONS } from '../constants/embeddings.constant.js';
@@ -274,6 +274,8 @@ export class StatementService {
 		const where: FilterQuery<Statement> = {};
 		const and: FilterQuery<Statement>[] = [scopeFilter(query)];
 		if (query.month) where.month = query.month;
+		const said = dayRange(query.from, query.to);
+		if (said) where.saidAt = said;
 		if (query.sourceKind) where.sourceKind = query.sourceKind;
 		if (query.subject) where.subject = query.subject;
 		if (query.sentiment)
@@ -354,6 +356,9 @@ export class StatementService {
 		const where: [string, string[]][] = [];
 		if (scope.cityId) where.push(['s.city_id = ?', [scope.cityId]]);
 		if (scope.month) where.push(['s.month = ?', [scope.month]]);
+		const said = dayRange(scope.from, scope.to);
+		if (said?.$gte) where.push(['s.said_at >= ?', [said.$gte.toISOString()]]);
+		if (said?.$lt) where.push(['s.said_at < ?', [said.$lt.toISOString()]]);
 		if (scope.brandId)
 			where.push(['(rv.brand_id = ? or m.brand_id = ?)', [scope.brandId, scope.brandId]]);
 		if (scope.venueId)
@@ -387,7 +392,7 @@ export class StatementService {
 	}
 }
 
-/** Whose claims: a city's, a brand's or a branch's (at least one), of a month or all */
+/** Whose claims: a city's, a brand's or a branch's (at least one), of a month, of days or all */
 export interface StatementScope {
 	cityId?: string;
 	/** Its branches' reviews and the posts' claims about it (`mention.brand`) */
@@ -395,6 +400,10 @@ export interface StatementScope {
 	/** Its reviews and the posts' claims about it (`mention.venue`) */
 	venueId?: string;
 	month?: string;
+	/** Said on or after this UTC day */
+	from?: string;
+	/** Said on or before this UTC day (inclusive) */
+	to?: string;
 }
 
 /** The claims of a scope a brand or a branch is: joined through the source, never stored on the claim */

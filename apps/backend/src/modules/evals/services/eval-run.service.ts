@@ -25,13 +25,10 @@ import {
 } from 'src/modules/statements/util/claim-parts-input.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import {
-	termAnswerLinks,
-	termTopicInput,
-	termTopicInputTopics,
-} from 'src/modules/topics/util/term-topic-input.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { runPool } from 'src/shared/util/pool.js';
+
+import { TERM_EVAL_OFF } from './eval-reference.service.js';
 
 import type {
 	CaseResult,
@@ -233,11 +230,10 @@ export class EvalRunService {
 			string,
 			{
 				isPromotional: boolean;
-				places: (Omit<EvalPlace, 'match'> & { cuisine: string | null })[];
+				places: Omit<EvalPlace, 'match'>[];
 				claims: (RawClaim & Pick<EvalPostClaim, 'subject' | 'place'>)[];
 			}
 		>();
-		const topicLabels = index.food.map(t => t.label);
 		if (fromReference)
 			for (const c of posts) {
 				const ref = c.reference!;
@@ -249,7 +245,6 @@ export class EvalRunService {
 						city: p.city,
 						visited: p.visited,
 						isNewOpening: p.isNewOpening,
-						cuisine: null,
 					})),
 					claims: ref.claims.map(cl => ({
 						text: cl.text,
@@ -266,7 +261,7 @@ export class EvalRunService {
 				const res = await readPostClaims(
 					this.postClaimsAgent,
 					c.source,
-					{ cityName: c.source.cityName, topics: topicLabels },
+					{ cityName: c.source.cityName },
 					{ model: reading.model },
 				);
 				answered(c.id, 'post-claims', res);
@@ -276,7 +271,6 @@ export class EvalRunService {
 					city: p.city,
 					visited: p.visited,
 					isNewOpening: p.isNewOpening,
-					cuisine: p.cuisine,
 				}));
 				postAnswers.set(c.id, {
 					isPromotional: res.object.isPromotional,
@@ -433,17 +427,14 @@ export class EvalRunService {
 				if (fromReference) {
 					results.get(c.id)!.output = {
 						isPromotional: answer.isPromotional,
-						places: answer.places.map(({ cuisine: _cuisine, ...p }) => ({
-							...p,
-							match: null,
-						})),
+						places: answer.places.map(p => ({ ...p, match: null })),
 						claims,
 					};
 					return;
 				}
 				const city = await this.evalCities.get(c.source.cityId);
 				const match = (
-					place: Omit<EvalPlace, 'match'> & { cuisine?: string | null },
+					place: Omit<EvalPlace, 'match'>,
 					said: string[],
 				) =>
 					this.match(
@@ -453,16 +444,14 @@ export class EvalRunService {
 							venueName: place.venueName,
 							locationHint: place.locationHint,
 							city: place.city,
-							cuisine: place.cuisine ?? null,
 							said,
 						},
 						res => answered(c.id, 'venue-match', res),
 					);
 				const places: EvalPlace[] = [];
 				for (const [i, place] of answer.places.entries()) {
-					const { cuisine: _cuisine, ...p } = place;
 					places.push({
-						...p,
+						...place,
 						match: await match(
 							place,
 							claims.filter(cl => cl.place === i).map(cl => cl.text),
@@ -487,24 +476,10 @@ export class EvalRunService {
 
 		// Agent C
 		const terms = cases.filter((c): c is TermCase => c.kind === 'term');
-		const topics = termTopicInputTopics(index);
-		await runPool(
-			// One wording a call, as the `terms` backlog reads them
-			terms,
-			CONCURRENCY,
-			async c => {
-				const res = await this.termTopicAgent.generate(termTopicInput(c.source.name), {
-					topics,
-				});
-				answered(c.id, 'term-topic', res);
-				const { keys, relations, suggestion } = termAnswerLinks(res.object, index);
-				results.get(c.id)!.output = {
-					topics: keys.map(key => ({ key, relation: relations.get(key)! })),
-					suggestion,
-				};
-			},
-			(c, e) => fail(c.id, e),
-		);
+		// TODO(topic-graph): agent C's term cases are not run. Its answer is one main topic, `exact` and
+		// modifiers now, and the references are the old term × topic links: each term case fails with
+		// that message until the eval's term part is remade
+		for (const c of terms) fail(c.id, new Error(TERM_EVAL_OFF));
 
 		for (const r of results.values()) {
 			r.tokens = Math.round(r.tokens);

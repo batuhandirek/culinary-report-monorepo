@@ -22,6 +22,7 @@ const DETAIL_NAMES: Record<string, (segment: string) => string | undefined> = {
 	},
 	'/admin/brands': () => page.data.brand?.name,
 	'/admin/venues': () => page.data.venue?.name,
+	'/admin/reviews': () => (page.data.review ? `${page.data.review.stars ? `${page.data.review.stars}★ ` : ''}review` : undefined),
 	'/admin/cities': () => page.data.city?.name,
 	'/admin/posts': () => (page.data.post ? `@${page.data.post.author ?? 'post'}` : undefined),
 	'/admin/creators': () => page.data.creator?.name,
@@ -83,7 +84,7 @@ export function constructAdminBreadcrumbs(): AdminBreadcrumb[] {
 	const config = page.data.reportConfig as { name: string } | undefined;
 	const brand = page.data.brand as { id: string; name: string } | undefined;
 	if (base === '/admin/brands' && config && brand) {
-		crumbs.push({ href: `/admin/brands/${brand.id}?tab=reports`, name: brand.name });
+		crumbs.push({ href: `/admin/brands/${brand.id}?tab=history`, name: brand.name });
 		crumbs.push({ href: '', name: config.name });
 		return crumbs;
 	}
@@ -91,6 +92,12 @@ export function constructAdminBreadcrumbs(): AdminBreadcrumb[] {
 	const venue = page.data.venue as { brand?: { id: string; name: string } } | undefined;
 	if (base === '/admin/venues' && venue?.brand) {
 		crumbs.push({ href: `/admin/brands/${venue.brand.id}`, name: venue.brand.name });
+	}
+	// A review sits under its branch, under its brand
+	const review = page.data.review as { brand: { id: string; name: string }; branch: { id: string; name: string } } | undefined;
+	if (base === '/admin/reviews' && review) {
+		crumbs.push({ href: `/admin/brands/${review.brand.id}`, name: review.brand.name });
+		crumbs.push({ href: `/admin/venues/${review.branch.id}?tab=reviews`, name: review.branch.name });
 	}
 	// A page that has not said what it is still gets a crumb, so the section stays a link;
 	// one that failed to load says so instead of pretending to be a record.

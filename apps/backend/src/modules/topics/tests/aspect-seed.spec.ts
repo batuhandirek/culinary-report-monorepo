@@ -74,7 +74,7 @@ describe('TopicIndex aspects', () => {
 	it('lists the roots in order, each followed by its children by label', () => {
 		const aspects = index.aspects;
 		expect(aspects.map(t => t.kind)).toEqual(aspects.map(() => TopicKindEnum.ASPECT));
-		expect(aspects.filter(t => !t.parentKey).map(t => t.key)).toEqual([...ASPECT_ROOTS]);
+		expect(aspects.filter(t => !t.isA[0]).map(t => t.key)).toEqual([...ASPECT_ROOTS]);
 		expect(aspects[0].key).toBe('food');
 		const at = (key: string) => aspects.findIndex(t => t.key === key);
 		for (const child of ASPECT_SEED.filter(s => s.parent === 'food'))
@@ -84,7 +84,7 @@ describe('TopicIndex aspects', () => {
 			const from = at(ASPECT_ROOTS[i]);
 			const to = i + 1 < ASPECT_ROOTS.length ? at(ASPECT_ROOTS[i + 1]) : aspects.length;
 			const children = aspects.slice(from + 1, to);
-			expect(children.map(t => t.parentKey)).toEqual(children.map(() => ASPECT_ROOTS[i]));
+			expect(children.map(t => t.isA[0])).toEqual(children.map(() => ASPECT_ROOTS[i]));
 			expect(children.map(t => t.label)).toEqual(
 				[...children.map(t => t.label)].sort((a, b) => a.localeCompare(b)),
 			);

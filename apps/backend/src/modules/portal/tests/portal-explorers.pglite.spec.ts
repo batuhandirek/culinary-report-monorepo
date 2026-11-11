@@ -357,7 +357,7 @@ describe('the portal explorers and competitor picks (pglite)', () => {
 							role: 'food',
 							term: expect.objectContaining({
 								name: 'döner',
-								topics: [expect.objectContaining({ topic: expect.objectContaining({ key: 'kebab' }) })],
+								topic: expect.objectContaining({ key: 'kebab' }),
 							}),
 						}),
 					],

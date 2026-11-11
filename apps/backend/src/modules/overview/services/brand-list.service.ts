@@ -208,6 +208,28 @@ export class BrandListService {
 		return out;
 	}
 
+	/** One brand's posts, views and creators between two moments (`from` inclusive), as `buzz` counts a month */
+	async buzzBetween(brandId: string, from: Date, to: Date, cityId?: string): Promise<BrandBuzz> {
+		const rows: { own: boolean; posts: number; views: string; creators: number }[] = await this.em
+			.getConnection()
+			.execute(
+				`select ${ownPostSql('p', 'x.brand_id')} as own,
+					count(*)::int as posts, coalesce(sum(p.views), 0) as views, count(distinct a.creator_id)::int as creators
+				from (select distinct m.brand_id, m.post_id from mentions m where m.brand_id = ?) x
+				join social_posts p on p.id = x.post_id
+				left join social_accounts a on a.id = p.account_id
+				where p.posted_at >= ? and p.posted_at < ? ${cityId ? 'and p.city_id = ?' : ''}
+				group by 1`,
+				[brandId, from, to, ...(cityId ? [cityId] : [])],
+			);
+		const out: BrandBuzz = { posts: 0, views: 0, creators: 0, ownPosts: 0 };
+		for (const row of rows) {
+			if (row.own) out.ownPosts += row.posts;
+			else Object.assign(out, { posts: row.posts, views: Number(row.views), creators: row.creators });
+		}
+		return out;
+	}
+
 	private async baseRows(query: AdminListBrandsInputDto): Promise<BaseRow[]> {
 		const city = query.cityId ? 'and v.city_id = ?' : '';
 		const cityParams = query.cityId ? [query.cityId] : [];

@@ -10,6 +10,8 @@ import { PostSourceKindEnum } from '../entities/post-source.entity.js';
 import { PostSkipReasonEnum, SocialPlatformEnum } from '../entities/social-post.entity.js';
 
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
+/** A UTC day, `2026-09-01` */
+type Day = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'>;
 
 export interface AdminVenueRefOutputDto {
 	id: string;
@@ -21,13 +23,10 @@ export interface AdminMentionOutputDto {
 	id: number;
 	venueName: string;
 	locationHint?: string;
-	cuisine?: string;
 	city?: string;
 	visited: boolean;
 	/** What the post says about this place, one claim per row with its parts (its sentiment is worked out from them) */
 	statements: StatementOutputDto[];
-	/** The kinds of food it is about (on a post's page): its cuisine's, else its venue's category's */
-	topics?: { source: 'cuisine' | 'category'; topic: { key: string; label: string } }[];
 	/** The brand it was matched to */
 	brand?: { id: string; name: string };
 	/** The branch, when the post says which; a chain's mention may have the brand only */
@@ -138,6 +137,10 @@ export interface AdminListPostsInputDto extends PaginationRequest {
 	cityId?: string & tags.Format<'uuid'>;
 	platform?: SocialPlatformEnum;
 	month?: Month;
+	/** Posted on or after this UTC day */
+	from?: Day;
+	/** Posted on or before this UTC day (inclusive) */
+	to?: Day;
 	/** Only posts that mention this venue. */
 	venueId?: string & tags.Format<'uuid'>;
 	/** Only posts that mention this brand, a branch of it or the brand alone. */
@@ -169,6 +172,10 @@ export interface AdminListMentionsInputDto extends PaginationRequest {
 	/** The brand's mentions: of every branch and of the brand alone */
 	brandId?: string & tags.Format<'uuid'>;
 	month?: Month;
+	/** Posted on or after this UTC day */
+	from?: Day;
+	/** Posted on or before this UTC day (inclusive) */
+	to?: Day;
 	matchMethod?: MentionMatchMethodEnum;
 }
 

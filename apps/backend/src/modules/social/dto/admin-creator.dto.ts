@@ -83,9 +83,20 @@ export interface AdminCreatorOutputDto {
 		lastPostedAt: Date;
 		own: boolean;
 	}[];
+	/** Every brand their posts named (`brands` holds the first 12) */
+	brandCount: number;
 	/** Every post of theirs we stored, and their views */
 	posts: number;
 	views: number;
+	/** Their posts over the last 30 and 90 days, to now */
+	recent: {
+		posts30: number;
+		views30: number;
+		posts90: number;
+		/** Of the 90 days' posts, those naming a brand (a mention matched to one) */
+		named90: number;
+		lastNamedAt?: Date;
+	};
 	/** What found their posts, the most posts first (15 at most) */
 	foundBy: AdminCreatorFindOutputDto[];
 	/** Their accounts' handle changes, and the handles their accounts took from others, newest first */

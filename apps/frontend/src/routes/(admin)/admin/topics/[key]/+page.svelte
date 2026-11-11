@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { ExternalLink, Pencil, Telescope } from '@lucide/svelte';
+	import { Pencil, Telescope, TrendingUp } from '@lucide/svelte';
 	import type { AdminTopicInsightOutputDto, AdminTopicOutputDto } from 'client';
 
 	import TopicEditor from './components/TopicEditor.svelte';
 	import TopicFigures from './components/TopicFigures.svelte';
+	import TopicGraph from './components/TopicGraph.svelte';
+	import TopicRelations from './components/TopicRelations.svelte';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
@@ -11,27 +13,29 @@
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import ExplorerHeader from '#components/admin/topics/ExplorerHeader.svelte';
 	import TopicTermsManager from '#components/admin/topics/TopicTermsManager.svelte';
-	import TreePopover from '#components/admin/topics/TreePopover.svelte';
 	import { cityItems } from '#lib/admin-cities.js';
 	import { api } from '#lib/api.js';
 	import { lastMonth, monthLabel, recentMonths } from '#lib/culinary.js';
 	import { exploreTopicHref } from '#lib/explore.js';
 	import { aspectPageHref, topicHref } from '#lib/topic-format.js';
 	import { kindLabel } from '#lib/topic-kinds.js';
+	import { topicSentence } from '#lib/topic-sentence.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
+	import IconButton from '#ui/wrapped/IconButton.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// One kind of food or drink, at any depth, laid out like a file explorer: its family on the
-	// left (the topic at the top of its branch and everything under it, each its own page, with
-	// its wordings counted), the topic itself on the right. Tab Wordings: the wordings that count
-	// for it, as chips, where a wording is relinked or made a dish of its own. Tab Figures: its
-	// venues, posts, searches, menu prices and Google Maps top ten in the city and month. Edit opens
-	// its fields in place. An aspect's key opens the aspect's page.
+	// One kind of food or drink, at any depth. Its heading says what it is as a sentence from its
+	// edges ("Menemen is a Turkish dish and a breakfast."), each topic named in it a link, with its
+	// relations both ways in a quiet line under it; Explore, Edit and Google Trends are icons. Under
+	// the head its neighbourhood in the topic graph, where a click walks to another topic. Tab
+	// Wordings: the wordings that count for it, as chips, where a wording is relinked or made a dish
+	// of its own. Tab Figures: its venues, posts, searches, menu prices and Google Maps top ten in the
+	// city and month. Edit opens its fields in place. An aspect's key opens the aspect's page.
 	const key = $derived(decodeURIComponent(page.params.key ?? ''));
 
 	adminCitiesStore.load();
@@ -67,34 +71,6 @@
 	const food = $derived((topics ?? []).filter((t) => t.kind !== 'aspect'));
 	const byKey = $derived(new Map(food.map((t) => [t.key, t])));
 	const labelOf = (k: string) => byKey.get(k)?.label ?? k;
-	const childCount = $derived(food.filter((t) => t.parentKey === key).length);
-
-	// Its family: the topic at the top of its branch and everything under that
-	const top = $derived.by(() => {
-		let at = topic;
-		const seen: string[] = [];
-		while (at?.parentKey && byKey.has(at.parentKey) && !seen.includes(at.key)) {
-			seen.push(at.key);
-			at = byKey.get(at.parentKey);
-		}
-		return at;
-	});
-	const family = $derived.by(() => {
-		if (!top) return [];
-		const keys = [top.key];
-		for (let i = 0; i < keys.length; i++) for (const t of food) if (t.parentKey === keys[i] && !keys.includes(t.key)) keys.push(t.key);
-		return keys.map((k) => {
-			const t = byKey.get(k)!;
-			const parent = t.parentKey ? byKey.get(t.parentKey) : undefined;
-			return {
-				key: t.key,
-				label: t.label,
-				parentKey: k === top.key ? undefined : t.parentKey,
-				count: t.terms,
-				...((!parent || parent.kind !== t.kind) && { tag: kindLabel(t.kind) })
-			};
-		});
-	});
 
 	let insight = $state<AdminTopicInsightOutputDto | null>(null);
 	const insightLoader = createLoader(
@@ -114,7 +90,16 @@
 		void key;
 		editing = false;
 	});
-	const trendsUrl = (id: string) => `https://trends.google.com/trends/explore?cat=71&q=${encodeURIComponent(id)}`;
+
+	/** How Google Trends searches it: by its id, else by its words; neither until one is given under Edit */
+	const trends = $derived.by(() => {
+		const q = topic?.trendsTopicId ?? topic?.trendsQuery;
+		if (!q) return null;
+		return {
+			href: `https://trends.google.com/trends/explore?cat=71&q=${encodeURIComponent(q)}`,
+			label: topic?.trendsTopicId ? `Google Trends: searched as ${q}` : `Google Trends: searched as "${q}"`
+		};
+	});
 </script>
 
 <div class="flex min-w-0 flex-col gap-4 pb-12">
@@ -129,24 +114,18 @@
 	{:else}
 		<ExplorerHeader
 			title={topic.label}
-			type={topic.parentKey ? `${kindLabel(topic.kind)} under ${labelOf(topic.parentKey)}` : kindLabel(topic.kind)}
-			code={topic.key}
-			facts={[
-				{ value: childCount, label: childCount === 1 ? 'topic under it' : 'topics under it' },
-				{ value: topic.terms, label: 'wordings', hint: 'Wordings linked to it, in any city' },
-				{ value: topic.venues, label: 'venues', hint: "The city's venues whose Google category is it" },
-				{ value: topic.mentions, label: 'mentions', hint: "The city's matched mentions naming it, all time" }
-			]}>
-			{#snippet titleAside()}
-				{#if family.length > 1}
-					<TreePopover
-						nodes={family}
-						current={key}
-						href={topicHref}
-						countLabel="wordings"
-						label={top && top.key !== key ? `${top.label} tree` : 'Its tree'}
-						back={{ href: '/admin/topics', label: 'All topics' }} />
-				{/if}
+			type={kindLabel(topic.kind)}
+			code={topic.key}>
+			{#snippet summary()}
+				{#each topicSentence(topic, byKey) as part, i (i)}
+					{#if part.key}<a
+							class="text-ink decoration-line hover:decoration-ink font-semibold underline decoration-2 underline-offset-4"
+							href={topicHref(part.key)}>{part.text}</a
+						>{:else}{part.text}{/if}
+				{/each}
+			{/snippet}
+			{#snippet meta()}
+				<TopicRelations {topic} topics={food} />
 			{/snippet}
 			{#snippet actions()}
 				{#if adminCitiesStore.list.length > 1}
@@ -154,20 +133,19 @@
 						<Select items={cityItems(adminCitiesStore.list)} value={cityId} aria-label="City" size="sm" onValueChange={(v) => setParam('cityId', v)} />
 					</div>
 				{/if}
-				<Button size="sm" variant="ghost" icon={Telescope} href={exploreTopicHref(key, { cityId, month })}>Explore</Button>
-				<Button size="sm" variant="outline" icon={Pencil} onclick={() => (editing = !editing)} aria-pressed={editing}>Edit</Button>
+				{#if trends}
+					<IconButton variant="ghost" icon={TrendingUp} label={trends.label} href={trends.href} target="_blank" rel="noreferrer" />
+				{:else}
+					<span
+						class="text-faint flex size-8 items-center justify-center"
+						title="Not searched on Google Trends: give it an id under Edit"
+						role="img"
+						aria-label="Not searched on Google Trends"><TrendingUp class="size-4" /></span>
+				{/if}
+				<IconButton variant="ghost" icon={Telescope} label="Explore its claims" href={exploreTopicHref(key, { cityId, month })} />
+				<IconButton variant={editing ? 'secondary' : 'outline'} icon={Pencil} label="Edit" aria-pressed={editing} onclick={() => (editing = !editing)} />
 			{/snippet}
-			{#if topic.trendsTopicId}
-				<a class="inline-flex items-center gap-1" href={trendsUrl(topic.trendsTopicId)} target="_blank" rel="noreferrer">
-					Searched on Google Trends as {topic.trendsTopicId} <ExternalLink class="size-3.5" />
-				</a>
-			{:else if topic.trendsQuery}
-				<span>Searched on Google Trends as "{topic.trendsQuery}"</span>
-			{:else}
-				<span class="text-muted-foreground">Not searched on Google Trends: give it an id under Edit.</span>
-			{/if}
 		</ExplorerHeader>
-
 
 		{#if editing}
 			<AdminPanel title={`Edit ${topic.label}`}>
@@ -181,6 +159,10 @@
 					onCancel={() => (editing = false)} />
 			</AdminPanel>
 		{/if}
+
+		<AdminPanel>
+			<TopicGraph {topic} topics={food} />
+		</AdminPanel>
 
 		<div class="flex items-end justify-between gap-3">
 			<AdminDetailTabs tabs={TABS} bind:value={tab} keeps={['cityId', 'month']} class="flex-1" />

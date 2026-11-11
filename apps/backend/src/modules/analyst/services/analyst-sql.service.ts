@@ -226,7 +226,9 @@ export class AnalystSqlService {
 					}[]
 				>(
 					`select t.id, t.key, t.label, t.kind::text as kind, p.label as parent
-					 from topics t left join topics p on p.id = t.parent_id
+					 from topics t
+					 left join topic_edges pe on pe.from_id = t.id and pe.type = 'is_a' and pe.rank = 0
+					 left join topics p on p.id = pe.to_id
 					 where t.deleted_at is null and t.kind ${type === 'aspect' ? '=' : '<>'} 'aspect'
 					   and (t.label ilike ? or t.key ilike ?)
 					 order by (lower(t.label) = lower(?)) desc, length(t.label) limit ${SEARCH_LIMIT}`,
@@ -341,8 +343,10 @@ export class AnalystSqlService {
 						hint: string | null;
 					}[]
 				>(
-					`select t.id, t.key, t.label, t.kind::text as kind, p.key as parent, t.hint
-					 from topics t left join topics p on p.id = t.parent_id
+					`select t.id, t.key, t.label, t.kind::text as kind, t.hint,
+						(select string_agg(p.key || ' (' || e.type || ')', ', ' order by e.type desc, e.rank)
+							from topic_edges e join topics p on p.id = e.to_id where e.from_id = t.id) as parent
+					 from topics t
 					 where t.deleted_at is null and ${isId ? 't.id = ?' : 't.key = ?'}`,
 					[ref],
 				);
@@ -353,16 +357,20 @@ export class AnalystSqlService {
 					id: row.id,
 					label: row.label,
 					found: true,
-					facts: `topics.id = '${row.id}', key '${row.key}': "${row.label}", kind ${row.kind}${row.parent ? `, under '${row.parent}'` : ', a root'}${row.hint ? `; hint: ${row.hint}` : ''}`,
+					facts: `topics.id = '${row.id}', key '${row.key}': "${row.label}", kind ${row.kind}${row.parent ? `, edges to ${row.parent}` : ', a root'}${row.hint ? `; hint: ${row.hint}` : ''}`,
 				};
 			}
 			case 'term': {
 				const [row] = await this.em.execute<
 					{ id: number; key: string; name: string; topics: string | null }[]
 				>(
-					`select t.id, t.key, t.name, string_agg(tp.key || ' (' || tt.relation || ')', ', ' order by tt.rank) as topics
-					 from terms t left join term_topics tt on tt.term_id = t.id left join topics tp on tp.id = tt.topic_id
-					 where ${/^\d+$/.test(ref) ? 't.id = ?' : 't.key = ?'} group by t.id`,
+					`select t.id, t.key, t.name,
+						concat_ws(', ',
+							(select tp.key || case when t.exact then ' (exact)' else ' (narrower)' end from topics tp where tp.id = t.topic_id),
+							(select string_agg(mp.key || ' (' || md.type || ')', ', ' order by md.rank)
+								from term_modifiers md join topics mp on mp.id = md.topic_id where md.term_id = t.id)) as topics
+					 from terms t
+					 where ${/^\d+$/.test(ref) ? 't.id = ?' : 't.key = ?'}`,
 					[/^\d+$/.test(ref) ? Number(ref) : ref],
 				);
 				if (!row) return missing;
@@ -372,7 +380,7 @@ export class AnalystSqlService {
 					id: String(row.id),
 					label: row.name,
 					found: true,
-					facts: `terms.id = ${row.id}, key '${row.key}': the wording "${row.name}", linked to ${row.topics ?? 'no topic'}`,
+					facts: `terms.id = ${row.id}, key '${row.key}': the wording "${row.name}", linked to ${row.topics || 'no topic'}`,
 				};
 			}
 			case 'city': {

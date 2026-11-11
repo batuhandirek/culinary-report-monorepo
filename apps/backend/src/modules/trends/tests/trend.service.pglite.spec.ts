@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
+import { addFoods, addStatements } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
@@ -79,16 +79,12 @@ describe('TrendService (pglite)', () => {
 				views: 100,
 				postedAt: new Date(`${date}T12:00:00Z`),
 			});
-			// Each dish the post lists, a dish-only statement of its own
+			const m = em.create(Mention, { post, venue, venueName: venue.name, visited: true });
+			// What the post calls the place's food, a claim first; then each dish it lists, a dish-only statement of its own
+			addFoods(em, m, [cuisine]);
 			addStatements(
 				em,
-				em.create(Mention, {
-					post,
-					venue,
-					venueName: venue.name,
-					cuisine,
-					visited: true,
-				}),
+				m,
 				dishes.map(name => ({ foods: [name], sentiment: 'positive' as const })),
 				{ index },
 			);
@@ -148,12 +144,16 @@ describe('TrendService (pglite)', () => {
 
 	it('groups the wordings of one dish topic, counts each row once per post or review, and every table adds up to 100', async () => {
 		const trends = await service.month('2026-09', city.id);
-		// "Döner", "doner kebab", "Kebabs": the kebab topic's row (their terms' links); "Vegetable kebab" links nothing yet
+		// "Döner", "doner kebab", "Kebabs": the kebab topic's row (their terms' links); "Vegetable kebab"
+		// links nothing yet, and "Viet" no dish (a cuisine): each its own wording's row. August's
+		// "Vietnamese", gone this month, is the empty "Other"
 		expect(trends.dishes.map(r => [r.key, r.label, r.count, r.share])).toEqual([
-			['kebab', 'Döner & kebab', 4, 57.1],
-			['ayran', 'Ayran', 1, 14.3],
-			['pho', 'Pho', 1, 14.3],
-			['vegetable kebab', 'Vegetable kebab', 1, 14.3],
+			['kebab', 'Döner & kebab', 4, 50],
+			['ayran', 'Ayran', 1, 12.5],
+			['pho', 'Pho', 1, 12.5],
+			['vegetable kebab', 'Vegetable kebab', 1, 12.5],
+			['viet', 'Viet', 1, 12.5],
+			['__other', 'Other', 0, 0],
 		]);
 		for (const table of [trends.cuisines, trends.dishes, trends.districts, trends.creators]) {
 			expect(_.sumBy(table, r => r.share)).toBeCloseTo(100, 0);

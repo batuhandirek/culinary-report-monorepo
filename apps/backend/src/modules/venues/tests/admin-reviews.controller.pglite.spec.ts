@@ -89,7 +89,7 @@ describe('AdminReviewsController (pglite)', () => {
 		]);
 	});
 
-	it("serves a review's statements with each part's aspect (and its root) or wording (and its topics), so a page can name and link them", async () => {
+	it("serves a review's statements with each part's aspect (and its root) or wording (and its main topic), so a page can name and link them", async () => {
 		const em = harness.orm.em;
 		seedTopics(em, ['burgers', 'taste']);
 		const city = await cityFactory.create({ name: 'Hamburg' });
@@ -144,16 +144,14 @@ describe('AdminReviewsController (pglite)', () => {
 						term: expect.objectContaining({
 							key: 'burger',
 							name: 'Burger',
-							topics: [
-								expect.objectContaining({
-									topic: expect.objectContaining({
-										key: 'burgers',
-										label: 'Burgers',
-										kind: 'dish',
-										parent: expect.objectContaining({ key: 'american' }),
-									}),
-								}),
-							],
+							exact: true,
+							topic: expect.objectContaining({
+								key: 'burgers',
+								label: 'Burgers',
+								kind: 'dish',
+								parent: expect.objectContaining({ key: 'american' }),
+							}),
+							modifiers: [],
 						}),
 					}),
 				],
@@ -170,16 +168,62 @@ describe('AdminReviewsController (pglite)', () => {
 			}),
 			expect.objectContaining({
 				sentiment: 'positive',
-				// A wording nothing links yet: the term alone, its topics empty until decided
+				// A wording not decided yet: the term alone, no main topic and no modifiers
 				parts: [
 					expect.objectContaining({
 						role: 'food',
-						term: expect.objectContaining({ name: 'Pommes', topics: [] }),
+						term: expect.objectContaining({ name: 'Pommes', exact: false, modifiers: [] }),
 					}),
 				],
 			}),
 		]);
 		expect(items[0].statements[1].parts[0].topic).not.toHaveProperty('parent');
+		expect(items[0].statements[2].parts[0].term?.topic ?? undefined).toBeUndefined();
 		expect(items[0].statements[2]).not.toHaveProperty('text');
+	});
+
+	it('serves one review on its own page: its branch, brand and city, and every claim it made', async () => {
+		const em = harness.orm.em;
+		// The aspects the suite's first case seeded (one harness, one schema)
+		const city = await cityFactory.create({ name: 'Leipzig' });
+		const brand = brandFactory.build({ name: 'Kebab Haus' });
+		const venue = venueFactory.build(
+			{ name: 'Kebab Haus Mitte', district: 'Mitte' },
+			{ associations: { city, brand } },
+		);
+		await em.flush();
+		const index = await harness.moduleRef.get(TopicService).index();
+		const review = em.create(Review, {
+			venue,
+			reviewId: 'r-detail',
+			publishedAt: new Date('2026-10-02T10:00:00Z'),
+			stars: 2,
+			text: 'Zu salzig',
+			textTranslated: 'Too salty',
+			ownerResponse: 'Sorry!',
+		});
+		addStatements(em, review, [{ text: 'too salty', sentiment: 'negative', aspect: 'taste' }], { index });
+		await em.flush();
+		em.clear();
+
+		const detail = await controller.getReview(review.id);
+		expect(detail).toMatchObject({
+			id: review.id,
+			stars: 2,
+			text: 'Zu salzig',
+			textTranslated: 'Too salty',
+			ownerResponse: 'Sorry!',
+			branch: { id: venue.id, name: 'Kebab Haus Mitte', district: 'Mitte' },
+			brand: { id: brand.id, name: 'Kebab Haus' },
+			city: { id: city.id, name: 'Leipzig' },
+		});
+		expect(detail.statements).toEqual([
+			expect.objectContaining({
+				text: 'too salty',
+				sentiment: 'negative',
+				parts: [expect.objectContaining({ role: 'aspect', topic: expect.objectContaining({ key: 'taste' }) })],
+			}),
+		]);
+		await expect(controller.getReview('00000000-0000-4000-8000-000000000000')).rejects.toThrow();
 	});
 });

@@ -1,380 +1,317 @@
 <script lang="ts">
-	import { ArrowRight, CircleAlert, FileText, Info, ListTodo, Send } from '@lucide/svelte';
+	import { ExternalLink, Map as MapIcon, MapPin } from '@lucide/svelte';
 	import type {
-		AdminBrandBranchOutputDto,
 		AdminBrandMonthFiguresOutputDto,
 		AdminBrandOutputDto,
-		AdminBrandSummaryOutputDto
+		AdminBrandSummaryOutputDto,
+		AdminBrandTopPostOutputDto,
+		AdminMentionOutputDto
 	} from 'client';
 
-	import type { BrandProspectStore } from '../stores/BrandProspectStore.svelte.js';
-
-	import { ago, onDay, prospectStageVariant } from '#components/admin/admin-format.js';
-	import AdminPanel from '#components/admin/AdminPanel.svelte';
-	import BrandAccounts from '#components/admin/BrandAccounts.svelte';
-	import {
-		compact,
-		currentMonth,
-		monthLabel,
-		PLATFORM_LABELS,
-		sentimentVariant
-	} from '#lib/culinary.js';
-	import { isDueToday, stageLabel } from '#lib/outreach-status.js';
+	import DetailCard from '#components/admin/detail/DetailCard.svelte';
+	import Pill from '#components/admin/detail/Pill.svelte';
+	import StatCell from '#components/admin/detail/StatCell.svelte';
+	import TagCloud from '#components/admin/detail/TagCloud.svelte';
+	import DigestionDetail from '#components/admin/digestion/DigestionDetail.svelte';
+	import { postColumns } from '#components/admin/posts/post-columns.js';
+	import RatingChart from '#components/admin/RatingChart.svelte';
+	import ChangeMentionVenueDialog from '#dialogs/admin/ChangeMentionVenueDialog.svelte';
+	import { compact, monthLabel } from '#lib/culinary.js';
 	import { topicHref } from '#lib/topic-format.js';
-	import Stat from '#ui/components/Stat.svelte';
+	import type { Column, PaginatedDataTableAction } from '#ui/components/paginated-data-table/index.js';
+	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
 	import { cn } from '#ui/lib/utils.js';
-	import Badge from '#ui/wrapped/Badge.svelte';
-	import Button from '#ui/wrapped/Button.svelte';
-	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
+	import IconButton from '#ui/wrapped/IconButton.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
-	// How the brand did this month, against the month before and the five before that, what its
-	// best posts were, and what to do about it. Every number links to the tab that lists it.
+	// The brand at a glance: what needs doing, a window (the last 30 days by default) against the
+	// one before it with each figure's twelve months as bars under it, its Google rating over time,
+	// the window's most viewed posts, its places and what its reviews mention (its own accounts are a header key). Every count opens the tab that lists it.
 	interface Props {
 		brand: AdminBrandOutputDto;
-		month: string;
 		cityId?: string;
-		/** A one-place brand's place */
-		place?: AdminBrandBranchOutputDto;
-		/** The month's figures, loaded by the page (its tabs count from them); null while loading */
+		/** Loaded by the page (its tabs count from it); null while loading */
 		summary: AdminBrandSummaryOutputDto | null;
+		period: string;
+		onPeriod: (period: string) => void;
 		failed: boolean;
 		onRetry: () => void;
-		sales: BrandProspectStore;
-		openTab: (tab: string) => void;
-		onBuild: () => void;
-		building: boolean;
+		openTab: (tab: string, params?: Record<string, string>) => void;
 	}
 
-	let { brand, month, cityId, place, summary, failed, onRetry, sales, openTab, onBuild, building }: Props =
-		$props();
+	let { brand, cityId, summary, period, onPeriod, failed, onRetry, openTab }: Props = $props();
 
 	const chain = $derived(brand.branches.length > 1);
-	const figures = $derived(summary?.figures);
-	const before = $derived(summary?.previous);
-	// "+3 on August": the change on the month before, when there is one
-	const previousName = $derived(
-		summary?.series.at(-2) ? monthLabel(summary.series.at(-2)!.month).split(' ')[0] : ''
+	const places = $derived(
+		brand.branches
+			.filter((b) => !b.closed && (!cityId || b.city.id === cityId))
+			.sort((a, b) => (b.reviewsCount ?? -1) - (a.reviewsCount ?? -1))
 	);
+	const figures = $derived(summary?.figures);
+
+	const PERIODS = [
+		{ value: '30d', label: '30d', long: '30 days' },
+		{ value: '90d', label: '90d', long: '90 days' },
+		{ value: '12mo', label: '12 mo', long: '12 months' }
+	];
+	const windowLabel = $derived(PERIODS.find((p) => p.value === period)?.long ?? '30 days');
+
+	// "+30": the change on the window before, signed; nothing when equal or unknown
 	const change = (key: keyof AdminBrandMonthFiguresOutputDto) => {
-		const now = figures?.[key];
-		const then = before?.[key];
-		if (typeof now !== 'number' || typeof then !== 'number' || now === then) return undefined;
+		const now = summary?.figures[key];
+		const then = summary?.previous[key];
+		if (typeof now !== 'number' || typeof then !== 'number' || now === then) return {};
 		const diff = now - then;
-		const shown = key === 'views' ? compact(Math.abs(diff)) : Math.abs(diff).toString();
-		return `${diff > 0 ? '+' : '−'}${shown} on ${previousName}`;
+		const shown = key === 'views' ? compact(Math.abs(diff)) : Math.abs(diff).toLocaleString('en');
+		return { delta: `${diff > 0 ? '+' : '−'}${shown}`, tone: diff > 0 ? ('up' as const) : ('down' as const) };
 	};
 
-	const TONES = {
-		urgent: { icon: CircleAlert, class: 'text-destructive' },
-		todo: { icon: ListTodo, class: 'text-ink' },
-		info: { icon: Info, class: 'text-muted-foreground' }
-	} as const;
+	const TONE_DOT = { urgent: 'bg-destructive', todo: 'bg-[hsl(40_100%_30%)]', info: 'bg-faint' } as const;
 	const TAB_LABELS: Record<string, string> = {
 		posts: 'Posts',
 		reviews: 'Reviews',
-		branches: 'Branches',
+		places: 'Places',
 		competitors: 'Competitors',
 		signals: 'Signals',
-		reports: 'Reports',
-		sales: 'Sales',
+		history: 'History',
 		settings: 'Settings',
 		overview: 'Overview'
 	};
+	// A to-do opening with its number shows the number in bold
+	const leading = (text: string) => text.match(/^([\d,.]+)(\s.*)$/);
 
-	// The six months on one scale per measure: a bar is the month against the busiest one
-	const maxOf = (key: 'posts' | 'reviews') =>
-		Math.max(1, ...(summary?.series.map((s) => s[key]) ?? [1]));
+	// A figure's twelve months, as the bars under it; a month without reviews was not scraped
+	const trend = (key: 'posts' | 'views' | 'creators' | 'reviews' | 'ownPosts', noun: string) =>
+		summary?.series.map((s) => ({
+			value: s[key] ?? 0,
+			text: `${monthLabel(s.month)}: ${
+				key === 'reviews' && !s.reviews
+					? 'none stored (not scraped)'
+					: `${key === 'views' ? compact(s.views) : (s[key] ?? 0).toLocaleString('en')} ${noun}${key === 'reviews' && s.stars ? `, ${s.stars.toFixed(1)} ★` : ''}`
+			}`
+		}));
+
+	// The most viewed posts as every post table shows them (`post-columns.ts`), with the tone
+	// worked out from their claims about the brand and, on a chain, the branch they named
+	type TopPost = AdminBrandTopPostOutputDto;
+	const topPostsPage = async () => {
+		const items = summary?.topPosts ?? [];
+		return { items, page: 1, pageSize: Math.max(items.length, 1), totalItems: items.length };
+	};
+	const TOP_POST_COLUMNS: Column<TopPost>[] = $derived(
+		postColumns<TopPost>(
+			(post) => ({
+				postId: post.id,
+				postedAt: post.postedAt,
+				platform: post.platform,
+				author: post.author,
+				text: post.summary,
+				views: post.views,
+				tone: post.sentiment
+			}),
+			{
+				text: 'What they said',
+				empty: 'says nothing we kept',
+				afterCreator: chain
+					? [{ type: 'value', name: 'Branch', class: 'max-w-[10rem]', truncate: 18, value: (post) => post.branch?.name ?? { value: 'the brand', class: 'text-muted-foreground' } }]
+					: []
+			}
+		)
+	);
+	const TOP_POST_ACTIONS: PaginatedDataTableAction<TopPost>[] = $derived([
+		{ icon: ExternalLink, label: 'Open on its platform', href: (post) => post.url },
+		...(chain
+			? [
+					{
+						icon: MapPin,
+						label: 'Assign a branch',
+						if: (post: TopPost) => !post.branch,
+						onClick: (post: TopPost) => {
+							moving = post;
+							moveOpen = true;
+						}
+					}
+				]
+			: [])
+	]);
+
+	// "Assign branch" on a post that named only the brand: the mention is moved to one branch
+	let moving = $state<AdminBrandTopPostOutputDto | null>(null);
+	let moveOpen = $state(false);
+	const movedMention = $derived(
+		moving
+			? ({ id: moving.mentionId, venueName: brand.name, locationHint: undefined, venue: undefined, matchNote: undefined } as unknown as AdminMentionOutputDto)
+			: null
+	);
 </script>
 
+{#snippet topPostDetails(post: AdminBrandTopPostOutputDto)}
+	<DigestionDetail postId={post.id} />
+{/snippet}
+
 {#if failed}
-	<ErrorState title="Couldn't load the month's figures" {onRetry} />
+	<ErrorState title="Couldn't load the brand's figures" {onRetry} />
 {:else}
-	<div class="flex min-w-0 flex-col gap-5">
-		{#if month === currentMonth()}
-			<p class="ink-strip m-0 text-sm">
-				{monthLabel(month)} is still going: the figures are what is stored so far.
-			</p>
-		{/if}
+	<div class="flex min-w-0 flex-col gap-3">
 		<!-- What needs doing: each line opens the tab where it is done -->
-		{#if summary && summary.todos.length}
-			<AdminPanel title="What needs doing" note={summary.todos.length}>
-				<ul class="divide-line m-0 flex list-none flex-col divide-y p-0 text-sm">
-					{#each summary.todos as todo (todo.key)}
-						{@const tone = TONES[todo.tone]}
-						<li>
-							<button
-								type="button"
-								class="hover:bg-sand flex w-full cursor-pointer items-center gap-3 px-1 py-2.5 text-left"
-								onclick={() => openTab(todo.tab)}>
-								<tone.icon class={cn('size-4 shrink-0', tone.class)} />
-								<span class={cn('min-w-0 flex-1', todo.tone === 'urgent' && 'font-medium')}
-									>{todo.text}</span>
-								<span class="text-beet flex shrink-0 items-center gap-1 text-xs"
-									>{TAB_LABELS[todo.tab] ?? todo.tab} <ArrowRight class="size-3.5" /></span>
-							</button>
-						</li>
-					{/each}
-				</ul>
-			</AdminPanel>
+		{#if summary?.todos.length}
+			<section class="border-destructive/25 bg-destructive/[0.04] flex flex-wrap rounded-md border" aria-label="What needs doing">
+				{#each summary.todos as todo (todo.key)}
+					{@const number = leading(todo.text)}
+					<div class="border-destructive/15 flex min-w-0 flex-[1_1_300px] items-center gap-2 border-r px-3.5 py-2 text-[12.5px] last:border-r-0">
+						<span class={cn('size-2 shrink-0 rounded-full', TONE_DOT[todo.tone])}></span>
+						<span class="min-w-0 flex-1 truncate" title={todo.text}>
+							{#if number}<b>{number[1]}</b>{number[2]}{:else}{todo.text}{/if}
+						</span>
+						<a
+							href={`?tab=${todo.tab}`}
+							class="shrink-0"
+							onclick={(e) => (e.preventDefault(), openTab(todo.tab))}>{TAB_LABELS[todo.tab] ?? todo.tab} →</a>
+					</div>
+				{/each}
+			</section>
 		{/if}
 
-		<!-- The month in numbers -->
-		<div class="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">
-			<Stat
-				size="sm"
-				title="Posts by others"
+		<div class="-mb-1 flex items-center justify-between gap-2">
+			<span class="eyebrow text-muted-foreground text-[7.5px]"
+				>Last {windowLabel} · vs the {windowLabel.split(' ')[0]} before</span>
+			<span class="border-line inline-flex overflow-hidden rounded-lg border" role="group" aria-label="Period">
+				{#each PERIODS as p (p.value)}
+					<button
+						type="button"
+						aria-pressed={p.value === period}
+						class={cn(
+							'cursor-pointer px-[9px] py-[3px] text-xs font-medium',
+							p.value === period ? 'bg-ink text-sand' : 'text-muted-foreground hover:text-ink'
+						)}
+						onclick={() => onPeriod(p.value)}>{p.label}</button>
+				{/each}
+			</span>
+		</div>
+
+		<section class="bg-paper border-line flex flex-wrap rounded-md border" aria-label={`The last ${windowLabel} in figures`}>
+			<StatCell
+				label="Posts by others"
 				value={figures?.posts ?? 0}
-				description={change('posts') ?? 'same as the month before'}
+				{...change('posts')}
+				sub={`by ${figures?.creators ?? 0} creators`}
+				trend={trend('posts', 'posts')}
 				loading={!summary}
 				href="?tab=posts"
 				onclick={(e) => (e.preventDefault(), openTab('posts'))} />
-			<Stat size="sm" title="Views" value={compact(figures?.views)} description={change('views') ?? 'same as the month before'} loading={!summary} />
-			<Stat size="sm" title="Creators" value={figures?.creators ?? 0} description={change('creators') ?? 'same as the month before'} loading={!summary} />
-			<Stat
-				size="sm"
-				title="Reviews"
-				value={figures?.reviews ?? 0}
-				description={figures?.stars ? `${figures.stars.toFixed(2)} ★ average` : (change('reviews') ?? 'none stored')}
+			<StatCell label="Views" value={compact(figures?.views)} {...change('views')} sub="on posts by others" trend={trend('views', 'views')} loading={!summary} />
+			<StatCell label="Creators" value={figures?.creators ?? 0} {...change('creators')} sub="who named it" trend={trend('creators', 'creators')} loading={!summary} />
+			<StatCell
+				label="Reviews"
+				value={(figures?.reviews ?? 0).toLocaleString('en')}
+				sub={figures?.stars ? `${figures.stars.toFixed(2)} ★ average` : 'none stored'}
+				trend={trend('reviews', 'reviews')}
 				loading={!summary}
 				href="?tab=reviews"
 				onclick={(e) => (e.preventDefault(), openTab('reviews'))} />
-			<Stat
-				size="sm"
-				title="To answer"
+			<StatCell
+				label="To answer"
 				value={figures?.unanswered ?? 0}
-				description="written, 3★ or fewer"
-				tone={figures?.unanswered ? 'danger' : 'default'}
+				bad={!!figures?.unanswered}
+				sub="3★ or fewer, unanswered"
 				loading={!summary}
-				href="?tab=reviews&reviews=reply"
-				onclick={(e) => (e.preventDefault(), openTab('reviews'))} />
-			<Stat
-				size="sm"
-				title="Own posts"
-				value={figures?.ownPosts ?? 0}
-				description="its own accounts"
-				loading={!summary} />
-		</div>
+				href="?tab=reviews&reply=1"
+				onclick={(e) => (e.preventDefault(), openTab('reviews', { reply: '1' }))} />
+			<StatCell label="Own posts" value={figures?.ownPosts ?? 0} sub="its own accounts" trend={trend('ownPosts', 'own posts')} loading={!summary} />
+		</section>
 
-		<div class="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-			<div class="flex min-w-0 flex-col gap-5">
-				<AdminPanel title="Six months" note={chain && cityId ? 'every branch in the city' : undefined}>
+		<div class="flex flex-wrap items-start gap-3">
+			<div class="flex min-w-0 flex-[999_1_620px] flex-col gap-3">
+				<DetailCard title="Google rating" note={chain ? 'over its open places' : 'as each read saw it'}>
+					{#snippet aside()}
+						<a href="?tab=reviews" onclick={(e) => (e.preventDefault(), openTab('reviews'))}>Reviews →</a>
+					{/snippet}
 					{#if !summary}
-						<SkeletonRows count={6} />
+						<div class="pb-3"><SkeletonRows count={3} /></div>
+					{:else if summary.ratings.length}
+						<div class="pb-2.5"><RatingChart points={summary.ratings} /></div>
 					{:else}
-						<table class="w-full text-sm">
-							<thead>
-								<tr class="text-muted-foreground text-left text-xs">
-									<th class="py-1.5 font-normal">Month</th>
-									<th class="w-[38%] py-1.5 font-normal">Posts by others</th>
-									<th class="py-1.5 text-right font-normal">Views</th>
-									<th class="w-[28%] py-1.5 pl-4 font-normal">Reviews</th>
-									<th class="py-1.5 text-right font-normal">Stars</th>
-								</tr>
-							</thead>
-							<tbody class="divide-line divide-y">
-								{#each [...summary.series].reverse() as row (row.month)}
-									<tr class={row.month === month ? 'font-medium' : ''}>
-										<td class="py-2 pr-3 whitespace-nowrap">{monthLabel(row.month)}</td>
-										<td class="py-2">
-											<div class="flex items-center gap-2">
-												<span class="bg-wash h-2 flex-1 overflow-hidden rounded-full">
-													<span
-														class="bg-primary-darker block h-full rounded-full"
-														style={`width: ${(row.posts / maxOf('posts')) * 100}%`}></span>
-												</span>
-												<span class="w-8 text-right tabular-nums">{row.posts}</span>
-											</div>
+						<p class="text-muted-foreground m-0 pb-3 text-xs">No Google rating read yet.</p>
+					{/if}
+				</DetailCard>
+
+				<DetailCard title="Most viewed posts" note={windowLabel} flush>
+					{#snippet aside()}
+						{#if chain && summary?.brandOnlyPosts}
+							<span class="text-muted-foreground">{summary.brandOnlyPosts} name no branch ·</span>
+						{/if}
+						<a href="?tab=posts" onclick={(e) => (e.preventDefault(), openTab('posts'))}
+							>All {summary ? summary.figures.posts + summary.figures.ownPosts : ''} posts</a>
+					{/snippet}
+					{#if !summary}
+						<div class="px-3.5 pb-3"><SkeletonRows count={4} /></div>
+					{:else if summary.topPosts.length === 0}
+						<p class="text-muted-foreground border-line m-0 border-t px-3.5 py-3 text-xs">
+							No post by others named it in the last {windowLabel}.
+						</p>
+					{:else}
+						<PaginatedDataTable
+							bare
+							dense
+							api={topPostsPage}
+							key={period}
+							noun="posts"
+							columns={TOP_POST_COLUMNS}
+							actions={TOP_POST_ACTIONS}
+							expand={topPostDetails}
+							rowKey={(post) => post.id} />
+					{/if}
+				</DetailCard>
+			</div>
+
+			<div class="flex min-w-0 max-w-[420px] flex-[1_1_340px] flex-col gap-3 max-lg:max-w-none">
+				<DetailCard title={chain ? 'Places' : 'Place'} note={chain ? places.length : undefined} flush>
+					{#snippet aside()}
+						<a href="?tab=places" onclick={(e) => (e.preventDefault(), openTab('places'))}>Branch tools</a>
+					{/snippet}
+					{#if places.length === 0}
+						<p class="text-muted-foreground m-0 px-3.5 pb-3 text-xs">No open place in this city.</p>
+					{:else}
+						<table class="mb-1.5 w-full border-collapse text-xs tabular-nums">
+							<tbody>
+								{#each places as branch (branch.id)}
+									<tr class="group hover:bg-sand/60 [&:not(:last-child)>td]:border-line/60 [&:not(:last-child)>td]:border-b">
+										<td class="w-full max-w-0 truncate py-[5px] pr-3.5 pl-3.5">
+											<a href={`/admin/venues/${branch.id}`}>{chain ? (branch.street ?? branch.name) : branch.name}</a>
+											{#if branch.district}<Pill class="ml-1 h-[18px] text-[11px]">{branch.district}</Pill>{/if}
 										</td>
-										<td class="py-2 text-right tabular-nums">{row.views ? compact(row.views) : '—'}</td>
-										<td class="py-2 pl-4">
-											<div class="flex items-center gap-2">
-												<span class="bg-wash h-2 flex-1 overflow-hidden rounded-full">
-													<span
-														class="bg-beet block h-full rounded-full"
-														style={`width: ${(row.reviews / maxOf('reviews')) * 100}%`}></span>
+										<td class="py-[5px] pr-3.5 text-right whitespace-nowrap">{branch.rating ? `${branch.rating.toFixed(1)}★` : '—'}</td>
+										<td class="text-muted-foreground py-[5px] pr-3.5 text-right whitespace-nowrap">{branch.mentions} posts</td>
+										<td class="w-8 pr-2">
+											{#if branch.googleUrl}
+												<span class="flex opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100">
+													<IconButton icon={MapIcon} label="Google Maps" variant="ghost" xs href={branch.googleUrl} target="_blank" rel="noreferrer" />
 												</span>
-												<span class="w-8 text-right tabular-nums">{row.reviews || '—'}</span>
-											</div>
+											{/if}
 										</td>
-										<td class="py-2 text-right tabular-nums">{row.stars ? row.stars.toFixed(1) : '—'}</td>
 									</tr>
 								{/each}
 							</tbody>
 						</table>
-						<p class="text-muted-foreground m-0 mt-3 text-xs">
-							A month with no reviews was not scraped for this brand (reviews are scraped
-							while it is a report brand or a competitor), not a month without reviews.
-						</p>
 					{/if}
-				</AdminPanel>
+				</DetailCard>
 
 				{#if summary?.reviewTags.length}
-					<AdminPanel title="Google reviews often mention" note="all time">
-						<p class="m-0 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
-							{#each summary.reviewTags as tag (tag.title)}
-								<span>
-									{#if tag.topic}
-										<a
-											class="text-beet underline-offset-2 hover:underline"
-											href={topicHref(tag.topic.key)}
-											title={`Food topic: ${tag.topic.label}`}>{tag.title}</a>
-									{:else}
-										{tag.title}
-									{/if}
-									<span class="text-muted-foreground text-xs tabular-nums">{tag.count}</span>
-								</span>
-							{/each}
-						</p>
-						<p class="text-muted-foreground m-0 mt-2 text-xs">
-							Google's own count over all of {chain ? 'its branches’' : 'its'} reviews: dishes guests come for, and what
-							bothers them ("queue", "cash only"). A tag naming a kind of food links to its topic.
-						</p>
-					</AdminPanel>
+					<DetailCard title="Reviews mention" note={chain ? 'all time, all branches' : 'all time'}>
+						<TagCloud
+							tags={summary.reviewTags.map((t) => ({
+								title: t.title,
+								count: t.count,
+								...(t.topic && { href: topicHref(t.topic.key), hint: `Food topic: ${t.topic.label}` })
+							}))} />
+					</DetailCard>
 				{/if}
-
-				<AdminPanel title="Most viewed posts" note={monthLabel(month)}>
-					{#if !summary}
-						<SkeletonRows count={3} />
-					{:else if summary.topPosts.length === 0}
-						<EmptyState
-							title="No post by others named it"
-							hint={`Nothing in ${monthLabel(month)}. Pick another month above.`}
-							ground="none"
-							size="sm" />
-					{:else}
-						<ul class="divide-line m-0 flex list-none flex-col divide-y p-0 text-sm">
-							{#each summary.topPosts as post (post.id)}
-								<li>
-									<a href={`/admin/posts/${post.id}`} class="hover:bg-sand flex gap-3 px-1 py-2.5">
-										<span class="w-14 shrink-0 text-right font-medium tabular-nums">{compact(post.views)}</span>
-										<span class="flex min-w-0 flex-1 flex-col gap-0.5">
-											<span class="truncate">{post.summary}</span>
-											<span class="text-muted-foreground truncate text-xs">
-												@{post.author ?? '—'} · {PLATFORM_LABELS[post.platform] ?? post.platform} ·
-												{onDay(post.postedAt)}{post.branch && chain ? ` · ${post.branch.name}` : ''}
-											</span>
-										</span>
-										<Badge pill variant={sentimentVariant(post.sentiment)}>{post.sentiment}</Badge>
-									</a>
-								</li>
-							{/each}
-						</ul>
-						{#if summary.brandOnlyPosts && chain}
-							<p class="text-muted-foreground m-0 mt-3 text-xs">
-								{summary.brandOnlyPosts} of the month's posts name the brand but no branch.
-							</p>
-						{/if}
-					{/if}
-				</AdminPanel>
-			</div>
-
-			<div class="flex min-w-0 flex-col gap-5">
-				<AdminPanel title="Report">
-					{#if !summary}
-						<SkeletonRows count={2} />
-					{:else if summary.report}
-						<a href={`/admin/reports/${summary.report.id}`} class="group flex flex-col gap-1.5 text-sm">
-							<span class="text-muted-foreground flex items-center gap-2 text-xs">
-								<FileText class="size-3.5" />
-								{monthLabel(summary.report.month)}{summary.report.month !== month ? ' (newest)' : ''} · built
-								{ago(summary.report.updatedAt)}{summary.report.sentAt ? ` · sent ${onDay(summary.report.sentAt)}` : ' · not sent'}
-							</span>
-							{#if summary.report.title}<span class="font-semibold group-hover:underline">{summary.report.title}</span>{/if}
-							{#if summary.report.headline}<span class="text-muted-foreground line-clamp-3">{summary.report.headline}</span>{/if}
-						</a>
-						{#if summary.report.month !== month}
-							<div class="mt-3">
-								<Button size="sm" variant="outline" icon={FileText} loading={building} onclick={onBuild}>
-									Build {monthLabel(month)}
-								</Button>
-							</div>
-						{/if}
-					{:else}
-						<div class="flex flex-col items-start gap-3">
-							<p class="text-muted-foreground m-0 text-sm">No report yet.</p>
-							<Button size="sm" variant="outline" icon={FileText} loading={building} onclick={onBuild}>
-								Build {monthLabel(month)}
-							</Button>
-						</div>
-					{/if}
-				</AdminPanel>
-
-				<AdminPanel title="Sales">
-					{#if sales.prospect}
-						<button type="button" class="flex w-full cursor-pointer flex-col gap-2 text-left text-sm" onclick={() => openTab('sales')}>
-							<span class="flex items-center gap-2">
-								<Badge pill variant={prospectStageVariant(sales.prospect.stage)}>{stageLabel(sales.prospect.stage)}</Badge>
-								<span class="text-muted-foreground">
-									{sales.prospect.outreachCount}
-									{sales.prospect.outreachCount === 1 ? 'try' : 'tries'}{sales.prospect.lastTouchAt ? ` · last ${ago(sales.prospect.lastTouchAt)}` : ''}
-								</span>
-							</span>
-							{#if sales.prospect.nextFollowUpAt}
-								<span class={isDueToday(sales.prospect.nextFollowUpAt) ? 'text-destructive font-medium' : 'text-muted-foreground'}>
-									Follow up {onDay(sales.prospect.nextFollowUpAt)}
-								</span>
-							{/if}
-							{#if sales.prospect.hook}<span class="text-muted-foreground line-clamp-2 text-xs">Lead with: {sales.prospect.hook}</span>{/if}
-						</button>
-					{:else if sales.prospect === null}
-						<div class="flex flex-col items-start gap-3">
-							<p class="text-muted-foreground m-0 text-sm">
-								Not on the sales list{brand.leadScore != null ? `; lead score ${Math.round(brand.leadScore)}` : ''}.
-							</p>
-							<Button size="sm" variant="outline" icon={Send} loading={sales.addAction.executing} onclick={async () => (await sales.addAction.execute()) && openTab('sales')}>
-								Add to sales
-							</Button>
-						</div>
-					{:else}
-						<SkeletonRows count={2} />
-					{/if}
-				</AdminPanel>
-
-				<BrandAccounts
-					brandId={brand.id}
-					{month}
-					branches={chain
-						? brand.branches.map((b) => ({ id: b.id, name: b.name, street: b.street ?? undefined }))
-						: []} />
-
-				<AdminPanel title={chain ? 'Branches' : 'Place'} note={chain ? brand.branches.filter((b) => !b.closed).length : undefined}>
-					{#if chain}
-						<ul class="divide-line m-0 flex list-none flex-col divide-y p-0 text-sm">
-							{#each brand.branches.filter((b) => !b.closed && (!cityId || b.city.id === cityId)).slice(0, 6) as branch (branch.id)}
-								<li>
-									<a href={`/admin/venues/${branch.id}`} class="hover:bg-sand flex items-center gap-3 px-1 py-2">
-										<span class="flex min-w-0 flex-1 flex-col">
-											<span class="truncate">{branch.name}</span>
-											<span class="text-muted-foreground truncate text-xs">{[branch.district, branch.street].filter(Boolean).join(' · ')}</span>
-										</span>
-										<span class="text-muted-foreground shrink-0 text-xs tabular-nums">
-											{branch.rating ? `${branch.rating.toFixed(1)} ★ · ` : ''}{branch.mentions} mentions
-										</span>
-									</a>
-								</li>
-							{/each}
-						</ul>
-						<button type="button" class="text-beet mt-2 cursor-pointer text-xs hover:underline" onclick={() => openTab('branches')}>
-							All branches and branch tools
-						</button>
-					{:else if place}
-						<a href={`/admin/venues/${place.id}`} class="flex flex-col gap-1 text-sm hover:underline">
-							<span class="font-medium">{place.name}</span>
-							<span class="text-muted-foreground text-xs">
-								{[place.category, place.street, place.district].filter(Boolean).join(' · ')}
-							</span>
-							{#if place.rating}
-								<span class="text-muted-foreground text-xs">{place.rating.toFixed(1)} ★ · {place.reviewsCount ?? 0} Google reviews</span>
-							{/if}
-						</a>
-						<p class="text-muted-foreground m-0 mt-2 text-xs">
-							Google details, food topics, demand and search ranks are on the place's page.
-						</p>
-					{/if}
-				</AdminPanel>
 			</div>
 		</div>
 	</div>
+
+	{#if movedMention}
+		<ChangeMentionVenueDialog mention={movedMention} bind:active={moveOpen} onChanged={onRetry} />
+	{/if}
 {/if}

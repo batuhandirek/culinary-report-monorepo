@@ -50,3 +50,8 @@ export interface AdminCreatorWatchOutputDto {
 		reasons: AdminWatchReasonOutputDto[];
 	}[];
 }
+
+/** A started scrape of one creator's profiles: the run to follow; absent when they have no profile */
+export interface AdminCreatorScrapeOutputDto {
+	workflowId?: string;
+}

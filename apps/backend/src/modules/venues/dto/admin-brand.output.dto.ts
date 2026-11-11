@@ -23,6 +23,9 @@ export interface AdminBrandBranchOutputDto extends Omit<
 	city: AdminCityRefOutputDto;
 	/** Mentions linked to it (its branch known), of any month */
 	mentions: number;
+	/** Its website on Google: the brand page's website key takes the first open branch's */
+	website?: string;
+	googleUrl?: string;
 }
 
 export interface AdminBrandListItemOutputDto {

@@ -1,3 +1,19 @@
+<script lang="ts" module>
+	const SECRET = /password|secret|token|^code$/i;
+
+	/** A record as the page shows it raw: indented, secrets blanked, `omit`'s top-level keys left out */
+	export const rawJson = (value: unknown, omit: string[] = []) =>
+		JSON.stringify(
+			value,
+			(key, nested) => {
+				if (omit.includes(key)) return undefined;
+				if (SECRET.test(key) && typeof nested === 'string') return '•••';
+				return nested;
+			},
+			2
+		);
+</script>
+
 <script lang="ts">
 	import { Check, Copy } from '@lucide/svelte';
 
@@ -15,19 +31,7 @@
 
 	let { value, label = 'Raw record', omit = [] }: Props = $props();
 
-	const SECRET = /password|secret|token|^code$/i;
-
-	const json = $derived(
-		JSON.stringify(
-			value,
-			(key, nested) => {
-				if (omit.includes(key)) return undefined;
-				if (SECRET.test(key) && typeof nested === 'string') return '•••';
-				return nested;
-			},
-			2
-		)
-	);
+	const json = $derived(rawJson(value, omit));
 
 	let open = $state(false);
 	let copied = $state(false);

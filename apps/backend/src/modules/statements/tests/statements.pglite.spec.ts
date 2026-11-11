@@ -103,7 +103,6 @@ const REVIEW_CLAIMS: Record<string, Claim[]> = {
 const place = (venueName: string) => ({
 	venueName,
 	locationHint: null,
-	cuisine: null,
 	city: 'Berlin',
 	visited: true,
 	isNewOpening: false,
@@ -260,7 +259,7 @@ describe('statements (pglite)', () => {
 	const rowsOf = (where: object) =>
 		em().find(Statement, where, {
 			orderBy: { id: 'asc' },
-			populate: ['parts.topic.parent', 'parts.term.topics.topic'],
+			populate: ['parts.topic.edges.to', 'parts.term.topic', 'parts.term.modifiers.topic'],
 		});
 	/** A statement's parts as `[role, key]`, in rank order */
 	const partsOf = (s: Statement) =>
@@ -463,7 +462,7 @@ describe('statements (pglite)', () => {
 		]);
 		const before = rows.map(s => [s.id, s.createdAt, s.parts.getItems().map(x => x.id)]);
 		// An admin decides the wording: every statement naming it follows, no row rewritten
-		await terms().change(fries.id, { topicKeys: ['vegan'] });
+		await terms().change(fries.id, { topicKey: 'vegan' });
 		em().clear();
 		const after = await rowsOf({ post: p.id });
 		expect(after.map(s => [s.id, s.createdAt, s.parts.getItems().map(x => x.id)])).toEqual(
@@ -827,15 +826,15 @@ describe('statements (pglite)', () => {
 		expect([
 			map.get('pomme')!.name,
 			map.get('pomme')!.decidedBy ?? null,
-			map.get('pomme')!.topics.count(),
-		]).toEqual(['Pommes', null, 0]);
+			map.get('pomme')!.topic ?? null,
+		]).toEqual(['Pommes', null, null]);
 		em().clear();
 		const linked = async (key: string) => {
-			const term = await em().findOneOrFail(Term, { key }, { populate: ['topics.topic'] });
+			const term = await em().findOneOrFail(Term, { key }, { populate: ['topic'] });
 			return [
 				term.name,
 				term.decidedBy ?? null,
-				term.topics.getItems().map(l => l.topic.key),
+				term.topic ? [term.topic.key] : [],
 			];
 		};
 		expect(await linked('doner')).toEqual(['Döner', 'match', ['kebab']]);

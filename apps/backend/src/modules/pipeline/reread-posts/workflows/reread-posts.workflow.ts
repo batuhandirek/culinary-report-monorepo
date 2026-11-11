@@ -18,7 +18,6 @@ import {
 } from 'src/modules/social/services/mention-extraction.service.js';
 import { POSTS_GATED_AT } from 'src/modules/statements/constants/statements-shipped.constant.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 
 import { PostClaimsAgent } from '../../read-posts/agents/post-claims.agent.js';
 import { PostGateAgent } from '../../read-posts/agents/post-gate.agent.js';
@@ -36,8 +35,8 @@ export type RereadPostResult =
  * One post read before `POSTS_GATED_AT` read again, as a workflow of its own (nightly,
  * `RereadPostsSchedule`): the gate first (a skipped post loses its claims and every mention but
  * an admin's), then agent A, whose places are paired with the post's stored mentions and never
- * re-match one (`MentionExtractionService.saveReread`), then the new claims' labels and the added
- * mentions' food topics. The same agents as `read-posts`, each call a child that waits for an
+ * re-match one (`MentionExtractionService.saveReread`), then the new claims' labels and the city's
+ * venue tags queued (they read what the claims name). The same agents as `read-posts`, each call a child that waits for an
  * account.
  */
 @Injectable()
@@ -49,20 +48,23 @@ export class RereadPostsWorkflow {
 		private readonly postClaimsAgent: PostClaimsAgent,
 		private readonly extraction: MentionExtractionService,
 		private readonly statementPartsService: StatementPartsService,
-		private readonly topicService: TopicService,
 	) {}
 
+	/**
+	 * `byHand`: an admin's "Re-analyse" on a post row, which reads it again whenever it was read
+	 * (the nightly run only takes posts read before `POSTS_GATED_AT`)
+	 */
 	@DurableWorkflow({ name: 'reread-posts.post' })
 	@EnsureRequestContext()
-	async rereadPost(postId: string): Promise<RereadPostResult> {
-		const plan = await this.plan(postId);
+	async rereadPost(postId: string, byHand = false): Promise<RereadPostResult> {
+		const plan = await this.plan(postId, byHand);
 		if (!plan) return { read: false };
 		return withLlmCallContext({ cityId: plan.post.cityId, purpose: 'reread-posts' }, () =>
-			this.reread(plan.post, plan.topics),
+			this.reread(plan.post),
 		);
 	}
 
-	private async reread(post: PostForReading, topics: string[]): Promise<RereadPostResult> {
+	private async reread(post: PostForReading): Promise<RereadPostResult> {
 		// 1. The gate: a post it skips keeps nothing but an admin's mentions
 		const gate =
 			hasContent(post) ?
@@ -85,30 +87,29 @@ export class RereadPostsWorkflow {
 		const reading = await readPostClaims(
 			this.durableLlm.as(this.postClaimsAgent),
 			postClaimsSource(post),
-			{ cityName: post.cityName, topics },
+			{ cityName: post.cityName },
 		);
 		const { claimIds, addedMentionIds, ...saved } = await this.saveReread(post.postId, {
 			...reading.object,
 			tokens: reading.usage.totalTokens,
 		});
 
-		// 3. The new claims' labels and the added mentions' food topics
+		// 3. The new claims' labels, then the city's venue tags, which read what the claims name
 		await this.labelClaims(claimIds);
-		await this.linkTopics(post.cityId, addedMentionIds);
+		await this.linkTopics(post.cityId, claimIds.length + addedMentionIds.length > 0);
 		return { ...saved, claims: claimIds.length, calls: reading.calls + 1 };
 	}
 
 	// ─── Steps: each one domain call, its result stored ───
 
-	/** The post as the gate and agent A see it, and the food topics' labels; none when it was re-read meanwhile */
+	/** The post as the gate and agent A see it; none when it was re-read meanwhile (any post by hand) */
 	@DurableStep({ name: 'plan' })
-	private async plan(postId: string): Promise<{ post: PostForReading; topics: string[] } | null> {
-		const post = await this.extraction.postForReading(postId, {
-			analysedBefore: POSTS_GATED_AT,
-		});
-		if (!post) return null;
-		const index = await this.topicService.index();
-		return { post, topics: index.food.map(t => t.label) };
+	private async plan(postId: string, byHand: boolean): Promise<{ post: PostForReading } | null> {
+		const post = await this.extraction.postForReading(
+			postId,
+			byHand ? {} : { analysedBefore: POSTS_GATED_AT },
+		);
+		return post && { post };
 	}
 
 	@DurableStep({ name: 'save gate' })
@@ -132,7 +133,7 @@ export class RereadPostsWorkflow {
 	}
 
 	@DurableStep({ name: 'link topics' })
-	private async linkTopics(cityId: string, mentionIds: number[]): Promise<void> {
-		await this.extraction.linkTopics(cityId, mentionIds);
+	private async linkTopics(cityId: string, changed: boolean): Promise<void> {
+		if (changed) await this.extraction.queueVenueTags(cityId);
 	}
 }

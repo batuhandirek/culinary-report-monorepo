@@ -13,7 +13,11 @@ import {
 	AccountWatchService,
 	type WatchReasonKindEnum,
 } from 'src/modules/social/services/account-watch.service.js';
-import { profilesPurpose, type ProfilesSaved } from 'src/modules/social/util/profile-runs.js';
+import {
+	profileRuns,
+	profilesPurpose,
+	type ProfilesSaved,
+} from 'src/modules/social/util/profile-runs.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
 
 import type { InstagramProfilesCall } from '../../atoms/instagram-profiles/util/instagram-profiles-input.js';
@@ -24,6 +28,8 @@ import { DAY_MS, WEEK_DAYS } from '../../shared/constants/cadence.constant.js';
 import { ReportBrandsService } from '../../shared/services/report-brands.service.js';
 import { workflowName } from '../../shared/util/operations.js';
 import {
+	CREATOR_SCRAPE_NOW_DAYS,
+	CREATOR_SCRAPE_NOW_USD,
 	CREATOR_TIKTOK_MAX_DAYS,
 	CREATOR_WATCH_BUDGET_USD,
 } from '../constants/creator-watch.constant.js';
@@ -43,6 +49,20 @@ interface CreatorWatchPlan {
 	tiktokSince: string;
 	/** Instagram profiles due, of which the run takes what the budget covers */
 	instagramDue: number;
+	tiktok: TiktokProfilesCall | null;
+	instagram: InstagramProfilesCall | null;
+}
+
+/** What one creator's scrape by hand did; `cityId` absent when they have no profile to scrape */
+export interface CreatorScrapeResult {
+	cityId?: string;
+	tiktok: ProfilesSaved;
+	instagram: ProfilesSaved;
+}
+
+/** What the creator's plan step stores: the city and the two runs */
+interface CreatorScrapePlan {
+	cityId: string;
 	tiktok: TiktokProfilesCall | null;
 	instagram: InstagramProfilesCall | null;
 }
@@ -99,6 +119,42 @@ export class CreatorWatchWorkflow {
 			tiktok: { since: plan.tiktokSince.slice(0, 10), ...tiktok },
 			instagram: { due: plan.instagramDue, ...instagram },
 		};
+	}
+
+	/**
+	 * One creator's profiles now, as an admin asked ("Scrape now" on the creator page, started on
+	 * `CREATOR_SCRAPE_QUEUE`, one in flight per creator): TikTok's latest ten videos and Instagram's
+	 * profile, the last `CREATOR_SCRAPE_NOW_DAYS` days' posts kept, `CREATOR_SCRAPE_NOW_USD` at most.
+	 * The same atoms as the daily run, one platform after the other; the reading reads the posts on its own.
+	 */
+	@DurableWorkflow({ name: 'creator-watch.creator' })
+	@EnsureRequestContext()
+	async creator(creatorId: string): Promise<CreatorScrapeResult> {
+		const now = await durableNow(this.durable);
+		const plan = await this.planCreator(creatorId, now);
+		if (!plan) return { tiktok: EMPTY, instagram: EMPTY };
+		const context = { cityId: plan.cityId, now: now.toISOString(), save: { accounts: 'all' as const } };
+		const tiktok: ProfilesSaved =
+			plan.tiktok ? await this.tiktokProfiles.call({ ...plan.tiktok, ...context }) : EMPTY;
+		const instagram: ProfilesSaved =
+			plan.instagram ?
+				await this.instagramProfiles.call({ ...plan.instagram, ...context })
+			:	EMPTY;
+		return { cityId: plan.cityId, tiktok, instagram };
+	}
+
+	/** The creator's profiles and city as runs; none without a profile */
+	@DurableStep({ name: 'plan creator' })
+	private async planCreator(creatorId: string, now: Date): Promise<CreatorScrapePlan | null> {
+		const found = await this.accountWatchService.creatorTargets(creatorId);
+		if (!found) return null;
+		const runs = profileRuns(found.targets, {
+			budgetUsd: CREATOR_SCRAPE_NOW_USD,
+			since: new Date(now.getTime() - CREATOR_SCRAPE_NOW_DAYS * DAY_MS).toISOString(),
+			latestTen: true,
+			label: 'creator, by hand',
+		});
+		return { cityId: found.cityId, ...runs };
 	}
 
 	/** The watch list's creators, which Instagram profiles are due, and where TikTok's videos start */

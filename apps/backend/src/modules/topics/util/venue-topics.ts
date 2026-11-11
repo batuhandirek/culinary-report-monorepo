@@ -34,7 +34,7 @@ export interface VenueTopicInput {
 	category: string | null | undefined;
 	/** Google's other categories */
 	categories?: string[] | null;
-	/** Its posts by others: each mention's stored cuisine topics (`MentionTopic`, source `cuisine`) */
+	/** Its posts by others: the kinds of food each mention's claims name (`FOOD_TOPIC_KEYS_SQL`) */
 	mentionTopics: { keys: string[]; n: number }[];
 	/** Its latest delivery menu: each item's stored topics (`MenuItemTopic`) */
 	menuItems?: { keys: string[] }[];
@@ -137,8 +137,9 @@ export const venueTopics = (input: VenueTopicInput, index: TopicIndex): VenueTop
 
 /**
  * What two venues have in common to eat, for competitor suggestions: 3 when their primary topics
- * match, 2 when one's primary is among the other's food tags or they share a parent cuisine
- * (ramen and sushi are both Japanese), 1 when any cuisine or dish tag overlaps after parents;
+ * match, 2 when one's primary is among the other's food tags or both primaries are a kind of the
+ * same thing (they share an `is_a` target: ramen and sushi are both Japanese), 1 when any cuisine
+ * or dish tag overlaps after what the tags count for;
  * 0 when none does. Two bars or two cafés (a place's primary when it has no food tag) match on it.
  */
 export const sharedFood = (
@@ -158,14 +159,13 @@ export const sharedFood = (
 		);
 	const foodA = food(a);
 	const foodB = food(b);
-	const parentOf = (key?: string) => (key ? index.get(key)?.parentKey : null);
+	const kindsOf = (key?: string) => (key ? (index.get(key)?.isA ?? []) : []);
 	if (primaryA && foodB.has(primaryA))
 		return { points: 2, reason: `related food (${label(primaryA)})` };
 	if (primaryB && foodA.has(primaryB))
 		return { points: 2, reason: `related food (${label(primaryB)})` };
-	const parentA = parentOf(primaryA);
-	if (parentA && parentA === parentOf(primaryB))
-		return { points: 2, reason: `related food (${label(parentA)})` };
+	const both = kindsOf(primaryA).find(k => kindsOf(primaryB).includes(k));
+	if (both) return { points: 2, reason: `related food (${label(both)})` };
 	const shared = [...foodA].find(k => foodB.has(k));
 	if (shared) return { points: 1, reason: `overlapping food (${label(shared)})` };
 	return { points: 0, reason: null };

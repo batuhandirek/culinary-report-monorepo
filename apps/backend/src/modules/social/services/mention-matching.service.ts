@@ -8,7 +8,6 @@ import _ from 'lodash';
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { CityService } from 'src/modules/cities/services/city.service.js';
 import { cityNames } from 'src/modules/cities/util/city.js';
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -255,7 +254,6 @@ export const toCandidateVenues = (
 export interface MatchInput {
 	venueName: string;
 	locationHint: string | null;
-	cuisine: string | null;
 	/** The city the post says the place is in */
 	city: string | null;
 	/** The post's account: a venue posting about itself spells its own name right */
@@ -440,7 +438,6 @@ export const planMatch = (
 				name: mention.venueName,
 				author: mention.author,
 				locationHint: mention.locationHint,
-				cuisine: mention.cuisine,
 				said: mention.said.slice(0, 5),
 				taggedLocation: mention.taggedLocation,
 			},
@@ -586,18 +583,13 @@ export class MentionMatchingService {
 	constructor(
 		private readonly em: EntityManager,
 		private readonly cityService: CityService,
-		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
 		private readonly hashtagService: HashtagService,
 	) {}
 
-	/**
-	 * A match moves what a mention is about when its cuisine named nothing (its venue's category),
-	 * and what its venue's tags read: the mentions' topics now, their cities' venue tags by job.
-	 */
+	/** A match moves what its venue's tags read (what the venue's posts' claims name): their cities' tags, by job */
 	private async relinkFood(mentions: Mention[]): Promise<void> {
 		if (!mentions.length) return;
-		await this.mentionTopicService.relink({ mentionIds: mentions.map(m => m.id) });
 		await this.venueTopicService.queueCityRefresh(_.uniq(mentions.map(m => m.post.city.id)));
 	}
 
@@ -931,7 +923,6 @@ export class MentionMatchingService {
 		return {
 			venueName: mention.venueName,
 			locationHint: mention.locationHint ?? null,
-			cuisine: mention.cuisine ?? null,
 			city: mention.city ?? null,
 			author: mention.post.author ?? null,
 			taggedLocation: mention.post.locationName ?? null,

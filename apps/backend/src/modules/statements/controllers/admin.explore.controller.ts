@@ -13,6 +13,7 @@ import {
 	AdminExploreBreakdownInputDto,
 	AdminExploreBreakdownOutputDto,
 	AdminExploreClaimsInputDto,
+	AdminExploreGroupsInputDto,
 	AdminExploreGroupsOutputDto,
 	AdminExploreHeadOutputDto,
 	AdminExploreInputDto,
@@ -80,7 +81,7 @@ export class AdminExploreController {
 	async listExploreClaims(
 		@TypedQuery() query: AdminExploreClaimsInputDto,
 	): Promise<AdminStatementsOutputDto> {
-		const { page, size, q, like, ...rest } = query;
+		const { page, size, q, like, sentiment, parts, ...rest } = query;
 		const { total, items, notEmbedded } = await this.statementInsightService.claims(
 			selectionOf(rest),
 			{
@@ -88,6 +89,8 @@ export class AdminExploreController {
 				limit: size,
 				q,
 				like,
+				sentiment,
+				parts,
 			},
 		);
 		return {
@@ -116,9 +119,10 @@ export class AdminExploreController {
 	/** The node's claims grouped by meaning, once they have vectors */
 	@TypedRoute.Get('/groups')
 	async getExploreGroups(
-		@TypedQuery() query: AdminExploreInputDto,
+		@TypedQuery() query: AdminExploreGroupsInputDto,
 	): Promise<AdminExploreGroupsOutputDto> {
-		return this.statementInsightService.groups(selectionOf(query));
+		const { similarity, minClaims, ...rest } = query;
+		return this.statementInsightService.groups(selectionOf(rest), { similarity, minClaims });
 	}
 
 	/** Wordings to explore, by a part of their name */

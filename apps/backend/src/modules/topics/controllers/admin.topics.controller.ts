@@ -1,8 +1,8 @@
-import { wrap } from '@mikro-orm/core';
-
 import { Controller, UseGuards } from '@nestjs/common';
 
 import { TypedBody, TypedParam, TypedQuery, TypedRoute } from '@nestia/core';
+
+import _ from 'lodash';
 
 import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant.js';
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
@@ -38,10 +38,9 @@ export class AdminTopicsController {
 		@TypedQuery() query: AdminGetTopicsInputDto,
 	): Promise<AdminTopicsOutputDto> {
 		const { topics } = await this.topicService.overview(query.cityId);
-		const keyById = new Map(topics.map(({ topic }) => [topic.id, topic.key]));
 		return {
 			topics: topics.map(({ topic, mentions, venues, terms }) => ({
-				...toDto(topic, keyById),
+				...toDto(topic),
 				mentions,
 				venues,
 				terms,
@@ -73,8 +72,7 @@ export class AdminTopicsController {
 	async createTopic(
 		@TypedBody() body: AdminCreateTopicInputDto,
 	): Promise<AdminTopicBaseOutputDto> {
-		const topic = await this.topicService.create(body);
-		return toDto(topic, await this.keysById());
+		return toDto(await this.reloaded(await this.topicService.create(body)));
 	}
 
 	/** Changes the fields given; the key stays. Its wordings are terms (`PATCH /admin/terms/:id`). */
@@ -83,28 +81,37 @@ export class AdminTopicsController {
 		@TypedParam('id') id: string,
 		@TypedBody() body: AdminUpdateTopicInputDto,
 	): Promise<AdminTopicBaseOutputDto> {
-		const topic = await this.topicService.update(id, body);
-		return toDto(topic, await this.keysById());
+		return toDto(await this.reloaded(await this.topicService.update(id, body)));
 	}
 
-	/** Deletes an aspect (400 for a kind of food, a root, or one with children); its points move to its parent. */
+	/** Deletes an aspect (400 for a kind of food, a root, or one with children); its claims move to its root. */
 	@TypedRoute.Delete('/:id')
 	async deleteTopic(@TypedParam('id') id: string): Promise<void> {
 		await this.topicService.remove(id);
 	}
 
-	private async keysById(): Promise<Map<string, string>> {
-		return new Map((await this.topicService.all()).map(t => [t.id, t.key]));
+	/** The topic as stored after a write, with its edges and the topics they point at */
+	private async reloaded(topic: Topic): Promise<Topic> {
+		return (await this.topicService.all()).find(t => t.id === topic.id) ?? topic;
 	}
 }
 
-const toDto = (topic: Topic, keyById: Map<string, string>): AdminTopicBaseOutputDto => {
-	const parentKey = topic.parent ? keyById.get(topic.parent.id) : undefined;
+/** By hand: an edge is answered as the other topic's key, which no serializer gives */
+const toDto = (topic: Topic): AdminTopicBaseOutputDto => {
+	const edges = topic.edges
+		.getItems()
+		.filter(e => !e.to.deletedAt)
+		.map(e => ({ to: e.to.key, type: e.type, rank: e.rank, decidedBy: e.decidedBy }));
+	const parentKey = edges.find(e => e.type === 'is_a')?.to;
 	return {
-		...(wrap(topic).serialize({
-			skipNull: true,
-			forceObject: true,
-		}) as unknown as AdminTopicBaseOutputDto),
+		id: topic.id,
+		key: topic.key,
+		label: topic.label,
+		kind: topic.kind,
 		...(parentKey && { parentKey }),
+		edges: _.sortBy(edges, e => (e.type === 'is_a' ? 0 : 1), e => e.rank),
+		...(topic.trendsTopicId && { trendsTopicId: topic.trendsTopicId }),
+		...(topic.trendsQuery && { trendsQuery: topic.trendsQuery }),
+		...(topic.hint && { hint: topic.hint }),
 	};
 };

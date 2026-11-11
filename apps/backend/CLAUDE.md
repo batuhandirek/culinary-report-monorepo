@@ -10,7 +10,7 @@ Setup gotchas that fail at runtime, not compile time:
 - typia/nestia need a patched TypeScript: run `npm run typia:setup` (root) after a fresh install or `@TypedBody` validation breaks.
 - typia inlines DTO types into each controller's compiled JS, but tsc only re-emits a file whose own output it thinks changed, so a changed enum/type a DTO uses leaves unchanged controllers validating the old one (500 "Response body data is not following the promised type"). `build` and `dev` delete `dist/tsconfig.tsbuildinfo` first; watch mode can't — **restart dev after changing a type a DTO uses**.
 - `src/main.ts` import order is load-bearing: `./tracing.js` first (OTel patching), `initDotEnv()` before any config-class import.
-- Pending migrations auto-run at boot (`SKIP_MIGRATIONS=true` to skip) — a broken migration bricks boot for everyone on the branch.
+- Pending migrations auto-run at boot in production (`SKIP_MIGRATIONS=true` to skip) — a broken migration bricks boot. The dev backend starts in `apps/backend`, where the config's migrations `path` finds nothing: run `npm run migration:up:dev` (`run-app` skill).
 
 ## Conventions
 

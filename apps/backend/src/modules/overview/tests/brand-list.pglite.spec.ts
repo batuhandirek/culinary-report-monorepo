@@ -17,13 +17,13 @@ import { SocialAccount } from 'src/modules/social/entities/social-account.entity
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { socialAccountFactory } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
-import { TermTopic } from 'src/modules/topics/entities/term-topic.entity.js';
 import { TermService } from 'src/modules/topics/services/term.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
+import { VenueSnapshot } from 'src/modules/venues/entities/venue-snapshot.entity.js';
 import { brandFactory } from 'src/modules/venues/tests/factories/brand.factory.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
@@ -122,10 +122,12 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		const chicken = em.create(Term, {
 			key: termKey('Chicken Döner'),
 			name: 'Chicken Döner',
+			topic: topics.get('kebab')!,
+			exact: false,
 			decidedBy: 'ai',
 			decidedAt: new Date(),
 		});
-		em.create(TermTopic, { term: chicken, topic: topics.get('kebab')!, rank: 0 });
+		void chicken;
 		doner = venueFactory.build(
 			{
 				name: 'Döner Pro',
@@ -276,25 +278,27 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		expect(quiet.brand.id).toBeTruthy();
 	});
 
-	it("sums up a brand's month, its six months and what to do", async () => {
+	it("sums up a brand's window, its twelve months and what to do", async () => {
 		const res = await summary.summary(
 			doner.brand.id,
-			{ cityId: city.id, month: '2026-09' },
+			{ cityId: city.id, month: '2026-09', period: '90d' },
 			now,
 		);
 
-		expect(res.figures).toMatchObject({ posts: 3, ownPosts: 1, reviews: 3, unanswered: 1 });
-		expect(res.series.map(s => s.month)).toEqual([
-			'2026-04',
-			'2026-05',
-			'2026-06',
-			'2026-07',
+		// The 90 days up to now: September and August's posts and reviews, nothing before them
+		expect(res.window).toMatchObject({ period: '90d', label: '90 days', to: now });
+		expect(res.figures).toMatchObject({ posts: 4, ownPosts: 1, reviews: 4, unanswered: 1 });
+		expect(res.previous).toMatchObject({ posts: 0, reviews: 0 });
+		expect(res.series).toHaveLength(12);
+		expect(res.series.map(s => s.month).slice(0, 1).concat(res.series.map(s => s.month).slice(-2))).toEqual([
+			'2025-10',
 			'2026-08',
 			'2026-09',
 		]);
 		expect(res.series.at(-2)).toMatchObject({ posts: 1, reviews: 1 });
-		// Most viewed first, its own account's post left out
-		expect(res.topPosts.map(p => p.author)).toEqual(['creator_b', 'creator_a', 'creator_a']);
+		// Most viewed first, its own account's post left out, each with the mention an admin moves
+		expect(res.topPosts.map(p => p.author)).toEqual(['creator_b', 'creator_a', 'creator_c', 'creator_a']);
+		expect(res.topPosts.every(p => p.mentionId)).toBe(true);
 		expect(res.report).toMatchObject({ month: '2026-09', title: 'Food wins' });
 		expect(res.todos.map(t => t.key)).toEqual(['unanswered', 'competitors']);
 		// Each tag with the topic it names: through the seed's alias (an admin term), or as the agent decided its wording
@@ -304,17 +308,48 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			{ title: 'Chicken Döner', count: 5, topic: { key: 'kebab', label: 'Döner & kebab' } },
 			{ title: 'waiting time', count: 3 },
 		]);
-		expect(res.todos[0]).toMatchObject({ tone: 'info', tab: 'reviews' });
+		expect(res.todos[0]).toMatchObject({
+			tone: 'info',
+			tab: 'reviews',
+			text: '1 critical review in 90 days unanswered · pitch hook',
+		});
+	});
+
+	it("merges its places' rating reads into one line from the day every place has one", async () => {
+		const em = harness.orm.em;
+		const brand = brandFactory.build({ name: 'Two Reads' }, { transient: { em } });
+		const a = venueFactory.build({ name: 'Two Reads A' }, { associations: { city, brand }, transient: { em } });
+		const b = venueFactory.build({ name: 'Two Reads B' }, { associations: { city, brand }, transient: { em } });
+		em.create(VenueSnapshot, { venue: a, snapshotDate: '2026-08-01', rating: 4, reviewsCount: 100 });
+		em.create(VenueSnapshot, { venue: b, snapshotDate: '2026-08-15', rating: 5, reviewsCount: 100 });
+		em.create(VenueSnapshot, { venue: a, snapshotDate: '2026-09-01', rating: 4, reviewsCount: 300 });
+		await em.flush();
+
+		const res = await summary.summary(brand.id, { cityId: city.id, month: '2026-09' }, now);
+		// 1 August had only A's read: the line starts on 15 August, A's read carried forward
+		expect(res.ratings).toEqual([
+			{ date: '2026-08-15', stars: 4.5, reviews: 200 },
+			{ date: '2026-09-01', stars: 4.25, reviews: 400 },
+		]);
+	});
+
+	it('compares the last 30 days with the 30 before by default', async () => {
+		const res = await summary.summary(doner.brand.id, { cityId: city.id, month: '2026-09' }, now);
+		expect(res.window).toMatchObject({ period: '30d', from: new Date('2026-09-18T12:00:00Z') });
+		// Since 18 September: one post by others and its own; the 30 days before: two posts, three reviews
+		expect(res.figures).toMatchObject({ posts: 1, ownPosts: 1, views: 200, reviews: 0 });
+		expect(res.previous).toMatchObject({ posts: 2, views: 6000, creators: 2, reviews: 3, unanswered: 1 });
+		expect(res.topPosts.map(p => p.views)).toEqual([200]);
 	});
 
 	it("flags a customer's missing report, the posts naming no branch and reviews never scraped", async () => {
-		const res = await summary.summary(chain.id, { cityId: city.id, month: '2026-09' }, now);
+		const res = await summary.summary(chain.id, { cityId: city.id, month: '2026-09', period: '90d' }, now);
 		expect(res.brandOnlyPosts).toBe(1);
 		expect(res.todos.map(t => [t.key, t.tone])).toEqual([
 			['report', 'urgent'],
 			['competitors', 'todo'],
 			['brand-only', 'info'],
-			// 1,300 Google reviews between its branches, none stored for September: not scraped
+			// 1,300 Google reviews between its branches, none stored in the window: not scraped
 			['reviews-missing', 'info'],
 		]);
 	});

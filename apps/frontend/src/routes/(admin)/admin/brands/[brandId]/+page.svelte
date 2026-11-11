@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChevronDown, ExternalLink, FileText, MapPin, Send } from '@lucide/svelte';
+	import { Globe, Newspaper, Settings2, ShoppingCart, Telescope } from '@lucide/svelte';
 	import type {
 		AdminBrandOutputDto,
 		AdminBrandSummaryOutputDto,
@@ -9,35 +9,35 @@
 	import { untrack } from 'svelte';
 
 	import BrandBranchesTab from './components/BrandBranchesTab.svelte';
+	import BrandHistoryTab from './components/BrandHistoryTab.svelte';
 	import BrandOverviewTab from './components/BrandOverviewTab.svelte';
 	import BrandPostsTab from './components/BrandPostsTab.svelte';
-	import BrandReportsTab from './components/BrandReportsTab.svelte';
-	import BrandReviewsTab from './components/BrandReviewsTab.svelte';
-	import BrandSalesTab from './components/BrandSalesTab.svelte';
 	import BrandSettingsTab from './components/BrandSettingsTab.svelte';
 	import BrandSignalsTab from './components/BrandSignalsTab.svelte';
+	import BuildReportButton from './components/BuildReportButton.svelte';
 	import { BrandProspectStore } from './stores/BrandProspectStore.svelte.js';
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
-	import { prospectStageVariant } from '#components/admin/admin-format.js';
-	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
+	import { onDay } from '#components/admin/admin-format.js';
 	import AdminDetailTabs, { type AdminDetailTab } from '#components/admin/AdminDetailTabs.svelte';
+	import BrandAccounts from '#components/admin/BrandAccounts.svelte';
 	import BrandCompetitors from '#components/admin/BrandCompetitors.svelte';
+	import BranchSwitcher from '#components/admin/detail/BranchSwitcher.svelte';
+	import DetailHead from '#components/admin/detail/DetailHead.svelte';
+	import IconKey from '#components/admin/detail/IconKey.svelte';
+	import Pill from '#components/admin/detail/Pill.svelte';
+	import ReviewsTable from '#components/admin/reviews/ReviewsTable.svelte';
 	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
-	import VenueFavicon from '#components/admin/venues/VenueFavicon.svelte';
 	import { api } from '#lib/api.js';
 	import { branchesByCity } from '#lib/brands.js';
-	import { lastMonth, leadScoreVariant, monthLabel, recentMonths } from '#lib/culinary.js';
+	import { lastMonth, LEAD_PROSPECT_SCORE, monthLabel } from '#lib/culinary.js';
 	import { exploreHref } from '#lib/explore.js';
 	import { stageLabel } from '#lib/outreach-status.js';
 	import { announceReportRun, followReportRun } from '#lib/report-runs.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
-	import * as DropdownMenu from '#ui/primitives-new/dropdown-menu/index.js';
-	import Badge from '#ui/wrapped/Badge.svelte';
-	import Button from '#ui/wrapped/Button.svelte';
-	import Buttonish from '#ui/wrapped/Buttonish.svelte';
+	import IconButton from '#ui/wrapped/IconButton.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
 	// The brand is the unit: its branches, what was said about it, its competitors, reports and
@@ -55,12 +55,16 @@
 	// Month and city live in the URL so every tab, a refresh and a shared link agree on them
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
 	const month = $derived(param('month') ?? lastMonth());
+	// The Overview's window: the last 30 days by default, 90 days or twelve months on the switch
+	const period = $derived(param('period') ?? '30d');
 	const cityId = $derived(param('cityId') ?? cities[0]?.cityId);
 	const city = $derived(cities.find((c) => c.cityId === cityId) ?? cities[0]);
 	// A one-place brand's place; a chain is shown as the brand, never as one of its branches
 	const place = $derived(chain ? undefined : (city?.branches.find((b) => !b.closed) ?? city?.branches[0]));
 	const cityOpen = $derived(city?.branches.filter((b) => !b.closed) ?? []);
 	const icon = $derived(cityOpen.find((b) => b.favicon)?.favicon ?? place?.favicon);
+	const website = $derived(cityOpen.find((b) => b.website)?.website ?? place?.website);
+	const host = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/.*$/, '');
 	const category = $derived.by(() => {
 		const counts = new Map<string, number>();
 		for (const b of cityOpen) if (b.category) counts.set(b.category, (counts.get(b.category) ?? 0) + 1);
@@ -80,7 +84,6 @@
 		else url.searchParams.delete(name);
 		goto(url, { replace: true, reset: false });
 	};
-	const MONTHS = recentMonths(12).map((m) => ({ value: m, label: monthLabel(m) }));
 	const CITIES = $derived(cities.map((c) => ({ value: c.cityId, label: c.cityName })));
 
 	// Its place on the sales list: the header, the Overview and the Sales tab share it
@@ -90,14 +93,15 @@
 		untrack(() => sales.load(id));
 	});
 
-	// The month in numbers: the Overview shows it, the tabs count from it
+	// The window in numbers: the Overview shows it, the tabs count from it
 	let summary = $state<AdminBrandSummaryOutputDto | null>(null);
 	const summaryLoader = createLoader(
-		(id: string, query: { month: string; cityId?: string }) => api.admin.getBrandSummary(id, query),
+		(id: string, query: { month: string; cityId?: string; period: string }) =>
+			api.admin.getBrandSummary(id, query as Parameters<typeof api.admin.getBrandSummary>[1]),
 		{ onSuccess: (s) => (summary = s) }
 	);
 	$effect(() => {
-		const args = { month, ...(cityId && { cityId }) };
+		const args = { month, period, ...(cityId && { cityId }) };
 		const id = brand.id;
 		untrack(() => {
 			summary = null;
@@ -105,30 +109,28 @@
 		});
 	});
 
+	// Reports and the sales conversation are its History; Settings opens from the header's key
 	const tabs: AdminDetailTab[] = $derived([
 		{ value: 'overview', label: 'Overview' },
 		{ value: 'posts', label: 'Posts', count: summary ? summary.figures.posts + summary.figures.ownPosts : undefined },
 		{ value: 'reviews', label: 'Reviews', count: summary?.figures.reviews },
 		{ value: 'claims', label: 'Claims' },
-		{
-			value: 'branches',
-			label: chain ? 'Branches' : 'Place',
-			count: chain ? open.length : undefined
-		},
+		{ value: 'places', label: 'Places', count: open.length },
 		{ value: 'competitors', label: 'Competitors' },
 		{ value: 'signals', label: 'Signals' },
-		{ value: 'reports', label: 'Reports' },
-		{ value: 'sales', label: 'Sales' },
-		{ value: 'settings', label: 'Settings' }
+		{ value: 'history', label: 'History' },
+		{ value: 'settings', label: 'Settings', hidden: true }
 	]);
 	let tab = $state('overview');
-	const KEEP = ['month', 'cityId'];
-	const openTab = (next: string) => {
+	const KEEP = ['month', 'cityId', 'period'];
+	// A tab's own filters are left behind; `params` opens it on one (Reviews' "Needs a reply")
+	const openTab = (next: string, params: Record<string, string> = {}) => {
 		const url = new URL(page.url.href);
 		for (const name of [...url.searchParams.keys()]) {
 			if (!KEEP.includes(name)) url.searchParams.delete(name);
 		}
 		if (next !== 'overview') url.searchParams.set('tab', next);
+		for (const [name, value] of Object.entries(params)) url.searchParams.set(name, value);
 		goto(url, { replace: true, reset: false });
 	};
 
@@ -145,7 +147,6 @@
 				.catch(() => (configs = []));
 		});
 	});
-	const activeConfigs = $derived(configs?.filter((c) => (c.status as string) === 'active') ?? []);
 
 	// LLM calls over the month's data, run in the background and followed until done (a run that
 	// waits for an LLM account goes on by itself; the toast links it). A configuration builds that
@@ -171,164 +172,120 @@
 		}
 	);
 	const addToSales = async () => {
-		if (await sales.addAction.execute()) openTab('sales');
+		if (await sales.addAction.execute()) openTab('history');
 	};
+	const report = $derived(summary?.report);
 </script>
 
-<AdminPageHeader title={brand.name}>
-	{#snippet aboveTitle()}
-		<span class="text-muted-foreground flex items-center gap-1.5 text-xs">
-			{#if icon}<VenueFavicon favicon={icon} />{/if}
-			{chain ? `Chain · ${open.length} open places` : 'Brand'}{category ? ` · ${category}` : ''}
+<DetailHead title={brand.name} favicon={icon}>
+	{#snippet pills()}
+		{#if chain}<Pill>Chain · {open.length} places</Pill>{/if}
+		{#if rating}
+			<Pill tone="ink" title={chain ? `Stars over ${cityOpen.length} places' Google reviews` : 'Google rating'}
+				>{rating.stars.toFixed(1)} ★ · {rating.count.toLocaleString('en')}</Pill>
+		{/if}
+		{#if brand.leadScore != null}
+			<Pill tone={brand.leadScore >= LEAD_PROSPECT_SCORE ? 'good' : 'sand'} href="?tab=history" title="Lead score: how it is scored is on History"
+				>Lead {Math.round(brand.leadScore)}</Pill>
+		{/if}
+	{/snippet}
+	{#snippet sub()}
+		<span class="text-muted-foreground">
+			{#if category}{category} ·{/if}
+			{#each cities as c, i (c.cityId)}
+				<a href={`/admin/cities/${c.cityId}`}>{c.cityName}</a>
+				({c.branches.filter((b) => !b.closed).length} open){i < cities.length - 1 ? ',' : ''}
+			{/each}
+			·
+			{#if report}
+				<a href={`/admin/reports/${report.id}`}>{monthLabel(report.month)} report</a>{report.sentAt
+					? `, sent ${onDay(report.sentAt)}`
+					: ', not sent'}
+			{:else if summary}
+				no report yet
+			{/if}
+			·
+			{#if sales.prospect}
+				<a href="?tab=history" onclick={(e) => (e.preventDefault(), openTab('history'))}
+					>{stageLabel(sales.prospect.stage).toLowerCase()}</a
+				>{sales.prospect.nextFollowUpAt ? `, follow up ${onDay(sales.prospect.nextFollowUpAt)}` : ''}
+			{:else if sales.prospect === null}
+				not on the sales list
+			{/if}
 		</span>
 	{/snippet}
-	{#snippet belowTitle()}
-		<div
-			class="text-muted-foreground mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
-			{#if sales.prospect}
-				<button type="button" class="cursor-pointer" onclick={() => openTab('sales')}>
-					<Badge pill variant={prospectStageVariant(sales.prospect.stage)}>
-						{stageLabel(sales.prospect.stage)}
-					</Badge>
-				</button>
-			{/if}
-			{#if brand.leadScore != null}
-				<Badge pill variant={leadScoreVariant(brand.leadScore)}
-					>Lead score {Math.round(brand.leadScore)}</Badge>
-			{/if}
-			{#if rating}
-				<span
-					>{rating.stars.toFixed(1)} ★ · {rating.count.toLocaleString('en')} reviews{chain
-						? ` over ${cityOpen.length} places`
-						: ''}</span>
-			{/if}
-			{#if place}
-				{#if place.street || place.district}
-					<span class="flex items-center gap-1">
-						<MapPin class="size-4 shrink-0" />
-						{[place.street, place.district].filter(Boolean).join(', ')}
-					</span>
-				{/if}
-				<a href={`/admin/venues/${place.id}`} class="flex items-center gap-1 hover:underline">
-					<ExternalLink class="size-4" /> Place details
-				</a>
-			{:else if cities.length}
-				<span class="flex items-center gap-1">
-					<MapPin class="size-4 shrink-0" />
-					{cities
-						.map((c) => `${c.cityName} (${c.branches.filter((b) => !b.closed).length})`)
-						.join(', ')}
-				</span>
-			{/if}
-		</div>
+	{#snippet actions()}
+		{#if website}<IconKey icon={Globe} label={`Website · ${host(website)}`} href={website} />{/if}
+		<IconKey icon={Newspaper} label="Its posts in Social" href={`/admin/posts?q=${encodeURIComponent(brand.name)}`} internal />
+		<BrandAccounts
+			brandId={brand.id}
+			branches={chain ? brand.branches.map((b) => ({ id: b.id, name: b.name, street: b.street ?? undefined })) : []} />
+		{#if cityId}
+			<IconKey
+				icon={Telescope}
+				label="What is said about it, in Explore"
+				href={exploreHref({ cityId, brandId: brand.id })}
+				internal />
+		{/if}
+		{#if sales.prospect === null && open.length}
+			<IconKey icon={ShoppingCart} label="Add to sales" disabled={sales.addAction.executing} onclick={addToSales} />
+		{/if}
+		{#if chain}
+			<span class="bg-line mx-[3px] h-5 w-px"></span>
+			<BranchSwitcher brandId={brand.id} brandName={brand.name} count={open.length} branches={brand.branches} />
+		{/if}
+		<BuildReportButton
+			{month}
+			{configs}
+			building={buildAction.executing}
+			onBuild={(config) => buildAction.execute(config)}
+			onMonth={(m) => setParam('month', m === lastMonth() ? undefined : m)} />
+		<IconButton
+			icon={Settings2}
+			label="Brand settings"
+			variant="outline"
+			class="border-line size-[30px] rounded-md"
+			onclick={() => openTab('settings')} />
 	{/snippet}
-	{#snippet rightTitle()}
-		<div class="flex shrink-0 flex-wrap items-center gap-2">
-			{#if sales.prospect === null && open.length}
-				<Button
-					size="sm"
-					variant="outline"
-					icon={Send}
-					loading={sales.addAction.executing}
-					onclick={addToSales}>
-					Add to sales
-				</Button>
-			{/if}
-			{#if CITIES.length > 1}
-				<div class="w-36">
-					<Select
-						items={CITIES}
-						value={cityId}
-						aria-label="City"
-						size="sm"
-						onValueChange={(v) => setParam('cityId', v)} />
-				</div>
-			{/if}
-			<div class="w-44">
-				<Select
-					items={MONTHS}
-					value={month}
-					aria-label="Month"
-					size="sm"
-					onValueChange={(v) => setParam('month', v === lastMonth() ? undefined : v)} />
-			</div>
-			{#if configs?.length}
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger disabled={buildAction.executing}>
-						<Buttonish
-							size="sm"
-							icon={FileText}
-							suffixIcon={ChevronDown}
-							loading={buildAction.executing}
-							disabled={buildAction.executing}>
-							Build report
-						</Buttonish>
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content class="w-64" side="bottom" align="end">
-						<DropdownMenu.Label>Configuration</DropdownMenu.Label>
-						{#each configs as config (config.id)}
-							<DropdownMenu.Item onclick={() => buildAction.execute(config)}>
-								<span class="min-w-0 flex-1 truncate">{config.name}</span>
-								{#if (config.status as string) !== 'active'}
-									<Badge variant="quiet">Inactive</Badge>
-								{/if}
-							</DropdownMenu.Item>
-						{/each}
-						<DropdownMenu.Separator />
-						<DropdownMenu.Item onclick={() => buildAction.execute()}>
-							{activeConfigs.length
-								? `Every active configuration (${activeConfigs.length})`
-								: 'Default template'}
-						</DropdownMenu.Item>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
-			{:else}
-				<Button
-					size="sm"
-					icon={FileText}
-					loading={buildAction.executing}
-					onclick={() => buildAction.execute()}>
-					Build report
-				</Button>
-			{/if}
-		</div>
-	{/snippet}
-</AdminPageHeader>
+</DetailHead>
 
-<div class="flex min-w-0 flex-col gap-5 pb-12">
-	<AdminDetailTabs {tabs} bind:value={tab} keeps={KEEP} />
+<div class="flex min-w-0 flex-col gap-3 pb-12">
+	<AdminDetailTabs {tabs} bind:value={tab} keeps={KEEP} dense>
+		{#snippet end()}
+			{#if CITIES.length > 1}
+				<Select items={CITIES} value={cityId} aria-label="City" size="sm" width={140} onValueChange={(v) => setParam('cityId', v)} />
+			{/if}
+		{/snippet}
+	</AdminDetailTabs>
 	{#key `${brand.id}:${tab}`}
 		{#if tab === 'overview'}
 			<BrandOverviewTab
 				{brand}
-				{month}
 				{cityId}
 				{summary}
+				{period}
+				onPeriod={(p) => setParam('period', p === '30d' ? undefined : p)}
 				failed={summaryLoader.failed}
 				onRetry={() => summaryLoader.reload()}
-				{place}
-				{sales}
-				{openTab}
-				onBuild={() => buildAction.execute()}
-				building={buildAction.executing} />
+				{openTab} />
 		{:else if tab === 'posts'}
-			<BrandPostsTab {brand} {month} />
+			<BrandPostsTab {brand} />
 		{:else if tab === 'reviews'}
-			<BrandReviewsTab {brand} {month} {cityId} />
+			<ReviewsTable scope={{ brandId: brand.id, cityId }} branches={chain} />
 		{:else if tab === 'claims'}
 			{#if cityId}
-				{#key `${cityId}:${month}`}
+				{#key cityId}
 					<p class="m-0 -mb-2 text-sm">
 						<a class="text-beet" href={exploreHref({ cityId, brandId: brand.id })}>Explore what is said about it</a>
 						<span class="text-muted-foreground">: any topic, broken down by branch, month and source</span>
 					</p>
 					<ClaimsTable
-						scope={{ brandId: brand.id, cityId, month }}
+						scope={{ brandId: brand.id, cityId }}
 						topicsCityId={cityId}
-						scopeLabel={`What its branches' reviews and the posts about it said in ${city?.cityName ?? 'the city'} that month`} />
+						scopeLabel={`What its branches' reviews and the posts about it said in ${city?.cityName ?? 'the city'}`} />
 				{/key}
 			{/if}
-		{:else if tab === 'branches'}
+		{:else if tab === 'places'}
 			<BrandBranchesTab {brand} onChange={set} />
 		{:else if tab === 'competitors'}
 			{#if cityId}
@@ -336,16 +293,15 @@
 			{/if}
 		{:else if tab === 'signals'}
 			<BrandSignalsTab {brand} {cityId} />
-		{:else if tab === 'reports'}
-			<BrandReportsTab
+		{:else if tab === 'history'}
+			<BrandHistoryTab
 				{brand}
 				{cityId}
 				{month}
 				{configs}
+				{sales}
 				onBuild={(config) => buildAction.execute(config)}
 				building={buildAction.executing} />
-		{:else if tab === 'sales'}
-			<BrandSalesTab {brand} {sales} />
 		{:else if tab === 'settings'}
 			<BrandSettingsTab {brand} onChange={set} />
 		{/if}

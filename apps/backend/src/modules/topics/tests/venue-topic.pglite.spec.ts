@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -41,8 +42,8 @@ describe('VenueTopicService (pglite)', () => {
 		await em.flush();
 		const own = ownAccount(em, venue.brand, city, 'phosang');
 		let n = 0;
-		const mention = (cuisine: string, author: string) =>
-			em.create(Mention, {
+		const mention = (foods: string, author: string) => {
+			const m = em.create(Mention, {
 				post: em.create(SocialPost, {
 					city,
 					externalId: `vft-${n++}`,
@@ -54,9 +55,10 @@ describe('VenueTopicService (pglite)', () => {
 				}),
 				venue,
 				venueName: venue.name,
-				cuisine,
 				visited: true,
 			});
+			addFoods(em, m, foods.split(', '));
+		};
 		mention('Pho, Vietnamese', 'eater1');
 		mention('Pho', 'eater2');
 		// Its own account calling itself Thai twice says nothing about what others call it

@@ -97,10 +97,7 @@ export interface AdminDigestionStatementOutputDto extends StatementOutputDto {
 }
 
 /** A place agent A took from a post, and what matching made of it */
-export interface AdminDigestionMentionOutputDto extends Omit<
-	AdminMentionOutputDto,
-	'statements' | 'topics'
-> {
+export interface AdminDigestionMentionOutputDto extends Omit<AdminMentionOutputDto, 'statements'> {
 	isNewOpening: boolean;
 	matchedAt?: Date;
 }

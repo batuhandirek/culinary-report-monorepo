@@ -17,7 +17,6 @@ import { MentionExtractionService } from '../services/mention-extraction.service
 const answer = (venueName: string, isNewOpening: boolean) => ({
 	venueName,
 	locationHint: null,
-	cuisine: null,
 	city: 'Berlin',
 	visited: true,
 	isNewOpening,

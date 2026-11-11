@@ -190,7 +190,7 @@ export class AspectDiscoveryService {
 			}),
 			context: {
 				legend: index.aspectLegend(),
-				roots: index.aspects.filter(t => !t.parentKey).map(t => t.key),
+				roots: index.aspects.filter(t => !t.isA.length).map(t => t.key),
 			},
 		};
 	}
@@ -228,7 +228,7 @@ export class AspectDiscoveryService {
 					await this.topicService.create({
 						label: group.label!,
 						kind: TopicKindEnum.ASPECT,
-						parentKey: group.root!,
+						edges: [{ to: group.root!, type: 'is_a' }],
 						hint: group.hint ?? null,
 						discovered: true,
 					});

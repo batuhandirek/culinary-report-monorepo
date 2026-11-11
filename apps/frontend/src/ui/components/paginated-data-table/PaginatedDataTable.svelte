@@ -56,8 +56,11 @@
 		onFiltersChange = undefined,
 		onFetch = undefined,
 		rowHref = undefined,
+		rowClass = undefined,
 		expand = undefined,
 		rowKey = undefined,
+		dense = false,
+		bare = false,
 		noun = 'results',
 		emptyTitle = undefined,
 		emptyDescription = undefined,
@@ -311,7 +314,7 @@
 	// A list that fits its smallest page needs no pager; an empty one inside a card needs no
 	// footer at all (the page-filling table keeps its frame).
 	let hasPages = $derived(!settled || total > sizeOptions[0] || currentPage > 1);
-	let showFooter = $derived(fill || !settled || total > 0);
+	let showFooter = $derived(bare ? hasPages : fill || !settled || total > 0);
 
 	const count = (n: number) => n.toLocaleString('en-US');
 
@@ -405,9 +408,11 @@
 
 	const cellClass = (column: Column<T>, extra?: string) =>
 		cn(
-			'border-line border-b px-3 py-2 align-middle text-[0.8125rem] leading-5 whitespace-nowrap first:pl-4 last:pr-4',
+			'border-line border-b px-3 align-middle text-[0.8125rem] leading-5 whitespace-nowrap first:pl-4 last:pr-4',
+			dense ? 'py-1' : 'py-2',
 			alignClass(column),
 			isNumeric(column) && 'tabular-nums',
+			column.grow && 'w-full max-w-0',
 			column.class,
 			extra
 		);
@@ -435,6 +440,8 @@
 {#snippet text(column: Column<T>, value: string | number)}
 	{#if isBlank(value)}
 		<span class="text-faint">—</span>
+	{:else if column.grow}
+		<span class="block truncate" title={String(value)}>{value}</span>
 	{:else if column.truncate}
 		<span class="block truncate" style:max-width={`${column.truncate}ch`} title={String(value)}>
 			{value}
@@ -447,11 +454,15 @@
 {#snippet actionButton(action: PaginatedDataTableAction<T>, row: T)}
 	{@const ActionIcon = action.icon}
 	{@const href = action.href?.(row)}
+	<!-- A link off the site (a post on its platform) opens in a new tab -->
+	{@const away = !!href && /^https?:\/\//.test(href)}
 	<Button
 		variant="ghost"
 		size="icon-xs"
 		class={cn('text-muted-foreground hover:text-ink rounded-md', action.class)}
 		{href}
+		target={away ? '_blank' : undefined}
+		rel={away ? 'noreferrer' : undefined}
 		title={action.label}
 		aria-label={action.label}
 		onclick={href ? undefined : () => action.onClick?.(row)}>
@@ -461,7 +472,8 @@
 
 <div
 	class={cn(
-		'border-line bg-paper flex w-full min-w-0 flex-col overflow-hidden rounded-md border',
+		'bg-paper flex w-full min-w-0 flex-col overflow-hidden',
+		!bare && 'border-line rounded-md border',
 		fill && 'min-h-0 flex-1'
 	)}>
 	{#if hasBar}
@@ -559,6 +571,7 @@
 							<tr
 								class={cn(
 									'group/row hover:bg-sand/70 transition-colors [&:last-child>td]:border-b-0',
+									rowClass?.(row),
 									(href || expand) && 'cursor-pointer',
 									isOpen && 'bg-sand/70'
 								)}
@@ -671,7 +684,7 @@
 								{#if hasTrailingCell}
 									{@const rowActions = visibleActions(row)}
 									<td
-										class="border-line w-px border-b py-1 pr-3 pl-1 whitespace-nowrap">
+										class={cn('border-line w-px border-b pr-3 pl-1 whitespace-nowrap', dense ? 'py-0' : 'py-1')}>
 										<div class="flex items-center justify-end gap-0.5">
 											{#each rowActions as action (action.label)}
 												{#if action.type === 'separator'}
@@ -707,7 +720,8 @@
 									<td
 										colspan={columnCount}
 										class="border-line bg-sand/40 border-b px-4 py-4 align-top text-sm whitespace-normal">
-										{@render expand(row)}
+										<!-- No width of its own: the opened row fills the table's width but never widens it -->
+										<div class="w-0 min-w-full">{@render expand(row)}</div>
 									</td>
 								</tr>
 							{/if}

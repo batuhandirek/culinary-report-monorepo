@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { Search, X } from '@lucide/svelte';
-	import type { AdminChangeTermInputDto, AdminTermOutputDto, AdminTermsOutputDto, AdminTopicOutputDto, GetTermsParamsStatusEnum } from 'client';
+	import type {
+		AdminChangeTermInputDto,
+		AdminTermOutputDto,
+		AdminTermsOutputDto,
+		AdminUpdatedTermOutputDto,
+		GetTermsParamsStatusEnum
+	} from 'client';
 
 	import { untrack } from 'svelte';
 
 	import { page } from '$app/state';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
+	import TermDecisionEditor from '#components/admin/topics/TermDecisionEditor.svelte';
 	import { api } from '#lib/api.js';
 	import { topicPageHref } from '#lib/topic-format.js';
-	import { KIND_ITEMS, kindLabel } from '#lib/topic-kinds.js';
+	import { edgeLabel } from '#lib/topic-kinds.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import { notificationManager } from '#ui/lib/notification-manager.js';
@@ -16,17 +23,17 @@
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
 	import Input from '#ui/wrapped/Input.svelte';
-	import ResponsiveMultiCombobox from '#ui/wrapped/ResponsiveMultiCombobox.svelte';
 	import SkeletonRows from '#ui/wrapped/SkeletonRows.svelte';
 
 	// Every wording the city has seen — a dish named in a review or a post, one of Google's
-	// "people often mention" tags — kept as said and linked to zero, one or many topics of any
-	// kind (food and aspects alike): decided once, by its name when it is a topic's, else by the
-	// AI in the nightly pass, else here (an admin's choice is never
-	// changed). The AI's suggested topics for wordings no topic fits are the topics missing;
-	// creating one links those wordings at once. A link may open it on a status, a search, a topic
-	// or a suggestion (`?status=linked&topic=pasta`, `?status=all&q=carbonara`: a topic page's wordings).
-	// "Create topic" opens the Topics page's new-topic form filled with the suggestion
+	// "people often mention" tags — kept as said and pointing at one main topic or none: decided
+	// once, by its name when it is a topic's, else by the AI in the nightly pass, else here (an
+	// admin's choice is never changed). A wording is its topic (a spelling, a translation) or
+	// something narrower under it, with what else it is or has as modifiers; a row's Edit opens its
+	// decision (`TermDecisionEditor`). The narrower wordings, grouped by the name the AI would give
+	// each as a topic of its own, are the topics in the making: a group becomes one by itself at 15
+	// uses from 5 sources, or at once from a wording's editor. A link may open the tab on a status, a
+	// search, a topic or a proposal (`?status=linked&topic=pasta`, `?status=all&q=carbonara`).
 	interface Props {
 		cityId: string;
 	}
@@ -45,7 +52,7 @@
 	let status = $state<Status>(STATUSES.find((s) => s.value === initial.get('status'))?.value ?? 'unlinked');
 	let q = $state(initial.get('q') ?? '');
 	let search = $state(initial.get('q')?.trim() ?? '');
-	let suggestion = $state<string | null>(initial.get('suggestion'));
+	let proposal = $state<string | null>(initial.get('proposal'));
 	let topic = $state<string | null>(initial.get('topic'));
 
 	let data = $state<AdminTermsOutputDto | null>(null);
@@ -54,7 +61,7 @@
 		cityId,
 		status: status as GetTermsParamsStatusEnum,
 		...(search && { q: search }),
-		...(suggestion && { suggestion }),
+		...(proposal && { proposal }),
 		...(topic && { topicKey: topic })
 	});
 	const loader = createLoader(
@@ -82,35 +89,22 @@
 		loader.load({ ...query, offset });
 	};
 
-	// Every topic of the city, each labelled with its kind, the kinds of food first and the
-	// aspects last: what a wording can be linked to
-	let topics = $state<AdminTopicOutputDto[]>([]);
-	$effect(() => {
-		api.admin.getTopics({ cityId }).then((res) => (topics = res.topics));
-	});
-	const kindOrder = (kind: string) => {
-		const i = KIND_ITEMS.findIndex((k) => k.value === kind);
-		return i < 0 ? KIND_ITEMS.length : i;
-	};
-	const topicItems = $derived(
-		[...topics]
-			.sort((a, b) => kindOrder(a.kind) - kindOrder(b.kind) || a.label.localeCompare(b.label))
-			.map((t) => ({ value: t.key, label: `${t.label} · ${kindLabel(t.kind)}` }))
-	);
-	const topicLabel = (key: string) => topics.find((t) => t.key === key)?.label ?? key;
+	// The topic a `?topic=` filter names, as the row's own data labels it
+	const topicLabel = (key: string) =>
+		terms.flatMap((t) => [t.topic, ...t.modifiers]).find((t) => t?.key === key)?.label ?? key;
 
+	// The row whose decision is open
+	let editing = $state<number | null>(null);
+	const merge = (row: AdminTermOutputDto, saved: AdminUpdatedTermOutputDto) =>
+		(terms = terms.map((t) => (t.id === row.id ? ({ ...saved, notes: t.notes, tagVenues: t.tagVenues } as AdminTermOutputDto) : t)));
 	const changeAction = createAction(
 		(row: AdminTermOutputDto, change: AdminChangeTermInputDto) => api.admin.changeTerm(row.id, change),
 		{
 			onSuccess: (saved, [row]) => {
-				terms = terms.map((t) =>
-					t.id === row.id
-						? ({ ...t, topics: saved.topics, decidedBy: saved.decidedBy, suggestion: saved.suggestion } as AdminTermOutputDto)
-						: t
-				);
+				merge(row, saved);
 				notificationManager.addNotification({
-					title: saved.topics.length
-						? `"${row.name}" counts as ${saved.topics.map((t) => t.label).join(', ')}`
+					title: saved.topic
+						? `"${row.name}" ${saved.exact ? 'is' : 'is under'} ${saved.topic.label}`
 						: saved.decidedBy
 							? `"${row.name}" counts for no topic`
 							: `"${row.name}" waits for the AI`,
@@ -120,7 +114,6 @@
 		}
 	);
 
-	const newTopicHref = (label: string) => `/admin/topics?${new URLSearchParams({ new: label, kind: 'dish' })}`;
 	const DECIDED: Record<string, string> = { match: 'by its name', ai: 'by the AI', admin: 'by an admin' };
 	const plural = (n: number, one: string, many = `${one}s`) => `${n.toLocaleString('en-GB')} ${n === 1 ? one : many}`;
 	const share = $derived(data?.summary.uses ? Math.round((data.summary.linkedUses / data.summary.uses) * 100) : 0);
@@ -141,8 +134,8 @@
 		{:else}
 			<p class="text-muted-foreground m-0 mb-3 text-sm">
 				{plural(data.summary.linkedUses, 'use')} of {data.summary.uses.toLocaleString('en-GB')} — a note naming a wording, a
-				venue's Google tag carrying it — count for a topic ({share} %). Each wording is sorted once: by its name when it is
-				a topic's name, else by the AI in the nightly pass. Topics you pick here stay.
+				venue's Google tag carrying it — count for a topic ({share} %). Each wording is decided once: by its name when it is
+				a topic's name, else by the AI in the nightly pass. What you decide here stays.
 			</p>
 			{#if data.summary.pendingTerms}
 				<p class="ink-strip m-0 mb-3 text-sm">
@@ -156,9 +149,9 @@
 						{s.label}
 					</button>
 				{/each}
-				{#if suggestion}
-					<button type="button" class="chip text-xs" aria-pressed="true" onclick={() => (suggestion = null)}>
-						AI suggests "{suggestion}" <X class="ml-1 inline size-3" aria-hidden="true" />
+				{#if proposal}
+					<button type="button" class="chip text-xs" aria-pressed="true" onclick={() => (proposal = null)}>
+						Proposed as "{proposal}" <X class="ml-1 inline size-3" aria-hidden="true" />
 					</button>
 				{/if}
 				{#if topic}
@@ -183,21 +176,21 @@
 									{#if row.tagVenues}
 										· in {plural(row.tagVenues, "venue's Google tags", "venues' Google tags")}
 									{/if}
-									{#if row.topics.length}
-										·
-										{#each row.topics as t, i (t.key)}
-											{i ? ', ' : ''}<a class="text-beet underline-offset-2 hover:underline" href={topicPageHref(t.key, t.kind)}>{t.label}</a>
-										{/each}
-										{row.decidedBy ? DECIDED[row.decidedBy] : ''}
+									{#if row.topic}
+										· {row.exact ? 'is' : 'under'}
+										<a class="text-beet underline-offset-2 hover:underline" href={topicPageHref(row.topic.key, row.topic.kind)}>{row.topic.label}</a>{#each row.modifiers as m (m.key)},
+											{edgeLabel(m.type)}
+											<a class="text-beet underline-offset-2 hover:underline" href={topicPageHref(m.key, m.kind)}>{m.label}</a>{/each}
+										{row.decidedBy ? DECIDED[row.decidedBy] : '(provisional, waiting for the AI)'}
 									{:else if row.decidedBy}
 										· no topic, {DECIDED[row.decidedBy]}
 									{:else}
 										· waiting for the AI
 									{/if}
-									{#if row.suggestion && !row.topics.length}
-										· AI suggests a new topic:
-										<button type="button" class="text-beet underline-offset-2 hover:underline" onclick={() => (suggestion = row.suggestion!)}>
-											{row.suggestion}
+									{#if row.proposedLabel && !row.exact}
+										· as a topic of its own:
+										<button type="button" class="text-beet underline-offset-2 hover:underline" onclick={() => (proposal = row.proposedLabel!)}>
+											{row.proposedLabel}
 										</button>
 									{/if}
 								</div>
@@ -212,25 +205,30 @@
 										Automatic
 									</Button>
 								{/if}
-								{#if !row.decidedBy || row.topics.length}
+								{#if !row.decidedBy || row.topic || row.modifiers.length}
 									<Button
 										size="sm"
 										variant="ghost"
 										title="Counts for no topic"
-										onclick={() => changeAction.execute(row, { topicKeys: [] })}>
+										onclick={() => changeAction.execute(row, { topicKey: null })}>
 										None
 									</Button>
 								{/if}
-								<div class="w-56">
-									<ResponsiveMultiCombobox
-										items={topicItems}
-										selected={row.topics.map((t) => t.key)}
-										placeholder="Pick topics"
-										title={`Topics of "${row.name}"`}
-										class="h-9"
-										onChange={(keys) => changeAction.execute(row, { topicKeys: (keys ?? []).map(String) })} />
-								</div>
+								<Button size="sm" variant="outline" aria-expanded={editing === row.id} onclick={() => (editing = editing === row.id ? null : row.id)}>
+									{editing === row.id ? 'Close' : 'Edit'}
+								</Button>
 							</div>
+							{#if editing === row.id}
+								<div class="bg-tint rounded-md sm:col-span-2">
+									<TermDecisionEditor
+										{cityId}
+										term={row}
+										onSaved={(saved) => {
+											merge(row, saved);
+											editing = null;
+										}} />
+								</div>
+							{/if}
 						</li>
 					{/each}
 				</ul>
@@ -243,22 +241,22 @@
 		{/if}
 	</AdminPanel>
 
-	<AdminPanel title="Topics the AI would add" note={data?.suggestions.length || undefined}>
+	<AdminPanel title="Topics in the making" note={data?.proposals.length || undefined}>
 		{#if !data}
 			<SkeletonRows count={6} lines={2} trailing />
-		{:else if !data.suggestions.length}
+		{:else if !data.proposals.length}
 			<EmptyState
-				title="Every wording fits a topic"
-				hint="The AI suggests a topic when a wording fits none."
+				title="No narrower wordings yet"
+				hint="A wording that is something narrower than its topic is named here as the topic it would be."
 				ground="none"
 				size="sm" />
 		{:else}
 			<p class="text-muted-foreground m-0 mb-3 text-sm">
-				Wordings with no topic yet, under the topic the AI named for them. Creating one links its wordings at once; the AI
-				looks at the other wordings without a topic again in its next pass.
+				The city's narrower wordings, under the name the AI gives each as a topic of its own, whatever the spelling. A group
+				becomes a topic by itself once it is used 15 times in 5 sources (across every city); a wording's Edit makes it one now.
 			</p>
 			<ul class="m-0 list-none p-0">
-				{#each data.suggestions as s (s.label)}
+				{#each data.proposals as s (s.label)}
 					<li class="grid grid-cols-1 items-center gap-x-4 gap-y-2 border-t py-2.5 sm:grid-cols-[minmax(0,1fr)_auto]">
 						<div class="min-w-0">
 							<div class="font-medium">{s.label}</div>
@@ -266,18 +264,15 @@
 								{plural(s.terms, 'wording')} · {plural(s.uses, 'use')} — {s.examples.join(', ')}
 							</div>
 						</div>
-						<div class="flex items-center gap-2">
-							<Button
-								size="sm"
-								variant="ghost"
-								onclick={() => {
-									status = 'all';
-									suggestion = s.label;
-								}}>
-								Wordings
-							</Button>
-							<Button size="sm" variant="outline" href={newTopicHref(s.label)}>Create topic</Button>
-						</div>
+						<Button
+							size="sm"
+							variant="ghost"
+							onclick={() => {
+								status = 'all';
+								proposal = s.label;
+							}}>
+							Wordings
+						</Button>
 					</li>
 				{/each}
 			</ul>

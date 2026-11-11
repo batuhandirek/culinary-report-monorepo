@@ -126,6 +126,10 @@ export interface AdminListReviewsInputDto extends PaginationRequest {
 	cityId?: string & tags.Format<'uuid'>;
 	/** YYYY-MM */
 	month?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
+	/** Published on or after this UTC day, `2026-09-01` */
+	from?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'>;
+	/** Published on or before this UTC day (inclusive) */
+	to?: string & tags.Pattern<'^[0-9]{4}-[0-9]{2}-[0-9]{2}$'>;
 	/** Written, 3 stars or fewer, nobody answered (no owner reply, not marked answered): lowest first */
 	needsReply?: boolean;
 	stars?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<5>;
@@ -140,3 +144,9 @@ export interface AdminBranchReviewOutputDto extends AdminReviewOutputDto {
 }
 
 export interface AdminListReviewsOutputDto extends PaginatedResult<AdminBranchReviewOutputDto> {}
+
+/** One review on its own page: the branch, its brand and city, what it says and its claims */
+export interface AdminReviewDetailOutputDto extends AdminBranchReviewOutputDto {
+	brand: { id: string; name: string };
+	city: { id: string; name: string };
+}

@@ -14,7 +14,6 @@ import { mergePostParts } from '../util/post-claims-read.js';
 const place = (venueName: string, extra: Partial<PostClaimsAnswer['places'][number]> = {}) => ({
 	venueName,
 	locationHint: null,
-	cuisine: null,
 	city: null,
 	visited: true,
 	isNewOpening: false,

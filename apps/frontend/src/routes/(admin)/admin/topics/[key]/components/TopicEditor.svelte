@@ -1,17 +1,18 @@
 <script lang="ts">
 	import { Search } from '@lucide/svelte';
-	import type { AdminTopicOutputDto, AdminTrendsTopicOutputDto, AdminUpdateTopicInputDtoKindEnum } from 'client';
+	import type { AdminTopicOutputDto, AdminTrendsTopicOutputDto, AdminUpdateTopicInputDto, AdminUpdateTopicInputDtoKindEnum } from 'client';
 
+	import TopicEdgesEditor from '#components/admin/topics/TopicEdgesEditor.svelte';
 	import { api } from '#lib/api.js';
-	import { FOOD_KIND_ITEMS } from '#lib/topic-kinds.js';
+	import { type EdgeType, FOOD_KIND_ITEMS } from '#lib/topic-kinds.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import Input from '#ui/wrapped/Input.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
-	// A kind of food edited in place: label, type, what it sits under and how Google Trends searches
-	// it (a topic id, found here through Trends' own suggestions, else search words). The key stays:
-	// stored trends rows carry it. A parent under the topic itself is not offered (the API refuses it too).
+	// A kind of food edited in place: label, type, what it is and has (its edges, the first "is a"
+	// its parent in the tree) and how Google Trends searches it (a topic id, found here through
+	// Trends' own suggestions, else search words). The key stays: stored trends rows carry it.
 	interface Props {
 		topic: AdminTopicOutputDto;
 		topics: AdminTopicOutputDto[];
@@ -21,39 +22,16 @@
 
 	let { topic, topics, onSaved, onCancel }: Props = $props();
 
-	const NONE = '-';
 	// svelte-ignore state_referenced_locally
 	let label = $state(topic.label);
 	// svelte-ignore state_referenced_locally
 	let kind = $state<string>(topic.kind);
 	// svelte-ignore state_referenced_locally
-	let parentKey = $state(topic.parentKey ?? NONE);
+	let edges = $state<{ to: string; type: EdgeType }[]>(topic.edges.map((e) => ({ to: e.to, type: e.type as EdgeType })));
 	// svelte-ignore state_referenced_locally
 	let trendsTopicId = $state(topic.trendsTopicId ?? '');
 	// svelte-ignore state_referenced_locally
 	let trendsQuery = $state(topic.trendsQuery ?? '');
-
-	/** The topic and everything under it: none of them can be its parent */
-	const below = $derived.by(() => {
-		const out = [topic.key];
-		let grew = true;
-		while (grew) {
-			grew = false;
-			for (const t of topics)
-				if (t.parentKey && out.includes(t.parentKey) && !out.includes(t.key)) {
-					out.push(t.key);
-					grew = true;
-				}
-		}
-		return out;
-	});
-	const parentItems = $derived([
-		{ value: NONE, label: 'Nothing' },
-		...topics
-			.filter((t) => t.kind !== 'aspect' && !below.includes(t.key))
-			.sort((a, b) => a.label.localeCompare(b.label))
-			.map((t) => ({ value: t.key, label: t.label }))
-	]);
 
 	const idValid = $derived(!trendsTopicId.trim() || /^\/(m|g)\/[0-9A-Za-z_]+$/.test(trendsTopicId.trim()));
 	const saveAction = createAction(
@@ -61,7 +39,7 @@
 			api.admin.updateTopic(topic.id, {
 				label: label.trim(),
 				kind: kind as AdminUpdateTopicInputDtoKindEnum,
-				parentKey: parentKey === NONE ? null : parentKey,
+				edges: edges as AdminUpdateTopicInputDto['edges'],
 				trendsTopicId: trendsTopicId.trim() || null,
 				trendsQuery: trendsQuery.trim() || null
 			}),
@@ -86,7 +64,7 @@
 		e.preventDefault();
 		if (label.trim() && idValid) saveAction.execute();
 	}}>
-	<div class="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,10rem)_minmax(0,14rem)]">
+	<div class="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,10rem)]">
 		<label class="flex min-w-0 flex-col gap-1 text-sm">
 			<span class="text-muted-foreground text-xs">Label</span>
 			<Input bind:value={label} aria-label="Label" class="h-9" />
@@ -96,11 +74,10 @@
 			<span class="text-muted-foreground text-xs">Type</span>
 			<Select items={FOOD_KIND_ITEMS.map((k) => ({ value: k.value, label: k.label }))} bind:value={kind} size="sm" aria-label="Type" />
 		</label>
-		<label class="flex min-w-0 flex-col gap-1 text-sm">
-			<span class="text-muted-foreground text-xs">Under</span>
-			<Select items={parentItems} bind:value={parentKey} size="sm" aria-label="Under" />
-			<span class="text-muted-foreground text-xs">Its mentions count for the parent too.</span>
-		</label>
+	</div>
+	<div class="flex min-w-0 flex-col gap-1 text-sm">
+		<span class="text-muted-foreground text-xs">What it is</span>
+		<TopicEdgesEditor selfKey={topic.key} {topics} bind:edges />
 	</div>
 	<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 		<label class="flex min-w-0 flex-col gap-1 text-sm">

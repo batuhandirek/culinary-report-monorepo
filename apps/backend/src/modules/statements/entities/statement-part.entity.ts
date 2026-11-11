@@ -13,7 +13,7 @@ export type StatementPartRole = 'aspect' | 'food';
 /**
  * One thing a statement is about, an atom. An `aspect` part is the `Topic` of kind aspect agent B
  * chose ("waited 50 minutes" → Waiting). A `food` part is a wording as the source spelled it, the
- * `Term` ("Pommes", "vegan döner"); its topics are the term's links (`term_topics`), **joined at
+ * `Term` ("Pommes", "vegan döner"); its topics are the term's main topic and modifiers (`terms.topic_id`, `term_modifiers`), **joined at
  * read time, never copied**, so an admin's or the agent's decision on a wording moves every statement
  * naming it at once. "Who talked about X" = aspect parts of X or a descendant, plus food parts whose
  * term links X or a descendant. Written by `StatementPartsService` only.

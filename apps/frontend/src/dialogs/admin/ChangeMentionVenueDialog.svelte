@@ -20,7 +20,7 @@
 		// Any mention row: the generated client gives each endpoint its own enum twin
 		mention: Pick<
 			AdminMentionOutputDto,
-			'id' | 'venueName' | 'locationHint' | 'cuisine' | 'venue' | 'matchNote'
+			'id' | 'venueName' | 'locationHint' | 'venue' | 'matchNote'
 		> & { matchMethod?: string };
 		active?: boolean;
 		onChanged?: (mention: AdminMentionOutputDto) => void;
@@ -86,7 +86,7 @@
 
 		<div class="mt-4 flex flex-col gap-4">
 			<div class="text-muted-foreground text-xs">
-				{[mention.locationHint, mention.cuisine].filter(Boolean).join(' · ') || 'No location hint'}
+				{mention.locationHint || 'No location hint'}
 				· now {mention.venue ? `linked to ${mention.venue.name}` : 'not linked'}
 				({mention.matchMethod ?? 'not matched yet'})
 			</div>

@@ -12,7 +12,6 @@ import { reviewClaimsInput } from 'src/modules/pipeline/read-reviews/util/review
 import { claimLabelAspects, claimLabelsRules } from 'src/modules/statements/util/claim-labels.js';
 import { TermTopicAgent } from 'src/modules/topics/agents/term-topic.agent.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { termAnswerLinks, termTopicInputTopics } from 'src/modules/topics/util/term-topic-input.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
 import {
@@ -568,45 +567,14 @@ export class EvalReferenceService {
 		batch: TermCase[],
 		index: TopicIndex,
 		spent: (id: string, u: EvalUsage) => void,
-	) {
-		const spec = this.termTopicAgent.rulesFor();
-		const res = await this.termReferenceAgent.generate(
-			JSON.stringify({
-				topics: termTopicInputTopics(index),
-				terms: batch.map(c => ({ id: String(c.source.termId), name: c.source.name })),
-			}),
-			{ spec },
-			this.callOptions(),
-		);
-		const usage = usageOf(res);
-		this.checkModel(res.model);
-		const answers = new Map(res.object.terms.map(a => [a.id, a]));
-		let written = 0;
-		// The call's usage is spread over its wordings
-		const share: EvalUsage = _.mapValues(usage, v => Math.round(v / batch.length)) as EvalUsage;
-		for (const c of batch) {
-			const answer = answers.get(String(c.source.termId));
-			if (!answer) continue;
-			const { keys, relations, suggestion } = termAnswerLinks(answer, index);
-			c.reference = {
-				model: res.model,
-				specHash: sha1(spec),
-				at: new Date().toISOString(),
-				usage: share,
-				notes: null,
-				topics: keys.map(key => ({ key, relation: relations.get(key)! })),
-				alsoAcceptable: _.uniq(
-					answer.alsoAcceptable
-						.map(k => (index.get(k) ? k : index.exact(k)))
-						.filter((k): k is string => !!k && !keys.includes(k)),
-				),
-				suggestion,
-			};
-			writeCase(c);
-			written++;
-		}
-		spent(batch[0].id, usage);
-		return written;
+	): Promise<number> {
+		// TODO(topic-graph): term references are off. The reference agent answers the old term × topic
+		// links (`same` / `kind_of` / `with`), which agent C no longer gives; remade with the eval
+		void batch;
+		void index;
+		void spent;
+		void this.termReferenceAgent;
+		throw new Error(TERM_EVAL_OFF);
 	}
 }
 
@@ -637,3 +605,7 @@ const normalizeClaim = (
 		kinds: _.uniq(claim.alsoAcceptable.kinds),
 	},
 });
+
+/** TODO(topic-graph): what every term command of the eval answers until its term part is remade */
+export const TERM_EVAL_OFF =
+	'The eval\'s term part is off since the topic graph: a wording now has one main topic, `exact` and modifiers, and the term references on disk are the old term × topic links. Run the eval with --kind review,post.';

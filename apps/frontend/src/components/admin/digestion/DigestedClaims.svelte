@@ -30,9 +30,11 @@
 		statements: AdminDigestionStatementOutputDto[];
 		/** The source's texts, for checking each quote against */
 		texts: (string | undefined)[];
+		/** One claim's id: ringed, the others quieter (an opened claim row) */
+		focus?: number;
 	}
 
-	let { statements, texts }: Props = $props();
+	let { statements, texts, focus }: Props = $props();
 
 	const SENTIMENTS: Record<string, { icon: Component; tone: string; rule: string; label: string }> = {
 		positive: { icon: ThumbsUp, tone: 'text-success', rule: 'border-l-success', label: 'positive' },
@@ -62,7 +64,12 @@
 		{@const foods = foodPartsOf(statement)}
 		{@const KindIcon = statement.kind ? KIND_ICONS[statement.kind] : undefined}
 		{@const found = statement.quote ? quoteFound(statement.quote, texts) : false}
-		<li class={['bg-paper border-line flex gap-2.5 rounded-md border border-l-[3px] px-3 py-2', look.rule]}>
+		<li
+			class={[
+				'bg-paper border-line flex gap-2.5 rounded-md border border-l-[3px] px-3 py-2',
+				look.rule,
+				focus != null && (statement.id === focus ? 'ring-grape ring-2' : 'opacity-60')
+			]}>
 			<span class={['mt-0.5 shrink-0', look.tone]} title={look.label}>
 				<look.icon class="size-4" aria-label={look.label} />
 			</span>

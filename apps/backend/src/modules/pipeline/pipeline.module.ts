@@ -28,6 +28,7 @@ import { TiktokSearchWorkflow } from './atoms/tiktok-search/workflows/tiktok-sea
 import { AdminBackfillReviewsController } from './backfill-reviews/controllers/admin.backfill-reviews.controller.js';
 import { BackfillReviewsWorkflow } from './backfill-reviews/workflows/backfill-reviews.workflow.js';
 import { AdminBrandBranchSearchController } from './brand-branch-search/controllers/admin.brand-branch-search.controller.js';
+import { AdminRefreshVenueDetailsController } from './refresh-venue-details/controllers/admin.refresh-venue-details.controller.js';
 import { BrandBranchSearchWorkflow } from './brand-branch-search/workflows/brand-branch-search.workflow.js';
 import { PressClassificationAgent } from './classify-press/agents/press-classification.agent.js';
 import { ClassifyPressSchedule } from './classify-press/schedules/classify-press.schedule.js';
@@ -74,6 +75,7 @@ import { AdminReflagOpeningsController } from './reflag-openings/controllers/adm
 import { ReflagOpeningsWorkflow } from './reflag-openings/workflows/reflag-openings.workflow.js';
 import { RefreshVenueDetailsSchedule } from './refresh-venue-details/schedules/refresh-venue-details.schedule.js';
 import { RefreshVenueDetailsWorkflow } from './refresh-venue-details/workflows/refresh-venue-details.workflow.js';
+import { AdminRereadPostsController } from './reread-posts/controllers/admin.reread-posts.controller.js';
 import { RereadPostsSchedule } from './reread-posts/schedules/reread-posts.schedule.js';
 import { RereadPostsWorkflow } from './reread-posts/workflows/reread-posts.workflow.js';
 import { RereadReviewsBacklogService } from './reread-reviews/services/reread-reviews-backlog.service.js';
@@ -132,8 +134,10 @@ import { ReportBrandsService } from './shared/services/report-brands.service.js'
 	controllers: [
 		AdminBackfillReviewsController,
 		AdminBrandBranchSearchController,
+		AdminRefreshVenueDetailsController,
 		AdminCreatorWatchController,
 		AdminReflagOpeningsController,
+		AdminRereadPostsController,
 	],
 	providers: [
 		InstagramHashtagsWorkflow,

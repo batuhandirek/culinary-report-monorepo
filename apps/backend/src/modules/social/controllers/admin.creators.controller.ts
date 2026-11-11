@@ -80,8 +80,10 @@ export class AdminCreatorsController {
 			accounts: detail.accounts.map(accountOutput),
 			months: detail.months,
 			brands: detail.brands,
+			brandCount: detail.brandCount,
 			posts: detail.posts,
 			views: detail.views,
+			recent: detail.recent,
 			foundBy: detail.foundBy,
 			handleChanges: detail.handleChanges.map(change => {
 				const out = wrap(change).serialize({

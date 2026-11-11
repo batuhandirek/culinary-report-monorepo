@@ -13,7 +13,7 @@ import { validateEnv } from 'src/shared/util/env.js';
 
 import { isLlmModelChoice, LlmModelChoice } from '../constants/llm-models.constant.js';
 
-/** `term-topic:full,topic-discovery:openai/gpt-5.4` → agent id → choice */
+/** `term-topic:full,post-claims:openai/gpt-5.4` → agent id → choice */
 const parseAgentModels = (raw: unknown): Record<string, LlmModelChoice> => {
 	if (raw && typeof raw === 'object') return raw as Record<string, LlmModelChoice>;
 	const out: Record<string, LlmModelChoice> = {};

@@ -17,6 +17,10 @@ export interface ColumnBase<T = unknown> {
 	// Cap the cell at this many characters' width; the rest is ellipsized and the full
 	// text goes in `title`. Only for plain text (`value` and `link` columns).
 	truncate?: number;
+	// Take the width the other columns leave, never more: the table fits its box and the text
+	// is cut to one line, the full text in `title` (`value` and `link`; a `snippet` cuts its own).
+	// One per table, the free text (a review, a caption, a claim).
+	grow?: boolean;
 	// The server sort values this column stands for: makes the header a sort toggle.
 	sort?: { asc?: string; desc?: string };
 }
@@ -181,11 +185,19 @@ export interface PaginatedDataTableProps<
 	// Where a row leads. The whole row becomes the link (cmd/ctrl-click opens a new tab)
 	// and a chevron at its end is the real anchor.
 	rowHref?: (row: T) => string | undefined;
+	// A row's own background or tone (a sentiment's faint tint): classes on its `<tr>`, under the
+	// hover and open states.
+	rowClass?: (row: T) => string | undefined;
 	// A row's details, drawn under it across every column when it is opened: a click on the row
 	// (when it has no `rowHref`) or on its chevron. Rendered only while open, so it may fetch.
 	expand?: Snippet<[T]>;
 	// A row's identity, so an open row stays open across a refetch; the row's index otherwise.
 	rowKey?: (row: T) => string;
+	// Short rows (28px): a long list of one-line rows (the claims).
+	dense?: boolean;
+	// Inside a card that frames it (a detail page's card): no border of its own, and no footer
+	// while it fits on one page.
+	bare?: boolean;
 	// What the table lists, for its empty state and count: "orders", "users".
 	noun?: string;
 	emptyTitle?: string;

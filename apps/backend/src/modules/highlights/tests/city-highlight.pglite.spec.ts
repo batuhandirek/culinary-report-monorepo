@@ -81,13 +81,7 @@ describe('CityHighlightService (pglite)', () => {
 				postedAt: new Date(`2026-09-${opts.day ?? '10'}T12:00:00Z`),
 			});
 			for (const v of venues) {
-				em.create(Mention, {
-					post: p,
-					venue: v,
-					venueName: v.name,
-					cuisine: 'Ramen',
-					visited: true,
-				});
+				em.create(Mention, { post: p, venue: v, venueName: v.name, visited: true });
 			}
 		};
 		// Sori: three posts by others; its own account posts twice with more views than anyone

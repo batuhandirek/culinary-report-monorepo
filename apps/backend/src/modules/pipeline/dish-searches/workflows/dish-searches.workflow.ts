@@ -11,7 +11,6 @@ import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-st
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import { durableNow, settleHandles } from 'src/modules/durable-workflows/util/durable-steps.js';
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { VenueScrapeSourceEnum } from 'src/modules/venues/constants/venue-status.constant.js';
 import {
@@ -41,7 +40,6 @@ export class DishSearchesWorkflow {
 		private readonly durable: DurableWorkflowsService,
 		private readonly cityService: CityService,
 		private readonly dishSearchService: DishSearchService,
-		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
 		private readonly places: PlacesWorkflow,
 	) {}
@@ -79,7 +77,6 @@ export class DishSearchesWorkflow {
 
 	@DurableStep({ name: 'refresh topics' })
 	private async refreshTopics(cityId: string): Promise<void> {
-		await this.mentionTopicService.relink({ cityId });
 		await this.venueTopicService.refreshCity(cityId);
 	}
 

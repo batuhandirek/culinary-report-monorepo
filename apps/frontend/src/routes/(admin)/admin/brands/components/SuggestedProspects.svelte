@@ -163,7 +163,7 @@
 										variant="ghost"
 										size="sm"
 										icon={ArrowUpRight}
-										href={`/admin/brands/${row.id}?tab=sales`}>
+										href={`/admin/brands/${row.id}?tab=history`}>
 										Open
 									</Button>
 								{:else}

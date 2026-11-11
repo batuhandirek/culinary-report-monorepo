@@ -5,6 +5,8 @@
 		label: string;
 		/** What it covers (an aspect's hint) */
 		hint?: string;
+		/** Its parents' names, top first */
+		path?: string[];
 	}
 </script>
 
@@ -50,6 +52,8 @@
 	const aspectNodes = $derived(tree?.filter((n) => n.kind === 'aspect') ?? null);
 	const foodNodes = $derived(tree?.filter((n) => n.kind !== 'aspect') ?? null);
 	let aspectOpen = $state(false);
+	// "Service › Advice": what the picker's hover says, where the chip shows only the last name
+	const fullName = (pick: TopicPick) => [...(pick.path ?? []), pick.label].join(' › ');
 	let foodOpen = $state(false);
 
 	// A scope picker lists the view's rows of its dimension, the picker's own filter left out
@@ -87,7 +91,7 @@
 {/snippet}
 
 {#snippet what()}
-	<ExplorePicker label="Aspect" value={aspect?.label} hint={aspect?.hint ? `${aspect.label}: ${aspect.hint}` : undefined} wide bind:open={aspectOpen} onClear={() => onTopic('aspect', undefined)}>
+	<ExplorePicker label="Aspect" value={aspect?.label} hint={aspect ? fullName(aspect) + (aspect.hint ? `: ${aspect.hint}` : '') : undefined} wide bind:open={aspectOpen} onClear={() => onTopic('aspect', undefined)}>
 		{#if treeFailed && !tree}
 			<ErrorState onRetry={onRetryTree} size="sm" ground="none" />
 		{:else}
@@ -102,7 +106,7 @@
 				}} />
 		{/if}
 	</ExplorePicker>
-	<ExplorePicker label="Food & drink" value={food?.label} wide bind:open={foodOpen} onClear={() => onTopic('food', undefined)}>
+	<ExplorePicker label="Food & drink" value={food?.label} hint={food ? fullName(food) : undefined} wide bind:open={foodOpen} onClear={() => onTopic('food', undefined)}>
 		{#if treeFailed && !tree}
 			<ErrorState onRetry={onRetryTree} size="sm" ground="none" />
 		{:else}

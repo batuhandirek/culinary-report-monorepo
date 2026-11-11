@@ -1,5 +1,11 @@
 <script lang="ts">
-	import type { AdminStatementRowOutputDto, AdminStatementsSummaryOutputDto, AdminTopicOutputDto } from 'client';
+	import { Quote } from '@lucide/svelte';
+	import type {
+		AdminExploreGroupsOutputDto,
+		AdminStatementRowOutputDto,
+		AdminStatementsSummaryOutputDto,
+		AdminTopicOutputDto
+	} from 'client';
 
 	import {
 		ListStatementsParamsKindEnum,
@@ -9,20 +15,37 @@
 		ListStatementsParamsSubjectEnum
 	} from 'client';
 
+	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
+	import DateRangeFilter from '#components/admin/DateRangeFilter.svelte';
+	import PlatformIcon from '#components/admin/detail/PlatformIcon.svelte';
+	import DigestionDetail from '#components/admin/digestion/DigestionDetail.svelte';
+	import ClaimGroups from '#components/admin/statements/ClaimGroups.svelte';
 	import { api } from '#lib/api.js';
-	import { authorLabel, monthLabel, PLATFORM_LABELS, recentMonths, sentimentVariant } from '#lib/culinary.js';
-	import { amountLabel, aspectOf, foodPartsOf, KIND_LABELS } from '#lib/statements.js';
+	import { authorLabel, monthLabel, PLATFORM_LABELS } from '#lib/culinary.js';
+	import { amountLabel, aspectOf, aspectPath, foodPartsOf, KIND_ICONS, KIND_LABELS, sentimentLook } from '#lib/statements.js';
 	import { aspectPageHref } from '#lib/topic-format.js';
 	import type { Column, Filter } from '#ui/components/paginated-data-table/index.js';
 	import PaginatedDataTable from '#ui/components/paginated-data-table/PaginatedDataTable.svelte';
+	import { createLoader } from '#ui/lib/loader.svelte.js';
+	import * as Tabs from '#ui/primitives-new/tabs/index.js';
+	import ErrorState from '#ui/wrapped/ErrorState.svelte';
+	import Tooltip from '#ui/wrapped/Tooltip.svelte';
 
 	// What agents A and B made of the sources: every claim of the scope (a city's month on the
-	// Trends page, a brand's or a branch's on theirs), one row each, with its sentiment, aspect, food
-	// wordings, number, what it is about and where it was said (the row opens the source). The strip
-	// above is the whole scope, whatever the table filters: how it was split and how much was read.
-	// With `explore` it lists an Explore view's claims instead (its own chips narrow them), with no
-	// strip and only the text and meaning searches.
+	// Trends page, a brand's or a branch's on theirs), one line each, faintly tinted by its
+	// sentiment, opening in place on its source (the review or the post, every step's result) with
+	// the claim ringed and its quote marked louder: its sentiment as a dot; the claim cut to the
+	// line, its kind as an icon when it is news (a change, a new item, a deal, an event, a
+	// question, a verdict), its number as a tag and the source's own words on hover; its aspect
+	// beside its food wordings; the source's platform icon (who and where on hover), the place or
+	// the city, and the day. On an aspect's page a row names its aspect
+	// only when it is a finer one under it. The strip above is the whole scope, whatever
+	// the table filters: how it was split and how much was read. With `explore` it lists an Explore
+	// view's claims instead (its own chips narrow them), with no strip and only the text and meaning
+	// searches. A brand's, a branch's or an aspect's claims are narrowed by days, like their Posts
+	// and Reviews tabs (the date range, `?from=&to=`); a city's month is fixed.
 	interface Props {
 		/** Whose claims, fixed: a city's month, a brand's (its branches' reviews, posts about it) or a branch's; every month unless `month` is given */
 		scope: { cityId?: string; brandId?: string; venueId?: string; month?: string };
@@ -38,9 +61,59 @@
 
 	let { scope, topicsCityId, scopeLabel = 'Every review and post here, whatever the table below filters', explore, aspect }: Props = $props();
 
+	// Days, when the scope is not one month and not an Explore view: the table's own date range
+	// (`?from=&to=`, every day without), the strip's figures following it
+	const dated = $derived(!scope.month && !explore);
+	const isDay = (v: string | null) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
+	const from = $derived(dated ? isDay(page.url.searchParams.get('from')) : undefined);
+	const to = $derived(dated ? isDay(page.url.searchParams.get('to')) : undefined);
+	const days = $derived({ ...(from && { from }), ...(to && { to }) });
+	const setRange = (range: { from?: string; to?: string }) => {
+		const url = new URL(page.url.href);
+		for (const key of ['from', 'to', 'page'] as const) {
+			const value = key === 'page' ? undefined : range[key];
+			if (value) url.searchParams.set(key, value);
+			else url.searchParams.delete(key);
+		}
+		goto(url, { replace: true, reset: false });
+	};
+
+	// A brand's or a branch's claims also read grouped by meaning, as Explore groups them (its
+	// `getExploreGroups`): over the months the dates cover, the last 24 up to now without (its most)
+	const groupable = $derived(dated && !aspect && !!(scope.brandId || scope.venueId));
+	let shown = $state<'all' | 'groups'>('all');
+	let groupBar = $state<{ similarity?: number; minClaims?: number }>({});
+	let groups = $state<AdminExploreGroupsOutputDto | null>(null);
+	const groupsLoader = createLoader((q: Parameters<typeof api.admin.getExploreGroups>[0]) => api.admin.getExploreGroups(q), {
+		onSuccess: (res) => (groups = res)
+	});
+	const shiftMonth = (month: string, n: number) => {
+		const [y, m] = month.split('-').map(Number);
+		return new Date(Date.UTC(y, m - 1 + n, 1)).toISOString().slice(0, 7);
+	};
+	const groupsQuery = $derived.by(() => {
+		const toMonth = (to ?? new Date().toISOString()).slice(0, 7);
+		const earliest = shiftMonth(toMonth, -23);
+		const fromMonth = from && from.slice(0, 7) > earliest ? from.slice(0, 7) : earliest;
+		return {
+			cityId: scope.cityId ?? topicsCityId,
+			...(scope.brandId && { brandId: scope.brandId }),
+			...(scope.venueId && { venueId: scope.venueId }),
+			from: fromMonth,
+			to: toMonth,
+			...groupBar
+		};
+	});
+	const groupsKey = $derived(groupable && shown === 'groups' ? JSON.stringify(groupsQuery) : '');
+	$effect(() => {
+		if (!groupsKey) return;
+		groups = null;
+		groupsLoader.load(JSON.parse(groupsKey));
+	});
+
 	let summary = $state<AdminStatementsSummaryOutputDto | null>(null);
 	$effect(() => {
-		if (!explore && !aspect) api.admin.getStatementsSummary(scope).then((res) => (summary = res));
+		if (!explore && !aspect) api.admin.getStatementsSummary({ ...scope, ...days }).then((res) => (summary = res));
 	});
 
 	// The aspects to filter by, each root followed by the aspects under it
@@ -62,11 +135,12 @@
 			])
 	);
 
-	const MONTHS = recentMonths(12).map((m) => ({ name: monthLabel(m), value: m }));
-	const SEARCHES: Filter[] = [{ key: 'q', name: 'Search', type: 'text', placeholder: 'Words in the claim…' }];
-	const FILTERS: Filter[] = $derived(explore ? SEARCHES : [
+	// One filter bar for every claims table. On Explore, the page's own pickers already narrow the
+	// view by months, source, about, kind and topic (its figures and tree too): the table keeps
+	// only what they don't, the words, the sentiment and the parts.
+	const EXPLORE_KEYS = ['q', 'sentiment', 'parts'];
+	const ALL_FILTERS: Filter[] = $derived([
 		{ key: 'q', name: 'Search', type: 'text', placeholder: 'Words in the claim…' },
-		...(scope.month ? [] : [{ key: 'month', name: 'Month', type: 'select', options: MONTHS } satisfies Filter]),
 		{
 			key: 'sourceKind',
 			name: 'Source',
@@ -121,6 +195,7 @@
 			]
 		}
 	]);
+	const FILTERS: Filter[] = $derived(ALL_FILTERS.filter((f) => !explore || EXPLORE_KEYS.includes(f.key)));
 
 	const aboutOf = (row: AdminStatementRowOutputDto) =>
 		row.review
@@ -133,82 +208,34 @@
 	// A brand's own post about itself is not word of mouth: said so in the source
 	const isOwnPost = (row: AdminStatementRowOutputDto) =>
 		!!row.post?.account?.brand && row.post.account.brand.id === row.mention?.brand?.id;
-	const sourceOf = (row: AdminStatementRowOutputDto) =>
-		row.review
-			? `${row.review.platform === 'tripadvisor' ? 'TripAdvisor' : 'Google'} review${row.review.stars ? ` · ${row.review.stars}★` : ''}`
-			: row.post
-				? `${PLATFORM_LABELS[row.post.platform] ?? row.post.platform} · ${authorLabel(row.post.platform, row.post.author)}${isOwnPost(row) ? ' (own post)' : ''}`
-				: '';
-	const sourceHref = (row: AdminStatementRowOutputDto) =>
-		row.post
-			? `/admin/posts/${row.post.id}`
-			: row.review
-				? `/admin/venues/${row.review.venue.id}?tab=reviews`
-				: undefined;
+	const day = (value: string | Date | null | undefined) => {
+		if (!value) return '';
+		const d = new Date(value);
+		return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', ...(d.getFullYear() !== new Date().getFullYear() && { year: '2-digit' }) });
+	};
+	const sourceLine = (row: AdminStatementRowOutputDto) =>
+		[
+			row.review
+				? `${row.review.platform === 'tripadvisor' ? 'TripAdvisor' : 'Google'}${row.review.stars ? ` ${row.review.stars}★` : ''}`
+				: row.post
+					? `${PLATFORM_LABELS[row.post.platform] ?? row.post.platform} ${authorLabel(row.post.platform, row.post.author)}${isOwnPost(row) ? ' (own)' : ''}`
+					: '',
+			day(row.saidAt)
+		]
+			.filter(Boolean)
+			.join(' · ');
 
+	// One line a claim: the rest is in tooltips, and the row opens on its source in place
 	const ALL_COLUMNS: Column<AdminStatementRowOutputDto>[] = [
-		{ type: 'date', name: 'Said', format: 'date', value: (row) => row.saidAt },
-		{
-			type: 'value',
-			name: 'Claim',
-			truncate: 90,
-			value: (row) => (row.text ? row.text : { value: 'named a dish', class: 'text-muted-foreground italic' })
-		},
-		{
-			type: 'value',
-			name: 'Quote',
-			label: 'In their words',
-			truncate: 60,
-			value: (row) => (row.quote ? { value: `“${row.quote}”`, class: 'text-muted-foreground' } : '')
-		},
-		{
-			type: 'badge',
-			name: 'Sentiment',
-			value: (row) => row.sentiment ?? 'not read',
-			variant: (row) => (row.sentiment ? sentimentVariant(row.sentiment) : 'quiet')
-		},
-		{
-			type: 'link',
-			name: 'Aspect',
-			truncate: 32,
-			if: (row) => !!aspectOf(row),
-			href: (row) => aspectPageHref(aspectOf(row)!.key),
-			value: (row) => {
-				const a = aspectOf(row)!;
-				return a.root !== a.key ? `${a.rootLabel} › ${a.label}` : a.label;
-			}
-		},
-		{
-			type: 'value',
-			name: 'Foods',
-			truncate: 30,
-			value: (row) => foodPartsOf(row).map((f) => f.name).join(', ')
-		},
-		{
-			type: 'value',
-			name: 'Number',
-			numeric: true,
-			value: (row) => (row.amount != null && row.unit ? amountLabel(row.amount, row.unit) : '')
-		},
-		{
-			type: 'badge',
-			name: 'Kind',
-			value: (row) => (row.kind ? (KIND_LABELS[row.kind] ?? row.kind) : null),
-			variant: (row) => (row.kind === 'change' || row.kind === 'new_item' || row.kind === 'deal' ? 'warning' : 'quiet')
-		},
-		{
-			type: 'value',
-			name: 'About',
-			truncate: 28,
-			value: (row) => (row.subject === 'place' ? aboutOf(row) : { value: aboutOf(row), class: 'text-muted-foreground' })
-		},
-		{ type: 'value', name: 'Source', truncate: 30, value: sourceOf }
+		{ type: 'snippet', name: 'Sentiment', label: '', class: 'w-0 pr-0', snippet: sentimentCell },
+		{ type: 'snippet', name: 'Claim', grow: true, snippet: claimCell },
+		{ type: 'snippet', name: 'About', label: 'Aspect · foods', class: 'max-w-[14rem]', snippet: aboutCell },
+		{ type: 'snippet', name: 'Where', class: 'max-w-[16rem]', snippet: whereCell }
 	];
-	// A branch's claims are all about it: no "About" column there
-	const COLUMNS = $derived(ALL_COLUMNS.filter((c) => !(scope.venueId && c.name === 'About')));
+	const COLUMNS = ALL_COLUMNS;
 
 	// The scope is fixed: the page mounts the table again when it changes
-	const filters = $derived(explore ? { ...explore } : { ...scope, ...(aspect && { aspect }) });
+	const filters = $derived(explore ? { ...explore } : { ...scope, ...days, ...(aspect && { aspect }) });
 
 	const listStatements = (params: Parameters<typeof api.admin.listStatements>[0]) =>
 		explore
@@ -231,6 +258,64 @@
 	];
 </script>
 
+{#snippet sentimentCell(row: AdminStatementRowOutputDto)}
+	{@const look = sentimentLook(row.sentiment)}
+	<span class={['block size-2.5 rounded-full', look.dot]} title={look.label}><span class="sr-only">{look.label}</span></span>
+{/snippet}
+
+{#snippet claimCell(row: AdminStatementRowOutputDto)}
+	{@const KindIcon = row.kind ? KIND_ICONS[row.kind] : undefined}
+	<div class="flex min-w-0 items-center gap-1.5">
+		{#if KindIcon}
+			<Tooltip text={KIND_LABELS[row.kind!] ?? row.kind}><KindIcon class="text-beet size-3.5 shrink-0" aria-label={KIND_LABELS[row.kind!] ?? row.kind} /></Tooltip>
+		{/if}
+		<span class={['min-w-0 truncate', !row.text && 'text-muted-foreground italic']} title={row.quote ? `${row.text ?? ''}\n\nIn their words: “${row.quote}”` : (row.text ?? undefined)}>
+			{row.text ?? 'named a dish'}
+		</span>
+		{#if row.quote}<Quote class="text-faint size-3 shrink-0" aria-label="Has the source's own words" />{/if}
+		{#if row.amount != null && row.unit}
+			<span class="bg-wash text-ink ml-auto shrink-0 rounded px-1.5 text-xs font-medium tabular-nums">{amountLabel(row.amount, row.unit)}</span>
+		{/if}
+	</div>
+{/snippet}
+
+{#snippet aboutCell(row: AdminStatementRowOutputDto)}
+	<!-- On an aspect's page its own name would fill every row: only a finer aspect under it shows -->
+	{@const a = aspectOf(row)?.key === aspect ? undefined : aspectOf(row)}
+	{@const foods = foodPartsOf(row).map((f) => f.name).join(', ')}
+	<div class="flex min-w-0 items-baseline gap-1.5">
+		{#if a}
+			<Tooltip text={aspectPath(a)} class="min-w-0 shrink-0">
+				<a
+					class="text-ink decoration-line hover:decoration-ink truncate underline underline-offset-4"
+					href={aspectPageHref(a.key)}
+					onclick={(e) => e.stopPropagation()}>{a.label}</a>
+			</Tooltip>
+		{/if}
+		{#if foods}<span class="text-muted-foreground min-w-0 truncate text-xs" title={foods}>{foods}</span>{/if}
+	</div>
+{/snippet}
+
+{#snippet whereCell(row: AdminStatementRowOutputDto)}
+	{@const platform = row.review?.platform ?? row.post?.platform}
+	<div class="flex min-w-0 items-center gap-1.5">
+		{#if platform}<PlatformIcon {platform} tip={sourceLine(row)} class="text-muted-foreground" />{/if}
+		{#if row.review?.stars}<span class="text-xs font-medium tabular-nums">{row.review.stars}★</span>{/if}
+		{#if !scope.venueId}
+			<span class={['min-w-0 truncate', row.subject !== 'place' && 'text-muted-foreground']} title={aboutOf(row)}>{aboutOf(row)}</span>
+		{/if}
+		<span class="text-muted-foreground ml-auto shrink-0 pl-1 text-xs tabular-nums">{day(row.saidAt)}</span>
+	</div>
+{/snippet}
+
+{#snippet dateRange()}
+	<DateRangeFilter {from} {to} onChange={setRange} />
+{/snippet}
+
+{#snippet source(row: AdminStatementRowOutputDto)}
+	<DigestionDetail postId={row.post?.id} reviewId={row.review?.id} focus={row.id} />
+{/snippet}
+
 <div class="flex flex-col gap-5 pb-12">
 	{#if !explore && !aspect}
 	<AdminPanel title="Claims" note={scopeLabel}>
@@ -249,6 +334,29 @@
 	</AdminPanel>
 	{/if}
 
+	{#if groupable}
+		<div class="-mb-2 flex flex-wrap items-center gap-2">
+			<Tabs.Root bind:value={shown}>
+				<Tabs.List>
+					<Tabs.Trigger value="all">All</Tabs.Trigger>
+					<Tabs.Trigger value="groups">
+						Grouped by meaning{#if groups?.groups.length}<span class="font-term text-base leading-none opacity-70">{groups.groups.length}</span>{/if}
+					</Tabs.Trigger>
+				</Tabs.List>
+			</Tabs.Root>
+			<div class="ml-auto">{@render dateRange()}</div>
+		</div>
+	{/if}
+
+	{#if groupable && shown === 'groups'}
+		<AdminPanel title="Grouped by meaning" note={`${monthLabel(groupsQuery.from)} – ${monthLabel(groupsQuery.to)}`}>
+			{#if groupsLoader.error && !groups}
+				<ErrorState onRetry={() => groupsLoader.load(JSON.parse(groupsKey))} />
+			{:else}
+				<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} />
+			{/if}
+		</AdminPanel>
+	{:else}
 	<PaginatedDataTable
 		syncWithSearchParams
 		{filters}
@@ -257,7 +365,12 @@
 		limit={50}
 		availableFilters={FILTERS}
 		columns={COLUMNS}
-		rowHref={sourceHref}
+		expand={source}
+		dense
+		toolbar={dated && !groupable ? dateRange : undefined}
+		rowKey={(row) => String(row.id)}
+		rowClass={(row) => sentimentLook(row.sentiment).tint}
 		emptyTitle="No claim matches"
 		emptyDescription="The month's reviews and posts hold no claim with these filters." />
+	{/if}
 </div>

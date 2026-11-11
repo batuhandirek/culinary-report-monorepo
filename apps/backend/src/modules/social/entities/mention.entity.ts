@@ -2,7 +2,6 @@ import { Collection, type Rel } from '@mikro-orm/core';
 import { Entity, Enum, Index, ManyToOne, OneToMany, Property } from '@mikro-orm/decorators/legacy';
 
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
-import { MentionTopic } from 'src/modules/topics/entities/mention-topic.entity.js';
 import { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { MikroOrmSimpleEntityAbstractClass } from 'src/shared/abstractions/mikro-orm-simple-entity.abstract-class.js';
@@ -43,9 +42,6 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 
 	// Neighbourhood, street, station or landmark the post gives
 	@Property({ type: 'text', nullable: true })
 	locationHint?: string | null;
-
-	@Property({ type: 'text', nullable: true })
-	cuisine?: string | null;
 
 	@Property({ type: 'text', nullable: true })
 	city?: string | null;
@@ -97,8 +93,4 @@ export class Mention extends MikroOrmSimpleEntityAbstractClass<'isNewOpening' | 
 	/** The claims about this place (`StatementService`, written with the post's); the post owns them */
 	@OneToMany(() => Statement, statement => statement.mention, { orderBy: { id: 'asc' } })
 	statements = new Collection<Statement>(this);
-
-	// The food topics it is about (`MentionTopic`, written by `MentionTopicService` only), in its text's order
-	@OneToMany(() => MentionTopic, link => link.mention, { orderBy: { rank: 'asc' } })
-	topics = new Collection<MentionTopic>(this);
 }

@@ -121,10 +121,11 @@ export interface SaveReviewsResult {
 	missed: number;
 }
 
-// A statement's aspect (`statements s`): the aspect row `a` and its parent `root` (none for a root)
+// A statement's aspect (`statements s`): the aspect row `a` and its root (`root`, the target of its `is_a` edge; none for a root)
 const ASPECT_JOIN_SQL = `join statement_parts p on p.statement_id = s.id and p.role = 'aspect'
 	join topics a on a.id = p.topic_id
-	left join topics root on root.id = a.parent_id`;
+	left join topic_edges root_edge on root_edge.from_id = a.id and root_edge.type = 'is_a'
+	left join topics root on root.id = root_edge.to_id`;
 const ROOT_KEY_SQL = 'coalesce(root.key, a.key)';
 // A claim that praises or complains: text, no change, no question (a dish-only statement has no text)
 const CLAIM_SQL = `s.text is not null and ${judgingSql('s')}`;

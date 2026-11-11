@@ -2,6 +2,7 @@
 
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { FOOD_TOPIC_KEYS_SQL } from 'src/modules/statements/util/statement-foods.js';
 
 /** One matched mention as the topic readers select it. */
 export interface TopicMentionRow {
@@ -9,7 +10,7 @@ export interface TopicMentionRow {
 	month: string;
 	brand_id: string;
 	brand_name: string;
-	/** Its stored food topics (`MentionTopic`), in the order its text names them */
+	/** The kinds of food its claims' food wordings are linked to (`mentionTopicsSql`), in the order named */
 	topics: string[];
 	/** By one of the brand's own accounts (`ownPostSql`) */
 	own: boolean;
@@ -32,9 +33,9 @@ const bump = (map: Map<string, Map<string, number>>, key: string, month: string)
 
 /**
  * Counts mentions by others (a brand's own account left out) per topic and month: a mention's
- * topics are its stored ones (its cuisine's, else its venue's Google category's, a chain's most
- * reviewed branch's when the post named no branch), each with its parents, and it counts once per
- * topic ("vegan döner" is vegan, döner and Turkish).
+ * topics are the kinds of food its claims name (`mentionTopicsSql`), each with its parents, and it
+ * counts once per topic ("vegan döner" is vegan, döner and Turkish); one whose claims name no food
+ * counts for none.
  */
 export const countTopicMentions = (
 	rows: TopicMentionRow[],
@@ -67,10 +68,9 @@ export const topicShares = (
 			:	null;
 	});
 
-/** SQL: a mention's (`alias`) stored food topic keys, in the order its text names them */
+/** SQL: what a mention (`alias`) is about: the kinds of food its claims' food wordings are linked to, in the order named */
 export const mentionTopicsSql = (alias: string) =>
-	`(select coalesce(array_agg(t.key order by mt.rank), '{}') from mention_topics mt
-		join topics t on t.id = mt.topic_id where mt.mention_id = ${alias}.id)`;
+	FOOD_TOPIC_KEYS_SQL(`st.mention_id = ${alias}.id`);
 
 /** The SQL behind `TopicMentionRow`: a city's matched mentions in [start, end). */
 export const TOPIC_MENTIONS_SQL = `select to_char(p.posted_at at time zone 'UTC', 'YYYY-MM') as month, m.brand_id,

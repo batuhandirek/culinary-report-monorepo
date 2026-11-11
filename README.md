@@ -63,6 +63,7 @@ DATA:
 - https://www.yelp.com/biz/schnitzelei-mitte-berlin?osq=Dinner#reviews 
 - https://www.tripadvisor.com
 - https://www.opentable.de/ (For reviews?)
+- https://www.foodnavigator.com/Article/2026/04/09/flavour-trends-2026/
 
 
 Question:
@@ -84,9 +85,11 @@ Question:
 - "Won't come back" -> Is this a signal?
 - /admin/posts/5cef67dc-1ba9-430c-af46-ae494160fb00
 	-	why did this not find lucys?
+- Do we need a 'Is this about the venue?' decision as well, from JEV?
+	-	'home-style matcha at cafés is usually not that nice'
+
 Report sections:
 - Upcoming "New Year's / Halloween etc." - what can be done kind of suggestion?
-
 
 To add
 Creators:
@@ -108,4 +111,8 @@ maybe use this as a signal to ensure they have 4 branches
 
 -http://localhost:5011/admin/posts/ad28b428-88e8-44bd-9e97-dc7f651be20b
 	- familiar ban mi flavours” is not tagged
+
+
+http://localhost:5011/admin/aspects/portion_size?kind=deal
+
 

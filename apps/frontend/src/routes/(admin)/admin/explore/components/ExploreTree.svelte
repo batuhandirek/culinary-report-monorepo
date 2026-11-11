@@ -26,12 +26,13 @@
 	const byKey = $derived(new Map((nodes ?? []).map((n) => [n.key, n])));
 	const order = (a: AdminExploreTreeNodeOutputDto, b: AdminExploreTreeNodeOutputDto) =>
 		b.sources - a.sources || a.label.localeCompare(b.label);
-	// Each node's children, by its key; the roots under ''
+	// Each node's children, by its key; the roots under ''. A topic that is a kind of several
+	// (Menemen: Turkish, Breakfast) is drawn under each, like a shortcut
 	const children = $derived.by(() => {
 		const out: Record<string, AdminExploreTreeNodeOutputDto[]> = {};
 		for (const n of nodes ?? []) {
-			const parent = n.parentKey && byKey.has(n.parentKey) ? n.parentKey : '';
-			(out[parent] ??= []).push(n);
+			const parents = n.isA.filter((k) => byKey.has(k));
+			for (const parent of parents.length ? parents : ['']) (out[parent] ??= []).push(n);
 		}
 		for (const list of Object.values(out)) list.sort(order);
 		return out;

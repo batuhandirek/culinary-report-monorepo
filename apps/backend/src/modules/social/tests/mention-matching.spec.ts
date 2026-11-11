@@ -73,7 +73,6 @@ describe('mention matching', () => {
 		const mention = (locationHint: string) => ({
 			venueName: 'Velvet',
 			locationHint,
-			cuisine: null,
 			city: 'Berlin',
 			author: null,
 			taggedLocation: null,
@@ -124,7 +123,6 @@ describe('mention matching', () => {
 		const mention = {
 			venueName: 'Goldies',
 			locationHint: 'in the food hall of a department store',
-			cuisine: null,
 			city: 'Berlin',
 			author: null,
 			taggedLocation: null,
@@ -172,7 +170,6 @@ describe('mention matching', () => {
 		const mention = (locationHint: string) => ({
 			venueName: 'Goldies',
 			locationHint,
-			cuisine: null,
 			city: 'Berlin',
 			author: null,
 			taggedLocation: null,

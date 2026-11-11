@@ -15,6 +15,7 @@ import { CityService } from 'src/modules/cities/services/city.service.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { SitemapService } from 'src/modules/sitemap/services/sitemap.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
 import { ownAccount } from 'src/modules/social/tests/factories/social-account.factory.js';
 import type { Topic } from 'src/modules/topics/entities/topic.entity.js';
@@ -289,14 +290,14 @@ describe('FoodTrendsReportService (pglite)', () => {
 				views: 10,
 				postedAt: new Date(`${date}T12:00:00Z`),
 			});
-			em.create(Mention, {
+			const m = em.create(Mention, {
 				post,
 				venue,
 				venueName: venue.name,
-				cuisine,
 				visited: true,
 				isNewOpening: opts.isNewOpening ?? false,
 			});
+			addFoods(em, m, [cuisine]);
 		};
 		// Q3 2026: 60 ramen posts by others, 40 döner; the ramen bar's own posts never count
 		for (let i = 0; i < 60; i++) mention(ramenBar, `2026-0${7 + (i % 3)}-1${i % 9}`, 'Ramen');

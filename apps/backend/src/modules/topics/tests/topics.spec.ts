@@ -46,11 +46,6 @@ describe('TopicIndex.resolve', () => {
 		expect(index.resolve(raw)).toEqual(keys);
 	});
 
-	it("takes the venue's category when the mention's cuisine says nothing", () => {
-		expect(index.resolveMention('Ramen', 'Japanese restaurant')).toEqual(['ramen']);
-		expect(index.resolveMention('.', 'Japanese restaurant')).toEqual(['japanese']);
-		expect(index.resolveMention(null, null)).toEqual([]);
-	});
 });
 
 describe('TopicIndex.resolveMenuItem', () => {
@@ -148,8 +143,8 @@ describe('TopicIndex.withParents', () => {
 
 	it('stops on a cycle', () => {
 		const cyclic = new TopicIndex([
-			{ key: 'a', label: 'A', kind: TopicKindEnum.DISH, parentKey: 'b' },
-			{ key: 'b', label: 'B', kind: TopicKindEnum.DISH, parentKey: 'a' },
+			{ key: 'a', label: 'A', kind: TopicKindEnum.DISH, isA: ['b'] },
+			{ key: 'b', label: 'B', kind: TopicKindEnum.DISH, isA: ['a'] },
 		]);
 		expect(cyclic.withParents(['a'])).toEqual(['a', 'b']);
 	});
@@ -159,27 +154,39 @@ describe('TopicIndex.withParents', () => {
 describe('TopicIndex with decided terms', () => {
 	const withTerms = (terms: IndexedTerm[]) => new TopicIndex(seedIndex().topics, terms);
 	const decided = withTerms([
-		{ key: 'vegan doner', name: 'vegan döner', topicKeys: ['kebab', 'vegan'] },
-		{ key: 'iced matcha', name: 'iced matcha', topicKeys: ['vegan', 'matcha'] },
-		{ key: 'waiting time', name: 'waiting time', topicKeys: ['wait'] },
+		{
+			key: 'vegan doner',
+			name: 'vegan döner',
+			topicKey: 'kebab',
+			exact: false,
+			modifiers: [{ topicKey: 'vegan', type: 'has' }],
+		},
+		{
+			key: 'iced matcha',
+			name: 'iced matcha',
+			topicKey: 'vegan',
+			exact: false,
+			modifiers: [{ topicKey: 'matcha', type: 'has' }],
+		},
+		{ key: 'waiting time', name: 'waiting time', topicKey: 'wait', exact: true, modifiers: [] },
 		// Decided "none", and decided for a topic that is gone
-		{ key: 'meat', name: 'meat', topicKeys: [] },
-		{ key: 'house special', name: 'house special', topicKeys: ['unicorn'] },
+		{ key: 'meat', name: 'meat', topicKey: null, exact: false, modifiers: [] },
+		{ key: 'house special', name: 'house special', topicKey: 'unicorn', exact: true, modifiers: [] },
 	]);
 
-	it('resolves a term to every topic it is, in the order decided, whole or as a run of words', () => {
+	it('resolves a term to its main topic and its modifiers, in that order, whole or as a run of words', () => {
 		expect(decided.exactAll('vegan döner')).toEqual(['kebab', 'vegan']);
 		expect(decided.exactAll('Vegan Doner')).toEqual(['kebab', 'vegan']);
-		expect(decided.exact('vegan döner')).toBe('kebab');
+		// A narrower wording evokes its topic and modifiers, but is no topic as a whole
+		expect(decided.exact('vegan döner')).toBeUndefined();
 		// The term's order, not the words': the seed alone gives vegan first
 		expect(decided.resolve('Vegan Döner')).toEqual(['kebab', 'vegan']);
 		expect(seedIndex().resolve('Vegan Döner')).toEqual(['vegan', 'kebab']);
 		expect(decided.resolve('Vegan Döner Haus')).toEqual(['kebab', 'vegan']);
 	});
 
-	it("gives a mention's and a menu item's topics from a decided wording", () => {
-		expect(decided.resolveMention('vegan döner', 'Restaurant')).toEqual(['kebab', 'vegan']);
-		expect(decided.resolveMention(null, 'Vegan Döner')).toEqual(['kebab', 'vegan']);
+	it("gives a Google category's and a menu item's topics from a decided wording", () => {
+		expect(decided.resolve('Vegan Döner')).toEqual(['kebab', 'vegan']);
 		expect(decided.resolveMenuItem({ name: 'Vegan Döner', category: null })).toEqual([
 			'kebab',
 			'vegan',
@@ -206,10 +213,10 @@ describe('TopicIndex with decided terms', () => {
 	it("takes a topic's own key over a term's form", () => {
 		const both = new TopicIndex(
 			[
-				{ key: 'bar', label: 'Bar', kind: TopicKindEnum.FORMAT, parentKey: null },
-				{ key: 'pub', label: 'Pub', kind: TopicKindEnum.FORMAT, parentKey: null },
+				{ key: 'bar', label: 'Bar', kind: TopicKindEnum.FORMAT },
+				{ key: 'pub', label: 'Pub', kind: TopicKindEnum.FORMAT },
 			],
-			[{ key: 'pub', name: 'pub', topicKeys: ['bar'] }],
+			[{ key: 'pub', name: 'pub', topicKey: 'bar', exact: true, modifiers: [] }],
 		);
 		expect(both.resolve('Pub')).toEqual(['pub']);
 		expect(both.exactAll('pub')).toEqual(['pub']);

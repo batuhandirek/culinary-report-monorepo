@@ -12,7 +12,6 @@ import { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { STATEMENT_POPULATE } from 'src/modules/statements/util/statement-populate.js';
-import { MentionTopicService } from 'src/modules/topics/services/mention-topic.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
@@ -113,7 +112,6 @@ export class ReportService {
 		private readonly reportAnalysisAgent: ReportAnalysisAgent,
 		private readonly reportEvidenceService: ReportEvidenceService,
 		private readonly topicService: TopicService,
-		private readonly mentionTopicService: MentionTopicService,
 		private readonly venueTopicService: VenueTopicService,
 		private readonly durableLlm: DurableLlmService,
 	) {}
@@ -136,8 +134,8 @@ export class ReportService {
 	 * written part; the editor reads it with the rest of the month's material (`editorPack`) and
 	 * the same read tools, once per configuration, over only the data its sections show. Neither
 	 * fails the build: a failing editor leaves the code-written fallback and the trace says why.
-	 * The cities' stored topic links are brought up to date first (the mentions' topics, then the
-	 * venue tags), so a report never reads stale tags. 400 when there is no open branch.
+	 * The cities' venue tags are brought up to date first, so a report never reads stale tags. 400
+	 * when there is no open branch.
 	 */
 	async buildAll(
 		brandId: string,
@@ -148,7 +146,6 @@ export class ReportService {
 		for (const id of cityId ?
 			[cityId]
 		:	(await this.brandService.citiesOf(brandId)).map(c => c.id)) {
-			await this.mentionTopicService.relink({ cityId: id });
 			await this.venueTopicService.refreshCity(id);
 		}
 		const targets = await this.reportConfigService.targets(brandId, configId);

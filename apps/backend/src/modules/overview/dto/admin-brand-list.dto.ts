@@ -29,7 +29,7 @@ export interface AdminListBrandsInputDto extends PaginationRequest {
 	sort?: AdminBrandSort;
 }
 
-/** What social media and Google reviews said about a brand in one month. */
+/** What social media and Google reviews said about a brand in one month (or one window: the brand page). */
 export interface AdminBrandMonthFiguresOutputDto {
 	/** Posts by others naming it (its own accounts left out) */
 	posts: number;

@@ -15,7 +15,6 @@ import {
 	MentionExtractionService,
 	type ReflagSaved,
 } from 'src/modules/social/services/mention-extraction.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 
 import { PostClaimsAgent } from '../../read-posts/agents/post-claims.agent.js';
 import { postClaimsSource } from '../../read-posts/util/post-claims-input.js';
@@ -61,7 +60,6 @@ export class ReflagOpeningsWorkflow {
 		private readonly durableLlm: DurableLlmService,
 		private readonly postClaimsAgent: PostClaimsAgent,
 		private readonly extraction: MentionExtractionService,
-		private readonly topicService: TopicService,
 	) {}
 
 	@DurableWorkflow({ name: 'reflag-openings.page' })
@@ -115,7 +113,7 @@ export class ReflagOpeningsWorkflow {
 				const reading = await readPostClaims(
 					this.durableLlm.as(this.postClaimsAgent),
 					postClaimsSource(plan.post),
-					{ cityName: plan.post.cityName, topics: plan.topics },
+					{ cityName: plan.post.cityName },
 				);
 				const saved = await this.saveFlags(postId, reading.object.places);
 				return { ...saved, tokens: reading.usage.totalTokens };
@@ -132,11 +130,9 @@ export class ReflagOpeningsWorkflow {
 	}
 
 	@DurableStep({ name: 'plan' })
-	private async plan(postId: string): Promise<{ post: PostForReading; topics: string[] } | null> {
+	private async plan(postId: string): Promise<{ post: PostForReading } | null> {
 		const post = await this.extraction.postForReading(postId);
-		if (!post) return null;
-		const index = await this.topicService.index();
-		return { post, topics: index.food.map(t => t.label) };
+		return post && { post };
 	}
 
 	@DurableStep({ name: 'save flags' })

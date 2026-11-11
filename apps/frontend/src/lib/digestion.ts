@@ -19,9 +19,6 @@ export const digestionStatusLabel = (status: string, skipReason?: string) =>
 			? `skipped: ${skipReason ? (SKIP_REASON_LABELS[skipReason] ?? skipReason) : 'by the gate'}`
 			: 'not read yet';
 
-export const digestionStatusVariant = (status: string): BadgeVariant =>
-	status === 'digested' ? 'success' : status === 'skipped' ? 'quiet' : 'outline';
-
 /** How a place a post named was matched (`Mention.matchMethod`) */
 export const MATCH_METHOD_LABELS: Record<string, string> = {
 	exact: 'exact name',
@@ -59,15 +56,27 @@ export const quoteFound = (quote: string | undefined, texts: (string | undefined
 	return !!pattern && texts.some((text) => !!text && new RegExp(pattern).test(text));
 };
 
-/** A text cut into runs, those inside one of the quotes marked */
-export const markQuotes = (text: string, quotes: (string | undefined)[]): { text: string; mark: boolean }[] => {
-	const ranges: [number, number][] = [];
-	for (const quote of quotes) {
-		const pattern = quote ? quotePattern(quote) : undefined;
-		if (!pattern) continue;
-		for (const match of text.matchAll(pattern)) ranges.push([match.index, match.index + match[0].length]);
-	}
+/**
+ * A text cut into runs, those inside one of the quotes marked; with `focus` (one claim's quote),
+ * the marked runs it covers are `focus` too, so the one claim stands out among the others
+ */
+export const markQuotes = (
+	text: string,
+	quotes: (string | undefined)[],
+	focus?: string
+): { text: string; mark: boolean; focus?: boolean }[] => {
+	const rangesOf = (list: (string | undefined)[]) => {
+		const out: [number, number][] = [];
+		for (const quote of list) {
+			const pattern = quote ? quotePattern(quote) : undefined;
+			if (!pattern) continue;
+			for (const match of text.matchAll(pattern)) out.push([match.index, match.index + match[0].length]);
+		}
+		return out;
+	};
+	const ranges = rangesOf(focus ? [...quotes, focus] : quotes);
 	if (!ranges.length) return [{ text, mark: false }];
+	const focused = focus ? rangesOf([focus]) : [];
 	ranges.sort((a, b) => a[0] - b[0]);
 	const merged: [number, number][] = [];
 	for (const range of ranges) {
@@ -75,11 +84,12 @@ export const markQuotes = (text: string, quotes: (string | undefined)[]): { text
 		if (last && range[0] <= last[1]) last[1] = Math.max(last[1], range[1]);
 		else merged.push([...range]);
 	}
-	const runs: { text: string; mark: boolean }[] = [];
+	const runs: { text: string; mark: boolean; focus?: boolean }[] = [];
 	let at = 0;
 	for (const [start, end] of merged) {
 		if (start > at) runs.push({ text: text.slice(at, start), mark: false });
-		runs.push({ text: text.slice(start, end), mark: true });
+		const isFocus = focused.some(([s, e]) => s < end && e > start);
+		runs.push({ text: text.slice(start, end), mark: true, ...(isFocus && { focus: true }) });
 		at = end;
 	}
 	if (at < text.length) runs.push({ text: text.slice(at), mark: false });

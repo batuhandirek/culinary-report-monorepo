@@ -21,7 +21,6 @@ import {
 	MentionMatchingService,
 } from 'src/modules/social/services/mention-matching.service.js';
 import { StatementPartsService } from 'src/modules/statements/services/statement-parts.service.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 
 import { queueCloseCalls } from '../../match-mentions/util/close-calls.js';
 import { PostClaimsAgent } from '../agents/post-claims.agent.js';
@@ -46,15 +45,14 @@ export interface ReadCityResult {
 	failed: number;
 }
 
-/** A post and the food topics' labels (agent A's cuisine words), as the plan step stores them */
+/** A post as the plan step stores it */
 interface PostPlan {
 	post: PostForReading;
-	topics: string[];
 }
 
 /**
  * The reading of posts. `readPost` is one post as a workflow of its own: the gate, then agent A
- * (its places and claims), the claims' labels, the mentions' food topics, then its places matched:
+ * (its places and claims), the claims' labels, the city's venue tags queued, then its places matched:
  * what the code is sure of saved, each close call queued as a run of its own
  * (`match-mentions.mention`, not awaited, so a call waiting for the allowance never holds the
  * reading). Each agent call is a
@@ -75,7 +73,6 @@ export class ReadPostsWorkflow {
 		private readonly extraction: MentionExtractionService,
 		private readonly mentionMatchingService: MentionMatchingService,
 		private readonly statementPartsService: StatementPartsService,
-		private readonly topicService: TopicService,
 	) {}
 
 	@DurableWorkflow({ name: 'read-posts.city' })
@@ -115,7 +112,7 @@ export class ReadPostsWorkflow {
 		);
 	}
 
-	private async read({ post, topics }: PostPlan): Promise<ReadPostResult> {
+	private async read({ post }: PostPlan): Promise<ReadPostResult> {
 		// 1. The gate: is it about eating or drinking out in the city? (nothing to read: no call)
 		const gate =
 			hasContent(post) ?
@@ -136,16 +133,16 @@ export class ReadPostsWorkflow {
 		const reading = await readPostClaims(
 			this.durableLlm.as(this.postClaimsAgent),
 			postClaimsSource(post),
-			{ cityName: post.cityName, topics },
+			{ cityName: post.cityName },
 		);
 		const saved = await this.saveReading(post.postId, {
 			...reading.object,
 			tokens: reading.usage.totalTokens,
 		});
 
-		// 3. The claims' labels (Jev) and the mentions' food topics
+		// 3. The claims' labels (Jev), and the city's venue tags, which read what the claims name
 		await this.labelClaims(saved.claimIds);
-		await this.linkTopics(post.cityId, saved.mentionIds);
+		await this.linkTopics(post.cityId, saved.mentionIds.length > 0);
 
 		// 4. Its places matched: the sure ones saved now, each close call queued, never awaited
 		const pass = await this.matchPlaces(saved.mentionIds);
@@ -166,13 +163,11 @@ export class ReadPostsWorkflow {
 		return this.extraction.unreadPostIds(cityId, READ_POSTS_PER_RUN);
 	}
 
-	/** The post as the gate and agent A see it, and the food topics' labels; none when it was read meanwhile */
+	/** The post as the gate and agent A see it; none when it was read meanwhile */
 	@DurableStep({ name: 'plan' })
 	private async plan(postId: string): Promise<PostPlan | null> {
 		const post = await this.extraction.postForReading(postId, { unread: true });
-		if (!post) return null;
-		const index = await this.topicService.index();
-		return { post, topics: index.food.map(t => t.label) };
+		return post && { post };
 	}
 
 	@DurableStep({ name: 'save gate' })
@@ -192,8 +187,8 @@ export class ReadPostsWorkflow {
 	}
 
 	@DurableStep({ name: 'link topics' })
-	private async linkTopics(cityId: string, mentionIds: number[]): Promise<void> {
-		await this.extraction.linkTopics(cityId, mentionIds);
+	private async linkTopics(cityId: string, changed: boolean): Promise<void> {
+		if (changed) await this.extraction.queueVenueTags(cityId);
 	}
 
 	@DurableStep({ name: 'match places' })

@@ -24,10 +24,15 @@ const aspect = (key: string, parent?: string): PartLike => ({
 	topic: { key, parent: parent ? { key: parent } : null },
 });
 
-/** A food part: the wording with its links (empty until decided) */
+/** A food part: the wording with its main topic and modifiers (none until decided) */
 const food = (key: string, name: string, topics: string[] = []): PartLike => ({
 	role: 'food',
-	term: { key, name, topics: topics.map(k => ({ topic: { key: k } })) },
+	term: {
+		key,
+		name,
+		topic: topics[0] ? { key: topics[0] } : null,
+		modifiers: topics.slice(1).map(k => ({ topic: { key: k } })),
+	},
 });
 
 const statement = (fields: StatementLike): StatementLike => ({ ...fields });

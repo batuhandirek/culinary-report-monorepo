@@ -34,7 +34,6 @@ export interface GateVerdict {
 export interface ReadPlace {
 	venueName: string;
 	locationHint: string | null;
-	cuisine: string | null;
 	city: string | null;
 	visited: boolean;
 	isNewOpening: boolean;

@@ -29,7 +29,11 @@ export class AdminBrandListController {
 		return this.brandListService.list(query);
 	}
 
-	/** One brand's month in numbers, six months of them, its best posts and what to do about it. */
+	/**
+	 * One brand in numbers over a rolling window (the last 30 or 90 days, or twelve months) against
+	 * the one before, six months of them, the window's best posts (each with its mention, to move to
+	 * a branch) and what to do about it.
+	 */
 	@TypedRoute.Get('/:id/summary')
 	async getBrandSummary(
 		@TypedParam('id') id: string & tags.Format<'uuid'>,

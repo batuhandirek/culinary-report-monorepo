@@ -4,15 +4,15 @@ import { ASPECT_SEED } from '../../constants/aspect-seed.constant.js';
 import { TOPIC_SEED, TopicSeed } from '../../constants/topic-seed.constant.js';
 import { Topic } from '../../entities/topic.entity.js';
 import { Term } from '../../entities/term.entity.js';
-import { TermTopic } from '../../entities/term-topic.entity.js';
+import { TopicEdge } from '../../entities/topic-edge.entity.js';
 import { type IndexedTerm, TopicIndex } from '../../util/topics.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
 import type { EntityManager as PostgresEntityManager } from '@mikro-orm/postgresql';
+import type { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import type { PgBossService } from 'src/modules/pgboss/pgboss.service.js';
 
 import { TopicService } from '../../services/topic.service.js';
 import type { TopicRelinkService } from '../../services/topic-relink.service.js';
-import { MentionTopicService } from '../../services/mention-topic.service.js';
 import { MenuTopicService } from '../../services/menu-topic.service.js';
 import { VenueTopicService } from '../../services/venue-topic.service.js';
 
@@ -122,7 +122,9 @@ export const aliasTerms = (seed: TopicSeed[] = FULL_SEED): IndexedTerm[] =>
 		(TEST_ALIASES[s.key] ?? []).map(alias => ({
 			key: termKey(alias),
 			name: alias,
-			topicKeys: [s.key],
+			topicKey: s.key,
+			exact: true,
+			modifiers: [],
 		})),
 	);
 
@@ -133,7 +135,8 @@ export const seedIndex = (seed: TopicSeed[] = FULL_SEED): TopicIndex =>
 			key: s.key,
 			label: s.label,
 			kind: s.kind,
-			parentKey: s.parent ?? null,
+			isA: s.parent ? [s.parent] : [],
+			has: [],
 			hint: s.hint ?? null,
 		})),
 		aliasTerms(seed),
@@ -141,8 +144,9 @@ export const seedIndex = (seed: TopicSeed[] = FULL_SEED): TopicIndex =>
 
 /**
  * The seed's topics in this entity manager, not flushed, as the seed migrations insert them (food
- * and aspects, with `TEST_ALIASES` as admin terms linked to their topics): `keys` picks some (their parents
- * come along), all of them otherwise. Returns the topics by key.
+ * and aspects, a seed's `parent` as the topic's `is_a` edge, with `TEST_ALIASES` as admin terms that
+ * are their topic, exact): `keys` picks some (their parents come along), all of them otherwise.
+ * The flush rebuilds `topic_closure` (`TopicClosureSubscriber`). Returns the topics by key.
  */
 export const seedTopics = (em: EntityManager, keys?: string[]): Map<string, Topic> => {
 	const byKey = new Map(FULL_SEED.map(s => [s.key, s]));
@@ -157,17 +161,24 @@ export const seedTopics = (em: EntityManager, keys?: string[]): Map<string, Topi
 	const created = new Map<string, Topic>();
 	// The seed lists parents before their children
 	for (const seed of FULL_SEED.filter(s => wanted.has(s.key))) {
-		created.set(
-			seed.key,
-			em.create(Topic, {
-				key: seed.key,
-				label: seed.label,
-				kind: seed.kind,
-				parent: seed.parent ? created.get(seed.parent) : null,
-				trendsTopicId: seed.mid ?? null,
-				hint: seed.hint ?? null,
-			}),
-		);
+		const topic = em.create(Topic, {
+			key: seed.key,
+			label: seed.label,
+			kind: seed.kind,
+			trendsTopicId: seed.mid ?? null,
+			hint: seed.hint ?? null,
+		});
+		created.set(seed.key, topic);
+		if (seed.parent)
+			topic.edges.add(
+				em.create(TopicEdge, {
+					from: topic,
+					to: created.get(seed.parent)!,
+					type: 'is_a',
+					rank: 0,
+					decidedBy: 'seed',
+				}),
+			);
 	}
 	const now = new Date();
 	const terms = new Map<string, Term>();
@@ -175,8 +186,14 @@ export const seedTopics = (em: EntityManager, keys?: string[]): Map<string, Topi
 		for (const alias of TEST_ALIASES[seed.key] ?? []) {
 			const key = termKey(alias);
 			if (!key || terms.has(key)) continue;
-			const term = em.create(Term, { key, name: alias, decidedBy: 'admin', decidedAt: now });
-			em.create(TermTopic, { term, topic: created.get(seed.key)!, rank: 0 });
+			const term = em.create(Term, {
+				key,
+				name: alias,
+				topic: created.get(seed.key)!,
+				exact: true,
+				decidedBy: 'admin',
+				decidedAt: now,
+			});
 			terms.set(key, term);
 		}
 	}
@@ -185,18 +202,22 @@ export const seedTopics = (em: EntityManager, keys?: string[]): Map<string, Topi
 
 /**
  * Brings the stored topic links up to date after a spec seeded posts, venues or menus, as the
- * writers and the per-city refresh do in the app: every mention's and menu item's topics, then every
- * venue's tags.
+ * writers and the per-city refresh do in the app: every menu item's topics, then every venue's tags
+ * (which read what the posts' claims name: seed those with `addFoods`).
  * Built on the entity manager alone, so a suite needs none of the services provided.
  */
 export const linkTopics = async (anyEm: EntityManager): Promise<void> => {
 	const em = anyEm as unknown as PostgresEntityManager;
 	const noJobs = { sendJob: async () => undefined } as unknown as PgBossService;
-	const topics = new TopicService(em, noJobs);
+	const noEmbeddings = {
+		embedMany: async () => {
+			throw new Error('No embeddings in tests');
+		},
+	} as unknown as EmbeddingsService;
+	const topics = new TopicService(em, noJobs, noEmbeddings);
 	const index = await topics.index();
 	const registry = { register: () => undefined } as unknown as TopicRelinkService;
 	const venueTopics = new VenueTopicService(em, topics, noJobs);
-	await new MentionTopicService(em, topics, registry).relink({ index });
 	await new MenuTopicService(em, topics, venueTopics, registry).relink(index);
 	await venueTopics.refreshAll(index);
 };

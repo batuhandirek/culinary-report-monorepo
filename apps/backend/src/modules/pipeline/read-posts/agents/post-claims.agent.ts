@@ -35,12 +35,6 @@ export const postClaimsSchema = z.object({
 					.describe(
 						'Neighborhood, street, station or landmark the post itself gives for this venue; null when it gives none. Never fill it in from what you know about the venue',
 					),
-				cuisine: z
-					.string()
-					.nullable()
-					.describe(
-						'The kinds of food it serves, comma-separated, most specific first, e.g. "Pho, Vietnamese" or "Vegan, Döner & kebab"',
-					),
 				city: z
 					.string()
 					.nullable()
@@ -89,11 +83,9 @@ export type PostClaimsReading = Omit<PostClaimsAnswer, 'claims'> & {
 	claims: (Omit<PostClaimsAnswer['claims'][number], 'place'> & { place: number | null })[];
 };
 
-/** The city whose scrape found the post (`City.name`) and the food topics' labels for the cuisine field. */
+/** The city whose scrape found the post (`City.name`) */
 export interface PostClaimsContext {
 	cityName: string;
-	/** The food topics' labels (`TopicIndex.food`): the cuisine words the reports group by */
-	topics?: string[];
 }
 
 /**
@@ -143,9 +135,6 @@ export class PostClaimsAgent extends BaseMastraAgent<typeof postClaimsSchema, Po
 			`Only what the text says: never add, judge or summarise a claim; within that scope never drop one because it fits no category. ` +
 			`isPromotional is true only for a post by someone other than the venue, a creator or a blog, that a venue paid for, gifted or invited: a paid partnership, an ad, a gifted meal, "invited by", a collab or a giveaway with the venue. It is false for a venue's own post about itself (its menu, its offers, "come by": that is the venue's own post, counted apart), for a creator's own unpaid visit even with a disclosure such as "unpaid ad" or "not sponsored", and for a creator plugging their own guide, app or channel. ` +
 			`Mark a venue as a new opening only when the post itself says it is new or has just opened; a new dish, a new menu or a creator's first visit is not an opening. ` +
-			(context?.topics?.length ?
-				`For cuisine, use these words where one fits: ${context.topics.join(', ')}. Use another short English word only when none fits. `
-			:	'') +
 			`Write everything in concise English.`
 		);
 	}

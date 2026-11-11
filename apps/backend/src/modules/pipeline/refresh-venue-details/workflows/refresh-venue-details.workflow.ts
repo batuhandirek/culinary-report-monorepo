@@ -15,6 +15,10 @@ import { VenueScrapeService } from 'src/modules/venues/services/venue-scrape.ser
 
 import { type PlacesResult, PlacesWorkflow } from '../../atoms/places/workflows/places.workflow.js';
 import { PipelineStepEnum } from '../../constants/pipeline.constant.js';
+import {
+	REFRESH_VENUE_DETAILS_VENUE,
+	VENUE_DETAILS_REFRESH_USD,
+} from '../constants/refresh-venue-details.constant.js';
 import { FILL_COMPETITORS_MONTH } from '../../fill-competitors/constants/fill-competitors.constant.js';
 import { FillCompetitorsWorkflow } from '../../fill-competitors/workflows/fill-competitors.workflow.js';
 import { ReportBrandsService } from '../../shared/services/report-brands.service.js';
@@ -31,6 +35,7 @@ interface DetailsPlan {
  * The Google Maps detail pages of every report branch and of their competitors (hours, amenities,
  * popular times, menus, the "Order online" links): the report compares them. One `places.run` of
  * the detail pages (known venues only), after the competitors are picked, so it calls that.
+ * `venue` is one place by hand ("Refresh from Google" on its page, `AdminRefreshVenueDetailsController`).
  */
 @Injectable()
 export class RefreshVenueDetailsWorkflow {
@@ -66,6 +71,30 @@ export class RefreshVenueDetailsWorkflow {
 				})
 			:	null;
 		return this.summary(plan, details);
+	}
+
+	@DurableWorkflow({ name: REFRESH_VENUE_DETAILS_VENUE })
+	@EnsureRequestContext()
+	async venue(venueId: string): Promise<{ saved: number; withPopularTimes: number }> {
+		const target = await this.venueTarget(venueId);
+		const details = await this.places.call({
+			cityId: null,
+			search: { mode: 'details', placeIds: [target.placeId] },
+			maxCostUsd: VENUE_DETAILS_REFRESH_USD,
+			purpose: `google-places details: ${target.name}`,
+			save: { source: VenueScrapeSourceEnum.DETAILS, newPlaces: 'none' },
+		});
+		return { saved: details.saved, ...(await this.venueSummary(details)) };
+	}
+
+	@DurableStep({ name: 'venue' })
+	private async venueTarget(venueId: string) {
+		return this.venueScrapeService.detailsTarget(venueId);
+	}
+
+	@DurableStep({ name: PipelineStepEnum.REFRESH_VENUE_DETAILS })
+	private async venueSummary(details: PlacesResult) {
+		return this.venueScrapeService.detailsSummary(details.recordId);
 	}
 
 	/** The month's report branches and their competitors, by place id */

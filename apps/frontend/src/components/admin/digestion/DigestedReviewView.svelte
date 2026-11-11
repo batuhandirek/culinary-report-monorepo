@@ -15,9 +15,12 @@
 	// the right, those about the city or nothing apart.
 	interface Props {
 		review: AdminDigestedReviewOutputDto;
+		/** One of its claims' ids: that claim ringed and its quote marked louder (an opened claim row) */
+		focus?: number;
 	}
 
-	let { review }: Props = $props();
+	let { review, focus }: Props = $props();
+	const focusQuote = $derived(focus == null ? undefined : review.statements.find((s) => s.id === focus)?.quote);
 
 	const quotes = $derived(review.statements.map((s) => s.quote));
 	const texts = $derived([review.text]);
@@ -58,7 +61,10 @@
 <div class="flex min-w-0 flex-col gap-4">
 	<div class="flex flex-wrap items-center justify-between gap-2">
 		<PipelineStrip {steps} />
-		<a href={`${venueHref}?tab=reviews`} class="text-xs font-medium underline-offset-4 hover:underline">Branch reviews</a>
+		<div class="flex items-center gap-3 text-xs">
+			<a href={`/admin/reviews/${review.id}`} class="font-medium underline-offset-4 hover:underline">Review page</a>
+			<a href={`${venueHref}?tab=reviews`} class="text-muted-foreground underline-offset-4 hover:underline">Branch reviews</a>
+		</div>
 	</div>
 
 	<p class="text-muted-foreground m-0 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-xs">
@@ -83,7 +89,7 @@
 
 	<div class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
 		<div class="flex min-w-0 flex-col gap-3">
-			<SourceText label="Original" text={review.text} {quotes} note={review.language} />
+			<SourceText label="Original" text={review.text} {quotes} focus={focusQuote} note={review.language} />
 			{#if review.textTranslated}
 				<SourceText label="Translation" text={review.textTranslated} />
 			{/if}
@@ -107,7 +113,7 @@
 							<span class="text-muted-foreground text-xs">{plural(group.statements.length, 'claim')}</span>
 						</header>
 					{/if}
-					<div class={headed ? 'pl-6' : ''}><DigestedClaims statements={group.statements} {texts} /></div>
+					<div class={headed ? 'pl-6' : ''}><DigestedClaims statements={group.statements} {texts} {focus} /></div>
 				</section>
 			{/each}
 		</div>
