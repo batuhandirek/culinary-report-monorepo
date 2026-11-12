@@ -430,6 +430,19 @@ describe('StatementInsightService (pglite)', () => {
 		expect(res).toMatchObject({ similarity: 0.82, minClaims: 3 });
 	});
 
+	it("groups only the claims the table's own filters keep", async () => {
+		const negative = await controller.getExploreGroups({ ...view({ node: 'wait' }), sentiment: 'negative' });
+		expect(negative.groups).toHaveLength(1);
+		expect(negative.groups[0]).toMatchObject({ claims: 3, complaints: 3 });
+		const neutral = await controller.getExploreGroups({ ...view({ node: 'wait' }), sentiment: 'neutral' });
+		expect(neutral.groups).toEqual([]);
+		expect(neutral.considered).toBeLessThan(4);
+		const words = await controller.getExploreGroups({ ...view({ node: 'wait' }), q: 'no such words' });
+		expect(words).toMatchObject({ embedded: 0, notEmbedded: 0, groups: [] });
+		const parts = await controller.getExploreGroups({ ...view({ node: 'wait' }), parts: 'none' });
+		expect(parts.groups).toEqual([]);
+	});
+
 	it('groups at the bar the page asks for', async () => {
 		const strict = await controller.getExploreGroups({
 			...view({ node: 'wait' }),

@@ -21,31 +21,9 @@ export const termTopicInputTopics = (
 	index: Pick<TopicIndex, 'topics' | 'isRoot'>,
 ): TermTopicInputTopic[] => fixedShortlist(index).map(inputTopic);
 
-/** A link a wording had under the old model, told to the converter's calls as a hint */
-export interface TermTopicHint {
-	label: string;
-	/** same | kind_of | with */
-	relation: string;
-}
-
-/**
- * Agent C's input message: one wording as it was said, the topics close to it (`closeShortlist`),
- * and, for the conversion of the old links, how it was linked until now.
- */
-export const termTopicInput = (
-	name: string,
-	close: IndexedTopic[],
-	hints?: TermTopicHint[],
-): string =>
-	[
-		`Wording: ${JSON.stringify(name)}`,
-		hints?.length ?
-			`Linked until now: ${hints.map(h => `${h.label} (${h.relation})`).join(', ')}`
-		:	null,
-		`Topics close to it:\n${topicLines(close.map(inputTopic))}`,
-	]
-		.filter(Boolean)
-		.join('\n\n');
+/** Agent C's input message: one wording as it was said and the topics close to it (`closeShortlist`) */
+export const termTopicInput = (name: string, close: IndexedTopic[]): string =>
+	`Wording: ${JSON.stringify(name)}\n\nTopics close to it:\n${topicLines(close.map(inputTopic))}`;
 
 /** The message for one wording from its vector: the close topics picked, then `termTopicInput` */
 export const termTopicMessage = (
@@ -53,8 +31,7 @@ export const termTopicMessage = (
 	index: Pick<TopicIndex, 'topics' | 'isRoot'>,
 	wording: number[] | null | undefined,
 	vectors: Map<string, number[]> | null | undefined,
-	hints?: TermTopicHint[],
-): string => termTopicInput(name, closeShortlist(index, wording, vectors), hints);
+): string => termTopicInput(name, closeShortlist(index, wording, vectors));
 
 // Modifiers a wording may carry; the longest label kept (a name, not a sentence)
 const MAX_MODIFIERS = 5;
@@ -115,9 +92,10 @@ export const termDecisionOf = (
 		modifiers.push({ topicKey: to.key, type: m.type ?? defaultEdgeType(to.kind) });
 	}
 	const label = answer.label?.trim().slice(0, LABEL_MAX) || null;
-	const kind = (PROMOTION_KINDS as readonly string[]).includes(answer.kind ?? '') ?
-		(answer.kind as TopicKindEnum)
-	:	null;
+	const kind =
+		(PROMOTION_KINDS as readonly string[]).includes(answer.kind ?? '') ?
+			(answer.kind as TopicKindEnum)
+		:	null;
 	// Nothing known about it at all: the same as none
 	if (!topicKey && !modifiers.length && !label) return NO_TOPIC;
 	return {

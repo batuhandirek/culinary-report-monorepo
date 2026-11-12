@@ -24,14 +24,13 @@ const DEFAULT_LIMIT = 50;
 export class AdminTermsController {
 	constructor(private readonly termService: TermService) {}
 
-	/** The city's wordings with their topics and uses; `status` defaults to `unlinked`. */
+	/** The city's wordings with their topics and uses; `status` defaults to `all`. */
 	@TypedRoute.Get('/')
 	async getTerms(@TypedQuery() query: AdminGetTermsInputDto): Promise<AdminTermsOutputDto> {
 		return this.termService.list(query.cityId, {
 			status: query.status,
 			q: query.q,
 			topicKey: query.topicKey,
-			proposal: query.proposal,
 			offset: query.offset ?? 0,
 			limit: query.limit ?? DEFAULT_LIMIT,
 		});

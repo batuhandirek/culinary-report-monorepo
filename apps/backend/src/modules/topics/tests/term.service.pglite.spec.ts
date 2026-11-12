@@ -339,7 +339,7 @@ describe('TermService (pglite)', () => {
 		expect(named.has('Café')).toBe(false);
 	});
 
-	it("lists a city's wordings with the statements naming them and the venues whose tags carry them, and filters by status, topic and proposal", async () => {
+	it("lists a city's wordings with the statements naming them and the venues whose tags carry them, and filters by status, topic and words", async () => {
 		const all = await service().list(city.id, { status: 'all', offset: 0, limit: 200 });
 		const row = (key: string) => all.terms.find(t => t.key === key);
 		expect(row('waiting time')).toMatchObject({ topic: { key: 'wait' }, exact: true, tagVenues: 2, notes: 0 });
@@ -350,19 +350,17 @@ describe('TermService (pglite)', () => {
 		});
 		// Another city's tag is not this city's wording
 		expect(row('pho')).toBeUndefined();
-		expect(all.summary.terms).toBe(all.total);
-		expect(all.proposals.find(p => p.label === 'Fries')).toMatchObject({ terms: 1, uses: 2 });
 
 		const keys = async (filters: Parameters<TermService['list']>[1]) =>
 			(await service().list(city.id, filters)).terms.map(t => t.key);
 		const page = { offset: 0, limit: 200 };
 		// A modifier counts as its topic's wording too
 		expect(await keys({ status: 'all', topicKey: 'vegan', ...page })).toEqual(['vegan doner']);
-		expect(await keys({ status: 'all', proposal: 'fries', ...page })).toEqual(['pomme']);
-		const unlinked = await keys({ status: 'unlinked', ...page });
-		expect(unlinked).toEqual(expect.arrayContaining(['sauce', 'pomme']));
-		expect(unlinked).not.toContain('vegan doner');
-		expect(await keys({ status: 'pending', ...page })).toEqual([]);
+		const linked = await keys({ status: 'linked', ...page });
+		expect(linked).toEqual(expect.arrayContaining(['waiting time', 'vegan doner']));
+		// No topic and no modifier: not linked, whatever it proposes
+		expect(linked).not.toContain('sauce');
+		expect(linked).not.toContain('pomme');
 		expect(await keys({ status: 'all', q: 'spagh', ...page })).toEqual(['spaghettiiiossso']);
 	});
 

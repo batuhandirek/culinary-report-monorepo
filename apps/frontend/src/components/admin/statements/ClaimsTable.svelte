@@ -78,10 +78,19 @@
 		goto(url, { replace: true, reset: false });
 	};
 
-	// A brand's or a branch's claims also read grouped by meaning, as Explore groups them (its
-	// `getExploreGroups`): over the months the dates cover, the last 24 up to now without (its most)
-	const groupable = $derived(dated && !aspect && !!(scope.brandId || scope.venueId));
-	let shown = $state<'all' | 'groups'>('all');
+	// The claims also read grouped by meaning (Explore's `getExploreGroups`), switched in the table's
+	// own bar: the same filters pick the claims, so "negative, under Waiting" groups only those. A
+	// brand's or a branch's over the months the dates cover (the last 24 up to now without, its
+	// most); an Explore view's over its months.
+	const groupable = $derived(!!explore || (dated && !aspect && !!(scope.brandId || scope.venueId)));
+	// Kept in the URL (`?claims=groups`), so a view remounting the table and a shared link keep it
+	const shown = $derived(page.url.searchParams.get('claims') === 'groups' ? 'groups' : 'all');
+	const setShown = (value: string) => {
+		const url = new URL(page.url.href);
+		if (value === 'groups') url.searchParams.set('claims', 'groups');
+		else url.searchParams.delete('claims');
+		goto(url, { replace: true, reset: false });
+	};
 	let groupBar = $state<{ similarity?: number; minClaims?: number }>({});
 	let groups = $state<AdminExploreGroupsOutputDto | null>(null);
 	const groupsLoader = createLoader((q: Parameters<typeof api.admin.getExploreGroups>[0]) => api.admin.getExploreGroups(q), {
@@ -91,20 +100,39 @@
 		const [y, m] = month.split('-').map(Number);
 		return new Date(Date.UTC(y, m - 1 + n, 1)).toISOString().slice(0, 7);
 	};
-	const groupsQuery = $derived.by(() => {
+	// A select filter holds a list; the groups take one value
+	const one = (value: unknown) => {
+		const v = Array.isArray(value) ? value[0] : value;
+		return v === undefined || v === null || v === '' ? undefined : String(v);
+	};
+	const months = $derived.by(() => {
 		const toMonth = (to ?? new Date().toISOString()).slice(0, 7);
 		const earliest = shiftMonth(toMonth, -23);
-		const fromMonth = from && from.slice(0, 7) > earliest ? from.slice(0, 7) : earliest;
+		return { from: from && from.slice(0, 7) > earliest ? from.slice(0, 7) : earliest, to: toMonth };
+	});
+	const groupsQuery = (table: Record<string, unknown>) => {
+		const own = { q: one(table.q), sentiment: one(table.sentiment), parts: one(table.parts), ...groupBar };
+		if (explore) return { ...explore, ...own } as Parameters<typeof api.admin.getExploreGroups>[0];
 		return {
 			cityId: scope.cityId ?? topicsCityId,
 			...(scope.brandId && { brandId: scope.brandId }),
 			...(scope.venueId && { venueId: scope.venueId }),
-			from: fromMonth,
-			to: toMonth,
-			...groupBar
-		};
+			...months,
+			node: one(table.aspect),
+			source: one(table.sourceKind),
+			subject: one(table.subject),
+			kind: one(table.kind),
+			...own
+		} as Parameters<typeof api.admin.getExploreGroups>[0];
+	};
+	// The table keeps its filters in the URL: the groups read them there
+	const TABLE_KEYS = ['q', 'sentiment', 'parts', 'aspect', 'sourceKind', 'subject', 'kind'];
+	const groupsKey = $derived.by(() => {
+		if (!groupable || shown !== 'groups') return '';
+		const params = page.url.searchParams;
+		const table = Object.fromEntries(TABLE_KEYS.map((key) => [key, params.get(key)?.split(',')]));
+		return JSON.stringify(groupsQuery(table));
 	});
-	const groupsKey = $derived(groupable && shown === 'groups' ? JSON.stringify(groupsQuery) : '');
 	$effect(() => {
 		if (!groupsKey) return;
 		groups = null;
@@ -312,6 +340,31 @@
 	<DateRangeFilter {from} {to} onChange={setRange} />
 {/snippet}
 
+{#snippet groupSwitch()}
+	<div class="flex flex-wrap items-center gap-2">
+		<Tabs.Root value={shown} onValueChange={setShown}>
+			<Tabs.List>
+				<Tabs.Trigger value="all">All</Tabs.Trigger>
+				<Tabs.Trigger value="groups">
+					Grouped by meaning{#if shown === 'groups' && groups?.groups.length}<span class="font-term text-base leading-none opacity-70">{groups.groups.length}</span>{/if}
+				</Tabs.Trigger>
+			</Tabs.List>
+		</Tabs.Root>
+		{#if dated}{@render dateRange()}{/if}
+	</div>
+{/snippet}
+
+{#snippet groupedBody()}
+	{#if !explore}
+		<p class="text-muted-foreground m-0 mb-2 text-xs">{monthLabel(months.from)} – {monthLabel(months.to)} · the claims these filters keep</p>
+	{/if}
+	{#if groupsLoader.error && !groups}
+		<ErrorState onRetry={() => groupsLoader.load(JSON.parse(groupsKey))} />
+	{:else}
+		<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} />
+	{/if}
+{/snippet}
+
 {#snippet source(row: AdminStatementRowOutputDto)}
 	<DigestionDetail postId={row.post?.id} reviewId={row.review?.id} focus={row.id} />
 {/snippet}
@@ -334,29 +387,6 @@
 	</AdminPanel>
 	{/if}
 
-	{#if groupable}
-		<div class="-mb-2 flex flex-wrap items-center gap-2">
-			<Tabs.Root bind:value={shown}>
-				<Tabs.List>
-					<Tabs.Trigger value="all">All</Tabs.Trigger>
-					<Tabs.Trigger value="groups">
-						Grouped by meaning{#if groups?.groups.length}<span class="font-term text-base leading-none opacity-70">{groups.groups.length}</span>{/if}
-					</Tabs.Trigger>
-				</Tabs.List>
-			</Tabs.Root>
-			<div class="ml-auto">{@render dateRange()}</div>
-		</div>
-	{/if}
-
-	{#if groupable && shown === 'groups'}
-		<AdminPanel title="Grouped by meaning" note={`${monthLabel(groupsQuery.from)} – ${monthLabel(groupsQuery.to)}`}>
-			{#if groupsLoader.error && !groups}
-				<ErrorState onRetry={() => groupsLoader.load(JSON.parse(groupsKey))} />
-			{:else}
-				<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} />
-			{/if}
-		</AdminPanel>
-	{:else}
 	<PaginatedDataTable
 		syncWithSearchParams
 		{filters}
@@ -367,10 +397,10 @@
 		columns={COLUMNS}
 		expand={source}
 		dense
-		toolbar={dated && !groupable ? dateRange : undefined}
+		toolbar={groupable ? groupSwitch : dated ? dateRange : undefined}
+		body={groupable && shown === 'groups' ? groupedBody : undefined}
 		rowKey={(row) => String(row.id)}
 		rowClass={(row) => sentimentLook(row.sentiment).tint}
 		emptyTitle="No claim matches"
 		emptyDescription="The month's reviews and posts hold no claim with these filters." />
-	{/if}
 </div>

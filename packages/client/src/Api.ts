@@ -2405,10 +2405,6 @@ export interface AdminExploreBreakdownRowOutputDto {
 	sources: number;
 }
 
-/**
- * The Claims table's own filters on top of the view: the ones the page's pickers don't hold
- * (sentiment, parts), as the Claims tabs filter them
- */
 export interface AdminExploreClaimsInputDto {
 	/** @format uuid */
 	brandId?: string;
@@ -2443,7 +2439,7 @@ export interface AdminExploreClaimsInputDto {
 	 * @maxLength 200
 	 */
 	q?: string;
-	/** One sentiment, or `unread`: agent B gave none yet */
+	/** One sentiment, or `unread`: no label yet */
 	sentiment?: AdminExploreClaimsInputDtoSentimentEnum;
 	side?: AdminExploreClaimsInputDtoSideEnum;
 	/** @min 1 */
@@ -2479,7 +2475,7 @@ export enum AdminExploreClaimsInputDtoPartsEnum {
 	NoAspect = 'no_aspect',
 }
 
-/** One sentiment, or `unread`: agent B gave none yet */
+/** One sentiment, or `unread`: no label yet */
 export enum AdminExploreClaimsInputDtoSentimentEnum {
 	Positive = 'positive',
 	Mixed = 'mixed',
@@ -2536,7 +2532,7 @@ export enum AdminExploreGroupOutputDtoSentimentEnum {
 	Neutral = 'neutral',
 }
 
-/** The grouping's bar, each defaulting to `INSIGHT_GROUP_FLOORS` */
+/** The claims the table's filters keep, grouped; the bar each defaulting to `INSIGHT_GROUP_FLOORS` */
 export interface AdminExploreGroupsInputDto {
 	/** @format uuid */
 	brandId?: string;
@@ -2558,11 +2554,20 @@ export interface AdminExploreGroupsInputDto {
 	minClaims?: number;
 	/** @maxLength 200 */
 	node?: string;
+	/** Under no aspect, no part at all, or naming a food */
+	parts?: AdminExploreGroupsInputDtoPartsEnum;
 	/**
 	 * The brands of one kind of place (their main food in the city), a topic's key
 	 * @maxLength 80
 	 */
 	place?: string;
+	/**
+	 * Words in the claim
+	 * @maxLength 200
+	 */
+	q?: string;
+	/** One sentiment, or `unread`: no label yet */
+	sentiment?: AdminExploreGroupsInputDtoSentimentEnum;
 	side?: AdminExploreGroupsInputDtoSideEnum;
 	/**
 	 * Cosine a claim needs with a group's centroid to join it: lower groups looser paraphrases
@@ -2591,6 +2596,22 @@ export enum AdminExploreGroupsInputDtoKindEnum {
 	Event = 'event',
 	Question = 'question',
 	Verdict = 'verdict',
+	Unread = 'unread',
+}
+
+/** Under no aspect, no part at all, or naming a food */
+export enum AdminExploreGroupsInputDtoPartsEnum {
+	None = 'none',
+	Food = 'food',
+	NoAspect = 'no_aspect',
+}
+
+/** One sentiment, or `unread`: no label yet */
+export enum AdminExploreGroupsInputDtoSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
 	Unread = 'unread',
 }
 
@@ -2998,11 +3019,6 @@ export interface AdminGetTermsInputDto {
 	/** @min 0 */
 	offset?: number;
 	/**
-	 * Only narrower terms proposed as this topic of their own (`proposedLabel`)
-	 * @maxLength 80
-	 */
-	proposal?: string;
-	/**
 	 * A search in the wording or its key
 	 * @maxLength 80
 	 */
@@ -3017,8 +3033,6 @@ export interface AdminGetTermsInputDto {
 
 export enum AdminGetTermsInputDtoStatusEnum {
 	All = 'all',
-	Pending = 'pending',
-	Unlinked = 'unlinked',
 	Linked = 'linked',
 }
 
@@ -5583,15 +5597,6 @@ export enum AdminTermOutputDtoDecidedByEnum {
 	Ai = 'ai',
 }
 
-export interface AdminTermProposalOutputDto {
-	examples: string[];
-	label: string;
-	/** Narrower wordings proposed as it */
-	terms: number;
-	/** Their statements and tag venues together */
-	uses: number;
-}
-
 export interface AdminTermTopicOutputDto {
 	key: string;
 	kind: string;
@@ -5599,16 +5604,6 @@ export interface AdminTermTopicOutputDto {
 }
 
 export interface AdminTermsOutputDto {
-	/** What the city's narrower wordings would be as topics of their own, most used first: a group becomes a topic at 15 uses from 5 sources */
-	proposals: AdminTermProposalOutputDto[];
-	/** The city's wordings and their uses, and how many point at a topic */
-	summary: {
-		linkedTerms: number;
-		linkedUses: number;
-		pendingTerms: number;
-		terms: number;
-		uses: number;
-	};
 	terms: AdminTermOutputDto[];
 	total: number;
 }
@@ -7815,6 +7810,22 @@ export enum GetExploreGroupsParamsKindEnum {
 	Unread = 'unread',
 }
 
+/** Under no aspect, no part at all, or naming a food */
+export enum GetExploreGroupsParamsPartsEnum {
+	None = 'none',
+	Food = 'food',
+	NoAspect = 'no_aspect',
+}
+
+/** One sentiment, or `unread`: no label yet */
+export enum GetExploreGroupsParamsSentimentEnum {
+	Positive = 'positive',
+	Mixed = 'mixed',
+	Negative = 'negative',
+	Neutral = 'neutral',
+	Unread = 'unread',
+}
+
 export enum GetExploreGroupsParamsSideEnum {
 	Praise = 'praise',
 	Complaints = 'complaints',
@@ -8030,8 +8041,6 @@ export type GetTermsData = AdminTermsOutputDto;
 
 export enum GetTermsParamsStatusEnum {
 	All = 'all',
-	Pending = 'pending',
-	Unlinked = 'unlinked',
 	Linked = 'linked',
 }
 
@@ -8590,7 +8599,7 @@ export enum ListExploreClaimsParamsPartsEnum {
 	NoAspect = 'no_aspect',
 }
 
-/** One sentiment, or `unread`: agent B gave none yet */
+/** One sentiment, or `unread`: no label yet */
 export enum ListExploreClaimsParamsSentimentEnum {
 	Positive = 'positive',
 	Mixed = 'mixed',
@@ -14181,7 +14190,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				 * @maxLength 200
 				 */
 				q?: string;
-				/** One sentiment, or `unread`: agent B gave none yet */
+				/** One sentiment, or `unread`: no label yet */
 				sentiment?: ListExploreClaimsParamsSentimentEnum;
 				side?: ListExploreClaimsParamsSideEnum;
 				/** @min 1 */
@@ -14235,11 +14244,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				minClaims?: number;
 				/** @maxLength 200 */
 				node?: string;
+				/** Under no aspect, no part at all, or naming a food */
+				parts?: GetExploreGroupsParamsPartsEnum;
 				/**
 				 * The brands of one kind of place (their main food in the city), a topic's key
 				 * @maxLength 80
 				 */
 				place?: string;
+				/**
+				 * Words in the claim
+				 * @maxLength 200
+				 */
+				q?: string;
+				/** One sentiment, or `unread`: no label yet */
+				sentiment?: GetExploreGroupsParamsSentimentEnum;
 				side?: GetExploreGroupsParamsSideEnum;
 				/**
 				 * Cosine a claim needs with a group's centroid to join it: lower groups looser paraphrases
@@ -14466,10 +14484,10 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
-		 * @description The city's wordings with their topics and uses; `status` defaults to `unlinked`.
+		 * @description The city's wordings with their topics and uses; `status` defaults to `all`.
 		 *
 		 * @name GetTerms
-		 * @summary The city's wordings with their topics and uses; `status` defaults to `unlinked`
+		 * @summary The city's wordings with their topics and uses; `status` defaults to `all`
 		 * @request GET:/admin/terms
 		 * @response `200` `GetTermsData`
 		 */
@@ -14484,11 +14502,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				limit?: number;
 				/** @min 0 */
 				offset?: number;
-				/**
-				 * Only narrower terms proposed as this topic of their own (`proposedLabel`)
-				 * @maxLength 80
-				 */
-				proposal?: string;
 				/**
 				 * A search in the wording or its key
 				 * @maxLength 80

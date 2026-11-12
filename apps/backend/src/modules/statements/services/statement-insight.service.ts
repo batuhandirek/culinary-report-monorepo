@@ -218,6 +218,31 @@ export interface InsightGroups {
 }
 
 /** The grouping's bar an admin may move; what is not given is `INSIGHT_GROUP_FLOORS`' */
+/** The Claims table's own filters, on top of the view: what the page's pickers don't hold */
+export interface InsightTableFilters {
+	/** Words in the claim */
+	q?: string;
+	/** A sentiment, or `unread` (none yet) */
+	sentiment?: string;
+	/** `none` (no part), `no_aspect`, `food` (names a food) */
+	parts?: 'none' | 'no_aspect' | 'food';
+}
+
+/** The table's filters as conditions on `claims c`: the list and its groups by meaning read the same claims */
+const tableFilterSql = (table: InsightTableFilters): Sql[] => {
+	const q = table.q?.trim();
+	return [
+		...(q ? [sql(`c.text ilike ?`, [`%${q.replace(/[\\%_]/g, ch => `\\${ch}`)}%`])] : []),
+		...(table.sentiment === 'unread' ? [sql('exists (select 1 from statements xs where xs.id = c.id and xs.sentiment is null)')]
+		: table.sentiment ? [sql('exists (select 1 from statements xs where xs.id = c.id and xs.sentiment = ?)', [table.sentiment])]
+		: []),
+		...(table.parts === 'none' ? [sql('not exists (select 1 from statement_parts xp where xp.statement_id = c.id)')]
+		: table.parts === 'no_aspect' ? [sql(`not exists (select 1 from statement_parts xp where xp.statement_id = c.id and xp.role = 'aspect')`)]
+		: table.parts === 'food' ? [sql(`exists (select 1 from statement_parts xp where xp.statement_id = c.id and xp.role = 'food')`)]
+		: []),
+	];
+};
+
 export interface InsightGroupBar {
 	similarity?: number;
 	minClaims?: number;
@@ -674,34 +699,21 @@ export class StatementInsightService {
 	 */
 	async claims(
 		selection: InsightSelection,
-		page: {
+		page: InsightTableFilters & {
 			offset: number;
 			limit: number;
-			q?: string;
 			like?: string;
-			/** A sentiment, or `unread` (none yet): the Claims table's filter */
-			sentiment?: string;
-			/** `none` (no part), `no_aspect`, `food` (names a food): the Claims table's filter */
-			parts?: 'none' | 'no_aspect' | 'food';
 		},
 	): Promise<{ total: number; items: Statement[]; notEmbedded?: number }> {
 		const { scope, filters, node } = await this.resolve(selection);
 		const cte = claimsCte(scope.cityId, scope);
-		const q = page.q?.trim();
 		const like = page.like?.trim();
 		const conditions = [
 			...scopeSql(scope),
 			...populationSql(filters),
 			...narrowingSql(filters),
 			...(node ? [nodeSql(node)] : []),
-			...(q ? [sql(`c.text ilike ?`, [`%${q.replace(/[\\%_]/g, ch => `\\${ch}`)}%`])] : []),
-			...(page.sentiment === 'unread' ? [sql('exists (select 1 from statements xs where xs.id = c.id and xs.sentiment is null)')]
-			: page.sentiment ? [sql('exists (select 1 from statements xs where xs.id = c.id and xs.sentiment = ?)', [page.sentiment])]
-			: []),
-			...(page.parts === 'none' ? [sql('not exists (select 1 from statement_parts xp where xp.statement_id = c.id)')]
-			: page.parts === 'no_aspect' ? [sql(`not exists (select 1 from statement_parts xp where xp.statement_id = c.id and xp.role = 'aspect')`)]
-			: page.parts === 'food' ? [sql(`exists (select 1 from statement_parts xp where xp.statement_id = c.id and xp.role = 'food')`)]
-			: []),
+			...tableFilterSql(page),
 		];
 		const withCte = (body: Sql) => joinSql([sql('with claims as ('), cte, sql(')'), body], ' ');
 		let ids: number[];
@@ -791,7 +803,11 @@ export class StatementInsightService {
 	 * never a figure a report quotes. Empty until the claims have vectors. `bar` moves the cosine and
 	 * the claims a group needs; the sources (two) and brands stay.
 	 */
-	async groups(selection: InsightSelection, bar: InsightGroupBar = {}): Promise<InsightGroups> {
+	async groups(
+		selection: InsightSelection,
+		bar: InsightGroupBar = {},
+		table: InsightTableFilters = {},
+	): Promise<InsightGroups> {
 		const floors = {
 			...INSIGHT_GROUP_FLOORS,
 			threshold: bar.similarity ?? INSIGHT_GROUP_FLOORS.threshold,
@@ -806,6 +822,7 @@ export class StatementInsightService {
 			...populationSql(filters),
 			...narrowingSql(filters),
 			...(node ? [nodeSql(node)] : []),
+			...tableFilterSql(table),
 		];
 		const withCte = (body: Sql) => joinSql([sql('with claims as ('), cte, sql(')'), body], ' ');
 		const [counts] = await this.run<{ embedded: number; notEmbedded: number }>(
@@ -835,11 +852,19 @@ export class StatementInsightService {
 			withCte(
 				joinSql(
 					[
-						sql(`select c.id, c.text, c.sentiment, c.side, c.source, c.brand_id::text, b.name as brand_name,
-							subvector(e.embedding, 1, ${CLUSTER_DIMENSIONS})::text as vector
-							from claims c join statements e on e.id = c.id left join brands b on b.id = c.brand_id`),
+						// The claims picked first, their vectors read after: a vector's text built for
+						// every row before the sort spilled ~500 MB to disk on a Berlin half-year (7.9 s → 0.5 s)
+						sql(`select p.id, p.text, p.sentiment, p.side, p.source, p.brand_id::text, b.name as brand_name,
+							subvector(v.embedding, 1, ${CLUSTER_DIMENSIONS})::text as vector
+							from (select c.id, c.text, c.sentiment, c.side, c.source, c.brand_id
+							from claims c join statements e on e.id = c.id`),
 						whereSql([...conditions, sql('e.embedded_at is not null')]),
-						sql('order by md5(c.id::text) limit ?', [CLUSTER_MAX_CLAIMS]),
+						sql(
+							`order by md5(c.id::text) limit ?) p
+							join statements v on v.id = p.id left join brands b on b.id = p.brand_id
+							order by md5(p.id::text)`,
+							[CLUSTER_MAX_CLAIMS],
+						),
 					],
 					' ',
 				),

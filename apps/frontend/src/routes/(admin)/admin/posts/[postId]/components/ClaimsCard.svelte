@@ -14,7 +14,7 @@
 	// without the place when it opens with its name) and its number, the source's own words under it
 	// (flagged when they aren't in the text); its aspect (to Explore on that aspect, side, city and
 	// month) and kind when it isn't an opinion; the food wordings, each to the topics it is linked
-	// to, or to the Terms tab while it is linked to none. Each row is `#claim-<id>`: a claims
+	// to, plain while it is linked to none. Each row is `#claim-<id>`: a claims
 	// table's link lands on it and `selected` marks it.
 	interface Props {
 		statements: AdminDigestionStatementOutputDto[];
@@ -56,9 +56,6 @@
 	);
 	const shown = $derived(filter === 'all' ? rows : rows.filter((r) => groupOf(r.s) === filter));
 	const trimmed = $derived(rows.some((r) => r.short));
-
-	const termsHref = (wording: string) =>
-		`/admin/trends?tab=terms&cityId=${encodeURIComponent(cityId)}&status=all&q=${encodeURIComponent(wording)}`;
 </script>
 
 <section class="bg-paper border-line min-w-0 overflow-hidden rounded-md border">
@@ -154,8 +151,7 @@
 								{#each foods as food (food.key)}
 									<div class="whitespace-nowrap">
 										{#if !food.topics.length}
-											<span>{food.name}</span>
-											<a class="text-[hsl(30_85%_30%)] underline-offset-2 hover:underline" href={termsHref(food.name)} title="Not linked to a topic yet: decide it on the Terms tab">· link</a>
+											<span title="Not linked to a topic yet">{food.name}</span>
 										{:else}
 											{#if !food.exact}<span class="text-muted-foreground" title="The wording, narrower than its topic">{food.name} →</span>{/if}
 											{#each food.topics as topic, i (topic.key)}{#if i}<span class="text-muted-foreground">, </span>{/if}<a

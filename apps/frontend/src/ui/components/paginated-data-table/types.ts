@@ -204,6 +204,9 @@ export interface PaginatedDataTableProps<
 	emptyDescription?: string;
 	// Controls at the end of the filter bar (an export, a "new" button).
 	toolbar?: Snippet;
+	// Another view of the same rows, drawn in place of the table and its footer while given (the
+	// claims grouped by meaning): the filter bar stays and hands it the filters; no page is fetched.
+	body?: Snippet<[F]>;
 	// Take the height the parent gives and scroll inside it, header pinned. Defaults to
 	// what the page says (`setDataTableFill`); a table inside a tab or a card stays `false`.
 	fill?: boolean;

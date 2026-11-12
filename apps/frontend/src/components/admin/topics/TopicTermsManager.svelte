@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ArrowUpRight, Plus, Search } from '@lucide/svelte';
+	import { Plus, Search } from '@lucide/svelte';
 
 	import { type AdminTermOutputDto, type AdminTermsOutputDto, type AdminUpdatedTermOutputDto, type GetTermsParamsStatusEnum } from 'client';
 
@@ -118,7 +118,6 @@
 
 	const n = (v: number) => v.toLocaleString('en-GB');
 	const plural = (v: number, one: string, many = `${one}s`) => `${n(v)} ${v === 1 ? one : many}`;
-	const termsTabHref = (name: string) => `/admin/trends?${new URLSearchParams({ tab: 'terms', cityId, status: 'all', q: name })}`;
 	const isFood = $derived(topic.kind !== 'aspect');
 </script>
 
@@ -213,11 +212,6 @@
 													onTopicsChanged?.();
 												}} />
 										{/if}
-										<div class="border-line flex items-center justify-end border-t px-2 py-1.5">
-											<a class="inline-flex items-center gap-1 px-2 text-xs whitespace-nowrap" href={termsTabHref(row.name)}>
-												In Terms <ArrowUpRight class="size-3" />
-											</a>
-										</div>
 									</div>
 								</ResponsivePopover>
 							</span>

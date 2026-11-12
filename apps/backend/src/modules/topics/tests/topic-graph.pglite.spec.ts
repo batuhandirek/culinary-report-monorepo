@@ -1,7 +1,3 @@
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
-
 import { wrap } from '@mikro-orm/core';
 
 import { BadRequestException } from '@nestjs/common';
@@ -19,26 +15,17 @@ import { FOODS_SQL, type StatementFood } from 'src/modules/statements/util/state
 import { STATEMENT_PARTS_POPULATE } from 'src/modules/statements/util/statement-populate.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
-import { termKey } from 'src/modules/venues/util/dishes.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import type { CountMode, EdgeType } from '../constants/topic-edge.constant.js';
-import { DECIDED_AT_SQL } from '../constants/topic-relinking.constant.js';
 import { Term, type TermDecider } from '../entities/term.entity.js';
 import { Topic, TopicKindEnum } from '../entities/topic.entity.js';
-import type { TopicRelinkingFile } from '../interfaces/topic-relinking.interface.js';
 import { TermService } from '../services/term.service.js';
 import { TopicService } from '../services/topic.service.js';
-import { TopicRelinkingImportService } from '../services/topic-relinking-import.service.js';
 import type { TermDecision } from '../util/term-topic-input.js';
-import { writeTopicRelinking } from '../util/topic-relinking-file.js';
 
 import { seedTopics } from './factories/topic.factory.js';
-
-// The import reads its file from here: nothing of the repo's own `tmp/topic-relinking`
-const relinkingDir = mkdtempSync(path.join(tmpdir(), 'topic-relinking-'));
-process.env.TOPIC_RELINKING_DIR = relinkingDir;
 
 const MONTH = '2026-09';
 
@@ -52,7 +39,6 @@ describe('The topic graph (pglite)', () => {
 	let topics: TopicService;
 	let terms: TermService;
 	let insight: StatementInsightService;
-	let importer: TopicRelinkingImportService;
 	let city: City;
 	let venue: Venue;
 	let reviews = 0;
@@ -150,14 +136,12 @@ describe('The topic graph (pglite)', () => {
 				TopicService,
 				TermService,
 				StatementInsightService,
-				TopicRelinkingImportService,
 				{ provide: PgBossService, useValue: { sendJob: jest.fn(async () => undefined) } },
 			],
 		});
 		topics = harness.moduleRef.get(TopicService);
 		terms = harness.moduleRef.get(TermService);
 		insight = harness.moduleRef.get(StatementInsightService);
-		importer = harness.moduleRef.get(TopicRelinkingImportService);
 		entityManagerManager.setEntityManager(harness.orm.em);
 
 		seedTopics(em(), [
@@ -188,7 +172,6 @@ describe('The topic graph (pglite)', () => {
 
 	afterAll(async () => {
 		await harness.stop();
-		rmSync(relinkingDir, { recursive: true, force: true });
 	});
 
 	it('states what Menemen is once, and every spelling follows', async () => {
@@ -440,117 +423,5 @@ describe('The topic graph (pglite)', () => {
 			exact: true,
 			topic: { key: 'menemen', parent: { key: 'turkish' } },
 		});
-	});
-
-	it('imports a converted decision once, and only onto a wording still decided as the converter saw it', async () => {
-		// As the migration leaves them: provisional, decided before the converter ran
-		await decide('acili ezme', { topicKey: 'turkish' });
-		await decide('sucuklu yumurta', { topicKey: 'turkish' });
-		await decide('simit', { topicKey: 'turkish' });
-		const at = async (key: string) =>
-			(
-				await sql<{ at: string }>(
-					`select ${DECIDED_AT_SQL('decided_at')} as at from terms where key = ?`,
-					[key],
-				)
-			)[0].at;
-		const file: TopicRelinkingFile = {
-			generatedAt: new Date().toISOString(),
-			model: 'test',
-			usd: 0,
-			tokens: 0,
-			unanswered: [],
-			terms: {
-				// Still as the converter saw it: applied
-				'sucuklu yumurta': {
-					decidedAt: await at('sucuklu yumurta'),
-					topic: 'menemen',
-					exact: false,
-					proposedLabel: 'Sucuklu yumurta',
-					proposedKind: 'dish',
-					modifiers: [{ topic: 'breakfast', type: 'is_a' }],
-				},
-				// Decided again since the clone (an admin, production's backlog): left alone
-				'acili ezme': { decidedAt: '2026-01-01T00:00:00.000000Z', none: true },
-				// A topic this database lacks: left alone
-				simit: { decidedAt: await at('simit'), topic: 'no such topic', exact: true },
-				// No such wording here
-				'never seen': { decidedAt: '2026-01-01T00:00:00.000000Z', none: true },
-			},
-		};
-		writeTopicRelinking(file);
-
-		const first = await importer.run();
-		expect(first).toMatchObject({ entries: 4, applied: 1, skipped: 2, unknownTopic: 1 });
-		const applied = await term('sucuklu yumurta');
-		expect(applied.topic?.key).toBe('menemen');
-		expect(applied.exact).toBe(false);
-		expect(applied.proposedLabel).toBe('Sucuklu yumurta');
-		expect(applied.decidedBy).toBe('ai');
-		expect(applied.modifiers.getItems().map(m => [m.topic.key, m.type])).toEqual([
-			['breakfast', 'is_a'],
-		]);
-		expect((await term('acili ezme')).topic?.key).toBe('turkish');
-		expect((await term('simit')).topic?.key).toBe('turkish');
-
-		// A second boot applies nothing
-		expect(await importer.run()).toMatchObject({ applied: 0, skipped: 3 });
-	});
-
-	it('imports an answer for a wording never decided only while it still is, as its decider', async () => {
-		// Waiting for the backlog, as the converter saw them
-		await terms.ensure(['vegan dürüm', 'Ezme', 'plate'], await topics.index());
-		await em().flush();
-		// Decided by an admin since the clone: left alone
-		await decide('çiğ köfte', { topicKey: 'turkish' }, 'admin');
-		const file: TopicRelinkingFile = {
-			generatedAt: new Date().toISOString(),
-			model: 'test',
-			usd: 0,
-			tokens: 0,
-			unanswered: [],
-			terms: {
-				[termKey('vegan dürüm')]: {
-					decidedAt: null,
-					decidedBy: 'ai',
-					topic: 'kebab',
-					exact: false,
-					proposedLabel: 'Vegan dürüm',
-					proposedKind: 'dish',
-					modifiers: [{ topic: 'vegan', type: 'has' }],
-				},
-				[termKey('Ezme')]: {
-					decidedAt: null,
-					decidedBy: 'match',
-					topic: 'turkish',
-					exact: true,
-				},
-				[termKey('plate')]: { decidedAt: null, decidedBy: 'ai', none: true },
-				[termKey('çiğ köfte')]: { decidedAt: null, decidedBy: 'ai', none: true },
-			},
-		};
-		writeTopicRelinking(file);
-
-		const first = await importer.run();
-		expect(first).toMatchObject({ entries: 4, applied: 3, appliedUndecided: 3, skipped: 1 });
-		const vegan = await term(termKey('vegan dürüm'));
-		expect(vegan.decidedBy).toBe('ai');
-		expect(vegan.decidedAt).toBeTruthy();
-		expect(vegan.topic?.key).toBe('kebab');
-		expect(vegan.proposedLabel).toBe('Vegan dürüm');
-		expect(vegan.modifiers.getItems().map(m => [m.topic.key, m.type])).toEqual([
-			['vegan', 'has'],
-		]);
-		const ezme = await term(termKey('Ezme'));
-		expect([ezme.decidedBy, ezme.topic?.key, ezme.exact]).toEqual(['match', 'turkish', true]);
-		const plate = await term(termKey('plate'));
-		expect([plate.decidedBy, plate.topic, plate.proposedLabel]).toEqual(['ai', null, null]);
-		// Still the admin's, never the entry's none (promotion may move it onto a topic of its own)
-		const cig = await term(termKey('çiğ köfte'));
-		expect(cig.decidedBy).toBe('admin');
-		expect(cig.topic).not.toBeNull();
-
-		// A second boot applies nothing: they are decided now
-		expect(await importer.run()).toMatchObject({ applied: 0, appliedUndecided: 0, skipped: 4 });
 	});
 });

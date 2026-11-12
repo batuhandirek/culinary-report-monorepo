@@ -2,7 +2,6 @@
 	import SearchInterestPanel from './components/SearchInterestPanel.svelte';
 	import TrendsClaimsTab from './components/TrendsClaimsTab.svelte';
 	import TrendsPostsTab from './components/TrendsPostsTab.svelte';
-	import TrendsTermsTab from './components/TrendsTermsTab.svelte';
 	import TrendsThemesTab from './components/TrendsThemesTab.svelte';
 	import TrendsTopicsTab from './components/TrendsTopicsTab.svelte';
 	import VenueOpeningsPanel from './components/VenueOpeningsPanel.svelte';
@@ -19,8 +18,7 @@
 
 	// What the city eats and talks about. Topics first: each kind of food with its venues (supply),
 	// the month's posts (buzz) and Google searches (demand); then the month in posts, what guests praise and criticise by theme, every claim the month was split into, the aspects the tree lacks (its claims no aspect fits, grouped by meaning), searches,
-	// openings and closures, and the terms (every wording reviews, posts, Google's tags and
-	// categories use, linked to its topics). Topics and aspects are edited on their own pages
+	// openings and closures. Topics, their wordings and aspects are edited on their own pages
 	// (`/admin/topics`, `/admin/aspects`).
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
@@ -42,8 +40,7 @@
 		{ value: 'themes', label: 'Praise and complaints' },
 		{ value: 'claims', label: 'Claims' },
 		{ value: 'searches', label: 'Searches' },
-		{ value: 'openings', label: 'Openings and closures' },
-		{ value: 'terms', label: 'Terms' }
+		{ value: 'openings', label: 'Openings and closures' }
 	];
 	let tab = $state('topics');
 </script>
@@ -79,8 +76,6 @@
 				<div class="pb-12"><SearchInterestPanel {cityId} {month} /></div>
 			{:else if tab === 'openings'}
 				<div class="pb-12"><VenueOpeningsPanel {cityId} {month} /></div>
-			{:else if tab === 'terms'}
-				<TrendsTermsTab {cityId} />
 			{/if}
 		{/key}
 	{/if}

@@ -49,11 +49,11 @@ const CONCURRENCY = 10;
 // Wordings a daily-backlog batch decides
 const BACKLOG_BATCH_TERMS = 500;
 const CHUNK = 500;
-const EXAMPLES = 3;
 const MAX_MODIFIERS = 5;
 
 /** Which terms an admin list shows */
-export type TermStatus = 'unlinked' | 'linked' | 'pending' | 'all';
+/** `linked`: with a main topic or a modifier (a topic page's wordings); `all`: every wording, decided or not */
+export type TermStatus = 'linked' | 'all';
 
 export interface TermListTopic {
 	key: string;
@@ -81,15 +81,6 @@ export interface TermListRow {
 }
 
 export interface TermList {
-	summary: {
-		terms: number;
-		uses: number;
-		linkedTerms: number;
-		linkedUses: number;
-		pendingTerms: number;
-	};
-	/** The things narrower wordings would be as topics of their own (`proposedLabel`), most used first: what promotion is counting towards */
-	proposals: { label: string; terms: number; uses: number; examples: string[] }[];
 	terms: TermListRow[];
 	total: number;
 }
@@ -600,8 +591,8 @@ export class TermService implements OnModuleInit {
 
 	/**
 	 * The city's wordings with their uses there (statements naming it, venues whose Google tags
-	 * carry it): a summary, what the narrower wordings would be as topics of their own, and the terms
-	 * the filters pick, most used first. Stores new wordings first.
+	 * carry it) that the filters pick, most used first: a topic page's wordings (`linked` with its
+	 * `topicKey`) and its search for another (`all` with `q`). Stores new wordings first.
 	 */
 	async list(
 		cityId: string,
@@ -609,7 +600,6 @@ export class TermService implements OnModuleInit {
 			status?: TermStatus;
 			q?: string;
 			topicKey?: string;
-			proposal?: string;
 			offset: number;
 			limit: number;
 		},
@@ -653,49 +643,18 @@ export class TermService implements OnModuleInit {
 			r => -uses(r),
 			r => r.key,
 		);
-		const proposals = _.sortBy(
-			Object.values(
-				_.groupBy(
-					sorted.filter(r => !r.exact && r.proposedLabel && r.decidedBy),
-					r => termKey(r.proposedLabel!),
-				),
-			).map(group => ({
-				label: _.maxBy(
-					Object.entries(_.countBy(group, r => r.proposedLabel!)),
-					([, n]) => n,
-				)![0],
-				terms: group.length,
-				uses: _.sumBy(group, uses),
-				examples: group.slice(0, EXAMPLES).map(r => r.name),
-			})),
-			s => -s.uses,
-			s => s.label,
-		);
 		const q = filters.q?.trim().toLowerCase();
 		const picked = sorted.filter(r => {
-			const status = filters.status ?? 'unlinked';
-			if (status === 'linked' && !linked(r)) return false;
-			if (status === 'unlinked' && (linked(r) || !r.decidedBy)) return false;
-			if (status === 'pending' && r.decidedBy) return false;
+			if (filters.status === 'linked' && !linked(r)) return false;
 			if (
 				filters.topicKey &&
 				r.topic?.key !== filters.topicKey &&
 				!r.modifiers.some(m => m.key === filters.topicKey)
 			)
 				return false;
-			if (filters.proposal && termKey(r.proposedLabel ?? '') !== termKey(filters.proposal))
-				return false;
 			return !q || r.name.toLowerCase().includes(q) || r.key.includes(q);
 		});
 		return {
-			summary: {
-				terms: rows.length,
-				uses: _.sumBy(rows, uses),
-				linkedTerms: rows.filter(linked).length,
-				linkedUses: _.sumBy(rows.filter(linked), uses),
-				pendingTerms: rows.filter(r => !r.decidedBy).length,
-			},
-			proposals,
 			total: picked.length,
 			terms: picked.slice(filters.offset, filters.offset + filters.limit),
 		};

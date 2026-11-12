@@ -65,6 +65,7 @@
 		emptyTitle = undefined,
 		emptyDescription = undefined,
 		toolbar = undefined,
+		body = undefined,
 		fill = getDataTableFill(),
 		pageSizes = [10, 15, 25, 50, 100]
 	}: PaginatedDataTableProps<T, F> = $props();
@@ -277,6 +278,8 @@
 		const size = currentSize;
 		// A new `key` asks for the same page again.
 		const request = JSON.stringify([filtersJson, pg, size, key]);
+		// Another view of the same filters is drawn in place of the rows: no page to fetch
+		if (body) return;
 		untrack(() => {
 			// A parent handing over an equal filter object is not a new question.
 			if (request === lastRequest) return;
@@ -488,6 +491,9 @@
 			class="border-line border-b px-3 py-2" />
 	{/if}
 
+	{#if body}
+		<div class="min-w-0 px-4 py-3">{@render body(effectiveFilters)}</div>
+	{:else}
 	<div class={cn('relative flex min-w-0 flex-col', fill && 'min-h-0 flex-1')}>
 		{#if refreshing}
 			<div class="bg-primary-darker absolute inset-x-0 top-0 z-20 h-0.5 animate-pulse"></div>
@@ -853,5 +859,6 @@
 				</nav>
 			{/if}
 		</div>
+	{/if}
 	{/if}
 </div>

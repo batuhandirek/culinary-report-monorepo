@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type {
-		AdminExploreGroupsOutputDto,
 		AdminExploreHeadOutputDto,
 		AdminExploreTreeNodeOutputDto
 	} from 'client';
@@ -14,7 +13,6 @@
 	import { page } from '$app/state';
 	import AdminPageHeader from '#components/admin/admin-page-header.svelte';
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
-	import ClaimGroups from '#components/admin/statements/ClaimGroups.svelte';
 	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
 	import { findAdminMenu } from '#constants/ADMIN_MENUS.js';
 	import { cityItems } from '#lib/admin-cities.js';
@@ -23,7 +21,6 @@
 	import { exploreHref, type ExploreView, viewOf } from '#lib/explore.js';
 	import { adminCitiesStore } from '#stores/AdminCitiesStore.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
-	import * as Tabs from '#ui/primitives-new/tabs/index.js';
 	import Button from '#ui/wrapped/Button.svelte';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
@@ -46,8 +43,12 @@
 	const to = $derived(view.to ?? defaultTo);
 	const from = $derived(view.from ?? shift(to, -5));
 
-	/** A new view: the current one changed by `patch` (the table's own search and page dropped) */
-	const setView = (patch: Partial<ExploreView>) => goto(exploreHref({ ...view, ...patch }), { reset: false });
+	/** A new view: the current one changed by `patch` (the table's own search and page dropped, its All / grouped switch kept) */
+	const setView = (patch: Partial<ExploreView>) => {
+		const href = exploreHref({ ...view, ...patch });
+		const grouped = page.url.searchParams.get('claims') === 'groups';
+		goto(grouped ? `${href}${href.includes('?') ? '&' : '?'}claims=groups` : href, { reset: false });
+	};
 	const MONTHS = recentMonths(24).map((m) => ({ value: m, label: monthLabel(m) }));
 	const setMonths = (next: { from: string; to: string }) => {
 		const lo = next.from <= next.to ? next.from : next.to;
@@ -80,12 +81,8 @@
 
 	let tree = $state<AdminExploreTreeNodeOutputDto[] | null>(null);
 	let head = $state<AdminExploreHeadOutputDto | null>(null);
-	let groups = $state<AdminExploreGroupsOutputDto | null>(null);
 	const treeLoader = createLoader((q: Query) => api.admin.getExploreTree(q as never), { onSuccess: (res) => (tree = res.nodes) });
 	const headLoader = createLoader((q: Query) => api.admin.getExploreHead(q as never), { onSuccess: (res) => (head = res) });
-	// The grouping's bar (cosine, claims a group needs), moved on the groups tab; unset is the API's default
-	let groupBar = $state<{ similarity?: number; minClaims?: number }>({});
-	const groupsLoader = createLoader((q: Query & typeof groupBar) => api.admin.getExploreGroups(q as never), { onSuccess: (res) => (groups = res) });
 
 	// The tree's counts don't depend on X: reloaded only when the rest of the view moves
 	const treeKey = $derived(query ? JSON.stringify({ ...query, node: undefined }) : '');
@@ -103,15 +100,8 @@
 		head = null;
 		headLoader.load(q);
 	});
-	const groupsKey = $derived(query ? JSON.stringify({ ...query, ...groupBar }) : '');
-	$effect(() => {
-		if (!groupsKey) return;
-		groups = null;
-		groupsLoader.load(JSON.parse(groupsKey));
-	});
 
 	let claimsOpen = $state<boolean | undefined>(undefined);
-	let claimsTab = $state<'all' | 'groups'>('all');
 
 	// The topics: an aspect and a food or drink (each a picker), claims about both when both are
 	// picked; node is the first, `with` the rest, and any further one an older link carried stays
@@ -199,25 +189,9 @@
 		<ExploreSection
 			id="claims"
 			title="Claims"
-			note={claimsTab === 'all' ? 'Every claim in the view, newest first · a row opens its source' : 'Claims that say the same thing'}
+			note="Every claim in the view, newest first, or grouped by meaning · a row opens its source"
 			bind:open={claimsOpen}>
-			{#snippet actions()}
-				<Tabs.Root bind:value={claimsTab}>
-					<Tabs.List>
-						<Tabs.Trigger value="all">All</Tabs.Trigger>
-						<Tabs.Trigger value="groups">
-							Grouped by meaning{#if groups?.groups.length}<span class="font-term text-base leading-none opacity-70">{groups.groups.length}</span>{/if}
-						</Tabs.Trigger>
-					</Tabs.List>
-				</Tabs.Root>
-			{/snippet}
-			{#if claimsTab === 'groups'}
-				{#if groupsLoader.error && !groups}
-					<ErrorState onRetry={() => groupsKey && groupsLoader.load(JSON.parse(groupsKey))} />
-				{:else}
-					<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} />
-				{/if}
-			{:else if cityId && query}
+			{#if cityId && query}
 				{#key viewKey}
 					<ClaimsTable scope={{ cityId }} topicsCityId={cityId} explore={query as never} />
 				{/key}

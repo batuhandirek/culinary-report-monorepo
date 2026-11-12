@@ -112,8 +112,6 @@ export class TermTopicAgent extends BaseMastraAgent<typeof termTopicSchema, Term
 			'a dish is not the dish: a burger bun is no burger, kebab sauce is a sauce that has kebab, a pizza oven is no pizza, ' +
 			'"cheese counter" is no cheese. A wording under an aspect is always exact (answer 1) with the closest aspect, a root ' +
 			'when nothing finer fits.\n\n' +
-			'When the message says how the wording was linked until now, read it as a hint from an older, looser pass: usually ' +
-			'right about which topics are involved, not about which answer it is.\n\n' +
 			'An odd wording gets an answer too: none is a decision.' +
 			(context ? `\n\nThe topics always offered:\n${topicLines(context.topics)}` : '')
 		);

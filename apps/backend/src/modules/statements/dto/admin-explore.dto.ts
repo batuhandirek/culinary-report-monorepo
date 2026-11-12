@@ -47,19 +47,23 @@ export interface AdminExploreBreakdownInputDto extends AdminExploreInputDto {
  * The Claims table's own filters on top of the view: the ones the page's pickers don't hold
  * (sentiment, parts), as the Claims tabs filter them
  */
-export interface AdminExploreClaimsInputDto extends AdminExploreInputDto, PaginationRequest {
+export interface AdminExploreTableInputDto {
 	/** Words in the claim */
 	q?: string & tags.MaxLength<200>;
-	/** One sentiment, or `unread`: agent B gave none yet */
+	/** One sentiment, or `unread`: no label yet */
 	sentiment?: AdminStatementSentimentFilter;
 	/** Under no aspect, no part at all, or naming a food */
 	parts?: AdminStatementPartsFilter;
+}
+
+export interface AdminExploreClaimsInputDto
+	extends AdminExploreInputDto, AdminExploreTableInputDto, PaginationRequest {
 	/** A phrase: closest in meaning first; claims without a vector are left out */
 	like?: string & tags.MaxLength<200>;
 }
 
-/** The grouping's bar, each defaulting to `INSIGHT_GROUP_FLOORS` */
-export interface AdminExploreGroupsInputDto extends AdminExploreInputDto {
+/** The claims the table's filters keep, grouped; the bar each defaulting to `INSIGHT_GROUP_FLOORS` */
+export interface AdminExploreGroupsInputDto extends AdminExploreInputDto, AdminExploreTableInputDto {
 	/** Cosine a claim needs with a group's centroid to join it: lower groups looser paraphrases */
 	similarity?: number & tags.Minimum<0.5> & tags.Maximum<0.98>;
 	/** Claims a group needs to be listed (from two sources at least, whatever this is) */

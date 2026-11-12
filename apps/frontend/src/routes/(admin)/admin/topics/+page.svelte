@@ -24,8 +24,7 @@
 
 	// The kinds of food and drink as one tree, a section per type: each topic with what sits under
 	// it, the wordings linked to it, and the city's venues and mentions on it; its page holds the
-	// rest. "New topic" adds one in place, also filled from the Terms tab's suggestions
-	// (`?new=Fries&kind=dish`). Aspects live on their own page.
+	// rest. "New topic" adds one in place. Aspects live on their own page.
 	adminCitiesStore.load();
 	const param = (name: string) => page.url.searchParams.get(name) ?? undefined;
 	const cityId = $derived(param('cityId') ?? (adminCitiesStore.list.find((c) => c.active) ?? adminCitiesStore.list[0])?.id);
@@ -76,10 +75,7 @@
 	);
 	const countOf = (kind: string) => food.filter((t) => t.kind === kind).length;
 
-	// "Create topic" from the Terms tab opens the form on the AI's suggested label
-	let creating = $state(!!param('new'));
-	const newLabel = param('new');
-	const newKind = param('kind');
+	let creating = $state(false);
 	const n = (v: number) => v.toLocaleString('en-GB');
 </script>
 
@@ -101,13 +97,8 @@
 		<AdminPanel title="New topic">
 			<NewTopicForm
 				topics={food}
-				label={newLabel}
-				kind={newKind}
 				onCreated={(key) => goto(topicHref(key))}
-				onCancel={() => {
-					creating = false;
-					setParam('new', undefined);
-				}} />
+				onCancel={() => (creating = false)} />
 		</AdminPanel>
 	{/if}
 

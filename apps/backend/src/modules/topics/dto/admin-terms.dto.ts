@@ -4,8 +4,8 @@ import type { EdgeType } from '../constants/topic-edge.constant.js';
 import type { TermDecider } from '../entities/term.entity.js';
 import type { TopicKindEnum } from '../entities/topic.entity.js';
 
-/** Which terms the list shows: `unlinked` = decided with no topic and no modifier, `linked`, `pending` = not decided yet */
-export type AdminTermStatus = 'unlinked' | 'linked' | 'pending' | 'all';
+/** Which terms the list shows: `linked` = with a main topic or a modifier, `all` (the default) = every one */
+export type AdminTermStatus = 'linked' | 'all';
 
 export interface AdminGetTermsInputDto {
 	cityId: string & tags.Format<'uuid'>;
@@ -14,8 +14,6 @@ export interface AdminGetTermsInputDto {
 	q?: string & tags.MaxLength<80>;
 	/** Only terms whose main topic or a modifier is this topic */
 	topicKey?: string & tags.MaxLength<80>;
-	/** Only narrower terms proposed as this topic of their own (`proposedLabel`) */
-	proposal?: string & tags.MaxLength<80>;
 	offset?: number & tags.Type<'uint32'>;
 	limit?: number & tags.Type<'uint32'> & tags.Minimum<1> & tags.Maximum<200>;
 }
@@ -51,26 +49,7 @@ export interface AdminTermOutputDto {
 	tagVenues: number;
 }
 
-export interface AdminTermProposalOutputDto {
-	label: string;
-	/** Narrower wordings proposed as it */
-	terms: number;
-	/** Their statements and tag venues together */
-	uses: number;
-	examples: string[];
-}
-
 export interface AdminTermsOutputDto {
-	/** The city's wordings and their uses, and how many point at a topic */
-	summary: {
-		terms: number;
-		uses: number;
-		linkedTerms: number;
-		linkedUses: number;
-		pendingTerms: number;
-	};
-	/** What the city's narrower wordings would be as topics of their own, most used first: a group becomes a topic at 15 uses from 5 sources */
-	proposals: AdminTermProposalOutputDto[];
 	terms: AdminTermOutputDto[];
 	total: number;
 }

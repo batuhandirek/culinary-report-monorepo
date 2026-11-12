@@ -24,7 +24,6 @@ import { MenuTopicService } from './services/menu-topic.service.js';
 import { TermService } from './services/term.service.js';
 import { TopicService } from './services/topic.service.js';
 import { TopicRelinkService } from './services/topic-relink.service.js';
-import { TopicRelinkingImportService } from './services/topic-relinking-import.service.js';
 import { TrendsTopicLookupService } from './services/trends-topic-lookup.service.js';
 import { VenueTopicService } from './services/venue-topic.service.js';
 import { TopicCityRefreshWorker } from './workers/topic-city-refresh.worker.js';
@@ -57,19 +56,12 @@ import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
 		TermService,
 		TermTopicAgent,
 		TopicRelinkService,
-		TopicRelinkingImportService,
 		TopicRelinkWorker,
 		TopicCityRefreshWorker,
 		MenuTopicService,
 		TrendsTopicLookupService,
 		VenueTopicService,
 	],
-	exports: [
-		TopicService,
-		TermService,
-		TopicRelinkService,
-		MenuTopicService,
-		VenueTopicService,
-	],
+	exports: [TopicService, TermService, TopicRelinkService, MenuTopicService, VenueTopicService],
 })
 export class TopicsModule {}

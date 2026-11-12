@@ -121,8 +121,12 @@ export class AdminExploreController {
 	async getExploreGroups(
 		@TypedQuery() query: AdminExploreGroupsInputDto,
 	): Promise<AdminExploreGroupsOutputDto> {
-		const { similarity, minClaims, ...rest } = query;
-		return this.statementInsightService.groups(selectionOf(rest), { similarity, minClaims });
+		const { similarity, minClaims, q, sentiment, parts, ...rest } = query;
+		return this.statementInsightService.groups(
+			selectionOf(rest),
+			{ similarity, minClaims },
+			{ q, sentiment, parts },
+		);
 	}
 
 	/** Wordings to explore, by a part of their name */
