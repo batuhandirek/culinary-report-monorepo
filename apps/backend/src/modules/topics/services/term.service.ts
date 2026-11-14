@@ -14,9 +14,7 @@ import { LlmBacklogRegistry } from 'src/modules/backlog/services/llm-backlog-reg
 import type { LlmModelChoice } from 'src/modules/llm/constants/llm-models.constant.js';
 import { EmbeddingsService } from 'src/modules/llm/services/embeddings.service.js';
 import { answerUsd } from 'src/modules/llm/util/llm-cost.js';
-import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
 import { termKey } from 'src/modules/venues/util/dishes.js';
-import { isFoodVenue } from 'src/modules/venues/util/venue-names.js';
 import { runPool } from 'src/shared/util/pool.js';
 
 import { TermTopicAgent } from '../agents/term-topic.agent.js';
@@ -38,6 +36,7 @@ import {
 	termTopicInputTopics,
 	termTopicMessage,
 } from '../util/term-topic-input.js';
+import { CATEGORY_ROWS_SQL, type CategoryWording, categoryWordingsOf } from '../util/category-wordings.js';
 import { TopicIndex } from '../util/topics.js';
 import { groupTwins, twinKeys } from '../util/twin-labels.js';
 
@@ -76,7 +75,7 @@ export interface TermListRow {
 	decidedBy?: TermDecider;
 	/** The city's statements naming it (food parts) */
 	notes: number;
-	/** The city's venues whose Google tags carry it */
+	/** The city's venues whose Google tags or categories carry it */
 	tagVenues: number;
 }
 
@@ -217,7 +216,7 @@ export class TermService implements OnModuleInit {
 					.map(x => x.key),
 			]),
 		);
-		const noPlace = (key: string) => index.get(key)?.kind !== TopicKindEnum.FORMAT;
+		const noPlace = (key: string) => index.get(key)?.kind !== TopicKindEnum.PLACE;
 		for (const title of titles) {
 			const key = termKey(title);
 			const hits = decided.get(key) ?? index.exactAll(title);
@@ -236,12 +235,18 @@ export class TermService implements OnModuleInit {
 		return row.n;
 	}
 
+	/** Every Google category, main or other, that names food or drink, once per `termKey` (`categoryWordingsOf`) */
+	async categoryWordings(): Promise<CategoryWording[]> {
+		return categoryWordingsOf(await this.em.getConnection().execute(CATEGORY_ROWS_SQL));
+	}
+
 	/**
-	 * Stores the wordings that have no row yet, as written: the venues' Google tags, and a food
-	 * venue's Google category the index resolves to nothing ("Serbian restaurant"), so the agent
-	 * decides them like any wording, and once decided they resolve through the index. Each is decided at once by a name match when it is a topic's key
-	 * or label as a whole, else waits for the agent. Statements' wordings need no sync: the labelling
-	 * pass stores them as it reads (`ensure`). Idempotent. Returns the terms added and matched.
+	 * Stores the wordings that have no row yet, as written: the venues' Google tags and every food
+	 * category (`categoryWordings`), so the agent decides them like any wording; a venue's category
+	 * tags are its term's decision (`TopicIndex.wordingTopics`), nothing while it waits. Each is decided
+	 * at once by a name match when it is a topic's key or label as a whole ("Italian restaurant",
+	 * "Cafe"), else waits for the agent. Statements' wordings need no sync: the labelling pass stores
+	 * them as it reads (`ensure`). Idempotent. Returns the terms added and matched.
 	 */
 	async sync(index: TopicIndex): Promise<{ added: number; matched: number }> {
 		const conn = this.em.getConnection();
@@ -249,20 +254,13 @@ export class TermService implements OnModuleInit {
 			`select distinct t->>'title' as title from venues v, jsonb_array_elements(v.details->'reviewsTags') t
 				where jsonb_exists(v.details, 'reviewsTags') and t->>'title' is not null`,
 		);
-		const categories = await conn.execute<{ category: string }[]>(
-			`select distinct category from venues where category is not null`,
-		);
 		const missing = new Map<string, string>();
 		const add = (name: string) => {
 			const key = termKey(name);
 			if (key && !missing.has(key)) missing.set(key, name.trim());
 		};
 		for (const { title } of tagTitles) add(title);
-		for (const { category } of categories) {
-			// A hotel or a dance school a scrape found is no kind of food; "Restaurant" alone says nothing
-			if (!isFoodVenue(category)) continue;
-			if (normalizeCuisine(category) && !index.resolve(category).length) add(category);
-		}
+		for (const { name } of await this.categoryWordings()) add(name);
 		const added: { key: string; name: string }[] = [];
 		for (const chunk of _.chunk([...missing], CHUNK)) {
 			const res: { key: string; name: string }[] = await conn.execute(
@@ -616,10 +614,23 @@ export class TermService implements OnModuleInit {
 			`select id, details->'reviewsTags' as tags from venues where city_id = ? and jsonb_exists(details, 'reviewsTags')`,
 			[cityId],
 		);
+		const categoryRows: { id: string; categories: string[] }[] = await conn.execute(
+			`select id, array_remove(array[category] || array(select jsonb_array_elements_text(coalesce(categories, '[]'::jsonb))), null) as categories
+			from venues where city_id = ?`,
+			[cityId],
+		);
+		// Each venue once per wording, whether its Google tags or its categories carry it (a category is a wording of its own)
+		const byVenue = new Map<string, Set<string>>();
+		const carry = (id: string, keys: string[]) => {
+			const set = byVenue.get(id) ?? new Set<string>();
+			for (const key of keys) if (key) set.add(key);
+			byVenue.set(id, set);
+		};
+		for (const v of tagRows) carry(v.id, (v.tags ?? []).map(t => termKey(t.title)));
+		for (const v of categoryRows) carry(v.id, (v.categories ?? []).map(termKey));
 		const tagVenues = new Map<string, number>();
-		for (const v of tagRows)
-			for (const key of new Set((v.tags ?? []).map(t => termKey(t.title)).filter(Boolean)))
-				tagVenues.set(key, (tagVenues.get(key) ?? 0) + 1);
+		for (const keys of byVenue.values())
+			for (const key of keys) tagVenues.set(key, (tagVenues.get(key) ?? 0) + 1);
 		const notes = new Map(noteRows.map(r => [r.key, r.notes]));
 		const keys = [...new Set([...notes.keys(), ...tagVenues.keys()])];
 		const terms: Term[] = [];

@@ -7,13 +7,11 @@ import _ from 'lodash';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import type { TopicIndex } from 'src/modules/topics/util/topics.js';
 import { previousMonth } from 'src/modules/venues/util/month.js';
-import { toVectorLiteral } from 'src/shared/util/vector.js';
 
 import {
 	CLUSTER_DIMENSIONS,
 	CLUSTER_MAX_CLAIMS,
 	CLUSTER_SAMPLE_THRESHOLD,
-	STATEMENT_EMBEDDING_DIMENSIONS,
 } from '../constants/embeddings.constant.js';
 import type { StatementKind } from '../constants/kind.constant.js';
 import type { Sentiment } from '../constants/sentiment.constant.js';
@@ -57,6 +55,7 @@ import {
 	sql,
 	whereSql,
 } from '../util/insight-sql.js';
+import { prefixDistanceSql } from '../util/near-sql.js';
 import { STATEMENT_PARTS_POPULATE } from '../util/statement-populate.js';
 
 import { STATEMENT_SOURCE_POPULATE } from './statement.service.js';
@@ -745,7 +744,7 @@ export class StatementInsightService {
 			);
 			ids = rows.map(r => Number(r.id));
 		} else {
-			const vector = toVectorLiteral(await this.statementEmbeddingService.phraseVector(like));
+			const vector = await this.statementEmbeddingService.phraseVector(like);
 			const [counts] = await this.run<{ total: number; notEmbedded: number }>(
 				withCte(
 					joinSql(
@@ -761,22 +760,28 @@ export class StatementInsightService {
 			);
 			total = counts.total;
 			notEmbedded = counts.notEmbedded;
-			const rows = await this.run<{ id: number }>(
-				withCte(
-					joinSql(
-						[
-							sql('select c.id from claims c join statements e on e.id = c.id'),
-							whereSql([...conditions, sql('e.embedded_at is not null')]),
-							sql(
-								`order by e.embedding <=> ?::halfvec(${STATEMENT_EMBEDDING_DIMENSIONS}), c.id desc limit ? offset ?`,
-								[vector, page.limit, page.offset],
-							),
-						],
-						' ',
-					),
-				),
+			ids = await this.statementEmbeddingService.nearest(
+				vector,
+				{ offset: page.offset, limit: page.limit },
+				async (em, prefix, count) => {
+					const query = withCte(
+						joinSql(
+							[
+								sql('select c.id from claims c join statements e on e.id = c.id'),
+								whereSql([...conditions, sql('e.embedded_at is not null')]),
+								// Distance alone, no tie-break: the prefix index only serves a lone `order by`
+								sql(`order by ${prefixDistanceSql('e')} limit ?`, [prefix, count]),
+							],
+							' ',
+						),
+					);
+					const rows: { id: number }[] = await em.execute(
+						query.text,
+						query.params as never[],
+					);
+					return rows.map(r => Number(r.id));
+				},
 			);
-			ids = rows.map(r => Number(r.id));
 		}
 		const found =
 			ids.length ?

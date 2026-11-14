@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import { normalizeCuisine } from 'src/modules/venues/util/cuisine.js';
+import { termKey as termKeyOf } from 'src/modules/venues/util/dishes.js';
 
 import { TOPIC_SEED } from '../constants/topic-seed.constant.js';
 import { TopicKindEnum } from '../entities/topic.entity.js';
@@ -46,6 +47,40 @@ describe('TopicIndex.resolve', () => {
 		expect(index.resolve(raw)).toEqual(keys);
 	});
 
+});
+
+describe('TopicIndex.wordingTopics', () => {
+	const decided = (name: string, d: Partial<IndexedTerm>): IndexedTerm => ({
+		key: termKeyOf(name),
+		name,
+		topicKey: null,
+		exact: false,
+		modifiers: [],
+		...d,
+	});
+	const idx = new TopicIndex(index.topics, [
+		decided('Cocktail bar', { topicKey: 'bar', modifiers: [{ topicKey: 'cocktails', type: 'has' }] }),
+		decided('Grocery delivery service', {}),
+		decided('Pizza delivery', { topicKey: 'takeaway_handling', exact: true }),
+		decided('Snack bar', { topicKey: 'street food', exact: true }),
+	]);
+
+	it("reads a decided category whole: its main topic, then its modifiers; none and an aspect give nothing", () => {
+		expect(idx.wordingTopics('Cocktail bar')).toEqual(['bar', 'cocktails']);
+		expect(idx.wordingTopics('Snack bar')).toEqual(['street food']);
+		expect(idx.wordingTopics('Grocery delivery service')).toEqual([]);
+		expect(idx.wordingTopics('Pizza delivery')).toEqual([]);
+	});
+
+	it("takes a topic's own name as a whole without a term, and nothing else until the agent decides", () => {
+		expect(idx.wordingTopics('Italian restaurant')).toEqual(['italian']);
+		expect(idx.wordingTopics('Coffee shop')).toEqual(['cafe']);
+		expect(idx.wordingTopics('Pub')).toEqual(['pub']);
+		// Undecided: never split into words, though "bar" and "wine" are topics
+		expect(idx.wordingTopics('Wine bar')).toEqual([]);
+		expect(idx.wordingTopics('Restaurant')).toEqual([]);
+		expect(idx.wordingTopics(null)).toEqual([]);
+	});
 });
 
 describe('TopicIndex.resolveMenuItem', () => {
@@ -213,8 +248,8 @@ describe('TopicIndex with decided terms', () => {
 	it("takes a topic's own key over a term's form", () => {
 		const both = new TopicIndex(
 			[
-				{ key: 'bar', label: 'Bar', kind: TopicKindEnum.FORMAT },
-				{ key: 'pub', label: 'Pub', kind: TopicKindEnum.FORMAT },
+				{ key: 'bar', label: 'Bar', kind: TopicKindEnum.PLACE },
+				{ key: 'pub', label: 'Pub', kind: TopicKindEnum.PLACE },
 			],
 			[{ key: 'pub', name: 'pub', topicKey: 'bar', exact: true, modifiers: [] }],
 		);

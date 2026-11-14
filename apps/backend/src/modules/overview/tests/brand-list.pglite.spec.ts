@@ -19,6 +19,7 @@ import { socialAccountFactory } from 'src/modules/social/tests/factories/social-
 import { Term } from 'src/modules/topics/entities/term.entity.js';
 import { TermService } from 'src/modules/topics/services/term.service.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import type { Brand } from 'src/modules/venues/entities/brand.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
@@ -107,6 +108,7 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 				DataCoverageService,
 				TermService,
 				TopicService,
+				VenueTopicService,
 				{ provide: DurableWorkflowsService, useValue: durable },
 			],
 		});
@@ -117,7 +119,7 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		const em = harness.orm.em;
 
 		city = await cityFactory.create({ name: 'Berlin' });
-		const topics = seedTopics(em, ['kebab', 'vegan']);
+		const topics = seedTopics(em, ['kebab', 'vegan', 'burgers']);
 		// The agent linked a wording no topic names as a whole
 		const chicken = em.create(Term, {
 			key: termKey('Chicken Döner'),
@@ -168,6 +170,17 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 		);
 		quiet = venueFactory.build({ name: 'Quiet Café' }, { associations: { city } });
 		await em.flush();
+		// Agent C decided the chain's Google category: its branches are tagged burgers
+		em.create(Term, {
+			key: termKey('Hamburger restaurant'),
+			name: 'Hamburger restaurant',
+			topic: topics.get('burgers')!,
+			exact: true,
+			decidedBy: 'ai',
+			decidedAt: new Date(),
+		});
+		await em.flush();
+		await harness.moduleRef.get(VenueTopicService).refreshCity(city.id);
 
 		// September: three creators on Döner Pro (one twice), its own account once; August: one
 		const sep1 = post('creator_a', '2026-09-03T10:00:00Z', 1000);
@@ -246,6 +259,8 @@ describe('Brand list, brand summary and data coverage (pglite)', () => {
 			name: 'Burgermeister',
 			branches: 2,
 			category: 'Hamburger restaurant',
+			// What its branches' stored tags say it is
+			topics: [{ key: 'burgers', label: 'Burgers', kind: 'dish' }],
 			// (4.5 × 900 + 3.5 × 100) / 1000
 			rating: 4.4,
 			reviewsCount: 1000,

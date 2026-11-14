@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
 
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-step.decorator.js';
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
@@ -75,7 +76,7 @@ export class ReadPostsWorkflow {
 		private readonly statementPartsService: StatementPartsService,
 	) {}
 
-	@DurableWorkflow({ name: 'read-posts.city' })
+	@DurableWorkflow({ name: 'read-posts.city', keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async readCity(cityId: string): Promise<ReadCityResult> {
 		const postIds = await this.unreadPosts(cityId);
@@ -102,7 +103,7 @@ export class ReadPostsWorkflow {
 		return result;
 	}
 
-	@DurableWorkflow({ name: 'read-posts.post' })
+	@DurableWorkflow({ name: 'read-posts.post', keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async readPost(postId: string): Promise<ReadPostResult> {
 		const plan = await this.plan(postId);

@@ -26,7 +26,9 @@ import {
 import { AdminWorkflowsController } from './controllers/admin.workflows.controller.js';
 import type { DurableWorkflowsModuleOptions } from './interfaces/durable-workflows.interface.js';
 import { definedDurableQueues } from './queues/define-durable-queue.js';
+import { DurablePruneSchedule } from './schedules/durable-prune.schedule.js';
 import { DurablePriorityService } from './services/durable-priority.service.js';
+import { DurablePruneService } from './services/durable-prune.service.js';
 import { DurableQueueMovesService } from './services/durable-queue-moves.service.js';
 import { DurableRegistry } from './services/durable-registry.service.js';
 import { DurableRunTreeService } from './services/durable-run-tree.service.js';
@@ -98,6 +100,7 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 		private readonly priority: DurablePriorityService,
 		private readonly registry: DurableRegistry,
 		private readonly runTree: DurableRunTreeService,
+		private readonly prune: DurablePruneService,
 	) {}
 
 	/**
@@ -121,6 +124,8 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 				DurablePriorityService,
 				DurableQueueMovesService,
 				DurableRunTreeService,
+				DurablePruneService,
+				DurablePruneSchedule,
 				WorkflowScannerService,
 				DurableWorkflowsService,
 			],
@@ -198,5 +203,6 @@ export class DurableWorkflowsModule implements OnModuleInit, BeforeApplicationSh
 		}
 		await this.priority.close().catch(() => undefined);
 		await this.runTree.close().catch(() => undefined);
+		await this.prune.close().catch(() => undefined);
 	}
 }

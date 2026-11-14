@@ -70,7 +70,7 @@ const counted = (
 
 /**
  * The venue's topics, its primary one first, then by score. Its main category's topics score 1,
- * its other categories' 0.5, a kind of food its posts give `MIN_TAG_MENTIONS`+ times and on
+ * its other categories' 0.5 (a category read whole through its decided term, `TopicIndex.wordingTopics`), a kind of food its posts give `MIN_TAG_MENTIONS`+ times and on
  * `MIN_TAG_SHARE`+ of its posts with one its share, the same for Google's review tags (weighted
  * by their counts), and a kind of food on `MIN_MENU_ITEMS`+ and `MIN_MENU_SHARE`+ of its menu's
  * items with one its share; menus and review tags never give a kind of place (Google's category
@@ -86,10 +86,11 @@ export const venueTopics = (input: VenueTopicInput, index: TopicIndex): VenueTop
 		if (!current || score > current.score) tags.set(key, { source, score });
 	};
 
-	const main = index.resolve(input.category);
+	// A category is a wording read whole through its term: nothing while agent C hasn't decided it
+	const main = index.wordingTopics(input.category);
 	main.forEach(key => add(key, 'category', 1));
 	for (const category of input.categories ?? [])
-		index.resolve(category).forEach(key => add(key, 'category', 0.5));
+		index.wordingTopics(category).forEach(key => add(key, 'category', 0.5));
 
 	// A stored key of a topic since deleted counts for nothing
 	const known = (keys: string[]) => keys.filter(key => index.get(key));
@@ -98,7 +99,7 @@ export const venueTopics = (input: VenueTopicInput, index: TopicIndex): VenueTop
 		MIN_TAG_MENTIONS,
 		MIN_TAG_SHARE,
 	);
-	const notPlace = (key: string) => index.get(key)!.kind !== TopicKindEnum.FORMAT;
+	const notPlace = (key: string) => index.get(key)!.kind !== TopicKindEnum.PLACE;
 	const fromMenu = counted(
 		(input.menuItems ?? []).map(item => ({ keys: known(item.keys), n: 1 })),
 		MIN_MENU_ITEMS,
@@ -106,7 +107,8 @@ export const venueTopics = (input: VenueTopicInput, index: TopicIndex): VenueTop
 	);
 	const fromReviews = counted(
 		(input.reviewTags ?? []).map(t => ({
-			keys: index.resolve(t.title).filter(notPlace),
+			// Read whole through its term, as a category is: "cheese counter" is no cheese
+			keys: index.wordingTopics(t.title).filter(notPlace),
 			n: t.count,
 		})),
 		MIN_TAG_MENTIONS,

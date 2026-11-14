@@ -6,6 +6,8 @@
  */
 const dummyEnv: Record<string, string> = {
 	NODE_ENV: 'test',
+	// No suite applies the repo's committed category decisions at boot (`VenueTopicsImportService`); its own spec points it at a folder of its own
+	VENUE_TOPICS_DIR: '/nonexistent/venue-topics',
 	PORT: '3000',
 	DB_HOST: '127.0.0.1',
 	DB_PORT: '5432',

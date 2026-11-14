@@ -11,9 +11,7 @@ import { ownPostSql } from 'src/modules/social/util/accounts.js';
 import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { dayRange, monthRange } from 'src/modules/venues/util/month.js';
-import { toVectorLiteral } from 'src/shared/util/vector.js';
 
-import { STATEMENT_EMBEDDING_DIMENSIONS } from '../constants/embeddings.constant.js';
 import { STATEMENT_KINDS, type StatementKind } from '../constants/kind.constant.js';
 import type { Sentiment } from '../constants/sentiment.constant.js';
 import {
@@ -22,6 +20,7 @@ import {
 	type StatementUnit,
 } from '../entities/statement.entity.js';
 import { statedAmount } from '../util/amounts.js';
+import { prefixDistanceSql } from '../util/near-sql.js';
 import { verbatimQuote } from '../util/quotes.js';
 import { STATEMENT_PARTS_POPULATE } from '../util/statement-populate.js';
 
@@ -311,23 +310,28 @@ export class StatementService {
 			);
 			return { total, items: await this.loadPage(page.map(s => s.id)) };
 		}
-		const vector = toVectorLiteral(await this.statementEmbeddingService.phraseVector(like));
-		const distance = raw(
-			alias => `${alias}.embedding <=> ?::halfvec(${STATEMENT_EMBEDDING_DIMENSIONS})`,
-			[vector],
+		const vector = await this.statementEmbeddingService.phraseVector(like);
+		const embedded: FilterQuery<Statement> = {
+			$and: [where, ...and, { embeddedAt: { $ne: null } }],
+		};
+		const total = await this.em.count(Statement, embedded);
+		const ids = await this.statementEmbeddingService.nearest(
+			vector,
+			{ offset, limit },
+			async (em, prefix, count) =>
+				(
+					await em.find(Statement, embedded, {
+						fields: ['id'],
+						// Distance alone, no tie-break: the prefix index only serves a lone `order by`.
+						// A raw key goes in its own object: MikroORM refuses one mixed with fields
+						orderBy: [
+							{ [raw(alias => prefixDistanceSql(alias), [prefix])]: QueryOrder.ASC },
+						],
+						limit: count,
+					})
+				).map(s => s.id),
 		);
-		const [page, total] = await this.em.findAndCount(
-			Statement,
-			{ $and: [where, ...and, { embeddedAt: { $ne: null } }] },
-			{
-				fields: ['id'],
-				// A raw key goes in its own object: MikroORM refuses one mixed with fields
-				orderBy: [{ [distance]: QueryOrder.ASC }, { id: QueryOrder.DESC }],
-				offset,
-				limit,
-			},
-		);
-		const items = await this.loadPage(page.map(s => s.id));
+		const items = await this.loadPage(ids);
 		const notEmbedded = await this.em.count(Statement, {
 			$and: [where, ...and, { text: { $ne: null }, embeddedAt: null }],
 		});

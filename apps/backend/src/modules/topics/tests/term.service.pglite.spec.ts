@@ -52,7 +52,7 @@ const ANSWERS: Record<string, Partial<TermTopicAnswer>> = {
 		topic: 'Burgers',
 		exact: false,
 		label: 'Smashed patty',
-		kind: 'format',
+		kind: 'place',
 		modifiers: [{ topic: 'nonsense', type: 'has' }],
 	},
 	nudelsalat: { topic: 'pasta', exact: false, label: 'Pasta salad', kind: 'dish' },

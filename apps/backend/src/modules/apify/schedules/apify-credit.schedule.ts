@@ -3,6 +3,7 @@ import { MikroORM } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger, type OnApplicationBootstrap } from '@nestjs/common';
 
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableSchedule } from 'src/modules/durable-workflows/decorators/durable-schedule.decorator.js';
 import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-step.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
@@ -39,7 +40,9 @@ export class ApifyCreditSchedule implements OnApplicationBootstrap {
 			.catch(e => this.logger.warn(`Orphan Apify runs not settled: ${(e as Error).message}`));
 	}
 
-	@DurableSchedule('apify-credit-check', APIFY_CREDIT_CHECK_CRON)
+	@DurableSchedule('apify-credit-check', APIFY_CREDIT_CHECK_CRON, {
+		keepDays: ITEM_RUN_KEEP_DAYS,
+	})
 	@EnsureRequestContext()
 	async check(): Promise<void> {
 		await this.settleOrphans();

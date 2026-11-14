@@ -65,7 +65,7 @@ export interface FoodTrendsInput {
 
 // Kinds of place (café, bar, fast food) are not kinds of food: off the public lists
 const isFood = (topic: FoodTrendsTopicInfo | undefined): topic is FoodTrendsTopicInfo =>
-	!!topic && topic.kind !== TopicKindEnum.FORMAT;
+	!!topic && topic.kind !== TopicKindEnum.PLACE;
 
 const round1 = (n: number) => Math.round(n * 10) / 10;
 

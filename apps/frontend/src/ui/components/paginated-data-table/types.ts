@@ -129,6 +129,11 @@ export interface MultiSelectFilter extends FilterBase {
 export interface TextFilter extends FilterBase {
 	type: 'text';
 	placeholder?: string;
+	/**
+	 * Applied only on Enter or the field's Search button, never while typing: for a search that
+	 * costs something per request (search by meaning embeds the phrase with a paid call).
+	 */
+	submit?: boolean;
 }
 
 export interface AutocompleteFilter extends FilterBase {
@@ -233,6 +238,8 @@ export interface PaginatedDataTableTextFilterProps {
 	value: string | undefined;
 	onChange: (value: string | undefined) => void;
 	placeholder?: string;
+	/** Apply on Enter or the Search button only (`TextFilter.submit`) */
+	submit?: boolean;
 	class?: string;
 }
 

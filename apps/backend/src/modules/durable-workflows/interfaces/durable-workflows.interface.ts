@@ -6,6 +6,13 @@ export interface DurableWorkflowOptions {
 	name?: string;
 	/** How often a crashed run is picked up again before it is given up (`MAX_RECOVERY_ATTEMPTS_EXCEEDED`); DBOS's default is 100 */
 	maxRecoveryAttempts?: number;
+	/**
+	 * Delete a finished run from DBOS this many days after it ended (`DurablePruneSchedule`); a
+	 * cancelled or failed one after `DURABLE_PRUNE_FAILED_KEEP_DAYS` at least. Kept for good without.
+	 * Only for runs nothing reads back once their parent has its result: one item's reading, one
+	 * agent call. Never an operation's run: its fixed id per period would start it again.
+	 */
+	keepDays?: number;
 }
 
 /** `@DurableStep()` and `DurableWorkflowsService.step`: a checkpointed call */
@@ -28,6 +35,8 @@ export interface DurableScheduleOptions {
 	queue?: DurableQueue;
 	/** Fire the runs missed while the backend was down; off by default (a missed hourly pass is caught by the next) */
 	backfill?: boolean;
+	/** Each firing's run deleted this many days after it ended, as `DurableWorkflowOptions.keepDays` */
+	keepDays?: number;
 }
 
 export interface DurableScheduleMetadata extends DurableScheduleOptions {

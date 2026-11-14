@@ -4,6 +4,7 @@ import { MikroORM } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableSchedule } from 'src/modules/durable-workflows/decorators/durable-schedule.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 
@@ -24,7 +25,7 @@ export class MatchMentionsSchedule {
 		private readonly workflow: MatchMentionsWorkflow,
 	) {}
 
-	@DurableSchedule('match-mentions', MATCH_MENTIONS_CRON)
+	@DurableSchedule('match-mentions', MATCH_MENTIONS_CRON, { keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async hourly(): Promise<void> {
 		for (const city of await cronCities(this.durable, this.cityService))

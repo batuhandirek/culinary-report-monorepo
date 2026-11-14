@@ -13,6 +13,8 @@ export interface RegisteredWorkflow {
 	invoker: AnyFn;
 	/** What callers hold (the method on the service instance) */
 	exposed: AnyFn;
+	/** `keepDays` of its decorator: when a finished run of it is deleted (`DurablePruneSchedule`) */
+	keepDays?: number;
 }
 
 export interface RegisteredSchedule extends DurableScheduleMetadata {
@@ -65,5 +67,12 @@ export class DurableRegistry {
 
 	list(): RegisteredWorkflow[] {
 		return [...this.workflows.values()];
+	}
+
+	/** The workflows whose finished runs are deleted after a while, with how long they are kept */
+	prunable(): (WorkflowRef & { keepDays: number })[] {
+		return this.list()
+			.filter(w => w.keepDays !== undefined)
+			.map(w => ({ ...w.ref, keepDays: w.keepDays! }));
 	}
 }

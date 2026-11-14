@@ -8,6 +8,7 @@ import _ from 'lodash';
 import type { ImageOutputDto } from 'src/modules/image/dto/image.output.dto.js';
 import { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
 import { ownPostSql } from 'src/modules/social/util/accounts.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { monthRange, previousMonth } from 'src/modules/venues/util/month.js';
 
@@ -64,7 +65,10 @@ const emptyFigures = (): AdminBrandMonthFiguresOutputDto => ({
  */
 @Injectable()
 export class BrandListService {
-	constructor(private readonly em: EntityManager) {}
+	constructor(
+		private readonly em: EntityManager,
+		private readonly venueTopicService: VenueTopicService,
+	) {}
 
 	async list(query: AdminListBrandsInputDto, now = new Date()): Promise<AdminListBrandsOutputDto> {
 		const month = query.month ?? previousMonth(now);
@@ -140,6 +144,7 @@ export class BrandListService {
 		);
 		const page = sorted.slice((query.page - 1) * query.size, query.page * query.size);
 		const icons = await this.favicons(page.map(r => r.base.icon_venue_id));
+		const topics = await this.venueTopicService.brandTopics(page.map(r => r.base.id), query.cityId);
 
 		return {
 			items: page.map(
@@ -150,6 +155,7 @@ export class BrandListService {
 					branches: row.base.branches,
 					districts: row.base.districts ?? [],
 					...(row.base.category && { category: row.base.category }),
+					topics: topics.get(row.base.id) ?? [],
 					...(row.base.rating !== null && { rating: Math.round(Number(row.base.rating) * 10) / 10 }),
 					...(row.base.reviews_count !== null && { reviewsCount: Number(row.base.reviews_count) }),
 					...(row.base.icon_venue_id &&

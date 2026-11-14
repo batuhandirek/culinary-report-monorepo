@@ -1,4 +1,5 @@
 import type { AdminCityRefOutputDto } from 'src/modules/cities/dto/admin-city.output.dto.js';
+import type { AdminVenueTopicOutputDto } from 'src/modules/topics/dto/admin-venue-topics.dto.js';
 
 import type { BrandReportScopeEnum } from '../entities/brand.entity.js';
 import type { LeadSignals } from '../interfaces/lead-score.interface.js';
@@ -23,6 +24,8 @@ export interface AdminBrandBranchOutputDto extends Omit<
 	city: AdminCityRefOutputDto;
 	/** Mentions linked to it (its branch known), of any month */
 	mentions: number;
+	/** Its stored food topics (`VenueTopic`), the primary first: what its Google categories, posts, menu and review tags say it is */
+	topics: AdminVenueTopicOutputDto[];
 	/** Its website on Google: the brand page's website key takes the first open branch's */
 	website?: string;
 	googleUrl?: string;

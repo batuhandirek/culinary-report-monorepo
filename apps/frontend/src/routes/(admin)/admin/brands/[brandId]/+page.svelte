@@ -29,8 +29,9 @@
 	import Pill from '#components/admin/detail/Pill.svelte';
 	import ReviewsTable from '#components/admin/reviews/ReviewsTable.svelte';
 	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
+	import TopicChips from '#components/admin/topics/TopicChips.svelte';
 	import { api } from '#lib/api.js';
-	import { branchesByCity } from '#lib/brands.js';
+	import { brandTopicsOf, branchesByCity } from '#lib/brands.js';
 	import { lastMonth, LEAD_PROSPECT_SCORE, monthLabel } from '#lib/culinary.js';
 	import { exploreHref } from '#lib/explore.js';
 	import { stageLabel } from '#lib/outreach-status.js';
@@ -70,6 +71,8 @@
 		for (const b of cityOpen) if (b.category) counts.set(b.category, (counts.get(b.category) ?? 0) + 1);
 		return [...counts].sort((a, b) => b[1] - a[1])[0]?.[0] ?? place?.category;
 	});
+	// What it is, from its open branches' food topics (its categories read through their terms)
+	const topics = $derived(brandTopicsOf(place ? [place] : cityOpen));
 	// Stars over all the open places' Google reviews in the city: one place's own rating
 	const rating = $derived.by(() => {
 		const rated = (place ? [place] : cityOpen).filter((b) => b.rating != null && b.reviewsCount);
@@ -191,7 +194,7 @@
 	{/snippet}
 	{#snippet sub()}
 		<span class="text-muted-foreground">
-			{#if category}{category} ·{/if}
+			{#if topics.length}<TopicChips {topics} source={category} /> ·{:else if category}{category} ·{/if}
 			{#each cities as c, i (c.cityId)}
 				<a href={`/admin/cities/${c.cityId}`}>{c.cityName}</a>
 				({c.branches.filter((b) => !b.closed).length} open){i < cities.length - 1 ? ',' : ''}

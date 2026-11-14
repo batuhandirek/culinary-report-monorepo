@@ -87,6 +87,11 @@ Question:
 	-	why did this not find lucys?
 - Do we need a 'Is this about the venue?' decision as well, from JEV?
 	-	'home-style matcha at cafés is usually not that nice'
+- /admin/posts/1c1287d7-7338-4eca-a9b4-5e00c6c5b422
+	- Is closed from November 9 to November 30, 2026
+	- Will be back on Tuesday, December 1, 2026
+- Percentage of different languages of reviews/posts determines 'internationality'
+
 
 Report sections:
 - Upcoming "New Year's / Halloween etc." - what can be done kind of suggestion?
@@ -115,4 +120,7 @@ maybe use this as a signal to ensure they have 4 branches
 
 http://localhost:5011/admin/aspects/portion_size?kind=deal
 
+- The 'count' of each menu item, increasing/decreasing
 
+- Best of X in Berlin
+	-	specific product

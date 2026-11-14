@@ -20,6 +20,7 @@ import { AdminStatementsController } from '../controllers/admin.statements.contr
 import type { AdminStatementsInputDto } from '../dto/admin-statements.dto.js';
 import { StatementService } from '../services/statement.service.js';
 import { StatementEmbeddingService } from '../services/statement-embedding.service.js';
+import { StatementInsightService } from '../services/statement-insight.service.js';
 
 import { addStatements } from './factories/statement.factory.js';
 
@@ -76,6 +77,7 @@ describe('statement embeddings (pglite)', () => {
 			providers: [
 				StatementService,
 				StatementEmbeddingService,
+				StatementInsightService,
 				TopicService,
 				AdminStatementsController,
 				LlmBacklogRegistry,
@@ -97,11 +99,11 @@ describe('statement embeddings (pglite)', () => {
 			remaining: async () => reread.left,
 			runBatch: async () => ({ done: 0 }),
 		});
-		// The migration's index (the harness skips indexes): pgvector's HNSW on halfvec(1024) works here too
+		// The migration's index (the harness skips indexes): the HNSW on the vectors' prefix works here too
 		await em
 			.getConnection()
 			.execute(
-				'create index statements_embedding_hnsw_index on statements using hnsw (embedding halfvec_cosine_ops)',
+				'create index statements_embedding_prefix_hnsw_index on statements using hnsw ((subvector(embedding, 1, 256)::halfvec(256)) halfvec_cosine_ops)',
 			);
 
 		seedTopics(em, ['wait_for_food']);
@@ -112,11 +114,13 @@ describe('statement embeddings (pglite)', () => {
 		const october = em.create(Review, {
 			venue,
 			reviewId: 'se-r1',
+			text: 'Lukewarm fries, cold soup, friendly staff.',
 			publishedAt: new Date('2026-10-05T12:00:00Z'),
 		});
 		const september = em.create(Review, {
 			venue,
 			reviewId: 'se-r2',
+			text: 'Cold burger. Card payment works.',
 			publishedAt: new Date('2026-09-05T12:00:00Z'),
 		});
 		addStatements(
@@ -265,6 +269,29 @@ describe('statement embeddings (pglite)', () => {
 		});
 	});
 
+	it("orders Explore's claims by meaning too, through the prefix index, with the table's filters and pages", async () => {
+		const insight = harness.moduleRef.get(StatementInsightService);
+		const scope = { cityId: city.id, from: '2026-09', to: '2026-10' };
+		const texts = (res: { items: { text?: string | null }[] }) => res.items.map(s => s.text);
+
+		const all = await insight.claims(scope, { offset: 0, limit: 50, like: 'cold food' });
+		expect(texts(all)).toEqual([
+			'the fries arrived lukewarm',
+			'the soup was cold',
+			'the burger was cold in the middle',
+			'friendly staff',
+		]);
+		expect([all.total, all.notEmbedded]).toEqual([4, 1]);
+
+		const negative = await insight.claims(scope, {
+			offset: 1,
+			limit: 1,
+			like: 'cold food',
+			sentiment: 'negative',
+		});
+		expect([texts(negative), negative.total]).toEqual([['the soup was cold'], 3]);
+	});
+
 	it('keeps the newest first without `like`, and no count of the unembedded', async () => {
 		const res = await list({});
 		// October's claims, the newest row first (the dish-only one)
@@ -275,5 +302,44 @@ describe('statement embeddings (pglite)', () => {
 		]);
 		expect(res.notEmbedded).toBeUndefined();
 		expect(embedder.embedMany).not.toHaveBeenCalled();
+	});
+
+	it("finds a filter's claims behind more nearer claims outside it than the index scan's depth", async () => {
+		// 900 September claims all nearer "cold food" than any October one: more than the scan's
+		// `ef_search` (400), so a scan that stopped there would leave nothing once October is asked.
+		// Each varies on its own in 20 values (`hashtext`, so the same every run): near-identical
+		// vectors make an HNSW graph that never reaches the October claims at all
+		const conn = em.getConnection();
+		const zeros = Array(1001).fill(0).join(',');
+		await conn.execute(
+			`insert into statements (source_kind, review_id, subject, city_id, month, said_at, text, sentiment, embedding, embedded_at)
+			select s.source_kind, s.review_id, s.subject, s.city_id, s.month, s.said_at, 'decoy ' || g, 'negative',
+				('[1,0.15,0.2,' || (select string_agg(round((0.05 * (hashtext(g || ':' || k) % 1000) / 1000.0)::numeric, 4)::text, ',' order by k)
+					from generate_series(1, 20) k) || ',${zeros}]')::halfvec(1024), now()
+			from generate_series(1, 900) g, statements s where s.text = 'the burger was cold in the middle'`,
+		);
+		// PGlite runs one session: a small table would be scanned whole, so make the planner take the index
+		await conn.execute('set enable_seqscan = off');
+		try {
+			const october = await list({ like: 'cold food', month: '2026-10' });
+			expect([october.items.map(s => s.text), october.totalItems]).toEqual([
+				['the fries arrived lukewarm', 'the soup was cold', 'friendly staff'],
+				3,
+			]);
+			const explore = await harness.moduleRef
+				.get(StatementInsightService)
+				.claims(
+					{ cityId: city.id, from: '2026-10', to: '2026-10' },
+					{ offset: 0, limit: 50, like: 'cold food' },
+				);
+			expect(explore.items.map(s => s.text)).toEqual([
+				'the fries arrived lukewarm',
+				'the soup was cold',
+				'friendly staff',
+			]);
+		} finally {
+			await conn.execute('reset enable_seqscan');
+			await conn.execute(`delete from statements where text like 'decoy %'`);
+		}
 	});
 });

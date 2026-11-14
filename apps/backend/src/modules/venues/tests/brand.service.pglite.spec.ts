@@ -23,6 +23,10 @@ import {
 	socialAccountFactory,
 } from 'src/modules/social/tests/factories/social-account.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
+import { VenueTopic } from 'src/modules/topics/entities/venue-topic.entity.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
@@ -61,6 +65,8 @@ describe('BrandService (pglite)', () => {
 				VenueScrapeService,
 				VenueService,
 				AdminBrandsController,
+				VenueTopicService,
+				TopicService,
 				{ provide: ApifyService, useValue: { runActor } },
 				{ provide: PgBossService, useValue: { sendJob } },
 			],
@@ -363,6 +369,30 @@ describe('BrandService (pglite)', () => {
 				payload: expect.objectContaining({ cityIds: [hamburg.id] }),
 			}),
 		);
+	});
+
+	it("gives each branch row its stored food topics with their labels, the primary first", async () => {
+		const em = harness.orm.em;
+		const topics = seedTopics(em, ['burgers', 'bar']);
+		const brand = await brandFactory.create({ name: 'Tagged Burger' });
+		const venue = branch(berlin, 'Tagged Burger', 50, {}, brand);
+		await em.flush();
+		em.create(VenueTopic, { venue, topic: topics.get('bar')!, computed: true, source: 'category', score: 1 });
+		em.create(VenueTopic, {
+			venue,
+			topic: topics.get('burgers')!,
+			computed: true,
+			source: 'mentions',
+			score: 0.5,
+			primary: true,
+		});
+		await em.flush();
+
+		const res = await controller.getBrand(brand.id);
+		expect(res.branches[0].topics.map(t => [t.key, t.label, t.kind, t.primary])).toEqual([
+			['burgers', 'Burgers', 'dish', true],
+			['bar', 'Bar', 'place', false],
+		]);
 	});
 
 	it('keeps an exclusion through a merge into the chain, and drops it with the venue', async () => {

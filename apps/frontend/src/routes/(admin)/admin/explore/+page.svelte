@@ -43,11 +43,17 @@
 	const to = $derived(view.to ?? defaultTo);
 	const from = $derived(view.from ?? shift(to, -5));
 
-	/** A new view: the current one changed by `patch` (the table's own search and page dropped, its All / grouped switch kept) */
+	/**
+	 * A new view: the current one changed by `patch` (the table's own words and page dropped; its
+	 * All / grouped switch and its "Similar to…" phrase kept, so a phrase follows the view narrowed)
+	 */
 	const setView = (patch: Partial<ExploreView>) => {
-		const href = exploreHref({ ...view, ...patch });
-		const grouped = page.url.searchParams.get('claims') === 'groups';
-		goto(grouped ? `${href}${href.includes('?') ? '&' : '?'}claims=groups` : href, { reset: false });
+		const url = new URL(exploreHref({ ...view, ...patch }), page.url.origin);
+		for (const key of ['claims', 'like']) {
+			const value = page.url.searchParams.get(key);
+			if (value) url.searchParams.set(key, value);
+		}
+		goto(url, { reset: false });
 	};
 	const MONTHS = recentMonths(24).map((m) => ({ value: m, label: monthLabel(m) }));
 	const setMonths = (next: { from: string; to: string }) => {
@@ -101,7 +107,8 @@
 		headLoader.load(q);
 	});
 
-	let claimsOpen = $state<boolean | undefined>(undefined);
+	// A link searching by meaning (an aspect page's "See claims") opens the claims whatever was remembered
+	let claimsOpen = $state<boolean | undefined>(page.url.searchParams.get('like') ? true : undefined);
 
 	// The topics: an aspect and a food or drink (each a picker), claims about both when both are
 	// picked; node is the first, `with` the rest, and any further one an older link carried stays

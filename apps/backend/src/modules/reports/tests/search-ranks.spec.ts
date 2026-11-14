@@ -48,7 +48,7 @@ describe('reportSearchRanks', () => {
 			...search('2026-11-03', 'ramen', TopicKindEnum.DISH, 4),
 			...search('2026-11-03', 'japanese', TopicKindEnum.CUISINE, 2),
 			...search('2026-11-03', 'noodles', TopicKindEnum.DISH),
-			...search('2026-11-03', 'cafe', TopicKindEnum.FORMAT, 1),
+			...search('2026-11-03', 'cafe', TopicKindEnum.PLACE, 1),
 			// September's two snapshots: the newer one counts
 			...search('2026-09-12', 'ramen', TopicKindEnum.DISH, 9),
 			...search('2026-09-28', 'ramen', TopicKindEnum.DISH, 6),

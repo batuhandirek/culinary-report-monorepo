@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
 
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-step.decorator.js';
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
@@ -61,7 +62,7 @@ export class ReadCommentsWorkflow {
 		private readonly disagreementAgent: CommentDisagreementAgent,
 	) {}
 
-	@DurableWorkflow({ name: 'read-comments.city' })
+	@DurableWorkflow({ name: 'read-comments.city', keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async readCity(cityId: string): Promise<ReadCommentsCityResult> {
 		const postIds = await this.postsToRead(cityId);

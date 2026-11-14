@@ -155,7 +155,7 @@ export class FoodTrendsReportService implements OnModuleInit {
 	/** The topics an anchored pull compares: every searched kind of food, the anchor first. */
 	private async compareTerms(): Promise<{ anchor: CompareTerm; topics: CompareTerm[] }> {
 		const searched = (await this.topicService.searched()).filter(
-			t => t.kind !== TopicKindEnum.FORMAT,
+			t => t.kind !== TopicKindEnum.PLACE,
 		);
 		const term = (t: Topic): CompareTerm => ({
 			key: t.key,
@@ -361,7 +361,7 @@ export class FoodTrendsReportService implements OnModuleInit {
 
 		const table = await this.searchInterestService.table(city.id, last);
 		const relatedRows: FoodTrendsRelatedRow[] = table.topics.flatMap(row =>
-			row.topicKind === TopicKindEnum.FORMAT ?
+			row.topicKind === TopicKindEnum.PLACE ?
 				[]
 			:	(row.related?.rising ?? []).map(q => ({
 					topic: row.label,

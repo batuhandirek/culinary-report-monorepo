@@ -199,7 +199,11 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 				s.workflowClassName,
 				s.workflowName,
 			]),
-		).toEqual([['sample-tick', '*/5 * * * *', 'SampleWorkflows', 'tick']]);
+		).toEqual([
+			// The engine's own: deletes old runs of the workflows that declare `keepDays`
+			['durable-prune', '20 9 * * *', 'DurablePruneSchedule', 'prune'],
+			['sample-tick', '*/5 * * * *', 'SampleWorkflows', 'tick'],
+		]);
 		const id = await durable.triggerSchedule('sample-tick');
 		await until(async () => (await durable.get(id))?.status === 'SUCCESS');
 		expect(sample.calls.some(call => call.startsWith('tick '))).toBe(true);
@@ -244,9 +248,10 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 		const tick = harness.moduleRef
 			.get(DurableRegistry)
 			.get({ className: 'SampleWorkflows', name: 'tick' })!;
-		// Left behind by an earlier deploy
+		// Left behind by an earlier deploy of this application (its name in front, as every
+		// schedule's: a bare name is unique across applications and would outlive the run)
 		await DBOS.createSchedule({
-			scheduleName: 'gone-tick',
+			scheduleName: durable.qualifiedScheduleName('gone-tick'),
 			workflowFn: tick.invoker as (at: Date, context: unknown) => Promise<void>,
 			schedule: '0 0 * * *',
 		});
@@ -254,13 +259,15 @@ describeWithDbos('Durable workflows (DBOS)', () => {
 			(await durable.schedules())
 				.map(s => durable.declaredScheduleName(s.scheduleName))
 				.sort(),
-		).toEqual(['gone-tick', 'sample-tick']);
+		).toEqual(['durable-prune', 'gone-tick', 'sample-tick']);
 
 		await harness.moduleRef.get(WorkflowScannerService).applySchedules(true);
 
 		expect(
-			(await durable.schedules()).map(s => durable.declaredScheduleName(s.scheduleName)),
-		).toEqual(['sample-tick']);
+			(await durable.schedules())
+				.map(s => durable.declaredScheduleName(s.scheduleName))
+				.sort(),
+		).toEqual(['durable-prune', 'sample-tick']);
 	});
 
 	it('runs a step plainly outside a workflow', async () => {

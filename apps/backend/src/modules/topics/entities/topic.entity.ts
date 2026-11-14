@@ -18,7 +18,7 @@ export enum TopicKindEnum {
 	// A way of eating: vegan, halal
 	DIET = 'diet',
 	// A kind of place: café, bar, street food, fine dining
-	FORMAT = 'format',
+	PLACE = 'place',
 	// A time of day: brunch, breakfast
 	MEAL = 'meal',
 	// What a dish is made with: beef, cheese, avocado, mushrooms (a dish `has` it)

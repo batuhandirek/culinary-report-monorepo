@@ -53,7 +53,7 @@ export const FIXED_SHORTLIST_KINDS = [
 	TopicKindEnum.CUISINE,
 	TopicKindEnum.DIET,
 	TopicKindEnum.MEAL,
-	TopicKindEnum.FORMAT,
+	TopicKindEnum.PLACE,
 ] as const;
 
 /** The closest topics of the other kinds (dish, drink, ingredient, child aspect) agent C is offered beside the fixed groups */

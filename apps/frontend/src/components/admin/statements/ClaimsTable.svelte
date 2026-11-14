@@ -166,9 +166,10 @@
 	// One filter bar for every claims table. On Explore, the page's own pickers already narrow the
 	// view by months, source, about, kind and topic (its figures and tree too): the table keeps
 	// only what they don't, the words, the sentiment and the parts.
-	const EXPLORE_KEYS = ['q', 'sentiment', 'parts'];
+	const EXPLORE_KEYS = ['q', 'like', 'sentiment', 'parts'];
 	const ALL_FILTERS: Filter[] = $derived([
 		{ key: 'q', name: 'Search', type: 'text', placeholder: 'Words in the claim…' },
+		{ key: 'like', name: 'Similar to', type: 'text', placeholder: 'Similar to…', submit: true },
 		{
 			key: 'sourceKind',
 			name: 'Source',
@@ -265,10 +266,24 @@
 	// The scope is fixed: the page mounts the table again when it changes
 	const filters = $derived(explore ? { ...explore } : { ...scope, ...days, ...(aspect && { aspect }) });
 
-	const listStatements = (params: Parameters<typeof api.admin.listStatements>[0]) =>
-		explore
-			? api.admin.listExploreClaims(params as unknown as Parameters<typeof api.admin.listExploreClaims>[0])
-			: api.admin.listStatements(params);
+	// "Similar to…" orders the page by meaning and leaves out the claims without a vector yet,
+	// which the response counts (`notEmbedded`, only with `like`)
+	const like = $derived(page.url.searchParams.get('like') || undefined);
+	let notEmbedded = $state<number | undefined>(undefined);
+	const listStatements = async (params: Parameters<typeof api.admin.listStatements>[0]) => {
+		const res = explore
+			? await api.admin.listExploreClaims(params as unknown as Parameters<typeof api.admin.listExploreClaims>[0])
+			: await api.admin.listStatements(params);
+		notEmbedded = res.notEmbedded;
+		return res;
+	};
+	// A group's "See claims": the table, closest to the group's most central claim first
+	const seeClaims = (phrase: string) => {
+		const url = new URL(page.url.href);
+		url.searchParams.set('like', phrase);
+		for (const key of ['q', 'page', 'claims']) url.searchParams.delete(key);
+		goto(url, { replace: true, reset: false });
+	};
 	const n = (value: number) => value.toLocaleString('en-GB');
 	const share = (part: number, whole: number) => `${whole ? Math.round((part / whole) * 100) : 0} %`;
 	const FIGURES: { label: string; value: (s: AdminStatementsSummaryOutputDto) => string }[] = [
@@ -361,7 +376,7 @@
 	{#if groupsLoader.error && !groups}
 		<ErrorState onRetry={() => groupsLoader.load(JSON.parse(groupsKey))} />
 	{:else}
-		<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} />
+		<ClaimGroups data={groups} bar={groupBar} onBar={(next) => (groupBar = { ...groupBar, ...next })} onSeeClaims={seeClaims} />
 	{/if}
 {/snippet}
 
@@ -385,6 +400,13 @@
 			<div class="h-24"></div>
 		{/if}
 	</AdminPanel>
+	{/if}
+
+	{#if like && shown === 'all'}
+		<p class="text-muted-foreground m-0 text-xs">
+			Closest in meaning to “{like}” first.
+			{#if notEmbedded}{n(notEmbedded)} matching {notEmbedded === 1 ? 'claim has' : 'claims have'} no vector yet and {notEmbedded === 1 ? 'is' : 'are'} left out.{/if}
+		</p>
 	{/if}
 
 	<PaginatedDataTable

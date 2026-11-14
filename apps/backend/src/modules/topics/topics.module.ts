@@ -26,6 +26,7 @@ import { TopicService } from './services/topic.service.js';
 import { TopicRelinkService } from './services/topic-relink.service.js';
 import { TrendsTopicLookupService } from './services/trends-topic-lookup.service.js';
 import { VenueTopicService } from './services/venue-topic.service.js';
+import { VenueTopicsImportService } from './services/venue-topics-import.service.js';
 import { TopicCityRefreshWorker } from './workers/topic-city-refresh.worker.js';
 import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
 
@@ -61,6 +62,7 @@ import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
 		MenuTopicService,
 		TrendsTopicLookupService,
 		VenueTopicService,
+		VenueTopicsImportService,
 	],
 	exports: [TopicService, TermService, TopicRelinkService, MenuTopicService, VenueTopicService],
 })

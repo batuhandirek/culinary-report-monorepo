@@ -199,7 +199,7 @@
 												</span>
 											</div>
 											<p class="text-muted-foreground m-0 mt-1 text-xs">
-												Named in {plural(row.notes, 'claim')}{row.tagVenues ? ` and ${plural(row.tagVenues, "venue's Google tags", "venues' Google tags")}` : ''}{#if row.proposedLabel}; as a topic the AI would call it “{row.proposedLabel}”{/if}{#if group.value === 'modifier' && row.topic}; its own topic is <a href={topicPageHref(row.topic.key, row.topic.kind)}>{row.topic.label}</a>{/if}.
+												Named in {plural(row.notes, 'claim')}{row.tagVenues ? ` and ${plural(row.tagVenues, "venue's Google tags or categories", "venues' Google tags or categories")}` : ''}{#if row.proposedLabel}; as a topic the AI would call it “{row.proposedLabel}”{/if}{#if group.value === 'modifier' && row.topic}; its own topic is <a href={topicPageHref(row.topic.key, row.topic.kind)}>{row.topic.label}</a>{/if}.
 											</p>
 										</div>
 										{#if opened === row.id}

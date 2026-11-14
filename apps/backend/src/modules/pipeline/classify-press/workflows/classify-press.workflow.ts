@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
 
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-step.decorator.js';
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
@@ -51,7 +52,7 @@ export class ClassifyPressWorkflow {
 		private readonly agent: PressClassificationAgent,
 	) {}
 
-	@DurableWorkflow({ name: 'classify-press.city' })
+	@DurableWorkflow({ name: 'classify-press.city', keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async classifyCity(cityId: string): Promise<ClassifyPressCityResult> {
 		const pageIds = await this.unclassifiedPages(cityId);

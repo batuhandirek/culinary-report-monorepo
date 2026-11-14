@@ -351,6 +351,9 @@ export class AspectDiscoveryService {
 		for (const list of centroids.values())
 			for (const centroid of list) {
 				const vector = `${toVectorLiteral(centroid)}`;
+				// An exact scan on purpose: every claim within the floor counts (up to `DISCOVERY_MAX_REFILE`),
+				// and the prefix index (`embeddingPrefixSql`, with its `::halfvec(N)` cast) would stop
+				// at `hnsw.ef_search` rows. Without the cast this expression doesn't match the index.
 				const near: { id: number }[] = await conn.execute(
 					`select s.id from statements s
 					left join statement_parts ap on ap.statement_id = s.id and ap.role = 'aspect'

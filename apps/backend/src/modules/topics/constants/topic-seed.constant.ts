@@ -11,7 +11,7 @@ export interface TopicSeed {
 	hint?: string;
 }
 
-const { CUISINE, DISH, DRINK, DIET, FORMAT, MEAL } = TopicKindEnum;
+const { CUISINE, DISH, DRINK, DIET, PLACE, MEAL } = TopicKindEnum;
 
 /**
  * The topics `Migration20261018101737_food_topics` inserted, from Berlin's mention cuisines
@@ -410,60 +410,60 @@ export const TOPIC_SEED: TopicSeed[] = [
 	{
 		key: 'cafe',
 		label: 'Café',
-		kind: FORMAT,
+		kind: PLACE,
 		mid: '/m/020fb2',
 	},
 	{
 		key: 'bakery',
 		label: 'Bakery',
-		kind: FORMAT,
+		kind: PLACE,
 		mid: '/m/02wv6th',
 	},
-	{ key: 'bar', label: 'Bar', kind: FORMAT },
+	{ key: 'bar', label: 'Bar', kind: PLACE },
 	{
 		key: 'shisha',
 		label: 'Shisha bar',
-		kind: FORMAT,
+		kind: PLACE,
 		parent: 'bar',
 		mid: '/m/0270w0s',
 	},
 	{
 		key: 'pub',
 		label: 'Pub',
-		kind: FORMAT,
+		kind: PLACE,
 		parent: 'bar',
 	},
 	{
 		key: 'beer garden',
 		label: 'Beer garden',
-		kind: FORMAT,
+		kind: PLACE,
 		mid: '/m/03krv6',
 	},
-	{ key: 'nightclub', label: 'Nightclub', kind: FORMAT },
-	{ key: 'fast food', label: 'Fast food', kind: FORMAT, mid: '/m/01_bhs' },
+	{ key: 'nightclub', label: 'Nightclub', kind: PLACE },
+	{ key: 'fast food', label: 'Fast food', kind: PLACE, mid: '/m/01_bhs' },
 	{
 		key: 'street food',
 		label: 'Street food',
-		kind: FORMAT,
+		kind: PLACE,
 		mid: '/m/05xnqg',
 	},
 	{
 		key: 'fine dining',
 		label: 'Fine dining',
-		kind: FORMAT,
+		kind: PLACE,
 		mid: '/g/11fjn3mbjf',
 	},
-	{ key: 'bistro', label: 'Bistro', kind: FORMAT },
+	{ key: 'bistro', label: 'Bistro', kind: PLACE },
 	{
 		key: 'deli',
 		label: 'Deli',
-		kind: FORMAT,
+		kind: PLACE,
 		mid: '/m/01_6hg',
 	},
 	{
 		key: 'market',
 		label: 'Food market',
-		kind: FORMAT,
+		kind: PLACE,
 	},
 
 	// Meals

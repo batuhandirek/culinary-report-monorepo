@@ -2,6 +2,7 @@ import { tags } from 'typia';
 
 import type { ImageOutputDto } from 'src/modules/image/dto/image.output.dto.js';
 import type { ProspectStageEnum } from 'src/modules/outreach/constants/outreach.constant.js';
+import type { TopicRefOutputDto } from 'src/modules/topics/dto/topic-ref.output.dto.js';
 import { PaginationRequest } from 'src/shared/interfaces/pagination-request.interface.js';
 
 type Month = string & tags.Pattern<'^[0-9]{4}-[0-9]{2}$'>;
@@ -56,6 +57,8 @@ export interface AdminBrandRowOutputDto {
 	districts: string[];
 	/** The Google category most of them share */
 	category?: string;
+	/** What it is, from its open branches' stored food topics: the primary most of them have first, three at most */
+	topics: TopicRefOutputDto[];
 	/** Their all-time Google stars over all their reviews (one branch's own rating); absent when none is rated */
 	rating?: number;
 	/** Their Google reviews, all time */

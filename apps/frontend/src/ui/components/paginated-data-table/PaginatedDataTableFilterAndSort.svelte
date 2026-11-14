@@ -257,6 +257,7 @@
 				: filter.name === 'Search'
 					? 'Search…'
 					: `Search by ${filter.name}…`}
+			submit={filter.type === 'text' && filter.submit}
 			onChange={(value) => onChange({ ...appliedFilters, [filter.key]: value })} />
 	{/each}
 

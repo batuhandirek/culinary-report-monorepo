@@ -23,8 +23,17 @@ export const STATEMENT_EMBEDDINGS_APPROVED_AT: Date | null = new Date('2026-11-0
  * The grouping (Explore, aspect discovery) reads each vector's first 256 values, renormalised: text-embedding-3 is trained
  * so a prefix is a shorter embedding of its own (what OpenAI's `dimensions` returns), and a greedy
  * pass over a Berlin month (~7,000 claims, many alone) took ~12 s at 1024 against ~3 s at 256.
+ * The HNSW index is on the same prefix (`statements_embedding_prefix_hnsw_index`, `util/near-sql.ts`).
  */
 export const CLUSTER_DIMENSIONS = 256;
+
+/**
+ * Claims a "Similar to" search picks through the prefix index before ordering them by the whole
+ * vector (`StatementEmbeddingService.nearest`); a deeper page picks twice its end. Measured on the
+ * 2026-11-13 clone (285k claims, 30 phrases): 94% of the exact top 50 at ~10 ms, against 73% (and
+ * ~45 rows) for the earlier full-vector index at pgvector's default `ef_search`.
+ */
+export const NEAR_CANDIDATES = 400;
 
 /** Claims Explore's grouping reads at most, in a fixed pseudo-random order (`md5(id)`) */
 export const CLUSTER_MAX_CLAIMS = 6_000;

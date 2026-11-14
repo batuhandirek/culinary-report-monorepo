@@ -708,6 +708,8 @@ export interface AdminBrandBranchOutputDto {
 	rating?: number;
 	reviewsCount?: number;
 	street?: string;
+	/** Its stored food topics (`VenueTopic`), the primary first: what its Google categories, posts, menu and review tags say it is */
+	topics: AdminVenueTopicOutputDto[];
 	/** Its website on Google: the brand page's website key takes the first open branch's */
 	website?: string;
 }
@@ -829,6 +831,8 @@ export interface AdminBrandRowOutputDto {
 	};
 	/** Their Google reviews, all time */
 	reviewsCount?: number;
+	/** What it is, from its open branches' stored food topics: the primary most of them have first, three at most */
+	topics: TopicRefOutputDto[];
 }
 
 export enum AdminBrandRowOutputDtoStageEnum {
@@ -1531,7 +1535,7 @@ export enum AdminCreateTopicInputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -2326,10 +2330,10 @@ export enum AdminExploreBreakdownInputDtoByEnum {
 	Subject = 'subject',
 	District = 'district',
 	Venue = 'venue',
+	Place = 'place',
 	Aspect = 'aspect',
 	Term = 'term',
 	Food = 'food',
-	Place = 'place',
 	Side = 'side',
 }
 
@@ -2388,10 +2392,10 @@ export enum AdminExploreBreakdownOutputDtoByEnum {
 	Subject = 'subject',
 	District = 'district',
 	Venue = 'venue',
+	Place = 'place',
 	Aspect = 'aspect',
 	Term = 'term',
 	Food = 'food',
-	Place = 'place',
 	Side = 'side',
 }
 
@@ -4514,7 +4518,7 @@ export enum AdminPromoteTermInputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -5029,7 +5033,7 @@ export enum AdminSearchInterestRowOutputDtoTopicKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -5757,7 +5761,7 @@ export enum AdminTopicBaseOutputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -5846,7 +5850,7 @@ export enum AdminTopicInsightRowOutputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -5903,7 +5907,7 @@ export enum AdminTopicOutputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -6262,7 +6266,7 @@ export enum AdminUpdateTopicInputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -6562,7 +6566,7 @@ export enum AdminVenueTopicOutputDtoKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -7630,7 +7634,7 @@ export enum FoodTrendsSearchTopicKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -7675,7 +7679,7 @@ export enum FoodTrendsTalkedTopicKindEnum {
 	Dish = 'dish',
 	Drink = 'drink',
 	Diet = 'diet',
-	Format = 'format',
+	Place = 'place',
 	Meal = 'meal',
 	Ingredient = 'ingredient',
 	Aspect = 'aspect',
@@ -7748,10 +7752,10 @@ export enum GetExploreBreakdownParamsByEnum {
 	Subject = 'subject',
 	District = 'district',
 	Venue = 'venue',
+	Place = 'place',
 	Aspect = 'aspect',
 	Term = 'term',
 	Food = 'food',
-	Place = 'place',
 	Side = 'side',
 }
 
@@ -11912,6 +11916,24 @@ export interface TopicPrice {
 	othersWithTopic: number;
 	/** The venue's median for items of the topic */
 	price: number;
+}
+
+/** A topic as a chip names and links it */
+export interface TopicRefOutputDto {
+	key: string;
+	kind: TopicRefOutputDtoKindEnum;
+	label: string;
+}
+
+export enum TopicRefOutputDtoKindEnum {
+	Cuisine = 'cuisine',
+	Dish = 'dish',
+	Drink = 'drink',
+	Diet = 'diet',
+	Place = 'place',
+	Meal = 'meal',
+	Ingredient = 'ingredient',
+	Aspect = 'aspect',
 }
 
 /** A brand that entered the month's top 50 by posts from others, or climbed in it. */

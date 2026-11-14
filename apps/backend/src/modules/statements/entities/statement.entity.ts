@@ -43,10 +43,12 @@ export type StatementUnit = 'minutes' | 'money';
 		'(review_id is not null)::int + (post_id is not null)::int + (comment_id is not null)::int + (web_mention_id is not null)::int = 1',
 })
 @Index({ properties: ['city', 'month'] })
+// On the vectors' first 256 values (`util/near-sql.ts`): 217 MB against 714 MB for the whole
+// vector at 285k claims; a search picks its candidates here and orders them by the whole vector
 @Index({
-	name: 'statements_embedding_hnsw_index',
+	name: 'statements_embedding_prefix_hnsw_index',
 	expression:
-		'create index "statements_embedding_hnsw_index" on "statements" using hnsw ("embedding" halfvec_cosine_ops)',
+		'create index "statements_embedding_prefix_hnsw_index" on "statements" using hnsw ((subvector("embedding", 1, 256)::halfvec(256)) halfvec_cosine_ops)',
 })
 export class Statement extends MikroOrmSimpleEntityAbstractClass<'parts'> {
 	@Property({ type: 'text' })

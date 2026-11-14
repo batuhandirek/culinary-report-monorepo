@@ -1,5 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
 
+import { TopicIndex } from '../util/topics.js';
 import { sharedFood, VenueTopicInput, venueTopics } from '../util/venue-topics.js';
 
 import { seedIndex } from './factories/topic.factory.js';
@@ -107,15 +108,39 @@ describe('venueTopics', () => {
 		// A single mention is noise
 		expect(brief({ category: 'Bar', reviewTags: [{ title: 'cocktails', count: 1 }] })).toEqual([
 			'*bar category 1',
-		]);
+		]);		// Read whole, never word by word: "cheese counter" is no cheese, an undecided tag nothing
+		expect(
+			brief({
+				category: 'Deli',
+				reviewTags: [
+					{ title: 'cheese counter', count: 40 },
+					{ title: 'cookie', count: 10 },
+				],
+			}),
+		).toEqual(['*cookies reviews 1', 'deli category 1']);
 	});
 
 	it('makes a place type primary when it has no food tag', () => {
-		expect(brief({ category: 'Cocktail bar' })).toEqual([
-			'*cocktails category 1',
-			'bar category 1',
+		const decided = new TopicIndex(index.topics, [
+			{
+				key: 'cocktail bar',
+				name: 'Cocktail bar',
+				topicKey: 'bar',
+				exact: false,
+				modifiers: [{ topicKey: 'cocktails', type: 'has' }],
+			},
 		]);
-		expect(brief({ category: 'Pub' })).toEqual(['*pub category 1']);
+		const of = (category: string) =>
+			venueTopics({ category, manual: [], mentionTopics: [] }, decided).map(
+				t => `${t.primary ? '*' : ''}${t.key} ${t.source} ${t.score}`,
+			);
+		expect(of('Cocktail bar')).toEqual(['*bar category 1', 'cocktails category 1']);
+		expect(of('Pub')).toEqual(['*pub category 1']);
+	});
+
+	it('gives a category no tag until agent C decides it, never word by word', () => {
+		// "Wine bar" is no term here: not bar and wine, nothing
+		expect(tags({ category: 'Wine bar' })).toEqual([]);
 	});
 });
 

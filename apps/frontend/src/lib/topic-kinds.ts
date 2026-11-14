@@ -1,13 +1,13 @@
 // A topic's type as the admin names it, in the order the page groups them: the kinds of food,
 // then the aspects (what guests say about a place: waiting, price, friendliness)
-export type TopicKind = 'cuisine' | 'dish' | 'drink' | 'diet' | 'format' | 'meal' | 'ingredient' | 'aspect';
+export type TopicKind = 'cuisine' | 'dish' | 'drink' | 'diet' | 'place' | 'meal' | 'ingredient' | 'aspect';
 
 export const KIND_ITEMS: { value: TopicKind; label: string; hint?: string }[] = [
 	{ value: 'cuisine', label: 'Cuisine' },
 	{ value: 'dish', label: 'Dish' },
 	{ value: 'drink', label: 'Drink' },
 	{ value: 'diet', label: 'Diet' },
-	{ value: 'format', label: 'Place' },
+	{ value: 'place', label: 'Place' },
 	{ value: 'meal', label: 'Meal' },
 	{ value: 'ingredient', label: 'Ingredient', hint: 'What dishes are made with: beef, cheese, avocado.' },
 	{ value: 'aspect', label: 'Aspect', hint: 'What guests say about a place: waiting, price, friendliness.' }

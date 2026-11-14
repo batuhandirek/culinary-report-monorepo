@@ -14,7 +14,7 @@ export const DISH_SEARCH_DEPTH = 10;
 export const SEARCHED_TOPIC_KINDS: ReadonlySet<TopicKindEnum> = new Set([
 	TopicKindEnum.DISH,
 	TopicKindEnum.CUISINE,
-	TopicKindEnum.FORMAT,
+	TopicKindEnum.PLACE,
 	TopicKindEnum.MEAL,
 	TopicKindEnum.DIET,
 	TopicKindEnum.DRINK,

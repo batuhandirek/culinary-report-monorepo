@@ -339,6 +339,16 @@ export class DurableWorkflowsService {
 		await DBOS.resumeWorkflow(workflowId);
 	}
 
+	/**
+	 * Deletes these runs and everything DBOS keeps for them (status, arguments, result, steps,
+	 * events), not their children. Irreversible; only `DurablePruneService` calls it. Inside a step
+	 * DBOS runs it directly, from a body it would be recorded as a step of its own.
+	 */
+	async deleteRuns(workflowIds: string[]): Promise<void> {
+		this.ensureLaunched('deleteRuns');
+		if (workflowIds.length) await DBOS.deleteWorkflows(workflowIds, false);
+	}
+
 	/** A new run that replays the steps before `startStep` from the old one and runs the rest afresh */
 	async fork(workflowId: string, startStep: number): Promise<string> {
 		this.ensureLaunched('fork');

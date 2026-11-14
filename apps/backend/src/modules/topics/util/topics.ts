@@ -89,8 +89,8 @@ export const aspectKey = (raw: string | null | undefined): string | null => {
  * evokes — its main topic, then its modifiers ("vegan döner": kebab, vegan) — an aspect among them
  * only through a decided term ("waiting time" → Waiting), never through its own key or label
  * ("food", "service" are words). `exact` answers a term's topic only when the wording is that topic
- * (`IndexedTerm.exact`): "kumpir", a narrower thing under Turkish, names no topic as a whole. The cuisine lookup (`resolve`, word runs over a cuisine string, a
- * category, a menu item): kinds of food only — topic keys and decided terms' food topics; so "Vegan
+ * (`IndexedTerm.exact`): "kumpir", a narrower thing under Turkish, names no topic as a whole. The cuisine lookup (`resolve`, word runs over a menu item or a
+ * hashtag; Google's categories and review tags are read whole, `wordingTopics`): kinds of food only — topic keys and decided terms' food topics; so "Vegan
  * Food" is vegan, not the root `food`, "#service" names no aspect, and "waiting time döner" is kebab
  * alone. A key wins over a label and over a term for the same form; between terms, the first given
  * wins. A term decided as none takes no form.
@@ -103,6 +103,10 @@ export class TopicIndex {
 	private readonly whole = new Map<string, string[]>();
 	/** The forms that are a topic as a whole: its key, its label, an exact term's wording (`exact`) */
 	private readonly same = new Map<string, string>();
+	/** The forms of a food topic's own key and label, no term: what a name match decides at once (`wordingTopics`) */
+	private readonly named = new Map<string, string>();
+	/** Every decided term by its key: the food topics it evokes, its main topic then its modifiers; empty for none (`wordingTopics`) */
+	private readonly decided = new Map<string, string[]>();
 	/** Reverse `is_a` edges: the topics that are a kind of the key */
 	private readonly children = new Map<string, IndexedTopic[]>();
 	/** Reverse `has` edges: the topics that have the key */
@@ -132,12 +136,14 @@ export class TopicIndex {
 			for (const form of lookupForms(t.key)) {
 				this.whole.set(form, [t.key]);
 				this.same.set(form, t.key);
+				this.named.set(form, t.key);
 			}
 		for (const t of food)
 			for (const form of lookupForms(t.label))
 				if (!this.whole.has(form)) {
 					this.whole.set(form, [t.key]);
 					this.same.set(form, t.key);
+					this.named.set(form, t.key);
 				}
 		for (const t of food) for (const form of lookupForms(t.key)) this.lookup.set(form, [t.key]);
 		// A label resolves to its topic too ("Desserts" is `dessert`), never over a key
@@ -148,6 +154,7 @@ export class TopicIndex {
 			const keys = [
 				...new Set([term.topicKey, ...term.modifiers.map(m => m.topicKey)]),
 			].filter((k): k is string => !!k && this.byKey.has(k));
+			if (!this.decided.has(term.key)) this.decided.set(term.key, keys.filter(isFood));
 			if (!keys.length) continue;
 			const food = keys.filter(isFood);
 			const same = term.exact && term.topicKey && this.byKey.has(term.topicKey);
@@ -342,11 +349,31 @@ export class TopicIndex {
 	}
 
 	/**
+	 * The food topics one of Google's wordings names (a category, a "people often mention" review tag),
+	 * read whole, never split into words: its decided
+	 * term's (by `termKey`: the main topic, then the modifiers; "Donut shop" → bakery, donuts; a term
+	 * decided as none names nothing), else the topic it is as a whole by that topic's own key or
+	 * label ("Italian restaurant", "Coffee shop": what the name match decides once the term is
+	 * stored), else nothing, until agent C decides it ("Snack bar" is no bar because it ends in one;
+	 * "cheese counter" no cheese).
+	 */
+	wordingTopics(raw: string | null | undefined): string[] {
+		const key = raw ? termKey(raw) : '';
+		if (!key) return [];
+		const decided = this.decided.get(key);
+		if (decided) return [...decided];
+		for (const form of lookupForms(raw!)) {
+			const named = this.named.get(form);
+			if (named) return [named];
+		}
+		return [];
+	}
+
+	/**
 	 * The topics a raw cuisine names, in the order it names them: the whole key or an alias of it
 	 * ("Döner/Kebap" → kebab), else the longest known runs of its words, so a compound gives each
-	 * part ("Vegan Döner" → vegan, kebab; "Korean Fried Chicken" → korean, fried chicken; "Snack
-	 * bar" → street food, as the longer run wins). Words no topic knows are skipped. Empty for
-	 * nothing known.
+	 * part ("Vegan Döner" → vegan, kebab; "Korean Fried Chicken" → korean, fried chicken). Words no
+	 * topic knows are skipped. Empty for nothing known. Never Google's categories or review tags (`wordingTopics`).
 	 */
 	resolve(raw: string | null | undefined): string[] {
 		const key = normalizeCuisine(raw);
@@ -382,7 +409,7 @@ export class TopicIndex {
 		const keep = (keys: string[]) =>
 			keys.filter(key => {
 				const kind = this.byKey.get(key)?.kind;
-				return main ? kind !== TopicKindEnum.FORMAT : kind === TopicKindEnum.DRINK;
+				return main ? kind !== TopicKindEnum.PLACE : kind === TopicKindEnum.DRINK;
 			});
 		const own = keep(this.resolve(item.name));
 		return own.length ? own : keep(this.resolve(item.category));

@@ -2,6 +2,8 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { AdminBrandsController } from '../controllers/admin.brands.controller.js';
@@ -24,7 +26,7 @@ describe('AdminBrandsController competitors (pglite)', () => {
 
 	beforeAll(async () => {
 		harness = await createPgliteTestingModule({
-			providers: [AdminBrandsController, CompetitorService],
+			providers: [AdminBrandsController, CompetitorService, VenueTopicService, TopicService],
 		});
 		controller = harness.moduleRef.get(AdminBrandsController);
 		service = harness.moduleRef.get(CompetitorService);

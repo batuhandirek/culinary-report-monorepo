@@ -4,6 +4,7 @@ import { MikroORM } from '@mikro-orm/postgresql';
 import { Injectable } from '@nestjs/common';
 
 import { CityService } from 'src/modules/cities/services/city.service.js';
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableSchedule } from 'src/modules/durable-workflows/decorators/durable-schedule.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 
@@ -22,7 +23,7 @@ export class ReadPostsSchedule {
 		private readonly workflow: ReadPostsWorkflow,
 	) {}
 
-	@DurableSchedule('read-posts', READ_POSTS_CRON)
+	@DurableSchedule('read-posts', READ_POSTS_CRON, { keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async hourly(): Promise<void> {
 		// Started, never awaited: each city's run governs itself

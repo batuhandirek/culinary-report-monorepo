@@ -11,12 +11,14 @@
 		value,
 		onChange,
 		placeholder = 'Search…',
+		submit = false,
 		class: className = ''
 	}: PaginatedDataTableTextFilterProps = $props();
 
-	// What is typed, ahead of what is applied: the list refetches once typing pauses.
+	// What is typed, ahead of what is applied: the list refetches once typing pauses, or with
+	// `submit` only on Enter or the Search button (each request costs something there).
 	let draft = $state(value ?? '');
-	let applied = value ?? '';
+	let applied = $state(value ?? '');
 	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	// The applied value can change under the field ("Clear all", the back button).
@@ -38,9 +40,12 @@
 	};
 
 	const schedule = () => {
+		if (submit) return;
 		clearTimeout(timer);
 		timer = setTimeout(apply, 350);
 	};
+	// Typed but not applied yet: the Search button shows
+	const pending = $derived(submit && draft.trim() !== '' && draft.trim() !== applied);
 
 	const clear = () => {
 		draft = '';
@@ -73,7 +78,12 @@
 				clear();
 			}
 		}} />
-	{#if draft}
+	{#if pending}
+		<button
+			type="button"
+			class="bg-ink text-paper hover:bg-ink/85 -mr-1.5 h-6 shrink-0 rounded-full px-2.5 text-xs font-medium"
+			onclick={apply}>Search</button>
+	{:else if draft}
 		<button
 			type="button"
 			class="text-muted-foreground hover:bg-ink/10 hover:text-ink -mr-1.5 grid size-6 shrink-0 place-items-center rounded-full"

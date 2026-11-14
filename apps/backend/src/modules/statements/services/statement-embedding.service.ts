@@ -16,6 +16,7 @@ import {
 	STATEMENT_EMBEDDING_DIMENSIONS,
 	STATEMENT_EMBEDDINGS_APPROVED_AT,
 } from '../constants/embeddings.constant.js';
+import { nearCandidates, nearScanSettingsSql, prefixLiteral } from '../util/near-sql.js';
 
 /** SQL: a statement (`s`) the embeddings backlog has still to embed: a claim with text and no vector */
 export const EMBEDDING_PENDING_SQL = 's.text is not null and s.embedded_at is null';
@@ -31,7 +32,7 @@ const PHRASE_CACHE = 200;
  * backlog (priority 60, after the re-reads), 2,000 claims a batch, most recent month first; new
  * claims get theirs the next night. The backlog waits (`waitsFor`) until the user approved the
  * spend (`STATEMENT_EMBEDDINGS_APPROVED_AT`). Also embeds
- * a search phrase for the Claims tables (`phraseVector`).
+ * a search phrase for the Claims tables (`phraseVector`) and runs their search by meaning (`nearest`).
  */
 @Injectable()
 export class StatementEmbeddingService implements OnModuleInit {
@@ -159,6 +160,33 @@ export class StatementEmbeddingService implements OnModuleInit {
 		if (this.phrases.size > PHRASE_CACHE)
 			this.phrases.delete(this.phrases.keys().next().value!);
 		return embeddings[0];
+	}
+
+	/**
+	 * A page of claim ids closest in meaning to `vector`, for the Claims tables' "Similar to".
+	 * `candidates` picks, with the caller's filters, the `count` claims nearest by the vector prefix
+	 * (ordered by `prefixDistanceSql`, bound to `prefix`, so the prefix index serves it); they are
+	 * then ordered by the whole vector, ties newest id first, and the page cut. One transaction, so
+	 * the scan settings (`nearScanSettingsSql`) apply to the pick only.
+	 */
+	async nearest(
+		vector: number[],
+		page: { offset: number; limit: number },
+		candidates: (em: EntityManager, prefix: string, count: number) => Promise<number[]>,
+	): Promise<number[]> {
+		const count = nearCandidates(page.offset, page.limit);
+		return this.em.transactional(async em => {
+			for (const setting of nearScanSettingsSql(count)) await em.execute(setting);
+			const ids = await candidates(em, prefixLiteral(vector), count);
+			if (!ids.length) return [];
+			// One placeholder per id: `em.execute` flattens an array bound to one `?`
+			const rows: { id: number }[] = await em.execute(
+				`select id from statements where id in (${ids.map(() => '?').join(', ')})
+				order by embedding <=> ?::halfvec(${STATEMENT_EMBEDDING_DIMENSIONS}), id desc limit ? offset ?`,
+				[...ids, toVectorLiteral(vector), page.limit, page.offset],
+			);
+			return rows.map(r => Number(r.id));
+		});
 	}
 
 	private async write(rows: { id: number; vector: number[] }[]): Promise<void> {

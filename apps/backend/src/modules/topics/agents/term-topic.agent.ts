@@ -46,7 +46,7 @@ const termTopicSchema = z.object({
 export interface TermTopicInputTopic {
 	key: string;
 	label: string;
-	/** cuisine, dish, drink, diet, format, meal, ingredient or aspect */
+	/** cuisine, dish, drink, diet, place, meal, ingredient or aspect */
 	kind: string;
 	/** The keys of the topics it is a kind of, the first its parent in the tree */
 	isA?: string[];
@@ -62,7 +62,7 @@ export interface TermTopicContext {
 }
 
 /**
- * Agent C: decides one wording (a dish name from a review or a post, one of Google's review tags,
+ * Agent C: decides one wording (a dish name from a review or a post, one of Google's review tags or a place's Google category,
  * any language, often misspelt): the one topic it is, or is a narrower thing under, with what
  * else it is or has. The `terms` backlog's reader. One wording a call; each wording is asked once
  * (`Term`); an admin's decision is never asked.
@@ -82,9 +82,10 @@ export class TermTopicAgent extends BaseMastraAgent<typeof termTopicSchema, Term
 
 	protected getInstructions(context?: TermTopicContext): string {
 		return (
-			'You place one wording guests used about restaurants, bars and cafés — a name of a dish or drink as written in a review or a ' +
-			'social media post, or a short tag Google shows as "people often mention" (any language, often misspelt) — in a graph of ' +
-			'topics. A topic is a kind of food or drink (kinds: cuisine, dish, drink, diet, format = a kind of place, meal, ingredient) ' +
+			'You place one wording about restaurants, bars and cafés — a name of a dish or drink as written in a review or a social ' +
+			'media post, a short tag Google shows as "people often mention" (any language, often misspelt), or a category Google ' +
+			'Maps gives a place ("Donut shop", "Snack bar", "Fine dining restaurant") — in a graph of topics. A topic is a kind of ' +
+			'food or drink (kinds: cuisine, dish, drink, diet, place = a kind of place (café, bar, street food), meal, ingredient) ' +
 			'or an aspect (what guests say about a place: waiting, price, friendliness). You are given topics to pick from: the ones ' +
 			'listed below, and in the message the ones closest to the wording. Each has its key, label, kind and the topics it is a ' +
 			'kind of. Use only keys you were given.\n\n' +
@@ -112,6 +113,12 @@ export class TermTopicAgent extends BaseMastraAgent<typeof termTopicSchema, Term
 			'a dish is not the dish: a burger bun is no burger, kebab sauce is a sauce that has kebab, a pizza oven is no pizza, ' +
 			'"cheese counter" is no cheese. A wording under an aspect is always exact (answer 1) with the closest aspect, a root ' +
 			'when nothing finer fits.\n\n' +
+			'A Google Maps category says what kind of place it is and what it is known for: read it whole, never word by word. ' +
+			'"Italian restaurant" is italian; "Cocktail bar" is under bar and has cocktails; "Donut shop" is under bakery and has ' +
+			'donuts; "Snack bar" is a snack stand (street food), no bar; "Gastropub" is under pub; "Pizza delivery" is under ' +
+			'pizza. A category is never an aspect: how a place serves (delivery, takeaway, a terrace) is no kind of food, so ' +
+			'read what it serves. A category that says nothing about food or drink ("Restaurant", "Caterer", "Supermarket", ' +
+			'"Hotel") is none.\n\n' +
 			'An odd wording gets an answer too: none is a decision.' +
 			(context ? `\n\nThe topics always offered:\n${topicLines(context.topics)}` : '')
 		);

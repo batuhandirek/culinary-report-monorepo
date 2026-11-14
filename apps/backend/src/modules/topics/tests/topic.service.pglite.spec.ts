@@ -148,25 +148,27 @@ describe('TopicService (pglite)', () => {
 		expect(byKey.get('kebab')?.terms).toBe(n);
 	});
 
-	it("stores a food venue's category nothing resolves as a term for the agent, in every city, beside the claims' wordings", async () => {
+	it("stores every food venue's category as a term, in every city, beside the claims' wordings: a topic's name decided at once, the rest for the agent", async () => {
 		const terms = harness.moduleRef.get(TermService);
 		const index = await service.index();
-		expect(index.resolve('Cheesesteaks')).toEqual([]);
-		// "Restaurant" says nothing, a hotel is no food, "Ramen restaurant" resolves; "Cheesesteaks"
-		// is a claim's wording, stored as it was read
-		expect(await terms.sync(index)).toEqual({ added: 1, matched: 0 });
+		// "Restaurant" says nothing and a hotel is no food: no term. "Ramen restaurant" is ramen by
+		// name; "Roman restaurant" waits for the agent; "Cheesesteaks" is a claim's wording, stored as read
+		expect(await terms.sync(index)).toEqual({ added: 2, matched: 1 });
 		const rows: { key: string; name: string; decided_by: string | null }[] =
 			await harness.orm.em
 				.getConnection()
-				.execute(
-					`select key, name, decided_by from terms where decided_by is null order by key`,
-				);
+				.execute(`select key, name, decided_by from terms where key in ('cheesesteak', 'ramen restaurant', 'roman restaurant', 'restaurant', 'hotel') order by key`);
 		expect(rows).toEqual([
 			{ key: 'cheesesteak', name: 'Cheesesteaks', decided_by: null },
+			{ key: 'ramen restaurant', name: 'Ramen restaurant', decided_by: 'match' },
 			{ key: 'roman restaurant', name: 'Roman restaurant', decided_by: null },
 		]);
 		expect(await terms.countPending()).toBe(2);
 		expect(await terms.sync(index)).toEqual({ added: 0, matched: 0 });
+		// Until the agent decides it, a category tags nothing: never "Roman" split into words
+		const after = await service.index();
+		expect(after.wordingTopics('Ramen restaurant')).toEqual(['ramen']);
+		expect(after.wordingTopics('Roman restaurant')).toEqual([]);
 	});
 
 	it('creates a topic keyed by its label, and an admin links a waiting word to it', async () => {
@@ -193,7 +195,7 @@ describe('TopicService (pglite)', () => {
 			}),
 		).rejects.toThrow('makes the key "philly cheesesteak", which Philly Cheesesteak has');
 		await expect(
-			controller.createTopic({ label: 'Restaurant', kind: TopicKindEnum.FORMAT }),
+			controller.createTopic({ label: 'Restaurant', kind: TopicKindEnum.PLACE }),
 		).rejects.toThrow(BadRequestException);
 
 		// The admin links the waiting word to the new topic: it keeps the spelling it was stored with

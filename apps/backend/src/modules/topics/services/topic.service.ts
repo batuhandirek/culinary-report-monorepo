@@ -439,7 +439,7 @@ export class TopicService {
 		const venues = new Map<string, number>();
 		for (const r of mentionRows) mentions.set(r.key, r.n);
 		for (const r of venueRows)
-			for (const k of index.resolve(r.category)) venues.set(k, (venues.get(k) ?? 0) + r.n);
+			for (const k of index.wordingTopics(r.category)) venues.set(k, (venues.get(k) ?? 0) + r.n);
 		return {
 			topics: topics.map(topic => ({
 				topic,

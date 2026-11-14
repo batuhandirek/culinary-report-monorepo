@@ -7,7 +7,8 @@
 	// What they say, grouped by meaning: the claims (an Explore view's, a brand's or a branch's)
 	// whose vectors sit close together, largest first, each with a few of its claims said in
 	// different ways. A reading aid, never a count a report quotes. The bar (how alike, how many
-	// claims) is moved here; unset is the API's default.
+	// claims) is moved here; unset is the API's default. "See claims" lists the claims closest to a
+	// group's most central one (`like`), the group's own first.
 	interface GroupBar {
 		similarity?: number;
 		minClaims?: number;
@@ -16,9 +17,10 @@
 		data: AdminExploreGroupsOutputDto | null;
 		bar?: GroupBar;
 		onBar?: (next: GroupBar) => void;
+		onSeeClaims?: (phrase: string) => void;
 	}
 
-	let { data, bar = {}, onBar }: Props = $props();
+	let { data, bar = {}, onBar, onSeeClaims }: Props = $props();
 
 	const SIMILARITY = [
 		{ value: 0.66, label: '0.66 · loosest' },
@@ -75,14 +77,20 @@
 {:else}
 	<ul class="divide-line m-0 flex list-none flex-col divide-y p-0">
 		{#each data.groups as group, i (i)}
-			<li class="flex flex-col gap-1.5 py-2.5">
-				<div class="flex flex-col gap-0.5">
+			<li class="group flex flex-col gap-1.5 py-2.5">
+				<div class="flex items-baseline justify-between gap-2">
 					<p class="m-0 text-sm font-medium">
 						{n(group.claims)} claims from {n(group.sources)} reviews and posts
 						<span class="text-muted-foreground font-normal">
 							· <span class="text-success">{n(group.praise)} praise</span> · <span class="text-destructive">{n(group.complaints)} complaints</span>
 						</span>
 					</p>
+					{#if onSeeClaims}
+						<button
+							type="button"
+							class="text-beet shrink-0 text-xs opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+							onclick={() => onSeeClaims(group.like)}>See claims</button>
+					{/if}
 				</div>
 				<ul class="m-0 flex list-none flex-col gap-0.5 p-0 text-sm">
 					{#each group.samples as sample (sample.id)}

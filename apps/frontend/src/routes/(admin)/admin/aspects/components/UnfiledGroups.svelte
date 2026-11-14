@@ -4,6 +4,7 @@
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
+	import { exploreHref } from '#lib/explore.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
@@ -12,7 +13,8 @@
 	// The month's loose claims (under no aspect, or filed at a root because nothing finer fitted)
 	// grouped by meaning: Explore's greedy grouping over the claims' vectors (`loose`), worked out on
 	// each load and never stored. A big group no aspect covers is where an aspect may be missing.
-	// Explore's population: own posts and claims of places matched to no brand are out.
+	// Explore's population: own posts and claims of places matched to no brand are out. "See claims"
+	// opens Explore on the city's month, the claims closest to the group's most central one first.
 	interface Props {
 		cityId: string;
 		month: string;
@@ -31,6 +33,11 @@
 		load();
 	});
 	const n = (v: number) => v.toLocaleString('en-GB');
+	const claimsHref = (phrase: string) => {
+		const url = new URL(exploreHref({ cityId, from: month, to: month }), 'http://x');
+		url.searchParams.set('like', phrase);
+		return `${url.pathname}${url.search}#explore-claims`;
+	};
 </script>
 
 <AdminPanel title="Unfiled, grouped by meaning" note={monthLabel(month)}>
@@ -53,13 +60,16 @@
 		</p>
 		<ul class="m-0 grid list-none grid-cols-1 gap-3 p-0 lg:grid-cols-2">
 			{#each data.groups as group, i (i)}
-				<li class="border-line rounded-md border p-3">
-					<p class="m-0 text-xs">
-						<span class="font-semibold tabular-nums">{n(group.claims)} claims</span>
-						<span class="text-muted-foreground">
-							· {n(group.sources)} sources · {n(group.praise)} praise · {n(group.complaints)} complaints
-						</span>
-					</p>
+				<li class="border-line group rounded-md border p-3">
+					<div class="flex items-baseline justify-between gap-2">
+						<p class="m-0 text-xs">
+							<span class="font-semibold tabular-nums">{n(group.claims)} claims</span>
+							<span class="text-muted-foreground">
+								· {n(group.sources)} sources · {n(group.praise)} praise · {n(group.complaints)} complaints
+							</span>
+						</p>
+						<a class="text-beet shrink-0 text-xs opacity-0 group-hover:opacity-100 focus-visible:opacity-100" href={claimsHref(group.like)}>See claims</a>
+					</div>
 					<ul class="m-0 mt-1.5 list-disc pl-4 text-sm">
 						{#each group.samples as sample (sample.id)}
 							<li>

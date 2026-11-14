@@ -32,7 +32,7 @@ const KIND_NOUNS: Record<string, string> = {
 };
 
 /** Kinds that describe another topic as a word before its kind: a Turkish dish, a street food dish, a vegan dish */
-const ADJECTIVE_KINDS = ['cuisine', 'format', 'diet'];
+const ADJECTIVE_KINDS = ['cuisine', 'place', 'diet'];
 
 /** A name inside a sentence: lowercased unless it is a cuisine (Turkish) or has capitals of its own (McRib) */
 const inline = (label: string, kind: string) =>

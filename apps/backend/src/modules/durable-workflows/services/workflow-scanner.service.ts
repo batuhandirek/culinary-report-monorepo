@@ -148,7 +148,13 @@ export class WorkflowScannerService {
 			writable: true,
 			configurable: true,
 		});
-		this.registry.addWorkflow({ ref, invoker, exposed });
+		const keepDays = options.keepDays ?? schedule?.keepDays;
+		this.registry.addWorkflow({
+			ref,
+			invoker,
+			exposed,
+			...(keepDays !== undefined && { keepDays }),
+		});
 		if (schedule) this.registry.addSchedule({ ...schedule, ref, invoker });
 		this.logger.log(
 			`Registered workflow ${workflowKey(ref)}${schedule ? ` (schedule ${schedule.name}: ${schedule.cron})` : ''}`,

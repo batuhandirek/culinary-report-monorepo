@@ -31,17 +31,17 @@ describe('dishSearches', () => {
 		expect(words('ramen', TopicKindEnum.DISH)).toBe('ramen Mitte');
 		expect(words('vietnamese', TopicKindEnum.CUISINE)).toBe('vietnamese food Mitte');
 		expect(words('vegan', TopicKindEnum.DIET)).toBe('vegan food Mitte');
-		expect(words('cafe', TopicKindEnum.FORMAT)).toBe('cafe Mitte');
+		expect(words('cafe', TopicKindEnum.PLACE)).toBe('cafe Mitte');
 		expect(words('brunch', TopicKindEnum.MEAL)).toBe('brunch Mitte');
 		expect(words('cocktails', TopicKindEnum.DRINK)).toBe('cocktails Mitte');
 	});
 
 	it('searches the food a guest types, not an ingredient, an aspect or a word nobody searches', () => {
 		expect(isSearchedTopic(dish('ramen'))).toBe(true);
-		expect(isSearchedTopic({ key: 'bakery', kind: TopicKindEnum.FORMAT })).toBe(true);
+		expect(isSearchedTopic({ key: 'bakery', kind: TopicKindEnum.PLACE })).toBe(true);
 		expect(isSearchedTopic({ key: 'avocado', kind: TopicKindEnum.INGREDIENT })).toBe(false);
 		expect(isSearchedTopic({ key: 'wait_for_food', kind: TopicKindEnum.ASPECT })).toBe(false);
-		expect(isSearchedTopic({ key: 'fast food', kind: TopicKindEnum.FORMAT })).toBe(false);
+		expect(isSearchedTopic({ key: 'fast food', kind: TopicKindEnum.PLACE })).toBe(false);
 		expect(isSearchedTopic({ key: 'halal', kind: TopicKindEnum.DIET })).toBe(false);
 		expect(isSearchedTopic({ key: 'coffee drinks', kind: TopicKindEnum.DRINK })).toBe(false);
 	});

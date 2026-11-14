@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 
 import type { WorkflowHandle } from '@dbos-inc/dbos-sdk';
 
+import { ITEM_RUN_KEEP_DAYS } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableStep } from 'src/modules/durable-workflows/decorators/durable-step.decorator.js';
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
@@ -50,7 +51,7 @@ export class ReadReviewsWorkflow {
 		private readonly agent: ReviewClaimsAgent,
 	) {}
 
-	@DurableWorkflow({ name: 'read-reviews.city' })
+	@DurableWorkflow({ name: 'read-reviews.city', keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async readCity(cityId: string): Promise<ReadReviewsCityResult> {
 		const reviewIds = await this.unreadReviews(cityId);
@@ -72,7 +73,7 @@ export class ReadReviewsWorkflow {
 		return result;
 	}
 
-	@DurableWorkflow({ name: 'read-reviews.review' })
+	@DurableWorkflow({ name: 'read-reviews.review', keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async readReview(reviewId: string): Promise<ReadReviewResult> {
 		const review = await this.plan(reviewId);

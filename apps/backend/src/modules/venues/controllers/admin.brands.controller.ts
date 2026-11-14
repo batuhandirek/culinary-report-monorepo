@@ -10,6 +10,7 @@ import { UserRoleEnum } from 'src/modules/auth/constants/user-role.enum.constant
 import { Roles } from 'src/modules/auth/decorators/roles.decorator.js';
 import { AuthenticationGuard } from 'src/modules/auth/guards/authentication.guard.js';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
 
 import {
 	AdminBrandVenueInputDto,
@@ -50,6 +51,7 @@ export class AdminBrandsController {
 		private readonly em: EntityManager,
 		private readonly brandService: BrandService,
 		private readonly competitorService: CompetitorService,
+		private readonly venueTopicService: VenueTopicService,
 	) {}
 
 	/** Groups of a city's venues that look like one brand; nothing is saved until confirmed. */
@@ -273,9 +275,10 @@ export class AdminBrandsController {
 		};
 	}
 
-	/** Venues as branch rows, with their mention counts, websites and Google Maps links. */
+	/** Venues as branch rows, with their mention counts, food topics, websites and Google Maps links. */
 	private async branches(venues: Venue[]): Promise<Map<string, AdminBrandBranchOutputDto>> {
 		const counts = await this.brandService.mentionCounts(venues.map(v => v.id));
+		const topics = await this.venueTopicService.labelled(venues.map(v => v.id));
 		return new Map(
 			venues.map(v => [
 				v.id,
@@ -284,8 +287,9 @@ export class AdminBrandsController {
 						skipNull: true,
 						forceObject: true,
 						populate: ['city', 'favicon'],
-					}) as unknown as Omit<AdminBrandBranchOutputDto, 'mentions'>),
+					}) as unknown as Omit<AdminBrandBranchOutputDto, 'mentions' | 'topics'>),
 					mentions: counts.get(v.id) ?? 0,
+					topics: topics.get(v.id) ?? [],
 				},
 			]),
 		);

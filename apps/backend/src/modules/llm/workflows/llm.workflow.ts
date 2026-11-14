@@ -3,7 +3,10 @@ import { MikroORM } from '@mikro-orm/postgresql';
 
 import { Injectable, Logger } from '@nestjs/common';
 
-import { DURABLE_WORKFLOWS_LOGGER } from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
+import {
+	DURABLE_WORKFLOWS_LOGGER,
+	ITEM_RUN_KEEP_DAYS,
+} from 'src/modules/durable-workflows/constants/durable-workflows.constant.js';
 import { DurableWorkflow } from 'src/modules/durable-workflows/decorators/durable-workflow.decorator.js';
 import { DurableWorkflowsService } from 'src/modules/durable-workflows/services/durable-workflows.service.js';
 import type { MastraAgentInput } from 'src/modules/llm/abstractions/base-mastra-agent.abstract.js';
@@ -82,7 +85,7 @@ export class LlmWorkflows {
 		private readonly llmModels: LlmModelsService,
 	) {}
 
-	@DurableWorkflow()
+	@DurableWorkflow({ keepDays: ITEM_RUN_KEEP_DAYS })
 	@EnsureRequestContext()
 	async generate(
 		agentId: string,

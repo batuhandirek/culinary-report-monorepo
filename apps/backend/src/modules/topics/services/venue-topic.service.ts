@@ -10,6 +10,8 @@ import { FOOD_TOPIC_KEYS_SQL } from 'src/modules/statements/util/statement-foods
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import type { VenueDetails } from 'src/modules/venues/interfaces/venue-details.interface.js';
 
+import type { AdminVenueTopicOutputDto } from '../dto/admin-venue-topics.dto.js';
+import type { TopicRefOutputDto } from '../dto/topic-ref.output.dto.js';
 import { Topic } from '../entities/topic.entity.js';
 import { VenueTopic } from '../entities/venue-topic.entity.js';
 import { TopicCityRefreshJob } from '../jobs/topic-city-refresh.job.js';
@@ -56,6 +58,48 @@ export class VenueTopicService {
 				);
 			for (const r of rows)
 				out.get(r.venue_id)!.push({ key: r.key, source: r.source, score: Number(r.score), primary: r.primary });
+		}
+		return out;
+	}
+
+	/** The stored tags of these venues with each topic's label and kind, by venue id, the primary first (`tags`' order) */
+	async labelled(venueIds: string[]): Promise<Map<string, AdminVenueTopicOutputDto[]>> {
+		const out = new Map<string, AdminVenueTopicOutputDto[]>(venueIds.map(id => [id, []]));
+		for (const ids of _.chunk(_.uniq(venueIds), CHUNK)) {
+			const rows: (AdminVenueTopicOutputDto & { venue_id: string })[] = await this.em.getConnection().execute(
+				`select vt.venue_id, t.key, t.label, t.kind, vt.source, vt.score::float as score, vt.primary from venue_topics vt
+				join topics t on t.id = vt.topic_id
+				where vt.computed and t.deleted_at is null and vt.venue_id in (${ids.map(() => '?').join(', ')})
+				order by vt.venue_id, vt.primary desc, vt.score desc, t.key`,
+				ids,
+			);
+			for (const { venue_id, ...tag } of rows) out.get(venue_id)!.push({ ...tag, score: Number(tag.score) });
+		}
+		return out;
+	}
+
+	/**
+	 * What each brand is, from its open branches' stored tags (in the city, when given): the topics
+	 * most of its branches have as their primary first, then those most branches carry, `limit` of
+	 * them. A brand whose branches have no tag maps to `[]`.
+	 */
+	async brandTopics(brandIds: string[], cityId?: string, limit = 3): Promise<Map<string, TopicRefOutputDto[]>> {
+		const out = new Map<string, TopicRefOutputDto[]>(brandIds.map(id => [id, []]));
+		for (const ids of _.chunk(_.uniq(brandIds), CHUNK)) {
+			const rows: (TopicRefOutputDto & { brand_id: string })[] = await this.em.getConnection().execute(
+				`select brand_id, key, label, kind from (
+					select v.brand_id, t.key, t.label, t.kind,
+						row_number() over (partition by v.brand_id
+							order by count(*) filter (where vt.primary) desc, count(distinct v.id) desc, max(vt.score) desc, t.key) as rank
+					from venues v
+					join venue_topics vt on vt.venue_id = v.id and vt.computed
+					join topics t on t.id = vt.topic_id and t.deleted_at is null
+					where not v.closed ${cityId ? 'and v.city_id = ?' : ''} and v.brand_id in (${ids.map(() => '?').join(', ')})
+					group by v.brand_id, t.key, t.label, t.kind
+				) x where rank <= ? order by brand_id, rank`,
+				[...(cityId ? [cityId] : []), ...ids, limit],
+			);
+			for (const { brand_id, ...topic } of rows) out.get(brand_id)!.push(topic);
 		}
 		return out;
 	}
