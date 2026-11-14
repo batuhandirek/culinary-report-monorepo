@@ -15,6 +15,8 @@ export enum VenueScrapeSourceEnum {
 	LOOKUP = 'lookup',
 	// Detail pages of known venues (`REFRESH_VENUE_DETAILS`, the busyness sample)
 	DETAILS = 'details',
+	// A Google review fetch (the weekly one covers every open venue): its items repeat the place's state
+	REVIEWS = 'reviews',
 }
 
 /**

@@ -67,7 +67,7 @@ Everything below starts at the same moment; each one waits for what it needs.
   - We refresh their Google Maps details (hours, amenities, popular times, delivery links).
   - We scrape the comments under each report brand's five most viewed TikTok posts.
   - We search Google News and Google for each report brand's press.
-- Once the details are refreshed, we scrape the report venues' and competitors' Wolt and Lieferando listings and menus.
+- We read the report venues' and competitors' pages on Wolt, Lieferando and Uber Eats: a web search finds the pages of the venues we have none for yet, then each page is read for its stars, fees and menu. A menu item a platform stops listing is marked removed, never deleted.
 - We pull Google search interest for every food topic and every paying customer's name.
 - Once the month's reviews and press are scraped and read, we score every brand's sales lead score.
 
@@ -76,6 +76,7 @@ Everything below starts at the same moment; each one waits for what it needs.
 - **Backfill reviews** (`POST /admin/backfill-reviews`): we fetch the reviews since a given day of every venue posts talked about lately that has none stored from then, within a budget.
 - **Re-flag openings** (`POST /admin/mentions/reflag-openings`): we re-read a month's posts only to decide again which places they call new.
 - **Find branches** (brand page): we search Google Maps for the brand's name in the city, keep every place it returns, and join the ones on the brand's own website to it; the page shows them when the search is done (about half a minute).
+- **Find menus** (brand page, Menu tab): we search the web for the brand's pages on Wolt, Lieferando and Uber Eats and read each one (stars, fees, the menu), for a few cents; the tab shows them when the run is done (a minute or two).
 - **Refresh from Google** (branch page): we read that one place's Google Maps page again (rating, review count, hours, details), for under a cent; the page reloads the place when it is done.
 - **Build report** (brand page): we build the brand's report for a month. No schedule ever does this.
 - **Trigger a schedule** (`/admin/workflows` → Schedules): any of the above, now, for every city.

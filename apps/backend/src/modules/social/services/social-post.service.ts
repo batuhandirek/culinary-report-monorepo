@@ -114,7 +114,8 @@ export class SocialPostService {
 	/**
 	 * Creates the post in the city whose scrape found it, or reads its counts again (a known post
 	 * keeps its first city and caption; `readCounts`), and links it to its author's account
-	 * (`SocialAccountService.ensure`, which takes the item's display name and follower count).
+	 * (`SocialAccountService.ensure`, which takes the item's display name and follower count; for a
+	 * known post `authorOfStoredPost`, which catches an author renamed before ids were stored).
 	 * Every find is recorded (`PostSource`), new post or known; a new post's hashtags are stored
 	 * as rows (`PostHashtag`); `seenAt` dates the author's follower snapshot. Returns false for an
 	 * item it cannot use. Does not flush; the finds
@@ -122,25 +123,36 @@ export class SocialPostService {
 	 */
 	async upsert(fields: PostFields, city: City, seenAt = new Date()): Promise<boolean> {
 		const { authorName, authorId, hashtags, finds, ...postFields } = fields;
-		const account = await this.socialAccountService.ensure(
-			fields.platform,
-			fields.author,
-			city,
-			{ platformUserId: authorId, displayName: authorName, followers: fields.authorFans },
-			seenAt,
-		);
+		const seen = {
+			platformUserId: authorId,
+			displayName: authorName,
+			followers: fields.authorFans,
+		};
 		const existing = await this.em.findOne(SocialPost, { externalId: fields.externalId });
 		if (existing) {
+			await this.socialAccountService.authorOfStoredPost(
+				existing,
+				fields.author,
+				city,
+				seen,
+				seenAt,
+			);
 			// Counts move until final, the author's followers always; the rest stays as first
 			// seen, subtitles only fill a gap
 			Object.assign(existing, _.pick(postFields, ['authorFans']));
 			this.readCounts(existing, postFields, seenAt);
 			existing.subtitles ??= fields.subtitles ?? null;
 			existing.subtitlesLanguage ??= fields.subtitlesLanguage ?? null;
-			existing.account ??= account;
 			await this.addFinds(existing, finds ?? []);
 			return true;
 		}
+		const account = await this.socialAccountService.ensure(
+			fields.platform,
+			fields.author,
+			city,
+			seen,
+			seenAt,
+		);
 		const post = this.em.create(SocialPost, {
 			...postFields,
 			author: account?.handle ?? fields.author ?? null,

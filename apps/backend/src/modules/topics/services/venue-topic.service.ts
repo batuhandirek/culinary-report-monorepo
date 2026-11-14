@@ -140,14 +140,14 @@ export class VenueTopicService {
 					where m.venue_id in (${marks}) and not ${ownPostSql('p', 'm.brand_id')}`,
 					ids,
 				),
-				// Each listing's latest menu: what the venue sells now
+				// Each listing's menu as its last read had it (removed items out): what the venue sells now
 				conn.execute<{ venue_id: string; keys: string[] }[]>(
 					`select l.venue_id, coalesce(array_agg(t.key) filter (where t.key is not null), '{}') as keys from menu_items mi
 					join venue_delivery_listings l on l.id = mi.listing_id
 					left join menu_item_topics it on it.menu_item_id = mi.id
 					left join topics t on t.id = it.topic_id
 					where l.venue_id in (${marks})
-					and mi.month = (select max(x.month) from menu_items x where x.listing_id = mi.listing_id)
+					and mi.removed_at is null
 					group by l.venue_id, mi.id`,
 					ids,
 				),

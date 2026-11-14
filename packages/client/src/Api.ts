@@ -714,6 +714,153 @@ export interface AdminBrandBranchOutputDto {
 	website?: string;
 }
 
+export interface AdminBrandListItemOutputDto {
+	branches: AdminBrandBranchOutputDto[];
+	/** Mentions that name the brand but no branch, of any month */
+	brandOnlyMentions: number;
+	/** @format date-time */
+	createdAt: string;
+	id: string;
+	key: string;
+	leadScore?: number;
+	name: string;
+	reportScope: AdminBrandListItemOutputDtoReportScopeEnum;
+}
+
+export enum AdminBrandListItemOutputDtoReportScopeEnum {
+	City = 'city',
+	All = 'all',
+}
+
+export interface AdminBrandMenuBranchOutputDto {
+	/** On the menu first, most named first; then the removed ones */
+	items: AdminBrandMenuItemOutputDto[];
+	listings: AdminBrandMenuListingOutputDto[];
+	name: string;
+	/** When its delivery pages were last searched for */
+	searchedAt?: string;
+	street?: string;
+	venueId: string;
+}
+
+/** One thing on a branch's menu, across the platforms listing it */
+export interface AdminBrandMenuItemOutputDto {
+	category?: string;
+	complaints: number;
+	description?: string;
+	key: string;
+	name: string;
+	offers: AdminBrandMenuOfferOutputDto[];
+	posts: number;
+	praise: number;
+	/** Off every platform that listed it */
+	removed: boolean;
+	reviews: number;
+	/** Reviews and posts by others about the brand whose claims name it, and how they judged it */
+	sources: number;
+	topics: {
+		key: string;
+		kind: string;
+		label: string;
+	}[];
+	wordings: AdminBrandMenuWordingOutputDto[];
+}
+
+/** A branch's page on a delivery platform, as its last read had it */
+export interface AdminBrandMenuListingOutputDto {
+	address?: string;
+	cuisines?: string[];
+	currency?: string;
+	deliveryFee?: number;
+	etaMax?: number;
+	etaMin?: number;
+	fetchedAt: string;
+	id: string;
+	/** Items on its menu now, and the ones it stopped listing */
+	items: number;
+	menuFetchedAt?: string;
+	minOrder?: number;
+	name?: string;
+	platform: AdminBrandMenuListingOutputDtoPlatformEnum;
+	rating?: number;
+	/** Its page stopped answering then */
+	removedAt?: string;
+	removedItems: number;
+	reviewsCount?: number;
+	/** Its figures by month, oldest first */
+	snapshots: AdminBrandMenuSnapshotOutputDto[];
+	url: string;
+}
+
+export enum AdminBrandMenuListingOutputDtoPlatformEnum {
+	Wolt = 'wolt',
+	Lieferando = 'lieferando',
+	UberEats = 'uber_eats',
+}
+
+/** A menu item on one platform */
+export interface AdminBrandMenuOfferOutputDto {
+	firstSeenAt: string;
+	lastSeenAt: string;
+	/** The share of raters who liked it (0–1), where the platform says */
+	likedShare?: number;
+	platform: AdminBrandMenuOfferOutputDtoPlatformEnum;
+	price: number;
+	/** Its price by month, oldest first, with how raters liked it that month where the platform says */
+	prices: {
+		likedShare?: number;
+		month: string;
+		price: number;
+		ratingsCount?: number;
+	}[];
+	ratingsCount?: number;
+	/** A read of the menu came back without it then */
+	removedAt?: string;
+}
+
+export enum AdminBrandMenuOfferOutputDtoPlatformEnum {
+	Wolt = 'wolt',
+	Lieferando = 'lieferando',
+	UberEats = 'uber_eats',
+}
+
+/** A brand's delivery pages and menus in a city, branch by branch (the most reviewed first) */
+export interface AdminBrandMenuOutputDto {
+	branches: AdminBrandMenuBranchOutputDto[];
+}
+
+/** The run an admin's "Find menus" started: the page follows it on `GET /admin/workflows/:id` */
+export interface AdminBrandMenuSearchOutputDto {
+	workflowId: string;
+}
+
+/** A listing's figures in one month */
+export interface AdminBrandMenuSnapshotOutputDto {
+	deliveryFee?: number;
+	etaMax?: number;
+	etaMin?: number;
+	menuItems?: number;
+	minOrder?: number;
+	month: string;
+	rating?: number;
+	reviewsCount?: number;
+}
+
+/** A wording the brand's reviews and posts use for an item */
+export interface AdminBrandMenuWordingOutputDto {
+	key: string;
+	method: AdminBrandMenuWordingOutputDtoMethodEnum;
+	name: string;
+	/** Reviews and posts by others naming it */
+	sources: number;
+}
+
+export enum AdminBrandMenuWordingOutputDtoMethodEnum {
+	Exact = 'exact',
+	Contains = 'contains',
+	Similar = 'similar',
+}
+
 /** What social media and Google reviews said about a brand in one month (or one window: the brand page). */
 export interface AdminBrandMonthFiguresOutputDto {
 	/** Distinct authors of those posts */
@@ -2943,6 +3090,11 @@ export interface AdminForkWorkflowInputDto {
 	startStep: number;
 }
 
+export interface AdminGetBrandMenuInputDto {
+	/** @format uuid */
+	cityId: string;
+}
+
 export interface AdminGetBrandSummaryInputDto {
 	/**
 	 * Figures in this city only; every city without
@@ -4216,6 +4368,20 @@ export enum AdminMentionWithPostOutputDtoMatchMethodEnum {
 	Ignored = 'ignored',
 }
 
+export interface AdminMergeBrandInputDto {
+	/**
+	 * The brand merged into this one and deleted
+	 * @format uuid
+	 */
+	brandId: string;
+	/**
+	 * The merged brand's name; this brand's without
+	 * @minLength 1
+	 * @maxLength 120
+	 */
+	name?: string;
+}
+
 /** Accounts that are this creator's too: they move under it, and creators left empty go. */
 export interface AdminMergeCreatorAccountsInputDto {
 	/**
@@ -4993,6 +5159,25 @@ export interface AdminRunLlmBacklogsOutputDto {
 export interface AdminSearchBrandInputDto {
 	/** @format uuid */
 	cityId: string;
+}
+
+export interface AdminSearchBrandMenusInputDto {
+	/** @format uuid */
+	cityId: string;
+}
+
+export interface AdminSearchBrandsInputDto {
+	/**
+	 * Left out of the results: the brand the search is made from
+	 * @format uuid
+	 */
+	excludeId?: string;
+	/**
+	 * On the brand's name or any of its branches'
+	 * @minLength 1
+	 * @maxLength 120
+	 */
+	q: string;
 }
 
 export interface AdminSearchInterestOutputDto {
@@ -5933,8 +6118,8 @@ export interface AdminTopicVenueOutputDto {
 
 /** What gives the tag: its Google categories, its posts, its menu, Google's review tags, or an admin */
 export enum AdminTopicVenueOutputDtoSourceEnum {
-	Mentions = 'mentions',
 	Category = 'category',
+	Mentions = 'mentions',
 	Manual = 'manual',
 	Menu = 'menu',
 	Reviews = 'reviews',
@@ -6400,6 +6585,7 @@ export interface AdminVenueDeliveryListingOutputDto {
 export enum AdminVenueDeliveryListingOutputDtoPlatformEnum {
 	Wolt = 'wolt',
 	Lieferando = 'lieferando',
+	UberEats = 'uber_eats',
 }
 
 /** What the demand samples and delivery scrapes stored for a venue, newest first. */
@@ -6574,8 +6760,8 @@ export enum AdminVenueTopicOutputDtoKindEnum {
 
 /** What gives it: its Google categories, its posts, its menu, Google's review tags, or an admin */
 export enum AdminVenueTopicOutputDtoSourceEnum {
-	Mentions = 'mentions',
 	Category = 'category',
+	Mentions = 'mentions',
 	Manual = 'manual',
 	Menu = 'menu',
 	Reviews = 'reviews',
@@ -7706,6 +7892,8 @@ export type GetApifyCreditData = AdminApifyCreditOutputDto;
 export type GetAspectsData = AdminAspectsOutputDto;
 
 export type GetBrandData = AdminBrandOutputDto;
+
+export type GetBrandMenuData = AdminBrandMenuOutputDto;
 
 export type GetBrandSummaryData = AdminBrandSummaryOutputDto;
 
@@ -8996,6 +9184,8 @@ export type MarkPortalReviewRepliedData = PortalReviewOutputDto;
 
 export type MatchAccountsData = AdminMatchAccountsOutputDto;
 
+export type MergeBrandData = AdminBrandOutputDto;
+
 export type MergeCreatorAccountsData = AdminCreatorOutputDto;
 
 /** A month's weather and calendar in the venue's city: why a month may be quiet or loud. */
@@ -9153,7 +9343,7 @@ export interface PaidVsOrganic {
 
 /** Make all properties in T optional */
 export interface PartialOmitCredentialVerificationRequestuser {
-	'__@OptionalProps@1221'?: PartialOmitCredentialVerificationRequestuserOptionalProps1221Enum;
+	'__@OptionalProps@1229'?: PartialOmitCredentialVerificationRequestuserOptionalProps1229Enum;
 	code?: string;
 	/** @format date-time */
 	createdAt?: string;
@@ -9179,7 +9369,7 @@ export interface PartialOmitCredentialVerificationRequestuser {
 	visitorInfo?: Visitor;
 }
 
-export enum PartialOmitCredentialVerificationRequestuserOptionalProps1221Enum {
+export enum PartialOmitCredentialVerificationRequestuserOptionalProps1229Enum {
 	LastSentAt = 'lastSentAt',
 	SendCount = 'sendCount',
 	CreatedAt = 'createdAt',
@@ -11653,6 +11843,10 @@ export enum SearchAnalystMentionsParamsTypeEnum {
 
 export type SearchBrandBranchesData = any;
 
+export type SearchBrandMenusData = AdminBrandMenuSearchOutputDto;
+
+export type SearchBrandsData = AdminBrandListItemOutputDto[];
+
 /** A topic's Google search interest and mention share, the month against the one before. */
 export interface SearchDelta {
 	/** Google's 0–100 this month (100 = the term's twelve-month peak) */
@@ -12239,6 +12433,7 @@ export enum VenueStatusChangeRowSourceEnum {
 	City = 'city',
 	Lookup = 'lookup',
 	Details = 'details',
+	Reviews = 'reviews',
 }
 
 /** Changes counted per kind. */
@@ -13653,6 +13848,55 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 			}),
 
 		/**
+		 * @description Brands by their name or a branch's, to pick one: the brand page's "Merge with another brand".
+		 *
+		 * @name SearchBrands
+		 * @summary Brands by their name or a branch's, to pick one: the brand page's "Merge with another brand"
+		 * @request GET:/admin/brands/search
+		 * @response `200` `SearchBrandsData`
+		 */
+		searchBrands: (
+			query: {
+				/**
+				 * Left out of the results: the brand the search is made from
+				 * @format uuid
+				 */
+				excludeId?: string;
+				/**
+				 * On the brand's name or any of its branches'
+				 * @minLength 1
+				 * @maxLength 120
+				 */
+				q: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<SearchBrandsData, any>({
+				path: `/admin/brands/search`,
+				method: 'GET',
+				query: query,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description Merges another brand into this one: its branches, mentions, accounts, reports and sales record move here, it is deleted, and the mentions are matched again.
+		 *
+		 * @name MergeBrand
+		 * @request POST:/admin/brands/{id}/merge
+		 * @response `201` `MergeBrandData`
+		 */
+		mergeBrand: (id: string, data: AdminMergeBrandInputDto, params: RequestParams = {}) =>
+			this.request<MergeBrandData, any>({
+				path: `/admin/brands/${id}/merge`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
 		 * No description
 		 *
 		 * @name GetBrand
@@ -13754,6 +13998,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description The brand's delivery pages and menus in a city, branch by branch: each page's figures by month, and each menu item with its prices per platform, its food topics and the reviews and posts that name it (the brand page's Menu tab).
+		 *
+		 * @name GetBrandMenu
+		 * @request GET:/admin/brands/{id}/menu
+		 * @response `200` `GetBrandMenuData`
+		 */
+		getBrandMenu: (
+			id: string,
+			query: {
+				/** @format uuid */
+				cityId: string;
+			},
+			params: RequestParams = {},
+		) =>
+			this.request<GetBrandMenuData, any>({
+				path: `/admin/brands/${id}/menu`,
+				method: 'GET',
+				query: query,
 				format: 'json',
 				...params,
 			}),
@@ -15644,6 +15911,27 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
 		) =>
 			this.request<SearchBrandBranchesData, any>({
 				path: `/admin/brands/${id}/searches`,
+				method: 'POST',
+				body: data,
+				type: ContentType.Json,
+				format: 'json',
+				...params,
+			}),
+
+		/**
+		 * @description "Find menus": starts the search and read of the brand's pages on the delivery platforms in the city (`scrape-delivery.brand`, a few cents and a minute or two; one in flight per brand and city) and answers its run, which the page follows until it ends. `high`: an admin waits on it, so its actor runs pass the pipeline's on the `apify` queue.
+		 *
+		 * @name SearchBrandMenus
+		 * @request POST:/admin/brands/{id}/menu-searches
+		 * @response `201` `SearchBrandMenusData`
+		 */
+		searchBrandMenus: (
+			id: string,
+			data: AdminSearchBrandMenusInputDto,
+			params: RequestParams = {},
+		) =>
+			this.request<SearchBrandMenusData, any>({
+				path: `/admin/brands/${id}/menu-searches`,
 				method: 'POST',
 				body: data,
 				type: ContentType.Json,

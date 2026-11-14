@@ -25,6 +25,7 @@ import {
 	instagramGoneItem,
 	instagramPhotoItem,
 	instagramReelItem,
+	instagramRenamedAuthorItem,
 	tiktokGoneItem,
 	tiktokPostItem,
 } from './fixtures/post-counts-items.js';
@@ -37,6 +38,7 @@ describe('Post counts at a fixed age (pglite)', () => {
 	let posts: SocialPostService;
 	let counts: PostCountsService;
 	const apify = new FakeApify<any>();
+	const authorOfStoredPost = jest.fn(async () => null);
 
 	/** As the `post-counts` run does: the plan, each platform's run as a child, the save; one failing keeps the other's reads, then fails */
 	const refresh = async (city: City, budgetUsd: number, now = new Date()) => {
@@ -65,7 +67,10 @@ describe('Post counts at a fixed age (pglite)', () => {
 			providers: [
 				SocialPostService,
 				PostCountsService,
-				{ provide: SocialAccountService, useValue: { ensure: async () => null } },
+				{
+					provide: SocialAccountService,
+					useValue: { ensure: async () => null, authorOfStoredPost },
+				},
 				{ provide: ApifyService, useValue: apify },
 			],
 		});
@@ -80,6 +85,7 @@ describe('Post counts at a fixed age (pglite)', () => {
 
 	beforeEach(() => {
 		apify.reset();
+		authorOfStoredPost.mockClear();
 		harness.orm.em.clear();
 	});
 
@@ -288,6 +294,41 @@ describe('Post counts at a fixed age (pglite)', () => {
 		expect((await stored('ig_1')).countsFinalAt).toBeInstanceOf(Date);
 		// Nothing else is due any more but the one the actor skipped
 		expect((await counts.due(city)).map(p => p.externalId)).toEqual(['7100000000000000003']);
+	});
+
+	it("hands each read post's author, by user id and current handle, to the account service", async () => {
+		const em = harness.orm.em;
+		const city = await cityFactory.create();
+		seed(city, {
+			externalId: `ig_${instagramRenamedAuthorItem.id}`,
+			platform: SocialPlatformEnum.INSTAGRAM,
+			url: instagramRenamedAuthorItem.url,
+			postedAt: daysAgo(8),
+			author: 'happeninginberlin',
+		});
+		seed(city, {
+			externalId: 'ig_2',
+			platform: SocialPlatformEnum.INSTAGRAM,
+			url: instagramGoneItem.url,
+			postedAt: daysAgo(8),
+		});
+		await em.flush();
+		apify.answer = () => [instagramGoneItem, instagramRenamedAuthorItem];
+
+		expect(await refresh(city, 2)).toMatchObject({ read: 1, gone: 1 });
+		// A gone post names no author
+		expect(authorOfStoredPost).toHaveBeenCalledTimes(1);
+		const [post, handle, , seen] = authorOfStoredPost.mock.calls[0] as unknown as [
+			SocialPost,
+			string,
+			City,
+			object,
+		];
+		expect([post.externalId, handle, seen]).toEqual([
+			`ig_${instagramRenamedAuthorItem.id}`,
+			'berlinbitte',
+			{ platformUserId: '46232504208', displayName: 'Berlin Bitte' },
+		]);
 	});
 
 	it('leaves Instagram posts while Instagram is off, and keeps the oldest first when the budget runs short', async () => {

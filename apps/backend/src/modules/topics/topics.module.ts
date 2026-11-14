@@ -13,6 +13,7 @@ import { TermTopicAgent } from './agents/term-topic.agent.js';
 import { AdminTermsController } from './controllers/admin.terms.controller.js';
 import { AdminTopicsController } from './controllers/admin.topics.controller.js';
 import { AdminVenueTopicsController } from './controllers/admin.venue-topics.controller.js';
+import { MenuItemTerm } from './entities/menu-item-term.entity.js';
 import { MenuItemTopic } from './entities/menu-item-topic.entity.js';
 import { Term } from './entities/term.entity.js';
 import { TermModifier } from './entities/term-modifier.entity.js';
@@ -20,6 +21,7 @@ import { Topic } from './entities/topic.entity.js';
 import { TopicClosure } from './entities/topic-closure.entity.js';
 import { TopicEdge } from './entities/topic-edge.entity.js';
 import { VenueTopic } from './entities/venue-topic.entity.js';
+import { MenuTermService } from './services/menu-term.service.js';
 import { MenuTopicService } from './services/menu-topic.service.js';
 import { TermService } from './services/term.service.js';
 import { TopicService } from './services/topic.service.js';
@@ -44,6 +46,7 @@ import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
 			TopicClosure,
 			VenueTopic,
 			MenuItemTopic,
+			MenuItemTerm,
 			User,
 			UserSession,
 		]),
@@ -60,10 +63,18 @@ import { TopicRelinkWorker } from './workers/topic-relink.worker.js';
 		TopicRelinkWorker,
 		TopicCityRefreshWorker,
 		MenuTopicService,
+		MenuTermService,
 		TrendsTopicLookupService,
 		VenueTopicService,
 		VenueTopicsImportService,
 	],
-	exports: [TopicService, TermService, TopicRelinkService, MenuTopicService, VenueTopicService],
+	exports: [
+		TopicService,
+		TermService,
+		TopicRelinkService,
+		MenuTopicService,
+		MenuTermService,
+		VenueTopicService,
+	],
 })
 export class TopicsModule {}

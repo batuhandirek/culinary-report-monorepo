@@ -340,6 +340,72 @@ export class BrandService {
 		return brand;
 	}
 
+	/**
+	 * Brands whose name or a branch's name holds `q`, for an admin to pick one (the brand page's
+	 * "Merge with another brand"): the name starting with it first, then the most branches.
+	 */
+	async search(q: string, excludeId?: string, limit = 8): Promise<Brand[]> {
+		const like = `%${q.trim().replace(/[\\%_]/g, m => `\\${m}`)}%`;
+		const prefix = `${q.trim().replace(/[\\%_]/g, m => `\\${m}`)}%`;
+		const rows: { id: string }[] = await this.em.getConnection().execute(
+			`select b.id from brands b
+			where (b.name ilike ? or exists (select 1 from venues v where v.brand_id = b.id and v.name ilike ?))
+				${excludeId ? 'and b.id <> ?' : ''}
+			order by (b.name ilike ?) desc,
+				(select count(*) from venues v where v.brand_id = b.id) desc,
+				lower(b.name), b.id
+			limit ?`,
+			[like, like, ...(excludeId ? [excludeId] : []), prefix, limit],
+		);
+		if (rows.length === 0) return [];
+		const brands = await this.em.find(
+			Brand,
+			{ id: { $in: rows.map(r => r.id) } },
+			{ populate: ['branches', 'branches.city', 'branches.favicon'] },
+		);
+		const order = new Map(rows.map((r, i) => [r.id, i]));
+		return _.sortBy(brands, b => order.get(b.id));
+	}
+
+	/**
+	 * Merges another brand into this one, whatever their names: its branches and records move
+	 * here (`absorb`) and it is deleted. This brand keeps its id, and its name unless `name` is
+	 * given. 409 when both are prospects, or when another chain has the name's key.
+	 */
+	async mergeBrand(id: string, otherId: string, rawName?: string): Promise<Brand> {
+		if (id === otherId) throw new BadRequestException('Pick another brand to merge');
+		const brand = await this.get(id);
+		const other = await this.get(otherId);
+		const name = (rawName ?? brand.name).trim();
+		const key = brandKey(name);
+		if (!key) throw new BadRequestException('Give the brand a name');
+		const chain =
+			key !== brand.key &&
+			(await this.list()).find(b => b.key === key && b.id !== id && b.id !== otherId);
+		if (chain)
+			throw new ConflictException(`${chain.name} is a brand already: merge into it instead`);
+		const prospects: { n: number }[] = await this.em
+			.getConnection()
+			.execute(`select count(*)::int n from prospects where brand_id in (?, ?)`, [id, otherId]);
+		if (prospects[0].n > 1)
+			throw new ConflictException(
+				'Both brands are prospects: take one off outreach first',
+			);
+
+		const venues = other.branches.getItems();
+		const keep = await this.absorb(brand, [brand, other]);
+		// Its own places are branches now, whatever this brand said about them before
+		if (venues.length)
+			await this.em.nativeDelete(BrandExcludedVenue, {
+				brand: keep.id,
+				venue: { $in: venues.map(v => v.id) },
+			});
+		Object.assign(keep, { name, key });
+		await this.em.flush();
+		await this.changed([keep.id], venues);
+		return this.get(keep.id);
+	}
+
 	/** Adds venues as branches: their brands are merged into this one (`absorb`). */
 	async addBranches(id: string, venueIds: string[]): Promise<Brand> {
 		const venues = await this.join(id, venueIds);

@@ -1,12 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
 import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
-import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
+import { linkTopics,seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
-import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import { VenueBusyness } from 'src/modules/venues/entities/venue-busyness.entity.js';
 import {
@@ -21,8 +20,9 @@ import {
 import { VenueBusynessService } from 'src/modules/venues/services/venue-busyness.service.js';
 import { VenueDeliveryService } from 'src/modules/venues/services/venue-delivery.service.js';
 import { VenueReservationService } from 'src/modules/venues/services/venue-reservation.service.js';
-import { busynessIndex } from 'src/modules/venues/util/busyness.js';
+import { seedMenuItem } from 'src/modules/venues/tests/factories/menu-item.factory.js';
 import { DETAIL_ITEM } from 'src/modules/venues/tests/fixtures/google-place-items.js';
+import { busynessIndex } from 'src/modules/venues/util/busyness.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -121,7 +121,7 @@ describe('ReportSignalsService (pglite)', () => {
 				currency: 'EUR',
 				fetchedAt: new Date('2026-10-02'),
 			});
-			for (const [name, price] of Object.entries(prices)) em.create(MenuItem, { listing: l, month: '2026-09', name, price });
+			for (const [name, price] of Object.entries(prices)) seedMenuItem(em, l, { month: '2026-09', name, price });
 		};
 		listing(venue, 4.6, { 'Döner im Brot': 8.5, 'Döner Teller': 13, Lahmacun: 7, Ayran: 2.5 });
 		listing(rival, 4.2, { 'Döner im Brot': 7, 'Döner Teller': 11, Pide: 9 });
@@ -255,7 +255,7 @@ describe('ReportSignalsService (pglite)', () => {
 				currency: 'EUR',
 				fetchedAt: new Date('2026-10-02'),
 			});
-			for (const [name, price] of Object.entries(items)) em.create(MenuItem, { listing: l, month: '2026-09', name, price });
+			for (const [name, price] of Object.entries(items)) seedMenuItem(em, l, { month: '2026-09', name, price });
 			return v;
 		};
 		const ichi = place('ramen-ichi', 'Ramen restaurant', { 'Tonkotsu Ramen': 15, 'Shoyu Ramen': 14, 'Chicken Katsu Curry': 12 });

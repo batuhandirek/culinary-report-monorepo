@@ -104,6 +104,30 @@ export class VenueService {
 	}
 
 	/**
+	 * A known venue's closed flags as another Google item repeats them (a review item does), stored
+	 * and a `VenueStatusChange` recorded when they flip. A flag the item lacks stays as it was.
+	 * Does not flush.
+	 */
+	recordOpenState(
+		venue: Venue,
+		flags: { permanentlyClosed?: boolean | null; temporarilyClosed?: boolean | null },
+		at: Date,
+		source: VenueScrapeSourceEnum,
+	): void {
+		const before = venueOpenState(venue);
+		if (flags.permanentlyClosed != null) venue.closed = flags.permanentlyClosed;
+		if (
+			flags.temporarilyClosed != null &&
+			flags.temporarilyClosed !== !!venue.details?.temporarilyClosed
+		) {
+			venue.details = { ...venue.details, temporarilyClosed: flags.temporarilyClosed };
+			venue.detailsAt = at;
+		}
+		const kind = statusChangeKind(before, venueOpenState(venue));
+		if (kind) this.em.create(VenueStatusChange, { venue, at, kind, source });
+	}
+
+	/**
 	 * Sets the venue's all-time Google rating and review count and records them as the day's
 	 * snapshot (one per venue and day). Does not flush.
 	 */

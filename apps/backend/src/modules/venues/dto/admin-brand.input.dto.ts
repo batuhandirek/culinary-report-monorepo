@@ -31,3 +31,17 @@ export interface AdminBrandVenueInputDto {
 export interface AdminListBrandSuggestionsInputDto {
 	cityId: string & tags.Format<'uuid'>;
 }
+
+export interface AdminSearchBrandsInputDto {
+	/** On the brand's name or any of its branches' */
+	q: string & tags.MinLength<1> & tags.MaxLength<120>;
+	/** Left out of the results: the brand the search is made from */
+	excludeId?: string & tags.Format<'uuid'>;
+}
+
+export interface AdminMergeBrandInputDto {
+	/** The brand merged into this one and deleted */
+	brandId: string & tags.Format<'uuid'>;
+	/** The merged brand's name; this brand's without */
+	name?: string & tags.MinLength<1> & tags.MaxLength<120>;
+}

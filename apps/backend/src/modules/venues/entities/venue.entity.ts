@@ -153,6 +153,11 @@ export class Venue extends MikroOrmEntityAbstractClass<'mentionCount' | 'closed'
 	@Property({ type: 'int', nullable: true })
 	tripadvisorReviewsCount?: number | null;
 
+	// When its pages on the delivery platforms were last searched for (`VenueDeliveryService`),
+	// found or not: a venue missing from a platform is searched again only once this is stale
+	@Property({ type: 'datetime', nullable: true })
+	deliverySearchedAt?: Date | null;
+
 	@OneToMany(() => VenueSnapshot, snapshot => snapshot.venue)
 	snapshots = new Collection<VenueSnapshot>(this);
 

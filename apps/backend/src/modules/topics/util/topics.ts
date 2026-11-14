@@ -399,20 +399,30 @@ export class TopicIndex {
 	}
 
 	/**
-	 * A delivery menu item's topics: its name's, else its menu section's ("Tonkotsu" under
-	 * "Ramen"). A kind of place never comes from a menu ("Bistro Salat" is no bistro), and an item
-	 * that is not a main course (`isMainCourse`: drinks, desserts, sides, extras) only gives drinks
-	 * ("Matcha Latte" under "Getränke"), so an extra cheese in the pizza section is no pizza.
+	 * A delivery menu item's topics: its name's, and its menu section's when the name names no dish,
+	 * drink or cuisine ("Tonkotsu" under "Ramen"; a house name that only spells an ingredient, "Sumac
+	 * Slap" under "Smashed Beef Burger", is the burger too). A leading English "The" is the menu's
+	 * article, never tea ("The Classic Smash": "thé" is a wording of tea). A kind of place never
+	 * comes from a menu ("Bistro Salat" is no bistro), and an item that is not a main course
+	 * (`isMainCourse`: drinks, desserts, sides, extras) only gives drinks ("Matcha Latte" under
+	 * "Getränke"), so an extra cheese in the pizza section is no pizza.
 	 */
 	resolveMenuItem(item: { name: string; category?: string | null }): string[] {
 		const main = isMainCourse(item);
+		const kindOf = (key: string) => this.byKey.get(key)?.kind;
 		const keep = (keys: string[]) =>
-			keys.filter(key => {
-				const kind = this.byKey.get(key)?.kind;
-				return main ? kind !== TopicKindEnum.PLACE : kind === TopicKindEnum.DRINK;
-			});
-		const own = keep(this.resolve(item.name));
-		return own.length ? own : keep(this.resolve(item.category));
+			keys.filter(key =>
+				main ? kindOf(key) !== TopicKindEnum.PLACE : kindOf(key) === TopicKindEnum.DRINK,
+			);
+		const own = keep(this.resolve(item.name.replace(/^\s*the\s+/i, '')));
+		const saysWhat = own.some(key => {
+			const kind = kindOf(key);
+			return (
+				kind === TopicKindEnum.DISH || kind === TopicKindEnum.DRINK || kind === TopicKindEnum.CUISINE
+			);
+		});
+		if (saysWhat) return own;
+		return [...own, ...keep(this.resolve(item.category)).filter(key => !own.includes(key))];
 	}
 
 	/** The keys and everything each counts for (`ancestors`): a topic counts for what it is and has too. */

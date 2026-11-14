@@ -493,7 +493,11 @@ export class TermService implements OnModuleInit {
 					const topic = await this.topicService.create(
 						{
 							label,
-							kind: (PROMOTION_KINDS as readonly TopicKindEnum[]).includes(kind) ? kind : TopicKindEnum.DISH,
+							// Promotion by itself makes only the kinds it may; an admin's "make it a topic" any kind of food (a place too)
+							kind:
+								(forced ? kind !== TopicKindEnum.ASPECT : (PROMOTION_KINDS as readonly TopicKindEnum[]).includes(kind)) ?
+									kind
+								:	TopicKindEnum.DISH,
 							edges: [
 								...isA.map(to => ({ to, type: 'is_a' as const })),
 								...has.filter(to => !isA.includes(to)).map(to => ({ to, type: 'has' as const })),

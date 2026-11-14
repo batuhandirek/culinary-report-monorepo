@@ -28,7 +28,6 @@ import { TiktokSearchWorkflow } from './atoms/tiktok-search/workflows/tiktok-sea
 import { AdminBackfillReviewsController } from './backfill-reviews/controllers/admin.backfill-reviews.controller.js';
 import { BackfillReviewsWorkflow } from './backfill-reviews/workflows/backfill-reviews.workflow.js';
 import { AdminBrandBranchSearchController } from './brand-branch-search/controllers/admin.brand-branch-search.controller.js';
-import { AdminRefreshVenueDetailsController } from './refresh-venue-details/controllers/admin.refresh-venue-details.controller.js';
 import { BrandBranchSearchWorkflow } from './brand-branch-search/workflows/brand-branch-search.workflow.js';
 import { PressClassificationAgent } from './classify-press/agents/press-classification.agent.js';
 import { ClassifyPressSchedule } from './classify-press/schedules/classify-press.schedule.js';
@@ -73,6 +72,7 @@ import { ReadReviewsSchedule } from './read-reviews/schedules/read-reviews.sched
 import { ReadReviewsWorkflow } from './read-reviews/workflows/read-reviews.workflow.js';
 import { AdminReflagOpeningsController } from './reflag-openings/controllers/admin.reflag-openings.controller.js';
 import { ReflagOpeningsWorkflow } from './reflag-openings/workflows/reflag-openings.workflow.js';
+import { AdminRefreshVenueDetailsController } from './refresh-venue-details/controllers/admin.refresh-venue-details.controller.js';
 import { RefreshVenueDetailsSchedule } from './refresh-venue-details/schedules/refresh-venue-details.schedule.js';
 import { RefreshVenueDetailsWorkflow } from './refresh-venue-details/workflows/refresh-venue-details.workflow.js';
 import { AdminRereadPostsController } from './reread-posts/controllers/admin.reread-posts.controller.js';
@@ -89,6 +89,7 @@ import { ScrapeBlogsSchedule } from './scrape-blogs/schedules/scrape-blogs.sched
 import { ScrapeBlogsWorkflow } from './scrape-blogs/workflows/scrape-blogs.workflow.js';
 import { ScrapeCommentsSchedule } from './scrape-comments/schedules/scrape-comments.schedule.js';
 import { ScrapeCommentsWorkflow } from './scrape-comments/workflows/scrape-comments.workflow.js';
+import { AdminScrapeDeliveryController } from './scrape-delivery/controllers/admin.scrape-delivery.controller.js';
 import { ScrapeDeliverySchedule } from './scrape-delivery/schedules/scrape-delivery.schedule.js';
 import { ScrapeDeliveryWorkflow } from './scrape-delivery/workflows/scrape-delivery.workflow.js';
 import { ScrapeInstagramSchedule } from './scrape-instagram/schedules/scrape-instagram.schedule.js';
@@ -134,6 +135,7 @@ import { ReportBrandsService } from './shared/services/report-brands.service.js'
 	controllers: [
 		AdminBackfillReviewsController,
 		AdminBrandBranchSearchController,
+		AdminScrapeDeliveryController,
 		AdminRefreshVenueDetailsController,
 		AdminCreatorWatchController,
 		AdminReflagOpeningsController,

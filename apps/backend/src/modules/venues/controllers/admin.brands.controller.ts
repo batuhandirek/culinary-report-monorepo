@@ -18,6 +18,8 @@ import {
 	AdminConfirmBrandInputDto,
 	AdminDismissBrandInputDto,
 	AdminListBrandSuggestionsInputDto,
+	AdminMergeBrandInputDto,
+	AdminSearchBrandsInputDto,
 	AdminUpdateBrandInputDto,
 } from '../dto/admin-brand.input.dto.js';
 import {
@@ -26,6 +28,10 @@ import {
 	AdminBrandOutputDto,
 	AdminBrandSuggestionOutputDto,
 } from '../dto/admin-brand.output.dto.js';
+import type {
+	AdminBrandMenuOutputDto,
+	AdminGetBrandMenuInputDto,
+} from '../dto/admin-brand-menu.dto.js';
 import {
 	AdminAddCompetitorInputDto,
 	AdminListCompetitorSuggestionsInputDto,
@@ -40,6 +46,7 @@ import type { Brand } from '../entities/brand.entity.js';
 import type { BrandCompetitor } from '../entities/brand-competitor.entity.js';
 import type { Venue } from '../entities/venue.entity.js';
 import { BrandService } from '../services/brand.service.js';
+import { BrandMenuService } from '../services/brand-menu.service.js';
 import { CompetitorService } from '../services/competitor.service.js';
 
 /** Brands: the Brands page (chains and suggestions), a brand's page and the venue page's Brand panel. */
@@ -52,6 +59,7 @@ export class AdminBrandsController {
 		private readonly brandService: BrandService,
 		private readonly competitorService: CompetitorService,
 		private readonly venueTopicService: VenueTopicService,
+		private readonly brandMenuService: BrandMenuService,
 	) {}
 
 	/** Groups of a city's venues that look like one brand; nothing is saved until confirmed. */
@@ -83,6 +91,29 @@ export class AdminBrandsController {
 	@TypedRoute.Post('/dismissals')
 	async dismissBrandSuggestion(@TypedBody() body: AdminDismissBrandInputDto): Promise<void> {
 		await this.brandService.dismiss(body);
+	}
+
+	/** Brands by their name or a branch's, to pick one: the brand page's "Merge with another brand". */
+	@TypedRoute.Get('/search')
+	async searchBrands(
+		@TypedQuery() query: AdminSearchBrandsInputDto,
+	): Promise<AdminBrandListItemOutputDto[]> {
+		const brands = await this.brandService.search(query.q, query.excludeId);
+		const branches = await this.branches(brands.flatMap(b => b.branches.getItems()));
+		const brandOnly = await this.brandService.brandOnlyMentionCounts(brands.map(b => b.id));
+		return brands.map(b => this.listItem(b, branches, brandOnly));
+	}
+
+	/**
+	 * Merges another brand into this one: its branches, mentions, accounts, reports and sales
+	 * record move here, it is deleted, and the mentions are matched again.
+	 */
+	@TypedRoute.Post('/:id/merge')
+	async mergeBrand(
+		@TypedParam('id') id: string & tags.Format<'uuid'>,
+		@TypedBody() body: AdminMergeBrandInputDto,
+	): Promise<AdminBrandOutputDto> {
+		return this.detail(await this.brandService.mergeBrand(id, body.brandId, body.name));
 	}
 
 	@TypedRoute.Get('/:id')
@@ -131,6 +162,20 @@ export class AdminBrandsController {
 		@TypedBody() body: AdminBrandVenueInputDto,
 	): Promise<AdminBrandOutputDto> {
 		return this.detail(await this.brandService.removeBranch(id, body.venueId, true));
+	}
+
+	/**
+	 * The brand's delivery pages and menus in a city, branch by branch: each page's figures by
+	 * month, and each menu item with its prices per platform, its food topics and the reviews and
+	 * posts that name it (the brand page's Menu tab).
+	 */
+	@TypedRoute.Get('/:id/menu')
+	async getBrandMenu(
+		@TypedParam('id') id: string & tags.Format<'uuid'>,
+		@TypedQuery() query: AdminGetBrandMenuInputDto,
+	): Promise<AdminBrandMenuOutputDto> {
+		await this.brandService.get(id);
+		return this.brandMenuService.menu(id, query.cityId);
 	}
 
 	/** The places and brands this brand's reports compare it with. */

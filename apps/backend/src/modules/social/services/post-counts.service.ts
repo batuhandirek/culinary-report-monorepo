@@ -33,7 +33,8 @@ import {
 	tikTokVideoId,
 } from '../util/post-counts.js';
 
-import { SocialPostService } from './social-post.service.js';
+import { type AccountSeen, SocialAccountService } from './social-account.service.js';
+import { idOf, SocialPostService } from './social-post.service.js';
 
 // The same actors as the scrapes, given post URLs (`TIKTOK_SCRAPER_ACTOR`, `INSTAGRAM_SCRAPER_ACTOR`):
 // one item a post, the counts as the scrapes read them; a deleted or private post comes back as an
@@ -90,6 +91,7 @@ export class PostCountsService {
 		private readonly em: EntityManager,
 		private readonly apifyService: ApifyService,
 		private readonly socialPostService: SocialPostService,
+		private readonly socialAccountService: SocialAccountService,
 	) {}
 
 	/**
@@ -221,10 +223,13 @@ export class PostCountsService {
 		const settled = new Set<SocialPost>();
 		let read = 0;
 		let gone = 0;
-		const take = (
+		// The item names its author by user id and current handle: an author known by an older
+		// handle alone (stored before ids were) is caught renamed (`authorOfStoredPost`)
+		const take = async (
 			post: SocialPost | undefined,
 			item: { error?: string },
 			counts: () => PostCounts,
+			author: () => { handle?: string | null; seen: AccountSeen },
 		) => {
 			if (!post || settled.has(post)) return;
 			settled.add(post);
@@ -235,27 +240,45 @@ export class PostCountsService {
 			}
 			this.socialPostService.readCounts(post, counts(), at);
 			read++;
+			const { handle, seen } = author();
+			if (handle)
+				await this.socialAccountService.authorOfStoredPost(post, handle, post.city, seen, at);
 		};
 		if (records.tiktok)
 			for (const item of await this.apifyService.storedItems<TiktokScraperItem>(
 				records.tiktok,
 			))
-				take(
+				await take(
 					byExternalId.get(
 						`${item?.id ?? tikTokVideoId(item?.submittedVideoUrl ?? item?.url)}`,
 					),
 					item,
 					() => clockworksCounts(item),
+					() => ({
+						handle: item.authorMeta?.name,
+						seen: {
+							platformUserId: idOf(item.authorMeta?.id),
+							displayName: item.authorMeta?.nickName ?? null,
+							followers: item.authorMeta?.fans ?? null,
+						},
+					}),
 				);
 		if (records.instagram)
 			for (const item of await this.apifyService.storedItems<InstagramScraperItem>(
 				records.instagram,
 			))
-				take(
+				await take(
 					(item?.id && byExternalId.get(`ig_${`${item.id}`.split('_')[0]}`)) ||
 						byUrl.get(item?.inputUrl ?? item?.url ?? ''),
 					item,
 					() => instagramCounts(item),
+					() => ({
+						handle: item.ownerUsername,
+						seen: {
+							platformUserId: idOf(item.ownerId),
+							displayName: item.ownerFullName ?? null,
+						},
+					}),
 				);
 		await this.em.flush();
 

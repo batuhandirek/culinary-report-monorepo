@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Globe, Newspaper, Settings2, ShoppingCart, Telescope } from '@lucide/svelte';
+	import { Ellipsis, GitMerge, Globe, Newspaper, Settings2, ShoppingCart, Telescope } from '@lucide/svelte';
 	import type {
 		AdminBrandOutputDto,
 		AdminBrandSummaryOutputDto,
@@ -10,11 +10,13 @@
 
 	import BrandBranchesTab from './components/BrandBranchesTab.svelte';
 	import BrandHistoryTab from './components/BrandHistoryTab.svelte';
+	import BrandMenuTab from './components/BrandMenuTab.svelte';
 	import BrandOverviewTab from './components/BrandOverviewTab.svelte';
 	import BrandPostsTab from './components/BrandPostsTab.svelte';
 	import BrandSettingsTab from './components/BrandSettingsTab.svelte';
 	import BrandSignalsTab from './components/BrandSignalsTab.svelte';
 	import BuildReportButton from './components/BuildReportButton.svelte';
+	import MergeBrandDialog from './components/MergeBrandDialog.svelte';
 	import { BrandProspectStore } from './stores/BrandProspectStore.svelte.js';
 
 	import { goto } from '$app/navigation';
@@ -31,13 +33,14 @@
 	import ClaimsTable from '#components/admin/statements/ClaimsTable.svelte';
 	import TopicChips from '#components/admin/topics/TopicChips.svelte';
 	import { api } from '#lib/api.js';
-	import { brandTopicsOf, branchesByCity } from '#lib/brands.js';
+	import { branchesByCity,brandTopicsOf } from '#lib/brands.js';
 	import { lastMonth, LEAD_PROSPECT_SCORE, monthLabel } from '#lib/culinary.js';
 	import { exploreHref } from '#lib/explore.js';
 	import { stageLabel } from '#lib/outreach-status.js';
 	import { announceReportRun, followReportRun } from '#lib/report-runs.js';
 	import { createAction } from '#ui/lib/action.svelte.js';
 	import { createLoader } from '#ui/lib/loader.svelte.js';
+	import * as DropdownMenu from '#ui/primitives-new/dropdown-menu/index.js';
 	import IconButton from '#ui/wrapped/IconButton.svelte';
 	import Select from '#ui/wrapped/Select.svelte';
 
@@ -48,6 +51,8 @@
 	let updated = $state<AdminBrandOutputDto | null>(null);
 	let brand: AdminBrandOutputDto = $derived(updated?.id === data.brand.id ? updated : data.brand);
 	const set = (b: AdminBrandOutputDto) => (updated = b);
+	// The header's "…" menu opens it
+	let merging = $state(false);
 
 	const cities = $derived(branchesByCity(brand.branches));
 	const open = $derived(brand.branches.filter((b) => !b.closed));
@@ -118,6 +123,7 @@
 		{ value: 'posts', label: 'Posts', count: summary ? summary.figures.posts + summary.figures.ownPosts : undefined },
 		{ value: 'reviews', label: 'Reviews', count: summary?.figures.reviews },
 		{ value: 'claims', label: 'Claims' },
+		{ value: 'menu', label: 'Menu' },
 		{ value: 'places', label: 'Places', count: open.length },
 		{ value: 'competitors', label: 'Competitors' },
 		{ value: 'signals', label: 'Signals' },
@@ -243,6 +249,19 @@
 			building={buildAction.executing}
 			onBuild={(config) => buildAction.execute(config)}
 			onMonth={(m) => setParam('month', m === lastMonth() ? undefined : m)} />
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger
+				class="border-line bg-paper hover:bg-tint inline-flex size-[30px] cursor-pointer items-center justify-center rounded-md border"
+				aria-label="More actions">
+				<Ellipsis class="size-4" strokeWidth={1.8} />
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content class="w-60" side="bottom" align="end">
+				<DropdownMenu.Item onclick={() => (merging = true)}>
+					<GitMerge class="size-4" strokeWidth={1.8} />
+					Merge with another brand…
+				</DropdownMenu.Item>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 		<IconButton
 			icon={Settings2}
 			label="Brand settings"
@@ -288,6 +307,8 @@
 						scopeLabel={`What its branches' reviews and the posts about it said in ${city?.cityName ?? 'the city'}`} />
 				{/key}
 			{/if}
+		{:else if tab === 'menu'}
+			<BrandMenuTab {brand} {cityId} />
 		{:else if tab === 'places'}
 			<BrandBranchesTab {brand} onChange={set} />
 		{:else if tab === 'competitors'}
@@ -310,3 +331,6 @@
 		{/if}
 	{/key}
 </div>
+
+<!-- Outside the menu, or closing the menu unmounts it -->
+<MergeBrandDialog {brand} bind:open={merging} onMerged={set} />

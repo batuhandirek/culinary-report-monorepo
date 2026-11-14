@@ -24,6 +24,7 @@ import {
 	REVIEW_BACKFILL_BUDGET_SHARE,
 	REVIEW_BACKFILL_MONTHS,
 } from '../constants/review-scrape.constant.js';
+import { VenueScrapeSourceEnum } from '../constants/venue-status.constant.js';
 import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { ReviewAlertEvent } from '../persisted-events/review-alert.persisted-event.js';
@@ -356,6 +357,7 @@ export class ReviewService {
 			if (!seen.has(venue.id)) {
 				seen.add(venue.id);
 				returned.push(venue.placeId);
+				this.venueService.recordOpenState(venue, item, now, VenueScrapeSourceEnum.REVIEWS);
 				if (item.totalScore != null || item.reviewsCount != null) {
 					await this.venueService.recordRating(venue, item, now);
 					rated++;
@@ -414,6 +416,8 @@ export class ReviewService {
 			if (!venue || since === undefined || answered.has(venue.id)) continue;
 			answered.add(venue.id);
 			returned.push(venue.placeId);
+			// The place's state is today's whatever the review's date
+			this.venueService.recordOpenState(venue, item, now, VenueScrapeSourceEnum.REVIEWS);
 			// A review since its day: the earlier run never got to it
 			if (item.publishedAtDate && item.publishedAtDate.slice(0, 10) >= since) {
 				missed++;

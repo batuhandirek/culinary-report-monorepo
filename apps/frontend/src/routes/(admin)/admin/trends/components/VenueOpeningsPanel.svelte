@@ -31,6 +31,7 @@
 		city: 'city list',
 		lookup: 'name lookup',
 		details: 'detail page',
+		reviews: 'review fetch',
 		posts: 'posts'
 	};
 
@@ -84,7 +85,7 @@
 	{:else if total === 0}
 		<EmptyState
 			title="No openings or closures seen"
-			hint="They come from the quarterly city venue scrape (after the city's first one), the monthly detail refresh, and posts saying a place has just opened."
+			hint="Openings come from the quarterly city venue scrape (after the city's first one) and posts saying a place has just opened; closures from every Google Maps read, the weekly review fetch of every open venue among them."
 			ground="none"
 			size="sm" />
 	{:else}

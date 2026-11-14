@@ -17,7 +17,7 @@
 
 	let { prices, key = 'prices', sectionHead }: Props = $props();
 
-	const PLATFORMS: Record<string, string> = { wolt: 'Wolt', lieferando: 'Lieferando' };
+	const PLATFORMS: Record<string, string> = { wolt: 'Wolt', lieferando: 'Lieferando', uber_eats: 'Uber Eats' };
 	const money = (n: number | undefined, currency = 'EUR') =>
 		n === undefined
 			? '—'

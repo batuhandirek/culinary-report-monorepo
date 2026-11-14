@@ -17,6 +17,10 @@ import { areNeighbourDistricts, stepBudgetUsd } from '../util/city.js';
 
 import { cityFactory } from './factories/city.factory.js';
 
+// The yield counts back three months from today, so the seeded posts are dated from today too:
+// fixed dates leave the window as the calendar moves on
+const daysAgo = (days: number) => new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+
 describe('CityService (pglite)', () => {
 	let harness: PgliteTestingModule;
 	let service: CityService;
@@ -134,7 +138,7 @@ describe('CityService (pglite)', () => {
 		const post = (
 			inCity: typeof city,
 			[kind, value]: [PostSourceKindEnum, string],
-			postedAt: string,
+			postedAt: Date,
 			views: number,
 			matched = false,
 			platform = SocialPlatformEnum.TIKTOK,
@@ -144,10 +148,10 @@ describe('CityService (pglite)', () => {
 				externalId: `y${++n}`,
 				platform,
 				url: `https://example.com/${n}`,
-				postedAt: new Date(postedAt),
+				postedAt,
 				views,
 			});
-			em.create(PostSource, { post: p, kind, value, foundAt: new Date(postedAt) });
+			em.create(PostSource, { post: p, kind, value, foundAt: postedAt });
 			em.create(Mention, {
 				post: p,
 				venueName: 'Früh',
@@ -157,16 +161,16 @@ describe('CityService (pglite)', () => {
 			});
 		};
 		const tag: [PostSourceKindEnum, string] = [PostSourceKindEnum.TIKTOK_HASHTAG, 'koelnfood'];
-		post(city, tag, '2026-09-10T00:00:00Z', 100, true);
-		post(city, tag, '2026-08-10T00:00:00Z', 50);
+		post(city, tag, daysAgo(30), 100, true);
+		post(city, tag, daysAgo(60), 50);
 		// Too old, another city, the other platform
-		post(city, tag, '2026-05-01T00:00:00Z', 1000, true);
-		post(other, tag, '2026-09-10T00:00:00Z', 1000, true);
-		post(city, [PostSourceKindEnum.INSTAGRAM_HASHTAG, 'koelnfood'], '2026-09-10T00:00:00Z', 7, true, SocialPlatformEnum.INSTAGRAM);
+		post(city, tag, daysAgo(200), 1000, true);
+		post(other, tag, daysAgo(30), 1000, true);
+		post(city, [PostSourceKindEnum.INSTAGRAM_HASHTAG, 'koelnfood'], daysAgo(30), 7, true, SocialPlatformEnum.INSTAGRAM);
 		// Searches are compared case-insensitively, as sources are
-		post(city, [PostSourceKindEnum.TIKTOK_SEARCH, 'Köln essen'], '2026-09-11T00:00:00Z', 30, true);
+		post(city, [PostSourceKindEnum.TIKTOK_SEARCH, 'Köln essen'], daysAgo(29), 30, true);
 		// A blog article: no views, its source the blog's URL
-		post(city, [PostSourceKindEnum.BLOG, 'https://www.koelnisst.de'], '2026-09-12T00:00:00Z', 0, true, SocialPlatformEnum.BLOG);
+		post(city, [PostSourceKindEnum.BLOG, 'https://www.koelnisst.de'], daysAgo(28), 0, true, SocialPlatformEnum.BLOG);
 		await em.flush();
 		// The posts came before their sources: adding a source gives it what it found
 		for (const [kind, value] of [
@@ -216,7 +220,7 @@ describe('CityService (pglite)', () => {
 				externalId: `u${++n}`,
 				platform: SocialPlatformEnum.TIKTOK,
 				url: `https://example.com/u/${n}`,
-				postedAt: new Date('2026-09-15T00:00:00Z'),
+				postedAt: daysAgo(30),
 			});
 			for (const [kind, value] of finds) em.create(PostSource, { post: p, kind, value, foundAt: new Date() });
 			em.create(Mention, {

@@ -24,8 +24,9 @@ export class OverpassService {
 	private readonly logger = new Logger(OverpassService.name);
 
 	/**
-	 * Every food and drink place inside an OSM relation (`overpassFoodQuery`). A busy server or a
-	 * dropped connection is retried on the next instance, waiting longer each time.
+	 * Every food and drink place inside an OSM relation (`overpassFoodQuery`). A busy server, a
+	 * dropped connection or an empty list is retried on the next instance, waiting longer each
+	 * time; it throws once every attempt failed, so it never returns an empty list.
 	 */
 	async foodPlaces(relationId: number, waitMs = FIRST_WAIT_MS): Promise<OverpassElement[]> {
 		const body = new URLSearchParams({
@@ -68,7 +69,12 @@ export class OverpassService {
 		const json = (await res.json()) as { elements?: OverpassElement[]; remark?: string };
 		// A query Overpass cut short (its timeout, its memory) still answers 200, with a remark
 		if (json.remark) throw new BusyError(`${new URL(url).host}: ${json.remark}`);
-		return json.elements ?? [];
+		// A city's boundary never holds no food place, so an empty list is not the city's answer:
+		// the next instance is asked (a relation that is no boundary lists nothing on any of them)
+		const elements = json.elements ?? [];
+		if (elements.length === 0)
+			throw new BusyError(`${new URL(url).host} listed nothing inside the relation`);
+		return elements;
 	}
 }
 

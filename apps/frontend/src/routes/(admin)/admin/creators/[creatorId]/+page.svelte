@@ -61,6 +61,9 @@
 	const lastRename = $derived(
 		creator.handleChanges.find((c) => creator.accounts.some((a) => a.id === c.account.id) && c.fromHandle)
 	);
+	// A rename is seen by the platform's user id: a profile stored before ids were has none yet,
+	// so its handle may have changed unnoticed
+	const withoutId = $derived(profiles.filter((a) => !a.platformUserId));
 
 	// The name, renamed in place
 	let renaming = $state(false);
@@ -200,6 +203,12 @@
 			{#if lastRename}
 				<Tooltip text="By the platform's user id; the day is when a scrape noticed">
 					<span>was @{lastRename.fromHandle}, seen {shortDay(lastRename.seenAt)}</span>
+				</Tooltip>
+			{:else if withoutId.length}
+				<Tooltip
+					text={`No platform user id stored for @${withoutId.map((a) => a.handle).join(', @')} yet, so a rename can't be seen. It comes with their next post we read.`}
+				>
+					<span>no user id yet</span>
 				</Tooltip>
 			{:else}
 				handle unchanged

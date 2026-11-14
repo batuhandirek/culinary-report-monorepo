@@ -8,15 +8,16 @@ import {
 	DeliveryPlatformEnum,
 	VenueDeliveryListing,
 } from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
+import { seedMenuItem, seedMenuMonth } from 'src/modules/venues/tests/factories/menu-item.factory.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
-import { TopicService } from '../services/topic.service.js';
 import { MenuTopicService } from '../services/menu-topic.service.js';
+import { TopicService } from '../services/topic.service.js';
 import { VenueTopicService } from '../services/venue-topic.service.js';
 
-import { seedTopics, linkTopics } from './factories/topic.factory.js';
+import { linkTopics,seedTopics } from './factories/topic.factory.js';
 
 /* Delivery menus read by food topic: who sells it at what price, a venue's tags from its menu and
  * Google's review tags, and its price position by its own kind of food. */
@@ -44,6 +45,7 @@ describe('MenuTopicService (pglite)', () => {
 				{ associations: { city: inCity } },
 			));
 		const listings = new Map<Venue, VenueDeliveryListing>();
+		const seeded = new Map<string, MenuItem>();
 		const menu = (v: Venue, month: string, items: [string, number, string?][]) => {
 			const listing =
 				listings.get(v) ??
@@ -54,8 +56,16 @@ describe('MenuTopicService (pglite)', () => {
 					fetchedAt: new Date('2026-10-02T06:00:00Z'),
 				});
 			listings.set(v, listing);
-			for (const [name, price, category] of items)
-				em.create(MenuItem, { listing, month, name, price, category: category ?? null });
+			// An item on the menu in two months is one row with a monthly row for each
+			for (const [name, price, category] of items) {
+				const had = seeded.get(`${v.name}:${name}`);
+				if (had) seedMenuMonth(em, had, month, price);
+				else
+					seeded.set(
+						`${v.name}:${name}`,
+						seedMenuItem(em, listing, { month, name, price, category: category ?? null }),
+					);
+			}
 		};
 
 		// Five ramen places in Mitte and one in Neukölln; "Ramen Ya" is a Japanese restaurant on Google

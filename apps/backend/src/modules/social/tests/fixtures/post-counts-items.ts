@@ -58,3 +58,20 @@ export const instagramGoneItem = {
 	error: 'not_found',
 	errorDescription: 'Post does not exist',
 };
+
+// An item naming its author (2026-11-10, trimmed): `ownerUsername` is the handle the account has
+// now, `ownerId` its user id, which outlives a rename. This account posted as
+// "happeninginberlin" until 2026-11-03; `inputUrl` set to the post as a `directUrls` read gives it.
+export const instagramRenamedAuthorItem = {
+	inputUrl: 'https://www.instagram.com/p/Dfk508XlfPi/',
+	id: '4027598293660201954',
+	type: 'Sidecar',
+	shortCode: 'Dfk508XlfPi',
+	url: 'https://www.instagram.com/p/Dfk508XlfPi/',
+	ownerUsername: 'berlinbitte',
+	ownerId: '46232504208',
+	ownerFullName: 'Berlin Bitte',
+	likesCount: 2,
+	commentsCount: 1,
+	timestamp: '2026-11-10T21:45:52.000Z',
+};

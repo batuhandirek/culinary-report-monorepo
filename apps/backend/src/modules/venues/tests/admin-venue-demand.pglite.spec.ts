@@ -8,7 +8,6 @@ import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { AdminVenuesController } from '../controllers/admin.venues.controller.js';
-import { MenuItem } from '../entities/menu-item.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueBusyness } from '../entities/venue-busyness.entity.js';
 import {
@@ -22,6 +21,8 @@ import {
 import { VenueBusynessService } from '../services/venue-busyness.service.js';
 import { VenueDeliveryService } from '../services/venue-delivery.service.js';
 import { VenueReservationService } from '../services/venue-reservation.service.js';
+
+import { seedMenuItem } from './factories/menu-item.factory.js';
 
 describe('GET /admin/venues/:id/demand (pglite)', () => {
 	let harness: PgliteTestingModule;
@@ -75,7 +76,7 @@ describe('GET /admin/venues/:id/demand (pglite)', () => {
 			rating: 4.4,
 			fetchedAt: new Date('2026-10-02'),
 		});
-		em.create(MenuItem, { listing, month: '2026-09', name: 'Döner', price: 7.5 });
+		seedMenuItem(em, listing, { month: '2026-09', name: 'Döner', price: 7.5 });
 		await em.flush();
 
 		const res = await harness.moduleRef.get(AdminVenuesController).getVenueDemand(venue.id);

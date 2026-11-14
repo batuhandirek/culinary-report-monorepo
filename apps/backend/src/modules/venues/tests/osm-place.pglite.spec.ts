@@ -244,17 +244,58 @@ describe('OsmPlaceService (pglite)', () => {
 	});
 
 	it('counts only what the last sync listed, and keeps a gone place', async () => {
-		foodPlaces.mockResolvedValueOnce([node(1, 'Pizza Roma', 0), node(2, 'Baba Pirzola', 0)]);
+		foodPlaces.mockResolvedValueOnce([
+			node(1, 'Pizza Roma', 0),
+			node(2, 'Baba Pirzola', 0),
+			node(3, 'Faustus', 0),
+			node(10, 'Lost Place', 500),
+		]);
 		const result = await service.sync(city, new Date('2026-10-23T10:00:00Z'));
 		expect(result).toMatchObject({
 			added: 0,
-			updated: 2,
-			gone: 4,
-			listed: 2,
-			matched: 2,
+			updated: 4,
+			gone: 2,
+			listed: 4,
+			matched: 3,
+			notFound: 1,
 			toLookUp: 0,
 		});
 		expect(await harness.orm.em.fork().count(OsmPlace, { city: city.id })).toBe(6);
+	});
+
+	it('stores nothing of an empty or a cut-short answer: the checklist stays as it was', async () => {
+		const lastSync = new Date('2026-10-23T10:00:00Z');
+		const before = await service.coverage(city);
+		expect(before).toEqual({ listed: 4, matched: 3, notFound: 1, toLookUp: 0 });
+
+		// Nothing listed
+		foodPlaces.mockResolvedValueOnce([]);
+		await expect(service.sync(city, new Date('2026-11-02T06:00:00Z'))).rejects.toThrow(
+			'Overpass listed 0 food places',
+		);
+		// Only elements that are no place (no name)
+		foodPlaces.mockResolvedValueOnce([
+			{ type: 'node', id: 4, lat: AT.lat, lon: AT.lng, tags: { amenity: 'cafe' } },
+		]);
+		await expect(service.sync(city, new Date('2026-11-02T06:00:00Z'))).rejects.toThrow(
+			'Overpass listed 0 food places',
+		);
+		// Under half of the four the last sync listed, with a place it never had
+		foodPlaces.mockResolvedValueOnce([node(20, 'Half An Answer', 2000)]);
+		await expect(service.sync(city, new Date('2026-11-02T06:00:00Z'))).rejects.toThrow(
+			'Overpass listed 1 food places for ' + city.name + ' against 4',
+		);
+
+		const em = harness.orm.em.fork();
+		expect((await em.findOneOrFail(City, city.id)).osmPlacesSyncedAt).toEqual(lastSync);
+		expect(await em.count(OsmPlace, { city: city.id })).toBe(6);
+		expect(await em.count(OsmPlace, { seenAt: { $gt: lastSync } })).toBe(0);
+		expect(await service.coverage(city)).toEqual(before);
+
+		// Half of them is a list: two places closed, the sync goes through
+		foodPlaces.mockResolvedValueOnce([node(1, 'Pizza Roma', 0), node(2, 'Baba Pirzola', 0)]);
+		const result = await service.sync(city, new Date('2026-11-03T06:00:00Z'));
+		expect(result).toMatchObject({ updated: 2, gone: 4, listed: 2, matched: 2 });
 	});
 
 	it('refuses a city without an OSM boundary', async () => {

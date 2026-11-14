@@ -24,6 +24,9 @@ export const PLACE_RESULT_USD = 0.004;
 const BUDGET_HEADROOM = 0.8;
 // Rows written per flush
 const FLUSH_EVERY = 1000;
+// Of the places the last sync listed, the share a new answer must hold: a city's food places do
+// not halve in a month, so a shorter list is an answer cut short, never the city
+const MIN_LISTED_SHARE = 0.5;
 
 export interface OsmCoverage {
 	/** Places the last sync listed */
@@ -54,7 +57,8 @@ export class OsmPlaceService {
 	/**
 	 * Stores every food place OSM lists inside the city's boundary (`City.osmRelationId`),
 	 * updating the ones it had, then links the unlinked ones to venues (`match`). A place OSM no
-	 * longer lists keeps its row with its old `seenAt`. Flushes.
+	 * longer lists keeps its row with its old `seenAt`. Throws, with nothing written, when
+	 * Overpass lists no place or under `MIN_LISTED_SHARE` of the last sync's. Flushes.
 	 */
 	async sync(
 		city: City,
@@ -69,6 +73,14 @@ export class OsmPlaceService {
 			.filter(f => f !== null);
 		// Overpass can list one element twice (a node inside two matching groups)
 		const byKey = new Map(fields.map(f => [f.osmKey, f]));
+
+		// Stored, an empty or cut-short answer would stamp the city synced with its places unseen:
+		// they would count as gone, and none would be linked or looked up until a sync lists them
+		const before = await this.em.count(OsmPlace, this.listed(city));
+		if (byKey.size === 0 || byKey.size < before * MIN_LISTED_SHARE)
+			throw new Error(
+				`Overpass listed ${byKey.size} food places for ${city.name} against ${before} at the last sync: nothing stored, the checklist stays as it was`,
+			);
 
 		const existing = new Map(
 			(await this.em.find(OsmPlace, { city })).map(p => [p.osmKey, p] as const),

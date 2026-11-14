@@ -90,6 +90,10 @@ describe('TopicIndex.resolveMenuItem', () => {
 		[{ name: 'Shoyu', category: 'Ramen' }, ['ramen']],
 		[{ name: 'Margherita', category: 'Pizza' }, ['pizza']],
 		[{ name: 'Vegan Döner im Brot', category: null }, ['vegan', 'kebab']],
+		// A name that names no dish takes its section's beside what it does name
+		[{ name: 'Vegan Special', category: 'Ramen' }, ['vegan', 'ramen']],
+		// The menu's article is no tea
+		[{ name: 'The Classic Ramen', category: null }, ['ramen']],
 		// A drink only from a drink; drinks, desserts, sides and extras give no food
 		[{ name: 'Matcha Latte', category: 'Getränke' }, ['matcha']],
 		[{ name: 'Coca-Cola 0,33l', category: 'Getränke' }, []],

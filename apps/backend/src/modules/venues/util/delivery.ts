@@ -1,21 +1,4 @@
-import { DeliveryPlatformEnum } from '../entities/venue-delivery-listing.entity.js';
-
 import { plain } from './venue-names.js';
-
-/** The delivery platform an ordering link points to; null for one we don't read. */
-export const deliveryPlatformOf = (url: string | null | undefined): DeliveryPlatformEnum | null => {
-	if (!url) return null;
-	let parsed: URL;
-	try {
-		parsed = new URL(url);
-	} catch {
-		return null;
-	}
-	const host = parsed.hostname.toLowerCase();
-	if (/(^|\.)wolt\.com$/.test(host) && /\/restaurant\//.test(parsed.pathname)) return DeliveryPlatformEnum.WOLT;
-	if (/(^|\.)lieferando\.(de|at)$/.test(host)) return DeliveryPlatformEnum.LIEFERANDO;
-	return null;
-};
 
 // Menu sections and items that are not a dish: drinks, desserts, sides, extras, deposits
 const NOT_A_MAIN =

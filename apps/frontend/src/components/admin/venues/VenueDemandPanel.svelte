@@ -5,6 +5,7 @@
 	import AdminPanel from '#components/admin/AdminPanel.svelte';
 	import { api } from '#lib/api.js';
 	import { monthLabel } from '#lib/culinary.js';
+	import { DELIVERY_PLATFORMS } from '#lib/delivery.js';
 	import { createAutoLoader } from '#ui/lib/loader.svelte.js';
 	import EmptyState from '#ui/wrapped/EmptyState.svelte';
 	import ErrorState from '#ui/wrapped/ErrorState.svelte';
@@ -29,8 +30,7 @@
 	const cell = (day: (typeof DAYS)[number], hour: number) =>
 		latest?.histogram?.[day]?.find((h) => h.hour === hour)?.occupancyPercent ?? 0;
 	const PLATFORMS: Record<string, string> = {
-		wolt: 'Wolt',
-		lieferando: 'Lieferando',
+		...DELIVERY_PLATFORMS,
 		thefork: 'TheFork',
 		opentable: 'OpenTable',
 		google: 'Google'

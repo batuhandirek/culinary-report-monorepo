@@ -52,12 +52,12 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 	const save = async (
 		author: string,
 		authorId?: string,
-		extra: { authorFans?: number; at?: Date } = {},
+		extra: { authorFans?: number; at?: Date; externalId?: string } = {},
 	) => {
 		const em = harness.orm.em;
 		await posts.upsert(
 			{
-				externalId: `ig_hc_${++n}`,
+				externalId: extra.externalId ?? `ig_hc_${++n}`,
 				platform: IG,
 				url: `https://www.instagram.com/p/hc${n}/`,
 				postedAt: new Date('2026-10-12T12:00:00Z'),
@@ -153,6 +153,55 @@ describe('accounts by the platform user id, and their handle changes (pglite)', 
 		]);
 		expect(await em.count(Creator, { id: goneCreator })).toBe(0);
 		expect(await changesOf(merged)).toEqual([['first_handle', 'second_handle', null]]);
+	});
+
+	it('merges an account known by its old handle alone when its stored post comes back under the new handle', async () => {
+		const em = harness.orm.em;
+		// Stored before ids were: the old handle alone
+		await save('was_happening', undefined, { externalId: 'ig_hc_renamed_1' });
+		const old = (await account({ handle: 'was_happening' }))!;
+		const oldCreator = old.creator.id;
+		// The same person under the new handle, with the id: a new account
+		await save('now_bitte', '901');
+		const renamed = (await account({ platformUserId: '901' }))!;
+		expect(renamed.id).not.toBe(old.id);
+
+		// The old post read again names its author by id and new handle
+		await save('now_bitte', '901', { externalId: 'ig_hc_renamed_1' });
+		const one = (await account({ platformUserId: '901' }))!;
+		expect([one.id, one.handle]).toEqual([renamed.id, 'now_bitte']);
+		expect(await account({ handle: 'was_happening' })).toBeNull();
+		expect(await em.count(SocialPost, { account: one.id })).toBe(2);
+		expect(await em.count(Creator, { id: oldCreator })).toBe(0);
+		expect(await changesOf(one)).toEqual([['was_happening', 'now_bitte', null]]);
+	});
+
+	it('renames an account known by its handle alone when its stored post comes back under another handle', async () => {
+		const em = harness.orm.em;
+		await save('solo_old', undefined, { externalId: 'ig_hc_renamed_2' });
+		const old = (await account({ handle: 'solo_old' }))!;
+
+		await save('solo_new', '902', { externalId: 'ig_hc_renamed_2' });
+		const after = (await em.findOneOrFail(SocialAccount, { id: old.id }))!;
+		expect([after.handle, after.platformUserId, after.creator.id]).toEqual([
+			'solo_new',
+			'902',
+			old.creator.id,
+		]);
+		expect(await em.count(SocialAccount, { platform: IG, platformUserId: '902' })).toBe(1);
+		expect(await changesOf(after)).toEqual([['solo_old', 'solo_new', null]]);
+	});
+
+	it('leaves a stored post on its account when the item carries no id', async () => {
+		const em = harness.orm.em;
+		await save('no_id_old', undefined, { externalId: 'ig_hc_renamed_3' });
+		const old = (await account({ handle: 'no_id_old' }))!;
+
+		await save('no_id_new', undefined, { externalId: 'ig_hc_renamed_3' });
+		const post = await em.findOneOrFail(SocialPost, { externalId: 'ig_hc_renamed_3' });
+		expect(post.account?.id).toBe(old.id);
+		expect((await account({ handle: 'no_id_old' }))?.handle).toBe('no_id_old');
+		expect(await changesOf(old)).toEqual([]);
 	});
 
 	it('gives a taken handle to its new owner, and renames the old one once its id is seen again', async () => {

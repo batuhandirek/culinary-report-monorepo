@@ -421,6 +421,13 @@ describe('TermService (pglite)', () => {
 		await expect(service().promoteTerm(await termId('waiting time'))).rejects.toBeInstanceOf(
 			BadRequestException,
 		);
+		// An admin's kind is kept, a place too (promotion by itself never makes one): a Google category under café
+		await service().ensure(['Espresso bar counter']);
+		const counter = await termId('espresso bar counter');
+		await service().change(counter, { topicKey: 'cafe', exact: false });
+		const place = await controller.promoteTerm(counter, { label: 'Espresso counter', kind: TopicKindEnum.PLACE });
+		expect(place).toMatchObject({ topic: { label: 'Espresso counter', kind: 'place' }, exact: true });
+		expect((await topicService().index()).parentOf(place.topic!.key)).toBe('cafe');
 	});
 
 	it('re-links after topics change: a wording that is now a topic takes it, exact, over anything else', async () => {

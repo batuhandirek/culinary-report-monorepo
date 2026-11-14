@@ -395,6 +395,60 @@ describe('BrandService (pglite)', () => {
 		]);
 	});
 
+	it('finds brands by their name or a branch name, and merges one into another whatever their names', async () => {
+		const em = harness.orm.em;
+		const kreuzberg = branch(berlin, 'ZAGROS Veggie Kebabs', 5096);
+		const kudamm = branch(berlin, 'ZAGROS Gemüsekebap', 3);
+		const stranger = branch(berlin, 'Zagros Bistro', 7, { closed: true });
+		const other = branch(berlin, 'Mustafas', 9000);
+		await em.flush();
+		const here = kreuzberg.brand.id;
+		const gone = kudamm.brand.id;
+		// Kreuzberg's brand had said the Ku'damm place was not its own
+		await controller.excludeBrandVenue(here, { venueId: kudamm.id });
+		em.create(Prospect, { brand: kudamm.brand, stage: ProspectStageEnum.CONTACTED });
+		mention(kudamm);
+		await em.flush();
+		em.clear();
+
+		const found = await controller.searchBrands({ q: 'zagros', excludeId: here });
+		expect(found.map(b => b.id).sort()).toEqual([gone, stranger.brand.id].sort());
+		expect(found.find(b => b.id === gone)!.branches.map(v => v.name)).toEqual([
+			'ZAGROS Gemüsekebap',
+		]);
+		expect((await controller.searchBrands({ q: 'gemüse' })).map(b => b.id)).toEqual([gone]);
+		expect(await controller.searchBrands({ q: '100%' })).toEqual([]);
+
+		await expect(service.mergeBrand(here, here)).rejects.toThrow('Pick another brand');
+		const merged = await controller.mergeBrand(here, { brandId: gone, name: 'ZAGROS' });
+		expect(merged).toMatchObject({ id: here, name: 'ZAGROS', key: 'zagros' });
+		expect(merged.branches.map(v => v.name).sort()).toEqual([
+			'ZAGROS Gemüsekebap',
+			'ZAGROS Veggie Kebabs',
+		]);
+		expect(sendJob).toHaveBeenCalledWith(
+			BrandChangedJob.jobName,
+			expect.objectContaining({ payload: { brandIds: [here], cityIds: [berlin.id] } }),
+		);
+		em.clear();
+		expect(await em.count(Brand, { id: gone })).toBe(0);
+		expect(await em.count(Prospect, { brand: here })).toBe(1);
+		expect(await em.findOneOrFail(Mention, { venue: kudamm.id })).toMatchObject({
+			brand: { id: here },
+		});
+		// Its own place now: no longer "not a branch"
+		expect(await em.count(BrandExcludedVenue, { brand: here })).toBe(0);
+
+		// Two prospects are an admin's call; without a name the brand keeps its own
+		em.create(Prospect, { brand: other.brand, stage: ProspectStageEnum.CONTACTED });
+		await em.flush();
+		await expect(service.mergeBrand(here, other.brand.id)).rejects.toThrow(
+			'Both brands are prospects',
+		);
+		await em.nativeDelete(Prospect, { brand: other.brand.id });
+		expect(await service.mergeBrand(here, other.brand.id)).toMatchObject({ name: 'ZAGROS' });
+	});
+
 	it('keeps an exclusion through a merge into the chain, and drops it with the venue', async () => {
 		const em = harness.orm.em;
 		const brand = await brandFactory.create({ name: 'Burgermeister' });

@@ -24,19 +24,18 @@ import {
 	TOPIC_MENTIONS_SQL,
 	type TopicMentionRow,
 } from 'src/modules/trends/util/topic-mentions.js';
-import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
 import type { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import {
 	DeliveryPlatformEnum,
 	VenueDeliveryListing,
 } from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
+import { seedMenuItem } from 'src/modules/venues/tests/factories/menu-item.factory.js';
 import { venueFactory } from 'src/modules/venues/tests/factories/venue.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { mockAgent } from 'src/tests/mock-agent.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
 import { AdminTermsController } from '../controllers/admin.terms.controller.js';
-
 import { Term } from '../entities/term.entity.js';
 import { Topic } from '../entities/topic.entity.js';
 import { VenueTopic } from '../entities/venue-topic.entity.js';
@@ -146,7 +145,7 @@ describe('Food topic links (pglite)', () => {
 			fetchedAt: new Date('2026-10-02T06:00:00Z'),
 		});
 		return names.map(name =>
-			em.create(MenuItem, { listing, month: '2026-09', name, price: 10, category: null }),
+			seedMenuItem(em, listing, { month: '2026-09', name, price: 10 }),
 		);
 	};
 

@@ -46,6 +46,7 @@ import { SocialPostSnapshot } from 'src/modules/social/entities/social-post-snap
 import { SocialAccountSubscriber } from 'src/modules/social/subscribers/social-account.subscriber.js';
 import { Statement } from 'src/modules/statements/entities/statement.entity.js';
 import { StatementPart } from 'src/modules/statements/entities/statement-part.entity.js';
+import { MenuItemTerm } from 'src/modules/topics/entities/menu-item-term.entity.js';
 import { MenuItemTopic } from 'src/modules/topics/entities/menu-item-topic.entity.js';
 import { Term } from 'src/modules/topics/entities/term.entity.js';
 import { TermModifier } from 'src/modules/topics/entities/term-modifier.entity.js';
@@ -62,6 +63,7 @@ import { BrandDismissal } from 'src/modules/venues/entities/brand-dismissal.enti
 import { BrandExcludedVenue } from 'src/modules/venues/entities/brand-excluded-venue.entity.js';
 import { DishSearchRank } from 'src/modules/venues/entities/dish-search-rank.entity.js';
 import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
+import { MenuItemSnapshot } from 'src/modules/venues/entities/menu-item-snapshot.entity.js';
 import { OsmPlace } from 'src/modules/venues/entities/osm-place.entity.js';
 import { Review } from 'src/modules/venues/entities/review.entity.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
@@ -119,6 +121,7 @@ export default defineConfig({
 		VenueDeliveryListing,
 		VenueDeliverySnapshot,
 		MenuItem,
+		MenuItemSnapshot,
 		Review,
 		SocialPost,
 		SocialAccount,
@@ -145,6 +148,7 @@ export default defineConfig({
 		Statement,
 		StatementPart,
 		MenuItemTopic,
+		MenuItemTerm,
 		Prospect,
 		OutreachTouch,
 		BrandMember,

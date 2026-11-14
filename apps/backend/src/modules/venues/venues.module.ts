@@ -30,6 +30,7 @@ import { VenueSnapshot } from './entities/venue-snapshot.entity.js';
 import { WebMention } from './entities/web-mention.entity.js';
 import { BrandService } from './services/brand.service.js';
 import { BrandLeadScoreService } from './services/brand-lead-score.service.js';
+import { BrandMenuService } from './services/brand-menu.service.js';
 import { CompetitorService } from './services/competitor.service.js';
 import { DishSearchService } from './services/dish-search.service.js';
 import { FaviconFetchService } from './services/favicon-fetch.service.js';
@@ -84,6 +85,7 @@ import { BrandAutoMergeWorker } from './workers/brand-auto-merge.worker.js';
 	],
 	providers: [
 		BrandService,
+		BrandMenuService,
 		BrandAutoMergeWorker,
 		VenueService,
 		WebMentionService,

@@ -7,4 +7,7 @@ export const SCRAPE_DELIVERY_MONTH: OperationRun = {
 	queue: SCRAPE_DELIVERY_QUEUE,
 };
 
+/** One brand by hand ("Find menus" on the brand page): the workflow's name */
+export const SCRAPE_DELIVERY_BRAND = 'scrape-delivery.brand';
+
 export { MONTH_CRON as SCRAPE_DELIVERY_MONTH_CRON } from '../../shared/constants/cadence.constant.js';

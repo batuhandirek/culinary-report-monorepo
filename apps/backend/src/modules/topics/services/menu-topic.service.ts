@@ -25,7 +25,8 @@ const ITEM_TOPICS_SQL = `(select coalesce(array_agg(t.key), '{}') from menu_item
 
 /**
  * Delivery menus (`MenuItem`, written by `VenueDeliveryService`) read by food topic: who sells a
- * kind of food and at what price, and a venue's own kind of food against the others'. Each item's
+ * kind of food and at what price, and a venue's own kind of food against the others'. A month's
+ * menu is the items with a row for it (`MenuItemSnapshot`), at that month's price. Each item's
  * topics are stored (`MenuItemTopic`, this service the one writer: `linkItems` with the scrape,
  * `relink` from `TopicRelinkJob`), so a new alias reprices once the job ran. Menus are scraped
  * for the report venues and their competitors only, so the figures lean to them.
@@ -55,11 +56,18 @@ export class MenuTopicService implements OnModuleInit {
 			}
 	}
 
-	/** Every stored item's topics against the index as it is now, writing only what changed. */
-	async relink(index: TopicIndex): Promise<{ items: number; changed: number }> {
+	/**
+	 * The stored items' topics against the index as it is now, writing only what changed: every
+	 * item's (`TopicRelinkJob`), or those of `listingIds` (a read that saw them again: a name or a
+	 * section may have moved).
+	 */
+	async relink(index: TopicIndex, listingIds?: string[]): Promise<{ items: number; changed: number }> {
+		if (listingIds && !listingIds.length) return { items: 0, changed: 0 };
 		const conn = this.em.getConnection();
 		const rows: { id: number; name: string; category: string | null; keys: string[] }[] = await conn.execute(
-			`select mi.id, mi.name, mi.category, ${ITEM_TOPICS_SQL.replace(' as topics', '')} as keys from menu_items mi`,
+			`select mi.id, mi.name, mi.category, ${ITEM_TOPICS_SQL.replace(' as topics', '')} as keys from menu_items mi
+			${listingIds ? `where mi.listing_id in (${listingIds.map(() => '?').join(', ')})` : ''}`,
+			listingIds ?? [],
 		);
 		const changed = rows
 			.map(r => ({ id: r.id, keys: index.resolveMenuItem(r).filter(key => index.get(key)?.id), had: r.keys }))
@@ -85,11 +93,12 @@ export class MenuTopicService implements OnModuleInit {
 		const [index, rows] = await Promise.all([
 			this.topicService.index(),
 			this.em.getConnection().execute<{ venue_id: string; district: string | null; topics: string[]; price: number }[]>(
-				`select l.venue_id, v.district, mi.price, ${ITEM_TOPICS_SQL} from menu_items mi
+				`select l.venue_id, v.district, s.price, ${ITEM_TOPICS_SQL} from menu_items mi
+					join menu_item_snapshots s on s.menu_item_id = mi.id and s.month = ?
 					join venue_delivery_listings l on l.id = mi.listing_id
 					join venues v on v.id = l.venue_id
-					where v.city_id = ? and not v.closed and mi.month = ?`,
-				[cityId, month],
+					where v.city_id = ? and not v.closed`,
+				[month, cityId],
 			),
 		]);
 		return menuTopicPrices(
@@ -124,11 +133,13 @@ export class MenuTopicService implements OnModuleInit {
 			this.em.getConnection().execute<
 				{ venue_id: string; name: string; category: string | null; price: number; topics: string[] }[]
 			>(
-				`select l.venue_id, mi.name, mi.category, mi.price, ${ITEM_TOPICS_SQL} from menu_items mi
+				`select l.venue_id, mi.name, mi.category, s.price, ${ITEM_TOPICS_SQL} from menu_items mi
 					join venue_delivery_listings l on l.id = mi.listing_id
-					where l.venue_id in (${ids.map(() => '?').join(', ')})
-					and mi.month = (select max(x.month) from menu_items x where x.listing_id = mi.listing_id and x.month <= ?)`,
-				[...ids, month],
+					join menu_item_snapshots s on s.menu_item_id = mi.id and s.month = (
+						select max(s2.month) from menu_item_snapshots s2 join menu_items x on x.id = s2.menu_item_id
+						where x.listing_id = mi.listing_id and s2.month <= ?)
+					where l.venue_id in (${ids.map(() => '?').join(', ')})`,
+				[month, ...ids],
 			),
 		]);
 		const items = _.groupBy(

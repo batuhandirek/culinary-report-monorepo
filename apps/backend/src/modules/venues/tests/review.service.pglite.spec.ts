@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
+import _ from 'lodash';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { cityFactory } from 'src/modules/cities/tests/factories/city.factory.js';
@@ -6,9 +7,14 @@ import type { ReviewsFetch } from 'src/modules/pipeline/atoms/reviews/util/revie
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
+import {
+	VenueScrapeSourceEnum,
+	VenueStatusChangeKindEnum,
+} from '../constants/venue-status.constant.js';
 import { Review, ReviewPlatformEnum } from '../entities/review.entity.js';
 import { Venue } from '../entities/venue.entity.js';
 import { VenueSnapshot } from '../entities/venue-snapshot.entity.js';
+import { VenueStatusChange } from '../entities/venue-status-change.entity.js';
 import { ReviewService } from '../services/review.service.js';
 import { VenueService } from '../services/venue.service.js';
 
@@ -263,9 +269,112 @@ describe('ReviewService plans and save (pglite)', () => {
 		em.clear();
 		const stored = await em.find(Review, { reviewId: { $in: ['blank', 'spaces', 'written'] } });
 		expect(
-			Object.fromEntries(stored.map(r => [r.reviewId, [r.text ?? null, r.textTranslated ?? null]])),
+			Object.fromEntries(
+				stored.map(r => [r.reviewId, [r.text ?? null, r.textTranslated ?? null]]),
+			),
 		).toEqual({ blank: [null, null], spaces: [null, null], written: ['Tasty', null] });
 		const unread = new Set(await service.unreadReviewIds(city.id, 1000));
 		expect(stored.filter(r => unread.has(r.id)).map(r => r.reviewId)).toEqual(['written']);
+	});
+
+	it("records a closure, a temporary closure and a reopening from the review items' flags, in both fetches, and keeps a state the item doesn't give", async () => {
+		const em = harness.orm.em;
+		const shut = venue('c-shut');
+		const paused = venue('c-paused');
+		const back = venue('c-back', { details: { temporarilyClosed: true } });
+		const silent = venue('c-silent', { details: { temporarilyClosed: true } });
+		await em.flush();
+		const now = new Date('2026-11-10T06:00:00Z');
+		const item = (placeId: string, publishedAtDate: string, flags: object) => ({
+			placeId,
+			reviewId: `${placeId}-r`,
+			publishedAtDate,
+			totalScore: 4.5,
+			reviewsCount: 200,
+			...flags,
+		});
+		await service.saveReviews(
+			[
+				item('c-shut', '2026-11-05T10:00:00Z', {
+					permanentlyClosed: true,
+					temporarilyClosed: false,
+				}),
+				item('c-paused', '2026-11-06T10:00:00Z', {
+					permanentlyClosed: false,
+					temporarilyClosed: true,
+				}),
+				item('c-silent', '2026-11-06T10:00:00Z', {}),
+			],
+			{ mode: 'since', placeIds: ['c-shut', 'c-paused', 'c-silent'], since: '2026-11-03' },
+			{ capped: false, now },
+		);
+		// The check of a quiet venue: its one newest review is old, its state today's
+		await service.saveReviews(
+			[
+				item('c-back', '2026-06-01T10:00:00Z', {
+					permanentlyClosed: false,
+					temporarilyClosed: false,
+				}),
+			],
+			{ mode: 'newest', places: [{ placeId: 'c-back', since: '2026-11-03' }] },
+			{ capped: false, now },
+		);
+		em.clear();
+		const changes = await em.find(
+			VenueStatusChange,
+			{ venue: { $in: [shut.id, paused.id, back.id, silent.id] } },
+			{ populate: ['venue'] },
+		);
+		expect(
+			_.sortBy(
+				changes.map(c => [c.venue.placeId, c.kind, c.source, c.at.toISOString()]),
+				0,
+			),
+		).toEqual([
+			[
+				'c-back',
+				VenueStatusChangeKindEnum.REOPENED,
+				VenueScrapeSourceEnum.REVIEWS,
+				now.toISOString(),
+			],
+			[
+				'c-paused',
+				VenueStatusChangeKindEnum.TEMPORARILY_CLOSED,
+				VenueScrapeSourceEnum.REVIEWS,
+				now.toISOString(),
+			],
+			[
+				'c-shut',
+				VenueStatusChangeKindEnum.PERMANENTLY_CLOSED,
+				VenueScrapeSourceEnum.REVIEWS,
+				now.toISOString(),
+			],
+		]);
+		const stored = await em.find(Venue, {
+			placeId: { $in: ['c-shut', 'c-paused', 'c-back', 'c-silent'] },
+		});
+		expect(
+			Object.fromEntries(
+				stored.map(v => [v.placeId, [v.closed, !!v.details?.temporarilyClosed]]),
+			),
+		).toEqual({
+			'c-shut': [true, false],
+			'c-paused': [false, true],
+			'c-back': [false, false],
+			'c-silent': [false, true],
+		});
+
+		// Read again in the same state: nothing new
+		await service.saveReviews(
+			[
+				item('c-paused', '2026-11-06T10:00:00Z', {
+					permanentlyClosed: false,
+					temporarilyClosed: true,
+				}),
+			],
+			{ mode: 'since', placeIds: ['c-paused'], since: '2026-11-03' },
+			{ capped: false, now: new Date('2026-11-17T06:00:00Z') },
+		);
+		expect(await em.count(VenueStatusChange, { venue: paused.id })).toBe(1);
 	});
 });

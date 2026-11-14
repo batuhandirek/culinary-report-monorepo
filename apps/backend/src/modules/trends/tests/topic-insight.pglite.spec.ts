@@ -4,19 +4,20 @@ import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
 
 import type { City } from 'src/modules/cities/entities/city.entity.js';
 import { testCity } from 'src/modules/cities/tests/factories/city.factory.js';
-import { TopicService } from 'src/modules/topics/services/topic.service.js';
-import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
-import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
-import { seedTopics, linkTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Mention } from 'src/modules/social/entities/mention.entity.js';
-import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
 import { SocialPlatformEnum, SocialPost } from 'src/modules/social/entities/social-post.entity.js';
-import { MenuItem } from 'src/modules/venues/entities/menu-item.entity.js';
+import { addFoods } from 'src/modules/statements/tests/factories/statement.factory.js';
+import { MenuTopicService } from 'src/modules/topics/services/menu-topic.service.js';
+import { TermService } from 'src/modules/topics/services/term.service.js';
+import { TopicService } from 'src/modules/topics/services/topic.service.js';
+import { VenueTopicService } from 'src/modules/topics/services/venue-topic.service.js';
+import { linkTopics,seedTopics } from 'src/modules/topics/tests/factories/topic.factory.js';
 import { Venue } from 'src/modules/venues/entities/venue.entity.js';
 import {
 	DeliveryPlatformEnum,
 	VenueDeliveryListing,
 } from 'src/modules/venues/entities/venue-delivery-listing.entity.js';
+import { seedMenuItem } from 'src/modules/venues/tests/factories/menu-item.factory.js';
 import { entityManagerManager } from 'src/shared/util/em.js';
 import { createPgliteTestingModule, PgliteTestingModule } from 'src/tests/testing-module.js';
 
@@ -27,7 +28,6 @@ import {
 	TrendSearchInterest,
 } from '../entities/trend-search-interest.entity.js';
 import { TopicInsightService } from '../services/topic-insight.service.js';
-import { TermService } from 'src/modules/topics/services/term.service.js';
 
 /* Supply (venues tagged), buzz (the month's posts) and demand (Google searches) per topic, and one
  * topic's page: children, posts by month, related searches, venues, menu prices. */
@@ -124,7 +124,7 @@ describe('TopicInsightService (pglite)', () => {
 				fetchedAt: new Date('2026-10-02T06:00:00Z'),
 			});
 			for (const [name, price] of items)
-				em.create(MenuItem, { listing, month: '2026-09', name, price, category: null });
+				seedMenuItem(em, listing, { month: '2026-09', name, price });
 		};
 		menu(ramen, [
 			['Tonkotsu Ramen', 14],

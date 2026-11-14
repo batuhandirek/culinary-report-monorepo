@@ -1,4 +1,4 @@
-import { FilterQuery, QueryOrder } from '@mikro-orm/core';
+import { FilterQuery, QueryOrder, wrap } from '@mikro-orm/core';
 import { EntityManager } from '@mikro-orm/postgresql';
 
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
@@ -304,6 +304,43 @@ export class SocialAccountService {
 			);
 		}
 		return account;
+	}
+
+	/**
+	 * A stored post read again (the counts refresh by its URL, or a scrape finding it again) names
+	 * its author by user id and current handle (`ensure`). When the post's account was known by
+	 * another handle alone (stored before ids were, 2026-11-04), that account was renamed in
+	 * between: it is merged into the id's account and the rename kept, so the creator shows "was
+	 * @old" instead of two people. Without an id nothing is proven and the post keeps its account.
+	 * Returns the author's account. Does not flush.
+	 */
+	async authorOfStoredPost(
+		post: SocialPost,
+		handle: string | null | undefined,
+		city: City,
+		seen: AccountSeen = {},
+		now = new Date(),
+	): Promise<SocialAccount | null> {
+		const account = await this.ensure(post.platform, handle, city, seen, now);
+		const stored = post.account;
+		if (!account || !stored || stored === account || !account.platformUserId) {
+			post.account ??= account;
+			return account;
+		}
+		if (!wrap(stored).isInitialized()) await wrap(stored).init();
+		if (stored.platformUserId || stored.handleLostAt) return account;
+		const fromHandle = stored.handle;
+		const source = seen.source ?? AccountSnapshotSourceEnum.POST;
+		const keep = await this.absorb(stored, account, account.handle, source, now);
+		this.em.create(SocialAccountHandleChange, {
+			account: keep,
+			fromHandle,
+			toHandle: keep.handle,
+			seenAt: now,
+			source,
+		});
+		post.account = keep;
+		return keep;
 	}
 
 	/** The account takes `handle` (its user id came back under it), the change kept. */

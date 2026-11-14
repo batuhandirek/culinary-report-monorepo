@@ -9,7 +9,9 @@ import { defineActor } from './actor.js';
  *   no review since then returns **no item at all**, so silence isn't "no reviews": ask it for
  *   its one newest review (`maxReviews: 1`) to tell.
  * - **Place figures for free.** Every item repeats its place's all-time `totalScore` and
- *   `reviewsCount`: the day's rating snapshot.
+ *   `reviewsCount`: the day's rating snapshot. It also repeats `permanentlyClosed` and
+ *   `temporarilyClosed`, so the weekly fetch notices closures (checked 2026-11-14 on two closed,
+ *   two temporarily closed and one open Berlin place: all five right).
  * - **Personal data.** `reviewUrl` and the reviewer are personal data: `personalData: false`.
  * - **Cap.** A cap under ~$0.05 risks a refused start for a small group.
  */
@@ -39,6 +41,9 @@ export interface GoogleMapsReviewItem {
 	/** The place's all-time figures, repeated on every item */
 	totalScore?: number;
 	reviewsCount?: number;
+	/** The place's state, repeated on every item */
+	permanentlyClosed?: boolean | null;
+	temporarilyClosed?: boolean | null;
 }
 
 export const GOOGLE_MAPS_REVIEWS_ACTOR = defineActor<GoogleMapsReviewsInput, GoogleMapsReviewItem>(
